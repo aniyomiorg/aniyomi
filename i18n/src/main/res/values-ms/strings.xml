@@ -37,7 +37,6 @@
     <string name="action_rename_category">Ubah nama kategori</string>
     <string name="action_move_category">Tetapkan kategori</string>
     <string name="action_edit_cover">Ubah muka hadapan</string>
-    <string name="action_stop">Henti</string>
     <string name="action_pause">Henti sebentar</string>
     <string name="action_previous_chapter">Bab sebelumnya</string>
     <string name="action_next_chapter">Bab seterusnya</string>
@@ -406,7 +405,6 @@
     <string name="pref_library_update_refresh_metadata">Segar semula metadata secara automatik</string>
     <string name="action_migrate">Pindah sumber</string>
     <string name="action_display_comfortable_grid">Grid selesa</string>
-    <string name="badges_header">Penanda</string>
     <string name="tabs_header">Tab</string>
     <string name="action_display_show_tabs">Tunjuk tab kategori</string>
     <string name="page_list_empty_error">Tiada muka surat ditemui</string>
@@ -477,10 +475,8 @@
     <string name="action_asc">Menaik</string>
     <string name="action_order_by_chapter_number">Mengikut nombor bab</string>
     <string name="action_order_by_upload_date">Mengikut tarikh muat naik</string>
-    <string name="channel_crash_logs">Log kerosakan</string>
-    <string name="crash_log_saved">Log kerosakan disimpan</string>
     <string name="pref_dump_crash_logs_summary">Simpan log ralat untuk dikongsi dengan pembangunan aplikasi</string>
-    <string name="pref_dump_crash_logs">Kumpulan log kerosakan</string>
+    <string name="pref_dump_crash_logs">Kongsi log kerosakan</string>
     <string name="track_started_reading_date">Tarikh mula</string>
     <string name="track_finished_reading_date">Tarikh selesai</string>
     <string name="action_filter_tracked">Dijejaki</string>
@@ -634,14 +630,12 @@
     <string name="source_filter_empty_screen">Tiada sumber dipasang ditemui</string>
     <string name="source_empty_screen">Tiada sumber ditemui</string>
     <string name="action_sort_unread_count">Kiraan belum dibaca</string>
-    <string name="split_tall_images">Memisah imej yang tinggi</string>
     <string name="split_tall_images_summary">Meningkatkan prestasi pembaca</string>
     <string name="download_notifier_split_page_not_found">Muka surat %d tidak dijumpai ketika memisah</string>
     <string name="download_notifier_split_page_path_not_found">Lokasi fail muka surat %d tidak ditemui</string>
     <string name="pref_reset_viewer_flags_summary">Menetapkan semula mod bacaan dan orientasi semua siri</string>
     <string name="pref_reset_viewer_flags_success">Tetapan pembaca diset semula</string>
     <string name="pref_reset_viewer_flags">Set semula tetapan pembaca setiap siri</string>
-    <string name="download_notifier_split_failed">Tidak dapat memisahkan imej yang dimuat turun</string>
     <string name="empty_screen">Hmm, ini agak menjanggalkan</string>
     <string name="pref_reset_viewer_flags_error">Tidak dapat set semula tetapan pembaca</string>
     <string name="ext_info_version">Versi</string>
@@ -698,7 +692,7 @@
     <string name="crash_screen_title">Ralat Tidak Dijangka Berlaku</string>
     <string name="crash_screen_restart_application">Mulakan semula aplikasi</string>
     <string name="pref_browse_summary">Sumber, sambungan, carian keseluruhan</string>
-    <string name="crash_screen_description">%s mengalami ralat tidak dijangka. Kami mencadangkan anda untuk tangkapan skrin mesej ini, mengumpulkan log kerosakan, dan kemudian mengongsi ia pada Discord kami di saluran bantuan.</string>
+    <string name="crash_screen_description">%s mengalami ralat tidak dijangka. Kami mencadangkan anda untuk kongsi log kerosakan pada Discord kami di saluran bantuan.</string>
     <string name="unknown_title">Tajuk tidak diketahui</string>
     <string name="invalid_location">Lokasi tidak sah: %s</string>
     <string name="error_user_agent_string_invalid">Rentetan ejen pengguna tidak sah</string>
@@ -724,4 +718,12 @@
     <string name="pref_hide_in_library_items">Sembunyikan entri yang sudah ada di dalam pustaka</string>
     <string name="action_copy_to_clipboard">Salin ke papan keratan</string>
     <string name="action_update_category">Kemas kini kategori</string>
+    <string name="split_tall_images">Memisah imej yang tinggi</string>
+    <string name="overlay_header">Tindanan</string>
+    <plurals name="missing_items">
+        <item quantity="other">Hilang %1$s bab</item>
+    </plurals>
+    <string name="missing_items_unknown">Berkemungkinan ada bab yang hilang</string>
+    <string name="pref_page_rotate_invert">Terbalikkan orientasi muka surat lebar yang diputarkan</string>
+    <string name="pref_page_rotate">Putar muka surat lebar agar muat</string>
     </resources>

@@ -138,12 +138,24 @@ class AnimeDownloadProvider(
      * @param episodeScanlator scanlator of the episode to query
      */
     fun getEpisodeDirName(episodeName: String, episodeScanlator: String?): String {
+        val newEpisodeName = sanitizeEpisodeName(episodeName)
         return DiskUtil.buildValidFilename(
             when {
-                episodeScanlator.isNullOrBlank().not() -> "${episodeScanlator}_$episodeName"
-                else -> episodeName
+                episodeScanlator.isNullOrBlank().not() -> "${episodeScanlator}_$newEpisodeName"
+                else -> newEpisodeName
             },
         )
+    }
+
+    /**
+     * Return the new name for the episode (in case it's empty or blank)
+     *
+     * @param episodeName the name of the episode
+     */
+    private fun sanitizeEpisodeName(episodeName: String): String {
+        return episodeName.ifBlank {
+            "Episode"
+        }
     }
 
     /**

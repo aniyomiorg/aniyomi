@@ -13,7 +13,6 @@ import eu.kanade.core.util.addOrRemove
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
-import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
@@ -75,6 +74,7 @@ import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
@@ -982,6 +982,14 @@ class AnimeInfoScreenModel(
         }
     }
 
+    private val Throwable.snackbarMessage: String
+        get() = when (val className = this::class.simpleName) {
+            null -> message ?: ""
+            "SourceNotInstalledException" -> context.getString(R.string.loader_not_implemented_error)
+            "Exception", "HttpException", "IOException" -> message ?: className
+            else -> "$className: $message"
+        }
+
     fun showAnimeSkipIntroDialog() {
         mutableState.update { state ->
             when (state) {
@@ -1066,10 +1074,3 @@ val episodeDecimalFormat = DecimalFormat(
     DecimalFormatSymbols()
         .apply { decimalSeparator = '.' },
 )
-
-private val Throwable.snackbarMessage: String
-    get() = when (val className = this::class.simpleName) {
-        null -> message ?: ""
-        "Exception", "HttpException", "IOException", "SourceNotInstalledException" -> message ?: className
-        else -> "$className: $message"
-    }

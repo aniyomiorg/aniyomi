@@ -41,7 +41,6 @@
     <string name="action_rename_category">Premenovať kategóriu</string>
     <string name="action_move_category">Určiť kategórie</string>
     <string name="action_edit_cover">Upraviť obal</string>
-    <string name="action_stop">Zastaviť</string>
     <string name="action_pause">Pauza</string>
     <string name="action_previous_chapter">Predošlá kapitola</string>
     <string name="action_next_chapter">Nasledujúca kapitola</string>
@@ -417,7 +416,6 @@
     <string name="nav_zone_next">Ďalší</string>
     <string name="restoring_backup_error">Obnovenie zálohy zlyhalo</string>
     <string name="restoring_backup_canceled">Obnovenie bolo zrušené</string>
-    <string name="badges_header">Odznaky</string>
     <string name="tabs_header">Karty</string>
     <string name="error_user_agent_string_blank">Reťazec User-Agent nemôže byť prázdny</string>
     <string name="pref_reset_viewer_flags">Obnovenie nastavení čítačky pre jednotlivé série</string>
@@ -527,7 +525,6 @@
     <string name="pref_category_auto_download">Automatické sťahovanie</string>
     <string name="pref_duplicate_pinned_sources_summary">Opakovať pripnuté zdroje v ich príslušných jazykových skupinách</string>
     <string name="source_empty_screen">Nenašiel sa žiadny zdroj</string>
-    <string name="download_notifier_split_failed">Stiahnutý obrázok sa nepodarilo rozdeliť</string>
     <string name="channel_progress">Priebeh</string>
     <string name="pref_clear_history">Vymazať históriu</string>
     <string name="error_saving_cover">Chyba pri ukladaní obalu</string>
@@ -554,7 +551,6 @@
     </plurals>
     <string name="recent_manga_time">Kap. %1$s - %2$s</string>
     <string name="download_notifier_split_page_not_found">Strana %d sa pri rozdeľovaní nenašla</string>
-    <string name="channel_crash_logs">Logy zlyhaní</string>
     <string name="publishing_finished">Publikovanie ukončené</string>
     <string name="no_pinned_sources">Nemáte žiadne pripnuté zdroje</string>
     <string name="update_check_eol">Táto verzia systému Android už nie je podporovaná</string>
@@ -616,7 +612,6 @@
     <string name="update_check_open">Otvoriť na GitHub-e</string>
     <string name="update_check_fdroid_migration_info">Nová verzia je k dispozícii z oficiálnych vydaní. Klepnutím sa dozviete, ako migrovať z neoficiálnych vydaní F-Droid.</string>
     <string name="getting_started_guide">Príručka Začíname</string>
-    <string name="crash_log_saved">Uložené logy o zlyhaní</string>
     <string name="notification_incognito_text">Zakázať režim inkognito</string>
     <string name="manga_info_collapse">Menej</string>
     <string name="webtoon_side_padding_5">5%</string>
@@ -674,7 +669,6 @@
     <string name="theme_lavender">Levanduľa</string>
     <string name="webtoon_side_padding_20">20%</string>
     <string name="pref_download_new_categories_details">Mangy vo vylúčených kategóriách nebudú stiahnuté, aj keď sú tiež v zahrnutých kategóriách.</string>
-    <string name="split_tall_images">Rozdelenie vysokých obrázkov</string>
     <string name="database_clean">Čistenie databázy</string>
     <string name="pref_clear_webview_data">Vymazanie údajov WebView</string>
     <string name="webview_data_deleted">Údaje WebView boli vymazané</string>

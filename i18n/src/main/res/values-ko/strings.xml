@@ -30,7 +30,6 @@
     <string name="action_rename_category">카테고리 이름 바꾸기</string>
     <string name="action_move_category">카테고리 지정</string>
     <string name="action_edit_cover">표지 편집</string>
-    <string name="action_stop">정지</string>
     <string name="action_remove">제거</string>
     <string name="action_resume">계속</string>
     <string name="action_open_in_browser">브라우저에서 열기</string>
@@ -398,7 +397,7 @@
     <string name="action_migrate">데이터 이전</string>
     <string name="recent_manga_time">%1$s화 - %2$s</string>
     <string name="secure_screen">화면 보안</string>
-    <string name="lock_with_biometrics">잠금 해제 요청</string>
+    <string name="lock_with_biometrics">잠금 해제 필요</string>
     <string name="pref_relative_format">단어 사용</string>
     <string name="pref_category_appearance">모양</string>
     <string name="relative_time_today">오늘</string>
@@ -454,7 +453,6 @@
     <string name="ext_update_all">전부 업데이트</string>
     <string name="invalid_backup_file_missing_manga">백업에 항목이 포함되어 있지 않습니다.</string>
     <string name="pref_dump_crash_logs_summary">개발자와 공유할 수 있는 오류 로그 파일을 생성합니다</string>
-    <string name="crash_log_saved">오류 로그가 저장되었습니다</string>
     <string name="privacy_policy">개인정보 보호 정책</string>
     <string name="share_page_info">%1$s: %2$s, %3$d페이지</string>
     <string name="clear_history_confirmation">계속하시겠습니까\? 모든 기록이 삭제됩니다.</string>
@@ -511,10 +509,9 @@
     <string name="webtoon_side_padding_10">10%</string>
     <string name="action_track">트래킹</string>
     <string name="pref_refresh_library_covers">서재 표지 새로고침</string>
-    <string name="pref_dump_crash_logs">오류 로그 덤프</string>
+    <string name="pref_dump_crash_logs">오류 로그 공유</string>
     <string name="chapter_not_found">회차를 찾을 수 없습니다</string>
     <string name="error_no_match">결과가 없습니다</string>
-    <string name="channel_crash_logs">오류 로그</string>
     <string name="ext_nsfw_warning">이 확장기능의 소스는 19금 콘텐츠가 포함될 수 있습니다</string>
     <string name="action_filter_tracked">트래커 사용</string>
     <string name="action_start">시작</string>
@@ -576,7 +573,6 @@
     <string name="pref_disable_battery_optimization_summary">백그라운드 서재 업데이트와 라이브러리 업데이트를 도울 수 있습니다</string>
     <string name="pref_verbose_logging">자세한 로그</string>
     <string name="pref_verbose_logging_summary">자세한 로그를 시스템 로그에 기록 (성능이 하락할 수 있습니다)</string>
-    <string name="badges_header">배지</string>
     <string name="date">날짜</string>
     <string name="local_filter_order_by">정렬</string>
     <string name="track_started_reading_date">읽기 시작한 날짜</string>
@@ -635,7 +631,6 @@
     <string name="battery_not_low">배터리가 부족하지 않을 때만</string>
     <string name="pref_clear_webview_data">WebView 데이터 지우기</string>
     <string name="webview_data_deleted">WebView 데이터 삭제됨</string>
-    <string name="split_tall_images">긴 이미지 분할</string>
     <string name="split_tall_images_summary">리더 성능 향상</string>
     <string name="ext_info_version">버전</string>
     <string name="ext_info_language">언어</string>
@@ -665,7 +660,6 @@
     <string name="cant_open_last_read_chapter">마지막 회차를 열 수 없습니다</string>
     <string name="appwidget_updates_description">최근에 업데이트된 항목 보기</string>
     <string name="on_hold_list">보류 목록</string>
-    <string name="download_notifier_split_failed">다운로드한 사진을 나눌 수 없습니다</string>
     <string name="download_notifier_split_page_not_found">나누어 짐 중에 %d페이지 안 찾습니다</string>
     <string name="loader_rar5_error">RARv5 포맷은 지원되지 않습니다</string>
     <string name="appwidget_unavailable_locked">앱 잠금 사용 중에 위젯 이용할 없습니다</string>
@@ -699,7 +693,7 @@
     <string name="pref_downloads_summary">자동 다운로드, 미리 다운로드</string>
     <string name="crash_screen_title">예기치 않은 오류가 발생했습니다</string>
     <string name="crash_screen_restart_application">애플리케이션 재시작</string>
-    <string name="crash_screen_description">%s에 예기치 않은 오류가 발생했습니다. 이 메시지를 스크린샷으로 찍고, 충돌 로그를 덤프 한 다음 공식 디스코드 채널에 공유하는 것을 추천합니다.</string>
+    <string name="crash_screen_description">%s에 예기치 않은 오류가 발생했습니다. 충돌 로그를 공식 디스코드 채널에 공유하는 것을 추천합니다.</string>
     <string name="unknown_title">알 수 없는 제목</string>
     <string name="invalid_location">잘못된 위치: %s</string>
     <string name="error_user_agent_string_invalid">잘못된 사용자 에이전트 문자열</string>
@@ -723,4 +717,12 @@
         <item quantity="other">다음 %d화</item>
     </plurals>
     <string name="action_update_category">카테고리 업데이트</string>
+    <string name="split_tall_images">긴 이미지 분할</string>
+    <string name="overlay_header">오버레이</string>
+    <string name="pref_page_rotate">화면에 맞게 넓은 페이지 회전</string>
+    <string name="pref_page_rotate_invert">회전된 넓은 페이지의 회전 방향</string>
+    <string name="missing_items_unknown">챕터가 누락되었을 수 있습니다</string>
+    <plurals name="missing_items">
+        <item quantity="other">누락된 회차 %1$s개</item>
+    </plurals>
     </resources>

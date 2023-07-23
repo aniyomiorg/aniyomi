@@ -126,7 +126,6 @@
     <string name="no_results_found">هیچ نتیجه ای یافت نشد</string>
     <string name="no_more_results">نتیجه بیشتری یافت نشد</string>
     <string name="tabs_header">تب ها</string>
-    <string name="badges_header">تعداد</string>
     <string name="pref_backup_slots">حداکثر تعداد نسخه‌های پشتیبان</string>
     <string name="pref_backup_interval">زمان پشتیبان گیری</string>
     <string name="pref_backup_service_category">پشتیبان گیری خودکار</string>
@@ -332,7 +331,6 @@
     <string name="action_next_chapter">قسمت بعد</string>
     <string name="action_previous_chapter">قسمت قبل</string>
     <string name="action_pause">مکث</string>
-    <string name="action_stop">متوقف کردن</string>
     <string name="action_view_chapters">مشاهده قسمت ها</string>
     <string name="local_source_badge">محلی</string>
     <string name="updating_category">درحال به روز رسانی دسته بندی ها</string>
@@ -594,7 +592,6 @@
     <string name="include">شامل: %s</string>
     <string name="exclude">بدون: %s</string>
     <string name="save_chapter_as_cbz">ذخیره به عنوان فایل آرشیو CBZ</string>
-    <string name="split_tall_images">نصف کردن خودکار عکس های بلند</string>
     <string name="publishing_finished">انتشار به پایان رسید</string>
     <string name="local_invalid_format">قالب فصل نامعتبر است</string>
     <string name="cancelled">لغو شد</string>
@@ -623,4 +620,6 @@
     <string name="restore_miui_warning">پشتیبانی/بازگردانی ممکن است کار نکند اگر بهینه‌سازی MIUI غیر فعال باشد</string>
     <string name="enhanced_services_not_installed">در دسترس است اما افزونه منبع نصب نشده است: %s</string>
     <string name="backup_info">شما باید از پشتیبانی ها در جا های دیگر هم کپی داشته باشید.</string>
+    <string name="action_update_category">بروزرسانی دسته بندی</string>
+    <string name="action_copy_to_clipboard">کپی کردن به کلیپ‌برد</string>
     </resources>

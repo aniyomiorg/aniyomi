@@ -12,7 +12,6 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.installer.InstallerAnime
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -134,7 +133,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
      */
     fun installApk(downloadId: Long, uri: Uri) {
         when (val installer = extensionInstaller.get()) {
-            PreferenceValues.ExtensionInstaller.LEGACY -> {
+            BasePreferences.ExtensionInstaller.LEGACY -> {
                 val intent = Intent(context, AnimeExtensionInstallActivity::class.java)
                     .setDataAndType(uri, APK_MIME)
                     .putExtra(EXTRA_DOWNLOAD_ID, downloadId)

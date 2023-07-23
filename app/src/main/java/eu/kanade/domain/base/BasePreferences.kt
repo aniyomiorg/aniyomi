@@ -3,6 +3,7 @@ package eu.kanade.domain.base
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import eu.kanade.tachiyomi.R
 import tachiyomi.core.preference.PreferenceStore
 
 class BasePreferences(
@@ -22,4 +23,10 @@ class BasePreferences(
     fun acraEnabled() = preferenceStore.getBoolean("acra.enable", false)
 
     fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+
+    enum class ExtensionInstaller(val titleResId: Int) {
+        LEGACY(R.string.ext_installer_legacy),
+        PACKAGEINSTALLER(R.string.ext_installer_packageinstaller),
+        SHIZUKU(R.string.ext_installer_shizuku),
+    }
 }

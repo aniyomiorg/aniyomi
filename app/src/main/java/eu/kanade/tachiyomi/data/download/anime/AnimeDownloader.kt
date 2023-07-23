@@ -62,11 +62,6 @@ import java.util.concurrent.TimeUnit
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
- *
- * @param context the application context.
- * @param provider the downloads directory provider.
- * @param cache the downloads cache, used to add the downloads to the cache after their completion.
- * @param sourceManager the source manager.
  */
 class AnimeDownloader(
     private val context: Context,
@@ -85,7 +80,7 @@ class AnimeDownloader(
     /**
      * Queue where active downloads are kept.
      */
-    val _queueState = MutableStateFlow<List<AnimeDownload>>(emptyList())
+    private val _queueState = MutableStateFlow<List<AnimeDownload>>(emptyList())
     val queueState = _queueState.asStateFlow()
 
     /**
@@ -146,7 +141,7 @@ class AnimeDownloader(
 
         initializeSubscription()
 
-        val pending = queueState.value.filter { it: AnimeDownload -> it.status != AnimeDownload.State.DOWNLOADED }
+        val pending = queueState.value.filter { it.status != AnimeDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != AnimeDownload.State.QUEUE) it.status = AnimeDownload.State.QUEUE }
 
         isPaused = false
@@ -290,7 +285,7 @@ class AnimeDownloader(
         // Runs in main thread (synchronization needed).
         val episodesToQueue = episodesWithoutDir.await()
             // Filter out those already enqueued.
-            .filter { episode -> queueState.value.none { it: AnimeDownload -> it.episode.id == episode.id } }
+            .filter { episode -> queueState.value.none { it.episode.id == episode.id } }
             // Create a download for each one.
             .map { AnimeDownload(source, anime, it, changeDownloader, video) }
 
@@ -765,7 +760,7 @@ class AnimeDownloader(
      * Returns true if all the queued downloads are in DOWNLOADED or ERROR state.
      */
     private fun areAllAnimeDownloadsFinished(): Boolean {
-        return queueState.value.none { it: AnimeDownload -> it.status.value <= AnimeDownload.State.DOWNLOADING.value }
+        return queueState.value.none { it.status.value <= AnimeDownload.State.DOWNLOADING.value }
     }
 
     private val progressSubject = PublishSubject.create<AnimeDownload>()
@@ -780,7 +775,7 @@ class AnimeDownloader(
         video?.progressSubject = subject
     }
 
-    fun addAllToQueue(downloads: List<AnimeDownload>) {
+    private fun addAllToQueue(downloads: List<AnimeDownload>) {
         _queueState.update {
             downloads.forEach { download ->
                 download.progressSubject = progressSubject
@@ -792,7 +787,7 @@ class AnimeDownloader(
         }
     }
 
-    fun removeFromQueue(download: AnimeDownload) {
+    private fun removeFromQueue(download: AnimeDownload) {
         _queueState.update {
             store.remove(download)
             download.progressSubject = null
@@ -814,7 +809,7 @@ class AnimeDownloader(
         queueState.value.filter { it.anime.id == anime.id }.forEach { removeFromQueue(it) }
     }
 
-    fun _clearQueue() {
+    private fun _clearQueue() {
         _queueState.update {
             it.forEach { download ->
                 download.progressSubject = null

@@ -34,7 +34,7 @@ class MangaExtensionFilterScreen : Screen() {
         MangaExtensionFilterScreen(
             navigateUp = navigator::pop,
             state = successState,
-            onClickToggle = { screenModel.toggle(it) },
+            onClickToggle = screenModel::toggle,
         )
 
         LaunchedEffect(Unit) {

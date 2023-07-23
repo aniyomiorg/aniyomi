@@ -193,7 +193,7 @@ class BackupManager(
             .map(Manga::source)
             .distinct()
             .map(mangaSourceManager::getOrStub)
-            .map { BackupSource.copyFrom(it) }
+            .map(BackupSource::copyFrom)
             .toList()
     }
 
@@ -203,7 +203,7 @@ class BackupManager(
             .map(Anime::source)
             .distinct()
             .map(animeSourceManager::getOrStub)
-            .map { BackupAnimeSource.copyFrom(it) }
+            .map(BackupAnimeSource::copyFrom)
             .toList()
     }
 

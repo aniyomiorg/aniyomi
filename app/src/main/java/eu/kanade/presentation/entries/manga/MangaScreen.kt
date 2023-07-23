@@ -68,6 +68,7 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.service.missingItemsCount
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.TwoPanelBox
@@ -397,6 +398,7 @@ private fun MangaScreenSmallImpl(
                         ItemHeader(
                             enabled = chapters.fastAll { !it.selected },
                             itemCount = chapters.size,
+                            missingItemsCount = chapters.map { it.chapter.chapterNumber }.missingItemsCount(),
                             onClick = onFilterClicked,
                             isManga = true,
                         )
@@ -611,6 +613,7 @@ fun MangaScreenLargeImpl(
                                 ItemHeader(
                                     enabled = chapters.fastAll { !it.selected },
                                     itemCount = chapters.size,
+                                    missingItemsCount = chapters.map { it.chapter.chapterNumber }.missingItemsCount(),
                                     onClick = onFilterButtonClicked,
                                     isManga = true,
                                 )

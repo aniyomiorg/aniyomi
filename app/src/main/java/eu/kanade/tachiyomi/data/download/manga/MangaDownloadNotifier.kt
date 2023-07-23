@@ -11,8 +11,9 @@ import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.lang.chop
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.notify
 import uy.kohesive.injekt.injectLazy
 import java.util.regex.Pattern
 
@@ -50,7 +51,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
      * @param id the id of the notification.
      */
     private fun NotificationCompat.Builder.show(id: Int) {
-        context.notificationManager.notify(id, build())
+        context.notify(id, build())
     }
 
     /**
@@ -58,7 +59,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
      * those can only be dismissed by the user.
      */
     fun dismissProgress() {
-        context.notificationManager.cancel(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
+        context.cancelNotification(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
     }
 
     /**

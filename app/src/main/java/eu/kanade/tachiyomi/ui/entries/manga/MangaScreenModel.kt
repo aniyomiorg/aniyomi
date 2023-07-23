@@ -12,7 +12,6 @@ import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.downloadedFilter
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
@@ -72,6 +71,7 @@ import tachiyomi.domain.items.chapter.service.getChapterSort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
@@ -972,6 +972,14 @@ class MangaInfoScreenModel(
             }
         }
     }
+
+    private val Throwable.snackbarMessage: String
+        get() = when (val className = this::class.simpleName) {
+            null -> message ?: ""
+            "SourceNotInstalledException" -> context.getString(R.string.loader_not_implemented_error)
+            "Exception", "HttpException", "IOException" -> message ?: className
+            else -> "$className: $message"
+        }
 }
 
 sealed class MangaScreenState {
@@ -1032,10 +1040,3 @@ val chapterDecimalFormat = DecimalFormat(
     DecimalFormatSymbols()
         .apply { decimalSeparator = '.' },
 )
-
-private val Throwable.snackbarMessage: String
-    get() = when (val className = this::class.simpleName) {
-        null -> message ?: ""
-        "Exception", "HttpException", "IOException", "SourceNotInstalledException" -> message ?: className
-        else -> "$className: $message"
-    }

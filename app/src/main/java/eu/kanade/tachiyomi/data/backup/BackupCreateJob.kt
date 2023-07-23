@@ -9,13 +9,13 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.cancelNotification
+import eu.kanade.tachiyomi.util.system.isRunning
+import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.backup.service.BackupPreferences
@@ -23,7 +23,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.TimeUnit
 
-class BackupCreatorJob(private val context: Context, workerParams: WorkerParameters) :
+class BackupCreateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     private val notifier = BackupNotifier(context)
@@ -41,7 +41,6 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
             logcat(LogPriority.ERROR, e) { "Not allowed to run on foreground service" }
         }
 
-        context.notificationManager.notify(Notifications.ID_BACKUP_PROGRESS, notifier.showBackupProgress().build())
         return try {
             val location = BackupManager(context).createBackup(uri, flags, isAutoBackup)
             if (!isAutoBackup) notifier.showBackupComplete(UniFile.fromUri(context, location.toUri()))
@@ -51,18 +50,20 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
             if (!isAutoBackup) notifier.showBackupError(e.message)
             Result.failure()
         } finally {
-            context.notificationManager.cancel(Notifications.ID_BACKUP_PROGRESS)
+            context.cancelNotification(Notifications.ID_BACKUP_PROGRESS)
         }
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
-        return ForegroundInfo(Notifications.ID_BACKUP_PROGRESS, notifier.showBackupProgress().build())
+        return ForegroundInfo(
+            Notifications.ID_BACKUP_PROGRESS,
+            notifier.showBackupProgress().build(),
+        )
     }
 
     companion object {
         fun isManualJobRunning(context: Context): Boolean {
-            val list = WorkManager.getInstance(context).getWorkInfosByTag(TAG_MANUAL).get()
-            return list.find { it.state == WorkInfo.State.RUNNING } != null
+            return context.workManager.isRunning(TAG_MANUAL)
         }
 
         fun setupTask(context: Context, prefInterval: Int? = null, prefFlags: Int? = null) {
@@ -71,9 +72,8 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
             val flags = prefFlags ?: backupPreferences.backupFlags().get().sumOf { s ->
                 s.toInt(16)
             }
-            val workManager = WorkManager.getInstance(context)
             if (interval > 0) {
-                val request = PeriodicWorkRequestBuilder<BackupCreatorJob>(
+                val request = PeriodicWorkRequestBuilder<BackupCreateJob>(
                     interval.toLong(),
                     TimeUnit.HOURS,
                     10,
@@ -88,9 +88,9 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
                     )
                     .build()
 
-                workManager.enqueueUniquePeriodicWork(TAG_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(TAG_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
             } else {
-                workManager.cancelUniqueWork(TAG_AUTO)
+                context.workManager.cancelUniqueWork(TAG_AUTO)
             }
         }
 
@@ -100,11 +100,11 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
                 LOCATION_URI_KEY to uri.toString(),
                 BACKUP_FLAGS_KEY to flags,
             )
-            val request = OneTimeWorkRequestBuilder<BackupCreatorJob>()
+            val request = OneTimeWorkRequestBuilder<BackupCreateJob>()
                 .addTag(TAG_MANUAL)
                 .setInputData(inputData)
                 .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(TAG_MANUAL, ExistingWorkPolicy.KEEP, request)
+            context.workManager.enqueueUniqueWork(TAG_MANUAL, ExistingWorkPolicy.KEEP, request)
         }
     }
 }

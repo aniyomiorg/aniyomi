@@ -7,7 +7,6 @@ import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
@@ -25,6 +24,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_C
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.model.MangaTrack
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

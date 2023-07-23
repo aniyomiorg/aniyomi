@@ -33,7 +33,6 @@
     <string name="action_move_category">Zmień kategorie</string>
     <string name="action_edit_cover">Edytuj okładkę</string>
     <string name="action_sort_total">Ilość rozdziałów</string>
-    <string name="action_stop">Zatrzymaj</string>
     <string name="action_pause">Wstrzymaj</string>
     <string name="action_previous_chapter">Poprzedni rozdział</string>
     <string name="action_next_chapter">Następny rozdział</string>
@@ -432,7 +431,6 @@
     <string name="action_migrate">Migracja</string>
     <string name="page_list_empty_error">Nie znaleziono żadnych stron</string>
     <string name="tabs_header">Karty</string>
-    <string name="badges_header">Plakietki</string>
     <string name="action_display_show_tabs">Pokaż karty kategorii</string>
     <string name="action_disable_all">Wyłącz wszystkie</string>
     <string name="action_enable_all">Włącz wszystkie</string>
@@ -502,10 +500,8 @@
     <string name="file_picker_error">Nie znaleziono aplikacji do przeglądania plików</string>
     <string name="myanimelist_relogin">Wymagane ponowne zalogowanie do MAL</string>
     <string name="pref_show_nsfw_source">Pokazuj na liście źródeł i rozszerzeń</string>
-    <string name="channel_crash_logs">Logi crashy</string>
     <string name="track_finished_reading_date">Data zakończenia</string>
     <string name="track_started_reading_date">Data rozpoczęcia</string>
-    <string name="crash_log_saved">Logi crasha zapisane</string>
     <string name="pref_dump_crash_logs_summary">Zapisuje logi błędów do pliku do udostępnienia programistom</string>
     <string name="pref_dump_crash_logs">Zapisz logi crasha</string>
     <string name="pref_viewer_nav">Strefy kliknięcia</string>
@@ -656,7 +652,6 @@
     <string name="action_close">Zamknij</string>
     <string name="action_move_to_top_all_for_series">Przenieś serię na górę</string>
     <string name="action_sort_unread_count">Ilość nieprzeczytanych</string>
-    <string name="split_tall_images">Rozdzielaj wysokie obrazy</string>
     <string name="learn_more">Kliknij, by dowiedzieć się więcej</string>
     <string name="update_check_open">Otwórz na GitHubie</string>
     <string name="pref_reset_viewer_flags_success">Reset wszystkich ustawień czytnika</string>
@@ -671,7 +666,6 @@
     <string name="error_saving_picture">Błąd podczas zapisywania obrazka</string>
     <string name="pref_clear_webview_data">Wyczyść dane WebView</string>
     <string name="webview_data_deleted">Dane WebView wyczyszczone</string>
-    <string name="download_notifier_split_failed">Nie można rozdzielić pobranego obrazka</string>
     <string name="split_tall_images_summary">Poprawia wydajność czytnika</string>
     <string name="description_placeholder">Brak opisu</string>
     <string name="wish_list">Lista życzeń</string>

@@ -148,7 +148,6 @@
     <string name="action_next_chapter">Sekantis skyrius</string>
     <string name="action_previous_chapter">Ankstesnis skyrius</string>
     <string name="action_pause">Pristabdyti</string>
-    <string name="action_stop">Stop</string>
     <string name="action_view_chapters">Rodyti skyrius</string>
     <string name="action_edit_cover">Keisti viršelį</string>
     <string name="action_move_category">Perkelti kategorijas</string>
@@ -466,7 +465,6 @@
     <string name="pref_navigate_pan">Bakstelėdami slinkti plačius vaizdus</string>
     <string name="pref_landscape_zoom">Priartinti horizontalų vaizdą</string>
     <string name="ext_info_version">Versija</string>
-    <string name="split_tall_images">Automatiškai padalinti aukšti vaizdai</string>
     <string name="tracking_info">Vienpusė sinchronizacija, skirta skaitymo progresui stebėjimo paslaugose atnaujinti. Nustatykite atskirą įrašų sekimą iš jų sekimo mygtuko.</string>
     <string name="pref_create_backup_summ">Galima naudoti dabartinei bibliotekai atkurti</string>
     <string name="pref_webtoon_side_padding">Šoninis spaudinėjimas</string>
@@ -488,7 +486,6 @@
     <string name="update_check_open">Atidaryti „GitHub“ svetainėje</string>
     <string name="channel_app_updates">Programėlių atnaujinimai</string>
     <string name="channel_ext_updates">Plėtinių atnaujinimai</string>
-    <string name="channel_crash_logs">Strigčių žurnalai</string>
     <string name="spen_previous_page">Ankstesnis puslapis</string>
     <string name="restore_miui_warning">Atsarginės kopijos kūrimas / atkūrimas gali veikti netinkamai, jei \"MIUI Optimization\" yra išjungtas.</string>
     <string name="restoring_backup_canceled">Atšauktas atkūrimas</string>
@@ -526,7 +523,6 @@
         <item quantity="few">%d plėtinių atnaujinimai pasiekiami</item>
         <item quantity="other">%d plėtinių atnaujinimai pasiekiami</item>
     </plurals>
-    <string name="download_notifier_split_failed">Nepavyko padalyti atsisiųsto vaizdo</string>
     <string name="chapter_settings_updated">Atnaujinti numatytus skyrių nustatymus</string>
     <string name="download_notifier_downloader_title">Parsisiuntėjas</string>
     <string name="download_notifier_title_error">Klaida</string>
@@ -559,7 +555,6 @@
     <string name="pref_reset_viewer_flags_summary">Iš naujo nustati visų serijų skaitymo režimą ir orientaciją</string>
     <string name="pref_reset_viewer_flags_success">Visų skaitytuvo nustatymų nustatymas iš naujo</string>
     <string name="pref_reset_viewer_flags_error">Nepavyko atstatyti skaitytuvo nustatymų</string>
-    <string name="crash_log_saved">Išsaugoti strigčių žurnalai</string>
     <string name="label_background_activity">Fono veikla</string>
     <string name="pref_disable_battery_optimization_summary">Padeda su fono bibliotekos naujinimais ir atsarginėmis kopijomis</string>
     <string name="battery_optimization_disabled">Akumuliatoriaus optimizavimas jau išjungtas</string>
@@ -601,7 +596,6 @@
     <string name="manga_cover">Viršelis</string>
     <string name="pinned_sources">Prisegtas</string>
     <string name="email">El. pašto adresas</string>
-    <string name="badges_header">Žymės</string>
     <string name="http_error_hint">Patikrinkite svetainę \"WebView\" aplinkoje</string>
     <string name="action_global_search_hint">Pasaulinė paieška…</string>
     <string name="latest">Naujausia</string>

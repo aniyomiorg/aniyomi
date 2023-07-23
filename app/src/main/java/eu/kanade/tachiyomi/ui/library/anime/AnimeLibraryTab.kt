@@ -31,7 +31,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.entries.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -64,6 +63,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab {
@@ -150,7 +150,7 @@ object AnimeLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = { screenModel.showSettingsDialog() },
+                    onClickFilter = screenModel::showSettingsDialog,
                     onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
                     onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
@@ -216,7 +216,7 @@ object AnimeLibraryTab : Tab {
                             }
                             Unit
                         }.takeIf { state.showAnimeContinueButton },
-                        onToggleSelection = { screenModel.toggleSelection(it) },
+                        onToggleSelection = screenModel::toggleSelection,
                         onToggleRangeSelection = {
                             screenModel.toggleRangeSelection(it)
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -276,7 +276,7 @@ object AnimeLibraryTab : Tab {
         }
 
         LaunchedEffect(state.selectionMode, state.dialog) {
-            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is AnimeLibraryScreenModel.Dialog.SettingsSheet)
+            HomeScreen.showBottomNav(!state.selectionMode)
         }
 
         LaunchedEffect(state.isLoading) {

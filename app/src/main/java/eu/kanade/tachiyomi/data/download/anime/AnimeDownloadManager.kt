@@ -90,7 +90,7 @@ class AnimeDownloadManager(
      * @param episodeId the episode to check.
      */
     fun getQueuedDownloadOrNull(episodeId: Long): AnimeDownload? {
-        return queueState.value.find { it: AnimeDownload -> it.episode.id == episodeId }
+        return queueState.value.find { it.episode.id == episodeId }
     }
 
     fun startDownloadNow(episodeId: Long?) {

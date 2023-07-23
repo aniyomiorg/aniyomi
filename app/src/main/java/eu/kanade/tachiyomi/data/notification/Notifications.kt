@@ -63,12 +63,6 @@ object Notifications {
     const val ID_RESTORE_COMPLETE = -504
 
     /**
-     * Notification channel used for crash log file sharing.
-     */
-    const val CHANNEL_CRASH_LOGS = "crash_logs_channel"
-    const val ID_CRASH_LOGS = -601
-
-    /**
      * Notification channel used for Incognito Mode
      */
     const val CHANNEL_INCOGNITO_MODE = "incognito_mode_channel"
@@ -93,6 +87,7 @@ object Notifications {
         "library_progress_channel",
         "updates_ext_channel",
         "downloader_cache_renewal",
+        "crash_logs_channel",
     )
 
     /**
@@ -102,12 +97,12 @@ object Notifications {
      * @param context The application context.
      */
     fun createChannels(context: Context) {
-        val notificationService = NotificationManagerCompat.from(context)
+        val notificationManager = NotificationManagerCompat.from(context)
 
         // Delete old notification channels
-        deprecatedChannels.forEach(notificationService::deleteNotificationChannel)
+        deprecatedChannels.forEach(notificationManager::deleteNotificationChannel)
 
-        notificationService.createNotificationChannelGroupsCompat(
+        notificationManager.createNotificationChannelGroupsCompat(
             listOf(
                 buildNotificationChannelGroup(GROUP_BACKUP_RESTORE) {
                     setName(context.getString(R.string.label_backup))
@@ -124,7 +119,7 @@ object Notifications {
             ),
         )
 
-        notificationService.createNotificationChannelsCompat(
+        notificationManager.createNotificationChannelsCompat(
             listOf(
                 buildNotificationChannel(CHANNEL_COMMON, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.channel_common))
@@ -167,9 +162,6 @@ object Notifications {
                     setGroup(GROUP_BACKUP_RESTORE)
                     setShowBadge(false)
                     setSound(null, null)
-                },
-                buildNotificationChannel(CHANNEL_CRASH_LOGS, IMPORTANCE_HIGH) {
-                    setName(context.getString(R.string.channel_crash_logs))
                 },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.pref_incognito_mode))

@@ -47,7 +47,7 @@ fun SkipIntroLengthDialog(
             content = {
                 WheelTextPicker(
                     modifier = Modifier.align(Alignment.Center),
-                    texts = remember { 1..255 }.map { stringResource(R.string.seconds_short, it) },
+                    items = remember { 1..255 }.map { stringResource(R.string.seconds_short, it) },
                     onSelectionChanged = { newLength = it + 1 },
                     startIndex = if (currentSkipIntroLength > 0) {
                         currentSkipIntroLength - 1

@@ -99,10 +99,6 @@ import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 import kotlin.math.max
 
-/**
- * Activity containing the reader of Tachiyomi. This activity is mostly a container of the
- * viewers, to which calls from the presenter or UI events are delegated.
- */
 class ReaderActivity : BaseActivity() {
 
     companion object {
@@ -662,7 +658,7 @@ class ReaderActivity : BaseActivity() {
      * Called from the presenter when a manga is ready. Used to instantiate the appropriate viewer
      * and the toolbar title.
      */
-    fun setManga(manga: Manga) {
+    private fun setManga(manga: Manga) {
         val prevViewer = viewer
 
         val viewerMode = ReadingModeType.fromPreference(viewModel.getMangaReadingMode(resolveDefault = false))
@@ -777,7 +773,7 @@ class ReaderActivity : BaseActivity() {
      * Called from the presenter if the initial load couldn't load the pages of the chapter. In
      * this case the activity is closed and a toast is shown to the user.
      */
-    fun setInitialChapterError(error: Throwable) {
+    private fun setInitialChapterError(error: Throwable) {
         logcat(LogPriority.ERROR, error)
         finish()
         toast(error.message)
@@ -952,7 +948,7 @@ class ReaderActivity : BaseActivity() {
      * cover to the presenter.
      */
     fun setAsCover(page: ReaderPage) {
-        viewModel.setAsCover(this, page)
+        viewModel.setAsCover(page)
     }
 
     /**
@@ -1040,21 +1036,21 @@ class ReaderActivity : BaseActivity() {
                 .launchIn(lifecycleScope)
 
             readerPreferences.showPageNumber().changes()
-                .onEach { setPageNumberVisibility(it) }
+                .onEach(::setPageNumberVisibility)
                 .launchIn(lifecycleScope)
 
             readerPreferences.trueColor().changes()
-                .onEach { setTrueColor(it) }
+                .onEach(::setTrueColor)
                 .launchIn(lifecycleScope)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 readerPreferences.cutoutShort().changes()
-                    .onEach { setCutoutShort(it) }
+                    .onEach(::setCutoutShort)
                     .launchIn(lifecycleScope)
             }
 
             readerPreferences.keepScreenOn().changes()
-                .onEach { setKeepScreenOn(it) }
+                .onEach(::setKeepScreenOn)
                 .launchIn(lifecycleScope)
 
             readerPreferences.customBrightness().changes()
@@ -1062,7 +1058,7 @@ class ReaderActivity : BaseActivity() {
                 .launchIn(lifecycleScope)
 
             readerPreferences.colorFilter().changes()
-                .onEach { setColorFilter(it) }
+                .onEach(::setCustomBrightness)
                 .launchIn(lifecycleScope)
 
             readerPreferences.colorFilterMode().changes()
@@ -1139,7 +1135,7 @@ class ReaderActivity : BaseActivity() {
             if (enabled) {
                 readerPreferences.customBrightnessValue().changes()
                     .sample(100)
-                    .onEach { setCustomBrightnessValue(it) }
+                    .onEach(::setCustomBrightnessValue)
                     .launchIn(lifecycleScope)
             } else {
                 setCustomBrightnessValue(0)
@@ -1153,7 +1149,7 @@ class ReaderActivity : BaseActivity() {
             if (enabled) {
                 readerPreferences.colorFilterValue().changes()
                     .sample(100)
-                    .onEach { setColorFilterValue(it) }
+                    .onEach(::setColorFilterValue)
                     .launchIn(lifecycleScope)
             } else {
                 binding.colorOverlay.isVisible = false

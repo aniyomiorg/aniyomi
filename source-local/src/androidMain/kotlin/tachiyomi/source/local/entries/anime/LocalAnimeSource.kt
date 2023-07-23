@@ -2,6 +2,7 @@ package tachiyomi.source.local.entries.anime
 
 import android.content.Context
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -18,6 +19,7 @@ import rx.Observable
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.R
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
@@ -233,3 +235,7 @@ actual class LocalAnimeSource(
         }
     }
 }
+
+fun Anime.isLocal(): Boolean = source == LocalAnimeSource.ID
+
+fun AnimeSource.isLocal(): Boolean = id == LocalAnimeSource.ID

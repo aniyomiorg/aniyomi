@@ -1,16 +1,16 @@
 [versions]
-aboutlib_version = "10.6.1"
+aboutlib_version = "10.6.2"
 okhttp_version = "5.0.0-alpha.11"
-coil_version = "2.2.2"
+coil_version = "2.3.0"
 shizuku_version = "12.2.0"
-sqlite = "2.3.0"
+sqlite = "2.3.1"
 sqldelight = "1.5.5"
 leakcanary = "2.10"
 voyager = "1.0.0-rc07"
 richtext = "0.16.0"
 
 [libraries]
-desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
+desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
 google-services-gradle = "com.google.gms:google-services:4.3.15"
 google-crashlytics-gradle = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
@@ -47,7 +47,7 @@ coil-core = { module = "io.coil-kt:coil", version.ref = "coil_version" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil_version" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil_version" }
 
-subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:846abe0"
+subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:c8e2650"
 image-decoder = "com.github.tachiyomiorg:image-decoder:7879b45"
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
@@ -62,13 +62,13 @@ photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
 compose-cascade = "me.saket.cascade:cascade-compose:2.0.0-rc02"
-compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.10.4"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.11.3"
 compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.0"
 
 logcat = "com.squareup.logcat:logcat:0.1"
 
 acra-http = "ch.acra:acra-http:5.9.7"
-firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.2"
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.1"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
@@ -87,6 +87,7 @@ sqldelight-android-paging = { module = "com.squareup.sqldelight:android-paging3-
 sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 junit = "org.junit.jupiter:junit-jupiter:5.9.2"
+kotest-assertions = "io.kotest:kotest-assertions-core:5.6.1"
 
 voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voyager" }
 voyager-tab-navigator = { module = "ca.gosyer:voyager-tab-navigator", version.ref = "voyager" }
@@ -109,3 +110,4 @@ coil = ["coil-core", "coil-gif", "coil-compose"]
 shizuku = ["shizuku-api", "shizuku-provider"]
 voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions"]
 richtext = ["richtext-commonmark", "richtext-m3"]
+test = ["junit", "kotest-assertions"]

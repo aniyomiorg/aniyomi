@@ -40,7 +40,6 @@
     <string name="action_rename_category">Перейменувати категорію</string>
     <string name="action_move_category">Помістити в категорію</string>
     <string name="action_edit_cover">Змінити обкладинку</string>
-    <string name="action_stop">Стоп</string>
     <string name="action_pause">Пауза</string>
     <string name="action_previous_chapter">Попередній розділ</string>
     <string name="action_next_chapter">Наступний розділ</string>
@@ -228,7 +227,7 @@
     <string name="cover_updated">Обкладинку оновлено</string>
     <string name="chapter_progress">Сторінка %1$d</string>
     <string name="no_next_chapter">Наступний розділ не знайдено</string>
-    <string name="decode_image_error">Зображення не може бути завантажене</string>
+    <string name="decode_image_error">Зображення не вдалося завантажити</string>
     <string name="confirm_set_image_as_cover">Ви бажаєте встановити цю картинку як обкладинку\?</string>
     <string name="transition_finished">Завершено:</string>
     <string name="transition_current">Поточна:</string>
@@ -399,7 +398,6 @@
     <string name="local_source_help_guide">Посібник місцевого джерела</string>
     <string name="last_used_source">Останній використаний</string>
     <string name="tabs_header">Вкладки</string>
-    <string name="badges_header">Значки</string>
     <plurals name="download_queue_summary">
         <item quantity="one">%1$s залишилось</item>
         <item quantity="few">%1$s залишилось</item>
@@ -502,12 +500,10 @@
     <string name="myanimelist_relogin">Будь ласка, увійдіть в MAL знову</string>
     <string name="pref_show_nsfw_source">Показувати в списку джерел та розширень</string>
     <string name="pref_category_nsfw_content">NSFW (18+) джерела</string>
-    <string name="channel_crash_logs">Логи падінь</string>
     <string name="track_finished_reading_date">Дата закінчення</string>
     <string name="track_started_reading_date">Дата початку</string>
-    <string name="crash_log_saved">Логи падінь збережено</string>
     <string name="pref_dump_crash_logs_summary">Зберігає логи помилок до файлу для надсилання розробникам</string>
-    <string name="pref_dump_crash_logs">Дамп логів про падіння</string>
+    <string name="pref_dump_crash_logs">Поділіться журналами збоїв</string>
     <string name="pref_viewer_nav">Зони тицяння</string>
     <string name="edge_nav">Межа</string>
     <string name="kindlish_nav">Kindle-подібна</string>
@@ -655,8 +651,6 @@
     <string name="skipped_reason_not_started">Пропущено, оскільки серія не почата</string>
     <string name="empty_backup_error">Немає елементів у бібліотеці для резервування</string>
     <string name="download_notifier_split_page_not_found">Сторінку %d не знайдено, при розділенні</string>
-    <string name="download_notifier_split_failed">Неможливо розділити завантажене зображення</string>
-    <string name="split_tall_images">Розділяти довгі зображення</string>
     <string name="split_tall_images_summary">Покращує продуктивність читалки</string>
     <string name="webview_data_deleted">Дані WebView очищені</string>
     <string name="pref_clear_webview_data">Очистити дані WebView</string>
@@ -723,7 +717,7 @@
     <string name="error_user_agent_string_blank">Рядок User agent не може бути пустим</string>
     <string name="popular">Популярне</string>
     <string name="auto_download_while_reading">Автоматичне завантаження під час читання</string>
-    <string name="crash_screen_description">%s зіткнулось з непередбачуваною помилкою. Ми пропонуємо вам, зробити скріншот цього повідомлення, завантажити журнал помилок та поділитись ними з нами на нашому каналі підтримки в Discord.</string>
+    <string name="crash_screen_description">%s зіткнулися з неочікуваною помилкою. Ми пропонуємо вам поділитися журналами збоїв у нашому каналі підтримки на Discord.</string>
     <string name="pref_general_summary">Мова застосунку, сповіщення</string>
     <string name="pref_appearance_summary">Тема, формат дати та часу</string>
     <string name="pref_library_summary">Категорії, глобальне оновлення</string>
@@ -759,4 +753,15 @@
         <item quantity="other">Наступних %d розділів</item>
     </plurals>
     <string name="action_update_category">Оновити категорію</string>
+    <string name="split_tall_images">Розділяти довгі зображення</string>
+    <string name="overlay_header">Оверлей</string>
+    <string name="missing_items_unknown">Можливо, відсутні розділи</string>
+    <string name="pref_page_rotate">Повернути широкі сторінки за розміром</string>
+    <string name="pref_page_rotate_invert">Перевернути орієнтацію обернутих широких сторінок</string>
+    <plurals name="missing_items">
+        <item quantity="one">Відсутній %1$s розділ</item>
+        <item quantity="few">Відсутні %1$s розділи</item>
+        <item quantity="many">Відсутні %1$s розділів</item>
+        <item quantity="other">Відсутні %1$s розділів</item>
+    </plurals>
     </resources>

@@ -40,7 +40,6 @@
     <string name="action_rename_category">Преименуј категорију</string>
     <string name="action_move_category">Изабери категорије</string>
     <string name="action_edit_cover">Промени омот</string>
-    <string name="action_stop">Заустави</string>
     <string name="action_pause">Паузирај</string>
     <string name="action_previous_chapter">Претходно поглавље</string>
     <string name="action_next_chapter">Наредно поглавље</string>
@@ -528,7 +527,6 @@
     <string name="download_notifier_no_network">Нема доступне интернет везе</string>
     <string name="download_notifier_download_finish">Преузимање је завршено</string>
     <string name="channel_ext_updates">Ажурирања додатака</string>
-    <string name="channel_crash_logs">Логови крешовања</string>
     <string name="spen_previous_page">Претходна страница</string>
     <string name="spen_next_page">Следећа страница</string>
     <string name="filter_mode_darken">Потамни (Burn)</string>
@@ -565,7 +563,6 @@
         <item quantity="other">%1$s преосталих</item>
     </plurals>
     <string name="channel_errors">Грешке</string>
-    <string name="crash_log_saved">Логови крешовања су сачувани</string>
     <string name="chapter_settings">Подешавања поглавља</string>
     <string name="recently">Скоро</string>
     <string name="relative_time_today">Данас</string>
@@ -610,7 +607,6 @@
     <string name="tracking_info">Једносмерна синхронизација за ажурирање броја прочитаних поглавља у трекерима. За појединачно праћење наслова додирни дугме за њихово праћење.</string>
     <string name="label_data">Подаци</string>
     <string name="pref_incognito_mode">Инкогнито мод</string>
-    <string name="badges_header">Беџеви</string>
     <string name="cover_updated">Омот је ажуриран</string>
     <string name="share_page_info">%1$s: %2$s, страница %3$d</string>
     <string name="pref_category_for_this_series">За овај наслов</string>
@@ -666,7 +662,6 @@
     <string name="pref_browse_summary">Извори, екстензије, глобална претрага</string>
     <string name="pref_backup_summary">Ручне и аутоматске резервне копије</string>
     <string name="auto_download_while_reading">Преузми аутоматски током читања</string>
-    <string name="split_tall_images">Раздели високе слике</string>
     <string name="copied_to_clipboard_plain">Копирано</string>
     <string name="pref_reset_viewer_flags_success">Сва подешавања читача су ресетована</string>
     <string name="pref_invalidate_download_cache_summary">Присили апликацију да поново провери преузета поглавља</string>
@@ -675,7 +670,6 @@
     <string name="appwidget_unavailable_locked">Widget није доступан када је омогућено закључавање апликације</string>
     <string name="wish_list">Листа жеља</string>
     <string name="enhanced_services_not_installed">Доступно, али извор није преузет: %s</string>
-    <string name="other_header">Остало</string>
     <string name="fdroid_warning">F-Droid верзије нису званично подржане.
 \nДодирните да сазнате више.</string>
     <string name="track_remove_date_conf_title">Уклони датум\?</string>
@@ -740,7 +734,6 @@
     <string name="action_remove_everything">Уклони све</string>
     <string name="crash_screen_title">Упс!</string>
     <string name="crash_screen_restart_application">Поново покрени апликацију</string>
-    <string name="download_notifier_split_failed">Није могуће разделити преузету слику</string>
     <string name="cant_open_last_read_chapter">Није могуће отворити последње прочитано поглавље</string>
     <string name="action_search_hint">Претражи…</string>
     <string name="download_ahead">Преузми унапред</string>

@@ -37,7 +37,6 @@
     <string name="action_rename_category">重命名分类</string>
     <string name="action_move_category">设置分类</string>
     <string name="action_edit_cover">编辑封面</string>
-    <string name="action_stop">停止</string>
     <string name="action_pause">暂停</string>
     <string name="action_previous_chapter">上一章</string>
     <string name="action_next_chapter">下一章</string>
@@ -407,7 +406,6 @@
     <string name="action_migrate">迁移</string>
     <string name="action_display_comfortable_grid">松散网格</string>
     <string name="tabs_header">标签</string>
-    <string name="badges_header">标记</string>
     <string name="action_display_show_tabs">显示分类标签</string>
     <string name="page_list_empty_error">没有找到页面</string>
     <string name="action_disable_all">全部禁用</string>
@@ -473,12 +471,10 @@
     <string name="edge_nav">边缘样式</string>
     <string name="kindlish_nav">Kindle 样式</string>
     <string name="l_nav">L 样式</string>
-    <string name="channel_crash_logs">崩溃日志</string>
     <string name="track_finished_reading_date">阅读完毕日期</string>
     <string name="track_started_reading_date">开始阅读日期</string>
-    <string name="crash_log_saved">崩溃日志已保存</string>
     <string name="pref_dump_crash_logs_summary">将错误日志保存到文件中，以便分享给开发者</string>
-    <string name="pref_dump_crash_logs">导出崩溃日志</string>
+    <string name="pref_dump_crash_logs">分享崩溃日志</string>
     <string name="action_desc">降序</string>
     <string name="action_asc">升序</string>
     <string name="action_order_by_chapter_number">按章节编号</string>
@@ -634,15 +630,13 @@
     <string name="source_filter_empty_screen">未找到已安装的图源</string>
     <string name="source_empty_screen">未找到图源</string>
     <string name="action_sort_unread_count">未读数</string>
-    <string name="split_tall_images">分割长图</string>
     <string name="split_tall_images_summary">可以改善阅读器的性能</string>
     <string name="download_notifier_split_page_not_found">拆分时未找到页 %d</string>
     <string name="download_notifier_split_page_path_not_found">找不到页面 %d 的文件路径</string>
-    <string name="pref_reset_viewer_flags">重置每一连载阅读器设置</string>
-    <string name="pref_reset_viewer_flags_summary">重置所有连载的阅读模式和方向</string>
+    <string name="pref_reset_viewer_flags">重置各作品阅读器独立设置</string>
+    <string name="pref_reset_viewer_flags_summary">重置所有作品的阅读模式和屏幕方向</string>
     <string name="pref_reset_viewer_flags_success">已重置所有阅读器设置</string>
-    <string name="pref_reset_viewer_flags_error">无法重置阅读器设置</string>
-    <string name="download_notifier_split_failed">无法拆分下载的图像</string>
+    <string name="pref_reset_viewer_flags_error">重置阅读器设置失败</string>
     <string name="empty_screen">额，尴尬了</string>
     <string name="ext_info_age_rating">年龄分级</string>
     <string name="ext_info_version">版本</string>
@@ -687,7 +681,7 @@
     <string name="skipped_reason_not_always_update">已跳过，因为作品无需更新</string>
     <string name="action_search_hint">搜索…</string>
     <string name="crash_screen_title">发生了意外错误</string>
-    <string name="crash_screen_description">%s 发生了意外错误。建议你将此信息截图，导出崩溃日志，并在 Discord #support 频道或者 GitHub 上反馈。</string>
+    <string name="crash_screen_description">%s 发生了意外错误。建议你将崩溃日志分享到 Discord #support 频道或者在 GitHub 上反馈。</string>
     <string name="crash_screen_restart_application">重启应用</string>
     <string name="pref_appearance_summary">主题 • 日期格式</string>
     <string name="pref_general_summary">应用语言 • 通知</string>
@@ -720,4 +714,12 @@
     <string name="pref_hide_in_library_items">隐藏已添加到书架的作品</string>
     <string name="action_copy_to_clipboard">复制到剪贴板</string>
     <string name="action_update_category">更新分类</string>
+    <string name="split_tall_images">分割长图</string>
+    <string name="overlay_header">标记和按钮</string>
+    <string name="pref_page_rotate">旋转横向图片</string>
+    <plurals name="missing_items">
+        <item quantity="other">缺少 %1$s 章</item>
+    </plurals>
+    <string name="missing_items_unknown">可能缺少章节</string>
+    <string name="pref_page_rotate_invert">旋转横向图片时反转方向</string>
     </resources>

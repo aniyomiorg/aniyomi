@@ -63,7 +63,6 @@
         <item quantity="other">%1$s-n egin da %2$s errorerekin</item>
     </plurals>
     <string name="cookies_cleared">Cookieak garbitu dira</string>
-    <string name="crash_log_saved">Gorde dira erroreen erregistroak</string>
     <string name="dropped">Alde batera utzia</string>
     <string name="status">Egoera</string>
     <string name="untrusted_extension">Fidagarria ez den luzapena</string>
@@ -198,7 +197,6 @@
     <string name="ext_uninstall">Desinstalatu</string>
     <string name="pref_show_page_number">Erakutsi orrialdearen zenbakia</string>
     <string name="pref_refresh_library_tracking">Freskatu jarraipena</string>
-    <string name="badges_header">Bereizgarriak</string>
     <string name="in_library">Liburutegian</string>
     <string name="manga_info_expand">Gehiago</string>
     <string name="display_mode_chapter">%1$s Kapitulua</string>
@@ -385,7 +383,6 @@
     <string name="action_move_category">Kategoriak ezarri</string>
     <string name="action_edit_cover">Editatu azala</string>
     <string name="action_view_chapters">Ikusi kapituluak</string>
-    <string name="action_stop">Gelditu</string>
     <string name="action_pause">Pausatu</string>
     <string name="action_previous_chapter">Aurreko kapitulua</string>
     <string name="action_next_chapter">Hurrengo kapitulua</string>
@@ -444,7 +441,6 @@
     <string name="information_no_recent">Ez dago azkenaldiko eguneraketarik</string>
     <string name="information_empty_library">Zure liburutegia hutsik dago</string>
     <string name="information_empty_category">Ez daukazu kategoriarik. Sakatu gehiketa botoia zure liburutegia antolatzeko bat sortzeko.</string>
-    <string name="channel_crash_logs">Erroreen erregistroak</string>
     <string name="spen_previous_page">Aurreko orrialdea</string>
     <string name="on">Piztu</string>
     <string name="action_newest">Berriena</string>

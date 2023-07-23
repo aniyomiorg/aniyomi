@@ -33,7 +33,6 @@
     <string name="action_rename_category">Преименувай категория</string>
     <string name="action_move_category">Запиши в категории</string>
     <string name="action_edit_cover">Промени корица</string>
-    <string name="action_stop">Спри</string>
     <string name="action_pause">Паузирай</string>
     <string name="action_previous_chapter">Предишна глава</string>
     <string name="action_next_chapter">Следваща глава</string>
@@ -448,7 +447,6 @@
         <item quantity="other">%1$s глави</item>
     </plurals>
     <string name="tabs_header">Раздели</string>
-    <string name="badges_header">Значки</string>
     <string name="label_data">Данни</string>
     <string name="requires_app_restart">Изисква рестартиране, за да влезе в сила</string>
     <string name="label_network">Мрежа</string>
@@ -525,7 +523,6 @@
     <string name="pref_dump_crash_logs">Разтовари записите от сривовете</string>
     <string name="off">Не</string>
     <string name="rotation_landscape">Пейзаж</string>
-    <string name="crash_log_saved">Записите са запазени</string>
     <string name="label_background_activity">Работа на заден план</string>
     <string name="notification_incognito_text">Изключи инкогнито</string>
     <string name="notification_updating">Обновяване на библиотеката… (%1$d/%2$d)</string>
@@ -614,7 +611,6 @@
     <string name="file_picker_error">Не бе намерено приложение за подбор на файлове</string>
     <string name="getting_started_guide">Първи стъпки</string>
     <string name="chapter_settings_updated">Стандартните настройки на главите бяха обновени</string>
-    <string name="channel_crash_logs">Записи от сривове</string>
     <string name="spen_previous_page">Предишна страница</string>
     <string name="spen_next_page">Следваща страница</string>
     <string name="action_display_language_badge">Език</string>
@@ -691,7 +687,6 @@
     <string name="on_hold_list">Списък със спрени</string>
     <string name="download_ahead">Предстоящо изтегляне</string>
     <string name="download_ahead_info">Работи само със заглавия в библиотеката и ако текущата и следващата глава са вече изтеглени</string>
-    <string name="download_notifier_split_failed">Изтегленото изображение не можа да бъде разделено</string>
     <string name="appwidget_updates_description">Виж наскоро обновената манга</string>
     <string name="download_notifier_split_page_path_not_found">Не можа да бъде намерен файловият път на страница %d</string>
     <string name="pref_duplicate_pinned_sources">Показвай дубликати на закачените източници</string>
@@ -742,7 +737,6 @@
     <string name="pref_advanced_summary">Покажи записи от крашове, оптимизации за батерията</string>
     <string name="multi_lang">Мулти</string>
     <string name="pref_navigate_pan">Увеличи широките изображения при натискане</string>
-    <string name="split_tall_images">Разделяй високите изображения</string>
     <string name="split_tall_images_summary">Подобрява производителността на четеца</string>
     <string name="missing_storage_permission">Не е дадено разрешение за съхранение</string>
     <string name="publishing_finished">Приключено издаване</string>

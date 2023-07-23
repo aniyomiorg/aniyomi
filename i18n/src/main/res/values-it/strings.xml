@@ -32,7 +32,6 @@
     <string name="action_rename_category">Rinomina categoria</string>
     <string name="action_move_category">Assegna categorie</string>
     <string name="action_edit_cover">Modifica copertina</string>
-    <string name="action_stop">Ferma</string>
     <string name="action_pause">Pausa</string>
     <string name="action_previous_chapter">Capitolo precedente</string>
     <string name="action_next_chapter">Capitolo successivo</string>
@@ -446,7 +445,6 @@
     <string name="page_list_empty_error">Nessuna pagina trovata</string>
     <string name="sort_by_upload_date">Per data di aggiunta</string>
     <string name="tabs_header">Schede</string>
-    <string name="badges_header">Etichette</string>
     <string name="label_data">Dati</string>
     <string name="backup_restore_missing_sources">Fonti mancanti:</string>
     <string name="invalid_backup_file_missing_manga">Il backup non contiene alcuna voce di libreria.</string>
@@ -527,12 +525,10 @@
     <string name="edge_nav">Bordo</string>
     <string name="kindlish_nav">Stile Kindle</string>
     <string name="l_nav">A forma di L</string>
-    <string name="channel_crash_logs">Registro dei crash</string>
     <string name="track_finished_reading_date">Data fine</string>
     <string name="track_started_reading_date">Data inizio</string>
-    <string name="crash_log_saved">Registro dei crash salvato</string>
     <string name="pref_dump_crash_logs_summary">Salva un registro degli errori su un file per condividerlo con gli sviluppatori</string>
-    <string name="pref_dump_crash_logs">Salva un registro dei crash</string>
+    <string name="pref_dump_crash_logs">Condividi il registro dei crash</string>
     <string name="action_desc">Decrescente</string>
     <string name="action_asc">Crescente</string>
     <string name="action_order_by_chapter_number">Per numero di capitolo</string>
@@ -691,14 +687,12 @@
     <string name="source_empty_screen">Nessuna fonte trovata</string>
     <string name="action_sort_unread_count">Conteggio non letti</string>
     <string name="split_tall_images_summary">Migliora le prestazioni del lettore</string>
-    <string name="split_tall_images">Dividi le immagini troppo alte</string>
     <string name="download_notifier_split_page_not_found">Pagina %d non trovata durante la divisione</string>
     <string name="download_notifier_split_page_path_not_found">Impossibile trovare il percorso della pagina %d</string>
     <string name="pref_reset_viewer_flags_summary">Reimposta la modalità di lettura e l\'orientamento per tutte le serie</string>
     <string name="pref_reset_viewer_flags">Reimposta le opzioni del lettore per ogni serie</string>
     <string name="pref_reset_viewer_flags_success">Ripristinate tutte le opzioni del lettore</string>
     <string name="pref_reset_viewer_flags_error">Impossibile ripristinare le opzioni del lettore</string>
-    <string name="download_notifier_split_failed">Impossibile separare le immagini scaricate</string>
     <string name="empty_screen">Beh, questo è imbarazzante</string>
     <string name="ext_info_age_rating">Classificazione per età</string>
     <string name="ext_info_version">Versione</string>
@@ -746,7 +740,7 @@
     <string name="action_search_hint">Ricerca…</string>
     <string name="pref_general_summary">Lingua dell\'app, notifiche</string>
     <string name="pref_appearance_summary">Tema, formato data e ora</string>
-    <string name="crash_screen_description">%s ha riscontrato un errore imprevisto. Ti suggeriamo di fare uno screenshot di questo messaggio, scaricare i registri degli arresti anomali e condividerli nel nostro canale di supporto su Discord.</string>
+    <string name="crash_screen_description">%s ha riscontrato un errore imprevisto. Ti suggeriamo di condividere il registro degli arresti anomali nel nostro canale di supporto su Discord.</string>
     <string name="pref_library_summary">Categorie, aggiornamenti globali</string>
     <string name="pref_downloads_summary">Download automatico, download anticipato</string>
     <string name="pref_browse_summary">Fonti, estensioni, ricerca globale</string>
@@ -782,4 +776,14 @@
     <string name="pref_hide_in_library_items">Nascondi le voci già in libreria</string>
     <string name="action_copy_to_clipboard">Copia negli appunti</string>
     <string name="action_update_category">Aggiorna categoria</string>
+    <string name="split_tall_images">Dividi immagini alte</string>
+    <string name="overlay_header">Sovrimpressione</string>
+    <string name="pref_page_rotate">Ruota le pagine larghe per adattareaallo schermo</string>
+    <string name="pref_page_rotate_invert">Capovolgi l\'orientamento delle pagine larghe ruotate</string>
+    <plurals name="missing_items">
+        <item quantity="one">Manca %1$s capitolo</item>
+        <item quantity="many">Mancano %1$s capitoli</item>
+        <item quantity="other">Mancano %1$s capitoli</item>
+    </plurals>
+    <string name="missing_items_unknown">Potrebbero mancare alcuni capitoli</string>
     </resources>

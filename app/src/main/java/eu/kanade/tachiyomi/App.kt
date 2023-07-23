@@ -41,8 +41,8 @@ import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
-import eu.kanade.tachiyomi.util.system.notification
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.cancelNotification
+import eu.kanade.tachiyomi.util.system.notify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -96,7 +96,10 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             .onEach { enabled ->
                 if (enabled) {
                     disableIncognitoReceiver.register()
-                    val notification = notification(Notifications.CHANNEL_INCOGNITO_MODE) {
+                    notify(
+                        Notifications.ID_INCOGNITO_MODE,
+                        Notifications.CHANNEL_INCOGNITO_MODE,
+                    ) {
                         setContentTitle(getString(R.string.pref_incognito_mode))
                         setContentText(getString(R.string.notification_incognito_text))
                         setSmallIcon(R.drawable.ic_glasses_24dp)
@@ -110,10 +113,9 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                         )
                         setContentIntent(pendingIntent)
                     }
-                    notificationManager.notify(Notifications.ID_INCOGNITO_MODE, notification)
                 } else {
                     disableIncognitoReceiver.unregister()
-                    notificationManager.cancel(Notifications.ID_INCOGNITO_MODE)
+                    cancelNotification(Notifications.ID_INCOGNITO_MODE)
                 }
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)

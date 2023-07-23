@@ -23,8 +23,8 @@ android {
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
-        versionCode = 99
-        versionName = "0.14.5"
+        versionCode = 102
+        versionName = "0.14.6"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -102,7 +102,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.addAll(listOf(
             "META-INF/DEPENDENCIES",
             "LICENSE.txt",
@@ -258,7 +258,7 @@ dependencies {
     implementation(libs.bundles.shizuku)
 
     // Tests
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.test)
 
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // debugImplementation(libs.leakcanary.android)

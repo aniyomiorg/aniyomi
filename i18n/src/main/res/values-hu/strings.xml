@@ -86,7 +86,6 @@
     <string name="action_rename_category">Kategória átnevezése</string>
     <string name="action_move_category">Kategóriák beállítása</string>
     <string name="action_edit_cover">Borító szerkesztése</string>
-    <string name="action_stop">Megállítás</string>
     <string name="action_pause">Szüneteltetés</string>
     <string name="action_previous_chapter">Előző fejezet</string>
     <string name="action_next_chapter">Következő fejezet</string>
@@ -236,7 +235,6 @@
     <string name="check_for_updates">Frissítések keresése</string>
     <string name="licenses">Nyílt forráskódú licenc</string>
     <string name="tabs_header">Lapok</string>
-    <string name="badges_header">Jelvények</string>
     <string name="nav_zone_prev">Előző</string>
     <string name="notification_chapters_single">%1$s. fejezet</string>
     <plurals name="notification_chapters_generic">
@@ -266,7 +264,6 @@
     <string name="copy">Másolás</string>
     <string name="migrate">Áttelepítés</string>
     <string name="display_mode_chapter">%1$s. fejezet</string>
-    <string name="channel_crash_logs">Összeomlási naplók</string>
     <string name="notification_chapters_multiple">%1$s. fejezetek</string>
     <string name="notification_chapters_single_and_more">A(z) %1$s. fejezet és %2$d egyéb fejezetek</string>
     <string name="share_page_info">%1$s:%2$s, %3$d. oldal</string>
@@ -591,7 +588,6 @@
     <string name="empty_screen">Hát ez kínos...</string>
     <string name="notification_size_warning">A nagy frissítések kárt okoznak a forrásoknak, és lassabb frissítésekhez, valamint megnövekedett akkumulátorhasználathoz vezethetnek. Koppintson további információért.</string>
     <string name="notification_update_error">%1$d frissítés sikertelen</string>
-    <string name="split_tall_images">Nagy képek automatikus elválasztása</string>
     <string name="split_tall_images_summary">Növeli a teljesítményt a nagy képek elválasztásával.</string>
     <string name="backup_restore_missing_trackers">Nem bejelentkezett trackerek:</string>
     <string name="pref_incognito_mode">Inkognitó mód</string>
@@ -647,7 +643,6 @@
     <string name="webview_data_deleted">WebView adatok törölve</string>
     <string name="pref_reset_viewer_flags_summary">Helyreállítja az olvasó módot és orientációt minden elemnél</string>
     <string name="pref_reset_viewer_flags_error">Nem lehetett visszaállítani az olvasói beállításokat</string>
-    <string name="crash_log_saved">Hibaüzenetek elmentve</string>
     <string name="pref_disable_battery_optimization">Akkumulátor optimalizálás kikapcsolása</string>
     <string name="pref_disable_battery_optimization_summary">Segít háttérbeli könyvtár frissítésben és a biztonsági mentésekben</string>
     <string name="battery_optimization_disabled">Akkumulátor optimalizálás már ki van kapcsolva</string>
@@ -667,7 +662,6 @@
     <string name="download_notifier_download_finish">Letöltés befejeződött</string>
     <string name="download_notifier_split_page_not_found">%d oldal nem található felosztás közben</string>
     <string name="download_notifier_split_page_path_not_found">Nem található az útvonal a %d-ik oldalhoz</string>
-    <string name="download_notifier_split_failed">Nem sikerült a letöltött képet felosztani</string>
     <string name="confirm_set_image_as_cover">Ez a kép legyen a fedlap\?</string>
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">%1$s fejezet és még 1</item>

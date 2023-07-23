@@ -7,12 +7,12 @@ import eu.kanade.tachiyomi.util.awaitSingle
 import rx.Observable
 
 /**
- * A basic interface for creating a source. It could be an online source, a local source, etc...
+ * A basic interface for creating a source. It could be an online source, a local source, etc.
  */
 interface AnimeSource {
 
     /**
-     * Id for the source. Must be unique.
+     * ID for the source. Must be unique.
      */
     val id: Long
 
@@ -46,9 +46,9 @@ interface AnimeSource {
     )
     fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException("Not used")
 
-    // TODO: remove direct usages on this method
     /**
-     * Returns an observable with the list of videos a episode has.
+     * Returns an observable with the list of videos a episode has. Videos should be returned
+     * in the expected order; the index is ignored.
      *
      * @param episode the episode.
      */
@@ -75,7 +75,8 @@ interface AnimeSource {
     }
 
     /**
-     * [1.x API] Get the list of videos a episode has.
+     * [1.x API] Get the list of videos a episode has. Videos should be returned
+     * in the expected order; the index is ignored.
      */
     @Suppress("DEPRECATION")
     suspend fun getVideoList(episode: SEpisode): List<Video> {

@@ -47,7 +47,7 @@
     <string name="action_display_download_badge_anime">Heruntergeladene Folgen</string>
     <string name="action_display_local_badge_manga">Lokale Quelle</string>
     <string name="action_display_local_badge_anime">Lokale Animequelle</string>
-    <string name="action_display_show_continue_reading_button">Fortsetzen-Knopf anzeigen</string>
+    <string name="action_display_show_continue_reading_button">Weiterlesen-Button</string>
     <string name="action_order_by_episode_number">Nach Folgennummer</string>
     <string name="action_start_download_externally">Externen Downloader benutzen</string>
     <string name="action_start_download_internally">Internen Downloader benutzen</string>

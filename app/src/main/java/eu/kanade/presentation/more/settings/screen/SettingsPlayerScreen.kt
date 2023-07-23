@@ -357,7 +357,7 @@ object SettingsPlayerScreen : SearchableSettings {
                     content = {
                         WheelTextPicker(
                             modifier = Modifier.align(Alignment.Center),
-                            texts = remember { 1..255 }.map {
+                            items = remember { 1..255 }.map {
                                 stringResource(
                                     R.string.seconds_short,
                                     it,

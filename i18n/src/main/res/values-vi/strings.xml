@@ -33,7 +33,6 @@
     <string name="action_rename_category">Đổi tên danh mục</string>
     <string name="action_move_category">Đặt danh mục</string>
     <string name="action_edit_cover">Sửa ảnh bìa</string>
-    <string name="action_stop">Dừng lại</string>
     <string name="action_pause">Tạm dừng</string>
     <string name="action_previous_chapter">Chương trước</string>
     <string name="action_next_chapter">Chương kế</string>
@@ -186,7 +185,7 @@
     <string name="cover_updated">Đã cập nhật ảnh bìa</string>
     <string name="chapter_progress">Trang: %1$d</string>
     <string name="no_next_chapter">Không tìm thấy chương kế tiếp</string>
-    <string name="decode_image_error">Loạt ảnh hiện không thể được tải lên</string>
+    <string name="decode_image_error">Hình ảnh không thể hiển thị được</string>
     <string name="confirm_set_image_as_cover">Bạn có chắc muốn đặt ảnh này làm ảnh bìa?</string>
     
     
@@ -274,7 +273,7 @@
     <string name="manga_added_library">Đã thêm vào thư viện</string>
     <string name="manga_removed_library">Đã xóa khỏi thư viện</string>
     <string name="delete_downloads_for_manga">Muốn xóa các chương đã tải\?</string>
-    <string name="copied_to_clipboard">Đã sao chép từ bộ nhớ đệm:
+    <string name="copied_to_clipboard">Đã sao chép vào bảng tạm:
 \n%1$s</string>
     <string name="source_not_installed">Nguồn truyện không thể cài đặt: %1$s</string>
     <string name="repeating">Đọc lại</string>
@@ -315,7 +314,7 @@
         <item quantity="other">%1$d chương mới có</item>
     </plurals>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="other">Cho %d tiêu đề</item>
+        <item quantity="other">Cho %d chương</item>
     </plurals>
     <string name="notification_check_updates">Kiểm tra các chương cập nhật mới</string>
     <string name="updating_library">Đang cập nhật thư viện</string>
@@ -371,7 +370,7 @@
     <string name="action_menu">Mục chính</string>
     <string name="label_sources">Nguồn</string>
     <string name="label_more">Thêm</string>
-    <string name="pref_search_pinned_sources_only">Chỉ bao gồm các nguồn được ghim</string>
+    <string name="pref_search_pinned_sources_only">Chỉ bao gồm những nguồn được ghim khi tìm kiếm toàn bộ</string>
     <string name="tracking_info">Đồng bộ một chiều để cập nhật tiến trình chương trong các dịch vụ theo dõi. Thiết lập theo dõi cho các truyện riêng lẻ từ nút theo dõi.</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
@@ -427,14 +426,11 @@
     <string name="track_started_reading_date">Ngày bắt đầu</string>
     <string name="pref_incognito_mode">Chế độ ẩn danh</string>
     <string name="pref_refresh_library_covers">Làm mới ảnh bìa trong thư viện</string>
-    <string name="crash_log_saved">Thông tin lỗi đã được lưu</string>
-    <string name="pref_dump_crash_logs">Tệp tin báo lỗi tạm</string>
+    <string name="pref_dump_crash_logs">Chia sẻ tệp báo lỗi tạm</string>
     <string name="pref_dump_crash_logs_summary">Lưu thông tin lỗi và gửi về nhà phát triển</string>
     <string name="file_picker_error">Không tìm thấy ứng dụng chọn tệp</string>
     <string name="spen_previous_page">Trang trước</string>
-    <string name="channel_crash_logs">Logs lỗi</string>
     <string name="spen_next_page">Trang tiếp theo</string>
-    <string name="badges_header">Huy hiệu</string>
     <string name="chapter_settings_updated">Đã cập nhật tuỳ chỉnh mặc định cho chương</string>
     <string name="channel_errors">Lỗi</string>
     <string name="channel_complete">Hoàn thành</string>
@@ -464,7 +460,7 @@
     <string name="confirm_set_chapter_settings">Bạn có chắc chắn muốn lưu lại tuỳ chỉnh này hay không\?</string>
     <string name="chapter_settings">Tuỳ chỉnh chương</string>
     <string name="sort_by_upload_date">Bởi ngày đăng</string>
-    <string name="clipboard_copy_error">Lưu vào bộ nhớ tạm thất bại</string>
+    <string name="clipboard_copy_error">Sao chép vào bảng tạm thất bại</string>
     <plurals name="manga_num_chapters">
         <item quantity="other">%1$s chương</item>
     </plurals>
@@ -666,7 +662,6 @@
     <string name="pref_clear_webview_data">Xóa dữ liệu WebView</string>
     <string name="network_not_metered">Chỉ trên mạng lưới không hạn định</string>
     <string name="action_sort_unread_count">Số lượng chưa đọc</string>
-    <string name="split_tall_images">Tự động chia cắt những ảnh quá dài</string>
     <string name="split_tall_images_summary">Cải thiện khả năng đọc bằng việc cắt nhỏ các ảnh quá dài</string>
     <string name="pref_reset_viewer_flags_success">Tất cả cài đặt đọc đã được cài lại</string>
     <string name="pref_reset_viewer_flags_error">Không thể cài lại cài đặt đọc</string>
@@ -687,7 +682,6 @@
     <string name="complete_list">Danh sách hoàn thành</string>
     <string name="on_hold_list">Danh sách đang chờ</string>
     <string name="wish_list">Danh sách muốn đọc</string>
-    <string name="download_notifier_split_failed">Không thể chia cắt ảnh đã tải xuống</string>
     <string name="download_notifier_split_page_not_found">Trang %d không thể được tìm thấy khi chia cắt</string>
     <string name="ext_info_age_rating">Phân loại độ tuổi</string>
     <string name="download_notifier_split_page_path_not_found">Không thể tìm thấy đường dẫn của trang %d</string>
@@ -728,6 +722,37 @@
     <string name="pref_tracking_summary">Đồng bộ tiến trình đọc, đồng bộ nâng cao</string>
     <string name="pref_browse_summary">Nguồn, tiện ích, tìm kiếm toàn bộ</string>
 <string name="label_download_queue">Hàng chờ tải xuống</string>
+    <string name="fdroid_warning">Bản dựng F-Droid không được hỗ trợ chính thức.
+\nNhấn để tìm hiểu thêm.</string>
     <string name="pref_skip_dupe_chapters">Bỏ qua chương đúp</string>
     <string name="enhanced_services_not_installed">Có sẵn nhưng nguồn không được cài đặt: %s</string>
+    <string name="day_short">Ngày %d</string>
+    <string name="split_tall_images">Tách ra những hình ảnh dài</string>
+    <string name="pref_hide_in_library_items">Giấu những truyện đã có trong thư viện</string>
+    <string name="minute_short">%d phút</string>
+    <string name="download_notifier_cache_renewal">Đang kiểm tra những truyện đã tải xuống</string>
+    <string name="crash_screen_description">%s đã có lỗi. Bạn nên chia sẻ tệp báo lỗi tạm ở trong kênh hỗ trợ của chúng tôi trên Discord.</string>
+    <string name="action_update_category">Cập nhật danh mục</string>
+    <string name="confirm_add_duplicate_manga">Truyện này đã có sẵn trong thư viện bạn.
+\n
+\nBạn có muốn thêm lại không\?</string>
+    <string name="copied_to_clipboard_plain">Đã sao chép vào bảng tạm</string>
+    <plurals name="download_amount">
+        <item quantity="other">%d Chương tiếp theo</item>
+    </plurals>
+    <string name="action_copy_to_clipboard">Sao chép vào bảng tạm</string>
+    <string name="seconds_short">%d giây</string>
+    <string name="hour_short">%d giờ</string>
+    <string name="pref_page_rotate">Quay những trang rộng để vừa màn hình</string>
+    <string name="pref_page_rotate_invert">Lật hướng của các trang rộng đã xoay</string>
+    <string name="overlay_header">Phủ lên</string>
+    <string name="missing_items_unknown">Có thể đang thiếu chương</string>
+    <plurals name="missing_items">
+        <item quantity="other">Đang thiếu %1$s</item>
+    </plurals>
+    <string name="track_remove_date_conf_title">Loại bỏ ngày\?</string>
+    <string name="pref_worker_info">Thông tin worker</string>
+    <string name="track_error">%1$s Lỗi: %2$s</string>
+    <string name="not_applicable">N/A</string>
+    <string name="information_required_plain">*bắt buộc</string>
     </resources>

@@ -10,7 +10,6 @@ import tachiyomi.core.metadata.comicinfo.ComicInfoPublishingStatus
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
-import tachiyomi.source.local.entries.manga.LocalMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -88,8 +87,6 @@ fun SManga.toDomainManga(sourceId: Long): Manga {
         source = sourceId,
     )
 }
-
-fun Manga.isLocal(): Boolean = source == LocalMangaSource.ID
 
 fun Manga.hasCustomCover(coverCache: MangaCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()

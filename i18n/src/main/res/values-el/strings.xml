@@ -40,7 +40,6 @@
     <string name="action_rename_category">Μετονομασία κατηγορίας</string>
     <string name="action_move_category">Ορισμός κατηγοριών</string>
     <string name="action_edit_cover">Επεξεργασία εξώφυλλου</string>
-    <string name="action_stop">Σταμάτημα</string>
     <string name="action_pause">Παύση</string>
     <string name="action_previous_chapter">Προηγούμενο κεφάλαιο</string>
     <string name="action_next_chapter">Επόμενο κεφάλαιο</string>
@@ -415,7 +414,6 @@
     <string name="action_migrate">Μεταφορά</string>
     <string name="action_display_comfortable_grid">Άνετο πλέγμα</string>
     <string name="tabs_header">Καρτέλες</string>
-    <string name="badges_header">Σήματα</string>
     <string name="action_display_show_tabs">Εμφάνιση καρτελών κατηγοριών</string>
     <string name="page_list_empty_error">Δεν βρέθηκαν σελίδες</string>
     <string name="action_disable_all">Απενεργοποίηση όλων</string>
@@ -484,12 +482,10 @@
     <string name="edge_nav">Άκρη</string>
     <string name="kindlish_nav">Σαν Kindle</string>
     <string name="l_nav">Σχήματος L</string>
-    <string name="channel_crash_logs">Αρχεία καταγραφής σφαλμάτων</string>
     <string name="track_finished_reading_date">Ημερομηνία λήξης</string>
     <string name="track_started_reading_date">Ημερομηνία έναρξης</string>
-    <string name="crash_log_saved">Τα αρχεία καταγραφής σφαλμάτων αποθηκεύτηκαν</string>
     <string name="pref_dump_crash_logs_summary">Αποθηκεύει αρχεία καταγραφής σφαλμάτων σε ένα αρχείο για κοινή χρήση με τους προγραμματιστές</string>
-    <string name="pref_dump_crash_logs">Άδειασμα αρχείων καταγραφής σφαλμάτων</string>
+    <string name="pref_dump_crash_logs">Κοινή χρήση αρχείων καταγραφής σφαλμάτων</string>
     <string name="action_desc">Φθίνουσα</string>
     <string name="action_asc">Αύξουσα</string>
     <string name="action_order_by_chapter_number">Κατά αριθμό κεφαλαίου</string>
@@ -646,7 +642,6 @@
     <string name="source_filter_empty_screen">Δε βρέθηκε εγκατεστημένη πηγή</string>
     <string name="action_sort_unread_count">Αριθμός μη αναγνωσμένων</string>
     <string name="source_empty_screen">Δε βρέθηκε πηγή</string>
-    <string name="split_tall_images">Διαχωρισμός ψηλών εικόνων</string>
     <string name="split_tall_images_summary">Βελτιώνει την απόδοση του αναγνώστη</string>
     <string name="download_notifier_split_page_not_found">Η σελίδα %d δε βρέθηκε κατά τη διάσπαση</string>
     <string name="download_notifier_split_page_path_not_found">Δεν ήταν δυνατή η εύρεση της διαδρομής αρχείου της σελίδας %d</string>
@@ -654,7 +649,6 @@
     <string name="pref_reset_viewer_flags">Επαναφορά ρυθμίσεων προγράμματος ανάγνωσης ανά σειρά</string>
     <string name="pref_reset_viewer_flags_error">Δεν ήταν δυνατή η επαναφορά των ρυθμίσεων του προγράμματος ανάγνωσης</string>
     <string name="pref_reset_viewer_flags_success">Επαναφορά όλων των ρυθμίσεων προγράμματος ανάγνωσης</string>
-    <string name="download_notifier_split_failed">Δεν ήταν δυνατή η διαίρεση της εικόνας που έχει ληφθεί</string>
     <string name="empty_screen">Λοιπόν, αυτό είναι άβολο</string>
     <string name="ext_info_version">Έκδοση</string>
     <string name="ext_info_language">Γλώσσα</string>
@@ -711,7 +705,7 @@
     <string name="crash_screen_restart_application">Επανεκκίνηση της εφαρμογής</string>
     <string name="pref_downloads_summary">Αυτόματη λήψη, λήψη εκ των προτέρων</string>
     <string name="pref_advanced_summary">Αρχεία καταγραφής σφαλμάτων, βελτιστοποιήσεις μπαταρίας</string>
-    <string name="crash_screen_description">Το %s αντιμετώπισε ένα μη αναμενόμενο σφάλμα. Σας προτείνουμε να κάνετε στιγμιότυπο οθόνης αυτού του μηνύματος, να αποθηκεύσετε τα αρχεία καταγραφής σφαλμάτων και, στη συνέχεια να το μοιραστείτε στο κανάλι υποστήριξης μας στο Discord.</string>
+    <string name="crash_screen_description">Το %s αντιμετώπισε ένα απροσδόκητο σφάλμα. Σας προτείνουμε να μοιραστείτε τα αρχεία καταγραφής σφαλμάτων στο κανάλι υποστήριξης μας στο Discord.</string>
     <string name="unknown_title">Άγνωστος τίτλος</string>
     <string name="invalid_location">Μη έγκυρη τοποθεσία: %s</string>
     <string name="error_user_agent_string_invalid">Μη έγκυρη συμβολοσειρά πράκτορα χρήστη</string>
@@ -736,4 +730,13 @@
     <string name="pref_hide_in_library_items">Απόκρυψη καταχωρήσεων που βρίσκονται ήδη στη βιβλιοθήκη</string>
     <string name="action_copy_to_clipboard">Αντιγραφή στο πρόχειρο</string>
     <string name="action_update_category">Ενημέρωση κατηγορίας</string>
+    <string name="split_tall_images">Διαχωρισμός ψηλών εικόνων</string>
+    <string name="overlay_header">Επικάλυψη</string>
+    <plurals name="missing_items">
+        <item quantity="one">Λείπει %1$s κεφάλαιο</item>
+        <item quantity="other">Λείπουν %1$s κεφάλαια</item>
+    </plurals>
+    <string name="missing_items_unknown">Μπορεί να λείπουν κεφάλαια</string>
+    <string name="pref_page_rotate">Περιστροφή πλατιών σελίδων για να χωρέσουν</string>
+    <string name="pref_page_rotate_invert">Αναστροφή του προσανατολισμού των πλατιών σελίδων που έχουν περιστραφεί</string>
     </resources>

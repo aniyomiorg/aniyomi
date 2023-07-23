@@ -22,9 +22,7 @@ class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {
         MigrateAnimeSearchScreen(
             navigateUp = navigator::pop,
             state = state,
-            getAnime = { source, anime ->
-                screenModel.getAnime(source = source, initialAnime = anime)
-            },
+            getAnime = { screenModel.getAnime(it) },
             onChangeSearchQuery = screenModel::updateSearchQuery,
             onSearch = screenModel::search,
             onClickSource = {
