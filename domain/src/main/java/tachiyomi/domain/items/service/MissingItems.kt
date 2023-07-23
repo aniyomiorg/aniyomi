@@ -1,5 +1,9 @@
 package tachiyomi.domain.items.service
 
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.episode.model.Episode
+import kotlin.math.floor
+
 fun List<Float>.missingItemsCount(): Int {
     if (this.isEmpty()) {
         return 0
@@ -32,4 +36,26 @@ fun List<Float>.missingItemsCount(): Int {
     }
 
     return missingItemsCount
+}
+
+fun calculateChapterGap(higherChapter: Chapter?, lowerChapter: Chapter?): Int {
+    if (higherChapter == null || lowerChapter == null) return 0
+    if (!higherChapter.isRecognizedNumber || !lowerChapter.isRecognizedNumber) return 0
+    return calculateChapterGap(higherChapter.chapterNumber, lowerChapter.chapterNumber)
+}
+
+fun calculateChapterGap(higherChapterNumber: Float, lowerChapterNumber: Float): Int {
+    if (higherChapterNumber < 0f || lowerChapterNumber < 0f) return 0
+    return floor(higherChapterNumber).toInt() - floor(lowerChapterNumber).toInt() - 1
+}
+
+fun calculateEpisodeGap(higherEpisode: Episode?, lowerEpisode: Episode?): Int {
+    if (higherEpisode == null || lowerEpisode == null) return 0
+    if (!higherEpisode.isRecognizedNumber || !lowerEpisode.isRecognizedNumber) return 0
+    return calculateChapterGap(higherEpisode.episodeNumber, lowerEpisode.episodeNumber)
+}
+
+fun calculateEpisodeGap(higherEpisodeNumber: Float, lowerEpisodeNumber: Float): Int {
+    if (higherEpisodeNumber < 0f || lowerEpisodeNumber < 0f) return 0
+    return floor(higherEpisodeNumber).toInt() - floor(lowerEpisodeNumber).toInt() - 1
 }
