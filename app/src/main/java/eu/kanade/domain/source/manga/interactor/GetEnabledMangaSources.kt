@@ -59,7 +59,7 @@ class GetEnabledMangaSources(
                     }
                     // SY -->
                     categories.forEach { category ->
-                        toFlatten.add(source.copy(/*category = category,*/ pin = source.pin - Pin.Actual))
+                        toFlatten.add(source.copy(pin = source.pin - Pin.Actual))
                     }
                     if (sourceCategoriesFilter && Pin.Actual !in toFlatten[0].pin && source.id in sourcesInSourceCategories) {
                         toFlatten.removeAt(0)
