@@ -3,7 +3,7 @@
 | ![CI](https://github.com/aniyomiorg/aniyomi/workflows/CI/badge.svg?branch=master&event=push) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
-# ![app icon](.github/readme-images/ic_launcher.png)Aniyomi
+# ![app icon](.github/readme-images/app-icon.png)Aniyomi
 Aniyomi is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
 
 ## Features
