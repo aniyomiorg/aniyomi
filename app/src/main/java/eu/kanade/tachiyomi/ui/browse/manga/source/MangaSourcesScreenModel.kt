@@ -37,7 +37,7 @@ class MangaSourcesScreenModel(
     // SY -->
     private val toggleExcludeFromMangaDataSaver: ToggleExcludeFromMangaDataSaver = Injekt.get(),
     // SY <--
-    ) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
+) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()

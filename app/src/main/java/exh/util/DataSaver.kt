@@ -4,7 +4,6 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.BANDWIDTH_HERO
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.NONE
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.WSRV_NL
-import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource

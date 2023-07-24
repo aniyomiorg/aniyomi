@@ -405,6 +405,7 @@ object SettingsAdvancedScreen : SearchableSettings {
             ),
         )
     }
+
     // SY -->
     @Composable
     private fun getDataSaverGroup(): Preference.PreferenceGroup {
