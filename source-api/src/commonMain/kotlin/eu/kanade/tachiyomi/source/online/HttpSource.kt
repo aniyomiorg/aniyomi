@@ -311,7 +311,8 @@ abstract class HttpSource : CatalogueSource {
      *
      * @param page the page whose source image has to be downloaded.
      */
-    suspend fun getImage(page: Page): Response {
+    /* SY --> */
+    open /* SY <-- */ suspend fun getImage(page: Page): Response {
         // images will be cached or saved manually, so don't take up network cache
         return client.newCachelessCallWithProgress(imageRequest(page), page)
             .awaitSuccess()

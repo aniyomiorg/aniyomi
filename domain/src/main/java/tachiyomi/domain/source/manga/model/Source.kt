@@ -8,6 +8,9 @@ data class Source(
     val isStub: Boolean,
     val pin: Pins = Pins.unpinned,
     val isUsedLast: Boolean = false,
+    // SY -->
+    val isExcludedFromDataSaver: Boolean = false,
+    // SY <--
 ) {
 
     val visualName: String

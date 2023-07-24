@@ -66,6 +66,10 @@ fun Screen.mangaSourcesTab(): TabContent {
                         screenModel.toggleSource(source)
                         screenModel.closeDialog()
                     },
+                    onClickToggleDataSaver = {
+                        screenModel.toggleExcludeFromMangaDataSaver(source)
+                        screenModel.closeDialog()
+                    }.takeIf { state.dataSaverEnabled },
                     onDismiss = screenModel::closeDialog,
                 )
             }

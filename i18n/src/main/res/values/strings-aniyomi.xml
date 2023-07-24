@@ -292,4 +292,22 @@
     <string name="choose_video_quality">Choose video quality:</string>
     <string name="extension_settings">Extension settings</string>
     <string name="action_save_screenshot">Save screenshot</string>
+    <!-- TachiyomiSY -->
+    <string name="data_saver_exclude">Exclude from data saver</string>
+    <string name="data_saver_stop_exclude">Stop excluding from data saver</string>
+    <string name="data_saver">Data Saver</string>
+    <string name="data_saver_summary">Compress images before downloading or loading in reader</string>
+    <string name="data_saver_downloader">Use data saver in the downloader</string>
+    <string name="data_saver_ignore_jpeg">Ignore Jpeg Images</string>
+    <string name="data_saver_ignore_gif">Ignore Gif Animations</string>
+    <string name="data_saver_image_quality">Image Quality</string>
+    <string name="data_saver_image_quality_summary">Higher values mean that a higher percentage of the image quality is saved, but it also means the file size is larger, 80 percent is a good median between file size and image quality</string>
+    <string name="data_saver_image_format">Compress to Jpeg</string>
+    <string name="data_saver_image_format_summary_on">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Jpeg</string>
+    <string name="data_saver_image_format_summary_off">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Webp</string>
+    <string name="data_saver_color_bw">Convert to Black And White</string>
+    <string name="bandwidth_hero">Bandwidth Hero (requires a Bandwidth Hero Proxy server)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
 </resources>
