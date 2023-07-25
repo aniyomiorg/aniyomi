@@ -24,6 +24,15 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
+import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
+import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER_FREE
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER_PRO
+import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
+import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
+import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.preference.asState
 import tachiyomi.presentation.core.components.WheelTextPicker
@@ -305,17 +314,8 @@ object SettingsPlayerScreen : SearchableSettings {
 
         val pm = basePreferences.context.packageManager
         val installedPackages = pm.getInstalledPackages(0)
-        val supportedPlayers = installedPackages.filter {
-            when (it.packageName) {
-                "is.xyz.mpv" -> true
-                "com.mxtech.videoplayer" -> true
-                "com.mxtech.videoplayer.ad" -> true
-                "com.mxtech.videoplayer.pro" -> true
-                "org.videolan.vlc" -> true
-                "com.husudosu.mpvremote" -> true
-                else -> false
-            }
-        }
+        val supportedPlayers = installedPackages.filter { it.packageName in externalPlayers }
+
         val packageNames = supportedPlayers.map { it.packageName }
         val packageNamesReadable = supportedPlayers
             .map { pm.getApplicationLabel(it.applicationInfo).toString() }
@@ -384,3 +384,15 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 }
+
+val externalPlayers = listOf(
+    MPV_PLAYER,
+    MX_PLAYER,
+    MX_PLAYER_FREE,
+    MX_PLAYER_PRO,
+    VLC_PLAYER,
+    MPV_REMOTE,
+    JUST_PLAYER,
+    NEXT_PLAYER,
+    X_PLAYER,
+)
