@@ -46,8 +46,7 @@ import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
-import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -262,10 +261,8 @@ class AnimeScreen(
     }
 
     private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
-        if (useExternalPlayer) {
-            context.startActivity(ExternalIntents.newIntent(context, episode.animeId, episode.id))
-        } else {
-            context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
+        withIOContext {
+            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, useExternalPlayer)
         }
     }
 
