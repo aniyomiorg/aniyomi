@@ -1,4 +1,4 @@
-package eu.kanade
+package eu.kanade.domain
 
 import eu.kanade.domain.source.manga.interactor.ToggleExcludeFromMangaDataSaver
 import uy.kohesive.injekt.api.InjektModule

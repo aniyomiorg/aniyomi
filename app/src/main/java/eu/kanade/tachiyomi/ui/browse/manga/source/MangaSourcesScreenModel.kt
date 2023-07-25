@@ -9,6 +9,7 @@ import eu.kanade.domain.source.manga.interactor.ToggleExcludeFromMangaDataSaver
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.SourcePreferences.DataSaver
 import eu.kanade.presentation.browse.manga.MangaSourceUiModel
 import eu.kanade.tachiyomi.util.system.LAST_USED_KEY
 import eu.kanade.tachiyomi.util.system.PINNED_KEY
@@ -56,7 +57,7 @@ class MangaSourcesScreenModel(
             .onEach {
                 mutableState.update {
                     it.copy(
-                        dataSaverEnabled = sourcePreferences.dataSaver().get() != SourcePreferences.DataSaver.NONE,
+                        dataSaverEnabled = sourcePreferences.dataSaver().get() != DataSaver.NONE,
                     )
                 }
             }
