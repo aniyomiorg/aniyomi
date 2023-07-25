@@ -4,7 +4,6 @@ import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.annotation.StringRes
@@ -90,14 +89,9 @@ class AnimeDownloadService : Service() {
 
     override fun onCreate() {
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
         wakeLock = acquireWakeLock(javaClass.name)
         _isRunning.value = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(1, getPlaceholderNotification())
-        } else {
-            @Suppress("DEPRECATION")
-            startForeground(1, Notification())
-        }
         listenNetworkChanges()
     }
 
