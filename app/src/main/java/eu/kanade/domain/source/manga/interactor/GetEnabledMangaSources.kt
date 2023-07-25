@@ -23,7 +23,9 @@ class GetEnabledMangaSources(
             combine(
                 preferences.disabledMangaSources().changes(),
                 preferences.lastUsedMangaSource().changes(),
+                // SY -->
                 preferences.dataSaverExcludedSources().changes(),
+                // SY <--
             ) { a, b, c -> Triple(a, b, c) },
             repository.getMangaSources(),
         ) { pinnedMangaSourceIds, enabledLanguages, (disabledSources, lastUsedSource, excludedFromDataSaver), sources ->
@@ -35,7 +37,9 @@ class GetEnabledMangaSources(
                     val flag = if ("${it.id}" in pinnedMangaSourceIds) Pins.pinned else Pins.unpinned
                     val source = it.copy(
                         pin = flag,
+                        // SY -->
                         isExcludedFromDataSaver = it.id.toString() in excludedFromDataSaver,
+                        // SY <--
                     )
                     val toFlatten = mutableListOf(source)
                     if (source.id == lastUsedSource) {
