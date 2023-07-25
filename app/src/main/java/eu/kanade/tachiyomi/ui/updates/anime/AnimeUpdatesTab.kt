@@ -27,8 +27,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.core.util.lang.launchIO
@@ -46,22 +44,11 @@ fun Screen.animeUpdatesTab(
 
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
-    fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
-        context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
-    }
-
-    suspend fun openEpisodeExternal(context: Context, animeId: Long, episodeId: Long) {
-        context.startActivity(ExternalIntents.newIntent(context, animeId, episodeId))
-    }
-
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
         val update = updateItem.update
-        if (playerPreferences.alwaysUseExternalPlayer().get() != altPlayer) {
-            openEpisodeExternal(context, update.animeId, update.episodeId)
-        } else {
-            openEpisodeInternal(context, update.animeId, update.episodeId)
-        }
+        val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
+        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, extPlayer)
     }
 
     return TabContent(
