@@ -308,6 +308,7 @@
     <string name="data_saver_color_bw">Convert to Black And White</string>
     <string name="bandwidth_hero">Bandwidth Hero (requires a Bandwidth Hero Proxy server)</string>
     <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
 </resources>

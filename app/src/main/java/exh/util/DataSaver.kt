@@ -3,13 +3,18 @@ package exh.util
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.BANDWIDTH_HERO
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.NONE
+import eu.kanade.domain.source.service.SourcePreferences.DataSaver.RESMUSH_IT
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.WSRV_NL
+import eu.kanade.tachiyomi.network.GET
+import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
+import okhttp3.OkHttpClient
 import okhttp3.Response
 import rx.Observable
 import tachiyomi.core.preference.Preference
+import uy.kohesive.injekt.injectLazy
 
 interface DataSaver {
 
@@ -52,6 +57,7 @@ fun DataSaver(source: MangaSource, preferences: SourcePreferences): DataSaver {
         NONE -> DataSaver.NoOp
         BANDWIDTH_HERO -> BandwidthHeroDataSaver(preferences)
         WSRV_NL -> WsrvNlDataSaver(preferences)
+        RESMUSH_IT -> ReSmushItDataSaver(preferences)
     }
 }
 
@@ -117,5 +123,32 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
                 "&output=webp&q=$quality"
             }
         }
+    }
+}
+
+private class ReSmushItDataSaver(preferences: SourcePreferences) : DataSaver {
+
+    private val network: NetworkHelper by injectLazy()
+
+    private val client: OkHttpClient
+        get() = network.client
+
+    private val ignoreJpg = preferences.dataSaverIgnoreJpeg().get()
+    private val ignoreGif = preferences.dataSaverIgnoreGif().get()
+
+    private val quality = preferences.dataSaverImageQuality().get()
+
+    override fun compress(imageUrl: String): String {
+        return when {
+            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) imageUrl else getUrl(imageUrl)
+            imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
+            else -> getUrl(imageUrl)
+        }
+    }
+
+    private fun getUrl(imageUrl: String): String {
+        // Network Request sent to resmush
+        return client.newCall(GET("http://api.resmush.it/ws.php?img=$imageUrl&qlty=$quality")).execute()
+            .body.string().substringAfter("\"dest\":\"").substringBefore("\",")
     }
 }

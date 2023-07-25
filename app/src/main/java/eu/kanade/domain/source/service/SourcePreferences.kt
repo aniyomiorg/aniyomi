@@ -76,6 +76,7 @@ class SourcePreferences(
         NONE,
         BANDWIDTH_HERO,
         WSRV_NL,
+        RESMUSH_IT,
     }
     // SY <--
 }

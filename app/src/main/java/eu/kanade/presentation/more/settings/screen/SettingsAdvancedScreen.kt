@@ -422,6 +422,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         DataSaver.NONE to stringResource(R.string.disabled),
                         DataSaver.BANDWIDTH_HERO to stringResource(R.string.bandwidth_hero),
                         DataSaver.WSRV_NL to stringResource(R.string.wsrv),
+                        DataSaver.RESMUSH_IT to stringResource(R.string.resmush),
                     ),
                 ),
                 Preference.PreferenceItem.EditTextPreference(
@@ -471,7 +472,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         } else {
                             stringResource(R.string.data_saver_image_format_summary_off)
                         },
-                        enabled = dataSaver != DataSaver.NONE,
+                        enabled = dataSaver != DataSaver.NONE && dataSaver != DataSaver.RESMUSH_IT,
                     )
                 },
                 Preference.PreferenceItem.SwitchPreference(
