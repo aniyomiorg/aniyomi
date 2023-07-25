@@ -5,6 +5,7 @@ import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.entries.manga.model.getComicInfo
 import eu.kanade.domain.items.chapter.model.toSChapter
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
@@ -16,6 +17,8 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
+import exh.util.DataSaver
+import exh.util.DataSaver.Companion.getImage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -75,6 +78,9 @@ class MangaDownloader(
     private val chapterCache: ChapterCache = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val xml: XML = Injekt.get(),
+    // SY -->
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
+    // SY <--
 ) {
 
     /**
@@ -331,6 +337,12 @@ class MangaDownloader(
                 reIndexedPages
             }
 
+            val dataSaver = if (sourcePreferences.dataSaverDownloader().get()) {
+                DataSaver(download.source, sourcePreferences)
+            } else {
+                DataSaver.NoOp
+            }
+
             // Delete all temporary (unfinished) files
             tmpDir.listFiles()
                 ?.filter { it.name!!.endsWith(".tmp") }
@@ -353,7 +365,7 @@ class MangaDownloader(
             pageList.asFlow()
                 .flatMapMerge(concurrency = 2) { page ->
                     flow {
-                        withIOContext { getOrDownloadImage(page, download, tmpDir) }
+                        withIOContext { getOrDownloadImage(page, download, tmpDir, dataSaver) }
                         emit(page)
                     }.flowOn(Dispatchers.IO)
                 }
@@ -380,7 +392,7 @@ class MangaDownloader(
      * @param download the download of the page.
      * @param tmpDir the temporary directory of the download.
      */
-    private suspend fun getOrDownloadImage(page: Page, download: MangaDownload, tmpDir: UniFile) {
+    private suspend fun getOrDownloadImage(page: Page, download: MangaDownload, tmpDir: UniFile, dataSaver: DataSaver) {
         // If the image URL is empty, do nothing
         if (page.imageUrl == null) {
             return
@@ -401,7 +413,7 @@ class MangaDownloader(
             val file = when {
                 imageFile != null -> imageFile
                 chapterCache.isImageInCache(page.imageUrl!!) -> copyImageFromCache(chapterCache.getImageFile(page.imageUrl!!), tmpDir, filename)
-                else -> downloadImage(page, download.source, tmpDir, filename)
+                else -> downloadImage(page, download.source, tmpDir, filename, dataSaver)
             }
 
             // When the page is ready, set page path, progress (just in case) and status
@@ -426,11 +438,11 @@ class MangaDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the image.
      */
-    private suspend fun downloadImage(page: Page, source: HttpSource, tmpDir: UniFile, filename: String): UniFile {
+    private suspend fun downloadImage(page: Page, source: HttpSource, tmpDir: UniFile, filename: String, dataSaver: DataSaver): UniFile {
         page.status = Page.State.DOWNLOAD_IMAGE
         page.progress = 0
         return flow {
-            val response = source.getImage(page)
+            val response = source.getImage(page, dataSaver)
             val file = tmpDir.createFile("$filename.tmp")
             try {
                 response.body.source().saveTo(file.openOutputStream())

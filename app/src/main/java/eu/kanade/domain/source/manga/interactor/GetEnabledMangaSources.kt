@@ -1,6 +1,7 @@
 package eu.kanade.domain.source.manga.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
+import exh.source.BlacklistedSources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,17 +20,27 @@ class GetEnabledMangaSources(
         return combine(
             preferences.pinnedMangaSources().changes(),
             preferences.enabledLanguages().changes(),
-            preferences.disabledMangaSources().changes(),
-            preferences.lastUsedMangaSource().changes(),
+            combine(
+                preferences.disabledMangaSources().changes(),
+                preferences.lastUsedMangaSource().changes(),
+                // SY -->
+                preferences.dataSaverExcludedSources().changes(),
+                // SY <--
+            ) { a, b, c -> Triple(a, b, c) },
             repository.getMangaSources(),
-        ) { pinnedSourceIds, enabledLanguages, disabledSources, lastUsedSource, sources ->
+        ) { pinnedMangaSourceIds, enabledLanguages, (disabledSources, lastUsedSource, excludedFromDataSaver), sources ->
             sources
                 .filter { it.lang in enabledLanguages || it.id == LocalMangaSource.ID }
-                .filterNot { it.id.toString() in disabledSources }
+                .filterNot { it.id.toString() in disabledSources || it.id in BlacklistedSources.HIDDEN_SOURCES }
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                 .flatMap {
-                    val flag = if ("${it.id}" in pinnedSourceIds) Pins.pinned else Pins.unpinned
-                    val source = it.copy(pin = flag)
+                    val flag = if ("${it.id}" in pinnedMangaSourceIds) Pins.pinned else Pins.unpinned
+                    val source = it.copy(
+                        pin = flag,
+                        // SY -->
+                        isExcludedFromDataSaver = it.id.toString() in excludedFromDataSaver,
+                        // SY <--
+                    )
                     val toFlatten = mutableListOf(source)
                     if (source.id == lastUsedSource) {
                         toFlatten.add(source.copy(isUsedLast = true, pin = source.pin - Pin.Actual))

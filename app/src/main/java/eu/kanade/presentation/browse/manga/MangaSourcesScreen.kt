@@ -160,6 +160,9 @@ fun MangaSourceOptionsDialog(
     source: Source,
     onClickPin: () -> Unit,
     onClickDisable: () -> Unit,
+    // SY -->
+    onClickToggleDataSaver: (() -> Unit)?,
+    // SY <--
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
@@ -185,6 +188,21 @@ fun MangaSourceOptionsDialog(
                             .padding(vertical = 16.dp),
                     )
                 }
+                // SY -->
+                if (onClickToggleDataSaver != null) {
+                    Text(
+                        text = if (source.isExcludedFromDataSaver) {
+                            stringResource(id = R.string.data_saver_stop_exclude)
+                        } else {
+                            stringResource(id = R.string.data_saver_exclude)
+                        },
+                        modifier = Modifier
+                            .clickable(onClick = onClickToggleDataSaver)
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                    )
+                }
+                // SY <--
             }
         },
         onDismissRequest = onDismiss,
