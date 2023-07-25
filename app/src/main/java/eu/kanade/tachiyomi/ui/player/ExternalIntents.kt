@@ -260,9 +260,12 @@ class ExternalIntents {
     private fun getComponent(packageName: String): ComponentName? {
         return when (packageName) {
             MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
-            MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(packageName, "$packageName.ActivityScreen")
+            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(packageName, "$packageName.ActivityScreen")
             VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
             MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
+            JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
+            NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
+            X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
             else -> null
         }
     }
@@ -285,7 +288,6 @@ class ExternalIntents {
     /**
      * Saves the episode's data based on whats returned by the external player.
      *
-     * @param resultCode the code sent to ensure that the returned [intent] is valid.
      * @param intent the [Intent] that contains the episode's position and duration.
      */
     @OptIn(DelicateCoroutinesApi::class)
@@ -496,8 +498,12 @@ class ExternalIntents {
 }
 
 // List of supported external players and their packages
-private const val MPV_PLAYER = "is.xyz.mpv"
-private const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"
-private const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"
-private const val VLC_PLAYER = "org.videolan.vlc"
-private const val MPV_REMOTE = "com.husudosu.mpvremote"
+const val MPV_PLAYER = "is.xyz.mpv"
+const val MX_PLAYER = "com.mxtech.videoplayer"
+const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"
+const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"
+const val VLC_PLAYER = "org.videolan.vlc"
+const val MPV_REMOTE = "com.husudosu.mpvremote"
+const val JUST_PLAYER = "com.brouken.player"
+const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
+const val X_PLAYER = "video.player.videoplayer"
