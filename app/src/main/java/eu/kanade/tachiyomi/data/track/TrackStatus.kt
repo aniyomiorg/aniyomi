@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.data.track.komga.Komga
 import eu.kanade.tachiyomi.data.track.mangaupdates.MangaUpdates
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.data.track.shikimori.Shikimori
+import eu.kanade.tachiyomi.data.track.simkl.Simkl
 
 enum class TrackStatus(val int: Int, @StringRes val res: Int) {
     READING(1, R.string.reading),
@@ -103,6 +104,16 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         MangaUpdates.ON_HOLD_LIST -> PAUSED
                         MangaUpdates.WISH_LIST -> PLAN_TO_READ
                         MangaUpdates.UNFINISHED_LIST -> DROPPED
+                        else -> null
+                    }
+                }
+                TrackManager.SIMKL -> {
+                    when (status) {
+                        Simkl.WATCHING -> WATCHING
+                        Simkl.COMPLETED -> COMPLETED
+                        Simkl.ON_HOLD -> PAUSED
+                        Simkl.PLAN_TO_WATCH -> PLAN_TO_WATCH
+                        Simkl.NOT_INTERESTING -> DROPPED
                         else -> null
                     }
                 }

@@ -255,7 +255,7 @@ fun LibraryBottomActionMenu(
     onMarkAsUnviewedClicked: () -> Unit,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onDeleteClicked: () -> Unit,
-    isEntry: Boolean,
+    isManga: Boolean,
 ) {
     AnimatedVisibility(
         visible = visible,
@@ -295,7 +295,7 @@ fun LibraryBottomActionMenu(
                     onLongClick = { onLongClickItem(0) },
                     onClick = onChangeCategoryClicked,
                 )
-                val viewed = if (isEntry) R.string.action_mark_as_read else R.string.action_mark_as_seen
+                val viewed = if (isManga) R.string.action_mark_as_read else R.string.action_mark_as_seen
                 Button(
                     title = stringResource(viewed),
                     icon = Icons.Outlined.DoneAll,
@@ -303,7 +303,7 @@ fun LibraryBottomActionMenu(
                     onLongClick = { onLongClickItem(1) },
                     onClick = onMarkAsViewedClicked,
                 )
-                val unviewed = if (isEntry) R.string.action_mark_as_unread else R.string.action_mark_as_unseen
+                val unviewed = if (isManga) R.string.action_mark_as_unread else R.string.action_mark_as_unseen
                 Button(
                     title = stringResource(unviewed),
                     icon = Icons.Outlined.RemoveDone,
@@ -325,7 +325,7 @@ fun LibraryBottomActionMenu(
                             expanded = downloadExpanded,
                             onDismissRequest = onDismissRequest,
                             onDownloadClicked = onDownloadClicked,
-                            isManga = isEntry,
+                            isManga = isManga,
                         )
                     }
                 }
