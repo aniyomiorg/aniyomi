@@ -74,6 +74,12 @@ fun SubtitleSettingsSheet(
 ) {
     val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
 
+    val updateOverride = {
+        val overrideType = if (overrideSubtitles) "no" else "force"
+        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
+        MPVLib.setPropertyString("sub-ass-override", overrideType)
+    }
+
     PlayerSheet(
         titleRes = R.string.player_subtitle_settings,
         onDismissRequest = onDismissRequest,
@@ -81,18 +87,14 @@ fun SubtitleSettingsSheet(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().clickable(onClick = { updateOverride() }),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = stringResource(id = R.string.player_override_subtitle_style))
                 Switch(
                     checked = overrideSubtitles,
-                    onCheckedChange = {
-                        val overrideType = if (overrideSubtitles) "no" else "force"
-                        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-                        MPVLib.setPropertyString("sub-ass-override", overrideType)
-                    },
+                    onCheckedChange = { updateOverride() },
                 )
             }
             if (overrideSubtitles) {
