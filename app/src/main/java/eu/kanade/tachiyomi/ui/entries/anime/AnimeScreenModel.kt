@@ -920,8 +920,9 @@ class AnimeInfoScreenModel(
     }
 
     private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean) {
-        val airingEpisode = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
-        updateSuccessState { it.copy(nextAiringEpisode = airingEpisode) }
+        val airingEpisodeData = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
+        setAnimeViewerFlags.awaitSetNextEpisodeAiring(anime.id, airingEpisodeData)
+        updateSuccessState { it.copy(nextAiringEpisode = airingEpisodeData) }
     }
 
     // Track sheet - end
