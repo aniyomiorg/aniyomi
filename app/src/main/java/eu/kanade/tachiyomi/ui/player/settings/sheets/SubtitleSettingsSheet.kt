@@ -25,7 +25,6 @@ import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.RemoveCircle
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
@@ -55,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.components.RepeatingIconButton
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -110,7 +110,7 @@ private fun SubtitleDelay(
     var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble("sub-delay")) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(text = stringResource(id = R.string.player_subtitle_delay))
-        IconButton(
+        RepeatingIconButton(
             onClick = {
                 currentDelay -= 0.1
                 onDelayChanged(currentDelay)
@@ -128,7 +128,7 @@ private fun SubtitleDelay(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
-        IconButton(
+        RepeatingIconButton(
             onClick = {
                 currentDelay += 0.1
                 onDelayChanged(currentDelay)
