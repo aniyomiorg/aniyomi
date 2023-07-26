@@ -84,6 +84,7 @@ fun SubtitleSettingsSheet(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
                 Text(text = stringResource(id = R.string.player_override_subtitle_style))
                 Switch(
                     checked = overrideSubtitles,
@@ -95,7 +96,6 @@ fun SubtitleSettingsSheet(
                 )
             }
             if (overrideSubtitles) {
-                SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
                 SubtitleLook(screenModel)
                 SubtitleColors(screenModel)
             }
