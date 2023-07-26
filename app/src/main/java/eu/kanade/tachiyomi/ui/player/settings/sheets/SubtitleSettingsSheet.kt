@@ -117,6 +117,7 @@ private fun SubtitleDelay(
             },
         ) { Icon(imageVector = Icons.Outlined.RemoveCircle, contentDescription = null) }
         OutlinedTextField(
+            modifier = Modifier.weight(1f),
             value = "%.2f".format(currentDelay),
             onValueChange = {
                 // Don't allow multiple decimal points, non-numeric characters, or leading zeros
