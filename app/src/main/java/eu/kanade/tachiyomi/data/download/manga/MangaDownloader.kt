@@ -17,8 +17,8 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
-import fork.util.DataSaver
-import fork.util.DataSaver.Companion.getImage
+import aniyomi.util.DataSaver
+import aniyomi.util.DataSaver.Companion.getImage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

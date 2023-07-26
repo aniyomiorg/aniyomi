@@ -1,7 +1,7 @@
 package eu.kanade.domain.source.manga.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
-import fork.source.MERGED_SOURCE_ID
+import aniyomi.source.MERGED_SOURCE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

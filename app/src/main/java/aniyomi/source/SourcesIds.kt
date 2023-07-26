@@ -1,4 +1,4 @@
-package fork.source
+package aniyomi.source
 
 // Lewd source IDs
 const val LEWD_SOURCE_SERIES = 6900L
