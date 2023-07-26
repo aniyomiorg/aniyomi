@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,6 +64,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
+import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.floor
@@ -73,14 +75,6 @@ fun SubtitleSettingsDialog(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
-    val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
-
-    val updateOverride = {
-        val overrideType = if (overrideSubtitles) "no" else "force"
-        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
-    }
-
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = listOf(
@@ -96,7 +90,7 @@ fun SubtitleSettingsDialog(
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
-                0 -> DelayPage()
+                0 -> DelayPage(screenModel)
                 1 -> StylePage(screenModel)
                 2 -> SizeAndPosPage(screenModel)
             }
@@ -105,29 +99,67 @@ fun SubtitleSettingsDialog(
 }
 
 @Composable
-private fun DelayPage() {
+private fun DelayPage(
+    screenModel: PlayerSettingsScreenModel,
+) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_subtitle_delay), Modifier.width(80.dp))
             TrackDelay(
-                onDelayChanged = { MPVLib.setPropertyDouble("sub-delay", it) },
-                type = "sub-delay",
+                onDelayChanged = {
+                    MPVLib.setPropertyDouble("sub-delay", it)
+                    if (screenModel.preferences.rememberSubtitlesDelay().get()) {
+                        screenModel.preferences.subtitlesDelay().set(it.toFloat())
+                    }
+                },
+                Tracks.SUBTITLES,
             )
+        }
+        val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
+        CheckboxItem(label = "Remember Sub Delay", checked = subDelay.collectAsState().value) {
+            screenModel.togglePreference { subDelay }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_audio_delay), Modifier.width(80.dp))
             TrackDelay(
-                onDelayChanged = { MPVLib.setPropertyDouble("audio-delay", it) },
-                type = "audio-delay",
+                onDelayChanged = {
+                    MPVLib.setPropertyDouble("audio-delay", it)
+                    if (screenModel.preferences.rememberAudioDelay().get()) {
+                        screenModel.preferences.audioDelay().set(it.toFloat())
+                    }
+                },
+                Tracks.AUDIO,
             )
+        }
+        val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
+        CheckboxItem(label = "Remember Audio Delay", checked = audioDelay.collectAsState().value) {
+            screenModel.togglePreference { audioDelay }
         }
     }
 }
 
 @Composable
 private fun StylePage(screenModel: PlayerSettingsScreenModel) {
+    val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
+
+    val updateOverride = {
+        val overrideType = if (overrideSubtitles) "no" else "force"
+        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
+        MPVLib.setPropertyString("sub-ass-override", overrideType)
+    }
     Column {
-        SubtitleColors(screenModel = screenModel)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(text = stringResource(id = R.string.player_override_subtitle_style))
+            Switch(
+                checked = overrideSubtitles,
+                onCheckedChange = { updateOverride() },
+            )
+        }
+        if (overrideSubtitles) SubtitleColors(screenModel = screenModel)
     }
 }
 
@@ -142,9 +174,9 @@ private fun SizeAndPosPage(screenModel: PlayerSettingsScreenModel) {
 @Composable
 private fun TrackDelay(
     onDelayChanged: (Double) -> Unit,
-    type: String,
+    track: Tracks,
 ) {
-    var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble(type)) }
+    var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble(track.mpvProperty)) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         RepeatingIconButton(
             onClick = {
@@ -437,6 +469,12 @@ private fun DrawScope.drawColorBox(
             style = stroke,
         )
     }
+}
+
+private enum class Tracks(@StringRes val label: Int, val mpvProperty: String) {
+    SUBTITLES(R.string.player_subtitle_delay, "sub-delay"),
+    AUDIO(R.string.player_audio_delay, "audio-delay"),
+    ;
 }
 
 private enum class SubsColor(val mpvProperty: String, val preference: (PlayerPreferences) -> Preference<Int>) {

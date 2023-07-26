@@ -52,6 +52,7 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SubtitleSettingsDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.toHexString
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
@@ -280,6 +281,7 @@ class PlayerActivity : BaseActivity() {
         setupPlayerControls()
         setupPlayerMPV()
         setupPlayerAudio()
+        setupPlayerSubtitles()
         setupPlayerBrightness()
         loadDeviceDimensions()
 
@@ -425,6 +427,10 @@ class PlayerActivity : BaseActivity() {
             playerPreferences.playerVolumeValue().get()
         }
 
+        if (playerPreferences.rememberAudioDelay().get()) {
+            MPVLib.setPropertyDouble("audio-delay", playerPreferences.audioDelay().get().toDouble())
+        }
+
         verticalScrollRight(0F)
 
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
@@ -432,6 +438,21 @@ class PlayerActivity : BaseActivity() {
         playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
         volumeControlStream = AudioManager.STREAM_MUSIC
+    }
+
+    private fun setupPlayerSubtitles() {
+        if (playerPreferences.rememberSubtitlesDelay().get()) {
+            MPVLib.setPropertyDouble("sub-delay", playerPreferences.subtitlesDelay().get().toDouble())
+        }
+
+        if (playerPreferences.overrideSubtitlesStyle().get()) {
+            MPVLib.setPropertyString("sub-bold", if (playerPreferences.boldSubtitles().get()) "yes" else "no")
+            MPVLib.setPropertyString("sub-italic", if (playerPreferences.italicSubtitles().get()) "yes" else "no")
+
+            MPVLib.setPropertyString("sub-color", playerPreferences.textColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString("sub-border-color", playerPreferences.borderColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString("sub-back-color", playerPreferences.backgroundColorSubtitles().get().toHexString())
+        }
     }
 
     private fun setupPlayerBrightness() {
