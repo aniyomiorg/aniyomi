@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -129,7 +128,7 @@ private fun StylePage(screenModel: PlayerSettingsScreenModel) {
 @Composable
 private fun SizeAndPosPage(screenModel: PlayerSettingsScreenModel) {
     // FIXME Contents don't appear in the dialog
-    Column(Modifier.fillMaxSize()) {
+    Column {
         SubtitleLook(screenModel = screenModel)
     }
 }
