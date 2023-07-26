@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +46,12 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -192,7 +198,6 @@ private fun SubtitleColors(
             onClick = { updateType(SubsColor.TEXT) },
             selected = subsColor == SubsColor.TEXT,
             preference = screenModel.preferences.textColorSubtitles(),
-
         )
         SubtitleColorSelector(
             label = R.string.player_subtitle_border_color,
@@ -207,7 +212,7 @@ private fun SubtitleColors(
             preference = screenModel.preferences.backgroundColorSubtitles(),
         )
     }
-
+    SubtitlePreview(screenModel.preferences)
     Column(verticalArrangement = Arrangement.SpaceEvenly) {
         if (subsColor != SubsColor.NONE) {
             SubtitleColorSlider(
@@ -337,6 +342,29 @@ private fun SubtitleColorSlider(
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
+    }
+}
+
+@Composable
+private fun SubtitlePreview(
+    prefs: PlayerPreferences,
+) {
+    // TODO Add Preview for Subtitle Borders
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "Lorem ipsum dolor sit amet.",
+            style = TextStyle(
+                fontFamily = FontFamily.SansSerif,
+                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                fontWeight =
+                if (prefs.boldSubtitles().collectAsState().value) FontWeight.Bold else FontWeight.Medium,
+                fontStyle =
+                if (prefs.italicSubtitles().collectAsState().value) FontStyle.Italic else FontStyle.Normal,
+                color = Color(prefs.textColorSubtitles().collectAsState().value),
+                background = Color(prefs.backgroundColorSubtitles().collectAsState().value),
+                textAlign = TextAlign.Center,
+            ),
+        )
     }
 }
 
