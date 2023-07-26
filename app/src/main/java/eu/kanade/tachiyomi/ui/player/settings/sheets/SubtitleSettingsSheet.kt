@@ -13,19 +13,25 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
+import androidx.compose.material.icons.outlined.RemoveCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +44,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -76,10 +83,43 @@ fun SubtitleSettingsSheet(
                 onClick = updateOverride,
             )
             if (overrideSubtitles) {
+                SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
                 SubtitleLook(screenModel)
                 SubtitleColors(screenModel)
             }
         }
+    }
+}
+
+@Composable
+private fun SubtitleDelay(
+    onDelayChanged: (Double) -> Unit,
+) {
+    var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble("sub-delay")) }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(text = stringResource(id = R.string.player_subtitle_delay))
+        IconButton(
+            onClick = {
+                currentDelay -= 0.1
+                onDelayChanged(currentDelay)
+            },
+        ) { Icon(imageVector = Icons.Outlined.RemoveCircle, contentDescription = null) }
+        TextField(
+            value = "%.2f".format(currentDelay),
+            onValueChange = {
+                // Don't allow multiple decimal points, non-numeric characters, or leading zeros
+                currentDelay = it.trim().replace(Regex("[^-\\d.]"), "").toDoubleOrNull()
+                    ?: currentDelay
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        IconButton(
+            onClick = {
+                currentDelay += 0.1
+                onDelayChanged(currentDelay)
+            },
+        ) { Icon(imageVector = Icons.Outlined.AddCircle, contentDescription = null) }
     }
 }
 
@@ -203,7 +243,9 @@ private fun SubtitleColorSelector(
 
     val borderColor = MaterialTheme.colorScheme.onSurface
     Column(
-        modifier = Modifier.clickable(onClick = onClick).padding(MaterialTheme.padding.small),
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(MaterialTheme.padding.small),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
