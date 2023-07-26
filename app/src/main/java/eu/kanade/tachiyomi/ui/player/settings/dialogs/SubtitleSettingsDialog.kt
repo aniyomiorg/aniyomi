@@ -98,7 +98,7 @@ fun SubtitleSettingsDialog(
             when (page) {
                 0 -> DelayPage()
                 1 -> StylePage(screenModel)
-                3 -> SizeAndPosPage(screenModel)
+                2 -> SizeAndPosPage(screenModel)
             }
         }
     }
