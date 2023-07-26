@@ -326,14 +326,8 @@ private fun SubtitleColorSlider(
 
         Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
 
-        val colorValue = argb.toValue(colorCode)
-        Text(
-            text = String.format("%03d", colorValue),
-        )
-
-        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
-
         Slider(
+            modifier = Modifier.weight(1f),
             value = argb.toValue(colorCode).toFloat(),
             onValueChange = { newColorValue ->
                 preference.getAndSet { getColorValue(it, newColorValue, argb.mask, argb.bitShift) }
@@ -342,6 +336,10 @@ private fun SubtitleColorSlider(
             valueRange = 0f..255f,
             steps = 255,
         )
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
+
+        Text(text = String.format("%03d", argb.toValue(colorCode)))
 
         Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
     }
