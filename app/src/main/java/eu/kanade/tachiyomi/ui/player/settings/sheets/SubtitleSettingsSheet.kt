@@ -24,9 +24,9 @@ import androidx.compose.material.icons.outlined.RemoveCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,13 +104,14 @@ private fun SubtitleDelay(
                 onDelayChanged(currentDelay)
             },
         ) { Icon(imageVector = Icons.Outlined.RemoveCircle, contentDescription = null) }
-        TextField(
+        OutlinedTextField(
             value = "%.2f".format(currentDelay),
             onValueChange = {
                 // Don't allow multiple decimal points, non-numeric characters, or leading zeros
                 currentDelay = it.trim().replace(Regex("[^-\\d.]"), "").toDoubleOrNull()
                     ?: currentDelay
             },
+            label = { Text(text = stringResource(id = R.string.player_subtitle_delay_text_field)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
