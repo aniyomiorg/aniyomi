@@ -79,12 +79,12 @@ fun SubtitleSettingsSheet(
         onDismissRequest = onDismissRequest,
     ) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
                 Text(text = stringResource(id = R.string.player_override_subtitle_style))
                 Switch(
                     checked = overrideSubtitles,
