@@ -109,11 +109,17 @@ private fun DelayPage() {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_subtitle_delay), Modifier.width(80.dp))
-            TrackDelay(onDelayChanged = { MPVLib.setPropertyDouble("sub-delay", it) })
+            TrackDelay(
+                onDelayChanged = { MPVLib.setPropertyDouble("sub-delay", it) },
+                type = "sub-delay",
+            )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_audio_delay), Modifier.width(80.dp))
-            TrackDelay(onDelayChanged = { MPVLib.setPropertyDouble("audio-delay", it) })
+            TrackDelay(
+                onDelayChanged = { MPVLib.setPropertyDouble("audio-delay", it) },
+                type = "audio-delay",
+            )
         }
     }
 }
@@ -136,8 +142,9 @@ private fun SizeAndPosPage(screenModel: PlayerSettingsScreenModel) {
 @Composable
 private fun TrackDelay(
     onDelayChanged: (Double) -> Unit,
+    type: String,
 ) {
-    var currentDelay by rememberSaveable { mutableStateOf(0.0) }
+    var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble(type)) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         RepeatingIconButton(
             onClick = {
