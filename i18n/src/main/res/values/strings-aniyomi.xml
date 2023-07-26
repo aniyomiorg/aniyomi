@@ -311,4 +311,19 @@
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
+
+    <!-- Library Grouping -->
+    <string name="tracking_status">Tracking status</string>
+    <string name="ungrouped">Ungrouped</string>
+    <string name="not_tracked">Not tracked</string>
+
+    <!-- More Info Menu -->
+    <string name="group">Group</string>
+
+    <!-- Library settings -->
+    <string name="anime_library_group_updates">Anime Library dynamic category updates</string>
+    <string name="manga_library_group_updates">Manga Library dynamic category updates</string>
+    <string name="library_group_updates_global">Always launch global updates</string>
+    <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
+    <string name="library_group_updates_all">Launch category updates all the time</string>
 </resources>

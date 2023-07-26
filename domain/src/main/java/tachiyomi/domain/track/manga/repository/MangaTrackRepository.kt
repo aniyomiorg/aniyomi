@@ -7,6 +7,12 @@ interface MangaTrackRepository {
 
     suspend fun getTrackByMangaId(id: Long): MangaTrack?
 
+    // SY -->
+    suspend fun getMangaTracks(): List<MangaTrack>
+
+    suspend fun getTracksByMangaIds(mangaIds: List<Long>): List<MangaTrack>
+    // SY <--
+
     suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack>
 
     fun getMangaTracksAsFlow(): Flow<List<MangaTrack>>

@@ -30,6 +30,9 @@ SELECT *
 FROM manga_sync
 WHERE _id = :id;
 
+getTracksByMangaIds:
+SELECT * FROM manga_sync WHERE manga_id IN :mangaIds;
+
 getTracksByMangaId:
 SELECT *
 FROM manga_sync

@@ -3,6 +3,7 @@ package tachiyomi.domain.category.manga.interactor
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.category.model.CategoryUpdate
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.plus
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -13,6 +14,12 @@ class SetSortModeForMangaCategory(
 ) {
 
     suspend fun await(categoryId: Long, type: MangaLibrarySort.Type, direction: MangaLibrarySort.Direction) {
+        // SY -->
+        if (preferences.groupMangaLibraryBy().get() != MangaLibraryGroup.BY_DEFAULT) {
+            preferences.libraryMangaSortingMode().set(MangaLibrarySort(type, direction))
+            return
+        }
+        // SY <--
         val category = categoryRepository.getMangaCategory(categoryId) ?: return
         val flags = category.flags + type + direction
         if (preferences.categorizedDisplaySettings().get()) {

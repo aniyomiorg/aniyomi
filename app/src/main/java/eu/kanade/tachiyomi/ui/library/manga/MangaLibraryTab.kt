@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -53,6 +54,7 @@ import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -105,7 +107,19 @@ object MangaLibraryTab : Tab {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = { category ->
-            val started = MangaLibraryUpdateJob.startNow(context, category)
+            // SY -->
+            val started = MangaLibraryUpdateJob.startNow(
+                context = context,
+                category = if (state.groupType == MangaLibraryGroup.BY_DEFAULT) category else null,
+                group = state.groupType,
+                groupExtra = when (state.groupType) {
+                    MangaLibraryGroup.BY_DEFAULT -> null
+                    MangaLibraryGroup.BY_SOURCE, MangaLibraryGroup.BY_TRACK_STATUS -> category?.id?.toString()
+                    MangaLibraryGroup.BY_STATUS -> category?.id?.minus(1)?.toString()
+                    else -> null
+                },
+            )
+            // SY <--
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
@@ -226,6 +240,9 @@ object MangaLibraryTab : Tab {
                 onDismissRequest = onDismissRequest,
                 screenModel = settingsScreenModel,
                 category = state.categories[screenModel.activeCategoryIndex],
+                // SY -->
+                hasCategories = state.categories.fastAny { !it.isSystemCategory },
+                // SY <--
             )
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(

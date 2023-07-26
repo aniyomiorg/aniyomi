@@ -32,6 +32,8 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.anime.model.AnimeGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
@@ -262,6 +264,26 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onClick = { showMangaDialog = true },
                 ),
+                // SY -->
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.groupAnimeLibraryUpdateType(),
+                    title = stringResource(R.string.anime_library_group_updates),
+                    entries = mapOf(
+                        AnimeGroupLibraryMode.GLOBAL to stringResource(R.string.library_group_updates_global),
+                        AnimeGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(R.string.library_group_updates_all_but_ungrouped),
+                        AnimeGroupLibraryMode.ALL to stringResource(R.string.library_group_updates_all),
+                    ),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.groupMangaLibraryUpdateType(),
+                    title = stringResource(R.string.manga_library_group_updates),
+                    entries = mapOf(
+                        MangaGroupLibraryMode.GLOBAL to stringResource(R.string.library_group_updates_global),
+                        MangaGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(R.string.library_group_updates_all_but_ungrouped),
+                        MangaGroupLibraryMode.ALL to stringResource(R.string.library_group_updates_all),
+                    ),
+                ),
+                // SY <--
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.autoUpdateMetadata(),
                     title = stringResource(R.string.pref_library_update_refresh_metadata),

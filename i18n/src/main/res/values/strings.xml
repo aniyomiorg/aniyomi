@@ -8,6 +8,7 @@
 
     <!-- Models -->
     <string name="name">Name</string>
+    <string name="categories">Categories</string>
     <string name="manga">Manga</string>
     <string name="chapters">Chapters</string>
     <string name="track">Tracking</string>
