@@ -1,7 +1,7 @@
 package eu.kanade.domain.source.manga.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
-import exh.source.BlacklistedSources
+import exh.source.MERGED_SOURCE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,13 +28,13 @@ class GetEnabledMangaSources(
                 // SY <--
             ) { a, b, c -> Triple(a, b, c) },
             repository.getMangaSources(),
-        ) { pinnedMangaSourceIds, enabledLanguages, (disabledSources, lastUsedSource, excludedFromDataSaver), sources ->
+        ) { pinnedSourceIds, enabledLanguages, (disabledSources, lastUsedSource, excludedFromDataSaver), sources ->
             sources
                 .filter { it.lang in enabledLanguages || it.id == LocalMangaSource.ID }
                 .filterNot { it.id.toString() in disabledSources || it.id in BlacklistedSources.HIDDEN_SOURCES }
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                 .flatMap {
-                    val flag = if ("${it.id}" in pinnedMangaSourceIds) Pins.pinned else Pins.unpinned
+                    val flag = if ("${it.id}" in pinnedSourceIds) Pins.pinned else Pins.unpinned
                     val source = it.copy(
                         pin = flag,
                         // SY -->
@@ -50,4 +50,10 @@ class GetEnabledMangaSources(
         }
             .distinctUntilChanged()
     }
+}
+
+object BlacklistedSources {
+    var HIDDEN_SOURCES = setOf(
+        MERGED_SOURCE_ID,
+    )
 }
