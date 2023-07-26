@@ -247,7 +247,7 @@
 
                 <data
                     android:host="simkl-auth"
-                    android:scheme="aniyomi" />
+                    android:scheme="kuukiyomi" />
             </intent-filter>
         </activity>
 
