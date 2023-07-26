@@ -297,7 +297,8 @@
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_override_subtitle_style">Override subtitle style</string>
     <string name="player_subtitle_delay">Subtitle Delay</string>
-    <string name="player_subtitle_delay_text_field">Delay(s)</string>
+    <string name="player_audio_delay">Audio Delay</string>
+    <string name="player_track_delay_text_field">Delay(s)</string>
     <string name="player_subtitle_text_color">Text</string>
     <string name="player_subtitle_border_color">Border</string>
     <string name="player_subtitle_background_color">Background</string>

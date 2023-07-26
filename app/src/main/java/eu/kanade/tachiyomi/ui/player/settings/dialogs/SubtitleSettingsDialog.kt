@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings.sheets
+package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -28,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,6 +55,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.RepeatingIconButton
+import eu.kanade.presentation.components.TabbedDialog
+import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -68,7 +70,7 @@ import kotlin.math.floor
 import kotlin.math.max
 
 @Composable
-fun SubtitleSettingsSheet(
+fun SubtitleSettingsDialog(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
@@ -80,38 +82,64 @@ fun SubtitleSettingsSheet(
         MPVLib.setPropertyString("sub-ass-override", overrideType)
     }
 
-    PlayerSheet(
-        titleRes = R.string.player_subtitle_settings,
+    TabbedDialog(
         onDismissRequest = onDismissRequest,
-    ) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
-            Row(
-                modifier = Modifier.fillMaxWidth().clickable(onClick = { updateOverride() }),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = stringResource(id = R.string.player_override_subtitle_style))
-                Switch(
-                    checked = overrideSubtitles,
-                    onCheckedChange = { updateOverride() },
-                )
-            }
-            if (overrideSubtitles) {
-                SubtitleLook(screenModel)
-                SubtitleColors(screenModel)
+        tabTitles = listOf(
+            "Delay",
+            "Style",
+            "Size & Position",
+        ),
+    ) { contentPadding, page ->
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(vertical = TabbedDialogPaddings.Vertical)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            when (page) {
+                0 -> DelayPage()
+                1 -> StylePage(screenModel)
+                3 -> SizeAndPosPage(screenModel)
             }
         }
     }
 }
 
 @Composable
-private fun SubtitleDelay(
+private fun DelayPage() {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = stringResource(id = R.string.player_subtitle_delay), Modifier.width(80.dp))
+            TrackDelay(onDelayChanged = { MPVLib.setPropertyDouble("sub-delay", it) })
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = stringResource(id = R.string.player_audio_delay), Modifier.width(80.dp))
+            TrackDelay(onDelayChanged = { MPVLib.setPropertyDouble("audio-delay", it) })
+        }
+    }
+}
+
+@Composable
+private fun StylePage(screenModel: PlayerSettingsScreenModel) {
+    Column {
+        SubtitleColors(screenModel = screenModel)
+    }
+}
+
+@Composable
+private fun SizeAndPosPage(screenModel: PlayerSettingsScreenModel) {
+    // FIXME Contents don't appear in the dialog
+    Column(Modifier.fillMaxSize()) {
+        SubtitleLook(screenModel = screenModel)
+    }
+}
+
+@Composable
+private fun TrackDelay(
     onDelayChanged: (Double) -> Unit,
 ) {
-    var currentDelay by rememberSaveable { mutableStateOf(MPVLib.getPropertyDouble("sub-delay")) }
+    var currentDelay by rememberSaveable { mutableStateOf(0.0) }
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(text = stringResource(id = R.string.player_subtitle_delay))
         RepeatingIconButton(
             onClick = {
                 currentDelay -= 0.1
@@ -126,7 +154,7 @@ private fun SubtitleDelay(
                 currentDelay = it.trim().replace(Regex("[^-\\d.]"), "").toDoubleOrNull()
                     ?: currentDelay
             },
-            label = { Text(text = stringResource(id = R.string.player_subtitle_delay_text_field)) },
+            label = { Text(text = stringResource(id = R.string.player_track_delay_text_field)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )

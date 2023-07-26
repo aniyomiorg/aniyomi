@@ -51,11 +51,11 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SubtitleSettingsDialog
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
@@ -366,7 +366,7 @@ class PlayerActivity : BaseActivity() {
                 }
 
                 is PlayerViewModel.Dialog.SubtitleSettings -> {
-                    SubtitleSettingsSheet(
+                    SubtitleSettingsDialog(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         onDismissRequest = pauseForDialog(),
                     )
