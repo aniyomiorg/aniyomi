@@ -37,8 +37,8 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 <details><summary>Issues</summary>
 
 1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/LuftVerbot/kuukiyomi/issues).**
-    Also take a look at issues opened on Aniyomis GitHub [issues](https://github.com/aniyomiorg/aniyomi/issues).
-2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
+2. Also take a look at issues opened on Aniyomis GitHub [issues](https://github.com/aniyomiorg/aniyomi/issues).
+3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
 
 </details>
 
