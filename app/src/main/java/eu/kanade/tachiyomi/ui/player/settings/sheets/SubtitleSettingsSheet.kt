@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,7 +54,6 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
-import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.floor
@@ -66,22 +66,26 @@ fun SubtitleSettingsSheet(
 ) {
     val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
 
-    val updateOverride = {
-        val overrideType = if (overrideSubtitles) "no" else "force"
-        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
-    }
-
     PlayerSheet(
         titleRes = R.string.player_subtitle_settings,
         onDismissRequest = onDismissRequest,
     ) {
         Column {
-            CheckboxItem(
-                label = stringResource(R.string.player_override_subtitle_style),
-                checked = overrideSubtitles,
-                onClick = updateOverride,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = stringResource(id = R.string.player_override_subtitle_style))
+                Switch(
+                    checked = overrideSubtitles,
+                    onCheckedChange = {
+                        val overrideType = if (overrideSubtitles) "no" else "force"
+                        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
+                        MPVLib.setPropertyString("sub-ass-override", overrideType)
+                    },
+                )
+            }
             if (overrideSubtitles) {
                 SubtitleDelay { MPVLib.setPropertyDouble("sub-delay", it) }
                 SubtitleLook(screenModel)
