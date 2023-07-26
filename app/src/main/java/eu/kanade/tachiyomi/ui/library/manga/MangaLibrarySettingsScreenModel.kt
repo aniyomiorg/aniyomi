@@ -1,7 +1,9 @@
 package eu.kanade.tachiyomi.ui.library.manga
 
+import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.preference.toggle
@@ -30,6 +32,11 @@ class MangaLibrarySettingsScreenModel(
 
     val trackServices = trackManager.services.filter { service -> service.isLogged }
 
+    // SY -->
+    val grouping by libraryPreferences.groupMangaLibraryBy().asState(coroutineScope)
+
+    // SY <--
+
     fun togglePreference(preference: (LibraryPreferences) -> Preference<Boolean>) {
         preference(libraryPreferences).toggle()
     }
@@ -55,4 +62,12 @@ class MangaLibrarySettingsScreenModel(
             setSortModeForCategory.await(category, mode, direction)
         }
     }
+
+    // SY -->
+    fun setGrouping(grouping: Int) {
+        coroutineScope.launchIO {
+            libraryPreferences.groupMangaLibraryBy().set(grouping)
+        }
+    }
+    // SY <--
 }

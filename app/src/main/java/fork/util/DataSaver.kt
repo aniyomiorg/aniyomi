@@ -1,4 +1,4 @@
-package exh.util
+package fork.util
 
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver.BANDWIDTH_HERO
