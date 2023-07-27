@@ -64,7 +64,6 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
-import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.floor
@@ -78,9 +77,9 @@ fun SubtitleSettingsDialog(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = listOf(
-            "Delay",
-            "Style",
-            "Size & Position",
+            stringResource(id = R.string.player_subtitle_settings_delay_tab),
+            stringResource(id = R.string.player_subtitle_settings_style_tab),
+            stringResource(id = R.string.player_subtitle_settings_size_and_position_tab),
         ),
     ) { contentPadding, page ->
         Column(
@@ -102,12 +101,30 @@ fun SubtitleSettingsDialog(
 private fun DelayPage(
     screenModel: PlayerSettingsScreenModel,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = 24.dp),
+    ) {
+        val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
+        val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { screenModel.togglePreference { subDelay } }),
+        ) {
+            Text(text = stringResource(id = R.string.player_subtitle_remember_delay))
+            Switch(
+                checked = subDelay.collectAsState().value,
+                onCheckedChange = { screenModel.togglePreference { subDelay } },
+            )
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_subtitle_delay), Modifier.width(80.dp))
             TrackDelay(
                 onDelayChanged = {
-                    MPVLib.setPropertyDouble("sub-delay", it)
+                    MPVLib.setPropertyDouble(Tracks.SUBTITLES.mpvProperty, it)
                     if (screenModel.preferences.rememberSubtitlesDelay().get()) {
                         screenModel.preferences.subtitlesDelay().set(it.toFloat())
                     }
@@ -115,25 +132,30 @@ private fun DelayPage(
                 Tracks.SUBTITLES,
             )
         }
-        val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
-        CheckboxItem(label = "Remember Sub Delay", checked = subDelay.collectAsState().value) {
-            screenModel.togglePreference { subDelay }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { screenModel.togglePreference { audioDelay } }),
+        ) {
+            Text(text = stringResource(id = R.string.player_audio_remember_delay))
+            Switch(
+                checked = audioDelay.collectAsState().value,
+                onCheckedChange = { screenModel.togglePreference { audioDelay } },
+            )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.player_audio_delay), Modifier.width(80.dp))
             TrackDelay(
                 onDelayChanged = {
-                    MPVLib.setPropertyDouble("audio-delay", it)
+                    MPVLib.setPropertyDouble(Tracks.AUDIO.mpvProperty, it)
                     if (screenModel.preferences.rememberAudioDelay().get()) {
                         screenModel.preferences.audioDelay().set(it.toFloat())
                     }
                 },
                 Tracks.AUDIO,
             )
-        }
-        val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
-        CheckboxItem(label = "Remember Audio Delay", checked = audioDelay.collectAsState().value) {
-            screenModel.togglePreference { audioDelay }
         }
     }
 }
