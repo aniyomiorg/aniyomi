@@ -23,6 +23,7 @@ import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.util.DebugLogger
 import eu.kanade.domain.DomainModule
+import eu.kanade.domain.SYDomainModule
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
@@ -85,6 +86,9 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
         Injekt.importModule(DomainModule())
+        // SY -->
+        Injekt.importModule(SYDomainModule())
+        // SY <--
 
         setupAcra()
         setupNotificationChannels()
