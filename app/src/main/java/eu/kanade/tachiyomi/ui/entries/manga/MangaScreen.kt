@@ -121,6 +121,9 @@ class MangaScreen(
             onShareClicked = { shareManga(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.manga.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditMangaInfoDialog,
+            // SY <--
             onMigrateClicked = { navigator.push(MigrateSearchScreen(successState.manga.id)) }.takeIf { successState.manga.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkChapters,
             onMultiMarkAsReadClicked = screenModel::markChaptersRead,
@@ -212,6 +215,15 @@ class MangaScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is MangaInfoScreenModel.Dialog.EditMangaInfo -> {
+                EditMangaDialog(
+                    manga = dialog.manga,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateMangaInfo,
+                )
+            }
+            // SY <--
         }
     }
 

@@ -35,26 +35,26 @@ fun SManga.copyFrom(other: Mangas) {
 fun Manga.copyFrom(other: Mangas): Manga {
     var manga = this
     if (other.author != null) {
-        manga = manga.copy(author = other.author)
+        manga = manga.copy(ogAuthor = other.author)
     }
 
     if (other.artist != null) {
-        manga = manga.copy(artist = other.artist)
+        manga = manga.copy(ogArtist = other.artist)
     }
 
     if (other.description != null) {
-        manga = manga.copy(description = other.description)
+        manga = manga.copy(ogDescription = other.description)
     }
 
     if (other.genre != null) {
-        manga = manga.copy(genre = other.genre)
+        manga = manga.copy(ogGenre = other.genre)
     }
 
     if (other.thumbnail_url != null) {
         manga = manga.copy(thumbnailUrl = other.thumbnail_url)
     }
 
-    manga = manga.copy(status = other.status)
+    manga = manga.copy(ogStatus = other.status)
 
     if (!initialized) {
         manga = manga.copy(initialized = other.initialized)
