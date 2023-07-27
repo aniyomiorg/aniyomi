@@ -1,7 +1,6 @@
 package eu.kanade.domain.source.manga.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
-import fork.source.MERGED_SOURCE_ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,7 +30,7 @@ class GetEnabledMangaSources(
         ) { pinnedSourceIds, enabledLanguages, (disabledSources, lastUsedSource, excludedFromDataSaver), sources ->
             sources
                 .filter { it.lang in enabledLanguages || it.id == LocalMangaSource.ID }
-                .filterNot { it.id.toString() in disabledSources || it.id in BlacklistedSources.HIDDEN_SOURCES }
+                .filterNot { it.id.toString() in disabledSources }
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                 .flatMap {
                     val flag = if ("${it.id}" in pinnedSourceIds) Pins.pinned else Pins.unpinned
@@ -50,10 +49,4 @@ class GetEnabledMangaSources(
         }
             .distinctUntilChanged()
     }
-}
-
-object BlacklistedSources {
-    var HIDDEN_SOURCES = setOf(
-        MERGED_SOURCE_ID,
-    )
 }

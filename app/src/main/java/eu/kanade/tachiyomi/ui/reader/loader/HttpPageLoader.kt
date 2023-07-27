@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.loader
 
+import aniyomi.util.DataSaver
+import aniyomi.util.DataSaver.Companion.getImage
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
@@ -7,8 +9,6 @@ import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import fork.util.DataSaver
-import fork.util.DataSaver.Companion.getImage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

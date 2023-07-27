@@ -1,4 +1,4 @@
-package fork.util
+package aniyomi.util
 
 import java.util.Locale
 
