@@ -296,7 +296,6 @@
     <!-- Subtitle settings -->
     <string name="player_subtitle_settings_delay_tab">Delay</string>
     <string name="player_subtitle_settings_style_tab">Style</string>
-    <string name="player_subtitle_settings_size_and_position_tab">Size &amp; Position</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_override_subtitle_style">Override subtitle style</string>
     <string name="player_subtitle_delay">Subtitle Delay</string>

@@ -79,7 +79,6 @@ fun SubtitleSettingsDialog(
         tabTitles = listOf(
             stringResource(id = R.string.player_subtitle_settings_delay_tab),
             stringResource(id = R.string.player_subtitle_settings_style_tab),
-            stringResource(id = R.string.player_subtitle_settings_size_and_position_tab),
         ),
     ) { contentPadding, page ->
         Column(
@@ -91,7 +90,6 @@ fun SubtitleSettingsDialog(
             when (page) {
                 0 -> DelayPage(screenModel)
                 1 -> StylePage(screenModel)
-                2 -> SizeAndPosPage(screenModel)
             }
         }
     }
@@ -169,9 +167,12 @@ private fun StylePage(screenModel: PlayerSettingsScreenModel) {
         screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
         MPVLib.setPropertyString("sub-ass-override", overrideType)
     }
-    Column {
+    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        SubtitleLook(screenModel = screenModel)
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { updateOverride() }),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -182,14 +183,6 @@ private fun StylePage(screenModel: PlayerSettingsScreenModel) {
             )
         }
         if (overrideSubtitles) SubtitleColors(screenModel = screenModel)
-    }
-}
-
-@Composable
-private fun SizeAndPosPage(screenModel: PlayerSettingsScreenModel) {
-    // FIXME Contents don't appear in the dialog
-    Column {
-        SubtitleLook(screenModel = screenModel)
     }
 }
 
@@ -493,9 +486,9 @@ private fun DrawScope.drawColorBox(
     }
 }
 
-private enum class Tracks(@StringRes val label: Int, val mpvProperty: String) {
-    SUBTITLES(R.string.player_subtitle_delay, "sub-delay"),
-    AUDIO(R.string.player_audio_delay, "audio-delay"),
+private enum class Tracks(val mpvProperty: String) {
+    SUBTITLES("sub-delay"),
+    AUDIO("audio-delay"),
     ;
 }
 
