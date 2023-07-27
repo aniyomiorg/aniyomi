@@ -168,7 +168,6 @@ private fun StylePage(screenModel: PlayerSettingsScreenModel) {
         MPVLib.setPropertyString("sub-ass-override", overrideType)
     }
     Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-        SubtitleLook(screenModel = screenModel)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -182,7 +181,10 @@ private fun StylePage(screenModel: PlayerSettingsScreenModel) {
                 onCheckedChange = { updateOverride() },
             )
         }
-        if (overrideSubtitles) SubtitleColors(screenModel = screenModel)
+        if (overrideSubtitles) {
+            SubtitleLook(screenModel = screenModel)
+            SubtitleColors(screenModel = screenModel)
+        }
     }
 }
 
