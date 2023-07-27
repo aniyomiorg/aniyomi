@@ -326,4 +326,16 @@
     <string name="library_group_updates_global">Always launch global updates</string>
     <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
     <string name="library_group_updates_all">Launch category updates all the time</string>
+
+    <!-- Entry Info Edit -->
+    <string name="reset_tags">Reset Tags</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="title_hint">Title: %1$s</string>
+    <string name="description_hint">Description: %1$s</string>
+    <string name="author_hint">Author: %1$s</string>
+    <string name="artist_hint">Artist: %1$s</string>
+
+    <!-- Actions -->
+    <string name="action_edit_info">Edit info</string>
+    <string name="action_ok">OK</string>
 </resources>

@@ -112,6 +112,9 @@ fun MangaScreen(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -155,6 +158,9 @@ fun MangaScreen(
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
             onMigrateClicked = onMigrateClicked,
+            // SY -->
+            onEditInfoClicked = onEditInfoClicked,
+            // SY <--
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
             onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -187,6 +193,9 @@ fun MangaScreen(
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
             onMigrateClicked = onMigrateClicked,
+            // SY -->
+            onEditInfoClicked = onEditInfoClicked,
+            // SY <--
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
             onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -229,6 +238,9 @@ private fun MangaScreenSmallImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -280,6 +292,9 @@ private fun MangaScreenSmallImpl(
                 onClickEditCategory = onEditCategoryClicked,
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
+                // SY -->
+                onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
+                // SY <--
                 changeAnimeSkipIntro = null,
                 actionModeCounter = chapters.count { it.selected },
                 onSelectAll = { onAllChapterSelected(true) },
@@ -450,6 +465,9 @@ fun MangaScreenLargeImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -505,6 +523,9 @@ fun MangaScreenLargeImpl(
                     onClickEditCategory = onEditCategoryClicked,
                     onClickRefresh = onRefresh,
                     onClickMigrate = onMigrateClicked,
+                    // SY -->
+                    onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
+                    // SY <--
                     changeAnimeSkipIntro = null,
                     actionModeCounter = chapters.count { it.selected },
                     onSelectAll = { onAllChapterSelected(true) },

@@ -23,4 +23,9 @@ object BackupConst {
     internal const val BACKUP_EXTENSIONS = 0x40
     internal const val BACKUP_EXTENSIONS_MASK = 0x40
     internal const val BACKUP_ALL = 0x7F
+
+    // SY -->
+    internal const val BACKUP_CUSTOM_INFO = 0x10
+    internal const val BACKUP_CUSTOM_INFO_MASK = 0x10
+    // SY <--
 }
