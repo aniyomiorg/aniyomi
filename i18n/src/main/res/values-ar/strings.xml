@@ -395,10 +395,9 @@
         <item quantity="many">%1$s عناصر متبقية</item>
         <item quantity="other">%1$s عناصر متبقية</item>
     </plurals>
-    <string name="downloaded_only_summary">يقوم بترشيح المانجا ضمن مكتبتك</string>
-    <string name="pref_search_pinned_sources_only">البحث فقط عن مصادر مثبتة في البحث العالمي</string>
-    <string name="pref_webtoon_side_padding">المساحة الجانبية</string>
-    <string name="vertical_plus_viewer">عمودي مستمر</string>
+    <string name="downloaded_only_summary">تصفية جميع الإدخالات في مكتبتك</string>
+    <string name="pref_webtoon_side_padding">الإزاحة الجانبية</string>
+    <string name="vertical_plus_viewer">شريط طويل بين أجزائه فجوات</string>
     <string name="gray_background">رمادي</string>
     <string name="pref_true_color_summary">يزيد من سلاسة تدرج الالوان بالصور، ولكن قد يؤثر على الأداء</string>
     <plurals name="lock_after_mins">
@@ -548,8 +547,8 @@
     <string name="rotation_landscape">افقي</string>
     <string name="rotation_portrait">رأسي</string>
     <string name="rotation_type">نوع التدوير</string>
-    <string name="automatic_background">تلقائيا</string>
-    <string name="pref_create_folder_per_manga_summary">إنشاء مجلدات وفقا لعنوان المانجا</string>
+    <string name="automatic_background">تلقائيًّا</string>
+    <string name="pref_create_folder_per_manga_summary">إنشاء مجلدات وفقا لعنوان الإدخالات</string>
     <string name="pref_create_folder_per_manga">حفظ الصفحات في مجلدات منفصلة</string>
     <string name="pref_reader_actions">الإجراءات</string>
     <string name="pref_grayscale">تدرج رمادي</string>
@@ -616,12 +615,8 @@
         <item quantity="many">منذ %1$d أيام</item>
         <item quantity="other">منذ %1$d أيام</item>
     </plurals>
-    <string name="pref_relative_time_short">قصير (اليوم، الأمس)</string>
     <string name="action_track">تتبع</string>
     <string name="pref_inverted_colors">معكوس</string>
-    <string name="pref_relative_time_long">طويل (القصير، +منذ كم يوم)</string>
-    <string name="pref_relative_format">الوقت النسبي</string>
-    <string name="pref_category_timestamps">الوقت</string>
     <string name="theme_tealturquoise">ازرق مخضر و فيروز</string>
     <string name="pref_category_appearance">المظهر</string>
     <string name="getting_started_guide">دليل البدء</string>
@@ -809,7 +804,6 @@
         <item quantity="other">بعد %d يوم</item>
     </plurals>
     <string name="skipped_reason_not_in_release_period">تُخُطِّيت بسبب عدم توقع صدور اليوم</string>
-    <string name="manga_modify_interval_title">عدِّل المدة</string>
     <string name="manga_display_modified_interval_title">عيِّن التحديث كلَّ</string>
     <plurals name="day">
         <item quantity="zero">لا يوم</item>
@@ -834,4 +828,7 @@
     <string name="action_ok">حسنًا</string>
     <string name="track_delete_remote_text">وكذلك أزله من %s</string>
     <string name="delete_downloaded">احذف ما نُزِّل</string>
+    <string name="syncing_library">تُزامن المكتبة</string>
+    <string name="library_sync_complete">انتهت مزامنة المكتبة</string>
+    <string name="has_results">وُجدت نتائج</string>
 </resources>
