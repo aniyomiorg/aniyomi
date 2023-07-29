@@ -411,7 +411,7 @@ class AnimeLibraryScreenModel(
                 mapOf(
                     Category(
                         0,
-                        preferences.context.getString(eu.kanade.tachiyomi.R.string.ungrouped),
+                        preferences.context.getString(R.string.ungrouped),
                         0,
                         0,
                     ) to
@@ -783,6 +783,25 @@ class AnimeLibraryScreenModel(
                         flags = 0,
                     )
                 }
+            }
+            AnimeLibraryGroup.BY_TAG -> {
+                val tags: List<String> = libraryAnime.flatMap { item ->
+                    item.libraryAnime.anime.genre?.distinct() ?: emptyList()
+                }
+                libraryAnime.flatMap { item ->
+                    item.libraryAnime.anime.genre?.distinct()?.map {
+                            genre ->
+                        Pair(genre, item)
+                    } ?: emptyList()
+                }.groupBy({ it.first }, { it.second }).filterValues { it.size > 3 }
+                    .mapKeys { (genre, _) ->
+                        Category(
+                            id = genre.hashCode().toLong(),
+                            name = genre,
+                            order = tags.indexOf(genre).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
+                            flags = 0,
+                        )
+                    }
             }
             else -> {
                 libraryAnime.groupBy { item ->

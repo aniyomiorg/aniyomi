@@ -778,6 +778,25 @@ class MangaLibraryScreenModel(
                     )
                 }
             }
+            MangaLibraryGroup.BY_TAG -> {
+                val tags: List<String> = libraryManga.flatMap { item ->
+                    item.libraryManga.manga.genre?.distinct() ?: emptyList()
+                }
+                libraryManga.flatMap { item ->
+                    item.libraryManga.manga.genre?.distinct()?.map {
+                            genre ->
+                        Pair(genre, item)
+                    } ?: emptyList()
+                }.groupBy({ it.first }, { it.second }).filterValues { it.size > 3 }
+                    .mapKeys { (genre, _) ->
+                        Category(
+                            id = genre.hashCode().toLong(),
+                            name = genre,
+                            order = tags.indexOf(genre).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
+                            flags = 0,
+                        )
+                    }
+            }
             else -> {
                 libraryManga.groupBy { item ->
                     item.libraryManga.manga.status

@@ -315,6 +315,7 @@
     <!-- Library Grouping -->
     <string name="tracking_status">Tracking status</string>
     <string name="ungrouped">Ungrouped</string>
+    <string name="tag">Tag</string>
     <string name="not_tracked">Not tracked</string>
 
     <!-- More Info Menu -->

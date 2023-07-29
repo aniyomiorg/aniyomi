@@ -306,6 +306,7 @@ private fun groupTypeDrawableRes(type: Int): Int {
         AnimeLibraryGroup.BY_STATUS -> R.drawable.ic_progress_clock_24dp
         AnimeLibraryGroup.BY_TRACK_STATUS -> R.drawable.ic_sync_24dp
         AnimeLibraryGroup.BY_SOURCE -> R.drawable.ic_browse_filled_24dp
+        AnimeLibraryGroup.BY_TAG -> R.drawable.ic_tag_24dp
         AnimeLibraryGroup.UNGROUPED -> R.drawable.ic_ungroup_24dp
         else -> R.drawable.ic_label_24dp
     }
@@ -320,6 +321,7 @@ private fun ColumnScope.GroupPage(
         buildList {
             add(AnimeLibraryGroup.BY_DEFAULT)
             add(AnimeLibraryGroup.BY_SOURCE)
+            add(AnimeLibraryGroup.BY_TAG)
             add(AnimeLibraryGroup.BY_STATUS)
             if (screenModel.trackServices.isNotEmpty()) {
                 add(AnimeLibraryGroup.BY_TRACK_STATUS)
