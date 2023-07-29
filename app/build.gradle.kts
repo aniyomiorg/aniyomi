@@ -10,7 +10,7 @@ plugins {
 }
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
-    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
+    //apply<com.google.gms.googleservices.GoogleServicesPlugin>()
     //apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
 }
 
@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId = "xyz.luft.tachiyomi.mi"
         versionCode = 102
-        versionName = "0.1"
+        versionName = "0.1.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
