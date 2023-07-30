@@ -126,7 +126,7 @@ internal class AnimeExtensionGithubApi {
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
                     hasChangelog = it.hasChangelog == 1,
-                    sources = it.sources?.toAnimeExtensionSources() ?: emptyList(),
+                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),
                     apkName = it.apk,
                     iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
                 )

@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.reader
+package eu.kanade.presentation.reader
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.ui.reader.loader.DownloadPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.service.calculateChapterGap
@@ -43,7 +42,7 @@ fun ChapterTransition(
     manga ?: return
 
     val currChapter = transition.from.chapter
-    val currChapterDownloaded = transition.from.pageLoader is DownloadPageLoader
+    val currChapterDownloaded = transition.from.pageLoader?.isLocal == true
 
     val goingToChapter = transition.to?.chapter
     val goingToChapterDownloaded = if (goingToChapter != null) {

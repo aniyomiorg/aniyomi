@@ -20,6 +20,7 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
+import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -124,6 +125,9 @@ class AnimeInfoScreenModel(
 
     private val processedEpisodes: Sequence<EpisodeItem>?
         get() = successState?.processedEpisodes
+
+    val episodeSwipeEndAction = libraryPreferences.swipeEpisodeEndAction().get()
+    val episodeSwipeStartAction = libraryPreferences.swipeEpisodeStartAction().get()
 
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
@@ -232,7 +236,7 @@ class AnimeInfoScreenModel(
 
             logcat(LogPriority.ERROR, e)
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = e.snackbarMessage)
+                snackbarHostState.showSnackbar(message = with(context) { e.formattedMessage })
             }
         }
     }
@@ -532,12 +536,55 @@ class AnimeInfoScreenModel(
                 context.getString(R.string.no_episodes_error)
             } else {
                 logcat(LogPriority.ERROR, e)
-                e.snackbarMessage
+                with(context) { e.formattedMessage }
             }
 
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(message = message)
             }
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if the swipe action is [LibraryPreferences.EpisodeSwipeAction.Disabled]
+     */
+    fun episodeSwipe(episodeItem: EpisodeItem, swipeAction: LibraryPreferences.EpisodeSwipeAction) {
+        coroutineScope.launch {
+            executeEpisodeSwipeAction(episodeItem, swipeAction)
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if the swipe action is [LibraryPreferences.EpisodeSwipeAction.Disabled]
+     */
+    private fun executeEpisodeSwipeAction(
+        episodeItem: EpisodeItem,
+        swipeAction: LibraryPreferences.EpisodeSwipeAction,
+    ) {
+        val episode = episodeItem.episode
+        when (swipeAction) {
+            LibraryPreferences.EpisodeSwipeAction.ToggleSeen -> {
+                markEpisodesSeen(listOf(episode), !episode.seen)
+            }
+            LibraryPreferences.EpisodeSwipeAction.ToggleBookmark -> {
+                bookmarkEpisodes(listOf(episode), !episode.bookmark)
+            }
+            LibraryPreferences.EpisodeSwipeAction.Download -> {
+                val downloadAction: EpisodeDownloadAction = when (episodeItem.downloadState) {
+                    AnimeDownload.State.ERROR,
+                    AnimeDownload.State.NOT_DOWNLOADED,
+                    -> EpisodeDownloadAction.START_NOW
+                    AnimeDownload.State.QUEUE,
+                    AnimeDownload.State.DOWNLOADING,
+                    -> EpisodeDownloadAction.CANCEL
+                    AnimeDownload.State.DOWNLOADED -> EpisodeDownloadAction.DELETE
+                }
+                runEpisodeDownloadActions(
+                    items = listOf(episodeItem),
+                    action = downloadAction,
+                )
+            }
+            LibraryPreferences.EpisodeSwipeAction.Disabled -> throw IllegalStateException()
         }
     }
 
@@ -908,7 +955,7 @@ class AnimeInfoScreenModel(
                     loggedServices
                         // Map to TrackItem
                         .map { service -> AnimeTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
-                        // Show only if the service supports this manga's source
+                        // Show only if the service supports this anime's source
                         .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source!!) ?: true }
                 }
                 .distinctUntilChanged()
@@ -947,11 +994,11 @@ class AnimeInfoScreenModel(
         }
     }
 
-    fun showDeleteEpisodeDialog(chapters: List<Episode>) {
+    fun showDeleteEpisodeDialog(episodes: List<Episode>) {
         mutableState.update { state ->
             when (state) {
                 AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.DeleteEpisodes(chapters))
+                is AnimeScreenState.Success -> state.copy(dialog = Dialog.DeleteEpisodes(episodes))
             }
         }
     }
@@ -982,14 +1029,6 @@ class AnimeInfoScreenModel(
             }
         }
     }
-
-    private val Throwable.snackbarMessage: String
-        get() = when (val className = this::class.simpleName) {
-            null -> message ?: ""
-            "SourceNotInstalledException" -> context.getString(R.string.loader_not_implemented_error)
-            "Exception", "HttpException", "IOException" -> message ?: className
-            else -> "$className: $message"
-        }
 
     fun showAnimeSkipIntroDialog() {
         mutableState.update { state ->
@@ -1043,8 +1082,8 @@ sealed class AnimeScreenState {
             get() = nextAiringEpisode.second.times(1000L).minus(Calendar.getInstance().timeInMillis)
 
         /**
-         * Applies the view filters to the list of chapters obtained from the database.
-         * @return an observable of the list of chapters filtered and sorted.
+         * Applies the view filters to the list of episodes obtained from the database.
+         * @return an observable of the list of episodes filtered and sorted.
          */
         private fun List<EpisodeItem>.applyFilters(anime: Anime): Sequence<EpisodeItem> {
             val isLocalAnime = anime.isLocal()

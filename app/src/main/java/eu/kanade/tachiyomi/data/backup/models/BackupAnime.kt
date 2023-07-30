@@ -77,7 +77,7 @@ data class BackupAnime(
                 artist = anime.artist,
                 author = anime.author,
                 description = anime.description,
-                genre = anime.genre ?: emptyList(),
+                genre = anime.genre.orEmpty(),
                 status = anime.status.toInt(),
                 thumbnailUrl = anime.thumbnailUrl,
                 favorite = anime.favorite,

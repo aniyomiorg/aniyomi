@@ -222,11 +222,18 @@ object MangaLibraryTab : Tab {
 
         val onDismissRequest = screenModel::closeDialog
         when (val dialog = state.dialog) {
-            is MangaLibraryScreenModel.Dialog.SettingsSheet -> MangaLibrarySettingsDialog(
-                onDismissRequest = onDismissRequest,
-                screenModel = settingsScreenModel,
-                category = state.categories[screenModel.activeCategoryIndex],
-            )
+            is MangaLibraryScreenModel.Dialog.SettingsSheet -> run {
+                val category = state.categories.getOrNull(screenModel.activeCategoryIndex)
+                if (category == null) {
+                    onDismissRequest()
+                    return@run
+                }
+                MangaLibrarySettingsDialog(
+                    onDismissRequest = onDismissRequest,
+                    screenModel = settingsScreenModel,
+                    category = category,
+                )
+            }
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,

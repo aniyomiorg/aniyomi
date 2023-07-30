@@ -21,11 +21,11 @@ import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceComfortab
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceCompactGrid
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceList
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -54,12 +54,7 @@ fun BrowseSourceContent(
         ?: mangaList.loadState.append.takeIf { it is LoadState.Error }
 
     val getErrorMessage: (LoadState.Error) -> String = { state ->
-        when {
-            state.error is NoChaptersException -> context.getString(R.string.no_results_found)
-            state.error.message.isNullOrEmpty() -> ""
-            state.error.message.orEmpty().startsWith("HTTP error") -> "${state.error.message}: ${context.getString(R.string.http_error_hint)}"
-            else -> state.error.message.orEmpty()
-        }
+        with(context) { state.error.formattedMessage }
     }
 
     LaunchedEffect(errorState) {

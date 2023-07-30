@@ -173,7 +173,7 @@ data class MangaExtensionDetailsState(
 ) {
 
     val sources: List<MangaExtensionSourceItem>
-        get() = _sources ?: emptyList()
+        get() = _sources.orEmpty()
 
     val isLoading: Boolean
         get() = extension == null || _sources == null
