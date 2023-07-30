@@ -114,7 +114,7 @@ object MangaLibraryTab : Tab {
                 group = state.groupType,
                 groupExtra = when (state.groupType) {
                     MangaLibraryGroup.BY_DEFAULT -> null
-                    MangaLibraryGroup.BY_SOURCE, MangaLibraryGroup.BY_TRACK_STATUS -> category?.id?.toString()
+                    MangaLibraryGroup.BY_SOURCE, MangaLibraryGroup.BY_TRACK_STATUS, MangaLibraryGroup.BY_TAG -> category?.id?.toString()
                     MangaLibraryGroup.BY_STATUS -> category?.id?.minus(1)?.toString()
                     else -> null
                 },

@@ -231,6 +231,13 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                     if (source != null) libraryManga.filter { it.manga.source == source } else emptyList()
                 }
+                MangaLibraryGroup.BY_TAG -> {
+                    val tagExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val tag = libraryManga.map { it.manga.genre }
+                        .distinct()
+                        .getOrNull(tagExtra ?: -1)
+                    if (tag != null) libraryManga.filter { it.manga.genre == tag } else emptyList()
+                }
                 MangaLibraryGroup.BY_STATUS -> {
                     val statusExtra = groupExtra?.toLongOrNull() ?: -1
                     libraryManga.filter {
