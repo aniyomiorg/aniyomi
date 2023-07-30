@@ -187,7 +187,7 @@ class LibraryPreferences(
         Download,
         Disabled,
     }
-    
+
     // SY -->
 
     fun groupAnimeLibraryUpdateType() = preferenceStore.getEnum("group_anime_library_update_type", AnimeGroupLibraryMode.GLOBAL)

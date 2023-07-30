@@ -82,7 +82,6 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
-import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat

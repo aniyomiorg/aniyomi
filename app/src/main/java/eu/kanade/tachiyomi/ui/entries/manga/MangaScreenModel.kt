@@ -641,17 +641,21 @@ class MangaInfoScreenModel(
             LibraryPreferences.ChapterSwipeAction.ToggleRead -> {
                 markChaptersRead(listOf(chapter), !chapter.read)
             }
+
             LibraryPreferences.ChapterSwipeAction.ToggleBookmark -> {
                 bookmarkChapters(listOf(chapter), !chapter.bookmark)
             }
+
             LibraryPreferences.ChapterSwipeAction.Download -> {
                 val downloadAction: ChapterDownloadAction = when (chapterItem.downloadState) {
                     MangaDownload.State.ERROR,
                     MangaDownload.State.NOT_DOWNLOADED,
                     -> ChapterDownloadAction.START_NOW
+
                     MangaDownload.State.QUEUE,
                     MangaDownload.State.DOWNLOADING,
                     -> ChapterDownloadAction.CANCEL
+
                     MangaDownload.State.DOWNLOADED -> ChapterDownloadAction.DELETE
                 }
                 runChapterDownloadActions(
@@ -659,6 +663,7 @@ class MangaInfoScreenModel(
                     action = downloadAction,
                 )
             }
+
             LibraryPreferences.ChapterSwipeAction.Disabled -> throw IllegalStateException()
         }
     }
@@ -724,14 +729,17 @@ class MangaInfoScreenModel(
                     downloadManager.startDownloads()
                 }
             }
+
             ChapterDownloadAction.START_NOW -> {
                 val chapter = items.singleOrNull()?.chapter ?: return
                 startDownload(listOf(chapter), true)
             }
+
             ChapterDownloadAction.CANCEL -> {
                 val chapterId = items.singleOrNull()?.chapter?.id ?: return
                 cancelDownload(chapterId)
             }
+
             ChapterDownloadAction.DELETE -> {
                 deleteChapters(items.map { it.chapter })
             }
@@ -1026,7 +1034,9 @@ class MangaInfoScreenModel(
                         // Map to TrackItem
                         .map { service -> MangaTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
-                        .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
+                        .filter {
+                            (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true
+                        }
                 }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
@@ -1112,7 +1122,8 @@ class MangaInfoScreenModel(
         }
     }
     // SY <--
-    
+}
+
 sealed class MangaScreenState {
     @Immutable
     object Loading : MangaScreenState()
