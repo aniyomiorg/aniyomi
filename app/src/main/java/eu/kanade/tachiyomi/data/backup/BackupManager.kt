@@ -18,6 +18,8 @@ import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER_MASK
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CUSTOM_INFO
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CUSTOM_INFO_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXTENSIONS
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXTENSIONS_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXT_PREFS
@@ -73,8 +75,14 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
+import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
+import tachiyomi.domain.entries.anime.interactor.SetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
+import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
+import tachiyomi.domain.entries.manga.interactor.SetCustomMangaInfo
+import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
@@ -102,6 +110,13 @@ class BackupManager(
     private val getAnimeCategories: GetAnimeCategories = Injekt.get()
     private val getMangaFavorites: GetMangaFavorites = Injekt.get()
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get()
+
+    // SY -->
+    private val getCustomMangaInfo: GetCustomMangaInfo = Injekt.get()
+    private val setCustomMangaInfo: SetCustomMangaInfo = Injekt.get()
+    private val getCustomAnimeInfo: GetCustomAnimeInfo = Injekt.get()
+    private val setCustomAnimeInfo: SetCustomAnimeInfo = Injekt.get()
+    // SY <--
 
     internal val parser = ProtoBuf
 
@@ -146,7 +161,7 @@ class BackupManager(
 
                     // Delete older backups
                     val numberOfBackups = backupPreferences.numberOfBackups().get()
-                    val backupRegex = Regex("""aniyomi_\d+-\d+-\d+_\d+-\d+.proto.gz""")
+                    val backupRegex = Regex("""kuukiyomi_\d+-\d+-\d+_\d+-\d+.proto.gz""")
                     dir.listFiles { _, filename -> backupRegex.matches(filename) }
                         .orEmpty()
                         .sortedByDescending { it.name }
@@ -260,7 +275,10 @@ class BackupManager(
      */
     private suspend fun backupManga(manga: Manga, options: Int): BackupManga {
         // Entry for this manga
-        val mangaObject = BackupManga.copyFrom(manga)
+        val mangaObject = BackupManga.copyFrom(
+            manga,
+            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomMangaInfo.get(manga.id) else null,
+        )
 
         // Check if user wants chapter information in backup
         if (options and BACKUP_CHAPTER_MASK == BACKUP_CHAPTER) {
@@ -314,7 +332,10 @@ class BackupManager(
      */
     private suspend fun backupAnime(anime: Anime, options: Int): BackupAnime {
         // Entry for this anime
-        val animeObject = BackupAnime.copyFrom(anime)
+        val animeObject = BackupAnime.copyFrom(
+            anime,
+            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomAnimeInfo.get(anime.id) else null,
+        )
 
         // Check if user wants chapter information in backup
         if (options and BACKUP_CHAPTER_MASK == BACKUP_CHAPTER) {
@@ -1222,5 +1243,15 @@ class BackupManager(
                 )
             }
         }
+    }
+
+    internal fun restoreEditedMangaInfo(mangaJson: CustomMangaInfo?) {
+        mangaJson ?: return
+        setCustomMangaInfo.set(mangaJson)
+    }
+
+    internal fun restoreEditedAnimeInfo(animeJson: CustomAnimeInfo?) {
+        animeJson ?: return
+        setCustomAnimeInfo.set(animeJson)
     }
 }

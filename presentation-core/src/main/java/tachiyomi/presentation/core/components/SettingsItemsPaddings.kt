@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tachiyomi.presentation.core.theme.header
@@ -173,3 +174,29 @@ fun TextItem(
         singleLine = true,
     )
 }
+
+// SY -->
+@Composable
+fun IconItem(
+    label: String,
+    icon: Painter,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    BaseSettingsItem(
+        label = label,
+        widget = {
+            Icon(
+                painter = icon,
+                contentDescription = label,
+                tint = if (selected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            )
+        },
+        onClick = onClick,
+    )
+}
+// SY <--

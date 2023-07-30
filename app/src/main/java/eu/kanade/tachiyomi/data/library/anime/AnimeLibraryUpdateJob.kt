@@ -14,6 +14,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
@@ -29,6 +30,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -62,6 +64,8 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.anime.model.AnimeGroupLibraryMode
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
@@ -134,7 +138,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         }
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
-        addAnimeToQueue(categoryId)
+        // SY -->
+        val group = inputData.getInt(AnimeLibraryUpdateJob.KEY_GROUP, AnimeLibraryGroup.BY_DEFAULT)
+        val groupExtra = inputData.getString(AnimeLibraryUpdateJob.KEY_GROUP_EXTRA)
+        // SY <--
+        addAnimeToQueue(categoryId, group, groupExtra)
 
         return withIOContext {
             try {
@@ -171,12 +179,20 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addAnimeToQueue(categoryId: Long) {
+    private fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryAnime = runBlocking { getLibraryAnime.await() }
+
+        // SY -->
+        val groupAnimeLibraryUpdateType = libraryPreferences.groupAnimeLibraryUpdateType().get()
+        // SY <--
 
         val listToUpdate = if (categoryId != -1L) {
             libraryAnime.filter { it.category == categoryId }
-        } else {
+        } else if (
+            group == AnimeLibraryGroup.BY_DEFAULT ||
+            groupAnimeLibraryUpdateType == AnimeGroupLibraryMode.GLOBAL ||
+            (groupAnimeLibraryUpdateType == AnimeGroupLibraryMode.ALL_BUT_UNGROUPED && group == AnimeLibraryGroup.UNGROUPED)
+        ) {
             val categoriesToUpdate = libraryPreferences.animeLibraryUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToUpdate }
@@ -193,10 +209,44 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             includedAnime
                 .filterNot { it.anime.id in excludedAnimeIds }
-                .distinctBy { it.anime.id }
+        } else {
+            when (group) {
+                AnimeLibraryGroup.BY_TRACK_STATUS -> {
+                    val trackingExtra = groupExtra?.toIntOrNull() ?: -1
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.animeId }
+
+                    libraryAnime.filter { (anime) ->
+                        val status = tracks[anime.id]?.firstNotNullOfOrNull { track ->
+                            TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                        } ?: TrackStatus.OTHER
+                        status.int == trackingExtra
+                    }
+                }
+                AnimeLibraryGroup.BY_SOURCE -> {
+                    val sourceExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val source = libraryAnime.map { it.anime.source }
+                        .distinct()
+                        .sorted()
+                        .getOrNull(sourceExtra ?: -1)
+
+                    if (source != null) libraryAnime.filter { it.anime.source == source } else emptyList()
+                }
+                AnimeLibraryGroup.BY_STATUS -> {
+                    val statusExtra = groupExtra?.toLongOrNull() ?: -1
+                    libraryAnime.filter {
+                        it.anime.status == statusExtra
+                    }
+                }
+                AnimeLibraryGroup.UNGROUPED -> libraryAnime
+                else -> libraryAnime
+            }
+            // SY <--
         }
 
         animeToUpdate = listToUpdate
+            // SY -->
+            .distinctBy { it.anime.id }
+            // SY <--
             .sortedBy { it.anime.title }
 
         // Warn when excessively checking a single source
@@ -482,7 +532,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private fun writeErrorFile(errors: List<Pair<Anime, String?>>): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("aniyomi_update_errors.txt")
+                val file = context.createFileInCacheDir("kuukiyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
                     // Error file format:
@@ -534,6 +584,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          */
         private const val KEY_TARGET = "target"
 
+        // SY -->
+        /**
+         * Key for group to update.
+         */
+        const val KEY_GROUP = "group"
+        const val KEY_GROUP_EXTRA = "group_extra"
+        // SY <--
+
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)
         }
@@ -573,6 +631,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             context: Context,
             category: Category? = null,
             target: Target = Target.EPISODES,
+            // SY -->
+            group: Int = AnimeLibraryGroup.BY_DEFAULT,
+            groupExtra: String? = null,
+            // SY <--
         ): Boolean {
             val wm = context.workManager
             if (wm.isRunning(TAG)) {
@@ -583,6 +645,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             val inputData = workDataOf(
                 KEY_CATEGORY to category?.id,
                 KEY_TARGET to target.name,
+                // SY -->
+                KEY_GROUP to group,
+                KEY_GROUP_EXTRA to groupExtra,
+                // SY <--
             )
             val request = OneTimeWorkRequestBuilder<AnimeLibraryUpdateJob>()
                 .addTag(TAG)

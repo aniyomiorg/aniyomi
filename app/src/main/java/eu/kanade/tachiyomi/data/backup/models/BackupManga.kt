@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.track.manga.model.MangaTrack
@@ -39,16 +40,28 @@ data class BackupManga(
     @ProtoNumber(103) var viewer_flags: Int? = null,
     @ProtoNumber(104) var history: List<BackupHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
+
+    @ProtoNumber(602) var customStatus: Int = 0,
+
+    // J2K specific values
+    @ProtoNumber(800) var customTitle: String? = null,
+    @ProtoNumber(801) var customArtist: String? = null,
+    @ProtoNumber(802) var customAuthor: String? = null,
+    // skipping 803 due to using duplicate value in previous builds
+    @ProtoNumber(804) var customDescription: String? = null,
+    @ProtoNumber(805) var customGenre: List<String>? = null,
 ) {
     fun getMangaImpl(): Manga {
         return Manga.create().copy(
             url = this@BackupManga.url,
-            title = this@BackupManga.title,
-            artist = this@BackupManga.artist,
-            author = this@BackupManga.author,
-            description = this@BackupManga.description,
-            genre = this@BackupManga.genre,
-            status = this@BackupManga.status.toLong(),
+            // SY -->
+            ogTitle = this@BackupManga.title,
+            ogArtist = this@BackupManga.artist,
+            ogAuthor = this@BackupManga.author,
+            ogDescription = this@BackupManga.description,
+            ogGenre = this@BackupManga.genre,
+            ogStatus = this@BackupManga.status.toLong(),
+            // SY <--
             thumbnailUrl = this@BackupManga.thumbnailUrl,
             favorite = this@BackupManga.favorite,
             source = this@BackupManga.source,
@@ -65,6 +78,29 @@ data class BackupManga(
         }
     }
 
+    // SY -->
+    fun getCustomMangaInfo(): CustomMangaInfo? {
+        if (customTitle != null ||
+            customArtist != null ||
+            customAuthor != null ||
+            customDescription != null ||
+            customGenre != null ||
+            customStatus != 0
+        ) {
+            return CustomMangaInfo(
+                id = 0L,
+                title = customTitle,
+                author = customAuthor,
+                artist = customArtist,
+                description = customDescription,
+                genre = customGenre,
+                status = customStatus.takeUnless { it == 0 }?.toLong(),
+            )
+        }
+        return null
+    }
+    // SY <--
+
     fun getTrackingImpl(): List<MangaTrack> {
         return tracking.map {
             it.getTrackingImpl()
@@ -72,15 +108,17 @@ data class BackupManga(
     }
 
     companion object {
-        fun copyFrom(manga: Manga): BackupManga {
+        fun copyFrom(manga: Manga, customMangaInfo: CustomMangaInfo?): BackupManga {
             return BackupManga(
                 url = manga.url,
-                title = manga.title,
-                artist = manga.artist,
-                author = manga.author,
-                description = manga.description,
-                genre = manga.genre.orEmpty(),
-                status = manga.status.toInt(),
+                // SY -->
+                title = manga.ogTitle,
+                artist = manga.ogArtist,
+                author = manga.ogAuthor,
+                description = manga.ogDescription,
+                genre = manga.ogGenre.orEmpty(),
+                status = manga.ogStatus.toInt(),
+                // SY <--
                 thumbnailUrl = manga.thumbnailUrl,
                 favorite = manga.favorite,
                 source = manga.source,
@@ -89,7 +127,16 @@ data class BackupManga(
                 viewer_flags = manga.viewerFlags.toInt(),
                 chapterFlags = manga.chapterFlags.toInt(),
                 updateStrategy = manga.updateStrategy,
-            )
+            ).also { backupManga ->
+                customMangaInfo?.let {
+                    backupManga.customTitle = it.title
+                    backupManga.customArtist = it.artist
+                    backupManga.customAuthor = it.author
+                    backupManga.customDescription = it.description
+                    backupManga.customGenre = it.genre
+                    backupManga.customStatus = it.status?.toInt() ?: 0
+                }
+            }
         }
     }
 }

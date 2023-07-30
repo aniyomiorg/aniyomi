@@ -30,6 +30,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsScreenModel
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -37,6 +38,7 @@ import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
+import tachiyomi.presentation.core.components.IconItem
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SettingsItemsPaddings
 import tachiyomi.presentation.core.components.SortItem
@@ -46,6 +48,9 @@ fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,
     category: Category,
+    // SY -->
+    hasCategories: Boolean,
+    // SY <--
 ) {
     TabbedDialog(
         onDismissRequest = onDismissRequest,
@@ -53,6 +58,9 @@ fun MangaLibrarySettingsDialog(
             stringResource(R.string.action_filter),
             stringResource(R.string.action_sort),
             stringResource(R.string.action_display),
+            // SY -->
+            stringResource(R.string.group),
+            // SY <--
         ),
     ) { contentPadding, page ->
         Column(
@@ -73,6 +81,12 @@ fun MangaLibrarySettingsDialog(
                     category = category,
                     screenModel = screenModel,
                 )
+                // SY -->
+                3 -> GroupPage(
+                    screenModel = screenModel,
+                    hasCategories = hasCategories,
+                )
+                // SY <--
             }
         }
     }
@@ -151,8 +165,19 @@ private fun ColumnScope.SortPage(
     category: Category,
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
-    val sortingMode = category.sort.type
-    val sortDescending = !category.sort.isAscending
+    // SY -->
+    val globalSortMode by screenModel.libraryPreferences.libraryMangaSortingMode().collectAsState()
+    val sortingMode = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
+        category.sort.type
+    } else {
+        globalSortMode.type
+    }
+    val sortDescending = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
+        category.sort.isAscending
+    } else {
+        globalSortMode.isAscending
+    }.not()
+    // SY <--
 
     listOf(
         R.string.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
@@ -292,4 +317,57 @@ private fun ColumnScope.DisplayPage(
             screenModel.togglePreference(LibraryPreferences::categoryNumberOfItems)
         },
     )
+}
+
+data class GroupMode(
+    val int: Int,
+    val nameRes: Int,
+    val drawableRes: Int,
+)
+
+private fun groupTypeDrawableRes(type: Int): Int {
+    return when (type) {
+        MangaLibraryGroup.BY_STATUS -> R.drawable.ic_progress_clock_24dp
+        MangaLibraryGroup.BY_TRACK_STATUS -> R.drawable.ic_sync_24dp
+        MangaLibraryGroup.BY_SOURCE -> R.drawable.ic_browse_filled_24dp
+        MangaLibraryGroup.UNGROUPED -> R.drawable.ic_ungroup_24dp
+        else -> R.drawable.ic_label_24dp
+    }
+}
+
+@Composable
+private fun ColumnScope.GroupPage(
+    screenModel: MangaLibrarySettingsScreenModel,
+    hasCategories: Boolean,
+) {
+    val groups = remember(hasCategories, screenModel.trackServices) {
+        buildList {
+            add(MangaLibraryGroup.BY_DEFAULT)
+            add(MangaLibraryGroup.BY_SOURCE)
+            add(MangaLibraryGroup.BY_STATUS)
+            if (screenModel.trackServices.isNotEmpty()) {
+                add(MangaLibraryGroup.BY_TRACK_STATUS)
+            }
+            if (hasCategories) {
+                add(MangaLibraryGroup.UNGROUPED)
+            }
+        }.map {
+            GroupMode(
+                it,
+                MangaLibraryGroup.groupTypeStringRes(it, hasCategories),
+                groupTypeDrawableRes(it),
+            )
+        }
+    }
+
+    groups.fastForEach {
+        IconItem(
+            label = stringResource(it.nameRes),
+            icon = painterResource(it.drawableRes),
+            selected = it.int == screenModel.grouping,
+            onClick = {
+                screenModel.setGrouping(it.int)
+            },
+        )
+    }
 }

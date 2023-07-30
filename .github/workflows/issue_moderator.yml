@@ -25,7 +25,7 @@ jobs:
               },
               {
                 "type": "body",
-                "regex": ".*\\* (Aniyomi version|Android version|Device): \\?.*",
+                "regex": ".*\\* (Kuukiyomi version|Android version|Device): \\?.*",
                 "message": "Requested information in the template was not filled out."
               }
             ]

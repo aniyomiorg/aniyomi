@@ -35,26 +35,26 @@ fun SAnime.copyFrom(other: Animes) {
 fun Anime.copyFrom(other: Animes): Anime {
     var anime = this
     if (other.author != null) {
-        anime = anime.copy(author = other.author)
+        anime = anime.copy(ogAuthor = other.author)
     }
 
     if (other.artist != null) {
-        anime = anime.copy(artist = other.artist)
+        anime = anime.copy(ogArtist = other.artist)
     }
 
     if (other.description != null) {
-        anime = anime.copy(description = other.description)
+        anime = anime.copy(ogDescription = other.description)
     }
 
     if (other.genre != null) {
-        anime = anime.copy(genre = other.genre)
+        anime = anime.copy(ogGenre = other.genre)
     }
 
     if (other.thumbnail_url != null) {
         anime = anime.copy(thumbnailUrl = other.thumbnail_url)
     }
 
-    anime = anime.copy(status = other.status)
+    anime = anime.copy(ogStatus = other.status)
 
     if (!initialized) {
         anime = anime.copy(initialized = other.initialized)

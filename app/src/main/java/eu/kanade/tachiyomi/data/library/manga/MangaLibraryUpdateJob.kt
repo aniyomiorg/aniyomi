@@ -14,6 +14,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
@@ -28,6 +29,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
@@ -62,6 +64,8 @@ import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
@@ -134,7 +138,11 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         }
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
-        addMangaToQueue(categoryId)
+        // SY -->
+        val group = inputData.getInt(KEY_GROUP, MangaLibraryGroup.BY_DEFAULT)
+        val groupExtra = inputData.getString(KEY_GROUP_EXTRA)
+        // SY <--
+        addMangaToQueue(categoryId, group, groupExtra)
 
         return withIOContext {
             try {
@@ -171,12 +179,20 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addMangaToQueue(categoryId: Long) {
+    private fun addMangaToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryManga = runBlocking { getLibraryManga.await() }
+
+        // SY -->
+        val groupMangaLibraryUpdateType = libraryPreferences.groupMangaLibraryUpdateType().get()
+        // SY <--
 
         val listToUpdate = if (categoryId != -1L) {
             libraryManga.filter { it.category == categoryId }
-        } else {
+        } else if (
+            group == MangaLibraryGroup.BY_DEFAULT ||
+            groupMangaLibraryUpdateType == MangaGroupLibraryMode.GLOBAL ||
+            (groupMangaLibraryUpdateType == MangaGroupLibraryMode.ALL_BUT_UNGROUPED && group == MangaLibraryGroup.UNGROUPED)
+        ) {
             val categoriesToUpdate = libraryPreferences.mangaLibraryUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToUpdate }
@@ -193,10 +209,44 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             includedManga
                 .filterNot { it.manga.id in excludedMangaIds }
-                .distinctBy { it.manga.id }
+        } else {
+            when (group) {
+                MangaLibraryGroup.BY_TRACK_STATUS -> {
+                    val trackingExtra = groupExtra?.toIntOrNull() ?: -1
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
+
+                    libraryManga.filter { (manga) ->
+                        val status = tracks[manga.id]?.firstNotNullOfOrNull { track ->
+                            TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                        } ?: TrackStatus.OTHER
+                        status.int == trackingExtra
+                    }
+                }
+                MangaLibraryGroup.BY_SOURCE -> {
+                    val sourceExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val source = libraryManga.map { it.manga.source }
+                        .distinct()
+                        .sorted()
+                        .getOrNull(sourceExtra ?: -1)
+
+                    if (source != null) libraryManga.filter { it.manga.source == source } else emptyList()
+                }
+                MangaLibraryGroup.BY_STATUS -> {
+                    val statusExtra = groupExtra?.toLongOrNull() ?: -1
+                    libraryManga.filter {
+                        it.manga.status == statusExtra
+                    }
+                }
+                MangaLibraryGroup.UNGROUPED -> libraryManga
+                else -> libraryManga
+            }
+            // SY <--
         }
 
         mangaToUpdate = listToUpdate
+            // SY -->
+            .distinctBy { it.manga.id }
+            // SY <--
             .sortedBy { it.manga.title }
 
         // Warn when excessively checking a single source
@@ -533,6 +583,14 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          */
         private const val KEY_TARGET = "target"
 
+        // SY -->
+        /**
+         * Key for group to update.
+         */
+        const val KEY_GROUP = "group"
+        const val KEY_GROUP_EXTRA = "group_extra"
+        // SY <--
+
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)
         }
@@ -573,6 +631,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             context: Context,
             category: Category? = null,
             target: Target = Target.CHAPTERS,
+            // SY -->
+            group: Int = MangaLibraryGroup.BY_DEFAULT,
+            groupExtra: String? = null,
+            // SY <--
         ): Boolean {
             val wm = context.workManager
             if (wm.isRunning(TAG)) {
@@ -583,6 +645,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             val inputData = workDataOf(
                 KEY_CATEGORY to category?.id,
                 KEY_TARGET to target.name,
+                // SY -->
+                KEY_GROUP to group,
+                KEY_GROUP_EXTRA to groupExtra,
+                // SY <--
             )
             val request = OneTimeWorkRequestBuilder<MangaLibraryUpdateJob>()
                 .addTag(TAG)

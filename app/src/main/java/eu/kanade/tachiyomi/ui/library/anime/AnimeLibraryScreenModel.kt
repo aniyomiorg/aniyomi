@@ -20,6 +20,7 @@ import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.LibraryToolbarTitle
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -27,6 +28,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +42,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
@@ -56,11 +59,14 @@ import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -89,6 +95,9 @@ class AnimeLibraryScreenModel(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
+    // SY -->
+    private val getTracks: GetAnimeTracks = Injekt.get(),
+    // SY <--
 ) : StateScreenModel<AnimeLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedAnimeCategory().asState(coroutineScope)
@@ -99,12 +108,25 @@ class AnimeLibraryScreenModel(
                 state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
                 getTracksPerAnime.subscribe(),
-                getTrackingFilterFlow(),
-                downloadCache.changes,
-            ) { searchQuery, library, tracks, loggedInTrackServices, _ ->
+                combine(
+                    getTrackingFilterFlow(),
+                    downloadCache.changes,
+                    ::Pair,
+                ),
+                // SY -->
+                combine(
+                    state.map { it.groupType }.distinctUntilChanged(),
+                    libraryPreferences.libraryAnimeSortingMode().changes(),
+                    ::Pair,
+                ),
+                // SY <--
+            ) { searchQuery, library, tracks, (loggedInTrackServices, _), (groupType, sort) ->
                 library
+                    // SY -->
+                    .applyGrouping(groupType)
+                    // SY <--
                     .applyFilters(tracks, loggedInTrackServices)
-                    .applySort()
+                    .applySort(sort.takeIf { groupType != AnimeLibraryGroup.BY_DEFAULT })
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
                             // Filter query
@@ -162,6 +184,16 @@ class AnimeLibraryScreenModel(
                 }
             }
             .launchIn(coroutineScope)
+
+        // SY -->
+        libraryPreferences.groupAnimeLibraryBy().changes()
+            .onEach {
+                mutableState.update { state ->
+                    state.copy(groupType = it)
+                }
+            }
+            .launchIn(coroutineScope)
+        // SY <--
     }
 
     /**
@@ -236,7 +268,7 @@ class AnimeLibraryScreenModel(
     /**
      * Applies library sorting to the given map of anime.
      */
-    private fun AnimeLibraryMap.applySort(): AnimeLibraryMap {
+    private fun AnimeLibraryMap.applySort(groupSort: AnimeLibrarySort? = null): AnimeLibraryMap {
         val locale = Locale.getDefault()
         val collator = Collator.getInstance(locale).apply {
             strength = Collator.PRIMARY
@@ -246,7 +278,9 @@ class AnimeLibraryScreenModel(
         }
 
         val sortFn: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
-            val sort = keys.find { it.id == i1.libraryAnime.category }!!.sort
+            // SY -->
+            val sort = groupSort ?: keys.find { it.id == i1.libraryAnime.category }!!.sort
+            // SY <--
             when (sort.type) {
                 AnimeLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
@@ -286,7 +320,10 @@ class AnimeLibraryScreenModel(
         }
 
         return this.mapValues { entry ->
-            val comparator = if (keys.find { it.id == entry.key.id }!!.sort.isAscending) {
+            // SY -->
+            val isAscending = groupSort?.isAscending ?: keys.find { it.id == entry.key.id }!!.sort.isAscending
+            // SY <--
+            val comparator = if (isAscending) {
                 Comparator(sortFn)
             } else {
                 Collections.reverseOrder(sortFn)
@@ -365,6 +402,33 @@ class AnimeLibraryScreenModel(
             displayCategories.associateWith { animelibAnime[it.id].orEmpty() }
         }
     }
+
+    // SY -->
+    private fun AnimeLibraryMap.applyGrouping(groupType: Int): AnimeLibraryMap {
+        val items = when (groupType) {
+            AnimeLibraryGroup.BY_DEFAULT -> this
+            AnimeLibraryGroup.UNGROUPED -> {
+                mapOf(
+                    Category(
+                        0,
+                        preferences.context.getString(eu.kanade.tachiyomi.R.string.ungrouped),
+                        0,
+                        0,
+                    ) to
+                        values.flatten().distinctBy { it.libraryAnime.anime.id },
+                )
+            }
+            else -> {
+                getGroupedAnimeItems(
+                    groupType = groupType,
+                    libraryAnime = this.values.flatten().distinctBy { it.libraryAnime.anime.id },
+                )
+            }
+        }
+
+        return items
+    }
+    // SY <--
 
     /**
      * Flow of tracking filter preferences
@@ -663,6 +727,94 @@ class AnimeLibraryScreenModel(
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
     }
 
+    // SY -->
+    /** Returns first unread chapter of a anime */
+    suspend fun getFirstUnseen(anime: Anime): Episode? {
+        return getNextEpisodes.await(anime.id).firstOrNull()
+    }
+
+    private fun getGroupedAnimeItems(
+        groupType: Int,
+        libraryAnime: List<AnimeLibraryItem>,
+    ): AnimeLibraryMap {
+        val context = preferences.context
+        return when (groupType) {
+            AnimeLibraryGroup.BY_TRACK_STATUS -> {
+                val tracks = runBlocking { getTracks.await() }.groupBy { it.animeId }
+                libraryAnime.groupBy { item ->
+                    val status = tracks[item.libraryAnime.anime.id]?.firstNotNullOfOrNull { track ->
+                        TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                    } ?: TrackStatus.OTHER
+
+                    status.int
+                }.mapKeys { (id) ->
+                    Category(
+                        id = id.toLong(),
+                        name = TrackStatus.values()
+                            .find { it.int == id }
+                            .let { it ?: TrackStatus.OTHER }
+                            .let { context.getString(it.res) },
+                        order = TrackStatus.values().indexOfFirst { it.int == id }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
+                        flags = 0,
+                    )
+                }
+            }
+            AnimeLibraryGroup.BY_SOURCE -> {
+                val sources: List<Long>
+                libraryAnime.groupBy { item ->
+                    item.libraryAnime.anime.source
+                }.also {
+                    sources = it.keys
+                        .map {
+                            sourceManager.getOrStub(it)
+                        }
+                        .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } })
+                        .map { it.id }
+                }.mapKeys {
+                    Category(
+                        id = it.key,
+                        name = if (it.key == LocalAnimeSource.ID) {
+                            context.getString(R.string.local_source)
+                        } else {
+                            val source = sourceManager.getOrStub(it.key)
+                            source.name.ifBlank { source.id.toString() }
+                        },
+                        order = sources.indexOf(it.key).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
+                        flags = 0,
+                    )
+                }
+            }
+            else -> {
+                libraryAnime.groupBy { item ->
+                    item.libraryAnime.anime.status
+                }.mapKeys {
+                    Category(
+                        id = it.key + 1,
+                        name = when (it.key) {
+                            SAnime.ONGOING.toLong() -> context.getString(R.string.ongoing)
+                            SAnime.LICENSED.toLong() -> context.getString(R.string.licensed)
+                            SAnime.CANCELLED.toLong() -> context.getString(R.string.cancelled)
+                            SAnime.ON_HIATUS.toLong() -> context.getString(R.string.on_hiatus)
+                            SAnime.PUBLISHING_FINISHED.toLong() -> context.getString(R.string.publishing_finished)
+                            SAnime.COMPLETED.toLong() -> context.getString(R.string.completed)
+                            else -> context.getString(R.string.unknown)
+                        },
+                        order = when (it.key) {
+                            SAnime.ONGOING.toLong() -> 1
+                            SAnime.LICENSED.toLong() -> 2
+                            SAnime.CANCELLED.toLong() -> 3
+                            SAnime.ON_HIATUS.toLong() -> 4
+                            SAnime.PUBLISHING_FINISHED.toLong() -> 5
+                            SAnime.COMPLETED.toLong() -> 6
+                            else -> 7
+                        },
+                        flags = 0,
+                    )
+                }
+            }
+        }.toSortedMap(compareBy { it.order })
+    }
+
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
@@ -688,6 +840,9 @@ class AnimeLibraryScreenModel(
         val showAnimeCount: Boolean = false,
         val showAnimeContinueButton: Boolean = false,
         val dialog: Dialog? = null,
+        // SY -->
+        val groupType: Int = AnimeLibraryGroup.BY_DEFAULT,
+        // SY <--
     ) {
         private val libraryCount by lazy {
             library.values

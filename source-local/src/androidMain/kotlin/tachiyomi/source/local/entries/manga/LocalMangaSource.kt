@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.util.storage.EpubFile
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
@@ -146,6 +147,23 @@ actual class LocalMangaSource(
 
         return Observable.just(MangasPage(mangas.toList(), false))
     }
+
+    // SY -->
+    fun updateMangaInfo(manga: SManga) {
+        val directory = fileSystem.getFilesInBaseDirectories().map { File(it, manga.url) }.find {
+            it.exists()
+        } ?: return
+        val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
+        val file = File(directory, existingFileName ?: "info.json")
+        file.outputStream().use {
+            json.encodeToStream(manga.toJson(), it)
+        }
+    }
+
+    private fun SManga.toJson(): MangaDetails {
+        return MangaDetails(title, author, artist, description, genre?.split(", "), status)
+    }
+    // SY <--
 
     // Manga details related
     override suspend fun getMangaDetails(manga: SManga): SManga = withIOContext {

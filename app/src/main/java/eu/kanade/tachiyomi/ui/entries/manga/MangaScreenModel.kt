@@ -6,6 +6,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import aniyomi.util.nullIfEmpty
+import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
@@ -61,8 +63,11 @@ import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
+import tachiyomi.domain.entries.manga.interactor.SetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
+import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -72,6 +77,7 @@ import tachiyomi.domain.items.chapter.service.getChapterSort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -91,6 +97,10 @@ class MangaInfoScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val getMangaAndChapters: GetMangaWithChapters = Injekt.get(),
+    // SY -->
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val setCustomMangaInfo: SetCustomMangaInfo = Injekt.get(),
+    // SY <--
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val setMangaChapterFlags: SetMangaChapterFlags = Injekt.get(),
     private val setMangaDefaultChapterFlags: SetMangaDefaultChapterFlags = Injekt.get(),
@@ -239,6 +249,71 @@ class MangaInfoScreenModel(
             }
         }
     }
+
+    // SY -->
+    fun updateMangaInfo(
+        title: String?,
+        author: String?,
+        artist: String?,
+        description: String?,
+        tags: List<String>?,
+        status: Long?,
+    ) {
+        val state = successState ?: return
+        var manga = state.manga
+        if (state.manga.isLocal()) {
+            val newTitle = if (title.isNullOrBlank()) manga.url else title.trim()
+            val newAuthor = author?.trimOrNull()
+            val newArtist = artist?.trimOrNull()
+            val newDesc = description?.trimOrNull()
+            manga = manga.copy(
+                ogTitle = newTitle,
+                ogAuthor = author?.trimOrNull(),
+                ogArtist = artist?.trimOrNull(),
+                ogDescription = description?.trimOrNull(),
+                ogGenre = tags?.nullIfEmpty(),
+                ogStatus = status ?: 0,
+                lastUpdate = manga.lastUpdate + 1,
+            )
+            (sourceManager.get(LocalMangaSource.ID) as LocalMangaSource).updateMangaInfo(manga.toSManga())
+            coroutineScope.launchNonCancellable {
+                updateManga.await(
+                    MangaUpdate(
+                        manga.id,
+                        title = newTitle,
+                        author = newAuthor,
+                        artist = newArtist,
+                        description = newDesc,
+                        genre = tags,
+                        status = status,
+                    ),
+                )
+            }
+        } else {
+            val genre = if (!tags.isNullOrEmpty() && tags != state.manga.ogGenre) {
+                tags
+            } else {
+                null
+            }
+            setCustomMangaInfo.set(
+                CustomMangaInfo(
+                    state.manga.id,
+                    title?.trimOrNull(),
+                    author?.trimOrNull(),
+                    artist?.trimOrNull(),
+                    description?.trimOrNull(),
+                    genre,
+                    status.takeUnless { it == state.manga.ogStatus },
+                ),
+            )
+            manga = manga.copy(lastUpdate = manga.lastUpdate + 1)
+        }
+
+        updateSuccessState { successState ->
+            successState.copy(manga = manga)
+        }
+    }
+    // SY <--
 
     fun toggleFavorite() {
         toggleFavorite(
@@ -966,6 +1041,11 @@ class MangaInfoScreenModel(
         data class ChangeCategory(val manga: Manga, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog()
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog()
+
+        // SY -->
+        data class EditMangaInfo(val manga: Manga) : Dialog()
+        // SY <--
+
         object SettingsSheet : Dialog()
         object TrackSheet : Dialog()
         object FullCover : Dialog()
@@ -1019,8 +1099,20 @@ class MangaInfoScreenModel(
             }
         }
     }
-}
 
+    // SY -->
+    fun showEditMangaInfoDialog() {
+        mutableState.update { state ->
+            when (state) {
+                MangaScreenState.Loading -> state
+                is MangaScreenState.Success -> {
+                    state.copy(dialog = Dialog.EditMangaInfo(state.manga))
+                }
+            }
+        }
+    }
+    // SY <--
+    
 sealed class MangaScreenState {
     @Immutable
     object Loading : MangaScreenState()

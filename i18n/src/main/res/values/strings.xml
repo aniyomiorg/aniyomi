@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Aniyomi</string>
+    <string name="app_name" translatable="false">Kuukiyomi</string>
 
     <!-- Generic strings -->
     <string name="on">On</string>
@@ -8,6 +8,7 @@
 
     <!-- Models -->
     <string name="name">Name</string>
+    <string name="categories">Categories</string>
     <string name="manga">Manga</string>
     <string name="chapters">Chapters</string>
     <string name="track">Tracking</string>

@@ -137,6 +137,9 @@ class AnimeScreen(
             onShareClicked = { shareAnime(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.anime.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
+            // SY <--
             onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
             changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
@@ -230,6 +233,15 @@ class AnimeScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is AnimeInfoScreenModel.Dialog.EditAnimeInfo -> {
+                EditAnimeDialog(
+                    anime = dialog.anime,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateAnimeInfo,
+                )
+            }
+            // SY <--
             AnimeInfoScreenModel.Dialog.ChangeAnimeSkipIntro -> {
                 fun updateSkipIntroLength(newLength: Long) {
                     scope.launchIO {

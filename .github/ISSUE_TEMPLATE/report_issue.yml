@@ -1,5 +1,5 @@
 name: 🐞 Issue report
-description: Report an issue in Aniyomi
+description: Report an issue in Kuukiyomi
 labels: [Bug]
 body:
   - type: textarea
@@ -47,10 +47,10 @@ body:
         You can paste the crash logs in plain text or upload it as an attachment.
 
   - type: input
-    id: aniyomi-version
+    id: kuukiyomi-version
     attributes:
-      label: Aniyomi version
-      description: You can find your Aniyomi version in **More → About**.
+      label: Kuukiyomi version
+      description: You can find your Kuukiyomi version in **More → About**.
       placeholder: |
         Example: "0.12.3.10"
     validations:
@@ -97,7 +97,7 @@ body:
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/help/faq/) and [troubleshooting guide](https://aniyomi.org/help/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.12.3.10](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.12.3.10](https://github.com/LuftVerbot/kuukiyomi/releases/latest)**.
           required: true
         - label: I have updated all installed extensions.
           required: true

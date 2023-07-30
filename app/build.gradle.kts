@@ -10,8 +10,8 @@ plugins {
 }
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
-    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
-    apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
+    //apply<com.google.gms.googleservices.GoogleServicesPlugin>()
+    //apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -22,10 +22,10 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
-
+      
+        applicationId = "xyz.luft.tachiyomi.mi"
         versionCode = 103
-        versionName = "0.14.6"
+        versionName = "0.1.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -247,13 +247,13 @@ dependencies {
 
     // Crash reports/analytics
     implementation(libs.acra.http)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    //implementation(libs.firebase.analytics)
+    //implementation(libs.firebase.crashlytics)
 
     // Add the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    //implementation("com.google.firebase:firebase-crashlytics-ktx")
+    //implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Shizuku
     implementation(libs.bundles.shizuku)

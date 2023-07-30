@@ -2,6 +2,8 @@ package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
+import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
 import kotlin.math.pow
 
@@ -17,16 +19,38 @@ data class Anime(
     val episodeFlags: Long,
     val coverLastModified: Long,
     val url: String,
-    val title: String,
-    val artist: String?,
-    val author: String?,
-    val description: String?,
-    val genre: List<String>?,
-    val status: Long,
+    // SY -->
+    val ogTitle: String,
+    val ogArtist: String?,
+    val ogAuthor: String?,
+    val ogDescription: String?,
+    val ogGenre: List<String>?,
+    val ogStatus: Long,
+    // SY <--
     val thumbnailUrl: String?,
     val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
 ) : Serializable {
+
+    // SY -->
+    private val customAnimeInfo = if (favorite) {
+        getCustomAnimeInfo.get(id)
+    } else {
+        null
+    }
+    val title: String
+        get() = customAnimeInfo?.title ?: ogTitle
+    val author: String?
+        get() = customAnimeInfo?.author ?: ogAuthor
+    val artist: String?
+        get() = customAnimeInfo?.artist ?: ogArtist
+    val description: String?
+        get() = customAnimeInfo?.description ?: ogDescription
+    val genre: List<String>?
+        get() = customAnimeInfo?.genre ?: ogGenre
+    val status: Long
+        get() = customAnimeInfo?.status ?: ogStatus
+    // SY <--
 
     val sorting: Long
         get() = episodeFlags and EPISODE_SORTING_MASK
@@ -111,7 +135,9 @@ data class Anime(
         fun create() = Anime(
             id = -1L,
             url = "",
-            title = "",
+            // Sy -->
+            ogTitle = "",
+            // SY <--
             source = -1L,
             favorite = false,
             lastUpdate = 0L,
@@ -121,14 +147,20 @@ data class Anime(
             viewerFlags = 0L,
             episodeFlags = 0L,
             coverLastModified = 0L,
-            artist = null,
-            author = null,
-            description = null,
-            genre = null,
-            status = 0L,
+            // SY -->
+            ogArtist = null,
+            ogAuthor = null,
+            ogDescription = null,
+            ogGenre = null,
+            ogStatus = 0L,
+            // SY <--
             thumbnailUrl = null,
             updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
         )
+
+        // SY -->
+        private val getCustomAnimeInfo: GetCustomAnimeInfo by injectLazy()
+        // SY <--
     }
 }

@@ -3,6 +3,7 @@ package tachiyomi.domain.category.anime.interactor
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.category.model.CategoryUpdate
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.model.plus
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -13,6 +14,12 @@ class SetSortModeForAnimeCategory(
 ) {
 
     suspend fun await(categoryId: Long, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
+        // SY -->
+        if (preferences.groupAnimeLibraryBy().get() != AnimeLibraryGroup.BY_DEFAULT) {
+            preferences.libraryAnimeSortingMode().set(AnimeLibrarySort(type, direction))
+            return
+        }
+        // SY <--
         val category = categoryRepository.getAnimeCategory(categoryId) ?: return
         val flags = category.flags + type + direction
         if (preferences.categorizedDisplaySettings().get()) {
