@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.ui.platform.ComposeView
+import eu.kanade.presentation.reader.ChapterTransition
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.ui.reader.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import tachiyomi.domain.entries.manga.model.Manga

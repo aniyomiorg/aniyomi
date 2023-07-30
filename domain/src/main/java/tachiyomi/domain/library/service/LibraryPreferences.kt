@@ -162,6 +162,32 @@ class LibraryPreferences(
         sortChapterByAscendingOrDescending().set(if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC)
     }
 
+    // region Swipe Actions
+
+    fun swipeEpisodeEndAction() = preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleBookmark)
+
+    fun swipeEpisodeStartAction() = preferenceStore.getEnum("pref_episode_swipe_start_action", EpisodeSwipeAction.ToggleSeen)
+
+    fun swipeChapterEndAction() = preferenceStore.getEnum("pref_chapter_swipe_end_action", ChapterSwipeAction.ToggleBookmark)
+
+    fun swipeChapterStartAction() = preferenceStore.getEnum("pref_chapter_swipe_start_action", ChapterSwipeAction.ToggleRead)
+
+    // endregion
+
+    enum class EpisodeSwipeAction {
+        ToggleSeen,
+        ToggleBookmark,
+        Download,
+        Disabled,
+    }
+
+    enum class ChapterSwipeAction {
+        ToggleRead,
+        ToggleBookmark,
+        Download,
+        Disabled,
+    }
+
     // SY -->
 
     fun groupAnimeLibraryUpdateType() = preferenceStore.getEnum("group_anime_library_update_type", AnimeGroupLibraryMode.GLOBAL)

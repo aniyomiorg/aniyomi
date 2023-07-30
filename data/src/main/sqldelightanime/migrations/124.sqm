@@ -1,0 +1,1 @@
+ALTER TABLE animes ADD COLUMN calculate_interval INTEGER DEFAULT 0 NOT NULL;

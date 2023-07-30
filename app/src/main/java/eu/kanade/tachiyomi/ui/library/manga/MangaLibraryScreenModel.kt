@@ -393,7 +393,7 @@ class MangaLibraryScreenModel(
                 categories
             }
 
-            displayCategories.associateWith { libraryManga[it.id] ?: emptyList() }
+            displayCategories.associateWith { libraryManga[it.id].orEmpty() }
         }
     }
 
@@ -856,7 +856,7 @@ class MangaLibraryScreenModel(
         }
 
         fun getLibraryItemsByPage(page: Int): List<MangaLibraryItem> {
-            return library.values.toTypedArray().getOrNull(page) ?: emptyList()
+            return library.values.toTypedArray().getOrNull(page).orEmpty()
         }
 
         fun getMangaCountForCategory(category: Category): Int? {

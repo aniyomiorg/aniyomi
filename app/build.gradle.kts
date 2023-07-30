@@ -22,8 +22,9 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
+      
         applicationId = "xyz.luft.tachiyomi.mi"
-        versionCode = 102
+        versionCode = 103
         versionName = "0.1.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")

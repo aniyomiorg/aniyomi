@@ -21,6 +21,7 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
+import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
@@ -133,6 +134,9 @@ class MangaInfoScreenModel(
     private val filteredChapters: Sequence<ChapterItem>?
         get() = successState?.processedChapters
 
+    val chapterSwipeEndAction = libraryPreferences.swipeChapterEndAction().get()
+    val chapterSwipeStartAction = libraryPreferences.swipeChapterStartAction().get()
+
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
     val skipFiltered by readerPreferences.skipFiltered().asState(coroutineScope)
@@ -241,7 +245,7 @@ class MangaInfoScreenModel(
 
             logcat(LogPriority.ERROR, e)
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = e.snackbarMessage)
+                snackbarHostState.showSnackbar(message = with(context) { e.formattedMessage })
             }
         }
     }
@@ -607,12 +611,60 @@ class MangaInfoScreenModel(
                 context.getString(R.string.no_chapters_error)
             } else {
                 logcat(LogPriority.ERROR, e)
-                e.snackbarMessage
+                with(context) { e.formattedMessage }
             }
 
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(message = message)
             }
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if the swipe action is [LibraryPreferences.ChapterSwipeAction.Disabled]
+     */
+    fun chapterSwipe(chapterItem: ChapterItem, swipeAction: LibraryPreferences.ChapterSwipeAction) {
+        coroutineScope.launch {
+            executeChapterSwipeAction(chapterItem, swipeAction)
+        }
+    }
+
+    /**
+     * @throws IllegalStateException if the swipe action is [LibraryPreferences.ChapterSwipeAction.Disabled]
+     */
+    private fun executeChapterSwipeAction(
+        chapterItem: ChapterItem,
+        swipeAction: LibraryPreferences.ChapterSwipeAction,
+    ) {
+        val chapter = chapterItem.chapter
+        when (swipeAction) {
+            LibraryPreferences.ChapterSwipeAction.ToggleRead -> {
+                markChaptersRead(listOf(chapter), !chapter.read)
+            }
+
+            LibraryPreferences.ChapterSwipeAction.ToggleBookmark -> {
+                bookmarkChapters(listOf(chapter), !chapter.bookmark)
+            }
+
+            LibraryPreferences.ChapterSwipeAction.Download -> {
+                val downloadAction: ChapterDownloadAction = when (chapterItem.downloadState) {
+                    MangaDownload.State.ERROR,
+                    MangaDownload.State.NOT_DOWNLOADED,
+                    -> ChapterDownloadAction.START_NOW
+
+                    MangaDownload.State.QUEUE,
+                    MangaDownload.State.DOWNLOADING,
+                    -> ChapterDownloadAction.CANCEL
+
+                    MangaDownload.State.DOWNLOADED -> ChapterDownloadAction.DELETE
+                }
+                runChapterDownloadActions(
+                    items = listOf(chapterItem),
+                    action = downloadAction,
+                )
+            }
+
+            LibraryPreferences.ChapterSwipeAction.Disabled -> throw IllegalStateException()
         }
     }
 
@@ -677,14 +729,17 @@ class MangaInfoScreenModel(
                     downloadManager.startDownloads()
                 }
             }
+
             ChapterDownloadAction.START_NOW -> {
                 val chapter = items.singleOrNull()?.chapter ?: return
                 startDownload(listOf(chapter), true)
             }
+
             ChapterDownloadAction.CANCEL -> {
                 val chapterId = items.singleOrNull()?.chapter?.id ?: return
                 cancelDownload(chapterId)
             }
+
             ChapterDownloadAction.DELETE -> {
                 deleteChapters(items.map { it.chapter })
             }
@@ -979,7 +1034,9 @@ class MangaInfoScreenModel(
                         // Map to TrackItem
                         .map { service -> MangaTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
-                        .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
+                        .filter {
+                            (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true
+                        }
                 }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
@@ -1065,14 +1122,6 @@ class MangaInfoScreenModel(
         }
     }
     // SY <--
-
-    private val Throwable.snackbarMessage: String
-        get() = when (val className = this::class.simpleName) {
-            null -> message ?: ""
-            "SourceNotInstalledException" -> context.getString(R.string.loader_not_implemented_error)
-            "Exception", "HttpException", "IOException" -> message ?: className
-            else -> "$className: $message"
-        }
 }
 
 sealed class MangaScreenState {
