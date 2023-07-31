@@ -15,6 +15,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -81,7 +82,9 @@ class ExternalIntents {
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
-        return if (pkgName.isEmpty()) {
+        return if (videoUrl.toString().startsWith("magnet:")) {
+            torrentIntentForPackage(context, videoUrl, video)
+        } else if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
                 addExtrasAndFlags(false, this)
@@ -200,6 +203,30 @@ class ExternalIntents {
     }
 
     /**
+     * Returns the [Intent] with added data to send to the given torrent external player.
+     *
+     * @param context the application context.
+     * @param uri the path data of the video.
+     * @param video the video being sent to the external player.
+     */
+    private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            if (isPackageInstalled(AMNIS, context.packageManager)) {
+                if (uri.toString().startsWith("magnet:")) {
+                    component = getComponent(AMNIS)
+                }
+            } else {
+                withUIContext {
+                    context.toast(R.string.install_amnis)
+                }
+            }
+            data = uri
+            addExtrasAndFlags(true, this)
+            addVideoHeaders(true, video, this)
+        }
+    }
+
+    /**
      * Adds extras and flags to the given [Intent].
      *
      * @param isSupportedPlayer is it a supported external player.
@@ -266,6 +293,7 @@ class ExternalIntents {
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
             NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
             X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
+            AMNIS -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
             else -> null
         }
     }
@@ -507,3 +535,4 @@ const val MPV_REMOTE = "com.husudosu.mpvremote"
 const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
+const val AMNIS = "com.amnis"
