@@ -82,7 +82,7 @@ class ExternalIntents {
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
-        return if (videoUrl.toString().startsWith("magnet:?")) {
+        return if (videoUrl.toString().startsWith("magnet:")) {
             torrentIntentForPackage(context, videoUrl, video)
         } else if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
