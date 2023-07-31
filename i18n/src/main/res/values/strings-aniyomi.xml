@@ -311,4 +311,7 @@
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
+
+    <!--Torrent -->
+    <string name="install_amnis">Amnis Player needs to be installed</string>
 </resources>
