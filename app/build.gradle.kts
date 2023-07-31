@@ -25,7 +25,7 @@ android {
 
         applicationId = "xyz.luft.tachiyomi.mi"
         versionCode = 103
-        versionName = "0.2"
+        versionName = "0.2.1"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
