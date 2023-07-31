@@ -277,7 +277,7 @@ class AnimeScreen(
 
     private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
         withIOContext {
-            if (episode.url.contains("magnet:?")) {
+            if (episode.url.startsWith("magnet:?")) {
                 MainActivity.startPlayerActivity(context, episode.animeId, episode.id, episode.url, true)
             } else {
                 MainActivity.startPlayerActivity(context, episode.animeId, episode.id, episode.url, useExternalPlayer)
