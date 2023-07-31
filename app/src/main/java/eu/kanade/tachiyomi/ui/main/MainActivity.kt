@@ -520,8 +520,10 @@ class MainActivity : BaseActivity() {
 
         var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
-        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean) {
-            if (extPlayer) {
+        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, episodeUrl: String, extPlayer: Boolean) {
+            if (episodeUrl.contains("magnet:?")) {
+                externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId)) ?: return
+            } else if (extPlayer) {
                 externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId)) ?: return
             } else {
                 context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))

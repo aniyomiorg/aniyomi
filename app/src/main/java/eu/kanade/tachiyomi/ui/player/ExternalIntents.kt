@@ -81,7 +81,9 @@ class ExternalIntents {
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
-        return if (pkgName.isEmpty()) {
+        return if (videoUrl.toString().contains("magnet:?")) {
+            torrentIntentForPackage(context, videoUrl, video)
+        } else if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
                 addExtrasAndFlags(false, this)
@@ -200,6 +202,26 @@ class ExternalIntents {
     }
 
     /**
+     * Returns the [Intent] with added data to send to the given torrent external player.
+     *
+     * @param context the application context.
+     * @param uri the path data of the video.
+     * @param video the video being sent to the external player.
+     */
+    private fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            if (isPackageInstalled("com.amins", context.packageManager)) {
+                if (uri.toString().contains("magnet:?")) {
+                    component = getComponent("com.amins")
+                }
+            }
+            setDataAndType(uri, "video/*")
+            // addExtrasAndFlags(true, this)
+            // addVideoHeaders(true, video, this)
+        }
+    }
+
+    /**
      * Adds extras and flags to the given [Intent].
      *
      * @param isSupportedPlayer is it a supported external player.
@@ -266,6 +288,7 @@ class ExternalIntents {
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
             NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
             X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
+            AMNIS -> ComponentName(packageName, "com.amnis")
             else -> null
         }
     }
@@ -507,3 +530,4 @@ const val MPV_REMOTE = "com.husudosu.mpvremote"
 const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
+const val AMNIS = "com.amnis"
