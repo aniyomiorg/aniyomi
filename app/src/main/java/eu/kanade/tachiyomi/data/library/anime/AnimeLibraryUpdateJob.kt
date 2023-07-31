@@ -139,8 +139,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
         // SY -->
-        val group = inputData.getInt(AnimeLibraryUpdateJob.KEY_GROUP, AnimeLibraryGroup.BY_DEFAULT)
-        val groupExtra = inputData.getString(AnimeLibraryUpdateJob.KEY_GROUP_EXTRA)
+        val group = inputData.getInt(KEY_GROUP, AnimeLibraryGroup.BY_DEFAULT)
+        val groupExtra = inputData.getString(KEY_GROUP_EXTRA)
         // SY <--
         addAnimeToQueue(categoryId, group, groupExtra)
 
@@ -230,6 +230,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                         .getOrNull(sourceExtra ?: -1)
 
                     if (source != null) libraryAnime.filter { it.anime.source == source } else emptyList()
+                }
+                AnimeLibraryGroup.BY_TAG -> {
+                    val tagExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val tag = libraryAnime.map { it.anime.genre }
+                        .distinct()
+                        .getOrNull(tagExtra ?: -1)
+
+                    if (tag != null) libraryAnime.filter { it.anime.genre == tag } else emptyList()
                 }
                 AnimeLibraryGroup.BY_STATUS -> {
                     val statusExtra = groupExtra?.toLongOrNull() ?: -1
