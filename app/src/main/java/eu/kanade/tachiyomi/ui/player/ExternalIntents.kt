@@ -15,6 +15,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -208,16 +209,20 @@ class ExternalIntents {
      * @param uri the path data of the video.
      * @param video the video being sent to the external player.
      */
-    private fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
+    private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
-            if (isPackageInstalled("com.amins", context.packageManager)) {
-                if (uri.toString().contains("magnet:?")) {
-                    component = getComponent("com.amins")
+            if (isPackageInstalled(AMNIS, context.packageManager)) {
+                if (uri.toString().startsWith("magnet:")) {
+                    component = getComponent(AMNIS)
+                }
+            } else {
+                withUIContext {
+                    context.toast(R.string.install_amnis)
                 }
             }
-            setDataAndType(uri, "video/*")
-            // addExtrasAndFlags(true, this)
-            // addVideoHeaders(true, video, this)
+            data = uri
+            addExtrasAndFlags(true, this)
+            addVideoHeaders(true, video, this)
         }
     }
 
@@ -288,7 +293,7 @@ class ExternalIntents {
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
             NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
             X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
-            AMNIS -> ComponentName(packageName, "com.amnis")
+            AMNIS -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
             else -> null
         }
     }
