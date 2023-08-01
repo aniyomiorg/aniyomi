@@ -296,7 +296,6 @@
     <string name="pref_episode_swipe">Episode swipe</string>
     <string name="pref_episode_swipe_end">Swipe to end action</string>
     <string name="pref_episode_swipe_start">Swipe to start action</string>
-
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
     <string name="data_saver_stop_exclude">Stop excluding from data saver</string>

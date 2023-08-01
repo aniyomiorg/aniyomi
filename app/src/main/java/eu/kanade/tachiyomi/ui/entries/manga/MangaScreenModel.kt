@@ -645,7 +645,6 @@ class MangaInfoScreenModel(
             LibraryPreferences.ChapterSwipeAction.ToggleBookmark -> {
                 bookmarkChapters(listOf(chapter), !chapter.bookmark)
             }
-
             LibraryPreferences.ChapterSwipeAction.Download -> {
                 val downloadAction: ChapterDownloadAction = when (chapterItem.downloadState) {
                     MangaDownload.State.ERROR,
@@ -655,7 +654,6 @@ class MangaInfoScreenModel(
                     MangaDownload.State.QUEUE,
                     MangaDownload.State.DOWNLOADING,
                     -> ChapterDownloadAction.CANCEL
-
                     MangaDownload.State.DOWNLOADED -> ChapterDownloadAction.DELETE
                 }
                 runChapterDownloadActions(
@@ -663,7 +661,6 @@ class MangaInfoScreenModel(
                     action = downloadAction,
                 )
             }
-
             LibraryPreferences.ChapterSwipeAction.Disabled -> throw IllegalStateException()
         }
     }
