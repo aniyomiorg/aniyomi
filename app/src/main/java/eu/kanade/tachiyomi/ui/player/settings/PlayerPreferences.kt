@@ -75,6 +75,14 @@ class PlayerPreferences(
 
     fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
 
+    fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
+
+    fun audioDelay() = preferenceStore.getFloat("pref_audio_delay", 0f)
+
+    fun rememberSubtitlesDelay() = preferenceStore.getBoolean("pref_remember_subtitles_delay", false)
+
+    fun subtitlesDelay() = preferenceStore.getFloat("pref_subtitles_delay", 0f)
+
     fun overrideSubtitlesStyle() = preferenceStore.getBoolean("pref_override_subtitles_style", false)
 
     fun boldSubtitles() = preferenceStore.getBoolean("pref_bold_subtitles", false)
