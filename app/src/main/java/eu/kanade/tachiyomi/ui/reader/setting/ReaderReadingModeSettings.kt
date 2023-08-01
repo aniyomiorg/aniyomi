@@ -139,5 +139,7 @@ class ReaderReadingModeSettings @JvmOverloads constructor(context: Context, attr
         binding.webtoonPrefsGroup.dualPageInvert.bindToPreference(readerPreferences.dualPageInvertWebtoon())
         binding.webtoonPrefsGroup.longStripSplit.isVisible = !isReleaseBuildType
         binding.webtoonPrefsGroup.longStripSplit.bindToPreference(readerPreferences.longStripSplitWebtoon())
+
+        binding.webtoonPrefsGroup.doubleTapZoom.bindToPreference(readerPreferences.webtoonDoubleTapZoomEnabled())
     }
 }

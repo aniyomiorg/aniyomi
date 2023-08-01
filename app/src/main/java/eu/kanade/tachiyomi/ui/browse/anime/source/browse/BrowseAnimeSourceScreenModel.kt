@@ -319,7 +319,7 @@ class BrowseAnimeSourceScreenModel(
         return getCategories.subscribe()
             .firstOrNull()
             ?.filterNot { it.isSystemCategory }
-            ?: emptyList()
+            .orEmpty()
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {

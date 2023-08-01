@@ -58,9 +58,11 @@ object SettingsLibraryScreen : SearchableSettings {
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
-        return mutableListOf(
+        return listOf(
             getCategoriesGroup(LocalNavigator.currentOrThrow, allCategories, allAnimeCategories, libraryPreferences),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
+            getChapterSwipeActionsGroup(libraryPreferences),
+            getEpisodeSwipeActionsGroup(libraryPreferences),
         )
     }
 
@@ -272,6 +274,68 @@ object SettingsLibraryScreen : SearchableSettings {
                     enabled = Injekt.get<TrackManager>().hasLoggedServices(),
                     title = stringResource(R.string.pref_library_update_refresh_trackers),
                     subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getChapterSwipeActionsGroup(
+        libraryPreferences: LibraryPreferences,
+    ): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_chapter_swipe),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.swipeChapterEndAction(),
+                    title = stringResource(R.string.pref_chapter_swipe_end),
+                    entries = mapOf(
+                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
+                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
+                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(R.string.action_mark_as_read),
+                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(R.string.action_download),
+                    ),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.swipeChapterStartAction(),
+                    title = stringResource(R.string.pref_chapter_swipe_start),
+                    entries = mapOf(
+                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
+                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
+                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(R.string.action_mark_as_read),
+                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(R.string.action_download),
+                    ),
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getEpisodeSwipeActionsGroup(
+        libraryPreferences: LibraryPreferences,
+    ): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_episode_swipe),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.swipeEpisodeEndAction(),
+                    title = stringResource(R.string.pref_episode_swipe_end),
+                    entries = mapOf(
+                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(R.string.action_mark_as_seen),
+                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(R.string.action_download),
+                    ),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.swipeEpisodeEndAction(),
+                    title = stringResource(R.string.pref_episode_swipe_start),
+                    entries = mapOf(
+                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(R.string.action_mark_as_seen),
+                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(R.string.action_download),
+                    ),
                 ),
             ),
         )

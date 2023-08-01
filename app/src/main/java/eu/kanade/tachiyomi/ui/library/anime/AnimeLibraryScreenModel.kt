@@ -362,7 +362,7 @@ class AnimeLibraryScreenModel(
                 categories
             }
 
-            displayCategories.associateWith { animelibAnime[it.id] ?: emptyList() }
+            displayCategories.associateWith { animelibAnime[it.id].orEmpty() }
         }
     }
 
@@ -707,7 +707,7 @@ class AnimeLibraryScreenModel(
         }
 
         fun getAnimelibItemsByPage(page: Int): List<AnimeLibraryItem> {
-            return library.values.toTypedArray().getOrNull(page) ?: emptyList()
+            return library.values.toTypedArray().getOrNull(page).orEmpty()
         }
 
         fun getAnimeCountForCategory(category: Category): Int? {

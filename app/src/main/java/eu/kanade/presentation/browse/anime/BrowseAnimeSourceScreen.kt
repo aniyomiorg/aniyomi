@@ -21,11 +21,11 @@ import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortab
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceCompactGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -54,12 +54,7 @@ fun BrowseAnimeSourceContent(
         ?: animeList.loadState.append.takeIf { it is LoadState.Error }
 
     val getErrorMessage: (LoadState.Error) -> String = { state ->
-        when {
-            state.error is NoEpisodesException -> context.getString(R.string.no_results_found)
-            state.error.message.isNullOrEmpty() -> ""
-            state.error.message.orEmpty().startsWith("HTTP error") -> "${state.error.message}: ${context.getString(R.string.http_error_hint)}"
-            else -> state.error.message.orEmpty()
-        }
+        with(context) { state.error.formattedMessage }
     }
 
     LaunchedEffect(errorState) {
