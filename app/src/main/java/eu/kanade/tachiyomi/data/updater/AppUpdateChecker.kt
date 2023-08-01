@@ -51,6 +51,24 @@ class AppUpdateChecker {
                             AppUpdateResult.NoNewUpdate
                         }
                     }
+                networkService.client
+                    .newCall(GET("https://api.github.com/repos/LuftVerbot/kuukiyomi/releases/latest"))
+                    .awaitSuccess()
+                    .parseAs<GithubRelease>()
+                    .let {
+                        lastAppCheck.set(Date().time)
+
+                        // Check if latest version is different from current version
+                        if (isNewVersion(it.version)) {
+                            if (context.isInstalledFromFDroid()) {
+                                AppUpdateResult.NewUpdateFdroidInstallation
+                            } else {
+                                AppUpdateResult.NewUpdate(it)
+                            }
+                        } else {
+                            AppUpdateResult.NoNewUpdate
+                        }
+                    }
             }
 
             when (result) {
@@ -67,7 +85,7 @@ class AppUpdateChecker {
         // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
 
-        return if (BuildConfig.PREVIEW) {
+        return if (versionTag.startsWith("r")) {
             // Preview builds: based on releases in "LuftVerbot/kuukiyomi-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()
