@@ -641,7 +641,6 @@ class MangaInfoScreenModel(
             LibraryPreferences.ChapterSwipeAction.ToggleRead -> {
                 markChaptersRead(listOf(chapter), !chapter.read)
             }
-
             LibraryPreferences.ChapterSwipeAction.ToggleBookmark -> {
                 bookmarkChapters(listOf(chapter), !chapter.bookmark)
             }
@@ -650,7 +649,6 @@ class MangaInfoScreenModel(
                     MangaDownload.State.ERROR,
                     MangaDownload.State.NOT_DOWNLOADED,
                     -> ChapterDownloadAction.START_NOW
-
                     MangaDownload.State.QUEUE,
                     MangaDownload.State.DOWNLOADING,
                     -> ChapterDownloadAction.CANCEL
