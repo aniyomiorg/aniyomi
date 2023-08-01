@@ -288,7 +288,7 @@ object SettingsLibraryScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.swipeChapterEndAction(),
-                    title = stringResource(R.string.pref_chapter_swipe_end),
+                    title = stringResource(R.string.pref_chapter_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
                         LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
@@ -298,7 +298,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.swipeChapterStartAction(),
-                    title = stringResource(R.string.pref_chapter_swipe_start),
+                    title = stringResource(R.string.pref_chapter_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
                         LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
@@ -319,7 +319,7 @@ object SettingsLibraryScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.swipeEpisodeEndAction(),
-                    title = stringResource(R.string.pref_episode_swipe_end),
+                    title = stringResource(R.string.pref_episode_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
@@ -328,8 +328,8 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeEpisodeEndAction(),
-                    title = stringResource(R.string.pref_episode_swipe_start),
+                    pref = libraryPreferences.swipeEpisodeStartAction(),
+                    title = stringResource(R.string.pref_episode_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
