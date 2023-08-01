@@ -160,13 +160,13 @@ class LibraryPreferences(
 
     // region Swipe Actions
 
-    fun swipeEpisodeEndAction() = preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleBookmark)
+    fun swipeEpisodeEndAction() = preferenceStore.getEnum("pref_episode_swipe_start_action", EpisodeSwipeAction.ToggleBookmark)
 
-    fun swipeEpisodeStartAction() = preferenceStore.getEnum("pref_episode_swipe_start_action", EpisodeSwipeAction.ToggleSeen)
+    fun swipeEpisodeStartAction() = preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleSeen)
 
-    fun swipeChapterEndAction() = preferenceStore.getEnum("pref_chapter_swipe_end_action", ChapterSwipeAction.ToggleBookmark)
+    fun swipeChapterEndAction() = preferenceStore.getEnum("pref_chapter_swipe_start_action", ChapterSwipeAction.ToggleBookmark)
 
-    fun swipeChapterStartAction() = preferenceStore.getEnum("pref_chapter_swipe_start_action", ChapterSwipeAction.ToggleRead)
+    fun swipeChapterStartAction() = preferenceStore.getEnum("pref_chapter_swipe_end_action", ChapterSwipeAction.ToggleRead)
 
     // endregion
 

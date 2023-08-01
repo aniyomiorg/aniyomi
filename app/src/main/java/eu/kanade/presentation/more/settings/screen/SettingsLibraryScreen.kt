@@ -287,7 +287,7 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(R.string.pref_chapter_swipe),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeChapterEndAction(),
+                    pref = libraryPreferences.swipeChapterStartAction(),
                     title = stringResource(R.string.pref_chapter_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
@@ -297,7 +297,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeChapterStartAction(),
+                    pref = libraryPreferences.swipeChapterEndAction(),
                     title = stringResource(R.string.pref_chapter_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
@@ -318,7 +318,7 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(R.string.pref_episode_swipe),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeEpisodeEndAction(),
+                    pref = libraryPreferences.swipeEpisodeStartAction(),
                     title = stringResource(R.string.pref_episode_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
@@ -328,7 +328,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeEpisodeStartAction(),
+                    pref = libraryPreferences.swipeEpisodeEndAction(),
                     title = stringResource(R.string.pref_episode_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
