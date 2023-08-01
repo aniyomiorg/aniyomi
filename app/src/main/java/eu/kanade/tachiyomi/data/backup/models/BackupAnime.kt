@@ -109,14 +109,12 @@ data class BackupAnime(
         fun copyFrom(anime: Anime, customAnimeInfo: CustomAnimeInfo?): BackupAnime {
             return BackupAnime(
                 url = anime.url,
-                // SY -->
-                title = anime.ogTitle,
-                artist = anime.ogArtist,
-                author = anime.ogAuthor,
-                description = anime.ogDescription,
-                genre = anime.ogGenre.orEmpty(),
-                status = anime.ogStatus.toInt(),
-                // SY <--
+                title = anime.title,
+                artist = anime.artist,
+                author = anime.author,
+                description = anime.description,
+                genre = anime.genre.orEmpty(),
+                status = anime.status.toInt(),
                 thumbnailUrl = anime.thumbnailUrl,
                 favorite = anime.favorite,
                 source = anime.source,
