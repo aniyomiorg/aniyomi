@@ -1110,19 +1110,6 @@ class AnimeInfoScreenModel(
         }
     }
 
-    // SY -->
-    fun showEditAnimeInfoDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> {
-                    state.copy(dialog = Dialog.EditAnimeInfo(state.anime))
-                }
-            }
-        }
-    }
-    // SY <--
-
     fun showAnimeSkipIntroDialog() {
         mutableState.update { state ->
             when (state) {

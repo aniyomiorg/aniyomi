@@ -1109,19 +1109,6 @@ class MangaInfoScreenModel(
             }
         }
     }
-
-    // SY -->
-    fun showEditMangaInfoDialog() {
-        mutableState.update { state ->
-            when (state) {
-                MangaScreenState.Loading -> state
-                is MangaScreenState.Success -> {
-                    state.copy(dialog = Dialog.EditMangaInfo(state.manga))
-                }
-            }
-        }
-    }
-    // SY <--
 }
 
 sealed class MangaScreenState {
