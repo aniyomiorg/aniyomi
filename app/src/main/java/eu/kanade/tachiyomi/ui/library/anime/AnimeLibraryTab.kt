@@ -245,6 +245,9 @@ object AnimeLibraryTab : Tab {
                     onDismissRequest = onDismissRequest,
                     screenModel = settingsScreenModel,
                     category = category,
+                    // SY -->
+                    hasCategories = state.categories.fastAny { !it.isSystemCategory },
+                    // SY <--
                 )
             }
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {
