@@ -217,7 +217,7 @@ class ExternalIntents {
                 }
             } else {
                 withUIContext {
-                    context.toast(R.string.install_amnis)
+                    context.toast(R.string.install_amnis, 8)
                 }
             }
             data = uri
