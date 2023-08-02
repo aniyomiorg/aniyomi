@@ -29,7 +29,4 @@
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>
     <string name="action_ok">OK</string>
-
-    <!--Torrent -->
-    <string name="install_amnis">Amnis Player needs to be installed</string>
 </resources>
