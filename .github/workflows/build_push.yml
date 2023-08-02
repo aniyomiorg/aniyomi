@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - kuukiyomi
-      - kuuku-prev
+      - kuuki-prev
     tags:
       - v*
 
