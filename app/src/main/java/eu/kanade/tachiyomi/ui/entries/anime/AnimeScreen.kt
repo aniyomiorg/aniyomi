@@ -109,6 +109,7 @@ class AnimeScreen(
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
             showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
+            alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {

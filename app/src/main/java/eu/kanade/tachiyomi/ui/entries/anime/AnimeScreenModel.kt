@@ -142,6 +142,8 @@ class AnimeInfoScreenModel(
     internal val autoOpenTrack: Boolean
         get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
 
+    val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
+
     /**
      * Helper function to update the UI state only if it's currently in success state
      */
