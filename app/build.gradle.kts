@@ -188,6 +188,7 @@ dependencies {
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
     implementation(androidx.profileinstaller)
+    implementation(androidx.mediasession)
 
     implementation(androidx.bundles.lifecycle)
 
