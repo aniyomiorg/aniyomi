@@ -50,6 +50,7 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.entries.anime.model.episodesFiltered
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.EntryScreenItem
@@ -273,6 +274,8 @@ private fun AnimeScreenSmallImpl(
 ) {
     val episodeListState = rememberLazyListState()
 
+    val trackPreferences = Injekt.get<TrackPreferences>()
+
     val episodes = remember(state) { state.processedEpisodes.toList() }
 
     val internalOnBackPressed = {
@@ -452,7 +455,7 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L) {
+                            if (timer > 0L && trackPreferences.showNextEpisodeAiringTime().get()) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
