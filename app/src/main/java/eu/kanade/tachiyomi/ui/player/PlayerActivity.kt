@@ -16,6 +16,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
+import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -145,6 +148,10 @@ class PlayerActivity : BaseActivity() {
     private var mReceiver: BroadcastReceiver? = null
 
     lateinit var binding: PlayerActivityBinding
+
+    private lateinit var mediaSession: MediaSessionCompat
+
+    private val playbackStateBuilder = PlaybackStateCompat.Builder()
 
     internal val player get() = binding.player
 
@@ -276,6 +283,7 @@ class PlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setupPlayerControls()
+        setupMediaSession()
         setupPlayerMPV()
         setupPlayerAudio()
         setupPlayerBrightness()
@@ -434,6 +442,89 @@ class PlayerActivity : BaseActivity() {
     }
 
     @Suppress("DEPRECATION")
+    private fun setupMediaSession() {
+        mediaSession = MediaSessionCompat(this, "Aniyomi_Player_Session").apply {
+            // Enable callbacks from MediaButtons and TransportControls
+            setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
+                    MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS,
+            )
+
+            // Do not let MediaButtons restart the player when the app is not visible
+            setMediaButtonReceiver(null)
+
+            setPlaybackState(
+                with(playbackStateBuilder) {
+                    setState(
+                        PlaybackStateCompat.STATE_NONE,
+                        0L,
+                        0.0F,
+                    )
+                    build()
+                },
+            )
+
+            // Implement methods that handle callbacks from a media controller
+            setCallback(
+                object : MediaSessionCompat.Callback() {
+                    override fun onPlay() {
+                        player.paused = false
+                        playerControls.toggleControls(isTapped = true)
+                        updatePlaybackState()
+                    }
+
+                    override fun onPause() {
+                        player.paused = true
+                        playerControls.toggleControls()
+                        updatePlaybackState(pause = true)
+                    }
+
+                    override fun onSkipToPrevious() {
+                        changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
+                    }
+
+                    override fun onSkipToNext() {
+                        changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                    }
+                },
+            )
+        }
+
+        MediaControllerCompat(this, mediaSession).also { mediaController ->
+            MediaControllerCompat.setMediaController(this, mediaController)
+        }
+    }
+
+    private fun updatePlaybackState(cachePause: Boolean = false, pause: Boolean = false) {
+        val state = when {
+            player.timePos?.let { it < 0 } ?: true ||
+                player.duration?.let { it <= 0 } ?: true -> PlaybackStateCompat.STATE_CONNECTING
+            cachePause -> PlaybackStateCompat.STATE_BUFFERING
+            pause or (player.paused == true) -> PlaybackStateCompat.STATE_PAUSED
+            else -> PlaybackStateCompat.STATE_PLAYING
+        }
+        var actions = PlaybackStateCompat.ACTION_PLAY or
+            PlaybackStateCompat.ACTION_PLAY_PAUSE or
+            PlaybackStateCompat.ACTION_PAUSE
+        if (viewModel.currentPlaylist.size > 1) {
+            actions = actions or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+        }
+
+        mediaSession.setPlaybackState(
+            with(playbackStateBuilder) {
+                setState(
+                    state,
+                    player.timePos?.toLong() ?: 0L,
+                    player.playbackSpeed?.toFloat() ?: 1.0f,
+                )
+                setActions(actions)
+                build()
+            },
+        )
+    }
+
+    @Suppress("DEPRECATION")
     private fun loadDeviceDimensions() {
         this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationType().get()
         val dm = DisplayMetrics()
@@ -497,6 +588,9 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        mediaSession.isActive = false
+        mediaSession.release()
+
         playerPreferences.playerVolumeValue().set(fineVolume)
         playerPreferences.playerBrightnessValue().set(brightness)
         MPVLib.removeLogObserver(playerObserver)
@@ -1560,19 +1654,28 @@ class PlayerActivity : BaseActivity() {
             "time-pos" -> {
                 playerControls.updatePlaybackPos(value.toInt())
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
+                updatePlaybackState()
             }
-            "duration" -> playerControls.updatePlaybackDuration(value.toInt())
+            "duration" -> {
+                playerControls.updatePlaybackDuration(value.toInt())
+                mediaSession.isActive = true
+                updatePlaybackState()
+            }
         }
     }
 
     internal fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "seeking" -> isSeeking(value)
-            "paused-for-cache" -> showLoadingIndicator(value)
+            "paused-for-cache" -> {
+                showLoadingIndicator(value)
+                updatePlaybackState(cachePause = true)
+            }
             "pause" -> {
                 if (!isFinishing) {
                     setAudioFocus(value)
                     updatePlaybackStatus(value)
+                    updatePlaybackState(pause = true)
                 }
             }
             "eof-reached" -> endFile(value)
