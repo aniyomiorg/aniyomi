@@ -108,6 +108,7 @@ class AnimeScreen(
             isTabletUi = isTabletUi(),
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
+            showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {

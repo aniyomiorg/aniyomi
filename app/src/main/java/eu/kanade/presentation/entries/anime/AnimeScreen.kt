@@ -50,7 +50,6 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.entries.anime.model.episodesFiltered
-import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.EntryScreenItem
@@ -100,6 +99,7 @@ fun AnimeScreen(
     isTabletUi: Boolean,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -155,6 +155,7 @@ fun AnimeScreen(
             dateFormat = dateFormat,
             episodeSwipeEndAction = episodeSwipeEndAction,
             episodeSwipeStartAction = episodeSwipeStartAction,
+            showNextEpisodeAirTime = showNextEpisodeAirTime,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -190,6 +191,7 @@ fun AnimeScreen(
             dateRelativeTime = dateRelativeTime,
             episodeSwipeEndAction = episodeSwipeEndAction,
             episodeSwipeStartAction = episodeSwipeStartAction,
+            showNextEpisodeAirTime = showNextEpisodeAirTime,
             dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
@@ -231,6 +233,7 @@ private fun AnimeScreenSmallImpl(
     dateFormat: DateFormat,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -273,8 +276,6 @@ private fun AnimeScreenSmallImpl(
     onInvertSelection: () -> Unit,
 ) {
     val episodeListState = rememberLazyListState()
-
-    val trackPreferences = Injekt.get<TrackPreferences>()
 
     val episodes = remember(state) { state.processedEpisodes.toList() }
 
@@ -455,7 +456,7 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && trackPreferences.showNextEpisodeAiringTime().get()) {
+                            if (timer > 0L && showNextEpisodeAirTime) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
@@ -494,6 +495,7 @@ fun AnimeScreenLargeImpl(
     dateFormat: DateFormat,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -707,7 +709,7 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L) {
+                                    if (timer > 0L && showNextEpisodeAirTime) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
