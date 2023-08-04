@@ -108,10 +108,12 @@ class AnimeScreen(
             isTabletUi = isTabletUi(),
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
+            showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
+            alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
-                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get() != alt
+                    val extPlayer = screenModel.alwaysUseExternalPlayer != alt
                     openEpisode(context, episode, extPlayer)
                 }
             },
@@ -128,7 +130,7 @@ class AnimeScreen(
             onRefresh = screenModel::fetchAllFromSource,
             onContinueWatching = {
                 scope.launchIO {
-                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get()
+                    val extPlayer = screenModel.alwaysUseExternalPlayer
                     continueWatching(context, screenModel.getNextUnseenEpisode(), extPlayer)
                 }
             },

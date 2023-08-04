@@ -25,6 +25,8 @@ class TrackPreferences(
 
     fun trackOnAddingToLibrary() = preferenceStore.getBoolean("track_on_adding_to_library", true)
 
+    fun showNextEpisodeAiringTime() = preferenceStore.getBoolean("show_next_episode_airing_time", true)
+
     companion object {
         fun trackUsername(syncId: Long) = "pref_mangasync_username_$syncId"
 

@@ -129,6 +129,8 @@ class AnimeInfoScreenModel(
     val episodeSwipeEndAction = libraryPreferences.swipeEpisodeEndAction().get()
     val episodeSwipeStartAction = libraryPreferences.swipeEpisodeStartAction().get()
 
+    val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
+
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
@@ -139,6 +141,8 @@ class AnimeInfoScreenModel(
 
     internal val autoOpenTrack: Boolean
         get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
+
+    val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
 
     /**
      * Helper function to update the UI state only if it's currently in success state
