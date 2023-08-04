@@ -277,8 +277,8 @@
     <string name="pref_hide_in_anime_library_items">Ocultar las entradas del anime que ya están en la biblioteca</string>
     <plurals name="download_amount_anime">
         <item quantity="one">Siguiente episodio</item>
-        <item quantity="many">Próximos episodios</item>
-        <item quantity="other">Próximos episodios</item>
+        <item quantity="many">Próximos %d episodios</item>
+        <item quantity="other">Próximos %d episodios</item>
     </plurals>
     <string name="copied_video_link_to_clipboard">Enlace de calidad del video copiado al portapapeles</string>
     <string name="choose_video_quality">Elige la calidad del vídeo:</string>

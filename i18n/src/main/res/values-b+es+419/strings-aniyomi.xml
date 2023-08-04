@@ -129,4 +129,7 @@
     <string name="action_view_episodes">Ver episodios</string>
     <string name="action_next_episode">Siguente episodio</string>
     <string name="action_screen_fit">Modo de ajuste de pantalla</string>
+    <string name="action_display_show_continue_reading_button">Mostrar botón continuar mirando/leyendo</string>
+    <string name="pref_bottom_nav_style">Estilo de navegación inferior</string>
+    <string name="action_sort_unseen_count">Recuento no visto</string>
 </resources>
