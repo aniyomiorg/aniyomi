@@ -85,7 +85,7 @@
     <string name="pref_always_use_external_player">Utiliser toujours un lecteur externe</string>
     <string name="pref_external_player_preference">Préférence pour les lecteurs externes</string>
     <string name="player_title">%1$s - %2$s</string>
-    <string name="episode_download_progress">%1$d% %</string>
+    <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Suppression des chapitres</string>
     <string name="pref_remove_after_marked_as_read">Après avoir été marqué comme lu</string>
     <string name="pref_remove_after_read">Suppression automatique après lecture</string>
