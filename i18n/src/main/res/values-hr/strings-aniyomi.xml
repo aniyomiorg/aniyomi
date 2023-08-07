@@ -44,7 +44,7 @@
         <item quantity="other">Sljedećih %d nepogledanih epizoda</item>
     </plurals>
     <plurals name="notification_new_episodes_summary">
-        <item quantity="one">Za 1 naslov</item>
+        <item quantity="one">Za jedan naslov</item>
         <item quantity="few">Za %d naslova</item>
         <item quantity="other">Za %d naslova</item>
     </plurals>
@@ -54,7 +54,7 @@
         <item quantity="other">%1$s epizoda</item>
     </plurals>
     <plurals name="notification_episodes_generic">
-        <item quantity="one">1 nova epizoda</item>
+        <item quantity="one">Jedna nova epizoda</item>
         <item quantity="few">%1$d nove epizode</item>
         <item quantity="other">%1$d novih epizoda</item>
     </plurals>
@@ -86,7 +86,7 @@
     <string name="pref_always_use_external_player">Uvijek koristi eksterni player</string>
     <string name="pref_category_internal_player">Interni player</string>
     <string name="pref_player_smooth_seek">Aktiviraj točno traženje</string>
-    <string name="pref_player_smooth_seek_summary">Kada je aktivirano, traženje se neće fokusirati na ključne kadrove, što dovodi do sporijeg, ali točnijeg traženja</string>
+    <string name="pref_player_smooth_seek_summary">Kada je aktivirano, traženje se neće fokusirati na ključne kadrove, što dovodi do sporijeg ali točnijeg traženja</string>
     <string name="pref_external_player_preference">Postavke eksternog playera</string>
     <string name="pref_use_external_downloader">Uvijek koristi eksterni upravljač preuzimanja za anime</string>
     <string name="player_overlay_back">Natrag</string>
@@ -302,4 +302,11 @@
     <string name="label_manga_extensions">Manga proširenja</string>
     <string name="label_anime_extensions">Anime proširenja</string>
     <string name="pref_search_pinned_manga_sources_only">Traži samo prikvačene manga izvore u globalnoj pretrazi</string>
+    <string name="action_order_by_episode_number">Po broju epizode</string>
+    <string name="pref_pip_episode_toasts">Prikaži obavijesti o epizodama prilikom mijenjanju epizoda u modusu slika-u-slici</string>
+    <string name="download_ahead_info_anime">Radi samo za unose u biblioteci te ako su trenutačna i sljedeća epizoda već preuzete</string>
+    <string name="pref_track_on_add_library">Otvori izbornik zapisa prilikom dodavanja u biblioteku</string>
+    <string name="used_cache_both">Korišteno za anime: %1$s, korišteno za manga: %2$s</string>
+    <string name="sort_by_episode_number">Po broju epizode</string>
+    <string name="chapter_dialog_header">Prijeđi na poglavlje</string>
 </resources>
