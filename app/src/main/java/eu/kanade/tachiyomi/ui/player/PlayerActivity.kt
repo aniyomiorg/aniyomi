@@ -153,6 +153,8 @@ class PlayerActivity : BaseActivity() {
 
     private val playbackStateBuilder = PlaybackStateCompat.Builder()
 
+    private lateinit var headsetReceiver: BroadcastReceiver
+
     internal val player get() = binding.player
 
     internal val playerControls get() = binding.playerControls
@@ -376,6 +378,11 @@ class PlayerActivity : BaseActivity() {
         }
 
         playerIsDestroyed = false
+
+        registerReceiver(
+            headsetReceiver,
+            IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
+        )
     }
 
     private fun setupPlayerControls() {
@@ -468,15 +475,11 @@ class PlayerActivity : BaseActivity() {
             setCallback(
                 object : MediaSessionCompat.Callback() {
                     override fun onPlay() {
-                        player.paused = false
-                        playerControls.toggleControls(isTapped = true)
-                        updatePlaybackState()
+                        pauseByIntents(false)
                     }
 
                     override fun onPause() {
-                        player.paused = true
-                        playerControls.toggleControls()
-                        updatePlaybackState(pause = true)
+                        pauseByIntents(true)
                     }
 
                     override fun onSkipToPrevious() {
@@ -493,6 +496,20 @@ class PlayerActivity : BaseActivity() {
         MediaControllerCompat(this, mediaSession).also { mediaController ->
             MediaControllerCompat.setMediaController(this, mediaController)
         }
+
+        headsetReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
+                    pauseByIntents(true)
+                }
+            }
+        }
+    }
+
+    private fun pauseByIntents(pause: Boolean) {
+        player.paused = pause
+        playerControls.toggleControls(!pause)
+        updatePlaybackState(pause = pause)
     }
 
     private fun updatePlaybackState(cachePause: Boolean = false, pause: Boolean = false) {
@@ -590,6 +607,7 @@ class PlayerActivity : BaseActivity() {
     override fun onDestroy() {
         mediaSession.isActive = false
         mediaSession.release()
+        unregisterReceiver(headsetReceiver)
 
         playerPreferences.playerVolumeValue().set(fineVolume)
         playerPreferences.playerBrightnessValue().set(brightness)
