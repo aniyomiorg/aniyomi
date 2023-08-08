@@ -59,8 +59,8 @@ class AnimeUpdatesScreenModel(
     private val getAnime: GetAnime = Injekt.get(),
     private val getEpisode: GetEpisode = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
-    internal val downloadPreferences: DownloadPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    downloadPreferences: DownloadPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesState>(AnimeUpdatesState()) {
 
@@ -69,6 +69,8 @@ class AnimeUpdatesScreenModel(
 
     val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
+
+    val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
@@ -183,9 +185,9 @@ class AnimeUpdatesScreenModel(
                 EpisodeDownloadAction.DELETE -> {
                     deleteEpisodes(items)
                 }
-                EpisodeDownloadAction.SHOW_OPTIONS -> {
+                EpisodeDownloadAction.SHOW_QUALITIES -> {
                     val update = items.singleOrNull()?.update ?: return@launch
-                    showOptionsDialog(update)
+                    showQualitiesDialog(update)
                 }
             }
             toggleAllSelection(false)
@@ -275,8 +277,8 @@ class AnimeUpdatesScreenModel(
         setDialog(Dialog.DeleteConfirmation(updatesItem))
     }
 
-    private fun showOptionsDialog(update: AnimeUpdatesWithRelations) {
-        setDialog(Dialog.Options(update.episodeId, update.animeId, update.sourceId))
+    private fun showQualitiesDialog(update: AnimeUpdatesWithRelations) {
+        setDialog(Dialog.ShowQualities(update.episodeName, update.episodeId, update.animeId, update.sourceId))
     }
 
     fun toggleSelection(
@@ -378,7 +380,7 @@ class AnimeUpdatesScreenModel(
 
     sealed class Dialog {
         data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog()
-        data class Options(val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog()
+        data class ShowQualities(val episodeTitle: String, val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog()
     }
 
     sealed class Event {

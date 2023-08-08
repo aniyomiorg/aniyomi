@@ -70,12 +70,12 @@ class ExternalIntents {
      * @param animeId the id of the anime.
      * @param episodeId the id of the episode.
      */
-    suspend fun getExternalIntent(context: Context, animeId: Long?, episodeId: Long?): Intent? {
+    suspend fun getExternalIntent(context: Context, animeId: Long?, episodeId: Long?, chosenVideo: Video?): Intent? {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
-        val video = EpisodeLoader.getLinks(episode, anime, source).asFlow().first()[0]
+        val video = chosenVideo ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first()[0]
 
         val videoUrl = getVideoUrl(context, video) ?: return null
 
@@ -491,8 +491,8 @@ class ExternalIntents {
          * @param animeId the id of the anime.
          * @param episodeId the id of the episode.
          */
-        suspend fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent? {
-            return externalIntents.getExternalIntent(context, animeId, episodeId)
+        suspend fun newIntent(context: Context, animeId: Long?, episodeId: Long?, video: Video?): Intent? {
+            return externalIntents.getExternalIntent(context, animeId, episodeId, video)
         }
     }
 }

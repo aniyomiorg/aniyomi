@@ -70,6 +70,7 @@ import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
@@ -518,11 +519,11 @@ class MainActivity : BaseActivity() {
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
 
-        var externalPlayerResult: ActivityResultLauncher<Intent>? = null
+        private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
-        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean) {
+        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
             if (extPlayer) {
-                externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId)) ?: return
+                externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId, video)) ?: return
             } else {
                 context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
             }
