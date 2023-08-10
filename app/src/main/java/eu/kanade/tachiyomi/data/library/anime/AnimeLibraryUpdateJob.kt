@@ -516,9 +516,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     }
 
     companion object {
-        private const val TAG = "AnimelibUpdate"
-        private const val WORK_NAME_AUTO = "LibraryUpdate-auto"
-        private const val WORK_NAME_MANUAL = "LibraryUpdate-manual"
+        private const val TAG = "AnimeLibraryUpdate"
+        private const val WORK_NAME_AUTO = "AnimeLibraryUpdate-auto"
+        private const val WORK_NAME_MANUAL = "AnimeLibraryUpdate-manual"
 
         private const val ERROR_LOG_HELP_URL = "https://aniyomi.org/help/guides/troubleshooting"
 
@@ -527,12 +527,12 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         /**
          * Key for category to update.
          */
-        private const val KEY_CATEGORY = "category"
+        private const val KEY_CATEGORY = "animeCategory"
 
         /**
          * Key that defines what should be updated.
          */
-        private const val KEY_TARGET = "target"
+        private const val KEY_TARGET = "animeTarget"
 
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)

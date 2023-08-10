@@ -73,6 +73,7 @@ object Migrations {
             if (oldVersion < 14) {
                 // Restore jobs after upgrading to Evernote's job scheduler.
                 MangaLibraryUpdateJob.setupTask(context)
+                AnimeLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 15) {
                 // Delete internal chapter cache dir.
@@ -103,6 +104,7 @@ object Migrations {
             if (oldVersion < 43) {
                 // Restore jobs after migrating from Evernote's job scheduler to WorkManager.
                 MangaLibraryUpdateJob.setupTask(context)
+                AnimeLibraryUpdateJob.setupTask(context)
                 BackupCreateJob.setupTask(context)
             }
             if (oldVersion < 44) {
@@ -199,10 +201,6 @@ object Migrations {
                 if (updateInterval == 1 || updateInterval == 2) {
                     libraryPreferences.libraryUpdateInterval().set(3)
                     MangaLibraryUpdateJob.setupTask(context, 3)
-                }
-                val animeupdateInterval = libraryPreferences.libraryUpdateInterval().get()
-                if (animeupdateInterval == 1 || animeupdateInterval == 2) {
-                    libraryPreferences.libraryUpdateInterval().set(3)
                     AnimeLibraryUpdateJob.setupTask(context, 3)
                 }
             }
