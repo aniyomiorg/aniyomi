@@ -141,9 +141,9 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar ao ecrã</string>
-    <string name="quality_dialog_header">Mudar a qualidade do vídeo:</string>
-    <string name="subtitle_dialog_header">Alterar faixa de legenda:</string>
-    <string name="audio_dialog_header">Alterar faixa de áudio:</string>
+    <string name="quality_dialog_header">Qualidade de vídeo</string>
+    <string name="subtitle_dialog_header">Legenda</string>
+    <string name="audio_dialog_header">Áudio</string>
     <string name="playback_options_speed">Velocidade de reprodução</string>
     <string name="playback_options_quality">Qualidade de vídeo</string>
     <string name="playback_options_title">Opções de reprodução</string>
@@ -205,7 +205,7 @@
     <string name="pref_library_anime_columns">Anime por fileira</string>
     <string name="action_sort_unseen_count">Itens não vistos</string>
     <string name="action_sort_episode_fetch_date">Data de episódios</string>
-    <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
+    <string name="pref_search_pinned_anime_sources_only">Pesquisar apenas fontes de anime fixadas na pesquisa global</string>
     <string name="pref_default_home_tab_library">Definir o ecrã inicial para o separador Mangá</string>
     <string name="pref_intro_length">Tamanho do salto de abertura</string>
     <string name="download_ahead_info_anime">Funciona apenas em entradas na biblioteca e se o episódio atual e o próximo já estiverem descarregados</string>
@@ -213,7 +213,7 @@
     <string name="download_unseen">Não visto</string>
     <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
     <string name="action_global_anime_search">Pesquisa Global de Animes</string>
-    <string name="pref_search_pinned_manga_sources_only">Incluir apenas fontes de mangá fixadas</string>
+    <string name="pref_search_pinned_manga_sources_only">Pesquisar apenas fontes de manga fixadas na pesquisa global</string>
     <string name="pref_bottom_nav_style">Estilo de navegação inferior</string>
     <string name="rotation_reverse_landscape">Paisagem reversa</string>
     <string name="rotation_sensor_portrait">Retrato (Sensor)</string>
@@ -274,8 +274,16 @@
     <string name="player_aniskip_mixedOp">Saltar MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar salto automático</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">Próximo episódio</item>
+        <item quantity="many">Próximos %d episódios</item>
+        <item quantity="other"></item>
     </plurals>
+    <string name="action_save_screenshot">Gravar a captura de ecrã</string>
+    <string name="chapter_dialog_header">Procurar capítulo</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar entradas de manga já na biblioteca</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>
+    <string name="stats_header">Mostrar estatísticas</string>
+    <string name="copied_video_link_to_clipboard">Ligação de qualidade de vídeo copiada para a área de transferência</string>
+    <string name="choose_video_quality">Escolha a qualidade do vídeo:</string>
+    <string name="extension_settings">Configurações de extensão</string>
 </resources>

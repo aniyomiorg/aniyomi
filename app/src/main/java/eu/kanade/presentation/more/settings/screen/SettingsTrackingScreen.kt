@@ -131,6 +131,10 @@ object SettingsTrackingScreen : SearchableSettings {
                 pref = trackPreferences.trackOnAddingToLibrary(),
                 title = stringResource(R.string.pref_track_on_add_library),
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = trackPreferences.showNextEpisodeAiringTime(),
+                title = stringResource(R.string.pref_show_next_episode_airing_time),
+            ),
             Preference.PreferenceGroup(
                 title = stringResource(R.string.services),
                 preferenceItems = listOf(

@@ -92,7 +92,7 @@ class AnimeInfoScreenModel(
     val context: Context,
     val animeId: Long,
     private val isFromSource: Boolean,
-    internal val downloadPreferences: DownloadPreferences = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
@@ -741,9 +741,9 @@ class AnimeInfoScreenModel(
             EpisodeDownloadAction.DELETE -> {
                 deleteEpisodes(items.map { it.episode })
             }
-            EpisodeDownloadAction.SHOW_OPTIONS -> {
+            EpisodeDownloadAction.SHOW_QUALITIES -> {
                 val episode = items.singleOrNull()?.episode ?: return
-                showOptionsDialog(episode)
+                showQualitiesDialog(episode)
             }
         }
     }
@@ -757,7 +757,7 @@ class AnimeInfoScreenModel(
 
             DownloadAction.UNVIEWED_ITEMS -> getUnseenEpisodes()
         }
-        if (!episodesToDownload.isNullOrEmpty()) {
+        if (episodesToDownload.isNotEmpty()) {
             startDownload(episodesToDownload, false)
         }
     }
@@ -1033,7 +1033,7 @@ class AnimeInfoScreenModel(
                 .map { tracks ->
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> AnimeTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
+                        .map { service -> AnimeTrackItem(tracks.find { it.syncId == service.id }, service) }
                         // Show only if the service supports this anime's source
                         .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source!!) ?: true }
                 }
@@ -1131,11 +1131,11 @@ class AnimeInfoScreenModel(
         }
     }
 
-    private fun showOptionsDialog(episode: Episode) {
+    private fun showQualitiesDialog(episode: Episode) {
         mutableState.update { state ->
             when (state) {
                 AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> { state.copy(dialog = Dialog.Options(episode, state.anime, state.source)) }
+                is AnimeScreenState.Success -> { state.copy(dialog = Dialog.ShowQualities(episode, state.anime, state.source)) }
             }
         }
     }

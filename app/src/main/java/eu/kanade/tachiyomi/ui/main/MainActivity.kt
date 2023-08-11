@@ -519,7 +519,7 @@ class MainActivity : BaseActivity() {
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
 
-        var externalPlayerResult: ActivityResultLauncher<Intent>? = null
+        private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
         suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
             if (extPlayer) {

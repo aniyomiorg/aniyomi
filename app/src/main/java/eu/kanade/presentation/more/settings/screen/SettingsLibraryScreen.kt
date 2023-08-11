@@ -23,6 +23,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -219,6 +220,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onValueChanged = {
                         MangaLibraryUpdateJob.setupTask(context, it)
+                        AnimeLibraryUpdateJob.setupTask(context, it)
                         true
                     },
                 ),
@@ -235,7 +237,10 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
-                        ContextCompat.getMainExecutor(context).execute { MangaLibraryUpdateJob.setupTask(context) }
+                        ContextCompat.getMainExecutor(context).execute {
+                            MangaLibraryUpdateJob.setupTask(context)
+                            AnimeLibraryUpdateJob.setupTask(context)
+                        }
                         true
                     },
                 ),
