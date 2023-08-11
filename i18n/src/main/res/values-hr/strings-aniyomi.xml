@@ -309,4 +309,5 @@
     <string name="used_cache_both">Korišteno za anime: %1$s, korišteno za manga: %2$s</string>
     <string name="sort_by_episode_number">Po broju epizode</string>
     <string name="chapter_dialog_header">Prijeđi na poglavlje</string>
+    <string name="pref_show_next_episode_airing_time">Prikaži vrijeme emitiranja sljedeće epizode</string>
 </resources>
