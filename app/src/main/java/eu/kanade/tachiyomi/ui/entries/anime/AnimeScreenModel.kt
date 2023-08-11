@@ -139,6 +139,10 @@ class AnimeInfoScreenModel(
     val episodeSwipeEndAction = libraryPreferences.swipeEpisodeEndAction().get()
     val episodeSwipeStartAction = libraryPreferences.swipeEpisodeStartAction().get()
 
+    val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
+    val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
+    val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
+
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
@@ -1053,12 +1057,7 @@ class AnimeInfoScreenModel(
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog()
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
-
-        // SY -->
-        data class EditAnimeInfo(val anime: Anime) : Dialog()
-        // SY <--
-
-        data class Options(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog()
+        data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog()
         object ChangeAnimeSkipIntro : Dialog()
         object SettingsSheet : Dialog()
         object TrackSheet : Dialog()
