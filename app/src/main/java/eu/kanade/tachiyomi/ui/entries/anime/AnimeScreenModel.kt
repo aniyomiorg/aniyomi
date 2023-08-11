@@ -1058,6 +1058,11 @@ class AnimeInfoScreenModel(
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog()
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog()
+
+        // SY -->
+        data class EditAnimeInfo(val anime: Anime) : Dialog()
+
+        // SY <--
         object ChangeAnimeSkipIntro : Dialog()
         object SettingsSheet : Dialog()
         object TrackSheet : Dialog()

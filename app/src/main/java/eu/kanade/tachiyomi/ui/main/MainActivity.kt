@@ -521,8 +521,8 @@ class MainActivity : BaseActivity() {
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
-        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
-            if (extPlayer) {
+        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, episodeUrl: String?, extPlayer: Boolean, video: Video? = null) {
+            if (extPlayer || (episodeUrl?.startsWith("magnet:") == true)) {
                 externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId, video)) ?: return
             } else {
                 context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))

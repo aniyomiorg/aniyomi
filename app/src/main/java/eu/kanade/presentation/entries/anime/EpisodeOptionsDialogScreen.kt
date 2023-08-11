@@ -243,7 +243,7 @@ private fun VideoList(
                     },
                     onExtPlayerClicked = {
                         scope.launch {
-                            MainActivity.startPlayerActivity(context, anime.id, episode.id, true, selectedVideo)
+                            MainActivity.startPlayerActivity(context, anime.id, episode.id, selectedVideo.videoUrl, true, selectedVideo)
                         }
                     },
                 )
