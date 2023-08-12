@@ -485,7 +485,7 @@ class PlayerActivity : BaseActivity() {
 
                     override fun onSkipToPrevious() {
                         if (playerPreferences.mediaChapterSeek().get()) {
-                            if (player.loadChapters() != emptyList<Chapter>()) {
+                            if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "-1"))
                             }
                         } else {
@@ -495,7 +495,7 @@ class PlayerActivity : BaseActivity() {
 
                     override fun onSkipToNext() {
                         if (playerPreferences.mediaChapterSeek().get()) {
-                            if (player.loadChapters() != emptyList<Chapter>()) {
+                            if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "1"))
                             }
                         } else {
