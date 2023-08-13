@@ -194,6 +194,7 @@ object SettingsPlayerScreen : SearchableSettings {
         val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = playerPreferences.skipLengthPreference()
         val playerSmoothSeek = playerPreferences.playerSmoothSeek()
+        val mediaChapterSeek = playerPreferences.mediaChapterSeek()
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -243,6 +244,10 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerSmoothSeek,
                     title = stringResource(R.string.pref_player_smooth_seek),
                     subtitle = stringResource(R.string.pref_player_smooth_seek_summary),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = mediaChapterSeek,
+                    title = stringResource(R.string.pref_media_control_chapter_seeking),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_category_player_aniskip_info),
