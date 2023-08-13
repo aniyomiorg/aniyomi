@@ -315,4 +315,6 @@
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Проксі-сервер Bandwidth Hero</string>
     <string name="data_saver_server_summary">Помістіть URL-адресу проксі-сервера Bandwidth Hero тут</string>
+    <string name="pref_show_next_episode_airing_time">Показати час показу наступного епізоду</string>
+    <string name="pref_episode_swipe">Пропустити епізод</string>
 </resources>
