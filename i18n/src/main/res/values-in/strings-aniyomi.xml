@@ -296,4 +296,5 @@
     <string name="data_saver">Penghemat Data</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="pref_show_next_episode_airing_time">Tampilkan waktu tayang episode berikutnya</string>
+    <string name="pref_media_control_chapter_seeking">Gunakan kontrol media untuk mencari chapter</string>
 </resources>
