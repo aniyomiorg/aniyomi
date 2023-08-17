@@ -248,6 +248,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = mediaChapterSeek,
                     title = stringResource(R.string.pref_media_control_chapter_seeking),
+                    subtitle = stringResource(R.string.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_category_player_aniskip_info),

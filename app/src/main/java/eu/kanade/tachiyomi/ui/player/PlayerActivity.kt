@@ -497,6 +497,9 @@ class PlayerActivity : BaseActivity() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "1"))
+                            } else {
+                                 doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
+                                 playerControls.resetControlsFade()
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
