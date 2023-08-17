@@ -487,7 +487,7 @@ class PlayerActivity : BaseActivity() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "-1"))
-                                skipAnimation("Previous chapter", isForward = false)
+                                skipAnimation(getString(R.string.go_to_previous_chapter), isForward = false)
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
@@ -498,10 +498,10 @@ class PlayerActivity : BaseActivity() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "1"))
-                                skipAnimation("Next chapter", isForward = true)
+                                skipAnimation(getString(R.string.go_to_next_chapter), isForward = true)
                             } else {
                                 MPVLib.command(arrayOf("seek", viewModel.getAnimeSkipIntroLength().toString(), "relative+exact"))
-                                skipAnimation("Skipped opening", isForward = true)
+                                skipAnimation(getString(R.string.go_to_after_opening), isForward = true)
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
