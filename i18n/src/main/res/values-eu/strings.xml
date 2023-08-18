@@ -10,9 +10,11 @@
     <string name="getting_started_guide">Hasiberrientzako gida</string>
     <string name="manga">Manga</string>
     <string name="chapters">Kapituluak</string>
+    <string name="categories">Kategoriak</string>
     <string name="name">Izena</string>
     <string name="history">Historiala</string>
     <string name="lock_when_idle">Blokeatu geldi geratzean</string>
+    <string name="default_category">Kategoria lehentsia</string>
     <string name="licensed">Lizentziatua</string>
     <string name="chapter_not_found">Kapitulua ez da aurkitu</string>
     <string name="loading">Kargatzen…</string>
@@ -72,6 +74,7 @@
     <string name="label_help">Laguntza</string>
     <string name="label_more">Gehiago</string>
     <string name="label_settings">Ezarpenak</string>
+    <string name="label_download_queue">Deskarga-ilara</string>
     <string name="label_library">Liburutegia</string>
     <string name="label_recent_updates">Eguneraketak</string>
     <string name="label_recent_manga">Historiala</string>
@@ -147,6 +150,7 @@
     <string name="delete_downloads_for_manga">Deskargatutako kapituluak ezabatu nahi dituzu\?</string>
     <string name="copied_to_clipboard">Arbelean kopiatu da:
 \n%1$s</string>
+    <string name="chapter_paused">Gelditurik</string>
     <string name="show_chapter_number">Kapituluaren zenbakia</string>
     <string name="download_unread">Irakurri gabea</string>
     <string name="manga_cover">Azala</string>
@@ -197,7 +201,6 @@
     <string name="chapter_settings">Kapituluaren ezarpenak</string>
     <string name="track_status">Egoera</string>
     <string name="track_type">Mota</string>
-    <string name="track_start_date">Hasia</string>
     <string name="custom_filter">Iragazki pertsonalizatua</string>
     <string name="snack_categories_deleted">Kategoriak ezabatuak</string>
     <string name="file_select_cover">Hautatu azaleko irudia</string>
@@ -207,6 +210,7 @@
     <string name="download_notifier_downloader_title">Deskargatzailea</string>
     <string name="download_notifier_unknown_error">Ezin izan da kapitulua deskargatu ustekabeko errore baten ondorioz</string>
     <string name="download_notifier_no_network">Ez dago sare-konexiorik erabilgarri</string>
+    <string name="channel_new_chapters">Kapituluaren eguneraketak</string>
     <string name="channel_app_updates">Aplikazioen eguneraketak</string>
     <string name="spen_next_page">Hurrengo orrialdea</string>
     <string name="channel_ext_updates">Luzapenen eguneraketak</string>
@@ -273,18 +277,20 @@
     <string name="double_tap_anim_speed_0">Animaziorik ez</string>
     <string name="pref_category_reading_mode">Irakurketa modua</string>
     <string name="label_network">Sarea</string>
+    <string name="pref_remove_exclude_categories">Baztertutako kategoriak</string>
     <string name="second_to_last">Azkenaurreko irakurritako kapitulua</string>
     <string name="fifth_to_last">Atzetik hasita bosgarren irakurritako kapitulua</string>
     <string name="pref_category_auto_download">Deskarga automatikoa</string>
+    <string name="pref_clear_database">Garbitu datu-basea</string>
     <string name="pref_dump_crash_logs_summary">Erroreen erregistroak fitxategi batean gordetzen ditu garatzaileekin partekatzeko</string>
     <string name="updating_category">Kategoria eguneratzen</string>
-    <string name="local_source_badge">Lokala</string>
     <string name="tabs_header">Fitxak</string>
     <string name="sort_by_number">Kapitulu zenbakiaren arabera</string>
     <string name="sort_by_upload_date">Igoera dataren arabera</string>
     <string name="confirm_set_image_as_cover">Irudi hau azaleko arte gisa erabili\?</string>
     <string name="notification_updating">Liburutegia eguneratzen… (%1$d/%2$d)</string>
     <string name="notification_size_warning">Eguneratze handiek bateriaren erabilera areagotzea eta iturriak motelagoak izatea eragin dezakete</string>
+    <string name="download_notifier_download_paused">Deskarga pausatu da</string>
     <string name="pref_low">Baxua</string>
     <string name="pref_lowest">Baxuena</string>
     <string name="pref_download_new">Deskargatu kapitulu berriak</string>
@@ -345,12 +351,13 @@
 \n
 \nFalta diren luzapenak instalatu eta jarraipen-zerbitzuetan saioa hasi beharko duzu ondoren horiek erabiltzeko.</string>
     <string name="chapter_downloading_progress">Deskargatzen (%1$d/%2$d)</string>
+    <string name="chapter_error">Errorea</string>
     <string name="manga_removed_library">Liburutegitik kendua</string>
     <string name="manga_info_collapse">Gutxiago</string>
     <string name="source_not_installed">Iturria ez dago instalatuta: %1$s</string>
+    <string name="snack_add_to_library">Manga liburutegira gehitu\?</string>
     <string name="file_select_backup">Hautatu babeskopia fitxategia</string>
     <string name="notification_cover_update_failed">Ezin izan da azala eguneratu</string>
-    <string name="download_notifier_download_finish">Deskarga bukatua</string>
     <string name="pref_library_update_manga_restriction">Saltatu eguneraketak</string>
     <string name="action_sort_date_added">Gehiketa data</string>
     <string name="action_search">Bilatu</string>
@@ -461,7 +468,6 @@
     <string name="action_settings">Ezarpenak</string>
     <string name="action_menu">Menua</string>
     <string name="action_filter">Iragazi</string>
-    <string name="action_filter_downloaded">Deskargatuak</string>
     <string name="action_filter_bookmarked">Orri-markatzailea jarria</string>
     <string name="action_filter_tracked">Jarraitua</string>
     <string name="action_filter_unread">Irakurri gabea</string>
@@ -573,7 +579,7 @@
     </plurals>
     <string name="extension_api_error">Ezin izan da luzapenen zerrenda lortu</string>
     <string name="pref_library_update_refresh_metadata_summary">Bilatu azal eta xehetasun berriak liburutegia eguneratzean</string>
-    <string name="tracker_komga_warning">Jarraitzaile hau Komga iturriarekin bakarrik da bateragarria.</string>
+    <string name="pref_library_update_categories_details">Baztertutako kategorietako mangak ez dira eguneratuko, sarturiko kategorietan egon arren.</string>
     <string name="pref_hide_threshold">Pantaila mugitzean menua ezkutatzeko sentikortasuna</string>
     <string name="clear_database_source_item_count">Liburutegian ez dauden %1$d manga datubasean</string>
     <string name="pref_verbose_logging">Erregistroaren bertsio luzea</string>
@@ -584,6 +590,7 @@
     <string name="cancelled">Bertan behera utzia</string>
     <string name="on_hiatus">Etenaldian</string>
     <string name="library_errors_help">Liburutegi eguneraketen akatsak nola konpondu jakiteko, ikusi %1$s</string>
+    <string name="action_display_local_badge">Manga lokala</string>
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">%1$s kapituluak eta bat gehiago</item>
         <item quantity="other">%1$s kapituluak eta %2$d gehiago</item>
@@ -593,6 +600,7 @@
     <string name="pref_show_navigation_mode">Nabigazio-diseinuaren geruza erakutsi</string>
     <string name="pref_show_navigation_mode_summary">Erakutsi ukipen-zonak irakurgailua irekitzen denean</string>
     <string name="enhanced_tracking_info">Iturri zehatzetarako ezaugarri hobetuak eskaintzen dituzten zerbitzuak. Mangen jarraipena automatikoki egiten da zure liburutegira gehitzen direnean.</string>
+    <string name="pref_clear_database_summary">Ezabatu zure liburutegian gordeta ez dauden mangen historia</string>
     <string name="publishing_finished">Argitarapena amaitua</string>
     <string name="pref_dual_page_split">Orrialde biko zatiketa</string>
     <string name="pref_dual_page_invert">Alderantzikatu orrialde bikoitzeko zatiketa</string>
@@ -603,7 +611,6 @@
     <string name="pref_update_only_started">Kapitulurik irakurri gabe</string>
     <string name="skipped_reason_completed">Saltatu egin da seriea bukatua dagoelako</string>
     <string name="skipped_reason_not_started">Saltatua ez daudelako irakurritako kapitulurik</string>
-    <string name="action_filter_started">Hasia</string>
     <string name="ext_info_version">Bertsioa</string>
     <string name="multi_lang">Multi</string>
     <string name="delete_category">Ezabatu kategoria</string>
@@ -612,5 +619,15 @@
     <string name="battery_not_low">Bateria baxu ez dagoenean</string>
     <string name="ext_info_language">Hizkuntza</string>
     <string name="action_search_hint">Bilatu…</string>
-<string name="label_download_queue">Deskarga-ilara</string>
-    </resources>
+    <string name="delete_category_confirmation">\"%s\" kategoria ezabatu nahi duzu\?</string>
+    <string name="action_remove_everything">Guztia kendu</string>
+    <string name="label_stats">Estatistikak</string>
+    <string name="label_started">Hasia</string>
+    <string name="label_local">Lokala</string>
+    <string name="label_downloaded">Deskargatuak</string>
+    <string name="action_filter_interval_long">Jaso hilabetero (28 egun)</string>
+    <string name="action_copy_to_clipboard">Kopiatu arbelera</string>
+    <string name="action_not_now">Orain ez</string>
+    <string name="delete_downloaded">Ezabatu deskargatuak</string>
+    <string name="pref_library_columns_per_row">%d ilara bakoitzeko</string>
+</resources>
