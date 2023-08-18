@@ -43,6 +43,8 @@ class PlayerPreferences(
 
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
 
+    fun mediaChapterSeek() = preferenceStore.getBoolean("pref_media_control_chapter_seeking", false)
+
     fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", AspectState.FIT.index)
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)

@@ -484,11 +484,23 @@ class PlayerActivity : BaseActivity() {
                     }
 
                     override fun onSkipToPrevious() {
-                        changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
+                        if (playerPreferences.mediaChapterSeek().get()) {
+                            if (player.loadChapters().isNotEmpty()) {
+                                MPVLib.command(arrayOf("add", "chapter", "-1"))
+                            }
+                        } else {
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
+                        }
                     }
 
                     override fun onSkipToNext() {
-                        changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                        if (playerPreferences.mediaChapterSeek().get()) {
+                            if (player.loadChapters().isNotEmpty()) {
+                                MPVLib.command(arrayOf("add", "chapter", "1"))
+                            }
+                        } else {
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                        }
                     }
                 },
             )
