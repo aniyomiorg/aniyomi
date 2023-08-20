@@ -487,6 +487,7 @@ class PlayerActivity : BaseActivity() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "-1"))
+                                skipAnimation(getString(R.string.go_to_previous_chapter), isForward = false)
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
@@ -497,6 +498,10 @@ class PlayerActivity : BaseActivity() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
                                 MPVLib.command(arrayOf("add", "chapter", "1"))
+                                skipAnimation(getString(R.string.go_to_next_chapter), isForward = true)
+                            } else {
+                                MPVLib.command(arrayOf("seek", viewModel.getAnimeSkipIntroLength().toString(), "relative+exact"))
+                                skipAnimation(getString(R.string.go_to_after_opening), isForward = true)
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
@@ -918,6 +923,33 @@ class PlayerActivity : BaseActivity() {
         ObjectAnimator.ofFloat(view, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
 
         MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
+    }
+
+    // Taken from util/AniSkipApi.kt
+    private fun skipAnimation(skipText: String, isForward: Boolean) {
+        binding.secondsView.binding.doubleTapSeconds.text = skipText
+
+        binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            rightToRight = if (isForward) ConstraintLayout.LayoutParams.PARENT_ID else ConstraintLayout.LayoutParams.UNSET
+            leftToLeft = if (isForward) ConstraintLayout.LayoutParams.UNSET else ConstraintLayout.LayoutParams.PARENT_ID
+        }
+        binding.secondsView.visibility = View.VISIBLE
+        binding.secondsView.isForward = isForward
+
+        val bindingBg = if (isForward) binding.ffwdBg else binding.rewBg
+
+        bindingBg.visibility = View.VISIBLE
+        bindingBg.animate().alpha(0.15f).setDuration(100).withEndAction {
+            binding.secondsView.animate().alpha(1f).setDuration(500).withEndAction {
+                binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
+                    bindingBg.animate().alpha(0f).setDuration(100).withEndAction {
+                        bindingBg.visibility = View.GONE
+                        binding.secondsView.visibility = View.GONE
+                        binding.secondsView.alpha = 1f
+                    }
+                }
+            }
+        }.start()
     }
 
     // Gesture Functions -- Start --

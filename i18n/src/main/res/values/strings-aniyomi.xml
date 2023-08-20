@@ -106,7 +106,11 @@
     <string name="pref_skip_5" translatable="false">5s</string>
     <string name="pref_skip_3" translatable="false">3s</string>
     <string name="pref_skip_disable">Disable</string>
-    <string name="pref_media_control_chapter_seeking">Use media controls for chapter seeking</string>
+    <string name="pref_media_control_chapter_seeking">Seek chapters with media controls</string>
+    <string name="pref_media_control_chapter_seeking_summary">When enabled, using next will invoke the skip intro button if no chapters are found</string>
+    <string name="go_to_next_chapter">Next chapter</string>
+    <string name="go_to_previous_chapter">Previous chapter</string>
+    <string name="go_to_after_opening">Skipped opening</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
