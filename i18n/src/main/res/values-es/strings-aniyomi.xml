@@ -310,5 +310,9 @@
     <string name="bandwidth_data_saver_server">Servidor Proxy Bandwidth Hero</string>
     <string name="data_saver_server_summary">Pon aquí la dirección url del servidor Proxy de Bandwidth Hero</string>
     <string name="pref_show_next_episode_airing_time">Mostrar la hora de emisión del próximo episodio</string>
-    <string name="pref_media_control_chapter_seeking">Utilizar controles multimedia para buscar los capítulos</string>
+    <string name="pref_media_control_chapter_seeking">Buscar los capítulos con los controles multimedia</string>
+    <string name="go_to_next_chapter">Siguiente capítulo</string>
+    <string name="pref_media_control_chapter_seeking_summary">Si se activa, al utilizar siguiente se invocará el botón de omitir la introducción si no se encuentra ningún capítulo</string>
+    <string name="go_to_previous_chapter">Capítulo anterior</string>
+    <string name="go_to_after_opening">Omitir la introducción</string>
 </resources>
