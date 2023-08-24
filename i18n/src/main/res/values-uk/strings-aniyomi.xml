@@ -317,4 +317,9 @@
     <string name="data_saver_server_summary">Помістіть URL-адресу проксі-сервера Bandwidth Hero тут</string>
     <string name="pref_show_next_episode_airing_time">Показати час показу наступного епізоду</string>
     <string name="pref_episode_swipe">Пропустити епізод</string>
+    <string name="pref_media_control_chapter_seeking_summary">Якщо увімкнено, використання наступного призведе до натискання кнопки пропустити вступ, якщо не знайдено розділів</string>
+    <string name="pref_media_control_chapter_seeking">Шукати розділи з елементами керування медіа</string>
+    <string name="go_to_next_chapter">Наступний розділ</string>
+    <string name="go_to_previous_chapter">Попередній розділ</string>
+    <string name="go_to_after_opening">Пропустити опенінґ</string>
 </resources>
