@@ -310,4 +310,9 @@
     <string name="sort_by_episode_number">Po broju epizode</string>
     <string name="chapter_dialog_header">Prijeđi na poglavlje</string>
     <string name="pref_show_next_episode_airing_time">Prikaži vrijeme emitiranja sljedeće epizode</string>
+    <string name="go_to_next_chapter">Sljedeće poglavlje</string>
+    <string name="go_to_after_opening">Preskočen uvod</string>
+    <string name="go_to_previous_chapter">Prethodno poglavlje</string>
+    <string name="pref_media_control_chapter_seeking_summary">Kada je aktivirano, korištenje gumba za sljedeće poglavlje će pokrenuti gumb za preskakanje uvoda ako se ne pronađe nijedno poglavlje</string>
+    <string name="pref_media_control_chapter_seeking">Traži poglavlja pomoću kontrola medija</string>
 </resources>
