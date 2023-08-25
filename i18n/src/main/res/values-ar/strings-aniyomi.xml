@@ -88,7 +88,7 @@
     <string name="pref_default_portrait_orientation">اتجاه عمودي بشكل افتراضي</string>
     <string name="video_list_empty_error">لا يوجد فيديو</string>
     <string name="action_next_episode">الحلقة التالية</string>
-    <string name="audio_dialog_header">تغيير مسار الصوت:</string>
+    <string name="audio_dialog_header">الصوت:</string>
     <string name="action_start_download_externally">استخدام أداة التحميل الخارجية</string>
     <string name="pref_intro_length">طول مدة تخطي المقدمة</string>
     <string name="label_updates">مانغا</string>
@@ -331,4 +331,9 @@
     <string name="data_saver">موفر البيانات</string>
     <string name="data_saver_summary">ضغط الصور قبل التنزيل أو التحميل في القارئ</string>
     <string name="pref_hide_in_anime_library_items">تم إخفاء مدخلات المانجا بالفعل في المكتبة</string>
+    <string name="pref_media_control_chapter_seeking_summary">عند التمكين، سيتم استخدام \"التالي\" لتشغيل تخطي المقدمة إذا لم يتم العثور على أي فصول</string>
+    <string name="go_to_next_chapter">الفصل التالي</string>
+    <string name="go_to_previous_chapter">الفصل السابق</string>
+    <string name="go_to_after_opening">تخطي افتتاحية</string>
+    <string name="pref_media_control_chapter_seeking">البحث عن الفصول باستخدام عناصر التحكم</string>
 </resources>
