@@ -412,9 +412,14 @@ class PlayerActivity : BaseActivity() {
         player.initialize(applicationContext.filesDir.path, logLevel)
         MPVLib.observeProperty("chapter-list", MPVLib.mpvFormat.MPV_FORMAT_NONE)
         MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
-        mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
+
+        mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
+        when (playerPreferences.deband().get()) {
+            1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
+            2 -> MPVLib.setOptionString("deband", "yes")
+        }
 
         MPVLib.addLogObserver(playerObserver)
         player.addObserver(playerObserver)
