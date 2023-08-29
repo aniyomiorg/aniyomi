@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
@@ -34,7 +36,6 @@ import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
 import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.preference.asState
 import tachiyomi.presentation.core.components.WheelTextPicker
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -81,10 +82,9 @@ object SettingsPlayerScreen : SearchableSettings {
 
     @Composable
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val scope = rememberCoroutineScope()
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
-        val mpvConf = playerPreferences.mpvConf()
+        val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_internal_player),
@@ -98,16 +98,10 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerHideControls,
                     title = stringResource(R.string.pref_player_hide_controls),
                 ),
-                Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = mpvConf,
-                    title = stringResource(R.string.pref_mpv_conf),
-                    subtitle = mpvConf.asState(scope).value
-                        .lines().take(2)
-                        .joinToString(
-                            separator = "\n",
-                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
-                        ),
-
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_category_player_advanced),
+                    subtitle = stringResource(R.string.pref_category_player_advanced_subtitle),
+                    onClick = { navigator.push(AdvancedPlayerSettingsScreen) },
                 ),
             ),
         )

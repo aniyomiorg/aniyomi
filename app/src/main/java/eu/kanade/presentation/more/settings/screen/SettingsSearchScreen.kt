@@ -294,6 +294,7 @@ private val settingScreens = listOf(
     SettingsBackupScreen,
     SettingsSecurityScreen,
     SettingsAdvancedScreen,
+    AdvancedPlayerSettingsScreen,
 )
 
 private data class SettingsData(
