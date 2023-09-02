@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">名前</string>
-    <string name="manga">漫画</string>
+    <string name="categories">カテゴリー</string>
+    <string name="manga">ライブラリの項目</string>
     <string name="chapters">章</string>
     <string name="history">履歴</string>
     <string name="label_settings">設定</string>
+    <string name="label_download_queue">ダウンロードキュー</string>
     <string name="label_library">ライブラリ</string>
     <string name="label_recent_manga">履歴</string>
     <string name="label_recent_updates">新着</string>
     <string name="label_backup">バックアップと復元</string>
     <string name="action_settings">設定</string>
     <string name="action_filter">絞り込む</string>
-    <string name="action_filter_downloaded">ダウンロード済み</string>
     <string name="action_filter_bookmarked">お気に入り</string>
     <string name="action_filter_unread">未読</string>
     <string name="action_filter_empty">フィルタを削除</string>
@@ -73,6 +74,7 @@
     <string name="pref_library_update_restriction">自動更新の条件</string>
     <string name="charging">充電中</string>
     <string name="pref_update_only_non_completed">ステータスが「完結済み」</string>
+    <string name="default_category">デフォルトカテゴリー</string>
     <string name="default_category_summary">毎回尋ねる</string>
     <string name="ext_update">更新</string>
     <string name="ext_install">インストール</string>
@@ -97,11 +99,11 @@
     <string name="white_background">白</string>
     <string name="black_background">ブラック</string>
     <string name="pref_viewer_type">既定のビューアモード</string>
-    <string name="left_to_right_viewer">左から右</string>
-    <string name="right_to_left_viewer">右から左</string>
-    <string name="vertical_viewer">縦反転</string>
-    <string name="webtoon_viewer">Webtoon</string>
-    <string name="pager_viewer">ページの表示</string>
+    <string name="left_to_right_viewer">ページに分ける（左から右）</string>
+    <string name="right_to_left_viewer">ページに分ける（右から左）</string>
+    <string name="vertical_viewer">ページに分ける（上から下）</string>
+    <string name="webtoon_viewer">縦長のストリップ</string>
+    <string name="pager_viewer">ページに分ける</string>
     <string name="pref_image_scale_type">スケールの種類</string>
     <string name="scale_type_fit_screen">画面サイズに合わせる</string>
     <string name="scale_type_stretch">ストレッチ</string>
@@ -137,6 +139,8 @@
     <string name="pref_backup_slots">最大バックアップ数</string>
     <string name="backup_created">バックアップが作成されました</string>
     <string name="cache_delete_error">消去中にエラーが発生しました</string>
+    <string name="pref_clear_database">データベースをクリア</string>
+    <string name="pref_clear_database_summary">ライブラリにない項目の履歴を削除</string>
     <string name="version">バージョン</string>
     <string name="pref_enable_acra">クラッシュレポートを送信する</string>
     <string name="login_title">%1$sにログイン</string>
@@ -178,7 +182,6 @@
     <string name="pref_acra_summary">バグの修正などに役立ちます。個人情報を送信しません</string>
     <string name="unknown_error">不明なエラー</string>
     <string name="updating_category">カテゴリーを更新中</string>
-    <string name="local_source_badge">ローカル</string>
     <string name="no_more_results">これ以上の結果はありません</string>
     <string name="action_global_search_hint">グローバル検索…</string>
     <string name="latest">最近の更新</string>
@@ -194,6 +197,8 @@
 \n%1$s</string>
     <string name="display_mode_chapter">第%1$s章</string>
     <string name="chapter_downloading_progress">ダウンロード中（%1$d/%2$d）</string>
+    <string name="chapter_error">エラー</string>
+    <string name="chapter_paused">一時停止済み</string>
     <string name="show_title">ソースタイトル</string>
     <string name="show_chapter_number">章の数</string>
     <string name="sort_by_source">ソースに基づいた順</string>
@@ -211,11 +216,11 @@
     <string name="title">タイトル</string>
     <string name="status">ステータス</string>
     <string name="track_status">ステータス</string>
-    <string name="track_start_date">開始済み</string>
     <string name="track_type">タイプ</string>
     <string name="error_category_exists">この名前が既に存在しています！</string>
     <string name="snack_categories_deleted">カテゴリーが削除されました</string>
     <string name="dialog_with_checkbox_remove_description">この章の読書日時を削除してもよろしいですか？</string>
+    <string name="snack_add_to_library">ライブラリに追加しますか？</string>
     <string name="picture_saved">画像を保存しました</string>
     <string name="custom_filter">カスタム フィルタ</string>
     <string name="set_as_cover">カバーとして設定</string>
@@ -249,6 +254,7 @@
     <string name="download_notifier_unknown_error">予期せぬエラーが発生したため、ダウンロードは失敗しました</string>
     <string name="download_notifier_text_only_wifi">Wi-Fi接続は利用できません</string>
     <string name="download_notifier_no_network">ネットワーク接続が利用できません</string>
+    <string name="download_notifier_download_paused">ダウンロード一時停止済み</string>
     <string name="channel_common">一般設定</string>
     <string name="repeating">読み返し中</string>
     <string name="source_not_installed">未インストールのソース：%1$s</string>
@@ -306,7 +312,6 @@
     <string name="action_newest">最新</string>
     <string name="label_sources">ソース</string>
     <string name="local_source">ローカルソース</string>
-    <string name="http_error_hint">WebViewでサイトを開く</string>
     <string name="tabs_header">タブ</string>
     <string name="email">メールアドレス</string>
     <plurals name="download_queue_summary">
@@ -339,8 +344,8 @@
     <string name="pref_webtoon_side_padding">余白</string>
     <string name="pref_category_reading">読書中</string>
     <string name="pref_always_show_chapter_transition">章の間の遷移ページを常に表示</string>
-    <string name="vertical_plus_viewer">上から下へ（連続）</string>
-    <string name="gray_background">灰色</string>
+    <string name="vertical_plus_viewer">ギャップ付き縦長のストリップ</string>
+    <string name="gray_background">グレー</string>
     <string name="pref_skip_filtered_chapters">フィルターされた章をスキップ</string>
     <string name="filter_mode_darken">焼き込み/比較（暗）</string>
     <string name="filter_mode_lighten">覆い焼き/比較（明）</string>
@@ -355,7 +360,7 @@
     </plurals>
     <string name="pref_library_update_refresh_metadata_summary">ライブラリを更新時、新しい表紙と情報を確認します</string>
     <string name="pref_library_update_refresh_metadata">メタデータを自動で更新</string>
-    <string name="pref_library_columns">行あたりの項目数</string>
+    <string name="pref_library_columns">グリッドの項目数</string>
     <string name="pref_category_display">画面</string>
     <string name="hide_notification_content">通知内容を非表示</string>
     <string name="secure_screen_summary">セキュア画面はアプリを切り替える時アプリの内容を非表示し、画面キャプチャを無効化します</string>
@@ -372,6 +377,7 @@
     <string name="action_select_inverse">選択を反転</string>
     <string name="action_menu">メニュー</string>
     <string name="confirm_exit">もう一度押して終了します</string>
+    <string name="channel_new_chapters">章の更新</string>
     <string name="information_webview_outdated">WebViewアプリを更新して互換性を向上させてください</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">%d件の拡張機能の更新が利用可能</item>
@@ -423,7 +429,6 @@
     <string name="pref_category_reading_mode">読み方</string>
     <string name="channel_complete">完了</string>
     <string name="channel_progress">プログレス</string>
-    <string name="download_notifier_download_finish">ダウンロード完了</string>
     <plurals name="num_trackers">
         <item quantity="other">%d個のトラッカー</item>
     </plurals>
@@ -491,6 +496,7 @@
     <string name="exclude">下記を除外：%s</string>
     <string name="include">下記を含む：%s</string>
     <string name="none">なし</string>
+    <string name="pref_library_update_categories_details">含まれているカテゴリーに入っていても、除外対象カテゴリーにある項目は更新されません。</string>
     <string name="action_show_errors">タップで詳細を表示</string>
     <string name="action_sort_chapter_fetch_date">章の取得された日付順</string>
     <string name="information_empty_category_dialog">まだカテゴリを登録していません。</string>
@@ -522,6 +528,7 @@
     <string name="pref_library_update_refresh_trackers">トラッカーを自動でリロード</string>
     <string name="restrictions">制限：%s</string>
     <string name="cancel_all_for_series">このシリーズの全項目をキャンセル</string>
+    <string name="action_display_local_badge">ローカル ソース</string>
     <string name="rotation_landscape">横向き</string>
     <string name="rotation_portrait">縦向き</string>
     <string name="pref_dark_theme_pure_black">真っ黒モード</string>
@@ -535,7 +542,6 @@
     <string name="action_start_downloading_now">ダウンロードを開始します</string>
     <string name="notification_updating">ライブラリを更新中... (%1$d/%2$d)</string>
     <string name="theme_monet">ダイナミック</string>
-    <string name="tracker_komga_warning">このトラッカーはKomgaにのみ対応します。</string>
     <string name="about_dont_kill_my_app">一部のスマホメーカーはバックグラウンドサービスを終了する追加のアプリ制限を施しています。修正する方法についてはこのWebサイトをご覧ください。</string>
     <string name="label_background_activity">バックアップアクティビティ</string>
     <string name="restore_miui_warning">MIUI最適化が有効な場合はバックアップ・復元が正常に機能しない恐れがあります。</string>
@@ -552,6 +558,7 @@
     <string name="getting_started_guide">入門ガイド</string>
     <string name="pref_tablet_ui_mode">タブレットUI</string>
     <string name="action_track">追跡</string>
+    <string name="pref_remove_exclude_categories">除外されるカテゴリー</string>
     <string name="pref_hide_threshold">メニューを自動非表示するスクロール量</string>
     <string name="theme_tealturquoise">青緑&amp;土耳古石</string>
     <string name="pref_category_appearance">外観</string>
@@ -588,13 +595,12 @@
     <string name="on_hiatus">休載中</string>
     <string name="action_faq_and_guides">よくあるご質問とガイド</string>
     <string name="action_display_cover_only_grid">表紙グリッド</string>
-    <string name="action_filter_started">開始済み</string>
     <string name="pref_update_only_started">読み始めていない</string>
     <string name="skipped_reason_not_caught_up">未読の章がある為スキップしました</string>
     <string name="pref_landscape_zoom">横長の画像に自動でズームイン</string>
     <string name="skipped_reason_completed">完結済みの為スキップしました</string>
     <string name="skipped_reason_not_started">読了した章がない為スキップしました</string>
-    <string name="pref_navigate_pan">タップで幅広い画像を左右に移動</string>
+    <string name="pref_navigate_pan">幅広い画像を左右に移動</string>
     <string name="notification_update_skipped">%1$d件の更新がスキップされました</string>
     <string name="learn_more">タップでもっと詳しく</string>
     <string name="channel_skipped">スキップ済み</string>
@@ -607,15 +613,12 @@
     <string name="update_check_fdroid_migration_info">公式リリースで新しいバージョンが取得可能です。非公式のF-Droidリリースからの移行については、タップで手順をご覧ください。</string>
     <string name="error_saving_picture">画像の保存時にエラー発生</string>
     <string name="action_close">閉じる</string>
-    <string name="pref_duplicate_pinned_sources">ピン留め中のソースを重複して表示</string>
     <string name="pref_clear_webview_data">WebViewデータを消去</string>
     <string name="webview_data_deleted">WebViewデータを消去しました</string>
-    <string name="battery_not_low">バッテリー残量が十分な場合</string>
-    <string name="pref_duplicate_pinned_sources_summary">各言語グループでもピン留め済みのソースを重複して表示します</string>
     <string name="source_empty_screen">ソースが見つかりません</string>
     <string name="source_filter_empty_screen">インストール済みのソースが見つかりません</string>
     <string name="action_sort_unread_count">未読の章数</string>
-    <string name="split_tall_images_summary">ビューアのパフォーマンスを改善します</string>
+    <string name="split_tall_images_summary">ビューアのパフォーマンスを向上させます</string>
     <string name="download_notifier_split_page_not_found">分割時にページ%dが見つかりませんでした</string>
     <string name="pref_reset_viewer_flags">シリーズ別のビューア設定をリセット</string>
     <string name="pref_reset_viewer_flags_summary">各シリーズのビューアモードと画面向きをリセットします</string>
@@ -669,7 +672,7 @@
     <string name="invalid_location">無効な場所: %s</string>
     <string name="unknown_title">不明なタイトル</string>
     <string name="error_user_agent_string_invalid">ユーザー エージェント文字列が無効です</string>
-    <string name="crash_screen_title">予期せぬエラーが発生しました</string>
+    <string name="crash_screen_title">おっと！</string>
     <string name="updates_last_update_info_just_now">ちょうど今</string>
     <string name="crash_screen_restart_application">アプリケーションを再起動</string>
     <string name="pref_reader_summary">ビューアモード、表示、ナビゲーション</string>
@@ -680,7 +683,7 @@
     <string name="pref_security_summary">アプリロック、セキュア画面</string>
     <string name="pref_advanced_summary">クラッシュ ログのダンプ、バッテリーの最適化</string>
     <string name="pref_appearance_summary">テーマ、日付と時刻の形式</string>
-    <string name="pref_library_summary">カテゴリ、グローバル アップデート</string>
+    <string name="pref_library_summary">カテゴリ、グローバル アップデート、章の間のスワイプ</string>
     <string name="action_open_random_manga">おまかせ閲覧</string>
     <string name="information_no_entries_found">このカテゴリに項目がありません</string>
     <string name="download_notifier_cache_renewal">ダウンロード内容を検査しています</string>
@@ -732,7 +735,7 @@
     <string name="overlay_header">オーバーレイ</string>
     <string name="pref_page_rotate">画面に合わせるように幅広いページを回転</string>
     <string name="pref_page_rotate_invert">回転した幅広いページの向きを反転</string>
-    <plurals name="missing_items">
+    <plurals name="missing_chapters">
         <item quantity="other">%1$s章が欠けています</item>
     </plurals>
     <string name="pref_debug_info">デバッグ情報</string>
@@ -752,7 +755,7 @@
     </plurals>
     <string name="skipped_reason_not_in_release_period">今日、連載更新が予想されていないためスキップしました</string>
     <string name="manga_modify_calculated_interval_title">間隔を設定</string>
-    <string name="has_results">実績あり</string>
+    <string name="has_results">結果あり</string>
     <string name="track_delete_title">%s の追跡を削除しますか\?</string>
     <string name="manga_display_interval_title">毎に評価</string>
     <string name="manga_display_modified_interval_title">ごとに更新するように設定する</string>
@@ -767,4 +770,10 @@
     <string name="library_sync_complete">ライブラリを同期しました</string>
     <string name="information_cloudflare_help">Cloudflareに関するヘルプ情報はこちら</string>
     <string name="download_cache_invalidated">ダウンロード インデックスを消去しました</string>
+    <string name="create_backup_file_error">バックアップ ファイルを作成できませんでした</string>
+    <string name="track_activity_name">トラッキング サービスにログイン</string>
+    <string name="licensed_manga_chapters_error">ライセンス制限あり—章を表示できません</string>
+    <string name="exception_http">HTTP %d、WebViewでこのWebサイトを確認してください</string>
+    <string name="exception_offline">インターネット接続がありません</string>
+    <string name="exception_unknown_host">%sにアクセスできませんでした</string>
 </resources>

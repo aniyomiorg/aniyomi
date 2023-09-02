@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nosaukums</string>
+    <string name="categories">Kategorijas</string>
     <string name="chapters">Nodaļas</string>
     <string name="track">Izsekošana</string>
     <string name="history">Vēsture</string>
     <string name="label_settings">Iestatījumi</string>
+    <string name="label_download_queue">Lejupieladēšanas rinda</string>
     <string name="label_library">Bibliotēka</string>
     <string name="label_recent_manga">Vēsture</string>
     <string name="label_recent_updates">Atjauninājumi</string>
@@ -93,6 +95,8 @@
     <string name="tapping_inverted_none">Nav</string>
     <string name="pref_read_with_tapping_inverted">Invertētas skāriena zonas</string>
     <string name="channel_ext_updates">Paplašinājumu atjauninājumi</string>
+    <string name="channel_new_chapters">Nodaļu atjauninājumi</string>
+    <string name="download_notifier_download_paused">Lejupielādes pauzētas</string>
     <string name="information_no_downloads">Nav lejuplāžu</string>
     <string name="label_help">Palīdzība</string>
     <string name="label_migration">Migrēt</string>
@@ -161,6 +165,7 @@
     <string name="action_display_show_number_of_items">Parādīt lietu skaitu</string>
     <string name="updating_library">Atjauninās bibliotēka</string>
     <string name="action_filter_tracked">Izsekots</string>
+    <string name="default_category">Noklusētā kategorija</string>
     <string name="action_search_settings">Meklēt Uzstādījumos</string>
     <string name="completed">Pabeigts</string>
     <string name="licensed">Licencēts</string>
@@ -265,10 +270,10 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="pref_dark_theme_pure_black">Pilnīgi melns tumšais režīms</string>
     <string name="pref_app_language">Aplikācijas valoda</string>
-    <string name="battery_not_low">Ja akumalators nav zems</string>
     <string name="pref_update_only_started">Kas nav sāktas</string>
     <string name="default_category_summary">Vienmēr jautāt</string>
     <string name="categorized_display_settings">Kategorijas iestatījumi kārtošanai un rādīšanai</string>
+    <string name="pref_library_update_categories_details">Izslēgto kategoriju ieraksti netiks atjaunināti, pat ja tie ir iekļautajās kategorijās.</string>
     <string name="none">Neviens</string>
     <string name="include">Iekļaut: %s</string>
     <string name="ext_update_all">Atjaunināt visu</string>
@@ -324,6 +329,8 @@
     <string name="white_background">Balts</string>
     <string name="vertical_plus_viewer">Nepārtraukta vertikāle</string>
     <string name="pref_webtoon_side_padding">Sānu platums</string>
+    <string name="pref_remove_exclude_categories">Izslēgtās kategorijas</string>
+    <string name="action_display_local_badge">Lokālais avots</string>
     <string name="pref_create_folder_per_manga">Saglabāt lappuses atsevišķās mapēs</string>
     <string name="nav_zone_prev">Iepriekšējais</string>
     <string name="pref_viewer_type">Noklusējuma lasīšanas režīms</string>
@@ -405,6 +412,8 @@
     <string name="pref_dns_over_https">Izvēlēties DNS pār HTTPS (DoH)</string>
     <string name="cookies_cleared">Sīkfaili notīrīti</string>
     <string name="cache_delete_error">Tīrīšanas laikā radās kļūda</string>
+    <string name="pref_clear_database">Notīrīt datu bāzi</string>
+    <string name="pref_clear_database_summary">Dzēst vēsturi ierakstiem, kas nav saglabāti jūsu bibliotēkā</string>
     <string name="pref_reset_viewer_flags">Atiestatīt atsevišķu sēriju lasītāja iestatījumus</string>
     <string name="pref_reset_viewer_flags_summary">Atiestatīt katras sērijas lasīšanas režīmu un orientāciju</string>
     <string name="pref_tablet_ui_mode">Planšetdatora lietotāja interfeiss</string>
@@ -451,7 +460,6 @@
     <string name="pager_viewer">Lapaspušu skats</string>
     <string name="logout">Izrakstīties</string>
     <string name="pinned_sources">Piesprausts</string>
-    <string name="http_error_hint">Pārbaudīt tīmekļa vietni šeit: WebView</string>
     <string name="other_source">Citi</string>
     <string name="logout_success">Tagad jūs esat izrakstījies</string>
     <string name="tabs_header">Cilnes</string>
@@ -497,6 +505,7 @@
     <string name="pref_clear_history">Notīrīt vēsturi</string>
     <string name="share_page_info">%1$s: %2$s, lapa %3$d</string>
     <string name="manga_added_library">Pievienots bibliotēkai</string>
+    <string name="snack_add_to_library">Pievienot bibliotēkai\?</string>
     <string name="show_title">Avota nosaukums</string>
     <string name="manga_cover">Vāks</string>
     <string name="on_hold">Aizturēts</string>
@@ -656,7 +665,6 @@
     <string name="download_queue_error">Nevarēja lejupielādēt nodaļas. Varat mēģināt vēlreiz lejupielādes sadaļā</string>
     <string name="getting_started_guide">Darba sākšanas rokasgrāmata</string>
     <string name="information_empty_category_dialog">Jums vēl nav nevienas kategorijas.</string>
-<string name="label_download_queue">Lejupieladēšanas rinda</string>
     <string name="error_user_agent_string_invalid">Nederīga lietotāja agent virkne</string>
     <string name="pref_skip_dupe_chapters">Izlaist vienādas nodaļas</string>
     <string name="track_remove_finish_date_conf_text">Tādējādi no %s tiks noņemts iepriekš atlasītais beigu datums</string>
@@ -717,12 +725,11 @@
     <string name="hour_short">%dh</string>
     <string name="internal_error">InternalError: Par plašāku informāciju skatiet avārijas žurnālu</string>
     <string name="delete_category_confirmation">Vai vēlaties dzēst kategoriju \"%s\"\?</string>
-    <plurals name="missing_items">
+    <plurals name="missing_chapters">
         <item quantity="zero">Trūkst %1$s nodaļu</item>
         <item quantity="one">Trūkst %1$s nodaļa</item>
         <item quantity="other">Trūkst %1$s nodaļas</item>
     </plurals>
-    <string name="missing_items_unknown">Iespējams, trūkst nodaļu</string>
     <plurals name="download_amount">
         <item quantity="zero">Nākošā %d nodaļa</item>
         <item quantity="one">Nākošā %d nodaļa</item>
@@ -744,7 +751,6 @@
         <item quantity="one">Nākamā nelasītā nodaļa</item>
         <item quantity="other">Nākamās %d nelasītas nodaļas</item>
     </plurals>
-    <string name="pref_worker_info">Worker info</string>
     <string name="action_not_now">Ne tagad</string>
     <string name="action_search_hint">Meklē…</string>
     <string name="fdroid_warning">F-Droid versijas netiek oficiāli atbalstītas.
@@ -763,4 +769,4 @@
     <string name="label_titles_in_global_update">Globālajā atjauninājumā</string>
     <string name="label_total_chapters">Kopā</string>
     <string name="information_required_plain">*obligāti</string>
-    </resources>
+</resources>

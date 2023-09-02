@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Navn</string>
-    <string name="manga">Manga</string>
+    <string name="categories">Kategorier</string>
+    <string name="manga">Bibliotekoppføringer</string>
     <string name="chapters">Kapitler</string>
     <string name="history">Historikk</string>
     <string name="label_settings">Innstillinger</string>
+    <string name="label_download_queue">Nedlastingskø</string>
     <string name="label_library">Bibliotek</string>
     <string name="label_recent_manga">Historikk</string>
     <string name="label_recent_updates">Oppdateringer</string>
@@ -14,7 +16,6 @@
     <string name="label_extension_info">Utvidelsesinfo</string>
     <string name="action_settings">Innstillinger</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Nedlastet</string>
     <string name="action_filter_bookmarked">Bokmerket</string>
     <string name="action_filter_unread">Ulest</string>
     <string name="action_filter_empty">Fjern filter</string>
@@ -73,6 +74,7 @@
     <string name="update_weekly">Ukentlig</string>
     <string name="all">Alle</string>
     <string name="charging">Lading</string>
+    <string name="default_category">Standard kategori</string>
     <string name="default_category_summary">Alltid spør</string>
     <string name="ext_update">Oppdater</string>
     <string name="ext_install">Installer</string>
@@ -102,7 +104,7 @@
     <string name="pref_crop_borders">Beskjær kanter</string>
     <string name="pref_custom_brightness">Egendefinert lysstyrke</string>
     <string name="pref_custom_color_filter">Egendefinert fargefilter</string>
-    <string name="pref_skip_read_chapters">Hopp over kapitler markert som leste</string>
+    <string name="pref_skip_read_chapters">Hopp over kapitler markert som lest</string>
     <string name="pref_read_with_volume_keys">Lydstyrkejusteringstaster</string>
     <string name="pref_read_with_volume_keys_inverted">Inverter lydstyrketaster</string>
     <string name="pref_read_with_long_tap">Vis handlinger ved langt trykk</string>
@@ -110,10 +112,10 @@
     <string name="white_background">Hvit</string>
     <string name="black_background">Svart</string>
     <string name="pref_viewer_type">Standard lesemodus</string>
-    <string name="left_to_right_viewer">Venstre til høyre</string>
-    <string name="right_to_left_viewer">Høyre til venstre</string>
-    <string name="vertical_viewer">Loddrett</string>
-    <string name="webtoon_viewer">Nett-tegneserie</string>
+    <string name="left_to_right_viewer">Sider (venstre til høyre)</string>
+    <string name="right_to_left_viewer">Sider (høyre til venstre)</string>
+    <string name="vertical_viewer">Sider (loddrett)</string>
+    <string name="webtoon_viewer">Lang stripe</string>
     <string name="pref_image_scale_type">Skalatype</string>
     <string name="scale_type_fit_screen">Tilpass skjerm</string>
     <string name="scale_type_stretch">Strekk</string>
@@ -165,6 +167,8 @@
     <string name="cache_delete_error">Feil oppstod under opprensing</string>
     <string name="pref_clear_cookies">Tøm informasjonskapsler</string>
     <string name="cookies_cleared">Informasjonskapsler slettet</string>
+    <string name="pref_clear_database">Tøm database</string>
+    <string name="pref_clear_database_summary">Slett historikk for oppføringer som ikke er lagret i biblioteket ditt</string>
     <string name="clear_database_completed">Oppføringer slettet</string>
     <string name="pref_refresh_library_tracking">Oppdater sporing</string>
     <string name="version">Versjon</string>
@@ -177,7 +181,6 @@
     <string name="login_success">Innlogget</string>
     <string name="unknown_error">Ukjent feil</string>
     <string name="updating_category">Oppdaterer kategori</string>
-    <string name="local_source_badge">Lokal</string>
     <string name="no_more_results">Ingen flere resultater</string>
     <string name="local_source">Lokal kilde</string>
     <string name="other_source">Andre</string>
@@ -196,6 +199,8 @@
     <string name="source_not_installed">Kilde ikke installert: %1$s</string>
     <string name="display_mode_chapter">Kapittel %1$s</string>
     <string name="chapter_downloading_progress">Laster ned (%1$d/%2$d)</string>
+    <string name="chapter_error">Feil</string>
+    <string name="chapter_paused">Pauset</string>
     <string name="show_title">Kildetittel</string>
     <string name="show_chapter_number">Kapittelnummer</string>
     <string name="sort_by_source">Etter kilde</string>
@@ -214,11 +219,11 @@
     <string name="title">Tittel</string>
     <string name="status">Status</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Startet</string>
     <string name="track_type">Type</string>
     <string name="error_category_exists">En kategori ved dette navnet finnes allerede!</string>
     <string name="snack_categories_deleted">Kategorier slettet</string>
     <string name="dialog_with_checkbox_remove_description">Lesningsdato for dette kapittelet vil bli fjernet. Er du sikker\?</string>
+    <string name="snack_add_to_library">Legg til i bibliotek\?</string>
     <string name="picture_saved">Bilde lagret</string>
     <string name="custom_filter">Egendefinert filter</string>
     <string name="set_as_cover">Sett som omslag</string>
@@ -244,7 +249,7 @@
     <string name="filter_mode_screen">Skjerm</string>
     <string name="label_help">Hjelp</string>
     <string name="action_display_download_badge">Last ned kapitler</string>
-    <string name="pref_library_columns">Elementer per rad</string>
+    <string name="pref_library_columns">Rutenettstørrelse</string>
     <string name="pref_double_tap_anim_speed">Animasjonshastighet ved dobbelklikk</string>
     <string name="pager_viewer">Sider</string>
     <string name="confirm_set_image_as_cover">Bruk dette bildet som omslag\?</string>
@@ -267,6 +272,7 @@
     <string name="download_notifier_unknown_error">Kunne ikke laste ned kapittel grunnet uventet feil</string>
     <string name="download_notifier_text_only_wifi">Ingen trådløstilkobling tilgjengelig</string>
     <string name="download_notifier_no_network">Ingen nettverkstilkobling tilgjengelig</string>
+    <string name="download_notifier_download_paused">Nedlastinger pauset</string>
     <string name="pref_color_filter_mode">Blandingsmodus for fargefilter</string>
     <string name="filter_mode_overlay">Overlegg</string>
     <string name="filter_mode_multiply">Multiplisere</string>
@@ -304,6 +310,7 @@
         <item quantity="other">Etter %1$s minutter</item>
     </plurals>
     <string name="secure_screen">Sikker skjerm</string>
+    <string name="channel_new_chapters">Kapitteloppdateringer</string>
     <string name="notification_chapters_single">Kapittel %1$s</string>
     <string name="email">E-postadresse</string>
     <string name="in_library">I biblioteket</string>
@@ -326,8 +333,8 @@
     <string name="creating_backup_error">Sikkerhetskopiering mislyktes</string>
     <string name="pref_category_reading">Leser</string>
     <string name="pref_always_show_chapter_transition">Alltid vis kapittelovergang</string>
-    <string name="vertical_plus_viewer">Kontinuerlig loddrett</string>
-    <string name="pref_skip_filtered_chapters">Hopp over filtrerte kapittel</string>
+    <string name="vertical_plus_viewer">Lang stripe med mellomrom</string>
+    <string name="pref_skip_filtered_chapters">Hopp over filtrerte kapitler</string>
     <string name="hide_notification_content">Skjul merknadsinnhold</string>
     <string name="secure_screen_summary">Sikker skjerm skjuler programinnhold ved bytting av programmer og blokker skjermavbildninger</string>
     <string name="confirm_exit">Trykk \"Tilbake\" igjen for å avslutte</string>
@@ -352,7 +359,7 @@
     <string name="action_migrate">Flytt</string>
     <string name="action_start">Start</string>
     <string name="tapping_inverted_both">Begge</string>
-    <string name="tapping_inverted_vertical">loddrett</string>
+    <string name="tapping_inverted_vertical">Loddrett</string>
     <string name="tapping_inverted_horizontal">vannrett</string>
     <string name="tapping_inverted_none">Ingen</string>
     <plurals name="notification_chapters_generic">
@@ -373,7 +380,6 @@
     <string name="unknown_status">Ukjent status</string>
     <string name="unknown_author">Ukjent forfatter</string>
     <string name="local_source_help_guide">Lokal kildeguide</string>
-    <string name="http_error_hint">Sjekk nettsted i WebView</string>
     <plurals name="download_queue_summary">
         <item quantity="one">%1$s gjenstående</item>
         <item quantity="other">%1$s gjenstående</item>
@@ -416,7 +422,6 @@
     <string name="notification_chapters_single_and_more">Kapittel %1$s og %2$d til</string>
     <string name="no_pinned_sources">Du har ingen festede kilder</string>
     <string name="channel_progress">Framdrift</string>
-    <string name="download_notifier_download_finish">Nedlastet</string>
     <string name="ext_nsfw_warning">Kan inneholde innhold for 18+</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Dette forhindrer ikke uoffisielle eller potensielt feilaktig kategoriserte tillegg fra å vise innhold for 18+ i appen.</string>
@@ -503,6 +508,7 @@
     <string name="action_sort_chapter_fetch_date">Dato hentet</string>
     <string name="pref_download_new_categories_details">Oppføringer i utelukkede kategorier vil ikke bli nedlastet selv om de også er i inkluderte kategorier.</string>
     <string name="pref_category_auto_download">Last ned automatisk</string>
+    <string name="pref_library_update_categories_details">Oppførninger i utelukkede kategorier vil ikke bli oppdatert selv om de også er i inkluderte kategorier.</string>
     <string name="action_show_errors">Trykk for å se detaljer</string>
     <string name="clipboard_copy_error">Kunne ikke kopiere til utklippstavlen</string>
     <string name="update_check_eol">Denne Android-versjonen støttes ikke lenger</string>
@@ -531,6 +537,7 @@
     <string name="action_track">Spor</string>
     <string name="enhanced_services">Forbedrede tjenester</string>
     <string name="tracking_guide">Sporingsveiledning</string>
+    <string name="pref_remove_exclude_categories">Utelukkede kategorier</string>
     <string name="pref_lowest">Laveste</string>
     <string name="pref_low">Lav</string>
     <string name="pref_high">Høy</string>
@@ -565,8 +572,8 @@
     <string name="theme_strawberrydaiquiri">Jordbær-Daiquiri</string>
     <string name="theme_midnightdusk">Midnattsskumring</string>
     <string name="theme_greenapple">Grønt eple</string>
+    <string name="action_display_local_badge">Lokal kilde</string>
     <string name="error_no_match">Ingen treff funnet</string>
-    <string name="tracker_komga_warning">Denne trackeren er kun kompatibel med Komga-kilder.</string>
     <string name="notification_incognito_text">Skru av inkognito-modus</string>
     <string name="help_translate">Bistå oversettelsen</string>
     <string name="pref_library_update_refresh_trackers_summary">Oppdater trackere ved oppdatering av bibliotek</string>
@@ -599,7 +606,6 @@
     <string name="skipped_reason_not_caught_up">Hoppet over fordi det er uleste kapitler</string>
     <string name="skipped_reason_completed">Hoppet over fordi serien er fullført</string>
     <string name="library_errors_help">For hjelp til å fikse bibliotekoppdateringsfeil, se %1$s</string>
-    <string name="action_filter_started">Startet</string>
     <string name="action_display_cover_only_grid">Kun omslags-rutenett</string>
     <string name="pref_update_only_started">Som ikke er påbegynt</string>
     <string name="pref_landscape_zoom">Zoom automatisk inn for brede bilder</string>
@@ -619,11 +625,8 @@
     <string name="error_saving_picture">Feil ved lagring av bilde</string>
     <string name="update_check_open">Åpne på GitHub</string>
     <string name="action_close">Lukk</string>
-    <string name="pref_duplicate_pinned_sources">Vis dupliserte festede kilder</string>
-    <string name="pref_duplicate_pinned_sources_summary">Gjenta festede kilder i sine respektive språkgrupper</string>
     <string name="pref_clear_webview_data">Slett WebView data</string>
     <string name="webview_data_deleted">WebView data slettet</string>
-    <string name="battery_not_low">Batteri er ikke lavt</string>
     <string name="empty_screen">Vel, dette er pinlig</string>
     <string name="pref_tracking_summary">Enveis fremdriftssynkronisering, forbedret synkronisering</string>
     <string name="pref_browse_summary">Kilder, utvidelser, globalt søk</string>
@@ -671,7 +674,7 @@
     <string name="delete_category_confirmation">Ønsker du å slette kategorien \"%s\"\?</string>
     <string name="delete_category">Slett kategori</string>
     <string name="internal_error">InternalError: Sjekk krasjlogger for mer informasjon</string>
-    <string name="crash_screen_title">En uventet feil oppstod</string>
+    <string name="crash_screen_title">Oops!</string>
     <string name="crash_screen_description">%s fikk en uventet feil. Vi foreslår at du deler krasjloggene i vår støttekanal på Discord.</string>
     <string name="pref_app_language">Appspråk</string>
     <string name="description_placeholder">Ingen beskrivelse</string>
@@ -694,12 +697,40 @@
     <string name="source_filter_empty_screen">Ingen installert kilde funnet</string>
     <string name="not_installed">Ikke installert</string>
     <string name="updates_last_update_info_just_now">Akkurat nå</string>
-    <string name="download_notifier_cache_renewal">Indeksering av nedlastinger</string>
+    <string name="download_notifier_cache_renewal">Sjekker nedlastinger</string>
     <string name="fdroid_warning">F-Droid-bygg er ikke offisielt støttet.
 \nTrykk for å finne ut mer.</string>
     <string name="information_no_entries_found">Fant ingen oppføringer i denne kategorien</string>
     <string name="action_open_random_manga">Åpne tilfeldig oppføring</string>
-<string name="label_download_queue">Nedlastingskø</string>
+    <string name="action_display_show_continue_reading_button">Fortsett å lese-knapp</string>
+    <string name="track_remove_date_conf_title">Fjerne dato\?</string>
+    <string name="track_remove_start_date_conf_text">Dette vil fjerne den tidligere valgte startdatoen fra %s</string>
+    <string name="track_remove_finish_date_conf_text">Dette vil fjerne den tidligere valgte sluttdatoen fra %s</string>
+    <string name="pref_invalidate_download_cache">Rydd ut nedlastingsindeksen</string>
+    <string name="pref_invalidate_download_cache_summary">Tving appen til å sjekke nedlastede kapitler på nytt</string>
+    <string name="label_started">Startet</string>
+    <string name="label_completed_titles">Fullførte oppføringer</string>
+    <string name="label_titles_section">Oppføringer</string>
+    <string name="label_used">Brukt</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%dt</string>
+    <string name="minute_short">%dm</string>
+    <string name="seconds_short">%ds</string>
+    <string name="label_stats">Statistikk</string>
+    <string name="label_total_chapters">Totalt</string>
+    <string name="label_downloaded">Nedlastet</string>
+    <string name="label_overview_section">Oversikt</string>
+    <string name="label_read_duration">Tid brukt</string>
+    <string name="label_titles_in_global_update">Globalt oppdaterte</string>
+    <string name="label_read_chapters">Lest</string>
+    <string name="label_tracked_titles">Tracket oppføringer</string>
+    <string name="label_mean_score">Snitt poengsum</string>
+    <string name="not_applicable">I/A</string>
+    <string name="label_local">Lokale</string>
+    <string name="label_tracker_section">Trackere</string>
+    <string name="action_not_now">Ikke nå</string>
+    <string name="information_no_manga_category">Kategorien er tom</string>
+    <string name="copied_to_clipboard_plain">Kopiert til utklippstavlen</string>
     <string name="enhanced_services_not_installed">Tilgjengelig, men kilden er ikke installert: %s</string>
     <string name="confirm_add_duplicate_manga">Du har en oppføring i biblioteket med samme navn.
 \n
@@ -716,12 +747,11 @@
     <string name="action_update_category">Oppdater kategori</string>
     <string name="split_tall_images">Del opp høye bilder</string>
     <string name="overlay_header">Elementer</string>
-    <plurals name="missing_items">
+    <plurals name="missing_chapters">
         <item quantity="one">Mangler %1$s kapittel</item>
         <item quantity="other">Mangler %1$s kapitler</item>
     </plurals>
-    <string name="missing_items_unknown">Kan mangle kapitler</string>
-    <string name="pref_page_rotate_invert">Vend sideretning for roterte brede sider</string>
+    <string name="pref_page_rotate_invert">Vend orienteringen av roterte brede sider</string>
     <string name="pref_page_rotate">Roter brede sider slik at de passer</string>
     <string name="pref_debug_info">Debug info</string>
     <string name="pref_library_columns_per_row">%d per rad</string>
@@ -756,4 +786,7 @@
     <string name="library_sync_complete">Biblioteksynkronisering fullført</string>
     <string name="information_cloudflare_help">Trykk her for å få hjelp med Cloudflare</string>
     <string name="download_cache_invalidated">Nedlastingsindeksen er ugyldiggjort</string>
+    <string name="create_backup_file_error">Kunne ikke opprette en backup-fil</string>
+    <string name="licensed_manga_chapters_error">Lisensiert - Ingen kapitler å vise</string>
+    <string name="track_activity_name">Sporingsinnlogging</string>
 </resources>

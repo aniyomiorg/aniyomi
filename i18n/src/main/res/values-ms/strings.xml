@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nama</string>
-    <string name="manga">Manga</string>
+    <string name="categories">Kategori</string>
+    <string name="manga">Entri pustaka</string>
     <string name="chapters">Bab-bab</string>
     <string name="track">Penjejakan</string>
     <string name="history">Sejarah</string>
     <string name="label_settings">Tetapan</string>
+    <string name="label_download_queue">Giliran muat turun</string>
     <string name="label_library">Pustaka</string>
     <string name="label_recent_manga">Sejarah</string>
     <string name="label_recent_updates">Kemas kini</string>
     <string name="label_backup">Sandaran dan memulih</string>
     <string name="action_settings">Tetapan</string>
     <string name="action_filter">Tapis</string>
-    <string name="action_filter_downloaded">Telah dimuat turun</string>
     <string name="action_filter_bookmarked">Ditanda</string>
     <string name="action_filter_unread">Belum dibaca</string>
     <string name="action_filter_empty">Kosongkan tapisan</string>
@@ -65,7 +66,7 @@
     <string name="pref_category_tracking">Penjejakan</string>
     <string name="pref_category_advanced">Lanjutan</string>
     <string name="pref_category_about">Tentang</string>
-    <string name="pref_library_columns">Kandungan setiap baris</string>
+    <string name="pref_library_columns">Saiz grid</string>
     <string name="portrait">Potret</string>
     <string name="landscape">Landskap</string>
     <string name="pref_library_update_interval">Kemas kini automatik</string>
@@ -79,6 +80,7 @@
     <string name="pref_library_update_restriction">Sekatan kemas kini automatik peranti</string>
     <string name="charging">Ketika mengecas</string>
     <string name="pref_update_only_non_completed">Dengan status \"Sudah selesai\"</string>
+    <string name="default_category">Kategori lalai</string>
     <string name="default_category_summary">Sentiasa tanya</string>
     <string name="pref_fullscreen">Skrin penuh</string>
     <string name="pref_page_transitions">Menggerakkan peralihan muka surat</string>
@@ -94,10 +96,10 @@
     <string name="white_background">Putih</string>
     <string name="black_background">Hitam</string>
     <string name="pref_viewer_type">Mod membaca lalai</string>
-    <string name="left_to_right_viewer">Kiri ke kanan</string>
-    <string name="right_to_left_viewer">Kanan ke kiri</string>
-    <string name="vertical_viewer">Menegak</string>
-    <string name="webtoon_viewer">Webtoon</string>
+    <string name="left_to_right_viewer">Muka surat (kiri ke kanan)</string>
+    <string name="right_to_left_viewer">Muka surat (kanan ke kiri)</string>
+    <string name="vertical_viewer">Muka surat (menegak)</string>
+    <string name="webtoon_viewer">Sebaris panjang</string>
     <string name="pref_image_scale_type">Skala</string>
     <string name="scale_type_fit_screen">Muat skrin</string>
     <string name="scale_type_stretch">Regang</string>
@@ -146,6 +148,8 @@
     <string name="cache_delete_error">Ralat berlaku ketika menghapus</string>
     <string name="pref_clear_cookies">Hapus cookies</string>
     <string name="cookies_cleared">Cookies dihapuskan</string>
+    <string name="pref_clear_database">Hapus pangkalan data</string>
+    <string name="pref_clear_database_summary">Hapus sejarah entri yang tidak disimpan di dalam pustaka</string>
     <string name="clear_database_completed">Entri dihapuskan</string>
     <string name="pref_refresh_library_tracking">Segar semula penjejakan</string>
     <string name="version">Versi</string>
@@ -158,7 +162,6 @@
     <string name="login_success">Log masuk berjaya</string>
     <string name="unknown_error">Ralat tidak diketahui</string>
     <string name="updating_category">mengemaskinikan kategori</string>
-    <string name="local_source_badge">Setempat</string>
     <string name="no_more_results">Tiada lagi hasil</string>
     <string name="local_source">Sumber setempat</string>
     <string name="other_source">Lain</string>
@@ -172,6 +175,8 @@
     <string name="delete_downloads_for_manga">Padam bab-bab yang dimuat turun?</string>
     <string name="display_mode_chapter">Bab %1$s</string>
     <string name="chapter_downloading_progress">Memuat turun (%1$d/%2$d)</string>
+    <string name="chapter_error">Ralat</string>
+    <string name="chapter_paused">Ditangguh</string>
     <string name="show_title">Tajuk sumber</string>
     <string name="show_chapter_number">Nombor bab</string>
     <string name="sort_by_source">Mengikut sumber</string>
@@ -191,6 +196,7 @@
     <string name="error_category_exists">Kategori dengan nama ini sudah wujud!</string>
     <string name="snack_categories_deleted">Kategori dipadam</string>
     <string name="dialog_with_checkbox_remove_description">Tarikh bacaan bab ini akan dipadam. Adakah anda pasti?</string>
+    <string name="snack_add_to_library">Tambah ke pustaka\?</string>
     <string name="action_display_download_badge">Bab dimuat turun</string>
     <string name="picture_saved">Gambar disimpan</string>
     <string name="custom_filter">Tapisan tersuai</string>
@@ -221,6 +227,7 @@
     <string name="download_notifier_unknown_error">Ralat tidak diketahui ketika memuat turun bab</string>
     <string name="download_notifier_text_only_wifi">Tiada sambungan Wi-Fi yang tersedia</string>
     <string name="download_notifier_no_network">Tiada sambungan rangkaian tersedia</string>
+    <string name="download_notifier_download_paused">Muat turun dihentikan sebentar</string>
     <string name="channel_common">Biasa</string>
     <string name="label_migration">Pindah sumber</string>
     <string name="label_extensions">Sambungan</string>
@@ -251,7 +258,6 @@
     <string name="source_not_installed">Sumber tidak dipasang: %1$s</string>
     <string name="repeating">Membaca semula</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Bermula</string>
     <string name="track_type">Jenis</string>
     <string name="transition_finished">Selesai:</string>
     <string name="transition_current">Sekarang:</string>
@@ -308,6 +314,7 @@
     <string name="pref_cutout_short">Tunjuk kandungan dalam kawasan bertakuk</string>
     <string name="information_cloudflare_bypass_failure">Gagal untuk memintas Cloudflare</string>
     <string name="information_webview_outdated">Sila kemas kini aplikasi WebView untuk keserasian yang lebih baik</string>
+    <string name="channel_new_chapters">Pengemaskinian bab</string>
     <string name="secure_screen_summary">Skrin keselamatan menyembunyikan kandungan aplikasi apabila menukar aplikasi dan sekat tangkapan skrin</string>
     <string name="pref_category_display">Paparan</string>
     <plurals name="notification_chapters_generic">
@@ -327,7 +334,7 @@
     <string name="email">Alamat e-mel</string>
     <string name="pref_always_show_chapter_transition">Sentiasa tunjuk peralihan bab</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="other">Untuk %d tajuk</item>
+        <item quantity="other">Untuk entri %d</item>
     </plurals>
     <string name="action_menu">Menu</string>
     <string name="action_newest">Terbaru</string>
@@ -338,10 +345,9 @@
         <item quantity="other">%d kemas kini sambungan tersedia</item>
     </plurals>
     <string name="channel_ext_updates">Kemas kini sambungan</string>
-    <string name="http_error_hint">Semak laman web dalam WebView</string>
     <string name="updating_library">Mengemas kini pustaka</string>
     <string name="pref_category_reading">Membaca</string>
-    <string name="vertical_plus_viewer">Menegak berterusan</string>
+    <string name="vertical_plus_viewer">Sebaris panjang dengan sela</string>
     <string name="pref_skip_filtered_chapters">Lingkau bab yang ditapis</string>
     <string name="action_select_inverse">Pilih songsang</string>
     <string name="label_sources">Sumber</string>
@@ -383,7 +389,7 @@
     <plurals name="restore_completed_message">
         <item quantity="other">Selesai dalam %1$s dengan %2$s ralat</item>
     </plurals>
-    <string name="tracking_info">Sinkron satu hala untuk kemas kini bab kemajuan dalam sistem penjejakan. Sediakan penjejakan untuk entri individu daripada butang penjejakan mereka.</string>
+    <string name="tracking_info">Menyelaras satu hala untuk kemas kini bab kemajuan dalam sistem penjejakan. Sediakan penjejakan untuk entri individu daripada butang penjejakan mereka.</string>
     <string name="pref_refresh_library_covers">Segar semula muka hadapan pustaka</string>
     <string name="sort_by_upload_date">Mengikut tarikh muat naik</string>
     <string name="label_data">Data</string>
@@ -428,7 +434,6 @@
         <item quantity="other">%d penjejak</item>
     </plurals>
     <string name="no_pinned_sources">Tiada sumber yang disematkan</string>
-    <string name="download_notifier_download_finish">Muat turun selesai</string>
     <string name="channel_progress">Kemajuan</string>
     <string name="channel_complete">Selesai</string>
     <string name="channel_errors">Ralat</string>
@@ -490,6 +495,7 @@
     <string name="exclude">Kecuali: %s</string>
     <string name="include">Hanya: %s</string>
     <string name="none">Tiada</string>
+    <string name="pref_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
     <string name="pref_download_new_categories_details">Entri di dalam kategori berkecuali tidak akan dimuat turun walaupun ianya ada di dalam kategori hanya.</string>
     <string name="pref_category_auto_download">Muat turun automatik</string>
     <string name="action_show_errors">Ketik untuk lihat butiran</string>
@@ -515,6 +521,7 @@
     <string name="pref_library_update_refresh_trackers_summary">Kemas kini penjejak ketika mengemaskini pustaka</string>
     <string name="pref_library_update_refresh_trackers">Segar semula penjejak secara automatik</string>
     <string name="restrictions">Sekatan: %s</string>
+    <string name="action_display_local_badge">Sumber setempat</string>
     <string name="off">Mati</string>
     <string name="on">Hidup</string>
     <string name="error_sharing_cover">Ralat berkongsi muka hadapan</string>
@@ -535,7 +542,6 @@
     <string name="pref_app_theme">Tema aplikasi</string>
     <string name="enhanced_tracking_info">Perkidmatan yang menyediakan fungsi yang dipertingkatkan untuk sumber tertentu. Entri akan dijejaki secara automatik apabila ditambahkan ke pustaka.</string>
     <string name="notification_updating">Mengemaskini pustaka… (%1$d/%2$d)</string>
-    <string name="tracker_komga_warning">Penjejak ini cuma boleh digunakan dengan sumber Komga.</string>
     <string name="restore_miui_warning">Sandaran/memulih mungkin tidak berfungsi dengan betul jika pengoptimuman MIUI dinyahaktifkan.</string>
     <string name="about_dont_kill_my_app">Sesetengah pengeluar ada sekatan tambahan pada aplikasi yang akan menghentikan perkidmatan latar belakang. Laman web ini ada maklumat cara membaikinya.</string>
     <string name="enhanced_services">Pertingkat perkhidmatan</string>
@@ -558,6 +564,7 @@
     <string name="action_track">Jejak</string>
     <string name="getting_started_guide">Panduan penggunaan</string>
     <string name="pref_tablet_ui_mode">UI tablet</string>
+    <string name="pref_remove_exclude_categories">Kategori dikecualikan</string>
     <string name="help_translate">Bantu menterjemah</string>
     <string name="ext_app_info">Maklumat aplikasi</string>
     <string name="ext_installer_legacy">Legasi</string>
@@ -580,7 +587,7 @@
     <string name="clear_database_source_item_count">%1$d entri bukan pustaka dalam pangkalan data</string>
     <string name="extension_api_error">Gagal mendapatkan senarai sambungan</string>
     <string name="privacy_policy">Dasar privasi</string>
-    <string name="pref_library_update_manga_restriction">Langkau mengemas kini tajuk</string>
+    <string name="pref_library_update_manga_restriction">Langkau mengemas kini entri</string>
     <string name="library_errors_help">Untuk bantuan cara menyelesaikan ralat kemas kini pustaka, lihat %1$s</string>
     <string name="save_chapter_as_cbz">Simpan sebagai arkib CBZ</string>
     <string name="cancelled">Dibatalkan</string>
@@ -608,12 +615,9 @@
     <string name="pref_clear_webview_data">Hapus data WebView</string>
     <string name="webview_data_deleted">Data WebView dihapuskan</string>
     <string name="action_close">Tutup</string>
-    <string name="pref_duplicate_pinned_sources_summary">Ulang sumber yang disematkan dalam kumpulan bahasa masing-masing</string>
-    <string name="battery_not_low">Apabila bateri tidak lemah</string>
-    <string name="pref_duplicate_pinned_sources">Tunjuk pendua sumber yang disematkan</string>
     <string name="source_filter_empty_screen">Tiada sumber dipasang ditemui</string>
     <string name="source_empty_screen">Tiada sumber ditemui</string>
-    <string name="action_sort_unread_count">Kiraan belum dibaca</string>
+    <string name="action_sort_unread_count">Bilangan belum dibaca</string>
     <string name="split_tall_images_summary">Meningkatkan prestasi pembaca</string>
     <string name="download_notifier_split_page_not_found">Muka surat %d tidak dijumpai ketika memisah</string>
     <string name="download_notifier_split_page_path_not_found">Lokasi fail muka surat %d tidak ditemui</string>
@@ -644,7 +648,7 @@
     <string name="pref_reset_user_agent_string">Set semula untaian ejen pengguna lalai</string>
     <string name="action_remove_everything">Buang semuanya</string>
     <string name="loader_rar5_error">Format RARv5 tidak disokong</string>
-    <string name="appwidget_unavailable_locked">Widget tidak tersedia apabila kekunci apl digunakan</string>
+    <string name="appwidget_unavailable_locked">Widget tidak tersedia apabila kekunci aplikasi digunakan</string>
     <string name="appwidget_updates_description">Lihat kemas kini entri pustaka terkini anda</string>
     <string name="update_already_running">Kemas kini sedang berjalan</string>
     <string name="error_user_agent_string_blank">Untaian ejen pengguna tidak boleh kosong</string>
@@ -665,14 +669,14 @@
     <string name="skipped_reason_not_always_update">Dilangkau kerana siri tidak memerlukan kemas kini</string>
     <string name="action_search_hint">Cari…</string>
     <string name="pref_appearance_summary">Tema, tarikh &amp; format masa</string>
-    <string name="pref_library_summary">Kategori, Kemas kini keseluruhan</string>
+    <string name="pref_library_summary">Kategori, Kemas kini keseluruhan, leret bab</string>
     <string name="pref_reader_summary">Mod membaca, paparan, navigasi</string>
     <string name="pref_downloads_summary">Muat turun automatik, muat turun maju</string>
-    <string name="pref_tracking_summary">Sinkron kemajuan satu hala, pertingkat sinkron</string>
+    <string name="pref_tracking_summary">Menyelaras kemajuan satu hala, pertingkat menyelaras</string>
     <string name="pref_backup_summary">Manual &amp; sandaran automatik</string>
     <string name="pref_advanced_summary">Kumpulan log kerosakan, pengoptimuman bateri</string>
     <string name="pref_security_summary">Kekunci aplikasi, skrin keselamatan</string>
-    <string name="crash_screen_title">Ralat Tidak Dijangka Berlaku</string>
+    <string name="crash_screen_title">Aduhai!</string>
     <string name="crash_screen_restart_application">Mulakan semula aplikasi</string>
     <string name="pref_browse_summary">Sumber, sambungan, carian keseluruhan</string>
     <string name="crash_screen_description">%s mengalami ralat tidak dijangka. Kami mencadangkan anda untuk kongsi log kerosakan pada Discord kami di saluran bantuan.</string>
@@ -682,14 +686,40 @@
     <string name="updates_last_update_info_just_now">Sebentar tadi</string>
     <string name="action_open_random_manga">Buka entri rawak</string>
     <string name="information_no_entries_found">Tiada entri dijumpai di kategori ini</string>
-    <string name="download_notifier_cache_renewal">Mengindeks muat turun</string>
+    <string name="download_notifier_cache_renewal">Menyemak muat turun</string>
     <string name="fdroid_warning">Binaan F-Droid tidak disokong secara rasmi.
 \nKetik untuk mengetahui lebih lanjut.</string>
-<string name="label_download_queue">Giliran muat turun</string>
+    <string name="action_display_show_continue_reading_button">Butang sambung membaca</string>
+    <string name="pref_invalidate_download_cache">Membatalkan indeks muat turun</string>
+    <string name="track_remove_date_conf_title">Buang tarikh\?</string>
+    <string name="track_remove_start_date_conf_text">Ini akan membuang tarikh mula yang dipilih oleh anda sebelum ini dari %s</string>
+    <string name="track_remove_finish_date_conf_text">Ini akan membuang tarikh selesai yang dipilih oleh anda sebelum ini dari %s</string>
+    <string name="pref_invalidate_download_cache_summary">Memaksa aplikasi untuk semak semula bab dimuat turun</string>
+    <string name="label_local">lokal</string>
+    <string name="label_downloaded">Dimuat turun</string>
+    <string name="label_titles_in_global_update">Dalam kemas kini keseluruhan</string>
+    <string name="label_total_chapters">Jumlah</string>
+    <string name="label_read_chapters">Dibaca</string>
+    <string name="label_tracked_titles">Entri dijejaki</string>
+    <string name="label_mean_score">Skor purata</string>
+    <string name="label_used">Digunakan</string>
+    <string name="label_stats">Statistik</string>
+    <string name="label_started">Dimulakan</string>
+    <string name="label_overview_section">Keseluruhan</string>
+    <string name="label_read_duration">Jangka bacaan</string>
+    <string name="label_titles_section">Entri</string>
+    <string name="label_tracker_section">Penjejak</string>
+    <string name="label_completed_titles">Entri yang sudah selesai</string>
+    <string name="not_applicable">N/A</string>
+    <string name="day_short">%dh</string>
+    <string name="hour_short">%dj</string>
+    <string name="minute_short">%dm</string>
+    <string name="seconds_short">%ds</string>
+    <string name="action_not_now">Bukan sekarang</string>
+    <string name="information_no_manga_category">Kategori kosong</string>
     <string name="pref_skip_dupe_chapters">Langkau bab pendua</string>
     <string name="enhanced_services_not_installed">Tersedia tetapi sumber tidak dipasang: %s</string>
     <string name="copied_to_clipboard_plain">Disalin ke papan keratan</string>
-    <string name="pref_worker_info">Maklumat Worker</string>
     <string name="track_error">%1$s ralat: %2$s</string>
     <string name="confirm_add_duplicate_manga">Entri di dalam pustaka anda mempunyai nama yang sama.
 \n
@@ -703,10 +733,9 @@
     <string name="action_update_category">Kemas kini kategori</string>
     <string name="split_tall_images">Memisah imej yang tinggi</string>
     <string name="overlay_header">Tindanan</string>
-    <plurals name="missing_items">
+    <plurals name="missing_chapters">
         <item quantity="other">Hilang %1$s bab</item>
     </plurals>
-    <string name="missing_items_unknown">Berkemungkinan ada bab yang hilang</string>
     <string name="pref_page_rotate_invert">Terbalikkan orientasi muka surat lebar yang diputarkan</string>
     <string name="pref_page_rotate">Putar muka surat lebar agar muat</string>
     <string name="pref_debug_info">Maklumat nyahpepijat</string>
@@ -727,7 +756,7 @@
     <plurals name="day">
         <item quantity="other">%d hari</item>
     </plurals>
-    <string name="manga_modify_calculated_interval_title">Tersuai Jarak Masa</string>
+    <string name="manga_modify_calculated_interval_title">Tersuai jarak masa</string>
     <string name="pref_update_only_in_release_period">Diluar jangkaan masa keluaran</string>
     <string name="manga_display_interval_title">Anggaran setiap</string>
     <string name="action_filter_interval_passed">Melepasi tempoh semak</string>
@@ -737,4 +766,14 @@
     <string name="track_delete_remote_text">Juga buang daripada %s</string>
     <string name="delete_downloaded">Padam dimuat turun</string>
     <string name="has_results">Mempunyai hasil</string>
+    <string name="create_backup_file_error">Tidak boleh menghasilkan fail sandaran</string>
+    <string name="licensed_manga_chapters_error">Berlesen - Tiada bab untuk ditayangkan</string>
+    <string name="exception_unknown_host">Tidak dapat mencapai %s</string>
+    <string name="syncing_library">Menyelaraskan pustaka</string>
+    <string name="library_sync_complete">Pustaka selesai diselaraskan</string>
+    <string name="exception_offline">Tiada sambungan Internet</string>
+    <string name="track_activity_name">Log masuk penjejakan</string>
+    <string name="download_cache_invalidated">Indeks muat turun tidak sah</string>
+    <string name="information_cloudflare_help">Ketik di sini untuk bantuan berkenaan Cloudflare</string>
+    <string name="exception_http">HTTP %d, semak laman web dalam WebView</string>
 </resources>
