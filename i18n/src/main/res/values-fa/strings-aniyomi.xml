@@ -83,7 +83,6 @@
     <string name="label_migration_manga">انتقال مانگا</string>
     <string name="settings">تنظیمات</string>
     <string name="stats_header">نمایش آمار و ارقام</string>
-    <string name="action_display_show_continue_reading_button">دکمه ادامه مشاهده/خواندن</string>
     <string name="player_aniskip_op">گذر از اوپنینگ</string>
     <string name="pref_show_next_episode_airing_time">نمایش زمان انتشار قسمت بعدی</string>
     <string name="used_cache_both">اشغال توسط انیمه: %1$s، اشغال توسط مانگا: %2$s</string>
