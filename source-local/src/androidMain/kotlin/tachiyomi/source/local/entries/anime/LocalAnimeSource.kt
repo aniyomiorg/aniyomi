@@ -200,8 +200,7 @@ actual class LocalAnimeSource(
         val duration = ffProbe.allLogsAsString.trim().toFloat()
         val second = duration.toInt() / 2
 
-        val coverFilename = coverPath.toFFmpegString(context)
-        com.arthenica.ffmpegkit.FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames 1 -q:v 2 \"$coverFilename\" -y")
+        com.arthenica.ffmpegkit.FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y")
 
         if (File(coverPath).exists()) {
             anime.thumbnail_url = coverPath
