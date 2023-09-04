@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.LintTask
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -29,8 +31,17 @@ android {
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
         buildConfigField("boolean", "PREVIEW", "false")
 
-        // Please disable ACRA or use your own instance in forked versions of the project
-        //buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
+        // Put these fields in acra.properties
+        val acraProperties = Properties()
+        rootProject.file("acra.properties")
+            .takeIf { it.exists() }
+            ?.let { acraProperties.load(FileInputStream(it)) }
+        val acraUri = acraProperties.getProperty("ACRA_URI", "")
+        val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
+        val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
+        buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
+        buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
+        buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS
