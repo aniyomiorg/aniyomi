@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "ACRA_URI=$acraUri" >> acra.properties
           echo "ACRA_LOGIN=$acraLogin" >> acra.properties
-          echo "ACRA_PASSWORD=acraPassword" >> acra.properties
+          echo "ACRA_PASSWORD=$acraPassword" >> acra.properties
 
       - name: Build app and run unit tests
         uses: gradle/gradle-command-action@v2
