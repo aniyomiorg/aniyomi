@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
+import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import tachiyomi.core.preference.PreferenceStore
 
 class BasePreferences(
@@ -19,8 +21,7 @@ class BasePreferences(
 
     fun extensionInstaller() = ExtensionInstallerPreference(context, preferenceStore)
 
-    // acra is disabled
-    fun acraEnabled() = preferenceStore.getBoolean("acra.enable", false)
+    fun acraEnabled() = preferenceStore.getBoolean("acra.enable", isPreviewBuildType || isReleaseBuildType)
 
     fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
 
