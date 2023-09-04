@@ -47,7 +47,7 @@
     <string name="action_display_download_badge_anime">Episode diunduh</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>
     <string name="action_display_local_badge_anime">Anime lokal</string>
-    <string name="action_display_show_continue_reading_button">Tampilkan tombol lanjutkan menonton/membaca</string>
+    <string name="action_display_show_continue_reading_button">Tombol lanjutkan menonton/membaca</string>
     <string name="action_order_by_episode_number">Dengan jumlah episode</string>
     <string name="action_start_download_externally">Gunakan pengunduhan eksternal</string>
     <string name="action_start_download_internally">Gunakan pengunduhan internal</string>
@@ -264,7 +264,7 @@
     <string name="pref_hide_in_manga_library_items">Sembunyikan entri manga yang sudah ada di pustaka</string>
     <string name="pref_hide_in_anime_library_items">Sembunyikan entri anime yang sudah ada di pustaka</string>
     <plurals name="download_amount_anime">
-        <item quantity="other">Episode selanjutnya</item>
+        <item quantity="other">%d Episode selanjutnya</item>
     </plurals>
     <string name="copied_video_link_to_clipboard">Tautan kualitas video yang disalin ke papan klip</string>
     <string name="choose_video_quality">Pilih kualitas video:</string>
@@ -272,4 +272,29 @@
     <string name="stats_header">Tampilkan statistik</string>
     <string name="action_save_screenshot">Tangkap layar disimpan</string>
     <string name="chapter_dialog_header">Geser untuk ke chapter</string>
+    <string name="data_saver_stop_exclude">Menghentikan pengecualian dari penghemat data</string>
+    <string name="data_saver_summary">Kompres gambar sebelum mengunduh atau memuat di pembaca</string>
+    <string name="data_saver_ignore_gif">Abaikan Animasi Gif</string>
+    <string name="data_saver_downloader">Gunakan penghemat data pada pengunduh</string>
+    <string name="data_saver_ignore_jpeg">Abaikan Gambar Jpeg</string>
+    <string name="data_saver_image_quality">Kualitas Gambar</string>
+    <string name="data_saver_image_format">Mengompres ke Jpeg</string>
+    <string name="bandwidth_data_saver_server">Server Proxy Bandwidth Hero</string>
+    <string name="data_saver_image_quality_summary">Nilai yang lebih tinggi berarti bahwa persentase kualitas gambar yang lebih tinggi disimpan, tetapi ini juga berarti ukuran file lebih besar, 80 persen adalah median yang baik antara ukuran file dan kualitas gambar</string>
+    <string name="pref_episode_swipe_end">Geser ke Kanan</string>
+    <string name="data_saver_exclude">Mengecualikan dari penghemat data</string>
+    <string name="data_saver_image_format_summary_off">Ukuran file Jpeg jauh lebih kecil daripada Webp (artinya lebih banyak data yang disimpan), tetapi itu membuat gambar kehilangan lebih banyak kualitas.
+\nSaat ini kompres ke Webp</string>
+    <string name="data_saver_server_summary">Letakkan url server Bandwidth Hero Proxy di sini</string>
+    <string name="data_saver_image_format_summary_on">Ukuran file Jpeg jauh lebih kecil daripada Webp (artinya lebih banyak data yang disimpan), tetapi itu membuat gambar kehilangan lebih banyak kualitas.
+\nSaat ini kompres ke Jpeg</string>
+    <string name="data_saver_color_bw">Konversi ke Hitam Putih</string>
+    <string name="bandwidth_hero">Bandwidth Hero (membutuhkan server Proxy Bandwidth Hero)</string>
+    <string name="resmush">resmush.it</string>
+    <string name="pref_episode_swipe">Geser episode</string>
+    <string name="pref_episode_swipe_start">Geser ke Kiri</string>
+    <string name="data_saver">Penghemat Data</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="pref_show_next_episode_airing_time">Tampilkan waktu tayang episode berikutnya</string>
+    <string name="pref_media_control_chapter_seeking">Gunakan kontrol media untuk mencari chapter</string>
 </resources>
