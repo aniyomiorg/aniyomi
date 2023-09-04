@@ -286,4 +286,20 @@
     <string name="action_save_screenshot">Salvar captura de tela</string>
     <string name="stats_header">Mostrar estatisticas</string>
     <string name="chapter_dialog_header">Procurar capítulo</string>
+    <string name="data_saver">Economia de dados</string>
+    <string name="data_saver_summary">Compactar imagens antes de baixar ou carregar no leitor</string>
+    <string name="bandwidth_hero">Bandwidth Hero (requer um servidor proxy Bandwidth Hero)</string>
+    <string name="go_to_previous_chapter">Capítulo anterior</string>
+    <string name="go_to_next_chapter">Próximo capítulo</string>
+    <string name="go_to_after_opening">Ignorar abertura</string>
+    <string name="data_saver_image_quality_summary">Valores mais altos significam que uma porcentagem maior da qualidade da imagem é salva, mas também significa que o tamanho do arquivo é maior, 80% é uma boa mediana entre o tamanho do arquivo e a qualidade da imagem</string>
+    <string name="data_saver_image_format">Comprimir para JPEG</string>
+    <string name="data_saver_color_bw">Converter para Preto e Branco</string>
+    <string name="data_saver_ignore_jpeg">Ignorar imagens JPEG</string>
+    <string name="data_saver_ignore_gif">Ignorar animações GIF</string>
+    <string name="data_saver_image_quality">Qualidade da imagem</string>
+    <string name="data_saver_image_format_summary_on">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
+\nAtualmente compacta para Jpeg</string>
+    <string name="data_saver_image_format_summary_off">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
+\nAtualmente compacta para Webp</string>
 </resources>

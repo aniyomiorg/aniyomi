@@ -268,7 +268,39 @@
     <string name="label_manga_sources">Mga Source ng Manga</string>
     <string name="label_anime_sources">Mga Source ng Anime</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one">Susunod na episode</item>
+        <item quantity="other">Susunod na %d (mga) episode</item>
     </plurals>
+    <string name="extension_settings">Mga Setting ng extension</string>
+    <string name="pref_episode_swipe">Pag-swipe ng episode</string>
+    <string name="pref_episode_swipe_end">Mag-swipe ng pakanang pagkilos</string>
+    <string name="data_saver_stop_exclude">Itigil ang di-pagsali mula sa data saver</string>
+    <string name="data_saver_summary">I-compress ang mga imahe bago mag-download o mag-load sa reader</string>
+    <string name="data_saver_downloader">Gumamit ng data saver sa downloader</string>
+    <string name="data_saver_ignore_jpeg">Di-pansinin ang mga imaheng Jpeg</string>
+    <string name="data_saver_ignore_gif">Di-pansinin ang mga Gif Animation</string>
+    <string name="data_saver_image_quality">Quality ng Imahe</string>
+    <string name="data_saver_image_format">I-compress sa Jpeg</string>
+    <string name="data_saver_image_format_summary_on">Ang laki ng file na Jpeg ay mas maliit kaysa sa Webp ay (ibig sabihin, mas maraming data ang nai-save), ngunit ginagawa nitong mas mawalan din ng kalidad ang mga imahe.
+\nKasalukuyang nag-compress sa Jpeg</string>
+    <string name="data_saver_color_bw">I-convert sa Itim at Puti</string>
+    <string name="bandwidth_hero">Bandwidth Hero (kinakailangan ng Bandwidth Hero Proxy server)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="data_saver_server_summary">Ilagay ang server url ng Bandwidth Hero Proxy dito</string>
+    <string name="pref_show_next_episode_airing_time">Ipakita ang oras ng pag-ere ng susunod na episode</string>
+    <string name="data_saver_image_quality_summary">Ang mas mataas na mga halaga ay nangangahulugan na ang isang mas mataas na porsyento ng kalidad ng imahe ay nai-save, ngunit nangangahulugan din ito na ang laki ng file ay mas malaki, 80 porsyento ay isang magandang median sa pagitan ng laki ng file at kalidad ng imahe.</string>
+    <string name="data_saver_image_format_summary_off">Ang laki ng file na Jpeg ay mas maliit kaysa sa Webp ay (ibig sabihin, mas maraming data ang nai-save), ngunit ginagawa nitong mas mawalan din ng kalidad ang mga imahe.
+\nKasalukuyang nagko-compress sa Webp</string>
+    <string name="pref_episode_swipe_start">Mag-swipe ng pakaliwang pagkilos</string>
+    <string name="data_saver_exclude">Hindi isali sa data saver</string>
+    <string name="copied_video_link_to_clipboard">Kopyahin ang quality ng video link sa clipboard</string>
+    <string name="choose_video_quality">Pumili ng quality ng video:</string>
+    <string name="data_saver">Data Saver</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="stats_header">Ipakita ang statistika</string>
+    <string name="pref_hide_in_manga_library_items">Itago ang mga entry na nasa library na</string>
+    <string name="pref_hide_in_anime_library_items">Itago ang mga entry na nasa library</string>
+    <string name="chapter_dialog_header">Mag-seek sa chapter</string>
+    <string name="action_save_screenshot">I-save ang screenshot</string>
 </resources>

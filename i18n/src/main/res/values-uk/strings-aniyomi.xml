@@ -99,7 +99,7 @@
     <string name="action_view_episodes">Переглянути епізоди</string>
     <string name="action_display_download_badge_anime">Завантажені епізоди</string>
     <string name="action_show_anime">Показати аніме</string>
-    <string name="action_display_show_continue_reading_button">Показати кнопку продовження перегляду/читання</string>
+    <string name="action_display_show_continue_reading_button">Кнопка продовжити перегляд/читання</string>
     <string name="action_start_download_externally">Використати зовнішній завантажувач</string>
     <string name="label_watched_episodes">Переглянуто</string>
     <string name="action_filter_unseen">Не переглянуто</string>
@@ -293,4 +293,33 @@
     <string name="action_save_screenshot">Зберегти знімок екрана</string>
     <string name="stats_header">Показати статистику</string>
     <string name="chapter_dialog_header">Перейти до розділу</string>
+    <string name="data_saver_downloader">Використовувати зберігач даних у завантажувачі</string>
+    <string name="data_saver_exclude">Виключити зі зберігача даних</string>
+    <string name="data_saver_stop_exclude">Зупинити виключення зі зберігача даних</string>
+    <string name="data_saver_ignore_jpeg">Ігнорувати зображення Jpeg</string>
+    <string name="data_saver_image_format_summary_off">Розмір файлу Jpeg значно менший, ніж Webp (тобто зберігається більше даних), але це також робить зображення якіснішими.
+\nВ даний час стискає Webp</string>
+    <string name="data_saver_image_quality_summary">Більші значення означають, що зберігається більший відсоток якості зображення, але це також означає, що розмір файлу більший, 80 відсотків — хороша середина між розміром файлу та якістю зображення</string>
+    <string name="pref_episode_swipe_end">Проведіть пальцем праворуч</string>
+    <string name="pref_episode_swipe_start">Проведіть пальцем ліворуч</string>
+    <string name="data_saver">Зберігач даних</string>
+    <string name="data_saver_summary">Стисніть зображення перед завантаженням або завантаженням у читачі</string>
+    <string name="data_saver_ignore_gif">Ігнорувати Gif анімації</string>
+    <string name="data_saver_image_quality">Якість зображення</string>
+    <string name="data_saver_image_format">Стиснути до Jpeg</string>
+    <string name="data_saver_image_format_summary_on">Розмір файлу Jpeg значно менший, ніж Webp (тобто зберігається більше даних), але це також робить зображення якіснішими.
+\nВ даний час стискає до Jpeg</string>
+    <string name="data_saver_color_bw">Перетворити на чорно-білий</string>
+    <string name="bandwidth_hero">Bandwidth Hero (потрібен проксі-сервер Bandwidth Hero)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_data_saver_server">Проксі-сервер Bandwidth Hero</string>
+    <string name="data_saver_server_summary">Помістіть URL-адресу проксі-сервера Bandwidth Hero тут</string>
+    <string name="pref_show_next_episode_airing_time">Показати час показу наступного епізоду</string>
+    <string name="pref_episode_swipe">Пропустити епізод</string>
+    <string name="pref_media_control_chapter_seeking_summary">Якщо увімкнено, використання наступного призведе до натискання кнопки пропустити вступ, якщо не знайдено розділів</string>
+    <string name="pref_media_control_chapter_seeking">Шукати розділи з елементами керування медіа</string>
+    <string name="go_to_next_chapter">Наступний розділ</string>
+    <string name="go_to_previous_chapter">Попередній розділ</string>
+    <string name="go_to_after_opening">Пропустити опенінґ</string>
 </resources>

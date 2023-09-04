@@ -46,7 +46,7 @@
     <string name="action_show_anime">Anime Göster</string>
     <string name="action_display_download_badge_anime">İndirilmiş Anime Bölümleri</string>
     <string name="action_display_local_badge_manga">Yerel kaynak</string>
-    <string name="action_display_show_continue_reading_button">İzlemeye/okumaya devam et düğmesini göster</string>
+    <string name="action_display_show_continue_reading_button">İzlemeye/okumaya devam et düğmesi</string>
     <string name="action_order_by_episode_number">Bölüm Numarasına Göre</string>
     <string name="action_start_download_externally">Harici İndirme Yöneticisi Kullan</string>
     <string name="action_start_download_internally">Dahili İndirme Yöneticisi Kullan</string>
@@ -279,4 +279,31 @@
     <string name="chapter_dialog_header">Bölüm ara</string>
     <string name="stats_header">İstatistikleri göster</string>
     <string name="action_save_screenshot">Ekran görüntüsünü kaydet</string>
+    <string name="pref_media_control_chapter_seeking_summary">Eģer etkinleştirilirse, sıradaki bölüm düğmesine basıldığında ve sırada bölüm yok ise 85 saniye ileri atlar</string>
+    <string name="go_to_next_chapter">Sıradaki bölüm</string>
+    <string name="go_to_previous_chapter">Önceki bölüm</string>
+    <string name="go_to_after_opening">Intro atlama</string>
+    <string name="data_saver_image_format">Jpeg\'e sıkıştır</string>
+    <string name="pref_show_next_episode_airing_time">Sıradaki bölümün yayınlanma tarihini göster</string>
+    <string name="pref_episode_swipe_end">Aksiyon için sağa kaydır</string>
+    <string name="pref_episode_swipe_start">Aksiyon için sola kaydır</string>
+    <string name="data_saver_summary">Okuyucuda göstermeden veya indirmeden önce resimleri sıkıştır</string>
+    <string name="data_saver_ignore_jpeg">Jpeg resimleri gözardı et</string>
+    <string name="data_saver_image_format_summary_on">Jpeg dosya büyüklüğü Webp\'e göre ciddi anlamda daha küçüktur ancak resimler daha fazla kalite kaybeder(yani daha fazla veri tasarrufu sağlar)
+\nŞu anda Jpeg\'e sıkıştırıyor</string>
+    <string name="pref_media_control_chapter_seeking">Medya kontrolleri ile bölümleri ara</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Sunucusu</string>
+    <string name="data_saver_server_summary">Buraya Bandwidth Hero Proxy sunucusu linki koyun</string>
+    <string name="data_saver">Veri tasarrufu</string>
+    <string name="data_saver_downloader">Indiricide veri tasarrufunu kullan</string>
+    <string name="data_saver_exclude">Veri tasaruffundan ayır</string>
+    <string name="data_saver_stop_exclude">Veri tasarufuna dahil et</string>
+    <string name="data_saver_image_quality_summary">Daha yüksek değer resim kalitesinin daha yüksek olduğü anlamına gelir ancak dosya boyutu daha büyük olur,%80 dosya büyüklüğü ve resim kalitesi açısından iyi bir denge sağlar</string>
+    <string name="data_saver_ignore_gif">Gif animasyonlarını gözardı et</string>
+    <string name="data_saver_image_quality">Resim kalitesi</string>
+    <string name="data_saver_image_format_summary_off">Jpeg dosya büyüklüğü Webp\'e göre ciddi anlamda daha küçüktur ancak resimler daha fazla kalite kaybeder(yani daha fazla veri tasarrufu sağlar)
+\nŞu anda Webp\'e sıkıştırıyor</string>
+    <string name="data_saver_color_bw">Siyah ve beyaza çevir</string>
+    <string name="bandwidth_hero">Bandwidth Hero (Bandwidth Hero Proxy sunucusu gerektirir)</string>
+    <string name="wsrv">wsrv.nl</string>
 </resources>
