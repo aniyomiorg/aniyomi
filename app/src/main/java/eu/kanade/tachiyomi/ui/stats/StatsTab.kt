@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.ui.stats.manga.mangaStatsTab
 
 data class StatsTab(
     private val isManga: Boolean = false,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

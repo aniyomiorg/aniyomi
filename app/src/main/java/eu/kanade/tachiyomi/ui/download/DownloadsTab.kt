@@ -20,7 +20,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class DownloadsTab(
     private val isManga: Boolean = false,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

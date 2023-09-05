@@ -25,8 +25,10 @@ import soup.compose.material.motion.animation.rememberSlideDistance
  */
 val LocalBackPress: ProvidableCompositionLocal<(() -> Unit)?> = staticCompositionLocalOf { null }
 
-interface Tab : cafe.adriel.voyager.navigator.tab.Tab {
-    suspend fun onReselect(navigator: Navigator) {}
+abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
+
+    override val key: ScreenKey = uniqueScreenKey
+    open suspend fun onReselect(navigator: Navigator) {}
 }
 
 // TODO: this prevents crashes in nested navigators with transitions not being disposed
