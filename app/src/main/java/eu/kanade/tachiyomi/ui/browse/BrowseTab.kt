@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class BrowseTab(
     private val toExtensions: Boolean = false,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

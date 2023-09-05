@@ -27,7 +27,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class HistoriesTab(
     private val fromMore: Boolean,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

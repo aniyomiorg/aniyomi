@@ -43,7 +43,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
-object MoreTab : Tab {
+object MoreTab : Tab() {
 
     override val options: TabOptions
         @Composable
