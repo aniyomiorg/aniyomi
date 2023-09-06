@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="player_aniskip_recap">ସଂକ୍ଷିପ୍ତବୃତ୍ତି ବାଦ୍ ଦିଅ</string>
+    <string name="player_aniskip_dontskip_toast">%d ସେକେଣ୍ଡରେ ବାଦ୍ ଦେବା</string>
+    <string name="pref_always_use_external_player">ସର୍ବଦା ବହିଃ-ଚାଳକ ବ୍ୟବହାର କରିବା</string>
+    <string name="currently_watching">ଏବେ ଦେଖୁଛନ୍ତି</string>
+    <string name="watching">ଦେଖୁଛନ୍ତି</string>
+    <string name="repeating_anime">ପୁନଃଦେଖୁଛନ୍ତି</string>
+    <string name="pref_enable_netflix_style_aniskip">Netflix ଶୈଳୀ ସକ୍ଷମ କରିବା</string>
+    <string name="pref_player_summary">ପ୍ରଗତି ନିୟନ୍ତ୍ରଣ, ଅନ୍ତଃ-ଚାଳକ, ବହିଃ-ଚାଳକ</string>
+    <string name="pref_waiting_time_aniskip_7">୭ ସେକେଣ୍ଡ</string>
+    <string name="player_aniskip_ed">ପ୍ରାନ୍ତ ବାଦ୍ ଦିଅ</string>
+    <string name="player_aniskip_dontskip">ବାଦ୍ ଦିଅନି</string>
+    <string name="action_play_externally">ବହିଃସ୍ଥ ଚାଳନ କରାଇବା</string>
+    <string name="currently_reading">ଏବେ ପଢ଼ୁଛନ୍ତି</string>
+    <string name="pref_waiting_time_aniskip_6">୬ ସେକେଣ୍ଡ</string>
+    <string name="pref_waiting_time_aniskip_5">୫ ସେକେଣ୍ଡ</string>
+    <string name="pref_waiting_time_aniskip_10">୧୦ ସେକେଣ୍ଡ</string>
+    <string name="player_aniskip_op">ଆଦ୍ୟ ବାଦ୍ ଦିଅ</string>
+    <string name="action_display_show_continue_reading_button">ଦେଖିବା/ପଢ଼ିବା ଜାରି ରଖିବା ବଟନ୍</string>
+    <string name="quality_dialog_header">ଵିଡ଼ିଓ ଗୁଣଵତ୍ତା</string>
+    <string name="player_aniskip_mixedOp">ମିଶ୍ରିତ ଆଦ୍ୟ ବାଦ୍ ଦିଅ</string>
+    <string name="go_to_after_opening">ଆଦ୍ୟ ବାଦ୍ ଦିଆଗଲା</string>
+    <string name="audio_dialog_header">ଅଡ଼ିଓ</string>
+    <string name="action_next_episode">ପରବର୍ତ୍ତୀ ଅଧ୍ୟାୟ</string>
+    <string name="player_aniskip_skip">%s ବାଦ୍ ଦିଆଗଲା</string>
+    <string name="player_controls_skip_intro_text">+%1$d ସେ</string>
+    <string name="go_to_next_chapter">ପରବର୍ତ୍ତୀ ଅଧ୍ୟାୟ</string>
+    <string name="pref_waiting_time_aniskip_9">୯ ସେକେଣ୍ଡ</string>
+    <string name="pref_category_external_player">ବହିଃ-ଚାଳକ</string>
+    <string name="pref_waiting_time_aniskip_8">୮ ସେକେଣ୍ଡ</string>
+    <string name="playback_options_quality">ଵିଡ଼ିଓ ଗୁଣଵତ୍ତା</string>
+    <string name="episodes">ଅଧ୍ୟାୟ</string>
+    <string name="plan_to_watch">ଦେଖିବା ପାଇଁ ଇଚ୍ଛୁକ</string>
+</resources>
