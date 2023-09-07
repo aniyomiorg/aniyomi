@@ -303,4 +303,7 @@
     <string name="pref_hide_in_anime_library_items">Itago ang mga entry na nasa library</string>
     <string name="chapter_dialog_header">Mag-seek sa chapter</string>
     <string name="action_save_screenshot">I-save ang screenshot</string>
+    <string name="pref_media_control_chapter_seeking_summary">Kapag pinagana, ang paggamit sa susunod ay hihingin ang laktawan na intro na buton kung walang makikitang mga kabanata</string>
+    <string name="pref_media_control_chapter_seeking">Mag-seek ng kabanata gamit ang mga media control</string>
+    <string name="go_to_next_chapter">Susunod na kabanata</string>
 </resources>
