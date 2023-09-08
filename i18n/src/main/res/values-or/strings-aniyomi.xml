@@ -119,4 +119,10 @@
     </plurals>
     <string name="want_to_read">ପଢ଼ିବାକୁ ଚାହୁଁଛନ୍ତି</string>
     <string name="enable_volume_brightness_gestures">ଧ୍ୱନି ଏବଂ ଉଜ୍ଜ୍ୱଳତା ଅଙ୍ଗଭଙ୍ଗୀ ସକ୍ଷମ କରିବା</string>
+    <string name="action_sort_last_seen">ଗତ ଦର୍ଶନ</string>
+    <string name="action_save_screenshot">ସ୍କ୍ରୀନ୍‌ସଟ୍ ସଞ୍ଚୟ କରିବା</string>
+    <string name="action_sort_last_checked">ଗତ ଯାଞ୍ଚ</string>
+    <string name="action_play_internally">ଅନ୍ତଃସ୍ଥ ଚାଳନ କରାଇବା</string>
+    <string name="pref_category_internal_player">ଅନ୍ତଃ-ଚାଳକ</string>
+    <string name="pref_backup_flags">ବ୍ୟାକ୍‌ଅପ୍ ଵିକଳ୍ପ</string>
 </resources>
