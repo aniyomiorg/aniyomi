@@ -125,4 +125,11 @@
     <string name="action_play_internally">ଅନ୍ତଃସ୍ଥ ଚାଳନ କରାଇବା</string>
     <string name="pref_category_internal_player">ଅନ୍ତଃ-ଚାଳକ</string>
     <string name="pref_backup_flags">ବ୍ୟାକ୍‌ଅପ୍ ଵିକଳ୍ପ</string>
+    <string name="label_manga">ମଙ୍ଗା</string>
+    <string name="label_migration_manga">ମଙ୍ଗାକୁ ସ୍ଥାନାନ୍ତର କରିବା</string>
+    <string name="action_sort_episode_fetch_date">ଅଧ୍ୟାୟ ଅଣାଯିବା ତାରିଖ</string>
+    <string name="label_history">ମଙ୍ଗା</string>
+    <string name="label_manga_library">ମଙ୍ଗା</string>
+    <string name="label_updates">ମଙ୍ଗା</string>
+    <string name="label_manga_sources">ମଙ୍ଗା ଉତ୍ସ</string>
 </resources>
