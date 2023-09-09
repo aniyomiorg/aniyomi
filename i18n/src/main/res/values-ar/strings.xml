@@ -79,7 +79,7 @@
     <string name="pref_library_update_restriction">تقييد التحديث التلقائي للجهاز</string>
     <string name="charging">عند الشحن</string>
     <string name="pref_update_only_non_completed">حالها «تمَّت»</string>
-    <string name="default_category">الفئة المبدئية</string>
+        <string name="default_category">الفئة المبدئية</string>
     <string name="default_category_summary">السؤال دائماً</string>
     <string name="pref_fullscreen">وضع الشاشة الكاملة</string>
     <string name="pref_page_transitions">مؤثرات الانتقال بين الصفحات</string>
@@ -116,7 +116,7 @@
     <string name="rotation_force_portrait">الوضع الرأسي اﻹجباري</string>
     <string name="rotation_force_landscape">الوضع الأفقي الإجباري</string>
     <string name="pref_download_directory">موقع التنزيل</string>
-    <string name="custom_dir">مجلد مخصص</string>
+            <string name="custom_dir">مجلد مخصص</string>
     <string name="disabled">معطل</string>
     <string name="last_read_chapter">آخر فصل مقروء</string>
     <string name="second_to_last">من الفصل الثاني قبل الأخير</string>
@@ -143,16 +143,16 @@
     <string name="color_filter_g_value">G</string>
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
-    <string name="used_cache">المستخدمة: %1$s</string>
+        <string name="used_cache">المستخدمة: %1$s</string>
     <string name="cache_deleted">تم محو الذاكرة المؤقتة. %1$d ملف تم محوه</string>
     <string name="cache_delete_error">حدث خطأ أثناء محو ذاكرة التخزين المؤقت</string>
     <string name="pref_clear_cookies">محو ملفات تعريف الارتباط</string>
     <string name="cookies_cleared">تم محو ملفات تعريف الارتباط</string>
     <string name="pref_clear_database">محو قاعدة البيانات</string>
     <string name="pref_clear_database_summary">مسح سجلّ الإدخالات التي ليست محفوظة في مكتبتك</string>
-    <string name="clear_database_completed">تم حذف المدخلات</string>
+        <string name="clear_database_completed">تم حذف المدخلات</string>
     <string name="pref_refresh_library_tracking">تحديث بيانات التتبع</string>
-    <string name="version">اﻹصدار</string>
+        <string name="version">اﻹصدار</string>
     <string name="pref_enable_acra">إرسال تقارير الأعطال</string>
     <string name="pref_acra_summary">هذا يساعد فى حل أي مشاكل. لن يتم إرسال أيّة بيانات حساسة</string>
     <string name="login_title">تسجيل الدخول إلى %1$s</string>
@@ -196,7 +196,7 @@
     <string name="error_category_exists">توجد بالفعل فئة بهذا الاسم!</string>
     <string name="snack_categories_deleted">تم حذف الفئات</string>
     <string name="dialog_with_checkbox_remove_description">سيؤدي هذا إلى إزالة تاريخ قراءة هذا الفصل. هل أنت متأكد؟</string>
-    <string name="snack_add_to_library">إضافة إلى المكتبة؟</string>
+        <string name="snack_add_to_library">إضافة إلى المكتبة؟</string>
     <string name="picture_saved">تم حفظ الصورة</string>
     <string name="custom_filter">مُرشح مخصص</string>
     <string name="set_as_cover">عيِّنها غلافًا</string>
@@ -242,6 +242,7 @@
     <string name="ext_untrusted">غير موثوق فيه</string>
     <string name="ext_uninstall">إلغاء التثبيت</string>
     <string name="untrusted_extension">إضافة ذات ريبة</string>
+
     <string name="pref_double_tap_anim_speed">سرعة مؤثر النقر المزدوج</string>
     <string name="pager_viewer">عارض الصفحات</string>
     <string name="double_tap_anim_speed_0">لا مؤثرات</string>
@@ -333,11 +334,10 @@
     <string name="action_unpin">إلغاء التثبيت</string>
     <string name="action_pin">تثبيت</string>
     <string name="action_select_inverse">عكس التحديد</string>
-    <string name="confirm_exit">اضغط رجوع مرة أخرى للخروج</string>
     <string name="channel_ext_updates">تحديثات اﻹضافات</string>
     <string name="channel_new_chapters">تحديثات الفصول</string>
     <string name="information_webview_outdated">يرجى تحديث تطبيق WebView لتوافق أفضل</string>
-    <string name="information_cloudflare_bypass_failure">فشل في تجاوز Cloudflare</string>
+        <string name="information_cloudflare_bypass_failure">فشل في تجاوز Cloudflare</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="zero">لايوجد تحديث للإضافة</item>
         <item quantity="one">يتوفر تحديث لإضافة</item>
@@ -427,7 +427,7 @@
     <string name="invalid_backup_file_missing_manga">النسخة الإحتياطية لا تحتوي على أيّة إدخالات المكتبة.</string>
     <string name="invalid_backup_file">ملفُّ النسخ الاحتياطيِّ غير صالح</string>
     <string name="tracking_info">مزامنة أحاديّة لتحديث تقدم الفصول في خدمات التتبع. قم بإعداد التتبع الخاص للإدخالات محدّدة من زر التتبع الخاص بها.</string>
-    <string name="unofficial_extension_message">هذه الإضافة ليست من قائمة إضافات Tachiyomi الرسمية.</string>
+    <string name="unofficial_extension_message">ليست هذه الإضافة من القائمة الرسمية.</string>
     <string name="ext_unofficial">غير رسمي</string>
     <string name="pref_library_update_refresh_metadata_summary">تحقق من وجود غلاف جديد وتفاصيل جديدة عند تحديث المكتبة</string>
     <string name="pref_library_update_refresh_metadata">تحديث البيانات الوصفية تلقائياً</string>
@@ -457,7 +457,7 @@
     <string name="requires_app_restart">يتطلب إعادة تشغيل التطبيق ليتم تفعيله</string>
     <string name="label_network">شبكة الاتصال</string>
     <string name="backup_restore_missing_trackers">أجهزة التتبع التي لم يتم تسجيل الدخول إليها:</string>
-    <string name="pref_category_reading_mode">وضع القراءة</string>
+            <string name="pref_category_reading_mode">وضع القراءة</string>
     <string name="ext_nsfw_warning">بعض المصادر من هذا الامتداد قد تحتوى على محتوى للبالغين (+18)</string>
     <string name="ext_nsfw_short">محتوى غير لائق</string>
     <string name="parental_controls_info">هذا لا يمنع الإضافات غير الرسمية أو التي تم وضع علامة عليها بشكل غير صحيح من إظهار محتوى غير لائق داخل التطبيق.</string>
@@ -469,7 +469,7 @@
     <string name="channel_errors">أخطاء</string>
     <string name="channel_complete">مُكتمل</string>
     <string name="channel_progress">التقدّم</string>
-    <string name="loader_not_implemented_error">لم يتم العثور على المصدر</string>
+        <string name="loader_not_implemented_error">لم يتم العثور على المصدر</string>
     <plurals name="num_trackers">
         <item quantity="zero">لا متتبّع</item>
         <item quantity="one">متتبّع واحد</item>
@@ -503,13 +503,13 @@
     <string name="share_page_info">%1$s: %2$s, صفحة %3$d</string>
     <string name="chapter_settings_updated">إعدادات الفصل الإفتراضية المُحدثة</string>
     <string name="set_chapter_settings_as_default">تعيين كافتراضي</string>
-    <string name="confirm_set_chapter_settings">هل أنت متأكد أنك تريد حفظ هذه الإعدادات كافتراضي؟</string>
+        <string name="confirm_set_chapter_settings">هل أنت متأكد أنك تريد حفظ هذه الإعدادات كافتراضي؟</string>
     <string name="chapter_settings">إعدادات الفصل</string>
     <string name="action_search_settings">إعدادات البحث</string>
     <string name="downloaded_chapters">الفصول المنزَّلة</string>
-    <string name="clear_history_confirmation">أمتأكِّد؟ سوف يُحذف التاريخ.</string>
+        <string name="clear_history_confirmation">أمتأكِّد؟ سوف يُحذف التاريخ.</string>
     <string name="clear_history_completed">حُذف التاريخ</string>
-    <string name="pref_incognito_mode">الوضع المخفي</string>
+        <string name="pref_incognito_mode">الوضع المخفي</string>
     <string name="pref_clear_history">مسح السجل</string>
     <string name="spen_next_page">الصفحة التالية</string>
     <string name="spen_previous_page">الصفحة سابقة</string>
@@ -648,13 +648,13 @@
     <string name="save_chapter_as_cbz">احفظ كأرشيف CBZ</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
     <string name="pref_library_update_manga_restriction">تخطي تحديث الإدخالات</string>
-    <string name="ext_installer_legacy">قياسي</string>
-    <string name="database_clean">لا شئ للتنظيف</string>
+        <string name="ext_installer_legacy">قياسي</string>
+        <string name="database_clean">لا شئ للتنظيف</string>
     <string name="clear_database_source_item_count">%1$d عدد الإدخالات غير المتواجدة بقاعدة بيانات المكتبه</string>
     <string name="extension_api_error">فشل الحصول على قائمة الملحقات</string>
     <string name="ext_installer_shizuku_unavailable_dialog">ثبِّت «شيزوكو» وشغِّله لتستخدمه مثبِّت إضافات.</string>
-    <string name="action_faq_and_guides">الاسئله الشائعه والأدلة</string>
-    <string name="action_display_cover_only_grid">شبكة بالاغلفة</string>
+        <string name="action_faq_and_guides">الاسئله الشائعه والأدلة</string>
+        <string name="action_display_cover_only_grid">شبكة بالاغلفة</string>
     <string name="skipped_reason_not_started">تُخُطِّيت بسبب عدم وجود فصول قُرئت</string>
     <string name="skipped_reason_not_caught_up">تُخُطِّيت لوجود فصول لم تُقرأ</string>
     <string name="pref_update_only_started">لم يبدأ هذا بعد</string>
@@ -678,7 +678,7 @@
     <string name="source_filter_empty_screen">لا يوجد مصادر مثبته</string>
     <string name="source_empty_screen">لا يوجد مصدر</string>
     <string name="action_sort_unread_count">المانجا الغير مقروءة</string>
-    <string name="split_tall_images_summary">يحسِّن أداء القارئ</string>
+        <string name="split_tall_images_summary">يحسِّن أداء القارئ</string>
     <string name="download_notifier_split_page_not_found">لم يُعثر على الصفحة %d أثناء التقسيم</string>
     <string name="download_notifier_split_page_path_not_found">لم يتم العثور على مسار الصفخة %d</string>
     <string name="pref_reset_viewer_flags_success">اعادة تعيين جميع اعدادات القارئ</string>
@@ -748,9 +748,9 @@
     <string name="fdroid_warning">لا يتم دعم إصدارات F-Droid رسميا.
 \nانقر لمعرفة المزيد.</string>
     <string name="invalid_location">موقع غير صالح: %s</string>
-    <string name="track_remove_date_conf_title">إزالة التاريخ؟</string>
+        <string name="track_remove_date_conf_title">إزالة التاريخ؟</string>
     <string name="track_remove_start_date_conf_text">%s سيؤدي هذا إلى إزالة تاريخ البدء المحدد مسبقًا من</string>
-    <string name="updates_last_update_info_just_now">في هذه اللحظة</string>
+        <string name="updates_last_update_info_just_now">في هذه اللحظة</string>
     <string name="track_remove_finish_date_conf_text">%s سيؤدي ذلك إلى إزالة تاريخ الانتهاء المحدد مسبقا من</string>
     <string name="pref_invalidate_download_cache">فهرس التنزيلات غير صالح</string>
     <string name="unknown_title">عنوان غير معروف</string>
@@ -780,7 +780,7 @@
     <string name="seconds_short">%d ث</string>
     <string name="information_no_manga_category">الفئة فارغة</string>
     <string name="action_not_now">ليس الان</string>
-    <string name="pref_skip_dupe_chapters">تجاوز الفصول المكررة</string>
+        <string name="pref_skip_dupe_chapters">تجاوز الفصول المكررة</string>
     <string name="enhanced_services_not_installed">متوفر ولكن المصدر غير مثبت: %s</string>
     <string name="confirm_add_duplicate_manga">لديك إدخال في مكتبتك بنفس الاسم. 
 \n
@@ -854,4 +854,5 @@
     <string name="exception_offline">لا اتصال بالإنترنت</string>
     <string name="exception_http">خطأ HTTP %d، انظر في WebView</string>
     <string name="exception_unknown_host">لم نصل %s</string>
+    <string name="unlock_app_title">افتح %s</string>
 </resources>

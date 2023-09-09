@@ -367,7 +367,6 @@
     <string name="manga_info_expand">De prus</string>
     <string name="licenses">Litzèntzias a còdighe abertu</string>
     <string name="website">Situ web</string>
-    <string name="confirm_exit">Incarca in segus torra pro essire</string>
     <string name="label_downloaded_only">Iscarrigados ebbia</string>
     <string name="recent_manga_time">Cap. %1$s - %2$s</string>
     <string name="last_used_source">Ùrtima impreada</string>
@@ -702,15 +701,13 @@
     <string name="information_no_entries_found">Perunu elementu atzapadu in custa categoria</string>
     <string name="fdroid_warning">Sas versiones de F-Droid non sunt prus suportadas in manera ufitziale.
 \nToca pro nde ischire de prus.</string>
-    <string name="action_display_show_continue_reading_button">Butone pro sighire a lèghere</string>
-    <string name="track_remove_date_conf_title">Bogare sa data\?</string>
+        <string name="track_remove_date_conf_title">Bogare sa data\?</string>
     <string name="pref_invalidate_download_cache">Invàlida s\'ìnditze de sos iscarrigamentos</string>
     <string name="track_remove_start_date_conf_text">Custu at a bogare sa data de incumintzu seletzionada in antis dae %s</string>
     <string name="track_remove_finish_date_conf_text">Custu at a bogare sa data de fine seletzionada in antis dae %s</string>
     <string name="label_downloaded">Iscarrigados</string>
     <string name="label_local">In locale</string>
-    <string name="pref_invalidate_download_cache_summary">Fortzat s\'aplicatzione a torrare a verificare sos capìtulos iscarrigados</string>
-    <string name="label_titles_in_global_update">In s\'agiornamentu globale</string>
+        <string name="label_titles_in_global_update">In s\'agiornamentu globale</string>
     <string name="label_total_chapters">Totale</string>
     <string name="label_read_chapters">Lèghidos</string>
     <string name="label_tracked_titles">Elementos arrastados</string>

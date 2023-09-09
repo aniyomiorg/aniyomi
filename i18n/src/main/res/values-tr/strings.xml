@@ -84,7 +84,7 @@
     <string name="pref_library_update_restriction">Otomatik güncellemeler aygıt kısıtlamaları</string>
     <string name="charging">Şarj olurken</string>
     <string name="pref_update_only_non_completed">\"Bitirilmiş\" durumda olan</string>
-    <string name="default_category">Varsayılan kategori</string>
+        <string name="default_category">Varsayılan kategori</string>
     <string name="default_category_summary">Her zaman sor</string>
     <string name="ext_update">Güncelle</string>
     <string name="ext_install">Kur</string>
@@ -96,6 +96,7 @@
     <string name="ext_untrusted">Güvenilmeyen</string>
     <string name="ext_uninstall">Kaldır</string>
     <string name="untrusted_extension">Güvenilmeyen uzantı</string>
+
     <string name="pref_fullscreen">Tam Ekran</string>
     <string name="pref_page_transitions">Sayfa geçişlerini canlandır</string>
     <string name="pref_double_tap_anim_speed">Çift dokunma animasyon hızı</string>
@@ -140,7 +141,7 @@
     <string name="color_filter_b_value">M</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">İndirme konumu</string>
-    <string name="custom_dir">Özel konum</string>
+            <string name="custom_dir">Özel konum</string>
     <string name="disabled">Devre dışı</string>
     <string name="last_read_chapter">Son okunan bölüm</string>
     <string name="second_to_last">Okunan sondan ikinci bölüm</string>
@@ -162,16 +163,16 @@
     <string name="backup_choice">Neyi yedeklemek istiyorsunuz?</string>
     <string name="restoring_backup">Yedek geri yükleniyor</string>
     <string name="creating_backup">Yedek oluşturuluyor</string>
-    <string name="used_cache">Kullanılan: %1$s</string>
+        <string name="used_cache">Kullanılan: %1$s</string>
     <string name="cache_deleted">Önbellek temizlendi. %1$d dosya silindi</string>
     <string name="cache_delete_error">Temizlenirken sorun oluştu</string>
     <string name="pref_clear_cookies">Çerezleri temizle</string>
     <string name="cookies_cleared">Çerezler temizlendi</string>
     <string name="pref_clear_database">Veritabanını temizle</string>
     <string name="pref_clear_database_summary">Kitaplığına kaydedilmeyen girdilerin geçmiş bilgisini sil</string>
-    <string name="clear_database_completed">Girdiler silindi</string>
+        <string name="clear_database_completed">Girdiler silindi</string>
     <string name="pref_refresh_library_tracking">İzlemeyi yenile</string>
-    <string name="version">Sürüm</string>
+        <string name="version">Sürüm</string>
     <string name="pref_enable_acra">Çökme bildirimi gönder</string>
     <string name="pref_acra_summary">Hataların düzeltilmesine yardımcı olur. Hiçbir duyarlı veri gönderilmez</string>
     <string name="login_title">%1$s \'e giriş yap</string>
@@ -207,6 +208,7 @@
     <string name="sort_by_number">Bölüm numarasına göre</string>
     <string name="manga_download">İndir</string>
     <string name="download_unread">Okunmayan</string>
+    <string name="confirm_delete_chapters">Seçilen bölümleri silmek istediğinize emin misiniz?</string>
     <string name="manga_tracking_tab">İzleme</string>
     <string name="reading">Okunuyor</string>
     <string name="completed">Tamamlandı</string>
@@ -222,7 +224,7 @@
     <string name="error_category_exists">Bu adla bir kategori zaten var!</string>
     <string name="snack_categories_deleted">Kategoriler silindi</string>
     <string name="dialog_with_checkbox_remove_description">Bu, bu bölümün okunma tarihini kaldıracak. Emin misiniz?</string>
-    <string name="snack_add_to_library">Kitaplığa eklensin mi\?</string>
+        <string name="snack_add_to_library">Kitaplığa eklensin mi\?</string>
     <string name="picture_saved">Resim kaydedildi</string>
     <string name="custom_filter">Özel süzgeç</string>
     <string name="set_as_cover">Kapak olarak ayarla</string>
@@ -365,8 +367,7 @@
     <string name="manga_info_collapse">Daha az</string>
     <string name="manga_info_expand">Daha fazla</string>
     <string name="website">Web sitesi</string>
-    <string name="licenses">Açık kaynak lisansları</string>
-    <string name="confirm_exit">Çıkmak için yeniden geriye basın</string>
+        <string name="licenses">Açık kaynak lisansları</string>
     <string name="label_downloaded_only">Yalnızca indirilen</string>
     <string name="recent_manga_time">Böl. %1$s - %2$s</string>
     <string name="restoring_backup_error">Yedek geri yüklenemedi</string>
@@ -398,7 +399,7 @@
     </plurals>
     <string name="tracking_info">Bölüm ilerlemesini, izleme hizmetlerinde güncellemek için tek yönlü eşitleme. Her girdinin izleme düğmesinden, izlemeyi ayarlayın.</string>
     <string name="pref_refresh_library_covers">Kitaplıktakilerin kapaklarını yenile</string>
-    <string name="unofficial_extension_message">Bu uzantı resmi Tachiyomi uzantıları dizelgesinden değil.</string>
+    <string name="unofficial_extension_message">Bu uzantı resmi dizelgeden değil.</string>
     <string name="ext_unofficial">Resmi olmayan</string>
     <string name="sort_by_upload_date">Yükleme tarihine göre</string>
     <string name="label_data">Veri</string>
@@ -434,7 +435,7 @@
     <string name="unknown_author">Bilinmeyen yazar</string>
     <string name="updated_version">v%1$s sürümüne güncellendi</string>
     <string name="whats_new">Yenilikler</string>
-    <string name="action_sort_date_added">Eklendiği tarih</string>
+        <string name="action_sort_date_added">Eklendiği tarih</string>
     <string name="action_global_search_query">\"%1$s\" için genel arama</string>
     <string name="pref_category_reading_mode">Okuma kipi</string>
     <string name="pref_category_theme">Tema</string>
@@ -447,7 +448,7 @@
     <string name="channel_progress">İlerleme</string>
     <string name="channel_errors">Hatalar</string>
     <string name="backup_restore_missing_trackers">İzleyiciler giriş yapmadı:</string>
-    <string name="ext_nsfw_warning">Bu uzantıdaki kaynaklar yetişkin (18+) içerik içerebilir</string>
+            <string name="ext_nsfw_warning">Bu uzantıdaki kaynaklar yetişkin (18+) içerik içerebilir</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Bu, resmi olmayan veya yanlış imlenmiş uzantıların, uygulama içinde yetişkin (18+) içeriği göstermesini engellemez.</string>
     <plurals name="missing_chapters_warning">
@@ -457,12 +458,12 @@
     <string name="no_chapters_error">Bölüm bulunamadı</string>
     <string name="chapter_settings_updated">Öntanımlı bölüm ayarları güncellendi</string>
     <string name="set_chapter_settings_as_default">Öntanımlı olarak ayarla</string>
-    <string name="confirm_set_chapter_settings">Bu ayarları varsayılan olarak kaydetmek istediğinizden emin misiniz\?</string>
+        <string name="confirm_set_chapter_settings">Bu ayarları varsayılan olarak kaydetmek istediğinizden emin misiniz\?</string>
     <string name="chapter_settings">Bölüm ayarları</string>
     <string name="share_page_info">%1$s: %2$s, sayfa %3$d</string>
     <string name="action_search_settings">Arama ayarları</string>
     <string name="downloaded_chapters">İndirilen bölümler</string>
-    <string name="pref_incognito_mode">Gizli kip</string>
+            <string name="pref_incognito_mode">Gizli kip</string>
     <string name="pref_clear_history">Geçmişi sil</string>
     <string name="clear_history_confirmation">Emin misiniz\? Tüm geçmiş silinecek.</string>
     <string name="clear_history_completed">Geçmiş silindi</string>
@@ -591,10 +592,10 @@
     <string name="pref_verbose_logging">Ayrıntılı günlük kaydı</string>
     <string name="pref_verbose_logging_summary">Ayrıntılı günlükleri sistem günlüğüne yaz (uygulama performansını düşürür)</string>
     <string name="connected_to_wifi">Yalnızca kablosuz ağda</string>
-    <string name="update_72hour">3 günde bir</string>
+        <string name="update_72hour">3 günde bir</string>
     <string name="ext_update_all">Tümünü güncelle</string>
     <string name="channel_app_updates">Uygulama güncellemeleri</string>
-    <string name="clear_database_source_item_count">Veri tabanında %1$d kitaplık dışı girdi</string>
+        <string name="clear_database_source_item_count">Veri tabanında %1$d kitaplık dışı girdi</string>
     <string name="database_clean">Temizlenecek bir şey yok</string>
     <string name="extension_api_error">Uzantı dizelgesi alınamadı</string>
     <string name="pref_library_update_manga_restriction">Girdileri güncellemeyi atla</string>
@@ -603,10 +604,10 @@
     <string name="privacy_policy">Gizlilik politikası</string>
     <string name="cancelled">İptal edildi</string>
     <string name="on_hiatus">Molada</string>
-    <string name="library_errors_help">Kitaplık güncelleme hatalarının nasıl düzeltileceği konusunda yardım için bkz. %1$s</string>
+        <string name="library_errors_help">Kitaplık güncelleme hatalarının nasıl düzeltileceği konusunda yardım için bkz. %1$s</string>
     <string name="action_display_cover_only_grid">Yalnızca kapağa ızgara</string>
     <string name="action_faq_and_guides">SSS ve Kılavuzlar</string>
-    <string name="pref_update_only_started">Bu başlamadı</string>
+        <string name="pref_update_only_started">Bu başlamadı</string>
     <string name="skipped_reason_completed">Manga bitirildiği için atlandı</string>
     <string name="skipped_reason_not_caught_up">Okunmamış bölümler olduğu için atlandı</string>
     <string name="skipped_reason_not_started">Hiçbir bölüm okunmadığı için atlandı</string>
@@ -628,7 +629,7 @@
     <string name="action_close">Kapat</string>
     <string name="source_filter_empty_screen">Kurulu kaynak bulunamadı</string>
     <string name="source_empty_screen">Kaynak bulunamadı</string>
-    <string name="action_sort_unread_count">Okunmayan sayısı</string>
+        <string name="action_sort_unread_count">Okunmayan sayısı</string>
     <string name="split_tall_images_summary">Okuyucu başarımını iyileştirir</string>
     <string name="download_notifier_split_page_not_found">Bölünürken sayfa %d bulunamadı</string>
     <string name="download_notifier_split_page_path_not_found">Sayfa %d dosya yolu bulunamadı</string>
@@ -701,11 +702,11 @@
     <string name="information_no_entries_found">Bu kategoride girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
-    <string name="track_remove_date_conf_title">Tarih kaldırılsın mı\?</string>
+        <string name="track_remove_date_conf_title">Tarih kaldırılsın mı\?</string>
     <string name="track_remove_start_date_conf_text">Bu, daha önce seçtiğiniz %s başlangıç tarihini kaldıracak</string>
     <string name="track_remove_finish_date_conf_text">Bu, daha önce seçtiğiniz %s bitiş tarihini kaldıracak</string>
     <string name="pref_invalidate_download_cache">İndirmeler dizinini geçersiz kıl</string>
-    <string name="label_stats">İstatistikler</string>
+        <string name="label_stats">İstatistikler</string>
     <string name="label_started">Başladı</string>
     <string name="label_downloaded">İndirilen</string>
     <string name="label_total_chapters">Toplam</string>
@@ -727,7 +728,7 @@
     <string name="seconds_short">%dsn</string>
     <string name="action_not_now">Şimdi değil</string>
     <string name="information_no_manga_category">Kategori boş</string>
-    <string name="copied_to_clipboard_plain">Panoya kopyalandı</string>
+        <string name="copied_to_clipboard_plain">Panoya kopyalandı</string>
     <string name="enhanced_services_not_installed">Kullanılabilir ancak kaynak kurulu değil: %s</string>
     <string name="pref_skip_dupe_chapters">Yinelenen bölümleri atla</string>
     <string name="confirm_add_duplicate_manga">Kitaplığınızda aynı ada sahip bir girdiniz var.
@@ -779,4 +780,15 @@
     <string name="manga_display_modified_interval_title">Güncelleme aralığını ayarla</string>
     <string name="has_results">Sonuç var</string>
     <string name="delete_downloaded">İndirilenleri sil</string>
+    <string name="create_backup_file_error">Yedekleme dosyası oluşturulamadı</string>
+    <string name="licensed_manga_chapters_error">Lisanslı - Gösterilecek bölüm yok</string>
+    <string name="download_cache_invalidated">İndirilenler dizini geçersiz kılındı</string>
+    <string name="information_cloudflare_help">Cloudflare\'le ilgili yardım için tıklayın</string>
+    <string name="exception_unknown_host">%s verisine erişilemedi</string>
+    <string name="track_activity_name">İzleme girişi</string>
+    <string name="library_sync_complete">Kitaplık eşleşmesi tamamlandı</string>
+    <string name="exception_http">HTTP %d, siteyi Web Görünümünde denetle</string>
+    <string name="exception_offline">Genel ağ bağlantısı yok</string>
+    <string name="syncing_library">Kitaplık eşleştiriliyor</string>
+    <string name="unlock_app_title">Aç: %s</string>
 </resources>

@@ -27,7 +27,6 @@
     <string name="channel_common">सामान्य</string>
     <string name="action_menu">मेनू</string>
     <string name="action_filter_bookmarked">बुकमार्क आहे</string>
-    <string name="confirm_exit">अॅप बंद करण्यासाठी बॅक पुन्हा दाबा</string>
     <string name="track">ट्रॅकिंग</string>
     <string name="manga">लायब्ररी इंत्रिज</string>
     <string name="categories">श्रेण्या</string>
@@ -42,6 +41,7 @@
     <string name="label_sources">स्त्रोत</string>
     <string name="label_recent_updates">अपडेट्स</string>
     <string name="label_library">संग्रहालय</string>
+    <string name="label_download_queue">डाऊनलोड रांग</string>
     <string name="action_restore">पुनर्संचयित करा</string>
     <string name="action_open_log">लॉग उघडा</string>
     <string name="action_undo">पूर्ववत करा</string>
@@ -125,6 +125,7 @@
     <string name="pref_page_transitions">पृष्ठ संक्रमण संजीवित करा</string>
     <string name="pref_cutout_short">कटआउट क्षेत्रात सामग्री दर्शवा</string>
     <string name="obsolete_extension_message">हे एक्सटेन्शन उपलब्ध नाही.</string>
+
     <string name="untrusted_extension">अविश्वासू एक्सटेन्शन</string>
     <string name="ext_uninstall">विस्थापित करा</string>
     <string name="ext_untrusted">अविश्वासू</string>
@@ -139,6 +140,7 @@
     <string name="ext_updates_pending">प्रलंबित अध्यातणे</string>
     <string name="all">सगडे</string>
     <string name="default_category_summary">नेहमी विचारायचे</string>
+    <string name="default_category">मूलभूत श्रेणी</string>
     <string name="pref_update_only_non_completed">फक्त चालू असलेल्याच मांगा आधीतणीत करायचे</string>
     <string name="charging">चार्ज होत आहे</string>
     <string name="pref_library_update_restriction">लायब्ररी अद्ययावत प्रतिबंधी</string>

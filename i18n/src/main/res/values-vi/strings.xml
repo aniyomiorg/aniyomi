@@ -398,7 +398,6 @@
     <string name="action_disable_all">Tắt tất cả</string>
     <string name="action_enable_all">Bật tất cả</string>
     <string name="action_sort_date_added">Ngày thêm</string>
-    <string name="confirm_exit">Nhấn trở lại lần nữa để thoát</string>
     <string name="invalid_backup_file_missing_manga">Bản sao lưu không chứa truyện nào.</string>
     <string name="invalid_backup_file">Tệp sao lưu không hợp lệ</string>
     <string name="add_to_library">Thêm vào thư viện</string>
@@ -711,8 +710,7 @@
     <string name="pref_advanced_summary">Tệp báo lỗi tạm, tối ưu hoá pin</string>
     <string name="pref_tracking_summary">Đồng bộ tiến trình đọc, đồng bộ nâng cao</string>
     <string name="pref_browse_summary">Nguồn, tiện ích, tìm kiếm toàn bộ</string>
-    <string name="action_display_show_continue_reading_button">Nút tiếp tục đọc</string>
-    <string name="action_open_random_manga">Mở một truyện ngẫu nhiên</string>
+        <string name="action_open_random_manga">Mở một truyện ngẫu nhiên</string>
     <string name="invalid_location">Vị trí không hợp lệ: %s</string>
     <string name="label_stats">Thống kê</string>
     <string name="label_downloaded">Đã tải xuống</string>
@@ -727,8 +725,7 @@
     <string name="label_started">Đang tiến hành</string>
     <string name="label_mean_score">Điểm trung bình</string>
     <string name="updates_last_update_info_just_now">Ngay bây giờ</string>
-    <string name="pref_invalidate_download_cache_summary">Buộc ứng dụng kiểm tra lại các chương đã tải xuống</string>
-    <string name="label_titles_in_global_update">Tổng cập nhật</string>
+        <string name="label_titles_in_global_update">Tổng cập nhật</string>
     <string name="label_used">Đã theo dõi</string>
     <string name="label_tracker_section">Theo dõi</string>
     <string name="label_tracked_titles">Tổng theo dõi</string>
@@ -792,4 +789,5 @@
     <string name="action_sort_next_updated">Cập nhật dự kiến tiếp theo</string>
     <string name="information_cloudflare_help">Nhấn vào đây để được trợ giúp về Cloudflare</string>
     <string name="pref_update_only_in_release_period">Chưa công bố</string>
+    <string name="unlock_app_title">Mở khoá %s</string>
 </resources>

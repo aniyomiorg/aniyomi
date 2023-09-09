@@ -27,11 +27,11 @@
     <string name="action_filter">Биилтирэ</string>
     <string name="action_menu">Талба</string>
     <string name="action_settings">Түстэл</string>
-    <string name="confirm_exit">Өссө биирдэ төттөрүнү баттаан, тахсар курдук</string>
     <string name="history">История</string>
     <string name="track">Кэтээһин</string>
     <string name="chapters">Түһүмэхтэр</string>
     <string name="manga">Маанга</string>
+    <string name="categories">Бөлөхтөр</string>
     <string name="information_empty_category">Эйиэхэ бөлөхтөр суохтар. Эбэр бэлиэни батта, бэбэлэтиэкэҕэ саҥа бөлөҕү оҥорорго.</string>
     <string name="information_empty_library">Эн бэбэлэтиэкэн кураанах. Бэбэлэтиэкэҕэ айымньыыларыы көрдөөһүнтэн эп.</string>
     <string name="information_no_recent_manga">Бүтэһик кэмҥэ тугу да аахпатын</string>
@@ -46,6 +46,7 @@
     <string name="label_recent_manga">Остуоруйа</string>
     <string name="label_recent_updates">Саҥардыылар</string>
     <string name="label_library">Бэбэлэтиэкэ</string>
+    <string name="label_download_queue">Хачаайдааһын уочарата</string>
     <string name="label_settings">Түстэл</string>
     <string name="label_more">Эбии</string>
     <string name="name">Аат</string>
@@ -53,6 +54,7 @@
         <item quantity="other">%d бөлөхтөр</item>
     </plurals>
     <string name="default_category_summary">Наар ыйыт</string>
+    <string name="default_category">Куолутунан бөлөх</string>
     <string name="pref_library_update_refresh_metadata_summary">Саҥа тас уонна кыра чаастар баалларын, бэрэбиэркэлээ</string>
     <string name="pref_library_update_refresh_metadata">Метаданнайдары автоматическайдык саҥарт</string>
     <string name="pref_update_only_non_completed">Бүтэ илик маанганы эрэ, саҥарт</string>
@@ -205,6 +207,7 @@
     <string name="pref_fullscreen">Толору экран</string>
     <string name="unofficial_extension_message">Бу кэҥэтии официальнай Tachiyomi испииһэгиттэн буолбатах.</string>
     <string name="obsolete_extension_message">Бу кэҥэтии кыаллыбат буолла.</string>
+
     <string name="untrusted_extension">Эрэлэ суох кэҥэтии</string>
     <string name="ext_uninstall">Сотон кэбис</string>
     <string name="ext_untrusted">Эрэлэ суох</string>
@@ -249,7 +252,7 @@
     <string name="pref_create_backup">Хаппаас куопуйаны оҥоруу</string>
     <string name="tracking_info">Биир өттүттэн мэнэйдэһии, кэтээһин өҥөлөргө баар түһүмэхтэр туруктарын саҥардыыга. Маанга туспа суругун уонна талкыйын кэтээһинин түстэлгэ уларыт.</string>
     <string name="services">Өҥөлөр</string>
-    <string name="pref_download_new">Саҥа түһүмэхтэри хачайдаа</string>
+        <string name="pref_download_new">Саҥа түһүмэхтэри хачайдаа</string>
     <string name="fifth_to_last">Бүтэһик түһүмэхтэн бэһис</string>
     <string name="fourth_to_last">Бүтэһик түһүмэхтэн төрдүс</string>
     <string name="third_to_last">Бүтэһик түһүмэхтэн үһүс</string>
@@ -257,15 +260,17 @@
     <string name="last_read_chapter">Бүтэһигинэн ааҕыллыбыт түһүмэх</string>
     <string name="disabled">Араарыллыбыт</string>
     <string name="custom_dir">Туттааччы ыйдарыыта</string>
-    <string name="pref_download_directory">Хачайдааһын сурунаала</string>
+            <string name="pref_download_directory">Хачайдааһын сурунаала</string>
     <string name="requires_app_restart">Уларыйыы киирэрин гына эбилиги хос холбоо</string>
     <string name="cache_delete_error">Кээс сотторуутугар сыыһааһын буолла</string>
     <string name="cache_deleted">Кээс ыраастанна. %1$d билэ сотторуллубут этэ</string>
     <string name="used_cache">Туттуллубут: %1$s</string>
-    <string name="label_data">Билим</string>
+        <string name="label_data">Билим</string>
     <string name="cookies_cleared">Куки ыраастанна</string>
+        <string name="pref_clear_database_summary">Эн бэбэлэтиэкэҕэр суох маанга остуоруйатын сотторуу</string>
+    <string name="pref_clear_database">Билим олоҕо ыраастааһына</string>
     <string name="pref_disable_battery_optimization">Батарея тупсарыытын араарыы</string>
-    <string name="pref_refresh_library_tracking">Кэтээһини чэбдигирии</string>
+        <string name="pref_refresh_library_tracking">Кэтээһини чэбдигирии</string>
     <string name="pref_refresh_library_covers">Бэбэлэтиэкэҕэ баар маанга таһын чэбдигирии</string>
     <string name="clear_database_completed">Дааннайдар сотуллубуттар</string>
     <string name="pref_disable_battery_optimization_summary">Бэбэлэтиэкэ уонна хаппаас куопуйатыгар кэннинээҕи саҥардыытыгар көмөлөһөр</string>
@@ -325,7 +330,7 @@
     <string name="browse">Көрдөөһүн</string>
     <string name="latest">Тиһэх</string>
     <string name="action_global_search_query">\"%1$s\" толору көрдөө</string>
-    <string name="manga_tracking_tab">Кэтээһин</string>
+            <string name="manga_tracking_tab">Кэтээһин</string>
     <string name="confirm_delete_chapters">Талыллыбыт түһүмэхтэри сотторорго эрэллээххин дуу\?</string>
     <string name="download_unread">Ааҕыллыбата</string>
     <string name="manga_download">Хачайдаа</string>
@@ -334,8 +339,11 @@
     <string name="sort_by_source">Төрүттэринэн</string>
     <string name="show_chapter_number">Түһүмэх нүөмэрэ</string>
     <string name="show_title">Төрүт аата</string>
+    <string name="chapter_paused">Тохтотулунна</string>
+    <string name="chapter_error">Сыыһааһын</string>
     <string name="chapter_downloading_progress">Хачайдааһын (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Түһүмэх %1$s</string>
+    <string name="snack_add_to_library">Маанганы Бэбэлэтиэкэҕэ киллэрэбит дуу\?</string>
     <string name="source_not_installed">Төрүт туруоруллубатах: %1$s</string>
     <string name="copied_to_clipboard">Хоспоххо куопуйаланна:
 \n %1$s</string>
@@ -344,7 +352,7 @@
     <string name="parental_controls_info">Ити официальнайа суох эбэтэр сыыһа бэлиэтэммит 18+ контенны эбиликкж киирэрин тохтоппот.</string>
     <string name="custom_filter">Туттааччы биилтирэ</string>
     <string name="picture_saved">Хартыыҥка оннунан хаалла</string>
-    <string name="dialog_with_checkbox_remove_description">Бу дьайыы түһүмэх ааҕыллыбыт кэмин сотторуо. Эрэллээххин дуо\?</string>
+        <string name="dialog_with_checkbox_remove_description">Бу дьайыы түһүмэх ааҕыллыбыт кэмин сотторуо. Эрэллээххин дуо\?</string>
     <string name="snack_categories_deleted">Бөлөхтөр соттороллубуттар</string>
     <string name="error_category_exists">Оннук ааттах бөлөх уруккуттан баар!</string>
     <string name="track_type">Көрүҥ</string>
@@ -389,10 +397,10 @@
     <string name="share_page_info">%1$s: %2$s, сирэй %3$d</string>
     <string name="no_chapters_error">Түһүмэхтэр суохтар</string>
     <string name="set_chapter_settings_as_default">Куолутунан</string>
-    <string name="confirm_set_chapter_settings">Бу түстэл куолутунан хааларын баҕараҕын дуо\?</string>
+        <string name="confirm_set_chapter_settings">Бу түстэл куолутунан хааларын баҕараҕын дуо\?</string>
     <string name="chapter_settings">Түһүмэх түстэлэ</string>
     <string name="downloaded_chapters">Хачайдаммыт түһүмэхтэр</string>
-    <string name="pref_incognito_mode">Кистэлэҥ эрэһиимэ</string>
+            <string name="pref_incognito_mode">Кистэлэҥ эрэһиимэ</string>
     <string name="pref_clear_history">Остуоруйаны сотторуу</string>
     <string name="clear_history_confirmation">Эрэллээххин дуо\? Остуоруйа барыта сотторуллуоҕа.</string>
     <string name="clear_history_completed">Остуоруйа сотторулунна</string>
@@ -412,6 +420,7 @@
     <string name="exclude">Киллэримэ: %s</string>
     <string name="include">Киллэр: %s</string>
     <string name="none">Суох</string>
+    <string name="pref_library_update_categories_details">Сотуллубут категориялар маангалара саҥардыллыа суоҕа, холбоммут категорияларга баарын үрдүнэн.</string>
     <string name="action_show_errors">Сыһааһыннары көрдөр</string>
     <string name="action_desc">Кыччыытынан</string>
     <string name="action_asc">Улаатыытынан</string>
@@ -420,5 +429,4 @@
     <string name="action_display_show_number_of_items">Мал төһө элбэҕин көрдөр</string>
     <string name="action_sort_chapter_fetch_date">Кэлэр күнэ</string>
     <string name="action_filter_tracked">Суолун көрө сылдьабыт</string>
-<string name="label_download_queue">Хачаайдааһын уочарата</string>
-    </resources>
+</resources>

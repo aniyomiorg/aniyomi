@@ -17,7 +17,6 @@
     <string name="label_default">Әдепкі</string>
     <string name="label_warning">Ескерту</string>
     <string name="confirm_lock_change">Өзгертуді растау үшін аутентификация өтіңіз</string>
-    <string name="confirm_exit">Шығу үшін қайтадан басыңыз</string>
     <string name="action_menu">Мәзір</string>
     <string name="action_filter">Сүзгі</string>
     <string name="action_filter_bookmarked">Бетбелгіленген</string>
@@ -702,13 +701,11 @@
     <string name="fdroid_warning">F-Droid құрастыруларына ресми түрде қолдау көрсетілмейді.
 \nТолығырақ білу үшін басыңыз.</string>
     <string name="download_notifier_cache_renewal">Жүктеулерді тексеру</string>
-    <string name="action_display_show_continue_reading_button">«Оқуды жалғастыру» батырмасы</string>
-    <string name="track_remove_finish_date_conf_text">Бұл %s ішінен бұрын таңдалған аяқталу күнін жояды</string>
+        <string name="track_remove_finish_date_conf_text">Бұл %s ішінен бұрын таңдалған аяқталу күнін жояды</string>
     <string name="track_remove_start_date_conf_text">Бұл бұрын таңдалған басталу күнін %s ішінен жояды</string>
     <string name="track_remove_date_conf_title">Күнің жоямыз ба\?</string>
     <string name="pref_invalidate_download_cache">Жүктеулер индексін тазалау</string>
-    <string name="pref_invalidate_download_cache_summary">Қолданбаны жүктеп алынған тарауларды қайта тексеруге мәжбүрлейді</string>
-    <string name="label_stats">Статистика</string>
+        <string name="label_stats">Статистика</string>
     <string name="label_started">Басталды</string>
     <string name="label_local">Жергілікті</string>
     <string name="label_downloaded">Жүктелген</string>

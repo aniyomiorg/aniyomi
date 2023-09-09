@@ -375,7 +375,6 @@
     <string name="website">Pagină web</string>
     <string name="restoring_backup_error">Restaurarea copiei de rezervă a eșuat</string>
     <string name="creating_backup_error">Crearea copiei de rezervă a eșuat</string>
-    <string name="confirm_exit">Apăsați din nou pentru a ieși</string>
     <string name="label_downloaded_only">Doar descărcate</string>
     <string name="restoring_backup_canceled">Restaurare anulată</string>
     <string name="restore_in_progress">Restaurarea este deja în curs de desfășurare</string>
@@ -710,8 +709,7 @@
     <string name="crash_screen_title">Ups!</string>
     <string name="crash_screen_restart_application">Reporniți aplicația</string>
     <string name="pref_navigate_pan">Panoramare a imaginii la scară largă la atingere</string>
-    <string name="action_display_show_continue_reading_button">Afișați butonul de continuare a cititului</string>
-    <string name="information_no_entries_found">Nu s-au găsit intrări în această categorie</string>
+        <string name="information_no_entries_found">Nu s-au găsit intrări în această categorie</string>
     <string name="track_remove_finish_date_conf_text">Acest lucru va elimina data de finalizare selectată anterior din %s</string>
     <string name="pref_invalidate_download_cache">Indexul descărcărilor invalid</string>
     <string name="download_notifier_cache_renewal">Descărcări de indexare</string>
@@ -720,8 +718,7 @@
     <string name="fdroid_warning">Versiunile F-Droid nu sunt acceptate oficial.
 \nApăsați pentru a afla mai multe.</string>
     <string name="action_open_random_manga">Deschideți aleatoriu</string>
-    <string name="pref_invalidate_download_cache_summary">Obligați aplicația să refacă verificarea capitolelor descărcate</string>
-    <string name="label_stats">Statistici</string>
+        <string name="label_stats">Statistici</string>
     <string name="label_local">Local</string>
     <string name="label_started">Inceput</string>
     <string name="label_downloaded">Descărcat</string>

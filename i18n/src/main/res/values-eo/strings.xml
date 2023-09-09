@@ -434,7 +434,6 @@
     <string name="theme_midnightdusk">Meznokta Vesperiĝo</string>
     <string name="loading">Ŝargas…</string>
     <string name="cancel_all_for_series">Nuligi ĉiujn por ĉi tiu serio</string>
-    <string name="confirm_exit">Premi «reen» denove por eliri</string>
     <string name="confirm_lock_change">Aŭtentigi por konfirmi ŝanĝon</string>
     <string name="restoring_backup_canceled">Rezignita restaŭro</string>
     <string name="restoring_backup_error">Restaŭro fiaskis</string>

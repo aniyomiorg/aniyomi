@@ -16,6 +16,7 @@
     <string name="action_disable">Адключыць</string>
     <string name="action_display_show_number_of_items">Паказаць колькасць прадметаў</string>
     <string name="action_display_show_tabs">Паказаць укладкі катэгорый</string>
+    <string name="action_display_local_badge">Значкі лакальных</string>
     <string name="action_display_download_badge">Значкі загружаных</string>
     <string name="action_display_list">Спіс</string>
     <string name="action_display_comfortable_grid">Зручная сетка</string>
@@ -68,11 +69,9 @@
     <string name="action_filter">Фільтр</string>
     <string name="action_menu">Меню</string>
     <string name="action_settings">Налады</string>
-    <string name="confirm_exit">Націсніце назад яшчэ раз, каб выйсці</string>
     <string name="label_help">Дапамога</string>
     <string name="label_extension_info">Інфармацыя аб пашырэнні</string>
     <string name="name">Назва</string>
-    <string name="action_filter_downloaded">Загружаны</string>
     <string name="label_extensions">Пашырэння</string>
     <string name="label_migration">перанесці дадзеныя</string>
     <string name="label_backup">Рэзервовае капіяванне і аднаўленне</string>
@@ -80,12 +79,14 @@
     <string name="label_recent_manga">Гісторыя</string>
     <string name="label_recent_updates">Абнаўленні</string>
     <string name="label_library">Бібліятэка</string>
+    <string name="label_download_queue">Чарга загрузак</string>
     <string name="label_settings">Налады</string>
     <string name="label_more">Яшчэ</string>
     <string name="history">Гісторыя</string>
     <string name="track">Адсочванне</string>
     <string name="chapters">Часткi</string>
     <string name="manga">Манга</string>
+    <string name="categories">Катэгорыі</string>
     <string name="ext_uninstall">Выдаліць</string>
     <string name="ext_untrusted">Ненадзейны</string>
     <string name="ext_unofficial">Неафіцыйны</string>
@@ -102,6 +103,7 @@
     <string name="include">Уключаць: %s</string>
     <string name="none">Ніхто</string>
     <string name="all">Усе</string>
+    <string name="pref_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <plurals name="num_categories">
         <item quantity="one">%d катэгорыя</item>
         <item quantity="few">%d катэгорыі</item>
@@ -110,6 +112,7 @@
     </plurals>
     <string name="categorized_display_settings">Налады для кожнай катэгорыі для сартавання і адлюстравання</string>
     <string name="default_category_summary">Заўсёды пытацца</string>
+    <string name="default_category">Катэгорыя па змаўчанні</string>
     <string name="pref_library_update_refresh_trackers_summary">Абнаўляць адсочванне пры абнаўленні бібліятэкі</string>
     <string name="pref_library_update_refresh_trackers">Аўтаматычна абнаўляць адсочванне</string>
     <string name="pref_library_update_refresh_metadata_summary">Правераць наяўнасць новай вокладкі і дэталяў пры абнаўленні бібліятэкі</string>
@@ -199,6 +202,7 @@
     <string name="ext_nsfw_short">18+</string>
     <string name="unofficial_extension_message">Гэта пашырэнне не ўваходзіць у афіцыйны спіс пашырэньні Tachiyomi.</string>
     <string name="obsolete_extension_message">Гэта пашырэнне больш недаступна.</string>
+
     <string name="untrusted_extension">Ненадзейнае пашырэнне</string>
     <string name="pref_viewer_nav">Схема навігацыі</string>
     <string name="pager_viewer">Пастаронкава</string>
@@ -289,7 +293,7 @@
     <string name="enhanced_services">Пашыраныя паслугі</string>
     <string name="tracking_info">Аднабаковая сінхранізацыя для абнаўлення прагрэсу частак у службах адсочвання. Наладзьце адсочванне асобных запісаў мангі з дапамогай кнопкі адсочвання.</string>
     <string name="services">Паслугi</string>
-    <string name="tracking_guide">Кіраўніцтва па адсочванні</string>
+        <string name="tracking_guide">Кіраўніцтва па адсочванні</string>
     <string name="pref_download_new_categories_details">Манга ў выключаных катэгорыях не будзе загружана, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <string name="pref_download_new">Спампаваць новыя часткi</string>
     <string name="pref_category_auto_download">Аўтаматычная загрузка</string>
@@ -300,7 +304,7 @@
     <string name="last_read_chapter">Апошняя прачытаная частка</string>
     <string name="disabled">Адключана</string>
     <string name="custom_dir">Карыстацкая дырэкторыя</string>
-    <string name="pref_download_directory">Каталог загрузак</string>
+                    <string name="pref_download_directory">Каталог загрузак</string>
     <string name="pref_lowest">Найнізкая</string>
     <string name="pref_low">Нізкая</string>
     <string name="pref_high">Высокая</string>
@@ -321,7 +325,6 @@
     <string name="rotation_force_portrait">Заблакаваная партрэтная</string>
     <string name="rotation_type">Тып арыентацыі</string>
     <string name="pref_rotation_type">Тып арыентацыі па змаўчанні</string>
-    <string name="action_filter_started">Пачата</string>
     <string name="label_warning">папярэджанне</string>
     <string name="delete_category">Выдаліць катэгорыю</string>
     <string name="delete_category_confirmation">Вы хочаце выдаліць катэгорыю \"%s\"\?</string>
@@ -329,8 +332,8 @@
     <string name="ext_update_all">Абнавіць усё</string>
     <string name="ext_info_age_rating">Узроставае абмежаванне</string>
     <string name="pref_update_only_started">Не пачата</string>
-    <string name="ext_info_version">Версія</string>
-    <string name="action_sort_unread_count">Колькасць непрачытаных</string>
+        <string name="ext_info_version">Версія</string>
+        <string name="action_sort_unread_count">Колькасць непрачытаных</string>
     <string name="extension_api_error">Не ўдалося атрымаць спіс пашырэнняў</string>
     <string name="action_display_cover_only_grid">Сетка без назвы</string>
     <string name="ext_app_info">Аб дадатку</string>
@@ -342,7 +345,7 @@
     <string name="theme_lavender">Лаванда</string>
     <string name="pref_app_language">Мова дадатку</string>
     <string name="pref_library_update_manga_restriction">Прапусціць абнаўленні</string>
-    <string name="ext_installer_shizuku_stopped">Shizuku не працуе</string>
+        <string name="ext_installer_shizuku_stopped">Shizuku не працуе</string>
     <string name="action_close">Закрыць</string>
     <string name="ext_install_service_notif">Устаноўка пашырэнняў…</string>
     <string name="action_move_to_top_all_for_series">Перамясціць у пачатак спісу</string>
@@ -351,5 +354,4 @@
     <string name="action_remove_everything">Выдаліць усё</string>
     <string name="update_72hour">Кожныя 3 дні</string>
     <string name="connected_to_wifi">Толькі па Wi-Fi</string>
-    <string name="label_download_queue">Чарга загрузак</string>
-    </resources>
+</resources>

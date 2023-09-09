@@ -71,7 +71,7 @@
     <string name="pref_library_update_restriction">Restrizioni del dispositivo agli aggiornamenti automatici</string>
     <string name="charging">Quando si carica</string>
     <string name="pref_update_only_non_completed">Con stato «Completata»</string>
-    <!-- Reader section -->
+        <!-- Reader section -->
     <string name="pref_fullscreen">Schermo Intero</string>
     <string name="pref_page_transitions">Animare le transizioni di pagina</string>
     <string name="pref_show_page_number">Mostra numero pagina</string>
@@ -110,7 +110,7 @@
     <string name="color_filter_a_value">A</string>
     <!-- Downloads section -->
     <string name="pref_download_directory">Posizione dei download</string>
-    <string name="custom_dir">Posizione personalizzata</string>
+            <string name="custom_dir">Posizione personalizzata</string>
     <string name="disabled">Disabilitato</string>
     <string name="last_read_chapter">Ultimo capitolo letto</string>
     <string name="second_to_last">Penultimo capitolo letto</string>
@@ -121,14 +121,14 @@
     <!-- Sync section -->
     <string name="services">Servizi</string>
     <!-- Advanced section -->
-    <string name="used_cache">Usati: %1$s</string>
+        <string name="used_cache">Usati: %1$s</string>
     <string name="cache_deleted">Cache cancellata. %1$d file sono stati cancellati</string>
     <string name="cache_delete_error">Errore durante la cancellazione</string>
     <string name="pref_clear_cookies">Cancella cookie</string>
     <string name="cookies_cleared">Cookie cancellati</string>
     <string name="pref_clear_database">Pulisci database</string>
     <string name="pref_clear_database_summary">Elimina la cronologia delle voci che non sono presenti nella libreria</string>
-    <string name="clear_database_completed">Elementi eliminati</string>
+        <string name="clear_database_completed">Elementi eliminati</string>
     <!-- About section -->
     <string name="version">Versione</string>
     <!-- ACRA -->
@@ -175,7 +175,7 @@
     <string name="error_category_exists">Esiste già una categoria con questo nome!</string>
     <!-- Dialog remove recently view -->
     <string name="dialog_with_checkbox_remove_description">Questo rimuoverà la data lettura di questo capitolo. Sei sicuro\?</string>
-    <!-- Image notifier -->
+        <!-- Image notifier -->
     <string name="picture_saved">Immagine salvata</string>
     <!-- Reader activity -->
     <string name="custom_filter">Filtro personalizzato</string>
@@ -246,7 +246,7 @@
     <string name="restoring_backup">Ripristino backup</string>
     <string name="creating_backup">Creazione backup</string>
     <string name="pref_refresh_library_tracking">Aggiorna tracking</string>
-    <string name="no_more_results">Nessun altro risultato</string>
+        <string name="no_more_results">Nessun altro risultato</string>
     <string name="local_source">Fonte locale</string>
     <string name="delete_downloads_for_manga">Eliminare i capitoli scaricati?</string>
     <string name="chapter_paused">In pausa</string>
@@ -269,6 +269,7 @@
     <string name="ext_untrusted">Non attendibile</string>
     <string name="ext_uninstall">Disinstalla</string>
     <string name="untrusted_extension">Estensione non attendibile</string>
+
     <string name="pref_double_tap_anim_speed">Velocità animazioni doppio tocco</string>
     <string name="pager_viewer">Per pagina</string>
     <string name="double_tap_anim_speed_0">Senza animazione</string>
@@ -411,9 +412,8 @@
     <string name="restore_in_progress">Ripristino già in corso</string>
     <string name="creating_backup_error">Backup fallito</string>
     <string name="backup_in_progress">Il backup è già in corso</string>
-    <string name="confirm_exit">Premi indietro nuovamente per uscire</string>
     <string name="label_downloaded_only">Solo scaricati</string>
-    <string name="viewer">Modalità di lettura</string>
+        <string name="viewer">Modalità di lettura</string>
     <string name="pref_category_for_this_series">Per questa serie</string>
     <string name="local_source_help_guide">Guida alle fonti locali</string>
     <string name="last_used_source">Ultimo usato</string>
@@ -447,7 +447,7 @@
     <string name="backup_restore_missing_sources">Fonti mancanti:</string>
     <string name="invalid_backup_file_missing_manga">Il backup non contiene alcuna voce di libreria.</string>
     <string name="invalid_backup_file">File di backup invalido</string>
-    <string name="unofficial_extension_message">Questa estensione non è presente nella lista ufficiale delle estensioni di Tachiyomi.</string>
+    <string name="unofficial_extension_message">Questa estensione non è dalla lista ufficiale.</string>
     <string name="ext_unofficial">Non ufficiale</string>
     <string name="pref_library_update_refresh_metadata_summary">Controlla nuove copertine e descrizioni durante l\'aggiornamento della libreria</string>
     <string name="pref_library_update_refresh_metadata">Ricarica metadati automaticamente</string>
@@ -478,7 +478,7 @@
     <string name="action_disable">Disabilita</string>
     <string name="action_start">Inizia</string>
     <string name="action_global_search_query">Ricerca «%1$s» globalmente</string>
-    <string name="pref_category_reading_mode">Modalità di lettura</string>
+        <string name="pref_category_reading_mode">Modalità di lettura</string>
     <string name="pref_category_theme">Tema</string>
     <string name="action_sort_date_added">Data di aggiunta</string>
     <plurals name="num_trackers">
@@ -490,7 +490,7 @@
     <string name="channel_errors">Errori</string>
     <string name="channel_complete">Completo</string>
     <string name="no_pinned_sources">Non hai fonti fissate</string>
-    <string name="ext_nsfw_warning">Fonti di questa estensione potrebbero contenere materiale NSFW (18+)</string>
+            <string name="ext_nsfw_warning">Fonti di questa estensione potrebbero contenere materiale NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <plurals name="missing_chapters_warning">
         <item quantity="one">%d capitolo saltato, la fonte non ce l\'ha o è stato filtrato</item>
@@ -503,11 +503,11 @@
     <string name="chapter_settings_updated">Impostazioni predefinite dei capitoli aggiornate</string>
     <string name="share_page_info">%1$s: %2$s, pagina %3$d</string>
     <string name="set_chapter_settings_as_default">Imposta come predefinito</string>
-    <string name="confirm_set_chapter_settings">Sei sicuro di voler salvare queste impostazioni come predefinite\?</string>
+        <string name="confirm_set_chapter_settings">Sei sicuro di voler salvare queste impostazioni come predefinite\?</string>
     <string name="chapter_settings">Impostazioni del capitolo</string>
     <string name="action_search_settings">Ricerca impostazioni</string>
     <string name="downloaded_chapters">Capitoli scaricati</string>
-    <string name="pref_incognito_mode">Modalità incognito</string>
+            <string name="pref_incognito_mode">Modalità incognito</string>
     <string name="pref_clear_history">Svuota cronologia</string>
     <string name="clear_history_confirmation">Sei sicuro\? Tutta la cronologia verrà persa.</string>
     <string name="clear_history_completed">Cronologia cancellata</string>
@@ -638,20 +638,20 @@
     <string name="notification_size_warning">Grossi aggiornamenti danneggiano le fonti, possono rallentare gli aggiornamenti e aumentare il consumo di batteria. Tocca per saperne di più.</string>
     <string name="connected_to_wifi">Solo su Wi-Fi</string>
     <string name="update_72hour">Ogni 3 giorni</string>
-    <string name="ext_update_all">Aggiorna tutto</string>
+        <string name="ext_update_all">Aggiorna tutto</string>
     <string name="channel_app_updates">Aggiornamenti dell\'applicazione</string>
-    <string name="clear_database_source_item_count">%1$d voci non presenti in libreria nel database</string>
+        <string name="clear_database_source_item_count">%1$d voci non presenti in libreria nel database</string>
     <string name="database_clean">Niente da Pulire</string>
     <string name="extension_api_error">Impossibile ottenere l\'elenco estensioni</string>
     <string name="privacy_policy">Politica sulla privacy</string>
-    <string name="pref_library_update_manga_restriction">Salta l\'aggiornamento delle voci</string>
+        <string name="pref_library_update_manga_restriction">Salta l\'aggiornamento delle voci</string>
     <string name="library_errors_help">Per un aiuto su come risolvere gli errori di aggiornamento della libreria vedi %1$s</string>
     <string name="save_chapter_as_cbz">Salva come archivio CBZ</string>
     <string name="cancelled">Cancellata</string>
     <string name="on_hiatus">In pausa</string>
     <string name="publishing_finished">Pubblicazione terminata</string>
     <string name="action_faq_and_guides">Domande frequenti e guide</string>
-    <string name="pref_navigate_pan">Scorri le immagini larghe</string>
+        <string name="pref_navigate_pan">Scorri le immagini larghe</string>
     <string name="pref_landscape_zoom">Ingrandisci automaticamente le immagini larghe</string>
     <string name="action_display_cover_only_grid">Griglia con solo copertine</string>
     <string name="pref_update_only_started">Che non sono state iniziate</string>
@@ -675,7 +675,7 @@
     <string name="source_filter_empty_screen">Nessuna fonte installata trovata</string>
     <string name="source_empty_screen">Nessuna fonte trovata</string>
     <string name="action_sort_unread_count">Conteggio non letti</string>
-    <string name="split_tall_images_summary">Migliora le prestazioni del lettore</string>
+        <string name="split_tall_images_summary">Migliora le prestazioni del lettore</string>
     <string name="download_notifier_split_page_not_found">Pagina %d non trovata durante la divisione</string>
     <string name="download_notifier_split_page_path_not_found">Impossibile trovare il percorso della pagina %d</string>
     <string name="pref_reset_viewer_flags_summary">Reimposta la modalità di lettura e l\'orientamento per tutte le serie</string>
@@ -748,11 +748,11 @@
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
-    <string name="track_remove_date_conf_title">Rimuovere la data\?</string>
+        <string name="track_remove_date_conf_title">Rimuovere la data\?</string>
     <string name="track_remove_finish_date_conf_text">Verrà rimossa la data di fine precedentemente selezionata da %s</string>
     <string name="track_remove_start_date_conf_text">Verrà rimossa la data di inizio precedentemente selezionata da %s</string>
     <string name="pref_invalidate_download_cache">Invalida l\'indice dei download</string>
-    <string name="label_started">Iniziati</string>
+        <string name="label_started">Iniziati</string>
     <string name="label_overview_section">Panoramica</string>
     <string name="label_titles_section">Voci</string>
     <string name="label_stats">Statistiche</string>
@@ -774,7 +774,7 @@
     <string name="day_short">%d g</string>
     <string name="action_not_now">Non ora</string>
     <string name="information_no_manga_category">La categoria è vuota</string>
-    <string name="copied_to_clipboard_plain">Copiato negli appunti</string>
+        <string name="copied_to_clipboard_plain">Copiato negli appunti</string>
     <string name="enhanced_services_not_installed">Disponibile ma la fonte non è installata: %s</string>
     <string name="pref_skip_dupe_chapters">Salta i capitoli duplicati</string>
     <string name="confirm_add_duplicate_manga">Hai già una voce in libreria con lo stesso nome.
@@ -839,4 +839,5 @@
     <string name="exception_http">HTTP %d, controlla il sito nella WebView</string>
     <string name="exception_offline">Nessuna connessione ad internet</string>
     <string name="exception_unknown_host">%s non raggiungibile</string>
+    <string name="unlock_app_title">Sblocca %s</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Naam</string>
+    <string name="categories">Categorieën</string>
     <string name="manga">Bibliotheek</string>
     <string name="chapters">Hoofdstukken</string>
     <string name="track">Tracking</string>
@@ -11,7 +12,6 @@
     <string name="label_backup">Back-up en herstel</string>
     <string name="action_settings">Instellingen</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Gedownload</string>
     <string name="action_filter_unread">Ongelezen</string>
     <string name="action_filter_empty">Verwijder filter</string>
     <string name="action_sort_alpha">Alfabetisch</string>
@@ -35,6 +35,7 @@
     <string name="action_pause">Pauzeren</string>
     <string name="action_previous_chapter">Vorige hoofdstuk</string>
     <string name="action_next_chapter">Volgende hoofdstuk</string>
+    <string name="label_download_queue">Downloadwachtrij</string>
     <string name="action_update_library">Bibliotheek bijwerken</string>
     <string name="action_retry">Opnieuw proberen</string>
     <string name="action_remove">Verwijderen</string>
@@ -68,6 +69,7 @@
     <string name="update_48hour">Iedere 2 dagen</string>
     <string name="update_weekly">Wekelijks</string>
     <string name="all">Alles</string>
+    <string name="default_category">Standaard categorie</string>
     <string name="default_category_summary">Altijd vragen</string>
     <string name="pref_fullscreen">Volledig scherm</string>
     <string name="pref_page_transitions">Animeer pagina-overgangen</string>
@@ -122,7 +124,7 @@
     <string name="used_cache">Gebruikt: %1$s</string>
     <string name="pref_clear_cookies">Verwijder cookies</string>
     <string name="cookies_cleared">Cookies verwijdered</string>
-    <string name="version">Versie</string>
+        <string name="version">Versie</string>
     <string name="login_title">Log in op %1$s</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
@@ -135,6 +137,8 @@
     <string name="remove_from_library">Verwijderen uit bibliotheek</string>
     <string name="display_mode_chapter">Hoofdstuk %1$s</string>
     <string name="chapter_downloading_progress">Aan het downloaden (%1$d/%2$d)</string>
+    <string name="chapter_error">Fout</string>
+    <string name="chapter_paused">Gepauzeerd</string>
     <string name="show_title">Brontitel</string>
     <string name="show_chapter_number">Hoofdstuknummer</string>
     <string name="sort_by_source">Op bron</string>
@@ -149,6 +153,7 @@
     <string name="status">Status</string>
     <string name="error_category_exists">Er bestaat al een categorie met deze naam!</string>
     <string name="snack_categories_deleted">Categorieën verwijderd</string>
+        <string name="snack_add_to_library">Toevoegen aan bibliotheek\?</string>
     <string name="picture_saved">Afbeelding opgeslagen</string>
     <string name="custom_filter">Aangepast filter</string>
     <string name="set_as_cover">Instellen als omslagfoto</string>
@@ -172,6 +177,7 @@
     <string name="download_notifier_title_error">Fout</string>
     <string name="download_notifier_text_only_wifi">Geen Wi-Fi-verbinding beschikbaar</string>
     <string name="download_notifier_no_network">Geen netwerkverbinding beschikbaar</string>
+    <string name="download_notifier_download_paused">Download gepauzeerd</string>
     <string name="label_recent_updates">Updates</string>
     <string name="action_sort_total">Aantal hoofdstukken</string>
     <string name="app_not_available">App niet beschikbaar</string>
@@ -186,11 +192,13 @@
     <string name="pref_zoom_start">Zoom startpositie</string>
     <string name="rotation_force_portrait">Vergrendeld staand</string>
     <string name="rotation_force_landscape">Vergrendeld liggend</string>
-    <string name="disabled">Uitgeschakeld</string>
+            <string name="disabled">Uitgeschakeld</string>
     <string name="fourth_to_last">Drie-na-laatste gelezen hoofdstuk</string>
     <string name="fifth_to_last">Vier-na-laatste gelezen hoofdstuk</string>
-    <string name="cache_deleted">Cache geleegd. %1$d bestanden zijn verwijderd</string>
+        <string name="cache_deleted">Cache geleegd. %1$d bestanden zijn verwijderd</string>
     <string name="cache_delete_error">Fout opgetreden tijdens het wissen</string>
+    <string name="pref_clear_database">Database leegmaken</string>
+    <string name="pref_clear_database_summary">Verwijder geschiedenis voor items die niet in je bibliotheek zijn opgeslagen</string>
     <string name="pref_refresh_library_tracking">Tracking bijwerken</string>
     <string name="pref_enable_acra">Rapporteer bugs</string>
     <string name="pref_acra_summary">Helpt bij het oplossen van bugs. Er wordt geen gevoelige data verzonden</string>
@@ -198,8 +206,8 @@
     <string name="download_notifier_unknown_error">Kon dit hoofdstuk niet downloaden door een onverwachte fout</string>
     <string name="pref_library_update_restriction">Toestel beperkingen voor automatisch bijwerken</string>
     <string name="pref_update_only_non_completed">Gelezen series</string>
-    <string name="pref_keep_screen_on">Scherm aanhouden</string>
-    <string name="clear_database_completed">Database geleegd</string>
+        <string name="pref_keep_screen_on">Scherm aanhouden</string>
+        <string name="clear_database_completed">Database geleegd</string>
     <string name="ongoing">Lopend</string>
     <string name="delete_downloads_for_manga">Verwijder gedownloade hoofdstukken?</string>
     <string name="reading">Aan het lezen</string>
@@ -217,7 +225,6 @@
     <string name="plan_to_read">Van plan te lezen</string>
     <string name="action_global_search">Globaal zoeken</string>
     <string name="action_display_download_badge">Gedownloade hoofdstukken</string>
-    <string name="local_source_badge">Lokaal</string>
     <string name="other_source">Anders</string>
     <string name="action_global_search_hint">Globaal zoeken…</string>
     <string name="latest">Nieuwste</string>
@@ -236,6 +243,7 @@
     <string name="ext_untrusted">Niet vertrouwd</string>
     <string name="ext_uninstall">Verwijderen</string>
     <string name="untrusted_extension">Niet vertrouwde extensie</string>
+
     <string name="pref_double_tap_anim_speed">Dubbeltik animatiesnelheid</string>
     <string name="pref_read_with_long_tap">Weergeven bij lang tikken</string>
     <string name="pager_viewer">Gepagineerd</string>
@@ -249,7 +257,6 @@
     <string name="source_not_installed">Bron niet geïnstalleerd: %1$s</string>
     <string name="repeating">Opnieuw aan het lezen</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Gestart</string>
     <string name="track_type">Soort</string>
     <string name="transition_finished">Afgerond:</string>
     <string name="transition_current">Huidige:</string>
@@ -308,6 +315,7 @@
     <string name="ext_updates_pending">Updates in de wachtrij</string>
     <string name="information_cloudflare_bypass_failure">Kon Cloudflare niet omzeilen</string>
     <string name="information_webview_outdated">Gelieve de WebView-app bij te werken voor betere compatibiliteit</string>
+    <string name="channel_new_chapters">Hoofdstukupdates</string>
     <string name="secure_screen_summary">Veilig scherm modus verbergt de inhoud van de app bij het wisselen en blokkeert schermafbeeldingen</string>
     <string name="pref_category_display">Weergave</string>
     <string name="action_move_to_bottom">Verplaats naar beneden</string>
@@ -317,12 +325,11 @@
     <string name="action_pin">Vastpinnen</string>
     <string name="label_sources">Bronnen</string>
     <string name="action_select_inverse">Selectie omkeren</string>
-    <string name="confirm_exit">Druk nogmaals op terug om te verlaten</string>
     <string name="restoring_backup_canceled">Herstellen geannuleerd</string>
     <string name="restoring_backup_error">Herstellen mislukt</string>
     <string name="restore_in_progress">Er wordt al een back-up hersteld</string>
     <string name="channel_ext_updates">Extensie-updates</string>
-    <plurals name="update_check_notification_ext_updates">
+        <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Extensie-update beschikbaar</item>
         <item quantity="other">%d extensie-updates beschikbaar</item>
     </plurals>
@@ -426,7 +433,7 @@
     <string name="pref_read_with_tapping_inverted">Tikken omkeren</string>
     <string name="unknown_status">Onbekende status</string>
     <string name="unknown_author">Onbekende auteur</string>
-    <string name="action_global_search_query">Overal zoeken naar \"%1$s\"</string>
+        <string name="action_global_search_query">Overal zoeken naar \"%1$s\"</string>
     <string name="updated_version">Bijgewerkt naar v%1$s</string>
     <string name="whats_new">Wat is er nieuw</string>
     <string name="pref_category_reading_mode">Leesmodus</string>
@@ -439,10 +446,9 @@
     <string name="no_pinned_sources">Je hebt geen vastgepinde bronnen</string>
     <string name="channel_complete">Voltooid</string>
     <string name="channel_progress">Voortgang</string>
-    <string name="download_notifier_download_finish">Download voltooid</string>
     <string name="channel_errors">Fouten</string>
     <string name="backup_restore_missing_trackers">Niet-ingelogde trackers:</string>
-    <string name="ext_nsfw_warning">Kan NSFW-inhoud (18+) bevatten</string>
+            <string name="ext_nsfw_warning">Kan NSFW-inhoud (18+) bevatten</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Dit voorkomt niet dat onofficiële of mogelijk incorrect gemarkeerde extensies NSFW-inhoud (18+) kunnen laten zien in de app.</string>
     <plurals name="missing_chapters_warning">
@@ -452,12 +458,12 @@
     <string name="no_chapters_error">Geen hoofdstukken gevonden</string>
     <string name="chapter_settings_updated">Standaard hoofdstukinstellingen bijgewerkt</string>
     <string name="set_chapter_settings_as_default">Instellen als standaard</string>
-    <string name="confirm_set_chapter_settings">Weet je zeker dat je deze instellingen als standaardinstellingen wilt opslaan\?</string>
+        <string name="confirm_set_chapter_settings">Weet je zeker dat je deze instellingen als standaardinstellingen wilt opslaan\?</string>
     <string name="chapter_settings">Hoofdstukinstellingen</string>
     <string name="share_page_info">%1$s: %2$s, pagina %3$d</string>
     <string name="action_search_settings">Zoekinstellingen</string>
     <string name="downloaded_chapters">Gedownloade hoofdstukken</string>
-    <string name="pref_incognito_mode">Incognitomodus</string>
+            <string name="pref_incognito_mode">Incognitomodus</string>
     <string name="pref_clear_history">Geschiedenis wissen</string>
     <string name="clear_history_confirmation">Weet je dit zeker\? Alle geschiedenis zal verloren gaan.</string>
     <string name="clear_history_completed">Geschiedenis verwijderd</string>
@@ -500,6 +506,7 @@
     <string name="pref_category_auto_download">Automatisch downloaden</string>
     <string name="exclude">Uitgezonderd: %s</string>
     <string name="include">Inbegrepen: %s</string>
+    <string name="pref_library_update_categories_details">Items in uitgesloten categorieën worden niet bijgewerkt, zelfs niet als ze onder opgenomen categorieën vallen.</string>
     <string name="action_sort_chapter_fetch_date">Datum opgehaald</string>
     <string name="none">Geen</string>
     <string name="action_show_errors">Klik om details te weergeven</string>
@@ -533,6 +540,7 @@
     <string name="categorized_display_settings">Instellingen per categorie voor sorteren en weergeven</string>
     <string name="pref_library_update_refresh_trackers_summary">Trackers bijwerken bij het bijwerken van de bibliotheek</string>
     <string name="pref_library_update_refresh_trackers">Trackers automatisch vernieuwen</string>
+    <string name="action_display_local_badge">Lokale bron</string>
     <string name="information_empty_category_dialog">Er zijn nog geen categorieën.</string>
     <string name="action_start_downloading_now">Begin nu met downloaden</string>
     <string name="notification_updating">Bibliotheek updaten... (%1$d/%2$d)</string>
@@ -546,7 +554,6 @@
     <string name="theme_midnightdusk">Nachtschemering</string>
     <string name="theme_greenapple">Groene Appel</string>
     <string name="pref_app_theme">Appthema</string>
-    <string name="tracker_komga_warning">Deze tracker werkt alleen met de Komga-bron.</string>
     <string name="enhanced_tracking_info">Diensten die uitgebreidere functionaliteit bieden voor bepaalde bronnen. Het tracken van items gebeurt automatisch wanneer je deze toevoegt aan je bibliotheek.</string>
     <string name="enhanced_services">Verbeterde diensten</string>
     <string name="theme_monet">Dynamisch</string>
@@ -555,6 +562,7 @@
     <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="label_background_activity">Achtergrond activiteit</string>
     <string name="action_track">Volg</string>
+    <string name="pref_remove_exclude_categories">Uitgesloten categoriën</string>
     <string name="pref_lowest">Laagste</string>
     <string name="pref_low">Laag</string>
     <string name="pref_high">Hoog</string>
@@ -585,15 +593,15 @@
     <string name="action_sort_count">Totaal aantal items</string>
     <string name="pref_verbose_logging_summary">Houd uitgebreide logs bij in de systeemlogs (verslechterd de werking van de app)</string>
     <string name="channel_app_updates">App updates</string>
-    <string name="ext_update_all">Alles updaten</string>
+        <string name="ext_update_all">Alles updaten</string>
     <string name="update_72hour">Iedere 3 dagen</string>
     <string name="library_errors_help">Voor hulp bij het oplossen van fouten bij het bijwerken van de bibliotheek, zie %1$s</string>
     <string name="database_clean">Niks om te wissen</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="clear_database_source_item_count">%1$d items niet in de bibliotheek in database</string>
     <string name="save_chapter_as_cbz">Opslaan als CBZ archief</string>
-    <string name="pref_library_update_manga_restriction">Bijwerken overslaan</string>
-    <string name="extension_api_error">Lijst met extensies ophalen mislukt</string>
+        <string name="pref_library_update_manga_restriction">Bijwerken overslaan</string>
+        <string name="extension_api_error">Lijst met extensies ophalen mislukt</string>
     <string name="publishing_finished">Uitgave voltooid</string>
     <string name="cancelled">Geannuleerd</string>
     <string name="on_hiatus">Gepauzeerd</string>
@@ -606,9 +614,8 @@
     <string name="channel_skipped">Overgeslagen</string>
     <string name="pref_landscape_zoom">Zoom liggende afbeelding</string>
     <string name="pref_navigate_pan">Tik om door brede afbeeldingen te scrollen</string>
-    <string name="action_display_cover_only_grid">Alleen-cover rooster</string>
+        <string name="action_display_cover_only_grid">Alleen-cover rooster</string>
     <string name="rotation_reverse_portrait">Omgedraaid portret-modus</string>
-    <string name="action_filter_started">Begonnen</string>
     <string name="action_move_to_top_all_for_series">Breng serie naar boven</string>
     <string name="pref_update_only_started">Geen gelezen hoofdstukken</string>
     <string name="skipped_reason_completed">Overgeslagen want de serie is af</string>
@@ -622,7 +629,7 @@
     <string name="download_notifier_split_page_not_found">Pagina %d niet gevonden tijdens het splitsen</string>
     <string name="internal_error">InternalError: Bekijk de crash logs voor meer informatie</string>
     <string name="theme_lavender">Lavendel</string>
-    <string name="action_remove_everything">Alles verwijderen</string>
+        <string name="action_remove_everything">Alles verwijderen</string>
     <string name="delete_category_confirmation">Wenst u categorie \"%s\" te verwijderen\?</string>
     <string name="delete_category">Categorie verwijderen</string>
     <string name="action_close">Sluiten</string>
@@ -640,17 +647,13 @@
     <string name="action_sort_unread_count">Ongelezen aantal</string>
     <string name="download_ahead_info">Werkt alleen bij vermeldingen in de bibliotheek en als het huidige hoofdstuk en het volgende alreeds gedownload zijn</string>
     <string name="pref_user_agent_string">Standaard \'user-agent-string\'</string>
-    <string name="pref_duplicate_pinned_sources">Laat gedupliceerde vastgezette bronnen zien</string>
-    <string name="pref_duplicate_pinned_sources_summary">Herhaal vastgezetten bronnen in hun respectieve taal groepen</string>
     <plurals name="next_unread_chapters">
         <item quantity="one">Volgende ongelezen hoofdstuk</item>
         <item quantity="other">Volgende aantal %d ongelezen hoofdstukken</item>
     </plurals>
     <string name="action_search_hint">Zoek…</string>
     <string name="missing_storage_permission">Opslag bevoegdheden niet verleent</string>
-<string name="label_download_queue">Downloadwachtrij</string>
-    <string name="action_display_show_continue_reading_button">Knop om lezen te hervatten weergeven</string>
-    <string name="label_stats">Statistieken</string>
+        <string name="label_stats">Statistieken</string>
     <string name="label_started">Gestart</string>
     <string name="label_local">Lokaal</string>
     <string name="label_downloaded">Gedownload</string>
@@ -684,20 +687,18 @@
     <string name="enhanced_services_not_installed">Beschikbaar maar bron niet geïnstalleerd: %s</string>
     <string name="error_user_agent_string_blank">User agent mag niet leeg zijn</string>
     <string name="pref_reset_viewer_flags">Leesinstellingen voor alle series terugzetten naar standaardwaarde</string>
-    <string name="pref_invalidate_download_cache_summary">Hercontrole van gedownloade hoofdstukken forceren</string>
-    <string name="copied_to_clipboard_plain">Naar klembord gekopieerd</string>
+        <string name="copied_to_clipboard_plain">Naar klembord gekopieerd</string>
     <string name="appwidget_updates_description">Recentelijk bijgewerkte items in de bibliotheek bekijken</string>
     <string name="track_error">%1$s-fout: %2$s</string>
     <string name="pref_reset_user_agent_string">User agent terugzetten naar standaardwaarde</string>
     <string name="track_remove_date_conf_title">Datum verwijderen\?</string>
     <string name="wish_list">Verlanglijst</string>
-    <string name="pref_worker_info">Worker-informatie</string>
     <string name="custom_cover">Aangepaste omslag</string>
     <string name="invalid_location">Ongeldige locatie: %s</string>
     <string name="pref_advanced_summary">Crashlogboeken opslaan, batterijoptimalisaties</string>
     <string name="action_update_category">Categorie bijwerken</string>
     <string name="updates_last_update_info">Laatste update bibliotheek: %s</string>
-    <string name="source_filter_empty_screen">Geen geïnstalleerde bron gevonden</string>
+        <string name="source_filter_empty_screen">Geen geïnstalleerde bron gevonden</string>
     <string name="not_installed">Niet geïnstalleerd</string>
     <string name="pref_hide_in_library_items">Verberg manga die al in de bibliotheek staat</string>
     <string name="update_already_running">Er is al een update bezig</string>
@@ -716,4 +717,78 @@
     <string name="track_remove_start_date_conf_text">Dit gaat je eerder geselcteerde startdatum %s verwijderen</string>
     <string name="delete_downloaded">Download verwijderen</string>
     <string name="skipped_reason_not_always_update">Overgeslagen omdat serie geen updates vereist.</string>
+    <string name="crash_screen_description">%s is een onverwachte fout tegengekomen. We raden u aan de crashlogboeken te delen in ons ondersteuningskanaal op Discord.</string>
+    <string name="pref_debug_info">Foutopsporingsinformatie</string>
+    <string name="label_completed_titles">Voltooide titels</string>
+    <string name="pref_update_only_in_release_period">Buiten verwachte vrijgave periode</string>
+    <string name="action_set_interval">Interval instellen</string>
+    <string name="action_filter_interval_custom">Aangepast ophaalinterval</string>
+    <string name="action_filter_interval_long">Maandelijks ophalen (28 dagen)</string>
+    <string name="action_filter_interval_passed">Controleperiode overschreden</string>
+    <string name="action_sort_next_updated">Volgende verwachte update</string>
+    <string name="split_tall_images">Splits hoge afbeeldingen</string>
+    <string name="licensed_manga_chapters_error">Gelicenseerd - Geen hoofdstukken te laten zien</string>
+    <string name="pref_page_rotate_invert">Draairichting van geroteerde brede pagina\'s omdraaien</string>
+    <string name="pref_double_tap_zoom">Dubbeltik om te zoomen</string>
+    <string name="track_activity_name">Log-in volgen</string>
+    <string name="syncing_library">Bibliotheek synchroniseren</string>
+    <string name="has_results">Heeft resultaten</string>
+    <string name="track_remove_finish_date_conf_text">Dit zal jouw eerder geselecteerde einddatum weg halen van %s</string>
+    <string name="track_delete_text">Dit zal de tracking lokaal verwijderen.</string>
+    <string name="track_delete_remote_text">Haal ook weg van %s</string>
+    <string name="overlay_header">Overlay</string>
+    <string name="label_overview_section">Overzicht</string>
+    <string name="label_read_duration">Leesduur</string>
+    <string name="manga_display_interval_title">Schat elke</string>
+    <string name="crash_screen_restart_application">Herstart de applicatie</string>
+    <string name="manga_modify_calculated_interval_title">Interval aanpassen</string>
+    <string name="download_cache_invalidated">Download Index geïnvalideerd</string>
+    <plurals name="day">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="pref_invalidate_download_cache">Maak de downloadindex ongeldig</string>
+    <plurals name="missing_chapters">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="action_ok">OK</string>
+    <string name="pref_chapter_swipe_start">Swipe naar de linker actie</string>
+    <string name="intervals_header">Intervallen</string>
+    <string name="track_delete_title">Haal %s tracking weg\?</string>
+    <string name="unlock_app_title">Ontgrendel %s</string>
+    <string name="pref_chapter_swipe_end">Swipe naar de juiste actie</string>
+    <string name="pref_library_columns_per_row">%d per rij</string>
+    <string name="pref_chapter_swipe">Hoofdstuk veeg</string>
+    <string name="pref_page_rotate">Roteer brede pagina\'s zodat ze passen</string>
+    <string name="create_backup_file_error">Kon een backup-bestand niet creëren</string>
+    <string name="library_sync_complete">Bibliotheeksynchronisatie beëindigd</string>
+    <string name="label_tracker_section">Trackers</string>
+    <string name="skipped_reason_not_in_release_period">Overgeslagen omdat geen uitgave is verwacht vandaag</string>
+    <string name="information_required_plain">*vereist</string>
+    <string name="label_total_chapters">Totaal</string>
+    <string name="action_filter_interval_late">Late 10+ controle</string>
+    <string name="action_filter_interval_dropped">Gevallen\? Late 20+ en 2 maanden</string>
+    <string name="label_read_chapters">Lees</string>
+    <string name="label_tracked_titles">Gevolgde titels</string>
+    <string name="label_mean_score">Gemiddelde score</string>
+    <string name="hour_short">%du</string>
+    <string name="remove_manga">U staat op het punt om \"%s\" te verwijderen uit uw bibliotheek</string>
+    <string name="seconds_short">%ds</string>
+    <string name="download_notifier_split_page_path_not_found">Kon bestandspad van pagina %d niet vinden</string>
+    <string name="label_titles_section">Titels</string>
+    <string name="update_check_open">Open op GitHub</string>
+    <string name="information_no_entries_found">Geen titels gevonden in deze categorie</string>
+    <string name="exception_offline">Geen internet verbinding</string>
+    <string name="exception_unknown_host">Kon niet %s bereiken</string>
+    <string name="label_used">Gebruikt</string>
+    <string name="not_applicable">N.v.t</string>
+    <string name="manga_display_modified_interval_title">Stel in om te updaten iedere</string>
+    <string name="information_cloudflare_help">Tik hier voor hulp met Cloudflare</string>
+    <string name="day_short">%dd</string>
+    <string name="information_no_manga_category">Category is leeg</string>
+    <string name="minute_short">%dm</string>
+    <string name="update_check_fdroid_migration_info">Er is een nieuwe versie beschikbaar van de officiële uitgavens. Tik om te leren hoe u kunt migreren vanuit niet-officiële F-Droid-releases.</string>
+    <string name="exception_http">HTTP %d, check website in WebView</string>
+    <string name="label_titles_in_global_update">In globale update</string>
 </resources>

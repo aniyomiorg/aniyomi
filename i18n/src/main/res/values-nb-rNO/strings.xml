@@ -337,7 +337,6 @@
     <string name="pref_skip_filtered_chapters">Hopp over filtrerte kapitler</string>
     <string name="hide_notification_content">Skjul merknadsinnhold</string>
     <string name="secure_screen_summary">Sikker skjerm skjuler programinnhold ved bytting av programmer og blokker skjermavbildninger</string>
-    <string name="confirm_exit">Trykk \"Tilbake\" igjen for å avslutte</string>
     <string name="label_downloaded_only">Kun nedlastet</string>
     <string name="ext_unofficial">Uoffisiell</string>
     <string name="viewer">Lesemodus</string>
@@ -702,13 +701,11 @@
 \nTrykk for å finne ut mer.</string>
     <string name="information_no_entries_found">Fant ingen oppføringer i denne kategorien</string>
     <string name="action_open_random_manga">Åpne tilfeldig oppføring</string>
-    <string name="action_display_show_continue_reading_button">Fortsett å lese-knapp</string>
-    <string name="track_remove_date_conf_title">Fjerne dato\?</string>
+        <string name="track_remove_date_conf_title">Fjerne dato\?</string>
     <string name="track_remove_start_date_conf_text">Dette vil fjerne den tidligere valgte startdatoen fra %s</string>
     <string name="track_remove_finish_date_conf_text">Dette vil fjerne den tidligere valgte sluttdatoen fra %s</string>
     <string name="pref_invalidate_download_cache">Rydd ut nedlastingsindeksen</string>
-    <string name="pref_invalidate_download_cache_summary">Tving appen til å sjekke nedlastede kapitler på nytt</string>
-    <string name="label_started">Startet</string>
+        <string name="label_started">Startet</string>
     <string name="label_completed_titles">Fullførte oppføringer</string>
     <string name="label_titles_section">Oppføringer</string>
     <string name="label_used">Brukt</string>

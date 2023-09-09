@@ -2,6 +2,7 @@
 <resources>
     <string name="unofficial_extension_message">ይህ ቅጥያ ከኦፊሴላዊው የታቺዮሚ ቅጥያዎች ዝርዝር አይደለም ፡፡</string>
     <string name="obsolete_extension_message">ይህ ቅጥያ ከእንግዲህ አይገኝም።</string>
+
     <string name="untrusted_extension">የማይታመን ቅጥያ</string>
     <string name="ext_uninstall">ማራገፍ</string>
     <string name="ext_untrusted">የማይታመን</string>
@@ -21,6 +22,7 @@
         <item quantity="other">%d ምድቦች</item>
     </plurals>
     <string name="default_category_summary">ሁል ጊዜም ይጠይቁ</string>
+    <string name="default_category">ነባሪ ምድብ</string>
     <string name="pref_library_update_refresh_metadata_summary">ቤተ-መጽሐፍትን ሲያዘምኑ አዲስ ሽፋን እና ዝርዝሮችን ይፈልጉ</string>
     <string name="pref_library_update_refresh_metadata">ዲበ ውሂብን በራስ-ሰር አድስ</string>
     <string name="pref_update_only_non_completed">ቀጣይ ማንጋን ብቻ ያዘምኑ</string>
@@ -134,16 +136,15 @@
     <string name="action_filter_empty">ማጣሪያውን ያስወግዱ</string>
     <string name="action_filter_unread">ያልተነበበ</string>
     <string name="action_filter_bookmarked">ዕልባት ተደርጓል</string>
-    <string name="action_filter_downloaded">ወርዷል</string>
     <string name="action_filter">ማጣሪያ</string>
     <string name="action_menu">ምናሌ</string>
     <string name="action_settings">ማስተካከያዎች</string>
-    <string name="confirm_exit">ለመውጣት እንደገና ተመልሰው ይጫኑ</string>
     <string name="label_extensions">ኢክስቴንሽኖች</string>
     <string name="history">ታሪክ</string>
     <string name="track">መከታተል</string>
     <string name="chapters">ምዕራፎች</string>
     <string name="manga">ማንጋ</string>
+    <string name="categories">ምድቦች</string>
     <string name="information_empty_category">ምንም ምድቦች የሉዎትም። ቤተ-መጽሐፍትዎን ለማደራጀት አንድ ለመፍጠር የመደመር አዝራሩን መታ ያድርጉ።</string>
     <string name="information_empty_library">ቤተ-መጽሐፍትዎ ባዶ ነው ተከታታዮችን ከአሰሳ ወደ ቤተ-መጽሐፍትዎ ያክሉ።</string>
     <string name="information_no_recent_manga">በቅርቡ የተነበበ ነገር የለም</string>
@@ -157,11 +158,12 @@
     <string name="label_recent_manga">ታሪክ</string>
     <string name="label_recent_updates">ዝመናዎች</string>
     <string name="label_library">ቤተ መጻሕፍት</string>
+    <string name="label_download_queue">የሚወርድ ወረፋ</string>
     <string name="label_settings">ማስተካከያዎች</string>
     <string name="label_more">ተጨማሪ</string>
     <string name="name">ስም</string>
     <string name="custom_dir">ብጁ አካባቢ</string>
-    <string name="pref_download_directory">አካባቢን ያውርዱ</string>
+                    <string name="pref_download_directory">አካባቢን ያውርዱ</string>
     <string name="pref_webtoon_side_padding">የጎን ሽፋን</string>
     <string name="pref_category_reading">ንባብ</string>
     <string name="pref_category_reading_mode">የንባብ ሁነታ</string>
@@ -224,7 +226,7 @@
     <string name="ext_nsfw_warning">18+ ይዘትን ይያዝ</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="action_sort_alpha">በፊደል ደርድር</string>
-    <string name="information_cloudflare_bypass_failure">ክላዉድ ፍሌር ን ማለፍ አልተሳካም</string>
+        <string name="information_cloudflare_bypass_failure">ክላዉድ ፍሌር ን ማለፍ አልተሳካም</string>
     <string name="download_notifier_no_network">ምንም የአውታረ መረብ ግንኙነት አይገኝም</string>
     <string name="tapping_inverted_both">ሁለቱም</string>
     <string name="tapping_inverted_vertical">አቀባዊ</string>
@@ -232,11 +234,12 @@
     <string name="tapping_inverted_none">የለም</string>
     <string name="pref_read_with_tapping_inverted">ተገልብጦ መታ ማድረግ</string>
     <string name="channel_ext_updates">የቅጥያ ዝመናዎች</string>
+    <string name="channel_new_chapters">የምዕራፍ ዝመናዎች</string>
     <string name="channel_errors">ስህተቶች</string>
     <string name="channel_complete">ተጠናቀቀ</string>
     <string name="channel_progress">እድገት</string>
     <string name="channel_common">የተለመደ</string>
-    <string name="download_notifier_download_finish">ማውረድ ተጠናቅቋል</string>
+    <string name="download_notifier_download_paused">ማውረድ ለአፍታ ቆሟል</string>
     <string name="color_filter_r_value">ቀ</string>
     <string name="color_filter_b_value">ቢ</string>
     <string name="color_filter_g_value">ኣ</string>
@@ -252,7 +255,7 @@
     <string name="pref_create_backup">ምትኬን ይፍጠሩ</string>
     <string name="tracking_info">በክትትል አገልግሎቶች ውስጥ የምዕራፍ እድገትን ለማዘመን የአንድ-መንገድ ማመሳሰል። ከመከታተያ አዝራራቸው የግለሰቦችን የማንጋ ግቤቶች መከታተልን ያዘጋጁ።</string>
     <string name="services">አገልግሎቶች</string>
-    <string name="pref_download_new">አዳዲስ ምዕራፎችን ያውርዱ</string>
+        <string name="pref_download_new">አዳዲስ ምዕራፎችን ያውርዱ</string>
     <string name="fifth_to_last">አምስተኛው እስከ መጨረሻው ምዕራፍ</string>
     <string name="fourth_to_last">ከአራተኛ እስከ መጨረሻው ምዕራፍ</string>
     <string name="third_to_last">ሦስተኛው እስከ መጨረሻው ምዕራፍ</string>
@@ -284,5 +287,4 @@
     <string name="backup_restore_missing_trackers">መከታተያዎች አልገቡም:</string>
     <string name="backup_restore_missing_sources">የጠፋ ምንጮች:</string>
     <string name="invalid_backup_file_missing_manga">ምትኬ ማንኛውንም ማንጋ አልያዘም ፡፡</string>
-<string name="label_download_queue">የሚወርድ ወረፋ</string>
-    </resources>
+</resources>

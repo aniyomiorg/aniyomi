@@ -306,7 +306,6 @@
     <string name="action_search_settings">Hľadať v nastaveniach</string>
     <string name="action_sort_date_added">Dátum pridaný</string>
     <string name="action_sort_chapter_fetch_date">Dátum načítania kapitoly</string>
-    <string name="confirm_exit">Stlačte tlačidlo späť znova pre ukončenie</string>
     <string name="confirm_lock_change">Prihlásiť sa pre potvrdenie zmien</string>
     <string name="label_default">Predvolené</string>
     <string name="label_sources">Zdroje</string>

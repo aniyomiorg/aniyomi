@@ -3,7 +3,6 @@
     <string name="history">Kasaysayan</string>
     <string name="label_recent_updates">Mga update</string>
     <string name="confirm_lock_change">Panghimatuod aron makumpirma ang pagbag-o</string>
-    <string name="confirm_exit">Pindota balik pag-usab aron makagawas</string>
     <string name="action_settings">Mga setting</string>
     <string name="action_menu">Menu</string>
     <string name="action_filter_bookmarked">Gi-bookmark</string>
@@ -444,8 +443,7 @@
     <string name="email">Email Address</string>
     <string name="unknown_error">Wala mailhi nga sayup</string>
     <string name="username">Username</string>
-    <string name="action_display_show_continue_reading_button">Ipakita ang buton sa pagpadayon sa pagbasa</string>
-    <string name="action_search_hint">Pangitaa…</string>
+        <string name="action_search_hint">Pangitaa…</string>
     <string name="action_open_random_manga">Abli nga random ang pagsulod</string>
     <string name="label_stats">Istatistika</string>
     <string name="label_started">Nagsugod</string>
@@ -453,6 +451,5 @@
     <string name="label_local">Lokal</string>
     <string name="pref_appearance_summary">Tema, format sa petsa ug panahon</string>
     <string name="action_not_now">Dili karon</string>
-    <string name="information_webview_required">Gikinahanlan ang WebView alang sa Tachiyomi</string>
-    <string name="information_required_plain">*gikinahanlan</string>
+        <string name="information_required_plain">*gikinahanlan</string>
 </resources>

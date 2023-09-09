@@ -50,7 +50,7 @@
     <string name="update_48hour">Každé 2 dny</string>
     <string name="update_weekly">Týdně</string>
     <string name="pref_update_only_non_completed">Ve stavu \"Dokončeno\"</string>
-    <string name="ext_update">Aktualizovat</string>
+        <string name="ext_update">Aktualizovat</string>
     <string name="ext_install">Instalovat</string>
     <string name="ext_pending">Čeká se</string>
     <string name="ext_downloading">Stahování</string>
@@ -60,6 +60,7 @@
     <string name="ext_untrusted">Nedůvěryhodné</string>
     <string name="ext_uninstall">Odinstalovat</string>
     <string name="untrusted_extension">Nedůvěryhodné rozšíření</string>
+
     <string name="pref_fullscreen">Celá obrazovka</string>
     <string name="pref_page_transitions">Animovat přechody stránek</string>
     <string name="pref_show_page_number">Zobrazit číslo stránky</string>
@@ -79,7 +80,7 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Umístění pro stažení</string>
-    <string name="custom_dir">Vlastní umístění</string>
+            <string name="custom_dir">Vlastní umístění</string>
     <string name="pref_download_new">Stahovat nové kapitoly</string>
     <string name="username">Uživatelské jméno</string>
     <string name="password">Heslo</string>
@@ -109,7 +110,7 @@
     <string name="score">Skóre</string>
     <string name="title">Název</string>
     <string name="track_type">Typ</string>
-    <string name="snack_add_to_library">Přidat do knihovny\?</string>
+        <string name="snack_add_to_library">Přidat do knihovny\?</string>
     <string name="picture_saved">Obrázek uložen</string>
     <string name="custom_filter">Vlastní filtr</string>
     <string name="chapter_progress">Stránka: %1$d</string>
@@ -206,16 +207,16 @@
     <string name="backup_choice">Co chcete zálohovat\?</string>
     <string name="restoring_backup">Obnovování zálohy</string>
     <string name="creating_backup">Vytváření zálohy</string>
-    <string name="used_cache">Využito: %1$s</string>
+        <string name="used_cache">Využito: %1$s</string>
     <string name="cache_deleted">Mezipaměť smazána. %1$d souborů bylo odstraněno</string>
     <string name="cache_delete_error">Během vymazávání došlo k chybě</string>
     <string name="pref_clear_cookies">Vymazat cookies</string>
     <string name="cookies_cleared">Cookies vymazány</string>
     <string name="pref_clear_database">Vyčistit databázi</string>
     <string name="pref_clear_database_summary">Smazat historii položek, které nejsou uloženy ve vaší knihovně</string>
-    <string name="clear_database_completed">Položky byly smazány</string>
+        <string name="clear_database_completed">Položky byly smazány</string>
     <string name="pref_refresh_library_tracking">Obnovit sledování</string>
-    <string name="version">Verze</string>
+        <string name="version">Verze</string>
     <string name="pref_enable_acra">Odesílat hlášení o pádu</string>
     <string name="pref_acra_summary">Pomáhá opravit chyby. Nebudou odeslány žádné citlivé údaje</string>
     <string name="updating_category">Aktualizuji kategorie</string>
@@ -336,13 +337,13 @@
     <string name="last_used_source">Naposledy použitý</string>
     <string name="tabs_header">Karty</string>
     <string name="downloaded_chapters">Stažené kapitoly</string>
-    <string name="email">Emailová adresa</string>
+        <string name="email">Emailová adresa</string>
     <plurals name="download_queue_summary">
         <item quantity="one">%1$s zbývá</item>
         <item quantity="few">%1$s zbývají</item>
         <item quantity="other">%1$s zbývá</item>
     </plurals>
-    <string name="pref_incognito_mode">Anonymní režim</string>
+        <string name="pref_incognito_mode">Anonymní režim</string>
     <string name="label_downloaded_only">Pouze staženo</string>
     <string name="updated_version">Aktualizováno na verzi v%1$s</string>
     <string name="check_for_updates">Zkontrolovat aktualizace</string>
@@ -379,7 +380,7 @@
     <string name="invalid_backup_file_missing_manga">Záloha neobsahuje žádné položky knihovny.</string>
     <string name="invalid_backup_file">Neplatný soubor se zálohou</string>
     <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol ve sledovacích službách. Nastavení sledování pro každou položku je možné z jejich tlačítka sledování.</string>
-    <string name="pref_category_reading_mode">Režim čtení</string>
+            <string name="pref_category_reading_mode">Režim čtení</string>
     <string name="pref_viewer_nav">Oblasti dotyku</string>
     <string name="nav_zone_next">Další</string>
     <string name="right_and_left_nav">Vpravo a Vlevo</string>
@@ -391,7 +392,7 @@
     <string name="tapping_inverted_none">Žádné</string>
     <string name="ext_nsfw_warning">Zdroje z tohoto rozšíření mohou obsahovat NSFW (18+) obsah</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Toto rozšíření není z oficiálního seznamu rozšíření pro Tachiyomi.</string>
+    <string name="unofficial_extension_message">Toto rozšíření není z oficiálního seznamu rozšíření.</string>
     <string name="ext_unofficial">Neoficiální</string>
     <plurals name="num_categories">
         <item quantity="one">%d kategorie</item>
@@ -427,7 +428,7 @@
     <string name="channel_progress">Postup</string>
     <string name="chapter_settings_updated">Výchozí nastavení kapitol aktualizováno</string>
     <string name="information_webview_outdated">Prosím aktualizujte aplikaci WebView pro lepší kompatibilitu</string>
-    <string name="information_cloudflare_bypass_failure">Nastala chyba při obcházení služby Cloudflare</string>
+        <string name="information_cloudflare_bypass_failure">Nastala chyba při obcházení služby Cloudflare</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Je dostupná aktualizace rozšíření</item>
         <item quantity="few">Jsou dostupné %d aktualizace rozšíření</item>
@@ -452,7 +453,7 @@
         <item quantity="other">Pro %d položek</item>
     </plurals>
     <string name="notification_check_updates">Hledám nové kapitoly</string>
-    <string name="migration_help_guide">Návod k přesunu zdrojů</string>
+        <string name="migration_help_guide">Návod k přesunu zdrojů</string>
     <string name="clear_history_confirmation">Jste si jistý/á\? Všechna historie bude navždy ztracena.</string>
     <string name="pref_clear_history">Vymazat historii</string>
     <string name="clear_history_completed">Historie vymazána</string>
@@ -479,7 +480,6 @@
     <string name="action_search_settings">Nastavení vyhledávání</string>
     <string name="action_sort_date_added">Datum přidání</string>
     <string name="action_filter_tracked">Sledováno</string>
-    <string name="confirm_exit">Opětovným stisknutím tlačítka aplikaci opustíte</string>
     <string name="viewer">Režim čtení</string>
     <string name="pref_show_reading_mode">Ukazovat režim čtení</string>
     <string name="pref_category_for_this_series">Pro tuto sérii</string>
@@ -489,7 +489,7 @@
         <item quantity="few">%d sledovače</item>
         <item quantity="other">%d sledovačů</item>
     </plurals>
-    <string name="pref_category_reading">Čtení</string>
+        <string name="pref_category_reading">Čtení</string>
     <string name="pref_show_reading_mode_summary">Při otevření čtečky krátce zobrazí aktuální režim</string>
     <string name="ext_updates_pending">Čekajících aktualizací</string>
     <string name="file_picker_error">Nebyla nalezena žádná aplikace pro výběr souborů</string>
@@ -602,22 +602,22 @@
     <string name="update_72hour">Každé 3 dny</string>
     <string name="connected_to_wifi">Jen na Wi-Fi</string>
     <string name="pref_verbose_logging">Podrobné protokolování</string>
-    <string name="ext_update_all">Aktualizovat vše</string>
+        <string name="ext_update_all">Aktualizovat vše</string>
     <string name="pref_verbose_logging_summary">Vypisovat podrobné informace do systémového protokolu (sníží výkon aplikace)</string>
     <string name="channel_app_updates">Aktualizace aplikace</string>
     <string name="notification_size_warning">Varování: velké aktualizace poškozují zdroje a můžou vést k pomalejším aktualizacím a zvýšenému využití baterie. Klepnutím se dozvíte více.</string>
-    <string name="extension_api_error">Chyba v získání seznamu rozšíření</string>
+        <string name="extension_api_error">Chyba v získání seznamu rozšíření</string>
     <string name="privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="clear_database_source_item_count">%1$d neknihovní záznamy v databázi</string>
     <string name="pref_true_color_summary">Snižuje pruhování barev, ale může mít vliv na výkon</string>
     <string name="pref_library_update_manga_restriction">Přeskočit aktualizování položek</string>
-    <string name="database_clean">Nic k vyčištění</string>
+        <string name="database_clean">Nic k vyčištění</string>
     <string name="save_chapter_as_cbz">Uložit jako CBZ archiv</string>
     <string name="library_errors_help">Nápovědu k tomu, jak opravit chyby při aktualizaci knihovny, viz %1$s</string>
     <string name="action_faq_and_guides">FAQ a Návody</string>
     <string name="publishing_finished">Zveřejnění dokončeno</string>
     <string name="cancelled">Zrušeno</string>
-    <string name="action_display_cover_only_grid">Mřížka jen s přebaly</string>
+        <string name="action_display_cover_only_grid">Mřížka jen s přebaly</string>
     <string name="pref_update_only_started">Které nebyly rozečteny</string>
     <string name="notification_update_error">%1$d aktualizace(í) selhalo</string>
     <string name="notification_update_skipped">%1$d aktualizace(í) přeskočena(y)</string>
@@ -659,7 +659,7 @@
     <string name="download_notifier_split_page_path_not_found">Nepodařilo se najít cestu k souboru stránky %d</string>
     <string name="pref_navigate_pan">Posunutí širokých snímků</string>
     <string name="action_sort_unread_count">Počet nepřečtených</string>
-    <string name="cant_open_last_read_chapter">Nelze otevřít poslední přečtenou kapitolu</string>
+        <string name="cant_open_last_read_chapter">Nelze otevřít poslední přečtenou kapitolu</string>
     <string name="custom_cover">Vlastní obal</string>
     <string name="not_installed">Nenainstalováno</string>
     <string name="pref_app_language">Jazyk aplikace</string>
@@ -715,11 +715,11 @@
     <string name="action_open_random_manga">Otevřít náhodnou položku</string>
     <string name="fdroid_warning">F-Droid sestavení nejsou oficiálně podporovány.
 \nKlepnutím zobrazíte další informace.</string>
-    <string name="track_remove_date_conf_title">Odstranit datum\?</string>
+        <string name="track_remove_date_conf_title">Odstranit datum\?</string>
     <string name="track_remove_finish_date_conf_text">Tím se odstraní dříve vybrané datum ukončení z %s</string>
     <string name="track_remove_start_date_conf_text">Tím se odstraní dříve vybrané datum zahájení z %s</string>
     <string name="pref_invalidate_download_cache">Zneplatnit index stahování</string>
-    <string name="label_started">Započato</string>
+        <string name="label_started">Započato</string>
     <string name="label_local">Lokální</string>
     <string name="label_downloaded">Staženo</string>
     <string name="label_completed_titles">Dokončené položky</string>
@@ -741,7 +741,7 @@
     <string name="seconds_short">%ds</string>
     <string name="action_not_now">Teď ne</string>
     <string name="information_no_manga_category">Kategorie je prázdná</string>
-    <string name="copied_to_clipboard_plain">Zkopírováno do schránky</string>
+        <string name="copied_to_clipboard_plain">Zkopírováno do schránky</string>
     <string name="enhanced_services_not_installed">K dispozici, ale zdroj není nainstalován: %s</string>
     <string name="pref_skip_dupe_chapters">Přeskakovat duplicitní kapitoly</string>
     <string name="confirm_add_duplicate_manga">Ve své knihovně máte položku se stejným názvem.
@@ -806,4 +806,5 @@
     <string name="exception_offline">Bez připojení k internetu</string>
     <string name="exception_unknown_host">Nelze dosáhnout %s</string>
     <string name="exception_http">HTTP %d, zkontrolovat web v WebView</string>
+    <string name="unlock_app_title">Odemknout %s</string>
 </resources>

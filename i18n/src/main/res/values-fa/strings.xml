@@ -413,7 +413,6 @@
     <string name="action_filter">فیلتر</string>
     <string name="action_menu">منو</string>
     <string name="action_settings">تنضیمات</string>
-    <string name="confirm_exit">برای بستن دکمه بازگشت را یک بار دیگر بزنید</string>
     <string name="history">تاریخچه</string>
     <string name="chapters">قسمت ها</string>
     <string name="manga">کتابخانه ورودی‌ها</string>
@@ -616,8 +615,7 @@
     <string name="label_local">شیرین شده</string>
     <string name="label_downloaded">دانلود شد</string>
     <string name="action_not_now">الان نه</string>
-    <string name="action_display_show_continue_reading_button">نمایش دکمه ادامه خواندن</string>
-    <string name="split_tall_images_summary">بهبود کارکرد ابزار خواندن</string>
+        <string name="split_tall_images_summary">بهبود کارکرد ابزار خواندن</string>
     <plurals name="next_unread_chapters">
         <item quantity="one">قسمت خوانده نشده بعدی</item>
         <item quantity="other">%d قسمت خوانده نشده بعدی</item>
