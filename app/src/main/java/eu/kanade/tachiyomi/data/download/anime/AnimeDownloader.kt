@@ -15,6 +15,7 @@ import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
@@ -22,7 +23,6 @@ import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
-import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
