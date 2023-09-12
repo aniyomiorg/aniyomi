@@ -115,7 +115,7 @@
     <string name="pref_clear_anime_database">애니메이션 데이터베이스 삭제</string>
     <string name="pref_clear_manga_database_summary">서재에 추가되지 않은 항목의 기록을 삭제합니다</string>
     <string name="pref_clear_anime_database_summary">서재에 추가되지 않은 애니메이션의 기록을 삭제합니다</string>
-    <string name="clear_database_confirmation">확실합니까\? 서재에 없는 에피소드의 모든 기록이 삭제됩니다</string>
+    <string name="clear_database_confirmation">확실합니까? 서재에 없는 에피소드의 모든 기록이 삭제됩니다</string>
     <string name="pref_incognito_mode_summary">읽은 내역의 기록을 일시 정지합니다</string>
     <string name="manga_from_library">서재에서</string>
     <string name="anime_from_library">서재의 애니메이션</string>
