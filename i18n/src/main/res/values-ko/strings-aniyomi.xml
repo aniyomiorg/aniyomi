@@ -4,7 +4,7 @@
     <string name="general_categories">카테고리</string>
     <string name="anime_categories">애니메이션 카테고리</string>
     <string name="entries">서재 항목</string>
-    <string name="chapters_episodes">회차 및 에피소드</string>
+    <string name="chapters_episodes">회차와 에피소드</string>
     <string name="episodes">에피소드</string>
     <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호와 같은 민감한 정보도 저장됩니다, 이 백업 파일을 공유하지 마십시오!</string>
     <string name="label_manga_library">만화</string>
@@ -119,7 +119,7 @@
     <string name="pref_clear_anime_database">애니메이션 데이터베이스 삭제</string>
     <string name="pref_clear_manga_database_summary">서재에 추가되지 않은 항목의 기록을 삭제합니다</string>
     <string name="pref_clear_anime_database_summary">서재에 추가되지 않은 애니메이션의 기록을 삭제합니다</string>
-    <string name="clear_database_confirmation">확실합니까\? 서재에 없는 항목의 읽은 기록이 삭제됩니다</string>
+    <string name="clear_database_confirmation">확실합니까\? 서재에 없는 에피소드의 모든 기록이 삭제됩니다</string>
     <string name="pref_refresh_library_tracking_summary">상태 및 평점, 마지막으로 읽은 회차를 동기화 서비스로부터 업데이트합니다</string>
     <string name="pref_incognito_mode_summary">읽은 내역의 기록을 일시 정지합니다</string>
     <string name="manga_from_library">서재에서</string>
@@ -271,11 +271,40 @@
     <string name="action_save_screenshot">스크린샷 저장</string>
     <string name="stats_header">통계 표시</string>
     <string name="copied_video_link_to_clipboard">영상 화질 링크 주소가 클립보드에 복사되었습니다</string>
-    <string name="pref_show_next_episode_airing_time">다음화 방송일시 보여주기</string>
+    <string name="pref_show_next_episode_airing_time">다음 에피소드 방송일 표시</string>
     <string name="pref_episode_swipe_start">왼쪽으로 스와이프</string>
     <string name="pref_episode_swipe_end">오른쪽으로 스와이프</string>
     <string name="go_to_after_opening">오프닝 스킵</string>
     <string name="go_to_next_chapter">다음화</string>
     <string name="pref_category_player_advanced">플레이어 세부 설정</string>
     <string name="go_to_previous_chapter">이전화</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero 프록시 서버</string>
+    <string name="chapter_dialog_header">회차를 찾기</string>
+    <string name="data_saver_server_summary">Bandwidth Hero 프록시 서버 URL 주소를 입력해 주세요</string>
+    <string name="pref_media_control_chapter_seeking_summary">활성화 시, 다음을 챕터가 없는 경우 인트로 건너뛰기 버튼이 호출됩니다</string>
+    <string name="pref_media_control_chapter_seeking">볼륨 버튼으로 회차를 찾기</string>
+    <string name="pref_debanding_title">Debanding 필터</string>
+    <string name="data_saver_image_format_summary_off">Jpeg 파일은 Webp보다 파일 사이즈가 작지만(더 많은 데이터가 절약), 이미지의 품질이 더 떨어집니다.
+\nWebp로 압축을 진행합니다</string>
+    <string name="data_saver_exclude">데이터 절약에서 제외</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="data_saver_downloader">다운로드 시 데이터 절약 사용</string>
+    <string name="data_saver_image_quality">이미지 품질</string>
+    <string name="pref_episode_swipe">에피소드 스와이프</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding 필터, mpv.conf… etc</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_hero">Bandwidth Hero (Bandwidth Hero 프록시 서버가 필요합니다)</string>
+    <string name="data_saver_stop_exclude">데이터 절약에서 제외 중지</string>
+    <string name="data_saver">데이터 절약</string>
+    <string name="data_saver_image_format_summary_on">Jpeg 파일은 Webp보다 파일 사이즈가 작지만(더 많은 데이터가 절약), 이미지의 품질이 더 떨어집니다.
+\nJpeg로 압축을 진행합니다</string>
+    <string name="pref_debanding_disabled">비활성화</string>
+    <string name="data_saver_summary">다운로드/로딩 시 이미지 압축</string>
+    <string name="data_saver_image_quality_summary">값이 높으면 이미지 품질이 좋게 저장되지만 파일 크기가 커지게 됩니다. 80%는 좋은 파일 크기와 이미지 품질 사이의 중간값입니다</string>
+    <string name="data_saver_image_format">Jpeg로 압축</string>
+    <string name="data_saver_color_bw">흑백으로 변환</string>
+    <string name="data_saver_ignore_gif">Gif 애니메이션 무시</string>
+    <string name="data_saver_ignore_jpeg">Jpeg 이미지 무시</string>
 </resources>
