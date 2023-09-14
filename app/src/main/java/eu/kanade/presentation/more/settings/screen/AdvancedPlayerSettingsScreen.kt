@@ -41,6 +41,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                     0 to context.getString(R.string.pref_debanding_disabled),
                     1 to context.getString(R.string.pref_debanding_cpu),
                     2 to context.getString(R.string.pref_debanding_gpu),
+                    3 to "YUV420P",
                 ),
             ),
         )
