@@ -419,6 +419,7 @@ class PlayerActivity : BaseActivity() {
         when (playerPreferences.deband().get()) {
             1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             2 -> MPVLib.setOptionString("deband", "yes")
+            3 -> MPVLib.setOptionString("vf", "format=yuv420p")
         }
 
         MPVLib.addLogObserver(playerObserver)
