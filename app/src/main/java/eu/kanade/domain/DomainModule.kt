@@ -49,6 +49,7 @@ import tachiyomi.data.updates.manga.MangaUpdatesRepositoryImpl
 import tachiyomi.domain.category.anime.interactor.CreateAnimeCategoryWithName
 import tachiyomi.domain.category.anime.interactor.DeleteAnimeCategory
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
 import tachiyomi.domain.category.anime.interactor.HideAnimeCategory
 import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
@@ -61,6 +62,7 @@ import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.manga.interactor.CreateMangaCategoryWithName
 import tachiyomi.domain.category.manga.interactor.DeleteMangaCategory
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.category.manga.interactor.GetVisibleMangaCategories
 import tachiyomi.domain.category.manga.interactor.HideMangaCategory
 import tachiyomi.domain.category.manga.interactor.RenameMangaCategory
 import tachiyomi.domain.category.manga.interactor.ReorderMangaCategory
@@ -144,6 +146,7 @@ class DomainModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<AnimeCategoryRepository> { AnimeCategoryRepositoryImpl(get()) }
         addFactory { GetAnimeCategories(get()) }
+        addFactory { GetVisibleAnimeCategories(get()) }
         addFactory { ResetAnimeCategoryFlags(get(), get()) }
         addFactory { SetDisplayModeForAnimeCategory(get(), get()) }
         addFactory { SetSortModeForAnimeCategory(get(), get()) }
@@ -156,6 +159,7 @@ class DomainModule : InjektModule {
 
         addSingletonFactory<MangaCategoryRepository> { MangaCategoryRepositoryImpl(get()) }
         addFactory { GetMangaCategories(get()) }
+        addFactory { GetVisibleMangaCategories(get()) }
         addFactory { ResetMangaCategoryFlags(get(), get()) }
         addFactory { SetDisplayModeForMangaCategory(get(), get()) }
         addFactory { SetSortModeForMangaCategory(get(), get()) }

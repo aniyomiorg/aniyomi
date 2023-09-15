@@ -33,7 +33,7 @@ hidden
 FROM categories
 ORDER BY sort;
 
-getCategoriesNotHidden:
+getVisibleCategories:
 SELECT
 _id AS id,
 name,
@@ -55,6 +55,18 @@ FROM categories C
 JOIN mangas_categories MC
 ON C._id = MC.category_id
 WHERE MC.manga_id = :mangaId;
+
+getVisibleCategoriesByMangaId:
+SELECT
+C._id AS id,
+C.name,
+C.sort AS `order`,
+C.flags,
+C.hidden
+FROM categories C
+JOIN mangas_categories MC
+ON C._id = MC.category_id
+WHERE MC.manga_id = :mangaId AND C.hidden = 0;
 
 insert:
 INSERT INTO categories(name, sort, flags)
