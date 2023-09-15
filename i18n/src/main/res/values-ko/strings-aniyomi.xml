@@ -307,4 +307,6 @@
     <string name="data_saver_color_bw">흑백으로 변환</string>
     <string name="data_saver_ignore_gif">Gif 애니메이션 무시</string>
     <string name="data_saver_ignore_jpeg">Jpeg 이미지 무시</string>
+    <string name="action_hide">숨기기</string>
+    <string name="pref_category_hide_hidden">카테고리 화면에서 카테고리 숨기기</string>
 </resources>
