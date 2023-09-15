@@ -320,4 +320,7 @@
     <string name="pref_debanding_disabled">Desactivado</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_title">Debanding</string>
+    <string name="action_hide">Ocultar</string>
+    <string name="pref_category_hide_hidden">Ocultar las categorías de la pantalla de las categorías</string>
 </resources>
