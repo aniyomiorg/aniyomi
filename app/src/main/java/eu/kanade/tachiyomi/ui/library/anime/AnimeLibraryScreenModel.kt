@@ -44,7 +44,7 @@ import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
@@ -75,7 +75,7 @@ typealias AnimeLibraryMap = Map<Category, List<AnimeLibraryItem>>
 
 class AnimeLibraryScreenModel(
     private val getLibraryAnime: GetLibraryAnime = Injekt.get(),
-    private val getCategories: GetAnimeCategories = Injekt.get(),
+    private val getCategories: GetVisibleAnimeCategories = Injekt.get(),
     private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodesByAnimeId: GetEpisodeByAnimeId = Injekt.get(),

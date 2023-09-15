@@ -28,6 +28,7 @@ class CreateAnimeCategoryWithName(
             name = name,
             order = nextOrder,
             flags = initialFlags,
+            hidden = false,
         )
 
         try {

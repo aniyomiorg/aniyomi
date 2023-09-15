@@ -54,13 +54,20 @@ object SettingsLibraryScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allCategories by getCategories.subscribe().collectAsState(initial = runBlocking { getCategories.await() })
+        val allCategories by getCategories.subscribe()
+            .collectAsState(initial = runBlocking { getCategories.await() })
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val allAnimeCategories by getAnimeCategories.subscribe()
+            .collectAsState(initial = runBlocking { getAnimeCategories.await() })
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         return listOf(
-            getCategoriesGroup(LocalNavigator.currentOrThrow, allCategories, allAnimeCategories, libraryPreferences),
+            getCategoriesGroup(
+                LocalNavigator.currentOrThrow,
+                allCategories,
+                allAnimeCategories,
+                libraryPreferences,
+            ),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
             getChapterSwipeActionsGroup(libraryPreferences),
             getEpisodeSwipeActionsGroup(libraryPreferences),
@@ -82,7 +89,8 @@ object SettingsLibraryScreen : SearchableSettings {
         val defaultCategory by libraryPreferences.defaultMangaCategory().collectAsState()
         val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
         val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
-        val selectedAnimeCategory = allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
+        val selectedAnimeCategory =
+            allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
 
         // For default category
         val mangaIds = listOf(libraryPreferences.defaultMangaCategory().defaultValue()) +
@@ -110,7 +118,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultAnimeCategory(),
                     title = stringResource(R.string.default_anime_category),
-                    subtitle = selectedAnimeCategory?.visualName ?: stringResource(R.string.default_category_summary),
+                    subtitle = selectedAnimeCategory?.visualName
+                        ?: stringResource(R.string.default_category_summary),
                     entries = animeIds.zip(animeLabels).toMap(),
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -125,7 +134,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultMangaCategory(),
                     title = stringResource(R.string.default_manga_category),
-                    subtitle = selectedCategory?.visualName ?: stringResource(R.string.default_category_summary),
+                    subtitle = selectedCategory?.visualName
+                        ?: stringResource(R.string.default_category_summary),
                     entries = mangaIds.zip(mangaLabels).toMap(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
@@ -139,6 +149,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         }
                         true
                     },
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = libraryPreferences.hideHiddenCategoriesSettings(),
+                    title = stringResource(R.string.pref_category_hide_hidden),
                 ),
             ),
         )
@@ -158,7 +172,8 @@ object SettingsLibraryScreen : SearchableSettings {
         val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateItemRestriction()
 
         val animelibUpdateCategoriesPref = libraryPreferences.animeLibraryUpdateCategories()
-        val animelibUpdateCategoriesExcludePref = libraryPreferences.animeLibraryUpdateCategoriesExclude()
+        val animelibUpdateCategoriesExcludePref =
+            libraryPreferences.animeLibraryUpdateCategoriesExclude()
 
         val includedAnime by animelibUpdateCategoriesPref.collectAsState()
         val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
@@ -174,14 +189,18 @@ object SettingsLibraryScreen : SearchableSettings {
                 onDismissRequest = { showAnimeDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
                     animelibUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    animelibUpdateCategoriesExcludePref.set(newExcluded.map { it.id.toString() }.toSet())
+                    animelibUpdateCategoriesExcludePref.set(
+                        newExcluded.map { it.id.toString() }
+                            .toSet(),
+                    )
                     showAnimeDialog = false
                 },
             )
         }
 
         val libraryUpdateCategoriesPref = libraryPreferences.mangaLibraryUpdateCategories()
-        val libraryUpdateCategoriesExcludePref = libraryPreferences.mangaLibraryUpdateCategoriesExclude()
+        val libraryUpdateCategoriesExcludePref =
+            libraryPreferences.mangaLibraryUpdateCategoriesExclude()
 
         val includedManga by libraryUpdateCategoriesPref.collectAsState()
         val excludedManga by libraryUpdateCategoriesExcludePref.collectAsState()
@@ -197,7 +216,10 @@ object SettingsLibraryScreen : SearchableSettings {
                 onDismissRequest = { showMangaDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
                     libraryUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    libraryUpdateCategoriesExcludePref.set(newExcluded.map { it.id.toString() }.toSet())
+                    libraryUpdateCategoriesExcludePref.set(
+                        newExcluded.map { it.id.toString() }
+                            .toSet(),
+                    )
                     showMangaDialog = false
                 },
             )

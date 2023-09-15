@@ -37,6 +37,7 @@ fun Screen.mangaCategoryTab(): TabContent {
                     contentPadding = contentPadding,
                     onClickCreate = { screenModel.showDialog(MangaCategoryDialog.Create) },
                     onClickRename = { screenModel.showDialog(MangaCategoryDialog.Rename(it)) },
+                    onClickHide = screenModel::hideCategory,
                     onClickDelete = { screenModel.showDialog(MangaCategoryDialog.Delete(it)) },
                     onClickMoveUp = screenModel::moveUp,
                     onClickMoveDown = screenModel::moveDown,
