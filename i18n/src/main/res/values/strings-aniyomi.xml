@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Actions -->
+    <string name="action_hide">Hide</string>
+
     <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
@@ -308,6 +311,9 @@
     <string name="pref_episode_swipe">Episode swipe</string>
     <string name="pref_episode_swipe_end">Swipe to right action</string>
     <string name="pref_episode_swipe_start">Swipe to left action</string>
+
+    <string name="pref_category_hide_hidden">Hide hidden categories from categories screen</string>
+
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
     <string name="data_saver_stop_exclude">Stop excluding from data saver</string>

@@ -4,22 +4,22 @@ import kotlinx.coroutines.flow.Flow
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import tachiyomi.domain.category.model.Category
 
-class GetMangaCategories(
+class GetVisibleMangaCategories(
     private val categoryRepository: MangaCategoryRepository,
 ) {
     fun subscribe(): Flow<List<Category>> {
-        return categoryRepository.getAllMangaCategoriesAsFlow()
+        return categoryRepository.getAllVisibleMangaCategoriesAsFlow()
     }
 
     fun subscribe(mangaId: Long): Flow<List<Category>> {
-        return categoryRepository.getCategoriesByMangaIdAsFlow(mangaId)
+        return categoryRepository.getVisibleCategoriesByMangaIdAsFlow(mangaId)
     }
 
     suspend fun await(): List<Category> {
-        return categoryRepository.getAllMangaCategories()
+        return categoryRepository.getAllVisibleMangaCategories()
     }
 
     suspend fun await(mangaId: Long): List<Category> {
-        return categoryRepository.getCategoriesByMangaId(mangaId)
+        return categoryRepository.getVisibleCategoriesByMangaId(mangaId)
     }
 }
