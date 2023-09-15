@@ -41,7 +41,6 @@
     <!-- Actions -->
     <string name="action_settings">Settings</string>
     <string name="action_menu">Menu</string>
-    <string name="action_hide">Hide</string>
     <string name="action_filter">Filter</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
     <string name="action_filter_tracked">Tracked</string>
@@ -264,7 +263,6 @@
     <string name="default_category">Default category</string>
     <string name="default_category_summary">Always ask</string>
     <string name="categorized_display_settings">Per-category settings for sort and display</string>
-    <string name="hide_hidden_categories_settings">Hide hidden categories from categories screen</string>
     <plurals name="num_categories">
         <item quantity="one">%d category</item>
         <item quantity="other">%d categories</item>

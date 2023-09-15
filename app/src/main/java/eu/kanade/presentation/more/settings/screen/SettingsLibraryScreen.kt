@@ -152,7 +152,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.hideHiddenCategoriesSettings(),
-                    title = stringResource(R.string.hide_hidden_categories_settings),
+                    title = stringResource(R.string.pref_category_hide_hidden),
                 ),
             ),
         )
