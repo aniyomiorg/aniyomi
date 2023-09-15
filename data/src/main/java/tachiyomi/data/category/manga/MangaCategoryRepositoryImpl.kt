@@ -65,6 +65,7 @@ class MangaCategoryRepositoryImpl(
             name = update.name,
             order = update.order,
             flags = update.flags,
+            hidden = if (update.hidden == true) 1L else 0L,
             categoryId = update.id,
         )
     }

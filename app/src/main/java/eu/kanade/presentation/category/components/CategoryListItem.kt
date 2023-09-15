@@ -11,6 +11,8 @@ import androidx.compose.material.icons.outlined.ArrowDropUp
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Label
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +35,7 @@ fun CategoryListItem(
     onMoveUp: (Category) -> Unit,
     onMoveDown: (Category) -> Unit,
     onRename: () -> Unit,
+    onHide: () -> Unit,
     onDelete: () -> Unit,
 ) {
     ElevatedCard(
@@ -71,10 +74,29 @@ fun CategoryListItem(
             }
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = onRename) {
-                Icon(imageVector = Icons.Outlined.Edit, contentDescription = stringResource(R.string.action_rename_category))
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = stringResource(R.string.action_rename_category),
+                )
             }
+            IconButton(
+                onClick = onHide,
+                content = {
+                    Icon(
+                        imageVector = if (category.hidden) {
+                            Icons.Outlined.Visibility
+                        } else {
+                            Icons.Outlined.VisibilityOff
+                        },
+                        contentDescription = stringResource(R.string.action_hide),
+                    )
+                },
+            )
             IconButton(onClick = onDelete) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = stringResource(R.string.action_delete))
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = stringResource(R.string.action_delete),
+                )
             }
         }
     }

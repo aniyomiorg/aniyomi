@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.domain.category.anime.interactor.CreateAnimeCategoryWithName
 import tachiyomi.domain.category.anime.interactor.DeleteAnimeCategory
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.HideAnimeCategory
 import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
 import tachiyomi.domain.category.model.Category
@@ -22,6 +23,7 @@ import uy.kohesive.injekt.api.get
 class AnimeCategoryScreenModel(
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val createCategoryWithName: CreateAnimeCategoryWithName = Injekt.get(),
+    private val hideCategory: HideAnimeCategory = Injekt.get(),
     private val deleteCategory: DeleteAnimeCategory = Injekt.get(),
     private val reorderCategory: ReorderAnimeCategory = Injekt.get(),
     private val renameCategory: RenameAnimeCategory = Injekt.get(),
@@ -47,6 +49,15 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                else -> {}
+            }
+        }
+    }
+
+    fun hideCategory(category: Category) {
+        coroutineScope.launch {
+            when (hideCategory.await(category)) {
+                is HideAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
                 else -> {}
             }
         }

@@ -17,6 +17,7 @@ fun CategoryContent(
     lazyListState: LazyListState,
     paddingValues: PaddingValues,
     onClickRename: (Category) -> Unit,
+    onClickHide: (Category) -> Unit,
     onClickDelete: (Category) -> Unit,
     onMoveUp: (Category) -> Unit,
     onMoveDown: (Category) -> Unit,
@@ -38,6 +39,7 @@ fun CategoryContent(
                 onMoveUp = onMoveUp,
                 onMoveDown = onMoveDown,
                 onRename = { onClickRename(category) },
+                onHide = { onClickHide(category) },
                 onDelete = { onClickDelete(category) },
             )
         }
