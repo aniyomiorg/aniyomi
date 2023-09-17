@@ -132,4 +132,12 @@
     <string name="label_manga_library">ମଙ୍ଗା</string>
     <string name="label_updates">ମଙ୍ଗା</string>
     <string name="label_manga_sources">ମଙ୍ଗା ଉତ୍ସ</string>
+    <string name="label_anime_library">ଅନିମେ</string>
+    <string name="action_hide">ଲୁଚାଅ</string>
+    <string name="action_show_manga">ମଙ୍ଗା ଦେଖାଅ</string>
+    <string name="label_anime_sources">ଅନିମେ ଉତ୍ସ</string>
+    <string name="action_sort_last_manga_update">ଗତ ମଙ୍ଗା ଅଦ୍ୟତନ</string>
+    <string name="action_show_anime">ଅନିମେ ଦେଖାଅ</string>
+    <string name="label_anime">ଅନିମେ</string>
+    <string name="action_sort_last_anime_update">ଗତ ଅନିମେ ଅଦ୍ୟତନ</string>
 </resources>
