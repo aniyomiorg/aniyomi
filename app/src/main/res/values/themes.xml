@@ -88,6 +88,33 @@
     <!-- Monet theme only support S+ -->
     <style name="Theme.Tachiyomi.Monet" />
 
+    <!--== Cotton Candy Theme ==-->
+    <style name="Theme.Tachiyomi.CottonCandy">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/cottoncandy_primary</item>
+        <item name="colorOnPrimary">@color/cottoncandy_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/cottoncandy_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/cottoncandy_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/cottoncandy_secondary</item>
+        <item name="colorOnSecondary">@color/cottoncandy_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/cottoncandy_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/cottoncandy_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/cottoncandy_tertiary</item>
+        <item name="colorOnTertiary">@color/cottoncandy_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/cottoncandy_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/cottoncandy_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/cottoncandy_background</item>
+        <item name="colorOnBackground">@color/cottoncandy_onBackground</item>
+        <item name="colorSurface">@color/cottoncandy_surface</item>
+        <item name="colorOnSurface">@color/cottoncandy_onSurface</item>
+        <item name="colorSurfaceVariant">@color/cottoncandy_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/cottoncandy_onSurfaceVariant</item>
+        <item name="colorOutline">@color/cottoncandy_outline</item>
+        <item name="colorOnSurfaceInverse">@color/cottoncandy_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/cottoncandy_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/cottoncandy_primaryInverse</item>
+    </style>
+
     <!--== Green Apple Theme ==-->
     <style name="Theme.Tachiyomi.GreenApple">
         <!-- Theme Colors -->
@@ -169,6 +196,33 @@
         <item name="colorSurfaceInverse">@color/midnightdusk_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/midnightdusk_primaryInverse</item>
         <item name="elevationOverlayColor">@color/midnightdusk_elevationOverlay</item>
+    </style>
+
+    <!--== Mocha Theme ==-->
+    <style name="Theme.Tachiyomi.Mocha">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/mocha_primary</item>
+        <item name="colorOnPrimary">@color/mocha_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/mocha_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/mocha_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/mocha_secondary</item>
+        <item name="colorOnSecondary">@color/mocha_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/mocha_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/mocha_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/mocha_tertiary</item>
+        <item name="colorOnTertiary">@color/mocha_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/mocha_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/mocha_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/mocha_background</item>
+        <item name="colorOnBackground">@color/mocha_onBackground</item>
+        <item name="colorSurface">@color/mocha_surface</item>
+        <item name="colorOnSurface">@color/mocha_onSurface</item>
+        <item name="colorSurfaceVariant">@color/mocha_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/mocha_onSurfaceVariant</item>
+        <item name="colorOutline">@color/mocha_outline</item>
+        <item name="colorOnSurfaceInverse">@color/mocha_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/mocha_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/mocha_primaryInverse</item>
     </style>
 
     <!--== Strawberry Daiquiri Theme ==-->
