@@ -8,31 +8,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.core.prefs.asState
+import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
-import eu.kanade.domain.items.episode.interactor.UpdateEpisode
-import eu.kanade.domain.items.episode.model.EpisodeUpdate
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.domain.updates.anime.interactor.GetAnimeUpdates
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
-import eu.kanade.presentation.components.EpisodeDownloadAction
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.updates.anime.AnimeUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -44,9 +32,20 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.items.episode.interactor.GetEpisode
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
+import tachiyomi.domain.items.episode.model.EpisodeUpdate
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -61,6 +60,7 @@ class AnimeUpdatesScreenModel(
     private val getEpisode: GetEpisode = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    downloadPreferences: DownloadPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesState>(AnimeUpdatesState()) {
 
@@ -68,9 +68,9 @@ class AnimeUpdatesScreenModel(
     val events: Flow<Event> = _events.receiveAsFlow()
 
     val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
+    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
 
-    val relativeTime: Int by uiPreferences.relativeTime().asState(coroutineScope)
-    val dateFormat: DateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
+    val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
@@ -103,20 +103,20 @@ class AnimeUpdatesScreenModel(
         }
 
         coroutineScope.launchIO {
-            merge(downloadManager.queue.statusFlow(), downloadManager.queue.progressFlow())
+            merge(downloadManager.statusFlow(), downloadManager.progressFlow())
                 .catch { logcat(LogPriority.ERROR, it) }
                 .collect(this@AnimeUpdatesScreenModel::updateDownloadState)
         }
     }
 
     private fun List<AnimeUpdatesWithRelations>.toUpdateItems(): List<AnimeUpdatesItem> {
-        return this.map {
-            val activeDownload = downloadManager.getQueuedDownloadOrNull(it.episodeId)
+        return this.map { update ->
+            val activeDownload = downloadManager.getQueuedDownloadOrNull(update.episodeId)
             val downloaded = downloadManager.isEpisodeDownloaded(
-                it.episodeName,
-                it.scanlator,
-                it.animeTitle,
-                it.sourceId,
+                update.episodeName,
+                update.scanlator,
+                update.animeTitle,
+                update.sourceId,
             )
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
@@ -124,16 +124,16 @@ class AnimeUpdatesScreenModel(
                 else -> AnimeDownload.State.NOT_DOWNLOADED
             }
             AnimeUpdatesItem(
-                update = it,
+                update = update,
                 downloadStateProvider = { downloadState },
                 downloadProgressProvider = { activeDownload?.progress ?: 0 },
-                selected = it.episodeId in selectedEpisodeIds,
+                selected = update.episodeId in selectedEpisodeIds,
             )
         }
     }
 
     fun updateLibrary(): Boolean {
-        val started = AnimeLibraryUpdateService.start(Injekt.get<Application>())
+        val started = AnimeLibraryUpdateJob.startNow(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }
@@ -171,18 +171,12 @@ class AnimeUpdatesScreenModel(
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(Injekt.get<Application>())
+                        downloadManager.startDownloads()
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {
                     val episodeId = items.singleOrNull()?.update?.episodeId ?: return@launch
                     startDownloadingNow(episodeId)
-                }
-                EpisodeDownloadAction.START_ALT -> {
-                    downloadEpisodes(items, alt = true)
-                    if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(Injekt.get<Application>())
-                    }
                 }
                 EpisodeDownloadAction.CANCEL -> {
                     val episodeId = items.singleOrNull()?.update?.episodeId ?: return@launch
@@ -190,6 +184,10 @@ class AnimeUpdatesScreenModel(
                 }
                 EpisodeDownloadAction.DELETE -> {
                     deleteEpisodes(items)
+                }
+                EpisodeDownloadAction.SHOW_QUALITIES -> {
+                    val update = items.singleOrNull()?.update ?: return@launch
+                    showQualitiesDialog(update)
                 }
             }
             toggleAllSelection(false)
@@ -277,6 +275,10 @@ class AnimeUpdatesScreenModel(
 
     fun showConfirmDeleteEpisodes(updatesItem: List<AnimeUpdatesItem>) {
         setDialog(Dialog.DeleteConfirmation(updatesItem))
+    }
+
+    private fun showQualitiesDialog(update: AnimeUpdatesWithRelations) {
+        setDialog(Dialog.ShowQualities(update.episodeName, update.episodeId, update.animeId, update.sourceId))
     }
 
     fun toggleSelection(
@@ -378,6 +380,7 @@ class AnimeUpdatesScreenModel(
 
     sealed class Dialog {
         data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog()
+        data class ShowQualities(val episodeTitle: String, val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog()
     }
 
     sealed class Event {
@@ -396,7 +399,8 @@ data class AnimeUpdatesState(
     val selectionMode = selected.isNotEmpty()
 
     fun getUiModel(context: Context, relativeTime: Int): List<AnimeUpdatesUiModel> {
-        val dateFormat = UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
+        val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
+
         return items
             .map { AnimeUpdatesUiModel.Item(it) }
             .insertSeparators { before, after ->

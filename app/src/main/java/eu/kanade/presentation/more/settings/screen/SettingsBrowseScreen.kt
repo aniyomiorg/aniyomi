@@ -7,11 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
-import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionUpdateJob
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.authenticate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -27,23 +25,9 @@ object SettingsBrowseScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val context = LocalContext.current
         val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
-        val preferences = remember { Injekt.get<BasePreferences>() }
         return listOf(
             Preference.PreferenceGroup(
-                title = stringResource(R.string.label_extensions),
-                preferenceItems = listOf(
-                    Preference.PreferenceItem.SwitchPreference(
-                        pref = preferences.automaticExtUpdates(),
-                        title = stringResource(R.string.pref_enable_automatic_extension_updates),
-                        onValueChanged = {
-                            MangaExtensionUpdateJob.setupTask(context, it)
-                            true
-                        },
-                    ),
-                ),
-            ),
-            Preference.PreferenceGroup(
-                title = stringResource(R.string.action_global_search),
+                title = stringResource(R.string.label_sources),
                 preferenceItems = listOf(
                     Preference.PreferenceItem.SwitchPreference(
                         pref = sourcePreferences.searchPinnedAnimeSourcesOnly(),
@@ -52,6 +36,14 @@ object SettingsBrowseScreen : SearchableSettings {
                     Preference.PreferenceItem.SwitchPreference(
                         pref = sourcePreferences.searchPinnedMangaSourcesOnly(),
                         title = stringResource(R.string.pref_search_pinned_manga_sources_only),
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.hideInAnimeLibraryItems(),
+                        title = stringResource(R.string.pref_hide_in_anime_library_items),
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.hideInMangaLibraryItems(),
+                        title = stringResource(R.string.pref_hide_in_manga_library_items),
                     ),
                 ),
             ),

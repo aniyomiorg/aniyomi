@@ -6,20 +6,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.MigrateAnimeScreen
-import eu.kanade.presentation.components.LoadingScreen
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.presentation.core.screens.LoadingScreen
 
 data class MigrationAnimeScreen(
     private val sourceId: Long,
-) : Screen {
+) : Screen() {
 
     @Composable
     override fun Content() {

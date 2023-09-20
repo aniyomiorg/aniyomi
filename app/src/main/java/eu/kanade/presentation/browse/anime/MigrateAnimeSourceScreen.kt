@@ -22,25 +22,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.anime.components.AnimeSourceIcon
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
-import eu.kanade.presentation.components.Badge
-import eu.kanade.presentation.components.BadgeGroup
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.ScrollbarLazyColumn
-import eu.kanade.presentation.components.Scroller.STICKY_HEADER_KEY_PREFIX
-import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.secondaryItemAlpha
-import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.MigrateAnimeSourceState
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.presentation.core.components.Badge
+import tachiyomi.presentation.core.components.BadgeGroup
+import tachiyomi.presentation.core.components.ScrollbarLazyColumn
+import tachiyomi.presentation.core.components.Scroller.STICKY_HEADER_KEY_PREFIX
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.theme.header
+import tachiyomi.presentation.core.util.plus
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MigrateAnimeSourceScreen(
@@ -164,7 +163,7 @@ private fun MigrateAnimeSourceItem(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (sourceLangString != null) {

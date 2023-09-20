@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.notify
 import uy.kohesive.injekt.injectLazy
 import java.util.regex.Pattern
 
@@ -45,22 +46,12 @@ internal class AnimeDownloadNotifier(private val context: Context) {
     private var isDownloading = false
 
     /**
-     * Updated when error is thrown
-     */
-    private var errorThrown = false
-
-    /**
-     * Updated when paused
-     */
-    var paused = false
-
-    /**
      * Shows a notification from this builder.
      *
      * @param id the id of the notification.
      */
     private fun NotificationCompat.Builder.show(id: Int) {
-        context.notificationManager.notify(id, build())
+        context.notify(id, build())
     }
 
     /**
@@ -159,7 +150,6 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         dismissProgress()
 
         // Reset states to default
-        errorThrown = false
         isDownloading = false
     }
 
@@ -180,7 +170,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             timeout?.let { setTimeoutAfter(it) }
             contentIntent?.let { setContentIntent(it) }
 
-            show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)
+            show(Notifications.ID_DOWNLOAD_EPISODE_ERROR)
         }
 
         // Reset download information
@@ -206,11 +196,10 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
 
-            show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)
+            show(Notifications.ID_DOWNLOAD_EPISODE_ERROR)
         }
 
         // Reset download information
-        errorThrown = true
         isDownloading = false
     }
 }

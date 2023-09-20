@@ -7,24 +7,24 @@ import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
-import eu.kanade.domain.entries.anime.interactor.GetLibraryAnime
-import eu.kanade.domain.entries.anime.model.isLocal
-import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.library.anime.LibraryAnime
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
-import eu.kanade.domain.track.anime.model.AnimeTrack
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -109,9 +109,9 @@ class AnimeStatsScreenModel(
             .fastFilterNot { it.anime.id in excludedMangaIds }
             .fastDistinctBy { it.anime.id }
             .fastCountNot {
-                (MANGA_NON_COMPLETED in updateRestrictions && it.anime.status.toInt() == SAnime.COMPLETED) ||
-                    (MANGA_HAS_UNREAD in updateRestrictions && it.unseenCount != 0L) ||
-                    (MANGA_NON_READ in updateRestrictions && it.totalEpisodes > 0 && !it.hasStarted)
+                (ENTRY_NON_COMPLETED in updateRestrictions && it.anime.status.toInt() == SAnime.COMPLETED) ||
+                    (ENTRY_HAS_UNVIEWED in updateRestrictions && it.unseenCount != 0L) ||
+                    (ENTRY_NON_VIEWED in updateRestrictions && it.totalEpisodes > 0 && !it.hasStarted)
             }
     }
 

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import kotlinx.coroutines.flow.update
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -15,7 +15,11 @@ class GlobalAnimeSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-) : AnimeSearchScreenModel<GlobalAnimeSearchState>(GlobalAnimeSearchState(searchQuery = initialQuery)) {
+) : AnimeSearchScreenModel<GlobalAnimeSearchState>(
+    GlobalAnimeSearchState(
+        searchQuery = initialQuery,
+    ),
+) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()

@@ -3,17 +3,17 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -138,12 +138,24 @@ class AnimeDownloadProvider(
      * @param episodeScanlator scanlator of the episode to query
      */
     fun getEpisodeDirName(episodeName: String, episodeScanlator: String?): String {
+        val newEpisodeName = sanitizeEpisodeName(episodeName)
         return DiskUtil.buildValidFilename(
             when {
-                episodeScanlator.isNullOrBlank().not() -> "${episodeScanlator}_$episodeName"
-                else -> episodeName
+                episodeScanlator.isNullOrBlank().not() -> "${episodeScanlator}_$newEpisodeName"
+                else -> newEpisodeName
             },
         )
+    }
+
+    /**
+     * Return the new name for the episode (in case it's empty or blank)
+     *
+     * @param episodeName the name of the episode
+     */
+    private fun sanitizeEpisodeName(episodeName: String): String {
+        return episodeName.ifBlank {
+            "Episode"
+        }
     }
 
     /**

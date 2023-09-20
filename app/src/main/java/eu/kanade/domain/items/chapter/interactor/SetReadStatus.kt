@@ -1,15 +1,15 @@
 package eu.kanade.domain.items.chapter.interactor
 
 import eu.kanade.domain.download.manga.interactor.DeleteChapterDownload
-import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.entries.manga.repository.MangaRepository
-import eu.kanade.domain.items.chapter.model.Chapter
-import eu.kanade.domain.items.chapter.model.ChapterUpdate
-import eu.kanade.domain.items.chapter.repository.ChapterRepository
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.repository.MangaRepository
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.model.ChapterUpdate
+import tachiyomi.domain.items.chapter.repository.ChapterRepository
 
 class SetReadStatus(
     private val downloadPreferences: DownloadPreferences,

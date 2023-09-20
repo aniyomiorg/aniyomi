@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -15,10 +14,10 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
-import eu.kanade.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
-import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Anilist(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -73,19 +72,18 @@ class Anilist(private val context: Context, id: Long) : TrackService(id), MangaT
         return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
     }
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            WATCHING -> getString(R.string.watching)
-            READING -> getString(R.string.reading)
-            PLANNING -> getString(R.string.plan_to_read)
-            PLANNING_ANIME -> getString(R.string.plan_to_watch)
-            COMPLETED -> getString(R.string.completed)
-            REPEATING -> getString(R.string.repeating)
-            REPEATING_ANIME -> getString(R.string.repeating_anime)
-            PAUSED -> getString(R.string.paused)
-            DROPPED -> getString(R.string.dropped)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        WATCHING -> R.string.watching
+        READING -> R.string.reading
+        PLANNING -> R.string.plan_to_read
+        PLANNING_ANIME -> R.string.plan_to_watch
+        COMPLETED -> R.string.completed
+        REPEATING -> R.string.repeating
+        REPEATING_ANIME -> R.string.repeating_anime
+        PAUSED -> R.string.paused
+        DROPPED -> R.string.dropped
+        else -> null
     }
 
     override fun getReadingStatus(): Int = READING

@@ -45,7 +45,6 @@
     <string name="action_show_manga">显示漫画</string>
     <string name="action_show_anime">显示动画</string>
     <string name="action_display_download_badge_anime">已下载剧集</string>
-    <string name="action_display_unseen_badge">未观看剧集</string>
     <string name="action_display_local_badge_manga">本地漫画</string>
     <string name="action_display_local_badge_anime">本地动画</string>
     <string name="action_display_show_continue_reading_button">显示“继续观看/阅读”按键</string>
@@ -93,7 +92,7 @@
     <string name="pref_category_external_player">外置播放器</string>
     <string name="pref_always_use_external_player">总是使用外置播放器</string>
     <string name="pref_external_player_preference">外置播放器首选项</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">删除章节</string>
     <string name="pref_remove_after_marked_as_read">手动标记为已读后</string>
@@ -109,7 +108,7 @@
     <string name="download_ahead_info_anime">仅在当前剧集以及下一集已经下载完成的情况下，或者对已经在内容库中的条目生效</string>
     <string name="pref_auto_update_manga_sync">阅读后更新进度</string>
     <string name="pref_track_on_add_library">在添加到内容库时打开跟踪菜单</string>
-    <string name="pref_backup_flags_summ">哪些信息将被包含在备份文件内</string>
+    <string name="pref_backup_flags_summary">哪些信息将被包含在备份文件内</string>
     <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
     <string name="pref_auto_clear_chapter_cache">关闭应用时清除章节缓存</string>
@@ -140,7 +139,6 @@
     <string name="download_paused">下载搁置中</string>
     <string name="show_episode_number">剧集序号</string>
     <string name="sort_by_episode_number">根据剧集序号排序</string>
-    <string name="download_1_episode">下一集</string>
     <string name="download_unseen">未观看</string>
     <string name="confirm_delete_episodes">确定要删除选中的剧集吗？</string>
     <string name="also_set_chapter_settings_for_library">同时应用至书架里的所有漫画</string>
@@ -161,7 +159,6 @@
     <string name="screenshot_show_subs">在截屏中显示字幕</string>
     <string name="enable_volume_brightness_gestures">启用音量和亮度手势</string>
     <string name="enable_horizontal_seek_gesture">启用水平定位手势</string>
-    <string name="stats_header">显示统计数据</string>
     <string name="toggle_stats">启用数据统计</string>
     <string name="stats_page">数据统计页</string>
     <string name="stats_page_1">第一页</string>
@@ -185,11 +182,10 @@
         <item quantity="other">%d秒</item>
     </plurals>
     <string name="no_next_episode">未找到下一集！</string>
-    <string name="no_previous_episode">未找到上一集！</string>
     <string name="label_history">漫画</string>
-    <string name="label_animehistory">动画</string>
+    <string name="label_anime_history">动画</string>
     <string name="label_updates">漫画</string>
-    <string name="label_animeupdates">动画</string>
+    <string name="label_anime_updates">动画</string>
     <string name="player_overlay_back">后退</string>
     <string name="enable_auto_play">自动播放已启用</string>
     <string name="disable_auto_play">自动播放已禁用</string>
@@ -204,4 +200,17 @@
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
+    <string name="pref_search_pinned_manga_sources_only">全局搜索仅限置顶漫画图源</string>
+    <string name="pref_category_volume_brightness">音量和亮度</string>
+    <string name="pref_library_manga_columns">每行漫画数目</string>
+    <string name="pref_search_pinned_anime_sources_only">全局搜索仅限置顶动画图源</string>
+    <string name="extension_settings">插件设置</string>
+    <string name="label_watched_duration">观看时长</string>
+    <string name="pref_library_anime_columns">每行动画数目</string>
+    <string name="settings">设置</string>
+    <string name="label_anime_extensions">动画插件</string>
+    <string name="label_anime">动画</string>
+    <string name="action_global_manga_search">全局漫画搜索</string>
+    <string name="action_global_anime_search">全局动画搜索</string>
+    <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
 </resources>

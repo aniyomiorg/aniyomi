@@ -14,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.presentation.components.ItemCover
-import eu.kanade.presentation.util.padding
+import eu.kanade.presentation.entries.ItemCover
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun BaseAnimeListItem(

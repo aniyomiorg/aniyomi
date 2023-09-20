@@ -20,10 +20,9 @@ import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import rx.subscriptions.CompositeSubscription
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -73,11 +72,6 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
      * Currently active item. It can be a chapter page or a chapter transition.
      */
     private var currentPage: Any? = null
-
-    /**
-     * Subscriptions to keep while this viewer is used.
-     */
-    val subscriptions = CompositeSubscription()
 
     private val threshold: Int =
         Injekt.get<ReaderPreferences>()
@@ -148,6 +142,10 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
             ActivityCompat.recreate(activity)
         }
 
+        config.doubleTapZoomChangedListener = {
+            frame.doubleTapZoom = it
+        }
+
         config.navigationModeChangedListener = {
             val showOnStart = config.navigationOverlayOnStart || config.forceNavigationOverlay
             activity.binding.navigationOverlay.setNavigation(config.navigator, showOnStart)
@@ -196,7 +194,6 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
     override fun destroy() {
         super.destroy()
         scope.cancel()
-        subscriptions.unsubscribe()
     }
 
     /**

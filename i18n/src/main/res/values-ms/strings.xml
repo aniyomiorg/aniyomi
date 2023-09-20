@@ -37,7 +37,6 @@
     <string name="action_rename_category">Ubah nama kategori</string>
     <string name="action_move_category">Tetapkan kategori</string>
     <string name="action_edit_cover">Ubah muka hadapan</string>
-    <string name="action_stop">Henti</string>
     <string name="action_pause">Henti sebentar</string>
     <string name="action_previous_chapter">Bab sebelumnya</string>
     <string name="action_next_chapter">Bab seterusnya</string>
@@ -90,7 +89,7 @@
     <string name="pref_keep_screen_on">Tetap nyalakan skrin</string>
     <string name="pref_reader_navigation">Navigasi</string>
     <string name="pref_read_with_volume_keys">Butang volum</string>
-    <string name="pref_read_with_volume_keys_inverted">Songsangkan butang volum</string>
+    <string name="pref_read_with_volume_keys_inverted">Songsangkan butang kelantangan</string>
     <string name="pref_reader_theme">Warna latar</string>
     <string name="white_background">Putih</string>
     <string name="black_background">Hitam</string>
@@ -178,10 +177,6 @@
     <string name="sort_by_source">Mengikut sumber</string>
     <string name="sort_by_number">Mengikut nombor bab</string>
     <string name="manga_download">Muat turun</string>
-    <string name="download_1">Bab seterusnya</string>
-    <string name="download_5">5 bab seterusnya</string>
-    <string name="download_10">10 bab seterusnya</string>
-    <string name="download_all">Semua</string>
     <string name="download_unread">Belum dibaca</string>
     <string name="confirm_delete_chapters">Adakah anda pasti ingin memadamkan bab yang dipilih\?</string>
     <string name="manga_tracking_tab">Penjejakan</string>
@@ -255,8 +250,6 @@
     <string name="copied_to_clipboard">Disalin ke papan keratan:
 \n%1$s</string>
     <string name="source_not_installed">Sumber tidak dipasang: %1$s</string>
-    <string name="custom_download">Muat turun jumlah tersuai</string>
-    <string name="download_custom">Tersuai</string>
     <string name="repeating">Membaca semula</string>
     <string name="track_status">Status</string>
     <string name="track_start_date">Bermula</string>
@@ -303,7 +296,7 @@
     <string name="theme_dark">Hidup</string>
     <string name="theme_system">Ikut sistem</string>
     <string name="pref_manage_notifications">Uruskan pemberitahuan</string>
-    <string name="pref_category_security">Keselamatan</string>
+    <string name="pref_category_security">Keselamatan dan privasi</string>
     <string name="lock_with_biometrics">Memerlukan buka kunci</string>
     <string name="lock_when_idle">Kunci apabila terbiar</string>
     <string name="lock_always">Selalu</string>
@@ -343,7 +336,6 @@
     <string name="action_oldest">Terlama</string>
     <string name="action_move_to_top">Naik ke atas</string>
     <string name="action_move_to_bottom">Turun ke bawah</string>
-    <string name="pref_enable_automatic_extension_updates">Menyemak kemas kini sambungan</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">%d kemas kini sambungan tersedia</item>
     </plurals>
@@ -388,7 +380,7 @@
     <plurals name="download_queue_summary">
         <item quantity="other">%1$s baki</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Hanya termasuk sumber yang disematkan</string>
+    <string name="pref_search_pinned_sources_only">Hanya cari sumber yang disematkan di dalam carian keseluruhan</string>
     <string name="gray_background">Kelabu</string>
     <string name="viewer">Mod membaca</string>
     <string name="pref_category_for_this_series">Untuk siri ini</string>
@@ -400,7 +392,6 @@
     <plurals name="restore_completed_message">
         <item quantity="other">Selesai dalam %1$s dengan %2$s ralat</item>
     </plurals>
-    <string name="action_display_unread_badge">Bab belum dibaca</string>
     <string name="tracking_info">Sinkron satu hala untuk kemas kini bab kemajuan dalam sistem penjejakan. Sediakan penjejakan untuk entri individu daripada butang penjejakan mereka.</string>
     <string name="pref_refresh_library_covers">Segar semula muka hadapan pustaka</string>
     <string name="sort_by_upload_date">Mengikut tarikh muat naik</string>
@@ -414,7 +405,6 @@
     <string name="pref_library_update_refresh_metadata">Segar semula metadata secara automatik</string>
     <string name="action_migrate">Pindah sumber</string>
     <string name="action_display_comfortable_grid">Grid selesa</string>
-    <string name="badges_header">Penanda</string>
     <string name="tabs_header">Tab</string>
     <string name="action_display_show_tabs">Tunjuk tab kategori</string>
     <string name="page_list_empty_error">Tiada muka surat ditemui</string>
@@ -485,10 +475,8 @@
     <string name="action_asc">Menaik</string>
     <string name="action_order_by_chapter_number">Mengikut nombor bab</string>
     <string name="action_order_by_upload_date">Mengikut tarikh muat naik</string>
-    <string name="channel_crash_logs">Log kerosakan</string>
-    <string name="crash_log_saved">Log kerosakan disimpan</string>
     <string name="pref_dump_crash_logs_summary">Simpan log ralat untuk dikongsi dengan pembangunan aplikasi</string>
-    <string name="pref_dump_crash_logs">Kumpulan log kerosakan</string>
+    <string name="pref_dump_crash_logs">Kongsi log kerosakan</string>
     <string name="track_started_reading_date">Tarikh mula</string>
     <string name="track_finished_reading_date">Tarikh selesai</string>
     <string name="action_filter_tracked">Dijejaki</string>
@@ -615,9 +603,6 @@
     <string name="action_faq_and_guides">Soalan Lazim dan Panduan</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="action_filter_started">Mula</string>
-    <string name="confirm_manga_add_duplicate">Anda mempunyai entri yang mempunyai nama yang sama tetapi daripada sumber yang berlainan (%1$s).
-\n
-\nAdakah anda masih ingin meneruskan\?</string>
     <string name="action_display_cover_only_grid">Cuma grid muka hadapan</string>
     <string name="skipped_reason_completed">Dilangkau kerana siri sudah lengkap</string>
     <string name="pref_update_only_started">Yang mana bacaan belum dimulakan</string>
@@ -645,14 +630,12 @@
     <string name="source_filter_empty_screen">Tiada sumber dipasang ditemui</string>
     <string name="source_empty_screen">Tiada sumber ditemui</string>
     <string name="action_sort_unread_count">Kiraan belum dibaca</string>
-    <string name="split_tall_images">Memisah imej yang tinggi</string>
     <string name="split_tall_images_summary">Meningkatkan prestasi pembaca</string>
     <string name="download_notifier_split_page_not_found">Muka surat %d tidak dijumpai ketika memisah</string>
     <string name="download_notifier_split_page_path_not_found">Lokasi fail muka surat %d tidak ditemui</string>
     <string name="pref_reset_viewer_flags_summary">Menetapkan semula mod bacaan dan orientasi semua siri</string>
     <string name="pref_reset_viewer_flags_success">Tetapan pembaca diset semula</string>
     <string name="pref_reset_viewer_flags">Set semula tetapan pembaca setiap siri</string>
-    <string name="download_notifier_split_failed">Tidak dapat memisahkan imej yang dimuat turun</string>
     <string name="empty_screen">Hmm, ini agak menjanggalkan</string>
     <string name="pref_reset_viewer_flags_error">Tidak dapat set semula tetapan pembaca</string>
     <string name="ext_info_version">Versi</string>
@@ -691,7 +674,7 @@
     <string name="are_you_sure">Adakah anda pasti\?</string>
     <string name="multi_lang">Pelbagai</string>
     <string name="updates_last_update_info">Terakhir pustaka dikemas kini: %s</string>
-    <string name="remove_manga">Anda akan membuang \"%s\" ini dariapda pustaka anda</string>
+    <string name="remove_manga">Anda akan membuang \"%s\" ini daripada pustaka anda</string>
     <string name="pref_long_strip_split">Pisah imej panjang (BETA)</string>
     <string name="popular">Popular</string>
     <string name="missing_storage_permission">Kebenaran storan tidak diberikan</string>
@@ -709,7 +692,7 @@
     <string name="crash_screen_title">Ralat Tidak Dijangka Berlaku</string>
     <string name="crash_screen_restart_application">Mulakan semula aplikasi</string>
     <string name="pref_browse_summary">Sumber, sambungan, carian keseluruhan</string>
-    <string name="crash_screen_description">%s mengalami ralat tidak dijangka. Kami mencadangkan anda untuk tangkapan skrin mesej ini, mengumpulkan log kerosakan, dan kemudian mengongsi ia pada Discord kami di saluran bantuan.</string>
+    <string name="crash_screen_description">%s mengalami ralat tidak dijangka. Kami mencadangkan anda untuk kongsi log kerosakan pada Discord kami di saluran bantuan.</string>
     <string name="unknown_title">Tajuk tidak diketahui</string>
     <string name="invalid_location">Lokasi tidak sah: %s</string>
     <string name="error_user_agent_string_invalid">Rentetan ejen pengguna tidak sah</string>
@@ -717,8 +700,30 @@
     <string name="action_open_random_manga">Buka entri rawak</string>
     <string name="information_no_entries_found">Tiada entri dijumpai di kategori ini</string>
     <string name="download_notifier_cache_renewal">Mengindeks muat turun</string>
-    <string name="channel_downloader_cache">Muat turun cache</string>
     <string name="fdroid_warning">Binaan F-Droid tidak disokong secara rasmi.
 \nKetik untuk mengetahui lebih lanjut.</string>
 <string name="label_download_queue">Giliran muat turun</string>
+    <string name="pref_skip_dupe_chapters">Langkau bab pendua</string>
+    <string name="enhanced_services_not_installed">Tersedia tetapi sumber tidak dipasang: %s</string>
+    <string name="copied_to_clipboard_plain">Disalin ke papan keratan</string>
+    <string name="pref_worker_info">Maklumat Worker</string>
+    <string name="track_error">%1$s ralat: %2$s</string>
+    <string name="confirm_add_duplicate_manga">Entri di dalam pustaka anda mempunyai nama yang sama.
+\n
+\nAdakah anda ingin meneruskan\?</string>
+    <string name="information_required_plain">*diperlukan</string>
+    <plurals name="download_amount">
+        <item quantity="other">%d bab seterusnya</item>
+    </plurals>
+    <string name="pref_hide_in_library_items">Sembunyikan entri yang sudah ada di dalam pustaka</string>
+    <string name="action_copy_to_clipboard">Salin ke papan keratan</string>
+    <string name="action_update_category">Kemas kini kategori</string>
+    <string name="split_tall_images">Memisah imej yang tinggi</string>
+    <string name="overlay_header">Tindanan</string>
+    <plurals name="missing_items">
+        <item quantity="other">Hilang %1$s bab</item>
+    </plurals>
+    <string name="missing_items_unknown">Berkemungkinan ada bab yang hilang</string>
+    <string name="pref_page_rotate_invert">Terbalikkan orientasi muka surat lebar yang diputarkan</string>
+    <string name="pref_page_rotate">Putar muka surat lebar agar muat</string>
     </resources>

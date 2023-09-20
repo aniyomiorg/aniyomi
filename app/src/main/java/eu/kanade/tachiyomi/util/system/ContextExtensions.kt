@@ -1,31 +1,22 @@
 package eu.kanade.tachiyomi.util.system
 
 import android.app.ActivityManager
-import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
-import android.provider.Settings
 import android.util.TypedValue
-import android.view.Display
-import android.view.View
-import android.view.WindowManager
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
@@ -34,17 +25,17 @@ import androidx.core.graphics.red
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import logcat.LogPriority
+import rikka.sui.Sui
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
@@ -77,7 +68,7 @@ fun Context.copyToClipboard(label: String, content: String) {
  * @param permission the permission to check.
  * @return true if it has permissions.
  */
-fun Context.hasPermission(permission: String) = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED
 
 /**
  * Returns the color for the given attribute.
@@ -111,50 +102,8 @@ fun Context.hasPermission(permission: String) = ContextCompat.checkSelfPermissio
     }
 }
 
-val getDisplayMaxHeightInPx: Int
-    get() = Resources.getSystem().displayMetrics.let { max(it.heightPixels, it.widthPixels) }
-
-/**
- * Converts to px.
- */
-val Int.dpToPx: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-/**
- * Converts to px and takes into account LTR/RTL layout.
- */
-val Float.dpToPxEnd: Float
-    get() = this * Resources.getSystem().displayMetrics.density *
-        if (Resources.getSystem().isLTR) 1 else -1
-
-val Resources.isLTR
-    get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR
-
-val Context.notificationManager: NotificationManager
-    get() = getSystemService()!!
-
-val Context.connectivityManager: ConnectivityManager
-    get() = getSystemService()!!
-
-val Context.wifiManager: WifiManager
-    get() = getSystemService()!!
-
 val Context.powerManager: PowerManager
     get() = getSystemService()!!
-
-val Context.displayCompat: Display?
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        display
-    } else {
-        @Suppress("DEPRECATION")
-        getSystemService<WindowManager>()?.defaultDisplay
-    }
-
-/** Gets the duration multiplier for general animations on the device
- * @see Settings.Global.ANIMATOR_DURATION_SCALE
- */
-val Context.animatorDurationScale: Float
-    get() = Settings.Global.getFloat(this.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
 
 /**
  * Convenience method to acquire a partial wake lock.
@@ -194,7 +143,7 @@ fun Context.openInBrowser(uri: Uri, forceDefaultBrowser: Boolean = false) {
     }
 }
 
-fun Context.defaultBrowserPackageName(): String? {
+private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         packageManager.resolveActivity(browserIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()))
@@ -214,59 +163,6 @@ fun Context.createFileInCacheDir(name: String): File {
     }
     file.createNewFile()
     return file
-}
-
-private const val TABLET_UI_REQUIRED_SCREEN_WIDTH_DP = 720
-
-// some tablets have screen width like 711dp = 1600px / 2.25
-private const val TABLET_UI_MIN_SCREEN_WIDTH_PORTRAIT_DP = 700
-
-// make sure icons on the nav rail fit
-private const val TABLET_UI_MIN_SCREEN_WIDTH_LANDSCAPE_DP = 600
-
-fun Context.isTabletUi(): Boolean {
-    return resources.configuration.isTabletUi()
-}
-
-fun Configuration.isTabletUi(): Boolean {
-    return smallestScreenWidthDp >= TABLET_UI_REQUIRED_SCREEN_WIDTH_DP
-}
-
-fun Configuration.isAutoTabletUiAvailable(): Boolean {
-    return smallestScreenWidthDp >= TABLET_UI_MIN_SCREEN_WIDTH_LANDSCAPE_DP
-}
-
-// TODO: move the logic to `isTabletUi()` when main activity is rewritten in Compose
-fun Context.prepareTabletUiContext(): Context {
-    val configuration = resources.configuration
-    val expected = when (Injekt.get<UiPreferences>().tabletUiMode().get()) {
-        TabletUiMode.AUTOMATIC ->
-            configuration.smallestScreenWidthDp >= when (configuration.orientation) {
-                Configuration.ORIENTATION_PORTRAIT -> TABLET_UI_MIN_SCREEN_WIDTH_PORTRAIT_DP
-                else -> TABLET_UI_MIN_SCREEN_WIDTH_LANDSCAPE_DP
-            }
-        TabletUiMode.ALWAYS -> true
-        TabletUiMode.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        TabletUiMode.NEVER -> false
-    }
-    if (configuration.isTabletUi() != expected) {
-        val overrideConf = Configuration()
-        overrideConf.setTo(configuration)
-        overrideConf.smallestScreenWidthDp = if (expected) {
-            overrideConf.smallestScreenWidthDp.coerceAtLeast(TABLET_UI_REQUIRED_SCREEN_WIDTH_DP)
-        } else {
-            overrideConf.smallestScreenWidthDp.coerceAtMost(TABLET_UI_REQUIRED_SCREEN_WIDTH_DP - 1)
-        }
-        return createConfigurationContext(overrideConf)
-    }
-    return this
-}
-
-/**
- * Returns true if current context is in night mode
- */
-fun Context.isNightMode(): Boolean {
-    return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 }
 
 /**
@@ -298,35 +194,6 @@ fun Context.createReaderThemeContext(): Context {
     return this
 }
 
-fun Context.isOnline(): Boolean {
-    val activeNetwork = connectivityManager.activeNetwork ?: return false
-    val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-    val maxTransport = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 -> NetworkCapabilities.TRANSPORT_LOWPAN
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> NetworkCapabilities.TRANSPORT_WIFI_AWARE
-        else -> NetworkCapabilities.TRANSPORT_VPN
-    }
-    return (NetworkCapabilities.TRANSPORT_CELLULAR..maxTransport).any(networkCapabilities::hasTransport)
-}
-
-/**
- * Returns true if device is connected to Wifi.
- */
-fun Context.isConnectedToWifi(): Boolean {
-    if (!wifiManager.isWifiEnabled) return false
-
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
-        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-
-        networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
-            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    } else {
-        @Suppress("DEPRECATION")
-        wifiManager.connectionInfo.bssid != null
-    }
-}
-
 /**
  * Gets document size of provided [Uri]
  *
@@ -347,6 +214,10 @@ fun Context.isPackageInstalled(packageName: String): Boolean {
         false
     }
 }
+
+val Context.hasMiuiPackageInstaller get() = isPackageInstalled("com.miui.packageinstaller")
+
+val Context.isShizukuInstalled get() = isPackageInstalled("moe.shizuku.privileged.api") || Sui.isSui()
 
 fun Context.isInstalledFromFDroid(): Boolean {
     val installerPackageName = try {
@@ -371,12 +242,4 @@ fun Context.getApplicationIcon(pkgName: String): Drawable? {
     } catch (e: PackageManager.NameNotFoundException) {
         null
     }
-}
-
-/**
- * Gets system's config_navBarNeedsScrim boolean flag added in Android 10, defaults to true.
- */
-fun Context.isNavigationBarNeedsScrim(): Boolean {
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
-        InternalResourceHelper.getBoolean(this, "config_navBarNeedsScrim", true)
 }

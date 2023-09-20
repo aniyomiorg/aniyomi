@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">श्रेणियाँ</string>
-    <string name="unlock_app">अनलॉक Aniyomi</string>
-    <string name="action_sort_last_manga_update">आखिरी किताब अद्यतन</string>
-    <string name="action_show_manga">मंगा दिखाएँ</string>
-    <string name="action_display_local_badge_manga">स्थानीय पुस्तक</string>
+    <string name="manga_categories">मंगा श्रेणियाँ</string>
+    <string name="unlock_app">अनलॉक अनियोमी</string>
+    <string name="action_sort_last_manga_update">अंतिम मंगा अपडेट</string>
+    <string name="action_show_manga">आइटम दिखाएँ</string>
+    <string name="action_display_local_badge_manga">स्थानीय स्रोत</string>
     <string name="pref_update_only_completely_read">अपठित अध्याय हैं</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकन पर अपठित संख्या दिखाएं</string>
     <string name="default_manga_category">डिफ़ॉल्ट श्रेणी</string>
@@ -24,18 +24,72 @@
     <string name="pref_auto_clear_chapter_cache">ऐप बंद करते समय चैप्टर कैशे साफ़ करें</string>
     <string name="pref_clear_manga_database">डेटाबेस साफ़ करें</string>
     <string name="pref_clear_manga_database_summary">मैंगा जो आपकी लाइब्रेरी में सहेजे नहीं हैं उनका इतिहास हटाएं</string>
-    <string name="clear_database_confirmation">क्या आपको यकीन है? अध्यायों और गैर-पुस्तकालय मंगा की प्रगति को खो दिया जाएगा</string>
     <string name="pref_refresh_library_tracking_summary">अपडेट की स्थिति, स्कोर और अंतिम अध्याय ट्रैकिंग सेवाओं से पढ़ें</string>
     <string name="pref_incognito_mode_summary">इतिहास पढ़ने से रोक देता है</string>
-    <string name="manga_from_library">पुस्तकालय से मंगा</string>
-    <string name="snack_add_to_manga_library">लाइब्रेरी में मंगा जोड़ें?</string>
+    <string name="snack_add_to_manga_library">लाइब्रेरी में मंगा जोड़ें\?</string>
     <string name="download_error">त्रुटि</string>
     <string name="download_paused">रोके गए</string>
     <string name="also_set_chapter_settings_for_library">मेरी लाइब्रेरी में सभी मंगा पर भी लागू करें</string>
-    <string name="dialog_with_checkbox_reset">इस मंगा के लिए सभी अध्यायों को रीसेट करें</string>
+    <string name="dialog_with_checkbox_reset">इस आइटम के लिए सभी अध्यायों को रीसेट करें</string>
     <string name="download_insufficient_space">कम संग्रहण स्थान के कारण अध्याय डाउनलोड नहीं कर सके</string>
     <string name="download_queue_size_warning">चेतावनी: बड़े बल्क डाउनलोड के कारण स्रोत धीमे हो सकते हैं। और/या ताचियोमी को ब्लॉक कर सकते हैं। अधिक जानने के लिए यह टैप करें ।</string>
-    <string name="information_webview_required">ताचियोमी के लिए वेबव्हिव आवश्यक है</string>
+    <string name="information_webview_required">ताचियोमी के लिए WebView आवश्यक है</string>
     <string name="download_notifier_download_paused_chapters">डाउनलोड रोक दिया है</string>
     <string name="channel_new_chapters_episodes">अध्याय अद्यतन</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="pref_bottom_nav_no_updates">अपडेट टैब के स्थान पर मोर टैब ले जाएं</string>
+    <string name="action_global_anime_search">वैश्विक एनीमे खोज</string>
+    <string name="action_filter_unseen">अनदेखे</string>
+    <string name="label_anime">एनिमे</string>
+    <string name="label_anime_sources">एनीमे स्रोत</string>
+    <string name="label_watched_duration">देखी गई अवधि</string>
+    <string name="label_watched_episodes">देखा है</string>
+    <string name="pref_library_manga_columns">प्रति पंक्ति मंगा आइटम</string>
+    <string name="pref_library_anime_columns">प्रति पंक्ति एनीमे आइटम</string>
+    <string name="action_global_manga_search">वैश्विक मंगा खोज</string>
+    <string name="episodes">एपिसोड</string>
+    <string name="chapters_episodes">अध्याय और एपिसोड</string>
+    <string name="entries">पुस्तकालय प्रविष्टियाँ</string>
+    <string name="label_manga_library">मंगा</string>
+    <string name="label_anime_library">एनिमे</string>
+    <string name="label_manga_sources">मंगा स्रोत</string>
+    <string name="general_categories">श्रेणियाँ</string>
+    <string name="anime_categories">एनीमे श्रेणियाँ</string>
+    <string name="backup_settings_warning">चेतावनी: सेटिंग्स का बैकअप लेने से आपके ट्रैक पासवर्ड भी संग्रहीत हो जाएंगे, इस बैकअप फ़ाइल को साझा न करें!</string>
+    <string name="label_manga">मंगा</string>
+    <string name="pref_bottom_nav_no_history">हिस्ट्री टैब के स्थान पर मोर टैब ले जाएं</string>
+    <string name="pref_bottom_nav_no_manga">मंगा टैब के स्थान पर मोर टैब को स्थानांतरित करें</string>
+    <string name="action_sort_total_episodes">कुल एपिसोड</string>
+    <string name="action_sort_last_seen">अंतिम बार देखा गया</string>
+    <string name="action_sort_latest_episode">नवीनतम कड़ी</string>
+    <string name="action_sort_last_anime_update">अंतिम एनीमे अपडेट</string>
+    <string name="action_sort_unseen_count">अनदेखे की संख्या</string>
+    <string name="action_sort_episode_fetch_date">एपिसोड लाने की तारीख</string>
 </resources>

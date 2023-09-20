@@ -21,7 +21,7 @@
     <string name="label_backup">Atsarginė kopija ir atkūrimas</string>
     <string name="label_sources">Šaltiniai</string>
     <string name="label_recent_manga">Istorija</string>
-    <string name="label_recent_updates">Naujiniai</string>
+    <string name="label_recent_updates">Naujienos</string>
     <string name="label_library">Biblioteka</string>
     <string name="label_settings">Nustatymai</string>
     <string name="label_more">Daugiau</string>
@@ -132,7 +132,6 @@
     <string name="action_disable">Išjungti</string>
     <string name="action_display_show_number_of_items">Rodyti įrašų skaičių</string>
     <string name="action_display_show_tabs">Rodyti kategorijų korteles</string>
-    <string name="action_display_unread_badge">Neperskaityti skyriai</string>
     <string name="action_display_download_badge">Atsisiųsti skyriai</string>
     <string name="action_display_list">Sąrašas</string>
     <string name="action_display_comfortable_grid">Patogus tinklelis</string>
@@ -149,7 +148,6 @@
     <string name="action_next_chapter">Sekantis skyrius</string>
     <string name="action_previous_chapter">Ankstesnis skyrius</string>
     <string name="action_pause">Pristabdyti</string>
-    <string name="action_stop">Stop</string>
     <string name="action_view_chapters">Rodyti skyrius</string>
     <string name="action_edit_cover">Keisti viršelį</string>
     <string name="action_move_category">Perkelti kategorijas</string>
@@ -325,7 +323,6 @@
     <string name="pref_backup_interval">Atsarginių kopijų kūrimo dažnis</string>
     <string name="third_to_last">Trečias nuo paskutinio skaityto</string>
     <string name="disabled">Išjungtas</string>
-    <string name="pref_enable_automatic_extension_updates">Patikrinkite plėtinių atnaujinimus</string>
     <string name="pref_hide_threshold">Jautrumas, skirtas paslėpti meniu slinkant</string>
     <string name="pref_low">Žemas</string>
     <string name="pref_download_new">Atsisiųsti naujus skyrius</string>
@@ -381,7 +378,7 @@
         <item quantity="other">%1$d nauji skyriai</item>
     </plurals>
     <string name="clear_history_completed">Istorija ištrinta</string>
-    <string name="decode_image_error">Nepavyko įkelti vaizdo</string>
+    <string name="decode_image_error">Nepavyko pakrauti paveikslėlio</string>
     <string name="page_list_empty_error">Puslapių nerasta</string>
     <string name="clear_history_confirmation">Ar tu tuo tikras\? Visa istorija bus prarasta.</string>
     <string name="confirm_set_image_as_cover">Naudoti šį paveiksliuką kaip viršelį\?</string>
@@ -468,7 +465,6 @@
     <string name="pref_navigate_pan">Bakstelėdami slinkti plačius vaizdus</string>
     <string name="pref_landscape_zoom">Priartinti horizontalų vaizdą</string>
     <string name="ext_info_version">Versija</string>
-    <string name="split_tall_images">Automatiškai padalinti aukšti vaizdai</string>
     <string name="tracking_info">Vienpusė sinchronizacija, skirta skaitymo progresui stebėjimo paslaugose atnaujinti. Nustatykite atskirą įrašų sekimą iš jų sekimo mygtuko.</string>
     <string name="pref_create_backup_summ">Galima naudoti dabartinei bibliotekai atkurti</string>
     <string name="pref_webtoon_side_padding">Šoninis spaudinėjimas</string>
@@ -490,7 +486,6 @@
     <string name="update_check_open">Atidaryti „GitHub“ svetainėje</string>
     <string name="channel_app_updates">Programėlių atnaujinimai</string>
     <string name="channel_ext_updates">Plėtinių atnaujinimai</string>
-    <string name="channel_crash_logs">Strigčių žurnalai</string>
     <string name="spen_previous_page">Ankstesnis puslapis</string>
     <string name="restore_miui_warning">Atsarginės kopijos kūrimas / atkūrimas gali veikti netinkamai, jei \"MIUI Optimization\" yra išjungtas.</string>
     <string name="restoring_backup_canceled">Atšauktas atkūrimas</string>
@@ -528,13 +523,12 @@
         <item quantity="few">%d plėtinių atnaujinimai pasiekiami</item>
         <item quantity="other">%d plėtinių atnaujinimai pasiekiami</item>
     </plurals>
-    <string name="download_notifier_split_failed">Nepavyko padalyti atsisiųsto vaizdo</string>
     <string name="chapter_settings_updated">Atnaujinti numatytus skyrių nustatymus</string>
     <string name="download_notifier_downloader_title">Parsisiuntėjas</string>
     <string name="download_notifier_title_error">Klaida</string>
     <string name="download_notifier_text_only_wifi">Nėra „Wi-Fi“ ryšio</string>
     <string name="channel_progress">Progresas</string>
-    <string name="backup_in_progress">Atsarginė jau kopija kuriama</string>
+    <string name="backup_in_progress">Atsarginė kopija jau kuriama</string>
     <string name="update_check_fdroid_migration_info">Nauja versija pasiekiama oficialiuose leidiniuose. Bakstelėkite , kad sužinotumėte, kaip pereiti iš neoficialių \"F-Droid\" leidinių.</string>
     <string name="pref_disable_battery_optimization">Išjungti akumuliatoriaus optimizavimą</string>
     <string name="restore_completed">Atkūrimas baigtas</string>
@@ -561,7 +555,6 @@
     <string name="pref_reset_viewer_flags_summary">Iš naujo nustati visų serijų skaitymo režimą ir orientaciją</string>
     <string name="pref_reset_viewer_flags_success">Visų skaitytuvo nustatymų nustatymas iš naujo</string>
     <string name="pref_reset_viewer_flags_error">Nepavyko atstatyti skaitytuvo nustatymų</string>
-    <string name="crash_log_saved">Išsaugoti strigčių žurnalai</string>
     <string name="label_background_activity">Fono veikla</string>
     <string name="pref_disable_battery_optimization_summary">Padeda su fono bibliotekos naujinimais ir atsarginėmis kopijomis</string>
     <string name="battery_optimization_disabled">Akumuliatoriaus optimizavimas jau išjungtas</string>
@@ -576,9 +569,6 @@
     <string name="last_used_source">Paskutinį kartą naudotas</string>
     <string name="chapter_not_found">Skyrius nerastas</string>
     <string name="publishing_finished">Skaitinis nepublikuojamas</string>
-    <string name="confirm_manga_add_duplicate">Bibliotekoje turite įrašą tokiu pačiu pavadinimu, bet iš kito šaltinio (%1$s).
-\n
-\nAr vis dar norite tęsti\?</string>
     <string name="tabs_header">Skirtukai</string>
     <string name="pref_enable_acra">Siųsti strigčių ataskaitas</string>
     <string name="plan_to_read">Planuojama skaityti</string>
@@ -596,8 +586,6 @@
     <string name="sort_by_source">Pagal šaltinį</string>
     <string name="sort_by_upload_date">Pagal įkėlimo datą</string>
     <string name="manga_download">Atsisiųsti</string>
-    <string name="custom_download">Pasirinktinis skyrių atsisiuntimas</string>
-    <string name="download_1">Sekantis skyrius</string>
     <string name="date">Data</string>
     <string name="updating_category">Kategorijos atnaujinimas</string>
     <string name="updated_version">Atnaujinta į v%1$s</string>
@@ -608,7 +596,6 @@
     <string name="manga_cover">Viršelis</string>
     <string name="pinned_sources">Prisegtas</string>
     <string name="email">El. pašto adresas</string>
-    <string name="badges_header">Žymės</string>
     <string name="http_error_hint">Patikrinkite svetainę \"WebView\" aplinkoje</string>
     <string name="action_global_search_hint">Pasaulinė paieška…</string>
     <string name="latest">Naujausia</string>
@@ -621,7 +608,6 @@
     <string name="help_translate">Padėkite išversti programa</string>
     <string name="paused">Pristabdytas</string>
     <string name="remove_from_library">Pašalinti iš bibliotekos</string>
-    <string name="download_all">Visus</string>
     <string name="local_source">Vietinis šaltinis</string>
     <string name="action_global_search_query">Ieškokite \"%1$s\" visame pasaulyje</string>
     <string name="no_pinned_sources">Neturite prisegtų šaltinių</string>
@@ -655,9 +641,6 @@
     <string name="add_to_library">Pridėti į biblioteką</string>
     <string name="manga_removed_library">Pašalinti iš bibliotekos</string>
     <string name="manga_info_collapse">Mažiau</string>
-    <string name="download_5">Sekantis 5 skyriai</string>
-    <string name="download_10">Sekančius 10 skyrių</string>
-    <string name="download_custom">Pasirinkti skyrius</string>
     <string name="download_unread">Dar neskaitytus</string>
     <string name="custom_cover">Individualus viršelis</string>
     <string name="error_sharing_cover">Įvyko klaida bendrinant viršelį</string>
@@ -740,13 +723,19 @@
     <string name="crash_screen_description">%s susidūrė su netikėta klaida. Siūlome padaryti šio pranešimo ekrano nuotrauką, išsisaugoti gedimų žurnalus ir pasidalyti tuo mūsų „Discord“ palaikymo kanale.</string>
     <string name="are_you_sure">Ar esate tikri\?</string>
     <string name="popular">Populiaru</string>
-    <string name="crash_screen_title">Įvyko netikėta klaida</string>
+    <string name="crash_screen_title">Ups!</string>
     <string name="crash_screen_restart_application">Iš naujo paleiskite programą</string>
-    <string name="channel_downloader_cache">Atsisiuntimų talpykla</string>
     <string name="download_notifier_cache_renewal">Indeksuojami atsisiuntimai</string>
     <string name="fdroid_warning">F-Droid versijos oficialiai nepalaikomos.
 \nBakstelėkite, kad sužinotumėte daugiau.</string>
     <string name="information_no_entries_found">Šioje kategorijoje įrašų nerasta</string>
     <string name="action_open_random_manga">Atverti atsitiktinį įrašą</string>
-<string name="label_download_queue">Atsisiuntimų sąrašas</string>
+<string name="label_download_queue">Atsisiuntimų eilė</string>
+    <string name="information_no_manga_category">Kategorija yra tuščia</string>
+    <string name="copied_to_clipboard_plain">Nukopijuota į iškarpinę</string>
+    <string name="enhanced_services_not_installed">Turima, bet šaltinis nėra įdiegtas: %s</string>
+    <string name="pref_skip_dupe_chapters">Praleisti pasikartojančius skyrius</string>
+    <string name="confirm_add_duplicate_manga">Bibliotekoje jau turite įrašą tokiu pačiu pavadinimu.
+\n
+\nAr vis tiek norite tęsti\?</string>
     </resources>

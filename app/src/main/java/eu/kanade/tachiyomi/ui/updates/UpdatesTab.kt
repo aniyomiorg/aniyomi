@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.ui.updates.manga.mangaUpdatesTab
 data class UpdatesTab(
     private val fromMore: Boolean,
     private val inMiddle: Boolean,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

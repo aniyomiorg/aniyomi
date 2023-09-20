@@ -48,7 +48,7 @@
     <string name="secure_screen">Siguran ekran</string>
     <string name="lock_when_idle">Zaključaj prilikom mirovanja</string>
     <string name="lock_with_biometrics">Zatraži otključavanje</string>
-    <string name="pref_category_security">Sigurnost</string>
+    <string name="pref_category_security">Sigurnost i privatnost</string>
     <string name="pref_manage_notifications">Upravljaj obavijestima</string>
     <string name="pref_confirm_exit">Potvrdi zatvaranje programa</string>
     <string name="pref_date_format">Format datuma</string>
@@ -117,7 +117,6 @@
     <string name="action_next_chapter">Sljedeće poglavlje</string>
     <string name="action_previous_chapter">Prethodno poglavlje</string>
     <string name="action_pause">Zaustavi</string>
-    <string name="action_stop">Prekini</string>
     <string name="action_view_chapters">Pogledaj poglavlja</string>
     <string name="action_edit_cover">Uredi naslovnicu</string>
     <string name="action_move_category">Postavi kategorije</string>
@@ -164,7 +163,6 @@
     <string name="pref_create_backup_summ">Može se koristiti za obnavljanje trenutačne biblioteke</string>
     <string name="pref_create_backup">Stvori sigurnosnu kopiju</string>
     <string name="pref_search_pinned_sources_only">Uključi samo označene izvore</string>
-    <string name="pref_enable_automatic_extension_updates">Traži nove verzije proširenja</string>
     <string name="services">Usluge</string>
     <string name="pref_download_new">Preuzmi nova poglavlja</string>
     <string name="fifth_to_last">Peto prije zadnjeg pročitanog poglavlja</string>
@@ -310,12 +308,6 @@
     <string name="manga_tracking_tab">Praćenje</string>
     <string name="confirm_delete_chapters">Stvarno želiš izbrisati odabrana poglavlja\?</string>
     <string name="download_unread">Nepročitano</string>
-    <string name="download_all">Sve</string>
-    <string name="download_custom">Prilagođeno</string>
-    <string name="download_10">Sljedećih 10 poglavlja</string>
-    <string name="download_5">Sljedećih 5 poglavlja</string>
-    <string name="download_1">Sljedeće poglavlje</string>
-    <string name="custom_download">Preuzmi prilagođenu količinu</string>
     <string name="manga_download">Preuzmi</string>
     <string name="sort_by_number">Po broju poglavlja</string>
     <string name="sort_by_source">Po izvoru</string>
@@ -427,12 +419,10 @@
     <string name="ext_unofficial">Neslužbeno</string>
     <string name="pref_library_update_refresh_metadata_summary">Provjeri nove naslovnice i pojedinosti prilikom aktualiziranja biblioteke</string>
     <string name="pref_library_update_refresh_metadata">Automatski osvježi metapodatke</string>
-    <string name="action_display_unread_badge">Nepročitana poglavlja</string>
     <string name="action_migrate">Migriraj</string>
     <string name="action_disable_all">Deaktiviraj sve</string>
     <string name="action_enable_all">Aktiviraj sve</string>
     <string name="page_list_empty_error">Nema stranica</string>
-    <string name="badges_header">Značke</string>
     <string name="tabs_header">Kartice</string>
     <string name="pref_show_reading_mode_summary">Nakratko prikaži trenutačni modus kad se čitač otvori</string>
     <string name="pref_show_reading_mode">Prikaži modus čitanja</string>
@@ -499,12 +489,10 @@
     <string name="file_picker_error">Nije pronađen nijedan program za biranje datoteka</string>
     <string name="myanimelist_relogin">Ponovo se prijavi na MAL</string>
     <string name="pref_show_nsfw_source">Prikaži u popisu izvora i proširenja</string>
-    <string name="channel_crash_logs">Zapisi rušenja programa</string>
     <string name="track_finished_reading_date">Datum kraja</string>
     <string name="track_started_reading_date">Datum početka</string>
-    <string name="crash_log_saved">Zapisi rušenja programa su spremljeni</string>
     <string name="pref_dump_crash_logs_summary">Sprema zapise grešaka u datoteku za obavještavanje programera</string>
-    <string name="pref_dump_crash_logs">Spremi zapise rušenja programa</string>
+    <string name="pref_dump_crash_logs">Dijeli zapise prekida programa</string>
     <string name="pref_viewer_nav">Područja dodira</string>
     <string name="edge_nav">Rub</string>
     <string name="kindlish_nav">Kao Kindle</string>
@@ -519,9 +507,9 @@
     <string name="backup_restore_content_full">Podaci datoteke sigurnosne kopije će se obnoviti.
 \n
 \nZa upotrebu podataka, morat ćeš instalirati nedostajuća proširenja i nakon toga se prijaviti na usluge praćenja.</string>
-    <string name="pref_dual_page_invert_summary">Ako se dvostranična podjela ne podudara sa smjerom čitanja</string>
-    <string name="pref_dual_page_invert">Preokreni smještaj dvostranične podjele</string>
-    <string name="pref_dual_page_split">Dvostranična podjela</string>
+    <string name="pref_dual_page_invert_summary">Ako se položaj rastavljenih širokih stranica ne podudara sa smjerom čitanja</string>
+    <string name="pref_dual_page_invert">Obrni položaj rastavljene stranice</string>
+    <string name="pref_dual_page_split">Rastavi široke stranice</string>
     <string name="pref_show_navigation_mode_summary">Kratko prikaži kada je čitač otvoren</string>
     <string name="nav_zone_right">Desno</string>
     <string name="nav_zone_left">Lijevo</string>
@@ -633,15 +621,12 @@
     <string name="pref_lowest">Najniža</string>
     <string name="publishing_finished">Objavljivanje završeno</string>
     <string name="cancelled">Prekinuto</string>
-    <string name="on_hiatus">Prekid</string>
+    <string name="on_hiatus">Zaustavljeno</string>
     <string name="library_errors_help">Za pomoć o tome kako popraviti greške aktualiziranja biblioteke, pogledaj %1$s</string>
     <string name="save_chapter_as_cbz">Spremi kao CBZ arhivu</string>
     <string name="action_faq_and_guides">ČPP i vodiči</string>
     <string name="action_display_cover_only_grid">Samo naslovnice</string>
     <string name="webtoon_side_padding_5">5 %</string>
-    <string name="confirm_manga_add_duplicate">U biblioteci imaš unos s istim imenom ali iz drugog izvora (%1$s).
-\n
-\nŽeliš li svejedno nastaviti\?</string>
     <string name="pref_navigate_pan">Navigiraj pomicanjem slike</string>
     <string name="pref_landscape_zoom">Promijeni uvećanje slike u ležećem formatu</string>
     <string name="action_filter_started">Započeto</string>
@@ -659,15 +644,13 @@
     <string name="empty_backup_error">Nema unosa u biblioteci za spremanje u sigurnosnu kopiju</string>
     <string name="split_tall_images_summary">Poboljšava performanse čitača</string>
     <string name="complete_list">Potpun popis</string>
-    <string name="download_notifier_split_failed">Nije bilo moguće podijeliti preuzetu sliku</string>
-    <string name="split_tall_images">Rastavi visoke slike</string>
     <string name="webview_data_deleted">WebView podaci su izbrisani</string>
     <string name="pref_clear_webview_data">Izbriši WebView podatke</string>
     <string name="reading_list">Popis čitanja</string>
     <string name="wish_list">Popis želja</string>
     <string name="on_hold_list">Na popisu čekanja</string>
     <string name="unfinished_list">Popis nedovršenih</string>
-    <string name="download_notifier_split_page_not_found">Stranica %d nije pronađena tijekom razdvajanja</string>
+    <string name="download_notifier_split_page_not_found">Stranica %d nije pronađena tijekom rastavljanja</string>
     <string name="loader_rar5_error">RARv5 format nije podržan</string>
     <string name="download_ahead_info">Radi samo na unosima u biblioteci i ako je trenutačno poglavlje plus sljedeće već preuzeto</string>
     <plurals name="next_unread_chapters">
@@ -696,4 +679,28 @@
     <string name="missing_storage_permission">Nedostaje dozvola za spremanje</string>
     <string name="theme_tidalwave">Tsunami</string>
 <string name="label_download_queue">Popis preuzimanja</string>
+    <string name="enhanced_services_not_installed">Dostupne, ali izvor nije instaliran: %s</string>
+    <string name="confirm_add_duplicate_manga">U tvojoj biblioteci imaš unos s istim imenom.
+\n
+\nŽeliš li svejedno nastaviti\?</string>
+    <string name="pref_skip_dupe_chapters">Preskoči dupla poglavlja</string>
+    <string name="track_error">%1$s greška: %2$s</string>
+    <string name="pref_hide_in_library_items">Sakrij unose koji se već nalaze u biblioteci</string>
+    <string name="action_copy_to_clipboard">Kopiraj u međuspremnik</string>
+    <plurals name="download_amount">
+        <item quantity="one">Sljedeće poglavlje</item>
+        <item quantity="few">Sljedeća %d poglavlja</item>
+        <item quantity="other">Sljedećih %d poglavlja</item>
+    </plurals>
+    <string name="action_update_category">Aktualiziraj katogoriju</string>
+    <string name="split_tall_images">Rastavi visoke slike</string>
+    <string name="overlay_header">Oznake</string>
+    <plurals name="missing_items">
+        <item quantity="one">Nedostaje %1$s poglavlje</item>
+        <item quantity="few">Nedostaju %1$s poglavlja</item>
+        <item quantity="other">Nedostaje %1$s poglavlja</item>
+    </plurals>
+    <string name="missing_items_unknown">Možda nedostaje poglavlje</string>
+    <string name="pref_page_rotate">Prilagodi prikaz širokih stranica okretanjem</string>
+    <string name="pref_page_rotate_invert">Preokreni položaj širokih stranica</string>
     </resources>

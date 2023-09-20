@@ -38,7 +38,7 @@
     <string name="pref_confirm_exit">Konfirmo daljen</string>
     <string name="pref_manage_notifications">Menaxho njoftimet</string>
     <string name="pref_app_language">Gjuha e aplikacionit</string>
-    <string name="pref_category_security">Siguria</string>
+    <string name="pref_category_security">Siguria dhe privatësia</string>
     <string name="lock_with_biometrics">Kërkohet shkyçja</string>
     <string name="lock_when_idle">Kyç kur është i papunë</string>
     <string name="lock_always">Gjithmonë</string>
@@ -83,7 +83,6 @@
     <string name="multi_lang">Shumë</string>
     <string name="ext_update">Përditëso</string>
     <string name="ext_obsolete">I vjetëruar</string>
-    <string name="channel_downloader_cache">Indeksimi</string>
     <string name="channel_progress">Përparim</string>
     <string name="download_notifier_split_page_path_not_found">Nuk mund të gjendej shtegu i skedarit të faqes %d</string>
     <string name="information_no_recent_manga">Asgjë e lexuar kohët e fundit</string>
@@ -109,7 +108,6 @@
     <string name="channel_new_chapters_episodes">Përditësimet e kapitullit</string>
     <string name="channel_skipped">U anashkalua</string>
     <string name="download_notifier_cache_renewal">Shkarkimet e indeksimit</string>
-    <string name="download_notifier_split_failed">Imazhi i shkarkuar nuk mund të ndahej</string>
     <string name="download_notifier_split_page_not_found">Faqja %d nuk u gjet gjatë ndarjes</string>
     <string name="download_notifier_downloader_title">Shkarkues</string>
     <string name="information_webview_outdated">Përditësoni aplikacionin WebView për përputhshmëri më të mirë</string>
@@ -132,7 +130,6 @@
     <string name="action_display_download_badge">Kapitujt e shkarkuar</string>
     <string name="action_display_local_badge">Burimi lokal</string>
     <string name="action_display_comfortable_grid">Rrjetë e rehatshme</string>
-    <string name="action_display_unread_badge">Kapituj të palexuar</string>
     <string name="action_display_show_tabs">Shfaq skedat e kategorive</string>
     <string name="action_display_list">Lista</string>
     <string name="action_display_cover_only_grid">Rrjetë vetëm me mbulesë</string>
@@ -251,7 +248,6 @@
     <string name="delete_category">Fshi kategorinë</string>
     <string name="action_edit_cover">Redakto kopertinën</string>
     <string name="action_view_chapters">Shiko kapitujt</string>
-    <string name="action_stop">Ndalo</string>
     <string name="action_pause">Ndalo</string>
     <string name="action_previous_chapter">Kapitulli i mëparshëm</string>
     <string name="action_next_chapter">Kapitulli tjetër</string>
@@ -385,7 +381,6 @@
     <string name="download_ahead">Shkarkoni përpara</string>
     <string name="auto_download_while_reading">Shkarkim automatik gjatë leximit</string>
     <string name="save_chapter_as_cbz">Ruaje si arkiv CBZ</string>
-    <string name="split_tall_images">Ndani imazhet e gjata</string>
     <string name="tracking_guide">Udhëzues gjurmimi</string>
     <string name="enhanced_services">Shërbime të përmirësuara</string>
     <plurals name="next_unread_chapters">
@@ -441,7 +436,6 @@
     <string name="kindlish_nav">Kindle-ish</string>
     <string name="enhanced_tracking_info">Shërbime që ofrojnë veçori të përmirësuara për burime specifike. Regjistrimet gjurmohen automatikisht kur shtohen në bibliotekën tuaj.</string>
     <string name="action_track">Pista</string>
-    <string name="pref_enable_automatic_extension_updates">Kontrolloni për përditësime shtesë</string>
     <string name="pref_backup_service_category">Rezervime automatike</string>
     <string name="pref_backup_interval">Frekuenca rezervë</string>
     <string name="pref_backup_slots">Rezervimet maksimale</string>
@@ -456,16 +450,12 @@
     <string name="local_invalid_format">Format i pavlefshëm i kapitullit</string>
     <string name="unknown_status">Status i panjohur</string>
     <string name="licensed">I licencuar</string>
-    <string name="confirm_manga_add_duplicate">Ju keni një hyrje në bibliotekën tuaj me të njëjtin emër, por nga një burim tjetër (%1$s).
-\n
-\nDëshironi akoma të vazhdoni\?</string>
     <string name="manga_removed_library">U hoq nga biblioteka</string>
     <string name="delete_downloads_for_manga">Të fshihen kapitujt e shkarkuar\?</string>
     <string name="clipboard_copy_error">Kopjimi në kujtesën e fragmenteve dështoi</string>
     <string name="source_not_installed">Burimi nuk është i instaluar: %1$s</string>
     <string name="sort_by_upload_date">Sipas datës së ngarkimit</string>
     <string name="manga_download">Shkarko</string>
-    <string name="download_5">5 kapitujt e ardhshëm</string>
     <string name="unread">Të palexuara</string>
     <string name="manga_tracking_tab">Ndjekja</string>
     <string name="unfinished_list">Lista e papërfunduar</string>
@@ -513,9 +503,8 @@
     <string name="latest">Të fundit</string>
     <string name="manga_info_expand">Më shumë</string>
     <string name="chapter_settings">Cilësimet e kapitullit</string>
-    <string name="crash_screen_title">Nje gabim i papritur ndodhi</string>
+    <string name="crash_screen_title">Ups!</string>
     <string name="update_check_notification_download_error">Gabim shkarkimi</string>
-    <string name="enhanced_tracking_warning">Ky gjurmues është i përputhshëm vetëm me burimin %1$s.</string>
     <string name="pref_invalidate_download_cache">Anuloni indeksin e shkarkimeve</string>
     <string name="pref_auto_clear_chapter_cache">Pastro memorjen e kapitullit në mbylljen e aplikacionit</string>
     <string name="pref_clear_database">Pastro bazën e të dhënave</string>
@@ -560,7 +549,7 @@
         <item quantity="one">Ofrohet përditësim i shtesës</item>
         <item quantity="other">Ofrohen %d përditësime shtesë</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Përfshi vetëm burime të fiksuara</string>
+    <string name="pref_search_pinned_sources_only">Kërko vetëm burime të fiksuara në kërkimin global</string>
     <string name="pref_create_backup">Krijo kopje rezervë</string>
     <string name="pref_create_backup_summ">Mund të përdoret për të rivendosur bibliotekën aktuale</string>
     <string name="pref_restore_backup">Rivendos kopjen rezervë</string>
@@ -601,7 +590,6 @@
     <string name="label_background_activity">Aktiviteti në sfond</string>
     <string name="pref_disable_battery_optimization_summary">Ndihmon me përditësimet dhe kopjet rezervë të bibliotekës në sfond</string>
     <string name="pref_dump_crash_logs_summary">Ruan regjistrat e gabimeve në një skedar për t\'i ndarë me zhvilluesit</string>
-    <string name="crash_log_saved">Regjistrat e aksidenteve u ruajtën</string>
     <string name="battery_optimization_disabled">Optimizimi i baterisë është tashmë i çaktivizuar</string>
     <string name="battery_optimization_setting_activity_not_found">Cilësimet e pajisjes nuk mund të hapeshin</string>
     <string name="check_for_updates">Kontrolloni për përditësime</string>
@@ -620,9 +608,7 @@
     <string name="updating_category">Kategoria po përditësohet</string>
     <string name="manga_from_library">Nga biblioteka</string>
     <string name="downloaded_chapters">Kapitujt e shkarkuar</string>
-    <string name="badges_header">Distinktivët</string>
     <string name="tabs_header">Skedat</string>
-    <string name="other_header">Tjetër</string>
     <string name="no_more_results">Nuk ka më rezultate</string>
     <string name="http_error_hint">Kontrolloni faqen e internetit në WebView</string>
     <string name="local_source">Burimi lokal</string>
@@ -645,10 +631,6 @@
     <string name="show_title">Titulli i burimit</string>
     <string name="sort_by_source">Sipas burimit</string>
     <string name="sort_by_number">Sipas numrit të kapitullit</string>
-    <string name="download_1">Kapitulli tjetër</string>
-    <string name="download_10">10 kapitujt e ardhshëm</string>
-    <string name="download_custom">Me porosi</string>
-    <string name="download_all">Të gjitha</string>
     <string name="download_unread">Të palexuara</string>
     <string name="custom_cover">Kopertine e personalizuar</string>
     <string name="manga_cover">Kopertina</string>
@@ -753,13 +735,11 @@
     <string name="last_used_source">Përdorur për herë të fundit</string>
     <string name="remove_from_library">Hiqe nga biblioteka</string>
     <string name="error_saving_cover">Gabim gjatë ruajtjes së kopertinës</string>
-    <string name="custom_download">Shkarkoni shumën e personalizuar</string>
     <string name="notification_first_add_to_library">Ju lutemi shtoni hyrjen në bibliotekën tuaj përpara se ta bëni këtë</string>
     <string name="confirm_set_chapter_settings">Jeni i sigurt që dëshironi t\'i ruani këto cilësime si parazgjedhje\?</string>
     <string name="dialog_with_checkbox_remove_description">Kjo do të heqë datën e leximit të këtij kapitulli. A je i sigurt\?</string>
     <string name="track_remove_start_date_conf_text">Kjo do të heqë datën e fillimit të zgjedhur më parë nga %s</string>
     <string name="update_check_eol">Ky version Android nuk mbështetet më</string>
-    <string name="channel_crash_logs">Regjistrat e përplasjeve</string>
     <string name="website">Faqja e internetit</string>
     <string name="version">Version</string>
     <string name="whats_new">Cfare ka te re</string>
@@ -794,4 +774,19 @@
     <string name="hour_short">%do</string>
     <string name="minute_short">%dm</string>
     <string name="information_no_manga_category">Kategorija është bosh</string>
+    <string name="enhanced_services_not_installed">Në dispozicion, por burimi nuk është i instaluar: %s</string>
+    <string name="pref_skip_dupe_chapters">Kapërceni kapitujt e kopjuar</string>
+    <string name="pref_hide_in_library_items">Fshih hyrjet tashmë në bibliotekë</string>
+    <string name="action_copy_to_clipboard">Kopjo në kujtesën e fragmenteve</string>
+    <string name="confirm_add_duplicate_manga">Ju keni një hyrje në librarni me të njëjtin emër.
+\n
+\nDëshironi të vazhdoni\?</string>
+    <plurals name="download_amount">
+        <item quantity="one">Kapitulli i rradhës</item>
+        <item quantity="other">%d kapituj të rradhës</item>
+    </plurals>
+    <string name="action_update_category">Përditëso kategorinë</string>
+    <string name="track_error">%1$s gabim: %2$s</string>
+    <string name="information_required_plain">*kërkohet</string>
+    <string name="copied_to_clipboard_plain">U kopjua në clipboard</string>
 </resources>

@@ -2,11 +2,10 @@
 <resources>
     <string name="manga_categories">Kategorijas</string>
     <string name="unlock_app">Atslēgt Anijomi</string>
-    <string name="action_sort_last_manga_update">Pēdējais manga atjauninājums</string>
-    <string name="action_show_manga">Rādīt manga</string>
-    <string name="action_display_local_badge_manga">Lokālā manga</string>
+    <string name="action_sort_last_manga_update">Pēdējā atjauninājuma pārbaude</string>
+    <string name="action_show_manga">Rādīt ierakstu</string>
+    <string name="action_display_local_badge_manga">Lokālais avots</string>
     <string name="pref_update_only_completely_read">Ar nelasītu(ām) nodaļu(ām)</string>
-    <string name="pref_library_update_show_tab_badge">Rādīt nelasīto skaitu uz Atjauninājumi ikonas</string>
     <string name="default_manga_category">Noklusētā kategorija</string>
     <string name="pref_manga_library_update_categories_details">Izslēgto kategoriju manga netiks atjaunināta, pat ja tās ir arī iekļautajās kategorijās.</string>
     <string name="untrusted_extension_message">Šis paplašinājums tika parakstīts ar neuzticamu sertifikātu, un tas netika aktivizēts.
@@ -24,16 +23,51 @@
     <string name="pref_auto_clear_chapter_cache">Notīriet nodaļu kešatmiņu, aizverot lietotni</string>
     <string name="pref_clear_manga_database">Notīrīt datu bāzi</string>
     <string name="pref_clear_manga_database_summary">Dzēst vēsturi preikš manga, kas nav saglabāta bibliotēkā</string>
-    <string name="clear_database_confirmation">Vai esi pārliecināts\? Lasītās nodaļas un progress priekš manga, kuras nav bibliotēkā, būs zudis</string>
+    <string name="clear_database_confirmation">Vai esi pārliecināts\? Lasītās nodaļas un progress priekš ieraksta, kuras nav bibliotēkā, būs zudis</string>
     <string name="pref_refresh_library_tracking_summary">Atjaunina statusu, vērtējumu un pēdējo izlasīto nodaļu no izsekošanas servisa</string>
     <string name="pref_incognito_mode_summary">Pauzē lasīšanas vēsturi</string>
-    <string name="manga_from_library">Manga no bibliotēkas</string>
+    <string name="manga_from_library">No bibliotēkas</string>
     <string name="snack_add_to_manga_library">Pievienot manga bibliotēkai\?</string>
-    <string name="also_set_chapter_settings_for_library">Attiecas arī uz visām manga manā bibliotēkā</string>
-    <string name="dialog_with_checkbox_reset">Atiestatīt visas šīs mangas nodaļas</string>
+    <string name="also_set_chapter_settings_for_library">Attiecas arī uz visiem ierakstiem manā bibliotēkā</string>
+    <string name="dialog_with_checkbox_reset">Atiestatīt visas šī ieraksta nodaļas</string>
     <string name="download_insufficient_space">Nevarēja lejupielādēt nodaļas, jo trūkst krātuves vietas</string>
     <string name="download_queue_size_warning">Brīdinājums: liela apjoma lejupielāde var izraisīt to, ka avoti kļūst lēnāki un/vai bloķē Tachiyomi. Pieskarieties, lai uzzinātu vairāk.</string>
     <string name="information_webview_required">Tachiyomi ir nepieciešams WebView</string>
     <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
     <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

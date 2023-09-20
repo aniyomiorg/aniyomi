@@ -90,12 +90,6 @@
     <string name="completed">הושלם</string>
     <string name="confirm_delete_chapters">האם אתה בטוח שברצונך למחוק את הפרקים שנבחרו\?</string>
     <string name="download_unread">לא נקרא</string>
-    <string name="download_all">הכל</string>
-    <string name="download_custom">מותאם אישית</string>
-    <string name="download_10">10 פרקים הבאים</string>
-    <string name="download_5">5 פרקים הבאים</string>
-    <string name="download_1">פרק הבא</string>
-    <string name="custom_download">הורד כמות מותאמת אישית</string>
     <string name="sort_by_number">לפי מספר פרק</string>
     <string name="sort_by_source">לפי מקור</string>
     <string name="show_chapter_number">מספר פרק</string>
@@ -211,7 +205,6 @@
     <string name="action_next_chapter">פרק הבא</string>
     <string name="action_previous_chapter">פרק קודם</string>
     <string name="action_pause">הפסק</string>
-    <string name="action_stop">עצור</string>
     <string name="action_view_chapters">הצג פרקים</string>
     <string name="action_edit_cover">ערוך את הכריכה</string>
     <string name="action_move_category">סדר קטגוריות</string>
@@ -298,7 +291,6 @@
     <string name="pref_double_tap_anim_speed">מהירות הנפשה בהקשה כפולה</string>
     <string name="pref_page_transitions">הנפשת מעברי דפים</string>
     <string name="pref_cutout_short">הצג תוכן באזור החתוך</string>
-    <string name="pref_enable_automatic_extension_updates">בדוק אם קיימים עדכוני הרחבות</string>
     <string name="untrusted_extension">תוסף לא מאומת</string>
     <string name="obsolete_extension_message">תוסף זה אינו זמין עוד.</string>
     <string name="pref_fullscreen">מסך מלא</string>
@@ -384,7 +376,6 @@
     <string name="action_start">התחל</string>
     <string name="action_migrate">העברה</string>
     <string name="action_display_comfortable_grid">רשת נוחה</string>
-    <string name="action_display_unread_badge">פרקים שלא נקראו</string>
     <string name="theme_tealturquoise">טורקיז צהבהב</string>
     <string name="pref_dark_theme_pure_black">מצב שחור כהה טהור</string>
     <string name="theme_greenapple">ירוק תפוח</string>
@@ -489,7 +480,6 @@
     <string name="pref_search_pinned_sources_only">כלול רק מקורות נעוצים</string>
     <string name="action_track">מעקב</string>
     <string name="clear_database_source_item_count">יש %1$d מנגה שנמצאות במסד הנתונים אבל לא בספרייה</string>
-    <string name="badges_header">תגים</string>
     <string name="tabs_header">לשוניות</string>
     <string name="action_global_search_query">חפש את \"%1$s\" גלובלית</string>
     <string name="unknown_status">מצב לא ידוע</string>
@@ -631,7 +621,6 @@
     <string name="kindlish_nav">כמו ספר אלקטרוני</string>
     <string name="ext_info_version">גרסה</string>
     <string name="filter_mode_overlay">כיסוי</string>
-    <string name="split_tall_images">פיצול תמונות ארוכות אוטומטי</string>
     <string name="ext_info_age_rating">הגבלת גיל</string>
     <string name="ext_info_language">שפה</string>
     <string name="pref_color_filter_mode">פילטר צבע משתלב</string>

@@ -10,12 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import eu.kanade.presentation.util.SecondaryItemAlpha
-import eu.kanade.presentation.util.padding
+import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun RowScope.StatsOverviewItem(
@@ -76,7 +75,7 @@ private fun RowScope.BaseStatsItem(
         )
         if (icon != null) {
             Icon(
-                painter = rememberVectorPainter(icon),
+                imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )

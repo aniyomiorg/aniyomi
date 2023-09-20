@@ -3,17 +3,17 @@ package eu.kanade.tachiyomi.data.download.manga
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -138,12 +138,24 @@ class MangaDownloadProvider(
      * @param chapterScanlator scanlator of the chapter to query
      */
     fun getChapterDirName(chapterName: String, chapterScanlator: String?): String {
+        val newChapterName = sanitizeChapterName(chapterName)
         return DiskUtil.buildValidFilename(
             when {
-                chapterScanlator.isNullOrBlank().not() -> "${chapterScanlator}_$chapterName"
-                else -> chapterName
+                chapterScanlator.isNullOrBlank().not() -> "${chapterScanlator}_$newChapterName"
+                else -> newChapterName
             },
         )
+    }
+
+    /**
+     * Return the new name for the chapter (in case it's empty or blank)
+     *
+     * @param chapterName the name of the chapter
+     */
+    private fun sanitizeChapterName(chapterName: String): String {
+        return chapterName.ifBlank {
+            "Chapter"
+        }
     }
 
     fun isChapterDirNameChanged(oldChapter: Chapter, newChapter: Chapter): Boolean {

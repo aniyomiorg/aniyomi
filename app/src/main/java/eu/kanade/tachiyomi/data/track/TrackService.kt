@@ -32,7 +32,8 @@ abstract class TrackService(val id: Long) {
     @ColorInt
     abstract fun getLogoColor(): Int
 
-    abstract fun getStatus(status: Int): String
+    @StringRes
+    abstract fun getStatus(status: Int): Int?
 
     abstract suspend fun login(username: String, password: String)
 

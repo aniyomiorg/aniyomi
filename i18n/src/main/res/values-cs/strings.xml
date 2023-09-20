@@ -98,11 +98,6 @@
     <string name="chapter_downloading_progress">Stahování (%1$d/%2$d)</string>
     <string name="sort_by_source">Podle zdroje</string>
     <string name="manga_download">Stáhnout</string>
-    <string name="download_1">Stáhnout další kapitolu</string>
-    <string name="download_5">Stáhnout dalších 5 kapitol</string>
-    <string name="download_10">Stáhnout dalších 10 kapitol</string>
-    <string name="download_custom">Stáhnout vlastní</string>
-    <string name="download_all">Stáhnout vše</string>
     <string name="download_unread">Stáhnout nepřečtené</string>
     <string name="confirm_delete_chapters">Opravdu chcete smazat vybrané kapitoly\?</string>
     <string name="reading">Rozečtené</string>
@@ -116,7 +111,7 @@
     <string name="custom_filter">Vlastní filtr</string>
     <string name="chapter_progress">Stránka: %1$d</string>
     <string name="no_next_chapter">Další kapitola nenalezena</string>
-    <string name="decode_image_error">Obrázek nemohl být načten</string>
+    <string name="decode_image_error">Obrázek se nepodařilo načíst</string>
     <string name="transition_finished">Dokončeno:</string>
     <string name="transition_current">Aktuální:</string>
     <string name="transition_next">Následující:</string>
@@ -151,7 +146,6 @@
     <string name="action_update_library">Aktualizovat knihovnu</string>
     <string name="action_rename_category">Přejmenovat kategorii</string>
     <string name="action_move_category">Vybrat kategorie</string>
-    <string name="action_stop">Stop</string>
     <string name="action_pause">Pauza</string>
     <string name="action_retry">Opakovat</string>
     <string name="action_resume">Pokračovat</string>
@@ -228,7 +222,6 @@
     <string name="copied_to_clipboard">Zkopírováno do schránky:
 \n%1$s</string>
     <string name="sort_by_number">Podle čísla kapitoly</string>
-    <string name="custom_download">Stažení vlastního počtu</string>
     <string name="manga_tracking_tab">Sledování</string>
     <string name="dropped">Již nečtu</string>
     <string name="on_hold">Pozastaveno</string>
@@ -308,7 +301,7 @@
     <string name="lock_never">Nikdy</string>
     <string name="lock_always">Vždy</string>
     <string name="lock_when_idle">Uzamknout při nečinnosti</string>
-    <string name="pref_category_security">Bezpečnost</string>
+    <string name="pref_category_security">Bezpečnost a soukromí</string>
     <string name="pref_manage_notifications">Spravovat oznámení</string>
     <string name="action_oldest">Nejstarší</string>
     <string name="action_newest">Nejnovější</string>
@@ -356,9 +349,8 @@
     <string name="battery_optimization_disabled">Optimalizace je již vypnuta</string>
     <string name="pref_disable_battery_optimization_summary">Pomáhá s aktualizacemi knihovny a záloh na pozadí</string>
     <string name="pref_disable_battery_optimization">Vypnout optimalizaci baterie</string>
-    <string name="crash_log_saved">Chybový protokol uložen</string>
     <string name="pref_dump_crash_logs_summary">Uloží chybové protokoly do souboru pro sdílení s vývojáři</string>
-    <string name="pref_dump_crash_logs">Vypsat protokoly o selhání</string>
+    <string name="pref_dump_crash_logs">Sdílet protokoly o selhání</string>
     <string name="pref_refresh_library_covers">Obnovit přebaly v knihovně</string>
     <string name="label_data">Data</string>
     <string name="requires_app_restart">Pro projevení je nutný restart aplikace</string>
@@ -382,7 +374,6 @@
     <string name="backup_restore_missing_sources">Chybějící zdroje:</string>
     <string name="invalid_backup_file_missing_manga">Záloha neobsahuje žádné položky knihovny.</string>
     <string name="invalid_backup_file">Neplatný soubor se zálohou</string>
-    <string name="pref_enable_automatic_extension_updates">Kontrolovat dostupnost aktualizací rozšíření</string>
     <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol ve sledovacích službách. Nastavení sledování pro každou položku je možné z jejich tlačítka sledování.</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
@@ -415,7 +406,7 @@
     <string name="pref_category_nsfw_content">NSFW (18+) zdroje</string>
     <string name="secure_screen_summary">Secure screen skryje obsah aplikace při přepínání aplikací a blokuje tvorbu snímků obrazovky</string>
     <string name="secure_screen">Chráněná obrazovka</string>
-    <string name="lock_with_biometrics">Vyžaduje odemknutí</string>
+    <string name="lock_with_biometrics">Vyžadovat odemknutí</string>
     <string name="pref_confirm_exit">Potvrdit opuštění</string>
     <string name="theme_dark">Zapnuto</string>
     <string name="theme_light">Vypnuto</string>
@@ -432,7 +423,6 @@
     <string name="action_disable">Zakázat</string>
     <string name="action_display_show_number_of_items">Zobrazovat počet položek</string>
     <string name="action_start">Začít</string>
-    <string name="channel_crash_logs">Záznamy o pádech</string>
     <string name="channel_ext_updates">Aktualizace rozšíření</string>
     <string name="channel_errors">Chyby</string>
     <string name="channel_complete">Dokončeno</string>
@@ -472,9 +462,9 @@
     <string name="recent_manga_time">Kap. %1$s - %2$s</string>
     <string name="updating_library">Aktualizuji knihovnu</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Přeskakuji %d kapitolu, buď chybí ve zdroji nebo byla vyfiltrována</item>
-        <item quantity="few">Přeskakuji %d kapitoly, buď chybí ve zdroji nebo byly vyfiltrovány</item>
-        <item quantity="other">Přeskakuji %d kapitol, buď chybí ve zdroji nebo byly vyfiltrovány</item>
+        <item quantity="one">Přeskočena %d kapitola, buď chybí ve zdroji nebo byla vyfiltrována</item>
+        <item quantity="few">Přeskočeny %d kapitoly, buď chybí ve zdroji nebo byly vyfiltrovány</item>
+        <item quantity="other">Přeskočeno %d kapitol, buď chybí ve zdroji nebo byly vyfiltrovány</item>
     </plurals>
     <string name="loader_not_implemented_error">Zdroj nenalezen</string>
     <string name="page_list_empty_error">Žádné stránky nenalezeny</string>
@@ -502,12 +492,11 @@
         <item quantity="few">%d sledovače</item>
         <item quantity="other">%d sledovačů</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Zahrnout pouze připnuté zdroje</string>
+    <string name="pref_search_pinned_sources_only">V globálním vyhledávání prohledávejte pouze připnuté zdroje</string>
     <string name="pref_category_reading">Čtení</string>
     <string name="pref_show_reading_mode_summary">Při otevření čtečky krátce zobrazí aktuální režim</string>
     <string name="ext_updates_pending">Čekajících aktualizací</string>
     <string name="file_picker_error">Nebyla nalezena žádná aplikace pro výběr souborů</string>
-    <string name="badges_header">Odznaky</string>
     <string name="downloaded_only_summary">Filtruje všechnu položky ve vaší knihovně</string>
     <string name="pref_download_new_categories_details">Položky ve vynechaných kategoriích nebudou staženy, i kdyby byly také v zahrnutých kategoriích.</string>
     <string name="pref_category_auto_download">Automatické stahování</string>
@@ -522,7 +511,6 @@
     <string name="none">Žádné</string>
     <string name="pref_category_display">Zobrazení</string>
     <string name="action_display_show_tabs">Zobrazovat karty kategorií</string>
-    <string name="action_display_unread_badge">Nepřečtené kapitoly</string>
     <string name="update_check_eol">Tato verze systému Android již není podporována</string>
     <string name="clipboard_copy_error">Kopírování do schránky se nezdařilo</string>
     <string name="vertical_plus_viewer">Průběžné vertikální</string>
@@ -638,9 +626,6 @@
     <string name="cancelled">Zrušeno</string>
     <string name="action_display_cover_only_grid">Mřížka jen s přebaly</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="confirm_manga_add_duplicate">Ve své knihovně máte položku se stejným názvem, ale z jiného zdroje (%1$s).
-\n
-\nPřejete si přesto pokračovat\?</string>
     <string name="pref_update_only_started">Které nebyly rozečteny</string>
     <string name="notification_update_error">%1$d aktualizace(í) selhalo</string>
     <string name="notification_update_skipped">%1$d aktualizace(í) přeskočena(y)</string>
@@ -678,13 +663,11 @@
     <string name="ext_info_language">Jazyk</string>
     <string name="ext_info_age_rating">Věkové hodnocení</string>
     <string name="ext_info_version">Verze</string>
-    <string name="split_tall_images">Rozdělit vysoké obrázky</string>
     <string name="split_tall_images_summary">Zlepšuje výkon čtečky</string>
     <string name="pref_reset_viewer_flags_error">Nastavení čtečky se nepodařilo resetovat</string>
     <string name="empty_screen">No, tohle je trapné</string>
     <string name="download_notifier_split_page_not_found">Stránka %d nebyla při rozdělení nalezena</string>
     <string name="download_notifier_split_page_path_not_found">Nepodařilo se najít cestu k souboru stránky %d</string>
-    <string name="download_notifier_split_failed">Stažený obrázek se nepodařilo rozdělit</string>
     <string name="pref_navigate_pan">Posunutí širokých snímků při klepnutí</string>
     <string name="action_sort_unread_count">Počet nepřečtených</string>
     <string name="battery_not_low">Když baterie není vybitá</string>
@@ -716,7 +699,7 @@
     <string name="download_ahead_info">Funguje pouze na položky v knihovně a pokud je již stažena aktuální kapitola a následující kapitola</string>
     <string name="are_you_sure">Jste si jistí\?</string>
     <string name="remove_manga">Chystáte se odstranit \"%s\" ze své knihovny</string>
-    <string name="multi_lang">Multi</string>
+    <string name="multi_lang">Více</string>
     <string name="pref_long_strip_split">Rozdělit vysoké obrázky (BETA)</string>
     <string name="updates_last_update_info">Poslední aktualizace knihovny: %s</string>
     <string name="popular">Populární</string>
@@ -732,7 +715,7 @@
     <string name="pref_browse_summary">Zdroje, rozšíření, globální vyhledávání</string>
     <string name="pref_security_summary">Zámek aplikace, zabezpečená obrazovka</string>
     <string name="pref_advanced_summary">Výpis protokolů selhání, optimalizace baterie</string>
-    <string name="crash_screen_description">%s narazil na neočekávanou chybu. Doporučujeme vám pořídit snímek obrazovky, vypsat protokoly o selhání a poté je sdílet v našem kanálu podpory na Discordu.</string>
+    <string name="crash_screen_description">%s narazil na neočekávanou chybu. Doporučujeme vám sdílet protokoly o selhání a poté je sdílet v našem kanálu podpory na Discordu.</string>
     <string name="crash_screen_restart_application">Restartujte aplikaci</string>
     <string name="pref_backup_summary">Ruční a automatické zálohování</string>
     <string name="crash_screen_title">Došlo k neočekávané chybě</string>
@@ -740,11 +723,36 @@
     <string name="unknown_title">Neznámý titul</string>
     <string name="error_user_agent_string_invalid">Neplatný řetězec uživatelského agenta</string>
     <string name="updates_last_update_info_just_now">Právě teď</string>
-    <string name="download_notifier_cache_renewal">Indexování stažených souborů</string>
+    <string name="download_notifier_cache_renewal">Kontrola stahování</string>
     <string name="channel_downloader_cache">Stáhnout mezipaměť</string>
     <string name="information_no_entries_found">V této kategorii nebyly nalezeny žádné položky</string>
     <string name="action_open_random_manga">Otevřít náhodnou položku</string>
     <string name="fdroid_warning">F-Droid sestavení nejsou oficiálně podporovány.
 \nKlepnutím zobrazíte další informace.</string>
 <string name="label_download_queue">Stahovací fronta</string>
+    <string name="enhanced_services_not_installed">K dispozici, ale zdroj není nainstalován: %s</string>
+    <string name="pref_skip_dupe_chapters">Přeskakovat duplicitní kapitoly</string>
+    <string name="confirm_add_duplicate_manga">Ve své knihovně máte položku se stejným názvem.
+\n
+\nStále si přejete pokračovat\?</string>
+    <string name="track_error">%1$s chyba: %2$s</string>
+    <string name="information_required_plain">*vyžadováno</string>
+    <string name="pref_hide_in_library_items">Skrýt položky, které jsou již v knihovně</string>
+    <plurals name="download_amount">
+        <item quantity="one">Další kapitola</item>
+        <item quantity="few">Další %d kapitoly</item>
+        <item quantity="other">Dalších %d kapitol</item>
+    </plurals>
+    <string name="action_copy_to_clipboard">Zkopírovat do schránky</string>
+    <string name="action_update_category">Aktualizovat kategorii</string>
+    <string name="split_tall_images">Rozdělit vysoké obrázky</string>
+    <string name="overlay_header">Překrytí</string>
+    <string name="pref_page_rotate_invert">Překlopení orientace otočených širokých stránek</string>
+    <string name="pref_page_rotate">Otočení širokých stránek tak, aby se vešly</string>
+    <plurals name="missing_items">
+        <item quantity="one">Chybí %1$s kapitola</item>
+        <item quantity="few">Chybí %1$s kapitoly</item>
+        <item quantity="other">Chybí %1$s kapitol</item>
+    </plurals>
+    <string name="missing_items_unknown">Mohou chybět kapitoly</string>
     </resources>

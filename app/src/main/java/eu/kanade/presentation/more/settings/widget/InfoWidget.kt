@@ -12,19 +12,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.presentation.util.ThemePreviews
-import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.ThemePreviews
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 internal fun InfoWidget(text: String) {
     Column(
         modifier = Modifier
-            .padding(horizontal = PrefsHorizontalPadding, vertical = 16.dp)
+            .padding(
+                horizontal = PrefsHorizontalPadding,
+                vertical = MaterialTheme.padding.medium,
+            )
             .secondaryItemAlpha(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
     ) {
         Icon(
             imageVector = Icons.Outlined.Info,

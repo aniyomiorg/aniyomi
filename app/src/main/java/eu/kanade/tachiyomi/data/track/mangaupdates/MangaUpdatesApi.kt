@@ -11,9 +11,8 @@ import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.PUT
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.add
@@ -29,6 +28,7 @@ import logcat.LogPriority
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 
 class MangaUpdatesApi(
@@ -47,14 +47,15 @@ class MangaUpdatesApi(
     }
 
     suspend fun getSeriesListItem(track: MangaTrack): Pair<ListItem, Rating?> {
-        val listItem =
+        val listItem = with(json) {
             authClient.newCall(
                 GET(
                     url = "$baseUrl/v1/lists/series/${track.media_id}",
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<ListItem>()
+        }
 
         val rating = getSeriesRating(track)
 
@@ -77,7 +78,7 @@ class MangaUpdatesApi(
                 body = body.toString().toRequestBody(contentType),
             ),
         )
-            .await()
+            .awaitSuccess()
             .let {
                 if (it.code == 200) {
                     track.status = status
@@ -104,20 +105,22 @@ class MangaUpdatesApi(
                 body = body.toString().toRequestBody(contentType),
             ),
         )
-            .await()
+            .awaitSuccess()
 
         updateSeriesRating(track)
     }
 
     suspend fun getSeriesRating(track: MangaTrack): Rating? {
         return try {
-            authClient.newCall(
-                GET(
-                    url = "$baseUrl/v1/series/${track.media_id}/rating",
-                ),
-            )
-                .await()
-                .parseAs<Rating>()
+            with(json) {
+                authClient.newCall(
+                    GET(
+                        url = "$baseUrl/v1/series/${track.media_id}/rating",
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<Rating>()
+            }
         } catch (e: Exception) {
             null
         }
@@ -134,14 +137,14 @@ class MangaUpdatesApi(
                     body = body.toString().toRequestBody(contentType),
                 ),
             )
-                .await()
+                .awaitSuccess()
         } else {
             authClient.newCall(
                 DELETE(
                     url = "$baseUrl/v1/series/${track.media_id}/rating",
                 ),
             )
-                .await()
+                .awaitSuccess()
         }
     }
 
@@ -156,20 +159,22 @@ class MangaUpdatesApi(
                 },
             )
         }
-        return client.newCall(
-            POST(
-                url = "$baseUrl/v1/series/search",
-                body = body.toString().toRequestBody(contentType),
-            ),
-        )
-            .await()
-            .parseAs<JsonObject>()
-            .let { obj ->
-                obj["results"]?.jsonArray?.map { element ->
-                    json.decodeFromJsonElement<Record>(element.jsonObject["record"]!!)
+        return with(json) {
+            client.newCall(
+                POST(
+                    url = "$baseUrl/v1/series/search",
+                    body = body.toString().toRequestBody(contentType),
+                ),
+            )
+                .awaitSuccess()
+                .parseAs<JsonObject>()
+                .let { obj ->
+                    obj["results"]?.jsonArray?.map { element ->
+                        json.decodeFromJsonElement<Record>(element.jsonObject["record"]!!)
+                    }
                 }
-            }
-            .orEmpty()
+                .orEmpty()
+        }
     }
 
     suspend fun authenticate(username: String, password: String): Context? {
@@ -177,21 +182,23 @@ class MangaUpdatesApi(
             put("username", username)
             put("password", password)
         }
-        return client.newCall(
-            PUT(
-                url = "$baseUrl/v1/account/login",
-                body = body.toString().toRequestBody(contentType),
-            ),
-        )
-            .await()
-            .parseAs<JsonObject>()
-            .let { obj ->
-                try {
-                    json.decodeFromJsonElement<Context>(obj["context"]!!)
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR, e)
-                    null
+        return with(json) {
+            client.newCall(
+                PUT(
+                    url = "$baseUrl/v1/account/login",
+                    body = body.toString().toRequestBody(contentType),
+                ),
+            )
+                .awaitSuccess()
+                .parseAs<JsonObject>()
+                .let { obj ->
+                    try {
+                        json.decodeFromJsonElement<Context>(obj["context"]!!)
+                    } catch (e: Exception) {
+                        logcat(LogPriority.ERROR, e)
+                        null
+                    }
                 }
-            }
+        }
     }
 }

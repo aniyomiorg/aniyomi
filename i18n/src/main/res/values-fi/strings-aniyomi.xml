@@ -40,7 +40,6 @@
     <string name="action_global_manga_search">Yleinen mangahaku</string>
     <string name="action_global_anime_search">Yleinen animehaku</string>
     <string name="action_show_anime">Näytä anime</string>
-    <string name="action_display_unseen_badge">Katsomattomat jaksot</string>
     <string name="action_order_by_episode_number">Jaksonumeroiden mukaisesti</string>
     <string name="pref_category_volume_brightness">Äänenvoimakkuus ja kirkkaus</string>
     <string name="pref_category_pip">Kuva kuvassa (PiP)</string>
@@ -52,7 +51,7 @@
     <string name="playback_options_title">Toistoasetukset</string>
     <string name="pref_category_progress">Edistyminen</string>
     <string name="pref_remember_brightness">Muista viimeksi käytetty kirkkaus ja käytä sitä</string>
-    <string name="pref_backup_flags_summ">Varmuuskopiotiedostoon sisällytettävät tiedot</string>
+    <string name="pref_backup_flags_summary">Varmuuskopiotiedostoon sisällytettävät tiedot</string>
     <string name="pref_auto_clear_chapter_cache">Tyhjennä jaksojen/lukujen välimuisti, kun sovellus suljetaan</string>
     <string name="downloaded_episodes">Ladatut jaksot</string>
     <string name="screenshot_show_subs">Näytä tekstitys näyttökuvassa</string>
@@ -98,7 +97,6 @@
     <string name="stats_page">Tilastosivu</string>
     <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon\?</string>
     <string name="screenshot_header">Ota näyttökuva</string>
-    <string name="stats_header">Näytä tilastot</string>
     <string name="display_mode_episode">Jakso %1$s</string>
     <string name="label_history">Manga</string>
     <string name="episode_not_found">Jaksoa ei löytynyt</string>
@@ -139,9 +137,6 @@
     <string name="currently_watching">Katsellaan parhaillaan</string>
     <string name="not_interesting">Ei kiinnostava</string>
     <string name="want_to_watch">Haluan katsoa</string>
-    <string name="download_1_episode">Seuraava jakso</string>
-    <string name="download_5_episodes">Seuraavat 5 jaksoa</string>
-    <string name="download_10_episodes">Seuraavat 10 jaksoa</string>
     <string name="download_unseen">Katsomatta</string>
     <string name="confirm_delete_episodes">Haluatko varmasti poistaa valitut jaksot\?</string>
     <string name="also_set_episode_settings_for_library">Käytä myös kaikkiin kirjastossani oleviin animeihin</string>
@@ -150,10 +145,9 @@
     <string name="dialog_with_checkbox_reset_anime">Nollaa kaikki tämän animen jaksot</string>
     <string name="episode_settings_updated">Jaksojen oletusasetukset on päivitetty</string>
     <string name="no_next_episode">Seuraavaa jaksoa ei löytynyt!</string>
-    <string name="no_previous_episode">Edellistä jaksoa ei löytynyt!</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Takaisin</string>
     <string name="enable_auto_play">Automaattinen toisto on käytössä</string>
     <string name="disable_auto_play">Automaattinen toisto on poissa käytöstä</string>
@@ -178,4 +172,20 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

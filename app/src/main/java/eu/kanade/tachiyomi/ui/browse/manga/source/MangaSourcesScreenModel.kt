@@ -5,22 +5,26 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
+import eu.kanade.domain.source.manga.interactor.ToggleExcludeFromMangaDataSaver
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
-import eu.kanade.domain.source.manga.model.Pin
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.SourcePreferences.DataSaver
 import eu.kanade.presentation.browse.manga.MangaSourceUiModel
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.LAST_USED_KEY
 import eu.kanade.tachiyomi.util.system.PINNED_KEY
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.source.manga.model.Pin
+import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap
@@ -31,6 +35,9 @@ class MangaSourcesScreenModel(
     private val getEnabledSources: GetEnabledMangaSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleSourcePin: ToggleMangaSourcePin = Injekt.get(),
+    // SY -->
+    private val toggleExcludeFromMangaDataSaver: ToggleExcludeFromMangaDataSaver = Injekt.get(),
+    // SY <--
 ) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
@@ -45,6 +52,17 @@ class MangaSourcesScreenModel(
                 }
                 .collectLatest(::collectLatestSources)
         }
+        // SY -->
+        sourcePreferences.dataSaver().changes()
+            .onEach {
+                mutableState.update {
+                    it.copy(
+                        dataSaverEnabled = sourcePreferences.dataSaver().get() != DataSaver.NONE,
+                    )
+                }
+            }
+            .launchIn(coroutineScope)
+        // SY <--
     }
 
     private fun collectLatestSources(sources: List<Source>) {
@@ -97,6 +115,12 @@ class MangaSourcesScreenModel(
         toggleSourcePin.await(source)
     }
 
+    // SY -->
+    fun toggleExcludeFromMangaDataSaver(source: Source) {
+        toggleExcludeFromMangaDataSaver.await(source)
+    }
+    // SY <--
+
     fun showSourceDialog(source: Source) {
         mutableState.update { it.copy(dialog = Dialog(source)) }
     }
@@ -117,6 +141,9 @@ data class MangaSourcesState(
     val dialog: MangaSourcesScreenModel.Dialog? = null,
     val isLoading: Boolean = true,
     val items: List<MangaSourceUiModel> = emptyList(),
+    // SY -->
+    val dataSaverEnabled: Boolean = false,
+    // SY <--
 ) {
     val isEmpty = items.isEmpty()
 }

@@ -38,4 +38,32 @@
     <string name="information_webview_required">WebView е необходим за Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
     <string name="channel_new_chapters_episodes">Нови глави</string>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

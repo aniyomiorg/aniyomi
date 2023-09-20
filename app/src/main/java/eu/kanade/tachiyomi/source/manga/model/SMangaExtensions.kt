@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.source.manga.model
 
 import data.Mangas
 import eu.kanade.tachiyomi.source.model.SManga
+import tachiyomi.domain.entries.manga.model.Manga
 
 fun SManga.copyFrom(other: Mangas) {
     if (other.author != null) {
@@ -17,7 +18,7 @@ fun SManga.copyFrom(other: Mangas) {
     }
 
     if (other.genre != null) {
-        genre = other.genre.joinToString(separator = ", ")
+        genre = other.genre!!.joinToString(separator = ", ")
     }
 
     if (other.thumbnail_url != null) {
@@ -29,4 +30,34 @@ fun SManga.copyFrom(other: Mangas) {
     if (!initialized) {
         initialized = other.initialized
     }
+}
+
+fun Manga.copyFrom(other: Mangas): Manga {
+    var manga = this
+    if (other.author != null) {
+        manga = manga.copy(author = other.author)
+    }
+
+    if (other.artist != null) {
+        manga = manga.copy(artist = other.artist)
+    }
+
+    if (other.description != null) {
+        manga = manga.copy(description = other.description)
+    }
+
+    if (other.genre != null) {
+        manga = manga.copy(genre = other.genre)
+    }
+
+    if (other.thumbnail_url != null) {
+        manga = manga.copy(thumbnailUrl = other.thumbnail_url)
+    }
+
+    manga = manga.copy(status = other.status)
+
+    if (!initialized) {
+        manga = manga.copy(initialized = other.initialized)
+    }
+    return manga
 }

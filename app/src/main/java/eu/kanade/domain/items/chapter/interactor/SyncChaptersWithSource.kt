@@ -1,19 +1,25 @@
 package eu.kanade.domain.items.chapter.interactor
 
-import eu.kanade.data.items.chapter.CleanupChapterName
-import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
-import eu.kanade.domain.items.chapter.model.toChapterUpdate
-import eu.kanade.domain.items.chapter.repository.ChapterRepository
+import eu.kanade.domain.entries.manga.model.toSManga
+import eu.kanade.domain.items.chapter.model.copyFromSChapter
+import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.isLocal
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.util.chapter.ChapterRecognition
+import tachiyomi.data.items.chapter.ChapterSanitizer
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.ShouldUpdateDbChapter
+import tachiyomi.domain.items.chapter.interactor.UpdateChapter
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.model.NoChaptersException
+import tachiyomi.domain.items.chapter.model.toChapterUpdate
+import tachiyomi.domain.items.chapter.repository.ChapterRepository
+import tachiyomi.domain.items.chapter.service.ChapterRecognition
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
@@ -52,7 +58,7 @@ class SyncChaptersWithSource(
             .mapIndexed { i, sChapter ->
                 Chapter.create()
                     .copyFromSChapter(sChapter)
-                    .copy(name = CleanupChapterName.awaitChapterName(sChapter.name, manga.title))
+                    .copy(name = with(ChapterSanitizer) { sChapter.name.sanitize(manga.title) })
                     .copy(mangaId = manga.id, sourceOrder = i.toLong())
             }
 

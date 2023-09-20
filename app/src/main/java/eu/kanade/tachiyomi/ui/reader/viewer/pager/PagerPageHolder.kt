@@ -13,16 +13,16 @@ import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import kotlinx.coroutines.supervisorScope
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.ImageUtil
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -60,24 +60,13 @@ class PagerPageHolder(
     private val scope = MainScope()
 
     /**
-     * Subscription for status changes of the page.
+     * Job for loading the page and processing changes to the page's status.
      */
-    private var statusSubscription: Subscription? = null
-
-    /**
-     * Job for progress changes of the page.
-     */
-    private var progressJob: Job? = null
-
-    /**
-     * Subscription used to read the header of the image. This is needed in order to instantiate
-     * the appropiate image view depending if the image is animated (GIF).
-     */
-    private var readImageHeaderSubscription: Subscription? = null
+    private var loadJob: Job? = null
 
     init {
         addView(progressIndicator)
-        observeStatus()
+        loadJob = scope.launch { loadPageAndProcessStatus() }
     }
 
     /**
@@ -86,75 +75,39 @@ class PagerPageHolder(
     @SuppressLint("ClickableViewAccessibility")
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        cancelProgressJob()
-        unsubscribeStatus()
-        unsubscribeReadImageHeader()
+        loadJob?.cancel()
+        loadJob = null
     }
 
     /**
-     * Observes the status of the page and notify the changes.
+     * Loads the page and processes changes to the page's status.
      *
-     * @see processStatus
+     * Returns immediately if the page has no PageLoader.
+     * Otherwise, this function does not return. It will continue to process status changes until
+     * the Job is cancelled.
      */
-    private fun observeStatus() {
-        statusSubscription?.unsubscribe()
-
+    private suspend fun loadPageAndProcessStatus() {
         val loader = page.chapter.pageLoader ?: return
-        statusSubscription = loader.getPage(page)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { processStatus(it) }
-    }
 
-    private fun launchProgressJob() {
-        progressJob?.cancel()
-        progressJob = scope.launch {
-            page.progressFlow.collectLatest { value -> progressIndicator.setProgress(value) }
-        }
-    }
-
-    /**
-     * Called when the status of the page changes.
-     *
-     * @param status the new status of the page.
-     */
-    private fun processStatus(status: Page.State) {
-        when (status) {
-            Page.State.QUEUE -> setQueued()
-            Page.State.LOAD_PAGE -> setLoading()
-            Page.State.DOWNLOAD_IMAGE -> {
-                launchProgressJob()
-                setDownloading()
+        supervisorScope {
+            launchIO {
+                loader.loadPage(page)
             }
-            Page.State.READY -> {
-                setImage()
-                cancelProgressJob()
-            }
-            Page.State.ERROR -> {
-                setError()
-                cancelProgressJob()
+            page.statusFlow.collectLatest { state ->
+                when (state) {
+                    Page.State.QUEUE -> setQueued()
+                    Page.State.LOAD_PAGE -> setLoading()
+                    Page.State.DOWNLOAD_IMAGE -> {
+                        setDownloading()
+                        page.progressFlow.collectLatest { value ->
+                            progressIndicator.setProgress(value)
+                        }
+                    }
+                    Page.State.READY -> setImage()
+                    Page.State.ERROR -> setError()
+                }
             }
         }
-    }
-
-    /**
-     * Unsubscribes from the status subscription.
-     */
-    private fun unsubscribeStatus() {
-        statusSubscription?.unsubscribe()
-        statusSubscription = null
-    }
-
-    private fun cancelProgressJob() {
-        progressJob?.cancel()
-        progressJob = null
-    }
-
-    /**
-     * Unsubscribes from the read image header subscription.
-     */
-    private fun unsubscribeReadImageHeader() {
-        readImageHeaderSubscription?.unsubscribe()
-        readImageHeaderSubscription = null
     }
 
     /**
@@ -184,19 +137,16 @@ class PagerPageHolder(
     /**
      * Called when the page is ready.
      */
-    private fun setImage() {
+    private suspend fun setImage() {
         progressIndicator.setProgress(0)
         errorLayout?.root?.isVisible = false
 
-        unsubscribeReadImageHeader()
         val streamFn = page.stream ?: return
 
-        readImageHeaderSubscription = Observable
-            .fromCallable {
-                val stream = streamFn().buffered(16)
-                val itemStream = process(item, stream)
-                val bais = ByteArrayInputStream(itemStream.readBytes())
-                try {
+        val (bais, isAnimated, background) = withIOContext {
+            streamFn().buffered(16).use { stream ->
+                process(item, stream).use { itemStream ->
+                    val bais = ByteArrayInputStream(itemStream.readBytes())
                     val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
                     bais.reset()
                     val background = if (!isAnimated && viewer.config.automaticBackground) {
@@ -206,35 +156,34 @@ class PagerPageHolder(
                     }
                     bais.reset()
                     Triple(bais, isAnimated, background)
-                } finally {
-                    stream.close()
-                    itemStream.close()
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { (bais, isAnimated, background) ->
-                bais.use {
-                    setImage(
-                        it,
-                        isAnimated,
-                        Config(
-                            zoomDuration = viewer.config.doubleTapAnimDuration,
-                            minimumScaleType = viewer.config.imageScaleType,
-                            cropBorders = viewer.config.imageCropBorders,
-                            zoomStartPosition = viewer.config.imageZoomType,
-                            landscapeZoom = viewer.config.landscapeZoom,
-                        ),
-                    )
-                    if (!isAnimated) {
-                        pageBackground = background
-                    }
+        }
+        withUIContext {
+            bais.use {
+                setImage(
+                    it,
+                    isAnimated,
+                    Config(
+                        zoomDuration = viewer.config.doubleTapAnimDuration,
+                        minimumScaleType = viewer.config.imageScaleType,
+                        cropBorders = viewer.config.imageCropBorders,
+                        zoomStartPosition = viewer.config.imageZoomType,
+                        landscapeZoom = viewer.config.landscapeZoom,
+                    ),
+                )
+                if (!isAnimated) {
+                    pageBackground = background
                 }
             }
-            .subscribe({}, {})
+        }
     }
 
     private fun process(page: ReaderPage, imageStream: BufferedInputStream): InputStream {
+        if (viewer.config.dualPageRotateToFit) {
+            return rotateDualPage(imageStream)
+        }
+
         if (!viewer.config.dualPageSplit) {
             return imageStream
         }
@@ -251,6 +200,16 @@ class PagerPageHolder(
         onPageSplit(page)
 
         return splitInHalf(imageStream)
+    }
+
+    private fun rotateDualPage(imageStream: BufferedInputStream): InputStream {
+        val isDoublePage = ImageUtil.isWideImage(imageStream)
+        return if (isDoublePage) {
+            val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
+            ImageUtil.rotateImage(imageStream, rotation)
+        } else {
+            imageStream
+        }
     }
 
     private fun splitInHalf(imageStream: InputStream): InputStream {

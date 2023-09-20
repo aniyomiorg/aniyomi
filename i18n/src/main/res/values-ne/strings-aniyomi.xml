@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">वर्गहरू</string>
-    <string name="unlock_app">अनलक ताचियोमी</string>
-    <string name="action_sort_last_manga_update">पछिल्लो माङ्गा अपडेट</string>
-    <string name="action_show_manga">माङ्गा देखाउनुहोस्</string>
+    <string name="unlock_app">ताचियोमी अनलक गर्नुहोस्</string>
+    <string name="action_sort_last_manga_update">पछिल्लो अपडेट चेक</string>
+    <string name="action_show_manga">इन्ट्री देखाउनुहोस्</string>
     <string name="action_display_local_badge_manga">लोकल माङ्गा</string>
-    <string name="pref_update_only_completely_read">नपढेका अध्यायहरू छन्</string>
+    <string name="pref_update_only_completely_read">नपढिएको अध्याय(हरू) संग</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकनमा नपढिएको संख्या देखाउनुहोस्</string>
     <string name="default_manga_category">पूर्वनिर्धारित वर्ग</string>
     <string name="pref_manga_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
@@ -17,25 +17,53 @@
     <string name="pref_category_delete_chapters">अध्यायहरू हटाउनुहोस्</string>
     <string name="pref_remove_after_marked_as_read">आफै पढिएको रूपमा चिन्ह लगाइएपछि</string>
     <string name="pref_remove_after_read">पढिसकेपछि स्वचालित रूपमा हटाउनुहोस्</string>
-    <string name="pref_remove_bookmarked_chapters">बुकमार्क गरिएका अध्यायहरू हटाउन अनुमति दिनुहोस्</string>
+    <string name="pref_remove_bookmarked_chapters">पुस्तकचिनो लगाइएका अध्यायहरू हटाउन अनुमति दिनुहोस्</string>
     <string name="pref_remove_exclude_categories_manga">बहिष्कृत वर्गहरू</string>
     <string name="pref_auto_update_manga_sync">पढिसकेपछि प्रगति अपडेट गर्नुहोस्</string>
     <string name="pref_clear_chapter_cache">अध्याय क्यास खाली गर्नुहोस्</string>
     <string name="pref_auto_clear_chapter_cache">एप बन्दमा अध्याय क्यास खाली गर्नुहोस्</string>
     <string name="pref_clear_manga_database">डाटाबेस खाली गर्नुहोस्</string>
     <string name="pref_clear_manga_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
-    <string name="clear_database_confirmation">साच्चै हो\? पढेका अध्यायहरू र गैर-पुस्तकालय माङ्गाको प्रगति हराउनेछ</string>
+    <string name="clear_database_confirmation">के तपाईँ निश्चित हुनुहुन्छ\? तपाईंले पढ्नुभएको अध्यायहरू र गैर-पुस्तकालय इन्ट्रीहरूको प्रगति हराउनेछ</string>
     <string name="pref_refresh_library_tracking_summary">ट्र्याकिङ सेवाहरूबाट स्थिति, स्कोर र अन्तिम पढिएको अध्याय अपडेट गर्दछ</string>
     <string name="pref_incognito_mode_summary">पढिएको इतिहास रोक्नु</string>
-    <string name="manga_from_library">पुस्तकालयबाट माङ्गा</string>
+    <string name="manga_from_library">पुस्तकालयबाट</string>
     <string name="snack_add_to_manga_library">माङ्गा पुस्तकालयमा राख्ने\?</string>
     <string name="download_error">त्रुटि</string>
     <string name="download_paused">रोकिएको</string>
-    <string name="also_set_chapter_settings_for_library">सबै पुस्तकालयका माङ्गामा लागू गर्नुहोस्</string>
-    <string name="dialog_with_checkbox_reset">यो मंगाको सबै अध्यायहरूको रिसेट</string>
+    <string name="also_set_chapter_settings_for_library">मेरो पुस्तकालयका सबै इन्ट्रीहरूमा पनि लागू गर्नुहोस्</string>
+    <string name="dialog_with_checkbox_reset">यो इन्ट्रीको सबै अध्यायहरू रिसेट गर्नुहोस्</string>
     <string name="download_insufficient_space">थोरै जम्मा गर्ने ठाउँ भएको कारणले अध्याय डाउनलोड हुन सकिँदएन</string>
-    <string name="download_queue_size_warning">सावधान: ठूलो हिस्सामा डाउनलोड गर्नाले स्रोत ढिलो चल्न अनि/वा ताचियोमीलाई अवरुद्घ गर्न सक्नेछ।</string>
+    <string name="download_queue_size_warning">सावधान: ठूलो हिस्सामा डाउनलोड गर्नाले स्रोत ढिलो चल्न अनि/वा ताचियोमीलाई अवरुद्घ गर्न सक्नेछ। थप जान्न ट्याप गर्नुहोस्।</string>
     <string name="information_webview_required">ताचियोमी को लागि WebView आवश्यक छ</string>
-    <string name="download_notifier_download_paused_chapters">डाउनलोड रोकियो</string>
+    <string name="download_notifier_download_paused_chapters">डाउनलोडहरु रोकियो</string>
     <string name="channel_new_chapters_episodes">अध्याय अपडेटहरू</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

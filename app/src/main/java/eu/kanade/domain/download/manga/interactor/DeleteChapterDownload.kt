@@ -1,10 +1,10 @@
 package eu.kanade.domain.download.manga.interactor
 
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 
 class DeleteChapterDownload(
     private val sourceManager: MangaSourceManager,

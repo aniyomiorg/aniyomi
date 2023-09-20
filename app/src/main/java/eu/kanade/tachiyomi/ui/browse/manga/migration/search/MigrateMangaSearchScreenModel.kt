@@ -3,15 +3,15 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.search
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchScreenModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -49,7 +49,7 @@ class MigrateSearchScreenModel(
             .filter { it.lang in enabledLanguages }
             .filterNot { "${it.id}" in disabledSources }
             .sortedWith(compareBy({ "${it.id}" !in pinnedSources }, { "${it.name.lowercase()} (${it.lang})" }))
-            .sortedByDescending { it.id == state.value.manga!!.id }
+            .sortedByDescending { it.id == state.value.manga!!.source }
     }
 
     override fun updateSearchQuery(query: String?) {

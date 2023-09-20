@@ -10,8 +10,11 @@ import eu.kanade.tachiyomi.core.preference.AndroidPreference.LongPrimitive
 import eu.kanade.tachiyomi.core.preference.AndroidPreference.Object
 import eu.kanade.tachiyomi.core.preference.AndroidPreference.StringPrimitive
 import eu.kanade.tachiyomi.core.preference.AndroidPreference.StringSetPrimitive
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.PreferenceStore
 
 class AndroidPreferenceStore(
     context: Context,
@@ -62,6 +65,7 @@ class AndroidPreferenceStore(
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 private val SharedPreferences.keyFlow
     get() = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? -> trySend(key) }

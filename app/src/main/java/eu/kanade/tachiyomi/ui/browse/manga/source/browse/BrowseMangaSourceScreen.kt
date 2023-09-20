@@ -28,62 +28,55 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
+import eu.kanade.presentation.browse.manga.MissingSourceScreen
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceToolbar
-import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.Divider
-import eu.kanade.presentation.components.DuplicateMangaDialog
-import eu.kanade.presentation.components.Scaffold
+import eu.kanade.presentation.category.ChangeCategoryDialog
+import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.util.AssistContentScreen
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
+import eu.kanade.tachiyomi.core.Constants
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.Constants
-import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.source.manga.model.StubMangaSource
+import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class BrowseMangaSourceScreen(
     private val sourceId: Long,
     private val listingQuery: String?,
-) : Screen, AssistContentScreen {
+) : Screen(), AssistContentScreen {
 
     private var assistUrl: String? = null
-
-    override val key = uniqueScreenKey
 
     override fun onProvideAssistUrl() = assistUrl
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
-        val haptic = LocalHapticFeedback.current
-        val uriHandler = LocalUriHandler.current
-
         val screenModel = rememberScreenModel { BrowseMangaSourceScreenModel(sourceId, listingQuery) }
         val state by screenModel.state.collectAsState()
 
-        val snackbarHostState = remember { SnackbarHostState() }
-
+        val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
                 !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
@@ -91,12 +84,29 @@ data class BrowseMangaSourceScreen(
             }
         }
 
-        val onHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) }
+        if (screenModel.source is StubMangaSource) {
+            MissingSourceScreen(
+                source = screenModel.source,
+                navigateUp = navigateUp,
+            )
+            return
+        }
 
+        val scope = rememberCoroutineScope()
+        val haptic = LocalHapticFeedback.current
+        val uriHandler = LocalUriHandler.current
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        val onHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) }
         val onWebViewClick = f@{
             val source = screenModel.source as? HttpSource ?: return@f
-            val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
-            context.startActivity(intent)
+            navigator.push(
+                WebViewScreen(
+                    url = source.baseUrl,
+                    initialTitle = source.name,
+                    sourceId = source.id,
+                ),
+            )
         }
 
         LaunchedEffect(screenModel.source) {
@@ -115,14 +125,15 @@ data class BrowseMangaSourceScreen(
                         navigateUp = navigateUp,
                         onWebViewClick = onWebViewClick,
                         onHelpClick = onHelpClick,
-                        onSearch = { screenModel.search(it) },
+                        onSettingsClick = { navigator.push(MangaSourcePreferencesScreen(sourceId)) },
+                        onSearch = screenModel::search,
                     )
 
                     Row(
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
-                            .padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            .padding(horizontal = MaterialTheme.padding.small),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                     ) {
                         FilterChip(
                             selected = state.listing == Listing.Popular,
@@ -142,7 +153,7 @@ data class BrowseMangaSourceScreen(
                                 Text(text = stringResource(R.string.popular))
                             },
                         )
-                        if (screenModel.source.supportsLatest) {
+                        if ((screenModel.source as CatalogueSource).supportsLatest) {
                             FilterChip(
                                 selected = state.listing == Listing.Latest,
                                 onClick = {
@@ -220,13 +231,20 @@ data class BrowseMangaSourceScreen(
 
         val onDismissRequest = { screenModel.setDialog(null) }
         when (val dialog = state.dialog) {
-            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {}
+            is BrowseMangaSourceScreenModel.Dialog.Filter -> {
+                SourceFilterMangaDialog(
+                    onDismissRequest = onDismissRequest,
+                    filters = state.filters,
+                    onReset = screenModel::resetFilters,
+                    onFilter = { screenModel.search(filters = state.filters) },
+                    onUpdate = screenModel::setFilters,
+                )
+            }
             is BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga -> {
                 DuplicateMangaDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { screenModel.addFavorite(dialog.manga) },
                     onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
-                    duplicateFrom = screenModel.getSourceOrStub(dialog.duplicate),
                 )
             }
             is BrowseMangaSourceScreenModel.Dialog.RemoveManga -> {
@@ -249,11 +267,8 @@ data class BrowseMangaSourceScreen(
                     },
                 )
             }
+            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {}
             else -> {}
-        }
-
-        LaunchedEffect(state.filters) {
-            screenModel.initFilterSheet(context)
         }
 
         LaunchedEffect(Unit) {

@@ -42,7 +42,6 @@
     <string name="action_rename_category">वर्गस्य नाम परिणमतु</string>
     <string name="action_move_category">वर्गानि स्थापयतु</string>
     <string name="action_edit_cover">आवरणं सम्पादयतु</string>
-    <string name="action_stop">निरामयतु</string>
     <string name="action_pause">विरामयतु</string>
     <string name="action_previous_chapter">पूर्वः अध्यायः</string>
     <string name="action_retry">पुनः यतताम्</string>
@@ -74,7 +73,6 @@
     <string name="action_display_grid">सुसम्बद्धा ग्रिड्-शैली</string>
     <string name="action_display_list">सूची</string>
     <string name="action_display_download_badge">अवारोपिताः अध्यायाः</string>
-    <string name="action_display_unread_badge">अपठिताः अध्यायाः</string>
     <string name="action_display_show_tabs">वर्गीयाः पीठिकाः दर्शयतु</string>
     <string name="action_disable">अशक्तं करोतु</string>
     <string name="action_pin">उपरि उद्वर्णयतु</string>
@@ -342,7 +340,6 @@
     <string name="tracking_guide">अनुप्रज्ञानमार्गदर्शनम्</string>
     <string name="enhanced_services">विवृद्धसेवाः</string>
     <string name="action_track">अनुप्रजानातु</string>
-    <string name="pref_enable_automatic_extension_updates">विस्तारनवीकरणानां कृते मार्गतु</string>
     <string name="pref_search_pinned_sources_only">केवलम् अग्रिमस्थकृतमूलम्</string>
     <string name="pref_create_backup">प्रतिलेखनं निर्मातु</string>
     <string name="pref_create_backup_summ">एतत् उपयुज्य वर्तमानग्रन्थालयं समादातुं शक्यते</string>
@@ -383,7 +380,6 @@
     <string name="cancelled">अलोप्यत</string>
     <string name="manga_info_expand">अधिकम्</string>
     <string name="manga_info_collapse">न्यूनम्</string>
-    <string name="download_custom">स्वकृतम्</string>
     <string name="download_unread">अपठितम्</string>
     <string name="manga_cover">मुखचित्रम्</string>
     <string name="dropped">त्यक्तम्</string>
@@ -394,14 +390,12 @@
     <string name="track_status">स्थितिः</string>
     <string name="track_start_date">आरब्धम्</string>
     <string name="track_type">प्रकारः</string>
-    <string name="download_all">सर्वाणि</string>
     <string name="paused">विरमितम्</string>
     <string name="username">उपयोक्तृनाम</string>
     <string name="pref_hide_threshold">सारयति सति सूच्याः गुप्तीकरणाय सूक्ष्मचैतन्यम्</string>
     <string name="pref_download_new_categories_details">यद्यपि अन्तर्भूतवर्गेषु स्थिताः सन्ति तथापि वर्जितवर्गेषु स्थिताः माङ्गाः अवारोपिताः न भविष्यन्ति।</string>
     <string name="tracking_info">अनुप्रज्ञानसेवासु अध्यायप्रगतिं नवीकर्तुं एकमार्गसमाकलनम्। तदीयात् अनुप्रज्ञानगण्डात् व्यक्तिगतेभ्यः माङ्गानिवेशेभ्यः अनुप्रज्ञानं स्थापयतु॥</string>
     <string name="label_data">दत्तांशः</string>
-    <string name="badges_header">पदकानि</string>
     <string name="tabs_header">प्लवनखण्डाः</string>
     <string name="other_source">अन्यम्</string>
     <string name="date">तिथिः</string>
@@ -438,7 +432,6 @@
     <string name="spen_next_page">अग्रिमपुटः</string>
     <string name="database_clean">दत्तनिधिः मार्जितः</string>
     <string name="label_background_activity">पृष्ठभूमिकार्यक्रमम्</string>
-    <string name="crash_log_saved">ध्वंसेतिवृत्तानि रक्षितानि</string>
     <string name="pref_disable_battery_optimization">विद्युत्कोषवृद्धिकरणम् अशक्तं करोतु</string>
     <string name="whats_new">नूतनं किम्</string>
     <string name="pref_tablet_ui_mode">टाबलेट् यू॰ऐ</string>
@@ -449,7 +442,6 @@
     <string name="in_library">ग्रन्थालये</string>
     <string name="show_title">मूलशीर्षकम्</string>
     <string name="show_chapter_number">अध्यायसङ्ख्या</string>
-    <string name="download_1">अग्रिमाध्यायः</string>
     <string name="cover_saved">मुखचित्रं रक्षितम्</string>
     <string name="on_hold">विरामे</string>
     <string name="track_started_reading_date">आरम्भकतिथिः</string>
@@ -509,7 +501,6 @@
     <string name="channel_complete">पूर्णम्</string>
     <string name="channel_app_updates">अनुप्रयोगनवीकरणानि</string>
     <string name="channel_ext_updates">विस्तारनवीकरणानि</string>
-    <string name="channel_crash_logs">ध्वंसेतिवृत्तानि</string>
     <plurals name="download_queue_summary">
         <item quantity="one">१ शेषम्</item>
         <item quantity="other">२ शेषे</item>
@@ -518,8 +509,6 @@
     <string name="getting_started_guide">प्रारम्भिकमार्गदर्शनम्</string>
     <string name="battery_optimization_setting_activity_not_found">साधनसमायोजनानि उद्घाटयितुं न अशक्नोम्</string>
     <string name="pref_verbose_logging">अतिविस्तीर्णेतिवृत्तलेखनम्</string>
-    <string name="download_5">अग्रिमपञ्चाध्यायाः</string>
-    <string name="download_10">अग्रिमदशाध्यायाः</string>
     <string name="plan_to_read">पठितुं इच्छामि</string>
     <string name="page_list_empty_error">पुटाः न लभ्याः</string>
     <string name="loader_not_implemented_error">मूलं न लभ्यम्</string>
@@ -554,7 +543,6 @@
     <string name="pref_refresh_library_covers">ग्रन्थालयमाङ्गामुखचित्राणि नवीकरोतु</string>
     <string name="pref_dump_crash_logs">ध्वंसेतिवृत्तानि पातयतु</string>
     <string name="sort_by_upload_date">उपारोपिततिथ्या</string>
-    <string name="custom_download">स्वकृतपरिमाणम् अवतारयतु</string>
     <string name="error_saving_cover">मुखचित्ररक्षणे दोषः</string>
     <string name="error_sharing_cover">मुखचित्रप्रसारणे दोषः</string>
     <string name="sort_by_number">अध्यायसङ्ख्यया</string>

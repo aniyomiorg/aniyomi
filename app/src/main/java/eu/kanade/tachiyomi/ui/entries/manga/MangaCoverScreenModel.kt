@@ -9,23 +9,23 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
-import eu.kanade.domain.entries.manga.interactor.GetManga
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.util.editCover
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withUIContext
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -121,7 +121,7 @@ class MangaCoverScreenModel(
             @Suppress("BlockingMethodInNonBlockingContext")
             context.contentResolver.openInputStream(data)?.use {
                 try {
-                    manga.editCover(context, it, updateManga, coverCache)
+                    manga.editCover(Injekt.get(), it, updateManga, coverCache)
                     notifyCoverUpdated(context)
                 } catch (e: Exception) {
                     notifyFailedCoverUpdate(context, e)

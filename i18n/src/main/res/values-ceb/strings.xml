@@ -10,7 +10,7 @@
     <string name="action_filter_tracked">Gisubay</string>
     <string name="action_filter_unread">Wala mabasa</string>
     <string name="action_sort_alpha">Alpabetiko</string>
-    <string name="action_sort_count">Kinatibuk sa manga</string>
+    <string name="action_sort_count">Hingpit nga mga entry</string>
     <string name="action_sort_total">Kinatibuk sa mga kapitulo</string>
     <string name="action_sort_last_read">Katapusan nga pagbasa</string>
     <string name="action_sort_unread_count">Wala mabasa nga ihap</string>
@@ -31,7 +31,7 @@
     <string name="label_settings">Mga setting</string>
     <string name="label_sources">Tinubdan</string>
     <string name="label_default">Default</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Mga entri sa basahonan</string>
     <string name="track">Pagsubay</string>
     <string name="label_library">Librarya</string>
     <string name="label_migration">Molalin</string>
@@ -65,7 +65,6 @@
     <string name="action_rename_category">Usba ang ngalan sa kategorya</string>
     <string name="action_edit_cover">Usba ang hapin</string>
     <string name="action_view_chapters">Tan-awa ang mga kapitulo</string>
-    <string name="action_stop">Hunong</string>
     <string name="action_remove">Kuhaa</string>
     <string name="action_previous_chapter">Sa miaging kapitulo</string>
     <string name="action_start">Pagsugod</string>
@@ -76,7 +75,6 @@
     <string name="action_display">Pagpakita</string>
     <string name="action_display_cover_only_grid">Cover-only grid</string>
     <string name="action_display_download_badge">Gi-download nga mga kapitulo</string>
-    <string name="action_display_unread_badge">Mga kapitulo nga wala pa mabasa</string>
     <string name="action_display_language_badge">Pinulongan</string>
     <string name="action_display_show_tabs">Ipakita ang mga tab sa kategorya</string>
     <string name="action_display_show_number_of_items">Ipakita ang gidaghanon sa mga butang</string>
@@ -322,7 +320,6 @@
     <string name="pref_download_new_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-download bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
     <string name="save_chapter_as_cbz">I-save ingon CBZ archive</string>
     <string name="tracking_guide">Giya sa pagsubay</string>
-    <string name="pref_enable_automatic_extension_updates">Susiha ang mga update sa extension</string>
     <string name="network_not_metered">Lamang sa ummetered network</string>
     <string name="ext_info_language">Pinulongan sa Extension</string>
     <string name="ext_info_version">Extension nga Bersyon</string>
@@ -355,7 +352,6 @@
     <string name="enhanced_tracking_info">Mga serbisyo nga naghatag dugang nga mga bahin alang sa piho nga mga gigikanan. Awtomatikong gisubay ang Manga kon idugang sa imong librarya.</string>
     <string name="tracking_info">Usa ka paagi nga pag-sync aron ma-update ang pag-uswag sa kapitulo sa mga serbisyo sa pagsubay. I-set up ang tracking para sa indibidwal nga manga entries gikan sa ilang tracking button.</string>
     <string name="enhanced_services">Gipalambo nga mga serbisyo</string>
-    <string name="split_tall_images">Awtomatikong gibahin ang taas nga mga imahe</string>
     <string name="split_tall_images_summary">Nagpauswag sa pasundayag sa magbabasa pinaagi sa pagbahin sa taas nga na-download nga mga imahe.</string>
     <string name="services">Mga serbisyo</string>
     <string name="pref_viewer_nav">Pag-tap sa mga zone</string>
@@ -432,7 +428,6 @@
     <string name="pref_reset_viewer_flags_summary">I-reset ang mode sa pagbasa ug oryentasyon sa tanan nga serye</string>
     <string name="pref_reset_viewer_flags_success">Ang tanan nga mga setting sa magbabasa gi-reset</string>
     <string name="pref_reset_viewer_flags_error">Dili ma-reset ang mga setting sa magbabasa</string>
-    <string name="crash_log_saved">Na-save ang mga crash log</string>
     <string name="label_background_activity">Kalihokan sa background</string>
     <string name="pref_disable_battery_optimization_summary">Nagtabang sa mga update sa librarya sa background ug pag-backup</string>
     <string name="pref_verbose_logging">Verbose logging</string>
@@ -465,6 +460,13 @@
     <string name="username">Username</string>
     <string name="action_display_show_continue_reading_button">Ipakita ang buton sa pagpadayon sa pagbasa</string>
     <string name="action_search_hint">Pangitaa…</string>
-    <string name="action_open_random_manga">Bukas nga random entry</string>
-<string name="label_download_queue">Pag-download sa Pila</string>
+    <string name="action_open_random_manga">Abli nga random ang pagsulod</string>
+    <string name="label_stats">Istatistika</string>
+    <string name="label_started">Nagsugod</string>
+    <string name="label_downloaded">Gi-download</string>
+    <string name="label_local">Lokal</string>
+    <string name="pref_appearance_summary">Tema, format sa petsa ug panahon</string>
+    <string name="pref_general_summary">Pinulongan sa app, pagpahibawo</string>
+    <string name="action_not_now">Dili karon</string>
+    <string name="label_download_queue">Pag-download sa Pila</string>
     </resources>

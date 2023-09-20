@@ -8,44 +8,41 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.SearchToolbar
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.Constants
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import kotlinx.coroutines.launch
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class MangaSourceSearchScreen(
     private val oldManga: Manga,
     private val sourceId: Long,
     private val query: String?,
-) : Screen {
+) : Screen() {
 
     @Composable
     override fun Content() {
-        val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -61,7 +58,7 @@ data class MangaSourceSearchScreen(
                     searchQuery = state.toolbarQuery ?: "",
                     onChangeSearchQuery = screenModel::setToolbarQuery,
                     onClickCloseSearch = navigator::pop,
-                    onSearch = { screenModel.search(it) },
+                    onSearch = screenModel::search,
                     scrollBehavior = scrollBehavior,
                 )
             },
@@ -89,8 +86,13 @@ data class MangaSourceSearchScreen(
                 contentPadding = paddingValues,
                 onWebViewClick = {
                     val source = screenModel.source as? HttpSource ?: return@BrowseSourceContent
-                    val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
-                    context.startActivity(intent)
+                    navigator.push(
+                        WebViewScreen(
+                            url = source.baseUrl,
+                            initialTitle = source.name,
+                            sourceId = source.id,
+                        ),
+                    )
                 },
                 onHelpClick = { uriHandler.openUri(Constants.URL_HELP) },
                 onLocalSourceHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) },
@@ -117,10 +119,6 @@ data class MangaSourceSearchScreen(
                 )
             }
             else -> {}
-        }
-
-        LaunchedEffect(state.filters) {
-            screenModel.initFilterSheet(context)
         }
     }
 }

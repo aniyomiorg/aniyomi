@@ -7,32 +7,17 @@ import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.core.prefs.CheckboxState
-import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.core.prefs.asState
+import eu.kanade.core.preference.PreferenceMutableState
+import eu.kanade.core.preference.asState
 import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.anime.interactor.GetLibraryAnime
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.AnimeUpdate
-import eu.kanade.domain.entries.anime.model.isLocal
-import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
-import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.library.anime.LibraryAnime
-import eu.kanade.domain.library.model.LibrarySort
-import eu.kanade.domain.library.model.sort
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.track.anime.interactor.GetTracksPerAnime
+import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.LibraryToolbarTitle
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -42,16 +27,12 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
-import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -59,6 +40,28 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.preference.CheckboxState
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
+import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
+import tachiyomi.domain.entries.applyFilter
+import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.anime.model.AnimeLibrarySort
+import tachiyomi.domain.library.anime.model.sort
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.Collator
@@ -72,7 +75,7 @@ typealias AnimeLibraryMap = Map<Category, List<AnimeLibraryItem>>
 
 class AnimeLibraryScreenModel(
     private val getLibraryAnime: GetLibraryAnime = Injekt.get(),
-    private val getCategories: GetAnimeCategories = Injekt.get(),
+    private val getCategories: GetVisibleAnimeCategories = Injekt.get(),
     private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodesByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
@@ -93,7 +96,7 @@ class AnimeLibraryScreenModel(
     init {
         coroutineScope.launchIO {
             combine(
-                state.map { it.searchQuery }.distinctUntilChanged(),
+                state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
                 getTracksPerAnime.subscribe(),
                 getTrackingFilterFlow(),
@@ -142,15 +145,15 @@ class AnimeLibraryScreenModel(
             getAnimelibItemPreferencesFlow(),
             getTrackingFilterFlow(),
         ) { prefs, trackFilter ->
-            val a = (
-                prefs.filterDownloaded or
-                    prefs.filterUnread or
-                    prefs.filterStarted or
-                    prefs.filterBookmarked or
-                    prefs.filterCompleted
-                ) != TriStateGroup.State.IGNORE.value
-            val b = trackFilter.values.any { it != TriStateGroup.State.IGNORE.value }
-            a || b
+            (
+                listOf(
+                    prefs.filterDownloaded,
+                    prefs.filterUnseen,
+                    prefs.filterStarted,
+                    prefs.filterBookmarked,
+                    prefs.filterCompleted,
+                ) + trackFilter.values
+                ).any { it != TriStateFilter.DISABLED }
         }
             .distinctUntilChanged()
             .onEach {
@@ -166,108 +169,65 @@ class AnimeLibraryScreenModel(
      */
     private suspend fun AnimeLibraryMap.applyFilters(
         trackMap: Map<Long, List<Long>>,
-        loggedInTrackServices: Map<Long, Int>,
+        loggedInTrackServices: Map<Long, TriStateFilter>,
     ): AnimeLibraryMap {
         val prefs = getAnimelibItemPreferencesFlow().first()
         val downloadedOnly = prefs.globalFilterDownloaded
-        val filterDownloaded = prefs.filterDownloaded
-        val filterUnread = prefs.filterUnread
+        val filterDownloaded =
+            if (downloadedOnly) TriStateFilter.ENABLED_IS else prefs.filterDownloaded
+        val filterUnseen = prefs.filterUnseen
         val filterStarted = prefs.filterStarted
         val filterBookmarked = prefs.filterBookmarked
         val filterCompleted = prefs.filterCompleted
 
         val isNotLoggedInAnyTrack = loggedInTrackServices.isEmpty()
 
-        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.EXCLUDE.value) it.key else null }
-        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.INCLUDE.value) it.key else null }
+        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateFilter.ENABLED_NOT) it.key else null }
+        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateFilter.ENABLED_IS) it.key else null }
         val trackFiltersIsIgnored = includedTracks.isEmpty() && excludedTracks.isEmpty()
 
-        val filterFnDownloaded: (AnimeLibraryItem) -> Boolean = downloaded@{
-            if (!downloadedOnly && filterDownloaded == TriStateGroup.State.IGNORE.value) return@downloaded true
-
-            val isDownloaded = it.libraryAnime.anime.isLocal() ||
-                it.downloadCount > 0 ||
-                downloadManager.getDownloadCount(it.libraryAnime.anime) > 0
-            return@downloaded if (downloadedOnly || filterDownloaded == TriStateGroup.State.INCLUDE.value) {
-                isDownloaded
-            } else {
-                !isDownloaded
+        val filterFnDownloaded: (AnimeLibraryItem) -> Boolean = {
+            applyFilter(filterDownloaded) {
+                it.libraryAnime.anime.isLocal() ||
+                    it.downloadCount > 0 ||
+                    downloadManager.getDownloadCount(it.libraryAnime.anime) > 0
             }
         }
 
-        val filterFnUnread: (AnimeLibraryItem) -> Boolean = unread@{
-            if (filterUnread == TriStateGroup.State.IGNORE.value) return@unread true
-
-            val isUnread = it.libraryAnime.unseenCount > 0
-            return@unread if (filterUnread == TriStateGroup.State.INCLUDE.value) {
-                isUnread
-            } else {
-                !isUnread
-            }
+        val filterFnUnseen: (AnimeLibraryItem) -> Boolean = {
+            applyFilter(filterUnseen) { it.libraryAnime.unseenCount > 0 }
         }
 
-        val filterFnStarted: (AnimeLibraryItem) -> Boolean = started@{
-            if (filterStarted == TriStateGroup.State.IGNORE.value) return@started true
-
-            val hasStarted = it.libraryAnime.hasStarted
-            return@started if (filterStarted == TriStateGroup.State.INCLUDE.value) {
-                hasStarted
-            } else {
-                !hasStarted
-            }
+        val filterFnStarted: (AnimeLibraryItem) -> Boolean = {
+            applyFilter(filterStarted) { it.libraryAnime.hasStarted }
         }
 
-        val filterFnBookmarked: (AnimeLibraryItem) -> Boolean = bookmarked@{
-            if (filterBookmarked == TriStateGroup.State.IGNORE.value) return@bookmarked true
-
-            val hasBookmarks = it.libraryAnime.hasBookmarks
-            return@bookmarked if (filterBookmarked == TriStateGroup.State.INCLUDE.value) {
-                hasBookmarks
-            } else {
-                !hasBookmarks
-            }
+        val filterFnBookmarked: (AnimeLibraryItem) -> Boolean = {
+            applyFilter(filterBookmarked) { it.libraryAnime.hasBookmarks }
         }
 
-        val filterFnCompleted: (AnimeLibraryItem) -> Boolean = completed@{
-            if (filterCompleted == TriStateGroup.State.IGNORE.value) return@completed true
-
-            val isCompleted = it.libraryAnime.anime.status.toInt() == SAnime.COMPLETED
-            return@completed if (filterCompleted == TriStateGroup.State.INCLUDE.value) {
-                isCompleted
-            } else {
-                !isCompleted
-            }
+        val filterFnCompleted: (AnimeLibraryItem) -> Boolean = {
+            applyFilter(filterCompleted) { it.libraryAnime.anime.status.toInt() == SAnime.COMPLETED }
         }
 
         val filterFnTracking: (AnimeLibraryItem) -> Boolean = tracking@{ item ->
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
-            val nimeTracks = trackMap[item.libraryAnime.id].orEmpty()
+            val animeTracks = trackMap[item.libraryAnime.id].orEmpty()
 
-            val exclude = nimeTracks.fastFilter { it in excludedTracks }
-            val include = nimeTracks.fastFilter { it in includedTracks }
+            val isExcluded = excludedTracks.isNotEmpty() && animeTracks.fastAny { it in excludedTracks }
+            val isIncluded = includedTracks.isEmpty() || animeTracks.fastAny { it in includedTracks }
 
-            // TODO: Simplify the filter logic
-            if (includedTracks.isNotEmpty() && excludedTracks.isNotEmpty()) {
-                return@tracking if (exclude.isNotEmpty()) false else include.isNotEmpty()
-            }
-
-            if (excludedTracks.isNotEmpty()) return@tracking exclude.isEmpty()
-
-            if (includedTracks.isNotEmpty()) return@tracking include.isNotEmpty()
-
-            return@tracking false
+            return@tracking !isExcluded && isIncluded
         }
 
-        val filterFn: (AnimeLibraryItem) -> Boolean = filter@{
-            return@filter !(
-                !filterFnDownloaded(it) ||
-                    !filterFnUnread(it) ||
-                    !filterFnStarted(it) ||
-                    !filterFnBookmarked(it) ||
-                    !filterFnCompleted(it) ||
-                    !filterFnTracking(it)
-                )
+        val filterFn: (AnimeLibraryItem) -> Boolean = {
+            filterFnDownloaded(it) &&
+                filterFnUnseen(it) &&
+                filterFnStarted(it) &&
+                filterFnBookmarked(it) &&
+                filterFnCompleted(it) &&
+                filterFnTracking(it)
         }
 
         return this.mapValues { entry -> entry.value.fastFilter(filterFn) }
@@ -288,33 +248,39 @@ class AnimeLibraryScreenModel(
         val sortFn: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
             val sort = keys.find { it.id == i1.libraryAnime.category }!!.sort
             when (sort.type) {
-                LibrarySort.Type.Alphabetical -> {
+                AnimeLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
-                LibrarySort.Type.LastRead -> {
+                AnimeLibrarySort.Type.LastSeen -> {
                     i1.libraryAnime.lastSeen.compareTo(i2.libraryAnime.lastSeen)
                 }
-                LibrarySort.Type.LastUpdate -> {
+                AnimeLibrarySort.Type.LastUpdate -> {
                     i1.libraryAnime.anime.lastUpdate.compareTo(i2.libraryAnime.anime.lastUpdate)
                 }
-                LibrarySort.Type.UnreadCount -> when {
-                    // Ensure unread content comes first
+                AnimeLibrarySort.Type.UnseenCount -> when {
+                    // Ensure unseen content comes first
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> 0
                     i1.libraryAnime.unseenCount == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryAnime.unseenCount == 0L -> if (sort.isAscending) -1 else 1
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
-                LibrarySort.Type.TotalChapters -> {
+                AnimeLibrarySort.Type.TotalEpisodes -> {
                     i1.libraryAnime.totalEpisodes.compareTo(i2.libraryAnime.totalEpisodes)
                 }
-                LibrarySort.Type.LatestChapter -> {
+                AnimeLibrarySort.Type.LatestEpisode -> {
                     i1.libraryAnime.latestUpload.compareTo(i2.libraryAnime.latestUpload)
                 }
-                LibrarySort.Type.ChapterFetchDate -> {
+                AnimeLibrarySort.Type.EpisodeFetchDate -> {
                     i1.libraryAnime.episodeFetchedAt.compareTo(i2.libraryAnime.episodeFetchedAt)
                 }
-                LibrarySort.Type.DateAdded -> {
+                AnimeLibrarySort.Type.DateAdded -> {
                     i1.libraryAnime.anime.dateAdded.compareTo(i2.libraryAnime.anime.dateAdded)
+                }
+                AnimeLibrarySort.Type.AiringTime -> when {
+                    i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) 1 else -1
+                    i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) -1 else 1
+                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(i2.libraryAnime.anime.nextEpisodeAiringAt)
+                    else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
             }
         }
@@ -333,7 +299,6 @@ class AnimeLibraryScreenModel(
     private fun getAnimelibItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
-            libraryPreferences.unviewedBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
 
@@ -346,15 +311,14 @@ class AnimeLibraryScreenModel(
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
-                    unseenBadge = it[1] as Boolean,
-                    localBadge = it[2] as Boolean,
-                    languageBadge = it[3] as Boolean,
-                    globalFilterDownloaded = it[4] as Boolean,
-                    filterDownloaded = it[5] as Int,
-                    filterUnread = it[6] as Int,
-                    filterStarted = it[7] as Int,
-                    filterBookmarked = it[8] as Int,
-                    filterCompleted = it[9] as Int,
+                    localBadge = it[1] as Boolean,
+                    languageBadge = it[2] as Boolean,
+                    globalFilterDownloaded = it[3] as Boolean,
+                    filterDownloaded = it[4] as TriStateFilter,
+                    filterUnseen = it[5] as TriStateFilter,
+                    filterStarted = it[6] as TriStateFilter,
+                    filterBookmarked = it[7] as TriStateFilter,
+                    filterCompleted = it[8] as TriStateFilter,
                 )
             },
         )
@@ -372,20 +336,21 @@ class AnimeLibraryScreenModel(
             animelibAnimeList
                 .map { animelibAnime ->
                     // Display mode based on user preference: take it from global library setting or category
-                    AnimeLibraryItem(animelibAnime).apply {
+                    AnimeLibraryItem(
+                        animelibAnime,
                         downloadCount = if (prefs.downloadBadge) {
                             downloadManager.getDownloadCount(animelibAnime.anime).toLong()
                         } else {
                             0
-                        }
-                        unseenCount = if (prefs.unseenBadge) animelibAnime.unseenCount else 0
-                        isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false
+                        },
+                        unseenCount = animelibAnime.unseenCount,
+                        isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false,
                         sourceLanguage = if (prefs.languageBadge) {
                             sourceManager.getOrStub(animelibAnime.anime.source).lang
                         } else {
                             ""
-                        }
-                    }
+                        },
+                    )
                 }
                 .groupBy { it.libraryAnime.category }
         }
@@ -397,7 +362,7 @@ class AnimeLibraryScreenModel(
                 categories
             }
 
-            displayCategories.associateWith { animelibAnime[it.id] ?: emptyList() }
+            displayCategories.associateWith { animelibAnime[it.id].orEmpty() }
         }
     }
 
@@ -406,7 +371,7 @@ class AnimeLibraryScreenModel(
      *
      * @return map of track id with the filter value
      */
-    private fun getTrackingFilterFlow(): Flow<Map<Long, Int>> {
+    private fun getTrackingFilterFlow(): Flow<Map<Long, TriStateFilter>> {
         val loggedServices = trackManager.services.filter { it.isLogged && it is AnimeTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
@@ -457,30 +422,19 @@ class AnimeLibraryScreenModel(
             DownloadAction.NEXT_1_ITEM -> downloadUnseenEpisodes(animes, 1)
             DownloadAction.NEXT_5_ITEMS -> downloadUnseenEpisodes(animes, 5)
             DownloadAction.NEXT_10_ITEMS -> downloadUnseenEpisodes(animes, 10)
+            DownloadAction.NEXT_25_ITEMS -> downloadUnseenEpisodes(animes, 25)
             DownloadAction.UNVIEWED_ITEMS -> downloadUnseenEpisodes(animes, null)
-            DownloadAction.CUSTOM -> {
-                mutableState.update { state ->
-                    state.copy(
-                        dialog = Dialog.DownloadCustomAmount(
-                            animes,
-                            selection.maxOf { it.unseenCount }.toInt(),
-                        ),
-                    )
-                }
-                return
-            }
-            else -> {}
         }
         clearSelection()
     }
 
     /**
-     * Queues the amount specified of unread episodes from the list of animes given.
+     * Queues the amount specified of unseen episodes from the list of animes given.
      *
      * @param animes the list of anime.
      * @param amount the amount to queue or null to queue all
      */
-    fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
+    private fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
         coroutineScope.launchNonCancellable {
             animes.forEach { anime ->
                 val episodes = getNextEpisodes.await(anime.id)
@@ -580,6 +534,10 @@ class AnimeLibraryScreenModel(
                 .getAnimelibItemsByCategoryId(state.value.categories[activeCategoryIndex].id)
                 ?.randomOrNull()
         }
+    }
+
+    fun showSettingsDialog() {
+        mutableState.update { it.copy(dialog = Dialog.SettingsSheet) }
     }
 
     fun clearSelection() {
@@ -700,24 +658,23 @@ class AnimeLibraryScreenModel(
     }
 
     sealed class Dialog {
+        object SettingsSheet : Dialog()
         data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
-        data class DownloadCustomAmount(val anime: List<Anime>, val max: Int) : Dialog()
     }
 
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
-        val unseenBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
 
         val globalFilterDownloaded: Boolean,
-        val filterDownloaded: Int,
-        val filterUnread: Int,
-        val filterStarted: Int,
-        val filterBookmarked: Int,
-        val filterCompleted: Int,
+        val filterDownloaded: TriStateFilter,
+        val filterUnseen: TriStateFilter,
+        val filterStarted: TriStateFilter,
+        val filterBookmarked: TriStateFilter,
+        val filterCompleted: TriStateFilter,
     )
 
     @Immutable
@@ -750,7 +707,7 @@ class AnimeLibraryScreenModel(
         }
 
         fun getAnimelibItemsByPage(page: Int): List<AnimeLibraryItem> {
-            return library.values.toTypedArray().getOrNull(page) ?: emptyList()
+            return library.values.toTypedArray().getOrNull(page).orEmpty()
         }
 
         fun getAnimeCountForCategory(category: Category): Int? {

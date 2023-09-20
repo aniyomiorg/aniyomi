@@ -8,16 +8,13 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.isServiceRunning
-import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.notification
+import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +27,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -88,21 +88,20 @@ class AnimeDownloadService : Service() {
     private lateinit var scope: CoroutineScope
 
     override fun onCreate() {
-        super.onCreate()
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
         wakeLock = acquireWakeLock(javaClass.name)
         _isRunning.value = true
-        listenDownloaderState()
         listenNetworkChanges()
     }
 
     override fun onDestroy() {
-        scope?.cancel()
+        scope.cancel()
         _isRunning.value = false
-        downloadManager.stopDownloads()
-        wakeLock.releaseIfHeld()
-        super.onDestroy()
+        downloadManager.downloaderStop()
+        if (wakeLock.isHeld) {
+            wakeLock.release()
+        }
     }
 
     // Not used
@@ -115,8 +114,8 @@ class AnimeDownloadService : Service() {
         return null
     }
 
-    private fun stopDownloads(@StringRes string: Int) {
-        downloadManager.stopDownloads(getString(string))
+    private fun downloaderStop(@StringRes string: Int) {
+        downloadManager.downloaderStop(getString(string))
     }
 
     private fun listenNetworkChanges() {
@@ -126,13 +125,13 @@ class AnimeDownloadService : Service() {
                 withUIContext {
                     if (isOnline()) {
                         if (downloadPreferences.downloadOnlyOverWifi().get() && !isConnectedToWifi()) {
-                            stopDownloads(R.string.download_notifier_text_only_wifi)
+                            downloaderStop(R.string.download_notifier_text_only_wifi)
                         } else {
-                            val started = downloadManager.startDownloads()
+                            val started = downloadManager.downloaderStart()
                             if (!started) stopSelf()
                         }
                     } else {
-                        stopDownloads(R.string.download_notifier_no_network)
+                        downloaderStop(R.string.download_notifier_no_network)
                     }
                 }
             }
@@ -146,35 +145,9 @@ class AnimeDownloadService : Service() {
             .launchIn(scope)
     }
 
-    /**
-     * Listens to downloader status. Enables or disables the wake lock depending on the status.
-     */
-    private fun listenDownloaderState() {
-        _isRunning
-            .onEach { isRunning ->
-                if (isRunning) {
-                    wakeLock.acquireIfNotHeld()
-                } else {
-                    wakeLock.releaseIfHeld()
-                }
-            }
-            .catch {
-                // Ignore errors
-            }
-            .launchIn(scope)
-    }
-
-    private fun PowerManager.WakeLock.releaseIfHeld() {
-        if (isHeld) release()
-    }
-
-    private fun PowerManager.WakeLock.acquireIfNotHeld() {
-        if (!isHeld) acquire()
-    }
-
     private fun getPlaceholderNotification(): Notification {
-        return notification(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
+        return notificationBuilder(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
             setContentTitle(getString(R.string.download_notifier_downloader_title))
-        }
+        }.build()
     }
 }

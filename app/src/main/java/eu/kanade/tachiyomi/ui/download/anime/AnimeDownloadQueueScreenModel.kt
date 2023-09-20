@@ -1,23 +1,18 @@
 package eu.kanade.tachiyomi.ui.download.anime
 
-import android.content.Context
 import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
-import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import logcat.LogPriority
-import rx.Subscription
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -36,9 +31,9 @@ class AnimeDownloadQueueScreenModel(
     var adapter: AnimeDownloadAdapter? = null
 
     /**
-     * Map of subscriptions for active downloads.
+     * Map of jobs for active downloads.
      */
-    val progressSubscriptions by lazy { mutableMapOf<AnimeDownload, Subscription>() }
+    private val progressJobs = mutableMapOf<AnimeDownload, Job>()
 
     val listener = object : AnimeDownloadAdapter.DownloadItemListener {
         /**
@@ -110,8 +105,7 @@ class AnimeDownloadQueueScreenModel(
 
     init {
         coroutineScope.launch {
-            downloadManager.queue.updates
-                .catch { logcat(LogPriority.ERROR, it) }
+            downloadManager.queueState
                 .map { downloads ->
                     downloads
                         .groupBy { it.source }
@@ -126,22 +120,28 @@ class AnimeDownloadQueueScreenModel(
     }
 
     override fun onDispose() {
-        for (subscription in progressSubscriptions.values) {
-            subscription.unsubscribe()
+        for (job in progressJobs.values) {
+            job.cancel()
         }
-        progressSubscriptions.clear()
+        progressJobs.clear()
         adapter = null
     }
 
-    fun getDownloadStatusFlow() = downloadManager.queue.statusFlow()
-    fun getDownloadProgressFlow() = downloadManager.queue.progressFlow()
+    val isDownloaderRunning
+        get() = downloadManager.isDownloaderRunning
+
+    fun getDownloadStatusFlow() = downloadManager.statusFlow()
+    fun getDownloadProgressFlow() = downloadManager.progressFlow()
+
+    fun startDownloads() {
+        downloadManager.startDownloads()
+    }
 
     fun pauseDownloads() {
         downloadManager.pauseDownloads()
     }
 
-    fun clearQueue(context: Context) {
-        AnimeDownloadService.stop(context)
+    fun clearQueue() {
         downloadManager.clearQueue()
     }
 
@@ -181,11 +181,11 @@ class AnimeDownloadQueueScreenModel(
                 onUpdateDownloadedPages(download)
             }
             AnimeDownload.State.DOWNLOADED -> {
-                unsubscribeProgress(download)
+                cancelProgressJob(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            AnimeDownload.State.ERROR -> unsubscribeProgress(download)
+            AnimeDownload.State.ERROR -> cancelProgressJob(download)
             else -> {
                 /* unused */
             }
@@ -197,8 +197,8 @@ class AnimeDownloadQueueScreenModel(
      *
      * @param download the download to unsubscribe.
      */
-    private fun unsubscribeProgress(download: AnimeDownload) {
-        progressSubscriptions.remove(download)?.unsubscribe()
+    private fun cancelProgressJob(download: AnimeDownload) {
+        progressJobs.remove(download)?.cancel()
     }
 
     /**

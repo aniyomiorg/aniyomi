@@ -11,13 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.presentation.browse.InLibraryBadge
-import eu.kanade.presentation.components.CommonEntryItemDefaults
-import eu.kanade.presentation.components.EntryCompactGridItem
-import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.library.CommonEntryItemDefaults
+import eu.kanade.presentation.library.EntryCompactGridItem
 import kotlinx.coroutines.flow.StateFlow
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun BrowseMangaSourceCompactGrid(

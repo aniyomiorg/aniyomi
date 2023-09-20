@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Colors for Doom theme
+  ~
+  ~ Key colors:
+  ~ Primary #FF5722
+  ~ Secondary #FF5722
+  ~ Tertiary #FFECE4
+  ~ Neutral #FFFFFF
+-->
+<resources>
+    <color name="doom_primary">#FF0000</color>
+    <color name="doom_onPrimary">#FAFAFA</color>
+    <color name="doom_primaryContainer">#FF0000</color>
+    <color name="doom_onPrimaryContainer">#FAFAFA</color>
+    <color name="doom_secondary">#FF0000</color>
+    <color name="doom_onSecondary">#FAFAFA</color>
+    <color name="doom_secondaryContainer">#FF0000</color>
+    <color name="doom_onSecondaryContainer">#FAFAFA</color>
+    <color name="doom_tertiary">#BFBFBF</color>
+    <color name="doom_onTertiary">#FF0000</color>
+    <color name="doom_tertiaryContainer">#BFBFBF</color>
+    <color name="doom_onTertiaryContainer">#FF0000</color>
+    <color name="doom_background">#1B1B1B</color>
+    <color name="doom_onBackground">#FFFFFF</color>
+    <color name="doom_surface">#1B1B1B</color>
+    <color name="doom_onSurface">#FFFFFF</color>
+    <color name="doom_surfaceVariant">#303030</color>
+    <color name="doom_onSurfaceVariant">#D8FFFFFF</color>
+    <color name="doom_outline">#FF0000</color>
+    <color name="doom_inverseOnSurface">#313131</color>
+    <color name="doom_inverseSurface">#FAFAFA</color>
+    <color name="doom_primaryInverse">#6D0D0B</color>
+    <color name="doom_elevationOverlay">@color/doom_primary</color>
+</resources>
+

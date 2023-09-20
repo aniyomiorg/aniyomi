@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.track
 
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.track.manga.model.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.track.manga.model.MangaTrack
 
 /**
  * An Enhanced Track Service will never prompt the user to match a manga with the remote.
@@ -21,6 +21,8 @@ interface EnhancedMangaTrackService {
      * Fully qualified source classes that this track service is compatible with.
      */
     fun getAcceptedSources(): List<String>
+
+    fun loginNoop()
 
     /**
      * match is similar to TrackService.search, but only return zero or one match.

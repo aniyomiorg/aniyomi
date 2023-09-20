@@ -14,6 +14,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
+import eu.kanade.presentation.extensions.RequestStoragePermission
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
@@ -26,7 +27,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class HistoriesTab(
     private val fromMore: Boolean,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

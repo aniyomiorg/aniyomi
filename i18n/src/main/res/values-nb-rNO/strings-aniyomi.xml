@@ -14,7 +14,7 @@
 \nEn skadelig utvidelse kan lese innloggingsdetaljer lagret i Tachiyomi, eller kjøre ukjent kode.
 \n
 \nVed å godta dette sertifikatet aksepterer du overstående risikoer.</string>
-    <string name="pref_category_delete_chapters">Slett kapittel</string>
+    <string name="pref_category_delete_chapters">Slett kapitler</string>
     <string name="pref_remove_after_marked_as_read">Etter manuelt markert som lest</string>
     <string name="pref_remove_after_read">Slett automatisk etter lesing</string>
     <string name="pref_remove_bookmarked_chapters">Tillat sletting av bokmerkede kapitler</string>
@@ -32,10 +32,38 @@
     <string name="download_error">Feil</string>
     <string name="download_paused">Pauset</string>
     <string name="also_set_chapter_settings_for_library">Anvend også for allle oppføringer i biblioteket</string>
-    <string name="dialog_with_checkbox_reset">Tilbakestill alle kapittel for denne oppføringen</string>
+    <string name="dialog_with_checkbox_reset">Tilbakestill alle kapitler for denne oppføringen</string>
     <string name="download_insufficient_space">Ikke nok lagringsplass til å laste ned kapitler</string>
     <string name="download_queue_size_warning">Advarsel: store bulknedlastinger kan føre til at kilder blir tregere og/eller blokkerer Tachiyomi. Trykk for å lære mer.</string>
     <string name="information_webview_required">Tachiyomi krever WebView</string>
     <string name="download_notifier_download_paused_chapters">Nedlasting pauset</string>
     <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

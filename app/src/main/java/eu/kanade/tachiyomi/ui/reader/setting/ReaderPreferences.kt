@@ -1,9 +1,8 @@
 package eu.kanade.tachiyomi.ui.reader.setting
 
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
-import eu.kanade.tachiyomi.core.preference.getEnum
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.getEnum
 
 class ReaderPreferences(
     private val preferenceStore: PreferenceStore,
@@ -19,6 +18,7 @@ class ReaderPreferences(
 
     fun showReadingMode() = preferenceStore.getBoolean("pref_show_reading_mode", true)
 
+    // TODO: default this to true if reader long strip ever goes stable
     fun trueColor() = preferenceStore.getBoolean("pref_true_color_key", false)
 
     fun fullscreen() = preferenceStore.getBoolean("fullscreen", true)
@@ -33,6 +33,8 @@ class ReaderPreferences(
 
     // TODO: Enable in release build when the feature is stable
     fun longStripSplitWebtoon() = preferenceStore.getBoolean("pref_long_strip_split_webtoon", !isReleaseBuildType)
+
+    fun webtoonDoubleTapZoomEnabled() = preferenceStore.getBoolean("pref_enable_double_tap_zoom_webtoon", true)
 
     fun imageScaleType() = preferenceStore.getInt("pref_image_scale_type_key", 1)
 
@@ -54,13 +56,15 @@ class ReaderPreferences(
 
     fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", 0)
 
-    fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", PreferenceValues.ReaderHideThreshold.LOW)
+    fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", ReaderHideThreshold.LOW)
 
     fun folderPerManga() = preferenceStore.getBoolean("create_folder_per_manga", false)
 
     fun skipRead() = preferenceStore.getBoolean("skip_read", false)
 
     fun skipFiltered() = preferenceStore.getBoolean("skip_filtered", true)
+
+    fun skipDupe() = preferenceStore.getBoolean("skip_dupe", false)
 
     // endregion
 
@@ -73,6 +77,10 @@ class ReaderPreferences(
     fun dualPageSplitWebtoon() = preferenceStore.getBoolean("pref_dual_page_split_webtoon", false)
 
     fun dualPageInvertWebtoon() = preferenceStore.getBoolean("pref_dual_page_invert_webtoon", false)
+
+    fun dualPageRotateToFit() = preferenceStore.getBoolean("pref_dual_page_rotate", false)
+
+    fun dualPageRotateToFitInvert() = preferenceStore.getBoolean("pref_dual_page_rotate_invert", false)
 
     // endregion
 
@@ -106,13 +114,27 @@ class ReaderPreferences(
 
     fun navigationModeWebtoon() = preferenceStore.getInt("reader_navigation_mode_webtoon", 0)
 
-    fun pagerNavInverted() = preferenceStore.getEnum("reader_tapping_inverted", PreferenceValues.TappingInvertMode.NONE)
+    fun pagerNavInverted() = preferenceStore.getEnum("reader_tapping_inverted", TappingInvertMode.NONE)
 
-    fun webtoonNavInverted() = preferenceStore.getEnum("reader_tapping_inverted_webtoon", PreferenceValues.TappingInvertMode.NONE)
+    fun webtoonNavInverted() = preferenceStore.getEnum("reader_tapping_inverted_webtoon", TappingInvertMode.NONE)
 
     fun showNavigationOverlayNewUser() = preferenceStore.getBoolean("reader_navigation_overlay_new_user", true)
 
     fun showNavigationOverlayOnStart() = preferenceStore.getBoolean("reader_navigation_overlay_on_start", false)
 
     // endregion
+
+    enum class TappingInvertMode(val shouldInvertHorizontal: Boolean = false, val shouldInvertVertical: Boolean = false) {
+        NONE,
+        HORIZONTAL(shouldInvertHorizontal = true),
+        VERTICAL(shouldInvertVertical = true),
+        BOTH(shouldInvertHorizontal = true, shouldInvertVertical = true),
+    }
+
+    enum class ReaderHideThreshold(val threshold: Int) {
+        HIGHEST(5),
+        HIGH(13),
+        LOW(31),
+        LOWEST(47),
+    }
 }

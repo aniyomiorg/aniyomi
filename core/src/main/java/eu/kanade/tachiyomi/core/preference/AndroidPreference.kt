@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import tachiyomi.core.preference.Preference
 
 sealed class AndroidPreference<T>(
     private val preferences: SharedPreferences,

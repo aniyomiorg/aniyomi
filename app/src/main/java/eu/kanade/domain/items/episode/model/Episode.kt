@@ -1,67 +1,42 @@
 package eu.kanade.domain.items.episode.model
 
+import dataanime.Episodes
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
+import tachiyomi.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.data.database.models.anime.Episode as DbEpisode
 
-data class Episode(
-    val id: Long,
-    val animeId: Long,
-    val seen: Boolean,
-    val bookmark: Boolean,
-    val lastSecondSeen: Long,
-    val totalSeconds: Long,
-    val dateFetch: Long,
-    val sourceOrder: Long,
-    val url: String,
-    val name: String,
-    val dateUpload: Long,
-    val episodeNumber: Float,
-    val scanlator: String?,
-) {
-    val isRecognizedNumber: Boolean
-        get() = episodeNumber >= 0f
-
-    fun toSEpisode(): SEpisode {
-        return SEpisode.create().also {
-            it.url = url
-            it.name = name
-            it.date_upload = dateUpload
-            it.episode_number = episodeNumber
-            it.scanlator = scanlator
-        }
-    }
-
-    fun copyFromSEpisode(sEpisode: SEpisode): Episode {
-        return this.copy(
-            name = sEpisode.name,
-            url = sEpisode.url,
-            dateUpload = sEpisode.date_upload,
-            episodeNumber = sEpisode.episode_number,
-            scanlator = sEpisode.scanlator?.ifBlank { null },
-        )
-    }
-
-    companion object {
-        fun create() = Episode(
-            id = -1,
-            animeId = -1,
-            seen = false,
-            bookmark = false,
-            lastSecondSeen = 0,
-            totalSeconds = 0,
-            dateFetch = 0,
-            sourceOrder = 0,
-            url = "",
-            name = "",
-            dateUpload = -1,
-            episodeNumber = -1f,
-            scanlator = null,
-        )
+// TODO: Remove when all deps are migrated
+fun Episode.toSEpisode(): SEpisode {
+    return SEpisode.create().also {
+        it.url = url
+        it.name = name
+        it.date_upload = dateUpload
+        it.episode_number = episodeNumber
+        it.scanlator = scanlator
     }
 }
 
-// TODO: Remove when all deps are migrated
+fun Episode.copyFromSEpisode(sEpisode: SEpisode): Episode {
+    return this.copy(
+        name = sEpisode.name,
+        url = sEpisode.url,
+        dateUpload = sEpisode.date_upload,
+        episodeNumber = sEpisode.episode_number,
+        scanlator = sEpisode.scanlator?.ifBlank { null },
+    )
+}
+
+fun Episode.copyFrom(other: Episodes): Episode {
+    return copy(
+        name = other.name,
+        url = other.url,
+        dateUpload = other.date_upload,
+        episodeNumber = other.episode_number,
+        scanlator = other.scanlator?.ifBlank { null },
+    )
+}
+
 fun Episode.toDbEpisode(): DbEpisode = EpisodeImpl().also {
     it.id = id
     it.anime_id = animeId

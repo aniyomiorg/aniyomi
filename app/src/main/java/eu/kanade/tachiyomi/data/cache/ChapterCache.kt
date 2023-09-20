@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.cache
 import android.content.Context
 import android.text.format.Formatter
 import com.jakewharton.disklrucache.DiskLruCache
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
@@ -13,6 +12,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okio.buffer
 import okio.sink
+import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
@@ -128,7 +128,7 @@ class ChapterCache(private val context: Context) {
      */
     fun isImageInCache(imageUrl: String): Boolean {
         return try {
-            diskCache.get(DiskUtil.hashKeyForDisk(imageUrl)) != null
+            diskCache.get(DiskUtil.hashKeyForDisk(imageUrl)).use { it != null }
         } catch (e: IOException) {
             false
         }

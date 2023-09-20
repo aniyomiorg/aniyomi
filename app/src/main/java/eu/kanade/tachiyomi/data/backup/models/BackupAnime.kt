@@ -1,12 +1,11 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeImpl
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrackImpl
-import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.track.anime.model.AnimeTrack
 
 @Suppress("DEPRECATION")
 @Serializable
@@ -39,32 +38,32 @@ data class BackupAnime(
     @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
 ) {
-    fun getAnimeImpl(): AnimeImpl {
-        return AnimeImpl().apply {
-            url = this@BackupAnime.url
-            title = this@BackupAnime.title
-            artist = this@BackupAnime.artist
-            author = this@BackupAnime.author
-            description = this@BackupAnime.description
-            genre = this@BackupAnime.genre.joinToString()
-            status = this@BackupAnime.status
-            thumbnail_url = this@BackupAnime.thumbnailUrl
-            favorite = this@BackupAnime.favorite
-            source = this@BackupAnime.source
-            date_added = this@BackupAnime.dateAdded
-            viewer_flags = this@BackupAnime.viewer_flags
-            episode_flags = this@BackupAnime.episodeFlags
-            update_strategy = this@BackupAnime.updateStrategy
-        }
+    fun getAnimeImpl(): Anime {
+        return Anime.create().copy(
+            url = this@BackupAnime.url,
+            title = this@BackupAnime.title,
+            artist = this@BackupAnime.artist,
+            author = this@BackupAnime.author,
+            description = this@BackupAnime.description,
+            genre = this@BackupAnime.genre,
+            status = this@BackupAnime.status.toLong(),
+            thumbnailUrl = this@BackupAnime.thumbnailUrl,
+            favorite = this@BackupAnime.favorite,
+            source = this@BackupAnime.source,
+            dateAdded = this@BackupAnime.dateAdded,
+            viewerFlags = this@BackupAnime.viewer_flags.toLong(),
+            episodeFlags = this@BackupAnime.episodeFlags.toLong(),
+            updateStrategy = this@BackupAnime.updateStrategy,
+        )
     }
 
-    fun getEpisodesImpl(): List<EpisodeImpl> {
+    fun getEpisodesImpl(): List<Episode> {
         return episodes.map {
             it.toEpisodeImpl()
         }
     }
 
-    fun getTrackingImpl(): List<AnimeTrackImpl> {
+    fun getTrackingImpl(): List<AnimeTrack> {
         return tracking.map {
             it.getTrackingImpl()
         }
@@ -78,13 +77,13 @@ data class BackupAnime(
                 artist = anime.artist,
                 author = anime.author,
                 description = anime.description,
-                genre = anime.genre ?: emptyList(),
+                genre = anime.genre.orEmpty(),
                 status = anime.status.toInt(),
                 thumbnailUrl = anime.thumbnailUrl,
                 favorite = anime.favorite,
                 source = anime.source,
                 dateAdded = anime.dateAdded,
-                viewer_flags = anime.viewerFlags.toInt(),
+                viewer_flags = anime.skipIntroLength,
                 episodeFlags = anime.episodeFlags.toInt(),
                 updateStrategy = anime.updateStrategy,
             )

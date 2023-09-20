@@ -38,9 +38,10 @@ object Notifications {
     private const val GROUP_DOWNLOADER = "group_downloader"
     const val CHANNEL_DOWNLOADER_PROGRESS = "downloader_progress_channel"
     const val ID_DOWNLOAD_CHAPTER_PROGRESS = -201
-    const val ID_DOWNLOAD_EPISODE_PROGRESS = -205
+    const val ID_DOWNLOAD_EPISODE_PROGRESS = -203
     const val CHANNEL_DOWNLOADER_ERROR = "downloader_error_channel"
     const val ID_DOWNLOAD_CHAPTER_ERROR = -202
+    const val ID_DOWNLOAD_EPISODE_ERROR = -204
 
     /**
      * Notification channel and ids used by the library updater.
@@ -61,12 +62,6 @@ object Notifications {
     const val CHANNEL_BACKUP_RESTORE_COMPLETE = "backup_restore_complete_channel_v2"
     const val ID_BACKUP_COMPLETE = -502
     const val ID_RESTORE_COMPLETE = -504
-
-    /**
-     * Notification channel used for crash log file sharing.
-     */
-    const val CHANNEL_CRASH_LOGS = "crash_logs_channel"
-    const val ID_CRASH_LOGS = -601
 
     /**
      * Notification channel used for Incognito Mode
@@ -93,6 +88,7 @@ object Notifications {
         "library_progress_channel",
         "updates_ext_channel",
         "downloader_cache_renewal",
+        "crash_logs_channel",
     )
 
     /**
@@ -102,12 +98,12 @@ object Notifications {
      * @param context The application context.
      */
     fun createChannels(context: Context) {
-        val notificationService = NotificationManagerCompat.from(context)
+        val notificationManager = NotificationManagerCompat.from(context)
 
         // Delete old notification channels
-        deprecatedChannels.forEach(notificationService::deleteNotificationChannel)
+        deprecatedChannels.forEach(notificationManager::deleteNotificationChannel)
 
-        notificationService.createNotificationChannelGroupsCompat(
+        notificationManager.createNotificationChannelGroupsCompat(
             listOf(
                 buildNotificationChannelGroup(GROUP_BACKUP_RESTORE) {
                     setName(context.getString(R.string.label_backup))
@@ -124,7 +120,7 @@ object Notifications {
             ),
         )
 
-        notificationService.createNotificationChannelsCompat(
+        notificationManager.createNotificationChannelsCompat(
             listOf(
                 buildNotificationChannel(CHANNEL_COMMON, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.channel_common))
@@ -167,9 +163,6 @@ object Notifications {
                     setGroup(GROUP_BACKUP_RESTORE)
                     setShowBadge(false)
                     setSound(null, null)
-                },
-                buildNotificationChannel(CHANNEL_CRASH_LOGS, IMPORTANCE_HIGH) {
-                    setName(context.getString(R.string.channel_crash_logs))
                 },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.pref_incognito_mode))

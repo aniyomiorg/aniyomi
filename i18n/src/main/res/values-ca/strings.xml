@@ -40,7 +40,6 @@
     <string name="action_rename_category">Canvia el nom de la categoria</string>
     <string name="action_move_category">Defineix les categories</string>
     <string name="action_edit_cover">Edita la portada</string>
-    <string name="action_stop">Atura</string>
     <string name="action_pause">Pausa</string>
     <string name="action_previous_chapter">Capítol anterior</string>
     <string name="action_next_chapter">Capítol següent</string>
@@ -202,12 +201,6 @@
     <string name="sort_by_source">Per font</string>
     <string name="sort_by_number">Per número de capítol</string>
     <string name="manga_download">Baixa</string>
-    <string name="custom_download">Baixa\'n una quantitat personalitzada</string>
-    <string name="download_1">El capítol següent</string>
-    <string name="download_5">Els 5 capítols següents</string>
-    <string name="download_10">Els 10 capítols següents</string>
-    <string name="download_custom">Personalitza</string>
-    <string name="download_all">Tot</string>
     <string name="download_unread">Els no llegits</string>
     <string name="confirm_delete_chapters">Esteu segur que voleu suprimir els capítols seleccionats\?</string>
     <string name="manga_tracking_tab">En seguiment</string>
@@ -303,7 +296,7 @@
     <string name="theme_dark">Activat</string>
     <string name="theme_system">Per defecte del sistema</string>
     <string name="pref_manage_notifications">Gestiona les notificacions</string>
-    <string name="pref_category_security">Seguretat</string>
+    <string name="pref_category_security">Seguretat i privadesa</string>
     <string name="lock_with_biometrics">Requereix desblocatge</string>
     <string name="lock_when_idle">Bloca per inactivitat</string>
     <string name="lock_always">Sempre</string>
@@ -347,7 +340,6 @@
     <string name="action_oldest">Els més antics</string>
     <string name="action_move_to_top">Mou a dalt de tot</string>
     <string name="action_move_to_bottom">Mou a sota de tot</string>
-    <string name="pref_enable_automatic_extension_updates">Comprova si hi ha actualitzacions de les extensions</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Hi ha una actualització d\'una extensió</item>
         <item quantity="other">Hi ha actualitzacions de %d extensions</item>
@@ -394,7 +386,7 @@
         <item quantity="one">En resta %1$s</item>
         <item quantity="other">En resten %1$s</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Inclou només les fonts fixades</string>
+    <string name="pref_search_pinned_sources_only">Cerca només a les fonts fixades a la cerca global</string>
     <string name="gray_background">Gris</string>
     <string name="viewer">Mode de lectura</string>
     <string name="pref_category_for_this_series">Per a aquesta sèrie</string>
@@ -408,7 +400,6 @@
         <item quantity="one">%d categoria</item>
         <item quantity="other">%d categories</item>
     </plurals>
-    <string name="action_display_unread_badge">Capítols no llegits</string>
     <string name="tracking_info">La sincronització és unidireccional per a actualitzar el progrés dels capítols als serveis de seguiment. Configureu el seguiment d\'elements individuals al seu botó de seguiment.</string>
     <string name="pref_refresh_library_covers">Refresca les portades de la biblioteca</string>
     <string name="unofficial_extension_message">Aquesta extensió no pertany a la llista d\'extensions oficials del Tachiyomi.</string>
@@ -423,7 +414,6 @@
     <string name="action_display_comfortable_grid">Graella confortable</string>
     <string name="action_migrate">Migra</string>
     <string name="tabs_header">Pestanyes</string>
-    <string name="badges_header">Icones</string>
     <string name="action_display_show_tabs">Mostra les pestanyes de les categories</string>
     <string name="page_list_empty_error">No s\'ha trobat cap pàgina</string>
     <string name="action_disable_all">Desactiva-ho tot</string>
@@ -488,10 +478,8 @@
     <string name="file_picker_error">No s\'ha trobat cap aplicació de selecció de fitxers</string>
     <string name="pref_show_nsfw_source">Mostra a la llista de fonts i extensions</string>
     <string name="myanimelist_relogin">Torneu a iniciar la sessió a MAL</string>
-    <string name="channel_crash_logs">Registres de fallades</string>
     <string name="track_finished_reading_date">Data de finalització</string>
     <string name="track_started_reading_date">Data d’inici</string>
-    <string name="crash_log_saved">S\'han desat els registres de fallades</string>
     <string name="pref_dump_crash_logs_summary">Desa els registres d\'errors en un fitxer perquè el pugueu compartir amb els desenvolupadors</string>
     <string name="pref_dump_crash_logs">Bolca els registres de fallades</string>
     <string name="pref_viewer_nav">Zones de toc</string>
@@ -627,9 +615,6 @@
     <string name="ext_app_info">Informació de l\'aplicació</string>
     <string name="notification_size_warning">Les actualitzacions grosses perjudiquen les fonts i poden implicar actualitzacions més lentes i un augment en l\'ús de bateria. Premeu per a obtenir-ne més informació.</string>
     <string name="pref_landscape_zoom">Amplia la imatge en horitzontal</string>
-    <string name="confirm_manga_add_duplicate">Teniu un element a la vostra biblioteca amb el mateix nom però d\'una font diferent (%1$s).
-\n
-\nVoleu continuar igualment\?</string>
     <string name="pref_navigate_pan">Fes panoràmiques les imatges amples en fer un toc</string>
     <string name="action_display_cover_only_grid">Graella només a la portada</string>
     <string name="action_filter_started">Començats</string>
@@ -657,7 +642,6 @@
     <string name="source_filter_empty_screen">No s\'ha trobat cap font instal·lada</string>
     <string name="source_empty_screen">No s\'ha trobat cap font</string>
     <string name="action_sort_unread_count">Nombre de no llegits</string>
-    <string name="split_tall_images">Divideix les imatges altes</string>
     <string name="split_tall_images_summary">Millora el rendiment del lector</string>
     <string name="download_notifier_split_page_not_found">No s\'ha trobat la pàgina %d en dividir</string>
     <string name="download_notifier_split_page_path_not_found">No s\'ha trobat el camí del fitxer de la pàgina %d</string>
@@ -665,7 +649,6 @@
     <string name="pref_reset_viewer_flags_summary">Restableix el mode de lectura i l\'orientació de totes les sèries</string>
     <string name="pref_reset_viewer_flags_success">S\'han restablert tota la configuració del lector</string>
     <string name="pref_reset_viewer_flags_error">No s\'ha pogut restablir la configuració del lector</string>
-    <string name="download_notifier_split_failed">No s\'ha pogut dividir la imatge baixada</string>
     <string name="empty_screen">Ostres, que estrany...</string>
     <string name="ext_info_language">Llengua</string>
     <string name="ext_info_version">Versió</string>
@@ -700,7 +683,7 @@
     <string name="invalid_location">Ubicació invàlida: %s</string>
     <string name="auto_download_while_reading">Baixa automàticament mentre es llegeix</string>
     <string name="download_ahead_info">Només funciona en elements de la biblioteca i si el capítol actual i el següent ja estan baixats</string>
-    <string name="crash_screen_title">S\'ha produït un error inesperat</string>
+    <string name="crash_screen_title">Ups!</string>
     <string name="crash_screen_description">S\'ha produït un error inesperat al %s. Us suggerim que feu una captura de pantalla d\'aquest missatge, bolqueu els registres d\'errors i els compartiu amb el nostre canal d\'assistència al Discord.</string>
     <plurals name="next_unread_chapters">
         <item quantity="one">El següent capítol no llegit</item>
@@ -727,11 +710,50 @@
     <string name="pref_long_strip_split">Divideix les imatges altes (BETA)</string>
     <string name="action_search_hint">Cerca…</string>
     <string name="updates_last_update_info">Biblioteca actualitzada per darrera vegada: %s</string>
-    <string name="download_notifier_cache_renewal">S\'estan indexant les baixades</string>
+    <string name="download_notifier_cache_renewal">S\'estan comprovant les baixades</string>
     <string name="channel_downloader_cache">Memòria cau de baixades</string>
     <string name="action_open_random_manga">Obre un element aleatori</string>
     <string name="fdroid_warning">Les compilacions de F-Droid no tenen assistència oficial.
 \nPremeu per a obtenir-ne més informació.</string>
     <string name="information_no_entries_found">No s\'ha trobat cap element en aquesta categoria</string>
 <string name="label_download_queue">Cua de baixades</string>
+    <string name="label_stats">Estadístiques</string>
+    <string name="label_local">Local</string>
+    <string name="label_downloaded">Baixats</string>
+    <string name="label_started">Començats</string>
+    <string name="copied_to_clipboard_plain">S\'ha copiat al porta-retalls</string>
+    <string name="label_read_chapters">Llegits</string>
+    <string name="label_total_chapters">Totals</string>
+    <string name="pref_skip_dupe_chapters">Omet els capítols duplicats</string>
+    <string name="enhanced_services_not_installed">Disponible però la font no està instal·lada: %s</string>
+    <string name="confirm_add_duplicate_manga">Ja teniu un element a la biblioteca amb el mateix nom.
+\n
+\nVoleu continuar igualment\?</string>
+    <string name="label_read_duration">Temps de lectura</string>
+    <string name="label_titles_section">Elements</string>
+    <string name="label_completed_titles">Elements completats</string>
+    <string name="track_error">Error %1$s: %2$s</string>
+    <string name="action_not_now">Ara no</string>
+    <string name="label_titles_in_global_update">A l\'actualització global</string>
+    <string name="label_overview_section">Resum</string>
+    <string name="label_tracker_section">Seguidors</string>
+    <string name="label_tracked_titles">Elements seguits</string>
+    <string name="label_mean_score">Puntuació mitjana</string>
+    <string name="information_required_plain">*obligatori</string>
+    <plurals name="download_amount">
+        <item quantity="one">El següent capítol</item>
+        <item quantity="other">Els següents %d capítols</item>
+    </plurals>
+    <string name="information_no_manga_category">La categoria és buida</string>
+    <string name="label_used">En ús</string>
+    <string name="not_applicable">N/A</string>
+    <string name="day_short">%dd</string>
+    <string name="pref_worker_info">Informació dels fils d\'execució</string>
+    <string name="hour_short">%dh</string>
+    <string name="minute_short">%dm</string>
+    <string name="seconds_short">%ds</string>
+    <string name="pref_hide_in_library_items">Amaga els elements que ja són a la biblioteca</string>
+    <string name="action_copy_to_clipboard">Copia al porta-retalls</string>
+    <string name="action_update_category">Actualitza la categoria</string>
+    <string name="split_tall_images">Divideix les imatges altes</string>
     </resources>

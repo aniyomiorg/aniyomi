@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Colors for Doom theme
+  ~
+  ~ Key colors:
+  ~ Primary #FF5722
+  ~ Secondary #FF5722
+  ~ Tertiary #FFECE4
+  ~ Neutral #FFFFFF
+-->
+<resources>
+    <color name="matrix_primary">#00FF00</color>
+    <color name="matrix_onPrimary">#FAFAFA</color>
+    <color name="matrix_primaryContainer">#00FF00</color>
+    <color name="matrix_onPrimaryContainer">#FAFAFA</color>
+    <color name="matrix_secondary">#00FF00</color>
+    <color name="matrix_onSecondary">#FAFAFA</color>
+    <color name="matrix_secondaryContainer">#00FF00</color>
+    <color name="matrix_onSecondaryContainer">#FAFAFA</color>
+    <color name="matrix_tertiary">#FFFFFF</color>
+    <color name="matrix_onTertiary">#00FF00</color>
+    <color name="matrix_tertiaryContainer">#FFFFFF</color>
+    <color name="matrix_onTertiaryContainer">#00FF00</color>
+    <color name="matrix_background">#111111</color>
+    <color name="matrix_onBackground">#FFFFFF</color>
+    <color name="matrix_surface">#111111</color>
+    <color name="matrix_onSurface">#FFFFFF</color>
+    <color name="matrix_surfaceVariant">#212121</color>
+    <color name="matrix_onSurfaceVariant">#D8FFFFFF</color>
+    <color name="matrix_outline">#00FF00</color>
+    <color name="matrix_inverseOnSurface">#313131</color>
+    <color name="matrix_inverseSurface">#FAFAFA</color>
+    <color name="matrix_primaryInverse">#007700</color>
+    <color name="matrix_elevationOverlay">@color/matrix_primary</color>
+</resources>
+

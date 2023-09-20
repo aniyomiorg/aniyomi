@@ -6,16 +6,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.manga.MangaExtensionFilterScreen
-import eu.kanade.presentation.components.LoadingScreen
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.presentation.core.screens.LoadingScreen
 
-class MangaExtensionFilterScreen : Screen {
+class MangaExtensionFilterScreen : Screen() {
 
     @Composable
     override fun Content() {
@@ -34,7 +34,7 @@ class MangaExtensionFilterScreen : Screen {
         MangaExtensionFilterScreen(
             navigateUp = navigator::pop,
             state = successState,
-            onClickToggle = { screenModel.toggle(it) },
+            onClickToggle = screenModel::toggle,
         )
 
         LaunchedEffect(Unit) {

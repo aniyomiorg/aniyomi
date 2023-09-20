@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,6 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -120,7 +120,7 @@ class MangaExtensionDetailsScreenModel(
 
         val cleared = urls.sumOf {
             try {
-                network.cookieManager.remove(it.toHttpUrl())
+                network.cookieJar.remove(it.toHttpUrl())
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to clear cookies for $it" }
                 0
@@ -173,7 +173,7 @@ data class MangaExtensionDetailsState(
 ) {
 
     val sources: List<MangaExtensionSourceItem>
-        get() = _sources ?: emptyList()
+        get() = _sources.orEmpty()
 
     val isLoading: Boolean
         get() = extension == null || _sources == null

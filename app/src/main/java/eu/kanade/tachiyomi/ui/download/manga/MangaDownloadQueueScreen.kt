@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.download.manga
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
@@ -8,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
@@ -37,19 +35,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
-import eu.kanade.tachiyomi.util.lang.launchUI
 import kotlinx.coroutines.CoroutineScope
+import tachiyomi.core.util.lang.launchUI
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
 import kotlin.math.roundToInt
 
 @Composable
 fun DownloadQueueScreen(
-    context: Context,
     contentPadding: PaddingValues,
     scope: CoroutineScope,
     screenModel: MangaDownloadQueueScreenModel,
@@ -86,7 +82,7 @@ fun DownloadQueueScreen(
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
-                val isRunning by MangaDownloadService.isRunning.collectAsState()
+                val isRunning by screenModel.isDownloaderRunning.collectAsState()
                 ExtendedFloatingActionButton(
                     text = {
                         val id = if (isRunning) {
@@ -106,14 +102,12 @@ fun DownloadQueueScreen(
                     },
                     onClick = {
                         if (isRunning) {
-                            MangaDownloadService.stop(context)
                             screenModel.pauseDownloads()
                         } else {
-                            MangaDownloadService.start(context)
+                            screenModel.startDownloads()
                         }
                     },
                     expanded = fabExpanded,
-                    modifier = Modifier.navigationBarsPadding(),
                 )
             }
         },
