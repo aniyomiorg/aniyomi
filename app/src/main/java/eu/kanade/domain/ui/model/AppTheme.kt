@@ -8,6 +8,7 @@ enum class AppTheme(val titleResId: Int?) {
     GREEN_APPLE(R.string.theme_greenapple),
     LAVENDER(R.string.theme_lavender),
     MIDNIGHT_DUSK(R.string.theme_midnightdusk),
+    SAFFRON(R.string.theme_saffron),
     STRAWBERRY_DAIQUIRI(R.string.theme_strawberrydaiquiri),
     TAKO(R.string.theme_tako),
     TEALTURQUOISE(R.string.theme_tealturquoise),

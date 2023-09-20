@@ -171,6 +171,33 @@
         <item name="elevationOverlayColor">@color/midnightdusk_elevationOverlay</item>
     </style>
 
+    <!--== Saffron Theme ==-->
+    <style name="Theme.Tachiyomi.Saffron">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/saffron_primary</item>
+        <item name="colorOnPrimary">@color/saffron_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/saffron_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/saffron_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/saffron_secondary</item>
+        <item name="colorOnSecondary">@color/saffron_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/saffron_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/saffron_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/saffron_tertiary</item>
+        <item name="colorOnTertiary">@color/saffron_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/saffron_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/saffron_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/saffron_background</item>
+        <item name="colorOnBackground">@color/saffron_onBackground</item>
+        <item name="colorSurface">@color/saffron_surface</item>
+        <item name="colorOnSurface">@color/saffron_onSurface</item>
+        <item name="colorSurfaceVariant">@color/saffron_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/saffron_onSurfaceVariant</item>
+        <item name="colorOutline">@color/saffron_outline</item>
+        <item name="colorOnSurfaceInverse">@color/saffron_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/saffron_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/saffron_primaryInverse</item>
+    </style>
+
     <!--== Strawberry Daiquiri Theme ==-->
     <style name="Theme.Tachiyomi.StrawberryDaiquiri">
         <!-- Theme Colors -->
