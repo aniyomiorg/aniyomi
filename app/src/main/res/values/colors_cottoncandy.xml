@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="cottoncandy_primary">#9A4058</color>
+    <color name="cottoncandy_onPrimary">#FFFFFF</color>
+    <color name="cottoncandy_primaryContainer">#FFD9DF</color>
+    <color name="cottoncandy_onPrimaryContainer">#3F0017</color>
+    <color name="cottoncandy_secondary">#5bcefa</color>
+    <color name="cottoncandy_onSecondary">#FFFFFF</color>
+    <color name="cottoncandy_secondaryContainer">#BCE9FF</color>
+    <color name="cottoncandy_onSecondaryContainer">#001F2A</color>
+    <color name="cottoncandy_tertiary">#9A4058</color>
+    <color name="cottoncandy_onTertiary">#FFFFFF</color>
+    <color name="cottoncandy_tertiaryContainer">#FFD9DF</color>
+    <color name="cottoncandy_onTertiaryContainer">#3F0017</color>
+    <color name="cottoncandy_background">#FFFBFF</color>
+    <color name="cottoncandy_onBackground">#201A1B</color>
+    <color name="cottoncandy_surface">#FFFBFF</color>
+    <color name="cottoncandy_onSurface">#201A1B</color>
+    <color name="cottoncandy_surfaceVariant">#F3DDE0</color>
+    <color name="cottoncandy_onSurfaceVariant">#524345</color>
+    <color name="cottoncandy_outline">#847375</color>
+    <color name="cottoncandy_inverseOnSurface">#FAEEEF</color>
+    <color name="cottoncandy_inverseSurface">#352F30</color>
+    <color name="cottoncandy_primaryInverse">#FFB1C1</color>
+    <color name="cottoncandy_elevationOverlay">@color/cottoncandy_primary</color>    
+</resources>
+
