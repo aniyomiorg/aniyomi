@@ -26,6 +26,9 @@ interface ThemingDelegate {
                 AppTheme.MIDNIGHT_DUSK -> {
                     resIds += R.style.Theme_Tachiyomi_MidnightDusk
                 }
+                AppTheme.COTTONCANDY -> {
+                    resIds += R.style.Theme_Tachiyomi_CottonCandy
+                }
                 AppTheme.STRAWBERRY_DAIQUIRI -> {
                     resIds += R.style.Theme_Tachiyomi_StrawberryDaiquiri
                 }
