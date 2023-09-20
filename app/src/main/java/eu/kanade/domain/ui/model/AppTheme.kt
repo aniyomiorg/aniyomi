@@ -5,9 +5,11 @@ import eu.kanade.tachiyomi.R
 enum class AppTheme(val titleResId: Int?) {
     DEFAULT(R.string.label_default),
     MONET(R.string.theme_monet),
+    COTTONCANDY(R.string.theme_cottoncandy),
     GREEN_APPLE(R.string.theme_greenapple),
     LAVENDER(R.string.theme_lavender),
     MIDNIGHT_DUSK(R.string.theme_midnightdusk),
+    MOCHA(R.string.theme_mocha),
     STRAWBERRY_DAIQUIRI(R.string.theme_strawberrydaiquiri),
     TAKO(R.string.theme_tako),
     TEALTURQUOISE(R.string.theme_tealturquoise),

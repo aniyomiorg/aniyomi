@@ -286,4 +286,7 @@
     <string name="label_migration_anime">Migrate Anime</string>
     <string name="settings">Settings</string>
     <string name="extension_settings">Extension settings</string>
+     <!-- Themes -->
+    <string name="theme_cottoncandy">Cotton Candy</string>
+    <string name="theme_mocha">Mocha</string>
 </resources>
