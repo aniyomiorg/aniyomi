@@ -199,7 +199,7 @@
     </style>
 
     <!--== Mocha Theme ==-->
-    <style name="Theme.Tachiyomi.mocha">
+    <style name="Theme.Tachiyomi.Mocha">
         <!-- Theme Colors -->
         <item name="colorPrimary">@color/mocha_primary</item>
         <item name="colorOnPrimary">@color/mocha_onPrimary</item>
