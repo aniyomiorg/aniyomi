@@ -16,7 +16,7 @@ class LibraryFlagsTest {
         LibraryDisplayMode.values.size shouldBe 4
         MangaLibrarySort.types.size shouldBe 8
         MangaLibrarySort.directions.size shouldBe 2
-        AnimeLibrarySort.types.size shouldBe 8
+        AnimeLibrarySort.types.size shouldBe 9
         AnimeLibrarySort.directions.size shouldBe 2
     }
 
