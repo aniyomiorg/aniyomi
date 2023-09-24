@@ -3,7 +3,7 @@
     <string name="theme_dark">अन</string>
     <string name="theme_light">अफ</string>
     <string name="pref_theme_mode">अँध्यारो मोड</string>
-    <string name="pref_category_theme">थिम</string>
+    <string name="pref_category_theme">थीम</string>
     <string name="pref_category_about">बारेमा</string>
     <string name="pref_category_advanced">उन्नत सेटिङहरू</string>
     <string name="pref_category_tracking">ट्र्याकिङ</string>
@@ -132,11 +132,6 @@
     <string name="landscape">ल्याण्डस्केप</string>
     <string name="pref_library_columns">ग्रिड साइज</string>
     <string name="pref_category_display">प्रदर्शन</string>
-    <plurals name="relative_time">
-        <item quantity="one">हिजो</item>
-        <item quantity="other">%1$d दिन अघि</item>
-    </plurals>
-    <string name="relative_time_today">आज</string>
     <string name="pref_show_nsfw_source">स्रोत र एक्सटेन्शन सूची मा देखाउनुहोस्</string>
     <string name="pref_category_nsfw_content">NSFW (१८+) स्रोतहरू</string>
     <string name="hide_notification_content">सूचना को सामग्री लुकाउनुहोस्</string>
@@ -162,7 +157,7 @@
     <string name="theme_midnightdusk">मिडनाइट डस्क</string>
     <string name="theme_greenapple">हरियो स्याउ</string>
     <string name="theme_monet">गतिशील</string>
-    <string name="pref_app_theme">एपको थिम</string>
+    <string name="pref_app_theme">एपको थीम</string>
     <string name="theme_system">सिस्टम पालना गर्नुहोस्</string>
     <string name="pref_category_appearance">रूप</string>
     <string name="action_start_downloading_now">अहिले डाउनलोड गर्न सुरु गर्नुहोस्</string>
@@ -170,7 +165,7 @@
     <string name="action_sort">क्रमबद्ध</string>
     <string name="cancel_all_for_series">यी श्रृङ्खलाका सबै रद्द गर्नुहोस्</string>
     <string name="action_display_local_badge">लोकल स्रोत</string>
-    <string name="action_open_in_web_view">WebViewमा खोल्नुहोस्</string>
+    <string name="action_open_in_web_view">WebView मा खोल्नुहोस्</string>
     <string name="confirm_lock_change">परिवर्तन पुष्टि गर्न प्रमाणित गर्नुहोस्</string>
     <string name="label_default">पूर्वनिर्धारित</string>
     <string name="pref_tablet_ui_mode">ट्याब्लेट UI</string>
@@ -199,7 +194,7 @@
     <string name="ext_installed">स्थापना गरियो</string>
     <string name="ext_trust">विश्वास</string>
     <string name="obsolete_extension_message">यो एक्सटेन्शन अब उपलब्ध छैन। यसले राम्ररी काम नगर्न सक्छ र एपमा समस्या ल्याउन सक्छ। यसलाई अनइन्स्टल गर्न सिफारिस गरिन्छ।</string>
-    <string name="unofficial_extension_message">यो एक्सटेन्शन आधिकारिक ताचियोमीको एक्सटेन्शन सूचीबाट होइन।</string>
+    <string name="unofficial_extension_message">यो एक्सटेन्शन आधिकारिक सूचीबाट होइन।</string>
     <string name="ext_nsfw_warning">यस एक्सटेन्शनको स्रोतहरूमा NSFW (१८+) सामग्री समावेश हुन सक्छ</string>
     <string name="ext_install_service_notif">एक्सटेन्शन स्थापना गर्दै…</string>
     <string name="ext_installer_shizuku_stopped">Shizuku चलिरहेको छैन</string>
@@ -262,8 +257,7 @@
     <string name="untrusted_extension">अविश्वसनीय एक्सटेन्शन</string>
     <string name="exclude">समावेश नगर्नुहोस्: %s</string>
     <string name="ext_installer_pref">इंस्टलर</string>
-
-    <string name="pref_fullscreen">पूर्ण स्क्रिन</string>
+        <string name="pref_fullscreen">पूर्ण स्क्रिन</string>
     <string name="pref_show_navigation_mode_summary">रिडर खोलिएको बेला छोटकरीमा देखाउनुहोस्</string>
     <string name="pref_dual_page_invert_summary">यदि विभाजित चौडा पृष्ठहरूको प्लेसमेन्ट पढ्ने दिशासँग मेल खाँदैन</string>
     <string name="pref_show_reading_mode">पढ्ने मोड देखाउनुहोस्</string>
@@ -295,8 +289,8 @@
     <string name="double_tap_anim_speed_normal">सामान्य</string>
     <string name="double_tap_anim_speed_0">कुनै एनिमेसन छैन</string>
     <string name="double_tap_anim_speed_fast">छिटो</string>
-    <string name="pref_rotation_type">पूर्वनिर्धारित रोटेशन प्रकार</string>
-    <string name="rotation_type">रोटेशन प्रकार</string>
+    <string name="pref_rotation_type">पूर्वनिर्धारित रोटेशन</string>
+    <string name="rotation_type">रोटेशन</string>
     <string name="rotation_free">फ्री</string>
     <string name="rotation_landscape">ल्याण्डस्केप</string>
     <string name="rotation_force_landscape">लक गरिएको ल्याण्डस्केप</string>
@@ -644,7 +638,7 @@
     <string name="label_downloaded">डाउनलोड गरिएको</string>
     <string name="network_not_metered">मापन नगरिएको नेटवर्कमा मात्र</string>
     <string name="download_ahead">अगाडि डाउनलोड गर्नुहोस्</string>
-    <string name="pref_appearance_summary">थिम, मिति र समय ढाँचा</string>
+    <string name="pref_appearance_summary">थीम, मिति र समय ढाँचा</string>
     <string name="download_ahead_info">हालको अध्याय + अर्को पहिले नै डाउनलोड गरिएमा मात्र काम गर्दछ।</string>
     <string name="theme_tidalwave">समुन्द्री लहर</string>
     <string name="ext_info_version">संस्करण</string>
@@ -790,4 +784,6 @@
     <string name="exception_offline">इन्टरनेट जडान छैन</string>
     <string name="exception_unknown_host">%s मा पुग्न सकिएन</string>
     <string name="exception_http">HTTP %d, WebView मा वेबसाइट जाँच गर्नुहोस्</string>
+    <string name="unlock_app_title">अनलक %s</string>
+    <string name="action_move_to_bottom_all_for_series">श्रृङ्खलालाई तल सार्नुहोस्</string>
 </resources>

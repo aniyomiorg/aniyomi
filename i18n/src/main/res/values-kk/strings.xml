@@ -39,11 +39,7 @@
     <string name="left_to_right_viewer">Бет (солдан оңға қарай)</string>
     <string name="information_empty_category">Санаттарыңыз жоқ. Жаңа санат жасау үшін және кітапханаңызды ұйымдастыру үшін қосу батырмасын басыңыз.</string>
     <string name="nav_zone_next">Келесі</string>
-    <plurals name="relative_time">
-        <item quantity="one">Кеше</item>
-        <item quantity="other">%1$d күн бұрын</item>
-    </plurals>
-    <string name="action_sort_unread_count">Оқылмаған тараулар</string>
+        <string name="action_sort_unread_count">Оқылмаған тараулар</string>
     <string name="action_display_list">Тізім</string>
     <string name="action_display_download_badge">Жүктелген тараулар</string>
     <string name="secure_screen">Қолданба экранын қорғау</string>
@@ -70,7 +66,6 @@
     <string name="theme_tealturquoise">Қызғылт пен жасыл</string>
     <string name="pref_dark_theme_pure_black">Қап-қараңғы режим</string>
     <string name="theme_yinyang">Инь мен Йянь</string>
-    <string name="relative_time_today">Бүгін</string>
     <string name="update_never">Өшірулі</string>
     <string name="update_6hour">Әр 6 сағат сайын</string>
     <string name="update_12hour">Әр 12 сағат сайын</string>
@@ -131,7 +126,7 @@
     <string name="action_remove">Жою</string>
     <string name="action_start">Бастау</string>
     <string name="action_open_in_browser">Браузерде ашу</string>
-    <string name="action_open_in_web_view">WebView-де ашу</string>
+        <string name="action_open_in_web_view">WebView-де ашу</string>
     <string name="action_migrate">Көшу</string>
     <string name="action_display_mode">Бейнебет режимі</string>
     <string name="action_display_local_badge">Локалды дереккөз</string>
@@ -229,7 +224,7 @@
     <string name="pref_dual_page_split">Қең беттерді бөлу</string>
     <string name="pref_show_page_number">Бет нөмірін көрсету</string>
     <string name="pref_color_filter_mode">Жарықты сүзу режимі</string>
-    <string name="pref_update_only_non_completed">«Аяқталған» күйімен</string>
+        <string name="pref_update_only_non_completed">«Аяқталған» күйімен</string>
     <plurals name="num_categories">
         <item quantity="one">%d санат</item>
         <item quantity="other">%d санаттар</item>
@@ -252,7 +247,7 @@
     <string name="ext_install">Орнату</string>
     <string name="ext_app_info">Қолданба туралы</string>
     <string name="untrusted_extension">Сенімсіз кеңейту</string>
-    <string name="unofficial_extension_message">Бұл кеңейту Tachiyomi кеңейтулерінің ресми тізімінен емес.</string>
+        <string name="unofficial_extension_message">Бұл кеңейту Tachiyomi кеңейтулерінің ресми тізімінен емес.</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="ext_nsfw_warning">Бұл кеңейту дереккөзінде NSFW (18+) мазмұны болуы мүмкін</string>
     <string name="ext_install_service_notif">Кеңейту орнатылуда…</string>
@@ -300,10 +295,10 @@
     <string name="pref_download_directory">Жүктеу орны</string>
     <string name="pref_remove_exclude_categories">Саналмайтын санаттар</string>
     <string name="custom_dir">Реттелетін орын</string>
-    <string name="backup_restore_missing_sources">Жоқ дереккөздер:</string>
+                <string name="backup_restore_missing_sources">Жоқ дереккөздер:</string>
     <string name="save_chapter_as_cbz">CBZ архивы ретінде сақтау</string>
     <string name="label_data">Дерек</string>
-    <string name="disabled_nav">Өшірулі</string>
+        <string name="disabled_nav">Өшірулі</string>
     <string name="label_network">Желі</string>
     <string name="cookies_cleared">Куки тазартылды</string>
     <string name="double_tap_anim_speed_normal">Қалыпты</string>
@@ -327,7 +322,7 @@
     <string name="pref_high">Жоғары</string>
     <string name="pref_low">Төмен</string>
     <string name="pref_lowest">Ең төмен</string>
-    <string name="disabled">Өшірулі</string>
+        <string name="disabled">Өшірулі</string>
     <string name="last_read_chapter">Соңғы оқылған тарау</string>
     <string name="second_to_last">Соңғыдан бұрын оқылған тарау</string>
     <string name="third_to_last">Соңғы оқылғаннан үшінші тарау</string>
@@ -381,7 +376,7 @@
     <string name="pager_viewer">Беттеп</string>
     <string name="tracking_guide">Бақылау нұсқаулығы</string>
     <string name="tracking_info">Бақылау қызметтеріндегі прогрессті жаңарту үшін бір жақты үйлестіру. Бақылау батырмасын пайдаланып бақылауды орнатыңыз.</string>
-    <string name="backup_created">Сақтық көшірме құрылды</string>
+            <string name="backup_created">Сақтық көшірме құрылды</string>
     <string name="invalid_backup_file">Сақтық көшірмесінің қате файлы</string>
     <string name="restore_completed">Қалпына келтіру дайын</string>
     <string name="pref_user_agent_string">Әдепкі қалпы бойынша user agent</string>
@@ -409,8 +404,8 @@
     <string name="cancelled">Күші жойылған</string>
     <string name="publishing_finished">Басылымы яқталды</string>
     <string name="add_to_library">Кітапханаға қосу</string>
-    <string name="pref_dump_crash_logs">Қателер тіркеулерімен бөлісу</string>
-    <string name="clear_database_completed">Жазбалар жойылды</string>
+        <string name="pref_dump_crash_logs">Қателер тіркеулерімен бөлісу</string>
+        <string name="clear_database_completed">Жазбалар жойылды</string>
     <string name="database_clean">Тазалайтын түк жоқ</string>
     <string name="pref_refresh_library_covers">Туындылар мұқабасын жаңарту</string>
     <string name="pref_refresh_library_tracking">Бақылауды жаңарту</string>
@@ -459,7 +454,7 @@
     <string name="other_source">Басқа</string>
     <string name="backup_info">Сақтық көшірмелерін басқа жерлерде де сақтауыңызға кеңес береміз.</string>
     <string name="error_user_agent_string_blank">User agent бос бола алмайды</string>
-    <string name="pref_reset_viewer_flags">Оқыма баптауын әрбір туынды үшін қалпына келтіру</string>
+        <string name="pref_reset_viewer_flags">Оқыма баптауын әрбір туынды үшін қалпына келтіру</string>
     <string name="pref_reset_viewer_flags_summary">Барлық туындылар үшін оқу режимі мен бағдарын қалпына келтіреді</string>
     <string name="label_background_activity">Аялық белсенділік</string>
     <string name="pref_disable_battery_optimization">Батареяның оңтайландыруын өшіру</string>
@@ -472,7 +467,7 @@
     <string name="login">Кіру</string>
     <string name="logout_success">Сіз шығып кеттіңіз</string>
     <string name="updating_category">Санатты жаңартып жатырмыз</string>
-    <string name="no_results_found">Нәтиже жоқ</string>
+        <string name="no_results_found">Нәтиже жоқ</string>
     <string name="local_source">Локал дереккөз</string>
     <string name="last_used_source">Ақырғы қолданылған</string>
     <string name="unknown">Белгісіз</string>
@@ -513,7 +508,7 @@
     <string name="repeating">Қайта оқылуда</string>
     <string name="reading_list">Оқылудағылар Тізімі</string>
     <string name="update_check_no_new_updates">Жаңалтулар жоқ</string>
-    <string name="chapter_settings_updated">Әдепкі тарау параметрлері жаңартылды</string>
+        <string name="chapter_settings_updated">Әдепкі тарау параметрлері жаңартылды</string>
     <string name="download_notifier_no_network">Желі байланысы жоқ</string>
     <string name="information_empty_category_dialog">Сіздің кітапханаңызда санаттар жоқ.</string>
     <string name="reading">Оқылуда</string>
@@ -576,7 +571,7 @@
     <string name="update_check_confirm">Жүктеп алу</string>
     <string name="channel_common">Ортақ</string>
     <string name="channel_progress">Прогресс</string>
-    <string name="chapter_settings">Тарау баптауы</string>
+        <string name="chapter_settings">Тарау баптауы</string>
     <string name="chapter_error">Қателік</string>
     <string name="chapter_paused">Тоқтатылды</string>
     <string name="track_status">Күйі</string>
@@ -605,7 +600,7 @@
     <string name="chapter_progress">Бет: %1$d</string>
     <string name="confirm_set_image_as_cover">Осы суретті мұқаба ретінде қолданайық па\?</string>
     <string name="show_title">Дереккөз атауы</string>
-    <string name="snack_categories_deleted">Санаттар жойылды</string>
+        <string name="snack_categories_deleted">Санаттар жойылды</string>
     <string name="cover_updated">Мұқаба жаңартылды</string>
     <string name="skipped_reason_not_started">Оқитын тарау болмағандықтан өткізіп жіберілді</string>
     <string name="file_select_cover">Мұқаба таңдау</string>
@@ -614,7 +609,7 @@
     <string name="crash_screen_description">%s күтпеген қатеге ұшырады. Жаңылыс журналдарын Discord сайтындағы қолдау арнамызда ортақ пайдалануды ұсынамыз.</string>
     <string name="crash_screen_restart_application">Қолданбаны өшіріп қосу</string>
     <string name="download_queue_error">Тараулар жүктелмеді. Жүктеулер кезегіне барып, сол жерден байқап көре аласыз</string>
-    <string name="notification_check_updates">Жаңа тараулар бар ма екенін тексеру</string>
+        <string name="notification_check_updates">Жаңа тараулар бар ма екенін тексеру</string>
     <string name="notification_chapters_single_and_more">%1$s тарау мен %2$d</string>
     <string name="notification_first_add_to_library">Бұны істер алдыңда жазбаны кітапханаңызға қосыңыз</string>
     <string name="skipped_reason_completed">Туынды аяқталған үшін өткізіп жіберілді</string>
@@ -678,7 +673,7 @@
         <item quantity="other">%d жазбасы үшін</item>
     </plurals>
     <string name="notification_chapters_single">%1$s-Тарау</string>
-    <string name="notification_new_chapters">Жаңа тараулар табылды</string>
+        <string name="notification_new_chapters">Жаңа тараулар табылды</string>
     <string name="pref_downloads_summary">Автоматты жүктеу, алдын ала жүктеу</string>
     <string name="manga_info_expand">Көбірек</string>
     <string name="delete_downloads_for_manga">Жүктелген тарауларды жоямыз ба\?</string>
@@ -726,7 +721,7 @@
     <string name="label_titles_in_global_update">Ауқымды жаңартуда</string>
     <string name="label_tracked_titles">Бақыланудағы жазбалар</string>
     <string name="label_tracker_section">Бақылау қызметтері</string>
-    <string name="information_no_manga_category">Бұл санат бос</string>
+        <string name="information_no_manga_category">Бұл санат бос</string>
     <string name="enhanced_services_not_installed">Қолжетімді, бірақ дереккөзі орнатылған жоқ: %s</string>
     <string name="copied_to_clipboard_plain">Аралық сақтағышқа көшірілді</string>
     <string name="pref_skip_dupe_chapters">Қайталанған бөлімдерді өткізіп жіберу</string>
