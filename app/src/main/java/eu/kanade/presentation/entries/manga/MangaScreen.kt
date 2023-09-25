@@ -64,7 +64,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
-import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
+import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
 import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
@@ -143,7 +143,7 @@ fun MangaScreen(
 
     val navigator = LocalNavigator.currentOrThrow
     val onSettingsClicked: (() -> Unit)? = {
-        navigator.push(SourcePreferencesScreen(state.source.id))
+        navigator.push(MangaSourcePreferencesScreen(state.source.id))
     }.takeIf { state.source is ConfigurableSource }
 
     if (!isTabletUi) {
