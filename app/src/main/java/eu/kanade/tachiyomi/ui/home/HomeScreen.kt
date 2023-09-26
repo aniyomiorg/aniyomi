@@ -40,6 +40,7 @@ import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.history.HistoriesTab
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
@@ -195,7 +196,7 @@ object HomeScreen : Screen() {
                         }
 
                         if (it is Tab.Animelib && it.animeIdToOpen != null) {
-                            navigator.push(MangaScreen(it.animeIdToOpen))
+                            navigator.push(AnimeScreen(it.animeIdToOpen))
                         }
                         if (it is Tab.Library && it.mangaIdToOpen != null) {
                             navigator.push(MangaScreen(it.mangaIdToOpen))
