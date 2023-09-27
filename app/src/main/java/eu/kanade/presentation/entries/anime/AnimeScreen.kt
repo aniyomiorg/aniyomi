@@ -65,6 +65,7 @@ import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescriptio
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
@@ -471,7 +472,7 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime) {
+                            if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
@@ -728,7 +729,7 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime) {
+                                    if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
