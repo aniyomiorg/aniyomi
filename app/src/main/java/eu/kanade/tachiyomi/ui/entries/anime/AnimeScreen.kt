@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -31,7 +32,6 @@ import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
 import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
-import eu.kanade.presentation.entries.anime.onDismissEpisodeOptionsDialogScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
@@ -46,8 +46,7 @@ import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
-import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -107,10 +106,14 @@ class AnimeScreen(
             dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
             isTabletUi = isTabletUi(),
+            episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
+            episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
+            showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
+            alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
-                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get() != alt
+                    val extPlayer = screenModel.alwaysUseExternalPlayer != alt
                     openEpisode(context, episode, extPlayer)
                 }
             },
@@ -127,7 +130,7 @@ class AnimeScreen(
             onRefresh = screenModel::fetchAllFromSource,
             onContinueWatching = {
                 scope.launchIO {
-                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get()
+                    val extPlayer = screenModel.alwaysUseExternalPlayer
                     continueWatching(context, screenModel.getNextUnseenEpisode(), extPlayer)
                 }
             },
@@ -142,6 +145,7 @@ class AnimeScreen(
             onMultiMarkAsSeenClicked = screenModel::markEpisodesSeen,
             onMarkPreviousAsSeenClicked = screenModel::markPreviousEpisodeSeen,
             onMultiDeleteClicked = screenModel::showDeleteEpisodeDialog,
+            onEpisodeSwipe = screenModel::episodeSwipe,
             onEpisodeSelected = screenModel::toggleSelection,
             onAllEpisodeSelected = screenModel::toggleAllSelection,
             onInvertSelection = screenModel::invertSelection,
@@ -242,14 +246,23 @@ class AnimeScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            is AnimeInfoScreenModel.Dialog.Options -> {
-                onDismissEpisodeOptionsDialogScreen = onDismissRequest
+            is AnimeInfoScreenModel.Dialog.ShowQualities -> {
+                EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest
+                val episodeTitle = if (dialog.anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
+                    stringResource(
+                        R.string.display_mode_episode,
+                        episodeDecimalFormat.format(dialog.episode.episodeNumber.toDouble()),
+                    )
+                } else {
+                    dialog.episode.name
+                }
                 NavigatorAdaptiveSheet(
                     screen = EpisodeOptionsDialogScreen(
+                        useExternalDownloader = screenModel.useExternalDownloader,
+                        episodeTitle = episodeTitle,
                         episodeId = dialog.episode.id,
                         animeId = dialog.anime.id,
                         sourceId = dialog.source.id,
-                        useExternalDownloader = screenModel.downloadPreferences.useExternalDownloader().get(),
                     ),
                     onDismissRequest = onDismissRequest,
                 )
@@ -262,10 +275,8 @@ class AnimeScreen(
     }
 
     private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
-        if (useExternalPlayer) {
-            context.startActivity(ExternalIntents.newIntent(context, episode.animeId, episode.id))
-        } else {
-            context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
+        withIOContext {
+            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, useExternalPlayer)
         }
     }
 

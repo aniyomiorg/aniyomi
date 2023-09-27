@@ -4,19 +4,17 @@ import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.isServiceRunning
-import eu.kanade.tachiyomi.util.system.notification
+import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +29,7 @@ import logcat.LogPriority
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -90,14 +89,9 @@ class AnimeDownloadService : Service() {
 
     override fun onCreate() {
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
         wakeLock = acquireWakeLock(javaClass.name)
         _isRunning.value = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(1, getPlaceholderNotification())
-        } else {
-            @Suppress("DEPRECATION")
-            startForeground(1, Notification())
-        }
         listenNetworkChanges()
     }
 
@@ -152,8 +146,8 @@ class AnimeDownloadService : Service() {
     }
 
     private fun getPlaceholderNotification(): Notification {
-        return notification(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
+        return notificationBuilder(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
             setContentTitle(getString(R.string.download_notifier_downloader_title))
-        }
+        }.build()
     }
 }

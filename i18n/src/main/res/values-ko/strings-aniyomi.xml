@@ -264,7 +264,7 @@
     <string name="pref_hide_in_manga_library_items">이미 서재에 있는 만화 항목 숨기기</string>
     <string name="pref_hide_in_anime_library_items">이미 서재에 있는 애니메이션 항목 숨기기</string>
     <plurals name="download_amount_anime">
-        <item quantity="other">다음 %d 에피소드</item>
+        <item quantity="other">다음 에피소드</item>
     </plurals>
     <string name="choose_video_quality">동영상 화질 선택:</string>
     <string name="extension_settings">확장기능 설정</string>

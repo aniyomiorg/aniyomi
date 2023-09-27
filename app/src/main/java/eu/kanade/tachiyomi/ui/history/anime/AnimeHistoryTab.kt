@@ -21,8 +21,6 @@ import eu.kanade.presentation.history.anime.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -46,14 +44,9 @@ fun Screen.animeHistoryTab(
 
     suspend fun openEpisode(context: Context, episode: Episode?) {
         val playerPreferences: PlayerPreferences by injectLazy()
-        val altPlayer = playerPreferences.alwaysUseExternalPlayer().get()
+        val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
         if (episode != null) {
-            val intent = if (altPlayer) {
-                ExternalIntents.newIntent(context, episode.animeId, episode.id)
-            } else {
-                PlayerActivity.newIntent(context, episode.animeId, episode.id)
-            }
-            context.startActivity(intent)
+            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         } else {
             snackbarHostState.showSnackbar(context.getString(R.string.no_next_episode))
         }

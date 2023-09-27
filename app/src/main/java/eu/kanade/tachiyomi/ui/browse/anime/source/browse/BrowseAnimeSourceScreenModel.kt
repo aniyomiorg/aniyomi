@@ -15,30 +15,26 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.entries.anime.model.toSAnime
-import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,8 +42,6 @@ import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
@@ -58,6 +52,10 @@ import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -72,12 +70,12 @@ class BrowseAnimeSourceScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
-    private val getAnime: GetAnime = Injekt.get(),
     private val getDuplicateAnimelibAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
+    private val getAnime: GetAnime = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
@@ -121,19 +119,21 @@ class BrowseAnimeSourceScreenModel(
             ) {
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
-                pagingData
-                    .map { withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) } }
-                    .filter { !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite }
-                    .map {
-                        getAnime.subscribe(it.url, it.source)
-                            .filterNotNull()
-                            .onEach(::initializeAnime)
-                            .stateIn(coroutineScope)
-                    }
+                pagingData.map {
+                    networkToLocalAnime.await(it.toDomainAnime(sourceId))
+                        .let { localAnime ->
+                            getAnime.subscribe(localAnime.url, localAnime.source)
+                        }
+                        .filterNotNull()
+                        .filter { localAnime ->
+                            !sourcePreferences.hideInAnimeLibraryItems().get() || !localAnime.favorite
+                        }
+                        .stateIn(ioCoroutineScope)
+                }
             }
-                .cachedIn(coroutineScope)
+                .cachedIn(ioCoroutineScope)
         }
-        .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())
+        .stateIn(ioCoroutineScope, SharingStarted.Lazily, emptyFlow())
 
     fun getColumnsPreference(orientation: Int): GridCells {
         val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -223,26 +223,6 @@ class BrowseAnimeSourceScreenModel(
                 listing = listing,
                 toolbarQuery = listing.query,
             )
-        }
-    }
-
-    /**
-     * Initialize an anime.
-     *
-     * @return anime to initialize.
-     */
-    private suspend fun initializeAnime(anime: Anime) {
-        if (anime.thumbnailUrl != null || anime.initialized) return
-        withNonCancellableContext {
-            try {
-                val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                val updatedAnime = anime.copyFrom(networkAnime)
-                    .copy(initialized = true)
-
-                updateAnime.await(updatedAnime.toAnimeUpdate())
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e)
-            }
         }
     }
 
@@ -339,7 +319,7 @@ class BrowseAnimeSourceScreenModel(
         return getCategories.subscribe()
             .firstOrNull()
             ?.filterNot { it.isSystemCategory }
-            ?: emptyList()
+            .orEmpty()
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {

@@ -27,16 +27,16 @@ class TrackManager(context: Context) {
         const val SIMKL = 101L
     }
 
-    val myAnimeList = MyAnimeList(context, MYANIMELIST)
-    val aniList = Anilist(context, ANILIST)
-    val kitsu = Kitsu(context, KITSU)
-    val shikimori = Shikimori(context, SHIKIMORI)
-    val bangumi = Bangumi(context, BANGUMI)
+    val myAnimeList = MyAnimeList(MYANIMELIST)
+    val aniList = Anilist(ANILIST)
+    val kitsu = Kitsu(KITSU)
+    val shikimori = Shikimori(SHIKIMORI)
+    val bangumi = Bangumi(BANGUMI)
     val komga = Komga(context, KOMGA)
-    val mangaUpdates = MangaUpdates(context, MANGA_UPDATES)
+    val mangaUpdates = MangaUpdates(MANGA_UPDATES)
     val kavita = Kavita(context, KAVITA)
-    val suwayomi = Suwayomi(context, SUWAYOMI)
-    val simkl = Simkl(context, SIMKL)
+    val suwayomi = Suwayomi(SUWAYOMI)
+    val simkl = Simkl(SIMKL)
 
     val services = listOf(myAnimeList, aniList, kitsu, shikimori, bangumi, komga, mangaUpdates, kavita, suwayomi, simkl)
 

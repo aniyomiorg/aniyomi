@@ -29,7 +29,7 @@ fun GlobalAnimeSearchScreen(
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
@@ -59,10 +59,10 @@ fun GlobalAnimeSearchScreen(
 }
 
 @Composable
-fun GlobalAnimeSearchContent(
+private fun GlobalAnimeSearchContent(
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
@@ -96,7 +96,7 @@ fun GlobalAnimeSearchContent(
 
                             GlobalAnimeSearchCardRow(
                                 titles = result.result,
-                                getAnime = { getAnime(source, it) },
+                                getAnime = getAnime,
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )

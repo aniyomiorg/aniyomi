@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 import kotlin.random.Random
@@ -54,6 +57,7 @@ fun EmptyScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -66,7 +70,9 @@ fun EmptyScreen(
 
         Text(
             text = message,
-            modifier = Modifier.paddingFromBaseline(top = 24.dp).secondaryItemAlpha(),
+            modifier = Modifier
+                .paddingFromBaseline(top = 24.dp)
+                .secondaryItemAlpha(),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
         )
@@ -74,14 +80,10 @@ fun EmptyScreen(
         if (!actions.isNullOrEmpty()) {
             Row(
                 modifier = Modifier
-                    .padding(
-                        top = 24.dp,
-                        start = 24.dp,
-                        end = 24.dp,
-                    ),
+                    .padding(top = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
-                actions.forEach {
+                actions.fastForEach {
                     ActionButton(
                         modifier = Modifier.weight(1f),
                         title = stringResource(it.stringResId),

@@ -58,7 +58,7 @@ fun BrowseAnimeSourceComfortableGrid(
 }
 
 @Composable
-fun BrowseAnimeSourceComfortableGridItem(
+private fun BrowseAnimeSourceComfortableGridItem(
     anime: Anime,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,

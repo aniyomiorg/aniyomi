@@ -11,35 +11,24 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
-import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
-import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
-import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -47,8 +36,9 @@ import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
+import eu.kanade.tachiyomi.util.system.isRunning
+import eu.kanade.tachiyomi.util.system.workManager
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -57,13 +47,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
@@ -72,6 +62,16 @@ import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.source.manga.model.SourceNotInstalledException
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
@@ -115,13 +115,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
 
             // Find a running manual worker. If exists, try again later
-            val otherRunningWorker = withContext(Dispatchers.IO) {
-                WorkManager.getInstance(context)
-                    .getWorkInfosByTag(WORK_NAME_MANUAL)
-                    .get()
-                    .find { it.state == WorkInfo.State.RUNNING }
-            }
-            if (otherRunningWorker != null) {
+            if (context.workManager.isRunning(WORK_NAME_MANUAL)) {
                 return Result.retry()
             }
         }
@@ -166,7 +160,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
         val notifier = MangaLibraryUpdateNotifier(context)
-        return ForegroundInfo(Notifications.ID_LIBRARY_PROGRESS, notifier.progressNotificationBuilder.build())
+        return ForegroundInfo(
+            Notifications.ID_LIBRARY_PROGRESS,
+            notifier.progressNotificationBuilder.build(),
+        )
     }
 
     /**
@@ -251,13 +248,13 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     manga,
                                 ) {
                                     when {
-                                        MANGA_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
+                                        ENTRY_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_completed))
 
-                                        MANGA_HAS_UNREAD in restrictions && libraryManga.unreadCount != 0L ->
+                                        ENTRY_HAS_UNVIEWED in restrictions && libraryManga.unreadCount != 0L ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_not_caught_up))
 
-                                        MANGA_NON_READ in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
+                                        ENTRY_NON_VIEWED in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_not_started))
 
                                         manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
@@ -284,7 +281,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 val errorMessage = when (e) {
                                                     is NoChaptersException -> context.getString(R.string.no_chapters_error)
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is MangaSourceManager.SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(manga to errorMessage)
@@ -537,7 +534,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         private const val KEY_TARGET = "target"
 
         fun cancelAllWorks(context: Context) {
-            WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
+            context.workManager.cancelAllWorkByTag(TAG)
         }
 
         fun setupTask(
@@ -566,9 +563,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
                     .build()
 
-                WorkManager.getInstance(context).enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
             } else {
-                WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME_AUTO)
+                context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }
         }
 
@@ -577,9 +574,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             category: Category? = null,
             target: Target = Target.CHAPTERS,
         ): Boolean {
-            val wm = WorkManager.getInstance(context)
-            val infos = wm.getWorkInfosByTag(TAG).get()
-            if (infos.find { it.state == WorkInfo.State.RUNNING } != null) {
+            val wm = context.workManager
+            if (wm.isRunning(TAG)) {
                 // Already running either as a scheduled or manual job
                 return false
             }
@@ -599,7 +595,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         }
 
         fun stop(context: Context) {
-            val wm = WorkManager.getInstance(context)
+            val wm = context.workManager
             val workQuery = WorkQuery.Builder.fromTags(listOf(TAG))
                 .addStates(listOf(WorkInfo.State.RUNNING))
                 .build()

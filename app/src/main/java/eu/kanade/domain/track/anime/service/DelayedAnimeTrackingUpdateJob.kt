@@ -7,11 +7,11 @@ import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
@@ -31,30 +31,33 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
         val trackManager = Injekt.get<TrackManager>()
         val delayedTrackingStore = Injekt.get<DelayedAnimeTrackingStore>()
 
-        withIOContext {
-            val tracks = delayedTrackingStore.getAnimeItems().mapNotNull {
-                val track = getTracks.awaitOne(it.trackId)
-                if (track == null) {
-                    delayedTrackingStore.removeAnimeItem(it.trackId)
-                }
-                track
-            }
-
-            tracks.forEach { animeTrack ->
-                try {
-                    val service = trackManager.getService(animeTrack.syncId)
-                    if (service != null && service.isLogged) {
-                        service.animeService.update(animeTrack.toDbTrack(), true)
-                        insertTrack.await(animeTrack)
+        val results = withIOContext {
+            delayedTrackingStore.getAnimeItems()
+                .mapNotNull {
+                    val track = getTracks.awaitOne(it.trackId)
+                    if (track == null) {
+                        delayedTrackingStore.removeAnimeItem(it.trackId)
                     }
-                    delayedTrackingStore.removeAnimeItem(animeTrack.id)
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR, e)
+                    track?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
                 }
-            }
+                .mapNotNull { animeTrack ->
+                    try {
+                        val service = trackManager.getService(animeTrack.syncId)
+                        if (service != null && service.isLogged) {
+                            logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.id}, last episode seen: ${animeTrack.lastEpisodeSeen}" }
+                            service.animeService.update(animeTrack.toDbTrack(), true)
+                            insertTrack.await(animeTrack)
+                        }
+                        delayedTrackingStore.removeAnimeItem(animeTrack.id)
+                        null
+                    } catch (e: Exception) {
+                        logcat(LogPriority.ERROR, e)
+                        false
+                    }
+                }
         }
 
-        return Result.success()
+        return if (results.isNotEmpty()) Result.failure() else Result.success()
     }
 
     companion object {
@@ -71,8 +74,7 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 .addTag(TAG)
                 .build()
 
-            WorkManager.getInstance(context)
-                .enqueueUniqueWork(TAG, ExistingWorkPolicy.REPLACE, request)
+            context.workManager.enqueueUniqueWork(TAG, ExistingWorkPolicy.REPLACE, request)
         }
     }
 }

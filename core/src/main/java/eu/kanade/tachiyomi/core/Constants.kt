@@ -9,11 +9,6 @@ object Constants {
 
     const val MAIN_ACTIVITY = "eu.kanade.tachiyomi.ui.main.MainActivity"
 
-    // Player Constants
-    const val REQUEST_INTERNAL = 102
-
-    const val REQUEST_EXTERNAL = 103
-
     // Shortcut actions
     const val SHORTCUT_ANIMELIB = "eu.kanade.tachiyomi.SHOW_ANIMELIB"
     const val SHORTCUT_LIBRARY = "eu.kanade.tachiyomi.SHOW_LIBRARY"

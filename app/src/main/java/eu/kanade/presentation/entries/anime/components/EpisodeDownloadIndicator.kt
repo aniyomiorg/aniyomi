@@ -39,7 +39,7 @@ enum class EpisodeDownloadAction {
     START_NOW,
     CANCEL,
     DELETE,
-    SHOW_OPTIONS,
+    SHOW_QUALITIES,
 }
 
 @Composable
@@ -87,7 +87,7 @@ private fun NotDownloadedIndicator(
             .size(IconButtonTokens.StateLayerSize)
             .commonClickable(
                 enabled = enabled,
-                onLongClick = { onClick(EpisodeDownloadAction.SHOW_OPTIONS) },
+                onLongClick = { onClick(EpisodeDownloadAction.SHOW_QUALITIES) },
                 onClick = { onClick(EpisodeDownloadAction.START) },
             )
             .secondaryItemAlpha(),

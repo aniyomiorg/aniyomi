@@ -23,8 +23,9 @@ android {
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
-        versionCode = 99
-        versionName = "0.14.5"
+
+        versionCode = 103
+        versionName = "0.14.6"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -102,7 +103,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.addAll(listOf(
             "META-INF/DEPENDENCIES",
             "LICENSE.txt",
@@ -186,22 +187,21 @@ dependencies {
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
     implementation(androidx.profileinstaller)
+    implementation(androidx.mediasession)
 
     implementation(androidx.bundles.lifecycle)
 
     // Job scheduling
     implementation(androidx.bundles.workmanager)
 
-    // RX
+    // RxJava
     implementation(libs.bundles.reactivex)
     implementation(libs.flowreactivenetwork)
 
-    // Network client
+    // Networking
     implementation(libs.bundles.okhttp)
     implementation(libs.okio)
-
-    // TLS 1.3 support for Android < 10
-    implementation(libs.conscrypt.android)
+    implementation(libs.conscrypt.android) // TLS 1.3 support for Android < 10
 
     // Data serialization (JSON, protobuf, xml)
     implementation(kotlinx.bundles.serialization)
@@ -238,9 +238,10 @@ dependencies {
     implementation(libs.insetter)
     implementation(libs.bundles.richtext)
     implementation(libs.aboutLibraries.compose)
-    implementation(libs.cascade)
     implementation(libs.bundles.voyager)
-    implementation(libs.materialmotion.core)
+    implementation(libs.compose.cascade)
+    implementation(libs.compose.materialmotion)
+    implementation(libs.compose.simpleicons)
 
     // Logging
     implementation(libs.logcat)
@@ -259,7 +260,7 @@ dependencies {
     implementation(libs.bundles.shizuku)
 
     // Tests
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.test)
 
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // debugImplementation(libs.leakcanary.android)

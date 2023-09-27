@@ -6,13 +6,13 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.io.Format
 import uy.kohesive.injekt.injectLazy
@@ -81,7 +81,6 @@ class ChapterLoader(
         val isDownloaded = downloadManager.isChapterDownloaded(dbChapter.name, dbChapter.scanlator, manga.title, manga.source, skipCache = true)
         return when {
             isDownloaded -> DownloadPageLoader(chapter, manga, source, downloadManager, downloadProvider)
-            source is HttpSource -> HttpPageLoader(chapter, source)
             source is LocalMangaSource -> source.getFormat(chapter.chapter).let { format ->
                 when (format) {
                     is Format.Directory -> DirectoryPageLoader(format.file)
@@ -94,7 +93,8 @@ class ChapterLoader(
                     is Format.Epub -> EpubPageLoader(format.file)
                 }
             }
-            source is MangaSourceManager.StubMangaSource -> throw source.getSourceNotInstalledException()
+            source is HttpSource -> HttpPageLoader(chapter, source)
+            source is StubMangaSource -> error(context.getString(R.string.source_not_installed, source.toString()))
             else -> error(context.getString(R.string.loader_not_implemented_error))
         }
     }

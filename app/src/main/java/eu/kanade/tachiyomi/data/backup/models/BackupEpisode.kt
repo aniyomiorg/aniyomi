@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import tachiyomi.domain.items.episode.model.Episode
 
 @Serializable
 data class BackupEpisode(
@@ -22,20 +22,20 @@ data class BackupEpisode(
     @ProtoNumber(9) var episodeNumber: Float = 0F,
     @ProtoNumber(10) var sourceOrder: Long = 0,
 ) {
-    fun toEpisodeImpl(): EpisodeImpl {
-        return EpisodeImpl().apply {
-            url = this@BackupEpisode.url
-            name = this@BackupEpisode.name
-            episode_number = this@BackupEpisode.episodeNumber
-            scanlator = this@BackupEpisode.scanlator
-            seen = this@BackupEpisode.seen
-            bookmark = this@BackupEpisode.bookmark
-            last_second_seen = this@BackupEpisode.lastSecondSeen
-            total_seconds = this@BackupEpisode.totalSeconds
-            date_fetch = this@BackupEpisode.dateFetch
-            date_upload = this@BackupEpisode.dateUpload
-            source_order = this@BackupEpisode.sourceOrder.toInt()
-        }
+    fun toEpisodeImpl(): Episode {
+        return Episode.create().copy(
+            url = this@BackupEpisode.url,
+            name = this@BackupEpisode.name,
+            episodeNumber = this@BackupEpisode.episodeNumber,
+            scanlator = this@BackupEpisode.scanlator,
+            seen = this@BackupEpisode.seen,
+            bookmark = this@BackupEpisode.bookmark,
+            lastSecondSeen = this@BackupEpisode.lastSecondSeen,
+            totalSeconds = this@BackupEpisode.totalSeconds,
+            dateFetch = this@BackupEpisode.dateFetch,
+            dateUpload = this@BackupEpisode.dateUpload,
+            sourceOrder = this@BackupEpisode.sourceOrder,
+        )
     }
 }
 

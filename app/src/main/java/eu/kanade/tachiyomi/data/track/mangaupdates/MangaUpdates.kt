@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.mangaupdates
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -11,7 +10,7 @@ import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 
-class MangaUpdates(private val context: Context, id: Long) : TrackService(id), MangaTrackService {
+class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
 
     companion object {
         const val READING_LIST = 0
@@ -36,15 +35,14 @@ class MangaUpdates(private val context: Context, id: Long) : TrackService(id), M
         return listOf(READING_LIST, COMPLETE_LIST, ON_HOLD_LIST, UNFINISHED_LIST, WISH_LIST)
     }
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            READING_LIST -> getString(R.string.reading_list)
-            WISH_LIST -> getString(R.string.wish_list)
-            COMPLETE_LIST -> getString(R.string.complete_list)
-            ON_HOLD_LIST -> getString(R.string.on_hold_list)
-            UNFINISHED_LIST -> getString(R.string.unfinished_list)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        READING_LIST -> R.string.reading_list
+        WISH_LIST -> R.string.wish_list
+        COMPLETE_LIST -> R.string.complete_list
+        ON_HOLD_LIST -> R.string.on_hold_list
+        UNFINISHED_LIST -> R.string.unfinished_list
+        else -> null
     }
 
     override fun getReadingStatus(): Int = READING_LIST

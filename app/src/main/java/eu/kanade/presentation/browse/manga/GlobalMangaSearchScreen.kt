@@ -29,7 +29,7 @@ fun GlobalMangaSearchScreen(
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
-    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
+    getManga: @Composable (Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
@@ -59,10 +59,10 @@ fun GlobalMangaSearchScreen(
 }
 
 @Composable
-fun GlobalSearchContent(
+private fun GlobalSearchContent(
     items: Map<CatalogueSource, MangaSearchItemResult>,
     contentPadding: PaddingValues,
-    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
+    getManga: @Composable (Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
@@ -96,7 +96,7 @@ fun GlobalSearchContent(
 
                             GlobalMangaSearchCardRow(
                                 titles = result.result,
-                                getManga = { getManga(source, it) },
+                                getManga = getManga,
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )

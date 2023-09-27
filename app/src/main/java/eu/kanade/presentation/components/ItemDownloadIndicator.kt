@@ -12,7 +12,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.download.service.DownloadPreferences
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import uy.kohesive.injekt.injectLazy
 

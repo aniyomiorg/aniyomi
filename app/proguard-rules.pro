@@ -1,5 +1,8 @@
 -dontobfuscate
 
+-keep,allowoptimization class eu.kanade.**
+-keep,allowoptimization class tachiyomi.**
+
 # Keep common dependencies used in extensions
 -keep,allowoptimization class androidx.preference.** { public protected *; }
 -keep,allowoptimization class android.content.** { *; }
@@ -72,3 +75,7 @@
 
 # XmlUtil
 -keep public enum nl.adaptivity.xmlutil.EventType { *; }
+
+# Firebase
+-keep class com.google.firebase.installations.** { *; }
+-keep interface com.google.firebase.installations.** { *; }

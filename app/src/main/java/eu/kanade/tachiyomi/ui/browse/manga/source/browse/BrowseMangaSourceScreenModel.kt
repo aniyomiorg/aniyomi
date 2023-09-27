@@ -15,30 +15,26 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toDomainManga
-import eu.kanade.domain.entries.manga.model.toSManga
-import eu.kanade.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.source.manga.interactor.GetRemoteManga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.manga.model.toDomainTrack
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,8 +42,6 @@ import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
@@ -58,6 +52,10 @@ import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.manga.interactor.GetRemoteManga
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -72,12 +70,12 @@ class BrowseMangaSourceScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: MangaCoverCache = Injekt.get(),
     private val getRemoteManga: GetRemoteManga = Injekt.get(),
-    private val getManga: GetManga = Injekt.get(),
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     private val setMangaDefaultChapterFlags: SetMangaDefaultChapterFlags = Injekt.get(),
+    private val getManga: GetManga = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val insertTrack: InsertMangaTrack = Injekt.get(),
@@ -121,19 +119,21 @@ class BrowseMangaSourceScreenModel(
             ) {
                 getRemoteManga.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
-                pagingData
-                    .map { withIOContext { networkToLocalManga.await(it.toDomainManga(sourceId)) } }
-                    .filter { !sourcePreferences.hideInMangaLibraryItems().get() || !it.favorite }
-                    .map {
-                        getManga.subscribe(it.url, it.source)
-                            .filterNotNull()
-                            .onEach(::initializeManga)
-                            .stateIn(coroutineScope)
-                    }
+                pagingData.map {
+                    networkToLocalManga.await(it.toDomainManga(sourceId))
+                        .let { localManga ->
+                            getManga.subscribe(localManga.url, localManga.source)
+                        }
+                        .filterNotNull()
+                        .filter { localManga ->
+                            !sourcePreferences.hideInMangaLibraryItems().get() || !localManga.favorite
+                        }
+                        .stateIn(ioCoroutineScope)
+                }
             }
-                .cachedIn(coroutineScope)
+                .cachedIn(ioCoroutineScope)
         }
-        .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())
+        .stateIn(ioCoroutineScope, SharingStarted.Lazily, emptyFlow())
 
     fun getColumnsPreference(orientation: Int): GridCells {
         val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -228,26 +228,6 @@ class BrowseMangaSourceScreenModel(
     }
 
     /**
-     * Initialize a manga.
-     *
-     * @param manga to initialize.
-     */
-    private suspend fun initializeManga(manga: Manga) {
-        if (manga.thumbnailUrl != null || manga.initialized) return
-        withNonCancellableContext {
-            try {
-                val networkManga = source.getMangaDetails(manga.toSManga())
-                val updatedManga = manga.copyFrom(networkManga)
-                    .copy(initialized = true)
-
-                updateManga.await(updatedManga.toMangaUpdate())
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e)
-            }
-        }
-    }
-
-    /**
      * Adds or removes a manga from the library.
      *
      * @param manga the manga to update.
@@ -333,7 +313,7 @@ class BrowseMangaSourceScreenModel(
         return getCategories.subscribe()
             .firstOrNull()
             ?.filterNot { it.isSystemCategory }
-            ?: emptyList()
+            .orEmpty()
     }
 
     suspend fun getDuplicateLibraryManga(manga: Manga): Manga? {

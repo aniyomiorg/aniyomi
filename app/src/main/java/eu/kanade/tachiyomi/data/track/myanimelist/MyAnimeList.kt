@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.myanimelist
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -16,7 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class MyAnimeList(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -55,19 +54,18 @@ class MyAnimeList(private val context: Context, id: Long) : TrackService(id), Ma
         return listOf(WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH, REWATCHING)
     }
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            READING -> getString(R.string.reading)
-            WATCHING -> getString(R.string.watching)
-            COMPLETED -> getString(R.string.completed)
-            ON_HOLD -> getString(R.string.on_hold)
-            DROPPED -> getString(R.string.dropped)
-            PLAN_TO_READ -> getString(R.string.plan_to_read)
-            PLAN_TO_WATCH -> getString(R.string.plan_to_watch)
-            REREADING -> getString(R.string.repeating)
-            REWATCHING -> getString(R.string.repeating_anime)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        READING -> R.string.reading
+        WATCHING -> R.string.watching
+        COMPLETED -> R.string.completed
+        ON_HOLD -> R.string.on_hold
+        DROPPED -> R.string.dropped
+        PLAN_TO_READ -> R.string.plan_to_read
+        PLAN_TO_WATCH -> R.string.plan_to_watch
+        REREADING -> R.string.repeating
+        REWATCHING -> R.string.repeating_anime
+        else -> null
     }
 
     override fun getReadingStatus(): Int = READING

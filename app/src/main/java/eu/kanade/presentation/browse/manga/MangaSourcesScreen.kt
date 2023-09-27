@@ -29,6 +29,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Pin
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
+import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -143,7 +144,7 @@ private fun SourcePinButton(
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
-    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(alpha = SecondaryItemAlpha)
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(
@@ -159,6 +160,9 @@ fun MangaSourceOptionsDialog(
     source: Source,
     onClickPin: () -> Unit,
     onClickDisable: () -> Unit,
+    // SY -->
+    onClickToggleDataSaver: (() -> Unit)?,
+    // SY <--
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
@@ -184,6 +188,21 @@ fun MangaSourceOptionsDialog(
                             .padding(vertical = 16.dp),
                     )
                 }
+                // SY -->
+                if (onClickToggleDataSaver != null) {
+                    Text(
+                        text = if (source.isExcludedFromDataSaver) {
+                            stringResource(id = R.string.data_saver_stop_exclude)
+                        } else {
+                            stringResource(id = R.string.data_saver_exclude)
+                        },
+                        modifier = Modifier
+                            .clickable(onClick = onClickToggleDataSaver)
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                    )
+                }
+                // SY <--
             }
         },
         onDismissRequest = onDismiss,

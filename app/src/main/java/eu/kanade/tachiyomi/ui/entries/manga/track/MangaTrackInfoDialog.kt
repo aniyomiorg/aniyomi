@@ -51,7 +51,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.catch
@@ -67,6 +66,7 @@ import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.DeleteMangaTrack
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
@@ -80,7 +80,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack as DbMangaTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DbMangaTrack
 
 data class MangaTrackInfoDialogHomeScreen(
     private val mangaId: Long,
@@ -149,7 +149,7 @@ data class MangaTrackInfoDialogHomeScreen(
                         TrackServiceSearchScreen(
                             mangaId = mangaId,
                             initialQuery = it.track?.title ?: mangaTitle,
-                            currentUrl = it.track?.tracking_url,
+                            currentUrl = it.track?.remoteUrl,
                             serviceId = it.service.id,
                         ),
                     )
@@ -163,7 +163,7 @@ data class MangaTrackInfoDialogHomeScreen(
      * Opens registered tracker url in browser
      */
     private fun openTrackerInBrowser(context: Context, trackItem: MangaTrackItem) {
-        val url = trackItem.track?.tracking_url ?: return
+        val url = trackItem.track?.remoteUrl ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
         }
@@ -218,7 +218,7 @@ data class MangaTrackInfoDialogHomeScreen(
                 for (trackItem in trackItems) {
                     try {
                         val track = trackItem.track ?: continue
-                        val domainMangaTrack = trackItem.service.mangaService.refresh(track).toDomainTrack() ?: continue
+                        val domainMangaTrack = trackItem.service.mangaService.refresh(track.toDbTrack()).toDomainTrack() ?: continue
                         insertTrack.await(domainMangaTrack)
 
                         if (trackItem.service is EnhancedMangaTrackService) {
@@ -248,12 +248,11 @@ data class MangaTrackInfoDialogHomeScreen(
         }
 
         private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {
-            val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
             val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
-                .map { service -> MangaTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                .map { service -> MangaTrackItem(find { it.syncId == service.id }, service) }
                 // Show only if the service supports this manga's source
                 .filter { (it.service as? EnhancedMangaTrackService)?.accept(source) ?: true }
         }
@@ -291,9 +290,9 @@ private data class TrackStatusSelectorScreen(
     private class Model(
         private val track: DbMangaTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(track.status)) {
+    ) : StateScreenModel<Model.State>(State(track.status.toInt())) {
 
-        fun getSelections(): Map<Int, String> {
+        fun getSelections(): Map<Int, Int?> {
             return service.mangaService.getStatusListManga().associateWith { service.getStatus(it) }
         }
 
@@ -303,7 +302,7 @@ private data class TrackStatusSelectorScreen(
 
         fun setStatus() {
             coroutineScope.launchNonCancellable {
-                service.mangaService.setRemoteMangaStatus(track, state.value.selection)
+                service.mangaService.setRemoteMangaStatus(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -342,15 +341,15 @@ private data class TrackChapterSelectorScreen(
     private class Model(
         private val track: DbMangaTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(track.last_chapter_read.toInt())) {
+    ) : StateScreenModel<Model.State>(State(track.lastChapterRead.toInt())) {
 
         fun getRange(): Iterable<Int> {
-            val endRange = if (track.total_chapters > 0) {
-                track.total_chapters
+            val endRange = if (track.totalChapters > 0) {
+                track.totalChapters
             } else {
                 10000
             }
-            return 0..endRange
+            return 0..endRange.toInt()
         }
 
         fun setSelection(selection: Int) {
@@ -359,7 +358,7 @@ private data class TrackChapterSelectorScreen(
 
         fun setChapter() {
             coroutineScope.launchNonCancellable {
-                service.mangaService.setRemoteLastChapterRead(track, state.value.selection)
+                service.mangaService.setRemoteLastChapterRead(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -397,7 +396,7 @@ private data class TrackScoreSelectorScreen(
     private class Model(
         private val track: DbMangaTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(service.mangaService.displayScore(track))) {
+    ) : StateScreenModel<Model.State>(State(service.mangaService.displayScore(track.toDbTrack()))) {
 
         fun getSelections(): List<String> {
             return service.mangaService.getScoreList()
@@ -409,7 +408,7 @@ private data class TrackScoreSelectorScreen(
 
         fun setScore() {
             coroutineScope.launchNonCancellable {
-                service.mangaService.setRemoteScore(track, state.value.selection)
+                service.mangaService.setRemoteScore(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -437,9 +436,9 @@ private data class TrackDateSelectorScreen(
         }
 
         val canRemove = if (start) {
-            track.started_reading_date > 0
+            track.startDate > 0
         } else {
-            track.finished_reading_date > 0
+            track.finishDate > 0
         }
         TrackDateSelector(
             title = if (start) {
@@ -458,15 +457,15 @@ private data class TrackDateSelectorScreen(
                     return@TrackDateSelector false
                 }
 
-                if (start && track.finished_reading_date > 0) {
+                if (start && track.finishDate > 0) {
                     // Disallow start date to be set later than finish date
-                    val dateFinished = Instant.ofEpochMilli(track.finished_reading_date)
+                    val dateFinished = Instant.ofEpochMilli(track.finishDate)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
                     dateToCheck <= dateFinished
-                } else if (!start && track.started_reading_date > 0) {
+                } else if (!start && track.startDate > 0) {
                     // Disallow end date to be set earlier than start date
-                    val dateStarted = Instant.ofEpochMilli(track.started_reading_date)
+                    val dateStarted = Instant.ofEpochMilli(track.startDate)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
                     dateToCheck >= dateStarted
@@ -491,7 +490,7 @@ private data class TrackDateSelectorScreen(
         val initialSelection: Long
             get() {
                 val millis =
-                    (if (start) track.started_reading_date else track.finished_reading_date)
+                    (if (start) track.startDate else track.finishDate)
                         .takeIf { it != 0L }
                         ?: Instant.now().toEpochMilli()
                 return convertEpochMillisZone(millis, ZoneOffset.systemDefault(), ZoneOffset.UTC)
@@ -504,9 +503,9 @@ private data class TrackDateSelectorScreen(
                 convertEpochMillisZone(millis, ZoneOffset.UTC, ZoneOffset.systemDefault())
             coroutineScope.launchNonCancellable {
                 if (start) {
-                    service.mangaService.setRemoteStartDate(track, localMillis)
+                    service.mangaService.setRemoteStartDate(track.toDbTrack(), localMillis)
                 } else {
-                    service.mangaService.setRemoteFinishDate(track, localMillis)
+                    service.mangaService.setRemoteFinishDate(track.toDbTrack(), localMillis)
                 }
             }
         }
@@ -603,9 +602,9 @@ private data class TrackDateRemoverScreen(
         fun removeDate() {
             coroutineScope.launchNonCancellable {
                 if (start) {
-                    service.mangaService.setRemoteStartDate(track, 0)
+                    service.mangaService.setRemoteStartDate(track.toDbTrack(), 0)
                 } else {
-                    service.mangaService.setRemoteFinishDate(track, 0)
+                    service.mangaService.setRemoteFinishDate(track.toDbTrack(), 0)
                 }
             }
         }
@@ -682,7 +681,7 @@ data class TrackServiceSearchScreen(
             }
         }
 
-        fun registerTracking(item: DbMangaTrack) {
+        fun registerTracking(item: MangaTrackSearch) {
             coroutineScope.launchNonCancellable { service.mangaService.registerTracking(item, mangaId) }
         }
 

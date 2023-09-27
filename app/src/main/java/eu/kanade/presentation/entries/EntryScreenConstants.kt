@@ -6,7 +6,6 @@ enum class DownloadAction {
     NEXT_10_ITEMS,
     NEXT_25_ITEMS,
     UNVIEWED_ITEMS,
-    ALL_ITEMS,
 }
 
 enum class EditCoverAction {

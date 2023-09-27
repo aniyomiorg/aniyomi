@@ -1,6 +1,5 @@
 package tachiyomi.data.source.manga
 
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -9,8 +8,25 @@ import eu.kanade.tachiyomi.source.model.SManga
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.chapter.model.NoChaptersException
+import tachiyomi.domain.source.manga.repository.SourcePagingSourceType
 
-typealias SourcePagingSourceType = PagingSource<Long, SManga>
+class SourceSearchPagingSource(source: CatalogueSource, val query: String, val filters: FilterList) : SourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): MangasPage {
+        return source.fetchSearchManga(currentPage, query, filters).awaitSingle()
+    }
+}
+
+class SourcePopularPagingSource(source: CatalogueSource) : SourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): MangasPage {
+        return source.fetchPopularManga(currentPage).awaitSingle()
+    }
+}
+
+class SourceLatestPagingSource(source: CatalogueSource) : SourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): MangasPage {
+        return source.fetchLatestUpdates(currentPage).awaitSingle()
+    }
+}
 
 abstract class SourcePagingSource(
     protected val source: CatalogueSource,
@@ -43,23 +59,5 @@ abstract class SourcePagingSource(
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey ?: anchorPage?.nextKey
         }
-    }
-}
-
-class SourceSearchPagingSource(source: CatalogueSource, val query: String, val filters: FilterList) : SourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): MangasPage {
-        return source.fetchSearchManga(currentPage, query, filters).awaitSingle()
-    }
-}
-
-class SourcePopularPagingSource(source: CatalogueSource) : SourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): MangasPage {
-        return source.fetchPopularManga(currentPage).awaitSingle()
-    }
-}
-
-class SourceLatestPagingSource(source: CatalogueSource) : SourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): MangasPage {
-        return source.fetchLatestUpdates(currentPage).awaitSingle()
     }
 }

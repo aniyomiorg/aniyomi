@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.library.anime
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -31,8 +30,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.entries.anime.model.isLocal
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.entries.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -47,8 +44,6 @@ import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -60,10 +55,12 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.display
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab {
@@ -107,8 +104,8 @@ object AnimeLibraryTab : Tab {
 
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val onClickRefresh: (Category?) -> Boolean = {
-            val started = AnimeLibraryUpdateJob.startNow(context, it)
+        val onClickRefresh: (Category?) -> Boolean = { category ->
+            val started = AnimeLibraryUpdateJob.startNow(context, category)
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
@@ -116,21 +113,10 @@ object AnimeLibraryTab : Tab {
             started
         }
 
-        fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
-            context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
-        }
-
-        suspend fun openEpisodeExternal(context: Context, animeId: Long, episodeId: Long) {
-            context.startActivity(ExternalIntents.newIntent(context, animeId, episodeId))
-        }
-
         suspend fun openEpisode(episode: Episode) {
             val playerPreferences: PlayerPreferences by injectLazy()
-            if (playerPreferences.alwaysUseExternalPlayer().get()) {
-                openEpisodeExternal(context, episode.animeId, episode.id)
-            } else {
-                openEpisodeInternal(context, episode.animeId, episode.id)
-            }
+            val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
+            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
         val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_anime_library)
@@ -150,8 +136,9 @@ object AnimeLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = { screenModel.showSettingsDialog() },
-                    onClickRefresh = { onClickRefresh(null) },
+                    onClickFilter = screenModel::showSettingsDialog,
+                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
                             val randomItem = screenModel.getRandomAnimelibItemForCurrentCategory()
@@ -215,7 +202,7 @@ object AnimeLibraryTab : Tab {
                             }
                             Unit
                         }.takeIf { state.showAnimeContinueButton },
-                        onToggleSelection = { screenModel.toggleSelection(it) },
+                        onToggleSelection = screenModel::toggleSelection,
                         onToggleRangeSelection = {
                             screenModel.toggleRangeSelection(it)
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -234,11 +221,18 @@ object AnimeLibraryTab : Tab {
 
         val onDismissRequest = screenModel::closeDialog
         when (val dialog = state.dialog) {
-            is AnimeLibraryScreenModel.Dialog.SettingsSheet -> AnimeLibrarySettingsDialog(
-                onDismissRequest = onDismissRequest,
-                screenModel = settingsScreenModel,
-                category = state.categories[screenModel.activeCategoryIndex],
-            )
+            is AnimeLibraryScreenModel.Dialog.SettingsSheet -> run {
+                val category = state.categories.getOrNull(screenModel.activeCategoryIndex)
+                if (category == null) {
+                    onDismissRequest()
+                    return@run
+                }
+                AnimeLibrarySettingsDialog(
+                    onDismissRequest = onDismissRequest,
+                    screenModel = settingsScreenModel,
+                    category = category,
+                )
+            }
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
@@ -275,7 +269,7 @@ object AnimeLibraryTab : Tab {
         }
 
         LaunchedEffect(state.selectionMode, state.dialog) {
-            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is AnimeLibraryScreenModel.Dialog.SettingsSheet)
+            HomeScreen.showBottomNav(!state.selectionMode)
         }
 
         LaunchedEffect(state.isLoading) {

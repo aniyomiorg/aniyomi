@@ -53,7 +53,7 @@ fun BrowseAnimeSourceList(
 }
 
 @Composable
-fun BrowseAnimeSourceListItem(
+private fun BrowseAnimeSourceListItem(
     anime: Anime,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,

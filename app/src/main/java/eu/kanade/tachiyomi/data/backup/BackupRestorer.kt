@@ -22,17 +22,18 @@ import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
-import eu.kanade.tachiyomi.data.database.models.anime.Anime
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.anime.Episode
-import eu.kanade.tachiyomi.data.database.models.manga.Chapter
-import eu.kanade.tachiyomi.data.database.models.manga.Manga
-import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.util.BackupUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,8 +43,6 @@ class BackupRestorer(
     private val context: Context,
     private val notifier: BackupNotifier,
 ) {
-
-    var job: Job? = null
 
     private var backupManager = BackupManager(context)
 
@@ -76,7 +75,7 @@ class BackupRestorer(
         return true
     }
 
-    fun writeErrorLog(): File {
+    private fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
                 val file = context.createFileInCacheDir("aniyomi_restore.txt")
@@ -117,41 +116,42 @@ class BackupRestorer(
         val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
-        // Restore individual manga
-        backup.backupManga.forEach {
-            if (job?.isActive != true) {
-                return false
+        return coroutineScope {
+            // Restore individual manga
+            backup.backupManga.forEach {
+                if (!isActive) {
+                    return@coroutineScope false
+                }
+
+                restoreManga(it, backup.backupCategories)
             }
 
-            restoreManga(it, backup.backupCategories)
-        }
+            backup.backupAnime.forEach {
+                if (!isActive) {
+                    return@coroutineScope false
+                }
 
-        backup.backupAnime.forEach {
-            if (job?.isActive != true) {
-                return false
+                restoreAnime(it, backup.backupAnimeCategories)
             }
 
-            restoreAnime(it, backup.backupAnimeCategories)
+            if (backup.backupPreferences.isNotEmpty()) {
+                restorePreferences(
+                    backup.backupPreferences,
+                    PreferenceManager.getDefaultSharedPreferences(context),
+                )
+            }
+
+            if (backup.backupExtensionPreferences.isNotEmpty()) {
+                restoreExtensionPreferences(backup.backupExtensionPreferences)
+            }
+
+            if (backup.backupExtensions.isNotEmpty()) {
+                restoreExtensions(backup.backupExtensions)
+            }
+
+            // TODO: optionally trigger online library + tracker update
+            true
         }
-
-        // TODO: optionally trigger online library + tracker update
-
-        if (backup.backupPreferences.isNotEmpty()) {
-            restorePreferences(
-                backup.backupPreferences,
-                PreferenceManager.getDefaultSharedPreferences(context),
-            )
-        }
-
-        if (backup.backupExtensionPreferences.isNotEmpty()) {
-            restoreExtensionPreferences(backup.backupExtensionPreferences)
-        }
-
-        if (backup.backupExtensions.isNotEmpty()) {
-            restoreExtensions(backup.backupExtensions)
-        }
-
-        return true
     }
 
     private suspend fun restoreCategories(backupCategories: List<BackupCategory>) {
@@ -184,7 +184,7 @@ class BackupRestorer(
             } else {
                 // Manga in database
                 // Copy information from manga already in database
-                backupManager.restoreExistingManga(manga, dbManga)
+                val manga = backupManager.restoreExistingManga(manga, dbManga)
                 // Fetch rest of manga information
                 restoreNewManga(manga, chapters, categories, history, tracks, backupCategories)
             }
@@ -213,8 +213,6 @@ class BackupRestorer(
         backupCategories: List<BackupCategory>,
     ) {
         val fetchedManga = backupManager.restoreNewManga(manga)
-        fetchedManga.id ?: return
-
         backupManager.restoreChapters(fetchedManga, chapters)
         restoreExtras(fetchedManga, categories, history, tracks, backupCategories)
     }
@@ -253,7 +251,7 @@ class BackupRestorer(
             } else {
                 // Anime in database
                 // Copy information from anime already in database
-                backupManager.restoreExistingAnime(anime, dbAnime)
+                val anime = backupManager.restoreExistingAnime(anime, dbAnime)
                 // Fetch rest of anime information
                 restoreNewAnime(anime, episodes, categories, history, tracks, backupCategories)
             }
@@ -282,8 +280,6 @@ class BackupRestorer(
         backupCategories: List<BackupCategory>,
     ) {
         val fetchedAnime = backupManager.restoreNewAnime(anime)
-        fetchedAnime.id ?: return
-
         backupManager.restoreEpisodes(fetchedAnime, episodes)
         restoreExtras(fetchedAnime, categories, history, tracks, backupCategories)
     }

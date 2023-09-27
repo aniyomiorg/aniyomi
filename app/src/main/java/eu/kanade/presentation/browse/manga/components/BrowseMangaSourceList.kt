@@ -52,7 +52,7 @@ fun BrowseMangaSourceList(
 }
 
 @Composable
-fun BrowseMangaSourceListItem(
+private fun BrowseMangaSourceListItem(
     manga: Manga,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,

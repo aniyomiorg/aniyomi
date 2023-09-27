@@ -39,7 +39,7 @@ internal object AnimeExtensionLoader {
     private const val METADATA_HAS_README = "tachiyomi.animeextension.hasReadme"
     private const val METADATA_HAS_CHANGELOG = "tachiyomi.animeextension.hasChangelog"
     const val LIB_VERSION_MIN = 12
-    const val LIB_VERSION_MAX = 14
+    const val LIB_VERSION_MAX = 15
 
     private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 

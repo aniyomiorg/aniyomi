@@ -136,7 +136,6 @@
     <string name="action_next_chapter">Аныгыскы түһүмэх</string>
     <string name="action_previous_chapter">Ааспыттанны түһүмэх</string>
     <string name="action_pause">Тохтобул</string>
-    <string name="action_stop">Тохтоо</string>
     <string name="action_view_chapters">Түһүмэхтэри көр</string>
     <string name="action_edit_cover">Таһын уларытыы</string>
     <string name="action_move_category">Бөлө(ххө/хтөргө) киллэр</string>
@@ -296,7 +295,6 @@
     <string name="no_results_found">Түмүк суох</string>
     <string name="no_more_results">Эбии түмүк суох</string>
     <string name="tabs_header">Кыбытыктар</string>
-    <string name="badges_header">Бэлиэлэр</string>
     <string name="updating_category">Бөлөх саҥардыыта</string>
     <string name="unknown_error">Биллибэт сыыһыы</string>
     <string name="logout_success">Эн таҕыстын</string>
@@ -339,7 +337,6 @@
     <string name="manga_tracking_tab">Кэтээһин</string>
     <string name="confirm_delete_chapters">Талыллыбыт түһүмэхтэри сотторорго эрэллээххин дуу\?</string>
     <string name="download_unread">Ааҕыллыбата</string>
-    <string name="download_all">Барыта</string>
     <string name="manga_download">Хачайдаа</string>
     <string name="sort_by_upload_date">Хачайдааһын кэминэн</string>
     <string name="sort_by_number">Түһүмэх нүөмэринэн</string>

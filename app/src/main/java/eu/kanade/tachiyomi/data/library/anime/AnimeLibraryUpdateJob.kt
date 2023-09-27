@@ -11,17 +11,14 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.R
@@ -29,26 +26,19 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.ANIME_HAS_UNSEEN
-import eu.kanade.tachiyomi.data.preference.ANIME_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.ANIME_NON_SEEN
-import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
-import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
-import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
-import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
+import eu.kanade.tachiyomi.util.system.isRunning
+import eu.kanade.tachiyomi.util.system.workManager
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -57,13 +47,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -72,6 +62,16 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
@@ -115,13 +115,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
 
             // Find a running manual worker. If exists, try again later
-            val otherRunningWorker = withContext(Dispatchers.IO) {
-                WorkManager.getInstance(context)
-                    .getWorkInfosByTag(WORK_NAME_MANUAL)
-                    .get()
-                    .find { it.state == WorkInfo.State.RUNNING }
-            }
-            if (otherRunningWorker != null) {
+            if (context.workManager.isRunning(WORK_NAME_MANUAL)) {
                 return Result.retry()
             }
         }
@@ -166,7 +160,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
         val notifier = AnimeLibraryUpdateNotifier(context)
-        return ForegroundInfo(Notifications.ID_LIBRARY_PROGRESS, notifier.progressNotificationBuilder.build())
+        return ForegroundInfo(
+            Notifications.ID_LIBRARY_PROGRESS,
+            notifier.progressNotificationBuilder.build(),
+        )
     }
 
     /**
@@ -251,13 +248,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     when {
-                                        ANIME_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
+                                        ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
 
-                                        ANIME_HAS_UNSEEN in restrictions && libraryAnime.unseenCount != 0L ->
+                                        ENTRY_HAS_UNVIEWED in restrictions && libraryAnime.unseenCount != 0L ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_caught_up))
 
-                                        ANIME_NON_SEEN in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
+                                        ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_started))
 
                                         anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
@@ -282,9 +279,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 }
                                             } catch (e: Throwable) {
                                                 val errorMessage = when (e) {
-                                                    is NoEpisodesException -> context.getString(R.string.no_chapters_error)
+                                                    is NoEpisodesException -> context.getString(R.string.no_episodes_error)
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is AnimeSourceManager.AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(anime to errorMessage)
@@ -538,7 +535,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         private const val KEY_TARGET = "target"
 
         fun cancelAllWorks(context: Context) {
-            WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
+            context.workManager.cancelAllWorkByTag(TAG)
         }
 
         fun setupTask(
@@ -567,9 +564,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
                     .build()
 
-                WorkManager.getInstance(context).enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
             } else {
-                WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME_AUTO)
+                context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }
         }
         fun startNow(
@@ -577,9 +574,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             category: Category? = null,
             target: Target = Target.EPISODES,
         ): Boolean {
-            val wm = WorkManager.getInstance(context)
-            val infos = wm.getWorkInfosByTag(TAG).get()
-            if (infos.find { it.state == WorkInfo.State.RUNNING } != null) {
+            val wm = context.workManager
+            if (wm.isRunning(TAG)) {
                 // Already running either as a scheduled or manual job
                 return false
             }
@@ -599,7 +595,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         }
 
         fun stop(context: Context) {
-            val wm = WorkManager.getInstance(context)
+            val wm = context.workManager
             val workQuery = WorkQuery.Builder.fromTags(listOf(TAG))
                 .addStates(listOf(WorkInfo.State.RUNNING))
                 .build()

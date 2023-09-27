@@ -25,8 +25,10 @@ import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.SourcePreferences.DataSaver
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.screen.debug.DebugInfoScreen
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -34,7 +36,6 @@ import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -62,6 +63,7 @@ import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.repository.MangaRepository
+import tachiyomi.domain.library.service.LibraryPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -76,6 +78,8 @@ object SettingsAdvancedScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
+        val navigator = LocalNavigator.currentOrThrow
+
         val basePreferences = remember { Injekt.get<BasePreferences>() }
         val networkPreferences = remember { Injekt.get<NetworkPreferences>() }
 
@@ -104,11 +108,18 @@ object SettingsAdvancedScreen : SearchableSettings {
                     true
                 },
             ),
+            Preference.PreferenceItem.TextPreference(
+                title = stringResource(R.string.pref_debug_info),
+                onClick = { navigator.push(DebugInfoScreen) },
+            ),
             getBackgroundActivityGroup(),
             getDataGroup(),
             getNetworkGroup(networkPreferences = networkPreferences),
             getLibraryGroup(),
             getExtensionsGroup(basePreferences = basePreferences),
+            // SY -->
+            getDataSaverGroup(),
+            // SY <--
         )
     }
 
@@ -116,7 +127,6 @@ object SettingsAdvancedScreen : SearchableSettings {
     private fun getBackgroundActivityGroup(): Preference.PreferenceGroup {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
-        val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_background_activity),
@@ -147,10 +157,6 @@ object SettingsAdvancedScreen : SearchableSettings {
                     title = "Don't kill my app!",
                     subtitle = stringResource(R.string.about_dont_kill_my_app),
                     onClick = { uriHandler.openUri("https://dontkillmyapp.com/") },
-                ),
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_worker_info),
-                    onClick = { navigator.push(WorkerInfoScreen) },
                 ),
             ),
         )
@@ -386,7 +392,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     entries = extensionInstallerPref.entries
                         .associateWith { stringResource(it.titleResId) },
                     onValueChanged = {
-                        if (it == PreferenceValues.ExtensionInstaller.SHIZUKU &&
+                        if (it == BasePreferences.ExtensionInstaller.SHIZUKU &&
                             !context.isShizukuInstalled
                         ) {
                             shizukuMissing = true
@@ -399,4 +405,83 @@ object SettingsAdvancedScreen : SearchableSettings {
             ),
         )
     }
+
+    // SY -->
+    @Composable
+    private fun getDataSaverGroup(): Preference.PreferenceGroup {
+        val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
+        val dataSaver by sourcePreferences.dataSaver().collectAsState()
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.data_saver),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.ListPreference(
+                    pref = sourcePreferences.dataSaver(),
+                    title = stringResource(R.string.data_saver),
+                    subtitle = stringResource(R.string.data_saver_summary),
+                    entries = mapOf(
+                        DataSaver.NONE to stringResource(R.string.disabled),
+                        DataSaver.BANDWIDTH_HERO to stringResource(R.string.bandwidth_hero),
+                        DataSaver.WSRV_NL to stringResource(R.string.wsrv),
+                        DataSaver.RESMUSH_IT to stringResource(R.string.resmush),
+                    ),
+                ),
+                Preference.PreferenceItem.EditTextPreference(
+                    pref = sourcePreferences.dataSaverServer(),
+                    title = stringResource(R.string.bandwidth_data_saver_server),
+                    subtitle = stringResource(R.string.data_saver_server_summary),
+                    enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = sourcePreferences.dataSaverDownloader(),
+                    title = stringResource(R.string.data_saver_downloader),
+                    enabled = dataSaver != DataSaver.NONE,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = sourcePreferences.dataSaverIgnoreJpeg(),
+                    title = stringResource(R.string.data_saver_ignore_jpeg),
+                    enabled = dataSaver != DataSaver.NONE,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = sourcePreferences.dataSaverIgnoreGif(),
+                    title = stringResource(R.string.data_saver_ignore_gif),
+                    enabled = dataSaver != DataSaver.NONE,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = sourcePreferences.dataSaverImageQuality(),
+                    title = stringResource(R.string.data_saver_image_quality),
+                    subtitle = stringResource(R.string.data_saver_image_quality_summary),
+                    entries = listOf(
+                        "10%",
+                        "20%",
+                        "40%",
+                        "50%",
+                        "70%",
+                        "80%",
+                        "90%",
+                        "95%",
+                    ).associateBy { it.trimEnd('%').toInt() },
+                    enabled = dataSaver != DataSaver.NONE,
+                ),
+                kotlin.run {
+                    val dataSaverImageFormatJpeg by sourcePreferences.dataSaverImageFormatJpeg().collectAsState()
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.dataSaverImageFormatJpeg(),
+                        title = stringResource(R.string.data_saver_image_format),
+                        subtitle = if (dataSaverImageFormatJpeg) {
+                            stringResource(R.string.data_saver_image_format_summary_on)
+                        } else {
+                            stringResource(R.string.data_saver_image_format_summary_off)
+                        },
+                        enabled = dataSaver != DataSaver.NONE && dataSaver != DataSaver.RESMUSH_IT,
+                    )
+                },
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = sourcePreferences.dataSaverColorBW(),
+                    title = stringResource(R.string.data_saver_color_bw),
+                    enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
+                ),
+            ),
+        )
+    }
+    // SY <--
 }

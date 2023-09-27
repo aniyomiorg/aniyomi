@@ -46,7 +46,6 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
@@ -57,6 +56,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
@@ -84,7 +84,7 @@ data class BrowseMangaSourceScreen(
             }
         }
 
-        if (screenModel.source is MangaSourceManager.StubMangaSource) {
+        if (screenModel.source is StubMangaSource) {
             MissingSourceScreen(
                 source = screenModel.source,
                 navigateUp = navigateUp,
@@ -126,7 +126,7 @@ data class BrowseMangaSourceScreen(
                         onWebViewClick = onWebViewClick,
                         onHelpClick = onHelpClick,
                         onSettingsClick = { navigator.push(MangaSourcePreferencesScreen(sourceId)) },
-                        onSearch = { screenModel.search(it) },
+                        onSearch = screenModel::search,
                     )
 
                     Row(
@@ -235,15 +235,9 @@ data class BrowseMangaSourceScreen(
                 SourceFilterMangaDialog(
                     onDismissRequest = onDismissRequest,
                     filters = state.filters,
-                    onReset = {
-                        screenModel.resetFilters()
-                    },
-                    onFilter = {
-                        screenModel.search(filters = state.filters)
-                    },
-                    onUpdate = {
-                        screenModel.setFilters(it)
-                    },
+                    onReset = screenModel::resetFilters,
+                    onFilter = { screenModel.search(filters = state.filters) },
+                    onUpdate = screenModel::setFilters,
                 )
             }
             is BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga -> {

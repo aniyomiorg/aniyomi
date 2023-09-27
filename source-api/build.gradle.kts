@@ -1,7 +1,31 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("com.android.library")
+}
+
+kotlin {
+    android()
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(kotlinx.serialization.json)
+                api(libs.injekt.core)
+                api(libs.rxjava)
+                api(libs.jsoup)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(project(":core"))
+                api(libs.preferencektx)
+
+                // Workaround for https://youtrack.jetbrains.com/issue/KT-57605
+                implementation(kotlinx.coroutines.android)
+                implementation(project.dependencies.platform(kotlinx.coroutines.bom))
+            }
+        }
+    }
 }
 
 android {
@@ -10,15 +34,4 @@ android {
     defaultConfig {
         consumerProguardFile("consumer-proguard.pro")
     }
-
-}
-
-dependencies {
-    implementation(project(":core"))
-
-    api(kotlinx.serialization.json)
-    api(libs.injekt.core)
-    api(libs.rxjava)
-    api(libs.preferencektx)
-    api(libs.jsoup)
 }

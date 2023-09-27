@@ -19,7 +19,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -34,10 +33,11 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.getResourceColor
 
-inline fun ComposeView.setComposeContent(crossinline content: @Composable () -> Unit) {
-    consumeWindowInsets = false
-    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-    setContent {
+inline fun ComponentActivity.setComposeContent(
+    parent: CompositionContext? = null,
+    crossinline content: @Composable () -> Unit,
+) {
+    setContent(parent) {
         TachiyomiTheme {
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.bodySmall,
@@ -49,11 +49,11 @@ inline fun ComposeView.setComposeContent(crossinline content: @Composable () -> 
     }
 }
 
-inline fun ComponentActivity.setComposeContent(
-    parent: CompositionContext? = null,
-    crossinline content: @Composable () -> Unit,
+fun ComposeView.setComposeContent(
+    content: @Composable () -> Unit,
 ) {
-    setContent(parent) {
+    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    setContent {
         TachiyomiTheme {
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.bodySmall,

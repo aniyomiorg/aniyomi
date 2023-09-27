@@ -1,15 +1,27 @@
 package eu.kanade.presentation.library.anime
 
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import eu.kanade.domain.library.service.LibraryPreferences
+import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.components.TriStateItem
@@ -22,9 +34,11 @@ import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.model.display
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.RadioItem
+import tachiyomi.presentation.core.components.SettingsItemsPaddings
 import tachiyomi.presentation.core.components.SortItem
 
 @Composable
@@ -185,7 +199,50 @@ private fun ColumnScope.DisplayPage(
         )
     }
 
-    HeadingItem(R.string.badges_header)
+    if (category.display != LibraryDisplayMode.List) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = SettingsItemsPaddings.Horizontal,
+                    vertical = SettingsItemsPaddings.Vertical,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+        ) {
+            val configuration = LocalConfiguration.current
+            val columnPreference = remember {
+                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    screenModel.libraryPreferences.animeLandscapeColumns()
+                } else {
+                    screenModel.libraryPreferences.animePortraitColumns()
+                }
+            }
+
+            val columns by columnPreference.changes().collectAsState(initial = 0)
+            Column {
+                Text(
+                    stringResource(id = R.string.pref_library_columns),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                if (columns > 0) {
+                    Text(stringResource(id = R.string.pref_library_columns_per_row, columns))
+                } else {
+                    Text(stringResource(id = R.string.label_default))
+                }
+            }
+
+            Slider(
+                value = columns.toFloat(),
+                onValueChange = { columnPreference.set(it.toInt()) },
+                modifier = Modifier.weight(1f),
+                valueRange = 0f..10f,
+                steps = 10,
+            )
+        }
+    }
+
+    HeadingItem(R.string.overlay_header)
     val downloadBadge by screenModel.libraryPreferences.downloadBadge().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_download_badge_anime),
@@ -210,6 +267,14 @@ private fun ColumnScope.DisplayPage(
             screenModel.togglePreference(LibraryPreferences::languageBadge)
         },
     )
+    val showContinueViewingButton by screenModel.libraryPreferences.showContinueViewingButton().collectAsState()
+    CheckboxItem(
+        label = stringResource(R.string.action_display_show_continue_reading_button),
+        checked = showContinueViewingButton,
+        onClick = {
+            screenModel.togglePreference(LibraryPreferences::showContinueViewingButton)
+        },
+    )
 
     HeadingItem(R.string.tabs_header)
     val categoryTabs by screenModel.libraryPreferences.categoryTabs().collectAsState()
@@ -226,16 +291,6 @@ private fun ColumnScope.DisplayPage(
         checked = categoryNumberOfItems,
         onClick = {
             screenModel.togglePreference(LibraryPreferences::categoryNumberOfItems)
-        },
-    )
-
-    HeadingItem(R.string.other_header)
-    val showContinueWatchingButton by screenModel.libraryPreferences.showContinueViewingButton().collectAsState()
-    CheckboxItem(
-        label = stringResource(R.string.action_display_show_continue_reading_button),
-        checked = showContinueWatchingButton,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::showContinueViewingButton)
         },
     )
 }

@@ -12,8 +12,9 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.notify
 
 /**
  * Class used to show BigPictureStyle notifications
@@ -49,7 +50,7 @@ class SaveImageNotifier(private val context: Context) {
      * Clears the notification message.
      */
     fun onClear() {
-        context.notificationManager.cancel(notificationId)
+        context.cancelNotification(notificationId)
     }
 
     /**
@@ -97,6 +98,6 @@ class SaveImageNotifier(private val context: Context) {
 
     private fun updateNotification() {
         // Displays the progress bar on notification
-        context.notificationManager.notify(notificationId, notificationBuilder.build())
+        context.notify(notificationId, notificationBuilder.build())
     }
 }

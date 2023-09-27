@@ -6,30 +6,28 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.data.backup.BackupRestoreService
+import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.updater.AppUpdateService
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.runBlocking
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.interactor.GetManga
@@ -42,6 +40,8 @@ import tachiyomi.domain.items.episode.interactor.GetEpisode
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -101,10 +101,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     "application/x-protobuf+gzip",
                     intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
                 )
-            ACTION_CANCEL_RESTORE -> cancelRestore(
-                context,
-                intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
-            )
+            ACTION_CANCEL_RESTORE -> cancelRestore(context)
             // Cancel library update and dismiss notification
             ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context)
             ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context)
@@ -174,14 +171,6 @@ class NotificationReceiver : BroadcastReceiver() {
                     downloadEpisodes(urls, animeId)
                 }
             }
-            // Share crash dump file
-            ACTION_SHARE_CRASH_LOG ->
-                shareFile(
-                    context,
-                    intent.getParcelableExtraCompat(EXTRA_URI)!!,
-                    "text/plain",
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
-                )
         }
     }
 
@@ -191,7 +180,7 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param notificationId the id of the notification
      */
     private fun dismissNotification(context: Context, notificationId: Int) {
-        context.notificationManager.cancel(notificationId)
+        context.cancelNotification(notificationId)
         context.notificationManager.cancelAll()
     }
 
@@ -279,11 +268,9 @@ class NotificationReceiver : BroadcastReceiver() {
      * Method called when user wants to stop a backup restore job.
      *
      * @param context context of application
-     * @param notificationId id of notification
      */
-    private fun cancelRestore(context: Context, notificationId: Int) {
-        BackupRestoreService.stop(context)
-        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
+    private fun cancelRestore(context: Context) {
+        BackupRestoreJob.stop(context)
     }
 
     /**
@@ -402,8 +389,6 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val ACTION_DELETE_IMAGE = "$ID.$NAME.DELETE_IMAGE"
 
         private const val ACTION_SHARE_BACKUP = "$ID.$NAME.SEND_BACKUP"
-
-        private const val ACTION_SHARE_CRASH_LOG = "$ID.$NAME.SEND_CRASH_LOG"
 
         private const val ACTION_CANCEL_RESTORE = "$ID.$NAME.CANCEL_RESTORE"
 
@@ -559,13 +544,13 @@ class NotificationReceiver : BroadcastReceiver() {
                     }
 
                     if (notifications.size == 2) {
-                        context.notificationManager.cancel(groupId)
+                        context.cancelNotification(groupId)
                         return
                     }
                 }
             }
 
-            context.notificationManager.cancel(notificationId)
+            context.cancelNotification(notificationId)
         }
 
         /**
@@ -611,7 +596,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
             val newIntent = PlayerActivity.newIntent(context, anime.id, episode.id)
-            return PendingIntent.getActivity(context, Constants.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         /**
@@ -841,23 +826,6 @@ class NotificationReceiver : BroadcastReceiver() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             }
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        }
-
-        /**
-         * Returns [PendingIntent] that starts a share activity for a crash log dump file.
-         *
-         * @param context context of application
-         * @param uri uri of file
-         * @param notificationId id of notification
-         * @return [PendingIntent]
-         */
-        internal fun shareCrashLogPendingBroadcast(context: Context, uri: Uri, notificationId: Int): PendingIntent {
-            val intent = Intent(context, NotificationReceiver::class.java).apply {
-                action = ACTION_SHARE_CRASH_LOG
-                putExtra(EXTRA_URI, uri)
-                putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-            }
-            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         /**
