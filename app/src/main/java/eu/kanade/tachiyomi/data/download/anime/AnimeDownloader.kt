@@ -216,10 +216,14 @@ class AnimeDownloader(
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                         },
-                        downloadPreferences.numberOfDownloads().get(),
+                        if (sourceManager.get(bySource.key.id) is UnmeteredSource) {
+                            downloadPreferences.numberOfDownloads().get()
+                        } else {
+                            1
+                        },
                     )
                 },
-                3,
+                5,
             )
             .subscribe(
                 { completedDownload ->

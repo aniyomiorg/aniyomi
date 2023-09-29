@@ -339,4 +339,5 @@
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
+    <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
 </resources>
