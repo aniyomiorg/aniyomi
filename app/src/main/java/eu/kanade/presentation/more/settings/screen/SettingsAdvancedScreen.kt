@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -52,6 +53,8 @@ import eu.kanade.tachiyomi.network.PREF_DOH_QUAD101
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD9
 import eu.kanade.tachiyomi.network.PREF_DOH_SHECAN
 import eu.kanade.tachiyomi.util.CrashLogUtil
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
+import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
@@ -88,7 +91,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                 pref = basePreferences.acraEnabled(),
                 title = stringResource(R.string.pref_enable_acra),
                 subtitle = stringResource(R.string.pref_acra_summary),
-                enabled = false, // acra is disabled
+                enabled = isPreviewBuildType || isReleaseBuildType,
             ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(R.string.pref_dump_crash_logs),
@@ -322,13 +325,19 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_covers),
-                    onClick = { MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.COVERS) },
+                    onClick = {
+                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.COVERS)
+                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.COVERS)
+                    },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_tracking),
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
                     enabled = trackManager.hasLoggedServices(),
-                    onClick = { MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.TRACKING) },
+                    onClick = {
+                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.TRACKING)
+                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.TRACKING)
+                    },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_reset_viewer_flags),

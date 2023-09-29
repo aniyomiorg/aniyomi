@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.LintTask
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -7,11 +9,6 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization")
     id("com.github.zellius.shortcut-helper")
-}
-
-if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
-    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
-    apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -33,8 +30,17 @@ android {
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
         buildConfigField("boolean", "PREVIEW", "false")
 
-        // Please disable ACRA or use your own instance in forked versions of the project
-        //buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
+        // Put these fields in acra.properties
+        val acraProperties = Properties()
+        rootProject.file("acra.properties")
+            .takeIf { it.exists() }
+            ?.let { acraProperties.load(FileInputStream(it)) }
+        val acraUri = acraProperties.getProperty("ACRA_URI", "")
+        val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
+        val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
+        buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
+        buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
+        buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS
@@ -246,15 +252,8 @@ dependencies {
     // Logging
     implementation(libs.logcat)
 
-    // Crash reports/analytics
+    // Crash reports
     implementation(libs.acra.http)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-
-    // Add the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Shizuku
     implementation(libs.bundles.shizuku)

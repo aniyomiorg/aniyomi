@@ -10,11 +10,19 @@ interface MangaCategoryRepository {
 
     suspend fun getAllMangaCategories(): List<Category>
 
+    suspend fun getAllVisibleMangaCategories(): List<Category>
+
     fun getAllMangaCategoriesAsFlow(): Flow<List<Category>>
+
+    fun getAllVisibleMangaCategoriesAsFlow(): Flow<List<Category>>
 
     suspend fun getCategoriesByMangaId(mangaId: Long): List<Category>
 
+    suspend fun getVisibleCategoriesByMangaId(mangaId: Long): List<Category>
+
     fun getCategoriesByMangaIdAsFlow(mangaId: Long): Flow<List<Category>>
+
+    fun getVisibleCategoriesByMangaIdAsFlow(mangaId: Long): Flow<List<Category>>
 
     suspend fun insertMangaCategory(category: Category)
 

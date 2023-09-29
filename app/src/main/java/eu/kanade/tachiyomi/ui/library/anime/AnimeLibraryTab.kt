@@ -63,7 +63,7 @@ import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
-object AnimeLibraryTab : Tab {
+object AnimeLibraryTab : Tab() {
 
     val libraryPreferences: LibraryPreferences by injectLazy()
     private val fromMore = libraryPreferences.bottomNavStyle().get() == 2

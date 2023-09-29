@@ -11,11 +11,11 @@ import com.arthenica.ffmpegkit.FFprobeSession
 import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
-import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
@@ -23,7 +23,6 @@ import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
-import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -217,10 +216,14 @@ class AnimeDownloader(
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                         },
-                        downloadPreferences.numberOfDownloads().get(),
+                        if (sourceManager.get(bySource.key.id) is UnmeteredSource) {
+                            downloadPreferences.numberOfDownloads().get()
+                        } else {
+                            1
+                        },
                     )
                 },
-                3,
+                5,
             )
             .subscribe(
                 { completedDownload ->
@@ -506,23 +509,20 @@ class AnimeDownloader(
         }
 
         var duration = 0L
-        var nextLineIsDuration = false
         val logCallback = LogCallback { log ->
-            if (nextLineIsDuration) {
-                parseDuration(log.message)?.let { duration = it }
-                nextLineIsDuration = false
-            }
-            if (log.message == "  Duration: ") nextLineIsDuration = true
             if (log.level <= Level.AV_LOG_WARNING) log.message?.let { logcat { it } }
-        }
-        val statisticsCallback = StatisticsCallback {
-            if (duration > 0L) {
-                video.progress = (100 * it.time.toLong() / duration).toInt()
+            if (duration != 0L && log.message.startsWith("frame=")) {
+                val outTime = log.message
+                    .substringAfter("time=", "")
+                    .substringBefore(" ", "")
+                    .let { parseTimeStringToSeconds(it) }
+                if (outTime != null && outTime > 0L) video.progress = (100 * outTime / duration).toInt()
             }
         }
-        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, statisticsCallback)
+        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, {})
 
         val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
+        duration = inputDuration.toLong()
         FFmpegKitConfig.ffmpegExecute(session)
         val outputDuration = getDuration(ffprobeCommand(ffmpegFilename(), null)) ?: 0F
         // allow for slight errors
@@ -539,6 +539,27 @@ class AnimeDownloader(
                 file?.renameTo("$filename.mkv")
                 file ?: throw Exception("Downloaded file not found")
             }
+    }
+
+    private fun parseTimeStringToSeconds(timeString: String): Long? {
+        val parts = timeString.split(":")
+        if (parts.size != 3) {
+            // Invalid format
+            return null
+        }
+
+        return try {
+            val hours = parts[0].toInt()
+            val minutes = parts[1].toInt()
+            val secondsAndMilliseconds = parts[2].split(".")
+            val seconds = secondsAndMilliseconds[0].toInt()
+            val milliseconds = secondsAndMilliseconds[1].toInt()
+
+            (hours * 3600 + minutes * 60 + seconds + milliseconds / 100.0).toLong()
+        } catch (e: NumberFormatException) {
+            // Invalid number format
+            null
+        }
     }
 
     private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {

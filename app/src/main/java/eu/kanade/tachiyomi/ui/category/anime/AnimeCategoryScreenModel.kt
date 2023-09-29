@@ -13,18 +13,24 @@ import kotlinx.coroutines.launch
 import tachiyomi.domain.category.anime.interactor.CreateAnimeCategoryWithName
 import tachiyomi.domain.category.anime.interactor.DeleteAnimeCategory
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
+import tachiyomi.domain.category.anime.interactor.HideAnimeCategory
 import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.service.LibraryPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimeCategoryScreenModel(
-    private val getCategories: GetAnimeCategories = Injekt.get(),
+    private val getAllCategories: GetAnimeCategories = Injekt.get(),
+    private val getVisibleCategories: GetVisibleAnimeCategories = Injekt.get(),
     private val createCategoryWithName: CreateAnimeCategoryWithName = Injekt.get(),
+    private val hideCategory: HideAnimeCategory = Injekt.get(),
     private val deleteCategory: DeleteAnimeCategory = Injekt.get(),
     private val reorderCategory: ReorderAnimeCategory = Injekt.get(),
     private val renameCategory: RenameAnimeCategory = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeCategoryScreenState>(AnimeCategoryScreenState.Loading) {
 
     private val _events: Channel<AnimeCategoryEvent> = Channel()
@@ -32,21 +38,38 @@ class AnimeCategoryScreenModel(
 
     init {
         coroutineScope.launch {
-            getCategories.subscribe()
-                .collectLatest { categories ->
-                    mutableState.update {
-                        AnimeCategoryScreenState.Success(
-                            categories = categories.filterNot(Category::isSystemCategory),
-                        )
-                    }
+            val allCategories = if (libraryPreferences.hideHiddenCategoriesSettings().get()) {
+                getVisibleCategories.subscribe()
+            } else {
+                getAllCategories.subscribe()
+            }
+
+            allCategories.collectLatest { categories ->
+                mutableState.update {
+                    AnimeCategoryScreenState.Success(
+                        categories = categories.filterNot(Category::isSystemCategory),
+                    )
                 }
+            }
         }
     }
 
     fun createCategory(name: String) {
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
-                is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
+
+                else -> {}
+            }
+        }
+    }
+
+    fun hideCategory(category: Category) {
+        coroutineScope.launch {
+            when (hideCategory.await(category)) {
+                is HideAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
                 else -> {}
             }
         }

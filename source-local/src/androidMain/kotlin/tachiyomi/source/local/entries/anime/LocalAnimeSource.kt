@@ -3,11 +3,11 @@ package tachiyomi.source.local.entries.anime
 import android.content.Context
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -200,8 +200,7 @@ actual class LocalAnimeSource(
         val duration = ffProbe.allLogsAsString.trim().toFloat()
         val second = duration.toInt() / 2
 
-        val coverFilename = coverPath.toFFmpegString(context)
-        com.arthenica.ffmpegkit.FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames 1 -q:v 2 \"$coverFilename\" -y")
+        com.arthenica.ffmpegkit.FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y")
 
         if (File(coverPath).exists()) {
             anime.thumbnail_url = coverPath

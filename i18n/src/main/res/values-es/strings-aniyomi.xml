@@ -47,7 +47,7 @@
     <string name="action_display_download_badge_anime">Episodios descargados</string>
     <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
-    <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
+    <string name="action_display_show_continue_reading_button">Botón de continuar viendo/leyendo</string>
     <string name="action_order_by_episode_number">Por número de episodio</string>
     <string name="action_start_download_externally">Usar descargador externo</string>
     <string name="action_start_download_internally">Usar descargador interno</string>
@@ -286,4 +286,38 @@
     <string name="action_save_screenshot">Guardar la captura de pantalla</string>
     <string name="stats_header">Mostrar las estadísticas</string>
     <string name="chapter_dialog_header">Ir al capítulo</string>
+    <string name="pref_episode_swipe">Pasar episodio</string>
+    <string name="pref_episode_swipe_end">Deslizar a la derecha</string>
+    <string name="data_saver_exclude">Excluir del protector de datos</string>
+    <string name="pref_episode_swipe_start">Deslizar a la izquierda</string>
+    <string name="data_saver_stop_exclude">Detener la excepción del protector de datos</string>
+    <string name="data_saver_image_quality_summary">Los valores más altos significan que se guarda un mayor porcentaje de la calidad de la imagen, pero también significa que el tamaño del archivo es mayor, el 80 por ciento es un buen término medio entre el tamaño del archivo y la calidad de la imagen</string>
+    <string name="data_saver_image_format_summary_off">El tamaño del archivo Jpeg es considerablemente más pequeño que Webp (lo que significa que se guardan más datos), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a Webp</string>
+    <string name="data_saver">Ahorro de datos</string>
+    <string name="data_saver_summary">Comprimir las imágenes antes de descargarlas o cargarlas en el lector</string>
+    <string name="data_saver_downloader">Usar el ahorrador de datos en el descargador</string>
+    <string name="data_saver_ignore_jpeg">Ignorar las imágenes Jpeg</string>
+    <string name="data_saver_ignore_gif">Ignorar las imágenes Gif</string>
+    <string name="data_saver_image_quality">Calidad de la imagen</string>
+    <string name="data_saver_image_format">Comprimir a Jpeg</string>
+    <string name="data_saver_image_format_summary_on">El tamaño del archivo Jpeg es considerablemente menor que el de Webp (lo que significa que se ahorran más datos), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a Jpeg</string>
+    <string name="data_saver_color_bw">Convertir a blanco y negro</string>
+    <string name="bandwidth_hero">Bandwidth Hero (requiere un servidor proxy Bandwidth Hero)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_data_saver_server">Servidor Proxy Bandwidth Hero</string>
+    <string name="data_saver_server_summary">Pon aquí la dirección url del servidor Proxy de Bandwidth Hero</string>
+    <string name="pref_show_next_episode_airing_time">Mostrar la hora de emisión del próximo episodio</string>
+    <string name="pref_media_control_chapter_seeking">Buscar los capítulos con los controles multimedia</string>
+    <string name="go_to_next_chapter">Siguiente capítulo</string>
+    <string name="pref_media_control_chapter_seeking_summary">Si se activa, al utilizar siguiente se invocará el botón de omitir la introducción si no se encuentra ningún capítulo</string>
+    <string name="go_to_previous_chapter">Capítulo anterior</string>
+    <string name="go_to_after_opening">Omitir la introducción</string>
+    <string name="pref_category_player_advanced">Ajustes avanzados del reproductor</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf... etc</string>
+    <string name="pref_debanding_disabled">Desactivado</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_debanding_cpu">CPU</string>
 </resources>

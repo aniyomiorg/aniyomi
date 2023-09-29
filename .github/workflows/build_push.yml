@@ -29,6 +29,16 @@ jobs:
           java-version: 17
           distribution: adopt
 
+      - name: Set ACRA properties
+        env:
+          acraUri: ${{ secrets.ACRA_URI }}
+          acraLogin: ${{ secrets.ACRA_LOGIN }}
+          acraPassword: ${{ secrets.ACRA_PASSWORD }}
+        run: |
+          echo "ACRA_URI=$acraUri" >> acra.properties
+          echo "ACRA_LOGIN=$acraLogin" >> acra.properties
+          echo "ACRA_PASSWORD=$acraPassword" >> acra.properties
+
       - name: Build app and run unit tests
         uses: gradle/gradle-command-action@v2
         with:

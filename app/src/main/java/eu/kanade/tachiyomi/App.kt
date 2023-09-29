@@ -43,6 +43,8 @@ import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.cancelNotification
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
+import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.notify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -50,6 +52,10 @@ import kotlinx.coroutines.flow.onEach
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
+import org.acra.config.httpSender
+import org.acra.data.StringFormat
+import org.acra.ktx.initAcra
+import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.util.system.logcat
 import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
@@ -70,6 +76,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
     override fun onCreate() {
         super<Application>.onCreate()
 
+        setupAcra()
         GlobalExceptionHandler.initialize(applicationContext, CrashActivity::class.java)
 
         // TLS 1.3 support for Android < 10
@@ -90,7 +97,6 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         Injekt.importModule(SYDomainModule())
         // SY <--
 
-        setupAcra()
         setupNotificationChannels()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -203,8 +209,21 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         return super.getPackageName()
     }
 
-    protected open fun setupAcra() {
-        // removed acra
+    private fun setupAcra() {
+        if (BuildConfig.ACRA_URI.isNotEmpty() && isPreviewBuildType || isReleaseBuildType) {
+            initAcra {
+                buildConfigClass = BuildConfig::class.java
+                excludeMatchingSharedPreferencesKeys = listOf(".*username.*", ".*password.*", ".*token.*")
+
+                reportFormat = StringFormat.JSON
+                httpSender {
+                    uri = BuildConfig.ACRA_URI
+                    basicAuthLogin = BuildConfig.ACRA_LOGIN
+                    basicAuthPassword = BuildConfig.ACRA_PASSWORD
+                    httpMethod = HttpSender.Method.POST
+                }
+            }
+        }
     }
 
     private fun setupNotificationChannels() {

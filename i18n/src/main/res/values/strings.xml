@@ -152,7 +152,7 @@
     <string name="app_not_available">App not available</string>
 
     <!-- Preferences -->
-      <!-- Subsections -->
+    <!-- Subsections -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_appearance">Appearance</string>
     <string name="pref_category_library">Library</string>
@@ -173,7 +173,7 @@
     <string name="pref_security_summary">App lock, secure screen</string>
     <string name="pref_advanced_summary">Dump crash logs, battery optimizations</string>
 
-      <!-- General section -->
+    <!-- General section -->
     <string name="pref_category_theme">Theme</string>
     <string name="pref_theme_mode">Dark mode</string>
     <string name="theme_system">Follow system</string>
@@ -229,7 +229,7 @@
         <item quantity="other">%1$d days ago</item>
     </plurals>
 
-      <!-- Library section -->
+    <!-- Library section -->
     <string name="pref_category_display">Display</string>
     <string name="pref_library_columns">Grid size</string>
     <string name="pref_library_columns_per_row">%d per row</string>
@@ -276,7 +276,7 @@
     <string name="pref_chapter_swipe_end">Swipe to right action</string>
     <string name="pref_chapter_swipe_start">Swipe to left action</string>
 
-      <!-- Extension section -->
+    <!-- Extension section -->
     <string name="multi_lang">Multi</string>
     <string name="ext_updates_pending">Updates pending</string>
     <string name="ext_update">Update</string>
@@ -309,7 +309,7 @@
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
 
-      <!-- Reader section -->
+    <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
     <string name="pref_show_navigation_mode">Show tap zones overlay</string>
     <string name="pref_show_navigation_mode_summary">Briefly show when reader is opened</string>
@@ -423,7 +423,7 @@
     <string name="pref_low">Low</string>
     <string name="pref_lowest">Lowest</string>
 
-      <!-- Downloads section -->
+    <!-- Downloads section -->
     <string name="pref_download_directory">Download location</string>
     <string name="pref_remove_exclude_categories">Excluded categories</string>
     <string name="custom_dir">Custom location</string>
@@ -458,11 +458,11 @@
     <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
     <string name="action_track">Track</string>
 
-      <!-- Browse section -->
+    <!-- Browse section -->
     <string name="pref_search_pinned_sources_only">Only search pinned sources in global search</string>
     <string name="pref_hide_in_library_items">Hide entries already in library</string>
 
-      <!-- Backup section -->
+    <!-- Backup section -->
     <string name="pref_create_backup">Create backup</string>
     <string name="pref_create_backup_summ">Can be used to restore current library</string>
     <string name="pref_restore_backup">Restore backup</string>
@@ -496,7 +496,7 @@
     <string name="restoring_backup_canceled">Canceled restore</string>
     <string name="backup_info">You should keep copies of backups in other places as well.</string>
 
-      <!-- Advanced section -->
+    <!-- Advanced section -->
     <string name="label_network">Network</string>
     <string name="pref_clear_cookies">Clear cookies</string>
     <string name="pref_dns_over_https">DNS over HTTPS (DoH)</string>
@@ -537,7 +537,7 @@
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
     <string name="pref_debug_info">Debug info</string>
 
-      <!-- About section -->
+    <!-- About section -->
     <string name="website">Website</string>
     <string name="version">Version</string>
     <string name="whats_new">What\'s new</string>

@@ -43,6 +43,8 @@ class PlayerPreferences(
 
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
 
+    fun mediaChapterSeek() = preferenceStore.getBoolean("pref_media_control_chapter_seeking", false)
+
     fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", AspectState.FIT.index)
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
@@ -74,6 +76,8 @@ class PlayerPreferences(
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
     fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+
+    fun deband() = preferenceStore.getInt("pref_deband", 0)
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
 

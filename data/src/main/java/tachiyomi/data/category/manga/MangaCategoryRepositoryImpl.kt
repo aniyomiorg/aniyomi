@@ -20,8 +20,16 @@ class MangaCategoryRepositoryImpl(
         return handler.awaitList { categoriesQueries.getCategories(categoryMapper) }
     }
 
+    override suspend fun getAllVisibleMangaCategories(): List<Category> {
+        return handler.awaitList { categoriesQueries.getVisibleCategories(categoryMapper) }
+    }
+
     override fun getAllMangaCategoriesAsFlow(): Flow<List<Category>> {
         return handler.subscribeToList { categoriesQueries.getCategories(categoryMapper) }
+    }
+
+    override fun getAllVisibleMangaCategoriesAsFlow(): Flow<List<Category>> {
+        return handler.subscribeToList { categoriesQueries.getVisibleCategories(categoryMapper) }
     }
 
     override suspend fun getCategoriesByMangaId(mangaId: Long): List<Category> {
@@ -30,9 +38,21 @@ class MangaCategoryRepositoryImpl(
         }
     }
 
+    override suspend fun getVisibleCategoriesByMangaId(mangaId: Long): List<Category> {
+        return handler.awaitList {
+            categoriesQueries.getVisibleCategoriesByMangaId(mangaId, categoryMapper)
+        }
+    }
+
     override fun getCategoriesByMangaIdAsFlow(mangaId: Long): Flow<List<Category>> {
         return handler.subscribeToList {
             categoriesQueries.getCategoriesByMangaId(mangaId, categoryMapper)
+        }
+    }
+
+    override fun getVisibleCategoriesByMangaIdAsFlow(mangaId: Long): Flow<List<Category>> {
+        return handler.subscribeToList {
+            categoriesQueries.getVisibleCategoriesByMangaId(mangaId, categoryMapper)
         }
     }
 
@@ -65,6 +85,7 @@ class MangaCategoryRepositoryImpl(
             name = update.name,
             order = update.order,
             flags = update.flags,
+            hidden = if (update.hidden == true) 1L else 0L,
             categoryId = update.id,
         )
     }

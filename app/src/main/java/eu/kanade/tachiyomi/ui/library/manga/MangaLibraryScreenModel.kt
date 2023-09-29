@@ -44,7 +44,7 @@ import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.category.manga.interactor.GetVisibleMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
@@ -75,7 +75,7 @@ typealias MangaLibraryMap = Map<Category, List<MangaLibraryItem>>
 
 class MangaLibraryScreenModel(
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
-    private val getCategories: GetMangaCategories = Injekt.get(),
+    private val getCategories: GetVisibleMangaCategories = Injekt.get(),
     private val getTracksPerManga: GetTracksPerManga = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
     private val getChaptersByMangaId: GetChapterByMangaId = Injekt.get(),

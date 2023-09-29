@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
@@ -34,7 +36,6 @@ import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
 import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.preference.asState
 import tachiyomi.presentation.core.components.WheelTextPicker
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -81,11 +82,9 @@ object SettingsPlayerScreen : SearchableSettings {
 
     @Composable
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val scope = rememberCoroutineScope()
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
-        val mpvConfPref = playerPreferences.mpvConf()
-        val mpvConf by mpvConfPref.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_internal_player),
@@ -99,23 +98,10 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerHideControls,
                     title = stringResource(R.string.pref_player_hide_controls),
                 ),
-                Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = mpvConfPref,
-                    title = stringResource(R.string.pref_mpv_conf),
-                    subtitle = mpvConfPref.asState(scope).value
-                        .lines().take(2)
-                        .joinToString(
-                            separator = "\n",
-                            postfix = if (mpvConfPref.asState(scope).value.lines().size > 2) "\n..." else "",
-                        ),
-
-                ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_reset_mpv_conf),
-                    enabled = remember(mpvConf) { mpvConf.isNotBlank() },
-                    onClick = {
-                        mpvConfPref.delete()
-                    },
+                    title = stringResource(R.string.pref_category_player_advanced),
+                    subtitle = stringResource(R.string.pref_category_player_advanced_subtitle),
+                    onClick = { navigator.push(AdvancedPlayerSettingsScreen) },
                 ),
             ),
         )
@@ -202,6 +188,7 @@ object SettingsPlayerScreen : SearchableSettings {
         val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = playerPreferences.skipLengthPreference()
         val playerSmoothSeek = playerPreferences.playerSmoothSeek()
+        val mediaChapterSeek = playerPreferences.mediaChapterSeek()
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -251,6 +238,11 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerSmoothSeek,
                     title = stringResource(R.string.pref_player_smooth_seek),
                     subtitle = stringResource(R.string.pref_player_smooth_seek_summary),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = mediaChapterSeek,
+                    title = stringResource(R.string.pref_media_control_chapter_seeking),
+                    subtitle = stringResource(R.string.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_category_player_aniskip_info),

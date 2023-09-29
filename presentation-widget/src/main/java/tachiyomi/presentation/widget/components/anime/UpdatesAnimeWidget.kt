@@ -48,7 +48,7 @@ fun UpdatesAnimeWidget(data: List<Pair<Long, Bitmap?>>?) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        coverRow.forEach { (mangaId, cover) ->
+                        coverRow.forEach { (animeId, cover) ->
                             Box(
                                 modifier = GlanceModifier
                                     .padding(horizontal = 3.dp),
@@ -56,12 +56,12 @@ fun UpdatesAnimeWidget(data: List<Pair<Long, Bitmap?>>?) {
                             ) {
                                 val intent = Intent(LocalContext.current, Class.forName(Constants.MAIN_ACTIVITY)).apply {
                                     action = Constants.SHORTCUT_ANIME
-                                    putExtra(Constants.ANIME_EXTRA, mangaId)
+                                    putExtra(Constants.ANIME_EXTRA, animeId)
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
                                     // https://issuetracker.google.com/issues/238793260
-                                    addCategory(mangaId.toString())
+                                    addCategory(animeId.toString())
                                 }
                                 UpdatesAnimeCover(
                                     modifier = GlanceModifier.clickable(actionStartActivity(intent)),

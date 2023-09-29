@@ -69,8 +69,9 @@ object SettingsDownloadScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 pref = downloadPreferences.numberOfDownloads(),
                 title = stringResource(R.string.pref_download_slots),
-                entries = listOf(1, 2, 3).associateWith { it.toString() },
+                entries = (1..5).associateWith { it.toString() },
             ),
+            Preference.PreferenceItem.InfoPreference(stringResource(R.string.download_slots_info)),
             getDeleteChaptersGroup(
                 downloadPreferences = downloadPreferences,
                 categories = allCategories,
