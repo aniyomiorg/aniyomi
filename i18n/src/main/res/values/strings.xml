@@ -448,7 +448,6 @@
     <string name="split_tall_images">Split tall images</string>
     <string name="split_tall_images_summary">Improves reader performance</string>
     <string name="pref_download_slots">Maximum downloads</string>
-    <string name="download_slots_info">Will only download in parallel from self-hosted sources</string>
 
     <!-- Tracking section -->
     <string name="tracking_guide">Tracking guide</string>
