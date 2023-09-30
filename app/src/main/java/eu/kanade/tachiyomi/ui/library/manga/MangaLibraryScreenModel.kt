@@ -408,6 +408,7 @@ class MangaLibraryScreenModel(
                         preferences.context.getString(R.string.ungrouped),
                         0,
                         0,
+                        false,
                     ) to
                         values.flatten().distinctBy { it.libraryManga.manga.id },
                 )
@@ -750,6 +751,7 @@ class MangaLibraryScreenModel(
                             .let { context.getString(it.res) },
                         order = TrackStatus.values().indexOfFirst { it.int == id }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }
@@ -775,6 +777,7 @@ class MangaLibraryScreenModel(
                         },
                         order = sources.indexOf(it.key).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }
@@ -794,6 +797,7 @@ class MangaLibraryScreenModel(
                             name = genre,
                             order = tags.indexOf(genre).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
                             flags = 0,
+                            hidden = false,
                         )
                     }
             }
@@ -822,6 +826,7 @@ class MangaLibraryScreenModel(
                             else -> 7
                         },
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }

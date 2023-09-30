@@ -11,6 +11,7 @@ import data.Mangas
 import dataanime.Animehistory
 import dataanime.Animes
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
@@ -22,6 +23,7 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
@@ -212,6 +214,10 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { ExternalIntents() }
 
+        // AM (CONNECTIONS) -->
+        addSingletonFactory { ConnectionsManager() }
+        // <-- AM (CONNECTIONS)
+
         // Asynchronously init expensive components for a faster cold start
         ContextCompat.getMainExecutor(app).execute {
             get<NetworkHelper>()
@@ -281,5 +287,8 @@ class PreferenceModule(val application: Application) : InjektModule {
         addSingletonFactory {
             BasePreferences(application, get())
         }
+        // AM (CONNECTIONS) -->
+        addSingletonFactory { ConnectionsPreferences(get()) }
+        // <-- AM (CONNECTIONS)
     }
 }

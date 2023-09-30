@@ -107,7 +107,7 @@ class PlayerViewModel(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    internal val incognitoMode = basePreferences.incognitoMode().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())

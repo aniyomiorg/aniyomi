@@ -39,18 +39,23 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.slider.Slider
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.entries.manga.model.orientationType
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.ReaderData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
+import eu.kanade.tachiyomi.source.manga.isNsfw
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -92,9 +97,12 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 import kotlin.math.max
@@ -109,6 +117,10 @@ class ReaderActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        // AM (CONNECTIONS) -->
+        private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
+        // <-- AM (CONNECTIONS)
 
         private const val ENABLED_BUTTON_IMAGE_ALPHA = 255
         private const val DISABLED_BUTTON_IMAGE_ALPHA = 64
@@ -244,6 +256,11 @@ class ReaderActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+        viewModel.viewModelScope.launchUI {
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
+        }
     }
 
     /**
@@ -258,6 +275,9 @@ class ReaderActivity : BaseActivity() {
         readingModeToast?.cancel()
         progressDialog?.dismiss()
         progressDialog = null
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = true)
+        // <-- AM (DISCORD)
     }
 
     /**
@@ -1199,4 +1219,29 @@ class ReaderActivity : BaseActivity() {
             binding.viewerContainer.setLayerType(LAYER_TYPE_HARDWARE, paint)
         }
     }
+
+    // AM (DISCORD) -->
+    private fun updateDiscordRPC(exitingReader: Boolean) {
+        if (connectionsPreferences.enableDiscordRPC().get()) {
+            viewModel.viewModelScope.launchIO {
+                if (!exitingReader) {
+                    DiscordRPCService.setReaderActivity(
+                        context = this@ReaderActivity,
+                        ReaderData(
+                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
+                            mangaId = viewModel.manga?.id,
+                            // AM (CU)>
+                            mangaTitle = viewModel.manga?.ogTitle,
+                            chapterNumber = viewModel.currentChapter?.chapter_number?.toString(),
+                            thumbnailUrl = viewModel.manga?.thumbnailUrl,
+                        ),
+                    )
+                } else {
+                    val lastUsedScreen = DiscordRPCService.lastUsedScreen
+                    DiscordRPCService.setMangaScreen(this@ReaderActivity, lastUsedScreen)
+                }
+            }
+        }
+    }
+    // <-- AM (DISCORD)
 }

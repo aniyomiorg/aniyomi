@@ -19,9 +19,12 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.isOnline
@@ -82,6 +85,22 @@ class ExternalIntents {
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
+        // AM (DISCORD) -->
+        withIOContext {
+            DiscordRPCService.setPlayerActivity(
+                context = context,
+                playerData = PlayerData(
+                    incognitoMode = source.isNsfw() || basePreferences.incognitoMode().get(),
+                    animeId = anime.id,
+                    // AM (CU)>
+                    animeTitle = anime.ogTitle,
+                    episodeNumber = episode.episodeNumber.toString(),
+                    thumbnailUrl = anime.thumbnailUrl,
+                ),
+            )
+        }
+        // <-- AM (DISCORD)
+
         return if (videoUrl.toString().startsWith("magnet:")) {
             torrentIntentForPackage(context, videoUrl, video)
         } else if (pkgName.isEmpty()) {
@@ -103,7 +122,7 @@ class ExternalIntents {
      */
     private suspend fun getVideoUrl(context: Context, video: Video): Uri? {
         if (video.videoUrl == null) {
-            makeErrorToast(context, Exception("Video URL is null."))
+            makeErrorToast(context, Exception("Video URL is null. Instead watch Suavemente!"))
             return null
         } else {
             val uri = video.videoUrl!!.toUri()
@@ -320,7 +339,7 @@ class ExternalIntents {
      */
     @OptIn(DelicateCoroutinesApi::class)
     @Suppress("DEPRECATION")
-    fun onActivityResult(intent: Intent?) {
+    fun onActivityResult(context: Context, intent: Intent?) {
         val data = intent ?: return
         val anime = anime
         val currentExtEpisode = episode
@@ -354,6 +373,9 @@ class ExternalIntents {
 
         // Update the episode's progress and history
         launchIO {
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordRPCService.lastUsedScreen)
+            // <-- AM (DISCORD)
             if (cause == "playback_completion" || (currentPosition == duration && duration == 0L)) {
                 saveEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.totalSeconds, currentExtEpisode.totalSeconds)
             } else {
