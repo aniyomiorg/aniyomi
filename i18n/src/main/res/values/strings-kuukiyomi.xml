@@ -29,4 +29,29 @@
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>
     <string name="action_ok">OK</string>
+
+    <!-- Connections section -->
+    <string name="special_services">Special Services</string>
+    <string name="pref_category_connections">Connections</string>
+    <string name="pref_connections_summary">Discord, more to come..</string>
+    <string name="connections_info">Special Services that are unique to Kuukiyomi and enhance the way you use the app</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Kuukiyomi does not share it anywhere else</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
+    <string name="pref_discord_idle">🌙 Idle</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord Incognito mode</string>
+    <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
+    <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Browsing</string>
+    <string name="scrolling">Scrolling through</string>
+    <string name="messing">Messing around with</string>
+    <string name="video">Video</string>
+    <string name="comic">Comic</string>
 </resources>

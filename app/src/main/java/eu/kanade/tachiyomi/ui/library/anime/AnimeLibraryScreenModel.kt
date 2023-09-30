@@ -414,6 +414,7 @@ class AnimeLibraryScreenModel(
                         preferences.context.getString(R.string.ungrouped),
                         0,
                         0,
+                        false,
                     ) to
                         values.flatten().distinctBy { it.libraryAnime.anime.id },
                 )
@@ -756,6 +757,7 @@ class AnimeLibraryScreenModel(
                             .let { context.getString(it.res) },
                         order = TrackStatus.values().indexOfFirst { it.int == id }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }
@@ -781,6 +783,7 @@ class AnimeLibraryScreenModel(
                         },
                         order = sources.indexOf(it.key).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }
@@ -800,6 +803,7 @@ class AnimeLibraryScreenModel(
                             name = genre,
                             order = tags.indexOf(genre).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
                             flags = 0,
+                            hidden = false,
                         )
                     }
             }
@@ -828,6 +832,7 @@ class AnimeLibraryScreenModel(
                             else -> 7
                         },
                         flags = 0,
+                        hidden = false,
                     )
                 }
             }

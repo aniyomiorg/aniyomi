@@ -39,6 +39,8 @@ import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.library.anime.AnimeLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -292,6 +294,9 @@ object AnimeLibraryTab : Tab() {
         LaunchedEffect(state.isLoading) {
             if (!state.isLoading) {
                 (context as? MainActivity)?.ready = true
+                // AM (DISCORD) -->
+                DiscordRPCService.setAnimeScreen(context, DiscordScreen.LIBRARY)
+                // <-- AM (DISCORD)
             }
         }
 

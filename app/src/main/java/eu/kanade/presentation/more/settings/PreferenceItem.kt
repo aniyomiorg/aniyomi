@@ -11,9 +11,11 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
+import eu.kanade.presentation.more.settings.widget.ConnectionsPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.EditTextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.InfoWidget
 import eu.kanade.presentation.more.settings.widget.ListPreferenceWidget
@@ -177,6 +179,20 @@ internal fun PreferenceItem(
                     )
                 }
             }
+            // AM (CONNECTIONS) -->
+            is Preference.PreferenceItem.ConnectionsPreference -> {
+                val uName by Injekt.get<PreferenceStore>()
+                    .getString(ConnectionsPreferences.connectionsUsername(item.service.id))
+                    .collectAsState()
+                item.service.run {
+                    ConnectionsPreferenceWidget(
+                        service = this,
+                        checked = uName.isNotEmpty(),
+                        onClick = { if (isLogged) item.openSettings() else item.login() },
+                    )
+                }
+            }
+            // <-- AM (CONNECTIONS)
             is Preference.PreferenceItem.InfoPreference -> {
                 InfoWidget(text = item.title)
             }
