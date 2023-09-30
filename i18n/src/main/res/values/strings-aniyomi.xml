@@ -323,11 +323,13 @@
 
 
     <!-- Subtitle settings -->
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
     <string name="player_subtitle_settings_delay_tab">Delay</string>
     <string name="player_subtitle_settings_style_tab">Style</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_override_subtitle_style">Override subtitle style</string>
+    <string name="player_override_subtitle_color">Override subtitle color</string>
     <string name="player_subtitle_delay">Subtitle Delay</string>
     <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
     <string name="player_audio_delay">Audio delay</string>

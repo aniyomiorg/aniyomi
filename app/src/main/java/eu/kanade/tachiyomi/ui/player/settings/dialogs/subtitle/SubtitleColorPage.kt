@@ -63,7 +63,7 @@ fun SubtitleColorPage(screenModel: PlayerSettingsScreenModel) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = stringResource(id = R.string.player_override_subtitle_style))
+            Text(text = stringResource(id = R.string.player_override_subtitle_color))
             Switch(
                 checked = overrideSubtitles,
                 onCheckedChange = { updateOverride() },

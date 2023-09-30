@@ -66,7 +66,7 @@ fun SubtitlePreview(
             .background(color = backgroundColor),
     ) {
         Text(
-            text = "Lorem ipsum dolor sit amet.",
+            text = stringResource(R.string.player_subtitle_settings_example),
             modifier = Modifier.align(Alignment.CenterHorizontally),
             style = TextStyle(
                 fontFamily = FontFamily.SansSerif,
