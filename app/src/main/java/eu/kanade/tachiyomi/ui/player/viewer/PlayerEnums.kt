@@ -40,6 +40,7 @@ enum class AspectState(val index: Int, @StringRes val stringRes: Int) {
     CROP(index = 0, stringRes = R.string.video_crop_screen),
     FIT(index = 1, stringRes = R.string.video_fit_screen),
     STRETCH(index = 2, stringRes = R.string.video_stretch_screen),
+    CUSTOM(index = 3, stringRes = R.string.video_custom_screen),
     ;
 
     companion object {

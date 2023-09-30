@@ -372,38 +372,42 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
-
     private fun cycleViewMode() {
-        playerViewMode = when (playerViewMode) {
-            AspectState.STRETCH -> AspectState.FIT
+        AspectState.mode = when (AspectState.mode) {
             AspectState.FIT -> AspectState.CROP
             AspectState.CROP -> AspectState.STRETCH
+            else -> AspectState.FIT
         }
         setViewMode(showText = true)
     }
 
     internal fun setViewMode(showText: Boolean) {
-        binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
-        when (playerViewMode) {
+        binding.playerInformation.text = activity.getString(AspectState.mode.stringRes)
+        var aspect = "-1"
+        var pan = "1.0"
+        when (AspectState.mode) {
             AspectState.CROP -> {
-                mpvUpdateAspect(aspect = "-1", pan = "1.0")
+                pan = "1.0"
             }
             AspectState.FIT -> {
-                mpvUpdateAspect(aspect = "-1", pan = "0.0")
+                pan = "0.0"
             }
             AspectState.STRETCH -> {
-                val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
-                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
+                aspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+            }
+            AspectState.CUSTOM -> {
+                aspect = MPVLib.getPropertyString("video-aspect-override")
             }
         }
+
+        mpvUpdateAspect(aspect = aspect, pan = pan)
+        playerPreferences.playerViewMode().set(AspectState.mode.index)
+
         if (showText) {
             animationHandler.removeCallbacks(playerInformationRunnable)
             binding.playerInformation.visibility = View.VISIBLE
             animationHandler.postDelayed(playerInformationRunnable, 1000L)
         }
-
-        playerPreferences.playerViewMode().set(playerViewMode.index)
     }
 
     private fun mpvUpdateAspect(aspect: String, pan: String) {

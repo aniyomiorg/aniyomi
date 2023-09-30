@@ -261,6 +261,7 @@
     <string name="video_fit_screen">"Fit to screen"</string>
     <string name="video_crop_screen">"Cropped to screen"</string>
     <string name="video_stretch_screen">"Stretched to screen"</string>
+    <string name="video_custom_screen">"Custom aspect ratio"</string>
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>

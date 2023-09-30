@@ -61,6 +61,7 @@ import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
@@ -421,8 +422,12 @@ class PlayerActivity : BaseActivity() {
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
+
+        val speedProperty = MPVLib.getPropertyDouble("speed")
+        val currentSpeed = if (speedProperty == 1.0) playerPreferences.playerSpeed().get().toDouble() else speedProperty
+        MPVLib.setPropertyDouble("speed", currentSpeed)
+
         MPVLib.observeProperty("chapter-list", MPVLib.mpvFormat.MPV_FORMAT_NONE)
-        MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
         val overrideType = if (viewModel.playerPreferences.overrideSubtitlesStyle().get()) "force" else "no"
@@ -609,6 +614,15 @@ class PlayerActivity : BaseActivity() {
         } else {
             switchControlsOrientation(true)
         }
+
+        val aspectProperty = MPVLib.getPropertyString("video-aspect-override")
+        AspectState.mode = if (aspectProperty != "-1" && aspectProperty != "${deviceWidth / deviceHeight}") {
+            AspectState.CUSTOM
+        } else {
+            AspectState.get(playerPreferences.playerViewMode().get())
+        }
+
+        playerControls.setViewMode(showText = false)
     }
 
     private fun pauseForDialog(): () -> Unit {
@@ -760,7 +774,6 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
-            playerControls.setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
             viewModel.closeDialog()
             if (playerSettingsSheet?.isShowing == true) {
@@ -1554,7 +1567,6 @@ class PlayerActivity : BaseActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     internal fun fileLoaded() {
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
-        MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getOrElse("sub") { emptyList() }
