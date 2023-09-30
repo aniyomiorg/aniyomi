@@ -50,6 +50,7 @@ import kotlinx.coroutines.flow.onEach
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
+import org.acra.ACRA
 import org.conscrypt.Conscrypt
 import tachiyomi.core.util.system.logcat
 import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
