@@ -54,8 +54,8 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.SubtitleSettingsDialog
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.toHexString
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.subtitle.SubtitleSettingsDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
