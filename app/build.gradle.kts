@@ -242,15 +242,8 @@ dependencies {
     // Logging
     implementation(libs.logcat)
 
-    // Crash reports/analytics
+    // Crash reports
     implementation(libs.acra.http)
-    //implementation(libs.firebase.analytics)
-    //implementation(libs.firebase.crashlytics)
-
-    // Add the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    //implementation("com.google.firebase:firebase-crashlytics-ktx")
-    //implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Shizuku
     implementation(libs.bundles.shizuku)
