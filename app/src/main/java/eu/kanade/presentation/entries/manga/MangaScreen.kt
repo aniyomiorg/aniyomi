@@ -265,6 +265,10 @@ private fun MangaScreenSmallImpl(
     onMigrateClicked: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
 
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
+
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsReadClicked: (List<Chapter>, markAsRead: Boolean) -> Unit,
@@ -498,6 +502,10 @@ fun MangaScreenLargeImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
+
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
