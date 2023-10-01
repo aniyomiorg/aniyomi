@@ -36,6 +36,7 @@ fun SubtitleSettingsDialog(
             stringResource(id = R.string.player_subtitle_settings_style_tab),
             stringResource(id = R.string.player_subtitle_settings_color_tab),
         ),
+        hideSystemBars = true,
     ) { contentPadding, page ->
         Column(
             modifier = Modifier

@@ -20,6 +20,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun PlayerDialog(
     @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
+    hideSystemBars: Boolean = true,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -34,9 +35,11 @@ fun PlayerDialog(
         ),
     ) {
         Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth(), tonalElevation = 1.dp) {
-            rememberSystemUiController().apply {
-                isSystemBarsVisible = false
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            if (hideSystemBars) {
+                rememberSystemUiController().apply {
+                    isSystemBarsVisible = false
+                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
             }
 
             Column(modifier = Modifier.padding(16.dp)) {

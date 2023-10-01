@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.core.view.WindowInsetsControllerCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
@@ -43,11 +45,18 @@ fun TabbedDialog(
     onDismissRequest: () -> Unit,
     tabTitles: List<String>,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
+    hideSystemBars: Boolean = false,
     content: @Composable (PaddingValues, Int) -> Unit,
 ) {
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,
     ) { contentPadding ->
+        if (hideSystemBars) {
+            rememberSystemUiController().apply {
+                isSystemBarsVisible = false
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        }
         val scope = rememberCoroutineScope()
         val pagerState = rememberPagerState()
 
