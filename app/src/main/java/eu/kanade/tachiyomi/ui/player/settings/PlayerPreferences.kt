@@ -81,11 +81,13 @@ class PlayerPreferences(
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
 
-    fun audioDelay() = preferenceStore.getFloat("pref_audio_delay", 0f)
+    fun audioDelay() = preferenceStore.getInt("pref_audio_delay", 0)
 
     fun rememberSubtitlesDelay() = preferenceStore.getBoolean("pref_remember_subtitles_delay", false)
 
-    fun subtitlesDelay() = preferenceStore.getFloat("pref_subtitles_delay", 0f)
+    fun subtitlesDelay() = preferenceStore.getInt("pref_subtitles_delay", 0)
+
+    fun subtitleFontSize() = preferenceStore.getInt("pref_subtitles_font_size", 55)
 
     fun overrideSubtitlesStyle() = preferenceStore.getBoolean("pref_override_subtitles_style", false)
 

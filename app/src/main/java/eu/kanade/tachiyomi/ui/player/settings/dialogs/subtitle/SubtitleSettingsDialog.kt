@@ -33,7 +33,7 @@ fun SubtitleSettingsDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = listOf(
             stringResource(id = R.string.player_subtitle_settings_delay_tab),
-            stringResource(id = R.string.player_subtitle_settings_style_tab),
+            stringResource(id = R.string.player_subtitle_settings_font_tab),
             stringResource(id = R.string.player_subtitle_settings_color_tab),
         ),
         hideSystemBars = true,
@@ -46,7 +46,7 @@ fun SubtitleSettingsDialog(
         ) {
             when (page) {
                 0 -> SubtitleDelayPage(screenModel)
-                1 -> SubtitleStylePage(screenModel)
+                1 -> SubtitleFontPage(screenModel)
                 2 -> SubtitleColorPage(screenModel)
             }
         }

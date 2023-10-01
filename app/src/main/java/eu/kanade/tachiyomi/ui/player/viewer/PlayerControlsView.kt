@@ -394,6 +394,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
             AspectState.STRETCH -> {
                 aspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+                pan = "0.0"
             }
             AspectState.CUSTOM -> {
                 aspect = MPVLib.getPropertyString("video-aspect-override")
@@ -411,8 +412,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun mpvUpdateAspect(aspect: String, pan: String) {
-        MPVLib.setOptionString("video-aspect-override", aspect)
-        MPVLib.setOptionString("panscan", pan)
+        MPVLib.setPropertyString("video-aspect-override", aspect)
+        MPVLib.setPropertyString("panscan", pan)
     }
 
     internal fun toggleAutoplay(isAutoplay: Boolean) {

@@ -17,7 +17,6 @@ import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,30 +47,8 @@ import kotlin.math.max
 
 @Composable
 fun SubtitleColorPage(screenModel: PlayerSettingsScreenModel) {
-    val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
-
-    val updateOverride = {
-        val overrideType = if (overrideSubtitles) "no" else "force"
-        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
-    }
-    Column(modifier = Modifier.padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = { updateOverride() }),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(text = stringResource(id = R.string.player_override_subtitle_color))
-            Switch(
-                checked = overrideSubtitles,
-                onCheckedChange = { updateOverride() },
-            )
-        }
-        if (overrideSubtitles) {
-            SubtitleColors(screenModel = screenModel)
-        }
+    screenModel.OverrideSubtitlesSwitch {
+        SubtitleColors(screenModel = screenModel)
     }
 }
 

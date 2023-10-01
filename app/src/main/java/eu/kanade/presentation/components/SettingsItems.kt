@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.RemoveCircle
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.material.icons.rounded.DisabledByDefault
@@ -26,10 +29,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.TriStateFilter
@@ -174,5 +179,54 @@ fun RepeatingIconButton(
                 (currentDelayMillis - (currentDelayMillis * delayDecayFactor))
                     .toLong().coerceAtLeast(minDelayMillis)
         }
+    }
+}
+
+@Composable
+fun OutlinedNumericChooser(
+    label: String,
+    placeholder: String,
+    suffix: String,
+    value: Int,
+    step: Int,
+    min: Int? = null,
+    onValueChanged: (Int) -> Unit,
+) {
+    var currentValue by rememberSaveable { mutableStateOf(value) }
+
+    val updateValue: (Boolean) -> Unit = {
+        currentValue += if (it) step else -step
+
+        if (min != null) currentValue = if (currentValue < min) min else currentValue
+
+        onValueChanged(currentValue)
+    }
+
+    Row(modifier = Modifier.padding(bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+        RepeatingIconButton(
+            onClick = { updateValue(false) },
+        ) { Icon(imageVector = Icons.Outlined.RemoveCircle, contentDescription = null) }
+
+        OutlinedTextField(
+            value = "%d".format(currentValue),
+
+            onValueChange = {
+                // Don't allow multiple decimal points, non-numeric characters, or leading zeros
+                currentValue = it.trim().replace(Regex("[^-\\d.]"), "").toIntOrNull()
+                    ?: currentValue
+                onValueChanged(currentValue)
+            },
+
+            label = { Text(text = label) },
+            placeholder = { Text(text = placeholder) },
+            suffix = { Text(text = suffix) },
+
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+
+        RepeatingIconButton(
+            onClick = { updateValue(true) },
+        ) { Icon(imageVector = Icons.Outlined.AddCircle, contentDescription = null) }
     }
 }

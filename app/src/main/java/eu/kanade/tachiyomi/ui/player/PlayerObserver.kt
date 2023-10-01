@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchUI
+import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 
 class PlayerObserver(val activity: PlayerActivity) :
@@ -33,7 +34,8 @@ class PlayerObserver(val activity: PlayerActivity) :
                 activity.player.paused = false
                 activity.refreshUi()
                 // Fixes a minor Ui bug but I have no idea why
-                if (activity.viewModel.isEpisodeOnline() != true) activity.showLoadingIndicator(false)
+                val isEpisodeOnline = withIOContext { activity.viewModel.isEpisodeOnline() != true }
+                if (isEpisodeOnline) activity.showLoadingIndicator(false)
             }
         }
     }

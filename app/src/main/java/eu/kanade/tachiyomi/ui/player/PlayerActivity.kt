@@ -380,7 +380,7 @@ class PlayerActivity : BaseActivity() {
 
                 is PlayerViewModel.Dialog.SubtitleSettings -> {
                     SubtitleSettingsDialog(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subTracks.size > 1),
                         onDismissRequest = pauseForDialog(),
                     )
                 }
@@ -455,7 +455,7 @@ class PlayerActivity : BaseActivity() {
         }
 
         if (playerPreferences.rememberAudioDelay().get()) {
-            MPVLib.setPropertyDouble("audio-delay", playerPreferences.audioDelay().get().toDouble())
+            MPVLib.setPropertyDouble("audio-delay", (playerPreferences.audioDelay().get() / 1000).toDouble())
         }
 
         verticalScrollRight(0F)
@@ -475,6 +475,7 @@ class PlayerActivity : BaseActivity() {
         if (playerPreferences.overrideSubtitlesStyle().get()) {
             MPVLib.setPropertyString("sub-bold", if (playerPreferences.boldSubtitles().get()) "yes" else "no")
             MPVLib.setPropertyString("sub-italic", if (playerPreferences.italicSubtitles().get()) "yes" else "no")
+            MPVLib.setPropertyInt("sub-font-size", playerPreferences.subtitleFontSize().get())
 
             MPVLib.setPropertyString("sub-color", playerPreferences.textColorSubtitles().get().toHexString())
             MPVLib.setPropertyString("sub-border-color", playerPreferences.borderColorSubtitles().get().toHexString())
@@ -615,8 +616,8 @@ class PlayerActivity : BaseActivity() {
             switchControlsOrientation(true)
         }
 
-        val aspectProperty = MPVLib.getPropertyString("video-aspect-override")
-        AspectState.mode = if (aspectProperty != "-1" && aspectProperty != "${deviceWidth / deviceHeight}") {
+        val aspectProperty = MPVLib.getPropertyString("video-aspect-override").toDouble()
+        AspectState.mode = if (aspectProperty != -1.0 && aspectProperty != (deviceWidth / deviceHeight).toDouble()) {
             AspectState.CUSTOM
         } else {
             AspectState.get(playerPreferences.playerViewMode().get())

@@ -5,15 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +19,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.components.OutlinedNumericChooser
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -30,36 +28,14 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 
 @Composable
-fun SubtitleStylePage(screenModel: PlayerSettingsScreenModel) {
-    val overrideSubtitles by screenModel.preferences.overrideSubtitlesStyle().collectAsState()
-
-    val updateOverride = {
-        val overrideType = if (overrideSubtitles) "no" else "force"
-        screenModel.togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
-    }
-    Column(modifier = Modifier.padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = { updateOverride() }),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(text = stringResource(id = R.string.player_override_subtitle_style))
-            Switch(
-                checked = overrideSubtitles,
-                onCheckedChange = { updateOverride() },
-            )
-        }
-        if (overrideSubtitles) {
-            SubtitleStyle(screenModel = screenModel)
-        }
+fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {
+    screenModel.OverrideSubtitlesSwitch {
+        SubtitleFont(screenModel = screenModel)
     }
 }
 
 @Composable
-private fun SubtitleStyle(
+private fun SubtitleFont(
     screenModel: PlayerSettingsScreenModel,
 ) {
     val boldSubtitles by screenModel.preferences.boldSubtitles().collectAsState()
@@ -81,35 +57,54 @@ private fun SubtitleStyle(
     val borderColor = Color(screenModel.preferences.borderColorSubtitles().get())
     val backgroundColor = Color(screenModel.preferences.backgroundColorSubtitles().get())
 
-    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-        Icon(
-            imageVector = Icons.Outlined.FormatSize,
-            contentDescription = null,
-            modifier = Modifier.size(32.dp),
-        )
-
-        val boldAlpha = if (boldSubtitles) 1f else ReadItemAlpha
-        Icon(
-            imageVector = Icons.Outlined.FormatBold,
-            contentDescription = null,
-            modifier = Modifier
-                .alpha(boldAlpha)
-                .size(32.dp)
-                .clickable(onClick = updateBold),
-        )
-
-        val italicAlpha = if (italicSubtitles) 1f else ReadItemAlpha
-        Icon(
-            imageVector = Icons.Outlined.FormatItalic,
-            contentDescription = null,
-            modifier = Modifier
-                .alpha(italicAlpha)
-                .size(32.dp)
-                .clickable(onClick = updateItalic),
-        )
+    val onSizeChanged: (Int) -> Unit = {
+        MPVLib.setPropertyInt("sub-font-size", it)
+        screenModel.preferences.subtitleFontSize().set(it)
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.FormatSize,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+            )
+
+            OutlinedNumericChooser(
+                label = stringResource(id = R.string.player_font_size_text_field),
+                placeholder = "55",
+                suffix = "",
+                value = screenModel.preferences.subtitleFontSize().get(),
+                step = 1,
+                min = 1,
+                onValueChanged = onSizeChanged,
+            )
+
+            val boldAlpha = if (boldSubtitles) 1f else ReadItemAlpha
+            Icon(
+                imageVector = Icons.Outlined.FormatBold,
+                contentDescription = null,
+                modifier = Modifier
+                    .alpha(boldAlpha)
+                    .size(32.dp)
+                    .clickable(onClick = updateBold),
+            )
+
+            val italicAlpha = if (italicSubtitles) 1f else ReadItemAlpha
+            Icon(
+                imageVector = Icons.Outlined.FormatItalic,
+                contentDescription = null,
+                modifier = Modifier
+                    .alpha(italicAlpha)
+                    .size(32.dp)
+                    .clickable(onClick = updateItalic),
+            )
+        }
+
         SubtitlePreview(
             isBold = screenModel.preferences.boldSubtitles().get(),
             isItalic = screenModel.preferences.italicSubtitles().get(),
