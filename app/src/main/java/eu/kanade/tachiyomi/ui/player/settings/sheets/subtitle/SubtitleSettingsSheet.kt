@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings.dialogs.subtitle
+package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 
 @Composable
-fun SubtitleSettingsDialog(
+fun SubtitleSettingsSheet(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {

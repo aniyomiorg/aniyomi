@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings.dialogs.subtitle
+package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
