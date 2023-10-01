@@ -140,9 +140,9 @@ fun RepeatingIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    maxDelayMillis: Long = 500,
+    maxDelayMillis: Long = 750,
     minDelayMillis: Long = 5,
-    delayDecayFactor: Float = .10f,
+    delayDecayFactor: Float = .25f,
     content: @Composable () -> Unit,
 ) {
     val currentClickListener by rememberUpdatedState(onClick)
