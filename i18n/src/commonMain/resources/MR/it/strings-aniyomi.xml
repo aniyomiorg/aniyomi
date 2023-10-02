@@ -181,7 +181,7 @@
     <string name="plan_to_watch">Da guardare</string>
     <string name="want_to_watch">Da guardare</string>
     <string name="repeating_anime">Da riguardare</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Vuoi proseguire\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Vuoi proseguire?</string>
     <string name="dialog_with_checkbox_reset_anime">Reimposta tutti gli episodi di questo anime</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
