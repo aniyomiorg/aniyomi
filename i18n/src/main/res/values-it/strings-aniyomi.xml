@@ -144,7 +144,7 @@
     <string name="subtitle_dialog_header">Sottotitoli</string>
     <string name="pref_preserve_watching_position">Mantieni la posizione di visualizzazione sugli episodi visti</string>
     <string name="player_aniskip_dontskip">Non saltare</string>
-    <string name="video_crop_screen">Zoom</string>
+    <string name="video_crop_screen">Centrato</string>
     <string name="playback_speed_dialog_reset">Ripristina</string>
     <string name="toggle_stats">Attiva statistiche</string>
     <string name="player_hwdec_dialog_title">Imposta la modalità di decodifica hardware predefinita</string>
@@ -236,7 +236,7 @@
     <string name="enable_auto_play">Auto-play è attivo</string>
     <string name="disable_auto_play">Auto-play è disattivato</string>
     <string name="video_fit_screen">Adatta allo schermo</string>
-    <string name="video_stretch_screen">Allunga</string>
+    <string name="video_stretch_screen">Allungato</string>
     <string name="playback_speed_dialog_title">Cambia la velocità di riproduzione:</string>
     <string name="quality_dialog_header">Qualità video</string>
     <string name="audio_dialog_header">Traccia audio</string>
@@ -302,11 +302,12 @@
     <string name="pref_episode_swipe_end">Azione swipe verso destra</string>
     <string name="go_to_after_opening">Sigla saltata</string>
     <string name="pref_debanding_disabled">Disabilitato</string>
-    <string name="extension_settings">Impostazioni delle estensioni</string>
+    <string name="extension_settings">Impostazioni della estensione</string>
     <string name="go_to_next_chapter">Capitolo successivo</string>
     <string name="pref_category_hide_hidden">Nasconi le categorie nascoste dalla schermata delle categorie</string>
     <string name="pref_category_player_advanced">Impostazioni avanzate del Player</string>
     <string name="go_to_previous_chapter">Capitolo precedente</string>
     <string name="choose_video_quality">Scegli la qualità video:</string>
     <string name="theme_cottoncandy">Zucchero filato</string>
+    <string name="bandwidth_hero">Bandwidth Hero (richiede il Bandwidth Hero server Proxy)</string>
 </resources>
