@@ -326,4 +326,5 @@
     <string name="theme_mocha">Moca</string>
     <string name="label_recent_anime_updates">Actualizaciones del anime</string>
     <string name="theme_cottoncandy">Algodón de azúcar</string>
+    <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
 </resources>
