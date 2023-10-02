@@ -313,7 +313,7 @@
     <string name="data_saver_downloader">Usa il risparmio dati nel downloader</string>
     <string name="data_saver_image_quality">Qualità delle immagini</string>
     <string name="data_saver_summary">Comprimi le immagini prima di scaricarle o mostrarle nel lettore</string>
-    <string name="data_saver_ignore_gif">Ignora le animazioni Gif</string>
+    <string name="data_saver_ignore_gif">Ignora le animazioni GIF</string>
     <string name="data_saver_ignore_jpeg">Ignora le immagini Jpeg</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
@@ -322,4 +322,9 @@
 \nAttualmente viene utilizzata la compressione Webp</string>
     <string name="resmush">resmush.it</string>
     <string name="download_slots_info">Scaricherà in modo concorrenziale solo da fonti self-hosted o unmetered</string>
+    <string name="data_saver_image_format_summary_on">La dimensione di un file JPEG e considerevole minore di un WEBP(quindi si risparmiano più dato), ma questo vuole dire che si perde più qualità.
+\nAttualmente comprime in un JPEG</string>
+    <string name="data_saver_image_quality_summary">Valori alti si traducono in una maggiore qualità dell\'immagine, ma questo implica file di dimensione più grande, 80 per cento è una buona media tra dimensione e qualità</string>
+    <string name="data_saver_image_format">Comprimi in JPEG</string>
+    <string name="data_saver_color_bw">Converte in bianco e nero</string>
 </resources>
