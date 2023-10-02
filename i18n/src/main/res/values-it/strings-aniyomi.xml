@@ -307,6 +307,6 @@
     <string name="pref_category_hide_hidden">Nasconi le categorie nascoste dalla schermata delle categorie</string>
     <string name="pref_category_player_advanced">Impostazioni avanzate del Player</string>
     <string name="go_to_previous_chapter">Capitolo precedente</string>
-    <string name="choose_video_quality">Scegli la risoluzione video:</string>
+    <string name="choose_video_quality">Scegli la qualità video:</string>
     <string name="theme_cottoncandy">Zucchero filato</string>
 </resources>
