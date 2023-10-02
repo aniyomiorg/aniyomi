@@ -310,4 +310,9 @@
     <string name="choose_video_quality">Scegli la qualità video:</string>
     <string name="theme_cottoncandy">Zucchero filato</string>
     <string name="bandwidth_hero">Bandwidth Hero (richiede il Bandwidth Hero server Proxy)</string>
+    <string name="data_saver_downloader">Usa il risparmio dati nel downloader</string>
+    <string name="data_saver_image_quality">Qualità delle immagini</string>
+    <string name="data_saver_summary">Comprimi le immagini prima di scaricarle o mostrarle nel lettore</string>
+    <string name="data_saver_ignore_gif">Ignora le animazioni Gif</string>
+    <string name="data_saver_ignore_jpeg">Ignora le immagini Jpeg</string>
 </resources>
