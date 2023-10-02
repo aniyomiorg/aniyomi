@@ -51,7 +51,7 @@
     <string name="pref_library_manga_columns">Manga per riga</string>
     <string name="pref_library_anime_columns">Anime per riga</string>
     <string name="entries">Elementi della libreria</string>
-    <string name="label_watched_episodes">Guardati</string>
+    <string name="label_watched_episodes">Visti</string>
     <string name="label_anime">Anime</string>
     <string name="label_watched_duration">Tempo di visione</string>
     <string name="pref_bottom_nav_no_updates">Sposta Aggiornamenti nella scheda Altro</string>
@@ -214,7 +214,7 @@
     <string name="plan_to_watch">Da guardare</string>
     <string name="want_to_watch">Da guardare</string>
     <string name="repeating_anime">Da riguardare</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Sei sicuro di proseguire\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Vuoi proseguire\?</string>
     <string name="dialog_with_checkbox_reset_anime">Reimposta tutti gli episodi di questo anime</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
@@ -280,14 +280,14 @@
     </plurals>
     <string name="stats_header">Mostra statistiche</string>
     <string name="pref_debanding_cpu">CPU</string>
-    <string name="pref_hide_in_manga_library_items">Nascondi Manga già in libreria</string>
+    <string name="pref_hide_in_manga_library_items">Nascondi manga già in libreria</string>
     <string name="chapter_dialog_header">Ricerca il capitolo</string>
     <string name="pref_media_control_chapter_seeking_summary">Se attivato,</string>
     <string name="pref_media_control_chapter_seeking">Ricerca capitoli usando i controlli del lettore</string>
     <string name="pref_debanding_title">Debanding</string>
     <string name="copied_video_link_to_clipboard">Link al video copiato negli appunti</string>
     <string name="action_save_screenshot">Salva screenshot</string>
-    <string name="pref_hide_in_anime_library_items">Nascondi Anime già in libreria</string>
+    <string name="pref_hide_in_anime_library_items">Nascondi anime già in libreria</string>
     <string name="data_saver_exclude">Escludi dal risparmio dati</string>
     <string name="pref_show_next_episode_airing_time">Mostra la messa in onda del prossimo episodio</string>
     <string name="pref_debanding_gpu">GPU</string>
@@ -302,7 +302,7 @@
     <string name="pref_episode_swipe_end">Azione swipe verso destra</string>
     <string name="go_to_after_opening">Sigla saltata</string>
     <string name="pref_debanding_disabled">Disabilitato</string>
-    <string name="extension_settings">Impostazioni della estensione</string>
+    <string name="extension_settings">Impostazioni dell\'estensione</string>
     <string name="go_to_next_chapter">Capitolo successivo</string>
     <string name="pref_category_hide_hidden">Nasconi le categorie nascoste dalla schermata delle categorie</string>
     <string name="pref_category_player_advanced">Impostazioni avanzate del Player</string>
@@ -315,4 +315,11 @@
     <string name="data_saver_summary">Comprimi le immagini prima di scaricarle o mostrarle nel lettore</string>
     <string name="data_saver_ignore_gif">Ignora le animazioni Gif</string>
     <string name="data_saver_ignore_jpeg">Ignora le immagini Jpeg</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_server_summary">Scrivi qui l\'url del Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_image_format_summary_off">Salvare le immagini come Jpeg permette di risparmiare spazio rispetto a Webp, ma la qualità è minore.
+\nAttualmente viene utilizzata la compressione Webp</string>
+    <string name="resmush">resmush.it</string>
+    <string name="download_slots_info">Scaricherà in modo concorrenziale solo da fonti self-hosted o unmetered</string>
 </resources>
