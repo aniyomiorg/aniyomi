@@ -323,4 +323,8 @@
     <string name="pref_category_player_advanced_subtitle">Uklanjanje artefakata, mpv.conf … itd.</string>
     <string name="action_hide">Sakrij</string>
     <string name="pref_category_hide_hidden">Sakrij skrivene kategorije s ekrana kategorija</string>
+    <string name="theme_mocha">Mocha</string>
+    <string name="label_recent_anime_updates">Anime aktualiziranja</string>
+    <string name="download_slots_info">Istodobno će se preuzimati samo iz izvora koji se sami hostiraju ili bez mjerenja</string>
+    <string name="theme_cottoncandy">Cotton Candy</string>
 </resources>
