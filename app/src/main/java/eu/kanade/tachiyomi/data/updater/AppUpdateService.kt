@@ -20,13 +20,13 @@ import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isServiceRunning
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
-import logcat.LogPriority
-import okhttp3.Call
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import okhttp3.internal.http2.ErrorCode
 import okhttp3.internal.http2.StreamResetException
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 
@@ -41,8 +41,8 @@ class AppUpdateService : Service() {
 
     private lateinit var notifier: AppUpdateNotifier
 
-    private var runningJob: Job? = null
-    private var runningCall: Call? = null
+    private val job = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onCreate() {
         notifier = AppUpdateNotifier(this)
@@ -62,11 +62,11 @@ class AppUpdateService : Service() {
         val url = intent.getStringExtra(EXTRA_DOWNLOAD_URL) ?: return START_NOT_STICKY
         val title = intent.getStringExtra(EXTRA_DOWNLOAD_TITLE) ?: getString(R.string.app_name)
 
-        runningJob = launchIO {
+        serviceScope.launch {
             downloadApk(title, url)
         }
 
-        runningJob?.invokeOnCompletion { stopSelf(startId) }
+        job.invokeOnCompletion { stopSelf(startId) }
         return START_NOT_STICKY
     }
 
@@ -80,8 +80,8 @@ class AppUpdateService : Service() {
     }
 
     private fun destroyJob() {
-        runningJob?.cancel()
-        runningCall?.cancel()
+        serviceScope.cancel()
+        job.cancel()
         if (wakeLock.isHeld) {
             wakeLock.release()
         }
@@ -116,9 +116,8 @@ class AppUpdateService : Service() {
 
         try {
             // Download the new update.
-            val call = network.client.newCachelessCallWithProgress(GET(url), progressListener)
-            runningCall = call
-            val response = call.await()
+            val response = network.client.newCachelessCallWithProgress(GET(url), progressListener)
+                .await()
 
             // File where the apk will be saved.
             val apkFile = File(externalCacheDir, "update.apk")
@@ -131,10 +130,9 @@ class AppUpdateService : Service() {
             }
             notifier.promptInstall(apkFile.getUriCompat(this))
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-            if (e is CancellationException ||
+            val shouldCancel = e is CancellationException ||
                 (e is StreamResetException && e.errorCode == ErrorCode.CANCEL)
-            ) {
+            if (shouldCancel) {
                 notifier.cancel()
             } else {
                 notifier.onDownloadError(url)
@@ -165,11 +163,11 @@ class AppUpdateService : Service() {
         fun start(context: Context, url: String, title: String? = context.getString(R.string.app_name)) {
             if (isRunning(context)) return
 
-            val intent = Intent(context, AppUpdateService::class.java).apply {
+            Intent(context, AppUpdateService::class.java).apply {
                 putExtra(EXTRA_DOWNLOAD_TITLE, title)
                 putExtra(EXTRA_DOWNLOAD_URL, url)
+                ContextCompat.startForegroundService(context, this)
             }
-            ContextCompat.startForegroundService(context, intent)
         }
 
         /**
@@ -188,10 +186,10 @@ class AppUpdateService : Service() {
          * @return [PendingIntent]
          */
         internal fun downloadApkPendingService(context: Context, url: String): PendingIntent {
-            val intent = Intent(context, AppUpdateService::class.java).apply {
+            return Intent(context, AppUpdateService::class.java).run {
                 putExtra(EXTRA_DOWNLOAD_URL, url)
+                PendingIntent.getService(context, 0, this, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             }
-            return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
     }
 }

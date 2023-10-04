@@ -38,10 +38,11 @@ import tachiyomi.data.history.anime.AnimeHistoryRepositoryImpl
 import tachiyomi.data.history.manga.MangaHistoryRepositoryImpl
 import tachiyomi.data.items.chapter.ChapterRepositoryImpl
 import tachiyomi.data.items.episode.EpisodeRepositoryImpl
-import tachiyomi.data.source.anime.AnimeSourceDataRepositoryImpl
+import tachiyomi.data.release.ReleaseServiceImpl
 import tachiyomi.data.source.anime.AnimeSourceRepositoryImpl
-import tachiyomi.data.source.manga.MangaSourceDataRepositoryImpl
+import tachiyomi.data.source.anime.AnimeStubSourceRepositoryImpl
 import tachiyomi.data.source.manga.MangaSourceRepositoryImpl
+import tachiyomi.data.source.manga.MangaStubSourceRepositoryImpl
 import tachiyomi.data.track.anime.AnimeTrackRepositoryImpl
 import tachiyomi.data.track.manga.MangaTrackRepositoryImpl
 import tachiyomi.data.updates.anime.AnimeUpdatesRepositoryImpl
@@ -113,14 +114,16 @@ import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.items.episode.interactor.ShouldUpdateDbEpisode
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
+import tachiyomi.domain.release.interactor.GetApplicationRelease
+import tachiyomi.domain.release.service.ReleaseService
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
-import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
+import tachiyomi.domain.source.anime.repository.AnimeStubSourceRepository
 import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
-import tachiyomi.domain.source.manga.repository.MangaSourceDataRepository
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
+import tachiyomi.domain.source.manga.repository.MangaStubSourceRepository
 import tachiyomi.domain.track.anime.interactor.DeleteAnimeTrack
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
@@ -206,6 +209,9 @@ class DomainModule : InjektModule {
         addFactory { UpdateManga(get()) }
         addFactory { SetMangaCategories(get()) }
 
+        addSingletonFactory<ReleaseService> { ReleaseServiceImpl(get(), get()) }
+        addFactory { GetApplicationRelease(get(), get()) }
+
         addSingletonFactory<AnimeTrackRepository> { AnimeTrackRepositoryImpl(get()) }
         addFactory { DeleteAnimeTrack(get()) }
         addFactory { GetTracksPerAnime(get()) }
@@ -266,7 +272,7 @@ class DomainModule : InjektModule {
         addFactory { GetMangaUpdates(get()) }
 
         addSingletonFactory<AnimeSourceRepository> { AnimeSourceRepositoryImpl(get(), get()) }
-        addSingletonFactory<AnimeSourceDataRepository> { AnimeSourceDataRepositoryImpl(get()) }
+        addSingletonFactory<AnimeStubSourceRepository> { AnimeStubSourceRepositoryImpl(get()) }
         addFactory { GetEnabledAnimeSources(get(), get()) }
         addFactory { GetLanguagesWithAnimeSources(get(), get()) }
         addFactory { GetRemoteAnime(get()) }
@@ -276,7 +282,7 @@ class DomainModule : InjektModule {
         addFactory { ToggleAnimeSourcePin(get()) }
 
         addSingletonFactory<MangaSourceRepository> { MangaSourceRepositoryImpl(get(), get()) }
-        addSingletonFactory<MangaSourceDataRepository> { MangaSourceDataRepositoryImpl(get()) }
+        addSingletonFactory<MangaStubSourceRepository> { MangaStubSourceRepositoryImpl(get()) }
         addFactory { GetEnabledMangaSources(get(), get()) }
         addFactory { GetLanguagesWithMangaSources(get(), get()) }
         addFactory { GetRemoteManga(get()) }

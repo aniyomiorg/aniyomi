@@ -7,13 +7,13 @@ import eu.kanade.tachiyomi.source.model.SManga
 import rx.Observable
 
 @Suppress("OverridingDeprecatedMember")
-class StubMangaSource(private val sourceData: MangaSourceData) : MangaSource {
+class StubMangaSource(
+    override val id: Long,
+    override val name: String,
+    override val lang: String,
+) : MangaSource {
 
-    override val id: Long = sourceData.id
-
-    override val name: String = sourceData.name.ifBlank { id.toString() }
-
-    override val lang: String = sourceData.lang
+    val isInvalid: Boolean = name.isBlank() || lang.isBlank()
 
     override suspend fun getMangaDetails(manga: SManga): SManga {
         throw SourceNotInstalledException()
@@ -43,7 +43,7 @@ class StubMangaSource(private val sourceData: MangaSourceData) : MangaSource {
     }
 
     override fun toString(): String {
-        return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
+        return if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
     }
 }
 

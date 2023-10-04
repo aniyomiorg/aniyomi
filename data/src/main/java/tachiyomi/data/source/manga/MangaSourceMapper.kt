@@ -1,7 +1,7 @@
 package tachiyomi.data.source.manga
 
-import tachiyomi.domain.source.manga.model.MangaSourceData
 import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.domain.source.manga.model.StubMangaSource
 
 val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { source ->
     Source(
@@ -13,6 +13,6 @@ val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { so
     )
 }
 
-val mangaSourceDataMapper: (Long, String, String) -> MangaSourceData = { id, lang, name ->
-    MangaSourceData(id, lang, name)
+val mangaSourceDataMapper: (Long, String, String) -> StubMangaSource = { id, lang, name ->
+    StubMangaSource(id, lang, name)
 }

@@ -8,10 +8,10 @@ import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
-import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
+import eu.kanade.tachiyomi.source.anime.toStubSource
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
@@ -22,7 +22,7 @@ import rx.Observable
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Locale
@@ -73,12 +73,12 @@ class AnimeExtensionManager(
     private val _availableAnimeExtensionsFlow = MutableStateFlow(emptyList<AnimeExtension.Available>())
     val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()
 
-    private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = emptyMap()
+    private var availableAnimeExtensionsSourcesData: Map<Long, StubAnimeSource> = emptyMap()
 
     private fun setupAvailableAnimeExtensionsSourcesDataMap(animeextensions: List<AnimeExtension.Available>) {
         if (animeextensions.isEmpty()) return
         availableAnimeExtensionsSourcesData = animeextensions
-            .flatMap { ext -> ext.sources.map { it.toAnimeSourceData() } }
+            .flatMap { ext -> ext.sources.map { it.toStubSource() } }
             .associateBy { it.id }
     }
 
@@ -145,8 +145,8 @@ class AnimeExtensionManager(
         // Use the source lang as some aren't present on the animeextension level.
         val availableLanguages = animeextensions
             .flatMap(AnimeExtension.Available::sources)
-            .distinctBy(AvailableAnimeSources::lang)
-            .map(AvailableAnimeSources::lang)
+            .distinctBy(AnimeExtension.Available.AnimeSource::lang)
+            .map(AnimeExtension.Available.AnimeSource::lang)
 
         val deviceLanguage = Locale.getDefault().language
         val defaultLanguages = preferences.enabledLanguages().defaultValue()
