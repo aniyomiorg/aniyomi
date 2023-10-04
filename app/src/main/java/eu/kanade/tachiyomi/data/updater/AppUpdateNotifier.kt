@@ -171,7 +171,7 @@ internal class AppUpdateNotifier(private val context: Context) {
                 context.getString(R.string.action_cancel),
                 NotificationReceiver.dismissNotificationPendingBroadcast(
                     context,
-                    Notifications.ID_APP_UPDATER
+                    Notifications.ID_APP_UPDATER,
                 ),
             )
         }

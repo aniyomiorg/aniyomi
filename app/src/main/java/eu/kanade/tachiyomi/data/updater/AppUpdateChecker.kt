@@ -2,24 +2,14 @@ package eu.kanade.tachiyomi.data.updater
 
 import android.content.Context
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.network.GET
-import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.awaitSuccess
-import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
-import kotlinx.serialization.json.Json
-import tachiyomi.core.preference.Preference
-import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
-import java.util.Date
-import kotlin.time.Duration.Companion.days
 
 class AppUpdateChecker {
 
     private val getApplicationRelease: GetApplicationRelease by injectLazy()
-
 
     suspend fun checkForUpdate(context: Context, forceCheck: Boolean = false): GetApplicationRelease.Result {
         return withIOContext {
