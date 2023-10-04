@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel
+import eu.kanade.tachiyomi.ui.browse.anime.source.browse.SourceFilterAnimeDialog
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
@@ -101,13 +102,23 @@ data class AnimeSourceSearchScreen(
             )
         }
 
+        val onDismissRequest = { screenModel.setDialog(null) }
         when (val dialog = state.dialog) {
+            is BrowseAnimeSourceScreenModel.Dialog.Filter -> {
+                SourceFilterAnimeDialog(
+                    onDismissRequest = onDismissRequest,
+                    filters = state.filters,
+                    onReset = screenModel::resetFilters,
+                    onFilter = { screenModel.search(filters = state.filters) },
+                    onUpdate = screenModel::setFilters,
+                )
+            }
             is BrowseAnimeSourceScreenModel.Dialog.Migrate -> {
                 MigrateAnimeDialog(
                     oldAnime = oldAnime,
                     newAnime = dialog.newAnime,
                     screenModel = rememberScreenModel { MigrateAnimeDialogScreenModel() },
-                    onDismissRequest = { screenModel.setDialog(null) },
+                    onDismissRequest = onDismissRequest,
                     onClickTitle = { navigator.push(AnimeScreen(dialog.newAnime.id)) },
                     onPopScreen = {
                         scope.launch {

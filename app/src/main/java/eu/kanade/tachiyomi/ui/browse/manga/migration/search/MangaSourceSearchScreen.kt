@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel
+import eu.kanade.tachiyomi.ui.browse.manga.source.browse.SourceFilterMangaDialog
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
@@ -101,13 +102,23 @@ data class MangaSourceSearchScreen(
             )
         }
 
+        val onDismissRequest = { screenModel.setDialog(null) }
         when (val dialog = state.dialog) {
+            is BrowseMangaSourceScreenModel.Dialog.Filter -> {
+                SourceFilterMangaDialog(
+                    onDismissRequest = onDismissRequest,
+                    filters = state.filters,
+                    onReset = screenModel::resetFilters,
+                    onFilter = { screenModel.search(filters = state.filters) },
+                    onUpdate = screenModel::setFilters,
+                )
+            }
             is BrowseMangaSourceScreenModel.Dialog.Migrate -> {
                 MigrateMangaDialog(
                     oldManga = oldManga,
                     newManga = dialog.newManga,
                     screenModel = rememberScreenModel { MigrateMangaDialogScreenModel() },
-                    onDismissRequest = { screenModel.setDialog(null) },
+                    onDismissRequest = onDismissRequest,
                     onClickTitle = { navigator.push(MangaScreen(dialog.newManga.id)) },
                     onPopScreen = {
                         scope.launch {
