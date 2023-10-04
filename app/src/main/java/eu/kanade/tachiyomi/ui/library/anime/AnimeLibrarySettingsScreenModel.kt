@@ -25,10 +25,11 @@ class AnimeLibrarySettingsScreenModel(
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val setDisplayModeForCategory: SetDisplayModeForAnimeCategory = Injekt.get(),
     private val setSortModeForCategory: SetSortModeForAnimeCategory = Injekt.get(),
-    trackManager: TrackManager = Injekt.get(),
+    private val trackManager: TrackManager = Injekt.get(),
 ) : ScreenModel {
 
-    val trackServices = trackManager.services.filter { service -> service.isLogged }
+    val trackServices
+        get() = trackManager.services.filter { it.isLogged }
 
     fun togglePreference(preference: (LibraryPreferences) -> Preference<Boolean>) {
         preference(libraryPreferences).toggle()

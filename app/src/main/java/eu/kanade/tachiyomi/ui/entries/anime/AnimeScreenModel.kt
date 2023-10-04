@@ -628,6 +628,9 @@ class AnimeInfoScreenModel(
             downloadEpisodes(episodes, false, video)
         }
         if (!isFavorited && !successState.hasPromptedToAddBefore) {
+            updateSuccessState { successState ->
+                successState.copy(hasPromptedToAddBefore = true)
+            }
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(R.string.snack_add_to_anime_library),
@@ -636,9 +639,6 @@ class AnimeInfoScreenModel(
                 )
                 if (result == SnackbarResult.ActionPerformed && !isFavorited) {
                     toggleFavorite()
-                }
-                updateSuccessState { successState ->
-                    successState.copy(hasPromptedToAddBefore = true)
                 }
             }
         }

@@ -64,7 +64,7 @@ private fun AnimeSourcesFilterContent(
         state.items.forEach { (language, sources) ->
             val enabled = language in state.enabledLanguages
             item(
-                key = language.hashCode(),
+                key = language,
                 contentType = "source-filter-header",
             ) {
                 AnimeSourcesFilterHeader(
@@ -74,18 +74,19 @@ private fun AnimeSourcesFilterContent(
                     onClickItem = onClickLanguage,
                 )
             }
-            if (!enabled) return@forEach
-            items(
-                items = sources,
-                key = { "source-filter-${it.key()}" },
-                contentType = { "source-filter-item" },
-            ) { source ->
-                AnimeSourcesFilterItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    source = source,
-                    isEnabled = "${source.id}" !in state.disabledSources,
-                    onClickItem = onClickSource,
-                )
+            if (enabled) {
+                items(
+                    items = sources,
+                    key = { "source-filter-${it.key()}" },
+                    contentType = { "source-filter-item" },
+                ) { source ->
+                    AnimeSourcesFilterItem(
+                        modifier = Modifier.animateItemPlacement(),
+                        source = source,
+                        isEnabled = "${source.id}" !in state.disabledSources,
+                        onClickItem = onClickSource,
+                    )
+                }
             }
         }
     }

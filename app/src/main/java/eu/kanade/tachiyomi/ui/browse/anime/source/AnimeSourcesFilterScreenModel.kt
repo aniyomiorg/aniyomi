@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.domain.source.anime.model.AnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.SortedMap
 
 class AnimeSourcesFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
@@ -66,7 +67,7 @@ sealed class AnimeSourcesFilterState {
     ) : AnimeSourcesFilterState()
 
     data class Success(
-        val items: Map<String, List<AnimeSource>>,
+        val items: SortedMap<String, List<AnimeSource>>,
         val enabledLanguages: Set<String>,
         val disabledSources: Set<String>,
     ) : AnimeSourcesFilterState() {

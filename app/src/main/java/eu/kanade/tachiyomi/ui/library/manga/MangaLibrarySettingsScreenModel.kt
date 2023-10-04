@@ -25,10 +25,11 @@ class MangaLibrarySettingsScreenModel(
     private val getCategories: GetMangaCategories = Injekt.get(),
     private val setDisplayModeForCategory: SetDisplayModeForMangaCategory = Injekt.get(),
     private val setSortModeForCategory: SetSortModeForMangaCategory = Injekt.get(),
-    trackManager: TrackManager = Injekt.get(),
+    private val trackManager: TrackManager = Injekt.get(),
 ) : ScreenModel {
 
-    val trackServices = trackManager.services.filter { service -> service.isLogged }
+    val trackServices
+        get() = trackManager.services.filter { it.isLogged }
 
     fun togglePreference(preference: (LibraryPreferences) -> Preference<Boolean>) {
         preference(libraryPreferences).toggle()
