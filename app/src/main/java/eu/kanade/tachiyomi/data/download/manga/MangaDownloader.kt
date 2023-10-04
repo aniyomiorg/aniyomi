@@ -350,21 +350,21 @@ class MangaDownloader(
 
             download.status = MangaDownload.State.DOWNLOADING
 
-            // Get all the URLs to the source images, fetch pages if necessary
-            pageList.filter { it.imageUrl.isNullOrEmpty() }.forEach { page ->
-                page.status = Page.State.LOAD_PAGE
-                try {
-                    page.imageUrl = download.source.fetchImageUrl(page).awaitSingle()
-                } catch (e: Throwable) {
-                    page.status = Page.State.ERROR
-                }
-            }
-
             // Start downloading images, consider we can have downloaded images already
             // Concurrently do 2 pages at a time
             pageList.asFlow()
                 .flatMapMerge(concurrency = 2) { page ->
                     flow {
+                        // Fetch image URL if necessary
+                        if (page.imageUrl.isNullOrEmpty()) {
+                            page.status = Page.State.LOAD_PAGE
+                            try {
+                                page.imageUrl = download.source.fetchImageUrl(page).awaitSingle()
+                            } catch (e: Throwable) {
+                                page.status = Page.State.ERROR
+                            }
+                        }
+
                         withIOContext { getOrDownloadImage(page, download, tmpDir, dataSaver) }
                         emit(page)
                     }.flowOn(Dispatchers.IO)
@@ -537,9 +537,15 @@ class MangaDownloader(
         dirname: String,
     ) {
         // Page list hasn't been initialized
-        val downloadPageCount = download.pages?.size ?: return
-        // Ensure that all pages has been downloaded
-        if (download.downloadedImages < downloadPageCount) return
+        val downloadPageCount = download.pages?.size ?: run {
+            download.status = MangaDownload.State.ERROR
+            return
+        }
+        // Ensure that all pages have been downloaded
+        if (download.downloadedImages != downloadPageCount) {
+            download.status = MangaDownload.State.ERROR
+            return
+        }
         // Ensure that the chapter folder has all the pages
         val downloadedImagesCount = tmpDir.listFiles().orEmpty().count {
             val fileName = it.name.orEmpty()
@@ -551,28 +557,27 @@ class MangaDownloader(
                 else -> true
             }
         }
+        if (downloadedImagesCount != downloadPageCount) {
+            download.status = MangaDownload.State.ERROR
+            return
+        }
 
-        download.status = if (downloadedImagesCount == downloadPageCount) {
-            createComicInfoFile(
-                tmpDir,
-                download.manga,
-                download.chapter,
-                download.source,
-            )
+        createComicInfoFile(
+            tmpDir,
+            download.manga,
+            download.chapter,
+            download.source,
+        )
 
-            // Only rename the directory if it's downloaded
-            if (downloadPreferences.saveChaptersAsCBZ().get()) {
-                archiveChapter(mangaDir, dirname, tmpDir)
-            } else {
-                tmpDir.renameTo(dirname)
-            }
+        // Only rename the directory if it's downloaded
+        if (downloadPreferences.saveChaptersAsCBZ().get()) {
+            archiveChapter(mangaDir, dirname, tmpDir)
+        } else {
             cache.addChapter(dirname, mangaDir, download.manga)
 
             DiskUtil.createNoMediaFile(tmpDir, context)
 
-            MangaDownload.State.DOWNLOADED
-        } else {
-            MangaDownload.State.ERROR
+            download.status = MangaDownload.State.DOWNLOADED
         }
     }
 

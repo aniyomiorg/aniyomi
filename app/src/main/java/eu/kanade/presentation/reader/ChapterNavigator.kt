@@ -1,6 +1,9 @@
 package eu.kanade.presentation.reader
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +18,12 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,8 +50,6 @@ fun ChapterNavigator(
     val isTabletUi = isTabletUi()
     val horizontalPadding = if (isTabletUi) 24.dp else 16.dp
     val layoutDirection = if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-
-    val backgroundColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
     val haptic = LocalHapticFeedback.current
 
     // We explicitly handle direction based on the reader viewer rather than the system direction
@@ -55,6 +60,11 @@ fun ChapterNavigator(
                 .padding(horizontal = horizontalPadding),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // Match with toolbar background color set in ReaderActivity
+            val backgroundColor = MaterialTheme.colorScheme
+                .surfaceColorAtElevation(3.dp)
+                .copy(alpha = if (isSystemInDarkTheme()) 0.9f else 0.95f)
+
             val isLeftEnabled = if (isRtl) enabledNext else enabledPrevious
             if (isLeftEnabled) {
                 FilledIconButton(
@@ -82,6 +92,14 @@ fun ChapterNavigator(
                     ) {
                         Text(text = currentPage.toString())
 
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val sliderDragged by interactionSource.collectIsDraggedAsState()
+                        LaunchedEffect(currentPage) {
+                            if (sliderDragged) {
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            }
+                        }
+
                         Slider(
                             modifier = Modifier
                                 .weight(1f)
@@ -91,8 +109,8 @@ fun ChapterNavigator(
                             steps = totalPages,
                             onValueChange = {
                                 onSliderValueChange(it.toInt() - 1)
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                             },
+                            interactionSource = interactionSource,
                         )
 
                         Text(text = totalPages.toString())
