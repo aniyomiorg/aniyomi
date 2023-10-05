@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemKey
 import androidx.paging.compose.items
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.browse.manga.components.BrowseSourceLoadingItem
@@ -35,10 +34,7 @@ fun BrowseAnimeSourceList(
             }
         }
 
-        items(
-            count = animeList.itemCount,
-            key = animeList.itemKey { it.value.id },
-        ) { index ->
+        items(count = animeList.itemCount) { index ->
             val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceListItem(
                 anime = anime,

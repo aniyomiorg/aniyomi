@@ -8,8 +8,8 @@ import eu.kanade.tachiyomi.animesource.model.Video
 @Suppress("OverridingDeprecatedMember")
 class StubAnimeSource(
     override val id: Long,
-    override val name: String,
     override val lang: String,
+    override val name: String,
 ) : AnimeSource {
 
     val isInvalid: Boolean = name.isBlank() || lang.isBlank()

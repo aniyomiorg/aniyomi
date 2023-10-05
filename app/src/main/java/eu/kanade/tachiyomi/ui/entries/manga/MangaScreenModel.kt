@@ -622,8 +622,8 @@ class MangaInfoScreenModel(
             downloadChapters(chapters)
         }
         if (!isFavorited && !successState.hasPromptedToAddBefore) {
-            updateSuccessState { successState ->
-                successState.copy(hasPromptedToAddBefore = true)
+            updateSuccessState { state ->
+                state.copy(hasPromptedToAddBefore = true)
             }
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(

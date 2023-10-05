@@ -9,8 +9,8 @@ import rx.Observable
 @Suppress("OverridingDeprecatedMember")
 class StubMangaSource(
     override val id: Long,
-    override val name: String,
     override val lang: String,
+    override val name: String,
 ) : MangaSource {
 
     val isInvalid: Boolean = name.isBlank() || lang.isBlank()

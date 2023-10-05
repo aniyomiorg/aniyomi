@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.components.OverflowMenu
 import eu.kanade.tachiyomi.R
@@ -77,18 +79,20 @@ fun EntryToolbar(
             },
             actions = {
                 if (isActionMode) {
-                    IconButton(onClick = onSelectAll) {
-                        Icon(
-                            imageVector = Icons.Outlined.SelectAll,
-                            contentDescription = stringResource(R.string.action_select_all),
-                        )
-                    }
-                    IconButton(onClick = onInvertSelection) {
-                        Icon(
-                            imageVector = Icons.Outlined.FlipToBack,
-                            contentDescription = stringResource(R.string.action_select_inverse),
-                        )
-                    }
+                    AppBarActions(
+                        listOf(
+                            AppBar.Action(
+                                title = stringResource(R.string.action_select_all),
+                                icon = Icons.Outlined.SelectAll,
+                                onClick = onSelectAll,
+                            ),
+                            AppBar.Action(
+                                title = stringResource(R.string.action_select_inverse),
+                                icon = Icons.Outlined.FlipToBack,
+                                onClick = onInvertSelection,
+                            ),
+                        ),
+                    )
                 } else {
                     if (onClickDownload != null) {
                         val (downloadExpanded, onDownloadExpanded) = remember { mutableStateOf(false) }

@@ -29,6 +29,7 @@ data class BackupTracking(
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
 
+    @Suppress("DEPRECATION")
     fun getTrackingImpl(): MangaTrack {
         return MangaTrack(
             id = -1,

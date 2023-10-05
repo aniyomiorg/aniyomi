@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemKey
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.browse.manga.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.library.CommonEntryItemDefaults
@@ -41,10 +40,7 @@ fun BrowseAnimeSourceComfortableGrid(
             }
         }
 
-        items(
-            count = animeList.itemCount,
-            key = animeList.itemKey { it.value.id },
-        ) { index ->
+        items(count = animeList.itemCount) { index ->
             val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceComfortableGridItem(
                 anime = anime,

@@ -6,7 +6,7 @@ shizuku_version = "12.2.0"
 sqlite = "2.3.1"
 sqldelight = "1.5.5"
 leakcanary = "2.10"
-voyager = "1.0.0-rc07"
+voyager = "1.0.0-rc06"
 richtext = "0.16.0"
 
 [libraries]
@@ -31,7 +31,6 @@ jsoup = "org.jsoup:jsoup:1.16.1"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:17bec43"
-compress = "org.apache.commons:commons-compress:1.23.0"
 junrar = "com.github.junrar:junrar:7.5.4"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
@@ -54,14 +53,14 @@ natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 richtext-commonmark = { module = "com.halilibo.compose-richtext:richtext-commonmark", version.ref = "richtext" }
 richtext-m3 = { module = "com.halilibo.compose-richtext:richtext-ui-material3", version.ref = "richtext" }
 
-material = "com.google.android.material:material:1.8.0"
+material = "com.google.android.material:material:1.9.0"
 flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533"
 flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533"
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
 compose-cascade = "me.saket.cascade:cascade-compose:2.0.0-rc02"
-compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.12.1"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.12.3"
 compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.0"
 
 logcat = "com.squareup.logcat:logcat:0.1"
@@ -84,11 +83,11 @@ sqldelight-android-paging = { module = "com.squareup.sqldelight:android-paging3-
 sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 junit = "org.junit.jupiter:junit-jupiter:5.9.3"
-kotest-assertions = "io.kotest:kotest-assertions-core:5.6.1"
+kotest-assertions = "io.kotest:kotest-assertions-core:5.6.2"
 
-voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voyager" }
-voyager-tab-navigator = { module = "ca.gosyer:voyager-tab-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = "voyager" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
 

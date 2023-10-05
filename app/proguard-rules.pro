@@ -75,6 +75,3 @@
 
 # XmlUtil
 -keep public enum nl.adaptivity.xmlutil.EventType { *; }
-
-# org.apache.commons:commons-compress
--keep,allowoptimization class org.apache.commons.compress.archivers.zip.**

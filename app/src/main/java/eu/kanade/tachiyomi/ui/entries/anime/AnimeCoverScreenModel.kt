@@ -118,7 +118,6 @@ class AnimeCoverScreenModel(
     fun editCover(context: Context, data: Uri) {
         val anime = state.value ?: return
         coroutineScope.launchIO {
-            @Suppress("BlockingMethodInNonBlockingContext")
             context.contentResolver.openInputStream(data)?.use {
                 try {
                     anime.editCover(Injekt.get(), it, updateAnime, coverCache)

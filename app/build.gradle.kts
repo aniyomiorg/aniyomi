@@ -218,7 +218,6 @@ dependencies {
     // Disk
     implementation(libs.disklrucache)
     implementation(libs.unifile)
-    implementation(libs.compress)
     implementation(libs.junrar)
 
     // Preferences
