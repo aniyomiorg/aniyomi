@@ -226,8 +226,14 @@ class AnimeDownloader(
                 5,
             )
             .subscribe(
-                { completedDownload ->
-                    completeAnimeDownload(completedDownload)
+                {
+                    // Remove successful download from queue
+                    if (it.status == AnimeDownload.State.DOWNLOADED) {
+                        removeFromQueue(it)
+                    }
+                    if (areAllAnimeDownloadsFinished()) {
+                        stop()
+                    }
                 },
                 { error ->
                     logcat(LogPriority.ERROR, error)
@@ -676,9 +682,16 @@ class AnimeDownloader(
                             }
                             it.delete()
                             tmpDir.delete()
-                            queueState.value.find { Anime -> Anime.video == video }?.let { Anime ->
-                                Anime.status = AnimeDownload.State.DOWNLOADED
-                                completeAnimeDownload(Anime)
+                            queueState.value.find { Anime -> Anime.video == video }?.let { download ->
+                                download.status = AnimeDownload.State.DOWNLOADED
+                                // Delete successful downloads from queue
+                                if (download.status == AnimeDownload.State.DOWNLOADED) {
+                                    // Remove downloaded episode from queue
+                                    removeFromQueue(download)
+                                }
+                                if (areAllAnimeDownloadsFinished()) {
+                                    stop()
+                                }
                             }
                         }
                     }
@@ -751,20 +764,6 @@ class AnimeDownloader(
     }
 
     /**
-     * Completes a download. This method is called in the main thread.
-     */
-    private fun completeAnimeDownload(download: AnimeDownload) {
-        // Delete successful downloads from queue
-        if (download.status == AnimeDownload.State.DOWNLOADED) {
-            // Remove downloaded episode from queue
-            removeFromQueue(download)
-        }
-        if (areAllAnimeDownloadsFinished()) {
-            stop()
-        }
-    }
-
-    /**
      * Returns true if all the queued downloads are in DOWNLOADED or ERROR state.
      */
     private fun areAllAnimeDownloadsFinished(): Boolean {
@@ -807,14 +806,26 @@ class AnimeDownloader(
         }
     }
 
-    fun removeFromQueue(episodes: List<Episode>) {
-        episodes.forEach { episode ->
-            queueState.value.find { it.episode.id == episode.id }?.let { removeFromQueue(it) }
+    private inline fun removeFromQueueByPredicate(predicate: (AnimeDownload) -> Boolean) {
+        _queueState.update { queue ->
+            val downloads = queue.filter { predicate(it) }
+            store.removeAll(downloads)
+            downloads.forEach { download ->
+                if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                    download.status = AnimeDownload.State.NOT_DOWNLOADED
+                }
+            }
+            queue - downloads
         }
     }
 
+    fun removeFromQueue(episodes: List<Episode>) {
+        val episodeIds = episodes.map { it.id }
+        removeFromQueueByPredicate { it.episode.id in episodeIds }
+    }
+
     fun removeFromQueue(anime: Anime) {
-        queueState.value.filter { it.anime.id == anime.id }.forEach { removeFromQueue(it) }
+        removeFromQueueByPredicate { it.anime.id == anime.id }
     }
 
     private fun _clearQueue() {

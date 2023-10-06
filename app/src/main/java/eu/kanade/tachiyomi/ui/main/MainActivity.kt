@@ -72,8 +72,6 @@ import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -123,9 +121,6 @@ class MainActivity : BaseActivity() {
     private val libraryPreferences: LibraryPreferences by injectLazy()
     private val uiPreferences: UiPreferences by injectLazy()
     private val preferences: BasePreferences by injectLazy()
-
-    private val episodeCache: EpisodeCache by injectLazy()
-    private val chapterCache: ChapterCache by injectLazy()
 
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
@@ -491,17 +486,6 @@ class MainActivity : BaseActivity() {
 
         ready = true
         return true
-    }
-
-    override fun onBackPressed() {
-        if (navigator?.size == 1 &&
-            !onBackPressedDispatcher.hasEnabledCallbacks() &&
-            libraryPreferences.autoClearItemCache().get()
-        ) {
-            chapterCache.clear()
-            episodeCache.clear()
-        }
-        super.onBackPressed()
     }
 
     init {

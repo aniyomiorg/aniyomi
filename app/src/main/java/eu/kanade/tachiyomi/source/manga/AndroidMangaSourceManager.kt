@@ -111,6 +111,6 @@ class AndroidMangaSourceManager(
             registerStubSource(it)
             return it
         }
-        return StubMangaSource(id, "", "")
+        return StubMangaSource(id = id, lang = "", name = "")
     }
 }

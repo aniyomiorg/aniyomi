@@ -111,6 +111,6 @@ class AndroidAnimeSourceManager(
             registerStubSource(it)
             return it
         }
-        return StubAnimeSource(id, "", "")
+        return StubAnimeSource(id = id, lang = "", name = "")
     }
 }

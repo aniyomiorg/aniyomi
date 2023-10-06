@@ -5,9 +5,9 @@ import tachiyomi.domain.source.anime.model.StubAnimeSource
 
 val animeSourceMapper: (eu.kanade.tachiyomi.animesource.AnimeSource) -> AnimeSource = { source ->
     AnimeSource(
-        source.id,
-        source.lang,
-        source.name,
+        id = source.id,
+        lang = source.lang,
+        name = source.name,
         supportsLatest = false,
         isStub = false,
     )
