@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -210,10 +212,11 @@ fun AppBarActions(
             IconButton(
                 onClick = it.onClick,
                 enabled = it.enabled,
-                modifier = Modifier.tooltipAnchor(),
+                modifier = Modifier.tooltipTrigger(),
             ) {
                 Icon(
                     imageVector = it.icon,
+                    tint = it.iconTint ?: LocalContentColor.current,
                     contentDescription = it.title,
                 )
             }
@@ -227,7 +230,7 @@ fun AppBarActions(
         ) {
             IconButton(
                 onClick = { showMenu = !showMenu },
-                modifier = Modifier.tooltipAnchor(),
+                modifier = Modifier.tooltipTrigger(),
             ) {
                 Icon(
                     Icons.Outlined.MoreVert,
@@ -348,7 +351,7 @@ fun SearchToolbar(
                     ) {
                         IconButton(
                             onClick = onClick,
-                            modifier = Modifier.tooltipAnchor(),
+                            modifier = Modifier.tooltipTrigger(),
                         ) {
                             Icon(
                                 Icons.Outlined.Search,
@@ -365,7 +368,7 @@ fun SearchToolbar(
                                 onClick()
                                 focusRequester.requestFocus()
                             },
-                            modifier = Modifier.tooltipAnchor(),
+                            modifier = Modifier.tooltipTrigger(),
                         ) {
                             Icon(
                                 Icons.Outlined.Close,
@@ -390,6 +393,7 @@ sealed interface AppBar {
     data class Action(
         val title: String,
         val icon: ImageVector,
+        val iconTint: Color? = null,
         val onClick: () -> Unit,
         val enabled: Boolean = true,
     ) : AppBarAction

@@ -12,7 +12,6 @@ import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
-import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
@@ -26,16 +25,26 @@ import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import rx.Observable
-import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import rx.subjects.PublishSubject
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNow
@@ -52,6 +61,7 @@ import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * This class is the one in charge of downloading episodes.
@@ -87,15 +97,8 @@ class AnimeDownloader(
      */
     private val notifier by lazy { AnimeDownloadNotifier(context) }
 
-    /**
-     * AnimeDownloader subscription.
-     */
-    private var subscription: Subscription? = null
-
-    /**
-     * Relay to send a list of downloads to the downloader.
-     */
-    private val downloadsRelay = PublishRelay.create<List<AnimeDownload>>()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var downloaderJob: Job? = null
 
     /**
      * Preference for user's choice of external downloader
@@ -106,7 +109,7 @@ class AnimeDownloader(
      * Whether the downloader is running.
      */
     val isRunning: Boolean
-        get() = subscription != null
+        get() = downloaderJob?.isActive ?: false
 
     /**
      * Whether the downloader is paused
@@ -134,18 +137,17 @@ class AnimeDownloader(
      * @return true if the downloader is started, false otherwise.
      */
     fun start(): Boolean {
-        if (subscription != null || queueState.value.isEmpty()) {
+        if (isRunning || queueState.value.isEmpty()) {
             return false
         }
-
-        initializeSubscription()
 
         val pending = queueState.value.filter { it.status != AnimeDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != AnimeDownload.State.QUEUE) it.status = AnimeDownload.State.QUEUE }
 
         isPaused = false
 
-        downloadsRelay.call(pending)
+        launchDownloaderJob()
+
         return pending.isNotEmpty()
     }
 
@@ -153,7 +155,7 @@ class AnimeDownloader(
      * Stops the downloader.
      */
     fun stop(reason: String? = null) {
-        destroySubscription()
+        cancelDownloaderJob()
         queueState.value
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.ERROR }
@@ -181,7 +183,7 @@ class AnimeDownloader(
      * Pauses the downloader
      */
     fun pause() {
-        destroySubscription()
+        cancelDownloaderJob()
         queueState.value
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.QUEUE }
@@ -192,7 +194,7 @@ class AnimeDownloader(
      * Removes everything from the queue.
      */
     fun clearQueue() {
-        destroySubscription()
+        cancelDownloaderJob()
 
         _clearQueue()
         notifier.dismissProgress()
@@ -201,52 +203,72 @@ class AnimeDownloader(
     /**
      * Prepares the subscriptions to start downloading.
      */
-    private fun initializeSubscription() {
-        // Unsubscribe the previous subscription if it exists
-        destroySubscription()
+    private fun launchDownloaderJob() {
+        if (isRunning) return
 
-        subscription = downloadsRelay.flatMapIterable { it }
-            // Concurrently download from 3 different sources
-            .groupBy { it.source }
-            .flatMap(
-                { bySource ->
-                    bySource.flatMap(
-                        { download ->
-                            downloadEpisode(download)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                        },
-                        if (sourceManager.get(bySource.key.id) is UnmeteredSource) {
-                            downloadPreferences.numberOfDownloads().get()
-                        } else {
-                            1
-                        },
-                    )
-                },
-                5,
-            )
-            .subscribe(
-                {
-                    // Remove successful download from queue
-                    if (it.status == AnimeDownload.State.DOWNLOADED) {
-                        removeFromQueue(it)
+        downloaderJob = scope.launch {
+            val activeDownloadsFlow = queueState.transformLatest { queue ->
+                while (true) {
+                    val activeDownloads = queue.asSequence()
+                        .filter { it.status.value <= AnimeDownload.State.DOWNLOADING.value } // Ignore completed downloads, leave them in the queue
+                        .groupBy { it.source }
+                        .toList().take(5) // Concurrently download from 5 different sources
+                        .map { (_, downloads) -> downloads.first() }
+                    emit(activeDownloads)
+
+                    if (activeDownloads.isEmpty()) break
+                    // Suspend until a download enters the ERROR state
+                    val activeDownloadsErroredFlow =
+                        combine(activeDownloads.map(AnimeDownload::statusFlow)) { states ->
+                            states.contains(AnimeDownload.State.ERROR)
+                        }.filter { it }
+                    activeDownloadsErroredFlow.first()
+                }
+            }.distinctUntilChanged()
+
+            // Use supervisorScope to cancel child jobs when the downloader job is cancelled
+            supervisorScope {
+                val downloadJobs = mutableMapOf<AnimeDownload, Job>()
+
+                activeDownloadsFlow.collectLatest { activeDownloads ->
+                    val downloadJobsToStop = downloadJobs.filter { it.key !in activeDownloads }
+                    downloadJobsToStop.forEach { (download, job) ->
+                        job.cancel()
+                        downloadJobs.remove(download)
                     }
-                    if (areAllAnimeDownloadsFinished()) {
-                        stop()
+
+                    val downloadsToStart = activeDownloads.filter { it !in downloadJobs }
+                    downloadsToStart.forEach { download ->
+                        downloadJobs[download] = launchDownloadJob(download)
                     }
-                },
-                { error ->
-                    logcat(LogPriority.ERROR, error)
-                    notifier.onError(error.message)
-                    stop()
-                },
-            )
+                }
+            }
+        }
+    }
+
+    private fun CoroutineScope.launchDownloadJob(download: AnimeDownload) = launchIO {
+        try {
+            downloadEpisode(download)
+
+            // Remove successful download from queue
+            if (download.status == AnimeDownload.State.DOWNLOADED) {
+                removeFromQueue(download)
+            }
+            if (areAllAnimeDownloadsFinished()) {
+                stop()
+            }
+        } catch (e: Throwable) {
+            if (e is CancellationException) throw e
+            logcat(LogPriority.ERROR, e)
+            notifier.onError(e.message)
+            stop()
+        }
     }
 
     /**
      * Destroys the downloader subscriptions.
      */
-    private fun destroySubscription() {
+    private fun cancelDownloaderJob() {
         isFFmpegRunning = false
         FFmpegKitConfig.getSessions().filter {
             it.isFFmpeg && (it.state == SessionState.CREATED || it.state == SessionState.RUNNING)
@@ -254,8 +276,8 @@ class AnimeDownloader(
             it.cancel()
         }
 
-        subscription?.unsubscribe()
-        subscription = null
+        downloaderJob?.cancel()
+        downloaderJob = null
     }
 
     /**
@@ -272,17 +294,13 @@ class AnimeDownloader(
 
         val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
         val wasEmpty = queueState.value.isEmpty()
-        // Called in background thread, the operation can be slow with SAF.
-        val episodesWithoutDir = async {
-            episodes
-                // Filter out those already downloaded.
-                .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
-                // Add episodes to queue from the start.
-                .sortedByDescending { it.sourceOrder }
-        }
+        val episodesWithoutDir = episodes
+            // Filter out those already downloaded.
+            .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
+            // Add chapters to queue from the start.
+            .sortedByDescending { it.sourceOrder }
 
-        // Runs in main thread (synchronization needed).
-        val episodesToQueue = episodesWithoutDir.await()
+        val episodesToQueue = episodesWithoutDir
             // Filter out those already enqueued.
             .filter { episode -> queueState.value.none { it.episode.id == episode.id } }
             // Create a download for each one.
@@ -290,11 +308,6 @@ class AnimeDownloader(
 
         if (episodesToQueue.isNotEmpty()) {
             addAllToQueue(episodesToQueue)
-
-            if (isRunning) {
-                // Send the list of downloads to the downloader.
-                downloadsRelay.call(episodesToQueue)
-            }
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
@@ -515,7 +528,12 @@ class AnimeDownloader(
         }
 
         var duration = 0L
+        var nextLineIsDuration = false
         val logCallback = LogCallback { log ->
+            if (nextLineIsDuration) {
+                parseDuration(log.message)?.let { duration = it }
+                nextLineIsDuration = false
+            }
             if (log.level <= Level.AV_LOG_WARNING) log.message?.let { logcat { it } }
             if (duration != 0L && log.message.startsWith("frame=")) {
                 val outTime = log.message
@@ -806,7 +824,7 @@ class AnimeDownloader(
         }
     }
 
-    private inline fun removeFromQueueByPredicate(predicate: (AnimeDownload) -> Boolean) {
+    private inline fun removeFromQueueIf(predicate: (AnimeDownload) -> Boolean) {
         _queueState.update { queue ->
             val downloads = queue.filter { predicate(it) }
             store.removeAll(downloads)
@@ -821,11 +839,11 @@ class AnimeDownloader(
 
     fun removeFromQueue(episodes: List<Episode>) {
         val episodeIds = episodes.map { it.id }
-        removeFromQueueByPredicate { it.episode.id in episodeIds }
+        removeFromQueueIf { it.episode.id in episodeIds }
     }
 
     fun removeFromQueue(anime: Anime) {
-        removeFromQueueByPredicate { it.anime.id == anime.id }
+        removeFromQueueIf { it.anime.id == anime.id }
     }
 
     private fun _clearQueue() {

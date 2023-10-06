@@ -4,13 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -20,7 +14,7 @@ import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.lifecycle.DisposableEffectIgnoringConfiguration
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.ScreenTransition
+import eu.kanade.presentation.util.ScreenTransition
 import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.presentation.core.components.AdaptiveSheet as AdaptiveSheetImpl
 
@@ -43,7 +37,7 @@ fun NavigatorAdaptiveSheet(
                 ScreenTransition(
                     navigator = sheetNavigator,
                     transition = {
-                        fadeIn(animationSpec = tween(220, delayMillis = 90)) with
+                        fadeIn(animationSpec = tween(220, delayMillis = 90)) togetherWith
                             fadeOut(animationSpec = tween(90))
                     },
                 )
@@ -79,15 +73,13 @@ fun AdaptiveSheet(
     tonalElevation: Dp = 1.dp,
     enableSwipeDismiss: Boolean = true,
     onDismissRequest: () -> Unit,
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val isTabletUi = isTabletUi()
+
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false,
-        ),
+        properties = dialogProperties,
     ) {
         AdaptiveSheetImpl(
             isTabletUi = isTabletUi,
@@ -95,12 +87,12 @@ fun AdaptiveSheet(
             enableSwipeDismiss = enableSwipeDismiss,
             onDismissRequest = onDismissRequest,
         ) {
-            val contentPadding = if (isTabletUi) {
-                PaddingValues()
-            } else {
-                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom).asPaddingValues()
-            }
-            content(contentPadding)
+            content()
         }
     }
 }
+
+private val dialogProperties = DialogProperties(
+    usePlatformDefaultWidth = false,
+    decorFitsSystemWindows = false,
+)

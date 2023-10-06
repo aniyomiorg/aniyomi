@@ -54,10 +54,9 @@ fun MangaLibrarySettingsDialog(
             stringResource(R.string.action_sort),
             stringResource(R.string.action_display),
         ),
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -219,23 +218,25 @@ private fun ColumnScope.DisplayPage(
                 }
             }
 
-            val columns by columnPreference.changes().collectAsState(initial = 0)
-            Column {
+            val columns by columnPreference.collectAsState()
+            Column(modifier = Modifier.weight(0.5f)) {
                 Text(
                     stringResource(id = R.string.pref_library_columns),
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                if (columns > 0) {
-                    Text(stringResource(id = R.string.pref_library_columns_per_row, columns))
-                } else {
-                    Text(stringResource(id = R.string.label_default))
-                }
+                Text(
+                    if (columns > 0) {
+                        stringResource(id = R.string.pref_library_columns_per_row, columns)
+                    } else {
+                        stringResource(id = R.string.label_default)
+                    },
+                )
             }
 
             Slider(
                 value = columns.toFloat(),
                 onValueChange = { columnPreference.set(it.toInt()) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1.5f),
                 valueRange = 0f..10f,
                 steps = 10,
             )

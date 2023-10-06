@@ -5,7 +5,7 @@ coil_version = "2.3.0"
 shizuku_version = "12.2.0"
 sqlite = "2.3.1"
 sqldelight = "1.5.5"
-leakcanary = "2.10"
+leakcanary = "2.11"
 voyager = "1.0.0-rc06"
 richtext = "0.16.0"
 
@@ -35,7 +35,7 @@ junrar = "com.github.junrar:junrar:7.5.4"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
-sqlite-android = "com.github.requery:sqlite-android:3.41.1"
+sqlite-android = "com.github.requery:sqlite-android:3.42.0"
 
 preferencektx = "androidx.preference:preference-ktx:1.2.0"
 
@@ -55,12 +55,10 @@ richtext-m3 = { module = "com.halilibo.compose-richtext:richtext-ui-material3", 
 
 material = "com.google.android.material:material:1.9.0"
 flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533"
-flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533"
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
-compose-cascade = "me.saket.cascade:cascade-compose:2.0.0-rc02"
-compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.12.3"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:1.0.2"
 compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.0"
 
 logcat = "com.squareup.logcat:logcat:0.1"
@@ -84,14 +82,13 @@ sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.
 
 junit = "org.junit.jupiter:junit-jupiter:5.9.3"
 kotest-assertions = "io.kotest:kotest-assertions-core:5.6.2"
+mockk = "io.mockk:mockk:1.13.5"
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
 kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
-
-mockk = "io.mockk:mockk:1.13.5"
 
 aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.10.n"
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.10"

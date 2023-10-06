@@ -31,7 +31,6 @@ import tachiyomi.presentation.core.util.plus
 fun MangaLibraryPager(
     state: PagerState,
     contentPadding: PaddingValues,
-    pageCount: Int,
     hasActiveFilters: Boolean,
     selectedManga: List<LibraryManga>,
     searchQuery: String?,
@@ -44,7 +43,6 @@ fun MangaLibraryPager(
     onClickContinueReading: ((LibraryManga) -> Unit)?,
 ) {
     HorizontalPager(
-        pageCount = pageCount,
         modifier = Modifier.fillMaxSize(),
         state = state,
         verticalAlignment = Alignment.Top,

@@ -22,7 +22,6 @@ import tachiyomi.presentation.core.components.HorizontalPager
 fun AnimeLibraryPager(
     state: PagerState,
     contentPadding: PaddingValues,
-    pageCount: Int,
     hasActiveFilters: Boolean,
     selectedAnime: List<LibraryAnime>,
     searchQuery: String?,
@@ -35,7 +34,6 @@ fun AnimeLibraryPager(
     onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
     HorizontalPager(
-        pageCount = pageCount,
         modifier = Modifier.fillMaxSize(),
         state = state,
         verticalAlignment = Alignment.Top,

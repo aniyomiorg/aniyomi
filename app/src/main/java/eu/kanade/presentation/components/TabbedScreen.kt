@@ -38,7 +38,7 @@ fun TabbedScreen(
     startIndex: Int? = null,
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
-    state: PagerState = rememberPagerState(),
+    state: PagerState = rememberPagerState { tabs.size },
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
@@ -105,7 +105,6 @@ fun TabbedScreen(
             }
 
             HorizontalPager(
-                pageCount = tabs.size,
                 modifier = Modifier.fillMaxSize(),
                 state = state,
                 verticalAlignment = Alignment.Top,
