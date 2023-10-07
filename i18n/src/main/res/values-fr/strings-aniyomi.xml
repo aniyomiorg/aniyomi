@@ -127,7 +127,7 @@
     <string name="snack_add_to_manga_library">Ajouter à la bibliothèque \?</string>
     <string name="snack_add_to_anime_library">Ajouter un animé à la bibliothèque \?</string>
     <string name="display_mode_episode">Épisode %1$s</string>
-    <string name="episode_downloading_progress">Téléchargement (%d% %)</string>
+    <string name="episode_downloading_progress">Téléchargement (%d%%)</string>
     <string name="download_error">Erreur</string>
     <string name="download_paused">En pause</string>
     <string name="show_episode_number">Numéro de l\'épisode</string>
