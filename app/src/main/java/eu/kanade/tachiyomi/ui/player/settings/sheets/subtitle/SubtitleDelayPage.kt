@@ -40,7 +40,7 @@ fun SubtitleDelayPage(
             Text(text = stringResource(id = R.string.player_audio_remember_delay))
             Switch(
                 checked = audioDelay.collectAsState().value,
-                onCheckedChange = { screenModel.togglePreference { audioDelay } },
+                onCheckedChange = null,
             )
         }
         Row(
@@ -73,7 +73,7 @@ fun SubtitleDelayPage(
             Text(text = stringResource(id = R.string.player_subtitle_remember_delay))
             Switch(
                 checked = subDelay.collectAsState().value,
-                onCheckedChange = { screenModel.togglePreference { subDelay } },
+                onCheckedChange = null,
             )
         }
         Row(

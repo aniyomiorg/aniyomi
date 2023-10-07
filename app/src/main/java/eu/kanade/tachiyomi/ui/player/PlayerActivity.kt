@@ -52,11 +52,11 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerScreenshotDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
@@ -97,7 +97,6 @@ import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -381,6 +380,17 @@ class PlayerActivity : BaseActivity() {
                 is PlayerViewModel.Dialog.SubtitleSettings -> {
                     SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subTracks.size > 1),
+                        onDismissRequest = pauseForDialog(),
+                    )
+                }
+
+                is PlayerViewModel.Dialog.PlayerScreenshot -> {
+                    PlayerScreenshotDialog(
+                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        cachePath = cacheDir.path,
+                        onSetAsCover = { viewModel.setAsCover(it) },
+                        onShare = { viewModel.shareImage(it, player.timePos) },
+                        onSave = { viewModel.saveImage(it, player.timePos) },
                         onDismissRequest = pauseForDialog(),
                     )
                 }
@@ -1218,11 +1228,6 @@ class PlayerActivity : BaseActivity() {
             ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
     }
 
-    fun openScreenshotSheet() {
-        playerControls.hideControls(true)
-        PlayerScreenshotSheet(this@PlayerActivity).show()
-    }
-
     @Suppress("UNUSED_PARAMETER")
     fun openOptionsSheet(view: View) {
         playerControls.hideControls(true)
@@ -1248,29 +1253,6 @@ class PlayerActivity : BaseActivity() {
         stats = !stats
     }
 
-    private fun takeScreenshot(): InputStream? {
-        val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
-        val subtitleFlag = if (playerPreferences.screenshotSubtitles().get()) {
-            "subtitles"
-        } else {
-            "video"
-        }
-        MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
-        val tempFile = File(filename).takeIf { it.exists() } ?: return null
-        val newFile = File(cacheDir.path + "/mpv_screenshot.png")
-        newFile.delete()
-        tempFile.renameTo(newFile)
-        return newFile.takeIf { it.exists() }?.inputStream()
-    }
-
-    /**
-     * Called from the options sheet. It delegates the call to the presenter to do some IO, which
-     * will call [onShareImageResult] with the path the image was saved on when it's ready.
-     */
-    fun shareImage() {
-        viewModel.shareImage({ takeScreenshot()!! }, player.timePos)
-    }
-
     /**
      * Called from the presenter when a screenshot is ready to be shared. It shows Android's
      * default sharing tool.
@@ -1287,14 +1269,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     /**
-     * Called from the options sheet. It delegates saving the screenshot on
-     * external storage to the presenter.
-     */
-    fun saveImage() {
-        viewModel.saveImage({ takeScreenshot()!! }, player.timePos)
-    }
-
-    /**
      * Called from the presenter when a screenshot is saved or fails. It shows a message
      * or logs the event depending on the [result].
      */
@@ -1307,14 +1281,6 @@ class PlayerActivity : BaseActivity() {
                 logcat(LogPriority.ERROR, result.error)
             }
         }
-    }
-
-    /**
-     * Called from the options sheet. It delegates setting the screenshot
-     * as the cover to the presenter.
-     */
-    fun setAsCover() {
-        viewModel.setAsCover(takeScreenshot())
     }
 
     /**

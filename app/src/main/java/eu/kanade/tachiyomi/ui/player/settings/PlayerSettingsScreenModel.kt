@@ -27,6 +27,8 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
+import java.io.InputStream
 
 class PlayerSettingsScreenModel(
     val preferences: PlayerPreferences = Injekt.get(),
@@ -89,5 +91,18 @@ class PlayerSettingsScreenModel(
                 )
             }
         }
+    }
+
+    fun takeScreenshot(cachePath: String, showSubtitles: Boolean): InputStream? {
+        val filename = cachePath + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
+        val subtitleFlag = if (showSubtitles) "subtitles" else "video"
+
+        MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
+        val tempFile = File(filename).takeIf { it.exists() } ?: return null
+        val newFile = File("$cachePath/mpv_screenshot.png")
+
+        newFile.delete()
+        tempFile.renameTo(newFile)
+        return newFile.takeIf { it.exists() }?.inputStream()
     }
 }

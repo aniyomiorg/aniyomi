@@ -86,14 +86,19 @@ private fun SubtitleColors(
             preference = backgroundColorPref,
         )
     }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        SubtitlePreview(
+            isBold = screenModel.preferences.boldSubtitles().get(),
+            isItalic = screenModel.preferences.italicSubtitles().get(),
+            textColor = Color(textColorPref.collectAsState().value),
+            borderColor = Color(borderColorPref.collectAsState().value),
+            backgroundColor = Color(backgroundColorPref.collectAsState().value),
+        )
+    }
+
     Column(verticalArrangement = Arrangement.SpaceEvenly) {
         if (subsColor != SubsColor.NONE) {
-            SubtitleColorSlider(
-                argb = ARGBValue.ALPHA,
-                subsColor = subsColor,
-                preference = subsColor.preference(screenModel.preferences),
-            )
-
             SubtitleColorSlider(
                 argb = ARGBValue.RED,
                 subsColor = subsColor,
@@ -111,16 +116,13 @@ private fun SubtitleColors(
                 subsColor = subsColor,
                 preference = subsColor.preference(screenModel.preferences),
             )
+
+            SubtitleColorSlider(
+                argb = ARGBValue.ALPHA,
+                subsColor = subsColor,
+                preference = subsColor.preference(screenModel.preferences),
+            )
         }
-    }
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        SubtitlePreview(
-            isBold = screenModel.preferences.boldSubtitles().get(),
-            isItalic = screenModel.preferences.italicSubtitles().get(),
-            textColor = Color(textColorPref.get()),
-            borderColor = Color(borderColorPref.get()),
-            backgroundColor = Color(backgroundColorPref.get()),
-        )
     }
 }
 

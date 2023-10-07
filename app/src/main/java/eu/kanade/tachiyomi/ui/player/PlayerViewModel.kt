@@ -507,13 +507,12 @@ class PlayerViewModel(
     /**
      * Sets the screenshot as cover and notifies the UI of the result.
      */
-    fun setAsCover(image: InputStream?) {
+    fun setAsCover(imageStream: () -> InputStream) {
         val anime = currentAnime ?: return
-        val imageStream = image ?: return
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(Injekt.get(), imageStream)
+                anime.editCover(Injekt.get(), imageStream())
                 if (anime.isLocal() || anime.favorite) {
                     SetAsCover.Success
                 } else {
@@ -692,6 +691,10 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = Dialog.SubtitleSettings) }
     }
 
+    fun showPlayerScreenshot() {
+        mutableState.update { it.copy(dialog = Dialog.PlayerScreenshot) }
+    }
+
     data class State(
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
@@ -707,6 +710,7 @@ class PlayerViewModel(
         object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
         object SubtitleSettings : Dialog()
+        object PlayerScreenshot : Dialog()
     }
 
     sealed class Event {

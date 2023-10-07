@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun SubtitleSettingsSheet(
@@ -61,25 +63,23 @@ fun SubtitlePreview(
     borderColor: Color,
     backgroundColor: Color,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .background(color = backgroundColor),
-    ) {
-        Text(
-            text = stringResource(R.string.player_subtitle_settings_example),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = TextStyle(
-                fontFamily = FontFamily.SansSerif,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                fontWeight =
-                if (isBold) FontWeight.Bold else FontWeight.Medium,
-                fontStyle =
-                if (isItalic) FontStyle.Italic else FontStyle.Normal,
-                shadow = Shadow(color = borderColor, blurRadius = 7.5f),
-                color = textColor,
-                textAlign = TextAlign.Center,
-            ),
-        )
+    Box(modifier = Modifier.padding(vertical = MaterialTheme.padding.medium)) {
+        Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
+            Text(
+                text = stringResource(R.string.player_subtitle_settings_example),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight =
+                    if (isBold) FontWeight.Bold else FontWeight.Medium,
+                    fontStyle =
+                    if (isItalic) FontStyle.Italic else FontStyle.Normal,
+                    shadow = Shadow(color = borderColor, blurRadius = 7.5f),
+                    color = textColor,
+                    textAlign = TextAlign.Center,
+                ),
+            )
+        }
     }
 }

@@ -209,7 +209,7 @@
     <string name="episode_progress">Progress: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progress: %1$s</string>
     <string name="screenshot_header">Take screenshot</string>
-    <string name="screenshot_show_subs">Show subtitles in screenshot</string>
+    <string name="screenshot_show_subs">Include Subtitles</string>
     <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
     <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>
     <string name="stats_header">Show statistics</string>
