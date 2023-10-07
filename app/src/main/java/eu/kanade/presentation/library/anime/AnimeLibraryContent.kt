@@ -14,16 +14,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
-import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.library.anime.LibraryAnime
-import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.rememberPagerState
+import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.presentation.library.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.rememberPagerState
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -61,9 +61,12 @@ fun AnimeLibraryContent(
         var isRefreshing by remember(pagerState.currentPage) { mutableStateOf(false) }
 
         if (showPageTabs && categories.size > 1) {
+            if (categories.size <= pagerState.currentPage) {
+                pagerState.currentPage = categories.size - 1
+            }
             LibraryTabs(
                 categories = categories,
-                currentPageIndex = pagerState.currentPage,
+                pagerState = pagerState,
                 getNumberOfItemsForCategory = getNumberOfAnimeForCategory,
             ) { scope.launch { pagerState.animateScrollToPage(it) } }
         }

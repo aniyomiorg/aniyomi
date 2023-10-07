@@ -74,7 +74,6 @@
     <string name="action_bookmark">บุ๊คมาร์คตอน</string>
     <string name="action_remove_bookmark">ยกเลิกบุ๊คมาร์คตอน</string>
     <string name="action_move_category">ตั้งหมวดหมู่</string>
-    <string name="action_stop">หยุด</string>
     <string name="action_pause">หยุดชั่วคราว</string>
     <string name="action_remove">นำออก</string>
     <string name="action_resume">ดำเนินการต่อ</string>
@@ -203,12 +202,6 @@
     <string name="sort_by_source">ตามแหล่งที่มา</string>
     <string name="sort_by_number">ตามหมายเลขตอน</string>
     <string name="manga_download">ดาวน์โหลด</string>
-    <string name="custom_download">จำนวนดาวน์โหลดที่กำหนดเอง</string>
-    <string name="download_1">ตอนถัดไป</string>
-    <string name="download_5">5 ตอนถัดไป</string>
-    <string name="download_10">10 ตอนถัดไป</string>
-    <string name="download_custom">กำหนดเอง</string>
-    <string name="download_all">ทั้งหมด</string>
     <string name="download_unread">ที่ยังไม่ได้อ่าน</string>
     <string name="confirm_delete_chapters">แน่ใจหรือไม่ว่าต้องการลบตอนที่เลือก\?</string>
     <string name="manga_tracking_tab">การติดตาม</string>
@@ -242,7 +235,7 @@
     <string name="cover_updated">อัปเดตปกแล้ว</string>
     <string name="chapter_progress">หน้า: %1$d</string>
     <string name="no_next_chapter">ไม่พบตอนถัดไป</string>
-    <string name="decode_image_error">ไม่สามารถโหลดรูปภาพได้</string>
+    <string name="decode_image_error">ไม่สามารถโหลดภาพนี้ได้</string>
     <string name="confirm_set_image_as_cover">ใช้ภาพนี้เป็นรูปปก\?</string>
     <string name="transition_finished">อ่านจบแล้ว:</string>
     <string name="transition_current">ปัจจุบัน:</string>
@@ -341,7 +334,7 @@
     <string name="lock_always">ตลอด</string>
     <string name="lock_when_idle">ล็อกเมื่อไม่ได้ใช้งาน</string>
     <string name="lock_with_biometrics">จำเป็นต้องปลดล็อก</string>
-    <string name="pref_category_security">ความปลอดภัย</string>
+    <string name="pref_category_security">ความปลอดภัยและความเป็นส่วนตัว</string>
     <string name="pref_manage_notifications">จัดการการแจ้งเตือน</string>
     <string name="pref_confirm_exit">ยืนยันการออก</string>
     <string name="pref_date_format">รูปแบบวันที่</string>
@@ -371,7 +364,6 @@
     <string name="action_disable">ปิดการใช้งาน</string>
     <string name="action_display_show_number_of_items">แสดงจำนวน</string>
     <string name="action_display_show_tabs">แสดงแท็บหมวดหมู่</string>
-    <string name="action_display_unread_badge">ตอนที่ยังไม่ได้อ่าน</string>
     <string name="action_display_comfortable_grid">ตารางแบบเต็มที</string>
     <string name="action_migrate">โยกย้าย</string>
     <string name="action_start">เริ่ม</string>
@@ -446,7 +438,6 @@
     <string name="last_used_source">ใช้ล่าสุด</string>
     <string name="http_error_hint">ตรวจสอบเว็บไซต์ใน WebView</string>
     <string name="tabs_header">แท็บ</string>
-    <string name="badges_header">เครื่องหมาย</string>
     <string name="downloaded_chapters">ตอนที่ดาวน์โหลดแล้ว</string>
     <string name="logout_success">ออกจากระบบแล้ว</string>
     <string name="logout">ออกจากระบบ</string>
@@ -468,9 +459,8 @@
     <string name="battery_optimization_disabled">การเพิ่มประสิทธิภาพแบตเตอรี่ถูกปิดใช้งานอยู่แล้ว</string>
     <string name="pref_disable_battery_optimization_summary">ช่วยในการอัปเดตและสำรองข้อมูลคลังในพื้นหลัง</string>
     <string name="pref_disable_battery_optimization">ปิดการใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่</string>
-    <string name="crash_log_saved">บันทึกบันทึกข้อขัดข้องแล้ว</string>
     <string name="pref_dump_crash_logs_summary">บันทึกบันทึกข้อผิดพลาดลงในแฟ้มเพื่อแบ่งปันกับผู้พัฒนา</string>
-    <string name="pref_dump_crash_logs">ดัมพ์บันทึกข้อขัดข้อง</string>
+    <string name="pref_dump_crash_logs">แบ่งปันบันทึกข้อขัดข้อง</string>
     <string name="pref_refresh_library_covers">โหลดปกในคลังใหม่</string>
     <string name="label_data">ข้อมูล</string>
     <string name="requires_app_restart">ต้องรีสตาร์ทแอปจึงจะมีผล</string>
@@ -493,7 +483,6 @@
     <string name="invalid_backup_file_missing_manga">แฟ้มสํารองข้อมูลไม่มีมังงะใด ๆ</string>
     <string name="invalid_backup_file">ข้อมูลสำรองไม่ถูกต้อง</string>
     <string name="pref_search_pinned_sources_only">เฉพาะแหล่งที่มาที่ตรึงไว้เท่านั้น</string>
-    <string name="pref_enable_automatic_extension_updates">ตรวจสอบการอัปเดตส่วนขยาย</string>
     <string name="tracking_info">ซิงค์ทางเดียวเพื่ออัปเดตความคืบหน้าของตอนกับบริการการติดตาม ตั้งค่าการติดตามรายการมังงะในแต่ละรายการได้จากปุ่มติดตาม</string>
     <string name="pref_download_new_categories_details">มังงะในหมวดหมู่ที่ยกเว้นไว้จะไม่ถูกดาวน์โหลดแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
     <string name="pref_category_auto_download">ดาวน์โหลดอัตโนมัติ</string>
@@ -513,7 +502,6 @@
         <item quantity="other">ของเรื่อง %d</item>
     </plurals>
     <string name="spen_previous_page">หน้าก่อน</string>
-    <string name="channel_crash_logs">บันทึกข้อขัดข้อง</string>
     <string name="channel_ext_updates">การอัปเดตส่วนขยาย</string>
     <string name="channel_errors">ข้อผิดพลาด</string>
     <string name="channel_complete">เสร็จสมบูรณ์</string>
@@ -619,9 +607,6 @@
     <string name="pref_landscape_zoom">ซูมภาพแนวนอน</string>
     <string name="skipped_reason_not_caught_up">ถูกข้ามเนื่องจากมีตอนที่ยังไม่ได้อ่าน</string>
     <string name="skipped_reason_not_started">ถูกข้ามเนื่องจากยังไม่มีตอนใด ๆ ถูกอ่าน</string>
-    <string name="confirm_manga_add_duplicate">มีรายการในคลังที่มีชื่อเดียวกัน แต่มาจากคนละแหล่งที่มา (%1$s)
-\n
-\nยังต้องการดำเนินการต่อหรือไม่\?</string>
     <string name="action_filter_started">เริ่มอ่านแล้ว</string>
     <string name="pref_update_only_started">ที่ยังไม่ได้เริ่มอ่าน</string>
     <string name="skipped_reason_completed">ถูกข้ามเนื่องจากเรื่องนี้จบแล้ว</string>
@@ -645,7 +630,6 @@
     <string name="source_filter_empty_screen">ไม่พบแหล่งที่มาที่ติดตั้งแล้ว</string>
     <string name="source_empty_screen">ไม่พบแหล่งที่มาใด ๆ</string>
     <string name="action_sort_unread_count">จำนวนตอนที่ยังไม่ได้อ่าน</string>
-    <string name="split_tall_images">แยกรูปภาพสูงยาว</string>
     <string name="download_notifier_split_page_not_found">ไม่พบหน้า %d ขณะกำลังแยกหน้า</string>
     <string name="split_tall_images_summary">เพิ่มประสิทธิภาพตัวอ่าน</string>
     <string name="download_notifier_split_page_path_not_found">ไม่พบตำแหน่งไฟล์ของหน้า %d</string>
@@ -653,7 +637,6 @@
     <string name="pref_reset_viewer_flags_summary">รีเซ็ตโหมดการอ่านและการจัดวางของทุกเรื่อง</string>
     <string name="pref_reset_viewer_flags_success">รีเซ็ตค่ากำหนดตัวอ่านทั้งหมดแล้ว</string>
     <string name="pref_reset_viewer_flags_error">ไม่สามารถรีเซ็ตค่ากำหนดตัวอ่าน</string>
-    <string name="download_notifier_split_failed">ไม่สามารถแยกภาพที่ดาวน์โหลดไว้ได้</string>
     <string name="empty_screen">เอ่อ นี้มันงี่เง่าชะมัด</string>
     <string name="ext_info_version">เวอร์ชัน</string>
     <string name="ext_info_language">ภาษา</string>
@@ -708,11 +691,32 @@
     <string name="pref_security_summary">การล็อกแอป, หน้าจอความปลอดภัย</string>
     <string name="pref_advanced_summary">ดัมพ์บันทึกข้อขัดข้อง, การเพิ่มประสิทธิภาพแบตเตอรี่</string>
     <string name="crash_screen_title">เกิดความผิดพลาดอย่างไม่ได้คาดคิด</string>
-    <string name="crash_screen_description">%s เกิดข้อผิดพลาดอย่างไม่คาดคิด ขอแนะนำให้คุณบันทึกภาพหน้าจอข้อความนี้ จากนั้นดัมพ์บันทึกข้อขัดข้อง แล้วส่งลงไปในช่องสนับสนุนของเราใน Discord</string>
+    <string name="crash_screen_description">%s เกิดข้อผิดพลาดอย่างไม่คาดคิด ขอแนะนำให้คุณแบ่งปันบันทึกข้อขัดข้อง แล้วส่งลงไปในช่องสนับสนุนของเราใน Discord</string>
     <string name="invalid_location">ตำแหน่งไม่ถูกต้อง: %s</string>
     <string name="unknown_title">ไม่ทราบชื่อเรื่อง</string>
     <string name="crash_screen_restart_application">เริ่มแอปพลิเคชันใหม่</string>
     <string name="updates_last_update_info_just_now">เมื่อสักครู่</string>
     <string name="error_user_agent_string_invalid">สตริงตัวแทนผู้ใช้ไม่ถูกต้อง</string>
 <string name="label_download_queue">คิวดาวน์โหลด</string>
+    <string name="pref_skip_dupe_chapters">ข้ามตอนที่ซ้ำกัน</string>
+    <string name="enhanced_services_not_installed">พร้อมใช้งานแต่ไม่ได้ติดตั้งแหล่งที่มา: %s</string>
+    <string name="confirm_add_duplicate_manga">มีรายการชื่อเดียวกันอยู่ในคลัง
+\n
+\nต้องการดำเนินการต่อหรือไม่\?</string>
+    <string name="track_error">%1$s ข้อผิดพลาด: %2$s</string>
+    <string name="information_required_plain">*จำเป็น</string>
+    <plurals name="download_amount">
+        <item quantity="other">%d ตอนถัดไป</item>
+    </plurals>
+    <string name="pref_hide_in_library_items">ซ่อนรายการที่มีอยู่ในคลังอยู่แล้ว</string>
+    <string name="action_copy_to_clipboard">คัดลอกไปยังคลิปบอร์ด</string>
+    <string name="action_update_category">อัปเดตหมวดหมู่</string>
+    <string name="missing_items_unknown">อาจเป็นตอนที่ไม่พบ</string>
+    <string name="split_tall_images">แยกภาพสูงยาว</string>
+    <string name="overlay_header">โอเวอร์เลย์</string>
+    <plurals name="missing_items">
+        <item quantity="other">ไม่พบ %1$s ตอน</item>
+    </plurals>
+    <string name="pref_page_rotate">หมุนหน้ากว้างให้พอดี</string>
+    <string name="pref_page_rotate_invert">พลิกการวางแนวของหน้ากว้างที่หมุน</string>
     </resources>

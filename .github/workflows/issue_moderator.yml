@@ -11,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Moderate issues
-        uses: tachiyomiorg/issue-moderator-action@v1
+        uses: tachiyomiorg/issue-moderator-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          duplicate-label: Duplicate
+
           auto-close-rules: |
             [
               {
@@ -27,3 +29,4 @@ jobs:
                 "message": "Requested information in the template was not filled out."
               }
             ]
+          auto-close-ignore-label: do-not-autoclose

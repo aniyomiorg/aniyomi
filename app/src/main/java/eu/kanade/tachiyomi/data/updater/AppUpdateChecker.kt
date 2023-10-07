@@ -2,51 +2,56 @@ package eu.kanade.tachiyomi.data.updater
 
 import android.content.Context
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.core.preference.Preference
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
-import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
+import kotlinx.serialization.json.Json
+import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.days
 
 class AppUpdateChecker {
 
     private val networkService: NetworkHelper by injectLazy()
     private val preferenceStore: PreferenceStore by injectLazy()
+    private val json: Json by injectLazy()
+
     private val lastAppCheck: Preference<Long> by lazy {
         preferenceStore.getLong("last_app_check", 0)
     }
 
     suspend fun checkForUpdate(context: Context, isUserPrompt: Boolean = false): AppUpdateResult {
-        // Limit checks to once a day at most
-        if (isUserPrompt.not() && Date().time < lastAppCheck.get() + TimeUnit.DAYS.toMillis(1)) {
+        // Limit checks to once a every 3 days at most
+        if (isUserPrompt.not() && Date().time < lastAppCheck.get() + 3.days.inWholeMilliseconds) {
             return AppUpdateResult.NoNewUpdate
         }
 
         return withIOContext {
-            val result = networkService.client
-                .newCall(GET("https://api.github.com/repos/$GITHUB_REPO/releases/latest"))
-                .await()
-                .parseAs<GithubRelease>()
-                .let {
-                    lastAppCheck.set(Date().time)
+            val result = with(json) {
+                networkService.client
+                    .newCall(GET("https://api.github.com/repos/$GITHUB_REPO/releases/latest"))
+                    .awaitSuccess()
+                    .parseAs<GithubRelease>()
+                    .let {
+                        lastAppCheck.set(Date().time)
 
-                    // Check if latest version is different from current version
-                    if (isNewVersion(it.version)) {
-                        if (context.isInstalledFromFDroid()) {
-                            AppUpdateResult.NewUpdateFdroidInstallation
+                        // Check if latest version is different from current version
+                        if (isNewVersion(it.version)) {
+                            if (context.isInstalledFromFDroid()) {
+                                AppUpdateResult.NewUpdateFdroidInstallation
+                            } else {
+                                AppUpdateResult.NewUpdate(it)
+                            }
                         } else {
-                            AppUpdateResult.NewUpdate(it)
+                            AppUpdateResult.NoNewUpdate
                         }
-                    } else {
-                        AppUpdateResult.NoNewUpdate
                     }
-                }
+            }
 
             when (result) {
                 is AppUpdateResult.NewUpdate -> AppUpdateNotifier(context).promptUpdate(result.release)

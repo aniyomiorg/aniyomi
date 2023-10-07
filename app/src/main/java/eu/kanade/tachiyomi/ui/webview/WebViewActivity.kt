@@ -6,21 +6,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.net.toUri
-import eu.kanade.presentation.webview.WebViewScreen
+import eu.kanade.presentation.webview.WebViewScreenContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.WebViewUtil
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
+import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
 
 class WebViewActivity : BaseActivity() {
@@ -45,18 +46,26 @@ class WebViewActivity : BaseActivity() {
             return
         }
 
-        val url = intent.extras!!.getString(URL_KEY) ?: return
-        var headers = mutableMapOf<String, String>()
-        val source = sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource
-        val animeSource = animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource
-        if (source != null) {
-            headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
-        } else if (animeSource != null) {
-            headers = animeSource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
+        val url = intent.extras?.getString(URL_KEY) ?: return
+        assistUrl = url
+        var headers = emptyMap<String, String>()
+        (sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource)?.let { source ->
+            try {
+                headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to build headers" }
+            }
+        }
+        (animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource)?.let { animeSource ->
+            try {
+                headers = animeSource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to build headers" }
+            }
         }
 
         setComposeContent {
-            WebViewScreen(
+            WebViewScreenContent(
                 onNavigateUp = { finish() },
                 initialTitle = intent.extras?.getString(TITLE_KEY),
                 url = url,
@@ -92,7 +101,7 @@ class WebViewActivity : BaseActivity() {
     }
 
     private fun clearCookies(url: String) {
-        val cleared = network.cookieManager.remove(url.toHttpUrl())
+        val cleared = network.cookieJar.remove(url.toHttpUrl())
         logcat { "Cleared $cleared cookies for: $url" }
     }
 

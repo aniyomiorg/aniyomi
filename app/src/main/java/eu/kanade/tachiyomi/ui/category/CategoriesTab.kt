@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 data class CategoriesTab(
     private val isManga: Boolean = false,
-) : Tab {
+) : Tab() {
 
     override val options: TabOptions
         @Composable

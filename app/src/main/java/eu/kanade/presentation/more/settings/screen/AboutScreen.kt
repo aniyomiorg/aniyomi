@@ -10,23 +10,22 @@ import androidx.compose.material.icons.outlined.Public
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import compose.icons.SimpleIcons
+import compose.icons.simpleicons.Discord
+import compose.icons.simpleicons.Github
+import compose.icons.simpleicons.Reddit
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
-import eu.kanade.presentation.components.LinkIcon
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.more.LogoHeader
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
@@ -35,13 +34,16 @@ import eu.kanade.tachiyomi.data.updater.RELEASE_URL
 import eu.kanade.tachiyomi.ui.more.NewUpdateScreen
 import eu.kanade.tachiyomi.util.CrashLogUtil
 import eu.kanade.tachiyomi.util.lang.toDateTimestampString
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.presentation.core.components.LinkIcon
+import tachiyomi.presentation.core.components.ScrollbarLazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat
@@ -49,7 +51,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-object AboutScreen : Screen {
+object AboutScreen : Screen() {
 
     @Composable
     override fun Content() {
@@ -145,22 +147,22 @@ object AboutScreen : Screen {
                     ) {
                         LinkIcon(
                             label = stringResource(R.string.website),
-                            painter = rememberVectorPainter(Icons.Outlined.Public),
+                            icon = Icons.Outlined.Public,
                             url = "https://aniyomi.org",
                         )
                         LinkIcon(
                             label = "Discord",
-                            painter = painterResource(R.drawable.ic_discord_24dp),
+                            icon = SimpleIcons.Discord,
                             url = "https://discord.gg/F32UjdJZrR",
                         )
                         LinkIcon(
                             label = "Reddit",
-                            painter = painterResource(R.drawable.ic_reddit_24dp),
+                            icon = SimpleIcons.Reddit,
                             url = "https://www.reddit.com/r/Aniyomi",
                         )
                         LinkIcon(
                             label = "GitHub",
-                            painter = painterResource(R.drawable.ic_github_24dp),
+                            icon = SimpleIcons.Github,
                             url = "https://github.com/aniyomiorg/aniyomi",
                         )
                     }
@@ -225,7 +227,7 @@ object AboutScreen : Screen {
         }
     }
 
-    private fun getFormattedBuildTime(): String {
+    internal fun getFormattedBuildTime(): String {
         return try {
             val inputDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.US)
             inputDf.timeZone = TimeZone.getTimeZone("UTC")

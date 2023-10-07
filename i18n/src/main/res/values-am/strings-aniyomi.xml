@@ -30,4 +30,44 @@
     <string name="label_manga">ማንጋ</string>
     <string name="label_anime">አኒሜ</string>
     <string name="label_watched_duration">የእይታ ቆይታ</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="pref_library_manga_columns">የማንጋ ዕቃዎች በአንድ ረድፍ</string>
+    <string name="pref_library_anime_columns">የአኒም ዕቃዎች በአንድ ረድፍ</string>
+    <string name="action_global_manga_search">ዓለም አቀፍ ማንጋ ፍለጋ</string>
+    <string name="action_global_anime_search">ዓለም አቀፍ አኒሜ ፍለጋ</string>
+    <string name="action_sort_total_episodes">ጠቅላላ ክፍሎች</string>
+    <string name="action_filter_unseen">የማይታይ</string>
+    <string name="pref_bottom_nav_no_updates">ዝመናዎችን ወደ ተጨማሪ ትር ይውሰዱ</string>
+    <string name="action_sort_latest_episode">የቅርብ ጊዜ ክፍል</string>
+    <string name="pref_bottom_nav_no_history">ታሪክን ወደ ተጨማሪ ትር ውሰድ</string>
+    <string name="pref_bottom_nav_no_manga">ማንጋን ወደ ተጨማሪ ትር ይውሰዱ</string>
+    <string name="action_sort_last_seen">ለመጨረሻ ግዜ የታየው</string>
+    <string name="action_sort_last_checked">መጨረሻ የተፈተሸ</string>
 </resources>

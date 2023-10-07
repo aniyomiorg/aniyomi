@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.ui.browse.anime.migration
 
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.entries.anime.model.hasCustomCover
-import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import kotlinx.coroutines.runBlocking
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy

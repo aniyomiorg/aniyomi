@@ -40,7 +40,7 @@
     <string name="action_display_download_badge_anime">Episódios baixados</string>
     <string name="action_display_local_badge_manga">Mangá local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
-    <string name="action_display_show_continue_reading_button">Mostrar o botão continuar assistindo/lendo</string>
+    <string name="action_display_show_continue_reading_button">Botão Continuar assistindo/lendo</string>
     <string name="action_order_by_episode_number">Por número do episódios</string>
     <string name="pref_player_summary">Controle de progresso, reprodutor interno, reprodutor externo</string>
     <string name="pref_update_only_completely_read">Com episódio(s) não visto(s)/capítulo(s) não lido(s)</string>
@@ -68,7 +68,7 @@
     <string name="pref_category_external_player">Player externo</string>
     <string name="pref_always_use_external_player">Sempre usar player externo</string>
     <string name="pref_external_player_preference">Preferência do player externo</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Excluir capítulos/episódios</string>
     <string name="pref_remove_after_marked_as_read">Depois de marcado manualmente como lido/assistido</string>
@@ -79,7 +79,7 @@
     <string name="pref_download_new_episodes">Baixar novos episódios</string>
     <string name="auto_download_while_watching">Baixar automaticamente enquanto assiste</string>
     <string name="pref_auto_update_manga_sync">Atualize o progresso após ler/assistir</string>
-    <string name="pref_backup_flags_summ">Quais informações incluir no arquivo de backup</string>
+    <string name="pref_backup_flags_summary">Quais informações incluir no arquivo de backup</string>
     <string name="pref_clear_chapter_cache">Limpar cache de capítulos e episódios</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por mangá: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Limpar cache de episódio/capítulo ao fechar o aplicativo</string>
@@ -112,9 +112,6 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número do episódio</string>
     <string name="sort_by_episode_number">Por número de episódios</string>
-    <string name="download_1_episode">Próximo episódio</string>
-    <string name="download_5_episodes">Próximos 5 episódios</string>
-    <string name="download_10_episodes">Próximos 10 episódios</string>
     <string name="confirm_delete_episodes">Tem certeza de que deseja excluir os episódios selecionados\?</string>
     <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
     <string name="also_set_episode_settings_for_library">Também se aplica a todos os animes da minha biblioteca</string>
@@ -134,7 +131,6 @@
     <string name="episode_progress_no_total">Progresso: %1$s</string>
     <string name="screenshot_header">Fazer captura de tela</string>
     <string name="screenshot_show_subs">Mostrar legendas na captura de tela</string>
-    <string name="stats_header">Mostrar estatísticas</string>
     <string name="stats_page_1">Página 1</string>
     <string name="stats_page_2">Página 2</string>
     <string name="stats_page_3">Página 3</string>
@@ -159,19 +155,18 @@
         <item quantity="other">%d segundos</item>
     </plurals>
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
-    <string name="no_previous_episode">Episódio anterior não encontrado!</string>
     <string name="label_history">Mangá</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Mangá</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Voltar</string>
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar a tela</string>
     <string name="playback_speed_dialog_reset">Redefinir</string>
-    <string name="quality_dialog_header">Mudar a qualidade do vídeo:</string>
-    <string name="subtitle_dialog_header">Alterar faixa de legenda:</string>
-    <string name="audio_dialog_header">Alterar faixa de áudio:</string>
+    <string name="quality_dialog_header">Qualidade do vídeo</string>
+    <string name="subtitle_dialog_header">Legenda</string>
+    <string name="audio_dialog_header">Áudio</string>
     <string name="playback_options_speed">Velocidade de reprodução</string>
     <string name="playback_options_quality">Qualidade de vídeo</string>
     <string name="playback_options_title">Opções de reprodução</string>
@@ -197,8 +192,8 @@
     </plurals>
     <string name="episode_settings">Configurações do episódio</string>
     <string name="pref_backup_flags">Opções de backup</string>
-    <string name="label_mangaextensions">Extensões de Mangá</string>
-    <string name="label_animeextensions">Extensões de Anime</string>
+    <string name="label_manga_extensions">Extensões de Mangá</string>
+    <string name="label_anime_extensions">Extensões de Anime</string>
     <string name="label_migration_manga">Migrar Mangás</string>
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>
@@ -209,7 +204,6 @@
     <string name="action_play_externally">Reproduzir externamente</string>
     <string name="action_play_internally">Reproduzir internamente</string>
     <string name="action_player_pip">Modo PiP</string>
-    <string name="action_display_unseen_badge">Episódios não vistos</string>
     <string name="pref_category_player">Reprodutor</string>
     <string name="action_start_download_externally">Usar downloader externo</string>
     <string name="action_start_download_internally">Usar downloader interno</string>
@@ -222,8 +216,8 @@
     <string name="pref_external_downloader_selection">App de download preferido</string>
     <string name="player_aniskip_dontskip">Não pular</string>
     <string name="action_global_anime_search">Pesquisa Global de Animes</string>
-    <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
-    <string name="pref_search_pinned_manga_sources_only">Incluir apenas fontes de mangá fixadas</string>
+    <string name="pref_search_pinned_anime_sources_only">Pesquisar apenas fontes de anime fixadas na pesquisa global</string>
+    <string name="pref_search_pinned_manga_sources_only">Pesquisar apenas fontes de mangá fixadas na pesquisa global</string>
     <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
     <string name="pref_library_manga_columns">Mangás por linha</string>
     <string name="pref_library_anime_columns">Animes por linha</string>
@@ -279,4 +273,33 @@
         <item quantity="many">Para %d títulos</item>
         <item quantity="other">Para %d títulos</item>
     </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Próximo episódio</item>
+        <item quantity="many">Próximos %d episódios</item>
+        <item quantity="other">Próximos %d episódios</item>
+    </plurals>
+    <string name="choose_video_quality">Escolher qualidade do vídeo:</string>
+    <string name="copied_video_link_to_clipboard">Link de qualidade de vídeo copiado para a área de transferência</string>
+    <string name="extension_settings">Configurações da extensão</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar entradas de mangá já na biblioteca</string>
+    <string name="action_save_screenshot">Salvar captura de tela</string>
+    <string name="stats_header">Mostrar estatisticas</string>
+    <string name="chapter_dialog_header">Procurar capítulo</string>
+    <string name="data_saver">Economia de dados</string>
+    <string name="data_saver_summary">Compactar imagens antes de baixar ou carregar no leitor</string>
+    <string name="bandwidth_hero">Bandwidth Hero (requer um servidor proxy Bandwidth Hero)</string>
+    <string name="go_to_previous_chapter">Capítulo anterior</string>
+    <string name="go_to_next_chapter">Próximo capítulo</string>
+    <string name="go_to_after_opening">Ignorar abertura</string>
+    <string name="data_saver_image_quality_summary">Valores mais altos significam que uma porcentagem maior da qualidade da imagem é salva, mas também significa que o tamanho do arquivo é maior, 80% é uma boa mediana entre o tamanho do arquivo e a qualidade da imagem</string>
+    <string name="data_saver_image_format">Comprimir para JPEG</string>
+    <string name="data_saver_color_bw">Converter para Preto e Branco</string>
+    <string name="data_saver_ignore_jpeg">Ignorar imagens JPEG</string>
+    <string name="data_saver_ignore_gif">Ignorar animações GIF</string>
+    <string name="data_saver_image_quality">Qualidade da imagem</string>
+    <string name="data_saver_image_format_summary_on">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
+\nAtualmente compacta para Jpeg</string>
+    <string name="data_saver_image_format_summary_off">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
+\nAtualmente compacta para Webp</string>
 </resources>

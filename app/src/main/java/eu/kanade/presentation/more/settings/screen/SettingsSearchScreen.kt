@@ -47,18 +47,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.components.Divider
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.util.runOnEnterKeyPressed
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.isLTR
+import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.util.runOnEnterKeyPressed
+import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
-class SettingsSearchScreen : Screen {
+class SettingsSearchScreen : Screen() {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -293,16 +294,17 @@ private val settingScreens = listOf(
     SettingsBackupScreen,
     SettingsSecurityScreen,
     SettingsAdvancedScreen,
+    AdvancedPlayerSettingsScreen,
 )
 
 private data class SettingsData(
     val title: String,
-    val route: Screen,
+    val route: VoyagerScreen,
     val contents: List<Preference>,
 )
 
 private data class SearchResultItem(
-    val route: Screen,
+    val route: VoyagerScreen,
     val title: String,
     val breadcrumbs: String,
     val highlightKey: String,

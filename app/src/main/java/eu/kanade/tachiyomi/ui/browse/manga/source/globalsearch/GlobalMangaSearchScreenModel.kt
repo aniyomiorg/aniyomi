@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import kotlinx.coroutines.flow.update
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -15,7 +15,11 @@ class GlobalMangaSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: MangaSourceManager = Injekt.get(),
-) : MangaSearchScreenModel<GlobalMangaSearchState>(GlobalMangaSearchState(searchQuery = initialQuery)) {
+) : MangaSearchScreenModel<GlobalMangaSearchState>(
+    GlobalMangaSearchState(
+        searchQuery = initialQuery,
+    ),
+) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedMangaSource()

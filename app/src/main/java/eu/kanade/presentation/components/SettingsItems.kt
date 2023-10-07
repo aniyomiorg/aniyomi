@@ -3,36 +3,42 @@ package eu.kanade.presentation.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.material.icons.rounded.DisabledByDefault
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.entries.TriStateFilter
+import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.presentation.core.components.SettingsItemsPaddings
 
 @Composable
 fun TriStateItem(
     label: String,
     state: TriStateFilter,
+    enabled: Boolean = true,
     onClick: ((TriStateFilter) -> Unit)?,
 ) {
     Row(
         modifier = Modifier
             .clickable(
-                enabled = onClick != null,
+                enabled = enabled && onClick != null,
                 onClick = {
                     when (state) {
                         TriStateFilter.DISABLED -> onClick?.invoke(TriStateFilter.ENABLED_IS)
@@ -42,10 +48,12 @@ fun TriStateItem(
                 },
             )
             .fillMaxWidth()
-            .padding(horizontal = TabbedDialogPaddings.Horizontal, vertical = 12.dp),
+            .padding(horizontal = SettingsItemsPaddings.Horizontal, vertical = SettingsItemsPaddings.Vertical),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {
+        val stateAlpha = if (enabled && onClick != null) 1f else ContentAlpha.disabled
+
         Icon(
             imageVector = when (state) {
                 TriStateFilter.DISABLED -> Icons.Rounded.CheckBoxOutlineBlank
@@ -53,76 +61,68 @@ fun TriStateItem(
                 TriStateFilter.ENABLED_NOT -> Icons.Rounded.DisabledByDefault
             },
             contentDescription = null,
-            tint = if (state == TriStateFilter.DISABLED) {
-                MaterialTheme.colorScheme.onSurfaceVariant
+            tint = if (!enabled || state == TriStateFilter.DISABLED) {
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = stateAlpha)
             } else {
-                MaterialTheme.colorScheme.primary
+                when (onClick) {
+                    null -> MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                    else -> MaterialTheme.colorScheme.primary
+                }
             },
         )
         Text(
             text = label,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = stateAlpha),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
 
 @Composable
-fun SortItem(
+fun SelectItem(
     label: String,
-    sortDescending: Boolean?,
-    onClick: () -> Unit,
+    options: Array<out Any?>,
+    selectedIndex: Int,
+    onSelect: (Int) -> Unit,
 ) {
-    val arrowIcon = when (sortDescending) {
-        true -> Icons.Default.ArrowDownward
-        false -> Icons.Default.ArrowUpward
-        null -> null
-    }
+    var expanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .fillMaxWidth()
-            .padding(horizontal = TabbedDialogPaddings.Horizontal, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
     ) {
-        if (arrowIcon != null) {
-            Icon(
-                imageVector = arrowIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-            )
-        } else {
-            Spacer(modifier = Modifier.size(24.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+                .padding(horizontal = SettingsItemsPaddings.Horizontal, vertical = SettingsItemsPaddings.Vertical),
+            label = { Text(text = label) },
+            value = options[selectedIndex].toString(),
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded,
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+        )
+
+        ExposedDropdownMenu(
+            modifier = Modifier.exposedDropdownSize(matchTextFieldWidth = true),
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            options.forEachIndexed { index, text ->
+                DropdownMenuItem(
+                    text = { Text(text.toString()) },
+                    onClick = {
+                        onSelect(index)
+                        expanded = false
+                    },
+                )
+            }
         }
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
-}
-
-@Composable
-fun RadioItem(
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .fillMaxWidth()
-            .padding(horizontal = TabbedDialogPaddings.Horizontal, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-    ) {
-        RadioButton(
-            selected = selected,
-            onClick = null,
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-        )
     }
 }

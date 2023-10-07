@@ -13,9 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
@@ -23,10 +22,12 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
-import eu.kanade.tachiyomi.util.lang.launchUI
-import eu.kanade.tachiyomi.util.system.notification
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.notify
+import tachiyomi.core.util.lang.launchUI
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -82,7 +83,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
@@ -91,7 +92,10 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     }
 
     fun showQueueSizeWarningNotification() {
-        val notificationBuilder = context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
+        context.notify(
+            Notifications.ID_LIBRARY_SIZE_WARNING,
+            Notifications.CHANNEL_LIBRARY_PROGRESS,
+        ) {
             setContentTitle(context.getString(R.string.label_warning))
             setStyle(
                 NotificationCompat.BigTextStyle()
@@ -101,11 +105,6 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             setTimeoutAfter(MangaDownloader.WARNING_NOTIF_TIMEOUT_MS)
             setContentIntent(NotificationHandler.openUrl(context, HELP_WARNING_URL))
         }
-
-        context.notificationManager.notify(
-            Notifications.ID_LIBRARY_SIZE_WARNING,
-            notificationBuilder.build(),
-        )
     }
 
     /**
@@ -119,17 +118,16 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             return
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_ERROR,
-            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
-                setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
-                setContentText(context.getString(R.string.action_show_errors))
-                setSmallIcon(R.drawable.ic_ani)
+            Notifications.CHANNEL_LIBRARY_ERROR,
+        ) {
+            setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
+            setContentText(context.getString(R.string.action_show_errors))
+            setSmallIcon(R.drawable.ic_ani)
 
-                setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
-            }
-                .build(),
-        )
+            setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
+        }
     }
 
     /**
@@ -142,16 +140,15 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             return
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_SKIPPED,
-            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_SKIPPED) {
-                setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
-                setContentText(context.getString(R.string.learn_more))
-                setSmallIcon(R.drawable.ic_ani)
-                setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_MANGA_URL))
-            }
-                .build(),
-        )
+            Notifications.CHANNEL_LIBRARY_SKIPPED,
+        ) {
+            setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
+            setContentText(context.getString(R.string.learn_more))
+            setSmallIcon(R.drawable.ic_ani)
+            setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_MANGA_URL))
+        }
     }
 
     /**
@@ -160,55 +157,55 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
      * @param updates a list of manga with new updates.
      */
     fun showUpdateNotifications(updates: List<Pair<Manga, Array<Chapter>>>) {
-        NotificationManagerCompat.from(context).apply {
-            // Parent group notification
-            notify(
-                Notifications.ID_NEW_CHAPTERS,
-                context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
-                    setContentTitle(context.getString(R.string.notification_new_chapters))
-                    if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
-                        setContentText(updates.first().first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN))
-                    } else {
-                        setContentText(context.resources.getQuantityString(R.plurals.notification_new_chapters_summary, updates.size, updates.size))
+        // Parent group notification
+        context.notify(
+            Notifications.ID_NEW_CHAPTERS,
+            Notifications.CHANNEL_NEW_CHAPTERS_EPISODES,
+        ) {
+            setContentTitle(context.getString(R.string.notification_new_chapters))
+            if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
+                setContentText(updates.first().first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN))
+            } else {
+                setContentText(context.resources.getQuantityString(R.plurals.notification_new_chapters_summary, updates.size, updates.size))
 
-                        if (!preferences.hideNotificationContent().get()) {
-                            setStyle(
-                                NotificationCompat.BigTextStyle().bigText(
-                                    updates.joinToString("\n") {
-                                        it.first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN)
-                                    },
-                                ),
-                            )
-                        }
-                    }
-
-                    setSmallIcon(R.drawable.ic_ani)
-                    setLargeIcon(notificationBitmap)
-
-                    setGroup(Notifications.GROUP_NEW_CHAPTERS)
-                    setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-                    setGroupSummary(true)
-                    priority = NotificationCompat.PRIORITY_HIGH
-
-                    setContentIntent(getNotificationIntent())
-                    setAutoCancel(true)
-                },
-            )
-
-            // Per-manga notification
-            if (!preferences.hideNotificationContent().get()) {
-                launchUI {
-                    updates.forEach { (manga, chapters) ->
-                        notify(manga.id.hashCode(), createNewChaptersNotification(manga, chapters))
-                    }
+                if (!preferences.hideNotificationContent().get()) {
+                    setStyle(
+                        NotificationCompat.BigTextStyle().bigText(
+                            updates.joinToString("\n") {
+                                it.first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN)
+                            },
+                        ),
+                    )
                 }
+            }
+
+            setSmallIcon(R.drawable.ic_ani)
+            setLargeIcon(notificationBitmap)
+
+            setGroup(Notifications.GROUP_NEW_CHAPTERS)
+            setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+            setGroupSummary(true)
+            priority = NotificationCompat.PRIORITY_HIGH
+
+            setContentIntent(getNotificationIntent())
+            setAutoCancel(true)
+        }
+
+        // Per-manga notification
+        if (!preferences.hideNotificationContent().get()) {
+            launchUI {
+                context.notify(
+                    updates.map { (manga, chapters) ->
+                        NotificationManagerCompat.NotificationWithIdAndTag(manga.id.hashCode(), createNewChaptersNotification(manga, chapters))
+                    },
+                )
             }
         }
     }
 
     private suspend fun createNewChaptersNotification(manga: Manga, chapters: Array<Chapter>): Notification {
         val icon = getMangaIcon(manga)
-        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
+        return context.notificationBuilder(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
             setContentTitle(manga.title)
 
             val description = getNewChaptersDescription(chapters)
@@ -270,14 +267,14 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     ),
                 )
             }
-        }
+        }.build()
     }
 
     /**
      * Cancels the progress notification.
      */
     fun cancelProgressNotification() {
-        context.notificationManager.cancel(Notifications.ID_LIBRARY_PROGRESS)
+        context.cancelNotification(Notifications.ID_LIBRARY_PROGRESS)
     }
 
     private suspend fun getMangaIcon(manga: Manga): Bitmap? {
@@ -342,7 +339,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     private fun getNotificationIntent(): PendingIntent {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            action = MainActivity.SHORTCUT_UPDATES
+            action = Constants.SHORTCUT_UPDATES
         }
         return PendingIntent.getActivity(
             context,

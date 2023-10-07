@@ -2,17 +2,17 @@ package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.interactor.GetChapter
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.interactor.GetChapter
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

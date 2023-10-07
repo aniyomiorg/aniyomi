@@ -1,7 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
 import android.content.Context
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.AnilistApi
@@ -52,11 +52,12 @@ import eu.kanade.tachiyomi.data.track.bangumi.BangumiApi
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeListApi
 import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
 import eu.kanade.tachiyomi.data.track.simkl.SimklApi
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -83,6 +84,7 @@ object SettingsTrackingScreen : SearchableSettings {
         val context = LocalContext.current
         val trackPreferences = remember { Injekt.get<TrackPreferences>() }
         val trackManager = remember { Injekt.get<TrackManager>() }
+        val sourceManager = remember { Injekt.get<MangaSourceManager>() }
 
         var dialog by remember { mutableStateOf<Any?>(null) }
         dialog?.run {
@@ -103,6 +105,23 @@ object SettingsTrackingScreen : SearchableSettings {
             }
         }
 
+        val enhancedMangaTrackers = trackManager.services
+            .filter { it is EnhancedMangaTrackService }
+            .partition { service ->
+                val acceptedMangaSources = (service as EnhancedMangaTrackService).getAcceptedSources()
+                sourceManager.getCatalogueSources().any { it::class.qualifiedName in acceptedMangaSources }
+            }
+        var enhancedMangaTrackerInfo = stringResource(R.string.enhanced_tracking_info)
+        if (enhancedMangaTrackers.second.isNotEmpty()) {
+            val missingMangaSourcesInfo = stringResource(
+                R.string.enhanced_services_not_installed,
+                enhancedMangaTrackers.second
+                    .map { stringResource(it.nameRes()) }
+                    .joinToString(),
+            )
+            enhancedMangaTrackerInfo += "\n\n$missingMangaSourcesInfo"
+        }
+
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = trackPreferences.autoUpdateTrack(),
@@ -111,6 +130,10 @@ object SettingsTrackingScreen : SearchableSettings {
             Preference.PreferenceItem.SwitchPreference(
                 pref = trackPreferences.trackOnAddingToLibrary(),
                 title = stringResource(R.string.pref_track_on_add_library),
+            ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = trackPreferences.showNextEpisodeAiringTime(),
+                title = stringResource(R.string.pref_show_next_episode_airing_time),
             ),
             Preference.PreferenceGroup(
                 title = stringResource(R.string.services),
@@ -162,43 +185,16 @@ object SettingsTrackingScreen : SearchableSettings {
             ),
             Preference.PreferenceGroup(
                 title = stringResource(R.string.enhanced_services),
-                preferenceItems = listOf(
-                    Preference.PreferenceItem.TrackingPreference(
-                        title = stringResource(trackManager.komga.nameRes()),
-                        service = trackManager.komga,
-                        login = {
-                            val sourceManager = Injekt.get<MangaSourceManager>()
-                            val acceptedSources = trackManager.komga.getAcceptedSources()
-                            val hasValidSourceInstalled = sourceManager.getCatalogueSources()
-                                .any { it::class.qualifiedName in acceptedSources }
+                preferenceItems = enhancedMangaTrackers.first
+                    .map { service ->
+                        Preference.PreferenceItem.TrackingPreference(
+                            title = stringResource(service.nameRes()),
+                            service = service,
+                            login = { (service as EnhancedMangaTrackService).loginNoop() },
+                            logout = service::logout,
+                        )
+                    } + listOf(Preference.PreferenceItem.InfoPreference(enhancedMangaTrackerInfo)),
 
-                            if (hasValidSourceInstalled) {
-                                trackManager.komga.loginNoop()
-                            } else {
-                                context.toast(context.getString(R.string.enhanced_tracking_warning, context.getString(trackManager.komga.nameRes())), Toast.LENGTH_LONG)
-                            }
-                        },
-                        logout = trackManager.komga::logout,
-                    ),
-                    Preference.PreferenceItem.TrackingPreference(
-                        title = stringResource(trackManager.kavita.nameRes()),
-                        service = trackManager.kavita,
-                        login = {
-                            val sourceManager = Injekt.get<MangaSourceManager>()
-                            val acceptedSources = trackManager.kavita.getAcceptedSources()
-                            val hasValidSourceInstalled = sourceManager.getCatalogueSources()
-                                .any { it::class.qualifiedName in acceptedSources }
-
-                            if (hasValidSourceInstalled) {
-                                trackManager.kavita.loginNoop()
-                            } else {
-                                context.toast(context.getString(R.string.enhanced_tracking_warning, context.getString(trackManager.kavita.nameRes())), Toast.LENGTH_LONG)
-                            }
-                        },
-                        logout = trackManager.kavita::logout,
-                    ),
-                    Preference.PreferenceItem.InfoPreference(stringResource(R.string.enhanced_tracking_info)),
-                ),
             ),
         )
     }
@@ -242,7 +238,7 @@ object SettingsTrackingScreen : SearchableSettings {
                         label = { Text(text = stringResource(uNameStringRes)) },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         singleLine = true,
-                        isError = inputError && username.text.isEmpty(),
+                        isError = inputError && !processing,
                     )
 
                     var hidePassword by remember { mutableStateOf(true) }
@@ -273,21 +269,16 @@ object SettingsTrackingScreen : SearchableSettings {
                             imeAction = ImeAction.Done,
                         ),
                         singleLine = true,
-                        isError = inputError && password.text.isEmpty(),
+                        isError = inputError && !processing,
                     )
                 }
             },
             confirmButton = {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !processing,
+                    enabled = !processing && username.text.isNotBlank() && password.text.isNotBlank(),
                     onClick = {
-                        if (username.text.isEmpty() || password.text.isEmpty()) {
-                            inputError = true
-                            return@Button
-                        }
                         scope.launchIO {
-                            inputError = false
                             processing = true
                             val result = checkLogin(
                                 context = context,
@@ -295,6 +286,7 @@ object SettingsTrackingScreen : SearchableSettings {
                                 username = username.text,
                                 password = password.text,
                             )
+                            inputError = !result
                             if (result) onDismissRequest()
                             processing = false
                         }
@@ -340,7 +332,7 @@ object SettingsTrackingScreen : SearchableSettings {
                 )
             },
             confirmButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
                     OutlinedButton(
                         modifier = Modifier.weight(1f),
                         onClick = onDismissRequest,

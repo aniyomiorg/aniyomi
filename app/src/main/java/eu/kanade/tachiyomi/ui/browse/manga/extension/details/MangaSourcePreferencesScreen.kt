@@ -35,23 +35,20 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.components.Scaffold
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getPreferenceKey
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
+import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class MangaSourcePreferencesScreen(val sourceId: Long) : Screen {
-
-    override val key = uniqueScreenKey
+class MangaSourcePreferencesScreen(val sourceId: Long) : Screen() {
 
     @Composable
     override fun Content() {
@@ -61,7 +58,7 @@ class MangaSourcePreferencesScreen(val sourceId: Long) : Screen {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = Injekt.get<MangaSourceManager>().get(sourceId)!!.toString()) },
+                    title = { Text(text = Injekt.get<MangaSourceManager>().getOrStub(sourceId).toString()) },
                     navigationIcon = {
                         IconButton(onClick = navigator::pop) {
                             Icon(

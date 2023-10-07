@@ -4,7 +4,7 @@
     <string name="unlock_app">Aniyomi уҫ</string>
     <string name="action_sort_last_manga_update">Юлашки ҫӗнетӗве тӗрӗслени</string>
     <string name="action_show_manga">Ҫырава кӑтарт</string>
-    <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫ</string>
+    <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫран</string>
     <string name="default_manga_category">Яланхилле пухмӑш</string>
     <string name="untrusted_extension_message">Ку хушмана шанчӑклӑ мар сертификатпа алӑ пуснӑ тата ӑна активламан.
 \n
@@ -32,4 +32,32 @@
     <string name="information_webview_required">Tachiyomi валли WebView кирлӗ</string>
     <string name="download_notifier_download_paused_chapters">Тиеве вӑхӑтлӑха чарнӑ</string>
     <string name="channel_new_chapters_episodes">Сыпӑксен ҫӗнетӗвӗсем</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

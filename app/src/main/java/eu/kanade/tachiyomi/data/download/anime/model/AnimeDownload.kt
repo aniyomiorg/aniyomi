@@ -1,13 +1,21 @@
 package eu.kanade.tachiyomi.data.download.anime.model
 
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.interactor.GetEpisode
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import rx.subjects.PublishSubject
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.GetEpisode
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -32,23 +40,34 @@ data class AnimeDownload(
     @Transient
     var downloadedImages: Int = 0
 
-    @Volatile
     @Transient
-    var status: State = State.NOT_DOWNLOADED
+    private val _statusFlow = MutableStateFlow(State.NOT_DOWNLOADED)
+
+    @Transient
+    val statusFlow = _statusFlow.asStateFlow()
+    var status: State
+        get() = _statusFlow.value
         set(status) {
-            field = status
-            statusSubject?.onNext(this)
-            statusCallback?.invoke(this)
+            _statusFlow.value = status
         }
 
     @Transient
-    var statusSubject: PublishSubject<AnimeDownload>? = null
+    val progressFlow = flow {
+        if (video == null) {
+            emit(0)
+            while (video == null) {
+                delay(50)
+            }
+        }
+
+        val progressFlows = video!!.progressFlow
+        emitAll(combine(progressFlows) { it.average().toInt() })
+    }
+        .distinctUntilChanged()
+        .debounce(50)
 
     @Transient
     var progressSubject: PublishSubject<AnimeDownload>? = null
-
-    @Transient
-    var statusCallback: ((AnimeDownload) -> Unit)? = null
 
     @Transient
     var progressCallback: ((AnimeDownload) -> Unit)? = null
@@ -69,12 +88,12 @@ data class AnimeDownload(
 
     companion object {
         suspend fun fromEpisodeId(
-            chapterId: Long,
+            episodeId: Long,
             getEpisode: GetEpisode = Injekt.get(),
             getAnimeById: GetAnime = Injekt.get(),
             sourceManager: AnimeSourceManager = Injekt.get(),
         ): AnimeDownload? {
-            val episode = getEpisode.await(chapterId) ?: return null
+            val episode = getEpisode.await(episodeId) ?: return null
             val anime = getAnimeById.await(episode.animeId) ?: return null
             val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return null
 

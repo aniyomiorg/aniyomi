@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
-import eu.kanade.tachiyomi.util.lang.launchNow
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchNow
+import tachiyomi.core.util.system.logcat
 
 /**
  * Broadcast receiver that listens for the system's packages installed, updated or removed, and only
@@ -50,13 +50,14 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
 
         when (intent.action) {
             Intent.ACTION_PACKAGE_ADDED -> {
-                if (!isReplacing(intent)) {
-                    launchNow {
-                        when (val result = getExtensionFromIntent(context, intent)) {
-                            is AnimeLoadResult.Success -> listener.onExtensionInstalled(result.extension)
-                            is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(result.extension)
-                            else -> {}
-                        }
+                if (isReplacing(intent)) return
+
+                launchNow {
+                    when (val result = getExtensionFromIntent(context, intent)) {
+                        is AnimeLoadResult.Success -> listener.onExtensionInstalled(result.extension)
+
+                        is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(result.extension)
+                        else -> {}
                     }
                 }
             }
@@ -71,11 +72,11 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                 }
             }
             Intent.ACTION_PACKAGE_REMOVED -> {
-                if (!isReplacing(intent)) {
-                    val pkgName = getPackageNameFromIntent(intent)
-                    if (pkgName != null) {
-                        listener.onPackageUninstalled(pkgName)
-                    }
+                if (isReplacing(intent)) return
+
+                val pkgName = getPackageNameFromIntent(intent)
+                if (pkgName != null) {
+                    listener.onPackageUninstalled(pkgName)
                 }
             }
         }

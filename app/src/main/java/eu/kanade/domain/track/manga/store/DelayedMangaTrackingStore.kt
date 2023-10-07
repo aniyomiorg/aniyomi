@@ -2,9 +2,9 @@ package eu.kanade.domain.track.manga.store
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.domain.track.manga.model.MangaTrack
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.track.manga.model.MangaTrack
 
 class DelayedMangaTrackingStore(context: Context) {
 

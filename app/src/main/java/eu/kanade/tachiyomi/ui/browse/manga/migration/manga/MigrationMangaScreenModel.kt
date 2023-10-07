@@ -3,11 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.manga
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -17,6 +13,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -64,7 +64,7 @@ data class MigrateMangaState(
 ) {
 
     val titles: List<Manga>
-        get() = titleList ?: emptyList()
+        get() = titleList.orEmpty()
 
     val isLoading: Boolean
         get() = source == null || titleList == null

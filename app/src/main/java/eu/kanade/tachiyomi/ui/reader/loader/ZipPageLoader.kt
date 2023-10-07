@@ -1,64 +1,59 @@
 package eu.kanade.tachiyomi.ui.reader.loader
 
+import android.app.Application
 import android.os.Build
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
-import eu.kanade.tachiyomi.util.system.ImageUtil
-import rx.Observable
+import uy.kohesive.injekt.injectLazy
 import java.io.File
-import java.nio.charset.StandardCharsets
-import java.util.zip.ZipFile
+import java.io.FileInputStream
+import java.util.zip.ZipInputStream
 
 /**
  * Loader used to load a chapter from a .zip or .cbz file.
  */
-class ZipPageLoader(file: File) : PageLoader() {
+internal class ZipPageLoader(file: File) : PageLoader() {
 
-    /**
-     * The zip file to load pages from.
-     */
-    private val zip = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        ZipFile(file, StandardCharsets.ISO_8859_1)
-    } else {
-        ZipFile(file)
+    private val context: Application by injectLazy()
+    private val tmpDir = File(context.externalCacheDir, "reader_${file.hashCode()}").also {
+        it.deleteRecursively()
+        it.mkdirs()
     }
 
-    /**
-     * Recycles this loader and the open zip.
-     */
+    init {
+        ZipInputStream(FileInputStream(file)).use { zipInputStream ->
+            generateSequence { zipInputStream.nextEntry }
+                .filterNot { it.isDirectory }
+                .forEach { entry ->
+                    File(tmpDir, entry.name.substringAfterLast("/"))
+                        .also { it.createNewFile() }
+                        .outputStream().use { pageOutputStream ->
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                pageOutputStream.write(zipInputStream.readNBytes(entry.size.toInt()))
+                            } else {
+                                val buffer = ByteArray(2048)
+                                var len: Int
+                                while (
+                                    zipInputStream.read(buffer, 0, buffer.size)
+                                        .also { len = it } >= 0
+                                ) {
+                                    pageOutputStream.write(buffer, 0, len)
+                                }
+                            }
+                            pageOutputStream.flush()
+                        }
+                    zipInputStream.closeEntry()
+                }
+        }
+    }
+
+    override var isLocal: Boolean = true
+
+    override suspend fun getPages(): List<ReaderPage> {
+        return DirectoryPageLoader(tmpDir).getPages()
+    }
+
     override fun recycle() {
         super.recycle()
-        zip.close()
-    }
-
-    /**
-     * Returns an observable containing the pages found on this zip archive ordered with a natural
-     * comparator.
-     */
-    override fun getPages(): Observable<List<ReaderPage>> {
-        return zip.entries().asSequence()
-            .filter { !it.isDirectory && ImageUtil.isImage(it.name) { zip.getInputStream(it) } }
-            .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
-            .mapIndexed { i, entry ->
-                ReaderPage(i).apply {
-                    stream = { zip.getInputStream(entry) }
-                    status = Page.State.READY
-                }
-            }
-            .let { Observable.just(it.toList()) }
-    }
-
-    /**
-     * Returns an observable that emits a ready state unless the loader was recycled.
-     */
-    override fun getPage(page: ReaderPage): Observable<Page.State> {
-        return Observable.just(
-            if (isRecycled) {
-                Page.State.ERROR
-            } else {
-                Page.State.READY
-            },
-        )
+        tmpDir.deleteRecursively()
     }
 }

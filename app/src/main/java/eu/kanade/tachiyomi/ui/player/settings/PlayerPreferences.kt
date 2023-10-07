@@ -1,7 +1,8 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import android.os.Build
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
+import tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,
@@ -42,7 +43,9 @@ class PlayerPreferences(
 
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
 
-    fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", 1)
+    fun mediaChapterSeek() = preferenceStore.getBoolean("pref_media_control_chapter_seeking", false)
+
+    fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", AspectState.FIT.index)
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
 
@@ -72,10 +75,7 @@ class PlayerPreferences(
 
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
-    private val defaultHwDec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        "mediacodec"
-    } else {
-        "mediacodec-copy"
-    }
-    fun standardHwDec() = preferenceStore.getString("pref_hwdec", defaultHwDec)
+    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+
+    fun deband() = preferenceStore.getInt("pref_deband", 0)
 }

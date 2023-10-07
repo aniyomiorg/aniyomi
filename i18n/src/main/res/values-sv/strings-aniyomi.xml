@@ -2,8 +2,8 @@
 <resources>
     <string name="manga_categories">Kategorier</string>
     <string name="unlock_app">Lås upp Aniyomi</string>
-    <string name="action_sort_last_manga_update">Sista manga-uppdateringen</string>
-    <string name="action_show_manga">Visa manga</string>
+    <string name="action_sort_last_manga_update">Senaste uppdateringskontroll</string>
+    <string name="action_show_manga">Visa inlägg</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>
     <string name="pref_update_only_completely_read">Med olästa kapitel</string>
     <string name="pref_library_update_show_tab_badge">Visa antalet olästa på ikonen Uppdateringar</string>
@@ -24,18 +24,46 @@
     <string name="pref_auto_clear_chapter_cache">Rensa kapitelcache när appen stängs</string>
     <string name="pref_clear_manga_database">Rensa databas</string>
     <string name="pref_clear_manga_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
-    <string name="clear_database_confirmation">Är du säker\? Lästa kapitel och framsteg av icke-bibliotek manga kommer att gå förlorade</string>
+    <string name="clear_database_confirmation">Är du säker\? Lästa kapitel och framsteg för poster som inte är biblioteksinlägg kommer att gå förlorade</string>
     <string name="pref_refresh_library_tracking_summary">Uppdaterar status, betyg och senaste kapitel läst från spårningstjänsterna</string>
     <string name="pref_incognito_mode_summary">Pausar läshistoriken</string>
-    <string name="manga_from_library">Manga från biblioteket</string>
+    <string name="manga_from_library">Från biblioteket</string>
     <string name="snack_add_to_manga_library">Lägg till manga i biblioteket\?</string>
     <string name="download_error">Fel</string>
     <string name="download_paused">Pausad</string>
-    <string name="also_set_chapter_settings_for_library">Gäller även all manga i biblioteket</string>
-    <string name="dialog_with_checkbox_reset">Återställ alla kapitel för denna manga</string>
+    <string name="also_set_chapter_settings_for_library">Gäller även alla inlägg i biblioteket</string>
+    <string name="dialog_with_checkbox_reset">Återställ alla kapitel för denna post</string>
     <string name="download_insufficient_space">Det gick inte att ladda ner kapitelt på grund av lågt lagringsutrymme</string>
     <string name="download_queue_size_warning">Varning: stora massnerladdningar kan leda till att källor blir långsamma och/eller blockerar Tachiyomi. Tryck för att få veta mer.</string>
     <string name="information_webview_required">WebView krävs för Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
     <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

@@ -1,12 +1,14 @@
 package eu.kanade.tachiyomi.ui.library.manga
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -28,43 +30,44 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.entries.manga.model.isLocal
-import eu.kanade.domain.library.manga.LibraryManga
-import eu.kanade.domain.library.model.display
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.DeleteLibraryEntryDialog
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.EmptyScreenAction
-import eu.kanade.presentation.components.LibraryBottomActionMenu
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.entries.DownloadCustomAmountDialog
+import eu.kanade.presentation.category.ChangeCategoryDialog
+import eu.kanade.presentation.entries.LibraryBottomActionMenu
+import eu.kanade.presentation.library.DeleteLibraryEntryDialog
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
+import eu.kanade.presentation.library.manga.MangaLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.model.display
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.EmptyScreenAction
+import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.injectLazy
 
-object MangaLibraryTab : Tab {
+object MangaLibraryTab : Tab() {
 
     val libraryPreferences: LibraryPreferences by injectLazy()
     private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
 
+    @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
@@ -87,6 +90,7 @@ object MangaLibraryTab : Tab {
         requestOpenSettingsSheet()
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -95,20 +99,18 @@ object MangaLibraryTab : Tab {
         val haptic = LocalHapticFeedback.current
 
         val screenModel = rememberScreenModel { MangaLibraryScreenModel() }
+        val settingsScreenModel = rememberScreenModel { MangaLibrarySettingsScreenModel() }
         val state by screenModel.state.collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val onClickRefresh: (Category?) -> Boolean = {
-            val started = MangaLibraryUpdateService.start(context, it)
+        val onClickRefresh: (Category?) -> Boolean = { category ->
+            val started = MangaLibraryUpdateJob.startNow(context, category)
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
             }
             started
-        }
-        val onClickFilter: () -> Unit = {
-            scope.launch { sendSettingsSheetIntent(state.categories[screenModel.activeCategoryIndex]) }
         }
 
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
@@ -130,8 +132,9 @@ object MangaLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = onClickFilter,
-                    onClickRefresh = { onClickRefresh(null) },
+                    onClickFilter = screenModel::showSettingsDialog,
+                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
                             val randomItem = screenModel.getRandomLibraryItemForCurrentCategory()
@@ -200,7 +203,7 @@ object MangaLibraryTab : Tab {
                             }
                             Unit
                         }.takeIf { state.showMangaContinueButton },
-                        onToggleSelection = { screenModel.toggleSelection(it) },
+                        onToggleSelection = screenModel::toggleSelection,
                         onToggleRangeSelection = {
                             screenModel.toggleRangeSelection(it)
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -219,6 +222,18 @@ object MangaLibraryTab : Tab {
 
         val onDismissRequest = screenModel::closeDialog
         when (val dialog = state.dialog) {
+            is MangaLibraryScreenModel.Dialog.SettingsSheet -> run {
+                val category = state.categories.getOrNull(screenModel.activeCategoryIndex)
+                if (category == null) {
+                    onDismissRequest()
+                    return@run
+                }
+                MangaLibrarySettingsDialog(
+                    onDismissRequest = onDismissRequest,
+                    screenModel = settingsScreenModel,
+                    category = category,
+                )
+            }
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
@@ -244,16 +259,6 @@ object MangaLibraryTab : Tab {
                     isManga = true,
                 )
             }
-            is MangaLibraryScreenModel.Dialog.DownloadCustomAmount -> {
-                DownloadCustomAmountDialog(
-                    maxAmount = dialog.max,
-                    onDismissRequest = onDismissRequest,
-                    onConfirm = { amount ->
-                        screenModel.downloadUnreadChapters(dialog.manga, amount)
-                        screenModel.clearSelection()
-                    },
-                )
-            }
             null -> {}
         }
 
@@ -264,7 +269,7 @@ object MangaLibraryTab : Tab {
             }
         }
 
-        LaunchedEffect(state.selectionMode) {
+        LaunchedEffect(state.selectionMode, state.dialog) {
             HomeScreen.showBottomNav(!state.selectionMode)
         }
 
@@ -276,7 +281,7 @@ object MangaLibraryTab : Tab {
 
         LaunchedEffect(Unit) {
             launch { queryEvent.receiveAsFlow().collect(screenModel::search) }
-            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { onClickFilter() } }
+            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { screenModel.showSettingsDialog() } }
         }
     }
 
@@ -286,8 +291,5 @@ object MangaLibraryTab : Tab {
 
     // For opening settings sheet in LibraryController
     private val requestSettingsSheetEvent = Channel<Unit>()
-    private val openSettingsSheetEvent_ = Channel<Category>()
-    val openSettingsSheetEvent = openSettingsSheetEvent_.receiveAsFlow()
-    private suspend fun sendSettingsSheetIntent(category: Category) = openSettingsSheetEvent_.send(category)
-    suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
+    private suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Actions -->
+    <string name="action_hide">Hide</string>
+
     <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
@@ -11,6 +14,7 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_anime">Anime</string>
     <string name="label_manga">Manga</string>
+    <string name="label_recent_anime_updates">Anime Updates</string>
     <string name="label_manga_sources">Manga Sources</string>
     <string name="label_anime_sources">Anime Sources</string>
     <string name="label_watched_duration">Watched duration</string>
@@ -52,12 +56,13 @@
     <string name="action_show_manga">Show manga</string>
     <string name="action_show_anime">Show anime</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
-    <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
-    <string name="pref_search_pinned_manga_sources_only">Only include pinned manga sources</string>
-    <string name="pref_search_pinned_anime_sources_only">Only include pinned anime sources</string>
-    <string name="action_display_show_continue_reading_button">Show continue watching/reading button</string>
+    <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>
+    <string name="pref_search_pinned_anime_sources_only">Only search pinned anime sources in global search</string>
+    <string name="pref_hide_in_manga_library_items">Hide manga entries already in library</string>
+    <string name="pref_hide_in_anime_library_items">Hide anime entries already in library</string>
+    <string name="action_display_show_continue_reading_button">Continue watching/reading button</string>
     <string name="action_order_by_episode_number">By episode number</string>
     <string name="action_start_download_externally">Use external downloader</string>
     <string name="action_start_download_internally">Use internal downloader</string>
@@ -103,7 +108,13 @@
     <string name="pref_skip_20" translatable="false">20s</string>
     <string name="pref_skip_10" translatable="false">10s</string>
     <string name="pref_skip_5" translatable="false">5s</string>
+    <string name="pref_skip_3" translatable="false">3s</string>
     <string name="pref_skip_disable">Disable</string>
+    <string name="pref_media_control_chapter_seeking">Seek chapters with media controls</string>
+    <string name="pref_media_control_chapter_seeking_summary">When enabled, using next will invoke the skip intro button if no chapters are found</string>
+    <string name="go_to_next_chapter">Next chapter</string>
+    <string name="go_to_previous_chapter">Previous chapter</string>
+    <string name="go_to_after_opening">Skipped opening</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
@@ -120,7 +131,7 @@
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
@@ -140,7 +151,8 @@
     <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>
     <string name="pref_track_on_add_library">Open track menu on adding to library</string>
-    <string name="pref_backup_flags_summ">What information to include in the backup file</string>
+    <string name="pref_show_next_episode_airing_time">Show next episode\'s airing time </string>
+    <string name="pref_backup_flags_summary">What information to include in the backup file</string>
     <string name="pref_clear_chapter_cache">Clear chapter and episode cache</string>
     <string name="used_cache_both">Used by anime: %1$s, used by manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app close</string>
@@ -172,9 +184,10 @@
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
     <string name="sort_by_episode_number">By episode number</string>
-    <string name="download_1_episode">Next episode</string>
-    <string name="download_5_episodes">Next 5 episodes</string>
-    <string name="download_10_episodes">Next 10 episodes</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Next episode</item>
+        <item quantity="other">Next %d episodes</item>
+    </plurals>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
@@ -204,6 +217,12 @@
     <string name="stats_page_1">Page 1</string>
     <string name="stats_page_2">Page 2</string>
     <string name="stats_page_3">Page 3</string>
+    <string name="pref_category_player_advanced">Advanced player settings</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
+    <string name="pref_debanding_title">Debanding</string>
+    <string name="pref_debanding_disabled">Disabled</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_gpu">GPU</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
@@ -231,11 +250,10 @@
         <item quantity="other">%d seconds</item>
     </plurals>
     <string name="no_next_episode">Next Episode not found!</string>
-    <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Back</string>
     <string name="enable_auto_play">"Auto-play is on"</string>
     <string name="disable_auto_play">"Auto-play is off"</string>
@@ -245,9 +263,10 @@
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
-    <string name="quality_dialog_header">Change video quality:</string>
-    <string name="subtitle_dialog_header">Change subtitle track:</string>
-    <string name="audio_dialog_header">Change audio track:</string>
+    <string name="quality_dialog_header">Video quality</string>
+    <string name="chapter_dialog_header">Seek to chapter</string>
+    <string name="subtitle_dialog_header">Subtitle</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Playback speed</string>
     <string name="playback_options_quality">Video quality</string>
     <string name="playback_options_title">Playback options</string>
@@ -280,10 +299,45 @@
     </plurals>
     <string name="episode_settings">Episode settings</string>
     <string name="pref_backup_flags">Backup options</string>
-    <string name="label_mangaextensions">Manga Extensions</string>
-    <string name="label_animeextensions">Anime Extensions</string>
+    <string name="label_manga_extensions">Manga Extensions</string>
+    <string name="label_anime_extensions">Anime Extensions</string>
     <string name="label_migration_manga">Migrate Manga</string>
     <string name="label_migration_anime">Migrate Anime</string>
     <string name="settings">Settings</string>
+    <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
+    <string name="choose_video_quality">Choose video quality:</string>
     <string name="extension_settings">Extension settings</string>
+
+     <!-- Themes -->
+    <string name="theme_cottoncandy">Cotton Candy</string>
+    <string name="theme_mocha">Mocha</string>
+
+    <string name="action_save_screenshot">Save screenshot</string>
+
+    <string name="pref_episode_swipe">Episode swipe</string>
+    <string name="pref_episode_swipe_end">Swipe to right action</string>
+    <string name="pref_episode_swipe_start">Swipe to left action</string>
+
+    <string name="pref_category_hide_hidden">Hide hidden categories from categories screen</string>
+
+    <!-- TachiyomiSY -->
+    <string name="data_saver_exclude">Exclude from data saver</string>
+    <string name="data_saver_stop_exclude">Stop excluding from data saver</string>
+    <string name="data_saver">Data Saver</string>
+    <string name="data_saver_summary">Compress images before downloading or loading in reader</string>
+    <string name="data_saver_downloader">Use data saver in the downloader</string>
+    <string name="data_saver_ignore_jpeg">Ignore Jpeg Images</string>
+    <string name="data_saver_ignore_gif">Ignore Gif Animations</string>
+    <string name="data_saver_image_quality">Image Quality</string>
+    <string name="data_saver_image_quality_summary">Higher values mean that a higher percentage of the image quality is saved, but it also means the file size is larger, 80 percent is a good median between file size and image quality</string>
+    <string name="data_saver_image_format">Compress to Jpeg</string>
+    <string name="data_saver_image_format_summary_on">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Jpeg</string>
+    <string name="data_saver_image_format_summary_off">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Webp</string>
+    <string name="data_saver_color_bw">Convert to Black And White</string>
+    <string name="bandwidth_hero">Bandwidth Hero (requires a Bandwidth Hero Proxy server)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
+    <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
 </resources>

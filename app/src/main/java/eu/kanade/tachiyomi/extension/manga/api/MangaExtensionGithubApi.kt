@@ -1,8 +1,7 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
-import eu.kanade.tachiyomi.core.preference.Preference
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
+import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -10,24 +9,29 @@ import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
+import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.days
 
 internal class MangaExtensionGithubApi {
 
     private val networkService: NetworkHelper by injectLazy()
     private val preferenceStore: PreferenceStore by injectLazy()
+    private val extensionManager: MangaExtensionManager by injectLazy()
+    private val json: Json by injectLazy()
+
     private val lastExtCheck: Preference<Long> by lazy {
         preferenceStore.getLong("last_ext_check", 0)
     }
-    private val extensionManager: MangaExtensionManager by injectLazy()
 
     private var requiresFallbackSource = false
 
@@ -39,7 +43,7 @@ internal class MangaExtensionGithubApi {
                 try {
                     networkService.client
                         .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
-                        .await()
+                        .awaitSuccess()
                 } catch (e: Throwable) {
                     logcat(LogPriority.ERROR, e) { "Failed to get extensions from GitHub" }
                     requiresFallbackSource = true
@@ -50,12 +54,14 @@ internal class MangaExtensionGithubApi {
             val response = githubResponse ?: run {
                 networkService.client
                     .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
-                    .await()
+                    .awaitSuccess()
             }
 
-            val extensions = response
-                .parseAs<List<ExtensionJsonObject>>()
-                .toExtensions()
+            val extensions = with(json) {
+                response
+                    .parseAs<List<ExtensionJsonObject>>()
+                    .toExtensions()
+            }
 
             // Sanity check - a small number of extensions probably means something broke
             // with the repo generator
@@ -69,7 +75,7 @@ internal class MangaExtensionGithubApi {
 
     suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<MangaExtension.Installed>? {
         // Limit checks to once a day at most
-        if (fromAvailableExtensionList.not() && Date().time < lastExtCheck.get() + TimeUnit.DAYS.toMillis(1)) {
+        if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
         }
 
@@ -95,6 +101,10 @@ internal class MangaExtensionGithubApi {
             }
         }
 
+        if (extensionsWithUpdate.isNotEmpty()) {
+            ExtensionUpdateNotifier(context).promptUpdates(extensionsWithUpdate.map { it.name })
+        }
+
         return extensionsWithUpdate
     }
 
@@ -115,7 +125,7 @@ internal class MangaExtensionGithubApi {
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
                     hasChangelog = it.hasChangelog == 1,
-                    sources = it.sources?.toExtensionSources() ?: emptyList(),
+                    sources = it.sources?.toExtensionSources().orEmpty(),
                     apkName = it.apk,
                     iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
                 )

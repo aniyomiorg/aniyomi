@@ -21,21 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.source.anime.model.AnimeSource
-import eu.kanade.domain.source.anime.model.Pin
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.ScrollbarLazyColumn
-import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesState
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.domain.source.anime.model.Pin
+import tachiyomi.presentation.core.components.ScrollbarLazyColumn
+import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.theme.header
+import tachiyomi.presentation.core.util.plus
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 @Composable
 fun AnimeSourcesScreen(
@@ -143,7 +144,7 @@ private fun AnimeSourcePinButton(
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
-    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(alpha = SecondaryItemAlpha)
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(

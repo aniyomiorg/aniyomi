@@ -22,10 +22,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.OverflowMenu
-import eu.kanade.presentation.components.Pill
 import eu.kanade.presentation.components.SearchToolbar
-import eu.kanade.presentation.theme.active
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.Pill
+import tachiyomi.presentation.core.theme.active
 
 @Composable
 fun LibraryToolbar(
@@ -37,6 +37,7 @@ fun LibraryToolbar(
     onClickInvertSelection: () -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
+    onClickGlobalUpdate: () -> Unit,
     onClickOpenRandomEntry: () -> Unit,
     searchQuery: String?,
     onSearchQueryChange: (String?) -> Unit,
@@ -57,6 +58,7 @@ fun LibraryToolbar(
         onSearchQueryChange = onSearchQueryChange,
         onClickFilter = onClickFilter,
         onClickRefresh = onClickRefresh,
+        onClickGlobalUpdate = onClickGlobalUpdate,
         onClickOpenRandomEntry = onClickOpenRandomEntry,
         scrollBehavior = scrollBehavior,
         navigateUp = navigateUp,
@@ -71,6 +73,7 @@ fun LibraryRegularToolbar(
     onSearchQueryChange: (String?) -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
+    onClickGlobalUpdate: () -> Unit,
     onClickOpenRandomEntry: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
     navigateUp: (() -> Unit)? = null,
@@ -104,7 +107,14 @@ fun LibraryRegularToolbar(
 
             OverflowMenu { closeMenu ->
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(R.string.pref_category_library_update)) },
+                    text = { Text(text = stringResource(R.string.action_update_library)) },
+                    onClick = {
+                        onClickGlobalUpdate()
+                        closeMenu()
+                    },
+                )
+                DropdownMenuItem(
+                    text = { Text(text = stringResource(R.string.action_update_category)) },
                     onClick = {
                         onClickRefresh()
                         closeMenu()

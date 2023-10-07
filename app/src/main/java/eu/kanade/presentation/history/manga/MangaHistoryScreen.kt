@@ -6,13 +6,13 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.manga.HistoryState
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
 import java.util.Date
 
 @Composable

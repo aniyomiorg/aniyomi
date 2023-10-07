@@ -1,14 +1,14 @@
 package eu.kanade.tachiyomi.util
 
-import android.content.Context
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.hasCustomCover
-import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.model.SManga
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.source.local.entries.manga.isLocal
+import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
@@ -76,13 +76,13 @@ fun Manga.shouldDownloadNewChapters(dbCategories: List<Long>, preferences: Downl
 }
 
 suspend fun Manga.editCover(
-    context: Context,
+    coverManager: LocalMangaCoverManager,
     stream: InputStream,
     updateManga: UpdateManga = Injekt.get(),
     coverCache: MangaCoverCache = Injekt.get(),
 ) {
     if (isLocal()) {
-        LocalMangaSource.updateCover(context, toSManga(), stream)
+        coverManager.update(toSManga(), stream)
         updateManga.awaitUpdateCoverLastModified(id)
     } else if (favorite) {
         coverCache.setCustomCoverToCache(this, stream)

@@ -3,7 +3,6 @@ package eu.kanade.presentation.entries.manga
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,14 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.entries.TriStateFilter
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.presentation.components.RadioItem
-import eu.kanade.presentation.components.SortItem
+import eu.kanade.domain.entries.manga.model.downloadedFilter
+import eu.kanade.domain.entries.manga.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
+import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.RadioItem
+import tachiyomi.presentation.core.components.SortItem
 
 @Composable
 fun ChapterSettingsDialog(
@@ -76,14 +77,9 @@ fun ChapterSettingsDialog(
         ) {
             when (page) {
                 0 -> {
-                    val forceDownloaded = manga?.forceDownloaded() == true
                     FilterPage(
-                        downloadFilter = if (forceDownloaded) {
-                            TriStateFilter.ENABLED_NOT
-                        } else {
-                            manga?.downloadedFilter
-                        } ?: TriStateFilter.DISABLED,
-                        onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { forceDownloaded },
+                        downloadFilter = manga?.downloadedFilter ?: TriStateFilter.DISABLED,
+                        onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { manga?.forceDownloaded() == true },
                         unreadFilter = manga?.unreadFilter ?: TriStateFilter.DISABLED,
                         onUnreadFilterChanged = onUnreadFilterChanged,
                         bookmarkedFilter = manga?.bookmarkedFilter ?: TriStateFilter.DISABLED,
@@ -106,6 +102,72 @@ fun ChapterSettingsDialog(
             }
         }
     }
+}
+
+@Composable
+private fun FilterPage(
+    downloadFilter: TriStateFilter,
+    onDownloadFilterChanged: ((TriStateFilter) -> Unit)?,
+    unreadFilter: TriStateFilter,
+    onUnreadFilterChanged: (TriStateFilter) -> Unit,
+    bookmarkedFilter: TriStateFilter,
+    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
+) {
+    TriStateItem(
+        label = stringResource(R.string.label_downloaded),
+        state = downloadFilter,
+        onClick = onDownloadFilterChanged,
+    )
+    TriStateItem(
+        label = stringResource(R.string.action_filter_unread),
+        state = unreadFilter,
+        onClick = onUnreadFilterChanged,
+    )
+    TriStateItem(
+        label = stringResource(R.string.action_filter_bookmarked),
+        state = bookmarkedFilter,
+        onClick = onBookmarkedFilterChanged,
+    )
+}
+
+@Composable
+private fun SortPage(
+    sortingMode: Long,
+    sortDescending: Boolean,
+    onItemSelected: (Long) -> Unit,
+) {
+    SortItem(
+        label = stringResource(R.string.sort_by_source),
+        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_SOURCE },
+        onClick = { onItemSelected(Manga.CHAPTER_SORTING_SOURCE) },
+    )
+    SortItem(
+        label = stringResource(R.string.sort_by_number),
+        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_NUMBER },
+        onClick = { onItemSelected(Manga.CHAPTER_SORTING_NUMBER) },
+    )
+    SortItem(
+        label = stringResource(R.string.sort_by_upload_date),
+        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_UPLOAD_DATE },
+        onClick = { onItemSelected(Manga.CHAPTER_SORTING_UPLOAD_DATE) },
+    )
+}
+
+@Composable
+private fun DisplayPage(
+    displayMode: Long,
+    onItemSelected: (Long) -> Unit,
+) {
+    RadioItem(
+        label = stringResource(R.string.show_title),
+        selected = displayMode == Manga.CHAPTER_DISPLAY_NAME,
+        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NAME) },
+    )
+    RadioItem(
+        label = stringResource(R.string.show_chapter_number),
+        selected = displayMode == Manga.CHAPTER_DISPLAY_NUMBER,
+        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NUMBER) },
+    )
 }
 
 @Composable
@@ -154,71 +216,5 @@ private fun SetAsDefaultDialog(
                 Text(text = stringResource(android.R.string.ok))
             }
         },
-    )
-}
-
-@Composable
-private fun ColumnScope.FilterPage(
-    downloadFilter: TriStateFilter,
-    onDownloadFilterChanged: ((TriStateFilter) -> Unit)?,
-    unreadFilter: TriStateFilter,
-    onUnreadFilterChanged: (TriStateFilter) -> Unit,
-    bookmarkedFilter: TriStateFilter,
-    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
-) {
-    TriStateItem(
-        label = stringResource(R.string.label_downloaded),
-        state = downloadFilter,
-        onClick = onDownloadFilterChanged,
-    )
-    TriStateItem(
-        label = stringResource(R.string.action_filter_unread),
-        state = unreadFilter,
-        onClick = onUnreadFilterChanged,
-    )
-    TriStateItem(
-        label = stringResource(R.string.action_filter_bookmarked),
-        state = bookmarkedFilter,
-        onClick = onBookmarkedFilterChanged,
-    )
-}
-
-@Composable
-private fun ColumnScope.SortPage(
-    sortingMode: Long,
-    sortDescending: Boolean,
-    onItemSelected: (Long) -> Unit,
-) {
-    SortItem(
-        label = stringResource(R.string.sort_by_source),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_SOURCE },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_SOURCE) },
-    )
-    SortItem(
-        label = stringResource(R.string.sort_by_number),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_NUMBER },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_NUMBER) },
-    )
-    SortItem(
-        label = stringResource(R.string.sort_by_upload_date),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_UPLOAD_DATE },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_UPLOAD_DATE) },
-    )
-}
-
-@Composable
-private fun ColumnScope.DisplayPage(
-    displayMode: Long,
-    onItemSelected: (Long) -> Unit,
-) {
-    RadioItem(
-        label = stringResource(R.string.show_title),
-        selected = displayMode == Manga.CHAPTER_DISPLAY_NAME,
-        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NAME) },
-    )
-    RadioItem(
-        label = stringResource(R.string.show_chapter_number),
-        selected = displayMode == Manga.CHAPTER_DISPLAY_NUMBER,
-        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NUMBER) },
     )
 }

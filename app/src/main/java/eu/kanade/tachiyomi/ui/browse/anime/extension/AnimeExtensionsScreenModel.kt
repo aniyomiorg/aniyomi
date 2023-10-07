@@ -6,23 +6,25 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import rx.Observable
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
@@ -33,14 +35,11 @@ class AnimeExtensionsScreenModel(
     private val getExtensions: GetAnimeExtensionsByType = Injekt.get(),
 ) : StateScreenModel<AnimeExtensionsState>(AnimeExtensionsState()) {
 
-    private val _query: MutableStateFlow<String?> = MutableStateFlow(null)
-    val query: StateFlow<String?> = _query.asStateFlow()
-
     private var _currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
 
     init {
         val context = Injekt.get<Application>()
-        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> AnimeExtensionUiModel) = { map ->
+        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> AnimeExtensionUiModel.Item) = { map ->
             {
                 AnimeExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
             }
@@ -74,44 +73,38 @@ class AnimeExtensionsScreenModel(
 
         coroutineScope.launchIO {
             combine(
-                _query,
+                state.map { it.searchQuery }.distinctUntilChanged().debounce(SEARCH_DEBOUNCE_MILLIS),
                 _currentDownloads,
                 getExtensions.subscribe(),
             ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
                 val searchQuery = query ?: ""
 
-                val languagesWithExtensions = _available
-                    .filter(queryFilter(searchQuery))
-                    .groupBy { it.lang }
-                    .toSortedMap(LocaleHelper.comparator)
-                    .flatMap { (lang, exts) ->
-                        listOf(
-                            AnimeExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)),
-                            *exts.map(extensionMapper(downloads)).toTypedArray(),
-                        )
-                    }
-
-                val items = mutableListOf<AnimeExtensionUiModel>()
+                val itemsGroups: ItemGroups = mutableMapOf()
 
                 val updates = _updates.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (updates.isNotEmpty()) {
-                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
-                    items.addAll(updates)
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_installed))
-                    items.addAll(installed)
-                    items.addAll(untrusted)
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
                 }
+
+                val languagesWithExtensions = _available
+                    .filter(queryFilter(searchQuery))
+                    .groupBy { it.lang }
+                    .toSortedMap(LocaleHelper.comparator)
+                    .map { (lang, exts) ->
+                        AnimeExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)) to exts.map(extensionMapper(downloads))
+                    }
 
                 if (languagesWithExtensions.isNotEmpty()) {
-                    items.addAll(languagesWithExtensions)
+                    itemsGroups.putAll(languagesWithExtensions)
                 }
 
-                items
+                itemsGroups
             }
                 .collectLatest {
                     mutableState.update { state ->
@@ -130,8 +123,8 @@ class AnimeExtensionsScreenModel(
     }
 
     fun search(query: String?) {
-        coroutineScope.launchIO {
-            _query.emit(query)
+        mutableState.update {
+            it.copy(searchQuery = query)
         }
     }
 
@@ -139,7 +132,8 @@ class AnimeExtensionsScreenModel(
         coroutineScope.launchIO {
             with(state.value) {
                 if (isEmpty) return@launchIO
-                items
+                items.values
+                    .flatten()
                     .mapNotNull {
                         when {
                             it !is AnimeExtensionUiModel.Item -> null
@@ -148,7 +142,7 @@ class AnimeExtensionsScreenModel(
                             else -> it.extension
                         }
                     }
-                    .forEach { updateExtension(it) }
+                    .forEach(::updateExtension)
             }
         }
     }
@@ -214,19 +208,22 @@ class AnimeExtensionsScreenModel(
 data class AnimeExtensionsState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
-    val items: List<AnimeExtensionUiModel> = emptyList(),
+    val items: ItemGroups = mutableMapOf(),
     val updates: Int = 0,
+    val searchQuery: String? = null,
 ) {
     val isEmpty = items.isEmpty()
 }
 
-sealed interface AnimeExtensionUiModel {
-    sealed interface Header : AnimeExtensionUiModel {
+typealias ItemGroups = MutableMap<AnimeExtensionUiModel.Header, List<AnimeExtensionUiModel.Item>>
+
+object AnimeExtensionUiModel {
+    sealed interface Header {
         data class Resource(@StringRes val textRes: Int) : Header
         data class Text(val text: String) : Header
     }
     data class Item(
         val extension: AnimeExtension,
         val installStep: InstallStep,
-    ) : AnimeExtensionUiModel
+    )
 }

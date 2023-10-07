@@ -35,7 +35,6 @@
     <string name="action_rename_category">Ubah nama kategori</string>
     <string name="action_move_category">Masukkan ke kategori</string>
     <string name="action_edit_cover">Ubah gambar sampul</string>
-    <string name="action_stop">Berhenti</string>
     <string name="action_pause">Hentikan sementara</string>
     <string name="action_previous_chapter">Bab sebelumnya</string>
     <string name="action_next_chapter">Bab selanjutnya</string>
@@ -170,10 +169,6 @@
     <string name="sort_by_source">Sumber</string>
     <string name="sort_by_number">Nomor bab</string>
     <string name="manga_download">Unduh</string>
-    <string name="download_1">Bab berikutnya</string>
-    <string name="download_5">5 bab berikutnya</string>
-    <string name="download_10">10 bab berikutnya</string>
-    <string name="download_all">Semua</string>
     <string name="download_unread">Belum dibaca</string>
     <string name="confirm_delete_chapters">Yakin ingin menghapus bab yang dipilih\?</string>
     <string name="manga_tracking_tab">Pelacakan</string>
@@ -248,8 +243,6 @@
     <string name="manga_removed_library">Dihapus dari pustaka</string>
     <string name="copied_to_clipboard">Tersalin ke papan klip:
 \n%1$s</string>
-    <string name="custom_download">Unduh sejumlah tertentu</string>
-    <string name="download_custom">Kustom</string>
     <string name="migration_dialog_what_to_include">Pilih data yang ikut dipindah</string>
     <string name="migrate">Pindah</string>
     <string name="copy">Salin</string>
@@ -295,7 +288,7 @@
     <string name="theme_dark">Nyala</string>
     <string name="theme_system">Ikuti sistem</string>
     <string name="pref_manage_notifications">Kelola notifikasi</string>
-    <string name="pref_category_security">Keamanan</string>
+    <string name="pref_category_security">Keamanan dan privasi</string>
     <string name="action_menu">Menu</string>
     <string name="action_reorganize_by">Susun ulang</string>
     <string name="action_newest">Terbaru</string>
@@ -304,7 +297,7 @@
     <string name="action_move_to_bottom">Pindahkan ke bawah</string>
     <string name="label_more">Lainnya</string>
     <string name="pref_category_library_update">Pembaruan</string>
-    <string name="lock_with_biometrics">Kunci dengan biometrik</string>
+    <string name="lock_with_biometrics">Memerlukan buka kunci</string>
     <string name="lock_when_idle">Kunci saat diam</string>
     <string name="lock_always">Selalu</string>
     <string name="lock_never">Tidak pernah</string>
@@ -343,7 +336,6 @@
     </plurals>
     <string name="label_sources">Sumber</string>
     <string name="channel_ext_updates">Pembaruan ekstensi</string>
-    <string name="pref_enable_automatic_extension_updates">Periksa pembaruan ekstensi</string>
     <string name="pref_category_reading">Membaca</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">Terdapat %d perbaruan ekstensi</item>
@@ -386,13 +378,12 @@
     <string name="restore_in_progress">Pemulihan masih dalam proses</string>
     <string name="backup_in_progress">Pencadangan masih dalam proses</string>
     <string name="restore_duration">%02d menit, %02d detik</string>
-    <string name="pref_search_pinned_sources_only">Hanya sertakan sumber yang ditandai</string>
+    <string name="pref_search_pinned_sources_only">Hanya mencari pada sumber di-sematkan dalam pencarian global</string>
     <string name="viewer">Mode membaca</string>
     <string name="pref_true_color_summary">Mengurangi banding, namun berdampak pada performa</string>
     <plurals name="num_categories">
         <item quantity="other">%d kategori</item>
     </plurals>
-    <string name="action_display_unread_badge">Belum Dibaca</string>
     <string name="gray_background">Abu-abu</string>
     <string name="pref_category_for_this_series">Untuk seri ini</string>
     <string name="battery_optimization_setting_activity_not_found">Tidak dapat membuka pengaturan perangkat</string>
@@ -413,7 +404,6 @@
     <string name="sort_by_upload_date">Menurut tanggal pengunggahan</string>
     <string name="action_display_comfortable_grid">Grid nyaman</string>
     <string name="tabs_header">Tab</string>
-    <string name="badges_header">Penanda</string>
     <string name="action_display_show_tabs">Tampilkan tab kategori</string>
     <string name="page_list_empty_error">Halaman tidak ditemukan</string>
     <string name="action_disable_all">Nonaktifkan semua</string>
@@ -454,7 +444,7 @@
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Hal ini tidak mencegah ekstensi yang tidak resmi atau berpotensi salah ditandai untuk menampilkan konten NSFW (18+) di dalam aplikasi.</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="other">Melewati %d bab, entah sumber kehilangan mereka atau karena sudah difilter</item>
+        <item quantity="other">Melewati %d bab, entah sumbernya hilang atau telah difilter</item>
     </plurals>
     <string name="no_chapters_error">Tidak ada bab yang ditemukan</string>
     <string name="chapter_settings_updated">Pengaturan bab bawaan diperbarui</string>
@@ -482,11 +472,9 @@
     <string name="action_order_by_chapter_number">Menurut nomor bab</string>
     <string name="action_order_by_upload_date">Menurut tanggal unggahan</string>
     <string name="action_filter_tracked">Dilacak</string>
-    <string name="pref_dump_crash_logs">Buat log kerusakan</string>
-    <string name="channel_crash_logs">Log kerusakan</string>
+    <string name="pref_dump_crash_logs">Bagikan log kerusakan</string>
     <string name="track_finished_reading_date">Tanggal selesai</string>
     <string name="track_started_reading_date">Tanggal mulai</string>
-    <string name="crash_log_saved">Log kerusakan disimpan</string>
     <string name="pref_dump_crash_logs_summary">Simpan log kerusakan ke sebuah berkas untuk dibagikan dengan pengembang aplikasi</string>
     <string name="pref_viewer_nav">Zona ketuk</string>
     <string name="right_and_left_nav">Kanan dan Kiri</string>
@@ -551,7 +539,7 @@
     <string name="enhanced_tracking_info">Layanan yang menyediakan fitur yang ditingkatan untuk sumber tertentu. Manga dilacak secara otomatis ketika ditambahkan ke pustaka Anda.</string>
     <string name="enhanced_services">Layanan yang ditingkatkan</string>
     <string name="pref_dark_theme_pure_black">Mode gelap hitam pekat</string>
-    <string name="theme_yotsuba">Yotsuba</string>
+    <string name="theme_yotsuba">yotsuba</string>
     <string name="theme_yinyang">Yin dan Yang</string>
     <string name="theme_tako">Tako</string>
     <string name="theme_strawberrydaiquiri">Stroberi Daiquiri</string>
@@ -616,9 +604,6 @@
     <string name="webtoon_side_padding_5">5%</string>
     <string name="action_display_cover_only_grid">Grid sampul saja</string>
     <string name="pref_update_only_started">Yang belum dibaca</string>
-    <string name="confirm_manga_add_duplicate">Anda memiliki sebuah entri di pustaka anda dengan nama yang sama tapi dari sumber yang berbeda (%1$s).
-\n
-\nApakah Anda yakin untuk melanjutkan\?</string>
     <string name="action_filter_started">Dimulai</string>
     <string name="skipped_reason_completed">Dilewati karena seri telah selesai</string>
     <string name="skipped_reason_not_caught_up">Dilewati karena ada bab yang belum dibaca</string>
@@ -645,14 +630,12 @@
     <string name="source_filter_empty_screen">Sumber yang diinstal tidak ditemukan</string>
     <string name="source_empty_screen">Tidak ada sumber yang ditemukan</string>
     <string name="action_sort_unread_count">Jumlah belum dibaca</string>
-    <string name="split_tall_images">Membagi gambar panjang</string>
     <string name="split_tall_images_summary">Meningkatkan kinerja pembaca</string>
     <string name="download_notifier_split_page_not_found">Halaman %d tidak ditemukan saat dipisah</string>
     <string name="download_notifier_split_page_path_not_found">Tidak dapat menemukan jalur file halaman %d</string>
     <string name="pref_reset_viewer_flags_success">Atur ulang semua pengaturan pengguna</string>
     <string name="pref_reset_viewer_flags">Muat ulang pengaturan per-pengguna</string>
     <string name="pref_reset_viewer_flags_summary">Atur ulang mode dan orientasi dari semua seri</string>
-    <string name="download_notifier_split_failed">Tidak bisa memisah gambar yang telah diunduh</string>
     <string name="empty_screen">Yah, ini aneh</string>
     <string name="pref_reset_viewer_flags_error">Tidak bisa mengatur ulang setelan pembaca</string>
     <string name="ext_info_version">Versi</string>
@@ -668,7 +651,7 @@
     <string name="custom_cover">Sampul kustom</string>
     <string name="not_installed">Tidak terinstall</string>
     <string name="pref_app_language">Bahasa aplikasi</string>
-    <string name="theme_lavender">Lavender</string>
+    <string name="theme_lavender">lavender</string>
     <string name="description_placeholder">Tidak ada deskripsi</string>
     <string name="delete_category_confirmation">Apakah anda ingin menghapus kategori \"%s\"\?</string>
     <string name="internal_error">InternalError: Periksa log kerusakan untuk informasi lebih lanjut</string>
@@ -690,7 +673,7 @@
     <string name="download_ahead_info">Hanya berfungsi pada entri di perpustakaan dan jika bab saat ini ditambah yang berikutnya sudah diunduh</string>
     <string name="remove_manga">Kamu akan menghapus \"%s\" dari pustaka</string>
     <string name="updates_last_update_info">Pustaka terakhir diperbarui: %s</string>
-    <string name="multi_lang">Multi</string>
+    <string name="multi_lang">banyak</string>
     <string name="pref_long_strip_split">Potong gambar panjang (BETA)</string>
     <string name="are_you_sure">Apa kamu yakin\?</string>
     <string name="popular">Popular</string>
@@ -700,7 +683,7 @@
     <string name="pref_browse_summary">Sumber, ekstensi, pencarian global</string>
     <string name="pref_reader_summary">Mode membaca, tampilan, navigasi</string>
     <string name="pref_tracking_summary">Sinkronisasi kemajuan satu arah, sinkronisasi yang ditingkatkan</string>
-    <string name="crash_screen_description">%s mengalami kesalahan yang tak terduga. Kami menyarankan Anda mengambil tangkapan layar pesan ini, membuat log kerusakan, dan kemudian membagikannya di saluran dukungan kami di Discord.</string>
+    <string name="crash_screen_description">%s mengalami kesalahan tak terduga. Kami menyarankan Anda membagi log kerusakan di saluran dukungan kami di Discord.</string>
     <string name="pref_downloads_summary">Unduh otomatis, unduh di depan</string>
     <string name="pref_security_summary">Kunci aplikasi, layar aman</string>
     <string name="pref_general_summary">Bahasa aplikasi, notifikasi</string>
@@ -715,4 +698,24 @@
     <string name="error_user_agent_string_invalid">String agen pengguna tidak valid</string>
     <string name="updates_last_update_info_just_now">Baru saja</string>
     <string name="label_download_queue">Antrian unduhan</string>
+    <string name="enhanced_services_not_installed">Tersedia tetapi sumber tidak terpasang: %s</string>
+    <string name="pref_skip_dupe_chapters">Melewati bab terduplikasi</string>
+    <string name="confirm_add_duplicate_manga">Kamu memiliki entri di pustaka dengan nama yang sama.
+\n
+\nApakah kamu ingin melanjutkan\?</string>
+    <string name="track_error">%1$seror%2$s</string>
+    <string name="pref_hide_in_library_items">Semua catatan tersembunyi sudah ada di perpustakaan</string>
+    <plurals name="download_amount">
+        <item quantity="other">berikutnya %d chapter</item>
+    </plurals>
+    <string name="action_copy_to_clipboard">Salin ke papan klip</string>
+    <string name="action_update_category">Perbarui kategori</string>
+    <string name="split_tall_images">Potong gambar tinggi</string>
+    <string name="overlay_header">Lapisan awal</string>
+    <string name="pref_page_rotate">Memutar halaman lebar agar pas</string>
+    <string name="pref_page_rotate_invert">Orientasi balik halaman lebar yang diputar</string>
+    <plurals name="missing_items">
+        <item quantity="other">Bab %1$s yang hilang</item>
+    </plurals>
+    <string name="missing_items_unknown">Mungkin ada bab yang terlewat</string>
     </resources>

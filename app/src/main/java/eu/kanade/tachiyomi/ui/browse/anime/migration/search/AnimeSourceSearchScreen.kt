@@ -8,44 +8,41 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.presentation.browse.anime.BrowseAnimeSourceContent
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.SearchToolbar
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.Constants
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import kotlinx.coroutines.launch
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 data class AnimeSourceSearchScreen(
     private val oldAnime: Anime,
     private val sourceId: Long,
     private val query: String?,
-) : Screen {
+) : Screen() {
 
     @Composable
     override fun Content() {
-        val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -61,7 +58,7 @@ data class AnimeSourceSearchScreen(
                     searchQuery = state.toolbarQuery ?: "",
                     onChangeSearchQuery = screenModel::setToolbarQuery,
                     onClickCloseSearch = navigator::pop,
-                    onSearch = { screenModel.search(it) },
+                    onSearch = screenModel::search,
                     scrollBehavior = scrollBehavior,
                 )
             },
@@ -89,8 +86,13 @@ data class AnimeSourceSearchScreen(
                 contentPadding = paddingValues,
                 onWebViewClick = {
                     val source = screenModel.source as? AnimeHttpSource ?: return@BrowseAnimeSourceContent
-                    val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
-                    context.startActivity(intent)
+                    navigator.push(
+                        WebViewScreen(
+                            url = source.baseUrl,
+                            initialTitle = source.name,
+                            sourceId = source.id,
+                        ),
+                    )
                 },
                 onHelpClick = { uriHandler.openUri(Constants.URL_HELP) },
                 onLocalAnimeSourceHelpClick = { uriHandler.openUri(LocalAnimeSource.HELP_URL) },
@@ -117,10 +119,6 @@ data class AnimeSourceSearchScreen(
                 )
             }
             else -> {}
-        }
-
-        LaunchedEffect(state.filters) {
-            screenModel.initFilterSheet(context)
         }
     }
 }

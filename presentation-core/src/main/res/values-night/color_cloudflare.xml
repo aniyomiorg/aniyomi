@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Colors for Cloudflare theme (Dark Mode)
+  ~
+  ~ Key colors:
+  ~ Primary #F38020
+  ~ Secondary #F38020
+  ~ Tertiary #1B1B22
+  ~ Neutral #1B1B22
+-->
+<resources>
+    <color name="cloudflare_primary">#F38020</color>
+    <color name="cloudflare_onPrimary">#1B1B22</color>
+    <color name="cloudflare_primaryContainer">#F38020</color>
+    <color name="cloudflare_onPrimaryContainer">#1B1B22</color>
+    <color name="cloudflare_secondary">#F38020</color>
+    <color name="cloudflare_onSecondary">#1B1B22</color>
+    <color name="cloudflare_secondaryContainer">#F38020</color>
+    <color name="cloudflare_onSecondaryContainer">#1B1B22</color>
+    <color name="cloudflare_tertiary">#1B1B22</color>
+    <color name="cloudflare_onTertiary">#F38020</color>
+    <color name="cloudflare_tertiaryContainer">#1B1B22</color>
+    <color name="cloudflare_onTertiaryContainer">#F38020</color>
+    <color name="cloudflare_background">#1B1B22</color>
+    <color name="cloudflare_onBackground">#EFF2F5</color>
+    <color name="cloudflare_surface">#1B1B22</color>
+    <color name="cloudflare_onSurface">#EFF2F5</color>
+    <color name="cloudflare_surfaceVariant">#3F3F46</color>
+    <color name="cloudflare_onSurfaceVariant">#D8FFFFFF</color>
+    <color name="cloudflare_outline">#F38020</color>
+    <color name="cloudflare_inverseOnSurface">#313033</color>
+    <color name="cloudflare_inverseSurface">#F3EFF4</color>
+    <color name="cloudflare_primaryInverse">#D6BAFF</color>
+    <color name="cloudflare_elevationOverlay">@color/cloudflare_primary</color>
+</resources>
+
+

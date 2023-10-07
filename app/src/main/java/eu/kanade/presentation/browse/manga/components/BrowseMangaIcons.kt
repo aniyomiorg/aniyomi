@@ -27,11 +27,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import coil.compose.AsyncImage
-import eu.kanade.domain.source.manga.model.Source
+import eu.kanade.domain.source.manga.model.icon
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
-import eu.kanade.tachiyomi.util.lang.withIOContext
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 private val defaultModifier = Modifier
     .height(40.dp)
@@ -60,9 +62,16 @@ fun MangaSourceIcon(
                 modifier = modifier.then(defaultModifier),
             )
         }
-        else -> {
+        source.id == LocalMangaSource.ID -> {
             Image(
                 painter = painterResource(R.mipmap.ic_local_source),
+                contentDescription = null,
+                modifier = modifier.then(defaultModifier),
+            )
+        }
+        else -> {
+            Image(
+                painter = painterResource(R.mipmap.ic_default_source),
                 contentDescription = null,
                 modifier = modifier.then(defaultModifier),
             )
@@ -90,14 +99,14 @@ fun MangaExtensionIcon(
         is MangaExtension.Installed -> {
             val icon by extension.getIcon(density)
             when (icon) {
-                Result.Error -> Image(
-                    bitmap = ImageBitmap.imageResource(id = R.mipmap.ic_local_source),
-                    contentDescription = null,
-                    modifier = modifier,
-                )
                 Result.Loading -> Box(modifier = modifier)
                 is Result.Success -> Image(
                     bitmap = (icon as Result.Success<ImageBitmap>).value,
+                    contentDescription = null,
+                    modifier = modifier,
+                )
+                Result.Error -> Image(
+                    bitmap = ImageBitmap.imageResource(id = R.mipmap.ic_default_source),
                     contentDescription = null,
                     modifier = modifier,
                 )

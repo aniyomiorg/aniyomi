@@ -40,10 +40,10 @@
     <string name="channel_new_chapters_episodes">章の更新</string>
     <string name="pref_library_manga_columns">行あたりの漫画</string>
     <string name="pref_library_anime_columns">行あたりのアニメ</string>
-    <string name="label_mangaextensions">漫画の拡張機能</string>
+    <string name="label_manga_extensions">漫画の拡張機能</string>
     <string name="label_migration_manga">漫画を移行</string>
     <string name="episode_settings">話の設定</string>
-    <string name="label_animeextensions">アニメの拡張機能</string>
+    <string name="label_anime_extensions">アニメの拡張機能</string>
     <string name="label_migration_anime">アニメを移行</string>
     <string name="pref_waiting_time_aniskip_9">9秒</string>
     <string name="general_categories">カテゴリー</string>

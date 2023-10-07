@@ -18,7 +18,6 @@
     <string name="action_display_show_number_of_items">Паказаць колькасць прадметаў</string>
     <string name="action_display_show_tabs">Паказаць укладкі катэгорый</string>
     <string name="action_display_download_badge">Значкі загружаных</string>
-    <string name="action_display_unread_badge">Значкі непрачытаных</string>
     <string name="action_display_list">Спіс</string>
     <string name="action_display_comfortable_grid">Зручная сетка</string>
     <string name="action_display_grid">Кампактная сетка</string>
@@ -34,7 +33,6 @@
     <string name="action_next_chapter">Наступная частка</string>
     <string name="action_previous_chapter">Папярэдняя частка</string>
     <string name="action_pause">Паўза</string>
-    <string name="action_stop">Спыніць</string>
     <string name="action_view_chapters">Прагляд частак</string>
     <string name="action_edit_cover">Рэдагаваць вокладку</string>
     <string name="action_move_category">Дадаць у катэгорыі</string>

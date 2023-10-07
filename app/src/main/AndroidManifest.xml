@@ -26,10 +26,6 @@
     <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- Remove permission from Firebase dependency -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"
-        tools:node="remove" />
-
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -256,7 +252,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".glance.manga.MangaUpdatesGridGlanceReceiver"
+            android:name="tachiyomi.presentation.widget.entries.manga.MangaUpdatesGridGlanceReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/label_recent_updates">
@@ -269,13 +265,19 @@
                 android:resource="@xml/updates_grid_glance_widget_info" />
         </receiver>
 
-        <service
-            android:name=".data.library.manga.MangaLibraryUpdateService"
-            android:exported="false" />
+        <receiver
+            android:name="tachiyomi.presentation.widget.entries.anime.AnimeUpdatesGridGlanceReceiver"
+            android:enabled="@bool/glance_appwidget_available"
+            android:exported="false"
+            android:label="@string/label_recent_anime_updates">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-        <service
-            android:name=".data.library.anime.AnimeLibraryUpdateService"
-            android:exported="false" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/updates_grid_glance_widget_info" />
+        </receiver>
 
         <service
             android:name=".data.download.manga.MangaDownloadService"
@@ -287,10 +289,6 @@
 
         <service
             android:name=".data.updater.AppUpdateService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.backup.BackupRestoreService"
             android:exported="false" />
 
         <service android:name=".extension.manga.util.MangaExtensionInstallService"
@@ -331,11 +329,6 @@
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
-
-        <!-- Disable advertising ID collection for Firebase -->
-        <meta-data
-            android:name="google_analytics_adid_collection_enabled"
-            android:value="false" />
 
     </application>
 

@@ -39,4 +39,97 @@
     <string name="download_notifier_download_paused_chapters">Descarga pausada</string>
     <string name="channel_new_chapters_episodes">Actualizaciones de capítulos</string>
     <string name="general_categories">Categorías</string>
+    <string name="episodes">Episodios</string>
+    <string name="backup_settings_warning">Advertencia: La configuración de respaldo también almacenará sus contraseñas, no comparta esta copia de seguridad!</string>
+    <string name="label_manga">Manga</string>
+    <string name="anime_categories">Categorías de anime</string>
+    <string name="chapters_episodes">Capitulos y episodios</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_duration">Tiempo visto</string>
+    <string name="entries">Entradas de la librería</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
+    <string name="label_manga_sources">Fuentes de manga</string>
+    <string name="label_anime_sources">Fuentes de anime</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="pref_search_pinned_manga_sources_only">Buscar solo fuentes de manga fijado en la búsqueda global</string>
+    <string name="action_start_download_internally">Utilizar el descargador interno</string>
+    <string name="pref_bottom_nav_no_manga">Mover Manga a la pestaña \"Mas\"</string>
+    <string name="action_mark_as_unseen">Marcar como no visto</string>
+    <string name="action_sort_last_anime_update">Ultima actualización de anime</string>
+    <string name="action_download_unread">Descargar capitulos sin leer</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime que ya se encuentren en la librería</string>
+    <string name="action_display_download_badge_anime">Episodios Descargados</string>
+    <string name="pref_player_summary">Control de progreso, reproductor interno, reproductor externo</string>
+    <string name="action_filter_unseen">No visto</string>
+    <string name="action_play_internally">Reproducir internamente</string>
+    <string name="action_order_by_episode_number">Por número de episodio</string>
+    <string name="action_start_download_externally">Utilizar un descargador externo</string>
+    <string name="pref_library_manga_columns">Manga ordenado por filas</string>
+    <string name="pref_library_anime_columns">Anime ordenado por filas</string>
+    <string name="label_watched_episodes">Visto</string>
+    <string name="action_global_manga_search">Busqueda Global de Manga</string>
+    <string name="action_global_anime_search">Busqueda Global de Anime</string>
+    <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes de anime fijado en la búsqueda global</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar entradas del manga que ya se encuentren en la librería</string>
+    <string name="action_sort_last_checked">Ultima revisión</string>
+    <string name="action_player_pip">Modo imagen sobre imagen (PiP)</string>
+    <string name="action_previous_episode">Episodio anterior</string>
+    <string name="action_download_unseen">Descargar episodios sin ver</string>
+    <string name="action_show_anime">Mostrar anime</string>
+    <string name="action_play">Reproducir</string>
+    <string name="pref_bottom_nav_no_updates">Mover pestaña \"Actualizaciones\" a la pestaña \"Mas\"</string>
+    <string name="pref_bottom_nav_no_history">Mover historial a la pestaña de mas</string>
+    <string name="action_bookmark_episode">Agregar el episodio a marcadores</string>
+    <string name="action_mark_previous_as_seen">Marcar anterior como visto</string>
+    <string name="action_remove_bookmark_episode">Desmarcar episodio</string>
+    <string name="action_sort_last_seen">Ultima vez</string>
+    <string name="action_sort_episode_fetch_date">Fecha de búsqueda del episodio</string>
+    <string name="action_display_local_badge_anime">Anime Local</string>
+    <string name="action_sort_total_episodes">Episodios totales</string>
+    <string name="action_sort_latest_episode">Episodio reciente</string>
+    <string name="action_mark_as_seen">Marcar como visto</string>
+    <string name="action_play_externally">Reproducir de forma externa</string>
+    <string name="action_edit_anime_categories">Editar categorías de Anime</string>
+    <string name="action_edit_manga_categories">Editar categorías de Manga</string>
+    <string name="action_view_episodes">Ver episodios</string>
+    <string name="action_next_episode">Siguente episodio</string>
+    <string name="action_screen_fit">Modo de ajuste de pantalla</string>
+    <string name="action_display_show_continue_reading_button">Mostrar botón continuar mirando/leyendo</string>
+    <string name="pref_bottom_nav_style">Estilo de navegación inferior</string>
+    <string name="action_sort_unseen_count">Recuento no visto</string>
 </resources>

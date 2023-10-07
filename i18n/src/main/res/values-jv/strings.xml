@@ -5,7 +5,6 @@
     <string name="track_type">Jinis</string>
     <string name="title">Judhul</string>
     <string name="no_chapters_error">Ora ditemokake bab</string>
-    <string name="download_all">Kabeh</string>
     <string name="manga_download">Donlot</string>
     <string name="display_mode_chapter">bab %1$s</string>
     <string name="other_source">Liyane</string>
@@ -99,7 +98,6 @@
     <string name="label_settings">Setelan</string>
     <string name="label_more">Liyane</string>
     <string name="name">Jeneng</string>
-    <string name="action_stop">Mandheg</string>
     <string name="manga">Manga</string>
     <string name="download_notifier_download_finish">Donlotan rampung</string>
     <string name="download_notifier_downloader_title">Donloder</string>
@@ -157,7 +155,6 @@
     <string name="action_pin">Pin</string>
     <string name="action_display_show_number_of_items">Tampilaken jumlah item</string>
     <string name="action_display_show_tabs">Tampilaken tab kategori</string>
-    <string name="action_display_unread_badge">Bab durung diwaca</string>
     <string name="action_display_download_badge">Chapter downloadan</string>
     <string name="action_display_comfortable_grid">Kothak penak</string>
     <string name="action_display_grid">Kothak kompak</string>

@@ -4,7 +4,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.source.manga.interactor.GetLanguagesWithMangaSources
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.ToggleLanguage
 import kotlinx.coroutines.flow.catch
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

@@ -13,9 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
@@ -23,10 +22,12 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
-import eu.kanade.tachiyomi.util.lang.launchUI
-import eu.kanade.tachiyomi.util.system.notification
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.notify
+import tachiyomi.core.util.lang.launchUI
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -82,7 +83,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
@@ -91,18 +92,16 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     }
 
     fun showQueueSizeWarningNotification() {
-        val notificationBuilder = context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
+        context.notify(
+            Notifications.ID_LIBRARY_SIZE_WARNING,
+            Notifications.CHANNEL_LIBRARY_PROGRESS,
+        ) {
             setContentTitle(context.getString(R.string.label_warning))
             setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_size_warning)))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setTimeoutAfter(AnimeDownloader.WARNING_NOTIF_TIMEOUT_MS)
             setContentIntent(NotificationHandler.openUrl(context, HELP_WARNING_URL))
         }
-
-        context.notificationManager.notify(
-            Notifications.ID_LIBRARY_SIZE_WARNING,
-            notificationBuilder.build(),
-        )
     }
 
     /**
@@ -116,17 +115,16 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             return
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_ERROR,
-            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
-                setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
-                setContentText(context.getString(R.string.action_show_errors))
-                setSmallIcon(R.drawable.ic_ani)
+            Notifications.CHANNEL_LIBRARY_ERROR,
+        ) {
+            setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
+            setContentText(context.getString(R.string.action_show_errors))
+            setSmallIcon(R.drawable.ic_ani)
 
-                setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
-            }
-                .build(),
-        )
+            setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
+        }
     }
 
     /**
@@ -139,16 +137,15 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             return
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_SKIPPED,
-            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_SKIPPED) {
-                setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
-                setContentText(context.getString(R.string.learn_more))
-                setSmallIcon(R.drawable.ic_ani)
-                setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_ANIME_URL))
-            }
-                .build(),
-        )
+            Notifications.CHANNEL_LIBRARY_SKIPPED,
+        ) {
+            setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
+            setContentText(context.getString(R.string.learn_more))
+            setSmallIcon(R.drawable.ic_ani)
+            setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_ANIME_URL))
+        }
     }
 
     /**
@@ -157,55 +154,55 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
      * @param updates a list of anime with new updates.
      */
     fun showUpdateNotifications(updates: List<Pair<Anime, Array<Episode>>>) {
-        NotificationManagerCompat.from(context).apply {
-            // Parent group notification
-            notify(
-                Notifications.ID_NEW_EPISODES,
-                context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
-                    setContentTitle(context.getString(R.string.notification_new_episodes))
-                    if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
-                        setContentText(updates.first().first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN))
-                    } else {
-                        setContentText(context.resources.getQuantityString(R.plurals.notification_new_episodes_summary, updates.size, updates.size))
+        // Parent group notification
+        context.notify(
+            Notifications.ID_NEW_EPISODES,
+            Notifications.CHANNEL_NEW_CHAPTERS_EPISODES,
+        ) {
+            setContentTitle(context.getString(R.string.notification_new_episodes))
+            if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
+                setContentText(updates.first().first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN))
+            } else {
+                setContentText(context.resources.getQuantityString(R.plurals.notification_new_episodes_summary, updates.size, updates.size))
 
-                        if (!preferences.hideNotificationContent().get()) {
-                            setStyle(
-                                NotificationCompat.BigTextStyle().bigText(
-                                    updates.joinToString("\n") {
-                                        it.first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN)
-                                    },
-                                ),
-                            )
-                        }
-                    }
-
-                    setSmallIcon(R.drawable.ic_ani)
-                    setLargeIcon(notificationBitmap)
-
-                    setGroup(Notifications.GROUP_NEW_EPISODES)
-                    setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-                    setGroupSummary(true)
-                    priority = NotificationCompat.PRIORITY_HIGH
-
-                    setContentIntent(getNotificationIntent())
-                    setAutoCancel(true)
-                },
-            )
-
-            // Per-anime notification
-            if (!preferences.hideNotificationContent().get()) {
-                launchUI {
-                    updates.forEach { (anime, episodes) ->
-                        notify(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
-                    }
+                if (!preferences.hideNotificationContent().get()) {
+                    setStyle(
+                        NotificationCompat.BigTextStyle().bigText(
+                            updates.joinToString("\n") {
+                                it.first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN)
+                            },
+                        ),
+                    )
                 }
+            }
+
+            setSmallIcon(R.drawable.ic_ani)
+            setLargeIcon(notificationBitmap)
+
+            setGroup(Notifications.GROUP_NEW_EPISODES)
+            setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+            setGroupSummary(true)
+            priority = NotificationCompat.PRIORITY_HIGH
+
+            setContentIntent(getNotificationIntent())
+            setAutoCancel(true)
+        }
+
+        // Per-anime notification
+        if (!preferences.hideNotificationContent().get()) {
+            launchUI {
+                context.notify(
+                    updates.map { (anime, episodes) ->
+                        NotificationManagerCompat.NotificationWithIdAndTag(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
+                    },
+                )
             }
         }
     }
 
     private suspend fun createNewEpisodesNotification(anime: Anime, episodes: Array<Episode>): Notification {
         val icon = getAnimeIcon(anime)
-        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
+        return context.notificationBuilder(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
             setContentTitle(anime.title)
 
             val description = getNewEpisodesDescription(episodes)
@@ -261,14 +258,14 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                     ),
                 )
             }
-        }
+        }.build()
     }
 
     /**
      * Cancels the progress notification.
      */
     fun cancelProgressNotification() {
-        context.notificationManager.cancel(Notifications.ID_LIBRARY_PROGRESS)
+        context.cancelNotification(Notifications.ID_LIBRARY_PROGRESS)
     }
 
     private suspend fun getAnimeIcon(anime: Anime): Bitmap? {
@@ -333,7 +330,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     private fun getNotificationIntent(): PendingIntent {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            action = MainActivity.SHORTCUT_UPDATES
+            action = Constants.SHORTCUT_UPDATES
         }
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }

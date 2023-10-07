@@ -1,9 +1,9 @@
 package eu.kanade.domain.entries.manga.interactor
 
-import eu.kanade.domain.entries.manga.model.MangaUpdate
-import eu.kanade.domain.entries.manga.repository.MangaRepository
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import tachiyomi.domain.entries.manga.model.MangaUpdate
+import tachiyomi.domain.entries.manga.repository.MangaRepository
 
 class SetMangaViewerFlags(
     private val mangaRepository: MangaRepository,

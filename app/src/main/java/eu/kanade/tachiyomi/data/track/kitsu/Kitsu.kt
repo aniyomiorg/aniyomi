@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.kitsu
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -17,7 +16,7 @@ import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 
-class Kitsu(private val context: Context, id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
+class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
 
     companion object {
         const val READING = 1
@@ -52,17 +51,16 @@ class Kitsu(private val context: Context, id: Long) : TrackService(id), AnimeTra
         return listOf(WATCHING, PLAN_TO_WATCH, COMPLETED, ON_HOLD, DROPPED)
     }
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            READING -> getString(R.string.currently_reading)
-            WATCHING -> getString(R.string.currently_watching)
-            PLAN_TO_READ -> getString(R.string.want_to_read)
-            PLAN_TO_WATCH -> getString(R.string.want_to_watch)
-            COMPLETED -> getString(R.string.completed)
-            ON_HOLD -> getString(R.string.on_hold)
-            DROPPED -> getString(R.string.dropped)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        READING -> R.string.currently_reading
+        WATCHING -> R.string.currently_watching
+        PLAN_TO_READ -> R.string.want_to_read
+        PLAN_TO_WATCH -> R.string.want_to_watch
+        COMPLETED -> R.string.completed
+        ON_HOLD -> R.string.on_hold
+        DROPPED -> R.string.dropped
+        else -> null
     }
 
     override fun getReadingStatus(): Int = READING

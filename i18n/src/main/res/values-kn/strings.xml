@@ -52,7 +52,6 @@
     <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
     <string name="action_unpin">ತೆಗೆದುಹಾಕಿ</string>
     <string name="action_pin">ಚುಚ್ಚು</string>
-    <string name="action_display_unread_badge">ಓದದ್ ಗುರುತುಗಳು</string>
     <string name="action_display_download_badge">ಡೌನಲೋಡ್ ಗುರುತುಗಳು</string>
     <string name="action_display_list">ಪಟ್ಟಿ</string>
     <string name="action_display_grid">ಕಾಂಪ್ಯಾಕ್ಟ್ ಗ್ರಿಡ್</string>
@@ -66,7 +65,6 @@
     <string name="action_next_chapter">ಮುಂದಿನ ಅಧ್ಯಾಯ</string>
     <string name="action_previous_chapter">ಹಿಂದಿನ ಅಧ್ಯಾಯ</string>
     <string name="action_pause">ವಿರಾಮ</string>
-    <string name="action_stop">ನಿಲ್ಲಿಸಿ</string>
     <string name="action_view_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ವೀಕ್ಷಿಸಿ</string>
     <string name="action_edit_cover">ಕವರ್ ತಿದ್ದಿ</string>
     <string name="action_move_category">ವರ್ಗಗಳನ್ನು ಹೊಂದಿಸಿ</string>
@@ -135,7 +133,6 @@
     <string name="pref_create_backup_summ">ಪ್ರಸ್ತುತ ಗ್ರಂಥಾಲಯವನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲು ಬಳಸಬಹುದು</string>
     <string name="pref_create_backup">ಬ್ಯಾಕಪ್ ರಚಿಸಿ</string>
     <string name="pref_search_pinned_sources_only">ಪಿನ್ ಮಾಡಿದ ಮೂಲಗಳನ್ನು ಮಾತ್ರ ಸೇರಿಸಿ</string>
-    <string name="pref_enable_automatic_extension_updates">ವಿಸ್ತರಣೆ ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
     <string name="tracking_info">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇವೆಗಳಲ್ಲಿ ಅಧ್ಯಾಯದ ಪ್ರಗತಿಯನ್ನು ನವೀಕರಿಸಲು ಏಕಮುಖ ಸಿಂಕ್. ಅವರ ಟ್ರ್ಯಾಕಿಂಗ್ ಬಟನ್ ನಿಂದ ಪ್ರತ್ಯೇಕ ಮಾಂಗಾ ನಮೂದುಗಳಿಗಾಗಿ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ಹೊಂದಿಸಿ.</string>
     <string name="services">ಸೇವೆಗಳು</string>
     <string name="pref_download_new">ಹೊಸ ಅಧ್ಯಾಯಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
@@ -327,12 +324,6 @@
     <string name="manga_tracking_tab">ಟ್ರ್ಯಾಕಿಂಗ್</string>
     <string name="confirm_delete_chapters">ಆಯ್ದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
     <string name="download_unread">ಓದದ</string>
-    <string name="download_all">ಎಲ್ಲಾ</string>
-    <string name="download_custom">ಕಸ್ಟಮ್</string>
-    <string name="download_10">ಮುಂದಿನ 10 ಅಧ್ಯಾಯಗಳು</string>
-    <string name="download_5">ಮುಂದಿನ 5 ಅಧ್ಯಾಯಗಳು</string>
-    <string name="download_1">ಮುಂದಿನ ಅಧ್ಯಾಯ</string>
-    <string name="custom_download">ಕಸ್ಟಮ್ ಮೊತ್ತದಲ್ಲಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
     <string name="manga_download">ಡೌನ್‌ಲೋಡ್</string>
     <string name="sort_by_number">ಅಧ್ಯಾಯದ ಸಂಖ್ಯೆಯ ಪ್ರಕಾರ</string>
     <string name="sort_by_source">ಮೂಲದ ಪ್ರಕಾರ</string>
@@ -420,7 +411,6 @@
     <string name="action_migrate">ಮೂಲ ಸ್ಥಳಾಂತರ</string>
     <string name="page_list_empty_error">ಯಾವುದೇ ಪುಟಗಳು ಸಿಕ್ಕಿಲ್ಲ</string>
     <string name="tabs_header">ಟ್ಯಾಬ್‌ಗಳು</string>
-    <string name="badges_header">ಬ್ಯಾಡ್ಜ್‌ಗಳು</string>
     <string name="pref_show_reading_mode_summary">ರೀಡರ್ ತೆರೆದಾಗ ಪ್ರಸ್ತುತ ಮೋಡ್ ಅನ್ನು ಸಂಕ್ಷಿಪ್ತವಾಗಿ ತೋರಿಸಿ</string>
     <string name="pref_show_reading_mode">ಓದುವ ರೀತಿ ತೋರಿಸಿ</string>
     <string name="action_display_show_tabs">ವರ್ಗ ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸಿ</string>
@@ -491,10 +481,8 @@
     <string name="action_order_by_upload_date">ಅಪ್ಲೋಡ್ ದಿನಾಂಕ ದಂತೆ</string>
     <string name="action_display_show_number_of_items">ವಸ್ತುಗಳ ಸಂಖ್ಯೆಯನ್ನು ತೋರಿಸಿ</string>
     <string name="action_sort_chapter_fetch_date">ಸಿಕ್ಕ ಮಾಹಿತಿ</string>
-    <string name="channel_crash_logs">ಕ್ರ್ಯಾಶ್ ಲಾಗ್ ಗಳು</string>
     <string name="track_finished_reading_date">ಮುಕ್ತಾಯ ದಿನಾಂಕ</string>
     <string name="track_started_reading_date">ಆರಂಭದ ದಿನ</string>
-    <string name="crash_log_saved">ಕ್ರ್ಯಾಶ್ ಲಾಗ್‌ಗಳನ್ನು ಉಳಿಸಲಾಗಿದೆ</string>
     <string name="pref_dump_crash_logs_summary">ಡೆವಲಪರ್‌ಗಳೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲು ದೋಷದೆ ಲಾಗ್‌ಗಳನ್ನು ಫೈಲ್‌ಗೆ ಸೇರಿಸಿ</string>
     <string name="pref_dump_crash_logs">ಕ್ರ್ಯಾಶ್ ಲಾಗ್‌ಗಳನ್ನು ಡಂಪ್ ಮಾಡಿ</string>
     <string name="pref_dns_over_https">HTTPS ಮೇಲೆ DNS ಬಳಸಿ</string>

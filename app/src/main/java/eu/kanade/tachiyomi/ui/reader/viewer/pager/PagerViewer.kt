@@ -19,9 +19,9 @@ import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.min
 
@@ -74,9 +74,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
                     setChaptersInternal(viewerChapters)
                     awaitingIdleViewerChapters = null
                     if (viewerChapters.currChapter.pages?.size == 1) {
-                        adapter.nextTransition?.to?.let {
-                            activity.requestPreloadChapter(it)
-                        }
+                        adapter.nextTransition?.to?.let(activity::requestPreloadChapter)
                     }
                 }
             }
@@ -234,9 +232,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
         val inPreloadRange = pages.size - page.number < 5
         if (inPreloadRange && allowPreload && page.chapter == adapter.currentChapter) {
             logcat { "Request preload next chapter because we're at page ${page.number} of ${pages.size}" }
-            adapter.nextTransition?.to?.let {
-                activity.requestPreloadChapter(it)
-            }
+            adapter.nextTransition?.to?.let(activity::requestPreloadChapter)
         }
     }
 
@@ -320,7 +316,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
      */
     protected open fun moveRight() {
         if (pager.currentItem != adapter.count - 1) {
-            val holder = (currentPage as? ReaderPage)?.let { getPageHolder(it) }
+            val holder = (currentPage as? ReaderPage)?.let(::getPageHolder)
             if (holder != null && config.navigateToPan && holder.canPanRight()) {
                 holder.panRight()
             } else {
@@ -334,7 +330,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
      */
     protected open fun moveLeft() {
         if (pager.currentItem != 0) {
-            val holder = (currentPage as? ReaderPage)?.let { getPageHolder(it) }
+            val holder = (currentPage as? ReaderPage)?.let(::getPageHolder)
             if (holder != null && config.navigateToPan && holder.canPanLeft()) {
                 holder.panLeft()
             } else {

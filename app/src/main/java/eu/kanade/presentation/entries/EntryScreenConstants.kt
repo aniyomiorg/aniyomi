@@ -4,9 +4,8 @@ enum class DownloadAction {
     NEXT_1_ITEM,
     NEXT_5_ITEMS,
     NEXT_10_ITEMS,
-    CUSTOM,
+    NEXT_25_ITEMS,
     UNVIEWED_ITEMS,
-    ALL_ITEMS,
 }
 
 enum class EditCoverAction {
@@ -20,4 +19,5 @@ enum class EntryScreenItem {
     DESCRIPTION_WITH_TAG,
     ITEM_HEADER,
     ITEM,
+    AIRING_TIME,
 }

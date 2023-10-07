@@ -58,7 +58,6 @@
     <string name="action_cancel">रद्द करा</string>
     <string name="action_unpin">पिन काढा</string>
     <string name="action_pin">पिन</string>
-    <string name="action_display_unread_badge">न वाचलेले बॅज</string>
     <string name="action_display_download_badge">Download बॅज</string>
     <string name="action_display_list">यादी</string>
     <string name="action_display_grid">ग्रीड</string>
@@ -72,7 +71,6 @@
     <string name="action_next_chapter">पुढील अध्याय</string>
     <string name="action_previous_chapter">मागील अध्याय</string>
     <string name="action_pause">विराम द्या</string>
-    <string name="action_stop">थांबवा</string>
     <string name="action_view_chapters">अध्याय बघा</string>
     <string name="action_edit_cover">कव्हर बदलवा</string>
     <string name="action_move_category">श्रेणी सेट करा</string>

@@ -4,50 +4,72 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.category.anime.interactor.CreateAnimeCategoryWithName
-import eu.kanade.domain.category.anime.interactor.DeleteAnimeCategory
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.anime.interactor.RenameAnimeCategory
-import eu.kanade.domain.category.anime.interactor.ReorderAnimeCategory
-import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.anime.interactor.CreateAnimeCategoryWithName
+import tachiyomi.domain.category.anime.interactor.DeleteAnimeCategory
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
+import tachiyomi.domain.category.anime.interactor.HideAnimeCategory
+import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
+import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.service.LibraryPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimeCategoryScreenModel(
-    private val getCategories: GetAnimeCategories = Injekt.get(),
+    private val getAllCategories: GetAnimeCategories = Injekt.get(),
+    private val getVisibleCategories: GetVisibleAnimeCategories = Injekt.get(),
     private val createCategoryWithName: CreateAnimeCategoryWithName = Injekt.get(),
+    private val hideCategory: HideAnimeCategory = Injekt.get(),
     private val deleteCategory: DeleteAnimeCategory = Injekt.get(),
     private val reorderCategory: ReorderAnimeCategory = Injekt.get(),
     private val renameCategory: RenameAnimeCategory = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeCategoryScreenState>(AnimeCategoryScreenState.Loading) {
 
     private val _events: Channel<AnimeCategoryEvent> = Channel()
-    val events = _events.consumeAsFlow()
+    val events = _events.receiveAsFlow()
 
     init {
         coroutineScope.launch {
-            getCategories.subscribe()
-                .collectLatest { categories ->
-                    mutableState.update {
-                        AnimeCategoryScreenState.Success(
-                            categories = categories.filterNot(Category::isSystemCategory),
-                        )
-                    }
+            val allCategories = if (libraryPreferences.hideHiddenCategoriesSettings().get()) {
+                getVisibleCategories.subscribe()
+            } else {
+                getAllCategories.subscribe()
+            }
+
+            allCategories.collectLatest { categories ->
+                mutableState.update {
+                    AnimeCategoryScreenState.Success(
+                        categories = categories.filterNot(Category::isSystemCategory),
+                    )
                 }
+            }
         }
     }
 
     fun createCategory(name: String) {
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
-                is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                CreateAnimeCategoryWithName.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
+                is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
+
+                else -> {}
+            }
+        }
+    }
+
+    fun hideCategory(category: Category) {
+        coroutineScope.launch {
+            when (hideCategory.await(category)) {
+                is HideAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -84,7 +106,6 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                RenameAnimeCategory.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -117,7 +138,6 @@ sealed class AnimeCategoryDialog {
 
 sealed class AnimeCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
-    object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 

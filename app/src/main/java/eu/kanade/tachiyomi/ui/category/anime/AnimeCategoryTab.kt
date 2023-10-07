@@ -11,9 +11,9 @@ import eu.kanade.presentation.category.AnimeCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
-import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
 fun Screen.animeCategoryTab(): TabContent {
@@ -36,6 +36,7 @@ fun Screen.animeCategoryTab(): TabContent {
                     contentPadding = contentPadding,
                     onClickCreate = { screenModel.showDialog(AnimeCategoryDialog.Create) },
                     onClickRename = { screenModel.showDialog(AnimeCategoryDialog.Rename(it)) },
+                    onClickHide = screenModel::hideCategory,
                     onClickDelete = { screenModel.showDialog(AnimeCategoryDialog.Delete(it)) },
                     onClickMoveUp = screenModel::moveUp,
                     onClickMoveDown = screenModel::moveDown,
@@ -46,13 +47,15 @@ fun Screen.animeCategoryTab(): TabContent {
                     AnimeCategoryDialog.Create -> {
                         CategoryCreateDialog(
                             onDismissRequest = screenModel::dismissDialog,
-                            onCreate = { screenModel.createCategory(it) },
+                            onCreate = screenModel::createCategory,
+                            categories = successState.categories,
                         )
                     }
                     is AnimeCategoryDialog.Rename -> {
                         CategoryRenameDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onRename = { screenModel.renameCategory(dialog.category, it) },
+                            categories = successState.categories,
                             category = dialog.category,
                         )
                     }

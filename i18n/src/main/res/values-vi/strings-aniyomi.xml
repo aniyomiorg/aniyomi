@@ -24,11 +24,11 @@
     <string name="pref_auto_clear_chapter_cache">Xóa bộ nhớ đệm các chương khi tắt ứng dụng</string>
     <string name="pref_clear_manga_database">Dọn dẹp cơ sở dữ liệu</string>
     <string name="pref_clear_manga_database_summary">Xóa truyện và các chương không nằm trong thư viện</string>
-    <string name="clear_database_confirmation">Bạn có chắc không? Các chương đã đọc và tiến độ đọc các truyện không nằm trong thư viện sẽ bị mất</string>
+    <string name="clear_database_confirmation">Bạn có chắc không\? Các chương đã đọc và tiến độ đọc các truyện không nằm trong thư viện sẽ bị mất</string>
     <string name="pref_refresh_library_tracking_summary">Cập nhật trạng thái, điểm số và chương cuối đã đọc từ dịch vụ theo dõi</string>
     <string name="pref_incognito_mode_summary">Dừng lưu giữ lịch sử đọc</string>
-    <string name="manga_from_library">Truyện từ thư viện</string>
-    <string name="snack_add_to_manga_library">Thêm truyện vào thư viện?</string>
+    <string name="manga_from_library">Từ thư viện</string>
+    <string name="snack_add_to_manga_library">Thêm truyện vào thư viện\?</string>
     <string name="download_error">Lỗi</string>
     <string name="download_paused">Đã tạm dừng</string>
     <string name="also_set_chapter_settings_for_library">Ngoài ra có hiệu lực với tất cả truyện trong thư viện</string>

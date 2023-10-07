@@ -1,65 +1,42 @@
 package eu.kanade.domain.items.chapter.model
 
+import data.Chapters
 import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.source.model.SChapter
+import tachiyomi.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter as DbChapter
 
-data class Chapter(
-    val id: Long,
-    val mangaId: Long,
-    val read: Boolean,
-    val bookmark: Boolean,
-    val lastPageRead: Long,
-    val dateFetch: Long,
-    val sourceOrder: Long,
-    val url: String,
-    val name: String,
-    val dateUpload: Long,
-    val chapterNumber: Float,
-    val scanlator: String?,
-) {
-    val isRecognizedNumber: Boolean
-        get() = chapterNumber >= 0f
-
-    fun toSChapter(): SChapter {
-        return SChapter.create().also {
-            it.url = url
-            it.name = name
-            it.date_upload = dateUpload
-            it.chapter_number = chapterNumber
-            it.scanlator = scanlator
-        }
-    }
-
-    fun copyFromSChapter(sChapter: SChapter): Chapter {
-        return this.copy(
-            name = sChapter.name,
-            url = sChapter.url,
-            dateUpload = sChapter.date_upload,
-            chapterNumber = sChapter.chapter_number,
-            scanlator = sChapter.scanlator?.ifBlank { null },
-        )
-    }
-
-    companion object {
-        fun create() = Chapter(
-            id = -1,
-            mangaId = -1,
-            read = false,
-            bookmark = false,
-            lastPageRead = 0,
-            dateFetch = 0,
-            sourceOrder = 0,
-            url = "",
-            name = "",
-            dateUpload = -1,
-            chapterNumber = -1f,
-            scanlator = null,
-        )
+// TODO: Remove when all deps are migrated
+fun Chapter.toSChapter(): SChapter {
+    return SChapter.create().also {
+        it.url = url
+        it.name = name
+        it.date_upload = dateUpload
+        it.chapter_number = chapterNumber
+        it.scanlator = scanlator
     }
 }
 
-// TODO: Remove when all deps are migrated
+fun Chapter.copyFromSChapter(sChapter: SChapter): Chapter {
+    return this.copy(
+        name = sChapter.name,
+        url = sChapter.url,
+        dateUpload = sChapter.date_upload,
+        chapterNumber = sChapter.chapter_number,
+        scanlator = sChapter.scanlator?.ifBlank { null },
+    )
+}
+
+fun Chapter.copyFrom(other: Chapters): Chapter {
+    return copy(
+        name = other.name,
+        url = other.url,
+        dateUpload = other.date_upload,
+        chapterNumber = other.chapter_number,
+        scanlator = other.scanlator?.ifBlank { null },
+    )
+}
+
 fun Chapter.toDbChapter(): DbChapter = ChapterImpl().also {
     it.id = id
     it.manga_id = mangaId

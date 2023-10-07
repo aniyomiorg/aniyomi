@@ -5,24 +5,23 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.IBinder
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.extension.anime.installer.InstallerAnime
 import eu.kanade.tachiyomi.extension.anime.installer.PackageInstallerInstallerAnime
 import eu.kanade.tachiyomi.extension.anime.installer.ShizukuInstallerAnime
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 
 class AnimeExtensionInstallService : Service() {
 
     private var installer: InstallerAnime? = null
 
     override fun onCreate() {
-        super.onCreate()
         val notification = notificationBuilder(Notifications.CHANNEL_EXTENSIONS_UPDATE) {
             setSmallIcon(R.drawable.ic_ani)
             setAutoCancel(false)
@@ -37,7 +36,7 @@ class AnimeExtensionInstallService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val uri = intent?.data
         val id = intent?.getLongExtra(EXTRA_DOWNLOAD_ID, -1)?.takeIf { it != -1L }
-        val installerUsed = intent?.getSerializableExtraCompat<PreferenceValues.ExtensionInstaller>(
+        val installerUsed = intent?.getSerializableExtraCompat<BasePreferences.ExtensionInstaller>(
             EXTRA_INSTALLER,
         )
         if (uri == null || id == null || installerUsed == null) {
@@ -47,8 +46,8 @@ class AnimeExtensionInstallService : Service() {
 
         if (installer == null) {
             installer = when (installerUsed) {
-                PreferenceValues.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(this)
-                PreferenceValues.ExtensionInstaller.SHIZUKU -> ShizukuInstallerAnime(this)
+                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(this)
+                BasePreferences.ExtensionInstaller.SHIZUKU -> ShizukuInstallerAnime(this)
                 else -> {
                     logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
                     stopSelf()
@@ -61,7 +60,6 @@ class AnimeExtensionInstallService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         installer?.onDestroy()
         installer = null
     }
@@ -75,7 +73,7 @@ class AnimeExtensionInstallService : Service() {
             context: Context,
             downloadId: Long,
             uri: Uri,
-            installer: PreferenceValues.ExtensionInstaller,
+            installer: BasePreferences.ExtensionInstaller,
         ): Intent {
             return Intent(context, AnimeExtensionInstallService::class.java)
                 .setDataAndType(uri, AnimeExtensionInstaller.APK_MIME)

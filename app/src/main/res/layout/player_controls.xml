@@ -20,17 +20,17 @@
 
         <ImageButton
             android:id="@+id/unlockBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:contentDescription="Unlock player"
-            android:src="@drawable/ic_lock_open_24dp"
+            android:src="@drawable/ic_unlock_20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="?attr/colorOnPrimarySurface" />
 
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/controlsView"
+        android:id="@+id/unlocked_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#70000000">
@@ -46,13 +46,13 @@
 
             <ImageButton
                 android:id="@+id/backArrowBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Go back"
-                android:src="@drawable/ic_arrow_back_24dp"
+                android:src="@drawable/ic_arrow_back_20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/titleMainTxt"
                 app:layout_constraintTop_toTopOf="parent"
@@ -63,14 +63,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:text=""
+                android:layout_marginTop="16dp"
                 android:textColor="?attr/colorOnPrimarySurface"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:maxLines="1"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintRight_toLeftOf="@id/episodeListBtn"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Anime Name" />
 
             <TextView
                 android:id="@+id/titleSecondaryTxt"
@@ -78,85 +81,93 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:alpha="0.5"
-                android:text=""
                 android:textColor="?attr/colorOnPrimarySurface"
                 android:textSize="12sp"
+                android:textStyle="italic"
+                android:maxLines="1"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
+                app:layout_constraintRight_toLeftOf="@id/episodeListBtn"
+                app:layout_constraintTop_toBottomOf="@id/titleMainTxt"
+                tools:text="Episode Name" />
+
+            <ImageButton
+                android:id="@+id/episodeListBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Episode list"
+                android:src="@drawable/ic_navigate_next_20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/titleMainTxt"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleMainTxt" />
+                app:tint="?attr/colorOnPrimarySurface" />
 
             <!-- Top Controls (Left)-->
 
             <ImageButton
                 android:id="@+id/player_overflow"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
-                android:onClick="openOptions"
-                android:src="@drawable/ic_overflow_24dp"
-                app:layout_constraintLeft_toRightOf="@id/qualityBtn"
+                android:onClick="openOptionsSheet"
+                android:src="@drawable/ic_overflow_20dp"
+                app:layout_constraintLeft_toRightOf="@id/settingsBtn"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/backArrowBtn"
+                app:layout_constraintTop_toBottomOf="@id/episodeListBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
-                android:id="@+id/qualityBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/settingsBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
-                android:onClick="pickQuality"
-                android:src="@drawable/ic_video_quality_24dp"
-                app:layout_constraintLeft_toRightOf="@id/cycleSubsBtn"
+                android:onClick="openTracksSheet"
+                android:src="@drawable/ic_video_settings_20dp"
+                app:layout_constraintLeft_toRightOf="@id/chaptersBtn"
                 app:layout_constraintRight_toLeftOf="@id/player_overflow"
                 app:layout_constraintTop_toTopOf="@id/player_overflow"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
-                android:id="@+id/cycleSubsBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/chaptersBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
-                android:contentDescription="Subtitles"
-                android:onClick="pickSub"
-                android:src="@drawable/ic_subtitles_black_24dp"
-                app:layout_constraintLeft_toRightOf="@id/cycleAudioBtn"
-                app:layout_constraintRight_toLeftOf="@id/qualityBtn"
-                app:layout_constraintTop_toTopOf="@id/qualityBtn"
-                app:tint="?attr/colorOnPrimarySurface" />
-
-            <ImageButton
-                android:id="@+id/cycleAudioBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="Audio"
-                android:onClick="pickAudio"
-                android:src="@drawable/ic_audiotrack_black_24dp"
+                android:contentDescription="Settings"
+                android:onClick="pickChapter"
+                android:src="@drawable/ic_video_chapter_24dp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toRightOf="@id/cycleDecoderBtn"
-                app:layout_constraintRight_toLeftOf="@id/cycleSubsBtn"
-                app:layout_constraintTop_toTopOf="@id/cycleSubsBtn"
+                app:layout_constraintRight_toLeftOf="@id/settingsBtn"
+                app:layout_constraintTop_toTopOf="@id/settingsBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
-            <Button
+            <TextView
                 android:id="@+id/cycleDecoderBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="switchDecoder"
-                android:text=".."
+                android:gravity="center"
+                android:text="HW+"
+                android:textSize="12sp"
                 android:textColor="?attr/colorOnPrimarySurface"
                 app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
-                app:layout_constraintRight_toLeftOf="@id/cycleAudioBtn"
-                app:layout_constraintTop_toTopOf="@id/cycleAudioBtn" />
+                app:layout_constraintRight_toLeftOf="@id/chaptersBtn"
+                app:layout_constraintTop_toTopOf="@id/chaptersBtn" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/toggleAutoplay"
-                android:layout_width="64dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 tools:checked="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtn"
@@ -183,7 +194,7 @@
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@color/tint_normal"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:layout_marginBottom="96dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="parent"
@@ -199,9 +210,9 @@
 
             <ImageButton
                 android:id="@+id/prevBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="255dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="256dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_previous_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -209,16 +220,15 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_previous_50dp"
+                app:srcCompat="@drawable/ic_skip_previous_40dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
                 android:id="@+id/play_btn"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play/Pause"
-                android:onClick="playPause"
                 android:textColor="@android:color/white"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -226,14 +236,14 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="?attr/colorOnPrimarySurface"
-                tools:src="@drawable/ic_play_arrow_72dp"
+                tools:src="@drawable/ic_play_arrow_64dp"
                 tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/nextBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="255dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="256dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_next_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -241,7 +251,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_next_50dp"
+                app:srcCompat="@drawable/ic_skip_next_40dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <TextView
@@ -252,7 +262,7 @@
                 android:gravity="left"
                 android:text="Information"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -265,44 +275,46 @@
             android:id="@+id/bottomControlsGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginHorizontal="10dp"
             android:layoutDirection="ltr"
             android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/bottomLeftControlsGroup"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent">
 
                 <ImageButton
                     android:id="@+id/lockBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Lock player"
-                    android:src="@drawable/ic_lock_24dp"
+                    android:src="@drawable/ic_lock_20dp"
                     app:tint="?attr/colorOnPrimarySurface" />
 
                 <ImageButton
                     android:id="@+id/rotateBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Rotate player"
                     android:onClick="rotatePlayer"
-                    android:src="@drawable/ic_screen_rotation_24dp"
+                    android:src="@drawable/ic_screen_rotation_20dp"
                     app:tint="?attr/colorOnPrimarySurface" />
 
-                <Button
+                <TextView
                     android:id="@+id/cycleSpeedBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="cycleSpeed"
-                    android:text=".."
+                    android:gravity="center"
+                    android:text="1.00x"
+                    android:textSize="12sp"
                     android:textColor="?attr/colorOnPrimarySurface" />
 
             </LinearLayout>
@@ -310,39 +322,39 @@
             <LinearLayout
                 android:id="@+id/bottomRightControlsGroup"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
                 <Button
                     android:id="@+id/controls_skip_intro_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                    android:layout_height="match_parent"
                     android:backgroundTint="?attr/colorPrimary"
                     android:onClick="skipIntro"
                     android:text=""
+                    android:textSize="12sp"
                     tools:text="+85s"
                     android:textColor="?attr/colorOnPrimary" />
 
                 <ImageButton
                     android:id="@+id/cycleViewModeBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Cycle view modes"
-                    android:onClick="cycleViewMode"
-                    android:src="@drawable/ic_fullscreen_black_24dp"
+                    android:src="@drawable/ic_fullscreen_black_20dp"
                     app:tint="?attr/colorOnPrimarySurface" />
 
                 <ImageButton
                     android:id="@+id/pipBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/action_player_pip"
-                    android:src="@drawable/ic_picture_in_picture_24dp"
-                    android:visibility="visible" />
+                    android:src="@drawable/ic_picture_in_picture_20dp"
+                    android:visibility="visible"
+                    app:tint="?attr/colorOnPrimarySurface" />
 
             </LinearLayout>
 
@@ -358,51 +370,35 @@
             android:visibility="visible">
 
             <TextView
-                android:id="@+id/playbackPositionTxt"
-                android:layout_width="96dp"
-                android:layout_height="48dp"
+                android:id="@+id/playbackPositionBtn"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="0:00"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
-
-            <Button
-                android:id="@+id/playbackPositionBtn"
-                android:layout_width="96dp"
-                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
-            <eu.kanade.tachiyomi.ui.player.CustomSeekBar
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/playbackSeekbar"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="80"
-                android:progressBackgroundTint="@color/tint_seekbar_bg"
-                android:secondaryProgressTint="?attr/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/playbackPositionTxt"
-                app:layout_constraintRight_toLeftOf="@id/playbackDurationTxt"
-                tools:progress="25"
-                tools:secondaryProgress="50" />
+                app:layout_constraintLeft_toRightOf="@id/playbackPositionBtn"
+                app:layout_constraintRight_toLeftOf="@id/playbackDurationBtn" />
 
             <TextView
-                android:id="@+id/playbackDurationTxt"
-                android:layout_width="96dp"
-                android:layout_height="48dp"
+                android:id="@+id/playbackDurationBtn"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="0:00"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <Button
-                android:id="@+id/playbackDurationBtn"
-                android:layout_width="96dp"
-                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -434,12 +430,12 @@
             android:gravity="left"
             android:text="10"
             android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <ProgressBar
             android:id="@+id/volumeBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="26dp"
+            android:layout_width="25dp"
             android:layout_height="125dp"
             android:progress="20"
             android:secondaryProgress="100"
@@ -450,7 +446,7 @@
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/ic_volume_on_24dp"
+            android:src="@drawable/ic_volume_on_20dp"
             app:tint="#FFFFFF"
             tools:ignore="ContentDescription" />
 
@@ -475,12 +471,12 @@
             android:layout_marginBottom="5dp"
             android:text="100"
             android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <ProgressBar
             android:id="@+id/brightnessBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="26dp"
+            android:layout_width="25dp"
             android:layout_height="125dp"
             android:progress="20"
             android:secondaryProgress="100"
@@ -491,7 +487,7 @@
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/ic_brightness_positive_24dp"
+            android:src="@drawable/ic_brightness_positive_20dp"
             app:tint="#FFFFFF"
             tools:ignore="ContentDescription" />
 

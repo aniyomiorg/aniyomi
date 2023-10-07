@@ -17,16 +17,13 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.core.prefs.asState
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.history.HistoriesTab
@@ -34,18 +31,19 @@ import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.library.service.LibraryPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
-object MoreTab : Tab {
+object MoreTab : Tab() {
 
     override val options: TabOptions
         @Composable
@@ -111,13 +109,13 @@ private class MoreScreenModel(
         // Handle running/paused status change and queue progress updating
         coroutineScope.launchIO {
             combine(
-                MangaDownloadService.isRunning,
-                downloadManager.queue.updates,
+                downloadManager.isDownloaderRunning,
+                downloadManager.queueState,
             ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
                 .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->
                     combine(
-                        AnimeDownloadService.isRunning,
-                        animeDownloadManager.queue.updates,
+                        animeDownloadManager.isDownloaderRunning,
+                        animeDownloadManager.queueState,
                     ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
                             val isDownloading = isDownloadingAnime || isDownloadingManga
@@ -125,8 +123,7 @@ private class MoreScreenModel(
                             val pendingDownloadExists = downloadQueueSize != 0
                             _state.value = when {
                                 !pendingDownloadExists -> DownloadQueueState.Stopped
-                                !isDownloading && !pendingDownloadExists -> DownloadQueueState.Paused(0)
-                                !isDownloading && pendingDownloadExists -> DownloadQueueState.Paused(downloadQueueSize)
+                                !isDownloading -> DownloadQueueState.Paused(downloadQueueSize)
                                 else -> DownloadQueueState.Downloading(downloadQueueSize)
                             }
                         }

@@ -1,11 +1,11 @@
 package eu.kanade.domain.source.manga.interactor
 
-import eu.kanade.domain.source.manga.model.Source
-import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.domain.source.manga.repository.MangaSourceRepository
 
 class GetLanguagesWithMangaSources(
     private val repository: MangaSourceRepository,

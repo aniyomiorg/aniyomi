@@ -20,13 +20,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.commandiron.wheel_picker_compose.WheelTextPicker
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
+import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
+import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER_FREE
+import eu.kanade.tachiyomi.ui.player.MX_PLAYER_PRO
+import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
+import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
+import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.preference.asState
+import tachiyomi.presentation.core.components.WheelTextPicker
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -72,10 +82,9 @@ object SettingsPlayerScreen : SearchableSettings {
 
     @Composable
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val scope = rememberCoroutineScope()
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
-        val mpvConf = playerPreferences.mpvConf()
+        val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_internal_player),
@@ -89,16 +98,10 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerHideControls,
                     title = stringResource(R.string.pref_player_hide_controls),
                 ),
-                Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = mpvConf,
-                    title = stringResource(R.string.pref_mpv_conf),
-                    subtitle = mpvConf.asState(scope).value
-                        .lines().take(2)
-                        .joinToString(
-                            separator = "\n",
-                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
-                        ),
-
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_category_player_advanced),
+                    subtitle = stringResource(R.string.pref_category_player_advanced_subtitle),
+                    onClick = { navigator.push(AdvancedPlayerSettingsScreen) },
                 ),
             ),
         )
@@ -185,6 +188,7 @@ object SettingsPlayerScreen : SearchableSettings {
         val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = playerPreferences.skipLengthPreference()
         val playerSmoothSeek = playerPreferences.playerSmoothSeek()
+        val mediaChapterSeek = playerPreferences.mediaChapterSeek()
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -226,6 +230,7 @@ object SettingsPlayerScreen : SearchableSettings {
                         20 to stringResource(R.string.pref_skip_20),
                         10 to stringResource(R.string.pref_skip_10),
                         5 to stringResource(R.string.pref_skip_5),
+                        3 to stringResource(R.string.pref_skip_3),
                         0 to stringResource(R.string.pref_skip_disable),
                     ),
                 ),
@@ -233,6 +238,11 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerSmoothSeek,
                     title = stringResource(R.string.pref_player_smooth_seek),
                     subtitle = stringResource(R.string.pref_player_smooth_seek_summary),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = mediaChapterSeek,
+                    title = stringResource(R.string.pref_media_control_chapter_seeking),
+                    subtitle = stringResource(R.string.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_category_player_aniskip_info),
@@ -304,17 +314,8 @@ object SettingsPlayerScreen : SearchableSettings {
 
         val pm = basePreferences.context.packageManager
         val installedPackages = pm.getInstalledPackages(0)
-        val supportedPlayers = installedPackages.filter {
-            when (it.packageName) {
-                "is.xyz.mpv" -> true
-                "com.mxtech.videoplayer" -> true
-                "com.mxtech.videoplayer.ad" -> true
-                "com.mxtech.videoplayer.pro" -> true
-                "org.videolan.vlc" -> true
-                "com.husudosu.mpvremote" -> true
-                else -> false
-            }
-        }
+        val supportedPlayers = installedPackages.filter { it.packageName in externalPlayers }
+
         val packageNames = supportedPlayers.map { it.packageName }
         val packageNamesReadable = supportedPlayers
             .map { pm.getApplicationLabel(it.applicationInfo).toString() }
@@ -356,15 +357,14 @@ object SettingsPlayerScreen : SearchableSettings {
                     content = {
                         WheelTextPicker(
                             modifier = Modifier.align(Alignment.Center),
-                            texts = remember { 1..255 }.map {
+                            items = remember { 1..255 }.map {
                                 stringResource(
                                     R.string.seconds_short,
                                     it,
                                 )
                             },
-                            onScrollFinished = {
+                            onSelectionChanged = {
                                 newLength = it
-                                null
                             },
                             startIndex = skipIntroLengthValue,
                         )
@@ -384,3 +384,15 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 }
+
+val externalPlayers = listOf(
+    MPV_PLAYER,
+    MX_PLAYER,
+    MX_PLAYER_FREE,
+    MX_PLAYER_PRO,
+    VLC_PLAYER,
+    MPV_REMOTE,
+    JUST_PLAYER,
+    NEXT_PLAYER,
+    X_PLAYER,
+)

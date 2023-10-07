@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.util
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
@@ -11,7 +10,6 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.util.lang.launchUI
 import `is`.xyz.mpv.MPVLib
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,6 +19,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
+import tachiyomi.core.util.lang.withUIContext
 import uy.kohesive.injekt.injectLazy
 
 class AniSkipApi {
@@ -68,22 +67,22 @@ class AniSkipApi {
         private val playerControls get() = binding.playerControls
         private val activity: PlayerActivity get() = binding.root.context as PlayerActivity
 
-        fun showSkipButton(skipType: SkipType) {
+        internal suspend fun showSkipButton(skipType: SkipType) {
             val skipButtonString = when (skipType) {
                 SkipType.ED -> R.string.player_aniskip_ed
                 SkipType.OP -> R.string.player_aniskip_op
                 SkipType.RECAP -> R.string.player_aniskip_recap
                 SkipType.MIXED_OP -> R.string.player_aniskip_mixedOp
             }
-            launchUI {
-                playerControls.binding.controlsSkipIntroBtn.isVisible = true
+            withUIContext {
+                playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                 playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
             }
         }
 
         // this is used when netflixStyle is enabled
         @SuppressLint("SetTextI18n")
-        fun showSkipButton(skipType: SkipType, waitingTime: Int) {
+        suspend fun showSkipButton(skipType: SkipType, waitingTime: Int) {
             val skipTime = when (skipType) {
                 SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
                 SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
@@ -92,8 +91,8 @@ class AniSkipApi {
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
-                    launchUI {
-                        playerControls.binding.controlsSkipIntroBtn.isVisible = true
+                    withUIContext {
+                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                         playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
                     }
                 } else {
@@ -113,7 +112,7 @@ class AniSkipApi {
                 rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 leftToLeft = ConstraintLayout.LayoutParams.UNSET
             }
-            binding.secondsView.isVisible = true
+            binding.secondsView.visibility = View.VISIBLE
             binding.secondsView.isForward = true
 
             binding.ffwdBg.visibility = View.VISIBLE
@@ -122,7 +121,7 @@ class AniSkipApi {
                     binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
                         binding.ffwdBg.animate().alpha(0f).setDuration(100).withEndAction {
                             binding.ffwdBg.visibility = View.GONE
-                            binding.secondsView.isVisible = false
+                            binding.secondsView.visibility = View.GONE
                             binding.secondsView.alpha = 1f
                         }
                     }

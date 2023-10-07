@@ -28,8 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.components.OverflowMenu
-import eu.kanade.presentation.theme.active
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.theme.active
 
 @Composable
 fun EntryToolbar(
@@ -43,7 +43,9 @@ fun EntryToolbar(
     onClickShare: (() -> Unit)?,
     onClickDownload: ((DownloadAction) -> Unit)?,
     onClickEditCategory: (() -> Unit)?,
+    onClickRefresh: () -> Unit,
     onClickMigrate: (() -> Unit)?,
+    onClickSettings: (() -> Unit)?,
     // Anime only
     changeAnimeSkipIntro: (() -> Unit)?,
     // For action mode
@@ -112,49 +114,63 @@ fun EntryToolbar(
                         Icon(Icons.Outlined.FilterList, contentDescription = stringResource(R.string.action_filter), tint = filterTint)
                     }
 
-                    if (onClickEditCategory != null || onClickMigrate != null || onClickShare != null || changeAnimeSkipIntro != null) {
-                        OverflowMenu { closeMenu ->
-                            if (onClickEditCategory != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_edit_categories)) },
-                                    onClick = {
-                                        onClickEditCategory()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickMigrate != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_migrate)) },
-                                    onClick = {
-                                        onClickMigrate()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (changeAnimeSkipIntro != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_change_intro_length)) },
-                                    onClick = {
-                                        changeAnimeSkipIntro()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickShare != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_share)) },
-                                    onClick = {
-                                        onClickShare()
-                                        closeMenu()
-                                    },
-                                )
-                            }
+                    OverflowMenu { closeMenu ->
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.action_webview_refresh)) },
+                            onClick = {
+                                onClickRefresh()
+                                closeMenu()
+                            },
+                        )
+                        if (onClickEditCategory != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_edit_categories)) },
+                                onClick = {
+                                    onClickEditCategory()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickMigrate != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_migrate)) },
+                                onClick = {
+                                    onClickMigrate()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (changeAnimeSkipIntro != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_change_intro_length)) },
+                                onClick = {
+                                    changeAnimeSkipIntro()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickShare != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_share)) },
+                                onClick = {
+                                    onClickShare()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickSettings != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.settings)) },
+                                onClick = {
+                                    onClickSettings()
+                                    closeMenu()
+                                },
+                            )
                         }
                     }
                 }
             },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme
                     .surfaceColorAtElevation(3.dp)
                     .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),

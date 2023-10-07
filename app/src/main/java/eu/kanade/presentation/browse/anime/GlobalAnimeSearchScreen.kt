@@ -8,20 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
 import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
 import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.anime.components.GlobalAnimeSearchCardRow
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun GlobalAnimeSearchScreen(
@@ -29,7 +29,7 @@ fun GlobalAnimeSearchScreen(
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
@@ -59,10 +59,10 @@ fun GlobalAnimeSearchScreen(
 }
 
 @Composable
-fun GlobalAnimeSearchContent(
+private fun GlobalAnimeSearchContent(
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
@@ -71,16 +71,13 @@ fun GlobalAnimeSearchContent(
         contentPadding = contentPadding,
     ) {
         items.forEach { (source, result) ->
-            item {
+            item(key = source.id) {
                 GlobalSearchResultItem(
                     title = source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is AnimeSearchItemResult.Error -> {
-                            GlobalSearchErrorResultItem(message = result.throwable.message)
-                        }
                         AnimeSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
@@ -99,10 +96,13 @@ fun GlobalAnimeSearchContent(
 
                             GlobalAnimeSearchCardRow(
                                 titles = result.result,
-                                getAnime = { getAnime(source, it) },
+                                getAnime = getAnime,
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )
+                        }
+                        is AnimeSearchItemResult.Error -> {
+                            GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
                     }
                 }

@@ -10,14 +10,10 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher.Companion.USE_CUSTOM_COVER
-import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.network.await
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 import okhttp3.CacheControl
 import okhttp3.Call
@@ -28,9 +24,12 @@ import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
 import okio.sink
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
 
 /**
  * A [Fetcher] that fetches cover image for [Manga] object.
@@ -261,7 +260,7 @@ class MangaCoverFetcher(
         File, URL
     }
 
-    class Factory(
+    class MangaFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
         private val diskCacheLazy: Lazy<DiskCache>,
     ) : Fetcher.Factory<Manga> {
@@ -271,35 +270,12 @@ class MangaCoverFetcher(
 
         override fun create(data: Manga, options: Options, imageLoader: ImageLoader): Fetcher {
             return MangaCoverFetcher(
-                url = data.thumbnail_url,
-                isLibraryManga = data.favorite,
-                options = options,
-                coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnail_url) },
-                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
-                diskCacheKeyLazy = lazy { MangaKeyer().key(data, options) },
-                sourceLazy = lazy { sourceManager.get(data.source) as? HttpSource },
-                callFactoryLazy = callFactoryLazy,
-                diskCacheLazy = diskCacheLazy,
-            )
-        }
-    }
-
-    class DomainMangaFactory(
-        private val callFactoryLazy: Lazy<Call.Factory>,
-        private val diskCacheLazy: Lazy<DiskCache>,
-    ) : Fetcher.Factory<DomainManga> {
-
-        private val coverCache: MangaCoverCache by injectLazy()
-        private val sourceManager: MangaSourceManager by injectLazy()
-
-        override fun create(data: DomainManga, options: Options, imageLoader: ImageLoader): Fetcher {
-            return MangaCoverFetcher(
                 url = data.thumbnailUrl,
                 isLibraryManga = data.favorite,
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
-                diskCacheKeyLazy = lazy { DomainMangaKeyer().key(data, options) },
+                diskCacheKeyLazy = lazy { MangaKeyer().key(data, options) },
                 sourceLazy = lazy { sourceManager.get(data.source) as? HttpSource },
                 callFactoryLazy = callFactoryLazy,
                 diskCacheLazy = diskCacheLazy,

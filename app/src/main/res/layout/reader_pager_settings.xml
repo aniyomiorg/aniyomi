@@ -30,14 +30,6 @@
         android:entries="@array/invert_tapping_mode"
         app:title="@string/pref_read_with_tapping_inverted" />
 
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/navigate_pan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:text="@string/pref_navigate_pan"
-        android:textColor="?android:attr/textColorSecondary" />
 
     <eu.kanade.tachiyomi.widget.MaterialSpinnerView
         android:id="@+id/scale_type"
@@ -72,6 +64,15 @@
         android:textColor="?android:attr/textColorSecondary" />
 
     <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/navigate_pan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/pref_navigate_pan"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/dual_page_split"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,10 +92,30 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/dual_page_rotate_to_fit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/pref_page_rotate"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/dual_page_rotate_to_fit_invert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/pref_page_rotate_invert"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/tapping_prefs_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="pager_nav,tapping_inverted,dual_page_split,dual_page_invert" />
+        app:constraint_referenced_ids="pager_nav,tapping_inverted,dual_page_split,dual_page_invert,dual_page_rotate_to_fit,dual_page_rotate_to_fit_invert" />
 
 </LinearLayout>

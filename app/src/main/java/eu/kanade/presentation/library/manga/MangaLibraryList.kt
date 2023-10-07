@@ -8,16 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.entries.manga.model.MangaCover
-import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
 import eu.kanade.presentation.animelib.components.LanguageBadge
 import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.components.EntryListItem
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.library.EntryListItem
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun MangaLibraryList(
@@ -60,8 +60,8 @@ fun MangaLibraryList(
                     lastModified = manga.coverLastModified,
                 ),
                 badge = {
-                    DownloadsBadge(count = libraryItem.downloadCount.toInt())
-                    UnviewedBadge(count = libraryItem.unreadCount.toInt())
+                    DownloadsBadge(count = libraryItem.downloadCount)
+                    UnviewedBadge(count = libraryItem.unreadCount)
                     LanguageBadge(
                         isLocal = libraryItem.isLocal,
                         sourceLanguage = libraryItem.sourceLanguage,
@@ -69,7 +69,7 @@ fun MangaLibraryList(
                 },
                 onLongClick = { onLongClick(libraryItem.libraryManga) },
                 onClick = { onClick(libraryItem.libraryManga) },
-                onClickContinueViewing = if (onClickContinueReading != null) {
+                onClickContinueViewing = if (onClickContinueReading != null && libraryItem.unreadCount > 0) {
                     { onClickContinueReading(libraryItem.libraryManga) }
                 } else {
                     null

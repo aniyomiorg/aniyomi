@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">Kategórie</string>
+    <string name="manga_categories">Kategórie Mangy</string>
     <string name="unlock_app">Odomknúť Tachiyomi</string>
     <string name="action_sort_last_manga_update">Posledná aktualizácia mangy</string>
     <string name="action_show_manga">Zobraziť mangu</string>
@@ -34,4 +34,39 @@
     <string name="download_insufficient_space">Nepodarilo sa stiahnuť kapitoly z dôvodu nedostatku úložného priestoru</string>
     <string name="download_queue_size_warning">Upozornenie: Veľké hromadné sťahovanie môže viesť k spomaleniu zdrojov a/alebo blokovaniu Tachiyomi. Klepnutím sa dozviete viac.</string>
     <string name="information_webview_required">WebView je potrebné pre Tachiyomi</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

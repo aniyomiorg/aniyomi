@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.data.database.models.manga
 
 import eu.kanade.tachiyomi.source.model.SChapter
 import java.io.Serializable
-import eu.kanade.domain.items.chapter.model.Chapter as DomainChapter
+import tachiyomi.domain.items.chapter.model.Chapter as DomainChapter
 
 interface Chapter : SChapter, Serializable {
 

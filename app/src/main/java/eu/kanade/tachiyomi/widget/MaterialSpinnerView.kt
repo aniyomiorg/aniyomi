@@ -16,9 +16,9 @@ import androidx.core.view.forEach
 import androidx.core.view.get
 import androidx.core.view.size
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.core.preference.Preference
 import eu.kanade.tachiyomi.databinding.PrefSpinnerBinding
 import eu.kanade.tachiyomi.util.system.getResourceColor
+import tachiyomi.core.preference.Preference
 
 class MaterialSpinnerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -57,10 +57,9 @@ class MaterialSpinnerView @JvmOverloads constructor(context: Context, attrs: Att
             val title = getString(R.styleable.MaterialSpinnerView_title).orEmpty()
             binding.title.text = title
 
-            val viewEntries = (
-                getTextArray(R.styleable.MaterialSpinnerView_android_entries)
-                    ?: emptyArray()
-                ).map { it.toString() }
+            val viewEntries = getTextArray(R.styleable.MaterialSpinnerView_android_entries)
+                .orEmpty()
+                .map { it.toString() }
             entries = viewEntries
             binding.details.text = viewEntries.firstOrNull().orEmpty()
         }

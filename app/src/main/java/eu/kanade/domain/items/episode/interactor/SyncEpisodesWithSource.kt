@@ -1,19 +1,25 @@
 package eu.kanade.domain.items.episode.interactor
 
-import eu.kanade.data.items.episode.CleanupEpisodeName
-import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.items.episode.model.toEpisodeUpdate
-import eu.kanade.domain.items.episode.repository.EpisodeRepository
+import eu.kanade.domain.entries.anime.model.toSAnime
+import eu.kanade.domain.items.episode.model.copyFromSEpisode
+import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
-import eu.kanade.tachiyomi.source.anime.isLocal
-import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
+import tachiyomi.data.items.episode.EpisodeSanitizer
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.ShouldUpdateDbEpisode
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.items.episode.model.toEpisodeUpdate
+import tachiyomi.domain.items.episode.repository.EpisodeRepository
+import tachiyomi.domain.items.episode.service.EpisodeRecognition
+import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
@@ -52,7 +58,7 @@ class SyncEpisodesWithSource(
             .mapIndexed { i, sEpisode ->
                 Episode.create()
                     .copyFromSEpisode(sEpisode)
-                    .copy(name = CleanupEpisodeName.awaitEpisodeName(sEpisode.name, anime.title))
+                    .copy(name = with(EpisodeSanitizer) { sEpisode.name.sanitize(anime.title) })
                     .copy(animeId = anime.id, sourceOrder = i.toLong())
             }
 

@@ -18,7 +18,6 @@
     <string name="username">Uzantnomo</string>
     <string name="password">Pasvorto</string>
     <string name="email">Retpoŝta adreso</string>
-    <string name="action_stop">Halti</string>
     <string name="action_view_chapters">Vidi ĉapitrojn</string>
     <string name="action_rename_category">Alinomi kategorion</string>
     <string name="action_edit_categories">Redakti kategoriojn</string>
@@ -205,7 +204,6 @@
     <string name="action_reset">Restartigi</string>
     <string name="action_display_show_number_of_items">Montri nombro de elementoj</string>
     <string name="action_display_show_tabs">Montri kategoriajn langetojn</string>
-    <string name="action_display_unread_badge">Nelegitsignoj</string>
     <string name="action_display_download_badge">Elŝutsignoj</string>
     <string name="action_display_grid">Kompakta krado</string>
     <string name="action_display">Montrado</string>
@@ -297,12 +295,6 @@
     <string name="chapter_settings">Ĉapitrajn agordojn</string>
     <string name="confirm_delete_chapters">Ĉu vi certe volas forigi elektitajn ĉapitrojn\?</string>
     <string name="download_unread">Nelegitajn</string>
-    <string name="download_all">Ĉiujn</string>
-    <string name="download_custom">Propra</string>
-    <string name="download_10">Sekvajn 10 ĉapitrojn</string>
-    <string name="download_5">Sekvajn 5 ĉapitrojn</string>
-    <string name="download_1">Sekvan ĉapitron</string>
-    <string name="custom_download">Elŝuti propran sumon</string>
     <string name="manga_download">Elŝuti</string>
     <string name="sort_by_upload_date">Laŭ laŝutita dato</string>
     <string name="sort_by_number">Laŭ ĉapitra numero</string>
@@ -334,7 +326,6 @@
     <string name="no_results_found">Neniu rezulto trovita</string>
     <string name="no_more_results">Ne pli rezultoj</string>
     <string name="tabs_header">Langetoj</string>
-    <string name="badges_header">Ŝildoj</string>
     <string name="unknown_error">Nekonata eraro</string>
     <string name="logout_success">Vi nun estas elsalutita</string>
     <string name="logout">Elsaluti</string>
@@ -463,7 +454,6 @@
     <string name="pref_backup_interval">Savkopia ofteco</string>
     <string name="pref_restore_backup_summ">Restaŭri bibliotekon de savkopia dosiero</string>
     <string name="pref_restore_backup">Restaŭri savkopion</string>
-    <string name="pref_enable_automatic_extension_updates">Kontroli ĉu estas kromaĵaj ĝisdatigoj</string>
     <string name="action_track">Ŝanĝspuri</string>
     <string name="services">Servoj</string>
     <string name="pref_create_folder_per_manga_summary">Kreas dosierujojn laŭ mangaaj titoloj</string>

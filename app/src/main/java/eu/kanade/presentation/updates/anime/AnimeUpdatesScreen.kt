@@ -16,13 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.EntryBottomActionMenu
-import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.Scaffold
+import eu.kanade.presentation.entries.EntryBottomActionMenu
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -30,6 +25,11 @@ import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
@@ -139,7 +139,7 @@ private fun AnimeUpdatesBottomBar(
         }.takeIf { selected.fastAny { !it.update.seen } },
         onMarkAsUnviewedClicked = {
             onMultiMarkAsSeenClicked(selected, false)
-        }.takeIf { selected.fastAny { it.update.seen } },
+        }.takeIf { selected.fastAny { it.update.seen || it.update.lastSecondSeen > 0L } },
         onDownloadClicked = {
             onDownloadEpisode(selected, EpisodeDownloadAction.START)
         }.takeIf {

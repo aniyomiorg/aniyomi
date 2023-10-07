@@ -25,11 +25,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -46,40 +49,60 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.presentation.components.EntryBottomActionMenu
-import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.TwoPanelBox
-import eu.kanade.presentation.components.VerticalFastScroller
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.domain.entries.anime.model.episodesFiltered
 import eu.kanade.presentation.entries.DownloadAction
+import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.EntryScreenItem
 import eu.kanade.presentation.entries.EntryToolbar
 import eu.kanade.presentation.entries.ItemHeader
 import eu.kanade.presentation.entries.anime.components.AnimeActionRow
 import eu.kanade.presentation.entries.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
-import eu.kanade.presentation.util.isScrolledToEnd
-import eu.kanade.presentation.util.isScrollingUp
+import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
+import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
+import eu.kanade.tachiyomi.util.lang.toRelativeString
+import eu.kanade.tachiyomi.util.system.copyToClipboard
+import kotlinx.coroutines.delay
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.service.missingItemsCount
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.model.StubAnimeSource
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.TwoPanelBox
+import tachiyomi.presentation.core.components.VerticalFastScroller
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.util.isScrolledToEnd
+import tachiyomi.presentation.core.util.isScrollingUp
+import java.text.DateFormat
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AnimeScreen(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     isTabletUi: Boolean,
+    episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
+    episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
+    alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -87,7 +110,10 @@ fun AnimeScreen(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+
     onFilterButtonClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -109,15 +135,36 @@ fun AnimeScreen(
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 
+    // For episode swipe
+    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+
     // Episode selection
     onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
     onAllEpisodeSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val onCopyTagToClipboard: (tag: String) -> Unit = {
+        if (it.isNotEmpty()) {
+            context.copyToClipboard(it, it)
+        }
+    }
+
+    val navigator = LocalNavigator.currentOrThrow
+    val onSettingsClicked: (() -> Unit)? = {
+        navigator.push(SourcePreferencesScreen(state.source.id))
+    }.takeIf { state.source is ConfigurableAnimeSource }
+
     if (!isTabletUi) {
         AnimeScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            dateFormat = dateFormat,
+            episodeSwipeEndAction = episodeSwipeEndAction,
+            episodeSwipeStartAction = episodeSwipeStartAction,
+            showNextEpisodeAirTime = showNextEpisodeAirTime,
+            alwaysUseExternalPlayer = alwaysUseExternalPlayer,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -125,7 +172,8 @@ fun AnimeScreen(
             onWebViewClicked = onWebViewClicked,
             onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
-            onTagClicked = onTagClicked,
+            onTagSearch = onTagSearch,
+            onCopyTagToClipboard = onCopyTagToClipboard,
             onFilterClicked = onFilterButtonClicked,
             onRefresh = onRefresh,
             onContinueWatching = onContinueWatching,
@@ -140,14 +188,22 @@ fun AnimeScreen(
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
             onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
             onMultiDeleteClicked = onMultiDeleteClicked,
+            onEpisodeSwipe = onEpisodeSwipe,
             onEpisodeSelected = onEpisodeSelected,
             onAllEpisodeSelected = onAllEpisodeSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     } else {
         AnimeScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            episodeSwipeEndAction = episodeSwipeEndAction,
+            episodeSwipeStartAction = episodeSwipeStartAction,
+            showNextEpisodeAirTime = showNextEpisodeAirTime,
+            alwaysUseExternalPlayer = alwaysUseExternalPlayer,
+            dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -155,7 +211,8 @@ fun AnimeScreen(
             onWebViewClicked = onWebViewClicked,
             onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
-            onTagClicked = onTagClicked,
+            onTagSearch = onTagSearch,
+            onCopyTagToClipboard = onCopyTagToClipboard,
             onFilterButtonClicked = onFilterButtonClicked,
             onRefresh = onRefresh,
             onContinueWatching = onContinueWatching,
@@ -170,17 +227,26 @@ fun AnimeScreen(
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
             onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
             onMultiDeleteClicked = onMultiDeleteClicked,
+            onEpisodeSwipe = onEpisodeSwipe,
             onEpisodeSelected = onEpisodeSelected,
             onAllEpisodeSelected = onAllEpisodeSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
+    episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
+    episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
+    alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -188,7 +254,11 @@ private fun AnimeScreenSmallImpl(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+    onCopyTagToClipboard: (tag: String) -> Unit,
+
     onFilterClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -203,12 +273,16 @@ private fun AnimeScreenSmallImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     changeAnimeSkipIntro: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
+
+    // For episode swipe
+    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 
     // Episode selection
     onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
@@ -251,12 +325,14 @@ private fun AnimeScreenSmallImpl(
                 onClickShare = onShareClicked,
                 onClickDownload = onDownloadActionClicked,
                 onClickEditCategory = onEditCategoryClicked,
+                onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = episodes.count { it.selected },
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = false,
+                onClickSettings = onSettingsClicked,
             )
         },
         bottomBar = {
@@ -269,6 +345,7 @@ private fun AnimeScreenSmallImpl(
                 onDownloadEpisode = onDownloadEpisode,
                 onMultiDeleteClicked = onMultiDeleteClicked,
                 fillFraction = 1f,
+                alwaysUseExternalPlayer = alwaysUseExternalPlayer,
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -333,7 +410,7 @@ private fun AnimeScreenSmallImpl(
                             author = state.anime.author,
                             artist = state.anime.artist,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
-                            isStubSource = remember { state.source is AnimeSourceManager.StubAnimeSource },
+                            isStubSource = remember { state.source is StubAnimeSource },
                             coverDataProvider = { state.anime },
                             status = state.anime.status,
                             onCoverClick = onCoverClicked,
@@ -364,7 +441,8 @@ private fun AnimeScreenSmallImpl(
                             defaultExpandState = state.isFromSource,
                             description = state.anime.description,
                             tagsProvider = { state.anime.genre },
-                            onTagClicked = onTagClicked,
+                            onTagSearch = onTagSearch,
+                            onCopyTagToClipboard = onCopyTagToClipboard,
                         )
                     }
 
@@ -375,16 +453,48 @@ private fun AnimeScreenSmallImpl(
                         ItemHeader(
                             enabled = episodes.fastAll { !it.selected },
                             itemCount = episodes.size,
+                            missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
                             onClick = onFilterClicked,
                             isManga = false,
                         )
                     }
 
+                    if (state.airingTime > 0L) {
+                        item(
+                            key = EntryScreenItem.AIRING_TIME,
+                            contentType = EntryScreenItem.AIRING_TIME,
+                        ) {
+                            // Handles the second by second countdown
+                            var timer by remember { mutableStateOf(state.airingTime) }
+                            LaunchedEffect(key1 = timer) {
+                                if (timer > 0L) {
+                                    delay(1000L)
+                                    timer -= 1000L
+                                }
+                            }
+                            if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                                NextEpisodeAiringListItem(
+                                    title = stringResource(
+                                        R.string.display_mode_episode,
+                                        episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                    ),
+                                    date = formatTime(state.airingTime, useDayFormat = true),
+                                )
+                            }
+                        }
+                    }
+
                     sharedEpisodeItems(
+                        anime = state.anime,
                         episodes = episodes,
+                        dateRelativeTime = dateRelativeTime,
+                        dateFormat = dateFormat,
+                        episodeSwipeEndAction = episodeSwipeEndAction,
+                        episodeSwipeStartAction = episodeSwipeStartAction,
                         onEpisodeClicked = onEpisodeClicked,
                         onDownloadEpisode = onDownloadEpisode,
                         onEpisodeSelected = onEpisodeSelected,
+                        onEpisodeSwipe = onEpisodeSwipe,
                     )
                 }
             }
@@ -392,10 +502,17 @@ private fun AnimeScreenSmallImpl(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimeScreenLargeImpl(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
+    episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
+    episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
+    showNextEpisodeAirTime: Boolean,
+    alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -403,7 +520,11 @@ fun AnimeScreenLargeImpl(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+    onCopyTagToClipboard: (tag: String) -> Unit,
+
     onFilterButtonClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -418,12 +539,16 @@ fun AnimeScreenLargeImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     changeAnimeSkipIntro: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
+
+    // For swipe actions
+    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 
     // Episode selection
     onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
@@ -472,12 +597,14 @@ fun AnimeScreenLargeImpl(
                     onClickShare = onShareClicked,
                     onClickDownload = onDownloadActionClicked,
                     onClickEditCategory = onEditCategoryClicked,
+                    onClickRefresh = onRefresh,
                     onClickMigrate = onMigrateClicked,
                     changeAnimeSkipIntro = changeAnimeSkipIntro,
                     actionModeCounter = episodes.count { it.selected },
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = false,
+                    onClickSettings = onSettingsClicked,
                 )
             },
             bottomBar = {
@@ -494,6 +621,7 @@ fun AnimeScreenLargeImpl(
                         onDownloadEpisode = onDownloadEpisode,
                         onMultiDeleteClicked = onMultiDeleteClicked,
                         fillFraction = 0.5f,
+                        alwaysUseExternalPlayer = alwaysUseExternalPlayer,
                     )
                 }
             },
@@ -538,7 +666,7 @@ fun AnimeScreenLargeImpl(
                             author = state.anime.author,
                             artist = state.anime.artist,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
-                            isStubSource = remember { state.source is AnimeSourceManager.StubAnimeSource },
+                            isStubSource = remember { state.source is StubAnimeSource },
                             coverDataProvider = { state.anime },
                             status = state.anime.status,
                             onCoverClick = onCoverClicked,
@@ -557,7 +685,8 @@ fun AnimeScreenLargeImpl(
                             defaultExpandState = true,
                             description = state.anime.description,
                             tagsProvider = { state.anime.genre },
-                            onTagClicked = onTagClicked,
+                            onTagSearch = onTagSearch,
+                            onCopyTagToClipboard = onCopyTagToClipboard,
                         )
                     }
                 },
@@ -581,16 +710,48 @@ fun AnimeScreenLargeImpl(
                                 ItemHeader(
                                     enabled = episodes.fastAll { !it.selected },
                                     itemCount = episodes.size,
+                                    missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
                                     onClick = onFilterButtonClicked,
                                     isManga = false,
                                 )
                             }
 
+                            if (state.airingTime > 0L) {
+                                item(
+                                    key = EntryScreenItem.AIRING_TIME,
+                                    contentType = EntryScreenItem.AIRING_TIME,
+                                ) {
+                                    // Handles the second by second countdown
+                                    var timer by remember { mutableStateOf(state.airingTime) }
+                                    LaunchedEffect(key1 = timer) {
+                                        if (timer > 0L) {
+                                            delay(1000L)
+                                            timer -= 1000L
+                                        }
+                                    }
+                                    if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                                        NextEpisodeAiringListItem(
+                                            title = stringResource(
+                                                R.string.display_mode_episode,
+                                                episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                            ),
+                                            date = formatTime(state.airingTime, useDayFormat = true),
+                                        )
+                                    }
+                                }
+                            }
+
                             sharedEpisodeItems(
+                                anime = state.anime,
                                 episodes = episodes,
+                                dateRelativeTime = dateRelativeTime,
+                                dateFormat = dateFormat,
+                                episodeSwipeEndAction = episodeSwipeEndAction,
+                                episodeSwipeStartAction = episodeSwipeStartAction,
                                 onEpisodeClicked = onEpisodeClicked,
                                 onDownloadEpisode = onDownloadEpisode,
                                 onEpisodeSelected = onEpisodeSelected,
+                                onEpisodeSwipe = onEpisodeSwipe,
                             )
                         }
                     }
@@ -611,8 +772,8 @@ private fun SharedAnimeBottomActionMenu(
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
     fillFraction: Float,
+    alwaysUseExternalPlayer: Boolean,
 ) {
-    val preferences: PlayerPreferences = Injekt.get()
     EntryBottomActionMenu(
         visible = selected.isNotEmpty(),
         modifier = modifier.fillMaxWidth(fillFraction),
@@ -643,19 +804,25 @@ private fun SharedAnimeBottomActionMenu(
         },
         onExternalClicked = {
             onEpisodeClicked(selected.fastMap { it.episode }.first(), true)
-        }.takeIf { !preferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
+        }.takeIf { !alwaysUseExternalPlayer && selected.size == 1 },
         onInternalClicked = {
             onEpisodeClicked(selected.fastMap { it.episode }.first(), true)
-        }.takeIf { preferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
+        }.takeIf { alwaysUseExternalPlayer && selected.size == 1 },
         isManga = false,
     )
 }
 
 private fun LazyListScope.sharedEpisodeItems(
+    anime: Anime,
     episodes: List<EpisodeItem>,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
+    episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
+    episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
+    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 ) {
     items(
         items = episodes,
@@ -663,11 +830,35 @@ private fun LazyListScope.sharedEpisodeItems(
         contentType = { EntryScreenItem.ITEM },
     ) { episodeItem ->
         val haptic = LocalHapticFeedback.current
+        val context = LocalContext.current
 
         AnimeEpisodeListItem(
-            title = episodeItem.episodeTitleString,
-            date = episodeItem.dateUploadString,
-            watchProgress = episodeItem.seenProgressString,
+            title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
+                stringResource(
+                    R.string.display_mode_episode,
+                    episodeDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
+                )
+            } else {
+                episodeItem.episode.name
+            },
+            date = episodeItem.episode.dateUpload
+                .takeIf { it > 0L }
+                ?.let {
+                    Date(it).toRelativeString(
+                        context,
+                        dateRelativeTime,
+                        dateFormat,
+                    )
+                },
+            watchProgress = episodeItem.episode.lastSecondSeen
+                .takeIf { !episodeItem.episode.seen && it > 0L }
+                ?.let {
+                    stringResource(
+                        R.string.episode_progress,
+                        formatTime(it),
+                        formatTime(episodeItem.episode.totalSeconds),
+                    )
+                },
             scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
             seen = episodeItem.episode.seen,
             bookmark = episodeItem.episode.bookmark,
@@ -675,6 +866,8 @@ private fun LazyListScope.sharedEpisodeItems(
             downloadIndicatorEnabled = episodes.fastAll { !it.selected },
             downloadStateProvider = { episodeItem.downloadState },
             downloadProgressProvider = { episodeItem.downloadProgress },
+            episodeSwipeEndAction = episodeSwipeEndAction,
+            episodeSwipeStartAction = episodeSwipeStartAction,
             onLongClick = {
                 onEpisodeSelected(episodeItem, !episodeItem.selected, true, true)
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -692,6 +885,9 @@ private fun LazyListScope.sharedEpisodeItems(
             } else {
                 null
             },
+            onEpisodeSwipe = {
+                onEpisodeSwipe(episodeItem, it)
+            },
         )
     }
 }
@@ -706,5 +902,36 @@ private fun onEpisodeItemClick(
         episodeItem.selected -> onToggleSelection(false)
         episodes.fastAny { it.selected } -> onToggleSelection(true)
         else -> onEpisodeClicked(episodeItem.episode, false)
+    }
+}
+
+private fun formatTime(milliseconds: Long, useDayFormat: Boolean = false): String {
+    return if (useDayFormat) {
+        String.format(
+            "Airing in %02dd %02dh %02dm %02ds",
+            TimeUnit.MILLISECONDS.toDays(milliseconds),
+            TimeUnit.MILLISECONDS.toHours(milliseconds) -
+                TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(milliseconds)),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else if (milliseconds > 3600000L) {
+        String.format(
+            "%d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(milliseconds),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else {
+        String.format(
+            "%d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
     }
 }

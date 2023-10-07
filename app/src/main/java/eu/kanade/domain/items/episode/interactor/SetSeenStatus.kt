@@ -1,15 +1,15 @@
 package eu.kanade.domain.items.episode.interactor
 
 import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
-import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.repository.AnimeRepository
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.items.episode.model.EpisodeUpdate
-import eu.kanade.domain.items.episode.repository.EpisodeRepository
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.EpisodeUpdate
+import tachiyomi.domain.items.episode.repository.EpisodeRepository
 
 class SetSeenStatus(
     private val downloadPreferences: DownloadPreferences,
