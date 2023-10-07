@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
@@ -25,6 +27,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.preference.toggle
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
+import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -37,6 +40,33 @@ class PlayerSettingsScreenModel(
 
     fun togglePreference(preference: (PlayerPreferences) -> Preference<Boolean>) {
         preference(preferences).toggle()
+    }
+
+    @Composable
+    fun ToggleableRow(
+        @StringRes textRes: Int,
+        isChecked: Boolean,
+        onClick: () -> Unit,
+        coloredText: Boolean = false,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(MaterialTheme.padding.medium),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(id = textRes),
+                color = if (coloredText) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                style = MaterialTheme.typography.titleSmall,
+            )
+            Switch(
+                checked = isChecked,
+                onCheckedChange = null,
+            )
+        }
     }
 
     @Composable
@@ -56,19 +86,12 @@ class PlayerSettingsScreenModel(
         ) {
             NoSubtitlesWarning()
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { updateOverride() }),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = stringResource(id = R.string.player_override_subtitle_font))
-                Switch(
-                    checked = overrideSubtitles,
-                    onCheckedChange = { updateOverride() },
-                )
-            }
+            ToggleableRow(
+                textRes = R.string.player_override_subtitle_font,
+                isChecked = overrideSubtitles,
+                onClick = updateOverride,
+            )
+
             if (overrideSubtitles) {
                 content()
             }

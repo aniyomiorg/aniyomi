@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,7 +32,7 @@ import tachiyomi.presentation.core.components.material.padding
 import java.io.InputStream
 
 @Composable
-fun PlayerScreenshotDialog(
+fun PlayerScreenshotSheet(
     screenModel: PlayerSettingsScreenModel,
     cachePath: String,
     onSetAsCover: (() -> InputStream) -> Unit,
@@ -79,24 +77,13 @@ fun PlayerScreenshotDialog(
                     },
                 )
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { screenModel.togglePreference { showSubtitles } })
-                    .padding(MaterialTheme.padding.medium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.screenshot_show_subs),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                Switch(
-                    checked = showSubtitles.collectAsState().value,
-                    onCheckedChange = null,
-                )
-            }
+
+            screenModel.ToggleableRow(
+                textRes = R.string.screenshot_show_subs,
+                isChecked = showSubtitles.collectAsState().value,
+                onClick = { screenModel.togglePreference { showSubtitles } },
+                coloredText = true,
+            )
         }
     }
 

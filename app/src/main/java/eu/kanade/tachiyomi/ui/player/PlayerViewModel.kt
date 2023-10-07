@@ -667,10 +667,6 @@ class PlayerViewModel(
         return null
     }
 
-    fun closeDialog() {
-        mutableState.update { it.copy(dialog = null) }
-    }
-
     fun showEpisodeList() {
         mutableState.update { it.copy(dialog = Dialog.EpisodeList) }
     }
@@ -688,11 +684,15 @@ class PlayerViewModel(
     }
 
     fun showSubtitleSettings() {
-        mutableState.update { it.copy(dialog = Dialog.SubtitleSettings) }
+        mutableState.update { it.copy(sheet = Sheet.SubtitleSettings) }
     }
 
     fun showPlayerScreenshot() {
-        mutableState.update { it.copy(dialog = Dialog.PlayerScreenshot) }
+        mutableState.update { it.copy(sheet = Sheet.PlayerScreenshot) }
+    }
+
+    fun closeDialogSheet() {
+        mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
     data class State(
@@ -702,6 +702,7 @@ class PlayerViewModel(
         val source: AnimeSource? = null,
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
+        val sheet: Sheet? = null,
     )
 
     sealed class Dialog {
@@ -709,8 +710,11 @@ class PlayerViewModel(
         object SpeedPicker : Dialog()
         object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
-        object SubtitleSettings : Dialog()
-        object PlayerScreenshot : Dialog()
+    }
+
+    sealed class Sheet {
+        object SubtitleSettings : Sheet()
+        object PlayerScreenshot : Sheet()
     }
 
     sealed class Event {

@@ -52,11 +52,11 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerScreenshotDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheetsda
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
@@ -92,6 +92,7 @@ import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
+import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
@@ -336,7 +337,7 @@ class PlayerActivity : BaseActivity() {
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,
-                            onDismissRequest = pauseForDialog(),
+                            onDismissRequest = pauseForDialogSheet(),
                         )
                     }
                 }
@@ -349,7 +350,7 @@ class PlayerActivity : BaseActivity() {
                     SpeedPickerDialog(
                         currentSpeed = MPVLib.getPropertyDouble("speed"),
                         onSpeedChanged = ::updateSpeed,
-                        onDismissRequest = pauseForDialog(),
+                        onDismissRequest = pauseForDialogSheet(),
                     )
                 }
 
@@ -361,7 +362,7 @@ class PlayerActivity : BaseActivity() {
                     DefaultDecoderDialog(
                         currentDecoder = playerPreferences.standardHwDec().get(),
                         onSelectDecoder = ::updateDecoder,
-                        onDismissRequest = pauseForDialog(),
+                        onDismissRequest = pauseForDialogSheet(),
                     )
                 }
 
@@ -372,26 +373,34 @@ class PlayerActivity : BaseActivity() {
                             defaultSkipIntroLength = playerPreferences.defaultIntroLength().get(),
                             fromPlayer = true,
                             updateSkipIntroLength = viewModel::setAnimeSkipIntroLength,
-                            onDismissRequest = pauseForDialog(),
+                            onDismissRequest = pauseForDialogSheet(),
                         )
                     }
                 }
 
-                is PlayerViewModel.Dialog.SubtitleSettings -> {
+                null -> {}
+            }
+        }
+
+        binding.sheetRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+
+            when (state.sheet) {
+                is PlayerViewModel.Sheet.SubtitleSettings -> {
                     SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subTracks.size > 1),
-                        onDismissRequest = pauseForDialog(),
+                        onDismissRequest = pauseForDialogSheet(),
                     )
                 }
 
-                is PlayerViewModel.Dialog.PlayerScreenshot -> {
-                    PlayerScreenshotDialog(
+                is PlayerViewModel.Sheet.PlayerScreenshot -> {
+                    PlayerScreenshotSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         cachePath = cacheDir.path,
                         onSetAsCover = { viewModel.setAsCover(it) },
                         onShare = { viewModel.shareImage(it, player.timePos) },
                         onSave = { viewModel.saveImage(it, player.timePos) },
-                        onDismissRequest = pauseForDialog(),
+                        onDismissRequest = pauseForDialogSheet(),
                     )
                 }
 
@@ -636,7 +645,7 @@ class PlayerActivity : BaseActivity() {
         playerControls.setViewMode(showText = false)
     }
 
-    private fun pauseForDialog(): () -> Unit {
+    private fun pauseForDialogSheet(): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
         playerControls.fadeOutControlsRunnable.run()
@@ -646,7 +655,7 @@ class PlayerActivity : BaseActivity() {
             } else {
                 playerControls.showAndFadeControls()
             }
-            viewModel.closeDialog()
+            viewModel.closeDialogSheet()
             refreshUi()
         }
     }
@@ -786,7 +795,7 @@ class PlayerActivity : BaseActivity() {
             }
             setupGestures()
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
-            viewModel.closeDialog()
+            viewModel.closeDialogSheet()
             if (playerSettingsSheet?.isShowing == true) {
                 playerSettingsSheet!!.dismiss()
             }
@@ -813,7 +822,7 @@ class PlayerActivity : BaseActivity() {
      */
     internal fun changeEpisode(episodeId: Long?, autoPlay: Boolean = false) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
-        viewModel.closeDialog()
+        viewModel.closeDialogSheet()
         if (playerSettingsSheet?.isShowing == true) {
             playerSettingsSheet!!.dismiss()
         }
