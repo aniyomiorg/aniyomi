@@ -126,7 +126,7 @@
     <string name="fourth_to_last">Ab viertletzt gelesenem Kapitel</string>
     <string name="fifth_to_last">Ab fünftletzt gelesenem Kapitel</string>
     <string name="pref_download_new">Neue Kapitel herunterladen</string>
-    <string name="services">Anbieter</string>
+    <string name="services">Tracker</string>
     <string name="pref_create_backup">Datensicherung erstellen</string>
     <string name="pref_create_backup_summ">Kann benutzt werden, um die aktuelle Bibliothek wiederherzustellen</string>
     <string name="pref_restore_backup">Datensicherung wiederherstellen</string>
@@ -240,8 +240,7 @@
     <string name="ext_installing">Wird installiert</string>
     <string name="ext_installed">Installiert</string>
     <string name="ext_uninstall">Deinstallieren</string>
-
-    <string name="double_tap_anim_speed_0">Keine Animation</string>
+        <string name="double_tap_anim_speed_0">Keine Animation</string>
     <string name="double_tap_anim_speed_normal">Normal</string>
     <string name="double_tap_anim_speed_fast">Schnell</string>
     <string name="manga_added_library">Zur Bibliothek hinzugefügt</string>
@@ -397,7 +396,7 @@
         <item quantity="one">Erledigt in %1$s mit %2$s Fehler</item>
         <item quantity="other">Erledigt in %1$s mit %2$s Fehlern</item>
     </plurals>
-    <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Tracking-Button ein.</string>
+    <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den externen Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Trackingbutton ein.</string>
     <string name="pref_refresh_library_covers">Bibliothekscover aktualisieren</string>
     <string name="unofficial_extension_message">Diese Erweiterung stammt nicht aus der offiziellen Liste.</string>
     <string name="ext_unofficial">Inoffiziell</string>
@@ -435,7 +434,7 @@
     <string name="unknown_author">Unbekannter Autor</string>
     <string name="updated_version">Auf v%1$s aktualisiert</string>
     <string name="whats_new">Was ist neu</string>
-        <string name="action_global_search_query">Nach „%1$s“ überall suchen</string>
+        <string name="action_global_search_query">Überall nach „%1$s“ suchen</string>
     <string name="action_sort_date_added">Hinzufügedatum</string>
     <string name="pref_category_reading_mode">Lesemodus</string>
     <string name="pref_category_theme">Thema</string>
@@ -554,8 +553,8 @@
     <string name="theme_midnightdusk">Mitternachtsdämmerung</string>
     <string name="theme_greenapple">Grüner Apfel</string>
     <string name="pref_app_theme">App-Design</string>
-    <string name="enhanced_services">Erweiterte Anbieter</string>
-    <string name="enhanced_tracking_info">Anbieter, die für bestimmte Quellen erweiterte Funktionen anbieten. Einträge werden automatisch getrackt, wenn sie deiner Bibliothek hinzugefügt werden.</string>
+    <string name="enhanced_services">Erweiterte Tracker</string>
+    <string name="enhanced_tracking_info">Bieten für bestimmte Quellen erweiterte Funktionen an. Einträge werden automatisch getrackt, wenn sie deiner Bibliothek hinzugefügt werden.</string>
     <string name="theme_monet">Dynamisch</string>
     <string name="label_background_activity">Hintergrundaktivität</string>
     <string name="pref_lowest">Niedrigste</string>
@@ -564,6 +563,11 @@
     <string name="pref_highest">Höchste</string>
     <string name="pref_hide_threshold">Empfindlichkeit für das Menü-Ausblenden beim Scrollen</string>
     <string name="pref_inverted_colors">Invertiert</string>
+    <plurals name="relative_time">
+        <item quantity="one">Gestern</item>
+        <item quantity="other">Vor %1$d Tagen</item>
+    </plurals>
+    <string name="relative_time_today">Heute</string>
     <string name="theme_tealturquoise">Blaugrün &amp; Türkis</string>
     <string name="pref_category_appearance">Erscheinungsbild</string>
     <string name="confirm_lock_change">Authentifiziere dich, um die Änderungen zu bestätigen</string>
@@ -779,7 +783,7 @@
     <string name="library_sync_complete">Bibliothekssynchronisierung abgeschlossen</string>
     <string name="information_cloudflare_help">Tippe hier, um Hilfe zu Cloudflare zu erhalten</string>
     <string name="download_cache_invalidated">Index der Downloads invalide</string>
-    <string name="track_activity_name">Tracking-Login</string>
+    <string name="track_activity_name">Tracker-Login</string>
     <string name="create_backup_file_error">Sicherungsdatei konnte nicht erstellt werden</string>
     <string name="licensed_manga_chapters_error">Lizenziert - Keine Kapitel zu zeigen</string>
     <string name="exception_http">HTTP %d, überprüfe die Webseite in WebView</string>
@@ -787,4 +791,6 @@
     <string name="exception_unknown_host">%s konnte nicht erreicht werden</string>
     <string name="unlock_app_title">%s entsperren</string>
     <string name="action_move_to_bottom_all_for_series">Serie nach unten verschieben</string>
+    <string name="pref_relative_format">Relative Zeitstempel</string>
+    <string name="pref_relative_format_summary">„%1$s“ anstelle von „%2$s“</string>
 </resources>

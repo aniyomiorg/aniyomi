@@ -60,8 +60,7 @@
     <string name="ext_untrusted">Nedůvěryhodné</string>
     <string name="ext_uninstall">Odinstalovat</string>
     <string name="untrusted_extension">Nedůvěryhodné rozšíření</string>
-
-    <string name="pref_fullscreen">Celá obrazovka</string>
+        <string name="pref_fullscreen">Celá obrazovka</string>
     <string name="pref_page_transitions">Animovat přechody stránek</string>
     <string name="pref_show_page_number">Zobrazit číslo stránky</string>
     <string name="pref_read_with_volume_keys">Tlačítka hlasitosti</string>
@@ -196,7 +195,7 @@
     <string name="double_tap_anim_speed_0">Bez animace</string>
     <string name="double_tap_anim_speed_normal">Normální</string>
     <string name="double_tap_anim_speed_fast">Rychle</string>
-    <string name="services">Služby</string>
+    <string name="services">Sledovače</string>
     <string name="pref_create_backup">Vytvořit zálohu</string>
     <string name="pref_restore_backup">Obnovit zálohu</string>
     <string name="pref_backup_directory">Místo zálohy</string>
@@ -379,7 +378,7 @@
     <string name="backup_restore_missing_sources">Chybějící zdroje:</string>
     <string name="invalid_backup_file_missing_manga">Záloha neobsahuje žádné položky knihovny.</string>
     <string name="invalid_backup_file">Neplatný soubor se zálohou</string>
-    <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol ve sledovacích službách. Nastavení sledování pro každou položku je možné z jejich tlačítka sledování.</string>
+    <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol v externích sledovacích službách. Nastavení sledování pro každou položku je možné z jejich tlačítka sledování.</string>
             <string name="pref_category_reading_mode">Režim čtení</string>
     <string name="pref_viewer_nav">Oblasti dotyku</string>
     <string name="nav_zone_next">Další</string>
@@ -554,8 +553,8 @@
     <string name="notification_updating">Aktualizuji knihovnu… (%1$d / %2$d)</string>
     <string name="about_dont_kill_my_app">Někteří výrobci používají další omezení aplikací, která vypíná služby na pozadí. Na této webové stránce najdete další informace o tom, jak to opravit.</string>
     <string name="restore_miui_warning">Pokud je MIUI optimalizace vypnutá, zálohování/obnovování nemusí fungovat správně.</string>
-    <string name="enhanced_tracking_info">Služby, které poskytují rozšířené funkce pro konkrétní zdroje. Záznamy jsou po přidání do knihovny automaticky sledovány.</string>
-    <string name="enhanced_services">Rozšířené služby</string>
+    <string name="enhanced_tracking_info">Poskytují rozšířené funkce pro konkrétní zdroje. Záznamy jsou po přidání do knihovny automaticky sledovány.</string>
+    <string name="enhanced_services">Vylepšené sledovače</string>
     <string name="tracking_guide">Návod ke sledování</string>
     <string name="pref_dark_theme_pure_black">Čistě černý tmavý režim</string>
     <string name="theme_yotsuba">Jotsuba</string>
@@ -575,6 +574,12 @@
     <string name="getting_started_guide">Příručka Začínáme</string>
     <string name="pref_tablet_ui_mode">Uživatelské rozhraní tabletu</string>
     <string name="action_track">Sledovat</string>
+    <plurals name="relative_time">
+        <item quantity="one">Včera</item>
+        <item quantity="few">Před %1$d dny</item>
+        <item quantity="other">Před %1$d dny</item>
+    </plurals>
+    <string name="relative_time_today">Dnes</string>
     <string name="theme_tealturquoise">Modrozelená a Tyrkysová</string>
     <string name="pref_category_appearance">Vzhled</string>
     <string name="confirm_lock_change">Potvrďte změnu ověřením</string>
@@ -792,7 +797,7 @@
     <string name="has_results">Má výsledky</string>
     <string name="syncing_library">Synchronizace knihovny</string>
     <string name="library_sync_complete">Synchronizace knihovny dokončena</string>
-    <string name="track_activity_name">Sledování přihlášení</string>
+    <string name="track_activity_name">Přihlášení sledovače</string>
     <string name="information_cloudflare_help">Klepněte zde pro pomoc s Cloudflare</string>
     <string name="download_cache_invalidated">Index stažených zneplatněn</string>
     <string name="create_backup_file_error">Nelze vytvořit soubor zálohy</string>
@@ -802,4 +807,6 @@
     <string name="exception_http">HTTP %d, zkontrolovat web v WebView</string>
     <string name="unlock_app_title">Odemknout %s</string>
     <string name="action_move_to_bottom_all_for_series">Přesunout sérii na konec</string>
+    <string name="pref_relative_format">Relativní časová razítka</string>
+    <string name="pref_relative_format_summary">\"%1$s\" namísto \"%2$s\"</string>
 </resources>
