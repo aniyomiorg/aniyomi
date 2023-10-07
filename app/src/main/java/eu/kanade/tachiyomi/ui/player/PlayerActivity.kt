@@ -1348,11 +1348,11 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
-            player.loadTracks()
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateDecoderButton()
             playerControls.updateSpeedButton()
+            withIOContext { player.loadTracks() }
         }
     }
 
