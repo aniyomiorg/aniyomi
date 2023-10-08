@@ -1,7 +1,8 @@
-package eu.kanade.tachiyomi.ui.player.settings.dialogs
+package eu.kanade.tachiyomi.ui.player.settings.sheets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,11 +29,12 @@ import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import tachiyomi.presentation.core.components.material.padding
 import java.io.InputStream
 
 @Composable
-fun PlayerScreenshotSheet(
+fun ScreenshotOptionsSheet(
     screenModel: PlayerSettingsScreenModel,
     cachePath: String,
     onSetAsCover: (() -> InputStream) -> Unit,
@@ -80,6 +82,7 @@ fun PlayerScreenshotSheet(
 
             screenModel.ToggleableRow(
                 textRes = R.string.screenshot_show_subs,
+                paddingValues = PaddingValues(MaterialTheme.padding.medium),
                 isChecked = showSubtitles.collectAsState().value,
                 onClick = { screenModel.togglePreference { showSubtitles } },
                 coloredText = true,

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,18 +12,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.OutlinedNumericChooser
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun SubtitleDelayPage(
     screenModel: PlayerSettingsScreenModel,
 ) {
-    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
         val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
         val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
 

@@ -139,7 +139,7 @@ private fun SubtitleColorSelector(
     Column(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .padding(MaterialTheme.padding.small),
+            .padding(MaterialTheme.padding.tiny),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

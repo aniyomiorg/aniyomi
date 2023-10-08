@@ -165,11 +165,10 @@
     <string name="screenshot_show_subs">Tampilkan subtitel di tangkap layar</string>
     <string name="enable_volume_brightness_gestures">Ubah volume dan gestur kecerahan</string>
     <string name="enable_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
-    <string name="toggle_stats">Ubah status</string>
-    <string name="stats_page">Halaman status</string>
-    <string name="stats_page_1">halaman 1</string>
-    <string name="stats_page_2">Halaman 2</string>
-    <string name="stats_page_3">Halaman 3</string>
+    <string name="toggle_player_statistics_page">Halaman status</string>
+    <string name="player_statistics_page_1">halaman 1</string>
+    <string name="player_statistics_page_2">Halaman 2</string>
+    <string name="player_statistics_page_3">Halaman 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Tidak dapat mengunduh karena ruang penyimpanan rendah</string>
     <string name="download_queue_size_warning">Peringatan: mengunduh dalam jumlah besar bisa menyebabkan sumber menjadi lambat dan/atau memblokir Tachiyomi. Ketuk untuk mempelajari lebih lanjut.</string>
@@ -269,7 +268,6 @@
     <string name="copied_video_link_to_clipboard">Tautan kualitas video yang disalin ke papan klip</string>
     <string name="choose_video_quality">Pilih kualitas video:</string>
     <string name="extension_settings">Pengaturan ekstensi</string>
-    <string name="stats_header">Tampilkan statistik</string>
     <string name="action_save_screenshot">Tangkap layar disimpan</string>
     <string name="chapter_dialog_header">Geser untuk ke chapter</string>
     <string name="data_saver_stop_exclude">Menghentikan pengecualian dari penghemat data</string>

@@ -687,8 +687,12 @@ class PlayerViewModel(
         mutableState.update { it.copy(sheet = Sheet.SubtitleSettings) }
     }
 
-    fun showPlayerScreenshot() {
-        mutableState.update { it.copy(sheet = Sheet.PlayerScreenshot) }
+    fun showScreenshotOptions() {
+        mutableState.update { it.copy(sheet = Sheet.ScreenshotOptions) }
+    }
+
+    fun showPlayerSettings() {
+        mutableState.update { it.copy(sheet = Sheet.PlayerSettings) }
     }
 
     fun closeDialogSheet() {
@@ -714,7 +718,8 @@ class PlayerViewModel(
 
     sealed class Sheet {
         object SubtitleSettings : Sheet()
-        object PlayerScreenshot : Sheet()
+        object ScreenshotOptions : Sheet()
+        object PlayerSettings : Sheet()
     }
 
     sealed class Event {

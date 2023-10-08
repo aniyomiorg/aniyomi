@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.util.preference.toggle
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
@@ -42,9 +44,12 @@ class PlayerSettingsScreenModel(
         preference(preferences).toggle()
     }
 
+    private val standardPadding = PaddingValues(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
+
     @Composable
     fun ToggleableRow(
         @StringRes textRes: Int,
+        paddingValues: PaddingValues = standardPadding,
         isChecked: Boolean,
         onClick: () -> Unit,
         coloredText: Boolean = false,
@@ -53,7 +58,7 @@ class PlayerSettingsScreenModel(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = onClick)
-                .padding(MaterialTheme.padding.medium),
+                .padding(paddingValues),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -79,9 +84,9 @@ class PlayerSettingsScreenModel(
             val overrideType = if (overrideSubtitles) "no" else "force"
             togglePreference(PlayerPreferences::overrideSubtitlesStyle)
             MPVLib.setPropertyString("sub-ass-override", overrideType)
+            if (overrideSubtitles) updateSubtitleOptions()
         }
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             NoSubtitlesWarning()
@@ -96,6 +101,16 @@ class PlayerSettingsScreenModel(
                 content()
             }
         }
+    }
+
+    private fun updateSubtitleOptions() {
+        MPVLib.setPropertyString("sub-bold", if (preferences.boldSubtitles().get()) "yes" else "no")
+        MPVLib.setPropertyString("sub-italic", if (preferences.italicSubtitles().get()) "yes" else "no")
+        MPVLib.setPropertyInt("sub-font-size", preferences.subtitleFontSize().get())
+
+        MPVLib.setPropertyString("sub-color", preferences.textColorSubtitles().get().toHexString())
+        MPVLib.setPropertyString("sub-border-color", preferences.borderColorSubtitles().get().toHexString())
+        MPVLib.setPropertyString("sub-back-color", preferences.backgroundColorSubtitles().get().toHexString())
     }
 
     @Composable

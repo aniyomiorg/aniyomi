@@ -52,12 +52,12 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheetsda
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerTracksSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.ScreenshotOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
@@ -211,7 +211,7 @@ class PlayerActivity : BaseActivity() {
         null
     }
 
-    private var playerSettingsSheet: PlayerSettingsSheet? = null
+    private var playerSettingsSheet: PlayerTracksSheet? = null
 
     @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
@@ -393,13 +393,20 @@ class PlayerActivity : BaseActivity() {
                     )
                 }
 
-                is PlayerViewModel.Sheet.PlayerScreenshot -> {
-                    PlayerScreenshotSheet(
+                is PlayerViewModel.Sheet.ScreenshotOptions -> {
+                    ScreenshotOptionsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         cachePath = cacheDir.path,
                         onSetAsCover = { viewModel.setAsCover(it) },
                         onShare = { viewModel.shareImage(it, player.timePos) },
                         onSave = { viewModel.saveImage(it, player.timePos) },
+                        onDismissRequest = pauseForDialogSheet(),
+                    )
+                }
+
+                is PlayerViewModel.Sheet.PlayerSettings -> {
+                    PlayerSettingsSheet(
+                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         onDismissRequest = pauseForDialogSheet(),
                     )
                 }
@@ -449,14 +456,18 @@ class PlayerActivity : BaseActivity() {
         MPVLib.observeProperty("chapter-list", MPVLib.mpvFormat.MPV_FORMAT_NONE)
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
-        val overrideType = if (viewModel.playerPreferences.overrideSubtitlesStyle().get()) "force" else "no"
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
 
         mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         when (playerPreferences.deband().get()) {
             1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             2 -> MPVLib.setOptionString("deband", "yes")
             3 -> MPVLib.setOptionString("vf", "format=yuv420p")
+        }
+
+        val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
+        if (currentPlayerStatisticsPage != 0) {
+            MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
+            MPVLib.command(arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage"))
         }
 
         MPVLib.addLogObserver(playerObserver)
@@ -487,6 +498,9 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerSubtitles() {
+        val overrideType = if (viewModel.playerPreferences.overrideSubtitlesStyle().get()) "force" else "no"
+        MPVLib.setPropertyString("sub-ass-override", overrideType)
+
         if (playerPreferences.rememberSubtitlesDelay().get()) {
             MPVLib.setPropertyDouble("sub-delay", playerPreferences.subtitlesDelay().get().toDouble())
         }
@@ -767,7 +781,7 @@ class PlayerActivity : BaseActivity() {
                     rightToLeft = playerControls.binding.toggleAutoplay.id
                     rightToRight = ConstraintLayout.LayoutParams.UNSET
                 }
-                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     topToBottom = ConstraintLayout.LayoutParams.UNSET
                 }
@@ -784,7 +798,7 @@ class PlayerActivity : BaseActivity() {
                     rightToLeft = ConstraintLayout.LayoutParams.UNSET
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 }
-                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.UNSET
                     topToBottom = playerControls.binding.episodeListBtn.id
                 }
@@ -1127,7 +1141,7 @@ class PlayerActivity : BaseActivity() {
         if (playerSettingsSheet?.isShowing == true) return
 
         playerControls.hideControls(true)
-        playerSettingsSheet = PlayerSettingsSheet(this@PlayerActivity).apply { show() }
+        playerSettingsSheet = PlayerTracksSheet(this@PlayerActivity).apply { show() }
     }
 
     private var selectedQuality = 0
@@ -1235,31 +1249,6 @@ class PlayerActivity : BaseActivity() {
         }
         selectedLoadedTrack?.let { player.aid = it.mpvId }
             ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun openOptionsSheet(view: View) {
-        playerControls.hideControls(true)
-        PlayerOptionsSheet(this@PlayerActivity).show()
-    }
-
-    var stats: Boolean = false
-    var statsPage: Int = 0
-        set(value) {
-            val newValue = when (value) {
-                0 -> 1
-                1 -> 2
-                2 -> 3
-                else -> 1
-            }
-            if (!stats) toggleStats()
-            MPVLib.command(arrayOf("script-binding", "stats/display-page-$newValue"))
-            field = newValue - 1
-        }
-
-    fun toggleStats() {
-        MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
-        stats = !stats
     }
 
     /**

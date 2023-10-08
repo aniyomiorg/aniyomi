@@ -122,6 +122,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
+        binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
+
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }

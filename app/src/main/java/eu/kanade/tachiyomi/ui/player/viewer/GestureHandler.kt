@@ -113,7 +113,7 @@ class GestureHandler(
     }
 
     override fun onLongPress(e: MotionEvent) {
-        activity.viewModel.showPlayerScreenshot()
+        activity.viewModel.showScreenshotOptions()
     }
 }
 

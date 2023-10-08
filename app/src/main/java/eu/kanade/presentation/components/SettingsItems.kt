@@ -202,7 +202,7 @@ fun OutlinedNumericChooser(
         onValueChanged(currentValue)
     }
 
-    Row(modifier = Modifier.padding(bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         RepeatingIconButton(
             onClick = { updateValue(false) },
         ) { Icon(imageVector = Icons.Outlined.RemoveCircle, contentDescription = null) }
