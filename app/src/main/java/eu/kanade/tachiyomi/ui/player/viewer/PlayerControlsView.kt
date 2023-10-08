@@ -124,14 +124,15 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
 
+        binding.tracksBtn.setOnClickListener { activity.viewModel.showTracksCatalog() }
+
         binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
 
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
-        // TODO: Update the Dialog opened
-        binding.episodeListBtn.setOnClickListener { activity.viewModel.showSubtitleSettings() }
+        binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
     }
 
     private fun switchEpisode(previous: Boolean) {

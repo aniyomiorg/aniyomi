@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
@@ -29,7 +30,7 @@ class PlayerObserver(val activity: PlayerActivity) :
 
     override fun event(eventId: Int) {
         when (eventId) {
-            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> activity.fileLoaded()
+            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> activity.viewModel.viewModelScope.launchIO { activity.fileLoaded() }
             MPVLib.mpvEventId.MPV_EVENT_START_FILE -> activity.viewModel.viewModelScope.launchUI {
                 activity.player.paused = false
                 activity.refreshUi()

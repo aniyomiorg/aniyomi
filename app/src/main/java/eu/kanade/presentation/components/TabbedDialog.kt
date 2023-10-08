@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.core.view.WindowInsetsControllerCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
@@ -80,7 +82,7 @@ fun TabbedDialog(
                     }
                 }
 
-                tabOverflowMenuContent?.let { MoreMenu(it) }
+                tabOverflowMenuContent?.let { MoreMenu(hideSystemBars, it) }
             }
             Divider()
 
@@ -98,10 +100,17 @@ fun TabbedDialog(
 
 @Composable
 private fun MoreMenu(
+    hideSystemBars: Boolean,
     content: @Composable ColumnScope.(() -> Unit) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
+        if (hideSystemBars) {
+            rememberSystemUiController().apply {
+                isSystemBarsVisible = false
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        }
         IconButton(onClick = { expanded = true }) {
             Icon(
                 imageVector = Icons.Default.MoreVert,

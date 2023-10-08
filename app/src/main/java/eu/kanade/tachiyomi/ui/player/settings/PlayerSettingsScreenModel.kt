@@ -35,6 +35,8 @@ import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.InputStream
 
+val sheetDialogPadding = PaddingValues(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
+
 class PlayerSettingsScreenModel(
     val preferences: PlayerPreferences = Injekt.get(),
     private val hasSubTracks: Boolean = true,
@@ -44,12 +46,10 @@ class PlayerSettingsScreenModel(
         preference(preferences).toggle()
     }
 
-    private val standardPadding = PaddingValues(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
-
     @Composable
     fun ToggleableRow(
         @StringRes textRes: Int,
-        paddingValues: PaddingValues = standardPadding,
+        paddingValues: PaddingValues = sheetDialogPadding,
         isChecked: Boolean,
         onClick: () -> Unit,
         coloredText: Boolean = false,

@@ -128,7 +128,6 @@
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Tracks"
-                android:onClick="openTracksSheet"
                 android:src="@drawable/ic_video_settings_20dp"
                 app:layout_constraintLeft_toRightOf="@id/chaptersBtn"
                 app:layout_constraintRight_toLeftOf="@id/settingsBtn"

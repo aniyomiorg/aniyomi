@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.player.settings.sheets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.Utils
 import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.roundToInt
@@ -66,13 +66,11 @@ fun VideoChaptersSheet(
                     onDismissRequest()
                 }
 
-                val standardPadding = PaddingValues(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = onClick)
-                        .padding(standardPadding),
+                        .padding(sheetDialogPadding),
                 ) {
                     Text(
                         text = videoChapterName,

@@ -263,7 +263,7 @@
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
-    <string name="settings_dialog_header">Video settings</string>
+    <string name="settings_dialog_header">Player settings</string>
     <string name="quality_dialog_header">Video quality</string>
     <string name="chapter_dialog_header">Seek to chapter</string>
     <string name="subtitle_dialog_header">Subtitle</string>
