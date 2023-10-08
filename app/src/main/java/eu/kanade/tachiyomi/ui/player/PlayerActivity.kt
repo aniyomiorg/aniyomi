@@ -385,13 +385,6 @@ class PlayerActivity : BaseActivity() {
             val state by viewModel.state.collectAsState()
 
             when (state.sheet) {
-                is PlayerViewModel.Sheet.SubtitleSettings -> {
-                    SubtitleSettingsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subtitleTracks.size > 1),
-                        onDismissRequest = pauseForDialogSheet(),
-                    )
-                }
-
                 is PlayerViewModel.Sheet.ScreenshotOptions -> {
                     ScreenshotOptionsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
@@ -484,6 +477,13 @@ class PlayerActivity : BaseActivity() {
                             onDismissRequest = pauseForDialogSheet(),
                         )
                     }
+                }
+
+                is PlayerViewModel.Sheet.SubtitleSettings -> {
+                    SubtitleSettingsSheet(
+                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subtitleTracks.size > 1),
+                        onDismissRequest = pauseForDialogSheet(fadeControls = true),
+                    )
                 }
 
                 null -> {}
@@ -734,10 +734,10 @@ class PlayerActivity : BaseActivity() {
         playerControls.setViewMode(showText = false)
     }
 
-    private fun pauseForDialogSheet(): () -> Unit {
+    private fun pauseForDialogSheet(fadeControls: Boolean = false): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
-        playerControls.fadeOutControlsRunnable.run()
+        if (!fadeControls) playerControls.fadeOutControlsRunnable.run()
         return {
             if (!wasPlayerPaused) {
                 player.paused = false

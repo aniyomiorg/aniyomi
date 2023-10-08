@@ -47,8 +47,8 @@ fun TracksCatalogSheet(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = tabTitles,
+        onOverflowMenuClicked = onSettingsClicked,
         hideSystemBars = true,
-        tabOverflowMenuContent = { onSettingsClicked(); },
     ) { contentPadding, page ->
         Column(
             modifier = Modifier
