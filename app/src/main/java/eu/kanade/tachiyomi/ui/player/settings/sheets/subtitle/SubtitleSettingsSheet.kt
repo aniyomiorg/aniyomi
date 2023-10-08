@@ -71,10 +71,8 @@ fun SubtitlePreview(
                 style = TextStyle(
                     fontFamily = FontFamily.SansSerif,
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight =
-                    if (isBold) FontWeight.Bold else FontWeight.Medium,
-                    fontStyle =
-                    if (isItalic) FontStyle.Italic else FontStyle.Normal,
+                    fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
+                    fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal,
                     shadow = Shadow(color = borderColor, blurRadius = 7.5f),
                     color = textColor,
                     textAlign = TextAlign.Center,

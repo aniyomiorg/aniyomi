@@ -695,6 +695,10 @@ class PlayerViewModel(
         mutableState.update { it.copy(sheet = Sheet.PlayerSettings) }
     }
 
+    fun showVideoChapters() {
+        mutableState.update { it.copy(sheet = Sheet.VideoChapters) }
+    }
+
     fun closeDialogSheet() {
         mutableState.update { it.copy(dialog = null, sheet = null) }
     }
@@ -720,6 +724,7 @@ class PlayerViewModel(
         object SubtitleSettings : Sheet()
         object ScreenshotOptions : Sheet()
         object PlayerSettings : Sheet()
+        object VideoChapters : Sheet()
     }
 
     sealed class Event {

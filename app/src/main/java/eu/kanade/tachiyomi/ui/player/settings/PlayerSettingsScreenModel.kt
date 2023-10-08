@@ -116,7 +116,10 @@ class PlayerSettingsScreenModel(
     @Composable
     fun NoSubtitlesWarning() {
         if (!hasSubTracks) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,

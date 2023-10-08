@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +16,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.padding
 
@@ -51,6 +52,12 @@ fun PlayerSettingsSheet(
             modifier = Modifier.padding(vertical = MaterialTheme.padding.medium),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
+            Text(
+                text = stringResource(id = R.string.settings_dialog_header),
+                modifier = Modifier.padding(horizontal = MaterialTheme.padding.medium),
+                style = MaterialTheme.typography.titleLarge,
+            )
+
             screenModel.ToggleableRow(
                 textRes = R.string.enable_volume_brightness_gestures,
                 isChecked = verticalGesture.collectAsState().value,
@@ -90,12 +97,4 @@ fun PlayerSettingsSheet(
             }
         }
     }
-}
-
-private enum class PlayerStatsPage(val page: Int, @StringRes val textRes: Int) {
-    OFF(0, R.string.off),
-    PAGE1(1, R.string.player_statistics_page_1),
-    PAGE2(2, R.string.player_statistics_page_2),
-    PAGE3(3, R.string.player_statistics_page_3),
-    ;
 }

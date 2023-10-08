@@ -54,10 +54,10 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
-import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerTracksSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.ScreenshotOptionsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.VideoChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
@@ -82,7 +82,6 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -100,6 +99,7 @@ import uy.kohesive.injekt.api.get
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
 class PlayerActivity : BaseActivity() {
 
@@ -267,7 +267,7 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
-    private var videoChapters: List<Chapter> = emptyList()
+    private var videoChapters: List<VideoChapter> = emptyList()
         set(value) {
             field = value
             runOnUiThread {
@@ -397,7 +397,7 @@ class PlayerActivity : BaseActivity() {
                     ScreenshotOptionsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         cachePath = cacheDir.path,
-                        onSetAsCover = { viewModel.setAsCover(it) },
+                        onSetAsCover = viewModel::setAsCover,
                         onShare = { viewModel.shareImage(it, player.timePos) },
                         onSave = { viewModel.saveImage(it, player.timePos) },
                         onDismissRequest = pauseForDialogSheet(),
@@ -407,6 +407,19 @@ class PlayerActivity : BaseActivity() {
                 is PlayerViewModel.Sheet.PlayerSettings -> {
                     PlayerSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        onDismissRequest = pauseForDialogSheet(),
+                    )
+                }
+
+                is PlayerViewModel.Sheet.VideoChapters -> {
+                    fun setChapter(videoChapter: VideoChapter, text: String) {
+                        val seekDifference = videoChapter.time.roundToInt() - (player.timePos ?: 0)
+                        doubleTapSeek(time = seekDifference, isDoubleTap = false, videoChapterText = text)
+                    }
+                    VideoChaptersSheet(
+                        timePosition = player.timePos ?: 0,
+                        videoChapters = videoChapters,
+                        onVideoChapterSelected = ::setChapter,
                         onDismissRequest = pauseForDialogSheet(),
                     )
                 }
@@ -947,8 +960,7 @@ class PlayerActivity : BaseActivity() {
         time: Int,
         event: MotionEvent? = null,
         isDoubleTap: Boolean = true,
-        isChapter: Boolean = false,
-        text: String? = null,
+        videoChapterText: String? = null,
     ) {
         if (SeekState.mode != SeekState.DOUBLE_TAP) {
             doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
@@ -978,8 +990,8 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            if (isChapter) {
-                binding.secondsView.binding.doubleTapSeconds.text = text
+            if (videoChapterText != null) {
+                binding.secondsView.binding.doubleTapSeconds.text = videoChapterText
             } else {
                 binding.secondsView.seconds -= time
             }
@@ -997,13 +1009,13 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            if (isChapter) {
-                binding.secondsView.binding.doubleTapSeconds.text = text
+            if (videoChapterText != null) {
+                binding.secondsView.binding.doubleTapSeconds.text = videoChapterText
             } else {
                 binding.secondsView.seconds += time
             }
         }
-        if (!isChapter) {
+        if (videoChapterText == null) {
             playerControls.hideUiForSeek()
         }
         binding.secondsView.start()
@@ -1167,28 +1179,6 @@ class PlayerActivity : BaseActivity() {
         showLoadingIndicator(true)
         logcat(LogPriority.INFO) { "Changing quality" }
         setVideoList(quality, currentVideoList)
-    }
-
-    private fun setChapter(chapter: Chapter) {
-        val seekDifference = chapter.time.roundToInt() - (player.timePos ?: 0)
-        doubleTapSeek(
-            time = seekDifference,
-            isDoubleTap = false,
-            isChapter = true,
-            text = chapter.title.takeIf { !it.isNullOrBlank() }
-                ?: Utils.prettyTime(chapter.time.roundToInt()),
-        )
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun pickChapter(view: View) {
-        playerControls.hideControls(true)
-        PlayerChaptersSheet(
-            activity = this@PlayerActivity,
-            textRes = R.string.chapter_dialog_header,
-            seekToChapterMethod = ::setChapter,
-            chapters = videoChapters,
-        ).show()
     }
 
     internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
@@ -1630,7 +1620,7 @@ class PlayerActivity : BaseActivity() {
             } else {
                 it.interval.startTime
             }
-            val startChapter = Chapter(
+            val startChapter = VideoChapter(
                 index = -2, // Index -2 is used to indicate that this is an AniSkip chapter
                 title = it.skipType.getString(),
                 time = startTime,
@@ -1639,7 +1629,7 @@ class PlayerActivity : BaseActivity() {
             val isNotLastChapter = abs(it.interval.endTime - (duration?.toDouble() ?: -2.0)) > 1.0
             val isNotAdjacent = nextStart == null || (abs(it.interval.endTime - nextStart) > 1.0)
             if (isNotLastChapter && isNotAdjacent) {
-                val endChapter = Chapter(
+                val endChapter = VideoChapter(
                     index = -1,
                     title = null,
                     time = it.interval.endTime,
@@ -1655,7 +1645,7 @@ class PlayerActivity : BaseActivity() {
             }
         }.sortedBy { it.time }.mapIndexed { i, it ->
             if (i == 0 && it.time < 1.0) {
-                Chapter(
+                VideoChapter(
                     it.index,
                     it.title,
                     0.0,
@@ -1674,7 +1664,7 @@ class PlayerActivity : BaseActivity() {
             filteredAniskipChapters.none { it.time == 0.0 }
         ) {
             listOf(
-                Chapter(
+                VideoChapter(
                     index = -1,
                     title = null,
                     time = 0.0,

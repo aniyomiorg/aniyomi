@@ -124,6 +124,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
 
+        binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
+
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }

@@ -74,3 +74,14 @@ enum class HwDecState(val title: String, val mpvValue: String) {
         }
     }
 }
+
+/**
+ * Player's Statistics Page handler
+ */
+enum class PlayerStatsPage(val page: Int, @StringRes val textRes: Int) {
+    OFF(0, R.string.off),
+    PAGE1(1, R.string.player_statistics_page_1),
+    PAGE2(2, R.string.player_statistics_page_2),
+    PAGE3(3, R.string.player_statistics_page_3),
+    ;
+}
