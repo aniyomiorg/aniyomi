@@ -214,4 +214,108 @@
     <string name="action_global_anime_search">全局动画搜索</string>
     <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
     <string name="stats_header"></string>
+    <string name="player_aniskip_recap"></string>
+    <string name="player_aniskip_dontskip_toast"></string>
+    <string name="wsrv"></string>
+    <string name="pref_remember_volume"></string>
+    <string name="pref_debanding_cpu"></string>
+    <string name="pref_hide_in_manga_library_items"></string>
+    <string name="episode_settings"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="bandwidth_data_saver_server"></string>
+    <string name="pref_category_pip"></string>
+    <string name="chapter_dialog_header"></string>
+    <string name="data_saver_server_summary"></string>
+    <string name="pref_enable_netflix_style_aniskip"></string>
+    <string name="pref_media_control_chapter_seeking_summary"></string>
+    <string name="pref_waiting_time_aniskip_7"></string>
+    <string name="recent_anime_time"></string>
+    <string name="player_aniskip_ed"></string>
+    <string name="pref_waiting_time_aniskip"></string>
+    <string name="pref_media_control_chapter_seeking"></string>
+    <string name="pref_debanding_title"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="player_aniskip_dontskip"></string>
+    <string name="pref_enable_pip"></string>
+    <string name="copied_video_link_to_clipboard"></string>
+    <string name="action_save_screenshot"></string>
+    <string name="data_saver_image_format_summary_off"></string>
+    <string name="pref_default_home_tab_library"></string>
+    <string name="pref_hide_in_anime_library_items"></string>
+    <string name="data_saver_exclude"></string>
+    <string name="pref_show_next_episode_airing_time"></string>
+    <string name="pref_debanding_gpu"></string>
+    <string name="label_migration_manga"></string>
+    <string name="pref_waiting_time_aniskip_6"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_episode_swipe_start"></string>
+    <string name="pref_enable_auto_skip_ani_skip"></string>
+    <string name="pref_waiting_time_aniskip_5"></string>
+    <string name="data_saver_downloader"></string>
+    <string name="action_change_intro_length"></string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="other"></item>
+    </plurals>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="data_saver_image_quality"></string>
+    <string name="pref_waiting_time_aniskip_10"></string>
+    <string name="pref_episode_swipe"></string>
+    <string name="notification_episodes_single_and_more"></string>
+    <string name="pref_category_player_advanced_subtitle"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="resmush"></string>
+    <string name="player_aniskip_op"></string>
+    <string name="bandwidth_hero"></string>
+    <string name="data_saver_stop_exclude"></string>
+    <string name="notification_episodes_multiple"></string>
+    <string name="theme_mocha"></string>
+    <string name="episode_progress"></string>
+    <string name="action_hide"></string>
+    <string name="label_manga_extensions"></string>
+    <string name="label_recent_anime_updates"></string>
+    <string name="data_saver"></string>
+    <string name="pref_skip_3" translatable="false"></string>
+    <string name="pref_invalidate_download_cache_summary"></string>
+    <string name="data_saver_image_format_summary_on"></string>
+    <string name="share_screenshot_info"></string>
+    <string name="episode_progress_no_total"></string>
+    <string name="download_slots_info"></string>
+    <string name="pref_episode_swipe_end"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="player_aniskip_mixedOp"></string>
+    <string name="go_to_after_opening"></string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="other"></item>
+    </plurals>
+    <string name="notification_episodes_single"></string>
+    <string name="pref_debanding_disabled"></string>
+    <string name="data_saver_summary"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="other"></item>
+    </plurals>
+    <string name="player_aniskip_skip"></string>
+    <string name="data_saver_image_quality_summary"></string>
+    <string name="pref_enable_aniskip"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="go_to_next_chapter"></string>
+    <string name="pref_backup_flags"></string>
+    <string name="pref_category_hide_hidden"></string>
+    <string name="data_saver_image_format"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="pref_category_player_advanced"></string>
+    <string name="pref_category_player_aniskip_info"></string>
+    <string name="pref_waiting_time_aniskip_9"></string>
+    <string name="label_migration_anime"></string>
+    <string name="data_saver_color_bw"></string>
+    <string name="go_to_previous_chapter"></string>
+    <string name="data_saver_ignore_gif"></string>
+    <string name="data_saver_ignore_jpeg"></string>
+    <string name="pref_category_player_seeking"></string>
+    <string name="pref_waiting_time_aniskip_8"></string>
+    <string name="choose_video_quality"></string>
+    <string name="theme_cottoncandy"></string>
+    <string name="player_hwdec_dialog_title"></string>
+    <string name="pref_skip_5" translatable="false"></string>
 </resources>
