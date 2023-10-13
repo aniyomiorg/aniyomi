@@ -333,17 +333,4 @@
     <string name="theme_mocha">Моча</string>
     <string name="label_recent_anime_updates">Оновлення аніме</string>
     <string name="theme_cottoncandy">Бавовняні цукерки</string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="download_slots_info"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>

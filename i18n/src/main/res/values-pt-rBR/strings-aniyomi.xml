@@ -302,41 +302,4 @@
 \nAtualmente compacta para Jpeg</string>
     <string name="data_saver_image_format_summary_off">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente compacta para Webp</string>
-    <string name="wsrv"></string>
-    <string name="pref_debanding_cpu"></string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="bandwidth_data_saver_server"></string>
-    <string name="data_saver_server_summary"></string>
-    <string name="pref_media_control_chapter_seeking_summary"></string>
-    <string name="pref_media_control_chapter_seeking"></string>
-    <string name="pref_debanding_title"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="data_saver_exclude"></string>
-    <string name="pref_show_next_episode_airing_time"></string>
-    <string name="pref_debanding_gpu"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_episode_swipe_start"></string>
-    <string name="data_saver_downloader"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="pref_episode_swipe"></string>
-    <string name="pref_category_player_advanced_subtitle"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="resmush"></string>
-    <string name="data_saver_stop_exclude"></string>
-    <string name="theme_mocha"></string>
-    <string name="action_hide"></string>
-    <string name="label_recent_anime_updates"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="download_slots_info"></string>
-    <string name="pref_episode_swipe_end"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="pref_debanding_disabled"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="pref_category_hide_hidden"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_category_player_advanced"></string>
-    <string name="theme_cottoncandy"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>

@@ -276,7 +276,7 @@
     <plurals name="download_amount_anime">
         <item quantity="one">Prossimo episodio</item>
         <item quantity="many">Prossimi %d episodi</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="stats_header">Mostra statistiche</string>
     <string name="pref_debanding_cpu">CPU</string>
@@ -327,16 +327,4 @@
     <string name="data_saver_image_quality_summary">Valori alti si traducono in una maggiore qualità dell\'immagine, ma questo implica file di dimensione più grande, 80 per cento è una buona media tra dimensione e qualità</string>
     <string name="data_saver_image_format">Comprimi in JPEG</string>
     <string name="data_saver_color_bw">Converte in bianco e nero</string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>

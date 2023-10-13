@@ -41,43 +41,43 @@
         <item quantity="one">פרק %1$s</item>
         <item quantity="two">%1$s פרקים</item>
         <item quantity="many">%1$s פרקים</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="download_amount_anime">
         <item quantity="one">הפרק הבא</item>
         <item quantity="two">הפרקים הבאים</item>
         <item quantity="many">הפרקים הבאים</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one">לסדרה אחת</item>
         <item quantity="two">ל-%d סדרות</item>
         <item quantity="many">ל-%d סדרות</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one">פרקים %1$s ועוד 1</item>
         <item quantity="two">פרקים %1$s ו-%2$d נוספים</item>
         <item quantity="many">פרקים %1$s ו-%2$d נוספים</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="next_unseen_episodes">
         <item quantity="one">הפרק הבא שלא נצפה</item>
         <item quantity="two">ה-%d פרקים הבאים שלא נצפו</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <plurals name="seconds">
         <item quantity="one">%d שנייה</item>
         <item quantity="two">%d שניות</item>
         <item quantity="many">%d שניות</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="notification_episodes_generic">
         <item quantity="one">פרק אחד חדש</item>
         <item quantity="two">%1$d פרקים חדשים</item>
         <item quantity="many">%1$d פרקים חדשים</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="action_global_manga_search">חיפוש מנגה גלובלי</string>
     <string name="action_download_unread">הורד חלקים שלא נקראו</string>
@@ -293,55 +293,4 @@
     <string name="label_anime_history">אנימה</string>
     <string name="notification_new_episodes">נמצאו פרקים חדשים</string>
     <string name="label_anime_updates">אנימה</string>
-    <string name="wsrv"></string>
-    <string name="pref_debanding_cpu"></string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="bandwidth_data_saver_server"></string>
-    <string name="data_saver_server_summary"></string>
-    <string name="pref_media_control_chapter_seeking_summary"></string>
-    <string name="pref_media_control_chapter_seeking"></string>
-    <string name="pref_debanding_title"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="data_saver_image_format_summary_off"></string>
-    <string name="data_saver_exclude"></string>
-    <string name="pref_show_next_episode_airing_time"></string>
-    <string name="pref_debanding_gpu"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_episode_swipe_start"></string>
-    <string name="data_saver_downloader"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="data_saver_image_quality"></string>
-    <string name="pref_episode_swipe"></string>
-    <string name="pref_category_player_advanced_subtitle"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="resmush"></string>
-    <string name="bandwidth_hero"></string>
-    <string name="data_saver_stop_exclude"></string>
-    <string name="theme_mocha"></string>
-    <string name="action_hide"></string>
-    <string name="label_recent_anime_updates"></string>
-    <string name="data_saver"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="data_saver_image_format_summary_on"></string>
-    <string name="download_slots_info"></string>
-    <string name="pref_episode_swipe_end"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="go_to_after_opening"></string>
-    <string name="pref_debanding_disabled"></string>
-    <string name="data_saver_summary"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="data_saver_image_quality_summary"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="go_to_next_chapter"></string>
-    <string name="pref_category_hide_hidden"></string>
-    <string name="data_saver_image_format"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_category_player_advanced"></string>
-    <string name="data_saver_color_bw"></string>
-    <string name="go_to_previous_chapter"></string>
-    <string name="data_saver_ignore_gif"></string>
-    <string name="data_saver_ignore_jpeg"></string>
-    <string name="theme_cottoncandy"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>

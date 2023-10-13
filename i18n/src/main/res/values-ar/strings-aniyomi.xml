@@ -337,27 +337,4 @@
     <string name="go_to_after_opening">تخطي افتتاحية</string>
     <string name="pref_media_control_chapter_seeking">البحث عن الفصول باستخدام عناصر التحكم</string>
     <string name="pref_debanding_title">Khalid</string>
-    <string name="pref_debanding_cpu"></string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="pref_debanding_gpu"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="pref_category_player_advanced_subtitle"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="theme_mocha"></string>
-    <string name="action_hide"></string>
-    <string name="label_recent_anime_updates"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="download_slots_info"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="pref_debanding_disabled"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="pref_category_hide_hidden"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_category_player_advanced"></string>
-    <string name="theme_cottoncandy"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>
