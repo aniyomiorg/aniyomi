@@ -39,11 +39,10 @@ fun VideoChaptersSheet(
         onDismissRequest = onDismissRequest,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = MaterialTheme.padding.medium),
+            modifier = Modifier.padding(MaterialTheme.padding.medium),
         ) {
             Text(
                 text = stringResource(id = R.string.chapter_dialog_header),
-                modifier = Modifier.padding(horizontal = MaterialTheme.padding.medium),
                 style = MaterialTheme.typography.titleLarge,
             )
 

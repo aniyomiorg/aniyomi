@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.AdaptiveSheet
@@ -48,7 +47,7 @@ fun PlayerSettingsSheet(
         onDismissRequest = onDismissRequest,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = MaterialTheme.padding.medium),
+            modifier = Modifier.padding(MaterialTheme.padding.medium),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             Text(
@@ -72,10 +71,8 @@ fun PlayerSettingsSheet(
             // TODO: (Merge_Change) below Row to be switched to 'SettingsChipRow'
             //  from 'SettingsItems.kt'
 
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.toggle_player_statistics_page),
