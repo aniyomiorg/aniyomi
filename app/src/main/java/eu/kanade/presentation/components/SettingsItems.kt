@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
@@ -209,6 +210,7 @@ fun OutlinedNumericChooser(
 
         OutlinedTextField(
             value = "%d".format(currentValue),
+            modifier = Modifier.widthIn(min = 140.dp),
 
             onValueChange = {
                 // Don't allow multiple decimal points, non-numeric characters, or leading zeros
