@@ -40,7 +40,7 @@
     <string name="action_display_download_badge_anime">Episódios baixados</string>
     <string name="action_display_local_badge_manga">Mangá local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
-    <string name="action_display_show_continue_reading_button">Mostrar o botão continuar assistindo/lendo</string>
+    <string name="action_display_show_continue_reading_button">Botão Continuar assistindo/lendo</string>
     <string name="action_order_by_episode_number">Por número do episódios</string>
     <string name="pref_player_summary">Controle de progresso, reprodutor interno, reprodutor externo</string>
     <string name="pref_update_only_completely_read">Com episódio(s) não visto(s)/capítulo(s) não lido(s)</string>
