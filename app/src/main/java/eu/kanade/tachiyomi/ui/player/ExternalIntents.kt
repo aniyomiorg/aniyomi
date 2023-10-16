@@ -221,26 +221,20 @@ class ExternalIntents {
 
             // Add support for Subtitles to external players
 
-            /*
-            val externalSubs = source.getExternalSubtitleStreams()
-            val enabledSubUrl = when {
-                source.selectedSubtitleStream != null -> {
-                    externalSubs.find { stream -> stream.index == source.selectedSubtitleStream?.index }?.let { sub ->
-                        apiClient.createUrl(sub.deliveryUrl)
-                    }
-                }
-                else -> null
+            val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+            val langIndex = video.subtitleTracks.indexOfFirst {
+                it.lang.contains(localLangName)
             }
+            val requestedLanguage = if (langIndex == -1) 0 else langIndex
+            val requestedUrl = video.subtitleTracks.getOrNull(requestedLanguage)?.url
 
-            // MX Player API / MPV
-            putExtra("subs", externalSubs.map { stream -> Uri.parse(apiClient.createUrl(stream.deliveryUrl)) }.toTypedArray())
-            putExtra("subs.name", externalSubs.map(ExternalSubtitleStream::displayTitle).toTypedArray())
-            putExtra("subs.filename", externalSubs.map(ExternalSubtitleStream::language).toTypedArray())
-            putExtra("subs.enable", enabledSubUrl?.let { url -> arrayOf(Uri.parse(url)) } ?: emptyArray())
+            // Just, Next, MX Player, mpv
+            putExtra("subs", video.subtitleTracks.map { Uri.parse(it.url) }.toTypedArray())
+            putExtra("subs.name", video.subtitleTracks.map { it.lang }.toTypedArray())
+            putExtra("subs.enable", requestedUrl?.let { arrayOf(Uri.parse(it)) } ?: emptyArray())
 
-            // VLC
-            if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)
-             */
+            // VLC - seems to only work for local sub files
+            requestedUrl?.let { putExtra("subtitles_location", it) }
         }
     }
 
