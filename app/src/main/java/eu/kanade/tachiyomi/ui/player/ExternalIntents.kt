@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.core.util.asFlow
@@ -23,6 +24,7 @@ import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -88,7 +90,7 @@ class ExternalIntents {
                 addVideoHeaders(false, video, this)
             }
         } else {
-            standardIntentForPackage(pkgName, context, videoUrl, video)
+            getIntentForPackage(pkgName, context, videoUrl, video)
         }
     }
 
@@ -151,6 +153,46 @@ class ExternalIntents {
      */
     private suspend fun makeErrorToast(context: Context, e: Exception?) {
         withUIContext { context.toast(e?.message ?: "Cannot open episode") }
+    }
+
+    /**
+     * Returns the [Intent] with added data to send to the given external player.
+     *
+     * @param pkgName the name of the package to send the [Intent] to.
+     * @param context the application context.
+     * @param uri the path data of the video.
+     * @param video the video being sent to the external player.
+     */
+    private fun getIntentForPackage(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
+        return when (pkgName) {
+            WEB_VIDEO_CASTER -> webVideoCasterIntent(pkgName, context, uri, video)
+            else -> standardIntentForPackage(pkgName, context, uri, video)
+        }
+    }
+
+    private fun webVideoCasterIntent(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "video/*")
+            if (isPackageInstalled(pkgName, context.packageManager)) setPackage(WEB_VIDEO_CASTER)
+            addExtrasAndFlags(true, this)
+
+            val headers = Bundle()
+            video.headers?.forEach {
+                headers.putString(it.first, it.second)
+            }
+
+            val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+            video.subtitleTracks.firstOrNull {
+                it.lang.contains(localLangName)
+            }?.let {
+                putExtra("subtitle", it.url)
+            } ?: video.subtitleTracks.firstOrNull()?.let {
+                putExtra("subtitle", it.url)
+            }
+
+            putExtra("android.media.intent.extra.HTTP_HEADERS", headers)
+            putExtra("secure_uri", true)
+        }
     }
 
     /**
@@ -507,3 +549,4 @@ const val MPV_REMOTE = "com.husudosu.mpvremote"
 const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
+const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"
