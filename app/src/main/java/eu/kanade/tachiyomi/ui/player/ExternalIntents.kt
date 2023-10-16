@@ -31,6 +31,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
@@ -77,7 +78,9 @@ class ExternalIntents {
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
-        val video = chosenVideo ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first()[0]
+        val video = chosenVideo
+            ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first().firstOrNull()
+            ?: throw Exception("Video list is empty")
 
         val videoUrl = getVideoUrl(context, video) ?: return null
 
