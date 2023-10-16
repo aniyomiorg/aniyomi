@@ -24,6 +24,7 @@ import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -180,7 +181,12 @@ class ExternalIntents {
                 headers.putString(it.first, it.second)
             }
 
-            video.subtitleTracks.firstOrNull()?.let {
+            val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+            video.subtitleTracks.firstOrNull {
+                it.lang.contains(localLangName)
+            }?.let {
+                putExtra("subtitle", it.url)
+            } ?: video.subtitleTracks.firstOrNull()?.let {
                 putExtra("subtitle", it.url)
             }
 
