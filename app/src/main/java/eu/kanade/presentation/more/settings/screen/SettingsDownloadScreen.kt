@@ -58,6 +58,18 @@ object SettingsDownloadScreen : SearchableSettings {
                 title = stringResource(R.string.connected_to_wifi),
             ),
             Preference.PreferenceItem.SwitchPreference(
+                pref = downloadPreferences.multiThread(),
+                title = stringResource(R.string.multi_thread_download),
+                subtitle = stringResource(R.string.multi_thread_download_summary),
+            ),
+
+            Preference.PreferenceItem.ListPreference(
+                pref = downloadPreferences.multiThreadNumber(),
+                title = stringResource(R.string.multi_thread_download_threads_number),
+                subtitle = stringResource(R.string.multi_thread_download_threads_number_summary),
+                entries = (1..32).associateWith { it.toString() },
+            ),
+            Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
                 title = stringResource(R.string.save_chapter_as_cbz),
             ),
