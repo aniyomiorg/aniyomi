@@ -20,6 +20,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
         val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
         val context = LocalContext.current
         val mpvConf = playerPreferences.mpvConf()
+        val mpvInput = playerPreferences.mpvInput()
         val scope = rememberCoroutineScope()
 
         return listOf(
@@ -33,6 +34,16 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
                     ),
 
+            ),
+            Preference.PreferenceItem.MultiLineEditTextPreference(
+                pref = mpvInput,
+                title = context.getString(R.string.pref_mpv_input),
+                subtitle = mpvInput.asState(scope).value
+                    .lines().take(2)
+                    .joinToString(
+                        separator = "\n",
+                        postfix = if (mpvInput.asState(scope).value.lines().size > 2) "\n..." else "",
+                    ),
             ),
             Preference.PreferenceItem.ListPreference(
                 title = context.getString(R.string.pref_debanding_title),
