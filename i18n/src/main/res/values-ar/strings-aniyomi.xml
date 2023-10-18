@@ -284,7 +284,7 @@
     <string name="action_global_anime_search">بحث الانمي العالمي</string>
     <string name="pref_category_volume_brightness">الحجم والسطوع</string>
     <string name="pref_enable_pip">تفعيل وضعية صورة داخل صورة (PiP)</string>
-    <string name="action_global_manga_search">بحث في المانغا العالمية</string>
+    <string name="action_global_manga_search">البحث العام عن المانجا</string>
     <string name="pref_search_pinned_manga_sources_only">ابحث في مصادر المانغا المثبتة فقط</string>
     <string name="pref_search_pinned_anime_sources_only">ابحث في مصادر الانمي المثبتة فقط</string>
     <string name="pref_default_home_tab_library">ضبط شاشة البداية إلى تبويب المانغاتعيين شاشة البدء إلى علامة تبويب المانغا</string>
@@ -337,4 +337,15 @@
     <string name="go_to_after_opening">تخطي افتتاحية</string>
     <string name="pref_media_control_chapter_seeking">البحث عن الفصول باستخدام عناصر التحكم</string>
     <string name="pref_debanding_title">Khalid</string>
+    <string name="pref_debanding_cpu">المعالج</string>
+    <string name="pref_debanding_gpu">المعالج</string>
+    <string name="pref_category_player_advanced_subtitle">إزالة الموجات، mpv.conf… الإخ</string>
+    <string name="theme_mocha">موكا</string>
+    <string name="action_hide">إخفاء</string>
+    <string name="label_recent_anime_updates">تحديثات الأنمي</string>
+    <string name="download_slots_info">سيتم تنزيل الملفات بشكل متزامن فقط من مصادر مستضافة ذاتية أو غير محدودة في استهلاك البيانات</string>
+    <string name="pref_debanding_disabled">معطّل</string>
+    <string name="pref_category_hide_hidden">إخفاء الفئات المخفية من شاشة الفئات</string>
+    <string name="pref_category_player_advanced">إعدادات المشغل المتقدمة</string>
+    <string name="theme_cottoncandy">حلوى القطن</string>
 </resources>
