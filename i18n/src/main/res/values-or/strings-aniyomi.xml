@@ -144,4 +144,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
+    <string name="pref_player_hide_controls">ଚାଳକ ଖୋଲିବା ସମୟରେ ଚାଳକ ନିୟନ୍ତ୍ରଣ ଲୁଚାଯାଉ</string>
 </resources>
