@@ -228,7 +228,7 @@
     <string name="player_aniskip_dontskip">Jangan di skip</string>
     <string name="player_aniskip_dontskip_toast">Lewati dalam %d detik</string>
     <string name="player_aniskip_skip">%s lewati</string>
-    <string name="player_hwdec_dialog_title">Pengaturan standar mode decoding hardware</string>
+    <string name="player_hwdec_mode">Pengaturan standar mode decoding hardware</string>
     <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s dan %2$d lainnya</string>
     <string name="notification_episodes_multiple">Episode %1$s</string>

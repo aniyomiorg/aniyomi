@@ -228,7 +228,7 @@
     <string name="player_aniskip_dontskip">건너뛰지 않기</string>
     <string name="player_aniskip_dontskip_toast">%d초 후에 건너뛰기</string>
     <string name="player_aniskip_skip">%s 건너뜀</string>
-    <string name="player_hwdec_dialog_title">기본 하드웨어 디코딩 모드 설정</string>
+    <string name="player_hwdec_mode">기본 하드웨어 디코딩 모드 설정</string>
     <string name="notification_episodes_single">에피소드 %1$s</string>
     <string name="notification_episodes_single_and_more">에피소드 %1$s와 그 외 %2$d</string>
     <string name="notification_episodes_multiple">에피소드 %1$s</string>

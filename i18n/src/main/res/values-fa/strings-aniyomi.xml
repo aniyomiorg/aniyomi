@@ -104,7 +104,7 @@
     <string name="pref_waiting_time_aniskip">اتمام مهلت</string>
     <string name="pref_waiting_time_aniskip_7">7 ثانیه</string>
     <string name="pref_waiting_time_aniskip_9">9 ثانیه</string>
-    <string name="player_hwdec_dialog_title">تنظیم حالت پیشفرض رمزگشایی سخت افزاری</string>
+    <string name="player_hwdec_mode">تنظیم حالت پیشفرض رمزگشایی سخت افزاری</string>
     <string name="pref_backup_flags">تنظیمات بکاپ</string>
     <string name="label_migration_anime">انتقال انیمه</string>
     <string name="data_saver_exclude">استثناء از صرفه‌جویی داده</string>

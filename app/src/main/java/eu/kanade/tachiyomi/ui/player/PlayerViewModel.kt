@@ -675,10 +675,6 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = Dialog.SpeedPicker) }
     }
 
-    fun showDefaultDecoder() {
-        mutableState.update { it.copy(dialog = Dialog.DefaultDecoder) }
-    }
-
     fun showSkipIntroLength() {
         mutableState.update { it.copy(dialog = Dialog.SkipIntroLength) }
     }
@@ -720,7 +716,6 @@ class PlayerViewModel(
     sealed class Dialog {
         object EpisodeList : Dialog()
         object SpeedPicker : Dialog()
-        object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
     }
 

@@ -163,7 +163,7 @@
     <string name="pref_category_player_aniskip_info">Для роботи AniSkip потрібно, щоб аніме відстежувалося за допомогою MAL або Anilist</string>
     <string name="pref_waiting_time_aniskip_7">7 секунд</string>
     <string name="pref_waiting_time_aniskip_8">8 секунд</string>
-    <string name="player_hwdec_dialog_title">Встановити режим апаратного декодування за замовчуванням</string>
+    <string name="player_hwdec_mode">Встановити режим апаратного декодування за замовчуванням</string>
     <string name="notification_episodes_single">Епізод %1$s</string>
     <string name="episode_settings">Налаштування епізоду</string>
     <string name="rotation_sensor_landscape">Горизонтальне зображення</string>

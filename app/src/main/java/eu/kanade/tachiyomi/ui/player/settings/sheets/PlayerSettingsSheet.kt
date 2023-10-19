@@ -19,6 +19,7 @@ import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.padding
@@ -31,6 +32,7 @@ fun PlayerSettingsSheet(
     val verticalGesture by remember { mutableStateOf(screenModel.preferences.gestureVolumeBrightness()) }
     val horizontalGesture by remember { mutableStateOf(screenModel.preferences.gestureHorizontalSeek()) }
     var statisticsPage by remember { mutableStateOf(screenModel.preferences.playerStatisticsPage().get()) }
+    var decoder by remember { mutableStateOf(screenModel.preferences.hwDec().get()) }
 
     // TODO: Shift to MPV-Lib
     val togglePlayerStatsPage: (Int) -> Unit = { page ->
@@ -40,6 +42,13 @@ fun PlayerSettingsSheet(
         }
         statisticsPage = page
         screenModel.preferences.playerStatisticsPage().set(page)
+    }
+
+    val togglePlayerDecoder: (HwDecState) -> Unit = { hwDecState ->
+        val hwDec = hwDecState.mpvValue
+        MPVLib.setOptionString("hwdec", hwDec)
+        decoder = hwDec
+        screenModel.preferences.hwDec().set(hwDec)
     }
 
     AdaptiveSheet(
@@ -67,8 +76,31 @@ fun PlayerSettingsSheet(
                 onClick = { screenModel.togglePreference { horizontalGesture } },
             )
 
-            // TODO: (Merge_Change) below Row to be switched to 'SettingsChipRow'
+            // TODO: (Merge_Change) below two Columns to be switched to using 'SettingsChipRow'
             //  from 'SettingsItems.kt'
+
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.player_hwdec_mode),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+
+                Row(
+                    modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
+                ) {
+                    HwDecState.values().forEach {
+                        if (!HwDecState.isHwSupported && it.title == "HW+") return@forEach
+                        FilterChip(
+                            selected = decoder == it.mpvValue,
+                            onClick = { togglePlayerDecoder(it) },
+                            label = { Text(it.title) },
+                        )
+                    }
+                }
+            }
 
             Column(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),

@@ -233,7 +233,7 @@
     <string name="video_stretch_screen">Esticado ao ecrã</string>
     <string name="action_change_intro_length">Alterar a duração da abertura</string>
     <string name="player_aniskip_skip">%s saltado</string>
-    <string name="player_hwdec_dialog_title">Definir o modo de descodificação de hardware padrão</string>
+    <string name="player_hwdec_mode">Definir o modo de descodificação de hardware padrão</string>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>

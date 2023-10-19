@@ -63,15 +63,6 @@ enum class HwDecState(val title: String, val mpvValue: String) {
         internal val isHwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         internal val defaultHwDec = if (isHwSupported) HW_PLUS else HW
-
-        internal var mode: HwDecState = defaultHwDec
-
-        internal fun get(title: String) = when (title) {
-            "mediacodec" -> HW_PLUS
-            "mediacodec-copy" -> HW
-            "no" -> SW
-            else -> defaultHwDec
-        }
     }
 }
 

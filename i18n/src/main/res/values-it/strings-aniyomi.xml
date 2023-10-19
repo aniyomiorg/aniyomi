@@ -146,7 +146,7 @@
     <string name="player_aniskip_dontskip">Non saltare</string>
     <string name="video_crop_screen">Centrato</string>
     <string name="playback_speed_dialog_reset">Ripristina</string>
-    <string name="player_hwdec_dialog_title">Imposta la modalità di decodifica hardware predefinita</string>
+    <string name="player_hwdec_mode">Imposta la modalità di decodifica hardware predefinita</string>
     <string name="rotation_sensor_portrait">Sensore portrait</string>
     <string name="action_sort_unseen_count">Conteggio di non visti</string>
     <string name="action_sort_last_anime_update">Ultimo aggiornamento anime</string>

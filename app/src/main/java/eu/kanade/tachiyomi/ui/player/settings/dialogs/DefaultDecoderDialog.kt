@@ -35,7 +35,7 @@ fun DefaultDecoderDialog(
     }
 
     PlayerDialog(
-        titleRes = R.string.player_hwdec_dialog_title,
+        titleRes = R.string.player_hwdec_mode,
         modifier = Modifier.fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {

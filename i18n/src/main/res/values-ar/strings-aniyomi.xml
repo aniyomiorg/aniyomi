@@ -245,7 +245,7 @@
     <string name="pref_waiting_time_aniskip_8">8 ثواني</string>
     <string name="pref_waiting_time_aniskip">زر إنتهاء الوقت</string>
     <string name="pref_waiting_time_aniskip_9">9 ثواني</string>
-    <string name="player_hwdec_dialog_title">تعيين وضع فك تشفير الأجهزة الافتراضي</string>
+    <string name="player_hwdec_mode">تعيين وضع فك تشفير الأجهزة الافتراضي</string>
     <string name="pref_pip_episode_toasts">إظهار الإخطار المنبثق عند تبديل الحلقات في وضع \"(PiP) صورة في صورة\"</string>
     <string name="notification_episodes_single">الحلقة %1$s</string>
     <string name="pref_waiting_time_aniskip_6">6 ثواني</string>

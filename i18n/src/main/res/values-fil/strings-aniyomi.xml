@@ -112,7 +112,7 @@
     <string name="player_aniskip_skip">Nilaktawan ng %s</string>
     <string name="pref_enable_netflix_style_aniskip">Paganahin ang istilo ng Netflix</string>
     <string name="player_aniskip_dontskip">Huwag laktawan</string>
-    <string name="player_hwdec_dialog_title">Itakda ang default na hardware decoding mode</string>
+    <string name="player_hwdec_mode">Itakda ang default na hardware decoding mode</string>
     <string name="notification_episodes_multiple">Mga Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s at %2$d pa</string>
     <string name="pref_backup_flags">Mga opsyon sa pag-backup</string>

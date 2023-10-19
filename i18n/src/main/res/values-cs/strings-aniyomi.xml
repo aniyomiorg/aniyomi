@@ -254,7 +254,7 @@
     <string name="pref_enable_netflix_style_aniskip">Zapnout styl Netflixu</string>
     <string name="player_aniskip_dontskip">Nepřeskakovat</string>
     <string name="player_aniskip_skip">Přeskočeno %s</string>
-    <string name="player_hwdec_dialog_title">Nastavit výchozí hardwarový dekódovací režim</string>
+    <string name="player_hwdec_mode">Nastavit výchozí hardwarový dekódovací režim</string>
     <string name="notification_episodes_single_and_more">Epizoda %1$s a dalších %2$d</string>
     <string name="notification_episodes_multiple">Epizody %1$s</string>
     <string name="episode_settings">Nastavení epizody</string>

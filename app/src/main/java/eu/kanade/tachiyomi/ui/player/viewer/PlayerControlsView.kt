@@ -88,7 +88,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
-        binding.cycleDecoderBtn.setOnLongClickListener { activity.viewModel.showDefaultDecoder(); true }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -165,14 +164,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 this.imageTintList =
                     ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
                 this.isClickable = plPos != plCount - 1
-            }
-        }
-    }
-
-    internal suspend fun updateDecoderButton() {
-        withUIContext {
-            if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
-                binding.cycleDecoderBtn.text = HwDecState.mode.title
             }
         }
     }

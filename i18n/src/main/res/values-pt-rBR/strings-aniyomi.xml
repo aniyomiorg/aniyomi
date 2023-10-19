@@ -247,7 +247,7 @@
     <string name="pref_player_fullscreen">Mostrar conteúdo no recorte de exibição</string>
     <string name="enable_volume_brightness_gestures">Ativar Gestos de Volume e Brilho</string>
     <string name="pref_default_intro_length">Duração padrão do pulo de abertura</string>
-    <string name="player_hwdec_dialog_title">Definir o modo de decodificação de hardware padrão</string>
+    <string name="player_hwdec_mode">Definir o modo de decodificação de hardware padrão</string>
     <string name="rotation_sensor_landscape">Paisagem (Sensor)</string>
     <string name="download_ahead_info_anime">Funciona apenas em entradas na biblioteca e se o episódio atual e o próximo já estiverem baixados</string>
     <string name="rotation_reverse_landscape">Paisagem reversa</string>

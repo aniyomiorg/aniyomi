@@ -198,7 +198,7 @@
     <string name="notification_episodes_single">Episodi %1$s</string>
     <string name="player_aniskip_dontskip_toast">Salta en %d segons</string>
     <string name="player_aniskip_skip">%s saltats</string>
-    <string name="player_hwdec_dialog_title">Establir per defecte el mode decodificació per hardware</string>
+    <string name="player_hwdec_mode">Establir per defecte el mode decodificació per hardware</string>
     <string name="episode_settings">Ajustos del episodi</string>
     <string name="quality_dialog_header">Canviar la qualitat del vídeo:</string>
     <string name="want_to_watch">Pendent de visualitzar</string>

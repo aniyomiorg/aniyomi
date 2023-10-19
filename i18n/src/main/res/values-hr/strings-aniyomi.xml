@@ -119,7 +119,7 @@
     <string name="pref_waiting_time_aniskip_10">10 sekunda</string>
     <string name="player_aniskip_dontskip_toast">Preskoči za %d sekunde</string>
     <string name="player_aniskip_skip">%s preskočeno</string>
-    <string name="player_hwdec_dialog_title">Postavi standardni modus hardverskog dekodiranja</string>
+    <string name="player_hwdec_mode">Postavi standardni modus hardverskog dekodiranja</string>
     <string name="notification_episodes_multiple">Epizode %1$s</string>
     <string name="episode_settings">Postavke epizode</string>
     <string name="pref_backup_flags">Opcije za sigurnosne kopije</string>

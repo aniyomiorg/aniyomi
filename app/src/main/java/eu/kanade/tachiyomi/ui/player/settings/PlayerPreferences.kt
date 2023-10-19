@@ -63,7 +63,7 @@ class PlayerPreferences(
     fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
-    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+    fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
 
     fun deband() = preferenceStore.getInt("pref_deband", 0)
 

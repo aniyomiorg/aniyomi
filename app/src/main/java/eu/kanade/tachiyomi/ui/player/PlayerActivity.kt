@@ -49,7 +49,6 @@ import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
@@ -67,7 +66,6 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -353,18 +351,6 @@ class PlayerActivity : BaseActivity() {
                     )
                 }
 
-                is PlayerViewModel.Dialog.DefaultDecoder -> {
-                    fun updateDecoder(newDec: String) {
-                        playerPreferences.standardHwDec().set(newDec)
-                        mpvUpdateHwDec(HwDecState.get(newDec))
-                    }
-                    DefaultDecoderDialog(
-                        currentDecoder = playerPreferences.standardHwDec().get(),
-                        onSelectDecoder = ::updateDecoder,
-                        onDismissRequest = pauseForDialogSheet(),
-                    )
-                }
-
                 is PlayerViewModel.Dialog.SkipIntroLength -> {
                     if (state.anime != null) {
                         SkipIntroLengthDialog(
@@ -532,7 +518,7 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
+        MPVLib.setOptionString("hwdec", playerPreferences.hwDec().get())
         when (playerPreferences.deband().get()) {
             1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             2 -> MPVLib.setOptionString("deband", "yes")
@@ -1244,17 +1230,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun switchDecoder(view: View) {
-        val newHwDec = when (HwDecState.get(player.hwdecActive)) {
-            HwDecState.HW -> if (HwDecState.isHwSupported) HwDecState.HW_PLUS else HwDecState.SW
-            HwDecState.HW_PLUS -> HwDecState.SW
-            HwDecState.SW -> HwDecState.HW
-        }
-        mpvUpdateHwDec(newHwDec)
-        refreshUi()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
     fun cycleSpeed(view: View) {
         player.cycleSpeed()
         refreshUi()
@@ -1287,7 +1262,6 @@ class PlayerActivity : BaseActivity() {
             updatePlaybackStatus(player.paused ?: return@launchUI)
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
-            playerControls.updateDecoderButton()
             playerControls.updateSpeedButton()
             withIOContext { player.loadTracks() }
         }
@@ -1674,11 +1648,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     // mpv events
-
-    private fun mpvUpdateHwDec(hwDec: HwDecState) {
-        MPVLib.setOptionString("hwdec", hwDec.mpvValue)
-        HwDecState.mode = hwDec
-    }
 
     internal fun eventPropertyUi(property: String, value: Long) {
         when (property) {

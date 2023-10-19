@@ -233,7 +233,7 @@
     <string name="player_aniskip_dontskip">Nicht überspringen</string>
     <string name="player_aniskip_dontskip_toast">Wird in %d Sekunden übersprungen</string>
     <string name="player_aniskip_skip">%s übersprungen</string>
-    <string name="player_hwdec_dialog_title">Standard Hardware-Dekodierung wählen</string>
+    <string name="player_hwdec_mode">Standard Hardware-Dekodierung wählen</string>
     <string name="notification_episodes_single">Folge %1$s</string>
     <string name="notification_episodes_single_and_more">Folge %1$s und %2$d mehr</string>
     <string name="notification_episodes_multiple">Folgen %1$s</string>
