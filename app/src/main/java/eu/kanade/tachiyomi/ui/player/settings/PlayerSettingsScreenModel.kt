@@ -81,9 +81,7 @@ class PlayerSettingsScreenModel(
         val overrideSubtitles by preferences.overrideSubtitlesStyle().collectAsState()
 
         val updateOverride = {
-            val overrideType = if (overrideSubtitles) "no" else "force"
             togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-            MPVLib.setPropertyString("sub-ass-override", overrideType)
             if (overrideSubtitles) updateSubtitleOptions()
         }
         Column(

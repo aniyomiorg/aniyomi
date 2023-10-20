@@ -559,9 +559,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerSubtitles() {
-        val overrideType = if (viewModel.playerPreferences.overrideSubtitlesStyle().get()) "force" else "no"
-        MPVLib.setPropertyString("sub-ass-override", overrideType)
-
         if (playerPreferences.rememberSubtitlesDelay().get()) {
             MPVLib.setPropertyDouble("sub-delay", playerPreferences.subtitlesDelay().get().toDouble())
         }
