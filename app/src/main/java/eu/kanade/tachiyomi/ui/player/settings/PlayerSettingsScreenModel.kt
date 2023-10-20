@@ -121,11 +121,11 @@ class PlayerSettingsScreenModel(
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(12.dp),
                 )
                 Text(
                     text = stringResource(id = R.string.player_subtitle_empty_warning),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     maxLines = 1,
                 )
             }

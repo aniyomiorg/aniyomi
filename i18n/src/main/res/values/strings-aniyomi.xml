@@ -328,7 +328,7 @@
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
-    <string name="player_subtitle_empty_warning">This will have no effect as there are no subtitles in this video</string>
+    <string name="player_subtitle_empty_warning">Wont work as there arent any subtitle tracks in this video</string>
     <string name="player_override_subtitle_font">Override subtitle font</string>
     <string name="player_override_subtitle_color">Override subtitle color</string>
     <string name="player_subtitle_delay">Subtitle Delay</string>
