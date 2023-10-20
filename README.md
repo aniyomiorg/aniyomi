@@ -5,13 +5,15 @@
 
 # ![app icon](.github/readme-images/app-icon.png)Kuukiyomi
 Kuukiyomi is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
-This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY and TachiyomiJ2K
+This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
 
 ## Features
 
 Features include:
 * Kuukiyomi:
   * resmush.it(Data Saver Provider)
+  * Group by tags in library
+  * Discord Rich Presence for Manga
 * Aniyomi:
   * Watching anime from [a variety of sources](https://github.com/aniyomiorg/aniyomi-extensions)
 * Everything you know and love about Tachiyomi: 
@@ -26,6 +28,10 @@ Features include:
 * Other fork features:
   * TachiyomiSY:
     * Data Saver
+    * Edit Info
+    * Library Grouping
+  * Animiru:
+    * Discord Rich Presence
 
 ## Download
 Get the app from the [releases page](https://github.com/LuftVerbot/kuukiyomi/releases).
