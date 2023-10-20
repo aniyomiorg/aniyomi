@@ -205,7 +205,6 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             chapterCache.clear()
             episodeCache.clear()
         }
-
     }
 
     override fun getPackageName(): String {
