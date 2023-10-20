@@ -6,13 +6,13 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 
 @Suppress("OverridingDeprecatedMember")
-class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
+class StubAnimeSource(
+    override val id: Long,
+    override val lang: String,
+    override val name: String,
+) : AnimeSource {
 
-    override val id: Long = sourceData.id
-
-    override val name: String = sourceData.name.ifBlank { id.toString() }
-
-    override val lang: String = sourceData.lang
+    val isInvalid: Boolean = name.isBlank() || lang.isBlank()
 
     override suspend fun getAnimeDetails(anime: SAnime): SAnime {
         throw AnimeSourceNotInstalledException()
@@ -27,7 +27,7 @@ class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
     }
 
     override fun toString(): String {
-        return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
+        return if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
     }
 }
 class AnimeSourceNotInstalledException : Exception()

@@ -3,6 +3,7 @@ package eu.kanade.presentation.library.anime
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,13 +17,11 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.PagerState
 
 @Composable
 fun AnimeLibraryPager(
     state: PagerState,
     contentPadding: PaddingValues,
-    pageCount: Int,
     hasActiveFilters: Boolean,
     selectedAnime: List<LibraryAnime>,
     searchQuery: String?,
@@ -35,7 +34,6 @@ fun AnimeLibraryPager(
     onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
     HorizontalPager(
-        count = pageCount,
         modifier = Modifier.fillMaxSize(),
         state = state,
         verticalAlignment = Alignment.Top,

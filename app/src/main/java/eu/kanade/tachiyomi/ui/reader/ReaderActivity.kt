@@ -6,18 +6,15 @@ import android.app.ProgressDialog
 import android.app.assist.AssistContent
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
-import android.graphics.drawable.RippleDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
-import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -29,25 +26,27 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.core.transition.doOnEnd
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.slider.Slider
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.entries.manga.model.orientationType
+import eu.kanade.presentation.reader.ChapterNavigator
+import eu.kanade.presentation.reader.PageIndicatorText
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
@@ -69,20 +68,19 @@ import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsSheet
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
-import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
-import eu.kanade.tachiyomi.util.system.getThemeColor
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.copy
 import eu.kanade.tachiyomi.util.view.popupMenu
+import eu.kanade.tachiyomi.util.view.setComposeContent
 import eu.kanade.tachiyomi.util.view.setTooltip
 import eu.kanade.tachiyomi.widget.listener.SimpleAnimationListener
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -95,6 +93,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import org.jsoup.internal.StringUtil.padding
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
@@ -105,7 +104,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
-import kotlin.math.max
 
 class ReaderActivity : BaseActivity() {
 
@@ -121,9 +119,6 @@ class ReaderActivity : BaseActivity() {
         // AM (CONNECTIONS) -->
         private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
         // <-- AM (CONNECTIONS)
-
-        private const val ENABLED_BUTTON_IMAGE_ALPHA = 255
-        private const val DISABLED_BUTTON_IMAGE_ALPHA = 64
     }
 
     private val readerPreferences: ReaderPreferences by injectLazy()
@@ -135,12 +130,6 @@ class ReaderActivity : BaseActivity() {
     private var assistUrl: String? = null
 
     val hasCutout by lazy { hasDisplayCutout() }
-
-    /**
-     * Viewer used to display the pages (pager, webtoon, ...).
-     */
-    var viewer: BaseViewer? = null
-        private set
 
     /**
      * Whether the menu is currently visible.
@@ -268,8 +257,7 @@ class ReaderActivity : BaseActivity() {
      */
     override fun onDestroy() {
         super.onDestroy()
-        viewer?.destroy()
-        viewer = null
+        viewModel.state.value.viewer?.destroy()
         config = null
         menuToggleToast?.cancel()
         readingModeToast?.cancel()
@@ -382,7 +370,7 @@ class ReaderActivity : BaseActivity() {
      * Dispatches a key event. If the viewer doesn't handle it, call the default implementation.
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        val handled = viewer?.handleKeyEvent(event) ?: false
+        val handled = viewModel.state.value.viewer?.handleKeyEvent(event) ?: false
         return handled || super.dispatchKeyEvent(event)
     }
 
@@ -391,7 +379,7 @@ class ReaderActivity : BaseActivity() {
      * implementation.
      */
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
-        val handled = viewer?.handleGenericMotionEvent(event) ?: false
+        val handled = viewModel.state.value.viewer?.handleGenericMotionEvent(event) ?: false
         return handled || super.dispatchGenericMotionEvent(event)
     }
 
@@ -428,42 +416,35 @@ class ReaderActivity : BaseActivity() {
             }
         }
 
-        // Init listeners on bottom menu
-        binding.pageSlider.addOnSliderTouchListener(
-            object : Slider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: Slider) {
-                    isScrollingThroughPages = true
-                }
+        binding.pageNumber.setComposeContent {
+            val state by viewModel.state.collectAsState()
 
-                override fun onStopTrackingTouch(slider: Slider) {
-                    isScrollingThroughPages = false
-                }
-            },
-        )
-        binding.pageSlider.addOnChangeListener { slider, value, fromUser ->
-            if (viewer != null && fromUser) {
-                isScrollingThroughPages = true
-                moveToPageIndex(value.toInt())
-                slider.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            }
+            PageIndicatorText(
+                currentPage = state.currentPage,
+                totalPages = state.totalPages,
+            )
         }
-        binding.leftChapter.setOnClickListener {
-            if (viewer != null) {
-                if (viewer is R2LPagerViewer) {
-                    loadNextChapter()
-                } else {
-                    loadPreviousChapter()
-                }
-            }
-        }
-        binding.rightChapter.setOnClickListener {
-            if (viewer != null) {
-                if (viewer is R2LPagerViewer) {
-                    loadPreviousChapter()
-                } else {
-                    loadNextChapter()
-                }
-            }
+
+        // Init listeners on bottom menu
+        binding.readerNav.setComposeContent {
+            val state by viewModel.state.collectAsState()
+
+            if (state.viewer == null) return@setComposeContent
+            val isRtl = state.viewer is R2LPagerViewer
+
+            ChapterNavigator(
+                isRtl = isRtl,
+                onNextChapter = ::loadNextChapter,
+                enabledNext = state.viewerChapters?.nextChapter != null,
+                onPreviousChapter = ::loadPreviousChapter,
+                enabledPrevious = state.viewerChapters?.prevChapter != null,
+                currentPage = state.currentPage,
+                totalPages = state.totalPages,
+                onSliderValueChange = {
+                    isScrollingThroughPages = true
+                    moveToPageIndex(it)
+                },
+            )
         }
 
         initBottomShortcuts()
@@ -473,18 +454,6 @@ class ReaderActivity : BaseActivity() {
             alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
         }
         binding.toolbarBottom.background = toolbarBackground.copy(this@ReaderActivity)
-
-        binding.readerSeekbar.background = toolbarBackground.copy(this@ReaderActivity)?.apply {
-            setCornerSize(999F)
-        }
-        listOf(binding.leftChapter, binding.rightChapter).forEach {
-            it.background = binding.readerSeekbar.background.copy(this)
-            it.foreground = RippleDrawable(
-                ColorStateList.valueOf(getThemeColor(android.R.attr.colorControlHighlight)),
-                null,
-                it.background,
-            )
-        }
 
         val toolbarColor = ColorUtils.setAlphaComponent(
             toolbarBackground.resolvedTintColor,
@@ -679,7 +648,7 @@ class ReaderActivity : BaseActivity() {
      * and the toolbar title.
      */
     private fun setManga(manga: Manga) {
-        val prevViewer = viewer
+        val prevViewer = viewModel.state.value.viewer
 
         val viewerMode = ReadingModeType.fromPreference(viewModel.getMangaReadingMode(resolveDefault = false))
         binding.actionReadingMode.setImageResource(viewerMode.iconRes)
@@ -701,7 +670,7 @@ class ReaderActivity : BaseActivity() {
             prevViewer.destroy()
             binding.viewerContainer.removeAllViews()
         }
-        viewer = newViewer
+        viewModel.onViewerLoaded(newViewer)
         updateViewerInset(readerPreferences.fullscreen().get())
         binding.viewerContainer.addView(newViewer.getView())
 
@@ -710,15 +679,6 @@ class ReaderActivity : BaseActivity() {
         }
 
         supportActionBar?.title = manga.title
-
-        binding.pageSlider.isRTL = newViewer is R2LPagerViewer
-        if (newViewer is R2LPagerViewer) {
-            binding.leftChapter.setTooltip(R.string.action_next_chapter)
-            binding.rightChapter.setTooltip(R.string.action_previous_chapter)
-        } else {
-            binding.leftChapter.setTooltip(R.string.action_previous_chapter)
-            binding.rightChapter.setTooltip(R.string.action_next_chapter)
-        }
 
         val loadingIndicatorContext = createReaderThemeContext()
         loadingIndicator = ReaderProgressIndicator(loadingIndicatorContext).apply {
@@ -759,25 +719,8 @@ class ReaderActivity : BaseActivity() {
      */
     private fun setChapters(viewerChapters: ViewerChapters) {
         binding.readerContainer.removeView(loadingIndicator)
-        viewer?.setChapters(viewerChapters)
+        viewModel.state.value.viewer?.setChapters(viewerChapters)
         binding.toolbar.subtitle = viewerChapters.currChapter.chapter.name
-
-        val currentChapterPageCount = viewerChapters.currChapter.pages?.size ?: 1
-        binding.readerSeekbar.isInvisible = currentChapterPageCount == 1
-
-        val leftChapterObject = if (viewer is R2LPagerViewer) viewerChapters.nextChapter else viewerChapters.prevChapter
-        val rightChapterObject = if (viewer is R2LPagerViewer) viewerChapters.prevChapter else viewerChapters.nextChapter
-
-        if (leftChapterObject == null && rightChapterObject == null) {
-            binding.leftChapter.isVisible = false
-            binding.rightChapter.isVisible = false
-        } else {
-            binding.leftChapter.isEnabled = leftChapterObject != null
-            binding.leftChapter.imageAlpha = if (leftChapterObject != null) ENABLED_BUTTON_IMAGE_ALPHA else DISABLED_BUTTON_IMAGE_ALPHA
-
-            binding.rightChapter.isEnabled = rightChapterObject != null
-            binding.rightChapter.imageAlpha = if (rightChapterObject != null) ENABLED_BUTTON_IMAGE_ALPHA else DISABLED_BUTTON_IMAGE_ALPHA
-        }
 
         // Invalidate menu to show proper chapter bookmark state
         invalidateOptionsMenu()
@@ -806,7 +749,7 @@ class ReaderActivity : BaseActivity() {
      * other cases are handled with chapter transitions on the viewers and chapter preloading.
      */
     @Suppress("DEPRECATION")
-    fun setProgressDialog(show: Boolean) {
+    private fun setProgressDialog(show: Boolean) {
         progressDialog?.dismiss()
         progressDialog = if (show) {
             ProgressDialog.show(this, null, getString(R.string.loading), true)
@@ -820,7 +763,7 @@ class ReaderActivity : BaseActivity() {
      * page is not found.
      */
     private fun moveToPageIndex(index: Int) {
-        val viewer = viewer ?: return
+        val viewer = viewModel.state.value.viewer ?: return
         val currentChapter = viewModel.getCurrentChapter() ?: return
         val page = currentChapter.pages?.getOrNull(index) ?: return
         viewer.moveToPage(page)
@@ -855,24 +798,6 @@ class ReaderActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     fun onPageSelected(page: ReaderPage) {
         viewModel.onPageSelected(page)
-        val pages = page.chapter.pages ?: return
-
-        // Set bottom page number
-        binding.pageNumber.text = "${page.number}/${pages.size}"
-
-        // Set page numbers
-        if (viewer !is R2LPagerViewer) {
-            binding.leftPageText.text = "${page.number}"
-            binding.rightPageText.text = "${pages.size}"
-        } else {
-            binding.rightPageText.text = "${page.number}"
-            binding.leftPageText.text = "${pages.size}"
-        }
-
-        // Set slider progress
-        binding.pageSlider.isEnabled = pages.size > 1
-        binding.pageSlider.valueTo = max(pages.lastIndex.toFloat(), 1f)
-        binding.pageSlider.value = page.index.toFloat()
     }
 
     /**
@@ -1000,7 +925,7 @@ class ReaderActivity : BaseActivity() {
      * Updates viewer inset depending on fullscreen reader preferences.
      */
     fun updateViewerInset(fullscreen: Boolean) {
-        viewer?.getView()?.applyInsetter {
+        viewModel.state.value.viewer?.getView()?.applyInsetter {
             if (!fullscreen) {
                 type(navigationBars = true, statusBars = true) {
                     padding()

@@ -23,7 +23,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
@@ -34,6 +39,7 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
@@ -76,6 +82,10 @@ class AnimeDownloadCache(
         .debounce(1000L) // Don't notify if it finishes quickly enough
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
+    private val diskCacheFile: File
+        get() = File(context.cacheDir, "dl_index_cache")
+
+    private val rootDownloadsDirLock = Mutex()
     private var rootDownloadsDir = RootDirectory(getDirectoryFromPreference())
 
     init {
@@ -85,6 +95,21 @@ class AnimeDownloadCache(
                 invalidateCache()
             }
             .launchIn(scope)
+
+        // Attempt to read cache file
+        scope.launch {
+            rootDownloadsDirLock.withLock {
+                try {
+                    val diskCache = diskCacheFile.inputStream().use {
+                        ProtoBuf.decodeFromByteArray<RootDirectory>(it.readBytes())
+                    }
+                    rootDownloadsDir = diskCache
+                    lastRenew = System.currentTimeMillis()
+                } catch (e: Throwable) {
+                    diskCacheFile.delete()
+                }
+            }
+        }
     }
 
     /**

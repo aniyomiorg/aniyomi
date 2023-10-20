@@ -4,9 +4,9 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.TabIndicator
-import tachiyomi.presentation.core.components.rememberPagerState
 
 object TabbedDialogPaddings {
     val Horizontal = 24.dp
@@ -43,13 +42,13 @@ fun TabbedDialog(
     onDismissRequest: () -> Unit,
     tabTitles: List<String>,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
-    content: @Composable (PaddingValues, Int) -> Unit,
+    content: @Composable (Int) -> Unit,
 ) {
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,
-    ) { contentPadding ->
+    ) {
         val scope = rememberCoroutineScope()
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState { tabTitles.size }
 
         Column {
             Row {
@@ -84,11 +83,10 @@ fun TabbedDialog(
 
             HorizontalPager(
                 modifier = Modifier.animateContentSize(),
-                count = tabTitles.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
             ) { page ->
-                content(contentPadding, page)
+                content(page)
             }
         }
     }

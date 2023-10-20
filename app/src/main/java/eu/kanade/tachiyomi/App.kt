@@ -29,6 +29,8 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
 import eu.kanade.tachiyomi.crash.CrashActivity
 import eu.kanade.tachiyomi.crash.GlobalExceptionHandler
+import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
 import eu.kanade.tachiyomi.data.coil.AnimeKeyer
@@ -59,6 +61,7 @@ import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
 import tachiyomi.presentation.widget.entries.manga.TachiyomiMangaWidgetManager
 import uy.kohesive.injekt.Injekt
@@ -69,9 +72,12 @@ import java.security.Security
 class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
     private val basePreferences: BasePreferences by injectLazy()
+    private val libraryPreferences: LibraryPreferences by injectLazy()
     private val networkPreferences: NetworkPreferences by injectLazy()
 
     private val disableIncognitoReceiver = DisableIncognitoReceiver()
+    private val chapterCache: ChapterCache by injectLazy()
+    private val episodeCache: EpisodeCache by injectLazy()
 
     @SuppressLint("LaunchActivityFromNotification")
     override fun onCreate() {
@@ -190,9 +196,16 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
     override fun onStop(owner: LifecycleOwner) {
         SecureActivityDelegate.onApplicationStopped()
+
         // AM (DISCORD) -->
         DiscordRPCService.stop(applicationContext)
         // <-- AM (DISCORD)
+
+        if (libraryPreferences.autoClearItemCache().get()) {
+            chapterCache.clear()
+            episodeCache.clear()
+        }
+
     }
 
     override fun getPackageName(): String {

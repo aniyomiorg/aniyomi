@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState.Companion.get
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
@@ -35,6 +36,7 @@ import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
 import eu.kanade.tachiyomi.util.chapter.removeDuplicates
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -404,6 +406,14 @@ class ReaderViewModel(
         eventChannel.trySend(Event.ReloadViewerChapters)
     }
 
+    fun onViewerLoaded(viewer: Viewer?) {
+        mutableState.update {
+            it.copy(
+                viewer = viewer,
+            )
+        }
+    }
+
     /**
      * Called every time a page changes on the reader. Used to mark the flag of chapters being
      * read, update tracking services, enqueue downloaded chapter deletion, and updating the active chapter if this
@@ -420,6 +430,11 @@ class ReaderViewModel(
         }
 
         // Save last page read and mark as read if needed
+        mutableState.update {
+            it.copy(
+                currentPage = page.index + 1,
+            )
+        }
         selectedChapter.chapter.last_page_read = page.index
         val shouldTrack = !incognitoMode || hasTrackers
         if (selectedChapter.pages?.lastIndex == page.index && shouldTrack) {
@@ -884,7 +899,16 @@ class ReaderViewModel(
         val source: MangaSource? = null,
         val viewerChapters: ViewerChapters? = null,
         val isLoadingAdjacentChapter: Boolean = false,
-    )
+        val currentPage: Int = -1,
+
+        /**
+         * Viewer used to display the pages (pager, webtoon, ...).
+         */
+        val viewer: Viewer? = null,
+    ) {
+        val totalPages: Int
+            get() = viewerChapters?.currChapter?.pages?.size ?: -1
+    }
 
     sealed class Event {
         object ReloadViewerChapters : Event()

@@ -74,15 +74,12 @@ import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
-import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
@@ -115,6 +112,7 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -128,9 +126,6 @@ class MainActivity : BaseActivity() {
     private val libraryPreferences: LibraryPreferences by injectLazy()
     private val uiPreferences: UiPreferences by injectLazy()
     private val preferences: BasePreferences by injectLazy()
-
-    private val episodeCache: EpisodeCache by injectLazy()
-    private val chapterCache: ChapterCache by injectLazy()
 
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
@@ -386,7 +381,7 @@ class MainActivity : BaseActivity() {
             if (BuildConfig.INCLUDE_UPDATER) {
                 try {
                     val result = AppUpdateChecker().checkForUpdate(context)
-                    if (result is AppUpdateResult.NewUpdate) {
+                    if (result is GetApplicationRelease.Result.NewUpdate) {
                         val updateScreen = NewUpdateScreen(
                             versionName = result.release.version,
                             changelogInfo = result.release.info,
@@ -525,17 +520,6 @@ class MainActivity : BaseActivity() {
 
         ready = true
         return true
-    }
-
-    override fun onBackPressed() {
-        if (navigator?.size == 1 &&
-            !onBackPressedDispatcher.hasEnabledCallbacks() &&
-            libraryPreferences.autoClearItemCache().get()
-        ) {
-            chapterCache.clear()
-            episodeCache.clear()
-        }
-        super.onBackPressed()
     }
 
     init {

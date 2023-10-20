@@ -2,18 +2,18 @@ package tachiyomi.data.source.manga
 
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.domain.source.manga.model.MangaSourceData
-import tachiyomi.domain.source.manga.repository.MangaSourceDataRepository
+import tachiyomi.domain.source.manga.model.StubMangaSource
+import tachiyomi.domain.source.manga.repository.MangaStubSourceRepository
 
-class MangaSourceDataRepositoryImpl(
+class MangaStubSourceRepositoryImpl(
     private val handler: MangaDatabaseHandler,
-) : MangaSourceDataRepository {
+) : MangaStubSourceRepository {
 
-    override fun subscribeAllManga(): Flow<List<MangaSourceData>> {
+    override fun subscribeAllManga(): Flow<List<StubMangaSource>> {
         return handler.subscribeToList { sourcesQueries.findAll(mangaSourceDataMapper) }
     }
 
-    override suspend fun getMangaSourceData(id: Long): MangaSourceData? {
+    override suspend fun getStubMangaSource(id: Long): StubMangaSource? {
         return handler.awaitOneOrNull {
             sourcesQueries.findOne(
                 id,
@@ -22,7 +22,7 @@ class MangaSourceDataRepositoryImpl(
         }
     }
 
-    override suspend fun upsertMangaSourceData(id: Long, lang: String, name: String) {
+    override suspend fun upsertStubMangaSource(id: Long, lang: String, name: String) {
         handler.await { sourcesQueries.upsert(id, lang, name) }
     }
 }

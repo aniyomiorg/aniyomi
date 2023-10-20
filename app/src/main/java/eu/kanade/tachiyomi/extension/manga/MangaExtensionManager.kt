@@ -6,12 +6,12 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
-import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
+import eu.kanade.tachiyomi.source.manga.toStubSource
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
@@ -22,7 +22,7 @@ import rx.Observable
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.source.manga.model.MangaSourceData
+import tachiyomi.domain.source.manga.model.StubMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Locale
@@ -73,12 +73,12 @@ class MangaExtensionManager(
     private val _availableExtensionsFlow = MutableStateFlow(emptyList<MangaExtension.Available>())
     val availableExtensionsFlow = _availableExtensionsFlow.asStateFlow()
 
-    private var availableExtensionsSourcesData: Map<Long, MangaSourceData> = emptyMap()
+    private var availableExtensionsSourcesData: Map<Long, StubMangaSource> = emptyMap()
 
     private fun setupAvailableExtensionsSourcesDataMap(extensions: List<MangaExtension.Available>) {
         if (extensions.isEmpty()) return
         availableExtensionsSourcesData = extensions
-            .flatMap { ext -> ext.sources.map { it.toSourceData() } }
+            .flatMap { ext -> ext.sources.map { it.toStubSource() } }
             .associateBy { it.id }
     }
 
@@ -145,8 +145,8 @@ class MangaExtensionManager(
         // Use the source lang as some aren't present on the extension level.
         val availableLanguages = extensions
             .flatMap(MangaExtension.Available::sources)
-            .distinctBy(AvailableMangaSources::lang)
-            .map(AvailableMangaSources::lang)
+            .distinctBy(MangaExtension.Available.MangaSource::lang)
+            .map(MangaExtension.Available.MangaSource::lang)
 
         val deviceLanguage = Locale.getDefault().language
         val defaultLanguages = preferences.enabledLanguages().defaultValue()

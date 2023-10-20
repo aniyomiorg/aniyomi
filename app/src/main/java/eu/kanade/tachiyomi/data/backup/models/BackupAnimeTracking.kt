@@ -28,6 +28,7 @@ data class BackupAnimeTracking(
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
+    @Suppress("DEPRECATION")
     fun getTrackingImpl(): AnimeTrack {
         return AnimeTrack(
             id = -1,

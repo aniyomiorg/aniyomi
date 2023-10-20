@@ -62,7 +62,7 @@
     <string name="pref_category_tracking">Tracking</string>
     <string name="pref_category_advanced">Erweitert</string>
     <string name="pref_category_about">Über</string>
-    <string name="pref_library_columns">Elemente pro Zeile</string>
+    <string name="pref_library_columns">Kachelgröße</string>
     <string name="portrait">Hochformat</string>
     <string name="landscape">Querformat</string>
     <string name="pref_library_update_interval">Automatische Aktualisierungen</string>
@@ -91,10 +91,10 @@
     <string name="white_background">Weiß</string>
     <string name="black_background">Schwarz</string>
     <string name="pref_viewer_type">Standard-Lesemodus</string>
-    <string name="left_to_right_viewer">Links nach rechts</string>
-    <string name="right_to_left_viewer">Rechts nach links</string>
-    <string name="vertical_viewer">Vertikal</string>
-    <string name="webtoon_viewer">Webtoon</string>
+    <string name="left_to_right_viewer">Seiten (links nach rechts)</string>
+    <string name="right_to_left_viewer">Seiten (rechts nach links)</string>
+    <string name="vertical_viewer">Seiten (vertikal)</string>
+    <string name="webtoon_viewer">Langer Streifen</string>
     <string name="pref_image_scale_type">Skalierung</string>
     <string name="scale_type_fit_screen">Bild ausfüllen</string>
     <string name="scale_type_stretch">Strecken</string>
@@ -351,11 +351,11 @@
     <string name="pref_category_reading">Beim Lesen</string>
     <string name="label_sources">Quellen</string>
     <string name="action_select_inverse">Auswahl umkehren</string>
-    <string name="vertical_plus_viewer">Kontinuierlich vertikal</string>
-    <string name="webtoon_side_padding_25">25 %</string>
-    <string name="webtoon_side_padding_20">20 %</string>
-    <string name="webtoon_side_padding_15">15 %</string>
-    <string name="webtoon_side_padding_10">10 %</string>
+    <string name="vertical_plus_viewer">Langer Streifen mit Lücken</string>
+    <string name="webtoon_side_padding_25">25%</string>
+    <string name="webtoon_side_padding_20">20%</string>
+    <string name="webtoon_side_padding_15">15%</string>
+    <string name="webtoon_side_padding_10">10%</string>
     <string name="webtoon_side_padding_0">Keine</string>
     <string name="pref_webtoon_side_padding">Seitenränder</string>
     <string name="pinned_sources">Angeheftet</string>
@@ -469,7 +469,7 @@
     <string name="downloaded_chapters">Heruntergeladene Kapitel</string>
     <string name="pref_incognito_mode">Inkognito-Modus</string>
     <string name="pref_clear_history">Verlauf löschen</string>
-    <string name="clear_history_confirmation">Bist du sicher\? Der gesamte Verlauf wird verloren sein.</string>
+    <string name="clear_history_confirmation">Bist du sicher\? Der gesamte Verlauf wird gelöscht.</string>
     <string name="clear_history_completed">Verlauf gelöscht</string>
     <string name="spen_next_page">Nächste Seite</string>
     <string name="spen_previous_page">Vorherige Seite</string>
@@ -613,10 +613,10 @@
     <string name="on_hiatus">Unterbrochen</string>
     <string name="publishing_finished">Veröffentlichung abgeschlossen</string>
     <string name="action_faq_and_guides">Häufige Fragen und Leitfäden</string>
-    <string name="webtoon_side_padding_5">5 %</string>
+    <string name="webtoon_side_padding_5">5%</string>
     <string name="action_display_cover_only_grid">Nur-Cover-Kacheln</string>
     <string name="pref_landscape_zoom">Bild im Querformat vergrößern</string>
-    <string name="pref_navigate_pan">Beim Tippen innerhalb breiter Seiten navigieren</string>
+    <string name="pref_navigate_pan">Innerhalb breiter Seiten navigieren</string>
     <string name="action_filter_started">Angefangen</string>
     <string name="pref_update_only_started">Die noch nicht begonnen wurden</string>
     <string name="skipped_reason_completed">Übersprungen, da die Serie abgeschlossen ist</string>
@@ -631,7 +631,7 @@
     <string name="disabled_nav">Deaktiviert</string>
     <string name="error_saving_picture">Fehler beim Speichern des Bildes</string>
     <string name="update_check_fdroid_migration_info">Eine neue Version ist aus dem offiziellen Repository verfügbar. Tippe, um zu erfahren, wie man aus inoffiziellen F-Droid-Versionen migriert.</string>
-    <string name="empty_backup_error">Keine zu sichernden Bibliothekseinträge</string>
+    <string name="empty_backup_error">Keine zu sichernden Bibliothekseinträge verfügbar</string>
     <string name="update_check_open">Auf GitHub öffnen</string>
     <string name="pref_clear_webview_data">WebView-Daten löschen</string>
     <string name="webview_data_deleted">WebView-Daten gelöscht</string>
@@ -697,7 +697,7 @@
     <string name="pref_appearance_summary">Thema, Datums- und Zeitformat</string>
     <string name="pref_reader_summary">Lesemodus, Anzeige, Navigation</string>
     <string name="pref_downloads_summary">Automatische Downloads, im Voraus herunterladen</string>
-    <string name="pref_library_summary">Kategorien, globale Aktualisierungen</string>
+    <string name="pref_library_summary">Kategorien, globale Aktualisierungen, Kapitelstreichen</string>
     <string name="crash_screen_restart_application">Anwendung neustarten</string>
     <string name="pref_tracking_summary">Einweg-Synchronisation, erweiterte Synchronisation</string>
     <string name="pref_browse_summary">Quellen, Erweiterungen, globale Suche</string>
@@ -739,4 +739,10 @@
     </plurals>
     <string name="missing_items_unknown">Es könnten Kapitel fehlen</string>
     <string name="pref_page_rotate_invert">Ausrichtung gedrehter breiter Seiten spiegeln</string>
+    <string name="pref_debug_info">Debug-Info</string>
+    <string name="pref_chapter_swipe">Kapitelstreichen</string>
+    <string name="pref_chapter_swipe_end">Aktion beim Streichen nach rechts</string>
+    <string name="pref_chapter_swipe_start">Aktion beim Streichen nach links</string>
+    <string name="pref_double_tap_zoom">Zum Zoomen doppeltippen</string>
+    <string name="pref_library_columns_per_row">%d pro Zeile</string>
     </resources>

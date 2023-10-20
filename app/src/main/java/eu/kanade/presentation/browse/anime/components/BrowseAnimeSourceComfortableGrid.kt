@@ -40,7 +40,7 @@ fun BrowseAnimeSourceComfortableGrid(
             }
         }
 
-        items(animeList.itemCount) { index ->
+        items(count = animeList.itemCount) { index ->
             val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceComfortableGridItem(
                 anime = anime,

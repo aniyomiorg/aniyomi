@@ -34,9 +34,8 @@ fun BrowseAnimeSourceList(
             }
         }
 
-        items(animeList) { animeflow ->
-            animeflow ?: return@items
-            val anime by animeflow.collectAsState()
+        items(count = animeList.itemCount) { index ->
+            val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceListItem(
                 anime = anime,
                 onClick = { onAnimeClick(anime) },

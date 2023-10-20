@@ -33,9 +33,8 @@ fun BrowseMangaSourceList(
             }
         }
 
-        items(mangaList) { mangaflow ->
-            mangaflow ?: return@items
-            val manga by mangaflow.collectAsState()
+        items(count = mangaList.itemCount) { index ->
+            val manga by mangaList[index]?.collectAsState() ?: return@items
             BrowseMangaSourceListItem(
                 manga = manga,
                 onClick = { onMangaClick(manga) },

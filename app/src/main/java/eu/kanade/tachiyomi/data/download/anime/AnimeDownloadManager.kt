@@ -304,9 +304,11 @@ class AnimeDownloadManager(
         val oldFolder = provider.findSourceDir(oldSource) ?: return
         val newName = provider.getSourceDirName(newSource)
 
+        if (oldFolder.name == newName) return
+
         val capitalizationChanged = oldFolder.name.equals(newName, ignoreCase = true)
         if (capitalizationChanged) {
-            val tempName = newName + "_tmp"
+            val tempName = newName + AnimeDownloader.TMP_DIR_SUFFIX
             if (oldFolder.renameTo(tempName).not()) {
                 logcat(LogPriority.ERROR) { "Failed to rename source download folder: ${oldFolder.name}" }
                 return
@@ -336,6 +338,9 @@ class AnimeDownloadManager(
             .firstOrNull()
 
         val newName = provider.getEpisodeDirName(newEpisode.name, newEpisode.scanlator)
+
+        if (oldFolder?.name == newName) return
+
         if (oldFolder?.renameTo(newName) == true) {
             cache.removeEpisode(oldEpisode, anime)
             cache.addEpisode(newName, animeDir, anime)

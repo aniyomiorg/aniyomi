@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.extension.manga.model
 
 import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.source.MangaSource
-import tachiyomi.domain.source.manga.model.MangaSourceData
+import tachiyomi.domain.source.manga.model.StubMangaSource
 
 sealed class MangaExtension {
 
@@ -44,10 +44,26 @@ sealed class MangaExtension {
         override val isNsfw: Boolean,
         override val hasReadme: Boolean,
         override val hasChangelog: Boolean,
-        val sources: List<AvailableMangaSources>,
+        val sources: List<MangaSource>,
         val apkName: String,
         val iconUrl: String,
-    ) : MangaExtension()
+    ) : MangaExtension() {
+
+        data class MangaSource(
+            val id: Long,
+            val lang: String,
+            val name: String,
+            val baseUrl: String,
+        ) {
+            fun toStubSource(): StubMangaSource {
+                return StubMangaSource(
+                    id = this.id,
+                    lang = this.lang,
+                    name = this.name,
+                )
+            }
+        }
+    }
 
     data class Untrusted(
         override val name: String,
@@ -61,19 +77,4 @@ sealed class MangaExtension {
         override val hasReadme: Boolean = false,
         override val hasChangelog: Boolean = false,
     ) : MangaExtension()
-}
-
-data class AvailableMangaSources(
-    val id: Long,
-    val lang: String,
-    val name: String,
-    val baseUrl: String,
-) {
-    fun toSourceData(): MangaSourceData {
-        return MangaSourceData(
-            id = this.id,
-            lang = this.lang,
-            name = this.name,
-        )
-    }
 }

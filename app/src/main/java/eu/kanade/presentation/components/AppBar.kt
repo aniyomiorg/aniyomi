@@ -19,7 +19,9 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -203,21 +206,37 @@ fun AppBarActions(
     var showMenu by remember { mutableStateOf(false) }
 
     actions.filterIsInstance<AppBar.Action>().map {
-        IconButton(
-            onClick = it.onClick,
-            enabled = it.enabled,
+        PlainTooltipBox(
+            tooltip = { Text(it.title) },
         ) {
-            Icon(
-                imageVector = it.icon,
-                contentDescription = it.title,
-            )
+            IconButton(
+                onClick = it.onClick,
+                enabled = it.enabled,
+                modifier = Modifier.tooltipTrigger(),
+            ) {
+                Icon(
+                    imageVector = it.icon,
+                    tint = it.iconTint ?: LocalContentColor.current,
+                    contentDescription = it.title,
+                )
+            }
         }
     }
 
     val overflowActions = actions.filterIsInstance<AppBar.OverflowAction>()
     if (overflowActions.isNotEmpty()) {
-        IconButton(onClick = { showMenu = !showMenu }) {
-            Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.abc_action_menu_overflow_description))
+        PlainTooltipBox(
+            tooltip = { Text(stringResource(R.string.abc_action_menu_overflow_description)) },
+        ) {
+            IconButton(
+                onClick = { showMenu = !showMenu },
+                modifier = Modifier.tooltipTrigger(),
+            ) {
+                Icon(
+                    Icons.Outlined.MoreVert,
+                    contentDescription = stringResource(R.string.abc_action_menu_overflow_description),
+                )
+            }
         }
 
         DropdownMenu(
@@ -327,17 +346,35 @@ fun SearchToolbar(
                 if (!searchEnabled) {
                     // Don't show search action
                 } else if (searchQuery == null) {
-                    IconButton(onClick) {
-                        Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
+                    PlainTooltipBox(
+                        tooltip = { Text(stringResource(R.string.action_search)) },
+                    ) {
+                        IconButton(
+                            onClick = onClick,
+                            modifier = Modifier.tooltipTrigger(),
+                        ) {
+                            Icon(
+                                Icons.Outlined.Search,
+                                contentDescription = stringResource(R.string.action_search),
+                            )
+                        }
                     }
                 } else if (searchQuery.isNotEmpty()) {
-                    IconButton(
-                        onClick = {
-                            onClick()
-                            focusRequester.requestFocus()
-                        },
+                    PlainTooltipBox(
+                        tooltip = { Text(stringResource(R.string.action_reset)) },
                     ) {
-                        Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_reset))
+                        IconButton(
+                            onClick = {
+                                onClick()
+                                focusRequester.requestFocus()
+                            },
+                            modifier = Modifier.tooltipTrigger(),
+                        ) {
+                            Icon(
+                                Icons.Outlined.Close,
+                                contentDescription = stringResource(R.string.action_reset),
+                            )
+                        }
                     }
                 }
             }
@@ -356,6 +393,7 @@ sealed interface AppBar {
     data class Action(
         val title: String,
         val icon: ImageVector,
+        val iconTint: Color? = null,
         val onClick: () -> Unit,
         val enabled: Boolean = true,
     ) : AppBarAction

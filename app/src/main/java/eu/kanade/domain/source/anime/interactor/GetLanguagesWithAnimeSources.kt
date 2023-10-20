@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
+import java.util.SortedMap
 
 class GetLanguagesWithAnimeSources(
     private val repository: AnimeSourceRepository,
     private val preferences: SourcePreferences,
 ) {
 
-    fun subscribe(): Flow<Map<String, List<AnimeSource>>> {
+    fun subscribe(): Flow<SortedMap<String, List<AnimeSource>>> {
         return combine(
             preferences.enabledLanguages().changes(),
             preferences.disabledAnimeSources().changes(),
@@ -23,7 +24,8 @@ class GetLanguagesWithAnimeSources(
                     .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name },
             )
 
-            sortedSources.groupBy { it.lang }
+            sortedSources
+                .groupBy { it.lang }
                 .toSortedMap(
                     compareBy<String> { it !in enabledLanguage }.then(LocaleHelper.comparator),
                 )
