@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Pindahkan Riwayat ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_updates">Pindahkan Update ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke tab Lainnya</string>
-    <string name="unlock_app">Buka Aniyomi</string>
+    <string name="unlock_app">Buka Kuukiyomi</string>
     <string name="action_filter_unseen">Belum dilihat</string>
     <string name="action_sort_total_episodes">total episode</string>
     <string name="action_sort_last_seen">Terakhir dilihat</string>

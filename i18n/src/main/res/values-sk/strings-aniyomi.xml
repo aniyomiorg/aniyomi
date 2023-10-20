@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategórie Mangy</string>
-    <string name="unlock_app">Odomknúť Tachiyomi</string>
+    <string name="unlock_app">Odomknúť Kuukiyomi</string>
     <string name="action_sort_last_manga_update">Posledná aktualizácia mangy</string>
     <string name="action_show_manga">Zobraziť mangu</string>
     <string name="action_display_local_badge_manga">Lokálna manga</string>

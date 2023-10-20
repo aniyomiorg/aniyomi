@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Mga Kategoriya</string>
-    <string name="unlock_app">I-unlock ang Tachiyomi</string>
+    <string name="unlock_app">I-unlock ang Kuukiyomi</string>
     <string name="action_sort_last_manga_update">Katapusan nga update sa manga</string>
     <string name="action_show_manga">Ipakita ang pagsulod</string>
     <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>

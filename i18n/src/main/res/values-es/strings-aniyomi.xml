@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
-    <string name="unlock_app">Desbloquear Aniyomi</string>
+    <string name="unlock_app">Desbloquear Kuukiyomi</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
     <string name="action_sort_last_seen">Ultimo visto</string>

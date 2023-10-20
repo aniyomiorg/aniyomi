@@ -14,7 +14,7 @@
     <string name="pref_bottom_nav_no_history">Mover Histórico para o separador Mais</string>
     <string name="pref_bottom_nav_no_updates">Mover Atualizações para o separador Mais</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para o separador Mais</string>
-    <string name="unlock_app">Desbloquear o Aniyomi</string>
+    <string name="unlock_app">Desbloquear o Kuukiyomi</string>
     <string name="action_sort_total_episodes">Total de episódios</string>
     <string name="action_sort_last_seen">Visto da última vez</string>
     <string name="action_sort_last_checked">Última verificação</string>

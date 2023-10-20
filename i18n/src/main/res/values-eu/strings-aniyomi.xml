@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategoriak</string>
-    <string name="unlock_app">Desblokeatu Tachiyomi</string>
+    <string name="unlock_app">Desblokeatu Kuukiyomi</string>
     <string name="action_show_manga">Manga erakutsi</string>
     <string name="action_display_local_badge_manga">Manga lokala</string>
     <string name="pref_update_only_completely_read">Irakurri gabeko kapituluak ditu</string>
