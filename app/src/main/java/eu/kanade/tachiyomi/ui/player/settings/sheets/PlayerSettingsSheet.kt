@@ -61,7 +61,7 @@ fun PlayerSettingsSheet(
         ) {
             Text(
                 text = stringResource(id = R.string.settings_dialog_header),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
             )
 
             screenModel.ToggleableRow(

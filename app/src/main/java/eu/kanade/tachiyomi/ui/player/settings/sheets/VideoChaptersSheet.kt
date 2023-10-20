@@ -43,7 +43,7 @@ fun VideoChaptersSheet(
         ) {
             Text(
                 text = stringResource(id = R.string.chapter_dialog_header),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
             )
 
             videoChapters.forEachIndexed { index, videoChapter ->
