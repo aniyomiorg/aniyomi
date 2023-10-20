@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -62,6 +63,7 @@ fun PlayerSettingsSheet(
             Text(
                 text = stringResource(id = R.string.settings_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 20.sp,
             )
 
             screenModel.ToggleableRow(

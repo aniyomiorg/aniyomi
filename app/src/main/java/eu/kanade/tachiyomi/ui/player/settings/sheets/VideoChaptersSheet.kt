@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
@@ -44,6 +45,7 @@ fun VideoChaptersSheet(
             Text(
                 text = stringResource(id = R.string.chapter_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
+                fontSize = 20.sp,
             )
 
             videoChapters.forEachIndexed { index, videoChapter ->
