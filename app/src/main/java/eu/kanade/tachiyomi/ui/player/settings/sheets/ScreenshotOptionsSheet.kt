@@ -91,38 +91,12 @@ fun ScreenshotOptionsSheet(
     }
 
     if (showSetCoverDialog) {
-        SetCoverDialog(
-            onConfirm = {
-                onSetAsCover { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! }
-                showSetCoverDialog = false
-            },
-            onDismiss = { showSetCoverDialog = false },
+        PlayerDialog(
+            titleRes = R.string.confirm_set_image_as_cover,
+            modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.padding.medium),
+            onConfirmRequest = { onSetAsCover { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! } },
+            onDismissRequest = { showSetCoverDialog = false },
         )
-    }
-}
-
-// TODO: (Merge_Change) stringResource "android.R.string.ok" to be replaced with
-//  "R.string.action_ok"
-
-@Composable
-private fun SetCoverDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    PlayerDialog(
-        titleRes = R.string.confirm_set_image_as_cover,
-        modifier = Modifier.fillMaxWidth(fraction = 0.4F).padding(MaterialTheme.padding.medium),
-        onDismissRequest = onDismiss,
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = onConfirm) {
-                Text(stringResource(android.R.string.ok))
-            }
-
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.action_cancel))
-            }
-        }
     }
 }
 

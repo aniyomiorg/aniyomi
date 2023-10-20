@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.FormatItalic
@@ -55,9 +56,9 @@ private fun SubtitleFont(
         MPVLib.setPropertyString("sub-italic", toItalicize)
     }
 
-    val textColor = Color(screenModel.preferences.textColorSubtitles().get())
-    val borderColor = Color(screenModel.preferences.borderColorSubtitles().get())
-    val backgroundColor = Color(screenModel.preferences.backgroundColorSubtitles().get())
+    val textColorPref = screenModel.preferences.textColorSubtitles()
+    val borderColorPref = screenModel.preferences.borderColorSubtitles()
+    val backgroundColorPref = screenModel.preferences.backgroundColorSubtitles()
 
     val onSizeChanged: (Int) -> Unit = {
         MPVLib.setPropertyInt("sub-font-size", it)
@@ -111,11 +112,11 @@ private fun SubtitleFont(
         }
 
         SubtitlePreview(
-            isBold = screenModel.preferences.boldSubtitles().get(),
-            isItalic = screenModel.preferences.italicSubtitles().get(),
-            textColor = textColor,
-            borderColor = borderColor,
-            backgroundColor = backgroundColor,
+            isBold = screenModel.preferences.boldSubtitles().collectAsState().value,
+            isItalic = screenModel.preferences.italicSubtitles().collectAsState().value,
+            textColor = Color(textColorPref.collectAsState().value),
+            borderColor = Color(borderColorPref.collectAsState().value),
+            backgroundColor = Color(backgroundColorPref.collectAsState().value),
         )
     }
 }

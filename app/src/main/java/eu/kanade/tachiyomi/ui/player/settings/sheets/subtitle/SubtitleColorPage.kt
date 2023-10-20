@@ -89,8 +89,8 @@ private fun SubtitleColors(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         SubtitlePreview(
-            isBold = screenModel.preferences.boldSubtitles().get(),
-            isItalic = screenModel.preferences.italicSubtitles().get(),
+            isBold = screenModel.preferences.boldSubtitles().collectAsState().value,
+            isItalic = screenModel.preferences.italicSubtitles().collectAsState().value,
             textColor = Color(textColorPref.collectAsState().value),
             borderColor = Color(borderColorPref.collectAsState().value),
             backgroundColor = Color(backgroundColorPref.collectAsState().value),

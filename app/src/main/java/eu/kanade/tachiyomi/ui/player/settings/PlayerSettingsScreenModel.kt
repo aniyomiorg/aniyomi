@@ -17,17 +17,23 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
+import eu.kanade.presentation.components.preferences
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import eu.kanade.tachiyomi.util.preference.toggle
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
+import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -85,6 +91,11 @@ class PlayerSettingsScreenModel(
             MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
 
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        if (showDialog) {
+            ResetSubtitlesDialog(onDismissRequest = { showDialog = false })
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -97,14 +108,49 @@ class PlayerSettingsScreenModel(
                 isChecked = overrideSubsASS,
                 onClick = updateOverrideASS,
             )
+
+            TextButton(onClick = { showDialog = true }) {
+                Text(stringResource(id = R.string.action_reset))
+            }
         }
+    }
+
+    @Composable
+    private fun ResetSubtitlesDialog(
+        onDismissRequest: () -> Unit,
+    ) {
+        val resetSubtitles = {
+            with(preferences) {
+                overrideSubsASS().delete()
+
+                subtitleFontSize().delete()
+                boldSubtitles().delete()
+                italicSubtitles().delete()
+
+                textColorSubtitles().delete()
+                borderColorSubtitles().delete()
+                backgroundColorSubtitles().delete()
+            }
+        }
+
+        PlayerDialog(
+            titleRes = R.string.player_reset_subtitles,
+            hideSystemBars = true,
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.6F)
+                .padding(MaterialTheme.padding.medium),
+            onConfirmRequest = resetSubtitles,
+            onDismissRequest = onDismissRequest,
+        )
     }
 
     @Composable
     fun NoSubtitlesWarning() {
         if (!hasSubTracks) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
