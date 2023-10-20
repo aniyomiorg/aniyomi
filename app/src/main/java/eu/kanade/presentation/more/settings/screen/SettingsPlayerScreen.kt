@@ -398,4 +398,5 @@ val externalPlayers = listOf(
     NEXT_PLAYER,
     X_PLAYER,
     WEB_VIDEO_CASTER,
+    AMNIS,
 )
