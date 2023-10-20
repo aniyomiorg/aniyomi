@@ -64,7 +64,6 @@ class PlayerPreferences(
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
     fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
-
     fun deband() = preferenceStore.getInt("pref_deband", 0)
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
@@ -73,7 +72,7 @@ class PlayerPreferences(
     fun rememberSubtitlesDelay() = preferenceStore.getBoolean("pref_remember_subtitles_delay", false)
     fun subtitlesDelay() = preferenceStore.getInt("pref_subtitles_delay", 0)
 
-    fun overrideSubtitlesStyle() = preferenceStore.getBoolean("pref_override_subtitles_style", false)
+    fun overrideSubsASS() = preferenceStore.getBoolean("pref_override_subtitles_ass", false)
 
     fun subtitleFontSize() = preferenceStore.getInt("pref_subtitles_font_size", 55)
     fun boldSubtitles() = preferenceStore.getBoolean("pref_bold_subtitles", false)

@@ -329,8 +329,7 @@
     <string name="player_subtitle_settings_color_tab">Color</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_subtitle_empty_warning">Will not work as there aren\'t any subtitle tracks in this video</string>
-    <string name="player_override_subtitle_font">Override subtitle font</string>
-    <string name="player_override_subtitle_color">Override subtitle color</string>
+    <string name="player_override_ass_subtitles">Override ASS subtitles</string>
     <string name="player_subtitle_delay">Subtitle Delay</string>
     <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
     <string name="player_audio_delay">Audio delay</string>

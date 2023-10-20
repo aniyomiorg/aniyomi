@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.util.preference.toggle
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
@@ -78,37 +77,27 @@ class PlayerSettingsScreenModel(
     fun OverrideSubtitlesSwitch(
         content: @Composable () -> Unit,
     ) {
-        val overrideSubtitles by preferences.overrideSubtitlesStyle().collectAsState()
+        val overrideSubsASS by preferences.overrideSubsASS().collectAsState()
 
-        val updateOverride = {
-            togglePreference(PlayerPreferences::overrideSubtitlesStyle)
-            if (overrideSubtitles) updateSubtitleOptions()
+        val updateOverrideASS = {
+            togglePreference(PlayerPreferences::overrideSubsASS)
+            val overrideType = if (overrideSubsASS) "force" else "no"
+            MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             NoSubtitlesWarning()
 
+            content()
+
             ToggleableRow(
-                textRes = R.string.player_override_subtitle_font,
-                isChecked = overrideSubtitles,
-                onClick = updateOverride,
+                textRes = R.string.player_override_ass_subtitles,
+                isChecked = overrideSubsASS,
+                onClick = updateOverrideASS,
             )
-
-            if (overrideSubtitles) {
-                content()
-            }
         }
-    }
-
-    private fun updateSubtitleOptions() {
-        MPVLib.setPropertyString("sub-bold", if (preferences.boldSubtitles().get()) "yes" else "no")
-        MPVLib.setPropertyString("sub-italic", if (preferences.italicSubtitles().get()) "yes" else "no")
-        MPVLib.setPropertyInt("sub-font-size", preferences.subtitleFontSize().get())
-
-        MPVLib.setPropertyString("sub-color", preferences.textColorSubtitles().get().toHexString())
-        MPVLib.setPropertyString("sub-border-color", preferences.borderColorSubtitles().get().toHexString())
-        MPVLib.setPropertyString("sub-back-color", preferences.backgroundColorSubtitles().get().toHexString())
     }
 
     @Composable
@@ -121,11 +110,11 @@ class PlayerSettingsScreenModel(
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    modifier = Modifier.size(12.dp),
+                    modifier = Modifier.size(14.dp),
                 )
                 Text(
                     text = stringResource(id = R.string.player_subtitle_empty_warning),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                 )
             }

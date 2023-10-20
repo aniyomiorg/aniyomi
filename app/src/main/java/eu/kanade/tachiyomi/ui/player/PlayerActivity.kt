@@ -559,18 +559,20 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerSubtitles() {
-        if (playerPreferences.rememberSubtitlesDelay().get()) {
-            MPVLib.setPropertyDouble("sub-delay", playerPreferences.subtitlesDelay().get().toDouble())
-        }
+        with(playerPreferences) {
+            val overrideType = if (overrideSubsASS().get()) "force" else "no"
+            MPVLib.setPropertyString("sub-ass-override", overrideType)
 
-        if (playerPreferences.overrideSubtitlesStyle().get()) {
-            MPVLib.setPropertyString("sub-bold", if (playerPreferences.boldSubtitles().get()) "yes" else "no")
-            MPVLib.setPropertyString("sub-italic", if (playerPreferences.italicSubtitles().get()) "yes" else "no")
-            MPVLib.setPropertyInt("sub-font-size", playerPreferences.subtitleFontSize().get())
+            if (rememberSubtitlesDelay().get()) {
+                MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get().toDouble())
+            }
 
-            MPVLib.setPropertyString("sub-color", playerPreferences.textColorSubtitles().get().toHexString())
-            MPVLib.setPropertyString("sub-border-color", playerPreferences.borderColorSubtitles().get().toHexString())
-            MPVLib.setPropertyString("sub-back-color", playerPreferences.backgroundColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString("sub-bold", if (boldSubtitles().get()) "yes" else "no")
+            MPVLib.setPropertyString("sub-italic", if (italicSubtitles().get()) "yes" else "no")
+            MPVLib.setPropertyInt("sub-font-size", subtitleFontSize().get())
+            MPVLib.setPropertyString("sub-color", textColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString("sub-border-color", borderColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString("sub-back-color", backgroundColorSubtitles().get().toHexString())
         }
     }
 

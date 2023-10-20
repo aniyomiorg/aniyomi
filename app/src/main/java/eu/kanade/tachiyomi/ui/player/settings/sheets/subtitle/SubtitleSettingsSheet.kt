@@ -43,7 +43,7 @@ fun SubtitleSettingsSheet(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(vertical = TabbedDialogPaddings.Vertical)
+                .padding(top = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
