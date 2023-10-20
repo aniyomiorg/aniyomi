@@ -755,7 +755,7 @@ class MangaInfoScreenModel(
 
             DownloadAction.UNVIEWED_ITEMS -> getUnreadChapters()
         }
-        if (!chaptersToDownload.isNotEmpty()) {
+        if (chaptersToDownload.isNotEmpty()) {
             startDownload(chaptersToDownload, false)
         }
     }

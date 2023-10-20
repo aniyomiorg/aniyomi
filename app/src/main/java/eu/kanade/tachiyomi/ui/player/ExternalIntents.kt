@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.core.util.asFlow
@@ -27,12 +28,14 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
@@ -79,7 +82,9 @@ class ExternalIntents {
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
-        val video = chosenVideo ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first()[0]
+        val video = chosenVideo
+            ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first().firstOrNull()
+            ?: throw Exception("Video list is empty")
 
         val videoUrl = getVideoUrl(context, video) ?: return null
 
@@ -110,7 +115,7 @@ class ExternalIntents {
                 addVideoHeaders(false, video, this)
             }
         } else {
-            standardIntentForPackage(pkgName, context, videoUrl, video)
+            getIntentForPackage(pkgName, context, videoUrl, video)
         }
     }
 
@@ -183,6 +188,46 @@ class ExternalIntents {
      * @param uri the path data of the video.
      * @param video the video being sent to the external player.
      */
+    private fun getIntentForPackage(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
+        return when (pkgName) {
+            WEB_VIDEO_CASTER -> webVideoCasterIntent(pkgName, context, uri, video)
+            else -> standardIntentForPackage(pkgName, context, uri, video)
+        }
+    }
+
+    private fun webVideoCasterIntent(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "video/*")
+            if (isPackageInstalled(pkgName, context.packageManager)) setPackage(WEB_VIDEO_CASTER)
+            addExtrasAndFlags(true, this)
+
+            val headers = Bundle()
+            video.headers?.forEach {
+                headers.putString(it.first, it.second)
+            }
+
+            val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+            video.subtitleTracks.firstOrNull {
+                it.lang.contains(localLangName)
+            }?.let {
+                putExtra("subtitle", it.url)
+            } ?: video.subtitleTracks.firstOrNull()?.let {
+                putExtra("subtitle", it.url)
+            }
+
+            putExtra("android.media.intent.extra.HTTP_HEADERS", headers)
+            putExtra("secure_uri", true)
+        }
+    }
+
+    /**
+     * Returns the [Intent] with added data to send to the given external player.
+     *
+     * @param pkgName the name of the package to send the [Intent] to.
+     * @param context the application context.
+     * @param uri the path data of the video.
+     * @param video the video being sent to the external player.
+     */
     private fun standardIntentForPackage(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             if (isPackageInstalled(pkgName, context.packageManager)) {
@@ -198,26 +243,20 @@ class ExternalIntents {
 
             // Add support for Subtitles to external players
 
-            /*
-            val externalSubs = source.getExternalSubtitleStreams()
-            val enabledSubUrl = when {
-                source.selectedSubtitleStream != null -> {
-                    externalSubs.find { stream -> stream.index == source.selectedSubtitleStream?.index }?.let { sub ->
-                        apiClient.createUrl(sub.deliveryUrl)
-                    }
-                }
-                else -> null
+            val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+            val langIndex = video.subtitleTracks.indexOfFirst {
+                it.lang.contains(localLangName)
             }
+            val requestedLanguage = if (langIndex == -1) 0 else langIndex
+            val requestedUrl = video.subtitleTracks.getOrNull(requestedLanguage)?.url
 
-            // MX Player API / MPV
-            putExtra("subs", externalSubs.map { stream -> Uri.parse(apiClient.createUrl(stream.deliveryUrl)) }.toTypedArray())
-            putExtra("subs.name", externalSubs.map(ExternalSubtitleStream::displayTitle).toTypedArray())
-            putExtra("subs.filename", externalSubs.map(ExternalSubtitleStream::language).toTypedArray())
-            putExtra("subs.enable", enabledSubUrl?.let { url -> arrayOf(Uri.parse(url)) } ?: emptyArray())
+            // Just, Next, MX Player, mpv
+            putExtra("subs", video.subtitleTracks.map { Uri.parse(it.url) }.toTypedArray())
+            putExtra("subs.name", video.subtitleTracks.map { it.lang }.toTypedArray())
+            putExtra("subs.enable", requestedUrl?.let { arrayOf(Uri.parse(it)) } ?: emptyArray())
 
-            // VLC
-            if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)
-             */
+            // VLC - seems to only work for local sub files
+            requestedUrl?.let { putExtra("subtitles_location", it) }
         }
     }
 
@@ -557,4 +596,4 @@ const val MPV_REMOTE = "com.husudosu.mpvremote"
 const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
-const val AMNIS = "com.amnis"
+const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"

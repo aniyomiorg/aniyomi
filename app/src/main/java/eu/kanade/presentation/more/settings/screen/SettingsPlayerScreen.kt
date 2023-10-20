@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.ui.player.MX_PLAYER_FREE
 import eu.kanade.tachiyomi.ui.player.MX_PLAYER_PRO
 import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
 import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
+import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import tachiyomi.presentation.core.components.WheelTextPicker
@@ -396,5 +397,5 @@ val externalPlayers = listOf(
     JUST_PLAYER,
     NEXT_PLAYER,
     X_PLAYER,
-    AMNIS,
+    WEB_VIDEO_CASTER,
 )

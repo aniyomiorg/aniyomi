@@ -278,4 +278,8 @@
     <string name="extension_settings">Erweiterungs-Einstellungen</string>
     <string name="stats_header">Statistiken anzeigen</string>
     <string name="action_save_screenshot">Bildschirmfoto speichern</string>
+    <string name="action_hide">Ausblenden</string>
+    <string name="label_recent_anime_updates">Anime-Aktualisierungen</string>
+    <string name="go_to_next_chapter">Nächstes Kapitel</string>
+    <string name="go_to_previous_chapter">Vorheriges Kapitel</string>
 </resources>
