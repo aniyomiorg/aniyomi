@@ -181,7 +181,7 @@ enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, 
     MORE(R.string.label_settings, R.string.messing, moreImageUrl),
     WEBVIEW(R.string.action_web_view, R.string.browsing, webviewImageUrl),
     VIDEO(R.string.video, R.string.watching, videoImageUrl),
-    COMIC(R.string.comic, R.string.reading, comicImageUrl),
+    MANGA(R.string.manga, R.string.reading, mangaImageUrl),
 
     ;
 }
@@ -189,12 +189,12 @@ enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match kuukiyomi brown/ green theme, Luft
 private const val kuukiyomiImageUrl = "attachments/1133407425886691390/1157665173729980416/ic_launcher.png"
-private const val libraryImageUrl = "attachments/951705840031780865/1006843591777341520/library.png"
-private const val updatesImageUrl = "attachments/951705840031780865/1006843592339365888/updates.png"
-private const val historyImageUrl = "attachments/951705840031780865/1006843591299178588/history.png"
-private const val browseImageUrl = "attachments/951705840031780865/1006843590980415518/browse.png"
-private const val moreImageUrl = "attachments/951705840031780865/1006843592045760533/more.png"
-private const val webviewImageUrl = "attachments/951705840031780865/1006843593467629568/webview.png"
-private const val videoImageUrl = "attachments/951705840031780865/1006843592637169714/video.png"
-private const val comicImageUrl = "attachments/951705840031780865/1006843592637169714/comic.png"
+private const val libraryImageUrl = "attachments/1133407425886691390/1165004086928740392/library.png"
+private const val updatesImageUrl = "attachments/1133407425886691390/1165006394248937645/updates.png"
+private const val historyImageUrl = "attachments/1133407425886691390/1165012765203767336/history.png"
+private const val browseImageUrl = "attachments/1133407425886691390/1165002904982278256/browse.png"
+private const val moreImageUrl = "attachments/1133407425886691390/1165013750189936761/more.png"
+private const val webviewImageUrl = "attachments/1133407425886691390/1165014654624477246/webview.png"
+private const val videoImageUrl = "attachments/1133407425886691390/1165018112618405919/video.png"
+private const val mangaImageUrl = "attachments/1133407425886691390/1165017344108666951/manga.png"
 // <-- AM (DISCORD)

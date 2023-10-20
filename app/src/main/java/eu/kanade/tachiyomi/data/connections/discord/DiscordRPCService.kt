@@ -50,7 +50,7 @@ class DiscordRPCService : Service() {
             launchIO {
                 if (lastUsedScreen == DiscordScreen.VIDEO) {
                     setAnimeScreen(this@DiscordRPCService, lastUsedScreen)
-                } else if (lastUsedScreen == DiscordScreen.COMIC) {
+                } else if (lastUsedScreen == DiscordScreen.MANGA) {
                     setMangaScreen(this@DiscordRPCService, lastUsedScreen)
                 }
             }
@@ -111,7 +111,7 @@ class DiscordRPCService : Service() {
 
         internal var lastUsedScreen = DiscordScreen.APP
             set(value) {
-                field = if ((value == DiscordScreen.VIDEO || value == DiscordScreen.COMIC) || value == DiscordScreen.WEBVIEW) field else value
+                field = if ((value == DiscordScreen.VIDEO || value == DiscordScreen.MANGA) || value == DiscordScreen.WEBVIEW) field else value
             }
 
         internal suspend fun setAnimeScreen(
@@ -285,7 +285,7 @@ class DiscordRPCService : Service() {
 
                 setMangaScreen(
                     context = context,
-                    discordScreen = DiscordScreen.COMIC,
+                    discordScreen = DiscordScreen.MANGA,
                     readerData = ReaderData(
                         mangaTitle = mangaTitle,
                         chapterNumber = chapterNumber,
