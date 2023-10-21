@@ -124,8 +124,7 @@
     <string name="login_title">התחבר אל %1$s</string>
     <string name="pref_acra_summary">עוזר בתיקון באגים. לא יישלחו נתונים רגישים</string>
     <string name="pref_enable_acra">שלח דוחות קריסה</string>
-
-    <string name="ext_uninstall">הסר התקנה</string>
+        <string name="ext_uninstall">הסר התקנה</string>
     <string name="ext_untrusted">לא מאומת</string>
     <string name="ext_installed">הותקן</string>
     <string name="ext_installing">מתקין</string>
@@ -368,6 +367,7 @@
     <string name="pref_category_nsfw_content">מקורות NSFW (18+)</string>
     <string name="pref_show_nsfw_source">הצג ברשימות מקורות ותוספים</string>
     <string name="parental_controls_info">זה לא מונע תוספים לא רשמיים או תוספים שעלולים לסמן באופן שגוי מלהציג תוכן NSFW (18+) בתוך האפליקציה.</string>
+    <string name="relative_time_today">היום</string>
     <string name="pref_category_display">תצוגה</string>
     <string name="pref_library_update_refresh_trackers_summary">עדכן עוקבים בעת עדכון הספרייה</string>
     <string name="action_enable_all">אפשר הכל</string>
@@ -414,6 +414,12 @@
     <string name="pref_library_update_manga_restriction">דלג על עדכוני פריטים</string>
     <string name="extension_api_error">נכשל בקבלת רשימת ההרחבות</string>
     <string name="action_faq_and_guides">שו\"ת ומדריכים</string>
+    <plurals name="relative_time">
+        <item quantity="one">אתמול</item>
+        <item quantity="two">לפני יומיים</item>
+        <item quantity="many">לפני %1$d ימים</item>
+        <item quantity="other">לפני %1$d ימים</item>
+    </plurals>
     <string name="ext_nsfw_short">18+</string>
     <string name="none">אין</string>
     <string name="update_72hour">כל 3 ימים</string>
@@ -452,14 +458,12 @@
     <string name="vertical_plus_viewer">רצועה מוארכת עם רווחים</string>
     <string name="pager_viewer">סידור עמודים</string>
     <string name="rotation_reverse_portrait">מאונך הפוך</string>
-    <string name="pref_create_folder_per_manga">שמור דפים בתיקיות נפרדות</string>
     <string name="tapping_inverted_vertical">אנכי</string>
     <string name="tapping_inverted_both">שניהם</string>
     <string name="pref_reader_actions">פעולות</string>
     <string name="pref_read_with_long_tap">הצג פעולות בלחיצה ארוכה</string>
     <string name="automatic_background">אוטומטי</string>
         <string name="disabled">מנוע</string>
-    <string name="pref_create_folder_per_manga_summary">צור תיקיות בהתאם לכותרת הפריטים</string>
     <string name="enhanced_tracking_info">שירותים המספקים שירותים משופרים למקורות ספציפיים. פריטים יהיו במעקב אוטומטי אחרי הוספה לספרייה שלך.</string>
     <string name="backup_restore_missing_sources">מקורות חסרים:</string>
     <string name="invalid_backup_file">קובץ גיבוי לא תקין</string>
@@ -597,8 +601,7 @@
     <string name="pref_show_navigation_mode">הראה את פרישת מיקומי הלחיצה</string>
     <string name="clear_history_confirmation">אתה בטוח\? כל ההיסטוריה תמחק.</string>
     <string name="migration_help_guide">מדריך נדידת מקורות</string>
-        <string name="notification_updating">מעדכן ספרייה... (%1$d/%2$d)</string>
-        <string name="local_invalid_format">פורמט פרק לא תקין</string>
+            <string name="local_invalid_format">פורמט פרק לא תקין</string>
     <string name="on_hiatus">בהפסקה</string>
     <string name="delete_category_confirmation">האם תרצה למחוק את הקטגוריה %s\?</string>
     <string name="pref_dual_page_split">פצל עמודים רחבים</string>
@@ -683,7 +686,6 @@
         <item quantity="other"/>
     </plurals>
     <string name="updates_last_update_info">ספריה עודכנה לאחרונה ב: %s</string>
-    <string name="pref_long_strip_split">פצל תמונות מוארכות (בטא)</string>
     <string name="pref_navigate_pan">שטח תמונה רחבה</string>
     <string name="pref_hide_in_library_items">הסתר פריטים שכבר בספרייה</string>
     <string name="missing_storage_permission">הרשאות אחסון לא ניתנו</string>

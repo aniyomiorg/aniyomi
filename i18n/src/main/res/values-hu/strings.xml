@@ -292,8 +292,7 @@
     <string name="updating_library">Könyvtár frissítése</string>
     <string name="no_chapters_error">Nem található fejezet</string>
     <string name="licensed">Licenszelt</string>
-
-    <string name="ext_trust">Bizalom</string>
+        <string name="ext_trust">Bizalom</string>
     <string name="exclude">Tiltott: %s</string>
     <string name="include">Kedvelt: %s</string>
     <string name="none">Semmi</string>
@@ -331,6 +330,11 @@
     <string name="pref_library_update_refresh_trackers">Követők automatikus frissítése</string>
     <string name="theme_tako">Polip</string>
     <string name="theme_strawberrydaiquiri">Eper koktél</string>
+    <plurals name="relative_time">
+        <item quantity="one">Tegnap</item>
+        <item quantity="other">%1$d napja</item>
+    </plurals>
+    <string name="relative_time_today">Ma</string>
     <string name="pref_dark_theme_pure_black">Teljesen fekete sötét mód</string>
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="theme_yinyang">Jin és Jang</string>
@@ -392,8 +396,6 @@
     <string name="vertical_plus_viewer">Hosszú szalag lyukakkal</string>
     <string name="automatic_background">Automatikus</string>
     <string name="gray_background">Szürke</string>
-    <string name="pref_create_folder_per_manga_summary">Mappák létrehozása bejegyzések címe szerint</string>
-    <string name="pref_create_folder_per_manga">Mentse a lapokat külön mappákba</string>
     <string name="pref_read_with_long_tap">Cselekmények mutatása hosszú koppintáskor</string>
     <string name="pref_reader_actions">Műveletek</string>
     <string name="tapping_inverted_none">Egyik sem</string>
@@ -470,8 +472,7 @@
     <string name="pref_clear_cookies">Sütik törlése</string>
     <string name="cache_deleted">Gyorsítótár törölve: %1$d fájl lett törölve</string>
     <string name="cache_delete_error">Hiba történt törlés közben</string>
-        <string name="notification_updating">Könyvtár frissítése...(%1$d/%2$d)</string>
-    <plurals name="notification_new_chapters_summary">
+        <plurals name="notification_new_chapters_summary">
         <item quantity="one">%d-nak/nek</item>
         <item quantity="other">%d-nak/nek</item>
     </plurals>
@@ -677,7 +678,6 @@
     <string name="pref_advanced_summary">Összeomlás naplók kiírása, akkumulátor optimalizálások</string>
     <string name="invalid_location">Hibás hely: %s</string>
     <string name="download_ahead_info">Csak akkor működik, ha az aktuális és a következő fejezet már letöltött.</string>
-    <string name="pref_long_strip_split">Magas képek felosztása (BÉTA)</string>
     <string name="download_ahead">Letöltés előre</string>
     <string name="pref_reader_summary">Olvasó mód, kijelző, navigáció</string>
     <string name="theme_tidalwave">Szökőár</string>

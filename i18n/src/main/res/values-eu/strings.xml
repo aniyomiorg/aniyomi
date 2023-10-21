@@ -33,7 +33,7 @@
     <string name="local_source">Iturri lokala</string>
     <string name="latest">Azkenak</string>
     <string name="no_more_results">Ez dago emaitza gehiagorik</string>
-    <string name="creating_backup">Babeskopia sortzen</string>
+        <string name="creating_backup">Babeskopia sortzen</string>
     <string name="restore_duration">%02d min, %02d seg</string>
     <string name="add_tracking">Gehitu jarraipena</string>
     <string name="cache_delete_error">Errore bat gertatu da cachea garbitzean</string>
@@ -122,7 +122,7 @@
     <string name="pref_always_show_chapter_transition">Erakutsi beti kapituluaren trantsizioa</string>
     <string name="last_read_chapter">Azkenik irakurritako kapitulua</string>
     <string name="pref_download_directory">Deskarga kokapena</string>
-    <string name="fourth_to_last">Atzetik hasita laugarren irakurritako kapitulua</string>
+        <string name="fourth_to_last">Atzetik hasita laugarren irakurritako kapitulua</string>
     <string name="backup_restore_missing_trackers">Saioa hasi gabeko jarraitzaileak:</string>
     <string name="backup_choice">Zeren babeskopia nahi duzu\?</string>
     <string name="restore_in_progress">Berreskuratzea abian da</string>
@@ -130,7 +130,7 @@
     <string name="backup_info">Babeskopia automatikoak oso gomendagarriak dira. Kopiak beste leku batzuetan ere gorde beharko zenituzke.</string>
     <string name="pref_clear_cookies">Garbitu cookieak</string>
     <string name="label_data">Datuak</string>
-    <string name="database_clean">Datu-basea garbi</string>
+                <string name="database_clean">Datu-basea garbi</string>
     <string name="pref_disable_battery_optimization">Desgaitu bateriaren optimizazioa</string>
     <string name="version">Bertsioa</string>
     <string name="website">Webgunea</string>
@@ -139,7 +139,7 @@
     <string name="pref_acra_summary">Edozein akats konpontzen laguntzen du. Ez da datu sentikorrik bidaliko</string>
     <string name="label_downloaded_only">Deskargatuak bakarrik</string>
     <string name="pref_incognito_mode">Ezkutuko modua</string>
-    <string name="downloaded_chapters">Deskargatutako kapituluak</string>
+        <string name="downloaded_chapters">Deskargatutako kapituluak</string>
     <string name="last_used_source">Azken erabilera</string>
     <string name="pinned_sources">Ainguratua</string>
     <string name="no_pinned_sources">Ez duzu iturri ainguraturik</string>
@@ -187,6 +187,10 @@
     <string name="transition_no_previous">Ez dago aurreko kapitulurik</string>
     <string name="copy">Kopiatu</string>
     <string name="update_check_eol">Android bertsio hau jada ez da onartzen</string>
+    <plurals name="relative_time">
+        <item quantity="one">Atzo</item>
+        <item quantity="other">Duela %1$d egun</item>
+    </plurals>
     <string name="ext_obsolete">Zaharkitua</string>
     <string name="ext_uninstall">Desinstalatu</string>
     <string name="pref_show_page_number">Erakutsi orrialdearen zenbakia</string>
@@ -199,7 +203,7 @@
     <string name="track_type">Mota</string>
     <string name="custom_filter">Iragazki pertsonalizatua</string>
     <string name="snack_categories_deleted">Kategoriak ezabatuak</string>
-    <string name="file_select_cover">Hautatu azaleko irudia</string>
+        <string name="file_select_cover">Hautatu azaleko irudia</string>
     <string name="update_check_no_new_updates">Ez dago eguneraketarik</string>
     <string name="information_cloudflare_bypass_failure">Ezin izan da Cloudflare saihestu</string>
     <string name="chapter_settings_updated">Kapituluaren ezarpen lehenetsiak eguneratu dira</string>
@@ -218,13 +222,13 @@
     <string name="rotation_portrait">Bertikala</string>
     <string name="rotation_landscape">Horizontala</string>
     <string name="rotation_force_portrait">Bertikal blokeatua</string>
-    <string name="custom_dir">Kokapen pertsonalizatua</string>
+                <string name="custom_dir">Kokapen pertsonalizatua</string>
     <string name="enhanced_services">Zerbitzu hobetuak</string>
     <string name="help_translate">Lagundu itzultzen</string>
     <string name="file_picker_error">Ez da aurkitu fitxategiak hautatzeko aplikaziorik</string>
     <string name="all">Denak</string>
     <string name="about_dont_kill_my_app">Fabrikatzaile batzuek aplikazioen murrizketa gehigarriak dituzte, atzeko planoko zerbitzuak akabatzen dituztenak. Webgune honek informazio gehiago du nola konpondu jakiteko.</string>
-    <string name="ext_untrusted">Fidatu gabekoa</string>
+        <string name="ext_untrusted">Fidatu gabekoa</string>
     <string name="pref_reader_theme">Atzeko planoaren kolorea</string>
     <string name="ext_update">Eguneratu</string>
     <string name="pref_custom_brightness">Distira pertsonalizatua</string>
@@ -284,8 +288,7 @@
     <string name="sort_by_number">Kapitulu zenbakiaren arabera</string>
     <string name="sort_by_upload_date">Igoera dataren arabera</string>
     <string name="confirm_set_image_as_cover">Irudi hau azaleko arte gisa erabili\?</string>
-    <string name="notification_updating">Liburutegia eguneratzen… (%1$d/%2$d)</string>
-    <string name="notification_size_warning">Eguneratze handiek bateriaren erabilera areagotzea eta iturriak motelagoak izatea eragin dezakete</string>
+        <string name="notification_size_warning">Eguneratze handiek bateriaren erabilera areagotzea eta iturriak motelagoak izatea eragin dezakete</string>
     <string name="download_notifier_download_paused">Deskarga pausatu da</string>
     <string name="pref_low">Baxua</string>
     <string name="pref_lowest">Baxuena</string>
@@ -297,7 +300,7 @@
     <string name="pref_enable_acra">Bidali hutsegite-txostenak</string>
     <string name="notification_incognito_text">Desgaitu ezkutuko modua</string>
     <string name="used_cache">Erabilia: %1$s</string>
-    <string name="clipboard_copy_error">Ezin izan da arbelean kopiatu</string>
+        <string name="clipboard_copy_error">Ezin izan da arbelean kopiatu</string>
     <string name="manga_download">Deskargatu</string>
     <string name="add_to_library">Gehitu liburutegira</string>
     <string name="myanimelist_relogin">Mesedez, hasi saioa berriro MAL-en</string>
@@ -313,7 +316,7 @@
     <string name="notification_first_add_to_library">Mesedez, gehitu manga zure liburutegian hau egin aurretik</string>
     <string name="transition_pages_loading">Orriak kargatzen…</string>
     <string name="channel_common">Arrunta</string>
-    <string name="download_notifier_text_only_wifi">Ez dago Wi-Fi konexiorik erabilgarri</string>
+        <string name="download_notifier_text_only_wifi">Ez dago Wi-Fi konexiorik erabilgarri</string>
     <string name="label_default">Lehenetsia</string>
     <string name="track">Jarraipena</string>
     <string name="action_display_mode">Bistaratze-modua</string>
@@ -335,8 +338,6 @@
     <string name="notification_chapters_multiple">%1$s Kapituluak</string>
     <string name="pref_keep_screen_on">Mantendu pantaila piztuta</string>
     <string name="pref_skip_read_chapters">Saltatu irakurriak bezala markatutako kapituluak</string>
-    <string name="pref_create_folder_per_manga">Gorde orrialdeak karpeta ezberdinetan</string>
-    <string name="pref_create_folder_per_manga_summary">Sortu karpetak manga izenburuaren arabera</string>
     <string name="pref_high">Altua</string>
     <string name="pref_skip_filtered_chapters">Saltatu iragazitako kapituluak</string>
     <string name="pref_read_with_volume_keys">Bolumen-teklak</string>
@@ -348,7 +349,7 @@
 \nFalta diren luzapenak instalatu eta jarraipen-zerbitzuetan saioa hasi beharko duzu ondoren horiek erabiltzeko.</string>
     <string name="chapter_downloading_progress">Deskargatzen (%1$d/%2$d)</string>
     <string name="chapter_error">Errorea</string>
-    <string name="manga_removed_library">Liburutegitik kendua</string>
+        <string name="manga_removed_library">Liburutegitik kendua</string>
     <string name="manga_info_collapse">Gutxiago</string>
     <string name="source_not_installed">Iturria ez dago instalatuta: %1$s</string>
     <string name="snack_add_to_library">Manga liburutegira gehitu\?</string>
@@ -412,11 +413,12 @@
     <string name="pref_category_nsfw_content">NSFW (18+) iturriak</string>
     <string name="pref_show_nsfw_source">Erakutsi iturrien eta luzapenen zerrendetan</string>
     <string name="parental_controls_info">Honek ez du eragozten ofizialak ez diren edo oker markatutako luzapenek NSFW (18+) edukia aplikazioan erakustea.</string>
+    <string name="relative_time_today">Gaur</string>
     <string name="pref_category_display">Bistaratu</string>
     <string name="pref_library_columns">Errenkada bakoitzeko elementu kopurua</string>
     <string name="pref_category_library_update">Eguneraketa globalak</string>
     <string name="pref_library_update_interval">Eguneratze automatikoak</string>
-    <string name="include">Sartu: %s</string>
+        <string name="include">Sartu: %s</string>
     <string name="color_filter_r_value">G</string>
     <string name="other_source">Besteak</string>
     <string name="action_global_search_hint">Bilaketa globala…</string>
@@ -532,7 +534,7 @@
     </plurals>
     <string name="pref_show_reading_mode_summary">Erakutsi erabilitako irakurketa modua laburki irakurlea irekitzen denean</string>
     <string name="tracking_guide">Jarraipen gida</string>
-    <string name="action_track">Jarraitu</string>
+        <string name="action_track">Jarraitu</string>
     <string name="cache_deleted">Cachea garbitu da. %1$d fitxategi ezabatu dira</string>
     <string name="label_background_activity">Atzeko planoko ekintzak</string>
     <string name="pref_disable_battery_optimization_summary">Liburutegiaren eguneraketak eta babeskopiak atzeko planoan egiten laguntzen du</string>
@@ -583,7 +585,7 @@
     <string name="cancelled">Bertan behera utzia</string>
     <string name="on_hiatus">Etenaldian</string>
     <string name="library_errors_help">Liburutegi eguneraketen akatsak nola konpondu jakiteko, ikusi %1$s</string>
-    <string name="action_display_local_badge">Manga lokala</string>
+        <string name="action_display_local_badge">Manga lokala</string>
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">%1$s kapituluak eta bat gehiago</item>
         <item quantity="other">%1$s kapituluak eta %2$d gehiago</item>
@@ -600,7 +602,7 @@
     <string name="pref_dual_page_invert_summary">Orrialde bikoitzeko zatiketaren kokapena irakurketa noranzkoarekin bat ez badator</string>
     <string name="pref_library_update_restriction">Eguneraketa automatikoentzako gailuaren murrizketak</string>
     <string name="action_faq_and_guides">Ohiko galderak eta gidak</string>
-    <string name="skipped_reason_not_caught_up">Saltatu egin da irakurri gabeko kapituluak daudelako</string>
+        <string name="skipped_reason_not_caught_up">Saltatu egin da irakurri gabeko kapituluak daudelako</string>
     <string name="pref_update_only_started">Kapitulurik irakurri gabe</string>
     <string name="skipped_reason_completed">Saltatu egin da seriea bukatua dagoelako</string>
     <string name="skipped_reason_not_started">Saltatua ez daudelako irakurritako kapitulurik</string>

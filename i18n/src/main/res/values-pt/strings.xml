@@ -221,8 +221,7 @@
     <string name="ext_installed">Instalado</string>
     <string name="ext_uninstall">Desinstalar</string>
     <string name="untrusted_extension">Extensão não confiável</string>
-
-    <string name="pref_crop_borders">Cortar bordas</string>
+        <string name="pref_crop_borders">Cortar bordas</string>
     <string name="pref_custom_color_filter">Filtro de cor personalizado</string>
     <string name="pref_read_with_volume_keys_inverted">Inverter teclas de volume</string>
     <string name="double_tap_anim_speed_0">Sem animação</string>
@@ -556,8 +555,6 @@
     <string name="rotation_landscape">Horizontal</string>
     <string name="rotation_portrait">Vertical</string>
     <string name="rotation_type">Tipo de rotação</string>
-    <string name="pref_create_folder_per_manga_summary">Cria as pastas usando os títulos dos itens</string>
-    <string name="pref_create_folder_per_manga">Guarda páginas em pastas separadas</string>
     <string name="pref_reader_actions">Ações</string>
     <string name="pref_grayscale">Tons de cinzento</string>
     <string name="date">Data</string>
@@ -590,7 +587,6 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="action_display_local_badge">Fonte local</string>
     <string name="information_empty_category_dialog">Ainda não tens nenhuma categoria.</string>
-    <string name="notification_updating">Atualizando biblioteca… (%1$d/%2$d)</string>
     <string name="error_no_match">Nenhuma correspondência encontrada</string>
     <string name="source_unsupported">Fonte não é suportada</string>
     <string name="enhanced_tracking_info">Serviços que oferecem recursos aprimorados para fontes específicas. Os itens são automaticamente monitorados quando adicionados na sua biblioteca.</string>
@@ -599,6 +595,12 @@
     <string name="pref_library_update_refresh_trackers_summary">Atualizar monitorizadores ao atualizar biblioteca</string>
     <string name="getting_started_guide">Guia de introdução</string>
     <string name="theme_tealturquoise">Azul-petróleo e Turquesa</string>
+    <plurals name="relative_time">
+        <item quantity="one">Ontem</item>
+        <item quantity="many">Há %1$d dias</item>
+        <item quantity="other">Há %1$d dias</item>
+    </plurals>
+    <string name="relative_time_today">Hoje</string>
     <string name="theme_monet">Dinâmico</string>
     <string name="label_warning">Aviso</string>
     <string name="confirm_lock_change">Autentifique-se para confirmar a mudança</string>
@@ -676,7 +678,6 @@
     <string name="download_notifier_split_page_path_not_found">Não foi possível encontrar o caminho do ficheiro da página %d</string>
     <string name="loader_rar5_error">O formato RARv5 não é suportado</string>
     <string name="multi_lang">Multi</string>
-    <string name="pref_long_strip_split">Dividir imagens altas (BETA)</string>
     <string name="auto_download_while_reading">Transferência automática durante leitura</string>
     <string name="delete_category_confirmation">Deseja apagar a categoria \"%s\"\?</string>
     <string name="delete_category">Apagar categoria</string>

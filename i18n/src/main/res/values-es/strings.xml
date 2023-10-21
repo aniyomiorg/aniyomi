@@ -74,7 +74,7 @@
     <string name="black_background">Negro</string>
     <string name="pref_viewer_type">Sentido de lectura normal</string>
     <string name="left_to_right_viewer">Por páginas, de izquierda a derecha</string>
-    <string name="right_to_left_viewer">Por páginas, de derecha a izquierda</string>
+    <string name="right_to_left_viewer">Páginas (de derecha a izquierda)</string>
     <string name="vertical_viewer">Por páginas, de arriba abajo</string>
     <string name="webtoon_viewer">Tira vertical continua</string>
     <string name="pref_image_scale_type">Método de ampliación</string>
@@ -185,7 +185,7 @@
     <string name="download_notifier_unknown_error">No se ha podido descargar el capítulo debido a un error inesperado</string>
     <string name="download_notifier_text_only_wifi">No estás conectado a ninguna red Wi-Fi</string>
     <string name="categories">Categorías</string>
-    <string name="manga">Elementos de la biblioteca</string>
+    <string name="manga">Entradas en la biblioteca</string>
     <string name="track">Seguimiento</string>
     <string name="history">Historial</string>
     <string name="action_filter_bookmarked">Favoritos</string>
@@ -283,8 +283,7 @@
     <string name="transition_no_previous">No hay ningún capítulo anterior</string>
     <string name="migrate">Migrar</string>
     <string name="copy">Copiar</string>
-
-    <string name="double_tap_anim_speed_0">Sin animación</string>
+        <string name="double_tap_anim_speed_0">Sin animación</string>
     <string name="manga_added_library">Añadido a biblioteca</string>
     <string name="manga_removed_library">Quitado de biblioteca</string>
     <string name="copied_to_clipboard">Copiado en portapapeles:
@@ -400,7 +399,7 @@
     <string name="action_pin">Anclar</string>
     <string name="add_tracking">Añadir seguimiento</string>
     <string name="in_library">En biblioteca</string>
-    <string name="add_to_library">Añadir a biblioteca</string>
+    <string name="add_to_library">Añadir a la biblioteca</string>
         <string name="manga_info_collapse">Menos</string>
     <string name="manga_info_expand">Más</string>
     <string name="licenses">Licencias de código abierto</string>
@@ -443,9 +442,9 @@
     <string name="ext_unofficial">No oficial</string>
     <string name="label_data">Datos</string>
     <string name="backup_restore_missing_sources">Fuentes que faltan:</string>
-    <string name="invalid_backup_file_missing_manga">La copia de seguridad no contiene ningún elemento de la biblioteca.</string>
+    <string name="invalid_backup_file_missing_manga">La copia de seguridad no contiene ningun elemento; la biblioteca está vacía.</string>
     <string name="invalid_backup_file">El archivo de copia de respaldo no es correcto</string>
-    <string name="pref_library_update_refresh_metadata_summary">Comprobar si hay una nueva portada y detalles al actualizar la biblioteca</string>
+    <string name="pref_library_update_refresh_metadata_summary">Comprueba si hay una nueva portada, información y descripción al actualizar la biblioteca</string>
     <string name="pref_library_update_refresh_metadata">Actualizar automáticamente los metadatos</string>
     <string name="action_display_comfortable_grid">Cuadrícula amplia</string>
     <string name="action_migrate">Migrar</string>
@@ -557,8 +556,6 @@
     <string name="action_display_show_number_of_items">Mostrar el número de elementos</string>
     <string name="action_sort_chapter_fetch_date">Fecha de obtención del capítulo</string>
     <string name="rotation_type">Tipo de rotación</string>
-    <string name="pref_create_folder_per_manga_summary">Crea carpetas según el título de los elementos</string>
-    <string name="pref_create_folder_per_manga">Guardar páginas en carpetas separadas</string>
     <string name="pref_reader_actions">Acciones</string>
     <string name="pref_grayscale">Escala de grises</string>
     <string name="restore_miui_warning">Es posible que las funciones de copia de respaldo y restauración no funcionen correctamente si la opción «Optimización de MIUI» está desactivada.</string>
@@ -577,7 +574,6 @@
     <string name="action_display_local_badge">Fuente local</string>
     <string name="about_dont_kill_my_app">Algunos fabricantes tienen restricciones adicionales para aplicaciones que detienen los servicios en segundo plano. Esta página web tiene más información sobre cómo solucionarlo.</string>
     <string name="information_empty_category_dialog">Todavía no existen categorías.</string>
-    <string name="notification_updating">Actualizando biblioteca… (%1$d/%2$d)</string>
     <string name="error_no_match">No se han encontrado coincidencias</string>
     <string name="source_unsupported">Fuente no soportada</string>
     <string name="unread">Sin leer</string>
@@ -597,8 +593,8 @@
     <string name="off">No</string>
     <string name="on">Sí</string>
     <string name="categorized_display_settings">Establecer el tipo de orden para cada categoría</string>
-    <string name="pref_library_update_refresh_trackers_summary">Actualizar los servicios de seguimiento al actualizar la biblioteca</string>
-    <string name="pref_library_update_refresh_trackers">Actualizar automáticamente los servicios de seguimiento</string>
+    <string name="pref_library_update_refresh_trackers_summary">También intenta actualizar el historial de lectura al actualizar la biblioteca</string>
+    <string name="pref_library_update_refresh_trackers">Sincronizar automáticamente los datos en servicios de seguimiento</string>
     <string name="label_background_activity">Actividad en segundo plano</string>
     <string name="action_track">Seguir</string>
     <string name="getting_started_guide">Guía de introducción</string>
@@ -609,6 +605,12 @@
     <string name="pref_highest">Más alta</string>
     <string name="pref_hide_threshold">Sensibilidad para ocultar automáticamente el menú al desplazarse</string>
     <string name="pref_inverted_colors">Invertido</string>
+    <plurals name="relative_time">
+        <item quantity="one">Ayer</item>
+        <item quantity="many">Hace %1$d días</item>
+        <item quantity="other">Hace %1$d días</item>
+    </plurals>
+    <string name="relative_time_today">Hoy</string>
     <string name="theme_tealturquoise">Azul marino y turquesa</string>
     <string name="pref_category_appearance">Apariencia</string>
     <string name="confirm_lock_change">Identifícate para confirmar el cambio</string>
@@ -627,13 +629,13 @@
     <string name="label_warning">Advertencia</string>
     <string name="notification_size_warning">Las actualizaciones grandes pueden implicar un mayor uso de la batería y que los distintos servicios bloqueen o ralenticen el acceso a tu dispositivo. Toca aquí para más información.</string>
     <string name="action_display_language_badge">Idioma</string>
-    <string name="backup_info">Es una buena idea tener copias de respaldo fuera de tu dispositivo.</string>
+    <string name="backup_info">También deberías guardar las copias de seguridad en otros lugares. Las copias de seguridad pueden contener datos confidenciales, incluidas las contraseñas almacenadas.</string>
     <string name="connected_to_wifi">Solo con Wi-Fi</string>
     <string name="update_72hour">Cada 3 días</string>
         <string name="ext_update_all">Actualizar todas</string>
     <string name="channel_app_updates">Actualizaciones de la aplicación</string>
         <string name="database_clean">Base de datos limpia</string>
-    <string name="clear_database_source_item_count">Hay %1$d elementos en la base de datos que no están en la biblioteca</string>
+    <string name="clear_database_source_item_count">%1$d entradas que no pertenecen a la biblioteca en la base de datos</string>
     <string name="extension_api_error">No se pudo descargar el listado de extensiones</string>
     <string name="privacy_policy">Política de privacidad</string>
         <string name="pref_library_update_manga_restriction">Omitir actualizaciones</string>
@@ -697,7 +699,7 @@
     <string name="pref_reset_user_agent_string">Restablecer el nombre del navegador («user agent»)</string>
     <string name="action_remove_everything">Quitar todo</string>
     <string name="loader_rar5_error">La app no soporta el formato RARv5</string>
-    <string name="appwidget_updates_description">Ver el manga actualizado de forma reciente</string>
+    <string name="appwidget_updates_description">Aquí aparecerá el contenido más reciente de tu biblioteca</string>
     <string name="appwidget_unavailable_locked">El widget no está disponible cuando el bloqueo de aplicación está activo</string>
     <string name="update_already_running">Ya se está actualizando</string>
     <string name="theme_tidalwave">Marea</string>
@@ -711,7 +713,6 @@
         <item quantity="other">Los siguientes %d capítulos sin leer</item>
     </plurals>
     <string name="are_you_sure">¿Estás seguro\?</string>
-    <string name="pref_long_strip_split">Separar imágenes más altas que anchas (en desarrollo)</string>
     <string name="updates_last_update_info">La biblioteca se actualizó: %s</string>
     <string name="remove_manga">Estás a punto de borrar «%s» de tu biblioteca</string>
     <string name="popular">Populares</string>
@@ -835,4 +836,9 @@
     <string name="action_move_to_bottom_all_for_series">Mover al último puesto</string>
     <string name="pref_relative_format">Marcas de tiempo relativas</string>
     <string name="pref_relative_format_summary">«%1$s» en vez de «%2$s»</string>
+    <string name="notification_updating_progress">Actualizando biblioteca... (%s)</string>
+    <string name="source_settings">Ajustes de la fuente</string>
+    <string name="app_settings">Ajustes de la aplicación</string>
+    <string name="action_sort_category">Ordenar categorías</string>
+    <string name="sort_category_confirmation">¿Quieres ordenar las categorías de forma alfabética\?</string>
 </resources>

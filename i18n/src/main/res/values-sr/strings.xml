@@ -96,8 +96,7 @@
     <string name="ext_untrusted">Неповерљиво</string>
     <string name="ext_uninstall">Обриши</string>
     <string name="untrusted_extension">Неповерљив додатак</string>
-
-    <string name="pref_fullscreen">Цео екран</string>
+        <string name="pref_fullscreen">Цео екран</string>
     <string name="pref_page_transitions">Анимације при промени странице</string>
     <string name="pref_double_tap_anim_speed">Брзина анимације двоклика</string>
     <string name="pref_show_page_number">Прикажи број странице</string>
@@ -419,6 +418,11 @@
     <string name="pref_dark_theme_pure_black">Потпуно црна тема</string>
     <string name="pref_category_nsfw_content">NSFW - извори за одрасле (18+)</string>
     <string name="pref_show_nsfw_source">Показати у листи за изворе и додатке</string>
+    <plurals name="relative_time">
+        <item quantity="one">Pre %1$d dan</item>
+        <item quantity="few">Pre %1$d dana</item>
+        <item quantity="other">Pre %1$d dana</item>
+    </plurals>
     <string name="pref_category_reading_mode">Начин читања</string>
     <string name="ext_installer_pref">Инсталер</string>
     <plurals name="missing_chapters_warning">
@@ -545,6 +549,7 @@
     </plurals>
     <string name="channel_errors">Грешке</string>
     <string name="chapter_settings">Подешавања поглавља</string>
+    <string name="relative_time_today">Данас</string>
     <string name="nav_zone_left">Лево</string>
     <string name="information_empty_category_dialog">Још немате категорија.</string>
     <string name="ext_app_info">Информације о апликацији</string>
@@ -572,8 +577,6 @@
     <string name="tapping_inverted_vertical">Вертикално</string>
     <string name="tapping_inverted_both">Оба</string>
     <string name="pref_reader_actions">Радње</string>
-    <string name="pref_create_folder_per_manga">Сачувај странице у засебне фолдере</string>
-    <string name="pref_create_folder_per_manga_summary">Прави датотеке по имену наслова</string>
     <string name="l_nav">У облику слова L</string>
     <string name="rotation_type">Оријентација</string>
     <string name="rotation_portrait">Усправно</string>
@@ -597,8 +600,7 @@
     <string name="clear_history_completed">Историја је избрисана</string>
     <string name="clear_history_confirmation">Да ли сте сигурни\? Цела историја ће бити изгубљена.</string>
     <string name="migration_help_guide">Водич за миграцију извора</string>
-        <string name="notification_updating">Ажурирање колекције... (%1$d/%2$d)</string>
-    <string name="notification_size_warning">Велика ажурирања штете изворима и могу довести до споријег ажурирања и повећања потрошње батерије. Кликни да сазнаш више.</string>
+        <string name="notification_size_warning">Велика ажурирања штете изворима и могу довести до споријег ажурирања и повећања потрошње батерије. Кликни да сазнаш више.</string>
     <string name="ext_update_all">Ажурирај све</string>
     <string name="channel_app_updates">Ажурирања апликације</string>
     <string name="clear_database_source_item_count">Број наслова у бази података које нису у колекцији: %1$d</string>
@@ -696,7 +698,6 @@
     <string name="label_completed_titles">Завршени наслови</string>
     <string name="split_tall_images_summary">Побољшава перформансе читача</string>
     <string name="network_not_metered">Само на мрежи без ограничења</string>
-    <string name="pref_long_strip_split">Раздели високе слике (БЕТА)</string>
     <string name="missing_storage_permission">Дозвола за меморијски простор није одобрена</string>
     <string name="error_user_agent_string_invalid">Неважећи низ корисничког агента</string>
     <string name="pref_reset_viewer_flags_error">Није могуће ресетовати подешавања читача</string>
