@@ -315,4 +315,16 @@
     <string name="go_to_previous_chapter">Prethodno poglavlje</string>
     <string name="pref_media_control_chapter_seeking_summary">Kada je aktivirano, korištenje gumba za sljedeće poglavlje će pokrenuti gumb za preskakanje uvoda ako se ne pronađe nijedno poglavlje</string>
     <string name="pref_media_control_chapter_seeking">Traži poglavlja pomoću kontrola medija</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_disabled">Deaktivirano</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_category_player_advanced">Napredne postavke playera</string>
+    <string name="pref_debanding_title">Uklanjanje artefakata</string>
+    <string name="pref_category_player_advanced_subtitle">Uklanjanje artefakata, mpv.conf … itd.</string>
+    <string name="action_hide">Sakrij</string>
+    <string name="pref_category_hide_hidden">Sakrij skrivene kategorije s ekrana kategorija</string>
+    <string name="theme_mocha">Mocha</string>
+    <string name="label_recent_anime_updates">Anime aktualiziranja</string>
+    <string name="download_slots_info">Istodobno će se preuzimati samo iz izvora koji se sami hostiraju ili bez mjerenja</string>
+    <string name="theme_cottoncandy">Cotton Candy</string>
 </resources>

@@ -336,4 +336,5 @@
     <string name="go_to_previous_chapter">الفصل السابق</string>
     <string name="go_to_after_opening">تخطي افتتاحية</string>
     <string name="pref_media_control_chapter_seeking">البحث عن الفصول باستخدام عناصر التحكم</string>
+    <string name="pref_debanding_title">Khalid</string>
 </resources>

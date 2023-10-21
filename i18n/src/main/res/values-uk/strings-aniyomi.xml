@@ -322,4 +322,15 @@
     <string name="go_to_next_chapter">Наступний розділ</string>
     <string name="go_to_previous_chapter">Попередній розділ</string>
     <string name="go_to_after_opening">Пропустити опенінґ</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_title">Налагодження</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_category_player_advanced_subtitle">Налагодження, mpv.conf… та ін.</string>
+    <string name="action_hide">Приховати</string>
+    <string name="pref_debanding_disabled">Вимкнено</string>
+    <string name="pref_category_hide_hidden">Сховати приховані категорії з екрану категорій</string>
+    <string name="pref_category_player_advanced">Розширені налаштування плеєра</string>
+    <string name="theme_mocha">Моча</string>
+    <string name="label_recent_anime_updates">Оновлення аніме</string>
+    <string name="theme_cottoncandy">Бавовняні цукерки</string>
 </resources>
