@@ -23,7 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -203,7 +203,7 @@ fun AnimeUpdatesUiItem(
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                var textHeight by remember { mutableStateOf(0) }
+                var textHeight by remember { mutableIntStateOf(0) }
                 if (!update.seen) {
                     Icon(
                         imageVector = Icons.Filled.Circle,

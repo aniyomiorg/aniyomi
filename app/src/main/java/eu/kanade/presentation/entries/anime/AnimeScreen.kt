@@ -34,7 +34,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -382,7 +383,7 @@ private fun AnimeScreenSmallImpl(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
             enabled = episodes.fastAll { !it.selected },
-            indicatorPadding = contentPadding,
+            indicatorPadding = WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues(),
         ) {
             val layoutDirection = LocalLayoutDirection.current
             VerticalFastScroller(
@@ -465,7 +466,7 @@ private fun AnimeScreenSmallImpl(
                             contentType = EntryScreenItem.AIRING_TIME,
                         ) {
                             // Handles the second by second countdown
-                            var timer by remember { mutableStateOf(state.airingTime) }
+                            var timer by remember { mutableLongStateOf(state.airingTime) }
                             LaunchedEffect(key1 = timer) {
                                 if (timer > 0L) {
                                     delay(1000L)
@@ -561,7 +562,7 @@ fun AnimeScreenLargeImpl(
     val episodes = remember(state) { state.processedEpisodes.toList() }
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
-    var topBarHeight by remember { mutableStateOf(0) }
+    var topBarHeight by remember { mutableIntStateOf(0) }
 
     PullRefresh(
         refreshing = state.isRefreshingData,
@@ -722,7 +723,7 @@ fun AnimeScreenLargeImpl(
                                     contentType = EntryScreenItem.AIRING_TIME,
                                 ) {
                                     // Handles the second by second countdown
-                                    var timer by remember { mutableStateOf(state.airingTime) }
+                                    var timer by remember { mutableLongStateOf(state.airingTime) }
                                     LaunchedEffect(key1 = timer) {
                                         if (timer > 0L) {
                                             delay(1000L)
