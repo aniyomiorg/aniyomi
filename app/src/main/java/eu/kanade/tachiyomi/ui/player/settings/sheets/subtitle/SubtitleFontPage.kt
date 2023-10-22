@@ -43,6 +43,10 @@ private fun SubtitleFont(
 ) {
     val boldSubtitles by screenModel.preferences.boldSubtitles().collectAsState()
     val italicSubtitles by screenModel.preferences.italicSubtitles().collectAsState()
+    val subtitleFontSize by screenModel.preferences.subtitleFontSize().collectAsState()
+    val textColor by screenModel.preferences.textColorSubtitles().collectAsState()
+    val borderColor by screenModel.preferences.borderColorSubtitles().collectAsState()
+    val backgroundColor by screenModel.preferences.backgroundColorSubtitles().collectAsState()
 
     val updateBold = {
         val toBold = if (boldSubtitles) "no" else "yes"
@@ -55,10 +59,6 @@ private fun SubtitleFont(
         screenModel.togglePreference(PlayerPreferences::italicSubtitles)
         MPVLib.setPropertyString("sub-italic", toItalicize)
     }
-
-    val textColorPref = screenModel.preferences.textColorSubtitles()
-    val borderColorPref = screenModel.preferences.borderColorSubtitles()
-    val backgroundColorPref = screenModel.preferences.backgroundColorSubtitles()
 
     val onSizeChanged: (Int) -> Unit = {
         MPVLib.setPropertyInt("sub-font-size", it)
@@ -84,7 +84,7 @@ private fun SubtitleFont(
                 label = stringResource(id = R.string.player_font_size_text_field),
                 placeholder = "55",
                 suffix = "",
-                value = screenModel.preferences.subtitleFontSize().get(),
+                value = subtitleFontSize,
                 step = 1,
                 min = 1,
                 onValueChanged = onSizeChanged,
@@ -112,11 +112,11 @@ private fun SubtitleFont(
         }
 
         SubtitlePreview(
-            isBold = screenModel.preferences.boldSubtitles().collectAsState().value,
-            isItalic = screenModel.preferences.italicSubtitles().collectAsState().value,
-            textColor = Color(textColorPref.collectAsState().value),
-            borderColor = Color(borderColorPref.collectAsState().value),
-            backgroundColor = Color(backgroundColorPref.collectAsState().value),
+            isBold = boldSubtitles,
+            isItalic = italicSubtitles,
+            textColor = Color(textColor),
+            borderColor = Color(borderColor),
+            backgroundColor = Color(backgroundColor),
         )
     }
 }
