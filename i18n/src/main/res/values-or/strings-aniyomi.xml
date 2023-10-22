@@ -140,4 +140,9 @@
     <string name="action_show_anime">ଅନିମେ ଦେଖାଅ</string>
     <string name="label_anime">ଅନିମେ</string>
     <string name="action_sort_last_anime_update">ଗତ ଅନିମେ ଅଦ୍ୟତନ</string>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="pref_player_hide_controls">ଚାଳକ ଖୋଲିବା ସମୟରେ ଚାଳକ ନିୟନ୍ତ୍ରଣ ଲୁଚାଯାଉ</string>
 </resources>

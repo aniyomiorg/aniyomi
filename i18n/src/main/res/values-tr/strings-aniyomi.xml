@@ -306,4 +306,17 @@
     <string name="data_saver_color_bw">Siyah ve beyaza çevir</string>
     <string name="bandwidth_hero">Bandwidth Hero (Bandwidth Hero Proxy sunucusu gerektirir)</string>
     <string name="wsrv">wsrv.nl</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_episode_swipe">Bölüm kaydırma</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… vb.</string>
+    <string name="resmush">resmush.it</string>
+    <string name="theme_mocha">Mocha</string>
+    <string name="action_hide">Gizle</string>
+    <string name="label_recent_anime_updates">Anime güncellemeleri</string>
+    <string name="download_slots_info">Sadece tarifesiz(kotasız) veya self hostlu durumda eş zamanlı indirme yapılacaktır</string>
+    <string name="pref_debanding_disabled">Devre dışı</string>
+    <string name="pref_category_hide_hidden">Gizli kategorileri kategoriler menüsünde de gizle</string>
+    <string name="pref_category_player_advanced">Gelişmiş oynatıcı ayarları</string>
+    <string name="theme_cottoncandy">Pamuk şekeri</string>
 </resources>

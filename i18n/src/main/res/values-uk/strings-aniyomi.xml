@@ -333,4 +333,5 @@
     <string name="theme_mocha">Моча</string>
     <string name="label_recent_anime_updates">Оновлення аніме</string>
     <string name="theme_cottoncandy">Бавовняні цукерки</string>
+    <string name="download_slots_info">Буде завантажувати тільки з власному хості або не лімітованих джерел</string>
 </resources>
