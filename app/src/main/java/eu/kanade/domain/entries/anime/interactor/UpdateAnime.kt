@@ -3,12 +3,16 @@ package eu.kanade.domain.entries.anime.interactor
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import tachiyomi.domain.entries.anime.interactor.getCurrentFetchRange
+import tachiyomi.domain.entries.anime.interactor.updateIntervalMeta
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
+import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZonedDateTime
 import java.util.Date
 
 class UpdateAnime(
@@ -71,6 +75,21 @@ class UpdateAnime(
                 initialized = true,
             ),
         )
+    }
+
+    suspend fun awaitUpdateIntervalMeta(
+        anime: Anime,
+        episodes: List<Episode>,
+        zonedDateTime: ZonedDateTime = ZonedDateTime.now(),
+        setCurrentFetchRange: Pair<Long, Long> = getCurrentFetchRange(zonedDateTime),
+    ): Boolean {
+        val newMeta = updateIntervalMeta(anime, episodes, zonedDateTime, setCurrentFetchRange)
+
+        return if (newMeta != null) {
+            animeRepository.updateAnime(newMeta)
+        } else {
+            true
+        }
     }
 
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {

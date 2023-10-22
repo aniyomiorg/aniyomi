@@ -1,17 +1,18 @@
 package tachiyomi.presentation.widget.entries.manga
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
-import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
+import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.ImageProvider
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.appWidgetBackground
-import androidx.glance.appwidget.updateAll
+import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.fillMaxSize
 import coil.executeBlocking
@@ -23,8 +24,7 @@ import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.util.system.dpToPx
-import kotlinx.coroutines.MainScope
-import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
@@ -46,33 +46,29 @@ class MangaUpdatesGridGlanceWidget : GlanceAppWidget() {
     private val app: Application by injectLazy()
     private val preferences: SecurityPreferences by injectLazy()
 
-    private val coroutineScope = MainScope()
-
     private var data: List<Pair<Long, Bitmap?>>? = null
 
     override val sizeMode = SizeMode.Exact
 
-    @Composable
-    override fun Content() {
-        // If app lock enabled, don't do anything
-        if (preferences.useAuthenticator().get()) {
-            LockedMangaWidget()
-            return
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val locked = preferences.useAuthenticator().get()
+        if (!locked) loadData()
+
+        provideContent {
+            // If app lock enabled, don't do anything
+            if (locked) {
+                LockedMangaWidget()
+                return@provideContent
+            }
+            UpdatesMangaWidget(data)
         }
-        UpdatesMangaWidget(data)
     }
 
-    fun loadData(list: List<MangaUpdatesWithRelations>? = null) {
-        coroutineScope.launchIO {
-            // Don't show anything when lock is active
-            if (preferences.useAuthenticator().get()) {
-                updateAll(app)
-                return@launchIO
-            }
-
+    private suspend fun loadData(list: List<MangaUpdatesWithRelations>? = null) {
+        withIOContext {
             val manager = GlanceAppWidgetManager(app)
             val ids = manager.getGlanceIds(this@MangaUpdatesGridGlanceWidget::class.java)
-            if (ids.isEmpty()) return@launchIO
+            if (ids.isEmpty()) return@withIOContext
 
             val processList = list
                 ?: Injekt.get<GetMangaUpdates>().await(
@@ -85,7 +81,6 @@ class MangaUpdatesGridGlanceWidget : GlanceAppWidget() {
                 .calculateRowAndColumnCount()
 
             data = prepareList(processList, rowCount * columnCount)
-            ids.forEach { update(app, it) }
         }
     }
 

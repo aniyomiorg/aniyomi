@@ -58,8 +58,15 @@ class LibraryPreferences(
             ENTRY_HAS_UNVIEWED,
             ENTRY_NON_COMPLETED,
             ENTRY_NON_VIEWED,
+            ENTRY_OUTSIDE_RELEASE_PERIOD,
         ),
     )
+
+    fun leadingAnimeExpectedDays() = preferenceStore.getInt("pref_library_before_expect_key", 1)
+    fun followingAnimeExpectedDays() = preferenceStore.getInt("pref_library_after_expect_key", 1)
+
+    fun leadingMangaExpectedDays() = preferenceStore.getInt("pref_library_before_expect_key", 1)
+    fun followingMangaExpectedDays() = preferenceStore.getInt("pref_library_after_expect_key", 1)
 
     fun autoUpdateMetadata() = preferenceStore.getBoolean("auto_update_metadata", false)
 
@@ -131,6 +138,26 @@ class LibraryPreferences(
 
     fun filterCompletedManga() =
         preferenceStore.getEnum("pref_filter_library_completed_v2", TriStateFilter.DISABLED)
+
+    fun filterIntervalCustomAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_custom", TriStateFilter.DISABLED)
+
+    fun filterIntervalCustomManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_custom", TriStateFilter.DISABLED)
+
+    fun filterIntervalLongAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_long", TriStateFilter.DISABLED)
+
+    fun filterIntervalLongManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_long", TriStateFilter.DISABLED)
+
+    fun filterIntervalLateAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_late", TriStateFilter.DISABLED)
+
+    fun filterIntervalLateManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_late", TriStateFilter.DISABLED)
+
+    fun filterIntervalDroppedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_dropped", TriStateFilter.DISABLED)
+
+    fun filterIntervalDroppedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_dropped", TriStateFilter.DISABLED)
+
+    fun filterIntervalPassedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_passed", TriStateFilter.DISABLED)
+
+    fun filterIntervalPassedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_passed", TriStateFilter.DISABLED)
 
     fun filterTrackedAnime(id: Int) =
         preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriStateFilter.DISABLED)
@@ -275,5 +302,6 @@ class LibraryPreferences(
         const val ENTRY_NON_COMPLETED = "manga_ongoing"
         const val ENTRY_HAS_UNVIEWED = "manga_fully_read"
         const val ENTRY_NON_VIEWED = "manga_started"
+        const val ENTRY_OUTSIDE_RELEASE_PERIOD = "manga_outside_release_period"
     }
 }
