@@ -744,8 +744,12 @@ class PlayerActivity : BaseActivity() {
         val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
-            gestures.onTouch(v, event)
-            mDetector.onTouchEvent(event)
+            if (v != null && event != null) {
+                gestures.onTouch(v, event)
+                mDetector.onTouchEvent(event)
+            } else {
+                false
+            }
         }
     }
 
