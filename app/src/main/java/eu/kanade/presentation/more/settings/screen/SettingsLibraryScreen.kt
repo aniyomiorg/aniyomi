@@ -72,7 +72,7 @@ object SettingsLibraryScreen : SearchableSettings {
             .collectAsState(initial = runBlocking { getCategories.await() })
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
         val allAnimeCategories by getAnimeCategories.subscribe()
-                .collectAsState(initial = runBlocking { getAnimeCategories.await() })
+            .collectAsState(initial = runBlocking { getAnimeCategories.await() })
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         return listOf(
