@@ -31,6 +31,8 @@ class PlayerPreferences(
 
     fun mpvConf() = preferenceStore.getString("pref_mpv_conf", "")
 
+    fun mpvInput() = preferenceStore.getString("pref_mpv_input", "")
+
     fun defaultPlayerOrientationType() = preferenceStore.getInt("pref_default_player_orientation_type_key", 10)
 
     fun adjustOrientationVideoDimensions() = preferenceStore.getBoolean("pref_adjust_orientation_video_dimensions", true)

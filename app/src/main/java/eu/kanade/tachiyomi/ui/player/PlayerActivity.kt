@@ -407,6 +407,8 @@ class PlayerActivity : BaseActivity() {
     private fun setupPlayerMPV() {
         val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
         playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+        val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
+        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
@@ -421,6 +423,8 @@ class PlayerActivity : BaseActivity() {
             2 -> MPVLib.setOptionString("deband", "yes")
             3 -> MPVLib.setOptionString("vf", "format=yuv420p")
         }
+
+        MPVLib.setOptionString("input-default-bindings", "yes")
 
         MPVLib.addLogObserver(playerObserver)
         player.addObserver(playerObserver)
@@ -1042,9 +1046,31 @@ class PlayerActivity : BaseActivity() {
              return true
              }
              */
-            else -> {}
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                doubleTapSeek(playerPreferences.skipLengthPreference().get())
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                doubleTapSeek(-playerPreferences.skipLengthPreference().get())
+                return true
+            }
+            KeyEvent.KEYCODE_SPACE -> {
+                doubleTapPlayPause()
+                return true
+            }
+            // add other keycodes as needed
+            else -> {
+                if (player.onKey(event!!)) return true
+            }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    // Removing this causes mpv to repeat the last repeated input
+    // that's not specified in onKeyDown indefinitely for some reason
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (player.onKey(event!!)) return true
+        return super.onKeyUp(keyCode, event)
     }
 
     @Suppress("UNUSED_PARAMETER")
