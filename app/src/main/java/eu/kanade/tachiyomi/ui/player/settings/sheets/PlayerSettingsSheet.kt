@@ -37,9 +37,11 @@ fun PlayerSettingsSheet(
 
     // TODO: Shift to MPV-Lib
     val togglePlayerStatsPage: (Int) -> Unit = { page ->
-        MPVLib.command(arrayOf("script-binding", "stats/display-page-$page"))
-        if (statisticsPage == 0 || page == 0) {
+        if ((statisticsPage == 0) xor (page == 0)) {
             MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
+        }
+        if (page != 0) {
+            MPVLib.command(arrayOf("script-binding", "stats/display-page-$page"))
         }
         statisticsPage = page
         screenModel.preferences.playerStatisticsPage().set(page)
