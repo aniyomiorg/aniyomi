@@ -42,6 +42,7 @@ import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
+import eu.kanade.tachiyomi.util.system.isDevFlavor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -297,17 +298,20 @@ object SettingsLibraryScreen : SearchableSettings {
                         true
                     },
                 ),
+                // TODO: remove isDevFlavor checks once functionality is available
                 Preference.PreferenceItem.MultiSelectListPreference(
                     pref = libraryUpdateDeviceRestrictionPref,
                     enabled = libraryUpdateInterval > 0,
                     title = stringResource(R.string.pref_library_update_restriction),
                     subtitle = stringResource(R.string.restrictions),
-                    entries = mapOf(
-                        DEVICE_ONLY_ON_WIFI to stringResource(R.string.connected_to_wifi),
-                        DEVICE_NETWORK_NOT_METERED to stringResource(R.string.network_not_metered),
-                        DEVICE_CHARGING to stringResource(R.string.charging),
-                        DEVICE_BATTERY_NOT_LOW to stringResource(R.string.battery_not_low),
-                    ),
+                    entries = buildMap {
+                        put(ENTRY_HAS_UNVIEWED, stringResource(R.string.pref_update_only_completely_read))
+                        put(ENTRY_NON_VIEWED, stringResource(R.string.pref_update_only_started))
+                        put(ENTRY_NON_COMPLETED, stringResource(R.string.pref_update_only_non_completed))
+                        if (isDevFlavor) {
+                            put(ENTRY_OUTSIDE_RELEASE_PERIOD, stringResource(R.string.pref_update_only_in_release_period))
+                        }
+                    },
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
                         ContextCompat.getMainExecutor(context).execute {
@@ -383,10 +387,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         pluralStringResource(R.plurals.pref_update_release_following_days, followMangaRange, followMangaRange),
                     ).joinToString(),
                     onClick = { showFetchMangaRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction && isDevFlavor },
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction && isDevFlavor },
 
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_update_anime_release_grace_period),
@@ -395,10 +399,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         pluralStringResource(R.plurals.pref_update_release_following_days, followAnimeRange, followAnimeRange),
                     ).joinToString(),
                     onClick = { showFetchAnimeRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction && isDevFlavor },
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction && isDevFlavor },
             ),
         )
     }
@@ -504,13 +508,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     contentAlignment = Alignment.Center,
                 ) {
                     val size = DpSize(width = maxWidth / 2, height = 128.dp)
-                    val items = (0..28).map {
-                        if (it == 0) {
-                            stringResource(R.string.label_default)
-                        } else {
-                            it.toString()
-                        }
-                    }
+                    val items = (0..28).map(Int::toString)
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {

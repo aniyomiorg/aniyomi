@@ -39,7 +39,6 @@ object SettingsGeneralScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val prefs = remember { Injekt.get<BasePreferences>() }
         val libraryPrefs = remember { Injekt.get<LibraryPreferences>() }
         val context = LocalContext.current
 
@@ -58,7 +57,10 @@ object SettingsGeneralScreen : SearchableSettings {
                 }
         }
 
-        return mutableListOf<Preference>().apply {
+        val langs = remember { getLangs(context) }
+        var currentLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag() ?: "") }
+
+        return buildList {
             add(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPrefs.bottomNavStyle(),
@@ -84,13 +86,6 @@ object SettingsGeneralScreen : SearchableSettings {
                 ),
             )
 
-            add(
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = prefs.confirmExit(),
-                    title = stringResource(R.string.pref_confirm_exit),
-                ),
-            )
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(
                     Preference.PreferenceItem.TextPreference(
@@ -105,8 +100,6 @@ object SettingsGeneralScreen : SearchableSettings {
                 )
             }
 
-            val langs = remember { getLangs(context) }
-            var currentLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag() ?: "") }
             add(
                 Preference.PreferenceItem.BasicListPreference(
                     value = currentLanguage,
