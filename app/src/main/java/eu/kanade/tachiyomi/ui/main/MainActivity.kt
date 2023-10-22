@@ -209,9 +209,6 @@ class MainActivity : BaseActivity() {
                 screen = HomeScreen,
                 disposeBehavior = NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = true),
             ) { navigator ->
-                if (navigator.size == 1) {
-                    ConfirmExit()
-                }
 
                 LaunchedEffect(navigator) {
                     this@MainActivity.navigator = navigator
@@ -307,22 +304,6 @@ class MainActivity : BaseActivity() {
         when (val screen = navigator?.lastItem) {
             is AssistContentScreen -> {
                 screen.onProvideAssistUrl()?.let { outContent.webUri = it.toUri() }
-            }
-        }
-    }
-
-    @Composable
-    private fun ConfirmExit() {
-        val scope = rememberCoroutineScope()
-        val confirmExit by preferences.confirmExit().collectAsState()
-        var waitingConfirmation by remember { mutableStateOf(false) }
-        BackHandler(enabled = !waitingConfirmation && confirmExit) {
-            scope.launch {
-                waitingConfirmation = true
-                val toast = toast(R.string.confirm_exit, Toast.LENGTH_LONG)
-                delay(2.seconds)
-                toast.cancel()
-                waitingConfirmation = false
             }
         }
     }

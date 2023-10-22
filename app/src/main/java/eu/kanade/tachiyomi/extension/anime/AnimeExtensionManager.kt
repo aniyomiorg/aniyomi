@@ -15,10 +15,11 @@ import eu.kanade.tachiyomi.source.anime.toStubSource
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import logcat.LogPriority
-import rx.Observable
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
@@ -201,7 +202,7 @@ class AnimeExtensionManager(
      *
      * @param extension The anime extension to be installed.
      */
-    fun installExtension(extension: AnimeExtension.Available): Observable<InstallStep> {
+    fun installExtension(extension: AnimeExtension.Available): Flow<InstallStep> {
         return installer.downloadAndInstall(api.getApkUrl(extension), extension)
     }
 
@@ -212,9 +213,9 @@ class AnimeExtensionManager(
      *
      * @param extension The anime extension to be updated.
      */
-    fun updateExtension(extension: AnimeExtension.Installed): Observable<InstallStep> {
+    fun updateExtension(extension: AnimeExtension.Installed): Flow<InstallStep> {
         val availableExt = _availableAnimeExtensionsFlow.value.find { it.pkgName == extension.pkgName }
-            ?: return Observable.empty()
+            ?: return emptyFlow()
         return installExtension(availableExt)
     }
 
