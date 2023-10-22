@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -44,6 +45,7 @@ fun TabbedDialog(
     tabTitles: List<String>,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
     onOverflowMenuClicked: (() -> Unit)? = null,
+    overflowIcon: ImageVector? = null,
     hideSystemBars: Boolean = false,
     content: @Composable (PaddingValues, Int) -> Unit,
 ) {
@@ -81,7 +83,7 @@ fun TabbedDialog(
                     }
                 }
 
-                MoreMenu(onOverflowMenuClicked, tabOverflowMenuContent)
+                MoreMenu(onOverflowMenuClicked, tabOverflowMenuContent, overflowIcon)
             }
             Divider()
 
@@ -101,6 +103,7 @@ fun TabbedDialog(
 private fun MoreMenu(
     onClickIcon: (() -> Unit)?,
     content: @Composable (ColumnScope.(() -> Unit) -> Unit)?,
+    overflowIcon: ImageVector? = null,
 ) {
     if (onClickIcon == null && content == null) return
 
@@ -110,7 +113,7 @@ private fun MoreMenu(
     Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
         IconButton(onClick = onClick) {
             Icon(
-                imageVector = Icons.Default.MoreVert,
+                imageVector = overflowIcon ?: Icons.Default.MoreVert,
                 contentDescription = stringResource(R.string.label_more),
             )
         }
