@@ -25,6 +25,7 @@
     <string name="description_hint">Description: %1$s</string>
     <string name="author_hint">Author: %1$s</string>
     <string name="artist_hint">Artist: %1$s</string>
+    <string name="custom_entry_info">Custom entry info</string>
 
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>

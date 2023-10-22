@@ -157,6 +157,10 @@ object SettingsBackupScreen : SearchableSettings {
                 BackupConst.BACKUP_PREFS to R.string.settings,
                 BackupConst.BACKUP_EXT_PREFS to R.string.extension_settings,
                 BackupConst.BACKUP_EXTENSIONS to R.string.label_extensions,
+
+                // SY -->
+                BackupConst.BACKUP_CUSTOM_INFO to R.string.custom_entry_info,
+                // SY <--
             )
         }
         val flags = remember {

@@ -276,7 +276,9 @@ class BackupManager(
         // Entry for this manga
         val mangaObject = BackupManga.copyFrom(
             manga,
+            // SY -->
             if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomMangaInfo.get(manga.id) else null,
+            // <-- SY
         )
 
         // Check if user wants chapter information in backup
@@ -333,7 +335,9 @@ class BackupManager(
         // Entry for this anime
         val animeObject = BackupAnime.copyFrom(
             anime,
+            // SY -->
             if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomAnimeInfo.get(anime.id) else null,
+            // <-- SY
         )
 
         // Check if user wants chapter information in backup
