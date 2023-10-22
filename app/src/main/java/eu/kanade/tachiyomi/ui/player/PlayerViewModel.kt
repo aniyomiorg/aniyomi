@@ -248,7 +248,13 @@ class PlayerViewModel(
 
                 val currentEp = currentEpisode ?: throw Exception("No episode loaded.")
 
-                currentVideoList = EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source).asFlow().first()
+                EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source).asFlow().first()
+                    .takeIf { it.isNotEmpty() }
+                    ?.also { currentVideoList = it }
+                    ?: run {
+                        currentVideoList = null
+                        throw Exception("Video list is empty.")
+                    }
                 savedEpisodeId = currentEp.id!!
 
                 Pair(currentVideoList, Result.success(true))
