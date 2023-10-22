@@ -3,12 +3,16 @@ package eu.kanade.domain.entries.manga.interactor
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
+import tachiyomi.domain.entries.manga.interactor.getCurrentFetchRange
+import tachiyomi.domain.entries.manga.interactor.updateIntervalMeta
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.entries.manga.repository.MangaRepository
+import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZonedDateTime
 import java.util.Date
 
 class UpdateManga(
@@ -71,6 +75,21 @@ class UpdateManga(
                 initialized = true,
             ),
         )
+    }
+
+    suspend fun awaitUpdateIntervalMeta(
+        manga: Manga,
+        chapters: List<Chapter>,
+        zonedDateTime: ZonedDateTime = ZonedDateTime.now(),
+        setCurrentFetchRange: Pair<Long, Long> = getCurrentFetchRange(zonedDateTime),
+    ): Boolean {
+        val newMeta = updateIntervalMeta(manga, chapters, zonedDateTime, setCurrentFetchRange)
+
+        return if (newMeta != null) {
+            mangaRepository.updateManga(newMeta)
+        } else {
+            true
+        }
     }
 
     suspend fun awaitUpdateLastUpdate(mangaId: Long): Boolean {

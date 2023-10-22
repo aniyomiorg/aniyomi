@@ -43,10 +43,16 @@
     <string name="action_settings">Settings</string>
     <string name="action_menu">Menu</string>
     <string name="action_filter">Filter</string>
+    <string name="action_set_interval">Set interval</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_started">Started</string>
+    <string name="action_filter_interval_custom">Customized fetch interval</string>
+    <string name="action_filter_interval_long">Fetch monthly (28 days)</string>
+    <string name="action_filter_interval_late">Late 10+ check</string>
+    <string name="action_filter_interval_dropped">Dropped? Late 20+ and 2 months</string>
+    <string name="action_filter_interval_passed">Passed check period</string>
     <!-- reserved for #4048 -->
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
@@ -54,6 +60,7 @@
     <string name="action_sort_total">Total chapters</string>
     <string name="action_sort_last_read">Last read</string>
     <string name="action_sort_unread_count">Unread count</string>
+    <string name="action_sort_next_updated">Next expected update</string>
     <string name="action_sort_latest_chapter">Latest chapter</string>
     <string name="action_sort_chapter_fetch_date">Chapter fetch date</string>
     <string name="action_sort_date_added">Date added</string>
@@ -256,6 +263,18 @@
     <string name="pref_library_update_manga_restriction">Skip updating entries</string>
     <string name="pref_update_only_non_completed">With \"Completed\" status</string>
     <string name="pref_update_only_started">That haven\'t been started</string>
+    <string name="pref_update_only_in_release_period">Outside expected release period</string>
+
+    <string name="pref_update_release_grace_period">Expected manga release grace period</string>
+    <plurals name="pref_update_release_leading_days">
+        <item quantity="one">%d day before</item>
+        <item quantity="other">%d days before</item>
+    </plurals>
+    <plurals name="pref_update_release_following_days">
+        <item quantity="one">%d day after</item>
+        <item quantity="other">%d days after</item>
+    </plurals>
+    <string name="pref_update_release_grace_period_info">A low grace period is recommended to minimize stress on sources. The more checks for an entry that are missed, the longer the interval in between checks will be with a maximum of 28 days.</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
@@ -581,6 +600,7 @@
     <string name="updating_category">Updating category</string>
     <string name="local_source_badge">Local</string>
     <string name="downloaded_chapters">Downloaded chapters</string>
+    <string name="intervals_header">Intervals</string>
     <!-- For badges/buttons on library covers. -->
     <string name="overlay_header">Overlay</string>
     <string name="tabs_header">Tabs</string>
@@ -606,6 +626,10 @@
     <string name="local_invalid_format">Invalid chapter format</string>
     <string name="local_filter_order_by">Order by</string>
     <string name="date">Date</string>
+    <plurals name="day">
+        <item quantity="one">1 day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
 
     <!-- Item info -->
     <plurals name="missing_items">
@@ -645,6 +669,10 @@
 
     <!-- Manga chapters / Anime episodes -->
     <string name="display_mode_chapter">Chapter %1$s</string>
+    <string name="manga_display_interval_title">Estimate every</string>
+    <string name="manga_display_modified_interval_title">Set to update every</string>
+    <string name="manga_modify_interval_title">Modify interval</string>
+    <string name="manga_modify_calculated_interval_title">Customize Interval</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="show_title">Source title</string>
     <string name="show_chapter_number">Chapter number</string>
@@ -838,6 +866,7 @@
     <string name="skipped_reason_not_caught_up">Skipped because there are unread chapters</string>
     <string name="skipped_reason_not_started">Skipped because no chapters are read</string>
     <string name="skipped_reason_not_always_update">Skipped because series does not require updates</string>
+    <string name="skipped_reason_not_in_release_period">Skipped because no release was expected today</string>
 
     <!-- File Picker Titles -->
     <string name="file_select_cover">Select cover image</string>
