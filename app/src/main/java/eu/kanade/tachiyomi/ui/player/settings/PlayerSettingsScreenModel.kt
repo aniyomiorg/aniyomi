@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
-import eu.kanade.presentation.components.preferences
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
@@ -47,9 +46,8 @@ class PlayerSettingsScreenModel(
     private val hasSubTracks: Boolean = true,
 ) : ScreenModel {
 
-    fun togglePreference(preference: (PlayerPreferences) -> Preference<Boolean>) {
+    fun togglePreference(preference: (PlayerPreferences) -> Preference<Boolean>) =
         preference(preferences).toggle()
-    }
 
     @Composable
     fun ToggleableRow(
@@ -86,8 +84,8 @@ class PlayerSettingsScreenModel(
         val overrideSubsASS by preferences.overrideSubsASS().collectAsState()
 
         val updateOverrideASS = {
-            togglePreference(PlayerPreferences::overrideSubsASS)
-            val overrideType = if (overrideSubsASS) "force" else "no"
+            val newOverrideValue = togglePreference(PlayerPreferences::overrideSubsASS)
+            val overrideType = if (newOverrideValue) "force" else "no"
             MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
 
