@@ -276,7 +276,7 @@
     <plurals name="download_amount_anime">
         <item quantity="one">Próximo episódio</item>
         <item quantity="many">Próximos %d episódios</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="action_save_screenshot">Gravar a captura de ecrã</string>
     <string name="chapter_dialog_header">Procurar capítulo</string>

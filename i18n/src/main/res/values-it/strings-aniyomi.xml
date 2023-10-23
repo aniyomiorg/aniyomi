@@ -276,7 +276,7 @@
     <plurals name="download_amount_anime">
         <item quantity="one">Prossimo episodio</item>
         <item quantity="many">Prossimi %d episodi</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="stats_header">Mostra statistiche</string>
     <string name="pref_debanding_cpu">CPU</string>
