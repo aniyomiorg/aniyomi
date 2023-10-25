@@ -249,7 +249,9 @@ data class AnimeTrackInfoDialogHomeScreen(
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
             val dbTracks = map { it.toDbTrack() }
-            val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
+            val loggedServices = Injekt.get<TrackManager>().services.filter {
+                it.isLogged && it.id != TrackManager.MANGA_UPDATES
+            }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
