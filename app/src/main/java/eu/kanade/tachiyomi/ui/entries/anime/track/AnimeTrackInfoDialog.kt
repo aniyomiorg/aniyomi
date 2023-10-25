@@ -47,6 +47,7 @@ import eu.kanade.presentation.track.anime.AnimeTrackInfoDialogHome
 import eu.kanade.presentation.track.anime.AnimeTrackServiceSearch
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -250,7 +251,7 @@ data class AnimeTrackInfoDialogHomeScreen(
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
             val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter {
-                it.isLogged && it.id != TrackManager.MANGA_UPDATES
+                it.isLogged && it is AnimeTrackService
             }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedServices
