@@ -113,6 +113,7 @@ class GestureHandler(
     }
 
     override fun onLongPress(e: MotionEvent) {
+        if (SeekState.mode == SeekState.LOCKED) { playerControls.toggleControls(); return }
         activity.openScreenshotSheet()
     }
 }
