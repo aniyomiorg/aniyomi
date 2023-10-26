@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.SwipeToDismiss
@@ -27,8 +26,6 @@ import androidx.compose.material.icons.filled.FileDownloadOff
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.rememberDismissState
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +55,6 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
 import tachiyomi.presentation.core.util.selectedBackground
-import kotlin.math.min
 
 @Composable
 fun AnimeEpisodeListItem(
@@ -105,6 +101,15 @@ fun AnimeEpisodeListItem(
             lastDismissDirection = null
         },
     )
+    val dismissContentAlpha = if (lastDismissDirection != null) animateDismissContentAlpha else 1f
+    val backgroundColor = if (episodeSwipeEndEnabled && (dismissState.dismissDirection == DismissDirection.StartToEnd || lastDismissDirection == DismissDirection.StartToEnd)) {
+        MaterialTheme.colorScheme.primary
+    } else if (episodeSwipeStartEnabled && (dismissState.dismissDirection == DismissDirection.EndToStart || lastDismissDirection == DismissDirection.EndToStart)) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        Color.Unspecified
+    }
+
     LaunchedEffect(dismissState.currentValue) {
         when (dismissState.currentValue) {
             DismissValue.DismissedToEnd -> {
@@ -128,17 +133,11 @@ fun AnimeEpisodeListItem(
             DismissValue.Default -> {}
         }
     }
+
     SwipeToDismiss(
         state = dismissState,
         directions = dismissDirections,
         background = {
-            val backgroundColor = if (episodeSwipeEndEnabled && (dismissState.dismissDirection == DismissDirection.StartToEnd || lastDismissDirection == DismissDirection.StartToEnd)) {
-                MaterialTheme.colorScheme.primary
-            } else if (episodeSwipeStartEnabled && (dismissState.dismissDirection == DismissDirection.EndToStart || lastDismissDirection == DismissDirection.EndToStart)) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                Color.Unspecified
-            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -176,119 +175,100 @@ fun AnimeEpisodeListItem(
             }
         },
         dismissContent = {
-            val animateCornerRatio = if (dismissState.offset.value != 0f) {
-                min(
-                    dismissState.progress.fraction / .075f,
-                    1f,
-                )
-            } else {
-                0f
-            }
-            val animateCornerShape = (8f * animateCornerRatio).dp
-            val dismissContentAlpha =
-                if (lastDismissDirection != null) animateDismissContentAlpha else 1f
-            Card(
-                modifier = modifier,
-                colors = CardDefaults.elevatedCardColors(
-                    containerColor = Color.Transparent,
-                ),
-                shape = RoundedCornerShape(animateCornerShape),
+            Row(
+                modifier = modifier
+                    .background(
+                        MaterialTheme.colorScheme.background.copy(dismissContentAlpha),
+                    )
+                    .selectedBackground(selected)
+                    .alpha(dismissContentAlpha)
+                    .combinedClickable(
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                    )
+                    .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
             ) {
-                Row(
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.background.copy(dismissContentAlpha),
-                        )
-                        .selectedBackground(selected)
-                        .alpha(dismissContentAlpha)
-                        .combinedClickable(
-                            onClick = onClick,
-                            onLongClick = onLongClick,
-                        )
-                        .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(2.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            var textHeight by remember { mutableIntStateOf(0) }
-                            if (!seen) {
-                                Icon(
-                                    imageVector = Icons.Filled.Circle,
-                                    contentDescription = stringResource(R.string.action_filter_unseen),
-                                    modifier = Modifier
-                                        .height(8.dp)
-                                        .padding(end = 4.dp),
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            }
-                            if (bookmark) {
-                                Icon(
-                                    imageVector = Icons.Filled.Bookmark,
-                                    contentDescription = stringResource(R.string.action_filter_bookmarked),
-                                    modifier = Modifier
-                                        .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            }
-                            Text(
-                                text = title,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = LocalContentColor.current.copy(alpha = textAlpha),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                onTextLayout = { textHeight = it.size.height },
+                        var textHeight by remember { mutableIntStateOf(0) }
+                        if (!seen) {
+                            Icon(
+                                imageVector = Icons.Filled.Circle,
+                                contentDescription = stringResource(R.string.unread),
+                                modifier = Modifier
+                                    .height(8.dp)
+                                    .padding(end = 4.dp),
+                                tint = MaterialTheme.colorScheme.primary,
                             )
                         }
+                        if (bookmark) {
+                            Icon(
+                                imageVector = Icons.Filled.Bookmark,
+                                contentDescription = stringResource(R.string.action_filter_bookmarked),
+                                modifier = Modifier
+                                    .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = LocalContentColor.current.copy(alpha = textAlpha),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            onTextLayout = { textHeight = it.size.height },
+                        )
+                    }
 
-                        Row {
-                            ProvideTextStyle(
-                                value = MaterialTheme.typography.bodyMedium.copy(
-                                    fontSize = 12.sp,
-                                    color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
-                                ),
-                            ) {
-                                if (date != null) {
-                                    Text(
-                                        text = date,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                    )
-                                    if (watchProgress != null || scanlator != null) DotSeparatorText()
-                                }
-                                if (watchProgress != null) {
-                                    Text(
-                                        text = watchProgress,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.alpha(ReadItemAlpha),
-                                    )
-                                    if (scanlator != null) DotSeparatorText()
-                                }
-                                if (scanlator != null) {
-                                    Text(
-                                        text = scanlator,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                    )
-                                }
+                    Row {
+                        ProvideTextStyle(
+                            value = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 12.sp,
+                                color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
+                            ),
+                        ) {
+                            if (date != null) {
+                                Text(
+                                    text = date,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                if (watchProgress != null || scanlator != null) DotSeparatorText()
+                            }
+                            if (watchProgress != null) {
+                                Text(
+                                    text = watchProgress,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.alpha(ReadItemAlpha),
+                                )
+                                if (scanlator != null) DotSeparatorText()
+                            }
+                            if (scanlator != null) {
+                                Text(
+                                    text = scanlator,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             }
                         }
                     }
+                }
 
-                    if (onDownloadClick != null) {
-                        EpisodeDownloadIndicator(
-                            enabled = downloadIndicatorEnabled,
-                            modifier = Modifier.padding(start = 4.dp),
-                            downloadStateProvider = downloadStateProvider,
-                            downloadProgressProvider = downloadProgressProvider,
-                            onClick = onDownloadClick,
-                        )
-                    }
+                if (onDownloadClick != null) {
+                    EpisodeDownloadIndicator(
+                        enabled = downloadIndicatorEnabled,
+                        modifier = Modifier.padding(start = 4.dp),
+                        downloadStateProvider = downloadStateProvider,
+                        downloadProgressProvider = downloadProgressProvider,
+                        onClick = onDownloadClick,
+                    )
                 }
             }
         },
