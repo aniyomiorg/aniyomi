@@ -258,7 +258,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = mangaToUpdate
-            .groupBy { it.manga.source }
+            .groupBy { it.manga.source + (0..4).random() }
             .filterKeys { sourceManager.get(it) !is UnmeteredSource }
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
@@ -285,7 +285,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source }.values
+            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }.values
                 .map { mangaInSource ->
                     async {
                         semaphore.withPermit {
@@ -414,7 +414,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val currentlyUpdatingManga = CopyOnWriteArrayList<Manga>()
 
         coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source }
+            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }
                 .values
                 .map { mangaInSource ->
                     async {

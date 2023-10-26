@@ -259,7 +259,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = animeToUpdate
-            .groupBy { it.anime.source }
+            .groupBy { it.anime.source + (0..4).random() }
             .filterKeys { sourceManager.get(it) !is UnmeteredSource }
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
@@ -286,7 +286,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         coroutineScope {
-            animeToUpdate.groupBy { it.anime.source }.values
+            animeToUpdate.groupBy { it.anime.source + (0..4).random() }.values
                 .map { animeInSource ->
                     async {
                         semaphore.withPermit {
@@ -415,7 +415,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val currentlyUpdatingAnime = CopyOnWriteArrayList<Anime>()
 
         coroutineScope {
-            animeToUpdate.groupBy { it.anime.source }
+            animeToUpdate.groupBy { it.anime.source + (0..4).random() }
                 .values
                 .map { animeInSource ->
                     async {

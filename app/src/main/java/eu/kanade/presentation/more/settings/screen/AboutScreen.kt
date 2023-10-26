@@ -153,7 +153,7 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "Discord",
                             icon = SimpleIcons.Discord,
-                            url = "https://discord.gg/F32UjdJZrR",
+                            url = "https://discord.gg/s82Vu589Ya",
                         )
                         LinkIcon(
                             label = "Reddit",
