@@ -12,6 +12,10 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -92,13 +96,20 @@ private fun TracksPageBuilder(
     selectedTrackIndex: Int,
     onTrackSelected: (Int) -> Unit,
 ) {
+    var selectedIndex by remember { mutableStateOf(selectedTrackIndex) }
+
+    val onSelected: (Int) -> Unit = { index ->
+        onTrackSelected(index)
+        selectedIndex = index
+    }
+
     tracks.forEachIndexed { index, track ->
-        val selected = selectedTrackIndex == index
+        val selected = selectedIndex == index
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = { onTrackSelected(index) })
+                .clickable(onClick = { onSelected(index) })
                 .padding(sheetDialogPadding),
         ) {
             Text(
