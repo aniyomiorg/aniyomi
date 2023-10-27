@@ -155,9 +155,9 @@
     <string name="screenshot_show_subs">Afficher les sous-titres dans la capture d\'écran</string>
     <string name="enable_volume_brightness_gestures">Gestes de basculement du volume et de la luminosité</string>
     <string name="enable_horizontal_seek_gesture">Activer le geste de recherche horizontale</string>
-    <string name="stats_page_1">Page 1</string>
-    <string name="stats_page_2">Page 2</string>
-    <string name="stats_page_3">Page 3</string>
+    <string name="player_statistics_page_1">Page 1</string>
+    <string name="player_statistics_page_2">Page 2</string>
+    <string name="player_statistics_page_3">Page 3</string>
     <string name="recent_anime_time">Ép. %1$s - %2$s</string>
     <string name="download_insufficient_space">Impossible de télécharger les chapitres, l\'espace de stockage est insuffisant</string>
     <string name="download_queue_size_warning">Attention : les téléchargements massifs peuvent entraîner un ralentissement des sources ou le blocage de Tachiyomi. Appuyez pour en savoir plus.</string>
@@ -231,8 +231,7 @@
     <string name="player_aniskip_recap">Passer le récap</string>
     <string name="notification_episodes_multiple">Épisodes %1$s</string>
     <string name="episode_settings">Paramètres des épisodes</string>
-    <string name="toggle_stats">Activer les statistiques</string>
-    <string name="stats_page">Pages des statistiques</string>
+    <string name="toggle_player_statistics_page">Pages des statistiques</string>
     <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
     <string name="pref_category_player_aniskip_info">Paramètres AniSkip</string>
     <string name="label_anime_extensions">Extensions d\'animés</string>
@@ -267,7 +266,7 @@
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
     <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
     <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
-    <string name="player_hwdec_dialog_title">Définir le mode de décodage matériel par défaut</string>
+    <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
     <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>

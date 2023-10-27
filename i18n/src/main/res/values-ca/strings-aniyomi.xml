@@ -147,10 +147,9 @@
     <string name="episode_progress_no_total">Progrés: %1$s</string>
     <string name="screenshot_show_subs">Mostra els subtítols a la captura de pantalla</string>
     <string name="screenshot_header">Fes captura de pantalla</string>
-    <string name="toggle_stats">Alternar estadístiques</string>
-    <string name="stats_page_1">Pàgina 1</string>
-    <string name="stats_page_2">Pàgina 2</string>
-    <string name="stats_page_3">Pàgina 3</string>
+    <string name="player_statistics_page_1">Pàgina 1</string>
+    <string name="player_statistics_page_2">Pàgina 2</string>
+    <string name="player_statistics_page_3">Pàgina 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="episode_settings_updated">Actualitzada configuració per defecte dels episodis</string>
     <string name="information_no_recent_anime">Cap visualització recent</string>
@@ -199,7 +198,7 @@
     <string name="notification_episodes_single">Episodi %1$s</string>
     <string name="player_aniskip_dontskip_toast">Salta en %d segons</string>
     <string name="player_aniskip_skip">%s saltats</string>
-    <string name="player_hwdec_dialog_title">Establir per defecte el mode decodificació per hardware</string>
+    <string name="player_hwdec_mode">Establir per defecte el mode decodificació per hardware</string>
     <string name="episode_settings">Ajustos del episodi</string>
     <string name="quality_dialog_header">Canviar la qualitat del vídeo:</string>
     <string name="want_to_watch">Pendent de visualitzar</string>
@@ -222,7 +221,7 @@
     <string name="default_anime_category">Categoria anime per defecte</string>
     <string name="pref_progress_mark_as_seen">Punt on marcar l\'episodi com a vist</string>
     <string name="pref_preserve_watching_position">Mantindre la posició de visionat als capítols finalitzats</string>
-    <string name="stats_page">Pàgina d\'estats</string>
+    <string name="toggle_player_statistics_page">Pàgina d\'estats</string>
     <string name="label_anime_extensions">Extensions d\'anime</string>
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar l\'anime</string>

@@ -152,7 +152,7 @@
     <string name="episode_progress_no_total">Прогрес: %1$s</string>
     <string name="enable_volume_brightness_gestures">Ввімкнути жести гучності та яскравості</string>
     <string name="enable_horizontal_seek_gesture">Ввімкнути жест горизонтального пошуку</string>
-    <string name="stats_page">Сторінка статистики</string>
+    <string name="toggle_player_statistics_page">Сторінка статистики</string>
     <string name="player_controls_skip_intro_text">+%1$d с</string>
     <string name="label_anime_history">Аніме</string>
     <string name="disable_auto_play">Автовідтворення вимкнено</string>
@@ -163,7 +163,7 @@
     <string name="pref_category_player_aniskip_info">Для роботи AniSkip потрібно, щоб аніме відстежувалося за допомогою MAL або Anilist</string>
     <string name="pref_waiting_time_aniskip_7">7 секунд</string>
     <string name="pref_waiting_time_aniskip_8">8 секунд</string>
-    <string name="player_hwdec_dialog_title">Встановити режим апаратного декодування за замовчуванням</string>
+    <string name="player_hwdec_mode">Встановити режим апаратного декодування за замовчуванням</string>
     <string name="notification_episodes_single">Епізод %1$s</string>
     <string name="episode_settings">Налаштування епізоду</string>
     <string name="rotation_sensor_landscape">Горизонтальне зображення</string>
@@ -173,7 +173,6 @@
     <string name="unknown_studio">Невідома студія</string>
     <string name="download_unseen">Не переглянуто</string>
     <string name="watching">Переглядаю</string>
-    <string name="toggle_stats">Перемикання статистики</string>
     <string name="notification_new_episodes">Знайдено нові епізоди</string>
     <string name="information_no_recent_anime">Останнім часом нічого не дивилися</string>
     <string name="episode_settings_updated">Оновлено налаштування епізодів за умовчанням</string>
@@ -265,9 +264,9 @@
     <string name="currently_watching">Зараз переглядається</string>
     <string name="plan_to_watch">Заплановано</string>
     <string name="screenshot_show_subs">Показати субтитри на знімку екрана</string>
-    <string name="stats_page_1">Сторінка 1</string>
-    <string name="stats_page_2">Сторінка 2</string>
-    <string name="stats_page_3">Сторінка 3</string>
+    <string name="player_statistics_page_1">Сторінка 1</string>
+    <string name="player_statistics_page_2">Сторінка 2</string>
+    <string name="player_statistics_page_3">Сторінка 3</string>
     <string name="recent_anime_time">Еп. %1$s - %2$s</string>
     <string name="video_list_empty_error">Відео не знайдено</string>
     <string name="label_history">Манґа</string>
@@ -291,7 +290,6 @@
     <string name="choose_video_quality">Виберіть якість відео:</string>
     <string name="extension_settings">Налаштування розширення</string>
     <string name="action_save_screenshot">Зберегти знімок екрана</string>
-    <string name="stats_header">Показати статистику</string>
     <string name="chapter_dialog_header">Перейти до розділу</string>
     <string name="data_saver_downloader">Використовувати зберігач даних у завантажувачі</string>
     <string name="data_saver_exclude">Виключити зі зберігача даних</string>

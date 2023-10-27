@@ -82,7 +82,6 @@
     <string name="player_aniskip_dontskip">گذر نکن</string>
     <string name="label_migration_manga">انتقال مانگا</string>
     <string name="settings">تنظیمات</string>
-    <string name="stats_header">نمایش آمار و ارقام</string>
     <string name="player_aniskip_op">گذر از اوپنینگ</string>
     <string name="pref_show_next_episode_airing_time">نمایش زمان انتشار قسمت بعدی</string>
     <string name="used_cache_both">اشغال توسط انیمه: %1$s، اشغال توسط مانگا: %2$s</string>
@@ -93,7 +92,7 @@
     <string name="plan_to_watch">برنامه برای مشاهده</string>
     <string name="not_interesting">غیر جالب</string>
     <string name="want_to_read">خواهان خواندن</string>
-    <string name="stats_page_3">صفحه 3</string>
+    <string name="player_statistics_page_3">صفحه 3</string>
     <string name="download_notifier_download_paused_episodes">دانلود قسمت متوقف شد</string>
     <string name="pref_invalidate_download_cache_summary">اجبار برنامه به بررسی مجدد چپتر و قسمت‌های دانلود شده</string>
     <string name="no_next_episode">قسمت‌ بعدی پیدا نشد!</string>
@@ -105,7 +104,7 @@
     <string name="pref_waiting_time_aniskip">اتمام مهلت</string>
     <string name="pref_waiting_time_aniskip_7">7 ثانیه</string>
     <string name="pref_waiting_time_aniskip_9">9 ثانیه</string>
-    <string name="player_hwdec_dialog_title">تنظیم حالت پیشفرض رمزگشایی سخت افزاری</string>
+    <string name="player_hwdec_mode">تنظیم حالت پیشفرض رمزگشایی سخت افزاری</string>
     <string name="pref_backup_flags">تنظیمات بکاپ</string>
     <string name="label_migration_anime">انتقال انیمه</string>
     <string name="data_saver_exclude">استثناء از صرفه‌جویی داده</string>
@@ -135,7 +134,7 @@
     <string name="pref_episode_swipe_end">کارکرد کشیدن به راست</string>
     <string name="pref_episode_swipe_start">کارکرد کشیدن به چپ</string>
     <string name="action_display_local_badge_anime">انیمه داخلی</string>
-    <string name="stats_page_1">صفحه 1</string>
+    <string name="player_statistics_page_1">صفحه 1</string>
     <string name="action_filter_unseen">دیده نشده</string>
     <string name="action_sort_last_anime_update">آخرین بروزرسانی انیمه</string>
     <string name="action_sort_unseen_count">مقدار دیده نشده</string>
@@ -159,7 +158,7 @@
     <string name="delete_downloads_for_anime">حذف قسمت‌های دانلود شده؟</string>
     <string name="display_mode_episode">قسمت %1$s</string>
     <string name="dialog_with_checkbox_reset_anime">بازنشانی همه قسمت‌های مشاهده شده برای این انیمه</string>
-    <string name="stats_page_2">صفحه 2</string>
+    <string name="player_statistics_page_2">صفحه 2</string>
     <string name="episode_progress">پیشرفت: %1$s از %2$s</string>
     <string name="download_queue_size_warning">اخطار: دانلود انبوه ممکن است منجر به کند شدن منابع یا مسدود شدن آنی‌یومی شود. برای اطلاعات بیشتر لمس کنید.</string>
     <string name="player_overlay_back">عقب</string>
@@ -226,10 +225,9 @@
     <string name="action_play_internally">پخش داخلی</string>
     <string name="extension_settings">تنظیمات افزونه‌ها</string>
     <string name="watching">در حال مشاهده</string>
-    <string name="toggle_stats">تغییر آمار</string>
     <string name="player_controls_skip_intro_text">%1$d ثانیه</string>
     <string name="pref_bottom_nav_no_manga">انتقال مانگا به برگه \"بیشتر\"</string>
-    <string name="stats_page">صفحه آمار</string>
+    <string name="toggle_player_statistics_page">صفحه آمار</string>
     <string name="episode_progress_no_total">پیشرفت: %1$s</string>
     <string name="pref_mpv_conf">ویرایش فایل پیکربندی MPV برای تنظیمات بیشتر پخش کننده</string>
     <string name="download_unseen">دیده نشده</string>

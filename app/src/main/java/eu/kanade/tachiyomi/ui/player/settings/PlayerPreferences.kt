@@ -10,23 +10,18 @@ class PlayerPreferences(
     fun preserveWatchingPosition() = preferenceStore.getBoolean("pref_preserve_watching_position", false)
 
     fun enablePip() = preferenceStore.getBoolean("pref_enable_pip", true)
-
     fun pipEpisodeToasts() = preferenceStore.getBoolean("pref_pip_episode_toasts", true)
-
     fun pipOnExit() = preferenceStore.getBoolean("pref_pip_on_exit", false)
 
     fun rememberPlayerBrightness() = preferenceStore.getBoolean("pref_remember_brightness", false)
-
     fun playerBrightnessValue() = preferenceStore.getFloat("player_brightness_value", -1.0F)
 
     fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
-
     fun playerVolumeValue() = preferenceStore.getFloat("player_volume_value", -1.0F)
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
 
     fun invertedPlaybackTxt() = preferenceStore.getBoolean("pref_invert_playback_txt", false)
-
     fun invertedDurationTxt() = preferenceStore.getBoolean("pref_invert_duration_txt", false)
 
     fun mpvConf() = preferenceStore.getString("pref_mpv_conf", "")
@@ -34,11 +29,9 @@ class PlayerPreferences(
     fun mpvInput() = preferenceStore.getString("pref_mpv_input", "")
 
     fun defaultPlayerOrientationType() = preferenceStore.getInt("pref_default_player_orientation_type_key", 10)
-
     fun adjustOrientationVideoDimensions() = preferenceStore.getBoolean("pref_adjust_orientation_video_dimensions", true)
 
     fun defaultPlayerOrientationLandscape() = preferenceStore.getInt("pref_default_player_orientation_landscape_key", 6)
-
     fun defaultPlayerOrientationPortrait() = preferenceStore.getInt("pref_default_player_orientation_portrait_key", 7)
 
     fun playerSpeed() = preferenceStore.getFloat("pref_player_speed", 1F)
@@ -56,28 +49,38 @@ class PlayerPreferences(
     fun screenshotSubtitles() = preferenceStore.getBoolean("pref_screenshot_subtitles", false)
 
     fun gestureVolumeBrightness() = preferenceStore.getBoolean("pref_gesture_volume_brightness", true)
-
     fun gestureHorizontalSeek() = preferenceStore.getBoolean("pref_gesture_horizontal_seek", true)
+    fun playerStatisticsPage() = preferenceStore.getInt("pref_player_statistics_page", 0)
 
     fun alwaysUseExternalPlayer() = preferenceStore.getBoolean("pref_always_use_external_player", false)
-
     fun externalPlayerPreference() = preferenceStore.getString("external_player_preference", "")
 
     fun progressPreference() = preferenceStore.getFloat("pref_progress_preference", 0.85F)
 
     fun defaultIntroLength() = preferenceStore.getInt("pref_default_intro_length", 85)
-
     fun skipLengthPreference() = preferenceStore.getInt("pref_skip_length_preference", 10)
 
     fun aniSkipEnabled() = preferenceStore.getBoolean("pref_enable_ani_skip", false)
-
     fun autoSkipAniSkip() = preferenceStore.getBoolean("pref_enable_auto_skip_ani_skip", false)
-
     fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
-
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
-    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
-
+    fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
     fun deband() = preferenceStore.getInt("pref_deband", 0)
+
+    fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
+    fun audioDelay() = preferenceStore.getInt("pref_audio_delay", 0)
+
+    fun rememberSubtitlesDelay() = preferenceStore.getBoolean("pref_remember_subtitles_delay", false)
+    fun subtitlesDelay() = preferenceStore.getInt("pref_subtitles_delay", 0)
+
+    fun overrideSubsASS() = preferenceStore.getBoolean("pref_override_subtitles_ass", false)
+
+    fun subtitleFontSize() = preferenceStore.getInt("pref_subtitles_font_size", 55)
+    fun boldSubtitles() = preferenceStore.getBoolean("pref_bold_subtitles", false)
+    fun italicSubtitles() = preferenceStore.getBoolean("pref_italic_subtitles", false)
+
+    fun textColorSubtitles() = preferenceStore.getInt("pref_text_color_subtitles", -1)
+    fun borderColorSubtitles() = preferenceStore.getInt("pref_border_color_subtitles", -16777216)
+    fun backgroundColorSubtitles() = preferenceStore.getInt("pref_background_color_subtitles", 0)
 }
