@@ -885,8 +885,12 @@ class PlayerActivity : BaseActivity() {
         val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
-            gestures.onTouch(v, event)
-            mDetector.onTouchEvent(event)
+            try { // TODO: https://issuetracker.google.com/issues/238920463 is fixed in API 34, but for now this will do
+                gestures.onTouch(v, event)
+                mDetector.onTouchEvent(event)
+            } catch (_: NullPointerException) {
+                false
+            }
         }
     }
 

@@ -48,6 +48,7 @@ import eu.kanade.presentation.track.manga.MangaTrackServiceSearch
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
@@ -248,7 +249,9 @@ data class MangaTrackInfoDialogHomeScreen(
         }
 
         private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {
-            val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
+            val loggedServices = Injekt.get<TrackManager>().services.filter {
+                it.isLogged && it is MangaTrackService
+            }
             val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
