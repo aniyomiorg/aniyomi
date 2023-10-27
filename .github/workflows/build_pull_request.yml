@@ -5,6 +5,7 @@ on:
       - '**.md'
       - 'i18n/src/main/res/**/strings.xml'
       - 'i18n/src/main/res/**/strings-aniyomi.xml'
+      - 'i18n/src/main/res/**/strings-kuukiyomi.xml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -20,7 +21,7 @@ jobs:
 
     steps:
       - name: Clone repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -37,4 +38,4 @@ jobs:
       - name: Build app and run unit tests
         uses: gradle/gradle-command-action@v2
         with:
-          arguments: lintKotlin assembleStandardRelease testReleaseUnitTest
+          arguments: ktlintCheck assembleStandardRelease testReleaseUnitTest
