@@ -146,8 +146,7 @@
     <string name="player_aniskip_dontskip">Non saltare</string>
     <string name="video_crop_screen">Centrato</string>
     <string name="playback_speed_dialog_reset">Ripristina</string>
-    <string name="toggle_stats">Attiva statistiche</string>
-    <string name="player_hwdec_dialog_title">Imposta la modalità di decodifica hardware predefinita</string>
+    <string name="player_hwdec_mode">Imposta la modalità di decodifica hardware predefinita</string>
     <string name="rotation_sensor_portrait">Sensore portrait</string>
     <string name="action_sort_unseen_count">Conteggio di non visti</string>
     <string name="action_sort_last_anime_update">Ultimo aggiornamento anime</string>
@@ -219,10 +218,10 @@
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
     <string name="screenshot_header">Fai uno screenshot</string>
-    <string name="stats_page">Statistiche</string>
-    <string name="stats_page_1">Pagina 1</string>
-    <string name="stats_page_2">Pagina 2</string>
-    <string name="stats_page_3">Pagina 3</string>
+    <string name="toggle_player_statistics_page">Statistiche</string>
+    <string name="player_statistics_page_1">Pagina 1</string>
+    <string name="player_statistics_page_2">Pagina 2</string>
+    <string name="player_statistics_page_3">Pagina 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="notification_new_episodes">Nuovi episodi trovati</string>
     <string name="episode_settings_updated">Aggiornate le impostazioni di default per gli episodi</string>

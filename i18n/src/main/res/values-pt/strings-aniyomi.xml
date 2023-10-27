@@ -119,9 +119,9 @@
     <string name="episode_progress_no_total">Progresso: %1$s</string>
     <string name="screenshot_header">Fazer captura de ecrã</string>
     <string name="screenshot_show_subs">Mostrar legendas na captura de ecrã</string>
-    <string name="stats_page_1">Página 1</string>
-    <string name="stats_page_2">Página 2</string>
-    <string name="stats_page_3">Página 3</string>
+    <string name="player_statistics_page_1">Página 1</string>
+    <string name="player_statistics_page_2">Página 2</string>
+    <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Não foi possível transferir devido a falta de espaço de armazenamento</string>
     <string name="download_queue_size_warning">Aviso: descargas grandes em massa podem levar as fontes a ficarem lentas e/ou começarem a bloquear o Tachiyomi. Toque para saber mais.</string>
@@ -198,7 +198,7 @@
     <string name="pref_category_external_downloader">Downloader externo</string>
     <string name="pref_use_external_downloader">Sempre usar downloader externo para anime</string>
     <string name="pref_external_downloader_selection">App de download preferido</string>
-    <string name="stats_page">Página de estatísticas</string>
+    <string name="toggle_player_statistics_page">Página de estatísticas</string>
     <string name="playback_speed_dialog_reset">Repor</string>
     <string name="player_aniskip_dontskip">Não saltar</string>
     <string name="pref_library_manga_columns">Mangás por linha</string>
@@ -230,11 +230,10 @@
     <string name="pref_remember_brightness">Lembrar e mudar para o último brilho usado</string>
     <string name="pref_mpv_conf">Editar o ficheiro de configuração do MPV para obter mais definições do reprodutor</string>
     <string name="enable_volume_brightness_gestures">Ativar Gestos de Volume e Brilho</string>
-    <string name="toggle_stats">Alternar estatísticas</string>
     <string name="video_stretch_screen">Esticado ao ecrã</string>
     <string name="action_change_intro_length">Alterar a duração da abertura</string>
     <string name="player_aniskip_skip">%s saltado</string>
-    <string name="player_hwdec_dialog_title">Definir o modo de descodificação de hardware padrão</string>
+    <string name="player_hwdec_mode">Definir o modo de descodificação de hardware padrão</string>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>
@@ -282,7 +281,6 @@
     <string name="chapter_dialog_header">Procurar capítulo</string>
     <string name="pref_hide_in_manga_library_items">Ocultar entradas de manga já na biblioteca</string>
     <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>
-    <string name="stats_header">Mostrar estatísticas</string>
     <string name="copied_video_link_to_clipboard">Ligação de qualidade de vídeo copiada para a área de transferência</string>
     <string name="choose_video_quality">Escolha a qualidade do vídeo:</string>
     <string name="extension_settings">Configurações de extensão</string>

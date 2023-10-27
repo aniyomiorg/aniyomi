@@ -175,7 +175,7 @@
     <string name="enable_auto_play">Automatické přerávání je zapnuté</string>
     <string name="action_change_intro_length">Změnit délku intra</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
-    <string name="stats_page">Stránka statistik</string>
+    <string name="toggle_player_statistics_page">Stránka statistik</string>
     <string name="repeating_anime">Sleduji znovu</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="plan_to_watch">Plánuji sledovat</string>
@@ -187,10 +187,9 @@
     <string name="screenshot_show_subs">Zobrazit titulky ve snímku obrazovky</string>
     <string name="enable_volume_brightness_gestures">Přepnutí gest pro hlasitost a jas</string>
     <string name="enable_horizontal_seek_gesture">Přepnutí gesta pro horizontální posun</string>
-    <string name="toggle_stats">Přepnout statistiky</string>
-    <string name="stats_page_1">Strana 1</string>
-    <string name="stats_page_2">Strana 2</string>
-    <string name="stats_page_3">Strana 3</string>
+    <string name="player_statistics_page_1">Strana 1</string>
+    <string name="player_statistics_page_2">Strana 2</string>
+    <string name="player_statistics_page_3">Strana 3</string>
     <string name="video_list_empty_error">Nenalezeno žádné video</string>
     <string name="notification_new_episodes">Nalezeny nové epizody</string>
     <string name="information_no_recent_anime">Nedávno nic nebylo sledováno</string>
@@ -255,7 +254,7 @@
     <string name="pref_enable_netflix_style_aniskip">Zapnout styl Netflixu</string>
     <string name="player_aniskip_dontskip">Nepřeskakovat</string>
     <string name="player_aniskip_skip">Přeskočeno %s</string>
-    <string name="player_hwdec_dialog_title">Nastavit výchozí hardwarový dekódovací režim</string>
+    <string name="player_hwdec_mode">Nastavit výchozí hardwarový dekódovací režim</string>
     <string name="notification_episodes_single_and_more">Epizoda %1$s a dalších %2$d</string>
     <string name="notification_episodes_multiple">Epizody %1$s</string>
     <string name="episode_settings">Nastavení epizody</string>

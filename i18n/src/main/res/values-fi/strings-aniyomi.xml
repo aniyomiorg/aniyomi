@@ -80,8 +80,8 @@
     <string name="pref_skip_disable">Poista käytöstä</string>
     <string name="pref_player_smooth_seek">Ota tarkka haku käyttöön</string>
     <string name="want_to_read">Haluan lukea</string>
-    <string name="stats_page_2">Sivu 2</string>
-    <string name="stats_page_3">Sivu 3</string>
+    <string name="player_statistics_page_2">Sivu 2</string>
+    <string name="player_statistics_page_3">Sivu 3</string>
     <string name="action_bookmark_episode">Lisää jakso kirjanmerkkeihin</string>
     <string name="anime_categories">Animeluokat</string>
     <string name="action_download_unseen">Lataa katsomattomat jaksot</string>
@@ -91,10 +91,10 @@
     <string name="action_display_download_badge_anime">Lataa jaksot</string>
     <string name="pref_category_player_orientation">Suunta</string>
     <string name="pref_default_intro_length">Esittelyn ohituksen oletuspituus</string>
-    <string name="stats_page_1">Sivu 1</string>
+    <string name="player_statistics_page_1">Sivu 1</string>
     <string name="pref_always_use_external_player">Käytä aina ulkoista toisto-ohjelmaa</string>
     <string name="pref_download_new_episodes">Lataa uudet jaksot</string>
-    <string name="stats_page">Tilastosivu</string>
+    <string name="toggle_player_statistics_page">Tilastosivu</string>
     <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon\?</string>
     <string name="screenshot_header">Ota näyttökuva</string>
     <string name="display_mode_episode">Jakso %1$s</string>

@@ -317,7 +317,7 @@
     <string name="choose_video_quality">Wybierz jakość wideo:</string>
     <string name="want_to_read">Chcę przeczytać</string>
     <string name="pref_mpv_conf">Edytuj plik konfiguracyjny MPV w celu dalszej konfiguracji odtwarzacza</string>
-    <string name="player_hwdec_dialog_title">Ustaw domyślny tryb dekodowania sprzętowego</string>
+    <string name="player_hwdec_mode">Ustaw domyślny tryb dekodowania sprzętowego</string>
     <string name="pref_default_landscape_orientation">Domyślny krajobrazowe</string>
     <string name="local_manga_source">Lokalne źródło mangi</string>
     <string name="playback_options_quality">Jakość</string>
