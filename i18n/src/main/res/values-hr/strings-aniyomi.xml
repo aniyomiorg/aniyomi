@@ -93,8 +93,7 @@
     <string name="action_display_download_badge_anime">Preuzete epizode</string>
     <string name="action_sort_unseen_count">Broj nepogledanih</string>
     <string name="episode_progress_no_total">Napredak: %1$s</string>
-    <string name="stats_page_3">Stranica 3</string>
-    <string name="toggle_stats">Uklj./Isklj. statistiku</string>
+    <string name="player_statistics_page_3">Stranica 3</string>
     <string name="video_list_empty_error">Nije pronađen nijedan video</string>
     <string name="subtitle_dialog_header">Titlovi</string>
     <string name="audio_dialog_header">Audio</string>
@@ -120,7 +119,7 @@
     <string name="pref_waiting_time_aniskip_10">10 sekunda</string>
     <string name="player_aniskip_dontskip_toast">Preskoči za %d sekunde</string>
     <string name="player_aniskip_skip">%s preskočeno</string>
-    <string name="player_hwdec_dialog_title">Postavi standardni modus hardverskog dekodiranja</string>
+    <string name="player_hwdec_mode">Postavi standardni modus hardverskog dekodiranja</string>
     <string name="notification_episodes_multiple">Epizode %1$s</string>
     <string name="episode_settings">Postavke epizode</string>
     <string name="pref_backup_flags">Opcije za sigurnosne kopije</string>
@@ -244,10 +243,9 @@
     <string name="want_to_read">Želim čitati</string>
     <string name="screenshot_header">Snimi snimku ekrana</string>
     <string name="screenshot_show_subs">Prikaži titlove u snimci ekrana</string>
-    <string name="stats_header">Prikaži statistiku</string>
-    <string name="stats_page">Stranica statistike</string>
-    <string name="stats_page_1">Stranica 1</string>
-    <string name="stats_page_2">Stranica 2</string>
+    <string name="toggle_player_statistics_page">Stranica statistike</string>
+    <string name="player_statistics_page_1">Stranica 1</string>
+    <string name="player_statistics_page_2">Stranica 2</string>
     <string name="recent_anime_time">Epizoda %1$s – %2$s</string>
     <string name="notification_new_episodes">Pronađene su nove epizode</string>
     <string name="download_notifier_download_paused_episodes">Preuzimanje epizode zaustavljeno</string>

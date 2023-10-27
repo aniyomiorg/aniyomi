@@ -513,13 +513,12 @@ class PlayerViewModel(
     /**
      * Sets the screenshot as cover and notifies the UI of the result.
      */
-    fun setAsCover(image: InputStream?) {
+    fun setAsCover(imageStream: () -> InputStream) {
         val anime = currentAnime ?: return
-        val imageStream = image ?: return
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(Injekt.get(), imageStream)
+                anime.editCover(Injekt.get(), imageStream())
                 if (anime.isLocal() || anime.favorite) {
                     SetAsCover.Success
                 } else {
@@ -674,10 +673,6 @@ class PlayerViewModel(
         return null
     }
 
-    fun closeDialog() {
-        mutableState.update { it.copy(dialog = null) }
-    }
-
     fun showEpisodeList() {
         mutableState.update { it.copy(dialog = Dialog.EpisodeList) }
     }
@@ -686,12 +681,32 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = Dialog.SpeedPicker) }
     }
 
-    fun showDefaultDecoder() {
-        mutableState.update { it.copy(dialog = Dialog.DefaultDecoder) }
-    }
-
     fun showSkipIntroLength() {
         mutableState.update { it.copy(dialog = Dialog.SkipIntroLength) }
+    }
+
+    fun showSubtitleSettings() {
+        mutableState.update { it.copy(sheet = Sheet.SubtitleSettings) }
+    }
+
+    fun showScreenshotOptions() {
+        mutableState.update { it.copy(sheet = Sheet.ScreenshotOptions) }
+    }
+
+    fun showPlayerSettings() {
+        mutableState.update { it.copy(sheet = Sheet.PlayerSettings) }
+    }
+
+    fun showVideoChapters() {
+        mutableState.update { it.copy(sheet = Sheet.VideoChapters) }
+    }
+
+    fun showTracksCatalog() {
+        mutableState.update { it.copy(sheet = Sheet.TracksCatalog) }
+    }
+
+    fun closeDialogSheet() {
+        mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
     data class State(
@@ -701,13 +716,21 @@ class PlayerViewModel(
         val source: AnimeSource? = null,
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
+        val sheet: Sheet? = null,
     )
 
     sealed class Dialog {
         object EpisodeList : Dialog()
         object SpeedPicker : Dialog()
-        object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
+    }
+
+    sealed class Sheet {
+        object SubtitleSettings : Sheet()
+        object ScreenshotOptions : Sheet()
+        object PlayerSettings : Sheet()
+        object VideoChapters : Sheet()
+        object TracksCatalog : Sheet()
     }
 
     sealed class Event {

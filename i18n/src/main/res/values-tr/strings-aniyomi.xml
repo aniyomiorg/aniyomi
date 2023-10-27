@@ -141,9 +141,9 @@
     <string name="episode_progress_no_total">İlerleme: %1$s</string>
     <string name="episode_progress">İlerleme: %1$s/%2$s</string>
     <string name="screenshot_show_subs">Ekran görüntüsünde alt yazıları göster</string>
-    <string name="stats_page_1">Sayfa 1</string>
-    <string name="stats_page_2">Sayfa 2</string>
-    <string name="stats_page_3">Sayfa 3</string>
+    <string name="player_statistics_page_1">Sayfa 1</string>
+    <string name="player_statistics_page_2">Sayfa 2</string>
+    <string name="player_statistics_page_3">Sayfa 3</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Sonraki bölüm bulunamadı!</string>
     <string name="label_history">Manga</string>
@@ -225,7 +225,6 @@
     <string name="anime_from_library">Kütüphaneden Anime</string>
     <string name="plan_to_watch">İzlemeyi planla</string>
     <string name="enable_horizontal_seek_gesture">Yatay hareketle göz atmayı aktifleştir</string>
-    <string name="toggle_stats">İstatistikleri değiştir</string>
     <string name="recent_anime_time">Bölüm %1$s - %2$s</string>
     <string name="subtitle_dialog_header">Altyazı</string>
     <string name="notification_episodes_multiple">%1$s bölüm</string>
@@ -237,7 +236,7 @@
     <string name="pref_pip_episode_toasts">Pencere içinde pencere modunda bölüm değiştirirken bölüm bildirimlerini gösterme</string>
     <string name="currently_reading">Şu anda okunuyor</string>
     <string name="want_to_watch">İzlemek istiyorum</string>
-    <string name="stats_page">İstatistikler</string>
+    <string name="toggle_player_statistics_page">İstatistikler</string>
     <string name="episode_settings_updated">Varsayılan bölüm ayarları güncellendi</string>
     <string name="pref_invalidate_download_cache_summary">Uygulamayı indirilen bölümleri ve kısımları yeniden kontrol etmeye zorla</string>
     <string name="audio_dialog_header">Ses</string>
@@ -273,11 +272,10 @@
     <string name="player_aniskip_recap">Özeti Atla</string>
     <string name="pref_waiting_time_aniskip">Düğme zaman aşımı</string>
     <string name="player_aniskip_mixedOp">MixedOp\'u atla</string>
-    <string name="player_hwdec_dialog_title">Varsayılan donanım kod çözme modunu ayarla</string>
+    <string name="player_hwdec_mode">Varsayılan donanım kod çözme modunu ayarla</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
     <string name="chapter_dialog_header">Bölüm ara</string>
-    <string name="stats_header">İstatistikleri göster</string>
     <string name="action_save_screenshot">Ekran görüntüsünü kaydet</string>
     <string name="pref_media_control_chapter_seeking_summary">Eģer etkinleştirilirse, sıradaki bölüm düğmesine basıldığında ve sırada bölüm yok ise 85 saniye ileri atlar</string>
     <string name="go_to_next_chapter">Sıradaki bölüm</string>
