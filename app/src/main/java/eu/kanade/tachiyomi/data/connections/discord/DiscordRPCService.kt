@@ -215,7 +215,7 @@ class DiscordRPCService : Service() {
                 val client = networkService.client
                 val response = if (!discordIncognito) {
                     try {
-                        client.newCall(GET("http://140.83.62.114:5000/link?imageLink=${playerData.thumbnailUrl}")).execute()
+                        client.newCall(GET("https://kizzy-api.vercel.app/image?url=${playerData.thumbnailUrl}")).execute()
                     } catch (e: Throwable) {
                         null
                     }
@@ -223,8 +223,8 @@ class DiscordRPCService : Service() {
                     null
                 }
 
-                val animeThumbnail = response?.header("discord-image-link")
-                    ?.takeIf { it != "external/Not Found" }
+                val animeThumbnail = response?.body?.string()
+                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore("\"}")
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setAnimeScreen(
@@ -271,7 +271,7 @@ class DiscordRPCService : Service() {
                 val client = networkService.client
                 val response = if (!discordIncognito) {
                     try {
-                        client.newCall(GET("http://140.83.62.114:5000/link?imageLink=${readerData.thumbnailUrl}")).execute()
+                        client.newCall(GET("https://kizzy-api.vercel.app/image?url=${readerData.thumbnailUrl}")).execute()
                     } catch (e: Throwable) {
                         null
                     }
@@ -279,8 +279,8 @@ class DiscordRPCService : Service() {
                     null
                 }
 
-                val mangaThumbnail = response?.header("discord-image-link")
-                    ?.takeIf { it != "external/Not Found" }
+                val mangaThumbnail = response?.body?.string()
+                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore("\"}")
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setMangaScreen(
