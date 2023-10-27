@@ -128,6 +128,7 @@
     <string name="pref_remember_volume">Remember and switch to the last used volume</string>
     <!-- Needs better English -->
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
+    <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
@@ -209,15 +210,13 @@
     <string name="episode_progress">Progress: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progress: %1$s</string>
     <string name="screenshot_header">Take screenshot</string>
-    <string name="screenshot_show_subs">Show subtitles in screenshot</string>
+    <string name="screenshot_show_subs">Include Subtitles</string>
     <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
     <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>
-    <string name="stats_header">Show statistics</string>
-    <string name="toggle_stats">Toggle stats</string>
-    <string name="stats_page">Stats page</string>
-    <string name="stats_page_1">Page 1</string>
-    <string name="stats_page_2">Page 2</string>
-    <string name="stats_page_3">Page 3</string>
+    <string name="toggle_player_statistics_page">Toggle statistics page</string>
+    <string name="player_statistics_page_1">Page 1</string>
+    <string name="player_statistics_page_2">Page 2</string>
+    <string name="player_statistics_page_3">Page 3</string>
     <string name="pref_category_player_advanced">Advanced player settings</string>
     <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
     <string name="pref_debanding_title">Debanding</string>
@@ -261,9 +260,11 @@
     <string name="video_fit_screen">"Fit to screen"</string>
     <string name="video_crop_screen">"Cropped to screen"</string>
     <string name="video_stretch_screen">"Stretched to screen"</string>
+    <string name="video_custom_screen">"Custom aspect ratio"</string>
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
+    <string name="settings_dialog_header">Player settings</string>
     <string name="quality_dialog_header">Video quality</string>
     <string name="chapter_dialog_header">Seek to chapter</string>
     <string name="subtitle_dialog_header">Subtitle</string>
@@ -290,7 +291,7 @@
     <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="player_aniskip_dontskip_toast">Skip in %d seconds</string>
     <string name="player_aniskip_skip">%s skipped</string>
-    <string name="player_hwdec_dialog_title">Set default hardware decoding mode</string>
+    <string name="player_hwdec_mode">Hardware decoding mode</string>
     <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
     <string name="notification_episodes_multiple">Episodes %1$s</string>
@@ -320,6 +321,26 @@
     <string name="pref_episode_swipe_start">Swipe to left action</string>
 
     <string name="pref_category_hide_hidden">Hide hidden categories from categories screen</string>
+
+
+    <!-- Subtitle settings -->
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_settings_delay_tab">Delay</string>
+    <string name="player_subtitle_settings_font_tab">Font</string>
+    <string name="player_subtitle_settings_color_tab">Color</string>
+    <string name="player_subtitle_settings">Subtitle settings</string>
+    <string name="player_subtitle_empty_warning">Has no effect because there aren\'t any subtitle tracks in this video</string>
+    <string name="player_override_ass_subtitles">Override ASS subtitles</string>
+    <string name="player_reset_subtitles">Reset subtitles to default</string>
+    <string name="player_subtitle_delay">Subtitle delay</string>
+    <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
+    <string name="player_audio_delay">Audio delay</string>
+    <string name="player_audio_remember_delay">Remember audio delay</string>
+    <string name="player_track_delay_text_field">Delay(s)</string>
+    <string name="player_font_size_text_field">Font size</string>
+    <string name="player_subtitle_text_color">Text</string>
+    <string name="player_subtitle_border_color">Border</string>
+    <string name="player_subtitle_background_color">Background</string>
 
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>

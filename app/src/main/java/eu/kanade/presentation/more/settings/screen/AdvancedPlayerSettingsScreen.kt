@@ -18,10 +18,10 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val scope = rememberCoroutineScope()
         val context = LocalContext.current
         val mpvConf = playerPreferences.mpvConf()
         val mpvInput = playerPreferences.mpvInput()
-        val scope = rememberCoroutineScope()
 
         return listOf(
             Preference.PreferenceItem.MultiLineEditTextPreference(

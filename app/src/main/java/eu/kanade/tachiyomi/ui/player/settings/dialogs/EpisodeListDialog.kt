@@ -62,7 +62,7 @@ fun EpisodeListDialog(
 
     PlayerDialog(
         titleRes = R.string.episodes,
-        modifier = Modifier.fillMaxHeight(fraction = 0.8F),
+        modifier = Modifier.fillMaxHeight(fraction = 0.8F).fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {
         VerticalFastScroller(

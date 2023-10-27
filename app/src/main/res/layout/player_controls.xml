@@ -109,31 +109,29 @@
             <!-- Top Controls (Left)-->
 
             <ImageButton
-                android:id="@+id/player_overflow"
+                android:id="@+id/settingsBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
-                android:onClick="openOptionsSheet"
                 android:src="@drawable/ic_overflow_20dp"
-                app:layout_constraintLeft_toRightOf="@id/settingsBtn"
+                app:layout_constraintLeft_toRightOf="@id/tracksBtn"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/episodeListBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
-                android:id="@+id/settingsBtn"
+                android:id="@+id/tracksBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
-                android:contentDescription="Settings"
-                android:onClick="openTracksSheet"
+                android:contentDescription="Tracks"
                 android:src="@drawable/ic_video_settings_20dp"
                 app:layout_constraintLeft_toRightOf="@id/chaptersBtn"
-                app:layout_constraintRight_toLeftOf="@id/player_overflow"
-                app:layout_constraintTop_toTopOf="@id/player_overflow"
+                app:layout_constraintRight_toLeftOf="@id/settingsBtn"
+                app:layout_constraintTop_toTopOf="@id/settingsBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
@@ -142,27 +140,12 @@
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
-                android:onClick="pickChapter"
-                android:src="@drawable/ic_video_chapter_24dp"
+                android:src="@drawable/ic_video_chapter_20dp"
                 android:visibility="gone"
-                app:layout_constraintLeft_toRightOf="@id/cycleDecoderBtn"
-                app:layout_constraintRight_toLeftOf="@id/settingsBtn"
-                app:layout_constraintTop_toTopOf="@id/settingsBtn"
-                app:tint="?attr/colorOnPrimarySurface" />
-
-            <TextView
-                android:id="@+id/cycleDecoderBtn"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
-                android:background="?attr/selectableItemBackground"
-                android:onClick="switchDecoder"
-                android:gravity="center"
-                android:text="HW+"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnPrimarySurface"
                 app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
-                app:layout_constraintRight_toLeftOf="@id/chaptersBtn"
-                app:layout_constraintTop_toTopOf="@id/chaptersBtn" />
+                app:layout_constraintRight_toLeftOf="@id/tracksBtn"
+                app:layout_constraintTop_toTopOf="@id/tracksBtn"
+                app:tint="?attr/colorOnPrimarySurface" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/toggleAutoplay"
@@ -170,8 +153,8 @@
                 android:layout_height="50dp"
                 tools:checked="true"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtn"
-                app:layout_constraintTop_toTopOf="@id/cycleDecoderBtn" />
+                app:layout_constraintRight_toLeftOf="@id/chaptersBtn"
+                app:layout_constraintTop_toTopOf="@id/chaptersBtn" />
 
             <!-- Audio -->
 

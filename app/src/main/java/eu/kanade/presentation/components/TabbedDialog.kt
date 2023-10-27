@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -43,9 +44,13 @@ fun TabbedDialog(
     onDismissRequest: () -> Unit,
     tabTitles: List<String>,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
+    onOverflowMenuClicked: (() -> Unit)? = null,
+    overflowIcon: ImageVector? = null,
+    hideSystemBars: Boolean = false,
     content: @Composable (PaddingValues, Int) -> Unit,
 ) {
     AdaptiveSheet(
+        hideSystemBars = hideSystemBars,
         onDismissRequest = onDismissRequest,
     ) { contentPadding ->
         val scope = rememberCoroutineScope()
@@ -78,7 +83,7 @@ fun TabbedDialog(
                     }
                 }
 
-                tabOverflowMenuContent?.let { MoreMenu(it) }
+                MoreMenu(onOverflowMenuClicked, tabOverflowMenuContent, overflowIcon)
             }
             Divider()
 
@@ -96,21 +101,29 @@ fun TabbedDialog(
 
 @Composable
 private fun MoreMenu(
-    content: @Composable ColumnScope.(() -> Unit) -> Unit,
+    onClickIcon: (() -> Unit)?,
+    content: @Composable (ColumnScope.(() -> Unit) -> Unit)?,
+    overflowIcon: ImageVector? = null,
 ) {
+    if (onClickIcon == null && content == null) return
+
     var expanded by remember { mutableStateOf(false) }
+    val onClick = onClickIcon ?: { expanded = true }
+
     Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(onClick = onClick) {
             Icon(
-                imageVector = Icons.Default.MoreVert,
+                imageVector = overflowIcon ?: Icons.Default.MoreVert,
                 contentDescription = stringResource(R.string.label_more),
             )
         }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            content { expanded = false }
+        if (onClickIcon == null) {
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+            ) {
+                content!! { expanded = false }
+            }
         }
     }
 }

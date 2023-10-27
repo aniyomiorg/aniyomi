@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.settings.dialogs
 import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,7 +35,8 @@ fun DefaultDecoderDialog(
     }
 
     PlayerDialog(
-        titleRes = R.string.player_hwdec_dialog_title,
+        titleRes = R.string.player_hwdec_mode,
+        modifier = Modifier.fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {
         Column {

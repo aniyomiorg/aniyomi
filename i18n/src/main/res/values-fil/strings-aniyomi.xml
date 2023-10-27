@@ -77,7 +77,6 @@
     <string name="sort_by_episode_number">Ayon sa bilang ng episode</string>
     <string name="enable_volume_brightness_gestures">Paganahin ang mga gesture ng Volume at Linawag</string>
     <string name="enable_horizontal_seek_gesture">Paganahin ang Pahalang na Hanapin ang Gesture</string>
-    <string name="toggle_stats">I-toggle ang mga istatistika</string>
     <string name="pref_category_player_aniskip_info">Kinakailangan ng AniSkip na masubaybayan ang anime sa MAL o Anilist upang gumana</string>
     <string name="pref_default_home_tab_library">Itakda ang panimulang screen sa Manga Tab</string>
     <string name="pref_anime_library_update_categories_details">Ang mga anime sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
@@ -113,7 +112,7 @@
     <string name="player_aniskip_skip">Nilaktawan ng %s</string>
     <string name="pref_enable_netflix_style_aniskip">Paganahin ang istilo ng Netflix</string>
     <string name="player_aniskip_dontskip">Huwag laktawan</string>
-    <string name="player_hwdec_dialog_title">Itakda ang default na hardware decoding mode</string>
+    <string name="player_hwdec_mode">Itakda ang default na hardware decoding mode</string>
     <string name="notification_episodes_multiple">Mga Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s at %2$d pa</string>
     <string name="pref_backup_flags">Mga opsyon sa pag-backup</string>
@@ -139,7 +138,7 @@
     <string name="display_mode_episode">Episode %1$s</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="dialog_with_checkbox_reset_anime">I-reset ang lahat ng episode para sa anime na ito</string>
-    <string name="stats_page_1">Pahina 1</string>
+    <string name="player_statistics_page_1">Pahina 1</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="video_list_empty_error">Walang nakitang video</string>
     <string name="episode_settings">Mga setting ng episode</string>
@@ -200,7 +199,7 @@
         <item quantity="one">1 bagong episode</item>
         <item quantity="other">%1$d (na) mga bagong episode</item>
     </plurals>
-    <string name="stats_page_3">Pahina 3</string>
+    <string name="player_statistics_page_3">Pahina 3</string>
     <string name="action_edit_manga_categories">I-edit ang mga kategorya ng manga</string>
     <string name="action_display_show_continue_reading_button">Ipakita ang pindutan sa tuluyang panonood/pagbasa</string>
     <string name="action_start_download_externally">Gumamit ng external downloader</string>
@@ -249,8 +248,8 @@
     <string name="screenshot_show_subs">Ipakita ang mga subtitle sa screenshot</string>
     <string name="dialog_with_checkbox_remove_description_anime">Aalisin nito ang petsa ng panonood ng episode na ito. Sigurado ka ba\?</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="stats_page">Pahina ng istatistika</string>
-    <string name="stats_page_2">Pahina 2</string>
+    <string name="toggle_player_statistics_page">Pahina ng istatistika</string>
+    <string name="player_statistics_page_2">Pahina 2</string>
     <string name="notification_new_episodes">May nakitang mga bagong episode</string>
     <string name="episode_settings_updated">Na-update ang mga default na setting ng episode</string>
     <string name="download_notifier_download_paused_episodes">Na-pause ang pag-download ng episode</string>
@@ -298,7 +297,6 @@
     <string name="data_saver">Data Saver</string>
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
-    <string name="stats_header">Ipakita ang statistika</string>
     <string name="pref_hide_in_manga_library_items">Itago ang mga entry na nasa library na</string>
     <string name="pref_hide_in_anime_library_items">Itago ang mga entry na nasa library</string>
     <string name="chapter_dialog_header">Mag-seek sa chapter</string>
