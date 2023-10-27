@@ -54,7 +54,6 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
-import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -212,7 +211,7 @@ object AnimeLibraryTab : Tab() {
                             navigator.push(GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""))
                         },
                         getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
-                        getDisplayModeForPage = { state.categories[it].display },
+                        getDisplayMode = { screenModel.getDisplayMode() },
                         getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(it) },
                     ) { state.getAnimelibItemsByPage(it) }
                 }

@@ -43,7 +43,7 @@ fun AnimeLibraryContent(
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
     getNumberOfAnimeForCategory: (Category) -> Int?,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getAnimeLibraryForPage: (Int) -> List<AnimeLibraryItem>,
 ) {
@@ -103,7 +103,7 @@ fun AnimeLibraryContent(
                 selectedAnime = selection,
                 searchQuery = searchQuery,
                 onGlobalSearchClicked = onGlobalSearchClicked,
-                getDisplayModeForPage = getDisplayModeForPage,
+                getDisplayMode = getDisplayMode,
                 getColumnsForOrientation = getColumnsForOrientation,
                 getLibraryForPage = getAnimeLibraryForPage,
                 onClickAnime = onClickAnime,

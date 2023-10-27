@@ -53,7 +53,6 @@ import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
-import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -213,7 +212,7 @@ object MangaLibraryTab : Tab() {
                             navigator.push(GlobalMangaSearchScreen(screenModel.state.value.searchQuery ?: ""))
                         },
                         getNumberOfMangaForCategory = { state.getMangaCountForCategory(it) },
-                        getDisplayModeForPage = { state.categories[it].display },
+                        getDisplayMode = { screenModel.getDisplayMode() },
                         getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(it) },
                     ) { state.getLibraryItemsByPage(it) }
                 }
