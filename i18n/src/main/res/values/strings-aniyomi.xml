@@ -322,7 +322,7 @@
     <string name="pref_category_hide_hidden">Hide hidden categories from categories screen</string>
 
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
-
+    
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
     <string name="data_saver_stop_exclude">Stop excluding from data saver</string>

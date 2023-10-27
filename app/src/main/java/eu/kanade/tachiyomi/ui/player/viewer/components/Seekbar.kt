@@ -6,7 +6,7 @@ import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
@@ -68,7 +68,7 @@ class Seekbar(
     ) {
         val range = 0F..duration
         val validSegments = segments.filter { it.start in range }
-        var mutableValue by remember { mutableStateOf(value) }
+        var mutableValue by remember { mutableFloatStateOf(value) }
         val interactionSource = remember { MutableInteractionSource() }
         val isDragging by interactionSource.collectIsDraggedAsState()
         val gap by animateDpAsState(if (isDragging) 5.dp else 2.dp, label = "gap")
