@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -34,7 +33,6 @@ fun SpeedPickerDialog(
 
     PlayerDialog(
         titleRes = R.string.title_speed_dialog,
-        modifier = Modifier.fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {
         Column {

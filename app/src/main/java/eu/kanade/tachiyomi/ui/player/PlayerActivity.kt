@@ -48,24 +48,23 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.ScreenshotOptionsSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.TracksCatalogSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.VideoChaptersSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
-import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
-import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -79,6 +78,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -88,15 +88,14 @@ import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
 class PlayerActivity : BaseActivity() {
 
@@ -137,7 +136,7 @@ class PlayerActivity : BaseActivity() {
                     setInitialEpisodeError(exception)
                 }
             }
-            lifecycleScope.launch { setVideoList(qualityIndex = 0, initResult.first!!) }
+            lifecycleScope.launch { setVideoList(quality = 0, initResult.first!!) }
         }
         super.onNewIntent(intent)
     }
@@ -208,6 +207,8 @@ class PlayerActivity : BaseActivity() {
         null
     }
 
+    private var playerSettingsSheet: PlayerSettingsSheet? = null
+
     @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
         if (hasAudioFocus) return
@@ -250,21 +251,19 @@ class PlayerActivity : BaseActivity() {
 
     private var playerIsDestroyed = true
 
-    private var selectedQualityIndex = 0
+    private var subTracks: Array<Track> = emptyArray()
 
-    private var subtitleTracks: Array<Track> = emptyArray()
-
-    private var selectedSubtitleIndex = 0
+    private var selectedSub = 0
 
     private var hadPreviousSubs = false
 
     private var audioTracks: Array<Track> = emptyArray()
 
-    private var selectedAudioIndex = 0
+    private var selectedAudio = 0
 
     private var hadPreviousAudio = false
 
-    private var videoChapters: List<VideoChapter> = emptyList()
+    private var videoChapters: List<Chapter> = emptyList()
         set(value) {
             field = value
             runOnUiThread {
@@ -289,7 +288,6 @@ class PlayerActivity : BaseActivity() {
         setupMediaSession()
         setupPlayerMPV()
         setupPlayerAudio()
-        setupPlayerSubtitles()
         setupPlayerBrightness()
         loadDeviceDimensions()
 
@@ -334,7 +332,7 @@ class PlayerActivity : BaseActivity() {
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,
-                            onDismissRequest = pauseForDialogSheet(),
+                            onDismissRequest = pauseForDialog(),
                         )
                     }
                 }
@@ -347,7 +345,19 @@ class PlayerActivity : BaseActivity() {
                     SpeedPickerDialog(
                         currentSpeed = MPVLib.getPropertyDouble("speed"),
                         onSpeedChanged = ::updateSpeed,
-                        onDismissRequest = pauseForDialogSheet(),
+                        onDismissRequest = pauseForDialog(),
+                    )
+                }
+
+                is PlayerViewModel.Dialog.DefaultDecoder -> {
+                    fun updateDecoder(newDec: String) {
+                        playerPreferences.standardHwDec().set(newDec)
+                        mpvUpdateHwDec(HwDecState.get(newDec))
+                    }
+                    DefaultDecoderDialog(
+                        currentDecoder = playerPreferences.standardHwDec().get(),
+                        onSelectDecoder = ::updateDecoder,
+                        onDismissRequest = pauseForDialog(),
                     )
                 }
 
@@ -358,118 +368,9 @@ class PlayerActivity : BaseActivity() {
                             defaultSkipIntroLength = playerPreferences.defaultIntroLength().get(),
                             fromPlayer = true,
                             updateSkipIntroLength = viewModel::setAnimeSkipIntroLength,
-                            onDismissRequest = pauseForDialogSheet(),
+                            onDismissRequest = pauseForDialog(),
                         )
                     }
-                }
-
-                null -> {}
-            }
-        }
-
-        binding.sheetRoot.setComposeContent {
-            val state by viewModel.state.collectAsState()
-
-            when (state.sheet) {
-                is PlayerViewModel.Sheet.ScreenshotOptions -> {
-                    ScreenshotOptionsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
-                        cachePath = cacheDir.path,
-                        onSetAsCover = viewModel::setAsCover,
-                        onShare = { viewModel.shareImage(it, player.timePos) },
-                        onSave = { viewModel.saveImage(it, player.timePos) },
-                        onDismissRequest = pauseForDialogSheet(),
-                    )
-                }
-
-                is PlayerViewModel.Sheet.PlayerSettings -> {
-                    PlayerSettingsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
-                        onDismissRequest = pauseForDialogSheet(),
-                    )
-                }
-
-                is PlayerViewModel.Sheet.VideoChapters -> {
-                    fun setChapter(videoChapter: VideoChapter, text: String) {
-                        val seekDifference = videoChapter.time.roundToInt() - (player.timePos ?: 0)
-                        doubleTapSeek(time = seekDifference, isDoubleTap = false, videoChapterText = text)
-                    }
-                    VideoChaptersSheet(
-                        timePosition = player.timePos ?: 0,
-                        videoChapters = videoChapters,
-                        onVideoChapterSelected = ::setChapter,
-                        onDismissRequest = pauseForDialogSheet(),
-                    )
-                }
-
-                is PlayerViewModel.Sheet.TracksCatalog -> {
-                    val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()?.takeUnless { it.isEmpty() }
-                    val subtitleTracks = subtitleTracks.takeUnless { it.isEmpty() }
-                    val audioTracks = audioTracks.takeUnless { it.isEmpty() }
-
-                    if (qualityTracks != null && subtitleTracks != null && audioTracks != null) {
-                        fun onQualitySelected(qualityIndex: Int) {
-                            if (playerIsDestroyed) return
-                            if (selectedQualityIndex == qualityIndex) return
-                            showLoadingIndicator(true)
-                            logcat(LogPriority.INFO) { "Changing quality" }
-                            setVideoList(qualityIndex, currentVideoList)
-                        }
-
-                        fun onSubtitleSelected(index: Int) {
-                            if (selectedSubtitleIndex == index || selectedSubtitleIndex > subtitleTracks.lastIndex) return
-                            selectedSubtitleIndex = index
-                            if (index == 0) {
-                                player.sid = -1
-                                return
-                            }
-                            val tracks = player.tracks.getValue("sub")
-                            val selectedLoadedTrack = tracks.firstOrNull {
-                                it.name == subtitleTracks[index].url ||
-                                    it.mpvId.toString() == subtitleTracks[index].url
-                            }
-                            selectedLoadedTrack?.let { player.sid = it.mpvId }
-                                ?: MPVLib.command(arrayOf("sub-add", subtitleTracks[index].url, "select", subtitleTracks[index].url))
-                        }
-
-                        fun onAudioSelected(index: Int) {
-                            if (selectedAudioIndex == index || selectedAudioIndex > audioTracks.lastIndex) return
-                            selectedAudioIndex = index
-                            if (index == 0) {
-                                player.aid = -1
-                                return
-                            }
-                            val tracks = player.tracks.getValue("audio")
-                            val selectedLoadedTrack = tracks.firstOrNull {
-                                it.name == audioTracks[index].url ||
-                                    it.mpvId.toString() == audioTracks[index].url
-                            }
-                            selectedLoadedTrack?.let { player.aid = it.mpvId }
-                                ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
-                        }
-
-                        TracksCatalogSheet(
-                            isEpisodeOnline = viewModel.isEpisodeOnline(),
-                            qualityTracks = qualityTracks,
-                            subtitleTracks = subtitleTracks,
-                            audioTracks = audioTracks,
-                            selectedQualityIndex = selectedQualityIndex,
-                            selectedSubtitleIndex = selectedSubtitleIndex,
-                            selectedAudioIndex = selectedAudioIndex,
-                            onQualitySelected = ::onQualitySelected,
-                            onSubtitleSelected = ::onSubtitleSelected,
-                            onAudioSelected = ::onAudioSelected,
-                            onSettingsClicked = viewModel::showSubtitleSettings,
-                            onDismissRequest = pauseForDialogSheet(),
-                        )
-                    }
-                }
-
-                is PlayerViewModel.Sheet.SubtitleSettings -> {
-                    SubtitleSettingsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, subtitleTracks.size > 1),
-                        onDismissRequest = pauseForDialogSheet(fadeControls = true),
-                    )
                 }
 
                 null -> {}
@@ -511,26 +412,16 @@ class PlayerActivity : BaseActivity() {
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
-
-        val speedProperty = MPVLib.getPropertyDouble("speed")
-        val currentSpeed = if (speedProperty == 1.0) playerPreferences.playerSpeed().get().toDouble() else speedProperty
-        MPVLib.setPropertyDouble("speed", currentSpeed)
-
         MPVLib.observeProperty("chapter-list", MPVLib.mpvFormat.MPV_FORMAT_NONE)
+        MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        MPVLib.setOptionString("hwdec", playerPreferences.hwDec().get())
+        mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         when (playerPreferences.deband().get()) {
             1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             2 -> MPVLib.setOptionString("deband", "yes")
             3 -> MPVLib.setOptionString("vf", "format=yuv420p")
-        }
-
-        val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
-        if (currentPlayerStatisticsPage != 0) {
-            MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
-            MPVLib.command(arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage"))
         }
 
         MPVLib.setOptionString("input-default-bindings", "yes")
@@ -549,10 +440,6 @@ class PlayerActivity : BaseActivity() {
             playerPreferences.playerVolumeValue().get()
         }
 
-        if (playerPreferences.rememberAudioDelay().get()) {
-            MPVLib.setPropertyDouble("audio-delay", (playerPreferences.audioDelay().get() / 1000).toDouble())
-        }
-
         verticalScrollRight(0F)
 
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
@@ -560,24 +447,6 @@ class PlayerActivity : BaseActivity() {
         playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
         volumeControlStream = AudioManager.STREAM_MUSIC
-    }
-
-    private fun setupPlayerSubtitles() {
-        with(playerPreferences) {
-            val overrideType = if (overrideSubsASS().get()) "force" else "no"
-            MPVLib.setPropertyString("sub-ass-override", overrideType)
-
-            if (rememberSubtitlesDelay().get()) {
-                MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get().toDouble())
-            }
-
-            MPVLib.setPropertyString("sub-bold", if (boldSubtitles().get()) "yes" else "no")
-            MPVLib.setPropertyString("sub-italic", if (italicSubtitles().get()) "yes" else "no")
-            MPVLib.setPropertyInt("sub-font-size", subtitleFontSize().get())
-            MPVLib.setPropertyString("sub-color", textColorSubtitles().get().toHexString())
-            MPVLib.setPropertyString("sub-border-color", borderColorSubtitles().get().toHexString())
-            MPVLib.setPropertyString("sub-back-color", backgroundColorSubtitles().get().toHexString())
-        }
     }
 
     private fun setupPlayerBrightness() {
@@ -712,28 +581,14 @@ class PlayerActivity : BaseActivity() {
         } else {
             switchControlsOrientation(true)
         }
-
-        val aspectProperty = MPVLib.getPropertyString("video-aspect-override").toDouble()
-        AspectState.mode = if (aspectProperty != -1.0 && aspectProperty != (deviceWidth / deviceHeight).toDouble()) {
-            AspectState.CUSTOM
-        } else {
-            AspectState.get(playerPreferences.playerViewMode().get())
-        }
-
-        playerControls.setViewMode(showText = false)
     }
 
-    private fun pauseForDialogSheet(fadeControls: Boolean = false): () -> Unit {
+    private fun pauseForDialog(): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
-        if (!fadeControls) playerControls.fadeOutControlsRunnable.run()
         return {
-            if (!wasPlayerPaused) {
-                player.paused = false
-            } else {
-                playerControls.showAndFadeControls()
-            }
-            viewModel.closeDialogSheet()
+            if (!wasPlayerPaused) player.paused = false
+            viewModel.closeDialog()
             refreshUi()
         }
     }
@@ -845,7 +700,7 @@ class PlayerActivity : BaseActivity() {
                     rightToLeft = playerControls.binding.toggleAutoplay.id
                     rightToRight = ConstraintLayout.LayoutParams.UNSET
                 }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     topToBottom = ConstraintLayout.LayoutParams.UNSET
                 }
@@ -862,7 +717,7 @@ class PlayerActivity : BaseActivity() {
                     rightToLeft = ConstraintLayout.LayoutParams.UNSET
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.UNSET
                     topToBottom = playerControls.binding.episodeListBtn.id
                 }
@@ -872,8 +727,12 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
+            playerControls.setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
-            viewModel.closeDialogSheet()
+            viewModel.closeDialog()
+            if (playerSettingsSheet?.isShowing == true) {
+                playerSettingsSheet!!.dismiss()
+            }
         }
     }
 
@@ -901,7 +760,10 @@ class PlayerActivity : BaseActivity() {
      */
     internal fun changeEpisode(episodeId: Long?, autoPlay: Boolean = false) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
-        viewModel.closeDialogSheet()
+        viewModel.closeDialog()
+        if (playerSettingsSheet?.isShowing == true) {
+            playerSettingsSheet!!.dismiss()
+        }
 
         player.paused = true
         showLoadingIndicator(true)
@@ -925,7 +787,7 @@ class PlayerActivity : BaseActivity() {
                     if (switchMethod.first != null) {
                         when {
                             switchMethod.first!!.isEmpty() -> setInitialEpisodeError(Exception("Video list is empty."))
-                            else -> setVideoList(qualityIndex = 0, switchMethod.first!!)
+                            else -> setVideoList(quality = 0, switchMethod.first!!)
                         }
                     } else {
                         logcat(LogPriority.ERROR) { "Error getting links" }
@@ -1009,7 +871,8 @@ class PlayerActivity : BaseActivity() {
         time: Int,
         event: MotionEvent? = null,
         isDoubleTap: Boolean = true,
-        videoChapterText: String? = null,
+        isChapter: Boolean = false,
+        text: String? = null,
     ) {
         if (SeekState.mode != SeekState.DOUBLE_TAP) {
             doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
@@ -1039,8 +902,8 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            if (videoChapterText != null) {
-                binding.secondsView.binding.doubleTapSeconds.text = videoChapterText
+            if (isChapter) {
+                binding.secondsView.binding.doubleTapSeconds.text = text
             } else {
                 binding.secondsView.seconds -= time
             }
@@ -1058,13 +921,13 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            if (videoChapterText != null) {
-                binding.secondsView.binding.doubleTapSeconds.text = videoChapterText
+            if (isChapter) {
+                binding.secondsView.binding.doubleTapSeconds.text = text
             } else {
                 binding.secondsView.seconds += time
             }
         }
-        if (videoChapterText == null) {
+        if (!isChapter) {
             playerControls.hideUiForSeek()
         }
         binding.secondsView.start()
@@ -1214,6 +1077,179 @@ class PlayerActivity : BaseActivity() {
         return super.onKeyUp(keyCode, event)
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun openTracksSheet(view: View) {
+        val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()?.takeUnless { it.isEmpty() }
+        val subTracks = subTracks.takeUnless { it.isEmpty() }
+        val audioTracks = audioTracks.takeUnless { it.isEmpty() }
+
+        if (qualityTracks == null || subTracks == null || audioTracks == null) return
+        if (playerSettingsSheet?.isShowing == true) return
+
+        playerControls.hideControls(true)
+        playerSettingsSheet = PlayerSettingsSheet(this@PlayerActivity).apply { show() }
+    }
+
+    private var selectedQuality = 0
+
+    internal fun qualityTracksTab(dismissSheet: () -> Unit): PlayerTracksBuilder {
+        val videoTracks = currentVideoList!!.map {
+            Track("", it.quality)
+        }.toTypedArray().takeUnless { it.isEmpty() }!!
+
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::changeQuality,
+            tracks = videoTracks,
+            preselectedTrack = selectedQuality,
+            dismissSheet = dismissSheet,
+            trackSettings = null,
+        )
+    }
+
+    private fun changeQuality(quality: Int) {
+        if (playerIsDestroyed) return
+        if (selectedQuality == quality) return
+        showLoadingIndicator(true)
+        logcat(LogPriority.INFO) { "Changing quality" }
+        setVideoList(quality, currentVideoList)
+    }
+
+    private fun setChapter(chapter: Chapter) {
+        val seekDifference = chapter.time.roundToInt() - (player.timePos ?: 0)
+        doubleTapSeek(
+            time = seekDifference,
+            isDoubleTap = false,
+            isChapter = true,
+            text = chapter.title.takeIf { !it.isNullOrBlank() }
+                ?: Utils.prettyTime(chapter.time.roundToInt()),
+        )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun pickChapter(view: View) {
+        playerControls.hideControls(true)
+        PlayerChaptersSheet(
+            activity = this@PlayerActivity,
+            textRes = R.string.chapter_dialog_header,
+            seekToChapterMethod = ::setChapter,
+            chapters = videoChapters,
+        ).show()
+    }
+
+    internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
+        val subTracks = subTracks.takeUnless { it.isEmpty() }!!
+
+        playerControls.hideControls(true)
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::setSub,
+            tracks = subTracks,
+            preselectedTrack = selectedSub,
+            dismissSheet = dismissTab,
+            trackSettings = null,
+        )
+    }
+
+    private fun setSub(index: Int) {
+        if (selectedSub == index || selectedSub > subTracks.lastIndex) return
+        selectedSub = index
+        if (index == 0) {
+            player.sid = -1
+            return
+        }
+        val tracks = player.tracks.getValue("sub")
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == subTracks[index].url ||
+                it.mpvId.toString() == subTracks[index].url
+        }
+        selectedLoadedTrack?.let { player.sid = it.mpvId }
+            ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].url))
+    }
+
+    internal fun audioTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
+        val audioTracks = audioTracks.takeUnless { it.isEmpty() }!!
+
+        playerControls.hideControls(true)
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::setAudio,
+            tracks = audioTracks,
+            preselectedTrack = selectedAudio,
+            dismissSheet = dismissTab,
+            trackSettings = null,
+        )
+    }
+
+    private fun setAudio(index: Int) {
+        if (selectedAudio == index || selectedAudio > audioTracks.lastIndex) return
+        selectedAudio = index
+        if (index == 0) {
+            player.aid = -1
+            return
+        }
+        val tracks = player.tracks.getValue("audio")
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == audioTracks[index].url ||
+                it.mpvId.toString() == audioTracks[index].url
+        }
+        selectedLoadedTrack?.let { player.aid = it.mpvId }
+            ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
+    }
+
+    fun openScreenshotSheet() {
+        playerControls.hideControls(true)
+        PlayerScreenshotSheet(this@PlayerActivity).show()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openOptionsSheet(view: View) {
+        playerControls.hideControls(true)
+        PlayerOptionsSheet(this@PlayerActivity).show()
+    }
+
+    var stats: Boolean = false
+    var statsPage: Int = 0
+        set(value) {
+            val newValue = when (value) {
+                0 -> 1
+                1 -> 2
+                2 -> 3
+                else -> 1
+            }
+            if (!stats) toggleStats()
+            MPVLib.command(arrayOf("script-binding", "stats/display-page-$newValue"))
+            field = newValue - 1
+        }
+
+    fun toggleStats() {
+        MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
+        stats = !stats
+    }
+
+    private fun takeScreenshot(): InputStream? {
+        val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
+        val subtitleFlag = if (playerPreferences.screenshotSubtitles().get()) {
+            "subtitles"
+        } else {
+            "video"
+        }
+        MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
+        val tempFile = File(filename).takeIf { it.exists() } ?: return null
+        val newFile = File(cacheDir.path + "/mpv_screenshot.png")
+        newFile.delete()
+        tempFile.renameTo(newFile)
+        return newFile.takeIf { it.exists() }?.inputStream()
+    }
+
+    /**
+     * Called from the options sheet. It delegates the call to the presenter to do some IO, which
+     * will call [onShareImageResult] with the path the image was saved on when it's ready.
+     */
+    fun shareImage() {
+        viewModel.shareImage({ takeScreenshot()!! }, player.timePos)
+    }
+
     /**
      * Called from the presenter when a screenshot is ready to be shared. It shows Android's
      * default sharing tool.
@@ -1227,6 +1263,14 @@ class PlayerActivity : BaseActivity() {
             message = getString(R.string.share_screenshot_info, anime.title, episode.name, seconds),
         )
         startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+    }
+
+    /**
+     * Called from the options sheet. It delegates saving the screenshot on
+     * external storage to the presenter.
+     */
+    fun saveImage() {
+        viewModel.saveImage({ takeScreenshot()!! }, player.timePos)
     }
 
     /**
@@ -1245,6 +1289,14 @@ class PlayerActivity : BaseActivity() {
     }
 
     /**
+     * Called from the options sheet. It delegates setting the screenshot
+     * as the cover to the presenter.
+     */
+    fun setAsCover() {
+        viewModel.setAsCover(takeScreenshot())
+    }
+
+    /**
      * Called from the presenter when a screenshot is set as cover or fails.
      * It shows a different message depending on the [result].
      */
@@ -1256,6 +1308,17 @@ class PlayerActivity : BaseActivity() {
                 SetAsCover.Error -> R.string.notification_cover_update_failed
             },
         )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun switchDecoder(view: View) {
+        val newHwDec = when (HwDecState.get(player.hwdecActive)) {
+            HwDecState.HW -> if (HwDecState.isHwSupported) HwDecState.HW_PLUS else HwDecState.SW
+            HwDecState.HW_PLUS -> HwDecState.SW
+            HwDecState.SW -> HwDecState.HW
+        }
+        mpvUpdateHwDec(newHwDec)
+        refreshUi()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1289,10 +1352,11 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
+            player.loadTracks()
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
+            playerControls.updateDecoderButton()
             playerControls.updateSpeedButton()
-            withIOContext { player.loadTracks() }
         }
     }
 
@@ -1380,11 +1444,11 @@ class PlayerActivity : BaseActivity() {
         finish()
     }
 
-    private fun setVideoList(qualityIndex: Int, videos: List<Video>?, fromStart: Boolean = false) {
+    private fun setVideoList(quality: Int, videos: List<Video>?, fromStart: Boolean = false) {
         if (playerIsDestroyed) return
         currentVideoList = videos
-        currentVideoList?.getOrNull(qualityIndex)?.let {
-            selectedQualityIndex = qualityIndex
+        currentVideoList?.getOrNull(quality)?.let {
+            selectedQuality = quality
             setHttpOptions(it)
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
@@ -1400,8 +1464,8 @@ class PlayerActivity : BaseActivity() {
                     MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
                 }
             }
-            subtitleTracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
-            audioTracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
+            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
+            audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
         refreshUi()
@@ -1476,17 +1540,17 @@ class PlayerActivity : BaseActivity() {
     }
 
     // TODO: exception java.util.ConcurrentModificationException:
-    //  UPDATE: MAY HAVE BEEN FIXED
     // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
-    internal suspend fun fileLoaded() {
+    internal fun fileLoaded() {
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+        MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         clearTracks()
         player.loadTracks()
-        subtitleTracks += player.tracks.getOrElse("sub") { emptyList() }
+        subTracks += player.tracks.getOrElse("sub") { emptyList() }
             .drop(1).map { track ->
                 Track(track.mpvId.toString(), track.name)
             }.toTypedArray()
@@ -1495,11 +1559,11 @@ class PlayerActivity : BaseActivity() {
                 Track(track.mpvId.toString(), track.name)
             }.toTypedArray()
         if (hadPreviousSubs) {
-            subtitleTracks.getOrNull(selectedSubtitleIndex)?.let { sub ->
+            subTracks.getOrNull(selectedSub)?.let { sub ->
                 MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
             }
         } else {
-            currentVideoList?.getOrNull(selectedQualityIndex)
+            currentVideoList?.getOrNull(selectedQuality)
                 ?.subtitleTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
                         it.lang.contains(localLangName)
@@ -1507,23 +1571,23 @@ class PlayerActivity : BaseActivity() {
                     val requestedLanguage = if (langIndex == -1) 0 else langIndex
                     tracks.getOrNull(requestedLanguage)?.let { sub ->
                         hadPreviousSubs = true
-                        selectedSubtitleIndex = requestedLanguage + 1
+                        selectedSub = requestedLanguage + 1
                         MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
                     }
                 } ?: run {
                 val mpvSub = player.tracks.getOrElse("sub") { emptyList() }
                     .firstOrNull { player.sid == it.mpvId }
-                selectedSubtitleIndex = mpvSub?.let {
-                    subtitleTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
+                selectedSub = mpvSub?.let {
+                    subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
                 }?.coerceAtLeast(0) ?: 0
             }
         }
         if (hadPreviousAudio) {
-            audioTracks.getOrNull(selectedAudioIndex)?.let { audio ->
+            audioTracks.getOrNull(selectedAudio)?.let { audio ->
                 MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
             }
         } else {
-            currentVideoList?.getOrNull(selectedQualityIndex)
+            currentVideoList?.getOrNull(selectedQuality)
                 ?.audioTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
                         it.lang.contains(localLangName)
@@ -1531,13 +1595,13 @@ class PlayerActivity : BaseActivity() {
                     val requestedLanguage = if (langIndex == -1) 0 else langIndex
                     tracks.getOrNull(requestedLanguage)?.let { audio ->
                         hadPreviousAudio = true
-                        selectedAudioIndex = requestedLanguage + 1
+                        selectedAudio = requestedLanguage + 1
                         MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
                     }
                 } ?: run {
                 val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
                     .firstOrNull { player.aid == it.mpvId }
-                selectedAudioIndex = mpvAudio?.let {
+                selectedAudio = mpvAudio?.let {
                     audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
                 }?.coerceAtLeast(0) ?: 0
             }
@@ -1582,7 +1646,7 @@ class PlayerActivity : BaseActivity() {
             } else {
                 it.interval.startTime
             }
-            val startChapter = VideoChapter(
+            val startChapter = Chapter(
                 index = -2, // Index -2 is used to indicate that this is an AniSkip chapter
                 title = it.skipType.getString(),
                 time = startTime,
@@ -1591,7 +1655,7 @@ class PlayerActivity : BaseActivity() {
             val isNotLastChapter = abs(it.interval.endTime - (duration?.toDouble() ?: -2.0)) > 1.0
             val isNotAdjacent = nextStart == null || (abs(it.interval.endTime - nextStart) > 1.0)
             if (isNotLastChapter && isNotAdjacent) {
-                val endChapter = VideoChapter(
+                val endChapter = Chapter(
                     index = -1,
                     title = null,
                     time = it.interval.endTime,
@@ -1607,7 +1671,7 @@ class PlayerActivity : BaseActivity() {
             }
         }.sortedBy { it.time }.mapIndexed { i, it ->
             if (i == 0 && it.time < 1.0) {
-                VideoChapter(
+                Chapter(
                     it.index,
                     it.title,
                     0.0,
@@ -1626,7 +1690,7 @@ class PlayerActivity : BaseActivity() {
             filteredAniskipChapters.none { it.time == 0.0 }
         ) {
             listOf(
-                VideoChapter(
+                Chapter(
                     index = -1,
                     title = null,
                     time = 0.0,
@@ -1677,6 +1741,11 @@ class PlayerActivity : BaseActivity() {
     }
 
     // mpv events
+
+    private fun mpvUpdateHwDec(hwDec: HwDecState) {
+        MPVLib.setOptionString("hwdec", hwDec.mpvValue)
+        HwDecState.mode = hwDec
+    }
 
     internal fun eventPropertyUi(property: String, value: Long) {
         when (property) {

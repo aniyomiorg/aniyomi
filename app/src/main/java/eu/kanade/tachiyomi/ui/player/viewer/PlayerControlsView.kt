@@ -88,6 +88,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
+        binding.cycleDecoderBtn.setOnLongClickListener { activity.viewModel.showDefaultDecoder(); true }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -120,12 +121,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> toggleAutoplay(isChecked) }
 
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
-
-        binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
-
-        binding.tracksBtn.setOnClickListener { activity.viewModel.showTracksCatalog() }
-
-        binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
 
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
@@ -164,6 +159,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 this.imageTintList =
                     ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
                 this.isClickable = plPos != plCount - 1
+            }
+        }
+    }
+
+    internal suspend fun updateDecoderButton() {
+        withUIContext {
+            if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
+                binding.cycleDecoderBtn.text = HwDecState.mode.title
             }
         }
     }
@@ -239,7 +242,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out Player controls
-    internal val fadeOutControlsRunnable = Runnable { fadeOutControls() }
+    private val fadeOutControlsRunnable = Runnable { fadeOutControls() }
 
     internal fun lockControls(locked: Boolean) {
         SeekState.mode = if (locked) SeekState.LOCKED else SeekState.NONE
@@ -368,48 +371,43 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
+
     private fun cycleViewMode() {
-        AspectState.mode = when (AspectState.mode) {
+        playerViewMode = when (playerViewMode) {
+            AspectState.STRETCH -> AspectState.FIT
             AspectState.FIT -> AspectState.CROP
             AspectState.CROP -> AspectState.STRETCH
-            else -> AspectState.FIT
         }
         setViewMode(showText = true)
     }
 
     internal fun setViewMode(showText: Boolean) {
-        binding.playerInformation.text = activity.getString(AspectState.mode.stringRes)
-        var aspect = "-1"
-        var pan = "1.0"
-        when (AspectState.mode) {
+        binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
+        when (playerViewMode) {
             AspectState.CROP -> {
-                pan = "1.0"
+                mpvUpdateAspect(aspect = "-1", pan = "1.0")
             }
             AspectState.FIT -> {
-                pan = "0.0"
+                mpvUpdateAspect(aspect = "-1", pan = "0.0")
             }
             AspectState.STRETCH -> {
-                aspect = "${activity.deviceWidth}/${activity.deviceHeight}"
-                pan = "0.0"
-            }
-            AspectState.CUSTOM -> {
-                aspect = MPVLib.getPropertyString("video-aspect-override")
+                val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
             }
         }
-
-        mpvUpdateAspect(aspect = aspect, pan = pan)
-        playerPreferences.playerViewMode().set(AspectState.mode.index)
-
         if (showText) {
             animationHandler.removeCallbacks(playerInformationRunnable)
             binding.playerInformation.visibility = View.VISIBLE
             animationHandler.postDelayed(playerInformationRunnable, 1000L)
         }
+
+        playerPreferences.playerViewMode().set(playerViewMode.index)
     }
 
     private fun mpvUpdateAspect(aspect: String, pan: String) {
-        MPVLib.setPropertyString("video-aspect-override", aspect)
-        MPVLib.setPropertyString("panscan", pan)
+        MPVLib.setOptionString("video-aspect-override", aspect)
+        MPVLib.setOptionString("panscan", pan)
     }
 
     internal fun toggleAutoplay(isAutoplay: Boolean) {

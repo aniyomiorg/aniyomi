@@ -10,13 +10,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.view.WindowInsetsControllerCompat
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.lifecycle.DisposableEffectIgnoringConfiguration
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.ScreenTransition
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.presentation.util.ScreenTransition
 import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.presentation.core.components.AdaptiveSheet as AdaptiveSheetImpl
@@ -73,7 +71,6 @@ fun NavigatorAdaptiveSheet(
  */
 @Composable
 fun AdaptiveSheet(
-    hideSystemBars: Boolean = false,
     tonalElevation: Dp = 1.dp,
     enableSwipeDismiss: Boolean = true,
     onDismissRequest: () -> Unit,
@@ -85,12 +82,6 @@ fun AdaptiveSheet(
         onDismissRequest = onDismissRequest,
         properties = dialogProperties,
     ) {
-        if (hideSystemBars) {
-            rememberSystemUiController().apply {
-                isSystemBarsVisible = false
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        }
         AdaptiveSheetImpl(
             isTabletUi = isTabletUi,
             tonalElevation = tonalElevation,

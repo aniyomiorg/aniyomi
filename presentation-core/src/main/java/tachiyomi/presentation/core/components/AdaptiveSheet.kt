@@ -1,6 +1,5 @@
 package tachiyomi.presentation.core.components
 
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -39,7 +38,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
@@ -62,12 +60,6 @@ fun AdaptiveSheet(
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val maxWidth = if (LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE) {
-        600.dp
-    } else {
-        460.dp
-    }
-
     if (isTabletUi) {
         var targetAlpha by remember { mutableFloatStateOf(0f) }
         val alpha by animateFloatAsState(
@@ -94,7 +86,7 @@ fun AdaptiveSheet(
         ) {
             Surface(
                 modifier = Modifier
-                    .requiredWidthIn(max = maxWidth)
+                    .requiredWidthIn(max = 460.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
@@ -134,7 +126,7 @@ fun AdaptiveSheet(
             val anchors = mapOf(0f to 0, fullHeight to 1)
             Surface(
                 modifier = Modifier
-                    .widthIn(max = maxWidth)
+                    .widthIn(max = 460.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
