@@ -43,7 +43,7 @@ fun MangaLibraryContent(
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
     getNumberOfMangaForCategory: (Category) -> Int?,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<MangaLibraryItem>,
 ) {
@@ -103,7 +103,7 @@ fun MangaLibraryContent(
                 selectedManga = selection,
                 searchQuery = searchQuery,
                 onGlobalSearchClicked = onGlobalSearchClicked,
-                getDisplayModeForPage = getDisplayModeForPage,
+                getDisplayMode = getDisplayMode,
                 getColumnsForOrientation = getColumnsForOrientation,
                 getLibraryForPage = getLibraryForPage,
                 onClickManga = onClickManga,

@@ -26,7 +26,7 @@ fun AnimeLibraryPager(
     selectedAnime: List<LibraryAnime>,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<AnimeLibraryItem>,
     onClickAnime: (LibraryAnime) -> Unit,
@@ -54,7 +54,7 @@ fun AnimeLibraryPager(
             return@HorizontalPager
         }
 
-        val displayMode = getDisplayModeForPage(page)
+        val displayMode by getDisplayMode(page)
         val columns by if (displayMode != LibraryDisplayMode.List) {
             val configuration = LocalConfiguration.current
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

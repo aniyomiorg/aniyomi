@@ -56,7 +56,7 @@ import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ResetAnimeCategoryFlags
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
-import tachiyomi.domain.category.anime.interactor.SetDisplayModeForAnimeCategory
+import tachiyomi.domain.category.anime.interactor.SetAnimeDisplayMode
 import tachiyomi.domain.category.anime.interactor.SetSortModeForAnimeCategory
 import tachiyomi.domain.category.anime.interactor.UpdateAnimeCategory
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
@@ -68,8 +68,8 @@ import tachiyomi.domain.category.manga.interactor.HideMangaCategory
 import tachiyomi.domain.category.manga.interactor.RenameMangaCategory
 import tachiyomi.domain.category.manga.interactor.ReorderMangaCategory
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
-import tachiyomi.domain.category.manga.interactor.SetDisplayModeForMangaCategory
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
+import tachiyomi.domain.category.manga.interactor.SetMangaDisplayMode
 import tachiyomi.domain.category.manga.interactor.SetSortModeForMangaCategory
 import tachiyomi.domain.category.manga.interactor.UpdateMangaCategory
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
@@ -151,7 +151,7 @@ class DomainModule : InjektModule {
         addFactory { GetAnimeCategories(get()) }
         addFactory { GetVisibleAnimeCategories(get()) }
         addFactory { ResetAnimeCategoryFlags(get(), get()) }
-        addFactory { SetDisplayModeForAnimeCategory(get(), get()) }
+        addFactory { SetAnimeDisplayMode(get()) }
         addFactory { SetSortModeForAnimeCategory(get(), get()) }
         addFactory { CreateAnimeCategoryWithName(get(), get()) }
         addFactory { RenameAnimeCategory(get()) }
@@ -164,7 +164,7 @@ class DomainModule : InjektModule {
         addFactory { GetMangaCategories(get()) }
         addFactory { GetVisibleMangaCategories(get()) }
         addFactory { ResetMangaCategoryFlags(get(), get()) }
-        addFactory { SetDisplayModeForMangaCategory(get(), get()) }
+        addFactory { SetMangaDisplayMode(get()) }
         addFactory { SetSortModeForMangaCategory(get(), get()) }
         addFactory { CreateMangaCategoryWithName(get(), get()) }
         addFactory { RenameMangaCategory(get()) }

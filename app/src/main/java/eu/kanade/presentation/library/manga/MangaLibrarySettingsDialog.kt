@@ -35,7 +35,6 @@ import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
-import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
@@ -48,7 +47,7 @@ import tachiyomi.presentation.core.components.SortItem
 fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,
-    category: Category,
+    category: Category?,
     // SY -->
     hasCategories: Boolean,
     // SY <--
@@ -78,7 +77,6 @@ fun MangaLibrarySettingsDialog(
                     screenModel = screenModel,
                 )
                 2 -> DisplayPage(
-                    category = category,
                     screenModel = screenModel,
                 )
                 // SY -->
@@ -163,7 +161,7 @@ private fun ColumnScope.FilterPage(
 
 @Composable
 private fun ColumnScope.SortPage(
-    category: Category,
+    category: Category?,
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
     // SY -->
@@ -207,10 +205,10 @@ private fun ColumnScope.SortPage(
 
 @Composable
 private fun ColumnScope.DisplayPage(
-    category: Category,
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
     HeadingItem(R.string.action_display_mode)
+    val displayMode by screenModel.libraryPreferences.libraryDisplayMode().collectAsState()
     listOf(
         R.string.action_display_grid to LibraryDisplayMode.CompactGrid,
         R.string.action_display_comfortable_grid to LibraryDisplayMode.ComfortableGrid,
@@ -219,12 +217,12 @@ private fun ColumnScope.DisplayPage(
     ).map { (titleRes, mode) ->
         RadioItem(
             label = stringResource(titleRes),
-            selected = category.display == mode,
-            onClick = { screenModel.setDisplayMode(category, mode) },
+            selected = displayMode == mode,
+            onClick = { screenModel.setDisplayMode(mode) },
         )
     }
 
-    if (category.display != LibraryDisplayMode.List) {
+    if (displayMode != LibraryDisplayMode.List) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
