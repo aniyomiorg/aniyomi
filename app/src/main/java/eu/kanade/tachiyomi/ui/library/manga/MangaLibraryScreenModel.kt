@@ -528,6 +528,8 @@ class MangaLibraryScreenModel(
     }
 
     suspend fun getRandomLibraryItemForCurrentCategory(): MangaLibraryItem? {
+        if (state.value.categories.isEmpty()) return null
+
         return withIOContext {
             state.value
                 .getLibraryItemsByCategoryId(state.value.categories[activeCategoryIndex].id)

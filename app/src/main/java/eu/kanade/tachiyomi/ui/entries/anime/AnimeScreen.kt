@@ -158,7 +158,7 @@ class AnimeScreen(
                 screenModel.showTrackDialog()
             }
         }
-        when (val dialog = (state as? AnimeScreenState.Success)?.dialog) {
+        when (val dialog = successState.dialog) {
             null -> {}
             is AnimeInfoScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(

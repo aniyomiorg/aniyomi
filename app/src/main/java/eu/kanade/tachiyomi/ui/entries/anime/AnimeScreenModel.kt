@@ -147,8 +147,13 @@ class AnimeInfoScreenModel(
     /**
      * Helper function to update the UI state only if it's currently in success state
      */
-    private fun updateSuccessState(func: (AnimeScreenState.Success) -> AnimeScreenState.Success) {
-        mutableState.update { if (it is AnimeScreenState.Success) func(it) else it }
+    private inline fun updateSuccessState(func: (AnimeScreenState.Success) -> AnimeScreenState.Success) {
+        mutableState.update {
+            when (it) {
+                AnimeScreenState.Loading -> it
+                is AnimeScreenState.Success -> func(it)
+            }
+        }
     }
 
     init {
@@ -289,17 +294,7 @@ class AnimeInfoScreenModel(
                 if (checkDuplicate) {
                     val duplicate = getDuplicateLibraryAnime.await(anime.title)
                     if (duplicate != null) {
-                        mutableState.update { state ->
-                            when (state) {
-                                AnimeScreenState.Loading -> state
-                                is AnimeScreenState.Success -> state.copy(
-                                    dialog = Dialog.DuplicateAnime(
-                                        anime,
-                                        duplicate,
-                                    ),
-                                )
-                            }
-                        }
+                        updateSuccessState { it.copy(dialog = Dialog.DuplicateAnime(anime, duplicate)) }
                         return@launchIO
                     }
                 }
@@ -362,16 +357,13 @@ class AnimeInfoScreenModel(
         coroutineScope.launch {
             val categories = getCategories()
             val selection = getAnimeCategoryIds(anime)
-            mutableState.update { state ->
-                when (state) {
-                    AnimeScreenState.Loading -> state
-                    is AnimeScreenState.Success -> state.copy(
-                        dialog = Dialog.ChangeCategory(
-                            anime = anime,
-                            initialSelection = categories.mapAsCheckboxState { it.id in selection },
-                        ),
-                    )
-                }
+            updateSuccessState { successState ->
+                successState.copy(
+                    dialog = Dialog.ChangeCategory(
+                        anime = anime,
+                        initialSelection = categories.mapAsCheckboxState { it.id in selection },
+                    ),
+                )
             }
         }
     }
@@ -990,66 +982,31 @@ class AnimeInfoScreenModel(
     }
 
     fun dismissDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = null)
-            }
-        }
+        updateSuccessState { it.copy(dialog = null) }
     }
 
     fun showDeleteEpisodeDialog(episodes: List<Episode>) {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.DeleteEpisodes(episodes))
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.DeleteEpisodes(episodes)) }
     }
 
     fun showSettingsDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.SettingsSheet)
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.SettingsSheet) }
     }
 
     fun showTrackDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.TrackSheet)
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.TrackSheet) }
     }
 
     fun showCoverDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.FullCover)
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.FullCover) }
     }
 
     fun showAnimeSkipIntroDialog() {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.ChangeAnimeSkipIntro)
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.ChangeAnimeSkipIntro) }
     }
 
     private fun showQualitiesDialog(episode: Episode) {
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> { state.copy(dialog = Dialog.ShowQualities(episode, state.anime, state.source)) }
-            }
-        }
+        updateSuccessState { it.copy(dialog = Dialog.ShowQualities(episode, it.anime, it.source)) }
     }
 }
 

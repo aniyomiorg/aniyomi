@@ -534,6 +534,8 @@ class AnimeLibraryScreenModel(
     }
 
     suspend fun getRandomAnimelibItemForCurrentCategory(): AnimeLibraryItem? {
+        if (state.value.categories.isEmpty()) return null
+
         return withIOContext {
             state.value
                 .getAnimelibItemsByCategoryId(state.value.categories[activeCategoryIndex].id)
