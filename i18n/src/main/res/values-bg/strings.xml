@@ -243,7 +243,6 @@
     <string name="pref_restore_backup">Възстанови резервно копие</string>
     <string name="pref_restore_backup_summ">Възстанови библиотеката от резервно копие</string>
     <string name="pref_backup_directory">Директория за резервното копие</string>
-    <string name="pref_backup_service_category">Автоматично запазване</string>
     <string name="pref_backup_interval">Честота на запазване</string>
     <string name="pref_backup_slots">Максимален брой копия</string>
     <string name="backup_created">Резервно копие създадено</string>
@@ -251,8 +250,7 @@
     <string name="backup_choice">Какво искате да запазите?</string>
     <string name="restoring_backup">Възстановяване на копие</string>
     <string name="creating_backup">Създаване на резервно копие</string>
-    <string name="pref_refresh_library_tracking">Обнови проследяването</string>
-        <string name="local_source">Локални</string>
+    <string name="local_source">Локални</string>
     <string name="delete_downloads_for_manga">Да се изтрият ли изтеглените глави?</string>
     <string name="chapter_paused">На пауза</string>
     <string name="download_notifier_download_paused">Изтеглянето спряно</string>
@@ -277,8 +275,7 @@
     <string name="ext_untrusted">Непотвърдени</string>
     <string name="ext_uninstall">Деинсталирай</string>
     <string name="untrusted_extension">Непотвърдено разширение</string>
-
-    <string name="pref_double_tap_anim_speed">Скорост на анимацията</string>
+        <string name="pref_double_tap_anim_speed">Скорост на анимацията</string>
     <string name="double_tap_anim_speed_0">Без анимация</string>
     <string name="double_tap_anim_speed_normal">Нормална</string>
     <string name="double_tap_anim_speed_fast">Бързо</string>
@@ -524,7 +521,6 @@
     <string name="l_nav">L-образно</string>
     <string name="kindlish_nav">Kindle-подобно</string>
     <string name="automatic_background">Автоматично</string>
-    <string name="pref_library_update_refresh_trackers_summary">Обновявай тракерите при обновявания на библиотеката</string>
     <string name="pref_viewer_nav">Схема на навигацията</string>
     <string name="nav_zone_prev">Преди</string>
     <string name="nav_zone_next">След</string>
@@ -539,6 +535,10 @@
     <string name="pref_hide_threshold">Чувствителност за скриване на менюто при превъртане</string>
     <string name="pref_highest">Най-висока</string>
     <string name="unread">Непрочетена</string>
+    <plurals name="relative_time">
+        <item quantity="one">Вчера</item>
+        <item quantity="other">Преди %1$d дни</item>
+    </plurals>
     <string name="manga_cover">Корица</string>
     <string name="label_warning">Предупреждение</string>
     <string name="confirm_lock_change">Удостоверете, за да потвърдите промяната</string>
@@ -554,7 +554,6 @@
     <string name="theme_yinyang">Ин и Янг</string>
     <string name="theme_yotsuba">Йоцуба</string>
     <string name="restrictions">Ограничения: %s</string>
-    <string name="pref_library_update_refresh_trackers">Автоматично обновявай тракерите</string>
     <string name="categorized_display_settings">Различно сортиране и показване за всяка категоря</string>
     <string name="pref_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
     <string name="none">Никоя</string>
@@ -600,6 +599,7 @@
     <string name="spen_next_page">Следваща страница</string>
     <string name="action_display_language_badge">Език</string>
     <string name="pref_show_nsfw_source">Показвай в списъка с източници и разширения</string>
+    <string name="relative_time_today">Днес</string>
     <string name="ext_app_info">Информация</string>
     <string name="pref_show_navigation_mode_summary">Покажи зони за натискане, когато четецът се отвори</string>
     <string name="pref_dual_page_invert">Обърни позициите на разделените широки страници</string>

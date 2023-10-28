@@ -84,7 +84,7 @@
     <string name="pref_library_update_restriction">设备自动更新限制</string>
     <string name="charging">充电时</string>
     <string name="pref_update_only_non_completed">已完结</string>
-    <string name="default_category">默认分类</string>
+        <string name="default_category">默认分类</string>
     <string name="default_category_summary">始终询问</string>
     <string name="ext_update">更新</string>
     <string name="ext_install">安装</string>
@@ -96,7 +96,7 @@
     <string name="ext_untrusted">不可信</string>
     <string name="ext_uninstall">卸载</string>
     <string name="untrusted_extension">不可信的插件</string>
-    <string name="pref_fullscreen">全屏</string>
+        <string name="pref_fullscreen">全屏</string>
     <string name="pref_page_transitions">页面过渡动画</string>
     <string name="pref_double_tap_anim_speed">双击动画速度</string>
     <string name="pref_show_page_number">显示页码</string>
@@ -140,7 +140,7 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">下载路径</string>
-    <string name="custom_dir">自定义路径</string>
+            <string name="custom_dir">自定义路径</string>
     <string name="disabled">关闭</string>
     <string name="last_read_chapter">最后阅读的章节</string>
     <string name="second_to_last">倒数第二已读章节</string>
@@ -154,7 +154,6 @@
     <string name="pref_restore_backup">还原备份</string>
     <string name="pref_restore_backup_summ">从备份文件中还原</string>
     <string name="pref_backup_directory">备份路径</string>
-    <string name="pref_backup_service_category">自动备份</string>
     <string name="pref_backup_interval">备份频率</string>
     <string name="pref_backup_slots">最大备份数</string>
     <string name="backup_created">已创建备份</string>
@@ -162,15 +161,14 @@
     <string name="backup_choice">需要备份什么？</string>
     <string name="restoring_backup">正在还原备份</string>
     <string name="creating_backup">正在创建备份</string>
-    <string name="used_cache">已使用空间：%1$s</string>
+        <string name="used_cache">已使用空间：%1$s</string>
     <string name="cache_deleted">缓存已清除。%1$d 个文件已被删除</string>
     <string name="cache_delete_error">清除时出现错误</string>
     <string name="pref_clear_cookies">清除 Cookie</string>
     <string name="cookies_cleared">Cookie 已清除</string>
     <string name="pref_clear_database">清理数据库</string>
     <string name="pref_clear_database_summary">删除未添加到书架的作品记录</string>
-    <string name="clear_database_completed">数据已删除</string>
-    <string name="pref_refresh_library_tracking">更新进度记录</string>
+        <string name="clear_database_completed">数据已删除</string>
     <string name="version">版本</string>
     <string name="pref_enable_acra">发送错误报告</string>
     <string name="pref_acra_summary">协助我们修复错误，发送的错误报告不包含个人敏感信息</string>
@@ -223,7 +221,7 @@
     <string name="error_category_exists">已存在同名分类！</string>
     <string name="snack_categories_deleted">分类已删除</string>
     <string name="dialog_with_checkbox_remove_description">此章节的阅读日期将被清除，你确定吗？</string>
-    <string name="snack_add_to_library">要添加到书架吗？</string>
+        <string name="snack_add_to_library">要添加到书架吗？</string>
     <string name="picture_saved">图片已保存</string>
     <string name="custom_filter">滤镜</string>
     <string name="set_as_cover">设为封面</string>
@@ -356,7 +354,7 @@
     <string name="vertical_plus_viewer">条漫（页间有空隙）</string>
     <string name="action_select_inverse">反选</string>
     <string name="add_tracking">添加进度记录</string>
-    <string name="manga_info_collapse">收起</string>
+        <string name="manga_info_collapse">收起</string>
     <string name="manga_info_expand">展开</string>
     <string name="licenses">开源许可证</string>
     <string name="website">官网</string>
@@ -424,7 +422,7 @@
     <string name="unknown_author">未知作者</string>
     <string name="updated_version">已更新至 v%1$s</string>
     <string name="whats_new">更新日志</string>
-    <string name="action_global_search_query">全局搜索“%1$s”</string>
+        <string name="action_global_search_query">全局搜索“%1$s”</string>
     <string name="pref_category_reading_mode">阅读模式</string>
     <string name="pref_category_theme">主题</string>
     <string name="action_sort_date_added">收藏日期</string>
@@ -437,7 +435,7 @@
     <string name="channel_progress">进度</string>
     <string name="channel_errors">错误</string>
     <string name="backup_restore_missing_trackers">尚未登录进度记录平台：</string>
-    <string name="ext_nsfw_warning">来自此插件的图源可能包含 NSFW (18+) 内容</string>
+            <string name="ext_nsfw_warning">来自此插件的图源可能包含 NSFW (18+) 内容</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">这并不能防止非官方或可能被错误标记的插件在应用中显示 NSFW (18+) 内容。</string>
     <plurals name="missing_chapters_warning">
@@ -446,12 +444,12 @@
     <string name="no_chapters_error">未找到章节</string>
     <string name="chapter_settings_updated">已更新默认章节设置</string>
     <string name="set_chapter_settings_as_default">设为默认</string>
-    <string name="confirm_set_chapter_settings">你确定要将当前设置保存为默认吗？</string>
+        <string name="confirm_set_chapter_settings">你确定要将当前设置保存为默认吗？</string>
     <string name="chapter_settings">章节设置</string>
     <string name="share_page_info">%1$s：%2$s，第 %3$d 页</string>
     <string name="action_search_settings">搜索设置</string>
     <string name="downloaded_chapters">已下载的章节</string>
-    <string name="pref_incognito_mode">无痕模式</string>
+            <string name="pref_incognito_mode">无痕模式</string>
     <string name="pref_clear_history">清除历史</string>
     <string name="clear_history_confirmation">你确定吗？所有的历史都将丢失。</string>
     <string name="clear_history_completed">历史已删除</string>
@@ -515,8 +513,6 @@
     <string name="local_filter_order_by">排序依据</string>
     <string name="local_invalid_format">无效的章节格式</string>
     <string name="chapter_not_found">未找到章节</string>
-    <string name="pref_library_update_refresh_trackers_summary">更新书架时一并更新进度记录平台</string>
-    <string name="pref_library_update_refresh_trackers">自动更新进度记录</string>
     <string name="restrictions">限制：%s</string>
     <string name="action_display_local_badge">本地图源</string>
     <string name="off">关闭</string>
@@ -549,6 +545,10 @@
     <string name="pref_highest">最高</string>
     <string name="pref_hide_threshold">滑动时隐藏菜单的灵敏度</string>
     <string name="pref_inverted_colors">反色</string>
+    <string name="relative_time_today">今天</string>
+    <plurals name="relative_time">
+        <item quantity="other">%1$d 天前</item>
+    </plurals>
     <string name="theme_tealturquoise">青色与绿松色</string>
     <string name="confirm_lock_change">验证以确认更改</string>
     <string name="label_default">默认</string>
@@ -573,20 +573,20 @@
     <string name="notification_size_warning">大量更新会损害图源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接至 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
-    <string name="ext_update_all">全部更新</string>
+        <string name="ext_update_all">全部更新</string>
     <string name="channel_app_updates">应用更新</string>
-    <string name="database_clean">无需清理</string>
+        <string name="database_clean">无需清理</string>
     <string name="clear_database_source_item_count">数据库中有 %1$d 部作品未添加到书架</string>
     <string name="extension_api_error">无法获取插件列表</string>
     <string name="privacy_policy">隐私声明</string>
-    <string name="pref_library_update_manga_restriction">跳过更新以下作品</string>
+        <string name="pref_library_update_manga_restriction">跳过更新以下作品</string>
     <string name="library_errors_help">关于书架更新出错的解决方法，请参阅 %1$s</string>
     <string name="save_chapter_as_cbz">保存为 CBZ 压缩包</string>
     <string name="publishing_finished">出版完毕</string>
     <string name="cancelled">已中止</string>
     <string name="on_hiatus">休刊中</string>
     <string name="action_faq_and_guides">常见问题和指南</string>
-    <string name="action_display_cover_only_grid">封面网格</string>
+        <string name="action_display_cover_only_grid">封面网格</string>
     <string name="pref_landscape_zoom">自动放大横向图片</string>
     <string name="pref_navigate_pan">图片放大时先平移再翻页</string>
     <string name="pref_update_only_started">尚未开始阅读</string>
@@ -609,7 +609,7 @@
     <string name="action_close">关闭</string>
     <string name="source_filter_empty_screen">未找到已安装的图源</string>
     <string name="source_empty_screen">未找到图源</string>
-    <string name="action_sort_unread_count">未读章数</string>
+        <string name="action_sort_unread_count">未读章数</string>
     <string name="split_tall_images_summary">可以改善阅读器的性能</string>
     <string name="download_notifier_split_page_not_found">拆分时未找到页 %d</string>
     <string name="download_notifier_split_page_path_not_found">找不到页面 %d 的文件路径</string>
@@ -621,11 +621,11 @@
     <string name="ext_info_age_rating">年龄分级</string>
     <string name="ext_info_version">版本</string>
     <string name="ext_info_language">语言</string>
-    <string name="reading_list">阅读列表</string>
-    <string name="wish_list">想读列表</string>
-    <string name="complete_list">读完列表</string>
-    <string name="unfinished_list">未读完列表</string>
-    <string name="on_hold_list">稍后读列表</string>
+    <string name="reading_list">阅读中</string>
+    <string name="wish_list">计划读</string>
+    <string name="complete_list">已完结</string>
+    <string name="unfinished_list">已放弃</string>
+    <string name="on_hold_list">搁置中</string>
     <string name="network_not_metered">仅在不按流量计费网络中</string>
     <string name="cant_open_last_read_chapter">打不开最后阅读章节</string>
     <string name="custom_cover">自定义封面</string>
@@ -680,7 +680,7 @@
     <string name="information_no_entries_found">此分类没有作品</string>
     <string name="fdroid_warning">F-Droid 渠道不受官方支持。
 \n点按了解更多。</string>
-    <string name="pref_invalidate_download_cache">清除下载索引</string>
+        <string name="pref_invalidate_download_cache">清除下载索引</string>
     <string name="track_remove_date_conf_title">要删除日期吗？</string>
     <string name="track_remove_start_date_conf_text">将会删除之前在 %s 中标记的开始日期</string>
     <string name="track_remove_finish_date_conf_text">将会删除之前在 %s 中标记的结束日期</string>
@@ -705,7 +705,7 @@
     <string name="seconds_short">%d 秒</string>
     <string name="day_short">%d 天</string>
     <string name="hour_short">%d 时</string>
-    <string name="information_no_manga_category">分类为空</string>
+        <string name="information_no_manga_category">分类为空</string>
     <string name="copied_to_clipboard_plain">已复制到剪贴板</string>
     <string name="enhanced_services_not_installed">支持以下平台但图源尚未安装：%s</string>
     <string name="pref_skip_dupe_chapters">跳过重复章节</string>
@@ -767,4 +767,12 @@
     <string name="exception_unknown_host">无法连接到 %s</string>
     <string name="source_settings">图源设置</string>
     <string name="app_settings">应用设置</string>
+    <string name="unlock_app_title">解锁 %s</string>
+    <string name="action_sort_category">分类排序</string>
+    <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
+    <string name="notification_updating_progress">书架更新中…(%s)</string>
+    <string name="sort_category_confirmation">是否按字母顺序对分类进行排序？</string>
+    <string name="file_null_uri_error">文件选择器无法将文件恢复至应用</string>
+    <string name="pref_relative_format">相对时间戳</string>
+    <string name="pref_relative_format_summary">以\"%1$s\" 表示 \"%2$s\"</string>
 </resources>

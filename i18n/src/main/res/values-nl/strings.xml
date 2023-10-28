@@ -113,7 +113,6 @@
     <string name="pref_restore_backup">Back-up herstellen</string>
     <string name="pref_restore_backup_summ">Herstellen van back-up bestand</string>
     <string name="pref_backup_directory">Back-uplocatie</string>
-    <string name="pref_backup_service_category">Automatische backups</string>
     <string name="pref_backup_interval">Back-upfrequentie</string>
     <string name="pref_backup_slots">Maximaal aantal back-ups</string>
     <string name="backup_created">Back-up gemaakt</string>
@@ -124,7 +123,7 @@
     <string name="used_cache">Gebruikt: %1$s</string>
     <string name="pref_clear_cookies">Verwijder cookies</string>
     <string name="cookies_cleared">Cookies verwijdered</string>
-        <string name="version">Versie</string>
+    <string name="version">Versie</string>
     <string name="login_title">Log in op %1$s</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
@@ -199,7 +198,6 @@
     <string name="cache_delete_error">Fout opgetreden tijdens het wissen</string>
     <string name="pref_clear_database">Database leegmaken</string>
     <string name="pref_clear_database_summary">Verwijder geschiedenis voor items die niet in je bibliotheek zijn opgeslagen</string>
-    <string name="pref_refresh_library_tracking">Tracking bijwerken</string>
     <string name="pref_enable_acra">Rapporteer bugs</string>
     <string name="pref_acra_summary">Helpt bij het oplossen van bugs. Er wordt geen gevoelige data verzonden</string>
     <string name="information_no_recent_manga">Niks recent gelezen</string>
@@ -243,8 +241,7 @@
     <string name="ext_untrusted">Niet vertrouwd</string>
     <string name="ext_uninstall">Verwijderen</string>
     <string name="untrusted_extension">Niet vertrouwde extensie</string>
-
-    <string name="pref_double_tap_anim_speed">Dubbeltik animatiesnelheid</string>
+        <string name="pref_double_tap_anim_speed">Dubbeltik animatiesnelheid</string>
     <string name="pref_read_with_long_tap">Weergeven bij lang tikken</string>
     <string name="pager_viewer">Gepagineerd</string>
     <string name="double_tap_anim_speed_0">Geen animatie</string>
@@ -536,8 +533,6 @@
     <string name="off">Uit</string>
     <string name="on">Aan</string>
     <string name="categorized_display_settings">Instellingen per categorie voor sorteren en weergeven</string>
-    <string name="pref_library_update_refresh_trackers_summary">Trackers bijwerken bij het bijwerken van de bibliotheek</string>
-    <string name="pref_library_update_refresh_trackers">Trackers automatisch vernieuwen</string>
     <string name="action_display_local_badge">Lokale bron</string>
     <string name="information_empty_category_dialog">Er zijn nog geen categorieën.</string>
     <string name="action_start_downloading_now">Begin nu met downloaden</string>
@@ -566,6 +561,11 @@
     <string name="pref_highest">Hoogste</string>
     <string name="pref_hide_threshold">Sensitiviteit voor het verbergen van het menu tijdens scrollen</string>
     <string name="pref_inverted_colors">Omgekeerd</string>
+    <plurals name="relative_time">
+        <item quantity="one">Gisteren</item>
+        <item quantity="other">%1$d dagen geleden</item>
+    </plurals>
+    <string name="relative_time_today">Vandaag</string>
     <string name="theme_tealturquoise">Blauwgroen &amp; Turkoois</string>
     <string name="pref_category_appearance">Uiterlijk</string>
     <string name="confirm_lock_change">Authenticeer om de wijziging te bevestigen</string>

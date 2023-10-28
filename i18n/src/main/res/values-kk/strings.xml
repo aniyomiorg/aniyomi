@@ -39,6 +39,10 @@
     <string name="left_to_right_viewer">Бет (солдан оңға қарай)</string>
     <string name="information_empty_category">Санаттарыңыз жоқ. Жаңа санат жасау үшін және кітапханаңызды ұйымдастыру үшін қосу батырмасын басыңыз.</string>
     <string name="nav_zone_next">Келесі</string>
+    <plurals name="relative_time">
+        <item quantity="one">Кеше</item>
+        <item quantity="other">%1$d күн бұрын</item>
+    </plurals>
         <string name="action_sort_unread_count">Оқылмаған тараулар</string>
     <string name="action_display_list">Тізім</string>
     <string name="action_display_download_badge">Жүктелген тараулар</string>
@@ -66,6 +70,7 @@
     <string name="theme_tealturquoise">Қызғылт пен жасыл</string>
     <string name="pref_dark_theme_pure_black">Қап-қараңғы режим</string>
     <string name="theme_yinyang">Инь мен Йянь</string>
+    <string name="relative_time_today">Бүгін</string>
     <string name="update_never">Өшірулі</string>
     <string name="update_6hour">Әр 6 сағат сайын</string>
     <string name="update_12hour">Әр 12 сағат сайын</string>
@@ -181,7 +186,6 @@
     <string name="pref_library_update_interval">Автоматты жаңартулар</string>
     <string name="action_resume">Жалғастыру</string>
     <string name="pref_app_language">Қолданба тілі</string>
-    <string name="pref_library_update_refresh_trackers">Бақылау қызметерін автоматты түрде жаңарту</string>
     <string name="default_category_summary">Әрқашан сұраңыз</string>
     <string name="default_category">Әдепкі санат</string>
     <string name="categorized_display_settings">Сұрыптау және көрсету үшін әр санат баптауы</string>
@@ -240,7 +244,6 @@
     <string name="pref_library_update_manga_restriction">Жазбаларды жаңартуды өткізіп жіберу</string>
     <string name="pref_update_only_started">Бұл басталған жоқ</string>
     <string name="pref_library_update_refresh_metadata_summary">Кітапхананы жаңарту кезінде жаңа мұқаба мен мәліметтерді тексеру</string>
-    <string name="pref_library_update_refresh_trackers_summary">Кітапхананы жаңарту кезінде бақылау қызметтерін жаңарту</string>
     <string name="ext_updates_pending">Жаңартулар күтілуде</string>
     <string name="ext_update_all">Барлығын жаңарту</string>
     <string name="ext_obsolete">Ескірген</string>
@@ -401,11 +404,10 @@
     <string name="cancelled">Күші жойылған</string>
     <string name="publishing_finished">Басылымы яқталды</string>
     <string name="add_to_library">Кітапханаға қосу</string>
-        <string name="pref_dump_crash_logs">Қателер тіркеулерімен бөлісу</string>
+    <string name="pref_dump_crash_logs">Қателер тіркеулерімен бөлісу</string>
         <string name="clear_database_completed">Жазбалар жойылды</string>
     <string name="database_clean">Тазалайтын түк жоқ</string>
     <string name="pref_refresh_library_covers">Туындылар мұқабасын жаңарту</string>
-    <string name="pref_refresh_library_tracking">Бақылауды жаңарту</string>
     <string name="information_cloudflare_bypass_failure">Cloudflare айналып өтілмеді</string>
     <string name="information_webview_outdated">Жақсырақ үйлесімділік үшін WebView-ді жаңартыңыз</string>
     <string name="pref_backup_directory">Сақтық көшірме бумасы</string>
@@ -489,7 +491,6 @@
     <string name="action_global_search_hint">Ауқымды іздеу…</string>
     <string name="action_global_search_query">\"%1$s\" ауқымды іздеу</string>
     <string name="browse">Іздеу</string>
-    <string name="pref_backup_service_category">Автоматты сақтық көшірме</string>
     <string name="pref_reset_user_agent_string">User agent-ті әдепкіге қайтару</string>
     <string name="cache_deleted">Кеш тазаланды. %1$d файл жойылды</string>
     <string name="check_for_updates">Жаңартуларға тексеру</string>

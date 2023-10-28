@@ -81,7 +81,7 @@
     <string name="pref_library_update_restriction">स्वचालित अपडेट डिवाइस प्रतिबंध</string>
     <string name="charging">चार्ज होते समय</string>
     <string name="pref_update_only_non_completed">पूरी की गई श्रृंखला</string>
-    <string name="default_category">डिफ़ॉल्ट श्रेणी</string>
+        <string name="default_category">डिफ़ॉल्ट श्रेणी</string>
     <string name="default_category_summary">हमेशा पूछे</string>
     <string name="pref_fullscreen">पूर्ण स्क्रीन</string>
     <string name="pref_page_transitions">चेतन पृष्ठ संक्रमण</string>
@@ -122,7 +122,7 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">डाउनलोड निर्देशिका</string>
-    <string name="custom_dir">इच्छा अनुसार निर्देशिका</string>
+            <string name="custom_dir">इच्छा अनुसार निर्देशिका</string>
     <string name="disabled">बंद करें</string>
     <string name="last_read_chapter">अंतिम पढ़ा अध्याय</string>
     <string name="second_to_last">दूसरा से अंतिम पढ़ा गया अध्याय</string>
@@ -136,7 +136,6 @@
     <string name="pref_restore_backup">बैकअप पुनर्स्थापित करे</string>
     <string name="pref_restore_backup_summ">बैकअप फ़ाइल से लाइब्रेरी पुनर्स्थापित करें</string>
     <string name="pref_backup_directory">बैकअप निर्देशिका</string>
-    <string name="pref_backup_service_category">स्वचालित बैकअप</string>
     <string name="pref_backup_interval">बैकअप फ़्रीक्वेंसी</string>
     <string name="pref_backup_slots">अधिकतम बैकअप</string>
     <string name="backup_created">बैकअप बनाया गया है</string>
@@ -144,7 +143,7 @@
     <string name="backup_choice">आप बैकअप के लिए क्या चाहते हैं?</string>
     <string name="restoring_backup">बैकअप को पुनर्स्थापित करना</string>
     <string name="creating_backup">बैकअप बनाना</string>
-    <string name="used_cache">उपयोग किया गया: %1$s</string>
+        <string name="used_cache">उपयोग किया गया: %1$s</string>
     <string name="cache_deleted">कैश साफ़ किया गया %1$d फ़ाइलों को हटा दिया गया है</string>
     <string name="cache_delete_error">साफ़ करने के दौरान त्रुटि हुई</string>
     <string name="pref_clear_cookies">कुकीज़ को साफ़ करें</string>
@@ -152,7 +151,6 @@
     <string name="pref_clear_database">डेटाबेस साफ़ करें</string>
     <string name="pref_clear_database_summary">उन आइटम का इतिहास हटाएं जो आपकी पुस्तकालय में सहेजी नहीं गई हैं</string>
         <string name="clear_database_completed">प्रविष्टियां हटाई गईं</string>
-    <string name="pref_refresh_library_tracking">रिफ्रेश ट्रैकिंग</string>
     <string name="version">संस्करण</string>
     <string name="pref_enable_acra">क्रैश रिपोर्ट भेजें</string>
     <string name="pref_acra_summary">किसी भी बग को ठीक करने में मदद करता है कोई संवेदनशील डेटा नहीं भेजा जाएगा</string>
@@ -197,7 +195,7 @@
     <string name="error_category_exists">इस नाम के साथ एक श्रेणी पहले से मौजूद है!</string>
     <string name="snack_categories_deleted">श्रेणियाँ हटाई गयी</string>
     <string name="dialog_with_checkbox_remove_description">यह इस अध्याय की पठन तिथि को निकाल देगा क्या आप निश्चित है?</string>
-    <string name="snack_add_to_library">पुस्तकालय में जोड़ें\?</string>
+        <string name="snack_add_to_library">पुस्तकालय में जोड़ें\?</string>
     <string name="picture_saved">चित्र सहेजा गया</string>
     <string name="custom_filter">इच्छा अनुसार फिल्टर</string>
     <string name="set_as_cover">कवर के रूप में सेट करें</string>
@@ -243,7 +241,7 @@
     <string name="ext_untrusted">अविश्वस्त</string>
     <string name="ext_uninstall">स्थापना रद्द करें</string>
     <string name="untrusted_extension">अविश्वस्त एक्सटेंशन</string>
-    <string name="pref_double_tap_anim_speed">डबल टैप एनीमेशन गति</string>
+        <string name="pref_double_tap_anim_speed">डबल टैप एनीमेशन गति</string>
     <string name="double_tap_anim_speed_0">कोई एनीमेशन नहीं</string>
     <string name="double_tap_anim_speed_normal">साधारण</string>
     <string name="double_tap_anim_speed_fast">तेज</string>
@@ -365,7 +363,7 @@
     <string name="add_to_library">पुस्तकालय में जोड़ें</string>
     <string name="manga_info_collapse">कम</string>
     <string name="manga_info_expand">अधिक</string>
-    <string name="licenses">ओपन सोर्स लाइसेंस</string>
+        <string name="licenses">ओपन सोर्स लाइसेंस</string>
     <string name="website">वेबसाइट</string>
     <string name="label_downloaded_only">केवल डाउनलोड किए गए</string>
     <string name="recent_manga_time">अध्याय %1$s – %2$s</string>
@@ -433,7 +431,7 @@
     <string name="unknown_author">अज्ञात लेखक</string>
     <string name="requires_app_restart">प्रभावी होने के लिए एप्लिकेशन पुनरारंभ की आवश्यकता होती है</string>
     <string name="whats_new">नया क्या है</string>
-    <string name="action_global_search_query">विश्व स्तर पर \"%1$s\" के लिए खोजें</string>
+        <string name="action_global_search_query">विश्व स्तर पर \"%1$s\" के लिए खोजें</string>
     <string name="updated_version">v%1$s तक अद्यतन</string>
     <string name="pref_category_reading_mode">पढ़न मोड</string>
     <string name="pref_category_theme">थीम</string>
@@ -447,7 +445,7 @@
     <string name="channel_progress">प्रगती</string>
     <string name="channel_errors">त्रुटियाँ</string>
     <string name="backup_restore_missing_trackers">ट्रैकर्स में लॉग इन नहीं किया गया:</string>
-    <string name="ext_nsfw_warning">इसमें NSFW (18+) सामग्री हो सकती है</string>
+            <string name="ext_nsfw_warning">इसमें NSFW (18+) सामग्री हो सकती है</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">यह अनौपचारिक या संभावित रूप से फ़्लैग किए गए एक्सटेंशन को ऐप के भीतर NSFW (18+) सामग्री के सामने आने से नहीं रोकता है।</string>
     <plurals name="missing_chapters_warning">
@@ -457,12 +455,12 @@
     <string name="chapter_settings_updated">अपडेट किए गए डिफ़ॉल्ट अध्याय सेटिंग्स</string>
     <string name="no_chapters_error">कोई अध्याय नहीं मिला</string>
     <string name="set_chapter_settings_as_default">डिफ़ॉल्ट के रूप में सेट करें</string>
-    <string name="confirm_set_chapter_settings">क्या आप वाकई इन सेटिंग्स को डिफ़ॉल्ट के रूप में सहेजना चाहते हैं\?</string>
+        <string name="confirm_set_chapter_settings">क्या आप वाकई इन सेटिंग्स को डिफ़ॉल्ट के रूप में सहेजना चाहते हैं\?</string>
     <string name="chapter_settings">अध्याय सेटिंग्स</string>
     <string name="share_page_info">%1$s: %2$s, पृष्ठ %3$d</string>
     <string name="downloaded_chapters">डाउनलोड किए गए अध्याय</string>
         <string name="action_search_settings">खोज सेंटिंग</string>
-    <string name="pref_incognito_mode">इंकॉग्निटो मोड</string>
+        <string name="pref_incognito_mode">इंकॉग्निटो मोड</string>
     <string name="pref_clear_history">इतिहास मिटा दें</string>
     <string name="clear_history_confirmation">क्या आपको यकीन है\? सारा इतिहास खो जाएगा।</string>
     <string name="clear_history_completed">इतिहास हटाया गया</string>
@@ -509,7 +507,6 @@
     <string name="theme_yinyang">यीन और यैंन्ग</string>
     <string name="theme_tealturquoise">टील</string>
     <string name="pref_category_appearance">रूप</string>
-    <string name="pref_library_update_refresh_trackers">ट्रैकर्स को स्वचालित रूप से रीफ्रेश करें</string>
     <string name="none">कोई नहीं</string>
     <string name="exclude">बहिष्कृत करें: %s</string>
     <string name="off">बंद</string>
@@ -540,7 +537,7 @@
     <string name="rotation_landscape">परिदृश्य</string>
     <string name="action_sort_count">कुल आइटम</string>
     <string name="theme_midnightdusk">मिडनाइट डस्क</string>
-    <string name="pref_library_update_refresh_trackers_summary">पुस्तकालय अपडेट करते समय ट्रैकर्स को अपडेट करें</string>
+    <string name="relative_time_today">आज</string>
     <string name="include">शामिल करें: %s</string>
     <string name="ext_app_info">ऐप की जानकारी</string>
     <string name="ext_installer_shizuku_stopped">शिज़ुकु नहीं चल रहा है</string>
@@ -551,6 +548,10 @@
     <string name="restore_miui_warning">MIUI ऑप्टिमाइज़ेशन अक्षम होने पर बैकअप/पुनर्स्थापना ठीक से काम नहीं कर सकता है।</string>
     <string name="label_background_activity">पृष्ठभूमि गतिविधि</string>
     <string name="about_dont_kill_my_app">कुछ निर्माताओं के पास अतिरिक्त ऐप प्रतिबंध हैं जो पृष्ठभूमि सेवाओं को मारते हैं। इस वेबसाइट में इसे ठीक करने के बारे में अधिक जानकारी है।</string>
+    <plurals name="relative_time">
+        <item quantity="one">कल</item>
+        <item quantity="other">%1$d दिन पहले</item>
+    </plurals>
     <string name="local_invalid_format">अमान्य अध्याय प्रारूप</string>
     <string name="local_filter_order_by">के अनुसार ऑर्डर करें</string>
     <string name="clipboard_copy_error">क्लिपबोर्ड पर कॉपी करने में विफल</string>
@@ -582,13 +583,13 @@
     <string name="label_warning">चेतावनी</string>
     <string name="action_display_language_badge">भाषा</string>
     <string name="backup_info">आपको अन्य स्थानों पर भी बैकअप की प्रतियाँ रखनी चाहिए।</string>
-    <string name="notification_size_warning">बड़े अपडेट स्रोतों को नुकसान पहुंचाते हैं और इससे धीमे अपडेट हो सकते हैं, और बैटरी का उपयोग भी बढ़ सकता है। अधिक जानने के लिए टैप करें ।</string>
+        <string name="notification_size_warning">बड़े अपडेट स्रोतों को नुकसान पहुंचाते हैं और इससे धीमे अपडेट हो सकते हैं, और बैटरी का उपयोग भी बढ़ सकता है। अधिक जानने के लिए टैप करें ।</string>
     <string name="channel_app_updates">ऐप अपडेट</string>
     <string name="update_72hour">हर 3 दिन</string>
     <string name="connected_to_wifi">केवल वाई-फ़ाई पर</string>
     <string name="clear_database_source_item_count">डेटाबेस में %1$d गैर-पुस्तकालय आइटम</string>
-    <string name="database_clean">साफ़ करने के लिए कुछ नहीं है</string>
-    <string name="pref_library_update_manga_restriction">शीर्षक अद्यतन न करें</string>
+        <string name="database_clean">साफ़ करने के लिए कुछ नहीं है</string>
+        <string name="pref_library_update_manga_restriction">शीर्षक अद्यतन न करें</string>
     <string name="save_chapter_as_cbz">CBZ आर्कैव के रूप में सहेजें</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="library_errors_help">लाइब्रेरी अपडेट त्रुटियों को ठीक करने के तरीके पर सहायता के लिए, %1$s देखें</string>
@@ -603,7 +604,7 @@
     <string name="skipped_reason_not_caught_up">छोड़ दिया गया क्योंकि वहाँ अपठित अध्याय हैं</string>
     <string name="skipped_reason_not_started">छोड़ दिया गया क्योंकि कोई अध्याय पढ़ा नहीं गया</string>
     <string name="pref_update_only_started">जो शुरू नहीं हुए हैं</string>
-    <string name="action_display_cover_only_grid">केवल कवर ग्रिड</string>
+        <string name="action_display_cover_only_grid">केवल कवर ग्रिड</string>
     <string name="disabled_nav">अक्षम</string>
     <string name="rotation_reverse_portrait">रिवर्स पोर्ट्रेट</string>
     <string name="notification_update_error">%1$d अपडेट विफल</string>
@@ -613,7 +614,7 @@
     <string name="action_move_to_top_all_for_series">श्रृंखला को शीर्ष पर ले जाएं</string>
     <string name="source_empty_screen">कोई स्रोत नहीं मिला</string>
     <string name="source_filter_empty_screen">कोई स्थापित स्रोत नहीं मिला</string>
-    <string name="action_sort_unread_count">अपठित गिनती</string>
+        <string name="action_sort_unread_count">अपठित गिनती</string>
     <string name="webview_data_deleted">WebView डेटा साफ हो गया</string>
     <string name="update_check_open">गिटहब में खोलें</string>
     <string name="error_saving_picture">चित्र सहेजने में त्रुटि</string>
@@ -682,7 +683,7 @@
     <string name="action_update_category">श्रेणी अपडेट करें</string>
     <string name="pref_appearance_summary">थीम, दिनांक और समय प्रारूप</string>
     <string name="pref_downloads_summary">स्वचालित डाउनलोड, आगे डाउनलोड करें</string>
-    <string name="enhanced_services_not_installed">उपलब्ध है लेकिन स्रोत स्थापित नहीं है: %s</string>
+        <string name="enhanced_services_not_installed">उपलब्ध है लेकिन स्रोत स्थापित नहीं है: %s</string>
     <string name="pref_hide_in_library_items">पुस्तकालय में पहले से ही रही आइटम को छिपाएँ</string>
     <string name="pref_library_summary">श्रेणियाँ, वैश्विक अपडेट, अध्याय स्वाइप</string>
     <string name="pref_page_rotate">फिट होने के लिए चौड़े पृष्ठों को घुमाएं</string>

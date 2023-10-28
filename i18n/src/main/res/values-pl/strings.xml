@@ -178,7 +178,6 @@
     <string name="pref_backup_directory">Lokalizacja kopii zapasowych</string>
     <string name="pref_backup_interval">Częstotliwość tworzenia kopii</string>
     <string name="pref_backup_slots">Maks. ilość kopii automatycznych</string>
-    <string name="pref_backup_service_category">Automatyczna kopia zapasowa</string>
     <string name="backup_choice">Co zawrzeć w kopii zapasowej?</string>
     <string name="restoring_backup">Przywracanie kopii zapasowej</string>
     <string name="creating_backup">Tworzenie kopii zapasowej</string>
@@ -194,8 +193,7 @@
     <string name="backup_created">Utworzono kopię zapasową</string>
     <string name="restore_completed">Przywracanie ukończone</string>
         <string name="clear_database_completed">Pozycje usunięte</string>
-    <string name="pref_refresh_library_tracking">Odśwież dane śledzenia</string>
-        <string name="login_success">Zalogowano</string>
+    <string name="login_success">Zalogowano</string>
     <string name="local_source">Źródło lokalne</string>
     <string name="ongoing">Nieukończone</string>
     <string name="unknown">Nieznany</string>
@@ -252,8 +250,7 @@
     <string name="ext_trust">Ufaj</string>
     <string name="ext_untrusted">Niezaufane</string>
     <string name="untrusted_extension">Niezaufane rozszerzenie</string>
-
-    <string name="migration_dialog_what_to_include">Zaznacz dane do zawarcia</string>
+        <string name="migration_dialog_what_to_include">Zaznacz dane do zawarcia</string>
     <string name="migrate">Migruj</string>
     <string name="pager_viewer">Widok stron</string>
     <string name="source_not_installed">Nie zainstalowano źródła: %1$s</string>
@@ -549,8 +546,6 @@
     <string name="local_filter_order_by">Sortowanie</string>
     <string name="local_invalid_format">Błędny format rozdziału</string>
     <string name="chapter_not_found">Nie znaleziono rozdziału</string>
-    <string name="pref_library_update_refresh_trackers">Automatycznie odświeżaj serwisy śledzące</string>
-    <string name="pref_library_update_refresh_trackers_summary">Aktualizuj serwisy śledzące podczas aktualizacji biblioteki</string>
     <string name="error_sharing_cover">Błąd przy udostępnianiu okładki</string>
     <string name="error_saving_cover">Błąd przy zapisie okładki</string>
     <string name="cover_saved">Okładka zapisana</string>
@@ -574,6 +569,12 @@
     <string name="theme_strawberrydaiquiri">Truskawkowe daiquiri</string>
     <string name="pref_hide_threshold">Czułość ukrywania dolnego paska podczas przewijania</string>
     <string name="theme_tako">Tako</string>
+    <plurals name="relative_time">
+        <item quantity="one">Wczoraj</item>
+        <item quantity="few">%1$d dni temu</item>
+        <item quantity="many">%1$d dni temu</item>
+        <item quantity="other">%1$d dni temu</item>
+    </plurals>
     <string name="label_background_activity">Aktywność w tle</string>
     <string name="action_track">Śledź</string>
     <string name="pref_category_appearance">Wygląd</string>
@@ -589,6 +590,7 @@
     <string name="pref_highest">Najwyższy</string>
     <string name="pref_inverted_colors">Odwrócone</string>
     <string name="ext_app_info">Informacje o aplikacji</string>
+    <string name="relative_time_today">Dzisiaj</string>
     <string name="theme_tealturquoise">Błękitny &amp; Turkusowy</string>
     <string name="theme_midnightdusk">Zmierzch północy</string>
     <string name="notification_size_warning">Ostrzeżenie: duże aktualizacje biblioteki mogą prowadzić do zwiększonego zużycia baterii oraz spowolnienia działania źródeł. Kliknij, by dowiedzieć się więcej.</string>

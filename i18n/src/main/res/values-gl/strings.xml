@@ -252,6 +252,7 @@
     <string name="pref_browse_summary">Fontes, extensións, procura global</string>
     <string name="pref_advanced_summary">Baixar os rexistros de erros, optimizacións de batería</string>
     <string name="theme_tidalwave">Maremoto</string>
+    <string name="relative_time_today">Hoxe</string>
         <string name="pref_library_update_categories_details">Os elementos das categorías excluídas non se actualizarán aínda se están tamén nas categorías incluídas.</string>
     <string name="ext_info_version">Versión</string>
     <string name="ext_install_service_notif">Instalando a extensión…</string>
@@ -303,7 +304,7 @@
     <string name="pref_user_agent_string">Nome do axente de usuario (\"user agent\") por defecto</string>
     <string name="error_user_agent_string_blank">O axente de usuario non pode estar vacío</string>
     <string name="used_cache">Usado: %1$s</string>
-            <string name="battery_optimization_setting_activity_not_found">Non se puideron abrir os axustes do dispositivo</string>
+        <string name="battery_optimization_setting_activity_not_found">Non se puideron abrir os axustes do dispositivo</string>
     <string name="pref_enable_acra">Enviar informes de erros</string>
     <string name="tabs_header">Lapelas</string>
     <string name="no_more_results">Non hai máis resultados</string>
@@ -366,7 +367,6 @@
     <string name="enhanced_services">Servizos mellorados</string>
     <string name="enhanced_tracking_info">Estes servizos proporcionan funcións melloradas para fontes concretas. Faise un seguemento automático dos elementos ao engadilos á biblioteca.</string>
     <string name="pref_backup_directory">Localización da copia de seguridade</string>
-    <string name="pref_backup_service_category">Copias de seguridade automáticas</string>
     <string name="backup_in_progress">Xa se está facendo unha copia de seguridade</string>
     <string name="pref_dump_crash_logs">Compartir os rexistros de erros</string>
     <string name="error_sharing_cover">Error ao compartir a portada</string>
@@ -406,7 +406,6 @@
     <string name="database_clean">Non hai nada que borrar</string>
     <string name="pref_clear_webview_data">Borrar os datos do WebView</string>
     <string name="pref_reset_viewer_flags_summary">Restablecer o modo de lectura e a orientación de tódalas series</string>
-    <string name="pref_refresh_library_tracking">Actualizar o seguemento</string>
     <string name="action_sort_unread_count">Número de non lidos</string>
         <string name="action_sort_chapter_fetch_date">Data de obtención dos capítulos</string>
     <string name="label_warning">Advertencia</string>
@@ -433,8 +432,6 @@
     <string name="theme_tealturquoise">Azul mariño e turquesa</string>
     <string name="theme_yinyang">Yin e Yang</string>
     <string name="pref_dark_theme_pure_black">Modo negro puro</string>
-    <string name="pref_library_update_refresh_trackers">Actualizar automaticamente os servizos de seguemento</string>
-    <string name="pref_library_update_refresh_trackers_summary">Actualizar os servizos de seguemento ao actualizar a biblioteca</string>
     <string name="include">Incluír: %s</string>
     <string name="extension_api_error">Non se puido baixar a listaxe de extensións</string>
     <string name="pref_clear_database">Borrar a base de datos</string>
@@ -486,6 +483,10 @@
     <string name="cancel_all_for_series">Cancelar todo para esta serie</string>
     <string name="action_order_by_upload_date">Por data de subida</string>
     <string name="action_show_errors">Preme para ver os detalles do erro</string>
+    <plurals name="relative_time">
+        <item quantity="one">Onte</item>
+        <item quantity="other">Fai %1$d días</item>
+    </plurals>
     <string name="pref_library_update_manga_restriction">Omitir actualizacións</string>
     <string name="restrictions">Restricións: %s</string>
     <string name="categorized_display_settings">Opcións de ordenación e visualización por categoría</string>

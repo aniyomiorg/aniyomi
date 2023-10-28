@@ -253,7 +253,6 @@
     </plurals>
     <string name="add_tracking">Сӑнану хуш</string>
     <string name="manga_tracking_tab">Сӑна</string>
-        <string name="pref_refresh_library_tracking">Сӑнанӑва ҫӗнет</string>
     <string name="custom_filter">Усӑҫ али</string>
     <string name="pref_acra_summary">Кирек мӗнле йӑнӑшсене тӳрлетме пулӑшать. Нимӗнле харкам пӗлӗм те ярӑнмасть</string>
     <string name="label_downloaded_only">Тиенӗсене ҫеҫ</string>
@@ -427,7 +426,6 @@
     <string name="invalid_backup_file_missing_manga">Янтӑвра манкӑсем ҫук.</string>
     <string name="backup_created">Янтӑв тӑвӑннӑ</string>
     <string name="pref_backup_slots">Май килнӗ таран янтӑвсем</string>
-    <string name="pref_backup_service_category">Хӑй-халлӗн янтӑвлани</string>
     <string name="pref_backup_directory">Янтӑв вырнаҫни</string>
     <string name="pref_restore_backup_summ">Вулавӑша янтӑвран тавӑр</string>
     <string name="pref_restore_backup">Янтӑв тавӑр</string>
@@ -511,8 +509,7 @@
     <string name="action_show_errors">Йӑнӑшсене кӑтарт</string>
     <string name="cancel_all_for_series">Ҫак серилӗх валли пурне те пӑрахӑҫла</string>
     <string name="pref_downloads_summary">Хӑй-хальлӗн тийесе илни, малтанах тийени</string>
-
-    <string name="action_sort_unread_count">Йулнӑ сыпӑксемпе</string>
+        <string name="action_sort_unread_count">Йулнӑ сыпӑксемпе</string>
     <string name="action_sort_count">Ҫырав шучӗпе</string>
     <string name="action_remove_everything">Пурне те катерт</string>
     <string name="delete_category_confirmation">«%s» пухмӑш катертесшӗнех-и\?</string>
@@ -547,12 +544,17 @@
     <string name="label_downloaded">Тийесе илнӗ</string>
     <string name="theme_tidalwave">Шыв хӑпарнин хумӗ</string>
     <string name="pref_app_theme">Ап темми</string>
+    <string name="relative_time_today">Пайан</string>
     <string name="theme_lavender">Лавантӑ</string>
     <string name="theme_yinyang">Ин тата Йан</string>
     <string name="pref_browse_summary">Ҫӑл куҫсем, хушмасем, пӗтӗмӗшле шырав</string>
     <string name="theme_greenapple">Симӗс пан улми</string>
     <string name="theme_yotsuba">Йутсупа</string>
     <string name="pref_library_update_manga_restriction">Серилӗхсене ҫӗнетнине сиктер</string>
+    <plurals name="relative_time">
+        <item quantity="one">Ӗнер</item>
+        <item quantity="other">%1$d кун кайалла</item>
+    </plurals>
     <string name="network_not_metered">Чараксӑр тетел урлӑ ҫеҫ</string>
     <string name="pref_update_only_started">Серилӗхе пуҫламан</string>
     <string name="theme_tako">Такку</string>
@@ -572,7 +574,6 @@
     <string name="automatic_background">Хӑй-хальлӗн</string>
     <string name="disabled_nav">Сӳнтернӗ</string>
     <string name="extension_api_error">Хушмасен йат-йышне илесси пулаймарӗ</string>
-    <string name="pref_library_update_refresh_trackers_summary">Вулавӑша ҫӗнетнӗ май йӗрлеве те ҫӗнетни</string>
     <string name="categorized_display_settings">Кашни пухмӑшӑн хӑйӗн ала ӗнерӗвӗсем</string>
     <string name="ext_app_info">Ап ҫинчен</string>
     <string name="split_tall_images_summary">Вулӑшӑн тухӑҫа лайӑхлатать</string>
@@ -582,7 +583,6 @@
     <string name="split_tall_images">Вӑрӑм сӑнсене пайлани</string>
     <string name="missing_storage_permission">Управ ирӗкӗсене паман</string>
     <string name="ext_info_version">Версси</string>
-    <string name="pref_library_update_refresh_trackers">Йӗрлеве хӑй-хальлӗн ҫӗнетни</string>
     <string name="ext_update_all">Пурне те ҫӗнет</string>
     <string name="delete_downloaded">Тийесе илнисене катерт</string>
     <string name="pref_library_columns_per_row">Ретре %d</string>

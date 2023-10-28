@@ -198,7 +198,6 @@
     <string name="services">Palvelut</string>
     <string name="pref_create_backup_summ">Voidaan käyttää nykyisen kirjaston palauttamiseen</string>
     <string name="pref_restore_backup_summ">Palauta kirjasto varmuuskopiointi-tiedostosta</string>
-    <string name="pref_backup_service_category">Automaattiset varmuuskopiot</string>
     <string name="pref_backup_interval">Varmuuskopioinnin tiheys</string>
     <string name="pref_backup_slots">Varmuuskopioiden enimmäismäärä</string>
     <string name="backup_created">Varmuuskopio luotu</string>
@@ -214,8 +213,7 @@
     <string name="pref_clear_database">Tyhjennä tietokanta</string>
     <string name="pref_clear_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
         <string name="clear_database_completed">Tiedot poistettu</string>
-    <string name="pref_refresh_library_tracking">Päivitä seuranta</string>
-        <string name="version">Versio</string>
+    <string name="version">Versio</string>
     <string name="pref_enable_acra">Lähetä kaatumisilmoituksia</string>
     <string name="pref_acra_summary">Auttaa korjaamaan bugeja. Arkaluonteista tietoa ei lähetetä</string>
     <string name="login_title">%1$s kirjautuminen</string>
@@ -529,13 +527,15 @@
     <string name="off">Pois päältä</string>
     <string name="on">Päällä</string>
     <string name="getting_started_guide">Aloitusopas</string>
-        <string name="pref_library_update_refresh_trackers_summary">Päivitä seurantapalvelimet kirjaston päivityksen yhteydessä</string>
+        <plurals name="relative_time">
+        <item quantity="one">Eilen</item>
+        <item quantity="other">%1$d päivää sitten</item>
+    </plurals>
         <string name="action_display_cover_only_grid">Kansikuva ruudukko</string>
     <string name="theme_monet">Dynaaminen</string>
     <string name="theme_greenapple">Vihreä omena</string>
     <string name="label_default">Oletus</string>
     <string name="action_display_local_badge">Laitteelle tallennettu manga</string>
-    <string name="pref_library_update_refresh_trackers">Päivitä seurantapalvelimet automaattisesti</string>
     <string name="action_sort_count">Yhteenlaskettu manga</string>
     <string name="action_start_downloading_now">Aloita lataaminen nyt</string>
     <string name="theme_yinyang">Ying ja Yang</string>
@@ -546,6 +546,7 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="pref_dark_theme_pure_black">Täysin musta pimeätila</string>
     <string name="pref_update_only_started">Ei lukemattomia lukuja</string>
+    <string name="relative_time_today">Tänään</string>
         <string name="pref_app_theme">Sovelluksen teema</string>
     <string name="label_warning">Varoitus</string>
     <string name="confirm_lock_change">Tunnistaudu vahvistaaksesi muutokset</string>
@@ -569,8 +570,7 @@
     <string name="ext_install_service_notif">Asennetaan laajennusta…</string>
     <string name="ext_installer_pref">Asentaja</string>
     <string name="action_remove_everything">Poista kaikki</string>
-
-    <string name="action_sort_unread_count">Lukemattomien määrä</string>
+        <string name="action_sort_unread_count">Lukemattomien määrä</string>
     <string name="delete_category">Poista kategoria</string>
     <string name="action_track">Jäljitä</string>
     <plurals name="next_unread_chapters">

@@ -135,7 +135,6 @@
     <string name="pref_restore_backup">Pulihkan sandaran</string>
     <string name="pref_restore_backup_summ">Pulihkan pustaka daripada fail sandaran</string>
     <string name="pref_backup_directory">Lokasi sandaran</string>
-    <string name="pref_backup_service_category">Sandaran automatik</string>
     <string name="pref_backup_interval">Kekerapan sandaran</string>
     <string name="pref_backup_slots">Sandaran maksimum</string>
     <string name="backup_created">Sandaran dicipta</string>
@@ -151,8 +150,7 @@
     <string name="pref_clear_database">Hapus pangkalan data</string>
     <string name="pref_clear_database_summary">Hapus sejarah entri yang tidak disimpan di dalam pustaka</string>
         <string name="clear_database_completed">Entri dihapuskan</string>
-    <string name="pref_refresh_library_tracking">Segar semula penjejakan</string>
-        <string name="version">Versi</string>
+    <string name="version">Versi</string>
     <string name="pref_enable_acra">Hantar laporan ranap</string>
     <string name="pref_acra_summary">Bantu membaiki aplikasi. Tiada data sensitif dihantar</string>
     <string name="login_title">Log masuk ke %1$s</string>
@@ -243,8 +241,7 @@
     <string name="ext_untrusted">Tidak dipercayai</string>
     <string name="ext_uninstall">Nyahpasang</string>
     <string name="untrusted_extension">Sambungan tak dipercayai</string>
-
-    <string name="pref_double_tap_anim_speed">Kelajuan animasi ketik dua kali</string>
+        <string name="pref_double_tap_anim_speed">Kelajuan animasi ketik dua kali</string>
     <string name="pref_true_color">32-bit warna</string>
     <string name="pref_skip_read_chapters">Langkau bab yang sudah dibaca</string>
     <string name="pref_read_with_long_tap">Tunjuk tindakan bila menahan ketik</string>
@@ -516,8 +513,6 @@
     <string name="local_filter_order_by">Susun mengikut</string>
     <string name="local_invalid_format">Format bab tidak sah</string>
     <string name="chapter_not_found">Bab tidak dijumpai</string>
-    <string name="pref_library_update_refresh_trackers_summary">Kemas kini penjejak ketika mengemaskini pustaka</string>
-    <string name="pref_library_update_refresh_trackers">Segar semula penjejak secara automatik</string>
     <string name="restrictions">Sekatan: %s</string>
     <string name="action_display_local_badge">Sumber setempat</string>
     <string name="off">Mati</string>
@@ -550,6 +545,10 @@
     <string name="pref_hide_threshold">Sensitiviti menyembunyikan menu apabila skrol</string>
     <string name="label_background_activity">Aktiviti latar belakang</string>
     <string name="pref_inverted_colors">Songsang</string>
+    <plurals name="relative_time">
+        <item quantity="other">%1$d hari lalu</item>
+    </plurals>
+    <string name="relative_time_today">Hari ini</string>
     <string name="theme_tealturquoise">Teal &amp; Turquoise</string>
     <string name="confirm_lock_change">Sahkan untuk mengesahkan perubahan</string>
     <string name="label_default">Lalai</string>
