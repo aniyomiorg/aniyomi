@@ -26,7 +26,6 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.ui.player.viewer.AspectState.Companion.get
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
@@ -37,6 +36,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
+import eu.kanade.tachiyomi.util.chapter.filterDownloadedChapters
 import eu.kanade.tachiyomi.util.chapter.removeDuplicates
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -94,6 +94,7 @@ class ReaderViewModel(
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
+    private val basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
@@ -189,6 +190,13 @@ class ReaderViewModel(
             .run {
                 if (readerPreferences.skipDupe().get()) {
                     removeDuplicates(selectedChapter)
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (basePreferences.downloadedOnly().get()) {
+                    filterDownloadedChapters(manga)
                 } else {
                     this
                 }
@@ -435,12 +443,13 @@ class ReaderViewModel(
                 currentPage = page.index + 1,
             )
         }
-        selectedChapter.chapter.last_page_read = page.index
-        val shouldTrack = !incognitoMode || hasTrackers
-        if (selectedChapter.pages?.lastIndex == page.index && shouldTrack) {
-            selectedChapter.chapter.read = true
-            updateTrackChapterRead(selectedChapter)
-            deleteChapterIfNeeded(selectedChapter)
+        if (!incognitoMode) {
+            selectedChapter.chapter.last_page_read = page.index
+            if (selectedChapter.pages?.lastIndex == page.index) {
+                selectedChapter.chapter.read = true
+                updateTrackChapterRead(selectedChapter)
+                deleteChapterIfNeeded(selectedChapter)
+            }
         }
 
         if (selectedChapter != currentChapters.currChapter) {
@@ -504,16 +513,17 @@ class ReaderViewModel(
      * @param currentChapter current chapter, which is going to be marked as read.
      */
     private fun deleteChapterIfNeeded(currentChapter: ReaderChapter) {
+        val removeAfterReadSlots = downloadPreferences.removeAfterReadSlots().get()
+        if (removeAfterReadSlots == -1) return
+
         // Determine which chapter should be deleted and enqueue
         val currentChapterPosition = chapterList.indexOf(currentChapter)
-        val removeAfterReadSlots = downloadPreferences.removeAfterReadSlots().get()
         val chapterToDelete = chapterList.getOrNull(currentChapterPosition - removeAfterReadSlots)
 
-        // If chapter is completely read no need to download it
+        // If chapter is completely read, no need to download it
         chapterToDownload = null
 
-        // Check if deleting option is enabled and chapter exists
-        if (removeAfterReadSlots != -1 && chapterToDelete != null) {
+        if (chapterToDelete != null) {
             enqueueDeleteReadChapters(chapterToDelete)
         }
     }
@@ -534,21 +544,21 @@ class ReaderViewModel(
 
     /**
      * Saves this [readerChapter] progress (last read page and whether it's read).
-     * If incognito mode isn't on or has at least 1 tracker
+     * if incognito mode isn't on.
      */
     private suspend fun saveChapterProgress(readerChapter: ReaderChapter) {
-        if (!incognitoMode || hasTrackers) {
-            val chapter = readerChapter.chapter
-            getCurrentChapter()?.requestedPage = chapter.last_page_read
-            updateChapter.await(
-                ChapterUpdate(
-                    id = chapter.id!!,
-                    read = chapter.read,
-                    bookmark = chapter.bookmark,
-                    lastPageRead = chapter.last_page_read.toLong(),
-                ),
-            )
-        }
+        if (!incognitoMode) return
+
+        val chapter = readerChapter.chapter
+        getCurrentChapter()?.requestedPage = chapter.last_page_read
+        updateChapter.await(
+            ChapterUpdate(
+                id = chapter.id!!,
+                read = chapter.read,
+                bookmark = chapter.bookmark,
+                lastPageRead = chapter.last_page_read.toLong(),
+            ),
+        )
     }
 
     /**
@@ -712,7 +722,7 @@ class ReaderViewModel(
         val chapter = page.chapter.chapter
         val filenameSuffix = " - ${page.number}"
         return DiskUtil.buildValidFilename(
-            "${manga.title} - ${chapter.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
+            "${manga.title} - ${chapter.name}".takeBytes(DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
         ) + filenameSuffix
     }
 
@@ -830,9 +840,10 @@ class ReaderViewModel(
      * will run in a background thread and errors are ignored.
      */
     private fun updateTrackChapterRead(readerChapter: ReaderChapter) {
+        if (incognitoMode || !hasTrackers) return
         if (!trackPreferences.autoUpdateTrack().get()) return
-        val manga = manga ?: return
 
+        val manga = manga ?: return
         val chapterRead = readerChapter.chapter.chapter_number.toDouble()
 
         val trackManager = Injekt.get<TrackManager>()
@@ -917,10 +928,5 @@ class ReaderViewModel(
 
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val page: ReaderPage) : Event()
-    }
-
-    companion object {
-        // Safe theoretical max filename size is 255 bytes and 1 char = 2-4 bytes (UTF-8)
-        private const val MAX_FILE_NAME_BYTES = 250
     }
 }

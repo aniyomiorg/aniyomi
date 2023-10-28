@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -97,7 +98,7 @@ class PlayerViewModel(
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
-    basePreferences: BasePreferences = Injekt.get(),
+    private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -272,6 +273,13 @@ class PlayerViewModel(
 
         return episodes
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
+            .run {
+                if (basePreferences.downloadedOnly().get()) {
+                    filterDownloadedEpisodes(anime)
+                } else {
+                    this
+                }
+            }
             .map { it.toDbEpisode() }
     }
 
@@ -540,9 +548,10 @@ class PlayerViewModel(
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode) {
+        if (basePreferences.incognitoMode().get()) return
         if (!trackPreferences.autoUpdateTrack().get()) return
-        val anime = currentAnime ?: return
 
+        val anime = currentAnime ?: return
         val episodeSeen = episode.episode_number.toDouble()
 
         val trackManager = Injekt.get<TrackManager>()
@@ -640,7 +649,7 @@ class PlayerViewModel(
         val episode = currentEpisode ?: return null
         val filenameSuffix = " - $timePos"
         return DiskUtil.buildValidFilename(
-            "${anime.title} - ${episode.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
+            "${anime.title} - ${episode.name}".takeBytes(DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
         ) + filenameSuffix
     }
 
@@ -741,5 +750,3 @@ class PlayerViewModel(
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }
 }
-
-private const val MAX_FILE_NAME_BYTES = 250

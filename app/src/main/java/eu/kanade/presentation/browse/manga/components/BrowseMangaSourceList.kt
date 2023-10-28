@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.library.CommonEntryItemDefaults
 import eu.kanade.presentation.library.EntryListItem

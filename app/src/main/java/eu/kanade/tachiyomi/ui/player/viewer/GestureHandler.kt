@@ -57,41 +57,56 @@ class GestureHandler(
     private var scrollDiff: Float? = null
 
     override fun onScroll(
-        e1: MotionEvent,
+        e1: MotionEvent?,
         e2: MotionEvent,
         distanceX: Float,
         distanceY: Float,
     ): Boolean {
-        if (SeekState.mode == SeekState.LOCKED) { playerControls.toggleControls(); return false }
-        if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
-        val dx = e1.x - e2.x
-        val dy = e1.y - e2.y
-        when (scrollState) {
-            STATE_UP -> {
-                if (abs(dx) >= trigger) {
-                    if (e1.x < width * 0.05F || e1.x > width * 0.95F) return false
-                    scrollState = STATE_HORIZONTAL
-                    activity.initSeek()
-                } else if (abs(dy) > trigger) {
-                    scrollState = when {
-                        e1.x > width * 0.6F -> STATE_VERTICAL_RIGHT
-                        e1.x < width * 0.4F -> STATE_VERTICAL_LEFT
-                        else -> STATE_UP
+        if (e1 != null) {
+            if (SeekState.mode == SeekState.LOCKED) {
+                playerControls.toggleControls(); return false
+            }
+            if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
+            val dx = e1.x - e2.x
+            val dy = e1.y - e2.y
+            when (scrollState) {
+                STATE_UP -> {
+                    if (abs(dx) >= trigger) {
+                        if (e1.x < width * 0.05F || e1.x > width * 0.95F) return false
+                        scrollState = STATE_HORIZONTAL
+                        activity.initSeek()
+                    } else if (abs(dy) > trigger) {
+                        scrollState = when {
+                            e1.x > width * 0.6F -> STATE_VERTICAL_RIGHT
+                            e1.x < width * 0.4F -> STATE_VERTICAL_LEFT
+                            else -> STATE_UP
+                        }
                     }
                 }
-            }
-            STATE_VERTICAL_LEFT -> {
-                val diff = 1.5F * distanceY / height
-                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollLeft(diff)
-            }
-            STATE_VERTICAL_RIGHT -> {
-                val diff = 1.5F * distanceY / height
-                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollRight(diff)
-            }
-            STATE_HORIZONTAL -> {
-                val diff = 150F * -dx / width
-                scrollDiff = diff
-                if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(diff)
+
+                STATE_VERTICAL_LEFT -> {
+                    val diff = 1.5F * distanceY / height
+                    if (preferences.gestureVolumeBrightness().get()) {
+                        activity.verticalScrollLeft(
+                            diff,
+                        )
+                    }
+                }
+
+                STATE_VERTICAL_RIGHT -> {
+                    val diff = 1.5F * distanceY / height
+                    if (preferences.gestureVolumeBrightness().get()) {
+                        activity.verticalScrollRight(
+                            diff,
+                        )
+                    }
+                }
+
+                STATE_HORIZONTAL -> {
+                    val diff = 150F * -dx / width
+                    scrollDiff = diff
+                    if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(diff)
+                }
             }
         }
         return true

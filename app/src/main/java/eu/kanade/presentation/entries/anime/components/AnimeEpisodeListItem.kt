@@ -33,6 +33,7 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -44,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalViewConfiguration
+import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -76,203 +79,209 @@ fun AnimeEpisodeListItem(
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
 ) {
-    val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
-    val textSubtitleAlpha = remember(seen) { if (seen) ReadItemAlpha else SecondaryItemAlpha }
-
-    val episodeSwipeStartEnabled = episodeSwipeStartAction != LibraryPreferences.EpisodeSwipeAction.Disabled
-    val episodeSwipeEndEnabled = episodeSwipeEndAction != LibraryPreferences.EpisodeSwipeAction.Disabled
-
-    val dismissState = rememberDismissState()
-    val dismissDirections = remember { mutableSetOf<DismissDirection>() }
-    var lastDismissDirection: DismissDirection? by remember { mutableStateOf(null) }
-    if (lastDismissDirection == null) {
-        if (episodeSwipeStartEnabled) {
-            dismissDirections.add(DismissDirection.EndToStart)
-        }
-        if (episodeSwipeEndEnabled) {
-            dismissDirections.add(DismissDirection.StartToEnd)
-        }
-    }
-    val animateDismissContentAlpha by animateFloatAsState(
-        label = "animateDismissContentAlpha",
-        targetValue = if (lastDismissDirection != null) 1f else 0f,
-        animationSpec = tween(durationMillis = if (lastDismissDirection != null) 500 else 0),
-        finishedListener = {
-            lastDismissDirection = null
+    // Increase touch slop of swipe action to reduce accidental trigger
+    val configuration = LocalViewConfiguration.current
+    CompositionLocalProvider(
+        LocalViewConfiguration provides object : ViewConfiguration by configuration {
+            override val touchSlop: Float = configuration.touchSlop * 3f
         },
-    )
-    val dismissContentAlpha = if (lastDismissDirection != null) animateDismissContentAlpha else 1f
-    val backgroundColor = if (episodeSwipeEndEnabled && (dismissState.dismissDirection == DismissDirection.StartToEnd || lastDismissDirection == DismissDirection.StartToEnd)) {
-        MaterialTheme.colorScheme.primary
-    } else if (episodeSwipeStartEnabled && (dismissState.dismissDirection == DismissDirection.EndToStart || lastDismissDirection == DismissDirection.EndToStart)) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        Color.Unspecified
-    }
+    ) {
+        val textAlpha = if (seen) ReadItemAlpha else 1f
+        val textSubtitleAlpha = if (seen) ReadItemAlpha else SecondaryItemAlpha
 
-    LaunchedEffect(dismissState.currentValue) {
-        when (dismissState.currentValue) {
-            DismissValue.DismissedToEnd -> {
-                lastDismissDirection = DismissDirection.StartToEnd
-                val dismissDirectionsCopy = dismissDirections.toSet()
-                dismissDirections.clear()
-                onEpisodeSwipe(episodeSwipeEndAction)
-                dismissState.snapTo(DismissValue.Default)
-                dismissDirections.addAll(dismissDirectionsCopy)
+        val episodeSwipeStartEnabled = episodeSwipeStartAction != LibraryPreferences.EpisodeSwipeAction.Disabled
+        val episodeSwipeEndEnabled = episodeSwipeEndAction != LibraryPreferences.EpisodeSwipeAction.Disabled
+
+        val dismissState = rememberDismissState()
+        val dismissDirections = remember { mutableSetOf<DismissDirection>() }
+        var lastDismissDirection: DismissDirection? by remember { mutableStateOf(null) }
+        if (lastDismissDirection == null) {
+            if (episodeSwipeStartEnabled) {
+                dismissDirections.add(DismissDirection.EndToStart)
             }
-
-            DismissValue.DismissedToStart -> {
-                lastDismissDirection = DismissDirection.EndToStart
-                val dismissDirectionsCopy = dismissDirections.toSet()
-                dismissDirections.clear()
-                onEpisodeSwipe(episodeSwipeStartAction)
-                dismissState.snapTo(DismissValue.Default)
-                dismissDirections.addAll(dismissDirectionsCopy)
+            if (episodeSwipeEndEnabled) {
+                dismissDirections.add(DismissDirection.StartToEnd)
             }
-
-            DismissValue.Default -> {}
         }
-    }
+        val animateDismissContentAlpha by animateFloatAsState(
+            label = "animateDismissContentAlpha",
+            targetValue = if (lastDismissDirection != null) 1f else 0f,
+            animationSpec = tween(durationMillis = if (lastDismissDirection != null) 500 else 0),
+            finishedListener = {
+                lastDismissDirection = null
+            },
+        )
+        val dismissContentAlpha = if (lastDismissDirection != null) animateDismissContentAlpha else 1f
+        val backgroundColor = if (episodeSwipeEndEnabled && (dismissState.dismissDirection == DismissDirection.StartToEnd || lastDismissDirection == DismissDirection.StartToEnd)) {
+            MaterialTheme.colorScheme.primary
+        } else if (episodeSwipeStartEnabled && (dismissState.dismissDirection == DismissDirection.EndToStart || lastDismissDirection == DismissDirection.EndToStart)) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            Color.Unspecified
+        }
 
-    SwipeToDismiss(
-        state = dismissState,
-        directions = dismissDirections,
-        background = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor),
-            ) {
-                if (dismissState.dismissDirection in dismissDirections) {
-                    val downloadState = downloadStateProvider()
-                    SwipeBackgroundIcon(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .align(Alignment.CenterStart)
-                            .alpha(
-                                if (dismissState.dismissDirection == DismissDirection.StartToEnd) 1f else 0f,
-                            ),
-                        tint = contentColorFor(backgroundColor),
-                        swipeAction = episodeSwipeEndAction,
-                        seen = seen,
-                        bookmark = bookmark,
-                        downloadState = downloadState,
-                    )
-                    SwipeBackgroundIcon(
-                        modifier = Modifier
-                            .padding(end = 16.dp)
-                            .align(Alignment.CenterEnd)
-                            .alpha(
-                                if (dismissState.dismissDirection == DismissDirection.EndToStart) 1f else 0f,
-                            ),
-                        tint = contentColorFor(backgroundColor),
-                        swipeAction = episodeSwipeStartAction,
-                        seen = seen,
-                        bookmark = bookmark,
-                        downloadState = downloadState,
-                    )
+        LaunchedEffect(dismissState.currentValue) {
+            when (dismissState.currentValue) {
+                DismissValue.DismissedToEnd -> {
+                    lastDismissDirection = DismissDirection.StartToEnd
+                    val dismissDirectionsCopy = dismissDirections.toSet()
+                    dismissDirections.clear()
+                    onEpisodeSwipe(episodeSwipeEndAction)
+                    dismissState.snapTo(DismissValue.Default)
+                    dismissDirections.addAll(dismissDirectionsCopy)
                 }
+                DismissValue.DismissedToStart -> {
+                    lastDismissDirection = DismissDirection.EndToStart
+                    val dismissDirectionsCopy = dismissDirections.toSet()
+                    dismissDirections.clear()
+                    onEpisodeSwipe(episodeSwipeStartAction)
+                    dismissState.snapTo(DismissValue.Default)
+                    dismissDirections.addAll(dismissDirectionsCopy)
+                }
+                DismissValue.Default -> { }
             }
-        },
-        dismissContent = {
-            Row(
-                modifier = modifier
-                    .background(
-                        MaterialTheme.colorScheme.background.copy(dismissContentAlpha),
-                    )
-                    .selectedBackground(selected)
-                    .alpha(dismissContentAlpha)
-                    .combinedClickable(
-                        onClick = onClick,
-                        onLongClick = onLongClick,
-                    )
-                    .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
+        }
+
+        SwipeToDismiss(
+            state = dismissState,
+            directions = dismissDirections,
+            background = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(backgroundColor),
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(2.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        var textHeight by remember { mutableIntStateOf(0) }
-                        if (!seen) {
-                            Icon(
-                                imageVector = Icons.Filled.Circle,
-                                contentDescription = stringResource(R.string.unread),
-                                modifier = Modifier
-                                    .height(8.dp)
-                                    .padding(end = 4.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                        if (bookmark) {
-                            Icon(
-                                imageVector = Icons.Filled.Bookmark,
-                                contentDescription = stringResource(R.string.action_filter_bookmarked),
-                                modifier = Modifier
-                                    .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = LocalContentColor.current.copy(alpha = textAlpha),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            onTextLayout = { textHeight = it.size.height },
+                    if (dismissState.dismissDirection in dismissDirections) {
+                        val downloadState = downloadStateProvider()
+                        SwipeBackgroundIcon(
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .align(Alignment.CenterStart)
+                                .alpha(
+                                    if (dismissState.dismissDirection == DismissDirection.StartToEnd) 1f else 0f,
+                                ),
+                            tint = contentColorFor(backgroundColor),
+                            swipeAction = episodeSwipeEndAction,
+                            seen = seen,
+                            bookmark = bookmark,
+                            downloadState = downloadState,
+                        )
+                        SwipeBackgroundIcon(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .align(Alignment.CenterEnd)
+                                .alpha(
+                                    if (dismissState.dismissDirection == DismissDirection.EndToStart) 1f else 0f,
+                                ),
+                            tint = contentColorFor(backgroundColor),
+                            swipeAction = episodeSwipeStartAction,
+                            seen = seen,
+                            bookmark = bookmark,
+                            downloadState = downloadState,
                         )
                     }
-
-                    Row {
-                        ProvideTextStyle(
-                            value = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 12.sp,
-                                color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
-                            ),
+                }
+            },
+            dismissContent = {
+                Row(
+                    modifier = modifier
+                        .background(
+                            MaterialTheme.colorScheme.background.copy(dismissContentAlpha),
+                        )
+                        .selectedBackground(selected)
+                        .alpha(dismissContentAlpha)
+                        .combinedClickable(
+                            onClick = onClick,
+                            onLongClick = onLongClick,
+                        )
+                        .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(2.dp),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            if (date != null) {
-                                Text(
-                                    text = date,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
+                            var textHeight by remember { mutableIntStateOf(0) }
+                            if (!seen) {
+                                Icon(
+                                    imageVector = Icons.Filled.Circle,
+                                    contentDescription = stringResource(R.string.unseen),
+                                    modifier = Modifier
+                                        .height(8.dp)
+                                        .padding(end = 4.dp),
+                                    tint = MaterialTheme.colorScheme.primary,
                                 )
-                                if (watchProgress != null || scanlator != null) DotSeparatorText()
                             }
-                            if (watchProgress != null) {
-                                Text(
-                                    text = watchProgress,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.alpha(ReadItemAlpha),
+                            if (bookmark) {
+                                Icon(
+                                    imageVector = Icons.Filled.Bookmark,
+                                    contentDescription = stringResource(R.string.action_filter_bookmarked),
+                                    modifier = Modifier
+                                        .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                                    tint = MaterialTheme.colorScheme.primary,
                                 )
-                                if (scanlator != null) DotSeparatorText()
                             }
-                            if (scanlator != null) {
-                                Text(
-                                    text = scanlator,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = LocalContentColor.current.copy(alpha = textAlpha),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                onTextLayout = { textHeight = it.size.height },
+                            )
+                        }
+
+                        Row {
+                            ProvideTextStyle(
+                                value = MaterialTheme.typography.bodyMedium.copy(
+                                    fontSize = 12.sp,
+                                    color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
+                                ),
+                            ) {
+                                if (date != null) {
+                                    Text(
+                                        text = date,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                    if (watchProgress != null || scanlator != null) DotSeparatorText()
+                                }
+                                if (watchProgress != null) {
+                                    Text(
+                                        text = watchProgress,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.alpha(ReadItemAlpha),
+                                    )
+                                    if (scanlator != null) DotSeparatorText()
+                                }
+                                if (scanlator != null) {
+                                    Text(
+                                        text = scanlator,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                if (onDownloadClick != null) {
-                    EpisodeDownloadIndicator(
-                        enabled = downloadIndicatorEnabled,
-                        modifier = Modifier.padding(start = 4.dp),
-                        downloadStateProvider = downloadStateProvider,
-                        downloadProgressProvider = downloadProgressProvider,
-                        onClick = onDownloadClick,
-                    )
+                    if (onDownloadClick != null) {
+                        EpisodeDownloadIndicator(
+                            enabled = downloadIndicatorEnabled,
+                            modifier = Modifier.padding(start = 4.dp),
+                            downloadStateProvider = downloadStateProvider,
+                            downloadProgressProvider = downloadProgressProvider,
+                            onClick = onDownloadClick,
+                        )
+                    }
                 }
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
 @Composable
