@@ -55,4 +55,8 @@
     <string name="messing">Messing around with</string>
     <string name="video">Video</string>
     <string name="comic">Comic</string>
+
+    <!--Torrent -->
+    <string name="install_amnis">Amnis Player needs to be installed</string>
+
 </resources>
