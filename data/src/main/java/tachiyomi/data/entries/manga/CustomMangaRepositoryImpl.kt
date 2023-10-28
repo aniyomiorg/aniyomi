@@ -10,7 +10,7 @@ import tachiyomi.domain.entries.manga.repository.CustomMangaRepository
 import java.io.File
 
 class CustomMangaRepositoryImpl(context: Context) : CustomMangaRepository {
-    private val editJson = File(context.getExternalFilesDir(null), "edits.json")
+    private val editJson = File(context.getExternalFilesDir(null), "MangaEdits.json")
 
     private val customMangaMap = fetchCustomData()
 
