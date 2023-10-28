@@ -1,9 +1,16 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
+import android.graphics.Rect
+import android.graphics.Typeface
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,13 +20,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
@@ -55,6 +67,73 @@ fun SubtitleSettingsSheet(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
+@Composable
+fun OutLineText(
+    text: String,
+    outlineColor: Color = Color.Black,
+    textColor: Color = Color.White,
+    backgroundColor: Color = Color.Black,
+    isBold: Boolean = false,
+    isItalic: Boolean = false,
+) {
+    val textPaintStroke = Paint().asFrameworkPaint().apply {
+        typeface = Typeface.create(
+            Typeface.SANS_SERIF,
+            if (isBold) FontWeight.Bold.weight else FontWeight.Normal.weight,
+            isItalic,
+        )
+        isAntiAlias = true
+        style = android.graphics.Paint.Style.STROKE
+        textSize = 16f
+        color = outlineColor.toArgb()
+        strokeWidth = 4f
+        strokeMiter = 2f
+        strokeJoin = android.graphics.Paint.Join.ROUND
+    }
+
+    val textPaint = Paint().asFrameworkPaint().apply {
+        typeface = Typeface.create(
+            Typeface.SANS_SERIF,
+            if (isBold) FontWeight.Bold.weight else FontWeight.Normal.weight,
+            isItalic,
+        )
+        isAntiAlias = true
+        style = android.graphics.Paint.Style.FILL
+        textSize = 16f
+        color = textColor.toArgb()
+    }
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawIntoCanvas {
+            it.nativeCanvas.drawRect(
+                Rect(
+                    0,
+                    size.height.toInt(),
+                    size.width.toInt(),
+                    0,
+                ),
+                Paint().asFrameworkPaint().apply {
+                    style = android.graphics.Paint.Style.FILL
+                    color = backgroundColor.toArgb()
+                },
+            )
+            it.nativeCanvas.drawText(
+                text,
+                size.width / 4,
+                (size.height * 3) / 4,
+                textPaintStroke,
+            )
+            it.nativeCanvas.drawText(
+                text,
+                size.width / 4,
+                (size.height * 3) / 4,
+                textPaint,
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun SubtitlePreview(
     isBold: Boolean,
@@ -63,21 +142,40 @@ fun SubtitlePreview(
     borderColor: Color,
     backgroundColor: Color,
 ) {
-    Box(modifier = Modifier.padding(vertical = MaterialTheme.padding.medium)) {
-        Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
-            Text(
-                text = stringResource(R.string.player_subtitle_settings_example),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = TextStyle(
-                    fontFamily = FontFamily.SansSerif,
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
-                    fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal,
-                    shadow = Shadow(color = borderColor, blurRadius = 7.5f),
-                    color = textColor,
-                    textAlign = TextAlign.Center,
-                ),
+    Box(
+        modifier = Modifier
+            .padding(
+                vertical = MaterialTheme.padding.medium,
+                horizontal = MaterialTheme.padding.large,
             )
+            .height(32.dp),
+    ) {
+        // if android 9 or above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            OutLineText(
+                text = stringResource(R.string.player_subtitle_settings_example),
+                outlineColor = borderColor,
+                textColor = textColor,
+                isBold = isBold,
+                isItalic = isItalic,
+                backgroundColor = backgroundColor,
+            )
+        } else {
+            Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
+                Text(
+                    text = stringResource(R.string.player_subtitle_settings_example),
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    style = TextStyle(
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                        fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
+                        fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal,
+                        shadow = Shadow(color = borderColor, blurRadius = 7.5f),
+                        color = textColor,
+                        textAlign = TextAlign.Center,
+                    ),
+                )
+            }
         }
     }
 }
