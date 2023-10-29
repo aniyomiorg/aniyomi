@@ -29,7 +29,6 @@
 
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>
-    <string name="action_ok">OK</string>
 
     <!-- Connections section -->
     <string name="special_services">Special Services</string>
