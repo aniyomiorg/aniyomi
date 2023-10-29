@@ -87,11 +87,14 @@ fun OutLineText(
         style = android.graphics.Paint.Style.STROKE
         textSize = 16f
         color = outlineColor.toArgb()
-        strokeWidth = 4f
+        strokeWidth = 2f
         strokeMiter = 2f
         strokeJoin = android.graphics.Paint.Join.ROUND
+        // change the text alignment from left to center (basically shift the anchor point of the text)
+        // keep in mind that this only affects horizontal alignment
+        // https://developer.android.com/reference/android/graphics/Paint.Align
+        textAlign = android.graphics.Paint.Align.CENTER
     }
-
     val textPaint = Paint().asFrameworkPaint().apply {
         typeface = Typeface.create(
             Typeface.SANS_SERIF,
@@ -102,6 +105,7 @@ fun OutLineText(
         style = android.graphics.Paint.Style.FILL
         textSize = 16f
         color = textColor.toArgb()
+        textAlign = android.graphics.Paint.Align.CENTER
     }
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawIntoCanvas {
@@ -117,15 +121,20 @@ fun OutLineText(
                     color = backgroundColor.toArgb()
                 },
             )
+            // Considering that the canvas's top left corner is at (0,0),
+            // position the text at the center of the canvas, which is at (width/2),
+            // and place it in the third quarter of the canvas, aligning it with the top.
+            // Essentially, it will be at the bottom center.
+            // It's approximately centered, I guess.
             it.nativeCanvas.drawText(
                 text,
-                size.width / 4,
+                size.width / 2,
                 (size.height * 3) / 4,
                 textPaintStroke,
             )
             it.nativeCanvas.drawText(
                 text,
-                size.width / 4,
+                size.width / 2,
                 (size.height * 3) / 4,
                 textPaint,
             )
