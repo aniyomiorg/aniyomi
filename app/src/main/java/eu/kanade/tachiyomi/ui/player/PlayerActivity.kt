@@ -540,17 +540,19 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerAudio() {
-        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        with(playerPreferences) {
+            audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        val useDeviceVolume = playerPreferences.playerVolumeValue().get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
-        fineVolume = if (useDeviceVolume) {
-            audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
-        } else {
-            playerPreferences.playerVolumeValue().get()
-        }
+            val useDeviceVolume = playerVolumeValue().get() == -1.0F || !rememberPlayerVolume().get()
+            fineVolume = if (useDeviceVolume) {
+                audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+            } else {
+                playerVolumeValue().get()
+            }
 
-        if (playerPreferences.rememberAudioDelay().get()) {
-            MPVLib.setPropertyDouble("audio-delay", (playerPreferences.audioDelay().get() / 1000).toDouble())
+            if (rememberAudioDelay().get()) {
+                MPVLib.setPropertyDouble("audio-delay", (audioDelay().get() / 1000.0))
+            }
         }
 
         verticalScrollRight(0F)
@@ -568,7 +570,7 @@ class PlayerActivity : BaseActivity() {
             MPVLib.setPropertyString("sub-ass-override", overrideType)
 
             if (rememberSubtitlesDelay().get()) {
-                MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get().toDouble())
+                MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
             MPVLib.setPropertyString("sub-bold", if (boldSubtitles().get()) "yes" else "no")
