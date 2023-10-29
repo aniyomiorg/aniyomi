@@ -6,6 +6,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -17,7 +19,7 @@ import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -236,6 +238,24 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
         }
 
         return api.updateLibAnime(track)
+    }
+
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        if (track.library_id == null || track.library_id!! == 0L) {
+            val libManga = api.findLibManga(track, getUsername().toInt()) ?: return track
+            track.library_id = libManga.library_id
+        }
+
+        return api.deleteLibManga(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        if (track.library_id == null || track.library_id!! == 0L) {
+            val libManga = api.findLibAnime(track, getUsername().toInt()) ?: return track
+            track.library_id = libManga.library_id
+        }
+
+        return api.deleteLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {

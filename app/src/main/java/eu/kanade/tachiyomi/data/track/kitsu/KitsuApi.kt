@@ -5,6 +5,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -210,6 +211,38 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                         track
                     }
             }
+        }
+    }
+
+    suspend fun removeLibManga(track: MangaTrack): MangaTrack {
+        return withIOContext {
+            authClient.newCall(
+                DELETE(
+                    "${baseUrl}library-entries/${track.media_id}",
+                    headers = headersOf(
+                        "Content-Type",
+                        "application/vnd.api+json",
+                    ),
+                ),
+            )
+                .awaitSuccess()
+            track
+        }
+    }
+
+    suspend fun removeLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            authClient.newCall(
+                DELETE(
+                    "${baseUrl}library-entries/${track.media_id}",
+                    headers = headersOf(
+                        "Content-Type",
+                        "application/vnd.api+json",
+                    ),
+                ),
+            )
+                .awaitSuccess()
+            track
         }
     }
 

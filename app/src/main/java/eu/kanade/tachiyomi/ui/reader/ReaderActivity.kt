@@ -431,6 +431,20 @@ class ReaderActivity : BaseActivity() {
             )
         }
 
+        binding.dialogRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+
+            when (state.dialog) {
+                is ReaderViewModel.Dialog.Page -> ReaderPageDialog(
+                    onDismissRequest = viewModel::closeDialog,
+                    onSetAsCover = viewModel::setAsCover,
+                    onShare = viewModel::shareImage,
+                    onSave = viewModel::saveImage,
+                )
+                null -> {}
+            }
+        }
+
         // Init listeners on bottom menu
         binding.readerNav.setComposeContent {
             val state by viewModel.state.collectAsState()
@@ -810,7 +824,7 @@ class ReaderActivity : BaseActivity() {
      * actions to perform is shown.
      */
     fun onPageLongTap(page: ReaderPage) {
-        ReaderPageSheet(this, page).show()
+        viewModel.openPageDialog(page)
     }
 
     /**
@@ -848,14 +862,6 @@ class ReaderActivity : BaseActivity() {
     }
 
     /**
-     * Called from the page sheet. It delegates the call to the presenter to do some IO, which
-     * will call [onShareImageResult] with the path the image was saved on when it's ready.
-     */
-    fun shareImage(page: ReaderPage) {
-        viewModel.shareImage(page)
-    }
-
-    /**
      * Called from the presenter when a page is ready to be shared. It shows Android's default
      * sharing tool.
      */
@@ -871,14 +877,6 @@ class ReaderActivity : BaseActivity() {
     }
 
     /**
-     * Called from the page sheet. It delegates saving the image of the given [page] on external
-     * storage to the presenter.
-     */
-    fun saveImage(page: ReaderPage) {
-        viewModel.saveImage(page)
-    }
-
-    /**
      * Called from the presenter when a page is saved or fails. It shows a message or logs the
      * event depending on the [result].
      */
@@ -891,14 +889,6 @@ class ReaderActivity : BaseActivity() {
                 logcat(LogPriority.ERROR, result.error)
             }
         }
-    }
-
-    /**
-     * Called from the page sheet. It delegates setting the image of the given [page] as the
-     * cover to the presenter.
-     */
-    fun setAsCover(page: ReaderPage) {
-        viewModel.setAsCover(page)
     }
 
     /**
