@@ -144,24 +144,20 @@ fun SubtitlePreview(
 ) {
     Box(
         modifier = Modifier
-            .padding(
-                vertical = MaterialTheme.padding.medium,
-                horizontal = MaterialTheme.padding.large,
-            )
+            .padding(vertical = MaterialTheme.padding.medium)
             .height(32.dp),
     ) {
-        // if android 9 or above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            OutLineText(
-                text = stringResource(R.string.player_subtitle_settings_example),
-                outlineColor = borderColor,
-                textColor = textColor,
-                isBold = isBold,
-                isItalic = isItalic,
-                backgroundColor = backgroundColor,
-            )
-        } else {
-            Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
+        Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                OutLineText(
+                    text = stringResource(R.string.player_subtitle_settings_example),
+                    outlineColor = borderColor,
+                    textColor = textColor,
+                    isBold = isBold,
+                    isItalic = isItalic,
+                    backgroundColor = backgroundColor,
+                )
+            } else {
                 Text(
                     text = stringResource(R.string.player_subtitle_settings_example),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
