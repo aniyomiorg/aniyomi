@@ -249,6 +249,34 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         }
     }
 
+    suspend fun deleteMangaItem(track: MangaTrack): MangaTrack {
+        return withIOContext {
+            val request = Request.Builder()
+                .url(mangaUrl(track.media_id).toString())
+                .delete()
+                .build()
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                track
+            }
+        }
+    }
+
+    suspend fun deleteAnimeItem(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            val request = Request.Builder()
+                .url(animeUrl(track.media_id).toString())
+                .delete()
+                .build()
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                track
+            }
+        }
+    }
+
     suspend fun findListItem(track: MangaTrack): MangaTrack? {
         return withIOContext {
             val uri = "$baseApiUrl/manga".toUri().buildUpon()

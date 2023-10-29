@@ -20,7 +20,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.TextButton
 
-// TODO: (Merge_Change) stringResource "android.R.string.ok" to be replaced with
+// TODO: (Merge_Change) stringResource "R.string.action_ok" to be replaced with
 //  "R.string.action_ok"
 
 @Composable
@@ -71,7 +71,7 @@ fun PlayerDialog(
                         }
 
                         TextButton(onClick = onConfirm) {
-                            Text(stringResource(android.R.string.ok))
+                            Text(stringResource(R.string.action_ok))
                         }
                     }
                 }

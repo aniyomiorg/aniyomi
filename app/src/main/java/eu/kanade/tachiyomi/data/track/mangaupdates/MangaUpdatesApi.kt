@@ -106,6 +106,19 @@ class MangaUpdatesApi(
         updateSeriesRating(track)
     }
 
+    suspend fun deleteSeriesFromList(track: MangaTrack) {
+        val body = buildJsonArray {
+            add(track.media_id)
+        }
+        authClient.newCall(
+            POST(
+                url = "$baseUrl/v1/lists/series/delete",
+                body = body.toString().toRequestBody(contentType),
+            ),
+        )
+            .awaitSuccess()
+    }
+
     private suspend fun getSeriesRating(track: MangaTrack): Rating? {
         return try {
             with(json) {

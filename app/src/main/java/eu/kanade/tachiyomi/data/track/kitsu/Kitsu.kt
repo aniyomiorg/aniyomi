@@ -6,6 +6,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -16,7 +18,7 @@ import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 
-class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
+class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -134,6 +136,14 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
         }
 
         return api.updateLibAnime(track)
+    }
+
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        return api.removeLibManga(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        return api.removeLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
