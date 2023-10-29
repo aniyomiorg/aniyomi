@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +29,18 @@ fun SubtitleDelayPage(
     Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
         val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
         val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
-
+        var currentSubDelay by rememberSaveable {
+            mutableStateOf(
+                (MPVLib.getPropertyDouble(Tracks.SUBTITLES.mpvProperty) * 1000)
+                    .toInt(),
+            )
+        }
+        var currentAudioDelay by rememberSaveable {
+            mutableStateOf(
+                (MPVLib.getPropertyDouble(Tracks.AUDIO.mpvProperty) * 1000)
+                    .toInt(),
+            )
+        }
         screenModel.ToggleableRow(
             textRes = R.string.player_audio_remember_delay,
             isChecked = audioDelay.collectAsState().value,
@@ -43,11 +56,12 @@ fun SubtitleDelayPage(
                 label = stringResource(id = R.string.player_audio_delay),
                 placeholder = "0",
                 suffix = "ms",
-                value = (MPVLib.getPropertyDouble(Tracks.AUDIO.mpvProperty) * 1000).toInt(),
+                value = currentAudioDelay,
                 step = 100,
                 onValueChanged = {
-                    MPVLib.setPropertyDouble(Tracks.AUDIO.mpvProperty, (it / 1000).toDouble())
+                    MPVLib.setPropertyDouble(Tracks.AUDIO.mpvProperty, it / 1000.0)
                     screenModel.preferences.audioDelay().set(it)
+                    currentAudioDelay = it
                 },
             )
         }
@@ -69,11 +83,12 @@ fun SubtitleDelayPage(
                 label = stringResource(id = R.string.player_subtitle_delay),
                 placeholder = "0",
                 suffix = "ms",
-                value = (MPVLib.getPropertyDouble(Tracks.SUBTITLES.mpvProperty) * 1000).toInt(),
+                value = currentSubDelay,
                 step = 100,
                 onValueChanged = {
-                    MPVLib.setPropertyDouble(Tracks.SUBTITLES.mpvProperty, (it / 1000).toDouble())
+                    MPVLib.setPropertyDouble(Tracks.SUBTITLES.mpvProperty, it / 1000.0)
                     screenModel.preferences.subtitlesDelay().set(it)
+                    currentSubDelay = it
                 },
             )
         }
