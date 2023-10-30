@@ -1,6 +1,6 @@
-package aniyomi.md.dto
+package aniyomi.md.manga.dto
 
-interface ListCallDto<T> {
+interface ListCallMangaDto<T> {
     val limit: Int
     val offset: Int
     val total: Int

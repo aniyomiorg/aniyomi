@@ -1,6 +1,5 @@
 package aniyomi.md.anime.dto
 
-import aniyomi.md.dto.ListCallDto
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
@@ -10,7 +9,7 @@ data class AnimeListDto(
     override val offset: Int,
     override val total: Int,
     override val data: List<AnimeDataDto>,
-) : ListCallDto<AnimeDataDto>
+) : ListCallAnimeDto<AnimeDataDto>
 
 @Serializable
 data class AnimeDto(

@@ -10,7 +10,7 @@ import tachiyomi.domain.entries.anime.repository.CustomAnimeRepository
 import java.io.File
 
 class CustomAnimeRepositoryImpl(context: Context) : CustomAnimeRepository {
-    private val editJson = File(context.getExternalFilesDir(null), "animeEdits.json")
+    private val editJson = File(context.getExternalFilesDir(null), "AnimeEdits.json")
 
     private val customAnimeMap = fetchCustomData()
 
