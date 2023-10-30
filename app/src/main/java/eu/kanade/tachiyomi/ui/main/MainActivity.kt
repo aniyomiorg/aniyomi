@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.main
 
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.Application
 import android.app.SearchManager
 import android.app.assist.AssistContent
 import android.content.Context
@@ -108,6 +109,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -523,7 +525,14 @@ class MainActivity : BaseActivity() {
 
         suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
             if (extPlayer) {
-                externalPlayerResult?.launch(ExternalIntents.newIntent(context, animeId, episodeId, video)) ?: return
+                val intent = try {
+                    ExternalIntents.newIntent(context, animeId, episodeId, video)
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR, e)
+                    withUIContext { Injekt.get<Application>().toast(e.message) }
+                    return
+                }
+                externalPlayerResult?.launch(intent) ?: return
             } else {
                 context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
             }

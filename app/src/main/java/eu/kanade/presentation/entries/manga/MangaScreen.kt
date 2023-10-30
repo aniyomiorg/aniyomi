@@ -47,6 +47,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.manga.model.chaptersFiltered
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryBottomActionMenu
@@ -60,7 +62,9 @@ import eu.kanade.presentation.entries.manga.components.MangaChapterListItem
 import eu.kanade.presentation.entries.manga.components.MangaInfoBox
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
+import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
 import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
@@ -137,6 +141,11 @@ fun MangaScreen(
         }
     }
 
+    val navigator = LocalNavigator.currentOrThrow
+    val onSettingsClicked: (() -> Unit)? = {
+        navigator.push(MangaSourcePreferencesScreen(state.source.id))
+    }.takeIf { state.source is ConfigurableSource }
+
     if (!isTabletUi) {
         MangaScreenSmallImpl(
             state = state,
@@ -171,6 +180,7 @@ fun MangaScreen(
             onChapterSelected = onChapterSelected,
             onAllChapterSelected = onAllChapterSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     } else {
         MangaScreenLargeImpl(
@@ -206,6 +216,7 @@ fun MangaScreen(
             onChapterSelected = onChapterSelected,
             onAllChapterSelected = onAllChapterSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     }
 }
@@ -243,6 +254,7 @@ private fun MangaScreenSmallImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -302,6 +314,7 @@ private fun MangaScreenSmallImpl(
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = true,
+                onClickSettings = onSettingsClicked,
             )
         },
         bottomBar = {
@@ -472,6 +485,7 @@ fun MangaScreenLargeImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -535,6 +549,7 @@ fun MangaScreenLargeImpl(
                     onSelectAll = { onAllChapterSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = true,
+                    onClickSettings = onSettingsClicked,
                 )
             },
             bottomBar = {

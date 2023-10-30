@@ -49,6 +49,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryBottomActionMenu
@@ -62,8 +64,11 @@ import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
 import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
@@ -145,6 +150,11 @@ fun AnimeScreen(
         }
     }
 
+    val navigator = LocalNavigator.currentOrThrow
+    val onSettingsClicked: (() -> Unit)? = {
+        navigator.push(SourcePreferencesScreen(state.source.id))
+    }.takeIf { state.source is ConfigurableAnimeSource }
+
     if (!isTabletUi) {
         AnimeScreenSmallImpl(
             state = state,
@@ -182,6 +192,7 @@ fun AnimeScreen(
             onEpisodeSelected = onEpisodeSelected,
             onAllEpisodeSelected = onAllEpisodeSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     } else {
         AnimeScreenLargeImpl(
@@ -220,6 +231,7 @@ fun AnimeScreen(
             onEpisodeSelected = onEpisodeSelected,
             onAllEpisodeSelected = onAllEpisodeSelected,
             onInvertSelection = onInvertSelection,
+            onSettingsClicked = onSettingsClicked,
         )
     }
 }
@@ -261,6 +273,7 @@ private fun AnimeScreenSmallImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     changeAnimeSkipIntro: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
@@ -319,6 +332,7 @@ private fun AnimeScreenSmallImpl(
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = false,
+                onClickSettings = onSettingsClicked,
             )
         },
         bottomBar = {
@@ -458,7 +472,7 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime) {
+                            if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
@@ -525,6 +539,7 @@ fun AnimeScreenLargeImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     changeAnimeSkipIntro: (() -> Unit)?,
+    onSettingsClicked: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
@@ -589,6 +604,7 @@ fun AnimeScreenLargeImpl(
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = false,
+                    onClickSettings = onSettingsClicked,
                 )
             },
             bottomBar = {
@@ -713,7 +729,7 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime) {
+                                    if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,

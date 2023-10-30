@@ -88,7 +88,7 @@ class AnimeExtensionDetailsScreenModel(
     fun getChangelogUrl(): String {
         val extension = state.value.extension ?: return ""
 
-        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")
+        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
         val pkgFactory = extension.pkgFactory
         if (extension.hasChangelog) {
             return createUrl(URL_EXTENSION_BLOB, pkgName, pkgFactory, "/CHANGELOG.md")
@@ -105,7 +105,7 @@ class AnimeExtensionDetailsScreenModel(
             return "https://aniyomi.org/help/faq/#extensions"
         }
 
-        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")
+        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
         val pkgFactory = extension.pkgFactory
         return createUrl(URL_EXTENSION_BLOB, pkgName, pkgFactory, "/README.md")
     }

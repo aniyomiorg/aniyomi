@@ -104,8 +104,8 @@
     </string-array>
 
     <string-array name="stats_pages">
-        <item>@string/stats_page_1</item>
-        <item>@string/stats_page_2</item>
-        <item>@string/stats_page_3</item>
+        <item>@string/player_statistics_page_1</item>
+        <item>@string/player_statistics_page_2</item>
+        <item>@string/player_statistics_page_3</item>
     </string-array>
 </resources>

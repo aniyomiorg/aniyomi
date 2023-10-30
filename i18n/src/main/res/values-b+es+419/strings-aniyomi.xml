@@ -129,7 +129,10 @@
     <string name="action_view_episodes">Ver episodios</string>
     <string name="action_next_episode">Siguente episodio</string>
     <string name="action_screen_fit">Modo de ajuste de pantalla</string>
-    <string name="action_display_show_continue_reading_button">Mostrar botón continuar mirando/leyendo</string>
-    <string name="pref_bottom_nav_style">Estilo de navegación inferior</string>
-    <string name="action_sort_unseen_count">Recuento no visto</string>
+    <string name="action_display_show_continue_reading_button">Botón de continuar viendo/leyendo</string>
+    <string name="pref_bottom_nav_style">Estilo de navegación abajo</string>
+    <string name="action_sort_unseen_count">Cuento no visto</string>
+    <string name="pref_category_player">Reproductor</string>
+    <string name="action_hide">Ocultar</string>
+    <string name="label_recent_anime_updates">Actualizaciones de Anime</string>
 </resources>

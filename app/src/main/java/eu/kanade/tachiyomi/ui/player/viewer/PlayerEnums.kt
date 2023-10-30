@@ -40,6 +40,7 @@ enum class AspectState(val index: Int, @StringRes val stringRes: Int) {
     CROP(index = 0, stringRes = R.string.video_crop_screen),
     FIT(index = 1, stringRes = R.string.video_fit_screen),
     STRETCH(index = 2, stringRes = R.string.video_stretch_screen),
+    CUSTOM(index = 3, stringRes = R.string.video_custom_screen),
     ;
 
     companion object {
@@ -62,14 +63,16 @@ enum class HwDecState(val title: String, val mpvValue: String) {
         internal val isHwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         internal val defaultHwDec = if (isHwSupported) HW_PLUS else HW
-
-        internal var mode: HwDecState = defaultHwDec
-
-        internal fun get(title: String) = when (title) {
-            "mediacodec" -> HW_PLUS
-            "mediacodec-copy" -> HW
-            "no" -> SW
-            else -> defaultHwDec
-        }
     }
+}
+
+/**
+ * Player's Statistics Page handler
+ */
+enum class PlayerStatsPage(val page: Int, @StringRes val textRes: Int) {
+    OFF(0, R.string.off),
+    PAGE1(1, R.string.player_statistics_page_1),
+    PAGE2(2, R.string.player_statistics_page_2),
+    PAGE3(3, R.string.player_statistics_page_3),
+    ;
 }

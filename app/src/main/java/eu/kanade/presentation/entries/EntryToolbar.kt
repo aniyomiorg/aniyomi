@@ -45,6 +45,7 @@ fun EntryToolbar(
     onClickEditCategory: (() -> Unit)?,
     onClickRefresh: () -> Unit,
     onClickMigrate: (() -> Unit)?,
+    onClickSettings: (() -> Unit)?,
     // Anime only
     changeAnimeSkipIntro: (() -> Unit)?,
     // For action mode
@@ -153,6 +154,15 @@ fun EntryToolbar(
                                 text = { Text(text = stringResource(R.string.action_share)) },
                                 onClick = {
                                     onClickShare()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickSettings != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.settings)) },
+                                onClick = {
+                                    onClickSettings()
                                     closeMenu()
                                 },
                             )
