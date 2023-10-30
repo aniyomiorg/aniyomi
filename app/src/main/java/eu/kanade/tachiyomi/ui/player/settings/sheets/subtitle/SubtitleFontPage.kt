@@ -13,6 +13,8 @@ import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,6 +43,7 @@ fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {
 private fun SubtitleFont(
     screenModel: PlayerSettingsScreenModel,
 ) {
+    val font by screenModel.preferences.subtitleFont().collectAsState()
     val boldSubtitles by screenModel.preferences.boldSubtitles().collectAsState()
     val italicSubtitles by screenModel.preferences.italicSubtitles().collectAsState()
     val subtitleFontSize by screenModel.preferences.subtitleFontSize().collectAsState()
@@ -63,6 +66,11 @@ private fun SubtitleFont(
     val onSizeChanged: (Int) -> Unit = {
         MPVLib.setPropertyInt("sub-font-size", it)
         screenModel.preferences.subtitleFontSize().set(it)
+    }
+
+    val updateFont: (String) -> Unit = {
+        MPVLib.setPropertyString("sub-font", it)
+        screenModel.preferences.subtitleFont().set(it)
     }
 
     Column(
@@ -111,7 +119,15 @@ private fun SubtitleFont(
             )
         }
 
+        OutlinedTextField(
+            value = font,
+            onValueChange = updateFont,
+            label = { Text(stringResource(id = R.string.player_subtitle_font_text_field)) },
+            singleLine = true,
+        )
+
         SubtitlePreview(
+            font = font,
             isBold = boldSubtitles,
             isItalic = italicSubtitles,
             textColor = Color(textColor),

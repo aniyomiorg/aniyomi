@@ -273,6 +273,8 @@ dependencies {
     implementation(libs.arthenica.smartexceptions)
     // seeker seek bar
     implementation(libs.seeker)
+    // true type parser
+    implementation(libs.truetypeparser)
 }
 
 androidComponents {

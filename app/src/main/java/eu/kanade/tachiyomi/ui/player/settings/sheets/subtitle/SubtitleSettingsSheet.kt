@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
+import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -32,11 +34,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jaredrummler.fontreader.truetype.TTFFile
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import tachiyomi.presentation.core.components.material.padding
+import java.io.File
 
 @Composable
 fun SubtitleSettingsSheet(
@@ -71,18 +75,15 @@ fun SubtitleSettingsSheet(
 @Composable
 fun OutLineText(
     text: String,
+    font: Typeface,
     outlineColor: Color = Color.Black,
     textColor: Color = Color.White,
-    backgroundColor: Color = Color.Black,
     isBold: Boolean = false,
     isItalic: Boolean = false,
+    backgroundColor: Color = Color.Black,
 ) {
     val textPaintStroke = Paint().asFrameworkPaint().apply {
-        typeface = Typeface.create(
-            Typeface.SANS_SERIF,
-            if (isBold) FontWeight.Bold.weight else FontWeight.Normal.weight,
-            isItalic,
-        )
+        typeface = font
         isAntiAlias = true
         style = android.graphics.Paint.Style.STROKE
         textSize = 16f
@@ -94,18 +95,18 @@ fun OutLineText(
         // keep in mind that this only affects horizontal alignment
         // https://developer.android.com/reference/android/graphics/Paint.Align
         textAlign = android.graphics.Paint.Align.CENTER
+        isFakeBoldText = isBold
+        textSkewX = if (isItalic) -0.25f else 0f
     }
     val textPaint = Paint().asFrameworkPaint().apply {
-        typeface = Typeface.create(
-            Typeface.SANS_SERIF,
-            if (isBold) FontWeight.Bold.weight else FontWeight.Normal.weight,
-            isItalic,
-        )
+        typeface = font
         isAntiAlias = true
         style = android.graphics.Paint.Style.FILL
         textSize = 16f
         color = textColor.toArgb()
         textAlign = android.graphics.Paint.Align.CENTER
+        isFakeBoldText = isBold
+        textSkewX = if (isItalic) -0.25f else 0f
     }
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawIntoCanvas {
@@ -145,12 +146,33 @@ fun OutLineText(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun SubtitlePreview(
+    font: String,
     isBold: Boolean,
     isItalic: Boolean,
     textColor: Color,
     borderColor: Color,
     backgroundColor: Color,
 ) {
+    val fontDirectory = File(
+        Environment.getExternalStorageDirectory().absolutePath +
+            File.separator + LocalContext.current.getString(R.string.app_name) +
+            File.separator,
+        "fonts",
+    )
+
+    val fontMap = fontDirectory.listFiles { file ->
+        file.extension.equals("ttf", true)
+    }.orEmpty().associateBy({ TTFFile.open(it).fullName }, { it.absolutePath })
+
+    val fontFile = fontMap.keys.firstOrNull { it.contains(font, ignoreCase = true) }
+        ?.let {
+            if (font.trim() == "") {
+                Typeface.SANS_SERIF
+            } else {
+                Typeface.createFromFile(fontMap[it]?.let(::File))
+            }
+        } ?: Typeface.SANS_SERIF
+
     Box(
         modifier = Modifier
             .padding(vertical = MaterialTheme.padding.medium)
@@ -160,6 +182,7 @@ fun SubtitlePreview(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 OutLineText(
                     text = stringResource(R.string.player_subtitle_settings_example),
+                    font = fontFile,
                     outlineColor = borderColor,
                     textColor = textColor,
                     isBold = isBold,
