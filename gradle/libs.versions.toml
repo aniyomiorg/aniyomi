@@ -97,7 +97,7 @@ arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.1.1"
 
 seeker = "io.github.2307vivek:seeker:1.1.1"
 
-truetypeparser = "com.jaredrummler:truetypeparser-light:1.0.0"
+truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
 [bundles]
 reactivex = ["rxandroid", "rxjava", "rxrelay"]

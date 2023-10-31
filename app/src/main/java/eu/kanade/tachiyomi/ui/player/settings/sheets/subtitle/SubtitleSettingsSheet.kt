@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.jaredrummler.truetypeparser.TTFFile
+import com.yubyf.truetypeparser.TTFFile
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
@@ -161,17 +161,15 @@ fun SubtitlePreview(
     )
 
     val fontMap = fontDirectory.listFiles { file ->
-        file.extension.equals("ttf", true)
-    }.orEmpty().associateBy({ TTFFile.open(it).fullName }, { it.absolutePath })
+        file.extension.equals("ttf", true) ||
+            file.extension.equals("otf", true)
+    }?.associateBy(
+        { TTFFile.open(it).families.values.toTypedArray()[0] },
+        { it.absolutePath },
+    ) ?: emptyMap()
 
-    val fontFile = fontMap.keys.firstOrNull { it.contains(font, ignoreCase = true) }
-        ?.let {
-            if (font.trim() == "") {
-                Typeface.SANS_SERIF
-            } else {
-                Typeface.createFromFile(fontMap[it]?.let(::File))
-            }
-        } ?: Typeface.SANS_SERIF
+    val fontFile = fontMap.keys.firstOrNull { it.contains(font, true) }
+        ?.let { Typeface.createFromFile(fontMap[it]?.let(::File)) } ?: Typeface.SANS_SERIF
 
     Box(
         modifier = Modifier
