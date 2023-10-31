@@ -86,10 +86,10 @@ fun OutLineText(
         typeface = font
         isAntiAlias = true
         style = android.graphics.Paint.Style.STROKE
-        textSize = 16f
+        textSize = 48f
         color = outlineColor.toArgb()
-        strokeWidth = 2f
-        strokeMiter = 2f
+        strokeWidth = 12f
+        strokeMiter = 8f
         strokeJoin = android.graphics.Paint.Join.ROUND
         // change the text alignment from left to center (basically shift the anchor point of the text)
         // keep in mind that this only affects horizontal alignment
@@ -102,7 +102,7 @@ fun OutLineText(
         typeface = font
         isAntiAlias = true
         style = android.graphics.Paint.Style.FILL
-        textSize = 16f
+        textSize = 48f
         color = textColor.toArgb()
         textAlign = android.graphics.Paint.Align.CENTER
         isFakeBoldText = isBold
@@ -153,14 +153,12 @@ fun SubtitlePreview(
     borderColor: Color,
     backgroundColor: Color,
 ) {
-    val fontDirectory = File(
+    val fontMap = File(
         Environment.getExternalStorageDirectory().absolutePath +
             File.separator + LocalContext.current.getString(R.string.app_name) +
             File.separator,
         "fonts",
-    )
-
-    val fontMap = fontDirectory.listFiles { file ->
+    ).listFiles { file ->
         file.extension.equals("ttf", true) ||
             file.extension.equals("otf", true)
     }?.associateBy(
