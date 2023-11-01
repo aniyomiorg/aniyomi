@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -364,16 +365,14 @@ class AnimeDownloader(
             return
         }
 
-        val episodeDirname =
-            provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
+        val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
         notifier.onProgressChange(download)
 
         val video = if (download.video == null) {
             // Pull video from network and add them to download object
             try {
-                val fetchedVideo =
-                    download.source.getVideoList(download.episode.toSEpisode()).first()
+                val fetchedVideo = download.source.getVideoList(download.episode.toSEpisode()).first()
                 download.video = fetchedVideo
                 fetchedVideo
             } catch (e: Exception) {
@@ -441,6 +440,14 @@ class AnimeDownloader(
         }
 
         val filename = DiskUtil.buildValidFilename(download.episode.name)
+
+        if (video.bytesDownloaded == 0L) {
+            val tmpFile = tmpDir.findFile("$filename.tmp")
+
+            // Delete temp file if it exists
+            tmpFile?.delete()
+        }
+
         val videoFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
@@ -488,7 +495,7 @@ class AnimeDownloader(
         // Define a suspend function to encapsulate the retry logic
         suspend fun attemptDownload(): UniFile {
             return try {
-                newObservable(video, download, tmpDir, filename)
+                newDownload(video, download, tmpDir, filename)
             } catch (e: Exception) {
                 if (tries >= 2) throw e
                 tries++
@@ -508,7 +515,7 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    private suspend fun ffmpegObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile = coroutineScope {
+    private suspend fun ffmpegDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile = coroutineScope {
         isFFmpegRunning = true
         val headers = video.headers ?: download.source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") {
@@ -624,9 +631,9 @@ class AnimeDownloader(
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
-    private suspend fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
+    private suspend fun newDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
         return if (isHls(video) || isMpd(video)) {
-            ffmpegObservable(video, download, tmpDir, filename)
+            ffmpegDownload(video, download, tmpDir, filename)
         } else {
             val response = download.source.fetchVideo(video)
             val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
