@@ -23,7 +23,6 @@ class MangaStorageScreenModel(
     downloadCacheIsInitializing = downloadCache.isInitializing,
     libraries = getLibraries.subscribe(),
     categories = getVisibleCategories.subscribe(),
-    getTotalDownloadSize = { downloadManager.getDownloadSize() },
     getDownloadSize = { downloadManager.getDownloadSize(manga) },
     getDownloadCount = { downloadManager.getDownloadCount(manga) },
     getId = { id },

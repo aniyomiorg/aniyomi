@@ -22,7 +22,6 @@ abstract class CommonStorageScreenModel<T>(
     private val downloadCacheIsInitializing: StateFlow<Boolean>,
     private val libraries: Flow<List<T>>,
     private val categories: Flow<List<Category>>,
-    private val getTotalDownloadSize: () -> Long,
     private val getDownloadSize: T.() -> Long,
     private val getDownloadCount: T.() -> Int,
     private val getId: T.() -> Long,
@@ -47,14 +46,13 @@ abstract class CommonStorageScreenModel<T>(
                     }.filter {
                         selectedCategory == AllCategory || it.getCategoryId() == selectedCategory.id
                     }
-                    val size = getTotalDownloadSize()
-                    val random = Random(size + distinctLibraries.size)
 
                     mutableState.update {
                         StorageScreenState.Success(
                             selectedCategory = selectedCategory,
                             categories = listOf(AllCategory, *categories.toTypedArray()),
                             items = distinctLibraries.map {
+                                val random = Random(it.getId())
                                 StorageItem(
                                     id = it.getId(),
                                     title = it.getTitle(),

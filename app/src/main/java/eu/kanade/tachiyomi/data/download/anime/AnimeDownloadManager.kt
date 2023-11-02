@@ -1,10 +1,12 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.util.size
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.drop
@@ -23,6 +25,9 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
+import tachiyomi.source.local.io.ArchiveAnime
+import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -214,12 +219,18 @@ class AnimeDownloadManager(
     }
 
     /**
-     * Returns the amount of downloaded episodes for an anime.
+     * Returns the amount of downloaded/local episodes for an anime.
      *
      * @param anime the anime to check.
      */
     fun getDownloadCount(anime: Anime): Int {
-        return cache.getDownloadCount(anime)
+        return if (anime.source == LocalAnimeSource.ID) {
+            LocalAnimeSourceFileSystem(context).getFilesInAnimeDirectory(anime.url)
+                .filter { ArchiveAnime.isSupported(it) }
+                .count()
+        } else {
+            cache.getDownloadCount(anime)
+        }
     }
 
     /**
@@ -230,12 +241,17 @@ class AnimeDownloadManager(
     }
 
     /**
-     * Returns the size of downloaded episodes for an anime.
+     * Returns the size of downloaded/local episodes for an anime.
      *
      * @param anime the anime to check.
      */
     fun getDownloadSize(anime: Anime): Long {
-        return cache.getDownloadSize(anime)
+        return if (anime.source == LocalAnimeSource.ID) {
+            LocalAnimeSourceFileSystem(context).getAnimeDirectory(anime.url)
+                .let { UniFile.fromFile(it) }?.size() ?: 0L
+        } else {
+            cache.getDownloadSize(anime)
+        }
     }
 
     fun cancelQueuedDownloads(downloads: List<AnimeDownload>) {
