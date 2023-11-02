@@ -30,6 +30,7 @@ import eu.kanade.tachiyomi.ui.history.HistoriesTab
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
+import eu.kanade.tachiyomi.ui.storage.StorageTab
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +79,7 @@ object MoreTab : Tab() {
             onClickDownloadQueue = { navigator.push(DownloadsTab()) },
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
+            onClickStorage = { navigator.push(StorageTab()) },
             onClickBackupAndRestore = { navigator.push(SettingsScreen.toBackupScreen()) },
             onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
             onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },

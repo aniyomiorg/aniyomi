@@ -8,6 +8,7 @@ import com.hippo.unifile.UniFile
 import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.MangaSource
+import eu.kanade.tachiyomi.util.size
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -141,7 +142,12 @@ class MangaDownloadCache(
     ): Boolean {
         if (skipCache) {
             val source = sourceManager.getOrStub(sourceId)
-            return provider.findChapterDir(chapterName, chapterScanlator, mangaTitle, source) != null
+            return provider.findChapterDir(
+                chapterName,
+                chapterScanlator,
+                mangaTitle,
+                source,
+            ) != null
         }
 
         renewCache()
@@ -150,7 +156,8 @@ class MangaDownloadCache(
         if (sourceDir != null) {
             val mangaDir = sourceDir.mangaDirs[provider.getMangaDirName(mangaTitle)]
             if (mangaDir != null) {
-                return provider.getValidChapterDirNames(chapterName, chapterScanlator).any { it in mangaDir.chapterDirs }
+                return provider.getValidChapterDirNames(chapterName, chapterScanlator)
+                    .any { it in mangaDir.chapterDirs }
             }
         }
         return false
@@ -185,6 +192,32 @@ class MangaDownloadCache(
             }
         }
         return 0
+    }
+
+    /**
+     * Returns the total size of downloaded chapters.
+     */
+    fun getTotalDownloadSize(): Long {
+        renewCache()
+
+        return rootDownloadsDir.sourceDirs.values.sumOf { sourceDir ->
+            sourceDir.dir.size()
+        }
+    }
+
+    /**
+     * Returns the total size of downloaded chapters for a manga.
+     *
+     * @param manga the manga to check.
+     */
+    fun getDownloadSize(manga: Manga): Long {
+        renewCache()
+
+        return rootDownloadsDir.sourceDirs[manga.source]?.mangaDirs?.get(
+            provider.getMangaDirName(
+                manga.title,
+            ),
+        )?.dir?.size() ?: 0
     }
 
     /**
@@ -452,11 +485,13 @@ private class MangaDirectory(
 )
 
 private object UniFileAsStringSerializer : KSerializer<UniFile> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("UniFile", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("UniFile", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: UniFile) {
         return encoder.encodeString(value.uri.toString())
     }
+
     override fun deserialize(decoder: Decoder): UniFile {
         return UniFile.fromUri(Injekt.get<Application>(), Uri.parse(decoder.decodeString()))
     }
