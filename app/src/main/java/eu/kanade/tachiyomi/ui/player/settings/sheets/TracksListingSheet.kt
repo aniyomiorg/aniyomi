@@ -81,10 +81,10 @@ fun TracksCatalogSheet(
                 onTrackSelected = onAudioSelected,
             )
 
-            when {
-                isEpisodeOnline == true && page == 0 -> QualityTracksPage()
-                page == 0 || page == 1 -> SubtitleTracksPage()
-                page == 2 -> AudioTracksPage()
+            when (page) {
+                0 -> if (isEpisodeOnline == true) QualityTracksPage() else SubtitleTracksPage()
+                1 -> if (isEpisodeOnline == true) SubtitleTracksPage() else AudioTracksPage()
+                2 -> if (isEpisodeOnline == true) AudioTracksPage()
             }
         }
     }
