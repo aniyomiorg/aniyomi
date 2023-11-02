@@ -1,5 +1,9 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets
 
+import android.content.Context
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +32,8 @@ import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
+import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.Utils
 
 @Composable
 fun TracksCatalogSheet(
@@ -50,11 +58,47 @@ fun TracksCatalogSheet(
         tabTitles.add(0, stringResource(id = R.string.quality_dialog_header))
     }
 
+    val resolver = LocalContext.current.contentResolver
+    var track = "sub"
+    val addExternalTrack = rememberLauncherForActivityResult(
+        object : ActivityResultContracts.GetContent() {
+            override fun createIntent(context: Context, input: String): Intent {
+                val intent = super.createIntent(context, input)
+                return Intent.createChooser(intent, "Select Something")
+            }
+        },
+    ) {
+        if (it != null) {
+            val path = resolver.openFileDescriptor(it, "r")?.detachFd()
+                ?.let { path -> Utils.findRealPath(path) }
+            MPVLib.command(arrayOf("$track-add", path, "cached"))
+        }
+    }
+
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = tabTitles,
-        onOverflowMenuClicked = onSettingsClicked,
-        overflowIcon = Icons.Outlined.Settings,
+        tabOverflowMenuContent = {
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.player_add_subtitles)) },
+                onClick = {
+                    track = "sub"
+                    addExternalTrack.launch("*/*")
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.player_add_audio)) },
+                onClick = {
+                    track = "audio"
+                    addExternalTrack.launch("*/*")
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.player_subtitle_settings)) },
+                onClick = onSettingsClicked,
+            )
+        },
+        overflowIcon = Icons.Outlined.MoreVert,
         hideSystemBars = true,
     ) { contentPadding, page ->
         Column(
