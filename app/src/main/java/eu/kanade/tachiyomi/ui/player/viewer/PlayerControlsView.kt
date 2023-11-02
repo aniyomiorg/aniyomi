@@ -363,11 +363,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         if (player.paused == true) {
-            activity.mCastSession!!.remoteMediaClient?.pause()
+            activity.mCastSession?.remoteMediaClient?.pause()
         } else {
-            activity.mCastSession!!.remoteMediaClient?.play()
+            activity.mCastSession?.remoteMediaClient?.play()
         }
-
     }
 
     // Fade out Player information text
