@@ -257,13 +257,13 @@ class AnimeDownloadManager(
             }
 
             removeFromDownloadQueue(filteredEpisodes)
-                val (animeDir, episodeDirs) = provider.findEpisodeDirs(
-                    filteredEpisodes,
-                    anime,
-                    source,
-                )
-                episodeDirs.forEach { it.delete() }
-                cache.removeEpisodes(filteredEpisodes, anime)
+            val (animeDir, episodeDirs) = provider.findEpisodeDirs(
+                filteredEpisodes,
+                anime,
+                source,
+            )
+            episodeDirs.forEach { it.delete() }
+            cache.removeEpisodes(filteredEpisodes, anime)
 
             // Delete anime directory if empty
             if (animeDir?.listFiles()?.isEmpty() == true) {
