@@ -346,7 +346,7 @@
     <string name="player_subtitle_text_color">Text</string>
     <string name="player_subtitle_border_color">Border</string>
     <string name="player_subtitle_background_color">Background</string>
-    <string name="unseen">Unseen</string>
+    <string name="player_subtitle_font_text_field">Font Name</string>
 
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
@@ -368,4 +368,5 @@
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
     <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
+    <string name="unseen">Unseen</string>
 </resources>

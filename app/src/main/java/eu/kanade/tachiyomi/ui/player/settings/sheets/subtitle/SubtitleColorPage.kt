@@ -66,6 +66,8 @@ private fun SubtitleColors(
     val borderColorPref = screenModel.preferences.borderColorSubtitles()
     val backgroundColorPref = screenModel.preferences.backgroundColorSubtitles()
 
+    val font by screenModel.preferences.subtitleFont().collectAsState()
+
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         SubtitleColorSelector(
             label = R.string.player_subtitle_text_color,
@@ -89,6 +91,7 @@ private fun SubtitleColors(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         SubtitlePreview(
+            font = font,
             isBold = screenModel.preferences.boldSubtitles().collectAsState().value,
             isItalic = screenModel.preferences.italicSubtitles().collectAsState().value,
             textColor = Color(textColorPref.collectAsState().value),
