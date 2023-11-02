@@ -13,6 +13,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -571,6 +572,21 @@ class PlayerActivity : BaseActivity() {
 
             if (rememberSubtitlesDelay().get()) {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
+            }
+
+            MPVLib.setPropertyString(
+                "sub-fonts-dir",
+                File(
+                    Environment.getExternalStorageDirectory().absolutePath + File.separator +
+                        getString(R.string.app_name),
+                    "fonts",
+                ).path,
+            )
+
+            if (playerPreferences.subtitleFont().get().trim() != "") {
+                MPVLib.setPropertyString("sub-font", playerPreferences.subtitleFont().get())
+            } else {
+                MPVLib.setPropertyString("sub-font", "Sans Serif")
             }
 
             MPVLib.setPropertyString("sub-bold", if (boldSubtitles().get()) "yes" else "no")

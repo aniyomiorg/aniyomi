@@ -76,6 +76,8 @@ class PlayerPreferences(
 
     fun overrideSubsASS() = preferenceStore.getBoolean("pref_override_subtitles_ass", false)
 
+    fun subtitleFont() = preferenceStore.getString("pref_subtitle_font", "Sans Serif")
+
     fun subtitleFontSize() = preferenceStore.getInt("pref_subtitles_font_size", 55)
     fun boldSubtitles() = preferenceStore.getBoolean("pref_bold_subtitles", false)
     fun italicSubtitles() = preferenceStore.getBoolean("pref_italic_subtitles", false)
