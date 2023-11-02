@@ -29,7 +29,7 @@ fun SelectStorageCategory(
 
     SelectItem(
         modifier = modifier,
-        label = stringResource(R.string.general_categories),
+        label = stringResource(R.string.label_category),
         selectedIndex = mappedCategories.indexOfFirst { it.id == selectedCategory.id },
         options = mappedCategories,
         onSelect = { index ->

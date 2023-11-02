@@ -4,6 +4,7 @@
     <string name="action_hide">Hide</string>
 
     <string name="label_all">All</string>
+    <string name="label_category">Category</string>
     <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
