@@ -6,6 +6,7 @@ import com.hippo.unifile.UniFile
 import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.util.size
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -148,6 +149,32 @@ class AnimeDownloadCache(
             }
         }
         return 0
+    }
+
+    /**
+     * Returns the total size of downloaded episodes.
+     */
+    fun getTotalDownloadSize(): Long {
+        renewCache()
+
+        return rootDownloadsDir.sourceDirs.values.sumOf { sourceDir ->
+            sourceDir.dir.size()
+        }
+    }
+
+    /**
+     * Returns the total size of downloaded chapters for an anime.
+     *
+     * @param anime the anime to check.
+     */
+    fun getDownloadSize(anime: Anime): Long {
+        renewCache()
+
+        return rootDownloadsDir.sourceDirs[anime.source]?.animeDirs?.get(
+            provider.getAnimeDirName(
+                anime.title,
+            ),
+        )?.dir?.size() ?: 0
     }
 
     /**

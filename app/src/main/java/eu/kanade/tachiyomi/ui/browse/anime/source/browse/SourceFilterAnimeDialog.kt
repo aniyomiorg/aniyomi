@@ -121,10 +121,11 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
                 label = filter.name,
                 options = filter.values,
                 selectedIndex = filter.state,
-            ) {
-                filter.state = it
-                onUpdate()
-            }
+                onSelect = {
+                    filter.state = it
+                    onUpdate()
+                },
+            )
         }
         is AnimeFilter.Sort -> {
             CollapsibleBox(

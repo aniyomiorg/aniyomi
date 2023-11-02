@@ -128,7 +128,13 @@ class AnimeDownloadManager(
      * @param autoStart whether to start the downloader after enqueuing the episodes.
      * @param alt whether to use the alternative downloader
      */
-    fun downloadEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true, alt: Boolean = false, video: Video? = null) {
+    fun downloadEpisodes(
+        anime: Anime,
+        episodes: List<Episode>,
+        autoStart: Boolean = true,
+        alt: Boolean = false,
+        video: Video? = null,
+    ) {
         downloader.queueEpisodes(anime, episodes, autoStart, alt, video)
     }
 
@@ -155,7 +161,8 @@ class AnimeDownloadManager(
      * @return an observable containing the list of pages from the episode.
      */
     fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Observable<Video> {
-        val episodeDir = provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source)
+        val episodeDir =
+            provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source)
         return Observable.fromCallable {
             val files = episodeDir?.listFiles().orEmpty()
                 .filter { "video" in it.type.orEmpty() }
@@ -165,7 +172,12 @@ class AnimeDownloadManager(
             }
 
             val file = files[0]
-            Video(file.uri.toString(), "download: " + file.uri.toString(), file.uri.toString(), file.uri).apply { status = Video.State.READY }
+            Video(
+                file.uri.toString(),
+                "download: " + file.uri.toString(),
+                file.uri.toString(),
+                file.uri,
+            ).apply { status = Video.State.READY }
         }
     }
 
@@ -185,7 +197,13 @@ class AnimeDownloadManager(
         sourceId: Long,
         skipCache: Boolean = false,
     ): Boolean {
-        return cache.isEpisodeDownloaded(episodeName, episodeScanlator, animeTitle, sourceId, skipCache)
+        return cache.isEpisodeDownloaded(
+            episodeName,
+            episodeScanlator,
+            animeTitle,
+            sourceId,
+            skipCache,
+        )
     }
 
     /**
@@ -202,6 +220,22 @@ class AnimeDownloadManager(
      */
     fun getDownloadCount(anime: Anime): Int {
         return cache.getDownloadCount(anime)
+    }
+
+    /**
+     * Returns the size of downloaded episodes.
+     */
+    fun getDownloadSize(): Long {
+        return cache.getTotalDownloadSize()
+    }
+
+    /**
+     * Returns the size of downloaded episodes for an anime.
+     *
+     * @param anime the anime to check.
+     */
+    fun getDownloadSize(anime: Anime): Long {
+        return cache.getDownloadSize(anime)
     }
 
     fun cancelQueuedDownloads(downloads: List<AnimeDownload>) {
@@ -221,7 +255,11 @@ class AnimeDownloadManager(
             launchIO {
                 removeFromDownloadQueue(filteredEpisodes)
 
-                val (animeDir, episodeDirs) = provider.findEpisodeDirs(filteredEpisodes, anime, source)
+                val (animeDir, episodeDirs) = provider.findEpisodeDirs(
+                    filteredEpisodes,
+                    anime,
+                    source,
+                )
                 episodeDirs.forEach { it.delete() }
                 cache.removeEpisodes(filteredEpisodes, anime)
 
@@ -346,7 +384,8 @@ class AnimeDownloadManager(
 
     private fun getEpisodesToDelete(episodes: List<Episode>, anime: Anime): List<Episode> {
         // Retrieve the categories that are set to exclude from being deleted on read
-        val categoriesToExclude = downloadPreferences.removeExcludeAnimeCategories().get().map(String::toLong)
+        val categoriesToExclude =
+            downloadPreferences.removeExcludeAnimeCategories().get().map(String::toLong)
 
         val categoriesForAnime = runBlocking { getCategories.await(anime.id) }
             .map { it.id }
@@ -372,7 +411,8 @@ class AnimeDownloadManager(
         }
         .onStart {
             emitAll(
-                queueState.value.filter { download -> download.status == AnimeDownload.State.DOWNLOADING }.asFlow(),
+                queueState.value.filter { download -> download.status == AnimeDownload.State.DOWNLOADING }
+                    .asFlow(),
             )
         }
 
