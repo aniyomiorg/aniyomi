@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.io.FileInputStream
 import java.util.Properties
-import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 plugins {
     id("com.android.application")
