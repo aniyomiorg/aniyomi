@@ -43,8 +43,7 @@ data class StorageTab(
                 mangaStorageTab(),
             ),
             startIndex = 1.takeIf { isManga },
-
-            )
+        )
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true
