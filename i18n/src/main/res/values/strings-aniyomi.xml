@@ -3,6 +3,8 @@
     <!-- Actions -->
     <string name="action_hide">Hide</string>
 
+    <string name="label_all">All</string>
+    <string name="label_category">Category</string>
     <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
@@ -177,6 +179,7 @@
         <item quantity="one">%1$s episode</item>
         <item quantity="other">%1$s episodes</item>
     </plurals>
+    <string name="delete_confirmation">Are you sure you wish to delete \"%s\"?</string>
     <string name="delete_downloads_for_anime">Delete downloaded episodes?</string>
     <string name="snack_add_to_manga_library">Add manga to library?</string>
     <string name="snack_add_to_anime_library">Add anime to library?</string>
@@ -250,6 +253,7 @@
         <item quantity="other">%d seconds</item>
     </plurals>
     <string name="no_next_episode">Next Episode not found!</string>
+    <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
