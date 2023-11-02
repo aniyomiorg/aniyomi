@@ -201,6 +201,22 @@ class MangaDownloadManager(
         return cache.getDownloadCount(manga)
     }
 
+    /**
+     * Returns the size of downloaded chapters.
+     */
+    fun getDownloadSize(): Long {
+        return cache.getTotalDownloadSize()
+    }
+
+    /**
+     * Returns the size of downloaded chapters for a manga.
+     *
+     * @param manga the manga to check.
+     */
+    fun getDownloadSize(manga: Manga): Long {
+        return cache.getDownloadSize(manga)
+    }
+
     fun cancelQueuedDownloads(downloads: List<MangaDownload>) {
         removeFromDownloadQueue(downloads.map { it.chapter })
     }
