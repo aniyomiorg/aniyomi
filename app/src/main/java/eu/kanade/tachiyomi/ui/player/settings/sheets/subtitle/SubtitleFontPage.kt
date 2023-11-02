@@ -1,28 +1,37 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
+import android.os.Environment
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yubyf.truetypeparser.TTFFile
+import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.OutlinedNumericChooser
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -31,6 +40,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import java.io.File
 
 @Composable
 fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {
@@ -73,6 +83,25 @@ private fun SubtitleFont(
         screenModel.preferences.subtitleFont().set(it)
     }
 
+    val context = LocalContext.current
+    val fontList by remember {
+        derivedStateOf {
+            val customFonts = File(
+                Environment.getExternalStorageDirectory().absolutePath +
+                    File.separator + context.getString(R.string.app_name) +
+                    File.separator,
+                "fonts",
+            ).listFiles { file ->
+                file.extension.equals("ttf", true) ||
+                    file.extension.equals("otf", true)
+            }?.map {
+                TTFFile.open(it).families.values.toTypedArray()[0] to it.absolutePath
+            } ?: emptyList()
+            listOf("Sans Serif" to "") + customFonts
+        }
+    }
+    var selectingFont by remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
@@ -82,11 +111,13 @@ private fun SubtitleFont(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Icon(
-                imageVector = Icons.Outlined.FormatSize,
-                contentDescription = null,
-                modifier = Modifier.size(32.dp),
-            )
+            IconButton(onClick = { selectingFont = true }) {
+                Icon(
+                    imageVector = Icons.Outlined.FormatSize,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                )
+            }
 
             OutlinedNumericChooser(
                 label = stringResource(id = R.string.player_font_size_text_field),
@@ -119,12 +150,23 @@ private fun SubtitleFont(
             )
         }
 
-        OutlinedTextField(
-            value = font,
-            onValueChange = updateFont,
-            label = { Text(stringResource(id = R.string.player_subtitle_font_text_field)) },
-            singleLine = true,
-        )
+        DropdownMenu(expanded = selectingFont, onDismissRequest = { selectingFont = false }) {
+            fontList.map {
+                val fontName = it.first
+                DropdownMenuItem(
+                    text = { Text(fontName) },
+                    onClick = { updateFont(fontName) },
+                    trailingIcon = {
+                        if (font == fontName) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                )
+            }
+        }
 
         SubtitlePreview(
             font = font,

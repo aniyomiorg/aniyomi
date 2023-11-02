@@ -143,7 +143,6 @@ fun OutLineText(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun SubtitlePreview(
     font: String,
