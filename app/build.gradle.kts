@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.io.FileInputStream
 import java.util.Properties
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 plugins {
     id("com.android.application")
@@ -268,11 +269,16 @@ dependencies {
 
     // mpv-android
     implementation(libs.aniyomi.mpv)
+
     // FFmpeg-kit
     implementation(libs.ffmpeg.kit)
     implementation(libs.arthenica.smartexceptions)
+
     // seeker seek bar
     implementation(libs.seeker)
+
+    // Cast
+    implementation(libs.bundles.cast)
 }
 
 androidComponents {

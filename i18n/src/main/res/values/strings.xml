@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Aniyomi</string>
+    <!-- 4C1B4D71 / C0868879 -->
+    <string name="app_cast_id" translatable="false">4C1B4D71</string>
 
     <!-- Generic strings -->
     <string name="on">On</string>
