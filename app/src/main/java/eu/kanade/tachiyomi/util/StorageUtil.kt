@@ -6,9 +6,9 @@ import com.hippo.unifile.UniFile
  * Converts a long to a readable file size.
  */
 fun Long.toSize(): String {
-    val kb = 1024
-    val mb = kb * 1024
-    val gb = mb * 1024
+    val kb = 1000
+    val mb = kb * kb
+    val gb = mb * kb
     return when {
         this >= gb -> "%.2f GB".format(this.toFloat() / gb)
         this >= mb -> "%.2f MB".format(this.toFloat() / mb)
