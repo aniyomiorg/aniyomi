@@ -169,7 +169,7 @@ internal object AnimeExtensionLoader {
             }
             .flatMap {
                 try {
-                    when (val obj = Class.forName(it, false, classLoader).newInstance()) {
+                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
                         is AnimeSource -> listOf(obj)
                         is AnimeSourceFactory -> obj.createSources()
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")

@@ -92,9 +92,9 @@ class ReaderViewModel(
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
+    val readerPreferences: ReaderPreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
-    private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val delayedTrackingStore: DelayedMangaTrackingStore = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
@@ -223,7 +223,6 @@ class ReaderViewModel(
         val currentChapters = state.value.viewerChapters
         if (currentChapters != null) {
             currentChapters.unref()
-            saveReadingProgress(currentChapters.currChapter)
             chapterToDownload?.let {
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
@@ -236,17 +235,6 @@ class ReaderViewModel(
      */
     fun onActivityFinish() {
         deletePendingChapters()
-    }
-
-    /**
-     * Called when the activity is saved. It updates the database
-     * to persist the current progress of the active chapter.
-     */
-    fun onSaveInstanceState() {
-        val currentChapter = getCurrentChapter() ?: return
-        viewModelScope.launchNonCancellable {
-            saveChapterProgress(currentChapter)
-        }
     }
 
     /**
@@ -346,7 +334,6 @@ class ReaderViewModel(
      */
     private suspend fun loadAdjacent(chapter: ReaderChapter) {
         val loader = loader ?: return
-        saveCurrentChapterReadingProgress()
 
         logcat { "Loading adjacent ${chapter.chapter.url}" }
 
@@ -420,16 +407,17 @@ class ReaderViewModel(
      * [page]'s chapter is different from the currently active.
      */
     fun onPageSelected(page: ReaderPage) {
-        val currentChapters = state.value.viewerChapters ?: return
-
-        val selectedChapter = page.chapter
-
         // InsertPage and StencilPage doesn't change page progress
         if (page is InsertPage || page is StencilPage) {
             return
         }
 
+        val currentChapters = state.value.viewerChapters ?: return
+        val pages = page.chapter.pages ?: return
+        val selectedChapter = page.chapter
+
         // Save last page read and mark as read if needed
+        saveReadingProgress()
         mutableState.update {
             it.copy(
                 currentPage = page.index + 1,
@@ -446,11 +434,9 @@ class ReaderViewModel(
 
         if (selectedChapter != currentChapters.currChapter) {
             logcat { "Setting ${selectedChapter.chapter.url} as active" }
-            saveReadingProgress(currentChapters.currChapter)
             setReadStartTime()
             viewModelScope.launch { loadNewChapter(selectedChapter) }
         }
-        val pages = page.chapter.pages ?: return
         val inDownloadRange = page.number.toDouble() / pages.size > 0.25
         if (inDownloadRange) {
             downloadNextChapters()
@@ -473,7 +459,7 @@ class ReaderViewModel(
                 manga.title,
                 manga.source,
             )
-            if (!isNextChapterDownloaded) return@launchIO
+            if (isNextChapterDownloaded) return@launchIO
 
             val chaptersToDownload = getNextChapters.await(manga.id, nextChapter.id!!).run {
                 if (readerPreferences.skipDupe().get()) {
@@ -520,17 +506,15 @@ class ReaderViewModel(
         }
     }
 
-    fun saveCurrentChapterReadingProgress() {
-        getCurrentChapter()?.let { saveReadingProgress(it) }
-    }
-
     /**
      * Called when reader chapter is changed in reader or when activity is paused.
      */
-    private fun saveReadingProgress(readerChapter: ReaderChapter) {
-        viewModelScope.launchNonCancellable {
-            saveChapterProgress(readerChapter)
-            saveChapterHistory(readerChapter)
+    private fun saveReadingProgress() {
+        getCurrentChapter()?.let {
+            viewModelScope.launchNonCancellable {
+                saveChapterProgress(it)
+                saveChapterHistory(it)
+            }
         }
     }
 
@@ -542,7 +526,7 @@ class ReaderViewModel(
         if (!incognitoMode) return
 
         val chapter = readerChapter.chapter
-        getCurrentChapter()?.requestedPage = chapter.last_page_read
+        readerChapter.requestedPage = chapter.last_page_read
         updateChapter.await(
             ChapterUpdate(
                 id = chapter.id!!,
@@ -718,8 +702,20 @@ class ReaderViewModel(
         ) + filenameSuffix
     }
 
+    fun showMenus(visible: Boolean) {
+        mutableState.update { it.copy(menuVisible = visible) }
+    }
+
+    fun showLoadingDialog() {
+        mutableState.update { it.copy(dialog = Dialog.Loading) }
+    }
+
     fun openPageDialog(page: ReaderPage) {
-        mutableState.update { it.copy(dialog = Dialog.Page(page)) }
+        mutableState.update { it.copy(dialog = Dialog.PageActions(page)) }
+    }
+
+    fun openColorFilterDialog() {
+        mutableState.update { it.copy(dialog = Dialog.ColorFilter) }
     }
 
     fun closeDialog() {
@@ -731,7 +727,7 @@ class ReaderViewModel(
      * There's also a notification to allow sharing the image somewhere else or deleting it.
      */
     fun saveImage() {
-        val page = (state.value.dialog as? Dialog.Page)?.page
+        val page = (state.value.dialog as? Dialog.PageActions)?.page
         if (page?.status != Page.State.READY) return
         val manga = manga ?: return
 
@@ -773,7 +769,7 @@ class ReaderViewModel(
      * image will be kept so it won't be taking lots of internal disk space.
      */
     fun shareImage() {
-        val page = (state.value.dialog as? Dialog.Page)?.page
+        val page = (state.value.dialog as? Dialog.PageActions)?.page
         if (page?.status != Page.State.READY) return
         val manga = manga ?: return
 
@@ -803,7 +799,7 @@ class ReaderViewModel(
      * Sets the image of this the selected page as cover and notifies the UI of the result.
      */
     fun setAsCover() {
-        val page = (state.value.dialog as? Dialog.Page)?.page
+        val page = (state.value.dialog as? Dialog.PageActions)?.page
         if (page?.status != Page.State.READY) return
         val manga = manga ?: return
         val stream = page.stream ?: return
@@ -918,13 +914,16 @@ class ReaderViewModel(
          */
         val viewer: Viewer? = null,
         val dialog: Dialog? = null,
+        val menuVisible: Boolean = false,
     ) {
         val totalPages: Int
             get() = viewerChapters?.currChapter?.pages?.size ?: -1
     }
 
     sealed class Dialog {
-        data class Page(val page: ReaderPage) : Dialog()
+        object Loading : Dialog()
+        object ColorFilter : Dialog()
+        data class PageActions(val page: ReaderPage) : Dialog()
     }
 
     sealed class Event {

@@ -18,13 +18,14 @@ import androidx.compose.material.DismissValue
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkRemove
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.FileDownloadOff
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.BookmarkAdd
+import androidx.compose.material.icons.outlined.BookmarkRemove
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.FileDownloadOff
+import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -296,32 +297,30 @@ private fun SwipeBackgroundIcon(
     val imageVector = when (swipeAction) {
         LibraryPreferences.EpisodeSwipeAction.ToggleSeen -> {
             if (!seen) {
-                Icons.Default.Visibility
+                Icons.Outlined.Done
             } else {
-                Icons.Default.VisibilityOff
+                Icons.Outlined.RemoveDone
             }
         }
         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark -> {
             if (!bookmark) {
-                Icons.Default.Bookmark
+                Icons.Outlined.BookmarkAdd
             } else {
-                Icons.Default.BookmarkRemove
+                Icons.Outlined.BookmarkRemove
             }
         }
         LibraryPreferences.EpisodeSwipeAction.Download -> {
             when (downloadState) {
                 AnimeDownload.State.NOT_DOWNLOADED,
                 AnimeDownload.State.ERROR,
-                -> { Icons.Default.Download }
+                -> { Icons.Outlined.Download }
                 AnimeDownload.State.QUEUE,
                 AnimeDownload.State.DOWNLOADING,
-                -> { Icons.Default.FileDownloadOff }
-                AnimeDownload.State.DOWNLOADED -> { Icons.Default.Delete }
+                -> { Icons.Outlined.FileDownloadOff }
+                AnimeDownload.State.DOWNLOADED -> { Icons.Outlined.Delete }
             }
         }
-        LibraryPreferences.EpisodeSwipeAction.Disabled -> {
-            null
-        }
+        LibraryPreferences.EpisodeSwipeAction.Disabled -> null
     }
     imageVector?.let {
         Icon(

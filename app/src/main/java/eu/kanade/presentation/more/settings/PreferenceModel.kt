@@ -44,6 +44,20 @@ sealed class Preference {
         ) : PreferenceItem<Boolean>()
 
         /**
+         * A [PreferenceItem] that provides a slider to select an integer number.
+         */
+        data class SliderPreference(
+            val value: Int,
+            val min: Int = 0,
+            val max: Int,
+            override val title: String = "",
+            override val subtitle: String? = null,
+            override val icon: ImageVector? = null,
+            override val enabled: Boolean = true,
+            override val onValueChanged: suspend (newValue: Int) -> Boolean = { true },
+        ) : PreferenceItem<Int>()
+
+        /**
          * A [PreferenceItem] that displays a list of entries as a dialog.
          */
         @Suppress("UNCHECKED_CAST")

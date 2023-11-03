@@ -70,6 +70,8 @@ import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
+import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -121,6 +123,8 @@ class MainActivity : BaseActivity() {
 
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
+    private val chapterCache: ChapterCache by injectLazy()
+    private val episodeCache: EpisodeCache by injectLazy()
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
@@ -128,12 +132,14 @@ class MainActivity : BaseActivity() {
     private var navigator: Navigator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val isLaunch = savedInstanceState == null
+
         // Prevent splash screen showing up on configuration changes
-        val splashScreen = if (savedInstanceState == null) installSplashScreen() else null
+        val splashScreen = if (isLaunch) installSplashScreen() else null
 
         super.onCreate(savedInstanceState)
 
-        val didMigration = if (savedInstanceState == null) {
+        val didMigration = if (isLaunch) {
             Migrations.upgrade(
                 context = applicationContext,
                 basePreferences = preferences,
@@ -167,7 +173,7 @@ class MainActivity : BaseActivity() {
             val indexing by downloadCache.isInitializing.collectAsState()
             val indexingAnime by animeDownloadCache.isInitializing.collectAsState()
 
-            // Set statusbar color considering the top app state banner
+            // Set status bar color considering the top app state banner
             val systemUiController = rememberSystemUiController()
             val isSystemInDarkTheme = isSystemInDarkTheme()
             val statusBarBackgroundColor = when {
@@ -208,7 +214,7 @@ class MainActivity : BaseActivity() {
                 LaunchedEffect(navigator) {
                     this@MainActivity.navigator = navigator
 
-                    if (savedInstanceState == null) {
+                    if (isLaunch) {
                         // Set start screen
                         handleIntentAction(intent, navigator)
 
@@ -287,6 +293,11 @@ class MainActivity : BaseActivity() {
         }
         setSplashScreenExitAnimation(splashScreen)
 
+        if (isLaunch && libraryPreferences.autoClearItemCache().get()) {
+            chapterCache.clear()
+            episodeCache.clear()
+        }
+
         externalPlayerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 ExternalIntents.externalIntents.onActivityResult(result.data)
@@ -304,7 +315,7 @@ class MainActivity : BaseActivity() {
     }
 
     @Composable
-    fun HandleOnNewIntent(context: Context, navigator: Navigator) {
+    private fun HandleOnNewIntent(context: Context, navigator: Navigator) {
         LaunchedEffect(Unit) {
             callbackFlow<Intent> {
                 val componentActivity = context as ComponentActivity

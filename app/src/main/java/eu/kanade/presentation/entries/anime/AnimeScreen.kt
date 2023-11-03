@@ -292,7 +292,7 @@ private fun AnimeScreenSmallImpl(
 ) {
     val episodeListState = rememberLazyListState()
 
-    val episodes = remember(state) { state.processedEpisodes.toList() }
+    val episodes = remember(state) { state.processedEpisodes }
 
     val internalOnBackPressed = {
         if (episodes.fastAny { it.selected }) {
@@ -358,7 +358,7 @@ private fun AnimeScreenSmallImpl(
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        val id = if (episodes.fastAny { it.episode.seen }) {
+                        val id = if (state.episodes.fastAny { it.episode.seen }) {
                             R.string.action_resume
                         } else {
                             R.string.action_start
@@ -559,7 +559,7 @@ fun AnimeScreenLargeImpl(
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
 
-    val episodes = remember(state) { state.processedEpisodes.toList() }
+    val episodes = remember(state) { state.processedEpisodes }
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
@@ -635,7 +635,7 @@ fun AnimeScreenLargeImpl(
                 ) {
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (episodes.fastAny { it.episode.seen }) {
+                            val id = if (state.episodes.fastAny { it.episode.seen }) {
                                 R.string.action_resume
                             } else {
                                 R.string.action_start

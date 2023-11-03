@@ -272,7 +272,7 @@ private fun MangaScreenSmallImpl(
 ) {
     val chapterListState = rememberLazyListState()
 
-    val chapters = remember(state) { state.processedChapters.toList() }
+    val chapters = remember(state) { state.processedChapters }
 
     val internalOnBackPressed = {
         if (chapters.fastAny { it.selected }) {
@@ -337,7 +337,7 @@ private fun MangaScreenSmallImpl(
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        val id = if (chapters.fastAny { it.chapter.read }) {
+                        val id = if (state.chapters.fastAny { it.chapter.read }) {
                             R.string.action_resume
                         } else {
                             R.string.action_start
@@ -504,7 +504,7 @@ fun MangaScreenLargeImpl(
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
 
-    val chapters = remember(state) { state.processedChapters.toList() }
+    val chapters = remember(state) { state.processedChapters }
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
@@ -577,7 +577,7 @@ fun MangaScreenLargeImpl(
                 ) {
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (chapters.fastAny { it.chapter.read }) {
+                            val id = if (state.chapters.fastAny { it.chapter.read }) {
                                 R.string.action_resume
                             } else {
                                 R.string.action_start

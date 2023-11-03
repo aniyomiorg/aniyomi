@@ -34,6 +34,7 @@ import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.MangaSource
@@ -161,6 +162,7 @@ internal fun MigrateMangaDialog(
 
 internal class MigrateMangaDialogScreenModel(
     private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
@@ -219,6 +221,7 @@ internal class MigrateMangaDialogScreenModel(
         val migrateCategories = MangaMigrationFlags.hasCategories(flags)
         val migrateTracks = MangaMigrationFlags.hasTracks(flags)
         val migrateCustomCover = MangaMigrationFlags.hasCustomCover(flags)
+        val deleteDownloaded = MangaMigrationFlags.hasDeleteDownloaded(flags)
 
         try {
             syncChaptersWithSource.await(sourceChapters, newManga, newSource)
@@ -281,6 +284,13 @@ internal class MigrateMangaDialogScreenModel(
                 }
             }
             insertTrack.awaitAll(tracks)
+        }
+
+        // Delete downloaded
+        if (deleteDownloaded) {
+            if (oldSource != null) {
+                downloadManager.deleteManga(oldManga, oldSource)
+            }
         }
 
         if (replace) {

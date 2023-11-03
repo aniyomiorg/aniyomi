@@ -169,7 +169,7 @@ internal object MangaExtensionLoader {
             }
             .flatMap {
                 try {
-                    when (val obj = Class.forName(it, false, classLoader).newInstance()) {
+                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
                         is MangaSource -> listOf(obj)
                         is SourceFactory -> obj.createSources()
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")

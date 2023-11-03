@@ -152,7 +152,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun setListing(listing: Listing) {
-        mutableState.update { it.copy(listing = listing) }
+        mutableState.update { it.copy(listing = listing, toolbarQuery = null) }
     }
 
     fun setFilters(filters: AnimeFilterList) {

@@ -152,6 +152,7 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
         source.setupPreferenceScreen(sourceScreen)
         sourceScreen.forEach { pref ->
             pref.isIconSpaceReserved = false
+            pref.isSingleLineTitle = false
             if (pref is DialogPreference) {
                 pref.dialogTitle = pref.title
             }
