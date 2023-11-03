@@ -345,6 +345,7 @@
     <string name="player_subtitle_text_color">Text</string>
     <string name="player_subtitle_border_color">Border</string>
     <string name="player_subtitle_background_color">Background</string>
+    <string name="player_subtitle_font_text_field">Font Name</string>
 
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
