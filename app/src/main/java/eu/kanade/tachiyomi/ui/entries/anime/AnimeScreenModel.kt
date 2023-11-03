@@ -133,7 +133,7 @@ class AnimeInfoScreenModel(
     private val isFavorited: Boolean
         get() = anime?.favorite ?: false
 
-    private val processedEpisodes: Sequence<EpisodeItem>?
+    private val processedEpisodes: List<EpisodeItem>?
         get() = successState?.processedEpisodes
 
     val episodeSwipeEndAction = libraryPreferences.swipeEpisodeEndAction().get()
@@ -1120,8 +1120,9 @@ sealed class AnimeScreenState {
         val nextAiringEpisode: Pair<Int, Long> = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt),
     ) : AnimeScreenState() {
 
-        val processedEpisodes: Sequence<EpisodeItem>
-            get() = episodes.applyFilters(anime)
+        val processedEpisodes by lazy {
+            episodes.applyFilters(anime).toList()
+        }
 
         val trackingAvailable: Boolean
             get() = trackItems.isNotEmpty()

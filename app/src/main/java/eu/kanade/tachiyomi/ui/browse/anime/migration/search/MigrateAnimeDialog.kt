@@ -36,10 +36,10 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.browse.anime.migration.AnimeMigrationFlags
-import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
@@ -145,7 +145,7 @@ internal fun MigrateAnimeDialog(
                                 val selectedIndices = mutableListOf<Int>()
                                 selected.fastForEachIndexed { i, b -> if (b) selectedIndices.add(i) }
                                 val newValue =
-                                    MangaMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
+                                    AnimeMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
                                 screenModel.migrateFlags.set(newValue)
                                 screenModel.migrateAnime(oldAnime, newAnime, true)
                                 withUIContext { onPopScreen() }
@@ -162,6 +162,7 @@ internal fun MigrateAnimeDialog(
 
 internal class MigrateAnimeDialogScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
@@ -220,6 +221,7 @@ internal class MigrateAnimeDialogScreenModel(
         val migrateCategories = AnimeMigrationFlags.hasCategories(flags)
         val migrateTracks = AnimeMigrationFlags.hasTracks(flags)
         val migrateCustomCover = AnimeMigrationFlags.hasCustomCover(flags)
+        val deleteDownloaded = AnimeMigrationFlags.hasDeleteDownloaded(flags)
 
         try {
             syncEpisodesWithSource.await(sourceEpisodes, newAnime, newSource)
@@ -282,6 +284,13 @@ internal class MigrateAnimeDialogScreenModel(
                 }
             }
             insertTrack.awaitAll(tracks)
+        }
+
+        // Delete downloaded
+        if (deleteDownloaded) {
+            if (oldSource != null) {
+                downloadManager.deleteAnime(oldAnime, oldSource)
+            }
         }
 
         if (replace) {

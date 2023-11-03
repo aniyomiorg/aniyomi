@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.reader
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.ProgressDialog
 import android.app.assist.AssistContent
 import android.content.Context
 import android.content.Intent
@@ -25,8 +24,15 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.core.transition.doOnEnd
@@ -64,6 +70,7 @@ import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderColorFilterDialog
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsSheet
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
@@ -98,9 +105,9 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.widget.util.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 
 class ReaderActivity : BaseActivity() {
@@ -119,8 +126,8 @@ class ReaderActivity : BaseActivity() {
         // <-- AM (CONNECTIONS)
     }
 
-    private val readerPreferences: ReaderPreferences by injectLazy()
-    private val preferences: BasePreferences by injectLazy()
+    private val readerPreferences = Injekt.get<ReaderPreferences>()
+    private val preferences = Injekt.get<BasePreferences>()
 
     lateinit var binding: ReaderActivityBinding
 
@@ -130,24 +137,11 @@ class ReaderActivity : BaseActivity() {
     val hasCutout by lazy { hasDisplayCutout() }
 
     /**
-     * Whether the menu is currently visible.
-     */
-    var menuVisible = false
-        private set
-
-    /**
      * Configuration at reader level, like background color or forced orientation.
      */
     private var config: ReaderConfig? = null
 
-    /**
-     * Progress dialog used when switching chapters from the menu buttons.
-     */
-    @Suppress("DEPRECATION")
-    private var progressDialog: ProgressDialog? = null
-
     private var menuToggleToast: Toast? = null
-
     private var readingModeToast: Toast? = null
 
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
@@ -170,8 +164,8 @@ class ReaderActivity : BaseActivity() {
         setContentView(binding.root)
 
         if (viewModel.needsInit()) {
-            val manga = intent.extras!!.getLong("manga", -1)
-            val chapter = intent.extras!!.getLong("chapter", -1)
+            val manga = intent.extras?.getLong("manga", -1) ?: -1L
+            val chapter = intent.extras?.getLong("chapter", -1) ?: -1L
             if (manga == -1L || chapter == -1L) {
                 finish()
                 return
@@ -187,10 +181,6 @@ class ReaderActivity : BaseActivity() {
                     }
                 }
             }
-        }
-
-        if (savedInstanceState != null) {
-            menuVisible = savedInstanceState.getBoolean(::menuVisible.name)
         }
 
         config = ReaderConfig()
@@ -259,26 +249,9 @@ class ReaderActivity : BaseActivity() {
         config = null
         menuToggleToast?.cancel()
         readingModeToast?.cancel()
-        progressDialog?.dismiss()
-        progressDialog = null
         // AM (DISCORD) -->
         updateDiscordRPC(exitingReader = true)
         // <-- AM (DISCORD)
-    }
-
-    /**
-     * Called when the activity is saving instance state. Current progress is persisted if this
-     * activity isn't changing configurations.
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(::menuVisible.name, menuVisible)
-        viewModel.onSaveInstanceState()
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onPause() {
-        viewModel.saveCurrentChapterReadingProgress()
-        super.onPause()
     }
 
     /**
@@ -288,7 +261,7 @@ class ReaderActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.setReadStartTime()
-        setMenuVisibility(menuVisible, animate = false)
+        setMenuVisibility(viewModel.state.value.menuVisible, animate = false)
     }
 
     /**
@@ -298,7 +271,7 @@ class ReaderActivity : BaseActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-            setMenuVisibility(menuVisible, animate = false)
+            setMenuVisibility(viewModel.state.value.menuVisible, animate = false)
         }
     }
 
@@ -433,14 +406,41 @@ class ReaderActivity : BaseActivity() {
 
         binding.dialogRoot.setComposeContent {
             val state by viewModel.state.collectAsState()
-
+            val onDismissRequest = viewModel::closeDialog
             when (state.dialog) {
-                is ReaderViewModel.Dialog.Page -> ReaderPageDialog(
-                    onDismissRequest = viewModel::closeDialog,
-                    onSetAsCover = viewModel::setAsCover,
-                    onShare = viewModel::shareImage,
-                    onSave = viewModel::saveImage,
-                )
+                is ReaderViewModel.Dialog.Loading -> {
+                    AlertDialog(
+                        onDismissRequest = {},
+                        confirmButton = {},
+                        text = {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                CircularProgressIndicator()
+                                Text(stringResource(R.string.loading))
+                            }
+                        },
+                    )
+                }
+                is ReaderViewModel.Dialog.ColorFilter -> {
+                    setMenuVisibility(false)
+                    ReaderColorFilterDialog(
+                        onDismissRequest = {
+                            onDismissRequest()
+                            setMenuVisibility(true)
+                        },
+                        readerPreferences = viewModel.readerPreferences,
+                    )
+                }
+                is ReaderViewModel.Dialog.PageActions -> {
+                    ReaderPageActionsDialog(
+                        onDismissRequest = onDismissRequest,
+                        onSetAsCover = viewModel::setAsCover,
+                        onShare = viewModel::shareImage,
+                        onSave = viewModel::saveImage,
+                    )
+                }
                 null -> {}
             }
         }
@@ -485,7 +485,7 @@ class ReaderActivity : BaseActivity() {
         }
 
         // Set initial visibility
-        setMenuVisibility(menuVisible)
+        setMenuVisibility(viewModel.state.value.menuVisible)
     }
 
     private fun initBottomShortcuts() {
@@ -572,11 +572,14 @@ class ReaderActivity : BaseActivity() {
                 if (readerSettingSheet?.isShowing == true) return@setOnClickListener
                 readerSettingSheet = ReaderSettingsSheet(this@ReaderActivity).apply { show() }
             }
+        }
 
-            setOnLongClickListener {
-                if (readerSettingSheet?.isShowing == true) return@setOnLongClickListener false
-                readerSettingSheet = ReaderSettingsSheet(this@ReaderActivity, showColorFilterSettings = true).apply { show() }
-                true
+        // Color filter sheet
+        with(binding.actionColorSettings) {
+            setTooltip(R.string.custom_filter)
+
+            setOnClickListener {
+                viewModel.openColorFilterDialog()
             }
         }
     }
@@ -608,7 +611,7 @@ class ReaderActivity : BaseActivity() {
      * [animate] the views.
      */
     fun setMenuVisibility(visible: Boolean, animate: Boolean = true) {
-        menuVisible = visible
+        viewModel.showMenus(visible)
         if (visible) {
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
             binding.readerMenu.isVisible = true
@@ -767,13 +770,11 @@ class ReaderActivity : BaseActivity() {
      * [show]. This is only used when the next/previous buttons on the toolbar are clicked; the
      * other cases are handled with chapter transitions on the viewers and chapter preloading.
      */
-    @Suppress("DEPRECATION")
     private fun setProgressDialog(show: Boolean) {
-        progressDialog?.dismiss()
-        progressDialog = if (show) {
-            ProgressDialog.show(this, null, getString(R.string.loading), true)
+        if (show) {
+            viewModel.showLoadingDialog()
         } else {
-            null
+            viewModel.closeDialog()
         }
     }
 
@@ -840,14 +841,14 @@ class ReaderActivity : BaseActivity() {
      * viewer because each one implements its own touch and key events.
      */
     fun toggleMenu() {
-        setMenuVisibility(!menuVisible)
+        setMenuVisibility(!viewModel.state.value.menuVisible)
     }
 
     /**
      * Called from the viewer to show the menu.
      */
     fun showMenu() {
-        if (!menuVisible) {
+        if (!viewModel.state.value.menuVisible) {
             setMenuVisibility(true)
         }
     }
@@ -856,7 +857,7 @@ class ReaderActivity : BaseActivity() {
      * Called from the viewer to hide the menu.
      */
     fun hideMenu() {
-        if (menuVisible) {
+        if (viewModel.state.value.menuVisible) {
             setMenuVisibility(false)
         }
     }
@@ -1054,7 +1055,7 @@ class ReaderActivity : BaseActivity() {
             }
 
             // Trigger relayout
-            setMenuVisibility(menuVisible)
+            setMenuVisibility(viewModel.state.value.menuVisible)
         }
 
         /**

@@ -1,10 +1,10 @@
 [versions]
-aboutlib_version = "10.7.0"
+aboutlib_version = "10.8.0"
 okhttp_version = "5.0.0-alpha.11"
 shizuku_version = "12.2.0"
 sqlite = "2.3.1"
 sqldelight = "1.5.5"
-leakcanary = "2.11"
+leakcanary = "2.12"
 voyager = "1.0.0-rc06"
 richtext = "0.16.0"
 
