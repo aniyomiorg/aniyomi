@@ -1,10 +1,12 @@
 package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.util.size
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.drop
@@ -22,6 +24,9 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.source.local.entries.manga.LocalMangaSource
+import tachiyomi.source.local.io.ArchiveManga
+import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -193,12 +198,18 @@ class MangaDownloadManager(
     }
 
     /**
-     * Returns the amount of downloaded chapters for a manga.
+     * Returns the amount of downloaded/local chapters for a manga.
      *
      * @param manga the manga to check.
      */
     fun getDownloadCount(manga: Manga): Int {
-        return cache.getDownloadCount(manga)
+        return if (manga.source == LocalMangaSource.ID) {
+            LocalMangaSourceFileSystem(context).getFilesInMangaDirectory(manga.url)
+                .filter { it.isDirectory || ArchiveManga.isSupported(it) }
+                .count()
+        } else {
+            cache.getDownloadCount(manga)
+        }
     }
 
     /**
@@ -209,12 +220,17 @@ class MangaDownloadManager(
     }
 
     /**
-     * Returns the size of downloaded chapters for a manga.
+     * Returns the size of downloaded/local episodes for an manga.
      *
      * @param manga the manga to check.
      */
     fun getDownloadSize(manga: Manga): Long {
-        return cache.getDownloadSize(manga)
+        return if (manga.source == LocalMangaSource.ID) {
+            LocalMangaSourceFileSystem(context).getMangaDirectory(manga.url)
+                .let { UniFile.fromFile(it) }?.size() ?: 0L
+        } else {
+            cache.getDownloadSize(manga)
+        }
     }
 
     fun cancelQueuedDownloads(downloads: List<MangaDownload>) {

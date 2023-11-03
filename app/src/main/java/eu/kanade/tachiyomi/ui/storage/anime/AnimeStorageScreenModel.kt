@@ -23,7 +23,6 @@ class AnimeStorageScreenModel(
     downloadCacheIsInitializing = downloadCache.isInitializing,
     libraries = getLibraries.subscribe(),
     categories = getVisibleCategories.subscribe(),
-    getTotalDownloadSize = { downloadManager.getDownloadSize() },
     getDownloadSize = { downloadManager.getDownloadSize(anime) },
     getDownloadCount = { downloadManager.getDownloadCount(anime) },
     getId = { id },

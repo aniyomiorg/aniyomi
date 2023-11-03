@@ -35,7 +35,11 @@ fun CumulativeStorage(
                     var currentAngle = 0f
                     rotate(180f) {
                         for (item in items) {
-                            val itemAngle = (item.size / totalSize) * totalAngle
+                            val itemAngle = if (totalSize > 0f) {
+                                (item.size / totalSize) * totalAngle
+                            } else {
+                                0f
+                            }
                             drawArc(
                                 color = item.color,
                                 startAngle = currentAngle,
