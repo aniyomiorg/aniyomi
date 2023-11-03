@@ -94,10 +94,10 @@ private fun SubtitleFont(
             ).listFiles { file ->
                 file.extension.equals("ttf", true) ||
                     file.extension.equals("otf", true)
-            }?.map {
+            }?.associate {
                 TTFFile.open(it).families.values.toTypedArray()[0] to it.absolutePath
-            } ?: emptyList()
-            listOf("Sans Serif" to "") + customFonts
+            } ?: emptyMap()
+            mapOf("Sans Serif" to ("" to null)) + customFonts
         }
     }
     var selectingFont by remember { mutableStateOf(false) }
@@ -152,7 +152,7 @@ private fun SubtitleFont(
 
         DropdownMenu(expanded = selectingFont, onDismissRequest = { selectingFont = false }) {
             fontList.map {
-                val fontName = it.first
+                val fontName = it.key
                 DropdownMenuItem(
                     text = { Text(fontName) },
                     onClick = { updateFont(fontName) },
