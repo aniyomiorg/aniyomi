@@ -31,6 +31,9 @@ fun CumulativeStorage(
             Canvas(
                 modifier = Modifier.aspectRatio(1f),
                 onDraw = {
+                    // don't bother with drawing anything if there's no data
+                    if (totalSize == 0f) return@Canvas
+
                     val totalAngle = 180f
                     var currentAngle = 0f
                     rotate(180f) {
