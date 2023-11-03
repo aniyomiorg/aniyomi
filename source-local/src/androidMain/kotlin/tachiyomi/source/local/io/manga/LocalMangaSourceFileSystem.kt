@@ -3,6 +3,7 @@ package tachiyomi.source.local.io.manga
 import android.content.Context
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import tachiyomi.source.local.R
+import tachiyomi.source.local.io.ArchiveManga
 import java.io.File
 
 actual class LocalMangaSourceFileSystem(
@@ -35,5 +36,11 @@ actual class LocalMangaSourceFileSystem(
             .filter { it.isDirectory && it.name == name }
             // Get all the files inside the filtered folders
             .flatMap { it.listFiles().orEmpty().toList() }
+    }
+
+    actual fun getChaptersInMangaDirectory(name: String): Sequence<File> {
+        return getFilesInMangaDirectory(name).filter {
+            it.isDirectory || ArchiveManga.isSupported(it)
+        }
     }
 }

@@ -11,4 +11,6 @@ expect class LocalMangaSourceFileSystem {
     fun getMangaDirectory(name: String): File?
 
     fun getFilesInMangaDirectory(name: String): Sequence<File>
+
+    fun getChaptersInMangaDirectory(name: String): Sequence<File>
 }

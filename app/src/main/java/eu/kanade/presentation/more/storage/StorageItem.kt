@@ -45,6 +45,7 @@ data class StorageItem(
     val thumbnail: String?,
     val entriesCount: Int,
     val color: Color,
+    val showDeleteButton: Boolean,
 )
 
 @Composable
@@ -110,17 +111,19 @@ fun StorageItem(
                     )
                 },
             )
-            IconButton(
-                onClick = {
-                    showDeleteDialog = true
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.action_delete),
-                    )
-                },
-            )
+            if (item.showDeleteButton) {
+                IconButton(
+                    onClick = {
+                        showDeleteDialog = true
+                    },
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.action_delete),
+                        )
+                    },
+                )
+            }
         },
     )
 
@@ -190,6 +193,7 @@ private fun StorageItemPreview() {
             thumbnail = null,
             entriesCount = 123,
             color = Color.Red,
+            showDeleteButton = true,
         ),
         isManga = true,
         onDelete = {

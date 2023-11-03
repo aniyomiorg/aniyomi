@@ -24,7 +24,6 @@ import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.R
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
-import tachiyomi.source.local.io.ArchiveAnime
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import uy.kohesive.injekt.injectLazy
 import java.io.File
@@ -155,9 +154,7 @@ actual class LocalAnimeSource(
 
     // Episodes
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
-        return fileSystem.getFilesInAnimeDirectory(anime.url)
-            // Only keep supported formats
-            .filter { it.isDirectory || ArchiveAnime.isSupported(it) }
+        return fileSystem.getEpisodesInAnimeDirectory(anime.url)
             .map { episodeFile ->
                 SEpisode.create().apply {
                     url = episodeFile.absolutePath

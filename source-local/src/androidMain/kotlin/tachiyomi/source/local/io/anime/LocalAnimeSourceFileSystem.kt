@@ -3,6 +3,7 @@ package tachiyomi.source.local.io.anime
 import android.content.Context
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import tachiyomi.source.local.R
+import tachiyomi.source.local.io.ArchiveAnime
 import java.io.File
 
 actual class LocalAnimeSourceFileSystem(
@@ -35,5 +36,11 @@ actual class LocalAnimeSourceFileSystem(
             .filter { it.isDirectory && it.name == name }
             // Get all the files inside the filtered folders
             .flatMap { it.listFiles().orEmpty().toList() }
+    }
+
+    actual fun getEpisodesInAnimeDirectory(name: String): Sequence<File> {
+        return getFilesInAnimeDirectory(name).filter {
+            it.isDirectory || ArchiveAnime.isSupported(it)
+        }
     }
 }

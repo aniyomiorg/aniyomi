@@ -256,9 +256,7 @@ actual class LocalMangaSource(
 
     // Chapters
     override suspend fun getChapterList(manga: SManga): List<SChapter> {
-        return fileSystem.getFilesInMangaDirectory(manga.url)
-            // Only keep supported formats
-            .filter { it.isDirectory || ArchiveManga.isSupported(it) }
+        return fileSystem.getChaptersInMangaDirectory(manga.url)
             .map { chapterFile ->
                 SChapter.create().apply {
                     url = "${manga.url}/${chapterFile.name}"

@@ -11,4 +11,6 @@ expect class LocalAnimeSourceFileSystem {
     fun getAnimeDirectory(name: String): File?
 
     fun getFilesInAnimeDirectory(name: String): Sequence<File>
+
+    fun getEpisodesInAnimeDirectory(name: String): Sequence<File>
 }

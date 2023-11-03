@@ -29,6 +29,7 @@ abstract class CommonStorageScreenModel<T>(
     private val getCategoryId: T.() -> Long,
     private val getTitle: T.() -> String,
     private val getThumbnail: T.() -> String?,
+    private val isFromLocalSource: T.() -> Boolean,
 ) : StateScreenModel<StorageScreenState>(StorageScreenState.Loading) {
 
     private val selectedCategory = MutableStateFlow(AllCategory)
@@ -66,6 +67,7 @@ abstract class CommonStorageScreenModel<T>(
                                         random.nextInt(255),
                                         random.nextInt(255),
                                     ),
+                                    showDeleteButton = !it.isFromLocalSource(),
                                 )
                             }.sortedByDescending { it.size },
                         )

@@ -142,6 +142,7 @@ private fun StorageScreenContentPreview() {
                         random.nextInt(255),
                         random.nextInt(255),
                     ),
+                    showDeleteButton = true,
                 )
             },
             categories = categories,
@@ -183,6 +184,7 @@ private fun StorageTabletUiScreenContentPreview() {
                         random.nextInt(255),
                         random.nextInt(255),
                     ),
+                    showDeleteButton = true,
                 )
             },
             categories = categories,
