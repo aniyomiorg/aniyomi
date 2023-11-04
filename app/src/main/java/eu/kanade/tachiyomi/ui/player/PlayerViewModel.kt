@@ -109,6 +109,7 @@ class PlayerViewModel(
     val eventFlow = eventChannel.receiveAsFlow()
 
     internal val incognitoMode = basePreferences.incognitoMode().get()
+    private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
@@ -349,9 +350,9 @@ class PlayerViewModel(
     }
 
     private fun downloadNextEpisodes() {
+        if (downloadAheadAmount == 0) return
         val anime = currentAnime ?: return
-        val amount = downloadPreferences.autoDownloadWhileWatching().get()
-        if (amount == 0 || !anime.favorite) return
+
         // Only download ahead if current + next episode is already downloaded too to avoid jank
         if (getCurrentEpisodeIndex() == this.currentPlaylist.lastIndex) return
         val currentEpisode = currentEpisode ?: return
@@ -366,7 +367,7 @@ class PlayerViewModel(
                 return@launchIO
             }
             val episodesToDownload = getNextEpisodes.await(anime.id, nextEpisode.id!!)
-                .take(amount)
+                .take(downloadAheadAmount)
             downloadManager.downloadEpisodes(anime, episodesToDownload)
         }
     }

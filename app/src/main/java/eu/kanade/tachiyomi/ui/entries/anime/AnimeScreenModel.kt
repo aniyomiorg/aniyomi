@@ -136,8 +136,8 @@ class AnimeInfoScreenModel(
     private val processedEpisodes: List<EpisodeItem>?
         get() = successState?.processedEpisodes
 
-    val episodeSwipeEndAction = libraryPreferences.swipeEpisodeEndAction().get()
-    val episodeSwipeStartAction = libraryPreferences.swipeEpisodeStartAction().get()
+    val episodeSwipeStartAction = libraryPreferences.swipeEpisodeEndAction().get()
+    val episodeSwipeEndAction = libraryPreferences.swipeEpisodeStartAction().get()
 
     val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
