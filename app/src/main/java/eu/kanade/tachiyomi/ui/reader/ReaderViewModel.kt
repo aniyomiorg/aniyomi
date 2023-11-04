@@ -25,6 +25,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
+import eu.kanade.tachiyomi.ui.reader.loader.DownloadPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
@@ -204,6 +205,7 @@ class ReaderViewModel(
     }
 
     private val incognitoMode = preferences.incognitoMode().get()
+    private val downloadAheadAmount = downloadPreferences.autoDownloadWhileReading().get()
 
     init {
         // To save state
@@ -444,12 +446,11 @@ class ReaderViewModel(
     }
 
     private fun downloadNextChapters() {
+        if (downloadAheadAmount == 0) return
         val manga = manga ?: return
-        val amount = downloadPreferences.autoDownloadWhileReading().get()
-        if (amount == 0 || !manga.favorite) return
 
         // Only download ahead if current + next chapter is already downloaded too to avoid jank
-        if (getCurrentChapter()?.pageLoader?.isLocal == true) return
+        if (getCurrentChapter()?.pageLoader !is DownloadPageLoader) return
         val nextChapter = state.value.viewerChapters?.nextChapter?.chapter ?: return
 
         viewModelScope.launchIO {
@@ -467,7 +468,7 @@ class ReaderViewModel(
                 } else {
                     this
                 }
-            }.take(amount)
+            }.take(downloadAheadAmount)
             downloadManager.downloadChapters(
                 manga,
                 chaptersToDownload,
