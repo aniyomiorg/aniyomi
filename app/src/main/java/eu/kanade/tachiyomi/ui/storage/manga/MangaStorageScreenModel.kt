@@ -5,6 +5,7 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.storage.CommonStorageScreenModel
 import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.GetVisibleMangaCategories
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.library.manga.LibraryManga
@@ -15,6 +16,7 @@ import uy.kohesive.injekt.api.get
 class MangaStorageScreenModel(
     downloadCache: MangaDownloadCache = Injekt.get(),
     private val getLibraries: GetLibraryManga = Injekt.get(),
+    getCategories: GetMangaCategories = Injekt.get(),
     getVisibleCategories: GetVisibleMangaCategories = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val sourceManager: MangaSourceManager = Injekt.get(),
@@ -22,7 +24,13 @@ class MangaStorageScreenModel(
     downloadCacheChanges = downloadCache.changes,
     downloadCacheIsInitializing = downloadCache.isInitializing,
     libraries = getLibraries.subscribe(),
-    categories = getVisibleCategories.subscribe(),
+    categories = { hideHiddenCategories ->
+        if (hideHiddenCategories) {
+            getVisibleCategories.subscribe()
+        } else {
+            getCategories.subscribe()
+        }
+    },
     getDownloadSize = { downloadManager.getDownloadSize(manga) },
     getDownloadCount = { downloadManager.getDownloadCount(manga) },
     getId = { id },
