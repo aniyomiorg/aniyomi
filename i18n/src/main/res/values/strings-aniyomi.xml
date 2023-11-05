@@ -324,7 +324,7 @@
     <string name="pref_episode_swipe_end">Swipe to right action</string>
     <string name="pref_episode_swipe_start">Swipe to left action</string>
 
-    <string name="pref_category_hide_hidden">Hide hidden categories from categories screen</string>
+    <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
 
 
     <!-- Subtitle settings -->

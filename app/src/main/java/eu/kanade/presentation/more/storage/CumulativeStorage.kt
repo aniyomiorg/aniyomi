@@ -31,15 +31,14 @@ fun CumulativeStorage(
             Canvas(
                 modifier = Modifier.aspectRatio(1f),
                 onDraw = {
+                    // don't bother drawing if there's no data
+                    if (totalSize == 0f) return@Canvas
+
                     val totalAngle = 180f
                     var currentAngle = 0f
                     rotate(180f) {
                         for (item in items) {
-                            val itemAngle = if (totalSize > 0f) {
-                                (item.size / totalSize) * totalAngle
-                            } else {
-                                0f
-                            }
+                            val itemAngle = (item.size / totalSize) * totalAngle
                             drawArc(
                                 color = item.color,
                                 startAngle = currentAngle,
