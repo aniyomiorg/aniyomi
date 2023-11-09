@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okio.Buffer
 import rx.subjects.PublishSubject
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
@@ -64,7 +64,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * This class is the one in charge of downloading episodes.
  *
  * Its queue contains the list of episodes to download. In order to download them, the downloader
- * subscription must be running and the list of episodes must be sent to them by [downloadsRelay].
+ * subscription must be running and the list of episodes must be sent to them by [downloaderJob].
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
@@ -75,7 +75,6 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val episodeCache: EpisodeCache = Injekt.get(),
-    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
 
     /**
@@ -631,23 +630,47 @@ class AnimeDownloader(
     }
 
     private suspend fun newDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
-        return if (isHls(video) || isMpd(video)) {
-            ffmpegDownload(video, download, tmpDir, filename)
+        // Check if the download is paused before starting
+        while (isPaused) {
+            delay(1000) // This is a pause check delay, adjust the timing as needed.
+        }
+
+        if (isHls(video) || isMpd(video)) {
+            return ffmpegDownload(video, download, tmpDir, filename)
         } else {
             val response = download.source.fetchVideo(video)
             val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
+
+            // Write to file with pause/resume capability
             try {
-                response.body.source().saveTo(file.openOutputStream(true))
-                // val extension = getImageExtension(response, file)
-                // TODO: support other file formats!!
+                response.body.source().use { source ->
+                    file.openOutputStream(true).use { output ->
+                        val buffer = Buffer()
+                        var totalBytesRead = 0L
+                        var bytesRead: Int
+                        val bufferSize = 4 * 1024
+                        while (source.read(buffer, bufferSize.toLong()).also { bytesRead = it.toInt() } != -1L) {
+                            // Check if the download is paused, if so, wait
+                            while (isPaused) {
+                                delay(1000) // Wait for 1 second before checking again
+                            }
+
+                            // Write the bytes to the file
+                            output.write(bytesRead)
+                            totalBytesRead += bytesRead
+                            video.progress = (totalBytesRead * 100 / response.body.contentLength()).toInt()
+                            // Update progress here if needed
+                        }
+                    }
+                }
+                // After download is complete, rename the file to its final name
                 file.renameTo("$filename.mp4")
+                return file
             } catch (e: Exception) {
                 response.close()
                 if (!queueState.value.equals(download)) file.delete()
-                // file.delete()
                 throw e
             }
-            file
         }
     }
 
