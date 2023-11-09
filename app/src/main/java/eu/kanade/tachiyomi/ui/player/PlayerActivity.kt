@@ -645,8 +645,11 @@ class PlayerActivity : BaseActivity() {
                     override fun onSkipToPrevious() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
-                                MPVLib.command(arrayOf("add", "chapter", "-1"))
-                                skipAnimation(getString(R.string.go_to_previous_chapter), isForward = false)
+                                doubleTapSeek(
+                                    -1,
+                                    videoChapterText = getString(R.string.go_to_previous_chapter),
+                                    chapterSeek = "-1",
+                                )
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
@@ -656,11 +659,13 @@ class PlayerActivity : BaseActivity() {
                     override fun onSkipToNext() {
                         if (playerPreferences.mediaChapterSeek().get()) {
                             if (player.loadChapters().isNotEmpty()) {
-                                MPVLib.command(arrayOf("add", "chapter", "1"))
-                                skipAnimation(getString(R.string.go_to_next_chapter), isForward = true)
+                                doubleTapSeek(
+                                    1,
+                                    videoChapterText = getString(R.string.go_to_next_chapter),
+                                    chapterSeek = "1",
+                                )
                             } else {
-                                MPVLib.command(arrayOf("seek", viewModel.getAnimeSkipIntroLength().toString(), "relative+exact"))
-                                skipAnimation(getString(R.string.go_to_after_opening), isForward = true)
+                                doubleTapSeek(viewModel.getAnimeSkipIntroLength())
                             }
                         } else {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
@@ -1028,6 +1033,7 @@ class PlayerActivity : BaseActivity() {
         event: MotionEvent? = null,
         isDoubleTap: Boolean = true,
         videoChapterText: String? = null,
+        chapterSeek: String? = null,
     ) {
         if (SeekState.mode != SeekState.DOUBLE_TAP) {
             doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
@@ -1082,7 +1088,7 @@ class PlayerActivity : BaseActivity() {
                 binding.secondsView.seconds += time
             }
         }
-        if (videoChapterText == null) {
+        if (videoChapterText == null || chapterSeek != null) {
             playerControls.hideUiForSeek()
         }
         binding.secondsView.start()
@@ -1091,34 +1097,11 @@ class PlayerActivity : BaseActivity() {
         ObjectAnimator.ofFloat(view, "alpha", 0f, 0.15f).setDuration(500).start()
         ObjectAnimator.ofFloat(view, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
 
-        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
-    }
-
-    // Taken from util/AniSkipApi.kt
-    private fun skipAnimation(skipText: String, isForward: Boolean) {
-        binding.secondsView.binding.doubleTapSeconds.text = skipText
-
-        binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
-            rightToRight = if (isForward) ConstraintLayout.LayoutParams.PARENT_ID else ConstraintLayout.LayoutParams.UNSET
-            leftToLeft = if (isForward) ConstraintLayout.LayoutParams.UNSET else ConstraintLayout.LayoutParams.PARENT_ID
+        if (chapterSeek == null) {
+            MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
+        } else {
+            MPVLib.command(arrayOf("add", "chapter", chapterSeek))
         }
-        binding.secondsView.visibility = View.VISIBLE
-        binding.secondsView.isForward = isForward
-
-        val bindingBg = if (isForward) binding.ffwdBg else binding.rewBg
-
-        bindingBg.visibility = View.VISIBLE
-        bindingBg.animate().alpha(0.15f).setDuration(100).withEndAction {
-            binding.secondsView.animate().alpha(1f).setDuration(500).withEndAction {
-                binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
-                    bindingBg.animate().alpha(0f).setDuration(100).withEndAction {
-                        bindingBg.visibility = View.GONE
-                        binding.secondsView.visibility = View.GONE
-                        binding.secondsView.alpha = 1f
-                    }
-                }
-            }
-        }.start()
     }
 
     // Gesture Functions -- Start --
