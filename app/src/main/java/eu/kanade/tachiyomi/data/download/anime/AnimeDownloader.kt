@@ -64,7 +64,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * This class is the one in charge of downloading episodes.
  *
  * Its queue contains the list of episodes to download. In order to download them, the downloader
- * subscription must be running and the list of episodes must be sent to them by [downloadsRelay].
+ * subscription must be running and the list of episodes must be sent to them by [downloaderJob].
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
@@ -75,7 +75,6 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val episodeCache: EpisodeCache = Injekt.get(),
-    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
 
     /**
