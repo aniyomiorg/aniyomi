@@ -648,7 +648,7 @@ class PlayerActivity : BaseActivity() {
                                 doubleTapSeek(
                                     -1,
                                     videoChapterText = getString(R.string.go_to_previous_chapter),
-                                    chapterSeek = "-1"
+                                    chapterSeek = "-1",
                                 )
                             }
                         } else {
