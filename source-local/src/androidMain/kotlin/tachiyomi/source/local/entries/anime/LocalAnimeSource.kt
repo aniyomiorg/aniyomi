@@ -142,7 +142,7 @@ actual class LocalAnimeSource(
         val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url).toList()
 
         animeDirFiles
-            .firstOrNull { it.extension == "json" }
+            .firstOrNull { it.extension == "json" && it.nameWithoutExtension == "details" }
             ?.let { file ->
                 json.decodeFromStream<AnimeDetails>(file.inputStream()).run {
                     title?.let { anime.title = it }
