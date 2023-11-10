@@ -196,7 +196,6 @@ actual class LocalAnimeSource(
                             scanlator = data.scanlator
                         }
                     }
-                    scanlator = episodeFile.absolutePath.split("/").last()
                 }
             }
             .sortedWith { e1, e2 ->
