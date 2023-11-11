@@ -17,6 +17,7 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
+import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
@@ -28,7 +29,10 @@ import tachiyomi.source.local.io.ArchiveAnime
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 actual class LocalAnimeSource(
     private val context: Context,
@@ -138,7 +142,7 @@ actual class LocalAnimeSource(
         val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url).toList()
 
         animeDirFiles
-            .firstOrNull { it.extension == "json" }
+            .firstOrNull { it.extension == "json" && it.nameWithoutExtension == "details" }
             ?.let { file ->
                 json.decodeFromStream<AnimeDetails>(file.inputStream()).run {
                     title?.let { anime.title = it }
@@ -155,6 +159,15 @@ actual class LocalAnimeSource(
 
     // Episodes
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
+        val episodesData = fileSystem.getFilesInAnimeDirectory(anime.url)
+            .firstOrNull {
+                it.extension == "json" && it.nameWithoutExtension == "episodes"
+            }?.let { file ->
+                runCatching {
+                    json.decodeFromStream<List<EpisodeDetails>>(file.inputStream())
+                }.getOrNull()
+            }
+
         return fileSystem.getFilesInAnimeDirectory(anime.url)
             // Only keep supported formats
             .filter { it.isDirectory || ArchiveAnime.isSupported(it) }
@@ -168,11 +181,21 @@ actual class LocalAnimeSource(
                     }
                     date_upload = episodeFile.lastModified()
 
-                    episode_number = EpisodeRecognition.parseEpisodeNumber(
+                    val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
                         anime.title,
                         this.name,
                         this.episode_number,
                     )
+                    episode_number = episodeNumber
+
+                    // Overwrite data from episodes.json file
+                    episodesData?.also { dataList ->
+                        dataList.firstOrNull { it.episode_number.equalsTo(episodeNumber) }?.also { data ->
+                            data.name?.also { name = it }
+                            data.date_upload?.also { date_upload = parseDate(it) }
+                            scanlator = data.scanlator
+                        }
+                    }
                 }
             }
             .sortedWith { e1, e2 ->
@@ -180,6 +203,14 @@ actual class LocalAnimeSource(
                 if (e == 0) e2.name.compareToCaseInsensitiveNaturalOrder(e1.name) else e
             }
             .toList()
+    }
+
+    private fun parseDate(isoDate: String): Long {
+        return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(isoDate)?.time ?: 0L
+    }
+
+    private fun Float.equalsTo(other: Float): Boolean {
+        return abs(this - other) < 0.0001
     }
 
     // Filters
