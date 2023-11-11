@@ -96,7 +96,7 @@ interface AnimeTrackService {
     }
 
     suspend fun setRemoteLastEpisodeSeen(track: AnimeTrack, episodeNumber: Int) {
-        if (track.last_episode_seen == 0F && track.last_episode_seen < episodeNumber && track.status != getRewatchingStatus()) {
+        if (track.last_episode_seen == 0f && track.last_episode_seen < episodeNumber && track.status != getRewatchingStatus()) {
             track.status = getWatchingStatus()
         }
         track.last_episode_seen = episodeNumber.toFloat()
