@@ -428,7 +428,7 @@ class ReaderViewModel(
 
         // Save last page read and mark as read if needed
         viewModelScope.launchNonCancellable {
-            updateChapterProgress(page.index)
+            updateChapterProgress(selectedChapter, page)
         }
 
         if (selectedChapter != getCurrentChapter()) {
@@ -508,15 +508,15 @@ class ReaderViewModel(
      * Saves the chapter progress (last read page and whether it's read)
      * if incognito mode isn't on.
      */
-    private suspend fun updateChapterProgress(pageIndex: Int) {
-        val readerChapter = getCurrentChapter() ?: return
+    private suspend fun updateChapterProgress(readerChapter: ReaderChapter, page: Page) {
+        val pageIndex = page.index
 
         mutableState.update {
             it.copy(currentPage = pageIndex + 1)
         }
+        readerChapter.requestedPage = pageIndex
 
-        if (!incognitoMode) {
-            readerChapter.requestedPage = pageIndex
+        if (!incognitoMode && page.status != Page.State.ERROR) {
             readerChapter.chapter.last_page_read = pageIndex
 
             if (readerChapter.pages?.lastIndex == pageIndex) {
@@ -529,7 +529,6 @@ class ReaderViewModel(
                 ChapterUpdate(
                     id = readerChapter.chapter.id!!,
                     read = readerChapter.chapter.read,
-                    bookmark = readerChapter.chapter.bookmark,
                     lastPageRead = readerChapter.chapter.last_page_read.toLong(),
                 ),
             )
