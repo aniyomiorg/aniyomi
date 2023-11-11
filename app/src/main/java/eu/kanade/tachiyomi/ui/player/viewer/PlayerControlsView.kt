@@ -123,7 +123,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
 
-        binding.tracksBtn.setOnClickListener { activity.viewModel.showTracksCatalog() }
+        binding.streamsBtn.setOnClickListener { activity.viewModel.showStreamsCatalog() }
 
         binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
 

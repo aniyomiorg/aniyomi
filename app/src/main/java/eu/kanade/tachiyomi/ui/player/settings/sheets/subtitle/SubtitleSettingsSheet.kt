@@ -63,7 +63,7 @@ fun SubtitleSettingsSheet(
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
-                0 -> SubtitleDelayPage(screenModel)
+                0 -> StreamsDelayPage(screenModel)
                 1 -> SubtitleFontPage(screenModel)
                 2 -> SubtitleColorPage(screenModel)
             }
