@@ -223,7 +223,7 @@ private fun ColumnScope.WebtoonViewerSettings(screenModel: ReaderSettingsScreenM
 
     if (dualPageSplitWebtoon) {
         val dualPageInvertWebtoon by screenModel.preferences.dualPageInvertWebtoon()
-                .collectAsState()
+            .collectAsState()
         CheckboxItem(
             label = stringResource(R.string.pref_dual_page_invert),
             checked = dualPageInvertWebtoon,
@@ -235,7 +235,7 @@ private fun ColumnScope.WebtoonViewerSettings(screenModel: ReaderSettingsScreenM
 
     if (!isReleaseBuildType) {
         val longStripSplitWebtoon by screenModel.preferences.longStripSplitWebtoon()
-                .collectAsState()
+            .collectAsState()
         CheckboxItem(
             label = stringResource(R.string.pref_long_strip_split),
             checked = longStripSplitWebtoon,
