@@ -1,9 +1,9 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
-import tachiyomi.core.preference.TriState
 import java.io.Serializable
 import kotlin.math.pow
 
