@@ -41,8 +41,8 @@ data class BackupEpisode(
     }
 }
 
-val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean, bookmark:
-Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Float, source_order: Long, dateFetch: Long, dateUpload: Long, lastModifiedAt: Long ->
+val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean,
+    bookmark: Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Float, source_order: Long, dateFetch: Long, dateUpload: Long, lastModifiedAt: Long, ->
     BackupEpisode(
         url = url,
         name = name,
