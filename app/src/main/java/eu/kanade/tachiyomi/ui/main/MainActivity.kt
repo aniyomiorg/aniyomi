@@ -138,6 +138,10 @@ class MainActivity : BaseActivity() {
     private val connectionsPreferences: ConnectionsPreferences by injectLazy()
     // <-- AM (CONNECTIONS)
 
+    init {
+        registerSecureActivity(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val isLaunch = savedInstanceState == null
 
@@ -507,10 +511,6 @@ class MainActivity : BaseActivity() {
 
         ready = true
         return true
-    }
-
-    init {
-        registerSecureActivity(this)
     }
 
     companion object {
