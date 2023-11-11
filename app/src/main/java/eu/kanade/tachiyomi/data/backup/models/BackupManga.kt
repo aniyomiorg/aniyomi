@@ -40,6 +40,8 @@ data class BackupManga(
     @ProtoNumber(103) var viewer_flags: Int? = null,
     @ProtoNumber(104) var history: List<BackupHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
+    @ProtoNumber(106) var lastModifiedAt: Long = 0,
+    @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
 
     @ProtoNumber(602) var customStatus: Int = 0,
 
@@ -69,6 +71,8 @@ data class BackupManga(
             viewerFlags = (this@BackupManga.viewer_flags ?: this@BackupManga.viewer).toLong(),
             chapterFlags = this@BackupManga.chapterFlags.toLong(),
             updateStrategy = this@BackupManga.updateStrategy,
+            lastModifiedAt = this@BackupManga.lastModifiedAt,
+            favoriteModifiedAt = this@BackupManga.favoriteModifiedAt,
         )
     }
 
@@ -127,6 +131,8 @@ data class BackupManga(
                 viewer_flags = manga.viewerFlags.toInt(),
                 chapterFlags = manga.chapterFlags.toInt(),
                 updateStrategy = manga.updateStrategy,
+                lastModifiedAt = manga.lastModifiedAt,
+                favoriteModifiedAt = manga.favoriteModifiedAt,
             ).also { backupManga ->
                 customMangaInfo?.let {
                     backupManga.customTitle = it.title

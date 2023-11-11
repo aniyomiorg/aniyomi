@@ -30,6 +30,8 @@ data class Anime(
     val thumbnailUrl: String?,
     val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
+    val lastModifiedAt: Long,
+    val favoriteModifiedAt: Long?,
 ) : Serializable {
 
     // SY -->
@@ -157,6 +159,8 @@ data class Anime(
             thumbnailUrl = null,
             updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
+            lastModifiedAt = 0L,
+            favoriteModifiedAt = null,
         )
 
         // SY -->

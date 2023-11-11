@@ -12,12 +12,22 @@ CREATE TABLE episodes(
     source_order INTEGER NOT NULL,
     date_fetch INTEGER AS Long NOT NULL,
     date_upload INTEGER AS Long NOT NULL,
+    last_modified_at INTEGER AS Long NOT NULL,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
 
 CREATE INDEX episodes_anime_id_index ON episodes(anime_id);
 CREATE INDEX episodes_unseen_by_anime_index ON episodes(anime_id, seen) WHERE seen = 0;
+
+CREATE TRIGGER update_last_modified_at_episodes
+AFTER UPDATE ON episodes
+FOR EACH ROW
+BEGIN
+  UPDATE episodes
+  SET last_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
 
 getEpisodeById:
 SELECT *
@@ -52,8 +62,8 @@ DELETE FROM episodes
 WHERE _id IN :episodeIds;
 
 insert:
-INSERT INTO episodes(anime_id,url,name,scanlator,seen,bookmark,last_second_seen,total_seconds,episode_number,source_order,date_fetch,date_upload)
-VALUES (:animeId,:url,:name,:scanlator,:seen,:bookmark,:lastSecondSeen,:totalSeconds,:episodeNumber,:sourceOrder,:dateFetch,:dateUpload);
+INSERT INTO episodes(anime_id, url, name, scanlator, seen, bookmark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at)
+VALUES (:animeId, :url, :name, :scanlator, :seen, :bookmark, :lastSecondSeen, :totalSeconds, :episodeNumber, :sourceOrder, :dateFetch, :dateUpload, strftime('%s', 'now'));
 
 update:
 UPDATE episodes
