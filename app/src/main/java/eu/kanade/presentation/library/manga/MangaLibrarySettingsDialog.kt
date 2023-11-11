@@ -7,21 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsScreenModel
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -31,6 +28,7 @@ import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun MangaLibrarySettingsDialog(
@@ -76,7 +74,7 @@ private fun ColumnScope.FilterPage(
     TriStateItem(
         label = stringResource(R.string.label_downloaded),
         state = if (downloadedOnly) {
-            TriStateFilter.ENABLED_IS
+            TriState.ENABLED_IS
         } else {
             filterDownloaded
         },

@@ -68,16 +68,7 @@ abstract class MangaSearchScreenModel<T>(
         val enabledSources = getEnabledSources()
 
         if (filter.isEmpty()) {
-            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedMangaSourcesOnly().get()
-            val pinnedSources = sourcePreferences.pinnedMangaSources().get()
-
-            return enabledSources.filter {
-                if (shouldSearchPinnedOnly) {
-                    "${it.id}" in pinnedSources
-                } else {
-                    true
-                }
-            }
+            return enabledSources
         }
 
         return extensionManager.installedExtensionsFlow.value
@@ -134,6 +125,11 @@ abstract class MangaSearchScreenModel<T>(
                 }.awaitAll()
         }
     }
+}
+
+enum class MangaSourceFilter {
+    All,
+    PinnedOnly,
 }
 
 sealed class MangaSearchItemResult {

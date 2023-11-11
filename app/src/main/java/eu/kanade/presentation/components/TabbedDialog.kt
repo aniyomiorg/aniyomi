@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -46,6 +47,7 @@ fun TabbedDialog(
     onOverflowMenuClicked: (() -> Unit)? = null,
     overflowIcon: ImageVector? = null,
     hideSystemBars: Boolean = false,
+    pagerState: PagerState = rememberPagerState { tabTitles.size },
     content: @Composable (Int) -> Unit,
 ) {
     AdaptiveSheet(
@@ -53,7 +55,6 @@ fun TabbedDialog(
         onDismissRequest = onDismissRequest,
     ) {
         val scope = rememberCoroutineScope()
-        val pagerState = rememberPagerState { tabTitles.size }
 
         Column {
             Row {

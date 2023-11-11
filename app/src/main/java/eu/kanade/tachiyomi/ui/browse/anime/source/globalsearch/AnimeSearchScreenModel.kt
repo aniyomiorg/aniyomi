@@ -68,16 +68,7 @@ abstract class AnimeSearchScreenModel<T>(
         val enabledSources = getEnabledSources()
 
         if (filter.isEmpty()) {
-            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedAnimeSourcesOnly().get()
-            val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
-
-            return enabledSources.filter {
-                if (shouldSearchPinnedOnly) {
-                    "${it.id}" in pinnedSources
-                } else {
-                    true
-                }
-            }
+            return enabledSources
         }
 
         return extensionManager.installedExtensionsFlow.value
@@ -134,6 +125,11 @@ abstract class AnimeSearchScreenModel<T>(
                 }.awaitAll()
         }
     }
+}
+
+enum class AnimeSourceFilter {
+    All,
+    PinnedOnly,
 }
 
 sealed class AnimeSearchItemResult {

@@ -18,17 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.presentation.components.SelectItem
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.core.preference.TriState
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.CollapsibleBox
 import tachiyomi.presentation.core.components.HeadingItem
+import tachiyomi.presentation.core.components.SelectItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TextItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun SourceFilterAnimeDialog(
@@ -165,19 +165,19 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
     }
 }
 
-private fun Int.toTriStateFilter(): TriStateFilter {
+private fun Int.toTriStateFilter(): TriState {
     return when (this) {
-        AnimeFilter.TriState.STATE_IGNORE -> TriStateFilter.DISABLED
-        AnimeFilter.TriState.STATE_INCLUDE -> TriStateFilter.ENABLED_IS
-        AnimeFilter.TriState.STATE_EXCLUDE -> TriStateFilter.ENABLED_NOT
+        AnimeFilter.TriState.STATE_IGNORE -> TriState.DISABLED
+        AnimeFilter.TriState.STATE_INCLUDE -> TriState.ENABLED_IS
+        AnimeFilter.TriState.STATE_EXCLUDE -> TriState.ENABLED_NOT
         else -> throw IllegalStateException("Unknown TriState state: $this")
     }
 }
 
-private fun TriStateFilter.toTriStateInt(): Int {
+private fun TriState.toTriStateInt(): Int {
     return when (this) {
-        TriStateFilter.DISABLED -> AnimeFilter.TriState.STATE_IGNORE
-        TriStateFilter.ENABLED_IS -> AnimeFilter.TriState.STATE_INCLUDE
-        TriStateFilter.ENABLED_NOT -> AnimeFilter.TriState.STATE_EXCLUDE
+        TriState.DISABLED -> AnimeFilter.TriState.STATE_IGNORE
+        TriState.ENABLED_IS -> AnimeFilter.TriState.STATE_INCLUDE
+        TriState.ENABLED_NOT -> AnimeFilter.TriState.STATE_EXCLUDE
     }
 }

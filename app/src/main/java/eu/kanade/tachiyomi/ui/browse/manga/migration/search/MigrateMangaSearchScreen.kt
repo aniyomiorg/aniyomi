@@ -10,6 +10,7 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSearchScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 
+// TODO: this should probably be merged with GlobalSearchScreen somehow to dedupe logic
 class MigrateSearchScreen(private val mangaId: Long) : Screen() {
 
     @Composable

@@ -1,8 +1,8 @@
 package tachiyomi.domain.library.service
 
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getEnum
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
@@ -110,60 +110,60 @@ class LibraryPreferences(
     // Mixture Filter
 
     fun filterDownloadedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_downloaded_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_downloaded_v2", TriState.DISABLED)
 
     fun filterDownloadedManga() =
-        preferenceStore.getEnum("pref_filter_library_downloaded_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_downloaded_v2", TriState.DISABLED)
 
     fun filterUnseen() =
-        preferenceStore.getEnum("pref_filter_animelib_unread_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_unread_v2", TriState.DISABLED)
 
     fun filterUnread() =
-        preferenceStore.getEnum("pref_filter_library_unread_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_unread_v2", TriState.DISABLED)
 
     fun filterStartedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_started_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_started_v2", TriState.DISABLED)
 
     fun filterStartedManga() =
-        preferenceStore.getEnum("pref_filter_library_started_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_started_v2", TriState.DISABLED)
 
     fun filterBookmarkedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_bookmarked_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_bookmarked_v2", TriState.DISABLED)
 
     fun filterBookmarkedManga() =
-        preferenceStore.getEnum("pref_filter_library_bookmarked_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_bookmarked_v2", TriState.DISABLED)
 
     fun filterCompletedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_completed_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_completed_v2", TriState.DISABLED)
 
     fun filterCompletedManga() =
-        preferenceStore.getEnum("pref_filter_library_completed_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_completed_v2", TriState.DISABLED)
 
-    fun filterIntervalCustomAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_custom", TriStateFilter.DISABLED)
+    fun filterIntervalCustomAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_custom", TriState.DISABLED)
 
-    fun filterIntervalCustomManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_custom", TriStateFilter.DISABLED)
+    fun filterIntervalCustomManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_custom", TriState.DISABLED)
 
-    fun filterIntervalLongAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_long", TriStateFilter.DISABLED)
+    fun filterIntervalLongAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_long", TriState.DISABLED)
 
-    fun filterIntervalLongManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_long", TriStateFilter.DISABLED)
+    fun filterIntervalLongManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_long", TriState.DISABLED)
 
-    fun filterIntervalLateAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_late", TriStateFilter.DISABLED)
+    fun filterIntervalLateAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_late", TriState.DISABLED)
 
-    fun filterIntervalLateManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_late", TriStateFilter.DISABLED)
+    fun filterIntervalLateManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_late", TriState.DISABLED)
 
-    fun filterIntervalDroppedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_dropped", TriStateFilter.DISABLED)
+    fun filterIntervalDroppedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_dropped", TriState.DISABLED)
 
-    fun filterIntervalDroppedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_dropped", TriStateFilter.DISABLED)
+    fun filterIntervalDroppedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_dropped", TriState.DISABLED)
 
-    fun filterIntervalPassedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_passed", TriStateFilter.DISABLED)
+    fun filterIntervalPassedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_passed", TriState.DISABLED)
 
-    fun filterIntervalPassedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_passed", TriStateFilter.DISABLED)
+    fun filterIntervalPassedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_passed", TriState.DISABLED)
 
     fun filterTrackedAnime(id: Int) =
-        preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriState.DISABLED)
 
     fun filterTrackedManga(id: Int) =
-        preferenceStore.getEnum("pref_filter_library_tracked_${id}_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_tracked_${id}_v2", TriState.DISABLED)
 
     // Mixture Update Count
 

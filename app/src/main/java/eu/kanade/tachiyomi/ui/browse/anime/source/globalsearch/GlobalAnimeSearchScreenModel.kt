@@ -3,7 +3,12 @@ package eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch
 import androidx.compose.runtime.Immutable
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
@@ -15,14 +20,21 @@ class GlobalAnimeSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-) : AnimeSearchScreenModel<GlobalAnimeSearchState>(
-    GlobalAnimeSearchState(
+) : AnimeSearchScreenModel<GlobalAnimeSearchScreenModel.State>(
+    State(
         searchQuery = initialQuery,
     ),
 ) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
+
+    val searchPagerFlow = state.map { Pair(it.onlyShowHasResults, it.items) }
+        .distinctUntilChanged()
+        .map { (onlyShowHasResults, items) ->
+            items.filter { (_, result) -> result.isVisible(onlyShowHasResults) }
+        }
+        .stateIn(ioCoroutineScope, SharingStarted.Lazily, state.value.items)
 
     init {
         extensionFilter = initialExtensionFilter
@@ -37,6 +49,7 @@ class GlobalAnimeSearchScreenModel(
         val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
 
         return sourceManager.getCatalogueSources()
+            .filter { mutableState.value.sourceFilter != AnimeSourceFilter.PinnedOnly || "${it.id}" in pinnedSources }
             .filter { it.lang in enabledLanguages }
             .filterNot { "${it.id}" in disabledSources }
             .sortedWith(compareBy({ "${it.id}" !in pinnedSources }, { "${it.name.lowercase()} (${it.lang})" }))
@@ -57,15 +70,29 @@ class GlobalAnimeSearchScreenModel(
     override fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult> {
         return mutableState.value.items
     }
-}
 
-@Immutable
-data class GlobalAnimeSearchState(
-    val searchQuery: String? = null,
-    val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
-) {
+    fun setSourceFilter(filter: AnimeSourceFilter) {
+        mutableState.update { it.copy(sourceFilter = filter) }
+    }
 
-    val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
+    fun toggleFilterResults() {
+        mutableState.update {
+            it.copy(onlyShowHasResults = !it.onlyShowHasResults)
+        }
+    }
 
-    val total: Int = items.size
+    private fun AnimeSearchItemResult.isVisible(onlyShowHasResults: Boolean): Boolean {
+        return !onlyShowHasResults || (this is AnimeSearchItemResult.Success && !this.isEmpty)
+    }
+
+    @Immutable
+    data class State(
+        val searchQuery: String? = null,
+        val sourceFilter: AnimeSourceFilter = AnimeSourceFilter.PinnedOnly,
+        val onlyShowHasResults: Boolean = false,
+        val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    ) {
+        val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
+        val total: Int = items.size
+    }
 }

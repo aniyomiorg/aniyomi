@@ -6,12 +6,12 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.preference.toggle
 import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.manga.interactor.SetMangaDisplayMode
 import tachiyomi.domain.category.manga.interactor.SetSortModeForMangaCategory
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -33,7 +33,7 @@ class MangaLibrarySettingsScreenModel(
         preference(libraryPreferences).toggle()
     }
 
-    fun toggleFilter(preference: (LibraryPreferences) -> Preference<TriStateFilter>) {
+    fun toggleFilter(preference: (LibraryPreferences) -> Preference<TriState>) {
         preference(libraryPreferences).getAndSet {
             it.next()
         }

@@ -373,7 +373,7 @@
     <string name="tapping_inverted_vertical">Vertical</string>
     <string name="tapping_inverted_both">Both</string>
     <string name="pref_reader_actions">Actions</string>
-    <string name="pref_read_with_long_tap">Show on long tap</string>
+    <string name="pref_read_with_long_tap">Show on actions long tap</string>
     <string name="pref_create_folder_per_manga">Save pages into separate folders</string>
     <string name="pref_create_folder_per_manga_summary">Creates folders according to entries\' title</string>
     <string name="pref_reader_theme">Background color</string>
@@ -431,12 +431,6 @@
     <string name="pref_category_reading_mode">Reading mode</string>
     <string name="pref_category_reading">Reading</string>
     <string name="pref_webtoon_side_padding">Side padding</string>
-    <string name="webtoon_side_padding_0">None</string>
-    <string name="webtoon_side_padding_5">5%</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_25">25%</string>
     <string name="pref_hide_threshold">Sensitivity for hiding menu on scroll</string>
     <string name="pref_highest">Highest</string>
     <string name="pref_high">High</string>
@@ -479,7 +473,6 @@
     <string name="action_track">Track</string>
 
     <!-- Browse section -->
-    <string name="pref_search_pinned_sources_only">Only search pinned sources in global search</string>
     <string name="pref_hide_in_library_items">Hide entries already in library</string>
 
     <!-- Backup section -->
@@ -620,6 +613,7 @@
     <string name="latest">Latest</string>
     <string name="popular">Popular</string>
     <string name="browse">Browse</string>
+    <string name="has_results">Has results</string>
     <string name="local_source_help_guide">Local source guide</string>
     <string name="no_pinned_sources">You have no pinned sources</string>
     <string name="chapter_not_found">Chapter not found</string>

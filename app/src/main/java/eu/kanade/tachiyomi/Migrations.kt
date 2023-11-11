@@ -23,12 +23,11 @@ import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.workManager
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getEnum
 import tachiyomi.domain.backup.service.BackupPreferences
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
-import uy.kohesive.injekt.api.get
 import java.io.File
 
 object Migrations {
@@ -434,12 +433,12 @@ object Migrations {
                                 remove(key)
 
                                 val newValue = when (pref.get()) {
-                                    1 -> TriStateFilter.ENABLED_IS
-                                    2 -> TriStateFilter.ENABLED_NOT
-                                    else -> TriStateFilter.DISABLED
+                                    1 -> TriState.ENABLED_IS
+                                    2 -> TriState.ENABLED_NOT
+                                    else -> TriState.DISABLED
                                 }
 
-                                preferenceStore.getEnum("${key}_v2", TriStateFilter.DISABLED).set(newValue)
+                                preferenceStore.getEnum("${key}_v2", TriState.DISABLED).set(newValue)
                             }
                         }
                     }

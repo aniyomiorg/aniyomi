@@ -1,55 +1,89 @@
 package eu.kanade.tachiyomi.ui.reader.setting
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.CommonTabbedSheetBinding
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import eu.kanade.domain.entries.manga.model.orientationType
+import eu.kanade.domain.entries.manga.model.readingModeType
+import eu.kanade.tachiyomi.databinding.ReaderReadingModeSettingsBinding
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.widget.ViewPagerAdapter
-import eu.kanade.tachiyomi.widget.sheet.BaseBottomSheetDialog
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
+import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import uy.kohesive.injekt.injectLazy
 
 class ReaderSettingsSheet(
     private val activity: ReaderActivity,
-) : BaseBottomSheetDialog(activity) {
+) : BottomSheetDialog(activity) {
 
-    private val tabs = listOf(
-        ReaderReadingModeSettings(activity) to R.string.pref_category_reading_mode,
-        ReaderGeneralSettings(activity) to R.string.pref_category_general,
-    )
+    private val readerPreferences: ReaderPreferences by injectLazy()
 
-    private lateinit var binding: CommonTabbedSheetBinding
-
-    override fun createView(inflater: LayoutInflater): View {
-        binding = CommonTabbedSheetBinding.inflate(activity.layoutInflater)
-
-        val adapter = Adapter()
-        binding.pager.adapter = adapter
-        binding.tabs.setupWithViewPager(binding.pager)
-
-        return binding.root
-    }
+    private lateinit var binding: ReaderReadingModeSettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        behavior.isFitToContents = false
-        behavior.halfExpandedRatio = 0.25f
+        binding = ReaderReadingModeSettingsBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
+
+        initGeneralPreferences()
+
+        when (activity.viewModel.state.value.viewer) {
+            is PagerViewer -> initPagerPreferences()
+            is WebtoonViewer -> initWebtoonPreferences()
+        }
     }
 
-    private inner class Adapter : ViewPagerAdapter() {
+    private fun initGeneralPreferences() {
+        binding.viewer.onItemSelectedListener = { position ->
+            val readingModeType = ReadingModeType.fromSpinner(position)
+            activity.viewModel.setMangaReadingMode(readingModeType.flagValue)
 
-        override fun createView(container: ViewGroup, position: Int): View {
-            return tabs[position].first
+            val mangaViewer = activity.viewModel.getMangaReadingMode()
+            if (mangaViewer == ReadingModeType.WEBTOON.flagValue || mangaViewer == ReadingModeType.CONTINUOUS_VERTICAL.flagValue) {
+                initWebtoonPreferences()
+            } else {
+                initPagerPreferences()
+            }
         }
+        binding.viewer.setSelection(activity.viewModel.manga?.readingModeType?.let { ReadingModeType.fromPreference(it.toInt()).prefValue } ?: ReadingModeType.DEFAULT.prefValue)
 
-        override fun getCount(): Int {
-            return tabs.size
+        binding.rotationMode.onItemSelectedListener = { position ->
+            val rotationType = OrientationType.fromSpinner(position)
+            activity.viewModel.setMangaOrientationType(rotationType.flagValue)
         }
+        binding.rotationMode.setSelection(activity.viewModel.manga?.orientationType?.let { OrientationType.fromPreference(it.toInt()).prefValue } ?: OrientationType.DEFAULT.prefValue)
+    }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return activity.resources!!.getString(tabs[position].second)
-        }
+    private fun initPagerPreferences() {
+        binding.webtoonPrefsGroup.root.isVisible = false
+        binding.pagerPrefsGroup.root.isVisible = true
+
+        binding.pagerPrefsGroup.tappingInverted.bindToPreference(readerPreferences.pagerNavInverted(), ReaderPreferences.TappingInvertMode::class.java)
+
+        binding.pagerPrefsGroup.pagerNav.bindToPreference(readerPreferences.navigationModePager())
+        readerPreferences.navigationModePager().changes()
+            .onEach {
+                val isTappingEnabled = it != 5
+                binding.pagerPrefsGroup.tappingInverted.isVisible = isTappingEnabled
+            }
+            .launchIn(activity.lifecycleScope)
+        binding.pagerPrefsGroup.scaleType.bindToPreference(readerPreferences.imageScaleType(), 1)
+
+        binding.pagerPrefsGroup.zoomStart.bindToPreference(readerPreferences.zoomStart(), 1)
+    }
+
+    private fun initWebtoonPreferences() {
+        binding.pagerPrefsGroup.root.isVisible = false
+        binding.webtoonPrefsGroup.root.isVisible = true
+
+        binding.webtoonPrefsGroup.tappingInverted.bindToPreference(readerPreferences.webtoonNavInverted(), ReaderPreferences.TappingInvertMode::class.java)
+
+        binding.webtoonPrefsGroup.webtoonNav.bindToPreference(readerPreferences.navigationModeWebtoon())
+        readerPreferences.navigationModeWebtoon().changes()
+            .onEach { binding.webtoonPrefsGroup.tappingInverted.isVisible = it != 5 }
+            .launchIn(activity.lifecycleScope)
     }
 }

@@ -10,6 +10,7 @@ import eu.kanade.presentation.browse.anime.MigrateAnimeSearchScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 
+// TODO: this should probably be merged with GlobalSearchScreen somehow to dedupe logic
 class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {
 
     @Composable

@@ -50,6 +50,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
+import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
@@ -60,7 +61,6 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
@@ -161,7 +161,8 @@ class AnimeInfoScreenModel(
             combine(
                 getAnimeAndEpisodes.subscribe(animeId).distinctUntilChanged(),
                 downloadCache.changes,
-            ) { animeAndEpisodes, _ -> animeAndEpisodes }
+                downloadManager.queueState,
+            ) { animeAndEpisodes, _, _ -> animeAndEpisodes }
                 .collectLatest { (anime, episodes) ->
                     updateSuccessState {
                         it.copy(
@@ -766,13 +767,13 @@ class AnimeInfoScreenModel(
      * Sets the seen filter and requests an UI update.
      * @param state whether to display only unseen episodes or all episodes.
      */
-    fun setUnseenFilter(state: TriStateFilter) {
+    fun setUnseenFilter(state: TriState) {
         val anime = successState?.anime ?: return
 
         val flag = when (state) {
-            TriStateFilter.DISABLED -> Anime.SHOW_ALL
-            TriStateFilter.ENABLED_IS -> Anime.EPISODE_SHOW_UNSEEN
-            TriStateFilter.ENABLED_NOT -> Anime.EPISODE_SHOW_SEEN
+            TriState.DISABLED -> Anime.SHOW_ALL
+            TriState.ENABLED_IS -> Anime.EPISODE_SHOW_UNSEEN
+            TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_SEEN
         }
         coroutineScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetUnseenFilter(anime, flag)
@@ -783,13 +784,13 @@ class AnimeInfoScreenModel(
      * Sets the download filter and requests an UI update.
      * @param state whether to display only downloaded episodes or all episodes.
      */
-    fun setDownloadedFilter(state: TriStateFilter) {
+    fun setDownloadedFilter(state: TriState) {
         val anime = successState?.anime ?: return
 
         val flag = when (state) {
-            TriStateFilter.DISABLED -> Anime.SHOW_ALL
-            TriStateFilter.ENABLED_IS -> Anime.EPISODE_SHOW_DOWNLOADED
-            TriStateFilter.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_DOWNLOADED
+            TriState.DISABLED -> Anime.SHOW_ALL
+            TriState.ENABLED_IS -> Anime.EPISODE_SHOW_DOWNLOADED
+            TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_DOWNLOADED
         }
 
         coroutineScope.launchNonCancellable {
@@ -801,13 +802,13 @@ class AnimeInfoScreenModel(
      * Sets the bookmark filter and requests an UI update.
      * @param state whether to display only bookmarked episodes or all episodes.
      */
-    fun setBookmarkedFilter(state: TriStateFilter) {
+    fun setBookmarkedFilter(state: TriState) {
         val anime = successState?.anime ?: return
 
         val flag = when (state) {
-            TriStateFilter.DISABLED -> Anime.SHOW_ALL
-            TriStateFilter.ENABLED_IS -> Anime.EPISODE_SHOW_BOOKMARKED
-            TriStateFilter.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
+            TriState.DISABLED -> Anime.SHOW_ALL
+            TriState.ENABLED_IS -> Anime.EPISODE_SHOW_BOOKMARKED
+            TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
         }
 
         coroutineScope.launchNonCancellable {
