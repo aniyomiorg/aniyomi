@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -26,7 +27,6 @@ import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.CollapsibleBox
 import tachiyomi.presentation.core.components.HeadingItem
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TextItem
 

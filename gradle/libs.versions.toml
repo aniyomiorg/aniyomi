@@ -1,5 +1,5 @@
 [versions]
-aboutlib_version = "10.8.0"
+aboutlib_version = "10.8.2"
 okhttp_version = "5.0.0-alpha.11"
 shizuku_version = "12.2.0"
 sqlite = "2.3.1"
@@ -57,7 +57,7 @@ flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
-compose-materialmotion = "io.github.fornewid:material-motion-compose-core:1.0.3"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:1.0.4"
 compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.0"
 
 swipe = "me.saket.swipe:swipe:1.2.0"

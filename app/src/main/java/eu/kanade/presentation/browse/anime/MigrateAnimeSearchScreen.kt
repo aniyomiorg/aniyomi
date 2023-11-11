@@ -1,6 +1,7 @@
 package eu.kanade.presentation.browse.anime
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import eu.kanade.presentation.browse.GlobalSearchEmptyResultItem
@@ -14,7 +15,6 @@ import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchSt
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 
 @Composable
