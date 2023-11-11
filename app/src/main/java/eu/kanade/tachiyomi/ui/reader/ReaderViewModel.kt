@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader
 
 import android.app.Application
 import android.net.Uri
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -712,8 +713,8 @@ class ReaderViewModel(
         mutableState.update { it.copy(dialog = Dialog.PageActions(page)) }
     }
 
-    fun openColorFilterDialog() {
-        mutableState.update { it.copy(dialog = Dialog.ColorFilter) }
+    fun openSettingsDialog() {
+        mutableState.update { it.copy(dialog = Dialog.Settings) }
     }
 
     fun closeDialog() {
@@ -817,16 +818,12 @@ class ReaderViewModel(
         }
     }
 
-    /**
-     * Results of the set as cover feature.
-     */
     enum class SetAsCoverResult {
-        Success, AddToLibraryFirst, Error
+        Success,
+        AddToLibraryFirst,
+        Error,
     }
 
-    /**
-     * Results of the save image feature.
-     */
     sealed class SaveImageResult {
         class Success(val uri: Uri) : SaveImageResult()
         class Error(val error: Throwable) : SaveImageResult()
@@ -901,6 +898,7 @@ class ReaderViewModel(
         }
     }
 
+    @Immutable
     data class State(
         val chapter: Chapter? = null,
         val manga: Manga? = null,
@@ -922,7 +920,7 @@ class ReaderViewModel(
 
     sealed class Dialog {
         object Loading : Dialog()
-        object ColorFilter : Dialog()
+        object Settings : Dialog()
         data class PageActions(val page: ReaderPage) : Dialog()
     }
 

@@ -16,12 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEach
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.anime.model.sort
@@ -33,6 +32,7 @@ import tachiyomi.presentation.core.components.IconItem
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun AnimeLibrarySettingsDialog(
@@ -90,7 +90,7 @@ private fun ColumnScope.FilterPage(
     TriStateItem(
         label = stringResource(R.string.label_downloaded),
         state = if (downloadedOnly) {
-            TriStateFilter.ENABLED_IS
+            TriState.ENABLED_IS
         } else {
             filterDownloaded
         },

@@ -41,7 +41,12 @@ internal object MangaExtensionLoader {
     const val LIB_VERSION_MIN = 1.2
     const val LIB_VERSION_MAX = 1.5
 
-    private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
+    private val PACKAGE_FLAGS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNING_CERTIFICATES
+    } else {
+        @Suppress("DEPRECATION")
+        PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
+    }
 
     // inorichi's key
     private const val officialSignature = "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
@@ -49,7 +54,7 @@ internal object MangaExtensionLoader {
     /**
      * List of the trusted signatures.
      */
-    var trustedSignatures = mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignature
+    var trustedSignatures = mutableSetOf(officialSignature) + preferences.trustedSignatures().get()
 
     /**
      * Return a list of all the installed extensions initialized concurrently.
@@ -59,7 +64,6 @@ internal object MangaExtensionLoader {
     fun loadMangaExtensions(context: Context): List<MangaLoadResult> {
         val pkgManager = context.packageManager
 
-        @Suppress("DEPRECATION")
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
         } else {
@@ -135,7 +139,7 @@ internal object MangaExtensionLoader {
             return MangaLoadResult.Error
         }
 
-        val signatureHash = getSignatureHash(pkgInfo)
+        val signatureHash = getSignatureHash(context, pkgInfo)
 
         if (signatureHash == null) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
@@ -221,12 +225,8 @@ internal object MangaExtensionLoader {
      *
      * @param pkgInfo The package info of the application.
      */
-    private fun getSignatureHash(pkgInfo: PackageInfo): String? {
-        val signatures = pkgInfo.signatures
-        return if (signatures != null && signatures.isNotEmpty()) {
-            Hash.sha256(signatures.first().toByteArray())
-        } else {
-            null
-        }
+    private fun getSignatureHash(context: Context, pkgInfo: PackageInfo): String? {
+        val signatures = PackageInfoCompat.getSignatures(context.packageManager, pkgInfo.packageName)
+        return signatures.firstOrNull()?.let { Hash.sha256(it.toByteArray()) }
     }
 }

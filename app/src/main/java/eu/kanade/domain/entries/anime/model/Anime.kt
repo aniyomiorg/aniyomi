@@ -3,24 +3,24 @@ package eu.kanade.domain.entries.anime.model
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-val Anime.downloadedFilter: TriStateFilter
+val Anime.downloadedFilter: TriState
     get() {
-        if (forceDownloaded()) return TriStateFilter.ENABLED_IS
+        if (forceDownloaded()) return TriState.ENABLED_IS
         return when (downloadedFilterRaw) {
-            Anime.EPISODE_SHOW_DOWNLOADED -> TriStateFilter.ENABLED_IS
-            Anime.EPISODE_SHOW_NOT_DOWNLOADED -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            Anime.EPISODE_SHOW_DOWNLOADED -> TriState.ENABLED_IS
+            Anime.EPISODE_SHOW_NOT_DOWNLOADED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
     }
 fun Anime.episodesFiltered(): Boolean {
-    return unseenFilter != TriStateFilter.DISABLED ||
-        downloadedFilter != TriStateFilter.DISABLED ||
-        bookmarkedFilter != TriStateFilter.DISABLED
+    return unseenFilter != TriState.DISABLED ||
+        downloadedFilter != TriState.DISABLED ||
+        bookmarkedFilter != TriState.DISABLED
 }
 fun Anime.forceDownloaded(): Boolean {
     return favorite && Injekt.get<BasePreferences>().downloadedOnly().get()

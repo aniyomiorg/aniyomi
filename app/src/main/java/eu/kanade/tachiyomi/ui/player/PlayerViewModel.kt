@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.net.Uri
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -719,6 +720,7 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
+    @Immutable
     data class State(
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,

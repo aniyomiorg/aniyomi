@@ -1,9 +1,9 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.core.preference.TriState
 import java.io.Serializable
 import kotlin.math.pow
 
@@ -78,18 +78,18 @@ data class Anime(
     val nextEpisodeAiringAt: Long
         get() = (viewerFlags and ANIME_AIRING_TIME_MASK).removeHexZeros(zeros = 6)
 
-    val unseenFilter: TriStateFilter
+    val unseenFilter: TriState
         get() = when (unseenFilterRaw) {
-            EPISODE_SHOW_UNSEEN -> TriStateFilter.ENABLED_IS
-            EPISODE_SHOW_SEEN -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            EPISODE_SHOW_UNSEEN -> TriState.ENABLED_IS
+            EPISODE_SHOW_SEEN -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
-    val bookmarkedFilter: TriStateFilter
+    val bookmarkedFilter: TriState
         get() = when (bookmarkedFilterRaw) {
-            EPISODE_SHOW_BOOKMARKED -> TriStateFilter.ENABLED_IS
-            EPISODE_SHOW_NOT_BOOKMARKED -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            EPISODE_SHOW_BOOKMARKED -> TriState.ENABLED_IS
+            EPISODE_SHOW_NOT_BOOKMARKED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
     fun sortDescending(): Boolean {
