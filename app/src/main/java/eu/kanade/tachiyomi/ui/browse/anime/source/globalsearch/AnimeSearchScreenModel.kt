@@ -1,10 +1,9 @@
 package eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
-import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
@@ -16,6 +15,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.awaitSingle
@@ -27,24 +28,26 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
 
-abstract class AnimeSearchScreenModel<T>(
-    initialState: T,
-    private val sourcePreferences: SourcePreferences = Injekt.get(),
+abstract class AnimeSearchScreenModel(
+    initialState: State = State(),
+    sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
-    private val updateAnime: UpdateAnime = Injekt.get(),
-) : StateScreenModel<T>(initialState) {
+) : StateScreenModel<AnimeSearchScreenModel.State>(initialState) {
 
     private val coroutineDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
     private var searchJob: Job? = null
 
-    protected var query: String? = null
-    protected var extensionFilter: String? = null
-
-    private val sources by lazy { getSelectedSources() }
+    private val enabledLanguages = sourcePreferences.enabledLanguages().get()
+    private val disabledSources = sourcePreferences.disabledAnimeSources().get()
     protected val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
+
+    private var lastQuery: String? = null
+    private var lastSourceFilter: AnimeSourceFilter? = null
+
+    protected var extensionFilter: String? = null
 
     private val sortComparator = { map: Map<AnimeCatalogueSource, AnimeSearchItemResult> ->
         compareBy<AnimeCatalogueSource>(
@@ -55,7 +58,7 @@ abstract class AnimeSearchScreenModel<T>(
     }
 
     @Composable
-    fun getAnime(initialAnime: Anime): State<Anime> {
+    fun getAnime(initialAnime: Anime): androidx.compose.runtime.State<Anime> {
         return produceState(initialValue = initialAnime) {
             getAnime.subscribe(initialAnime.url, initialAnime.source)
                 .filterNotNull()
@@ -66,10 +69,6 @@ abstract class AnimeSearchScreenModel<T>(
     }
 
     open fun getEnabledSources(): List<AnimeCatalogueSource> {
-        val enabledLanguages = sourcePreferences.enabledLanguages().get()
-        val disabledSources = sourcePreferences.disabledAnimeSources().get()
-        val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
-
         return sourceManager.getCatalogueSources()
             .filter { it.lang in enabledLanguages && "${it.id}" !in disabledSources }
             .sortedWith(
@@ -95,55 +94,90 @@ abstract class AnimeSearchScreenModel<T>(
             .filter { it in enabledSources }
     }
 
-    abstract fun updateSearchQuery(query: String?)
-
-    abstract fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>)
-
-    abstract fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult>
-
-    private fun getAndUpdateItems(function: (Map<AnimeCatalogueSource, AnimeSearchItemResult>) -> Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
-        updateItems(function(getItems()))
+    fun updateSearchQuery(query: String?) {
+        mutableState.update { it.copy(searchQuery = query) }
     }
 
-    abstract fun setSourceFilter(filter: AnimeSourceFilter)
+    fun setSourceFilter(filter: AnimeSourceFilter) {
+        mutableState.update { it.copy(sourceFilter = filter) }
+        search()
+    }
 
-    abstract fun toggleFilterResults()
+    fun toggleFilterResults() {
+        mutableState.update { it.copy(onlyShowHasResults = !it.onlyShowHasResults) }
+    }
 
-    fun search(query: String) {
-        if (this.query == query) return
+    fun search() {
+        val query = state.value.searchQuery
+        val sourceFilter = state.value.sourceFilter
 
-        this.query = query
+        if (query.isNullOrBlank()) return
+        val sameQuery = this.lastQuery == query
+        if (sameQuery && this.lastSourceFilter == sourceFilter) return
 
-        val initialItems = getSelectedSources().associateWith { AnimeSearchItemResult.Loading }
-        updateItems(initialItems)
+        this.lastQuery = query
+        this.lastSourceFilter = sourceFilter
+
+        val sources = getSelectedSources()
+
+        // Reuse previous results if possible
+        if (sameQuery) {
+            val existingResults = state.value.items
+            updateItems(sources.associateWith { existingResults[it] ?: AnimeSearchItemResult.Loading })
+        } else {
+            updateItems(sources.associateWith { AnimeSearchItemResult.Loading })
+        }
+
         searchJob = ioCoroutineScope.launch {
-            sources
-                .map { source ->
-                    async {
-                        try {
-                            val page = withContext(coroutineDispatcher) {
-                                source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
-                            }
+            sources.map { source ->
+                async {
+                    if (state.value.items[source] !is AnimeSearchItemResult.Loading) {
+                        return@async
+                    }
+                    try {
+                        val page = withContext(coroutineDispatcher) {
+                            source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
+                        }
 
-                            val titles = page.animes.map {
-                                networkToLocalAnime.await(it.toDomainAnime(source.id))
-                            }
+                        val titles = page.animes.map {
+                            networkToLocalAnime.await(it.toDomainAnime(source.id))
+                        }
 
-                            getAndUpdateItems { items ->
-                                val mutableMap = items.toMutableMap()
-                                mutableMap[source] = AnimeSearchItemResult.Success(titles)
-                                mutableMap.toSortedMap(sortComparator(mutableMap))
-                            }
-                        } catch (e: Exception) {
-                            getAndUpdateItems { items ->
-                                val mutableMap = items.toMutableMap()
-                                mutableMap[source] = AnimeSearchItemResult.Error(e)
-                                mutableMap.toSortedMap(sortComparator(mutableMap))
-                            }
+                        if (isActive) {
+                            updateItem(source, AnimeSearchItemResult.Success(titles))
+                        }
+                    } catch (e: Exception) {
+                        if (isActive) {
+                            updateItem(source, AnimeSearchItemResult.Error(e))
                         }
                     }
-                }.awaitAll()
+                }
+            }
+                .awaitAll()
         }
+    }
+
+    private fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
+        mutableState.update { it.copy(items = items.toSortedMap(sortComparator(items))) }
+    }
+
+    private fun updateItem(source: AnimeCatalogueSource, result: AnimeSearchItemResult) {
+        val mutableItems = state.value.items.toMutableMap()
+        mutableItems[source] = result
+        updateItems(mutableItems)
+    }
+
+    @Immutable
+    data class State(
+        val fromSourceId: Long? = null,
+        val searchQuery: String? = null,
+        val sourceFilter: AnimeSourceFilter = AnimeSourceFilter.PinnedOnly,
+        val onlyShowHasResults: Boolean = false,
+        val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    ) {
+        val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
+        val total: Int = items.size
+        val filteredItems = items.filter { (_, result) -> result.isVisible(onlyShowHasResults) }
     }
 }
 
@@ -153,7 +187,7 @@ enum class AnimeSourceFilter {
 }
 
 sealed class AnimeSearchItemResult {
-    object Loading : AnimeSearchItemResult()
+    data object Loading : AnimeSearchItemResult()
 
     data class Error(
         val throwable: Throwable,

@@ -163,7 +163,7 @@ class MangaExtensionDetailsScreenModel(
 }
 
 sealed class MangaExtensionDetailsEvent {
-    object Uninstalled : MangaExtensionDetailsEvent()
+    data object Uninstalled : MangaExtensionDetailsEvent()
 }
 
 @Immutable

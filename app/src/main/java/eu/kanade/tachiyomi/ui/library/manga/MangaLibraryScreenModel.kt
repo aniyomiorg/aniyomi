@@ -659,7 +659,7 @@ class MangaLibraryScreenModel(
     }
 
     sealed class Dialog {
-        object SettingsSheet : Dialog()
+        data object SettingsSheet : Dialog()
         data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteManga(val manga: List<Manga>) : Dialog()
     }

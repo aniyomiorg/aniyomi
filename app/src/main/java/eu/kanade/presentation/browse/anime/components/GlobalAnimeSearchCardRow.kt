@@ -64,6 +64,7 @@ private fun AnimeItem(
     Box(modifier = Modifier.width(96.dp)) {
         EntryComfortableGridItem(
             title = title,
+            titleMaxLines = 3,
             coverData = cover,
             coverBadgeStart = {
                 InLibraryBadge(enabled = isFavorite)

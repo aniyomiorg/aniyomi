@@ -488,7 +488,7 @@ class ReaderActivity : BaseActivity() {
 
             setOnClickListener {
                 popupMenu(
-                    items = ReadingModeType.values().map { it.flagValue to it.stringRes },
+                    items = ReadingModeType.entries.map { it.flagValue to it.stringRes },
                     selectedItemId = viewModel.getMangaReadingMode(resolveDefault = false),
                 ) {
                     val newReadingMode = ReadingModeType.fromPreference(itemId)
@@ -541,7 +541,7 @@ class ReaderActivity : BaseActivity() {
 
             setOnClickListener {
                 popupMenu(
-                    items = OrientationType.values().map { it.flagValue to it.stringRes },
+                    items = OrientationType.entries.map { it.flagValue to it.stringRes },
                     selectedItemId = viewModel.manga?.orientationType?.toInt()
                         ?: readerPreferences.defaultOrientationType().get(),
                 ) {

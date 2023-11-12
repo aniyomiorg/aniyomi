@@ -163,7 +163,7 @@ class AnimeExtensionDetailsScreenModel(
 }
 
 sealed class AnimeExtensionDetailsEvent {
-    object Uninstalled : AnimeExtensionDetailsEvent()
+    data object Uninstalled : AnimeExtensionDetailsEvent()
 }
 
 @Immutable

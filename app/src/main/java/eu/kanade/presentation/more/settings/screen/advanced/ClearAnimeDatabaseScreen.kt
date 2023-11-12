@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FlipToBack
@@ -47,7 +48,6 @@ import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAni
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 import tachiyomi.mi.data.AnimeDatabase
-import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -135,7 +135,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                                 .padding(contentPadding)
                                 .fillMaxSize(),
                         ) {
-                            FastScrollLazyColumn(
+                            LazyColumn(
                                 modifier = Modifier.weight(1f),
                             ) {
                                 items(s.items) { sourceWithCount ->
@@ -270,7 +270,7 @@ private class ClearAnimeDatabaseScreenModel : StateScreenModel<ClearAnimeDatabas
     }
 
     sealed class State {
-        object Loading : State()
+        data object Loading : State()
         data class Ready(
             val items: List<AnimeSourceWithCount>,
             val selection: List<Long> = emptyList(),

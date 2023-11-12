@@ -10,7 +10,6 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSearchScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 
-// TODO: this should probably be merged with GlobalSearchScreen somehow to dedupe logic
 class MigrateSearchScreen(private val mangaId: Long) : Screen() {
 
     @Composable
@@ -20,28 +19,32 @@ class MigrateSearchScreen(private val mangaId: Long) : Screen() {
         val screenModel = rememberScreenModel { MigrateSearchScreenModel(mangaId = mangaId) }
         val state by screenModel.state.collectAsState()
 
+        val dialogScreenModel = rememberScreenModel { MangaMigrateSearchScreenDialogScreenModel(mangaId = mangaId) }
+        val dialogState by dialogScreenModel.state.collectAsState()
+
         MigrateMangaSearchScreen(
             state = state,
+            fromSourceId = dialogState.manga?.source,
             navigateUp = navigator::pop,
             onChangeSearchQuery = screenModel::updateSearchQuery,
-            onSearch = screenModel::search,
+            onSearch = { screenModel.search() },
             getManga = { screenModel.getManga(it) },
             onChangeSearchFilter = screenModel::setSourceFilter,
             onToggleResults = screenModel::toggleFilterResults,
             onClickSource = {
-                navigator.push(MangaSourceSearchScreen(state.manga!!, it.id, state.searchQuery))
+                navigator.push(MangaSourceSearchScreen(dialogState.manga!!, it.id, state.searchQuery))
             },
-            onClickItem = { screenModel.setDialog(MigrateSearchScreenModel.Dialog.Migrate(it)) },
+            onClickItem = { dialogScreenModel.setDialog(MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate(it)) },
             onLongClickItem = { navigator.push(MangaScreen(it.id, true)) },
         )
 
-        when (val dialog = state.dialog) {
-            is MigrateSearchScreenModel.Dialog.Migrate -> {
+        when (val dialog = dialogState.dialog) {
+            is MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate -> {
                 MigrateMangaDialog(
-                    oldManga = state.manga!!,
+                    oldManga = dialogState.manga!!,
                     newManga = dialog.manga,
                     screenModel = rememberScreenModel { MigrateMangaDialogScreenModel() },
-                    onDismissRequest = { screenModel.setDialog(null) },
+                    onDismissRequest = { dialogScreenModel.setDialog(null) },
                     onClickTitle = {
                         navigator.push(MangaScreen(dialog.manga.id, true))
                     },

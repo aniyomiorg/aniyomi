@@ -54,7 +54,7 @@ class MigrationAnimeScreenModel(
 }
 
 sealed class MigrationAnimeEvent {
-    object FailedFetchingFavorites : MigrationAnimeEvent()
+    data object FailedFetchingFavorites : MigrationAnimeEvent()
 }
 
 @Immutable

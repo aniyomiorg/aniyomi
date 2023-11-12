@@ -120,14 +120,14 @@ class AnimeHistoryScreenModel(
     }
 
     sealed class Dialog {
-        object DeleteAll : Dialog()
+        data object DeleteAll : Dialog()
         data class Delete(val history: AnimeHistoryWithRelations) : Dialog()
     }
 
     sealed class Event {
         data class OpenEpisode(val episode: Episode?) : Event()
-        object InternalError : Event()
-        object HistoryCleared : Event()
+        data object InternalError : Event()
+        data object HistoryCleared : Event()
     }
 }
 

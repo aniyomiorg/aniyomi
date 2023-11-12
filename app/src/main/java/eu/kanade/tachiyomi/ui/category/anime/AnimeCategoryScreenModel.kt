@@ -131,20 +131,20 @@ class AnimeCategoryScreenModel(
 }
 
 sealed class AnimeCategoryDialog {
-    object Create : AnimeCategoryDialog()
+    data object Create : AnimeCategoryDialog()
     data class Rename(val category: Category) : AnimeCategoryDialog()
     data class Delete(val category: Category) : AnimeCategoryDialog()
 }
 
 sealed class AnimeCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
-    object InternalError : LocalizedMessage(R.string.internal_error)
+    data object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
 sealed class AnimeCategoryScreenState {
 
     @Immutable
-    object Loading : AnimeCategoryScreenState()
+    data object Loading : AnimeCategoryScreenState()
 
     @Immutable
     data class Success(

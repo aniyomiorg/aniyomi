@@ -55,13 +55,13 @@ class AnimeExtensionFilterScreenModel(
 }
 
 sealed class AnimeExtensionFilterEvent {
-    object FailedFetchingLanguages : AnimeExtensionFilterEvent()
+    data object FailedFetchingLanguages : AnimeExtensionFilterEvent()
 }
 
 sealed class AnimeExtensionFilterState {
 
     @Immutable
-    object Loading : AnimeExtensionFilterState()
+    data object Loading : AnimeExtensionFilterState()
 
     @Immutable
     data class Success(
