@@ -351,7 +351,7 @@ fun <T> SelectItem(
         )
 
         ExposedDropdownMenu(
-            modifier = Modifier.exposedDropdownSize(matchTextFieldWidth = true),
+            modifier = Modifier.exposedDropdownSize(),
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
@@ -479,7 +479,7 @@ fun TextItem(
 }
 
 @Composable
-fun SettingsFlowRow(
+fun SettingsChipRow(
     @StringRes labelRes: Int,
     content: @Composable FlowRowScope.() -> Unit,
 ) {

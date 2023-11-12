@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -72,6 +73,7 @@ fun NavigatorAdaptiveSheet(
  */
 @Composable
 fun AdaptiveSheet(
+    modifier: Modifier = Modifier,
     hideSystemBars: Boolean = false,
     tonalElevation: Dp = 1.dp,
     enableSwipeDismiss: Boolean = true,
@@ -91,6 +93,7 @@ fun AdaptiveSheet(
             }
         }
         AdaptiveSheetImpl(
+            modifier = modifier,
             isTabletUi = isTabletUi,
             tonalElevation = tonalElevation,
             enableSwipeDismiss = enableSwipeDismiss,

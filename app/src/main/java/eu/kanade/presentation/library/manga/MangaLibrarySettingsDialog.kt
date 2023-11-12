@@ -31,7 +31,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.IconItem
-import tachiyomi.presentation.core.components.SettingsFlowRow
+import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
@@ -208,7 +208,7 @@ private fun ColumnScope.DisplayPage(
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
     val displayMode by screenModel.libraryPreferences.libraryDisplayMode().collectAsState()
-    SettingsFlowRow(R.string.action_display_mode) {
+    SettingsChipRow(R.string.action_display_mode) {
         displayModes.map { (titleRes, mode) ->
             FilterChip(
                 selected = displayMode == mode,

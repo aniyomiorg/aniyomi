@@ -10,16 +10,19 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
@@ -27,6 +30,7 @@ import java.util.concurrent.Executors
 abstract class AnimeSearchScreenModel<T>(
     initialState: T,
     private val sourcePreferences: SourcePreferences = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
@@ -34,12 +38,13 @@ abstract class AnimeSearchScreenModel<T>(
 ) : StateScreenModel<T>(initialState) {
 
     private val coroutineDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
+    private var searchJob: Job? = null
 
     protected var query: String? = null
-    protected lateinit var extensionFilter: String
+    protected var extensionFilter: String? = null
 
     private val sources by lazy { getSelectedSources() }
-    private val pinnedSources by lazy { sourcePreferences.pinnedAnimeSources().get() }
+    protected val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
 
     private val sortComparator = { map: Map<AnimeCatalogueSource, AnimeSearchItemResult> ->
         compareBy<AnimeCatalogueSource>(
@@ -53,29 +58,41 @@ abstract class AnimeSearchScreenModel<T>(
     fun getAnime(initialAnime: Anime): State<Anime> {
         return produceState(initialValue = initialAnime) {
             getAnime.subscribe(initialAnime.url, initialAnime.source)
+                .filterNotNull()
                 .collectLatest { anime ->
-                    if (anime == null) return@collectLatest
                     value = anime
                 }
         }
     }
 
-    abstract fun getEnabledSources(): List<AnimeCatalogueSource>
+    open fun getEnabledSources(): List<AnimeCatalogueSource> {
+        val enabledLanguages = sourcePreferences.enabledLanguages().get()
+        val disabledSources = sourcePreferences.disabledAnimeSources().get()
+        val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
+
+        return sourceManager.getCatalogueSources()
+            .filter { it.lang in enabledLanguages && "${it.id}" !in disabledSources }
+            .sortedWith(
+                compareBy(
+                    { "${it.id}" !in pinnedSources },
+                    { "${it.name.lowercase()} (${it.lang})" },
+                ),
+            )
+    }
 
     private fun getSelectedSources(): List<AnimeCatalogueSource> {
-        val filter = extensionFilter
-
         val enabledSources = getEnabledSources()
 
-        if (filter.isEmpty()) {
+        val filter = extensionFilter
+        if (filter.isNullOrEmpty()) {
             return enabledSources
         }
 
         return extensionManager.installedExtensionsFlow.value
             .filter { it.pkgName == filter }
             .flatMap { it.sources }
-            .filter { it in enabledSources }
             .filterIsInstance<AnimeCatalogueSource>()
+            .filter { it in enabledSources }
     }
 
     abstract fun updateSearchQuery(query: String?)
@@ -88,6 +105,10 @@ abstract class AnimeSearchScreenModel<T>(
         updateItems(function(getItems()))
     }
 
+    abstract fun setSourceFilter(filter: AnimeSourceFilter)
+
+    abstract fun toggleFilterResults()
+
     fun search(query: String) {
         if (this.query == query) return
 
@@ -95,8 +116,7 @@ abstract class AnimeSearchScreenModel<T>(
 
         val initialItems = getSelectedSources().associateWith { AnimeSearchItemResult.Loading }
         updateItems(initialItems)
-
-        ioCoroutineScope.launch {
+        searchJob = ioCoroutineScope.launch {
             sources
                 .map { source ->
                     async {
@@ -144,5 +164,9 @@ sealed class AnimeSearchItemResult {
     ) : AnimeSearchItemResult() {
         val isEmpty: Boolean
             get() = result.isEmpty()
+    }
+
+    fun isVisible(onlyShowHasResults: Boolean): Boolean {
+        return !onlyShowHasResults || (this is Success && !this.isEmpty)
     }
 }

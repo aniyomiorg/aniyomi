@@ -14,6 +14,7 @@ import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
@@ -67,6 +68,7 @@ class BrowseMangaSourceScreenModel(
     listingQuery: String?,
     sourceManager: MangaSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: MangaCoverCache = Injekt.get(),
     private val getRemoteManga: GetRemoteManga = Injekt.get(),
@@ -105,6 +107,10 @@ class BrowseMangaSourceScreenModel(
                     toolbarQuery = query,
                 )
             }
+        }
+
+        if (!basePreferences.incognitoMode().get()) {
+            sourcePreferences.lastUsedMangaSource().set(source.id)
         }
     }
 

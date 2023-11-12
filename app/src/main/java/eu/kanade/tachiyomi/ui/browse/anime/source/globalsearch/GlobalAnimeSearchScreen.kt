@@ -18,7 +18,7 @@ import tachiyomi.presentation.core.screens.LoadingScreen
 
 class GlobalAnimeSearchScreen(
     val searchQuery: String = "",
-    private val extensionFilter: String = "",
+    private val extensionFilter: String? = null,
 ) : Screen() {
 
     @Composable
@@ -33,9 +33,8 @@ class GlobalAnimeSearchScreen(
         }
         val state by screenModel.state.collectAsState()
         var showSingleLoadingScreen by remember {
-            mutableStateOf(searchQuery.isNotEmpty() && extensionFilter.isNotEmpty() && state.total == 1)
+            mutableStateOf(searchQuery.isNotEmpty() && !extensionFilter.isNullOrEmpty() && state.total == 1)
         }
-        val filteredSources by screenModel.searchPagerFlow.collectAsState()
 
         if (showSingleLoadingScreen) {
             LoadingScreen()
@@ -58,7 +57,6 @@ class GlobalAnimeSearchScreen(
         } else {
             GlobalAnimeSearchScreen(
                 state = state,
-                items = filteredSources,
                 navigateUp = navigator::pop,
                 onChangeSearchQuery = screenModel::updateSearchQuery,
                 onSearch = screenModel::search,
@@ -66,9 +64,6 @@ class GlobalAnimeSearchScreen(
                 onChangeSearchFilter = screenModel::setSourceFilter,
                 onToggleResults = screenModel::toggleFilterResults,
                 onClickSource = {
-                    if (!screenModel.incognitoMode.get()) {
-                        screenModel.lastUsedSourceId.set(it.id)
-                    }
                     navigator.push(BrowseAnimeSourceScreen(it.id, state.searchQuery))
                 },
                 onClickItem = { navigator.push(AnimeScreen(it.id, true)) },

@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesState
+import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Pin
@@ -40,7 +40,7 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 @Composable
 fun MangaSourcesScreen(
-    state: MangaSourcesState,
+    state: MangaSourcesScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (Source, Listing) -> Unit,
     onClickPin: (Source) -> Unit,

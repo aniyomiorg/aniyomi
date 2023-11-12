@@ -21,23 +21,22 @@ class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {
         val state by screenModel.state.collectAsState()
 
         MigrateAnimeSearchScreen(
-            navigateUp = navigator::pop,
             state = state,
-            getAnime = { screenModel.getAnime(it) },
+            navigateUp = navigator::pop,
             onChangeSearchQuery = screenModel::updateSearchQuery,
             onSearch = screenModel::search,
+            getAnime = { screenModel.getAnime(it) },
+            onChangeSearchFilter = screenModel::setSourceFilter,
+            onToggleResults = screenModel::toggleFilterResults,
             onClickSource = {
-                if (!screenModel.incognitoMode.get()) {
-                    screenModel.lastUsedSourceId.set(it.id)
-                }
                 navigator.push(AnimeSourceSearchScreen(state.anime!!, it.id, state.searchQuery))
             },
-            onClickItem = { screenModel.setDialog(MigrateAnimeSearchDialog.Migrate(it)) },
+            onClickItem = { screenModel.setDialog((MigrateAnimeSearchScreenModel.Dialog.Migrate(it))) },
             onLongClickItem = { navigator.push(AnimeScreen(it.id, true)) },
         )
 
         when (val dialog = state.dialog) {
-            is MigrateAnimeSearchDialog.Migrate -> {
+            is MigrateAnimeSearchScreenModel.Dialog.Migrate -> {
                 MigrateAnimeDialog(
                     oldAnime = state.anime!!,
                     newAnime = dialog.anime,
