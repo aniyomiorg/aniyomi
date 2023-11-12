@@ -730,7 +730,7 @@ class AnimeLibraryScreenModel(
     }
 
     sealed class Dialog {
-        object SettingsSheet : Dialog()
+        data object SettingsSheet : Dialog()
         data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
     }

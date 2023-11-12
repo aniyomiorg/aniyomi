@@ -1,10 +1,9 @@
 package eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
-import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
@@ -16,6 +15,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.awaitSingle
@@ -27,24 +28,26 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
 
-abstract class MangaSearchScreenModel<T>(
-    initialState: T,
-    private val sourcePreferences: SourcePreferences = Injekt.get(),
+abstract class MangaSearchScreenModel(
+    initialState: State = State(),
+    sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: MangaSourceManager = Injekt.get(),
     private val extensionManager: MangaExtensionManager = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
-    private val updateManga: UpdateManga = Injekt.get(),
-) : StateScreenModel<T>(initialState) {
+) : StateScreenModel<MangaSearchScreenModel.State>(initialState) {
 
     private val coroutineDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
     private var searchJob: Job? = null
 
-    protected var query: String? = null
-    protected var extensionFilter: String? = null
-
-    private val sources by lazy { getSelectedSources() }
+    private val enabledLanguages = sourcePreferences.enabledLanguages().get()
+    private val disabledSources = sourcePreferences.disabledMangaSources().get()
     protected val pinnedSources = sourcePreferences.pinnedMangaSources().get()
+
+    private var lastQuery: String? = null
+    private var lastSourceFilter: MangaSourceFilter? = null
+
+    protected var extensionFilter: String? = null
 
     private val sortComparator = { map: Map<CatalogueSource, MangaSearchItemResult> ->
         compareBy<CatalogueSource>(
@@ -55,7 +58,7 @@ abstract class MangaSearchScreenModel<T>(
     }
 
     @Composable
-    fun getManga(initialManga: Manga): State<Manga> {
+    fun getManga(initialManga: Manga): androidx.compose.runtime.State<Manga> {
         return produceState(initialValue = initialManga) {
             getManga.subscribe(initialManga.url, initialManga.source)
                 .filterNotNull()
@@ -66,10 +69,6 @@ abstract class MangaSearchScreenModel<T>(
     }
 
     open fun getEnabledSources(): List<CatalogueSource> {
-        val enabledLanguages = sourcePreferences.enabledLanguages().get()
-        val disabledSources = sourcePreferences.disabledMangaSources().get()
-        val pinnedSources = sourcePreferences.pinnedMangaSources().get()
-
         return sourceManager.getCatalogueSources()
             .filter { it.lang in enabledLanguages && "${it.id}" !in disabledSources }
             .sortedWith(
@@ -95,56 +94,90 @@ abstract class MangaSearchScreenModel<T>(
             .filter { it in enabledSources }
     }
 
-    abstract fun updateSearchQuery(query: String?)
-
-    abstract fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>)
-
-    abstract fun getItems(): Map<CatalogueSource, MangaSearchItemResult>
-
-    private fun getAndUpdateItems(function: (Map<CatalogueSource, MangaSearchItemResult>) -> Map<CatalogueSource, MangaSearchItemResult>) {
-        updateItems(function(getItems()))
+    fun updateSearchQuery(query: String?) {
+        mutableState.update { it.copy(searchQuery = query) }
     }
 
-    abstract fun setSourceFilter(filter: MangaSourceFilter)
+    fun setSourceFilter(filter: MangaSourceFilter) {
+        mutableState.update { it.copy(sourceFilter = filter) }
+        search()
+    }
 
-    abstract fun toggleFilterResults()
+    fun toggleFilterResults() {
+        mutableState.update { it.copy(onlyShowHasResults = !it.onlyShowHasResults) }
+    }
 
-    fun search(query: String) {
-        if (this.query == query) return
+    fun search() {
+        val query = state.value.searchQuery
+        val sourceFilter = state.value.sourceFilter
 
-        this.query = query
+        if (query.isNullOrBlank()) return
+        val sameQuery = this.lastQuery == query
+        if (sameQuery && this.lastSourceFilter == sourceFilter) return
+
+        this.lastQuery = query
+        this.lastSourceFilter = sourceFilter
 
         searchJob?.cancel()
-        val initialItems = getSelectedSources().associateWith { MangaSearchItemResult.Loading }
-        updateItems(initialItems)
+        val sources = getSelectedSources()
+
+        // Reuse previous results if possible
+        if (sameQuery) {
+            val existingResults = state.value.items
+            updateItems(sources.associateWith { existingResults[it] ?: MangaSearchItemResult.Loading })
+        } else {
+            updateItems(sources.associateWith { MangaSearchItemResult.Loading })
+        }
         searchJob = ioCoroutineScope.launch {
-            sources
-                .map { source ->
-                    async {
-                        try {
-                            val page = withContext(coroutineDispatcher) {
-                                source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
-                            }
+            sources.map { source ->
+                async {
+                    if (state.value.items[source] !is MangaSearchItemResult.Loading) {
+                        return@async
+                    }
+                    try {
+                        val page = withContext(coroutineDispatcher) {
+                            source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
+                        }
 
-                            val titles = page.mangas.map {
-                                networkToLocalManga.await(it.toDomainManga(source.id))
-                            }
+                        val titles = page.mangas.map {
+                            networkToLocalManga.await(it.toDomainManga(source.id))
+                        }
 
-                            getAndUpdateItems { items ->
-                                val mutableMap = items.toMutableMap()
-                                mutableMap[source] = MangaSearchItemResult.Success(titles)
-                                mutableMap.toSortedMap(sortComparator(mutableMap))
-                            }
-                        } catch (e: Exception) {
-                            getAndUpdateItems { items ->
-                                val mutableMap = items.toMutableMap()
-                                mutableMap[source] = MangaSearchItemResult.Error(e)
-                                mutableMap.toSortedMap(sortComparator(mutableMap))
-                            }
+                        if (isActive) {
+                            updateItem(source, MangaSearchItemResult.Success(titles))
+                        }
+                    } catch (e: Exception) {
+                        if (isActive) {
+                            updateItem(source, MangaSearchItemResult.Error(e))
                         }
                     }
-                }.awaitAll()
+                }
+            }
+                .awaitAll()
         }
+    }
+
+    private fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>) {
+        mutableState.update { it.copy(items = items.toSortedMap(sortComparator(items))) }
+    }
+
+    private fun updateItem(source: CatalogueSource, result: MangaSearchItemResult) {
+        val mutableItems = state.value.items.toMutableMap()
+        mutableItems[source] = result
+        updateItems(mutableItems)
+    }
+
+    @Immutable
+    data class State(
+        val fromSourceId: Long? = null,
+        val searchQuery: String? = null,
+        val sourceFilter: MangaSourceFilter = MangaSourceFilter.PinnedOnly,
+        val onlyShowHasResults: Boolean = false,
+        val items: Map<CatalogueSource, MangaSearchItemResult> = emptyMap(),
+    ) {
+        val progress: Int = items.count { it.value !is MangaSearchItemResult.Loading }
+        val total: Int = items.size
+        val filteredItems = items.filter { (_, result) -> result.isVisible(onlyShowHasResults) }
     }
 }
 
@@ -154,7 +187,7 @@ enum class MangaSourceFilter {
 }
 
 sealed class MangaSearchItemResult {
-    object Loading : MangaSearchItemResult()
+    data object Loading : MangaSearchItemResult()
 
     data class Error(
         val throwable: Throwable,

@@ -18,7 +18,7 @@ class UpdateAnimeCategory(
     }
 
     sealed class Result {
-        object Success : Result()
+        data object Success : Result()
         data class Error(val error: Exception) : Result()
     }
 }

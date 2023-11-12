@@ -211,7 +211,7 @@ private fun rememberColumnWidthSums(
                 gridWidth,
                 horizontalArrangement.spacing.roundToPx(),
             ).toMutableList().apply {
-                for (i in 1 until size) {
+                for (i in 1 ..< size) {
                     this[i] += this[i - 1]
                 }
             }

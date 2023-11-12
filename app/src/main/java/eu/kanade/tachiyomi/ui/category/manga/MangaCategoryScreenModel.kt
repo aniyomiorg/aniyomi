@@ -131,20 +131,20 @@ class MangaCategoryScreenModel(
 }
 
 sealed class MangaCategoryDialog {
-    object Create : MangaCategoryDialog()
+    data object Create : MangaCategoryDialog()
     data class Rename(val category: Category) : MangaCategoryDialog()
     data class Delete(val category: Category) : MangaCategoryDialog()
 }
 
 sealed class MangaCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent()
-    object InternalError : LocalizedMessage(R.string.internal_error)
+    data object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
 sealed class MangaCategoryScreenState {
 
     @Immutable
-    object Loading : MangaCategoryScreenState()
+    data object Loading : MangaCategoryScreenState()
 
     @Immutable
     data class Success(

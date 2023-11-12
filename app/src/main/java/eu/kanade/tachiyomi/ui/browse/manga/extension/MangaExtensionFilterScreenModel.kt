@@ -55,13 +55,13 @@ class MangaExtensionFilterScreenModel(
 }
 
 sealed class MangaExtensionFilterEvent {
-    object FailedFetchingLanguages : MangaExtensionFilterEvent()
+    data object FailedFetchingLanguages : MangaExtensionFilterEvent()
 }
 
 sealed class MangaExtensionFilterState {
 
     @Immutable
-    object Loading : MangaExtensionFilterState()
+    data object Loading : MangaExtensionFilterState()
 
     @Immutable
     data class Success(

@@ -952,10 +952,10 @@ class AnimeInfoScreenModel(
                         // Try to select the items in-between when possible
                         val range: IntRange
                         if (selectedIndex < selectedPositions[0]) {
-                            range = selectedIndex + 1 until selectedPositions[0]
+                            range = selectedIndex + 1 ..< selectedPositions[0]
                             selectedPositions[0] = selectedIndex
                         } else if (selectedIndex > selectedPositions[1]) {
-                            range = (selectedPositions[1] + 1) until selectedIndex
+                            range = (selectedPositions[1] + 1) ..< selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
                             // Just select itself
@@ -1054,12 +1054,12 @@ class AnimeInfoScreenModel(
 
         // SY -->
         data class EditAnimeInfo(val anime: Anime) : Dialog()
-
         // SY <--
-        object ChangeAnimeSkipIntro : Dialog()
-        object SettingsSheet : Dialog()
-        object TrackSheet : Dialog()
-        object FullCover : Dialog()
+
+        data object ChangeAnimeSkipIntro : Dialog()
+        data object SettingsSheet : Dialog()
+        data object TrackSheet : Dialog()
+        data object FullCover : Dialog()
     }
 
     fun dismissDialog() {

@@ -1,5 +1,5 @@
 [versions]
-aboutlib_version = "10.8.2"
+aboutlib_version = "10.8.3"
 okhttp_version = "5.0.0-alpha.11"
 shizuku_version = "12.2.0"
 sqlite = "2.3.1"
@@ -29,7 +29,7 @@ jsoup = "org.jsoup:jsoup:1.16.1"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:17bec43"
-junrar = "com.github.junrar:junrar:7.5.4"
+junrar = "com.github.junrar:junrar:7.5.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
@@ -45,7 +45,7 @@ coil-gif = { module = "io.coil-kt:coil-gif" }
 coil-compose = { module = "io.coil-kt:coil-compose" }
 
 subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:c8e2650"
-image-decoder = "com.github.tachiyomiorg:image-decoder:7879b45"
+image-decoder = "com.github.tachiyomiorg:image-decoder:16eda64574"
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
@@ -64,7 +64,7 @@ swipe = "me.saket.swipe:swipe:1.2.0"
 
 logcat = "com.squareup.logcat:logcat:0.1"
 
-acra-http = "ch.acra:acra-http:5.10.1"
+acra-http = "ch.acra:acra-http:5.11.0"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
 aboutLibraries-gradle = { module = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin", version.ref = "aboutlib_version" }

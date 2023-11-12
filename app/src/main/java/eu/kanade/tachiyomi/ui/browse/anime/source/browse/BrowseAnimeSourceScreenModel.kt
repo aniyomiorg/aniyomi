@@ -358,8 +358,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     sealed class Listing(open val query: String?, open val filters: AnimeFilterList) {
-        object Popular : Listing(query = GetRemoteAnime.QUERY_POPULAR, filters = AnimeFilterList())
-        object Latest : Listing(query = GetRemoteAnime.QUERY_LATEST, filters = AnimeFilterList())
+        data object Popular : Listing(query = GetRemoteAnime.QUERY_POPULAR, filters = AnimeFilterList())
+        data object Latest : Listing(query = GetRemoteAnime.QUERY_LATEST, filters = AnimeFilterList())
         data class Search(override val query: String?, override val filters: AnimeFilterList) : Listing(query = query, filters = filters)
 
         companion object {
@@ -374,7 +374,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     sealed class Dialog {
-        object Filter : Dialog()
+        data object Filter : Dialog()
         data class RemoveAnime(val anime: Anime) : Dialog()
         data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
         data class ChangeAnimeCategory(

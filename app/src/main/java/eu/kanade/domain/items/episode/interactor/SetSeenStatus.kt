@@ -73,8 +73,8 @@ class SetSeenStatus(
         await(anime.id, seen)
 
     sealed class Result {
-        object Success : Result()
-        object NoEpisodes : Result()
+        data object Success : Result()
+        data object NoEpisodes : Result()
         data class InternalError(val error: Throwable) : Result()
     }
 }

@@ -164,6 +164,7 @@ private fun BoxScope.CoverTextOverlay(
 fun EntryComfortableGridItem(
     isSelected: Boolean = false,
     title: String,
+    titleMaxLines: Int = 2,
     coverData: EntryCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
@@ -205,6 +206,7 @@ fun EntryComfortableGridItem(
                 title = title,
                 style = MaterialTheme.typography.titleSmall,
                 minLines = 2,
+                maxLines = titleMaxLines,
             )
         }
     }
@@ -254,6 +256,7 @@ private fun GridItemTitle(
     title: String,
     style: TextStyle,
     minLines: Int,
+    maxLines: Int = 2,
 ) {
     Text(
         modifier = modifier,
@@ -261,7 +264,7 @@ private fun GridItemTitle(
         fontSize = 12.sp,
         lineHeight = 18.sp,
         minLines = minLines,
-        maxLines = 2,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         style = style,
     )
