@@ -2,27 +2,22 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration.search
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchScreenModel
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSourceFilter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MigrateAnimeSearchScreenModel(
     val animeId: Long,
     initialExtensionFilter: String = "",
-    preferences: BasePreferences = Injekt.get(),
-    private val sourcePreferences: SourcePreferences = Injekt.get(),
-    private val sourceManager: AnimeSourceManager = Injekt.get(),
-    private val getAnime: GetAnime = Injekt.get(),
-) : AnimeSearchScreenModel<MigrateAnimeSearchState>(MigrateAnimeSearchState()) {
+    getAnime: GetAnime = Injekt.get(),
+) : AnimeSearchScreenModel<MigrateAnimeSearchScreenModel.State>(State()) {
 
     init {
         extensionFilter = initialExtensionFilter
@@ -37,19 +32,16 @@ class MigrateAnimeSearchScreenModel(
         }
     }
 
-    val incognitoMode = preferences.incognitoMode()
-    val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
-
     override fun getEnabledSources(): List<AnimeCatalogueSource> {
-        val enabledLanguages = sourcePreferences.enabledLanguages().get()
-        val disabledSources = sourcePreferences.disabledAnimeSources().get()
-        val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
-
-        return sourceManager.getCatalogueSources()
-            .filter { it.lang in enabledLanguages }
-            .filterNot { "${it.id}" in disabledSources }
-            .sortedWith(compareBy({ "${it.id}" !in pinnedSources }, { "${it.name.lowercase()} (${it.lang})" }))
-            .sortedByDescending { it.id == state.value.anime!!.source }
+        return super.getEnabledSources()
+            .filter { mutableState.value.sourceFilter != AnimeSourceFilter.PinnedOnly || "${it.id}" in pinnedSources }
+            .sortedWith(
+                compareBy(
+                    { it.id != state.value.anime!!.source },
+                    { "${it.id}" !in pinnedSources },
+                    { "${it.name.lowercase()} (${it.lang})" },
+                ),
+            )
     }
 
     override fun updateSearchQuery(query: String?) {
@@ -68,26 +60,38 @@ class MigrateAnimeSearchScreenModel(
         return mutableState.value.items
     }
 
-    fun setDialog(dialog: MigrateAnimeSearchDialog?) {
+    override fun setSourceFilter(filter: AnimeSourceFilter) {
+        mutableState.update { it.copy(sourceFilter = filter) }
+    }
+
+    override fun toggleFilterResults() {
+        mutableState.update {
+            it.copy(onlyShowHasResults = !it.onlyShowHasResults)
+        }
+    }
+
+    fun setDialog(dialog: Dialog?) {
         mutableState.update {
             it.copy(dialog = dialog)
         }
     }
-}
 
-sealed class MigrateAnimeSearchDialog {
-    data class Migrate(val anime: Anime) : MigrateAnimeSearchDialog()
-}
+    @Immutable
+    data class State(
+        val anime: Anime? = null,
+        val dialog: Dialog? = null,
 
-@Immutable
-data class MigrateAnimeSearchState(
-    val anime: Anime? = null,
-    val searchQuery: String? = null,
-    val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
-    val dialog: MigrateAnimeSearchDialog? = null,
-) {
+        val searchQuery: String? = null,
+        val sourceFilter: AnimeSourceFilter = AnimeSourceFilter.PinnedOnly,
+        val onlyShowHasResults: Boolean = false,
+        val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    ) {
+        val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
+        val total: Int = items.size
+        val filteredItems = items.filter { (_, result) -> result.isVisible(onlyShowHasResults) }
+    }
 
-    val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
-
-    val total: Int = items.size
+    sealed class Dialog {
+        data class Migrate(val anime: Anime) : Dialog()
+    }
 }

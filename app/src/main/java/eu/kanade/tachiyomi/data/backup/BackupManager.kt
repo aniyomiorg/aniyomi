@@ -76,7 +76,9 @@ import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -102,6 +104,8 @@ class BackupManager(
     private val getAnimeCategories: GetAnimeCategories = Injekt.get()
     private val getMangaFavorites: GetMangaFavorites = Injekt.get()
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get()
+    private val getMangaHistory: GetMangaHistory = Injekt.get()
+    private val getAnimeHistory: GetAnimeHistory = Injekt.get()
 
     internal val parser = ProtoBuf
 
@@ -289,11 +293,11 @@ class BackupManager(
 
         // Check if user wants history information in backup
         if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
-            val historyByMangaId = mangaHandler.awaitList(true) { historyQueries.getHistoryByMangaId(manga.id) }
+            val historyByMangaId = getMangaHistory.await(manga.id)
             if (historyByMangaId.isNotEmpty()) {
                 val history = historyByMangaId.map { history ->
-                    val chapter = mangaHandler.awaitOne { chaptersQueries.getChapterById(history.chapter_id) }
-                    BackupHistory(chapter.url, history.last_read?.time ?: 0L, history.time_read)
+                    val chapter = mangaHandler.awaitOne { chaptersQueries.getChapterById(history.chapterId) }
+                    BackupHistory(chapter.url, history.readAt?.time ?: 0L, history.readDuration)
                 }
                 if (history.isNotEmpty()) {
                     mangaObject.history = history
@@ -343,11 +347,11 @@ class BackupManager(
 
         // Check if user wants history information in backup
         if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
-            val historyByAnimeId = animeHandler.awaitList(true) { animehistoryQueries.getHistoryByAnimeId(anime.id) }
+            val historyByAnimeId = getAnimeHistory.await(anime.id)
             if (historyByAnimeId.isNotEmpty()) {
                 val history = historyByAnimeId.map { history ->
-                    val episode = animeHandler.awaitOne { episodesQueries.getEpisodeById(history.episode_id) }
-                    BackupAnimeHistory(episode.url, history.last_seen?.time ?: 0L)
+                    val episode = animeHandler.awaitOne { episodesQueries.getEpisodeById(history.episodeId) }
+                    BackupAnimeHistory(episode.url, history.seenAt?.time ?: 0L)
                 }
                 if (history.isNotEmpty()) {
                     animeObject.history = history

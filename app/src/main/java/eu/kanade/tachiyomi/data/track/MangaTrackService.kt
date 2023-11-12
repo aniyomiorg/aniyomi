@@ -6,15 +6,18 @@ import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZoneOffset
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 interface MangaTrackService {
@@ -75,6 +78,21 @@ interface MangaTrackService {
                             lastChapterRead = latestLocalReadChapterNumber,
                         )
                         setRemoteLastChapterRead(updatedTrack.toDbTrack(), latestLocalReadChapterNumber.toInt())
+                    }
+
+                    if (track.startDate <= 0) {
+                        val firstReadChapterDate = Injekt.get<GetMangaHistory>().await(mangaId)
+                            .sortedBy { it.readAt }
+                            .firstOrNull()
+                            ?.readAt
+
+                        firstReadChapterDate?.let {
+                            val startDate = firstReadChapterDate.time.convertEpochMillisZone(
+                                ZoneOffset.systemDefault(),
+                                ZoneOffset.UTC,
+                            )
+                            setRemoteStartDate(track.toDbTrack(), startDate)
+                        }
                     }
                 }
 

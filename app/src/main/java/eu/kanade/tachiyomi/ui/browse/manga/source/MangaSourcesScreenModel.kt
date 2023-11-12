@@ -38,7 +38,7 @@ class MangaSourcesScreenModel(
     // SY -->
     private val toggleExcludeFromMangaDataSaver: ToggleExcludeFromMangaDataSaver = Injekt.get(),
     // SY <--
-) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
+) : StateScreenModel<MangaSourcesScreenModel.State>(State()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()
@@ -101,12 +101,6 @@ class MangaSourcesScreenModel(
         }
     }
 
-    fun onOpenSource(source: Source) {
-        if (!preferences.incognitoMode().get()) {
-            sourcePreferences.lastUsedMangaSource().set(source.id)
-        }
-    }
-
     fun toggleSource(source: Source) {
         toggleSource.await(source)
     }
@@ -134,16 +128,16 @@ class MangaSourcesScreenModel(
     }
 
     data class Dialog(val source: Source)
-}
 
-@Immutable
-data class MangaSourcesState(
-    val dialog: MangaSourcesScreenModel.Dialog? = null,
-    val isLoading: Boolean = true,
-    val items: List<MangaSourceUiModel> = emptyList(),
-    // SY -->
-    val dataSaverEnabled: Boolean = false,
-    // SY <--
-) {
-    val isEmpty = items.isEmpty()
+    @Immutable
+    data class State(
+        val dialog: Dialog? = null,
+        val isLoading: Boolean = true,
+        val items: List<MangaSourceUiModel> = emptyList(),
+        // SY -->
+        val dataSaverEnabled: Boolean = false,
+        // SY <--
+    ) {
+        val isEmpty = items.isEmpty()
+    }
 }

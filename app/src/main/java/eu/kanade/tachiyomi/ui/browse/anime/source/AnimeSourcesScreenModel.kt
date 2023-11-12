@@ -31,7 +31,7 @@ class AnimeSourcesScreenModel(
     private val getEnabledAnimeSources: GetEnabledAnimeSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
     private val toggleSourcePin: ToggleAnimeSourcePin = Injekt.get(),
-) : StateScreenModel<AnimeSourcesState>(AnimeSourcesState()) {
+) : StateScreenModel<AnimeSourcesScreenModel.State>(State()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()
@@ -83,12 +83,6 @@ class AnimeSourcesScreenModel(
         }
     }
 
-    fun onOpenSource(source: AnimeSource) {
-        if (!preferences.incognitoMode().get()) {
-            sourcePreferences.lastUsedAnimeSource().set(source.id)
-        }
-    }
-
     fun toggleSource(source: AnimeSource) {
         toggleSource.await(source)
     }
@@ -110,13 +104,13 @@ class AnimeSourcesScreenModel(
     }
 
     data class Dialog(val source: AnimeSource)
-}
 
-@Immutable
-data class AnimeSourcesState(
-    val dialog: AnimeSourcesScreenModel.Dialog? = null,
-    val isLoading: Boolean = true,
-    val items: List<AnimeSourceUiModel> = emptyList(),
-) {
-    val isEmpty = items.isEmpty()
+    @Immutable
+    data class State(
+        val dialog: Dialog? = null,
+        val isLoading: Boolean = true,
+        val items: List<AnimeSourceUiModel> = emptyList(),
+    ) {
+        val isEmpty = items.isEmpty()
+    }
 }

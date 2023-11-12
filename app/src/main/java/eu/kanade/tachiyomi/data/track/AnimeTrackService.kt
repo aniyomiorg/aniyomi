@@ -6,15 +6,18 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZoneOffset
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 interface AnimeTrackService {
@@ -75,6 +78,21 @@ interface AnimeTrackService {
                             lastEpisodeSeen = latestLocalSeenEpisodeNumber,
                         )
                         setRemoteLastEpisodeSeen(updatedTrack.toDbTrack(), latestLocalSeenEpisodeNumber.toInt())
+                    }
+
+                    if (track.startDate <= 0) {
+                        val firstReadChapterDate = Injekt.get<GetAnimeHistory>().await(animeId)
+                            .sortedBy { it.seenAt }
+                            .firstOrNull()
+                            ?.seenAt
+
+                        firstReadChapterDate?.let {
+                            val startDate = firstReadChapterDate.time.convertEpochMillisZone(
+                                ZoneOffset.systemDefault(),
+                                ZoneOffset.UTC,
+                            )
+                            setRemoteStartDate(track.toDbTrack(), startDate)
+                        }
                     }
                 }
 

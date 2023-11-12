@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.domain.history.manga.model.MangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.domain.history.manga.repository.MangaHistoryRepository
@@ -26,6 +27,10 @@ class MangaHistoryRepositoryImpl(
 
     override suspend fun getTotalReadDuration(): Long {
         return handler.awaitOne { historyQueries.getReadDuration() }
+    }
+
+    override suspend fun getHistoryByMangaId(mangaId: Long): List<MangaHistory> {
+        return handler.awaitList { historyQueries.getHistoryByMangaId(mangaId, mangaHistoryMapper) }
     }
 
     override suspend fun resetMangaHistory(historyId: Long) {

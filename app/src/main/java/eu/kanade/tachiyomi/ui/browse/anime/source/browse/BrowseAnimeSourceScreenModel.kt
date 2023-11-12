@@ -14,6 +14,7 @@ import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
@@ -67,6 +68,7 @@ class BrowseAnimeSourceScreenModel(
     listingQuery: String?,
     sourceManager: AnimeSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
@@ -105,6 +107,10 @@ class BrowseAnimeSourceScreenModel(
                     toolbarQuery = query,
                 )
             }
+        }
+
+        if (!basePreferences.incognitoMode().get()) {
+            sourcePreferences.lastUsedAnimeSource().set(source.id)
         }
     }
 

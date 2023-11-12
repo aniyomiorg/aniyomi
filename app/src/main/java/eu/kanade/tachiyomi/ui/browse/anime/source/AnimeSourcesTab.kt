@@ -47,7 +47,6 @@ fun Screen.animeSourcesTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source, listing ->
-                    screenModel.onOpenSource(source)
                     navigator.push(BrowseAnimeSourceScreen(source.id, listing.query))
                 },
                 onClickPin = screenModel::togglePin,
