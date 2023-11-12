@@ -1,10 +1,8 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -27,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,12 +36,12 @@ import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
-import java.io.File
 
 @Composable
 fun StreamsCatalogSheet(
     isEpisodeOnline: Boolean?,
     videoStreams: PlayerViewModel.VideoStreams,
+    openContentFd: (Uri) -> String?,
     onQualitySelected: (Int) -> Unit,
     onSubtitleSelected: (Int) -> Unit,
     onAudioSelected: (Int) -> Unit,
@@ -75,18 +72,21 @@ fun StreamsCatalogSheet(
             @Composable fun QualityTracksPage() = StreamsPageBuilder(
                 externalTrackCode = null,
                 stream = videoStreams.mercedes,
+                openContentFd = openContentFd,
                 onTrackSelected = onQualitySelected,
             )
 
             @Composable fun SubtitleTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "sub",
                 stream = videoStreams.bmw,
+                openContentFd = openContentFd,
                 onTrackSelected = onSubtitleSelected,
             )
 
             @Composable fun AudioTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "audio",
                 stream = videoStreams.audi,
+                openContentFd = openContentFd,
                 onTrackSelected = onAudioSelected,
             )
 
@@ -103,6 +103,7 @@ fun StreamsCatalogSheet(
 private fun StreamsPageBuilder(
     externalTrackCode: String?,
     stream: PlayerViewModel.VideoStreams.Stream,
+    openContentFd: (Uri) -> String?,
     onTrackSelected: (Int) -> Unit,
 ) {
     var tracks by remember { mutableStateOf(stream.tracks) }
@@ -115,7 +116,6 @@ private fun StreamsPageBuilder(
     }
 
     if (externalTrackCode != null) {
-        val resolver = LocalContext.current.contentResolver
         val addExternalTrack = rememberLauncherForActivityResult(
             object : ActivityResultContracts.GetContent() {
                 override fun createIntent(context: Context, input: String): Intent {
@@ -127,7 +127,7 @@ private fun StreamsPageBuilder(
             if (it != null) {
                 val url = it.toString()
                 val fd = if (url.startsWith("content://")) {
-                    openContentFd(Uri.parse(url), resolver)
+                    openContentFd(Uri.parse(url))
                 } else {
                     url
                 } ?: return@rememberLauncherForActivityResult
@@ -177,24 +177,4 @@ private fun StreamsPageBuilder(
             )
         }
     }
-}
-
-private fun openContentFd(uri: Uri, resolver: ContentResolver): String? {
-    if (uri.scheme != "content") return null
-    val fd = try {
-        val desc = resolver.openFileDescriptor(uri, "r")
-        desc!!.detachFd()
-    } catch (e: Exception) {
-        return null
-    }
-    // Find out real file path and see if we can read it directly
-    try {
-        val path = File("/proc/self/fd/$fd").canonicalPath
-        if (!path.startsWith("/proc") && File(path).canRead()) {
-            ParcelFileDescriptor.adoptFd(fd).close() // we don't need that anymore
-            return path
-        }
-    } catch (_: Exception) {}
-    // Else, pass the fd to mpv
-    return "fdclose://$fd"
 }

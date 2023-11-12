@@ -449,6 +449,7 @@ class PlayerActivity : BaseActivity() {
                         StreamsCatalogSheet(
                             isEpisodeOnline = viewModel.isEpisodeOnline(),
                             videoStreams = viewModel.state.collectAsState().value.videoStreams,
+                            openContentFd = ::openContentFd,
                             onQualitySelected = ::onQualitySelected,
                             onSubtitleSelected = ::onSubtitleSelected,
                             onAudioSelected = ::onAudioSelected,
