@@ -35,7 +35,7 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.Utils
+import java.io.File
 
 @Composable
 fun StreamsCatalogSheet(
@@ -126,15 +126,15 @@ private fun StreamsPageBuilder(
         ) {
             if (it != null) {
                 val url = it.toString()
-                val fd = if (url.startsWith("content://")) {
+                val path = if (url.startsWith("content://")) {
                     openContentFd(Uri.parse(url))
                 } else {
                     url
                 } ?: return@rememberLauncherForActivityResult
-                MPVLib.command(arrayOf("$externalTrackCode-add", fd, "cached"))
-                val path = Utils.findRealPath(fd.substringAfter("//").toInt()) ?: fd
-                tracks += Track(path, path)
-                stream.tracks += Track(path, path)
+                MPVLib.command(arrayOf("$externalTrackCode-add", path, "cached"))
+                val title = File(path).name
+                tracks += Track(path, title)
+                stream.tracks += Track(path, title)
                 index = tracks.lastIndex
                 stream.index = tracks.lastIndex
             }
