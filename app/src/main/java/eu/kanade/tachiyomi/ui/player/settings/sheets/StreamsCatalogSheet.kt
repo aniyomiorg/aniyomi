@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -35,6 +36,7 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
+import tachiyomi.presentation.core.components.material.padding
 import java.io.File
 
 @Composable
@@ -146,8 +148,10 @@ private fun StreamsPageBuilder(
                 .fillMaxWidth()
                 .clickable(onClick = { addExternalTrack.launch("*/*") })
                 .padding(sheetDialogPadding),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
+                modifier = Modifier.padding(end = MaterialTheme.padding.tiny),
                 imageVector = Icons.Default.Add,
                 contentDescription = stringResource(id = addTrackRes),
             )
