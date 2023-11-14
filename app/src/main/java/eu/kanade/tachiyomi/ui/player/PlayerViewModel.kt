@@ -721,7 +721,7 @@ class PlayerViewModel(
         val sheet: Sheet? = null,
     )
 
-    class VideoStreams(val mercedes: Stream, val bmw: Stream, val audi: Stream) {
+    class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())
         class Stream(var index: Int = 0, var tracks: Array<Track> = emptyArray())
     }

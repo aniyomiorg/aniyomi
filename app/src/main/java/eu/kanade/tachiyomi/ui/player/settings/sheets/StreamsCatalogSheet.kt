@@ -73,21 +73,21 @@ fun StreamsCatalogSheet(
         ) {
             @Composable fun QualityTracksPage() = StreamsPageBuilder(
                 externalTrackCode = null,
-                stream = videoStreams.mercedes,
+                stream = videoStreams.quality,
                 openContentFd = openContentFd,
                 onTrackSelected = onQualitySelected,
             )
 
             @Composable fun SubtitleTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "sub",
-                stream = videoStreams.bmw,
+                stream = videoStreams.subtitle,
                 openContentFd = openContentFd,
                 onTrackSelected = onSubtitleSelected,
             )
 
             @Composable fun AudioTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "audio",
-                stream = videoStreams.audi,
+                stream = videoStreams.audio,
                 openContentFd = openContentFd,
                 onTrackSelected = onAudioSelected,
             )
