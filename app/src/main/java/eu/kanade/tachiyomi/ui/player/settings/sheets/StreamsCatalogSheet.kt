@@ -123,9 +123,9 @@ private fun StreamsPageBuilder(
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
                     return if (externalTrackCode == "audio") {
-                        Intent.createChooser(intent, "Select an Audio file.")
+                        Intent.createChooser(intent, context.getString(R.string.player_add_external_audio_intent))
                     } else {
-                        Intent.createChooser(intent, "Select a Subtitle file.")
+                        Intent.createChooser(intent, context.getString(R.string.player_add_external_subtitles_intent))
                     }
                 }
             },
@@ -146,7 +146,7 @@ private fun StreamsPageBuilder(
             }
         }
 
-        val addTrackRes = if (externalTrackCode == "sub") R.string.player_add_subtitles else R.string.player_add_audio
+        val addTrackRes = if (externalTrackCode == "sub") R.string.player_add_external_subtitles else R.string.player_add_external_audio
         Row(
             modifier = Modifier
                 .fillMaxWidth()
