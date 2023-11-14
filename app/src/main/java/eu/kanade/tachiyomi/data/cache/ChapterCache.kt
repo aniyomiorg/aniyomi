@@ -4,18 +4,28 @@ import android.content.Context
 import android.text.format.Formatter
 import com.jakewharton.disklrucache.DiskLruCache
 import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
-import kotlinx.serialization.decodeFromString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okio.buffer
 import okio.sink
 import tachiyomi.domain.items.chapter.model.Chapter
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
+import kotlin.math.pow
+import kotlin.math.roundToLong
 
 /**
  * Class used to create chapter cache
@@ -28,20 +38,35 @@ import java.io.IOException
  */
 class ChapterCache(private val context: Context) {
 
+    companion object {
+        /** Name of cache directory.  */
+        const val PARAMETER_CACHE_DIRECTORY = "chapter_disk_cache"
+
+        /** Application cache version.  */
+        const val PARAMETER_APP_VERSION = 1
+
+        /** The number of values per cache entry. Must be positive.  */
+        const val PARAMETER_VALUE_COUNT = 1
+
+        /** The maximum number of bytes this cache should use to store.  */
+        const val PARAMETER_CACHE_SIZE = 50L * 1024 * 1024
+    }
+
+    /** Google Json class used for parsing JSON files.  */
     private val json: Json by injectLazy()
 
-    /** Cache class used for cache management. */
-    private val diskCache = DiskLruCache.open(
-        File(context.cacheDir, "chapter_disk_cache"),
-        PARAMETER_APP_VERSION,
-        PARAMETER_VALUE_COUNT,
-        PARAMETER_CACHE_SIZE,
-    )
+    private val readerPreferences: ReaderPreferences = Injekt.get()
+
+    private val scope = CoroutineScope(Job() + Dispatchers.IO)
+
+    /** Cache class used for cache management.  */
+    private var diskCache = setupDiskCache(readerPreferences.preloadSize().get())
 
     /**
      * Returns directory of cache.
      */
-    private val cacheDir: File = diskCache.directory
+    val cacheDir: File
+        get() = diskCache.directory
 
     /**
      * Returns real size of directory.
@@ -54,6 +79,50 @@ class ChapterCache(private val context: Context) {
      */
     val readableSize: String
         get() = Formatter.formatFileSize(context, realSize)
+
+    init {
+        readerPreferences.preloadSize().changes()
+            .drop(1)
+            .onEach {
+                // Save old cache for destruction later
+                val oldCache = diskCache
+                diskCache = setupDiskCache(it)
+                oldCache.close()
+            }
+            .launchIn(scope)
+    }
+
+    private fun setupDiskCache(cacheSize: Int): DiskLruCache {
+        return DiskLruCache.open(
+            File(context.cacheDir, PARAMETER_CACHE_DIRECTORY),
+            PARAMETER_APP_VERSION,
+            PARAMETER_VALUE_COUNT,
+            // 4 pages = 115MB, 6 = ~150MB, 10 = ~200MB, 20 = ~300MB
+            (PARAMETER_CACHE_SIZE * cacheSize.toFloat().pow(0.6f)).roundToLong(),
+        )
+    }
+
+    /**
+     * Remove file from cache.
+     *
+     * @param file name of file "md5.0".
+     * @return status of deletion for the file.
+     */
+    fun removeFileFromCache(file: String): Boolean {
+        // Make sure we don't delete the journal file (keeps track of cache).
+        if (file == "journal" || file.startsWith("journal.")) {
+            return false
+        }
+
+        try {
+            // Remove the extension from the file to get the key of the cache
+            val key = file.substringBeforeLast(".")
+            // Remove file from cache.
+            return diskCache.remove(key)
+        } catch (e: Exception) {
+            return false
+        }
+    }
 
     /**
      * Get page list from cache.
@@ -169,38 +238,7 @@ class ChapterCache(private val context: Context) {
         return deletedFiles
     }
 
-    /**
-     * Remove file from cache.
-     *
-     * @param file name of file "md5.0".
-     * @return status of deletion for the file.
-     */
-    private fun removeFileFromCache(file: String): Boolean {
-        // Make sure we don't delete the journal file (keeps track of cache).
-        if (file == "journal" || file.startsWith("journal.")) {
-            return false
-        }
-
-        return try {
-            // Remove the extension from the file to get the key of the cache
-            val key = file.substringBeforeLast(".")
-            // Remove file from cache.
-            diskCache.remove(key)
-        } catch (e: Exception) {
-            false
-        }
-    }
-
     private fun getKey(chapter: Chapter): String {
         return "${chapter.mangaId}${chapter.url}"
     }
 }
-
-/** Application cache version.  */
-private const val PARAMETER_APP_VERSION = 1
-
-/** The number of values per cache entry. Must be positive.  */
-private const val PARAMETER_VALUE_COUNT = 1
-
-/** The maximum number of bytes this cache should use to store.  */
-private const val PARAMETER_CACHE_SIZE = 100L * 1024 * 1024

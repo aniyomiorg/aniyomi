@@ -55,7 +55,10 @@
     <string name="video">Video</string>
     <string name="comic">Comic</string>
 
-    <!--Torrent -->
+    <!-- Torrent -->
     <string name="install_amnis">Amnis Player needs to be installed</string>
+
+    <!-- Prefs -->
+    <string name="pref_page_preload_amount">Page preload amount</string>
 
 </resources>
