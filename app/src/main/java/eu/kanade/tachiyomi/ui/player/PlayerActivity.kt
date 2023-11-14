@@ -138,7 +138,13 @@ class PlayerActivity : BaseActivity() {
                     setInitialEpisodeError(exception)
                 }
             }
-            lifecycleScope.launch { setVideoList(qualityIndex = 0, initResult.first!!) }
+            lifecycleScope.launch {
+                setVideoList(
+                    qualityIndex = initResult.first.videoIndex,
+                    videos = initResult.first.videoList,
+                    position = initResult.first.position,
+                )
+            }
         }
         super.onNewIntent(intent)
     }
@@ -410,6 +416,7 @@ class PlayerActivity : BaseActivity() {
                             if (playerIsDestroyed) return
                             if (streams.quality.index == qualityIndex) return
                             showLoadingIndicator(true)
+                            viewModel.qualityIndex = qualityIndex
                             logcat(LogPriority.INFO) { "Changing quality" }
                             setVideoList(qualityIndex, currentVideoList)
                         }
@@ -1374,7 +1381,7 @@ class PlayerActivity : BaseActivity() {
         finish()
     }
 
-    private fun setVideoList(qualityIndex: Int, videos: List<Video>?, fromStart: Boolean = false) {
+    private fun setVideoList(qualityIndex: Int, videos: List<Video>?, fromStart: Boolean = false, position: Long? = null) {
         if (playerIsDestroyed) return
         currentVideoList = videos
         currentVideoList?.getOrNull(qualityIndex)?.let {
@@ -1383,11 +1390,15 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    if ((episode.seen && !preservePos) || fromStart) {
-                        episode.last_second_seen = 1L
+                    val resumePosition = if (position != null) {
+                        position
+                    } else if ((episode.seen && !preservePos) || fromStart) {
+                        0L
+                    } else {
+                        episode.last_second_seen
                     }
-                    MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
-                    playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
+                    MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
+                    playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
             } else {
                 player.timePos?.let {
@@ -1395,8 +1406,7 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
-            streams.audio
-                .tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
+            streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
         refreshUi()

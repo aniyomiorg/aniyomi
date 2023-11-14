@@ -83,8 +83,8 @@ import java.util.Date
 /**
  * Presenter used by the activity to perform background operations.
  */
-class ReaderViewModel(
-    private val savedState: SavedStateHandle = SavedStateHandle(),
+class ReaderViewModel @JvmOverloads constructor(
+    private val savedState: SavedStateHandle,
     private val sourceManager: MangaSourceManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),

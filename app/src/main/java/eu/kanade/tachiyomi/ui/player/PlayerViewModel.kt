@@ -47,12 +47,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
@@ -80,8 +75,8 @@ import uy.kohesive.injekt.api.get
 import java.io.InputStream
 import java.util.Date
 
-class PlayerViewModel(
-    private val savedState: SavedStateHandle = SavedStateHandle(),
+class PlayerViewModel @JvmOverloads constructor(
+    private val savedState: SavedStateHandle,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
@@ -138,9 +133,27 @@ class PlayerViewModel(
         get() = state.value.source
 
     /**
+     * The position in the current video. Used to restore from process kill.
+     */
+    private var episodePosition = savedState.get<Long>("episode_position") ?: 0L
+        set(value) {
+            savedState["episode_position"] = value
+            field = value
+        }
+
+    /**
+     * The current video's quality index. Used to restore from process kill.
+     */
+    var qualityIndex = savedState.get<Int>("quality_index") ?: 0
+        set(value) {
+            savedState["quality_index"] = value
+            field = value
+        }
+
+    /**
      * The episode id of the currently loaded episode. Used to restore from process kill.
      */
-    private var savedEpisodeId = savedState.get<Long>("episode_id") ?: -1L
+    private var episodeId = savedState.get<Long>("episode_id") ?: -1L
         set(value) {
             savedState["episode_id"] = value
             field = value
@@ -150,12 +163,10 @@ class PlayerViewModel(
 
     private var currentVideoList: List<Video>? = null
 
-    private var requestedSecond: Long = 0L
-
     private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
         val anime = currentAnime ?: return episodes
-        val selectedEpisode = episodes.find { it.id == savedEpisodeId }
-            ?: error("Requested episode of id $savedEpisodeId not found in episode list")
+        val selectedEpisode = episodes.find { it.id == episodeId }
+            ?: error("Requested episode of id $episodeId not found in episode list")
 
         val episodesForPlayer = episodes.filterNot {
             anime.unseenFilterRaw == Anime.EPISODE_SHOW_SEEN && !it.seen ||
@@ -166,7 +177,7 @@ class PlayerViewModel(
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED && it.bookmark
         }.toMutableList()
 
-        if (episodesForPlayer.all { it.id != savedEpisodeId }) {
+        if (episodesForPlayer.all { it.id != episodeId }) {
             episodesForPlayer += listOf(selectedEpisode)
         }
 
@@ -207,38 +218,26 @@ class PlayerViewModel(
         }
     }
 
-    init {
-        // To save state
-        state.map { currentEpisode }
-            .distinctUntilChanged()
-            .filterNotNull()
-            .onEach { currentEpisode ->
-                if (!currentEpisode.seen) {
-                    requestedSecond = currentEpisode.last_second_seen
-                }
-                savedEpisodeId = currentEpisode.id!!
-            }
-            .launchIn(viewModelScope)
-    }
-
     /**
      * Whether this presenter is initialized yet.
      */
-    private fun needsInit(animeId: Long, episodeId: Long): Boolean {
-        return animeId != currentAnime?.id || episodeId != currentEpisode?.id
+    private fun needsInit(): Boolean {
+        return currentAnime == null || currentEpisode == null
     }
 
     /**
-     * Initializes this presenter with the given [animeId] and [episodeId]. This method will
+     * Initializes this presenter with the given [animeId] and [initialEpisodeId]. This method will
      * fetch the anime from the database and initialize the episode.
      */
-    suspend fun init(animeId: Long, episodeId: Long): Pair<List<Video>?, Result<Boolean>> {
-        if (!needsInit(animeId, episodeId)) return Pair(currentVideoList, Result.success(true))
+    suspend fun init(animeId: Long, initialEpisodeId: Long): Pair<InitResult, Result<Boolean>> {
+        val defaultResult = InitResult(currentVideoList, 0, null)
+        if (!needsInit()) return Pair(defaultResult, Result.success(true))
         return try {
             val anime = getAnime.await(animeId)
             if (anime != null) {
+                if (episodeId == -1L) episodeId = initialEpisodeId
+
                 checkTrackers(anime)
-                savedEpisodeId = episodeId
 
                 mutableState.update { it.copy(episodeList = initEpisodeList(anime)) }
                 val episode = this.currentPlaylist.first { it.id == episodeId }
@@ -256,17 +255,27 @@ class PlayerViewModel(
                         currentVideoList = null
                         throw Exception("Video list is empty.")
                     }
-                savedEpisodeId = currentEp.id!!
 
-                Pair(currentVideoList, Result.success(true))
+                val result = InitResult(
+                    videoList = currentVideoList,
+                    videoIndex = qualityIndex,
+                    position = episodePosition,
+                )
+                Pair(result, Result.success(true))
             } else {
                 // Unlikely but okay
-                Pair(currentVideoList, Result.success(false))
+                Pair(defaultResult, Result.success(false))
             }
         } catch (e: Throwable) {
-            Pair(currentVideoList, Result.failure(e))
+            Pair(defaultResult, Result.failure(e))
         }
     }
+
+    data class InitResult(
+        val videoList: List<Video>?,
+        val videoIndex: Int,
+        val position: Long?,
+    )
 
     private fun initEpisodeList(anime: Anime): List<Episode> {
         val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
@@ -301,7 +310,7 @@ class PlayerViewModel(
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
-                savedEpisodeId = currentEpisode.id!!
+                this@PlayerViewModel.episodeId = currentEpisode.id!!
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
@@ -317,13 +326,15 @@ class PlayerViewModel(
     fun onSecondReached(position: Int, duration: Int) {
         if (state.value.isLoadingEpisode) return
         val currentEp = currentEpisode ?: return
-        if (savedEpisodeId == -1L) return
+        if (episodeId == -1L) return
 
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
         // Save last second seen and mark as seen if needed
         currentEp.last_second_seen = seconds
         currentEp.total_seconds = totalSeconds
+
+        episodePosition = seconds
 
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
