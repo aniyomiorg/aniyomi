@@ -117,13 +117,13 @@
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
                 android:src="@drawable/ic_overflow_20dp"
-                app:layout_constraintLeft_toRightOf="@id/tracksBtn"
+                app:layout_constraintLeft_toRightOf="@id/streamsBtn"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/episodeListBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
-                android:id="@+id/tracksBtn"
+                android:id="@+id/streamsBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
@@ -143,8 +143,8 @@
                 android:src="@drawable/ic_video_chapter_20dp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
-                app:layout_constraintRight_toLeftOf="@id/tracksBtn"
-                app:layout_constraintTop_toTopOf="@id/tracksBtn"
+                app:layout_constraintRight_toLeftOf="@id/streamsBtn"
+                app:layout_constraintTop_toTopOf="@id/streamsBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial

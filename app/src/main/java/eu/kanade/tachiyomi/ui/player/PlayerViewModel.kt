@@ -15,6 +15,7 @@ import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
@@ -701,8 +702,8 @@ class PlayerViewModel(
         mutableState.update { it.copy(sheet = Sheet.VideoChapters) }
     }
 
-    fun showTracksCatalog() {
-        mutableState.update { it.copy(sheet = Sheet.TracksCatalog) }
+    fun showStreamsCatalog() {
+        mutableState.update { it.copy(sheet = Sheet.StreamsCatalog) }
     }
 
     fun closeDialogSheet() {
@@ -714,10 +715,16 @@ class PlayerViewModel(
         val episode: Episode? = null,
         val anime: Anime? = null,
         val source: AnimeSource? = null,
+        val videoStreams: VideoStreams = VideoStreams(),
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
         val sheet: Sheet? = null,
     )
+
+    class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
+        constructor() : this(Stream(), Stream(), Stream())
+        class Stream(var index: Int = 0, var tracks: Array<Track> = emptyArray())
+    }
 
     sealed class Dialog {
         object EpisodeList : Dialog()
@@ -730,13 +737,12 @@ class PlayerViewModel(
         object ScreenshotOptions : Sheet()
         object PlayerSettings : Sheet()
         object VideoChapters : Sheet()
-        object TracksCatalog : Sheet()
+        object StreamsCatalog : Sheet()
     }
 
     sealed class Event {
         data class SetAnimeSkipIntro(val duration: Int) : Event()
         data class SetCoverResult(val result: SetAsCover) : Event()
-
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }

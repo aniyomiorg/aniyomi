@@ -23,7 +23,7 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.padding
 
 @Composable
-fun SubtitleDelayPage(
+fun StreamsDelayPage(
     screenModel: PlayerSettingsScreenModel,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
@@ -31,13 +31,13 @@ fun SubtitleDelayPage(
         val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
         var currentSubDelay by rememberSaveable {
             mutableStateOf(
-                (MPVLib.getPropertyDouble(Tracks.SUBTITLES.mpvProperty) * 1000)
+                (MPVLib.getPropertyDouble(Streams.SUBTITLES.mpvProperty) * 1000)
                     .toInt(),
             )
         }
         var currentAudioDelay by rememberSaveable {
             mutableStateOf(
-                (MPVLib.getPropertyDouble(Tracks.AUDIO.mpvProperty) * 1000)
+                (MPVLib.getPropertyDouble(Streams.AUDIO.mpvProperty) * 1000)
                     .toInt(),
             )
         }
@@ -59,7 +59,7 @@ fun SubtitleDelayPage(
                 value = currentAudioDelay,
                 step = 100,
                 onValueChanged = {
-                    MPVLib.setPropertyDouble(Tracks.AUDIO.mpvProperty, it / 1000.0)
+                    MPVLib.setPropertyDouble(Streams.AUDIO.mpvProperty, it / 1000.0)
                     screenModel.preferences.audioDelay().set(it)
                     currentAudioDelay = it
                 },
@@ -86,7 +86,7 @@ fun SubtitleDelayPage(
                 value = currentSubDelay,
                 step = 100,
                 onValueChanged = {
-                    MPVLib.setPropertyDouble(Tracks.SUBTITLES.mpvProperty, it / 1000.0)
+                    MPVLib.setPropertyDouble(Streams.SUBTITLES.mpvProperty, it / 1000.0)
                     screenModel.preferences.subtitlesDelay().set(it)
                     currentSubDelay = it
                 },
@@ -95,7 +95,7 @@ fun SubtitleDelayPage(
     }
 }
 
-private enum class Tracks(val mpvProperty: String) {
+private enum class Streams(val mpvProperty: String) {
     SUBTITLES("sub-delay"),
     AUDIO("audio-delay"),
     ;

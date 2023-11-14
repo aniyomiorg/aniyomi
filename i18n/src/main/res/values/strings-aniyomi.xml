@@ -333,6 +333,10 @@
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
+    <string name="player_add_external_audio">Add external audio</string>
+    <string name="player_add_external_audio_intent">Select an audio file.</string>
+    <string name="player_add_external_subtitles">Add external subtitles</string>
+    <string name="player_add_external_subtitles_intent">Select a subtitle file.</string>
     <string name="player_subtitle_empty_warning">Has no effect because there aren\'t any subtitle tracks in this video</string>
     <string name="player_override_ass_subtitles">Override ASS subtitles</string>
     <string name="player_reset_subtitles">Reset subtitles to default</string>
