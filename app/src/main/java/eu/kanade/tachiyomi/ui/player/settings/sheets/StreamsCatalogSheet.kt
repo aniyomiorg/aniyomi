@@ -122,7 +122,11 @@ private fun StreamsPageBuilder(
             object : ActivityResultContracts.GetContent() {
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
-                    return Intent.createChooser(intent, "Select Something")
+                    return if (externalTrackCode == "audio") {
+                        Intent.createChooser(intent, "Select an Audio file.")
+                    } else {
+                        Intent.createChooser(intent, "Select a Subtitle file.")
+                    }
                 }
             },
         ) {
