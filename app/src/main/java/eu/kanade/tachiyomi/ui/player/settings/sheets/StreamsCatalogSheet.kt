@@ -64,10 +64,9 @@ fun StreamsCatalogSheet(
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
         hideSystemBars = true,
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
