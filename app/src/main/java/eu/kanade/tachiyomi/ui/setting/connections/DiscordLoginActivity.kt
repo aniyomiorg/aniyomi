@@ -41,9 +41,9 @@ class DiscordLoginActivity : BaseActivity() {
                     webView.evaluateJavascript(
                         """
                         (function() {
-                            const wreq = webpackChunkdiscord_app.push([[Symbol()], {}, w => w])
+                            const wreq = (webpackChunkdiscord_app.push([[''], {}, e => { m = []; for (let c in e.c) m.push(e.c[c])}]), m)
                             webpackChunkdiscord_app.pop()
-                            const token = Object.values(wreq.c).find(m => m.exports?.Z?.getToken).exports.Z.getToken();
+                            const token = wreq.find(m => m?.exports?.default?.getToken !== void 0).exports.default.getToken(); 
                             return token;
                         })()
                         """.trimIndent(),
