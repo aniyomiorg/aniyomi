@@ -16,7 +16,7 @@ import kotlinx.serialization.json.JsonElement
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
-private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
+private const val RICH_PRESENCE_APPLICATION_ID = "1174688109242355812"
 
 // Constant for buttons list
 private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
