@@ -23,14 +23,14 @@ CREATE TABLE animes(
     date_added INTEGER AS Long NOT NULL,
     update_strategy INTEGER AS UpdateStrategy NOT NULL DEFAULT 0,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
-    last_modified_at INTEGER AS Long NOT NULL,
+    last_modified_at INTEGER AS Long NOT NULL DEFAULT 0,
     favorite_modified_at INTEGER AS Long
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
 CREATE INDEX animes_url_index ON animes(url);
 
-CREATE TRIGGER update_favorite_modified_at_animes
+CREATE TRIGGER update_last_favorite_at_animes
 AFTER UPDATE OF favorite ON animes
 BEGIN
   UPDATE animes

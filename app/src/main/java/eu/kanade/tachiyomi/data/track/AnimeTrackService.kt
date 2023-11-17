@@ -61,7 +61,7 @@ interface AnimeTrackService {
                 val hasSeenEpisodes = allEpisodes.any { it.seen }
                 bind(item, hasSeenEpisodes)
 
-                val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
+                var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
                 Injekt.get<InsertAnimeTrack>().await(track)
 
@@ -74,10 +74,10 @@ interface AnimeTrackService {
                         ?.episodeNumber?.toDouble() ?: -1.0
 
                     if (latestLocalSeenEpisodeNumber > track.lastEpisodeSeen) {
-                        val updatedTrack = track.copy(
+                        track = track.copy(
                             lastEpisodeSeen = latestLocalSeenEpisodeNumber,
                         )
-                        setRemoteLastEpisodeSeen(updatedTrack.toDbTrack(), latestLocalSeenEpisodeNumber.toInt())
+                        setRemoteLastEpisodeSeen(track.toDbTrack(), latestLocalSeenEpisodeNumber.toInt())
                     }
 
                     if (track.startDate <= 0) {
@@ -90,6 +90,9 @@ interface AnimeTrackService {
                             val startDate = firstReadChapterDate.time.convertEpochMillisZone(
                                 ZoneOffset.systemDefault(),
                                 ZoneOffset.UTC,
+                            )
+                            track = track.copy(
+                                startDate = startDate,
                             )
                             setRemoteStartDate(track.toDbTrack(), startDate)
                         }

@@ -61,7 +61,7 @@ interface MangaTrackService {
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 
-                val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
+                var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
                 Injekt.get<InsertMangaTrack>().await(track)
 
@@ -74,10 +74,10 @@ interface MangaTrackService {
                         ?.chapterNumber?.toDouble() ?: -1.0
 
                     if (latestLocalReadChapterNumber > track.lastChapterRead) {
-                        val updatedTrack = track.copy(
+                        track = track.copy(
                             lastChapterRead = latestLocalReadChapterNumber,
                         )
-                        setRemoteLastChapterRead(updatedTrack.toDbTrack(), latestLocalReadChapterNumber.toInt())
+                        setRemoteLastChapterRead(track.toDbTrack(), latestLocalReadChapterNumber.toInt())
                     }
 
                     if (track.startDate <= 0) {
@@ -90,6 +90,9 @@ interface MangaTrackService {
                             val startDate = firstReadChapterDate.time.convertEpochMillisZone(
                                 ZoneOffset.systemDefault(),
                                 ZoneOffset.UTC,
+                            )
+                            track = track.copy(
+                                startDate = startDate,
                             )
                             setRemoteStartDate(track.toDbTrack(), startDate)
                         }

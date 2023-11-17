@@ -78,7 +78,6 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
@@ -99,6 +98,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.preference.toggle
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
@@ -957,18 +957,20 @@ class ReaderActivity : BaseActivity() {
             }
         }
 
+        private val grayBackgroundColor = Color.rgb(0x20, 0x21, 0x25)
+
         /**
          * Initializes the reader subscriptions.
          */
         init {
             readerPreferences.readerTheme().changes()
                 .onEach { theme ->
-                    binding.readerContainer.setBackgroundResource(
+                    binding.readerContainer.setBackgroundColor(
                         when (theme) {
-                            0 -> R.color.md_white_1000
-                            2 -> R.color.reader_background_dark
+                            0 -> Color.WHITE
+                            2 -> grayBackgroundColor
                             3 -> automaticBackgroundColor()
-                            else -> R.color.md_black_1000
+                            else -> Color.BLACK
                         },
                     )
                 }
@@ -1021,9 +1023,9 @@ class ReaderActivity : BaseActivity() {
          */
         private fun automaticBackgroundColor(): Int {
             return if (baseContext.isNightMode()) {
-                R.color.reader_background_dark
+                grayBackgroundColor
             } else {
-                R.color.md_white_1000
+                Color.WHITE
             }
         }
 

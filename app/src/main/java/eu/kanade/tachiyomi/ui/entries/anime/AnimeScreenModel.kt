@@ -84,11 +84,9 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import java.util.Calendar
 
-class AnimeInfoScreenModel(
+class AnimeScreenModel(
     val context: Context,
     val animeId: Long,
     private val isFromSource: Boolean,
@@ -1116,7 +1114,7 @@ sealed class AnimeScreenState {
         val episodes: List<EpisodeItem>,
         val trackItems: List<AnimeTrackItem> = emptyList(),
         val isRefreshingData: Boolean = false,
-        val dialog: AnimeInfoScreenModel.Dialog? = null,
+        val dialog: AnimeScreenModel.Dialog? = null,
         val hasPromptedToAddBefore: Boolean = false,
         val nextAiringEpisode: Pair<Int, Long> = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt),
     ) : AnimeScreenState() {
@@ -1164,9 +1162,3 @@ data class EpisodeItem(
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
-
-val episodeDecimalFormat = DecimalFormat(
-    "#.###",
-    DecimalFormatSymbols()
-        .apply { decimalSeparator = '.' },
-)

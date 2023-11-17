@@ -17,13 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
 fun PlayerSettingsSheet(
@@ -95,7 +95,7 @@ fun PlayerSettingsSheet(
                     modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
-                    HwDecState.values().forEach {
+                    HwDecState.entries.forEach {
                         if (!HwDecState.isHwSupported && it.title == "HW+") return@forEach
                         FilterChip(
                             selected = decoder == it.mpvValue,

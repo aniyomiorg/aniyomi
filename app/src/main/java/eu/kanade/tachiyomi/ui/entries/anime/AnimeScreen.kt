@@ -34,6 +34,7 @@ import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
 import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
+import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -76,7 +77,7 @@ class AnimeScreen(
         val context = LocalContext.current
         val haptic = LocalHapticFeedback.current
         val scope = rememberCoroutineScope()
-        val screenModel = rememberScreenModel { AnimeInfoScreenModel(context, animeId, fromSource) }
+        val screenModel = rememberScreenModel { AnimeScreenModel(context, animeId, fromSource) }
 
         val state by screenModel.state.collectAsState()
 
@@ -163,7 +164,7 @@ class AnimeScreen(
         }
         when (val dialog = successState.dialog) {
             null -> {}
-            is AnimeInfoScreenModel.Dialog.ChangeCategory -> {
+            is AnimeScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
@@ -173,7 +174,7 @@ class AnimeScreen(
                     },
                 )
             }
-            is AnimeInfoScreenModel.Dialog.DeleteEpisodes -> {
+            is AnimeScreenModel.Dialog.DeleteEpisodes -> {
                 DeleteItemsDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
@@ -183,12 +184,12 @@ class AnimeScreen(
                     isManga = false,
                 )
             }
-            is AnimeInfoScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(
+            is AnimeScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(
                 onDismissRequest = onDismissRequest,
                 onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
                 onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
             )
-            AnimeInfoScreenModel.Dialog.SettingsSheet -> EpisodeSettingsDialog(
+            AnimeScreenModel.Dialog.SettingsSheet -> EpisodeSettingsDialog(
                 onDismissRequest = onDismissRequest,
                 anime = successState.anime,
                 onDownloadFilterChanged = screenModel::setDownloadedFilter,
@@ -198,7 +199,7 @@ class AnimeScreen(
                 onDisplayModeChanged = screenModel::setDisplayMode,
                 onSetAsDefault = screenModel::setCurrentSettingsAsDefault,
             )
-            AnimeInfoScreenModel.Dialog.TrackSheet -> {
+            AnimeScreenModel.Dialog.TrackSheet -> {
                 NavigatorAdaptiveSheet(
                     screen = AnimeTrackInfoDialogHomeScreen(
                         animeId = successState.anime.id,
@@ -209,7 +210,7 @@ class AnimeScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            AnimeInfoScreenModel.Dialog.FullCover -> {
+            AnimeScreenModel.Dialog.FullCover -> {
                 val sm = rememberScreenModel { AnimeCoverScreenModel(successState.anime.id) }
                 val anime by sm.state.collectAsState()
                 if (anime != null) {
@@ -236,7 +237,7 @@ class AnimeScreen(
                 }
             }
             // SY -->
-            is AnimeInfoScreenModel.Dialog.EditAnimeInfo -> {
+            is AnimeScreenModel.Dialog.EditAnimeInfo -> {
                 EditAnimeDialog(
                     anime = dialog.anime,
                     onDismissRequest = screenModel::dismissDialog,
@@ -244,7 +245,7 @@ class AnimeScreen(
                 )
             }
             // SY <--
-            AnimeInfoScreenModel.Dialog.ChangeAnimeSkipIntro -> {
+            AnimeScreenModel.Dialog.ChangeAnimeSkipIntro -> {
                 fun updateSkipIntroLength(newLength: Long) {
                     scope.launchIO {
                         screenModel.setAnimeViewerFlags.awaitSetSkipIntroLength(animeId, newLength)
@@ -258,12 +259,12 @@ class AnimeScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            is AnimeInfoScreenModel.Dialog.ShowQualities -> {
+            is AnimeScreenModel.Dialog.ShowQualities -> {
                 EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest
                 val episodeTitle = if (dialog.anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                     stringResource(
                         R.string.display_mode_episode,
-                        episodeDecimalFormat.format(dialog.episode.episodeNumber.toDouble()),
+                        formatEpisodeNumber(dialog.episode.episodeNumber),
                     )
                 } else {
                     dialog.episode.name

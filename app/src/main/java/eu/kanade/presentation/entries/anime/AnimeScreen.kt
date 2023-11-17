@@ -65,6 +65,7 @@ import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
+import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -73,7 +74,6 @@ import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
-import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
@@ -492,7 +492,7 @@ private fun AnimeScreenSmallImpl(
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
-                                        episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                        formatEpisodeNumber(state.airingEpisodeNumber.toFloat()),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
                                 )
@@ -755,7 +755,7 @@ fun AnimeScreenLargeImpl(
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
-                                                episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                                formatEpisodeNumber(state.airingEpisodeNumber.toFloat()),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
                                         )
@@ -858,7 +858,7 @@ private fun LazyListScope.sharedEpisodeItems(
             title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                 stringResource(
                     R.string.display_mode_episode,
-                    episodeDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
+                    formatEpisodeNumber(episodeItem.episode.episodeNumber),
                 )
             } else {
                 episodeItem.episode.name

@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEach
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
 import tachiyomi.core.preference.TriState
@@ -35,6 +34,7 @@ import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
+import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
 fun AnimeLibrarySettingsDialog(
@@ -239,60 +239,36 @@ private fun ColumnScope.DisplayPage(
             } else {
                 stringResource(R.string.label_default)
             },
-            onChange = { columnPreference.set(it) },
+            onChange = columnPreference::set,
         )
     }
 
     HeadingItem(R.string.overlay_header)
-    val downloadBadge by screenModel.libraryPreferences.downloadBadge().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_download_badge_anime),
-        checked = downloadBadge,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::downloadBadge)
-        },
+        pref = screenModel.libraryPreferences.downloadBadge(),
     )
-    val localBadge by screenModel.libraryPreferences.localBadge().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_local_badge),
-        checked = localBadge,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::localBadge)
-        },
+        pref = screenModel.libraryPreferences.localBadge(),
     )
-    val languageBadge by screenModel.libraryPreferences.languageBadge().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_language_badge),
-        checked = languageBadge,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::languageBadge)
-        },
+        pref = screenModel.libraryPreferences.languageBadge(),
     )
-    val showContinueViewingButton by screenModel.libraryPreferences.showContinueViewingButton().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_show_continue_reading_button),
-        checked = showContinueViewingButton,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::showContinueViewingButton)
-        },
+        pref = screenModel.libraryPreferences.showContinueViewingButton(),
     )
 
     HeadingItem(R.string.tabs_header)
-    val categoryTabs by screenModel.libraryPreferences.categoryTabs().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_show_tabs),
-        checked = categoryTabs,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::categoryTabs)
-        },
+        pref = screenModel.libraryPreferences.categoryTabs(),
     )
-    val categoryNumberOfItems by screenModel.libraryPreferences.categoryNumberOfItems().collectAsState()
     CheckboxItem(
         label = stringResource(R.string.action_display_show_number_of_items),
-        checked = categoryNumberOfItems,
-        onClick = {
-            screenModel.togglePreference(LibraryPreferences::categoryNumberOfItems)
-        },
+        pref = screenModel.libraryPreferences.categoryNumberOfItems(),
     )
 }
 

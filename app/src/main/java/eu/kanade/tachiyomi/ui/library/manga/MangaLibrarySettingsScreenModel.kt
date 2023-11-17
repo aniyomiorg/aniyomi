@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.util.preference.toggle
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getAndSet
@@ -30,15 +29,11 @@ class MangaLibrarySettingsScreenModel(
 
     val trackServices
         get() = trackManager.services.filter { it.isLogged }
-
+    
     // SY -->
     val grouping by libraryPreferences.groupMangaLibraryBy().asState(coroutineScope)
 
     // SY <--
-
-    fun togglePreference(preference: (LibraryPreferences) -> Preference<Boolean>) {
-        preference(libraryPreferences).toggle()
-    }
 
     fun toggleFilter(preference: (LibraryPreferences) -> Preference<TriState>) {
         preference(libraryPreferences).getAndSet {
