@@ -1081,8 +1081,10 @@ class MangaScreenModel(
         data class ChangeCategory(val manga: Manga, val initialSelection: List<CheckboxState<Category>>) : Dialog
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog
+
         // SY -->
         data class EditMangaInfo(val manga: Manga) : Dialog
+
         // SY <--
         data class SetMangaInterval(val manga: Manga) : Dialog
         data object SettingsSheet : Dialog
