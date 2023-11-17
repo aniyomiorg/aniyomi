@@ -135,7 +135,7 @@ class PlayerViewModel @JvmOverloads constructor(
     /**
      * The position in the current video. Used to restore from process kill.
      */
-    private var episodePosition = savedState.get<Long>("episode_position") ?: 0L
+    private var episodePosition = savedState.get<Long>("episode_position")
         set(value) {
             savedState["episode_position"] = value
             field = value
