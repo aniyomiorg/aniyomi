@@ -27,6 +27,7 @@ import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
 import eu.kanade.presentation.entries.EditCoverAction
+import eu.kanade.presentation.entries.SetIntervalDialog
 import eu.kanade.presentation.entries.anime.AnimeScreen
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
@@ -104,8 +105,8 @@ class AnimeScreen(
         AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
-            dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
+            intervalDisplay = screenModel::intervalDisplay,
             isTabletUi = isTabletUi(),
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
@@ -139,10 +140,11 @@ class AnimeScreen(
             onCoverClicked = screenModel::showCoverDialog,
             onShareClicked = { shareAnime(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
-            onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.anime.favorite },
+            onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
             // SY -->
             onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
             // SY <--
+            onEditIntervalClicked = screenModel::showSetAnimeIntervalDialog.takeIf { screenModel.isIntervalEnabled && successState.anime.favorite },
             onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
             changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
@@ -245,6 +247,13 @@ class AnimeScreen(
                 )
             }
             // SY <--
+            is AnimeScreenModel.Dialog.SetAnimeInterval -> {
+                SetIntervalDialog(
+                    interval = if (dialog.anime.calculateInterval < 0) -dialog.anime.calculateInterval else 0,
+                    onDismissRequest = onDismissRequest,
+                    onValueChanged = { screenModel.setFetchRangeInterval(dialog.anime, it) },
+                )
+            }
             AnimeScreenModel.Dialog.ChangeAnimeSkipIntro -> {
                 fun updateSkipIntroLength(newLength: Long) {
                     scope.launchIO {

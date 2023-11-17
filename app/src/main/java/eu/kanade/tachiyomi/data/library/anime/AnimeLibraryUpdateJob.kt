@@ -58,6 +58,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
@@ -74,6 +75,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
@@ -81,6 +83,7 @@ import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -105,6 +108,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get()
+    private val setAnimeUpdateInterval: SetAnimeUpdateInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -285,6 +289,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val hasDownloads = AtomicBoolean(false)
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
+        val now = ZonedDateTime.now()
+        val fetchRange = setAnimeUpdateInterval.getCurrentFetchRange(now)
+        val higherLimit = fetchRange.second
+
         coroutineScope {
             animeToUpdate.groupBy { it.anime.source + (0..4).random() }.values
                 .map { animeInSource ->
@@ -305,6 +313,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     when {
+                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > higherLimit ->
+                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_in_release_period))
+
                                         ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
 
@@ -319,7 +330,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                         else -> {
                                             try {
-                                                val newEpisodes = updateAnime(anime)
+                                                val newEpisodes = updateAnime(anime, now, fetchRange)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newEpisodes.isNotEmpty()) {
@@ -391,7 +402,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      * @param anime the anime to update.
      * @return a pair of the inserted and removed episodes.
      */
-    private suspend fun updateAnime(anime: Anime): List<Episode> {
+    private suspend fun updateAnime(anime: Anime, zoneDateTime: ZonedDateTime, fetchRange: Pair<Long, Long>): List<Episode> {
         val source = sourceManager.getOrStub(anime.source)
 
         // Update anime metadata if needed
@@ -406,7 +417,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         // to get latest data so it doesn't get overwritten later on
         val dbAnime = getAnime.await(anime.id)?.takeIf { it.favorite } ?: return emptyList()
 
-        return syncEpisodesWithSource.await(episodes, dbAnime, source)
+        return syncEpisodesWithSource.await(episodes, dbAnime, source, false, zoneDateTime, fetchRange)
     }
 
     private suspend fun updateCovers() {

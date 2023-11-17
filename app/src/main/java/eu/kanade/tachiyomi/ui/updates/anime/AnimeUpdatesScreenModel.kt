@@ -61,14 +61,12 @@ class AnimeUpdatesScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     downloadPreferences: DownloadPreferences = Injekt.get(),
-    uiPreferences: UiPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
 
     val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
-    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
 
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
@@ -382,12 +380,12 @@ class AnimeUpdatesScreenModel(
     data class State(
         val isLoading: Boolean = true,
         val items: List<AnimeUpdatesItem> = emptyList(),
-        val dialog: AnimeUpdatesScreenModel.Dialog? = null,
+        val dialog: Dialog? = null,
     ) {
         val selected = items.filter { it.selected }
         val selectionMode = selected.isNotEmpty()
 
-        fun getUiModel(context: Context, relativeTime: Int): List<AnimeUpdatesUiModel> {
+        fun getUiModel(context: Context): List<AnimeUpdatesUiModel> {
             val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
 
             return items
@@ -397,11 +395,7 @@ class AnimeUpdatesScreenModel(
                     val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
                     when {
                         beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                            val text = afterDate.toRelativeString(
-                                context = context,
-                                range = relativeTime,
-                                dateFormat = dateFormat,
-                            )
+                            val text = afterDate.toRelativeString(context, dateFormat)
                             AnimeUpdatesUiModel.Header(text)
                         }
                         // Return null to avoid adding a separator between two items.

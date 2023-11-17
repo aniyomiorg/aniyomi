@@ -23,6 +23,7 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.TreeSet
 
@@ -48,6 +49,9 @@ class SyncEpisodesWithSource(
         rawSourceEpisodes: List<SEpisode>,
         anime: Anime,
         source: AnimeSource,
+        manualFetch: Boolean = false,
+        zoneDateTime: ZonedDateTime = ZonedDateTime.now(),
+        fetchRange: Pair<Long, Long> = Pair(0, 0),
     ): List<Episode> {
         if (rawSourceEpisodes.isEmpty() && !source.isLocal()) {
             throw NoEpisodesException()
@@ -134,6 +138,14 @@ class SyncEpisodesWithSource(
 
         // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
         if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
+            if (manualFetch || anime.calculateInterval == 0 || anime.nextUpdate < fetchRange.first) {
+                updateAnime.awaitUpdateFetchInterval(
+                    anime,
+                    dbEpisodes,
+                    zoneDateTime,
+                    fetchRange,
+                )
+            }
             return emptyList()
         }
 
@@ -188,6 +200,8 @@ class SyncEpisodesWithSource(
             val episodeUpdates = toChange.map { it.toEpisodeUpdate() }
             updateEpisode.awaitAll(episodeUpdates)
         }
+        val newChapters = episodeRepository.getEpisodeByAnimeId(anime.id)
+        updateAnime.awaitUpdateFetchInterval(anime, newChapters, zoneDateTime, fetchRange)
 
         // Set this anime as updated since episodes were changed
         // Note that last_update actually represents last time the episode list changed at all

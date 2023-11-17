@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.PreferenceManager
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
@@ -28,16 +30,23 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
 import tachiyomi.domain.entries.manga.model.CustomMangaInfo
+import tachiyomi.domain.entries.manga.interactor.SetMangaUpdateInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.repository.ChapterRepository
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.Locale
 
@@ -45,6 +54,17 @@ class BackupRestorer(
     private val context: Context,
     private val notifier: BackupNotifier,
 ) {
+    private val updateManga: UpdateManga = Injekt.get()
+    private val chapterRepository: ChapterRepository = Injekt.get()
+    private val setMangaUpdateInterval: SetMangaUpdateInterval = Injekt.get()
+
+    private val updateAnime: UpdateAnime = Injekt.get()
+    private val episodeRepository: EpisodeRepository = Injekt.get()
+    private val setAnimeUpdateInterval: SetAnimeUpdateInterval = Injekt.get()
+
+    private var zonedDateTime = ZonedDateTime.now()
+    private var currentMangaRange = setMangaUpdateInterval.getCurrentFetchRange(zonedDateTime)
+    private var currentAnimeRange = setAnimeUpdateInterval.getCurrentFetchRange(zonedDateTime)
 
     private var backupManager = BackupManager(context)
 
@@ -122,6 +142,10 @@ class BackupRestorer(
         val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
+        zonedDateTime = ZonedDateTime.now()
+        currentMangaRange = setMangaUpdateInterval.getCurrentFetchRange(zonedDateTime)
+        currentAnimeRange = setAnimeUpdateInterval.getCurrentFetchRange(zonedDateTime)
+
         return coroutineScope {
             // Restore individual manga
             backup.backupManga.forEach {
@@ -187,7 +211,7 @@ class BackupRestorer(
 
         try {
             val dbManga = backupManager.getMangaFromDatabase(manga.url, manga.source)
-            if (dbManga == null) {
+            val restoredManga = if (dbManga == null) {
                 // Manga not in database
                 restoreExistingManga(manga, chapters, categories, history, tracks, backupCategories, customManga)
             } else {
@@ -197,6 +221,8 @@ class BackupRestorer(
                 // Fetch rest of manga information
                 restoreNewManga(updateManga, chapters, categories, history, tracks, backupCategories, customManga)
             }
+            val updatedChapters = chapterRepository.getChapterByMangaId(restoredManga.id)
+            updateManga.awaitUpdateFetchInterval(restoredManga, updatedChapters, zonedDateTime, currentMangaRange)
         } catch (e: Exception) {
             val sourceName = sourceMapping[manga.source] ?: manga.source.toString()
             errors.add(Date() to "${manga.title} [$sourceName]: ${e.message}")
@@ -227,10 +253,11 @@ class BackupRestorer(
         // SY -->
         customManga: CustomMangaInfo?,
         // SY <--
-    ) {
+    ): Manga {
         val fetchedManga = backupManager.restoreNewManga(manga)
         backupManager.restoreChapters(fetchedManga, chapters)
         restoreExtras(fetchedManga, categories, history, tracks, backupCategories, customManga)
+        return fetchedManga
     }
 
     private suspend fun restoreNewManga(
@@ -243,9 +270,10 @@ class BackupRestorer(
         // SY -->
         customManga: CustomMangaInfo?,
         // SY <--
-    ) {
+    ): Manga {
         backupManager.restoreChapters(backupManga, chapters)
         restoreExtras(backupManga, categories, history, tracks, backupCategories, customManga)
+        return backupManga
     }
 
     private suspend fun restoreExtras(
@@ -279,7 +307,7 @@ class BackupRestorer(
 
         try {
             val dbAnime = backupManager.getAnimeFromDatabase(anime.url, anime.source)
-            if (dbAnime == null) {
+            val restoredAnime = if (dbAnime == null) {
                 // Anime not in database
                 restoreExistingAnime(anime, episodes, categories, history, tracks, backupCategories, customAnime)
             } else {
@@ -289,6 +317,8 @@ class BackupRestorer(
                 // Fetch rest of anime information
                 restoreNewAnime(updateAnime, episodes, categories, history, tracks, backupCategories, customAnime)
             }
+            val updatedEpisodes = episodeRepository.getEpisodeByAnimeId(restoredAnime.id)
+            updateAnime.awaitUpdateFetchInterval(restoredAnime, updatedEpisodes, zonedDateTime, currentAnimeRange)
         } catch (e: Exception) {
             val sourceName = sourceMapping[anime.source] ?: anime.source.toString()
             errors.add(Date() to "${anime.title} [$sourceName]: ${e.message}")
@@ -319,10 +349,11 @@ class BackupRestorer(
         // SY -->
         customAnime: CustomAnimeInfo?,
         // SY <--
-    ) {
+    ): Anime {
         val fetchedAnime = backupManager.restoreNewAnime(anime)
         backupManager.restoreEpisodes(fetchedAnime, episodes)
         restoreExtras(fetchedAnime, categories, history, tracks, backupCategories, customAnime)
+        return fetchedAnime
     }
 
     private suspend fun restoreNewAnime(
@@ -335,9 +366,10 @@ class BackupRestorer(
         // SY -->
         customAnime: CustomAnimeInfo?,
         // SY <--
-    ) {
+    ): Anime {
         backupManager.restoreEpisodes(backupAnime, episodes)
         restoreExtras(backupAnime, categories, history, tracks, backupCategories, customAnime)
+        return backupAnime
     }
 
     private suspend fun restoreExtras(

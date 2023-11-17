@@ -3,8 +3,7 @@ package eu.kanade.domain.entries.anime.interactor
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import tachiyomi.domain.entries.anime.interactor.getCurrentFetchRange
-import tachiyomi.domain.entries.anime.interactor.updateIntervalMeta
+import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
@@ -17,6 +16,7 @@ import java.util.Date
 
 class UpdateAnime(
     private val animeRepository: AnimeRepository,
+    private val setAnimeUpdateInterval: SetAnimeUpdateInterval,
 ) {
 
     suspend fun await(animeUpdate: AnimeUpdate): Boolean {
@@ -77,16 +77,15 @@ class UpdateAnime(
         )
     }
 
-    suspend fun awaitUpdateIntervalMeta(
+    suspend fun awaitUpdateFetchInterval(
         anime: Anime,
         episodes: List<Episode>,
         zonedDateTime: ZonedDateTime = ZonedDateTime.now(),
-        setCurrentFetchRange: Pair<Long, Long> = getCurrentFetchRange(zonedDateTime),
+        fetchRange: Pair<Long, Long> = setAnimeUpdateInterval.getCurrentFetchRange(zonedDateTime),
     ): Boolean {
-        val newMeta = updateIntervalMeta(anime, episodes, zonedDateTime, setCurrentFetchRange)
-
-        return if (newMeta != null) {
-            animeRepository.updateAnime(newMeta)
+        val updateAnime = setAnimeUpdateInterval.updateInterval(anime, episodes, zonedDateTime, fetchRange)
+        return if (updateAnime != null) {
+            animeRepository.updateAnime(updateAnime)
         } else {
             true
         }

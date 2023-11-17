@@ -26,6 +26,7 @@ import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
 import eu.kanade.presentation.entries.EditCoverAction
+import eu.kanade.presentation.entries.SetIntervalDialog
 import eu.kanade.presentation.entries.manga.ChapterSettingsDialog
 import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.entries.manga.MangaScreen
@@ -99,8 +100,8 @@ class MangaScreen(
         MangaScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
-            dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
+            intervalDisplay = screenModel::intervalDisplay,
             isTabletUi = isTabletUi(),
             chapterSwipeStartAction = screenModel.chapterSwipeStartAction,
             chapterSwipeEndAction = screenModel.chapterSwipeEndAction,
@@ -122,10 +123,11 @@ class MangaScreen(
             onCoverClicked = screenModel::showCoverDialog,
             onShareClicked = { shareManga(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
-            onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.manga.favorite },
+            onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.manga.favorite },
             // SY -->
             onEditInfoClicked = screenModel::showEditMangaInfoDialog,
             // SY <--
+            onEditIntervalClicked = screenModel::showSetMangaIntervalDialog.takeIf { screenModel.isIntervalEnabled && successState.manga.favorite },
             onMigrateClicked = { navigator.push(MigrateSearchScreen(successState.manga.id)) }.takeIf { successState.manga.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkChapters,
             onMultiMarkAsReadClicked = screenModel::markChaptersRead,
@@ -227,6 +229,13 @@ class MangaScreen(
                 )
             }
             // SY <--
+            is MangaScreenModel.Dialog.SetMangaInterval -> {
+                SetIntervalDialog(
+                    interval = if (dialog.manga.calculateInterval < 0) -dialog.manga.calculateInterval else 0,
+                    onDismissRequest = onDismissRequest,
+                    onValueChanged = { screenModel.setFetchRangeInterval(dialog.manga, it) },
+                )
+            }
         }
     }
 

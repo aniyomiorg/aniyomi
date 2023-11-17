@@ -24,7 +24,6 @@ fun AnimeHistoryContent(
     onClickDelete: (AnimeHistoryWithRelations) -> Unit,
     preferences: UiPreferences = Injekt.get(),
 ) {
-    val relativeTime: Int = remember { preferences.relativeTime().get() }
     val dateFormat: DateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }
 
     FastScrollLazyColumn(
@@ -45,7 +44,6 @@ fun AnimeHistoryContent(
                     RelativeDateHeader(
                         modifier = Modifier.animateItemPlacement(),
                         date = item.date,
-                        relativeTime = relativeTime,
                         dateFormat = dateFormat,
                     )
                 }

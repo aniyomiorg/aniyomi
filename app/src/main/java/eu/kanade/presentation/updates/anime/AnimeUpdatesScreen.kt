@@ -40,7 +40,6 @@ fun AnimeUpdateScreen(
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
     lastUpdated: Long,
-    relativeTime: Int,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
@@ -101,7 +100,7 @@ fun AnimeUpdateScreen(
                             animeUpdatesLastUpdatedItem(lastUpdated)
                         }
                         animeUpdatesUiItems(
-                            uiModels = state.getUiModel(context, relativeTime),
+                            uiModels = state.getUiModel(context),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,

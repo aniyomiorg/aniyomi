@@ -97,7 +97,7 @@ import java.util.concurrent.TimeUnit
 fun AnimeScreen(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Int,
+    intervalDisplay: () -> Pair<Int, Int>?,
     dateFormat: DateFormat,
     isTabletUi: Boolean,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
@@ -127,6 +127,7 @@ fun AnimeScreen(
     onShareClicked: (() -> Unit)?,
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
+    onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     // SY -->
     onEditInfoClicked: () -> Unit,
@@ -163,8 +164,8 @@ fun AnimeScreen(
         AnimeScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
             dateFormat = dateFormat,
+            intervalDisplay = intervalDisplay,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
@@ -186,6 +187,7 @@ fun AnimeScreen(
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
+            onEditIntervalClicked = onEditIntervalClicked,
             onMigrateClicked = onMigrateClicked,
             // SY -->
             onEditInfoClicked = onEditInfoClicked,
@@ -205,12 +207,12 @@ fun AnimeScreen(
         AnimeScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
             alwaysUseExternalPlayer = alwaysUseExternalPlayer,
             dateFormat = dateFormat,
+            intervalDisplay = intervalDisplay,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -228,6 +230,7 @@ fun AnimeScreen(
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
+            onEditIntervalClicked = onEditIntervalClicked,
             changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMigrateClicked = onMigrateClicked,
             // SY -->
@@ -251,8 +254,8 @@ fun AnimeScreen(
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Int,
     dateFormat: DateFormat,
+    intervalDisplay: () -> Pair<Int, Int>?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -281,6 +284,7 @@ private fun AnimeScreenSmallImpl(
     onShareClicked: (() -> Unit)?,
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
+    onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     // SY -->
     onEditInfoClicked: () -> Unit,
@@ -324,9 +328,11 @@ private fun AnimeScreenSmallImpl(
             }
             val animatedTitleAlpha by animateFloatAsState(
                 if (firstVisibleItemIndex > 0) 1f else 0f,
+                label = "titleAlpha",
             )
             val animatedBgAlpha by animateFloatAsState(
                 if (firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0) 1f else 0f,
+                label = "bgAlpha",
             )
             EntryToolbar(
                 title = state.anime.title,
@@ -441,10 +447,13 @@ private fun AnimeScreenSmallImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
+                            intervalDisplay = intervalDisplay,
+                            isUserIntervalMode = state.anime.calculateInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
                             onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
+                            onEditIntervalClicked = onEditIntervalClicked,
                             onEditCategory = onEditCategoryClicked,
                         )
                     }
@@ -503,7 +512,6 @@ private fun AnimeScreenSmallImpl(
                     sharedEpisodeItems(
                         anime = state.anime,
                         episodes = episodes,
-                        dateRelativeTime = dateRelativeTime,
                         dateFormat = dateFormat,
                         episodeSwipeStartAction = episodeSwipeStartAction,
                         episodeSwipeEndAction = episodeSwipeEndAction,
@@ -523,8 +531,8 @@ private fun AnimeScreenSmallImpl(
 fun AnimeScreenLargeImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Int,
     dateFormat: DateFormat,
+    intervalDisplay: () -> Pair<Int, Int>?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -553,6 +561,7 @@ fun AnimeScreenLargeImpl(
     onShareClicked: (() -> Unit)?,
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
+    onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     // SY -->
     onEditInfoClicked: () -> Unit,
@@ -697,10 +706,13 @@ fun AnimeScreenLargeImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
+                            intervalDisplay = intervalDisplay,
+                            isUserIntervalMode = state.anime.calculateInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
                             onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
+                            onEditIntervalClicked = onEditIntervalClicked,
                             onEditCategory = onEditCategoryClicked,
                         )
                         ExpandableAnimeDescription(
@@ -766,7 +778,6 @@ fun AnimeScreenLargeImpl(
                             sharedEpisodeItems(
                                 anime = state.anime,
                                 episodes = episodes,
-                                dateRelativeTime = dateRelativeTime,
                                 dateFormat = dateFormat,
                                 episodeSwipeStartAction = episodeSwipeStartAction,
                                 episodeSwipeEndAction = episodeSwipeEndAction,
@@ -837,7 +848,6 @@ private fun SharedAnimeBottomActionMenu(
 private fun LazyListScope.sharedEpisodeItems(
     anime: Anime,
     episodes: List<EpisodeItem>,
-    dateRelativeTime: Int,
     dateFormat: DateFormat,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
@@ -866,11 +876,7 @@ private fun LazyListScope.sharedEpisodeItems(
             date = episodeItem.episode.dateUpload
                 .takeIf { it > 0L }
                 ?.let {
-                    Date(it).toRelativeString(
-                        context,
-                        dateRelativeTime,
-                        dateFormat,
-                    )
+                    Date(it).toRelativeString(context, dateFormat)
                 },
             watchProgress = episodeItem.episode.lastSecondSeen
                 .takeIf { !episodeItem.episode.seen && it > 0L }

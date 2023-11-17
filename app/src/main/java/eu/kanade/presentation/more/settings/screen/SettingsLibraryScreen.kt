@@ -294,20 +294,17 @@ object SettingsLibraryScreen : SearchableSettings {
                         true
                     },
                 ),
-                // TODO: remove isDevFlavor checks once functionality is available
                 Preference.PreferenceItem.MultiSelectListPreference(
                     pref = libraryUpdateDeviceRestrictionPref,
                     enabled = libraryUpdateInterval > 0,
                     title = stringResource(R.string.pref_library_update_restriction),
                     subtitle = stringResource(R.string.restrictions),
-                    entries = buildMap {
-                        put(ENTRY_HAS_UNVIEWED, stringResource(R.string.pref_update_only_completely_read))
-                        put(ENTRY_NON_VIEWED, stringResource(R.string.pref_update_only_started))
-                        put(ENTRY_NON_COMPLETED, stringResource(R.string.pref_update_only_non_completed))
-                        if (isDevFlavor) {
-                            put(ENTRY_OUTSIDE_RELEASE_PERIOD, stringResource(R.string.pref_update_only_in_release_period))
-                        }
-                    },
+                    entries = mapOf(
+                        ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
+                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
+                        ENTRY_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
+                        ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(R.string.pref_update_only_in_release_period),
+                    ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
                         ContextCompat.getMainExecutor(context).execute {
