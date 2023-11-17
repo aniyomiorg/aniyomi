@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -24,6 +23,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.cancelNotification
+import eu.kanade.tachiyomi.util.system.getBitmapOrNull
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
 import tachiyomi.core.util.lang.launchUI
@@ -283,7 +283,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             .size(NOTIF_MANGA_ICON_SIZE)
             .build()
         val drawable = context.imageLoader.execute(request).drawable
-        return (drawable as? BitmapDrawable)?.bitmap
+        return drawable?.getBitmapOrNull()
     }
 
     private fun getNewChaptersDescription(chapters: Array<Chapter>): String {
