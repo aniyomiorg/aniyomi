@@ -37,7 +37,6 @@ fun MangaUpdateScreen(
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
     lastUpdated: Long,
-    relativeTime: Int,
     onClickCover: (MangaUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
@@ -98,7 +97,7 @@ fun MangaUpdateScreen(
                         }
 
                         mangaUpdatesUiItems(
-                            uiModels = state.getUiModel(context, relativeTime),
+                            uiModels = state.getUiModel(context),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,

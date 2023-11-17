@@ -56,6 +56,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.interactor.SetMangaUpdateInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
@@ -70,6 +71,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.manga.model.SourceNotInstalledException
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
@@ -77,6 +79,7 @@ import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -101,6 +104,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getTracks: GetMangaTracks = Injekt.get()
     private val insertTrack: InsertMangaTrack = Injekt.get()
     private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get()
+    private val setMangaUpdateInterval: SetMangaUpdateInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
 
@@ -227,6 +231,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val hasDownloads = AtomicBoolean(false)
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
+        val now = ZonedDateTime.now()
+        val fetchRange = setMangaUpdateInterval.getCurrentFetchRange(now)
+        val higherLimit = fetchRange.second
+
         coroutineScope {
             mangaToUpdate.groupBy { it.manga.source }.values
                 .map { mangaInSource ->
@@ -247,6 +255,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     manga,
                                 ) {
                                     when {
+                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && manga.nextUpdate > higherLimit ->
+                                            skippedUpdates.add(manga to context.getString(R.string.skipped_reason_not_in_release_period))
+
                                         ENTRY_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_completed))
 
@@ -261,7 +272,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                         else -> {
                                             try {
-                                                val newChapters = updateManga(manga)
+                                                val newChapters = updateManga(manga, now, fetchRange)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newChapters.isNotEmpty()) {
@@ -333,7 +344,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      * @param manga the manga to update.
      * @return a pair of the inserted and removed chapters.
      */
-    private suspend fun updateManga(manga: Manga): List<Chapter> {
+    private suspend fun updateManga(manga: Manga, zoneDateTime: ZonedDateTime, fetchRange: Pair<Long, Long>): List<Chapter> {
         val source = sourceManager.getOrStub(manga.source)
 
         // Update manga metadata if needed
@@ -348,7 +359,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         // to get latest data so it doesn't get overwritten later on
         val dbManga = getManga.await(manga.id)?.takeIf { it.favorite } ?: return emptyList()
 
-        return syncChaptersWithSource.await(chapters, dbManga, source)
+        return syncChaptersWithSource.await(chapters, dbManga, source, false, zoneDateTime, fetchRange)
     }
 
     private suspend fun updateCovers() {

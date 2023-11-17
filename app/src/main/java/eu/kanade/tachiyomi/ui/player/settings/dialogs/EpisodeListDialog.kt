@@ -92,11 +92,7 @@ fun EpisodeListDialog(
                     val date = episode.date_upload
                         .takeIf { it > 0L }
                         ?.let {
-                            Date(it).toRelativeString(
-                                context,
-                                relativeTime,
-                                dateFormat,
-                            )
+                            Date(it).toRelativeString(context, dateFormat)
                         } ?: ""
 
                     EpisodeListItem(

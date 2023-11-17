@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
@@ -65,6 +64,7 @@ import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
@@ -79,6 +79,7 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
+import kotlin.math.absoluteValue
 
 class AnimeScreenModel(
     val context: Context,
@@ -103,6 +104,7 @@ class AnimeScreenModel(
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
+    private val animeRepository: AnimeRepository = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
@@ -131,8 +133,11 @@ class AnimeScreenModel(
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
-    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
+
+    val isIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
+    private val leadDay = libraryPreferences.leadingAnimeExpectedDays().get()
+    private val followDay = libraryPreferences.followingAnimeExpectedDays().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
@@ -320,7 +325,7 @@ class AnimeScreenModel(
                     // Choose a category
                     else -> {
                         isFromChangeCategory = true
-                        promptChangeCategories()
+                        showChangeCategoryDialog()
                     }
                 }
 
@@ -350,7 +355,7 @@ class AnimeScreenModel(
         }
     }
 
-    fun promptChangeCategories() {
+    fun showChangeCategoryDialog() {
         val anime = successState?.anime ?: return
         coroutineScope.launch {
             val categories = getCategories()
@@ -363,6 +368,37 @@ class AnimeScreenModel(
                     ),
                 )
             }
+        }
+    }
+
+    fun showSetAnimeIntervalDialog() {
+        val anime = successState?.anime ?: return
+        updateSuccessState {
+            it.copy(dialog = Dialog.SetAnimeInterval(anime))
+        }
+    }
+
+    // TODO: this should be in the state/composables
+    fun intervalDisplay(): Pair<Int, Int>? {
+        val anime = successState?.anime ?: return null
+        val effInterval = anime.calculateInterval
+        return 1.coerceAtLeast(effInterval.absoluteValue - leadDay) to (effInterval.absoluteValue + followDay)
+    }
+
+    fun setFetchRangeInterval(anime: Anime, newInterval: Int) {
+        val interval = when (newInterval) {
+            // reset interval 0 default to trigger recalculation
+            // only reset if interval is custom, which is negative
+            0 -> if (anime.calculateInterval < 0) 0 else anime.calculateInterval
+            else -> -newInterval
+        }
+        coroutineScope.launchIO {
+            updateAnime.awaitUpdateFetchInterval(
+                anime.copy(calculateInterval = interval),
+                successState?.episodes?.map { it.episode }.orEmpty(),
+            )
+            val newAnime = animeRepository.getAnimeById(animeId)
+            updateSuccessState { it.copy(anime = newAnime) }
         }
     }
 
@@ -519,6 +555,7 @@ class AnimeScreenModel(
                     episodes,
                     state.anime,
                     state.source,
+                    manualFetch,
                 )
 
                 if (manualFetch) {
@@ -536,6 +573,8 @@ class AnimeScreenModel(
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(message = message)
             }
+            val newAnime = animeRepository.getAnimeById(animeId)
+            updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
         }
     }
 
@@ -972,6 +1011,7 @@ class AnimeScreenModel(
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
+        data class SetAnimeInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
         data object ChangeAnimeSkipIntro : Dialog
         data object SettingsSheet : Dialog
@@ -1009,7 +1049,7 @@ class AnimeScreenModel(
 
     sealed interface State {
         @Immutable
-        object Loading : State
+        data object Loading : State
 
         @Immutable
         data class Success(

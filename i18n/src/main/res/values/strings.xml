@@ -204,10 +204,6 @@
     <string name="theme_matrix">Matrix</string>
     <string name="theme_tidalwave">Tidal Wave</string>
     <string name="pref_dark_theme_pure_black">Pure black dark mode</string>
-    <string name="pref_category_timestamps">Timestamps</string>
-    <string name="pref_relative_format">Relative timestamps</string>
-    <string name="pref_relative_time_short">Short (Today, Yesterday)</string>
-    <string name="pref_relative_time_long">Long (Short+, n days ago)</string>
     <string name="pref_date_format">Date format</string>
 
     <string name="pref_manage_notifications">Manage notifications</string>
@@ -628,6 +624,10 @@
         <item quantity="one">1 day</item>
         <item quantity="other">%d days</item>
     </plurals>
+    <plurals name="range_interval_day">
+        <item quantity="one">%1$d - %2$d day</item>
+        <item quantity="other">%1$d - %2$d days</item>
+    </plurals>
 
     <!-- Item info -->
     <plurals name="missing_items">
@@ -669,8 +669,7 @@
     <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="manga_display_interval_title">Estimate every</string>
     <string name="manga_display_modified_interval_title">Set to update every</string>
-    <string name="manga_modify_interval_title">Modify interval</string>
-    <string name="manga_modify_calculated_interval_title">Customize Interval</string>
+    <string name="manga_modify_calculated_interval_title">Customize interval</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="show_title">Source title</string>
     <string name="show_chapter_number">Chapter number</string>

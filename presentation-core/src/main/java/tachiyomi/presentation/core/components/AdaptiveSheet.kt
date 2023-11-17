@@ -78,6 +78,7 @@ fun AdaptiveSheet(
         val alpha by animateFloatAsState(
             targetValue = targetAlpha,
             animationSpec = sheetAnimationSpec,
+            label = "alpha",
         )
         val internalOnDismissRequest: () -> Unit = {
             scope.launch {
