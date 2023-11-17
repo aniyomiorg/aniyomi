@@ -7,7 +7,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.history.manga.HistoryState
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -17,7 +16,7 @@ import java.util.Date
 
 @Composable
 fun MangaHistoryScreen(
-    state: HistoryState,
+    state: MangaHistoryScreenModel.State,
     contentPadding: PaddingValues,
     searchQuery: String? = null,
     snackbarHostState: SnackbarHostState,
@@ -54,7 +53,7 @@ fun MangaHistoryScreen(
     }
 }
 
-sealed class MangaHistoryUiModel {
-    data class Header(val date: Date) : MangaHistoryUiModel()
-    data class Item(val item: MangaHistoryWithRelations) : MangaHistoryUiModel()
+sealed interface MangaHistoryUiModel {
+    data class Header(val date: Date) : MangaHistoryUiModel
+    data class Item(val item: MangaHistoryWithRelations) : MangaHistoryUiModel
 }

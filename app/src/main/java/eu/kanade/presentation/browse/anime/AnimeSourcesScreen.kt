@@ -192,7 +192,7 @@ fun AnimeSourceOptionsDialog(
     )
 }
 
-sealed class AnimeSourceUiModel {
-    data class Item(val source: AnimeSource) : AnimeSourceUiModel()
-    data class Header(val language: String) : AnimeSourceUiModel()
+sealed interface AnimeSourceUiModel {
+    data class Item(val source: AnimeSource) : AnimeSourceUiModel
+    data class Header(val language: String) : AnimeSourceUiModel
 }

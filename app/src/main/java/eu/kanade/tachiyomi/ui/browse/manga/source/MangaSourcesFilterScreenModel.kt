@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.manga.source
 
+import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.source.manga.interactor.GetLanguagesWithMangaSources
@@ -21,7 +22,7 @@ class SourcesFilterScreenModel(
     private val getLanguagesWithSources: GetLanguagesWithMangaSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-) : StateScreenModel<MangaSourcesFilterState>(MangaSourcesFilterState.Loading) {
+) : StateScreenModel<SourcesFilterScreenModel.State>(State.Loading) {
 
     init {
         coroutineScope.launch {
@@ -32,14 +33,14 @@ class SourcesFilterScreenModel(
             ) { a, b, c -> Triple(a, b, c) }
                 .catch { throwable ->
                     mutableState.update {
-                        MangaSourcesFilterState.Error(
+                        State.Error(
                             throwable = throwable,
                         )
                     }
                 }
                 .collectLatest { (languagesWithSources, enabledLanguages, disabledSources) ->
                     mutableState.update {
-                        MangaSourcesFilterState.Success(
+                        State.Success(
                             items = languagesWithSources,
                             enabledLanguages = enabledLanguages,
                             disabledSources = disabledSources,
@@ -56,23 +57,26 @@ class SourcesFilterScreenModel(
     fun toggleLanguage(language: String) {
         toggleLanguage.await(language)
     }
-}
 
-sealed class MangaSourcesFilterState {
+    sealed interface State {
 
-    object Loading : MangaSourcesFilterState()
+        @Immutable
+        data object Loading : State
 
-    data class Error(
-        val throwable: Throwable,
-    ) : MangaSourcesFilterState()
+        @Immutable
+        data class Error(
+            val throwable: Throwable,
+        ) : State
 
-    data class Success(
-        val items: SortedMap<String, List<Source>>,
-        val enabledLanguages: Set<String>,
-        val disabledSources: Set<String>,
-    ) : MangaSourcesFilterState() {
+        @Immutable
+        data class Success(
+            val items: SortedMap<String, List<Source>>,
+            val enabledLanguages: Set<String>,
+            val disabledSources: Set<String>,
+        ) : State {
 
-        val isEmpty: Boolean
-            get() = items.isEmpty()
+            val isEmpty: Boolean
+                get() = items.isEmpty()
+        }
     }
 }

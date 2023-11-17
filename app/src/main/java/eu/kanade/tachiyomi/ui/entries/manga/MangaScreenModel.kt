@@ -100,10 +100,10 @@ class MangaScreenModel(
     private val getTracks: GetMangaTracks = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
-) : StateScreenModel<MangaScreenState>(MangaScreenState.Loading) {
+) : StateScreenModel<MangaScreenModel.State>(State.Loading) {
 
-    private val successState: MangaScreenState.Success?
-        get() = state.value as? MangaScreenState.Success
+    private val successState: State.Success?
+        get() = state.value as? State.Success
 
     private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is MangaTrackService } }
 
@@ -140,11 +140,11 @@ class MangaScreenModel(
     /**
      * Helper function to update the UI state only if it's currently in success state
      */
-    private inline fun updateSuccessState(func: (MangaScreenState.Success) -> MangaScreenState.Success) {
+    private inline fun updateSuccessState(func: (State.Success) -> State.Success) {
         mutableState.update {
             when (it) {
-                MangaScreenState.Loading -> it
-                is MangaScreenState.Success -> func(it)
+                State.Loading -> it
+                is State.Success -> func(it)
             }
         }
     }
@@ -182,7 +182,7 @@ class MangaScreenModel(
 
             // Show what we have earlier
             mutableState.update {
-                MangaScreenState.Success(
+                State.Success(
                     manga = manga,
                     source = Injekt.get<MangaSourceManager>().getOrStub(manga.source),
                     isFromSource = isFromSource,
@@ -347,8 +347,7 @@ class MangaScreenModel(
     }
 
     fun promptChangeCategories() {
-        val state = successState ?: return
-        val manga = state.manga
+        val manga = successState?.manga ?: return
         coroutineScope.launch {
             val categories = getCategories()
             val selection = getMangaCategoryIds(manga)
@@ -675,9 +674,9 @@ class MangaScreenModel(
     }
 
     fun markPreviousChapterRead(pointer: Chapter) {
-        val successState = successState ?: return
+        val manga = successState?.manga ?: return
         val chapters = filteredChapters.orEmpty().map { it.chapter }
-        val prevChapters = if (successState.manga.sortDescending()) chapters.asReversed() else chapters
+        val prevChapters = if (manga.sortDescending()) chapters.asReversed() else chapters
         val pointerPos = prevChapters.indexOf(pointer)
         if (pointerPos != -1) markChaptersRead(prevChapters.take(pointerPos), true)
     }
@@ -953,13 +952,13 @@ class MangaScreenModel(
 
     // Track sheet - end
 
-    sealed class Dialog {
-        data class ChangeCategory(val manga: Manga, val initialSelection: List<CheckboxState<Category>>) : Dialog()
-        data class DeleteChapters(val chapters: List<Chapter>) : Dialog()
-        data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog()
-        data object SettingsSheet : Dialog()
-        data object TrackSheet : Dialog()
-        data object FullCover : Dialog()
+    sealed interface Dialog {
+        data class ChangeCategory(val manga: Manga, val initialSelection: List<CheckboxState<Category>>) : Dialog
+        data class DeleteChapters(val chapters: List<Chapter>) : Dialog
+        data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog
+        data object SettingsSheet : Dialog
+        data object TrackSheet : Dialog
+        data object FullCover : Dialog
     }
 
     fun dismissDialog() {
@@ -981,48 +980,53 @@ class MangaScreenModel(
     fun showCoverDialog() {
         updateSuccessState { it.copy(dialog = Dialog.FullCover) }
     }
-}
 
-sealed class MangaScreenState {
-    @Immutable
-    object Loading : MangaScreenState()
+    sealed interface State {
+        @Immutable
+        object Loading : State
 
-    @Immutable
-    data class Success(
-        val manga: Manga,
-        val source: MangaSource,
-        val isFromSource: Boolean,
-        val chapters: List<ChapterItem>,
-        val trackItems: List<MangaTrackItem> = emptyList(),
-        val isRefreshingData: Boolean = false,
-        val dialog: MangaScreenModel.Dialog? = null,
-        val hasPromptedToAddBefore: Boolean = false,
-    ) : MangaScreenState() {
+        @Immutable
+        data class Success(
+            val manga: Manga,
+            val source: MangaSource,
+            val isFromSource: Boolean,
+            val chapters: List<ChapterItem>,
+            val trackItems: List<MangaTrackItem> = emptyList(),
+            val isRefreshingData: Boolean = false,
+            val dialog: Dialog? = null,
+            val hasPromptedToAddBefore: Boolean = false,
+        ) : State {
 
-        val processedChapters by lazy {
-            chapters.applyFilters(manga).toList()
-        }
+            val processedChapters by lazy {
+                chapters.applyFilters(manga).toList()
+            }
 
-        val trackingAvailable: Boolean
-            get() = trackItems.isNotEmpty()
+            val trackingAvailable: Boolean
+                get() = trackItems.isNotEmpty()
 
-        val trackingCount: Int
-            get() = trackItems.count { it.track != null }
+            val trackingCount: Int
+                get() = trackItems.count { it.track != null }
 
-        /**
-         * Applies the view filters to the list of chapters obtained from the database.
-         * @return an observable of the list of chapters filtered and sorted.
-         */
-        private fun List<ChapterItem>.applyFilters(manga: Manga): Sequence<ChapterItem> {
-            val isLocalManga = manga.isLocal()
-            val unreadFilter = manga.unreadFilter
-            val downloadedFilter = manga.downloadedFilter
-            val bookmarkedFilter = manga.bookmarkedFilter
-            return asSequence()
-                .filter { (chapter) -> applyFilter(unreadFilter) { !chapter.read } }
-                .filter { (chapter) -> applyFilter(bookmarkedFilter) { chapter.bookmark } }
-                .filter { applyFilter(downloadedFilter) { it.isDownloaded || isLocalManga } }
-                .sortedWith { (chapter1), (chapter2) -> getChapterSort(manga).invoke(chapter1, chapter2) }
+            /**
+             * Applies the view filters to the list of chapters obtained from the database.
+             * @return an observable of the list of chapters filtered and sorted.
+             */
+            private fun List<ChapterItem>.applyFilters(manga: Manga): Sequence<ChapterItem> {
+                val isLocalManga = manga.isLocal()
+                val unreadFilter = manga.unreadFilter
+                val downloadedFilter = manga.downloadedFilter
+                val bookmarkedFilter = manga.bookmarkedFilter
+                return asSequence()
+                    .filter { (chapter) -> applyFilter(unreadFilter) { !chapter.read } }
+                    .filter { (chapter) -> applyFilter(bookmarkedFilter) { chapter.bookmark } }
+                    .filter { applyFilter(downloadedFilter) { it.isDownloaded || isLocalManga } }
+                    .sortedWith { (chapter1), (chapter2) ->
+                        getChapterSort(manga).invoke(
+                            chapter1,
+                            chapter2,
+                        )
+                    }
+            }
         }
     }
 }

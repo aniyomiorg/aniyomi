@@ -81,12 +81,12 @@ class AnimeScreen(
 
         val state by screenModel.state.collectAsState()
 
-        if (state is AnimeScreenState.Loading) {
+        if (state is AnimeScreenModel.State.Loading) {
             LoadingScreen()
             return
         }
 
-        val successState = state as AnimeScreenState.Success
+        val successState = state as AnimeScreenModel.State.Success
         val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
 
         LaunchedEffect(successState.anime, screenModel.source) {

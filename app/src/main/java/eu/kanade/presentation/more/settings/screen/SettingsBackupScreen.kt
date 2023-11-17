@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -62,7 +63,6 @@ import tachiyomi.domain.backup.service.FLAG_HISTORY
 import tachiyomi.domain.backup.service.FLAG_SETTINGS
 import tachiyomi.domain.backup.service.FLAG_TRACK
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
@@ -197,8 +197,8 @@ object SettingsBackupScreen : SearchableSettings {
                             }
                         }
                     }
-                    if (!state.isScrolledToStart()) Divider(modifier = Modifier.align(Alignment.TopCenter))
-                    if (!state.isScrolledToEnd()) Divider(modifier = Modifier.align(Alignment.BottomCenter))
+                    if (!state.isScrolledToStart()) HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
+                    if (!state.isScrolledToEnd()) HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
                 }
             },
             dismissButton = {

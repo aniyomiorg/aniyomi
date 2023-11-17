@@ -37,7 +37,7 @@ class AnimeHistoryScreenModel(
     private val getHistory: GetAnimeHistory = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val removeHistory: RemoveAnimeHistory = Injekt.get(),
-) : StateScreenModel<AnimeHistoryState>(AnimeHistoryState()) {
+) : StateScreenModel<AnimeHistoryScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Channel.UNLIMITED)
     val events: Flow<Event> = _events.receiveAsFlow()
@@ -119,20 +119,21 @@ class AnimeHistoryScreenModel(
         mutableState.update { it.copy(dialog = dialog) }
     }
 
-    sealed class Dialog {
-        data object DeleteAll : Dialog()
-        data class Delete(val history: AnimeHistoryWithRelations) : Dialog()
+    @Immutable
+    data class State(
+        val searchQuery: String? = null,
+        val list: List<AnimeHistoryUiModel>? = null,
+        val dialog: Dialog? = null,
+    )
+
+    sealed interface Dialog {
+        data object DeleteAll : Dialog
+        data class Delete(val history: AnimeHistoryWithRelations) : Dialog
     }
 
-    sealed class Event {
-        data class OpenEpisode(val episode: Episode?) : Event()
-        data object InternalError : Event()
-        data object HistoryCleared : Event()
+    sealed interface Event {
+        data class OpenEpisode(val episode: Episode?) : Event
+        data object InternalError : Event
+        data object HistoryCleared : Event
     }
 }
-
-@Immutable
-data class AnimeHistoryState(
-    val list: List<AnimeHistoryUiModel>? = null,
-    val dialog: AnimeHistoryScreenModel.Dialog? = null,
-)

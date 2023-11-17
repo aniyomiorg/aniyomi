@@ -658,10 +658,10 @@ class MangaLibraryScreenModel(
         mutableState.update { it.copy(dialog = null) }
     }
 
-    sealed class Dialog {
-        data object SettingsSheet : Dialog()
-        data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
-        data class DeleteManga(val manga: List<Manga>) : Dialog()
+    sealed interface Dialog {
+        data object SettingsSheet : Dialog
+        data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog
+        data class DeleteManga(val manga: List<Manga>) : Dialog
     }
 
     @Immutable

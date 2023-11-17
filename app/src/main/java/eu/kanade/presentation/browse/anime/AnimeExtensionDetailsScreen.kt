@@ -22,12 +22,14 @@ import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,11 +54,9 @@ import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsState
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.DIVIDER_ALPHA
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -64,7 +64,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 @Composable
 fun AnimeExtensionDetailsScreen(
     navigateUp: () -> Unit,
-    state: AnimeExtensionDetailsState,
+    state: AnimeExtensionDetailsScreenModel.State,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickWhatsNew: () -> Unit,
     onClickReadme: () -> Unit,
@@ -313,7 +313,7 @@ private fun DetailsHeader(
             }
         }
 
-        Divider()
+        HorizontalDivider()
     }
 }
 
@@ -355,11 +355,8 @@ private fun InfoText(
 
 @Composable
 private fun InfoDivider() {
-    Divider(
-        modifier = Modifier
-            .height(20.dp)
-            .width(1.dp),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = DIVIDER_ALPHA),
+    VerticalDivider(
+        modifier = Modifier.height(20.dp),
     )
 }
 

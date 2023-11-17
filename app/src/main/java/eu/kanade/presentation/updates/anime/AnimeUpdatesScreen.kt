@@ -22,7 +22,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
-import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesState
+import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AnimeUpdateScreen(
-    state: AnimeUpdatesState,
+    state: AnimeUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
     lastUpdated: Long,
@@ -158,7 +158,7 @@ private fun AnimeUpdatesBottomBar(
     )
 }
 
-sealed class AnimeUpdatesUiModel {
-    data class Header(val date: String) : AnimeUpdatesUiModel()
-    data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel()
+sealed interface AnimeUpdatesUiModel {
+    data class Header(val date: String) : AnimeUpdatesUiModel
+    data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel
 }

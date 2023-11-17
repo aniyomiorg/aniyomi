@@ -43,7 +43,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsState
+import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
@@ -56,7 +56,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun AnimeExtensionScreen(
-    state: AnimeExtensionsState,
+    state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
@@ -107,7 +107,7 @@ fun AnimeExtensionScreen(
 
 @Composable
 private fun AnimeExtensionContent(
-    state: AnimeExtensionsState,
+    state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,

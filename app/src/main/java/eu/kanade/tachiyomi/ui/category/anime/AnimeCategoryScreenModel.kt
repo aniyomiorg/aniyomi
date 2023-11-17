@@ -130,27 +130,27 @@ class AnimeCategoryScreenModel(
     }
 }
 
-sealed class AnimeCategoryDialog {
-    data object Create : AnimeCategoryDialog()
-    data class Rename(val category: Category) : AnimeCategoryDialog()
-    data class Delete(val category: Category) : AnimeCategoryDialog()
+sealed interface AnimeCategoryDialog {
+    data object Create : AnimeCategoryDialog
+    data class Rename(val category: Category) : AnimeCategoryDialog
+    data class Delete(val category: Category) : AnimeCategoryDialog
 }
 
-sealed class AnimeCategoryEvent {
-    sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
+sealed interface AnimeCategoryEvent {
+    sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent
     data object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
-sealed class AnimeCategoryScreenState {
+sealed interface AnimeCategoryScreenState {
 
     @Immutable
-    data object Loading : AnimeCategoryScreenState()
+    data object Loading : AnimeCategoryScreenState
 
     @Immutable
     data class Success(
         val categories: List<Category>,
         val dialog: AnimeCategoryDialog? = null,
-    ) : AnimeCategoryScreenState() {
+    ) : AnimeCategoryScreenState {
 
         val isEmpty: Boolean
             get() = categories.isEmpty()

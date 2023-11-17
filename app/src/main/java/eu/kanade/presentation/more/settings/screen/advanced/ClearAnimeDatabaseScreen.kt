@@ -15,10 +15,12 @@ import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,7 +50,6 @@ import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAni
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 import tachiyomi.mi.data.AnimeDatabase
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -148,7 +149,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                                 }
                             }
 
-                            Divider()
+                            HorizontalDivider()
 
                             Button(
                                 modifier = Modifier
@@ -269,12 +270,15 @@ private class ClearAnimeDatabaseScreenModel : StateScreenModel<ClearAnimeDatabas
         state.copy(showConfirmation = false)
     }
 
-    sealed class State {
-        data object Loading : State()
+    sealed interface State {
+        @Immutable
+        data object Loading : State
+
+        @Immutable
         data class Ready(
             val items: List<AnimeSourceWithCount>,
             val selection: List<Long> = emptyList(),
             val showConfirmation: Boolean = false,
-        ) : State()
+        ) : State
     }
 }

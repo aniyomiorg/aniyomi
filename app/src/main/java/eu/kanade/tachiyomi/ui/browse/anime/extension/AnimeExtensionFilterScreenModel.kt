@@ -54,20 +54,20 @@ class AnimeExtensionFilterScreenModel(
     }
 }
 
-sealed class AnimeExtensionFilterEvent {
-    data object FailedFetchingLanguages : AnimeExtensionFilterEvent()
+sealed interface AnimeExtensionFilterEvent {
+    data object FailedFetchingLanguages : AnimeExtensionFilterEvent
 }
 
-sealed class AnimeExtensionFilterState {
+sealed interface AnimeExtensionFilterState {
 
     @Immutable
-    data object Loading : AnimeExtensionFilterState()
+    data object Loading : AnimeExtensionFilterState
 
     @Immutable
     data class Success(
         val languages: List<String>,
         val enabledLanguages: Set<String> = emptySet(),
-    ) : AnimeExtensionFilterState() {
+    ) : AnimeExtensionFilterState {
 
         val isEmpty: Boolean
             get() = languages.isEmpty()

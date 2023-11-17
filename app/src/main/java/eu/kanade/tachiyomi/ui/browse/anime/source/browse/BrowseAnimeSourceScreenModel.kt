@@ -373,15 +373,15 @@ class BrowseAnimeSourceScreenModel(
         }
     }
 
-    sealed class Dialog {
-        data object Filter : Dialog()
-        data class RemoveAnime(val anime: Anime) : Dialog()
-        data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
+    sealed interface Dialog {
+        data object Filter : Dialog
+        data class RemoveAnime(val anime: Anime) : Dialog
+        data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
         data class ChangeAnimeCategory(
             val anime: Anime,
             val initialSelection: List<CheckboxState.State<Category>>,
-        ) : Dialog()
-        data class Migrate(val newAnime: Anime) : Dialog()
+        ) : Dialog
+        data class Migrate(val newAnime: Anime) : Dialog
     }
 
     @Immutable

@@ -21,7 +21,7 @@ import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
-import eu.kanade.tachiyomi.ui.updates.manga.UpdatesState
+import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -33,7 +33,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MangaUpdateScreen(
-    state: UpdatesState,
+    state: MangaUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
     lastUpdated: Long,
@@ -147,7 +147,7 @@ private fun MangaUpdatesBottomBar(
     )
 }
 
-sealed class MangaUpdatesUiModel {
-    data class Header(val date: String) : MangaUpdatesUiModel()
-    data class Item(val item: MangaUpdatesItem) : MangaUpdatesUiModel()
+sealed interface MangaUpdatesUiModel {
+    data class Header(val date: String) : MangaUpdatesUiModel
+    data class Item(val item: MangaUpdatesItem) : MangaUpdatesUiModel
 }
