@@ -21,12 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
@@ -68,7 +67,7 @@ fun MangaHistoryItem(
                 text = if (history.chapterNumber > -1) {
                     stringResource(
                         R.string.recent_manga_time,
-                        chapterFormatter.format(history.chapterNumber),
+                        formatChapterNumber(history.chapterNumber),
                         readAt,
                     )
                 } else {
@@ -88,8 +87,3 @@ fun MangaHistoryItem(
         }
     }
 }
-
-private val chapterFormatter = DecimalFormat(
-    "#.###",
-    DecimalFormatSymbols().apply { decimalSeparator = '.' },
-)

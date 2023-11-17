@@ -16,11 +16,13 @@ android {
         database("Database") {
             packageName = "tachiyomi.data"
             dialect = "sqlite:3.24"
+            schemaOutputDirectory = project.file("./src/main/sqldelight")
             sourceFolders = listOf("sqldelight")
         }
         database("AnimeDatabase") {
             packageName = "tachiyomi.mi.data"
             dialect = "sqlite:3.24"
+            schemaOutputDirectory = project.file("./src/main/sqldelightanime")
             sourceFolders = listOf("sqldelightanime")
         }
     }

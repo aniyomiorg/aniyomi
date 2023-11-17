@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
@@ -29,8 +30,6 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.injectLazy
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 class AnimeLibraryUpdateNotifier(private val context: Context) {
 
@@ -279,16 +278,10 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     }
 
     private fun getNewEpisodesDescription(episodes: Array<Episode>): String {
-        val formatter = DecimalFormat(
-            "#.###",
-            DecimalFormatSymbols()
-                .apply { decimalSeparator = '.' },
-        )
-
         val displayableEpisodeNumbers = episodes
             .filter { it.isRecognizedNumber }
             .sortedBy { it.episodeNumber }
-            .map { formatter.format(it.episodeNumber) }
+            .map { formatEpisodeNumber(it.episodeNumber) }
             .toSet()
 
         return when (displayableEpisodeNumbers.size) {

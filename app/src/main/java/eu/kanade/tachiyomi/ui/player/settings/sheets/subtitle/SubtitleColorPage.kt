@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
@@ -42,6 +41,7 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 import kotlin.math.floor
 import kotlin.math.max
 

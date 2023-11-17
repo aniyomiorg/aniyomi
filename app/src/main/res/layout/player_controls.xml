@@ -212,7 +212,7 @@
                 android:layout_height="64dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play/Pause"
-                android:textColor="@android:color/white"
+                android:textColor="#FFF"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -359,7 +359,7 @@
                 android:gravity="center"
                 android:text="0:00"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"
+                android:textColor="#FFF"
                 android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -381,7 +381,7 @@
                 android:gravity="center"
                 android:text="0:00"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"
+                android:textColor="#FFF"
                 android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

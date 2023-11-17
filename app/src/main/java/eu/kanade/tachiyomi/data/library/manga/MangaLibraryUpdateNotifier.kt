@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
@@ -29,8 +30,6 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.injectLazy
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 class MangaLibraryUpdateNotifier(private val context: Context) {
 
@@ -288,16 +287,10 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     }
 
     private fun getNewChaptersDescription(chapters: Array<Chapter>): String {
-        val formatter = DecimalFormat(
-            "#.###",
-            DecimalFormatSymbols()
-                .apply { decimalSeparator = '.' },
-        )
-
         val displayableChapterNumbers = chapters
             .filter { it.isRecognizedNumber }
             .sortedBy { it.chapterNumber }
-            .map { formatter.format(it.chapterNumber) }
+            .map { formatChapterNumber(it.chapterNumber) }
             .toSet()
 
         return when (displayableChapterNumbers.size) {

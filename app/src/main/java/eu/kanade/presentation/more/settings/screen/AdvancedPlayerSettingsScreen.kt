@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.preference.asState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

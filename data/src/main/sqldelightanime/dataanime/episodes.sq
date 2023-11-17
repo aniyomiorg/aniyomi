@@ -12,7 +12,7 @@ CREATE TABLE episodes(
     source_order INTEGER NOT NULL,
     date_fetch INTEGER AS Long NOT NULL,
     date_upload INTEGER AS Long NOT NULL,
-    last_modified_at INTEGER AS Long NOT NULL,
+    last_modified_at INTEGER AS Long NOT NULL DEFAULT 0,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );

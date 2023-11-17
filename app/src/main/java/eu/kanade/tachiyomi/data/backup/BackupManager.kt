@@ -131,9 +131,9 @@ class BackupManager(
             backupAnimes(databaseAnime, flags),
             backupAnimeCategories(flags),
             emptyList(),
-            backupExtensionInfo(databaseManga),
+            prepExtensionInfoForSync(databaseManga),
             emptyList(),
-            backupAnimeExtensionInfo(databaseAnime),
+            prepAnimeExtensionInfoForSync(databaseAnime),
             backupPreferences(prefs, flags),
             backupExtensionPreferences(flags),
             backupExtensions(flags),
@@ -190,7 +190,7 @@ class BackupManager(
         }
     }
 
-    private fun backupExtensionInfo(mangas: List<Manga>): List<BackupSource> {
+    fun prepExtensionInfoForSync(mangas: List<Manga>): List<BackupSource> {
         return mangas
             .asSequence()
             .map(Manga::source)
@@ -200,7 +200,7 @@ class BackupManager(
             .toList()
     }
 
-    private fun backupAnimeExtensionInfo(animes: List<Anime>): List<BackupAnimeSource> {
+    fun prepAnimeExtensionInfoForSync(animes: List<Anime>): List<BackupAnimeSource> {
         return animes
             .asSequence()
             .map(Anime::source)
@@ -215,7 +215,7 @@ class BackupManager(
      *
      * @return list of [BackupCategory] to be backed up
      */
-    private suspend fun backupCategories(options: Int): List<BackupCategory> {
+    suspend fun backupCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
         return if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
             getMangaCategories.await()
@@ -231,7 +231,7 @@ class BackupManager(
      *
      * @return list of [BackupCategory] to be backed up
      */
-    private suspend fun backupAnimeCategories(options: Int): List<BackupCategory> {
+    suspend fun backupAnimeCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
         return if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
             getAnimeCategories.await()
@@ -242,13 +242,13 @@ class BackupManager(
         }
     }
 
-    private suspend fun backupMangas(mangas: List<Manga>, flags: Int): List<BackupManga> {
+    suspend fun backupMangas(mangas: List<Manga>, flags: Int): List<BackupManga> {
         return mangas.map {
             backupManga(it, flags)
         }
     }
 
-    private suspend fun backupAnimes(animes: List<Anime>, flags: Int): List<BackupAnime> {
+    suspend fun backupAnimes(animes: List<Anime>, flags: Int): List<BackupAnime> {
         return animes.map {
             backupAnime(it, flags)
         }
