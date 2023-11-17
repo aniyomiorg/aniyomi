@@ -12,7 +12,7 @@ import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesFilterState
+import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesFilterScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -22,7 +22,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 @Composable
 fun AnimeSourcesFilterScreen(
     navigateUp: () -> Unit,
-    state: AnimeSourcesFilterState.Success,
+    state: AnimeSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (AnimeSource) -> Unit,
 ) {
@@ -54,7 +54,7 @@ fun AnimeSourcesFilterScreen(
 @Composable
 private fun AnimeSourcesFilterContent(
     contentPadding: PaddingValues,
-    state: AnimeSourcesFilterState.Success,
+    state: AnimeSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (AnimeSource) -> Unit,
 ) {

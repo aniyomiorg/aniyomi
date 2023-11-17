@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.extension
 
 import android.app.Application
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
@@ -35,7 +36,7 @@ class MangaExtensionsScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val extensionManager: MangaExtensionManager = Injekt.get(),
     private val getExtensions: GetMangaExtensionsByType = Injekt.get(),
-) : StateScreenModel<MangaExtensionsState>(MangaExtensionsState()) {
+) : StateScreenModel<MangaExtensionsScreenModel.State>(State()) {
 
     private var _currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
 
@@ -191,16 +192,17 @@ class MangaExtensionsScreenModel(
     fun trustSignature(signatureHash: String) {
         extensionManager.trustSignature(signatureHash)
     }
-}
 
-data class MangaExtensionsState(
-    val isLoading: Boolean = true,
-    val isRefreshing: Boolean = false,
-    val items: ItemGroups = mutableMapOf(),
-    val updates: Int = 0,
-    val searchQuery: String? = null,
-) {
-    val isEmpty = items.isEmpty()
+    @Immutable
+    data class State(
+        val isLoading: Boolean = true,
+        val isRefreshing: Boolean = false,
+        val items: ItemGroups = mutableMapOf(),
+        val updates: Int = 0,
+        val searchQuery: String? = null,
+    ) {
+        val isEmpty = items.isEmpty()
+    }
 }
 
 typealias ItemGroups = MutableMap<MangaExtensionUiModel.Header, List<MangaExtensionUiModel.Item>>

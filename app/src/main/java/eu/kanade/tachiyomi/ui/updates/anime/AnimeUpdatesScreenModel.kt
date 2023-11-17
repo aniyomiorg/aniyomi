@@ -62,7 +62,7 @@ class AnimeUpdatesScreenModel(
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     downloadPreferences: DownloadPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
-) : StateScreenModel<AnimeUpdatesState>(AnimeUpdatesState()) {
+) : StateScreenModel<AnimeUpdatesScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
@@ -378,47 +378,47 @@ class AnimeUpdatesScreenModel(
         libraryPreferences.newAnimeUpdatesCount().set(0)
     }
 
-    sealed class Dialog {
-        data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog()
-        data class ShowQualities(val episodeTitle: String, val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog()
-    }
+    @Immutable
+    data class State(
+        val isLoading: Boolean = true,
+        val items: List<AnimeUpdatesItem> = emptyList(),
+        val dialog: AnimeUpdatesScreenModel.Dialog? = null,
+    ) {
+        val selected = items.filter { it.selected }
+        val selectionMode = selected.isNotEmpty()
 
-    sealed class Event {
-        data object InternalError : Event()
-        data class LibraryUpdateTriggered(val started: Boolean) : Event()
-    }
-}
+        fun getUiModel(context: Context, relativeTime: Int): List<AnimeUpdatesUiModel> {
+            val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
 
-@Immutable
-data class AnimeUpdatesState(
-    val isLoading: Boolean = true,
-    val items: List<AnimeUpdatesItem> = emptyList(),
-    val dialog: AnimeUpdatesScreenModel.Dialog? = null,
-) {
-    val selected = items.filter { it.selected }
-    val selectionMode = selected.isNotEmpty()
-
-    fun getUiModel(context: Context, relativeTime: Int): List<AnimeUpdatesUiModel> {
-        val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
-
-        return items
-            .map { AnimeUpdatesUiModel.Item(it) }
-            .insertSeparators { before, after ->
-                val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                        val text = afterDate.toRelativeString(
-                            context = context,
-                            range = relativeTime,
-                            dateFormat = dateFormat,
-                        )
-                        AnimeUpdatesUiModel.Header(text)
+            return items
+                .map { AnimeUpdatesUiModel.Item(it) }
+                .insertSeparators { before, after ->
+                    val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    when {
+                        beforeDate.time != afterDate.time && afterDate.time != 0L -> {
+                            val text = afterDate.toRelativeString(
+                                context = context,
+                                range = relativeTime,
+                                dateFormat = dateFormat,
+                            )
+                            AnimeUpdatesUiModel.Header(text)
+                        }
+                        // Return null to avoid adding a separator between two items.
+                        else -> null
                     }
-                    // Return null to avoid adding a separator between two items.
-                    else -> null
                 }
-            }
+        }
+    }
+
+    sealed interface Dialog {
+        data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog
+        data class ShowQualities(val episodeTitle: String, val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog
+    }
+
+    sealed interface Event {
+        data object InternalError : Event
+        data class LibraryUpdateTriggered(val started: Boolean) : Event
     }
 }
 

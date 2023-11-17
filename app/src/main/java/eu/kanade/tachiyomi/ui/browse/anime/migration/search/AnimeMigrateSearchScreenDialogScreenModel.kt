@@ -37,7 +37,7 @@ class AnimeMigrateSearchScreenDialogScreenModel(
         val dialog: Dialog? = null,
     )
 
-    sealed class Dialog {
-        data class Migrate(val anime: Anime) : Dialog()
+    sealed interface Dialog {
+        data class Migrate(val anime: Anime) : Dialog
     }
 }

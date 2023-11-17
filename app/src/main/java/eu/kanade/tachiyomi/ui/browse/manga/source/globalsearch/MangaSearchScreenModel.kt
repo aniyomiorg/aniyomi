@@ -186,16 +186,16 @@ enum class MangaSourceFilter {
     PinnedOnly,
 }
 
-sealed class MangaSearchItemResult {
-    data object Loading : MangaSearchItemResult()
+sealed interface MangaSearchItemResult {
+    data object Loading : MangaSearchItemResult
 
     data class Error(
         val throwable: Throwable,
-    ) : MangaSearchItemResult()
+    ) : MangaSearchItemResult
 
     data class Success(
         val result: List<Manga>,
-    ) : MangaSearchItemResult() {
+    ) : MangaSearchItemResult {
         val isEmpty: Boolean
             get() = result.isEmpty()
     }

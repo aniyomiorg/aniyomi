@@ -26,7 +26,7 @@ import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.anime.components.AnimeSourceIcon
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.MigrateAnimeSourceState
+import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.MigrateAnimeSourceScreenModel
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.presentation.core.components.Badge
@@ -43,7 +43,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MigrateAnimeSourceScreen(
-    state: MigrateAnimeSourceState,
+    state: MigrateAnimeSourceScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (AnimeSource) -> Unit,
     onToggleSortingDirection: () -> Unit,

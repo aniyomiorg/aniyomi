@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -68,7 +68,7 @@ fun SourceFilterAnimeDialog(
                         Text(stringResource(R.string.action_filter))
                     }
                 }
-                Divider()
+                HorizontalDivider()
             }
 
             items(filters) {
@@ -85,7 +85,7 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
             HeadingItem(filter.name)
         }
         is AnimeFilter.Separator -> {
-            Divider()
+            HorizontalDivider()
         }
         is AnimeFilter.CheckBox -> {
             CheckboxItem(

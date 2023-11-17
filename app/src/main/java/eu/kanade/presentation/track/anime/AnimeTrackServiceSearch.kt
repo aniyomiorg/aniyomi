@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +46,6 @@ import eu.kanade.presentation.track.manga.SearchResultItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -126,7 +126,7 @@ fun AnimeTrackServiceSearch(
                         }
                     },
                 )
-                Divider()
+                HorizontalDivider()
             }
         },
         bottomBar = {

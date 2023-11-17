@@ -20,11 +20,11 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class MigrationAnimeScreenModel(
+class MigrateAnimeScreenModel(
     private val sourceId: Long,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val getFavorites: GetAnimeFavorites = Injekt.get(),
-) : StateScreenModel<MigrateAnimeState>(MigrateAnimeState()) {
+) : StateScreenModel<MigrateAnimeScreenModel.State>(State()) {
 
     private val _events: Channel<MigrationAnimeEvent> = Channel()
     val events: Flow<MigrationAnimeEvent> = _events.receiveAsFlow()
@@ -51,24 +51,24 @@ class MigrationAnimeScreenModel(
                 }
         }
     }
+
+    @Immutable
+    data class State(
+        val source: AnimeSource? = null,
+        private val titleList: List<Anime>? = null,
+    ) {
+
+        val titles: List<Anime>
+            get() = titleList.orEmpty()
+
+        val isLoading: Boolean
+            get() = source == null || titleList == null
+
+        val isEmpty: Boolean
+            get() = titles.isEmpty()
+    }
 }
 
-sealed class MigrationAnimeEvent {
-    data object FailedFetchingFavorites : MigrationAnimeEvent()
-}
-
-@Immutable
-data class MigrateAnimeState(
-    val source: AnimeSource? = null,
-    private val titleList: List<Anime>? = null,
-) {
-
-    val titles: List<Anime>
-        get() = titleList.orEmpty()
-
-    val isLoading: Boolean
-        get() = source == null || titleList == null
-
-    val isEmpty: Boolean
-        get() = titles.isEmpty()
+sealed interface MigrationAnimeEvent {
+    data object FailedFetchingFavorites : MigrationAnimeEvent
 }

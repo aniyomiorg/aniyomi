@@ -22,12 +22,12 @@ class MangaSourcesFilterScreen : Screen() {
         val screenModel = rememberScreenModel { SourcesFilterScreenModel() }
         val state by screenModel.state.collectAsState()
 
-        if (state is MangaSourcesFilterState.Loading) {
+        if (state is SourcesFilterScreenModel.State.Loading) {
             LoadingScreen()
             return
         }
 
-        if (state is MangaSourcesFilterState.Error) {
+        if (state is SourcesFilterScreenModel.State.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
                 context.toast(R.string.internal_error)
@@ -36,7 +36,7 @@ class MangaSourcesFilterScreen : Screen() {
             return
         }
 
-        val successState = state as MangaSourcesFilterState.Success
+        val successState = state as SourcesFilterScreenModel.State.Success
 
         MangaSourcesFilterScreen(
             navigateUp = navigator::pop,

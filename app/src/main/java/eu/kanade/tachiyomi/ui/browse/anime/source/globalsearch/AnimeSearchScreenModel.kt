@@ -186,16 +186,16 @@ enum class AnimeSourceFilter {
     PinnedOnly,
 }
 
-sealed class AnimeSearchItemResult {
-    data object Loading : AnimeSearchItemResult()
+sealed interface AnimeSearchItemResult {
+    data object Loading : AnimeSearchItemResult
 
     data class Error(
         val throwable: Throwable,
-    ) : AnimeSearchItemResult()
+    ) : AnimeSearchItemResult
 
     data class Success(
         val result: List<Anime>,
-    ) : AnimeSearchItemResult() {
+    ) : AnimeSearchItemResult {
         val isEmpty: Boolean
             get() = result.isEmpty()
     }

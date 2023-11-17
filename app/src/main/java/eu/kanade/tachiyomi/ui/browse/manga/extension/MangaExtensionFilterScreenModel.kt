@@ -54,20 +54,20 @@ class MangaExtensionFilterScreenModel(
     }
 }
 
-sealed class MangaExtensionFilterEvent {
-    data object FailedFetchingLanguages : MangaExtensionFilterEvent()
+sealed interface MangaExtensionFilterEvent {
+    data object FailedFetchingLanguages : MangaExtensionFilterEvent
 }
 
-sealed class MangaExtensionFilterState {
+sealed interface MangaExtensionFilterState {
 
     @Immutable
-    data object Loading : MangaExtensionFilterState()
+    data object Loading : MangaExtensionFilterState
 
     @Immutable
     data class Success(
         val languages: List<String>,
         val enabledLanguages: Set<String> = emptySet(),
-    ) : MangaExtensionFilterState() {
+    ) : MangaExtensionFilterState {
 
         val isEmpty: Boolean
             get() = languages.isEmpty()

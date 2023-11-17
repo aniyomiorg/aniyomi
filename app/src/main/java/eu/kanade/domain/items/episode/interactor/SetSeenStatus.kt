@@ -72,9 +72,9 @@ class SetSeenStatus(
     suspend fun await(anime: Anime, seen: Boolean) =
         await(anime.id, seen)
 
-    sealed class Result {
-        data object Success : Result()
-        data object NoEpisodes : Result()
-        data class InternalError(val error: Throwable) : Result()
+    sealed interface Result {
+        data object Success : Result
+        data object NoEpisodes : Result
+        data class InternalError(val error: Throwable) : Result
     }
 }

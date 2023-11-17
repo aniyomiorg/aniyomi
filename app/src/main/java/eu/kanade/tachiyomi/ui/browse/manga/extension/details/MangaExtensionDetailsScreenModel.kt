@@ -38,7 +38,7 @@ class MangaExtensionDetailsScreenModel(
     private val extensionManager: MangaExtensionManager = Injekt.get(),
     private val getExtensionSources: GetExtensionSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
-) : StateScreenModel<MangaExtensionDetailsState>(MangaExtensionDetailsState()) {
+) : StateScreenModel<MangaExtensionDetailsScreenModel.State>(State()) {
 
     private val _events: Channel<MangaExtensionDetailsEvent> = Channel()
     val events: Flow<MangaExtensionDetailsEvent> = _events.receiveAsFlow()
@@ -160,21 +160,21 @@ class MangaExtensionDetailsScreenModel(
             url + "/src/" + pkgName.replace(".", "/") + path
         }
     }
+
+    @Immutable
+    data class State(
+        val extension: MangaExtension.Installed? = null,
+        private val _sources: List<MangaExtensionSourceItem>? = null,
+    ) {
+
+        val sources: List<MangaExtensionSourceItem>
+            get() = _sources.orEmpty()
+
+        val isLoading: Boolean
+            get() = extension == null || _sources == null
+    }
 }
 
-sealed class MangaExtensionDetailsEvent {
-    data object Uninstalled : MangaExtensionDetailsEvent()
-}
-
-@Immutable
-data class MangaExtensionDetailsState(
-    val extension: MangaExtension.Installed? = null,
-    private val _sources: List<MangaExtensionSourceItem>? = null,
-) {
-
-    val sources: List<MangaExtensionSourceItem>
-        get() = _sources.orEmpty()
-
-    val isLoading: Boolean
-        get() = extension == null || _sources == null
+sealed interface MangaExtensionDetailsEvent {
+    data object Uninstalled : MangaExtensionDetailsEvent
 }

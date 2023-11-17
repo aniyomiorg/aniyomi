@@ -72,7 +72,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
-import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -95,7 +95,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun AnimeScreen(
-    state: AnimeScreenState.Success,
+    state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     dateRelativeTime: Int,
     dateFormat: DateFormat,
@@ -249,7 +249,7 @@ fun AnimeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnimeScreenSmallImpl(
-    state: AnimeScreenState.Success,
+    state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     dateRelativeTime: Int,
     dateFormat: DateFormat,
@@ -521,7 +521,7 @@ private fun AnimeScreenSmallImpl(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimeScreenLargeImpl(
-    state: AnimeScreenState.Success,
+    state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     dateRelativeTime: Int,
     dateFormat: DateFormat,

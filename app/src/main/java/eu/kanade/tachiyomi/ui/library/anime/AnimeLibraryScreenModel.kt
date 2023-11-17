@@ -729,10 +729,10 @@ class AnimeLibraryScreenModel(
         mutableState.update { it.copy(dialog = null) }
     }
 
-    sealed class Dialog {
-        data object SettingsSheet : Dialog()
-        data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
-        data class DeleteAnime(val anime: List<Anime>) : Dialog()
+    sealed interface Dialog {
+        data object SettingsSheet : Dialog
+        data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog
+        data class DeleteAnime(val anime: List<Anime>) : Dialog
     }
 
     // SY -->

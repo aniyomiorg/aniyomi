@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.presentation.core.screens.LoadingScreen
 
-data class MigrationAnimeScreen(
+data class MigrateAnimeScreen(
     private val sourceId: Long,
 ) : Screen() {
 
@@ -25,7 +25,7 @@ data class MigrationAnimeScreen(
     override fun Content() {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = rememberScreenModel { MigrationAnimeScreenModel(sourceId) }
+        val screenModel = rememberScreenModel { MigrateAnimeScreenModel(sourceId) }
 
         val state by screenModel.state.collectAsState()
 

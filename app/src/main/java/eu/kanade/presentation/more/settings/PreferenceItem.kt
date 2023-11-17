@@ -14,8 +14,6 @@ import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.ConnectionsPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.EditTextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.InfoWidget
@@ -175,16 +173,6 @@ internal fun PreferenceItem(
                     singleLine = false,
                 )
             }
-            is Preference.PreferenceItem.AppThemePreference -> {
-                val value by item.pref.collectAsState()
-                val amoled by Injekt.get<UiPreferences>().themeDarkAmoled().collectAsState()
-                AppThemePreferenceWidget(
-                    title = item.title,
-                    value = value,
-                    amoled = amoled,
-                    onItemClick = { scope.launch { item.pref.set(it) } },
-                )
-            }
             is Preference.PreferenceItem.TrackingPreference -> {
                 val uName by Injekt.get<PreferenceStore>()
                     .getString(TrackPreferences.trackUsername(item.service.id))
@@ -213,6 +201,9 @@ internal fun PreferenceItem(
             // <-- AM (CONNECTIONS)
             is Preference.PreferenceItem.InfoPreference -> {
                 InfoWidget(text = item.title)
+            }
+            is Preference.PreferenceItem.CustomPreference -> {
+                item.content(item)
             }
         }
     }

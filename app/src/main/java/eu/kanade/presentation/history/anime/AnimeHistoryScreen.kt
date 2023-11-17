@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import eu.kanade.presentation.animehistory.components.AnimeHistoryContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
-import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryState
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -18,7 +17,7 @@ import java.util.Date
 
 @Composable
 fun AnimeHistoryScreen(
-    state: AnimeHistoryState,
+    state: AnimeHistoryScreenModel.State,
     contentPadding: PaddingValues,
     searchQuery: String? = null,
     snackbarHostState: SnackbarHostState,
@@ -55,7 +54,7 @@ fun AnimeHistoryScreen(
     }
 }
 
-sealed class AnimeHistoryUiModel {
-    data class Header(val date: Date) : AnimeHistoryUiModel()
-    data class Item(val item: AnimeHistoryWithRelations) : AnimeHistoryUiModel()
+sealed interface AnimeHistoryUiModel {
+    data class Header(val date: Date) : AnimeHistoryUiModel
+    data class Item(val item: AnimeHistoryWithRelations) : AnimeHistoryUiModel
 }
