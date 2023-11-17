@@ -219,7 +219,7 @@ class MangaScreen(
                 }
             }
             // SY -->
-            is MangaInfoScreenModel.Dialog.EditMangaInfo -> {
+            is MangaScreenModel.Dialog.EditMangaInfo -> {
                 EditMangaDialog(
                     manga = dialog.manga,
                     onDismissRequest = screenModel::dismissDialog,
