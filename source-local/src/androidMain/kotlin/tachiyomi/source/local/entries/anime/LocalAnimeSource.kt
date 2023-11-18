@@ -181,11 +181,7 @@ actual class LocalAnimeSource(
                     }
                     date_upload = episodeFile.lastModified()
 
-                    val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
-                        anime.title,
-                        this.name,
-                        this.episode_number,
-                    )
+                    val episodeNumber = EpisodeRecognition.parseEpisodeNumber(anime.title, this.name, this.episode_number.toDouble()).toFloat()
                     episode_number = episodeNumber
 
                     // Overwrite data from episodes.json file

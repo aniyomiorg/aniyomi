@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.lang.toLong
 import tachiyomi.core.util.system.logcat
+import tachiyomi.data.StringListColumnAdapter
+import tachiyomi.data.UpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.data.listOfStringsAdapter
-import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.entries.manga.repository.MangaRepository
@@ -129,7 +129,7 @@ class MangaRepositoryImpl(
                     artist = value.artist,
                     author = value.author,
                     description = value.description,
-                    genre = value.genre?.let(listOfStringsAdapter::encode),
+                    genre = value.genre?.let(StringListColumnAdapter::encode),
                     title = value.title,
                     status = value.status,
                     thumbnailUrl = value.thumbnailUrl,
@@ -143,7 +143,7 @@ class MangaRepositoryImpl(
                     coverLastModified = value.coverLastModified,
                     dateAdded = value.dateAdded,
                     mangaId = value.id,
-                    updateStrategy = value.updateStrategy?.let(updateStrategyAdapter::encode),
+                    updateStrategy = value.updateStrategy?.let(UpdateStrategyColumnAdapter::encode),
                 )
             }
         }

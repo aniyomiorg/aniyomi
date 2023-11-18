@@ -14,7 +14,7 @@ val mangaHistoryMapper: (Long, Long, Date?, Long) -> MangaHistory = { id, chapte
     )
 }
 
-val mangaHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?, Long) -> MangaHistoryWithRelations = {
+val mangaHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Double, Date?, Long) -> MangaHistoryWithRelations = {
         historyId, mangaId, chapterId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, chapterNumber, readAt, readDuration ->
     MangaHistoryWithRelations(
         id = historyId,

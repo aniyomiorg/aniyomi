@@ -238,10 +238,10 @@ class AnimeExtensionManager(
     /**
      * Uninstalls the anime extension that matches the given package name.
      *
-     * @param pkgName The package name of the application to uninstall.
+     * @param extension The extension to uninstall.
      */
-    fun uninstallExtension(pkgName: String) {
-        installer.uninstallApk(pkgName)
+    fun uninstallExtension(extension: AnimeExtension) {
+        installer.uninstallApk(extension.pkgName)
     }
 
     /**
@@ -260,18 +260,13 @@ class AnimeExtensionManager(
         val nowTrustedAnimeExtensions = _untrustedAnimeExtensionsFlow.value.filter { it.signatureHash == signature }
         _untrustedAnimeExtensionsFlow.value -= nowTrustedAnimeExtensions
 
-        val ctx = context
         launchNow {
             nowTrustedAnimeExtensions
                 .map { animeextension ->
-                    async { AnimeExtensionLoader.loadExtensionFromPkgName(ctx, animeextension.pkgName) }
+                    async { AnimeExtensionLoader.loadExtensionFromPkgName(context, animeextension.pkgName) }.await()
                 }
-                .map { it.await() }
-                .forEach { result ->
-                    if (result is AnimeLoadResult.Success) {
-                        registerNewExtension(result.extension)
-                    }
-                }
+                .filterIsInstance<AnimeLoadResult.Success>()
+                .forEach { registerNewExtension(it.extension) }
         }
     }
 

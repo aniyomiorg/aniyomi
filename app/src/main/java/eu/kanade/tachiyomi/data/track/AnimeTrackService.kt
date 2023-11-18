@@ -39,7 +39,7 @@ interface AnimeTrackService {
     fun getRewatchingStatus(): Int
 
     // TODO: Store all scores as 10 point in the future maybe?
-    fun get10PointScore(track: DomainAnimeTrack): Float {
+    fun get10PointScore(track: DomainAnimeTrack): Double {
         return track.score
     }
 

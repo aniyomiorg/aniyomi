@@ -65,9 +65,9 @@ import okio.gzip
 import okio.sink
 import tachiyomi.core.util.lang.toLong
 import tachiyomi.core.util.system.logcat
+import tachiyomi.data.UpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
@@ -778,7 +778,7 @@ class BackupManager(
                         track.last_chapter_read,
                         track.total_chapters,
                         track.status,
-                        track.score.toDouble(),
+                        track.score,
                         track.remote_url,
                         track.start_date,
                         track.finish_date,
@@ -861,7 +861,7 @@ class BackupManager(
                         track.last_episode_seen,
                         track.total_episodes,
                         track.status,
-                        track.score.toDouble(),
+                        track.score,
                         track.remote_url,
                         track.start_date,
                         track.finish_date,
@@ -1050,7 +1050,7 @@ class BackupManager(
                 coverLastModified = manga.coverLastModified,
                 dateAdded = manga.dateAdded,
                 mangaId = manga.id!!,
-                updateStrategy = manga.updateStrategy.let(updateStrategyAdapter::encode),
+                updateStrategy = manga.updateStrategy.let(UpdateStrategyColumnAdapter::encode),
             )
         }
         return manga.id
@@ -1078,7 +1078,7 @@ class BackupManager(
                 coverLastModified = anime.coverLastModified,
                 dateAdded = anime.dateAdded,
                 animeId = anime.id!!,
-                updateStrategy = anime.updateStrategy.let(updateStrategyAdapter::encode),
+                updateStrategy = anime.updateStrategy.let(UpdateStrategyColumnAdapter::encode),
             )
         }
         return anime.id

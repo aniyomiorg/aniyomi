@@ -27,7 +27,7 @@ data class BackupEpisode(
         return Episode.create().copy(
             url = this@BackupEpisode.url,
             name = this@BackupEpisode.name,
-            episodeNumber = this@BackupEpisode.episodeNumber,
+            episodeNumber = this@BackupEpisode.episodeNumber.toDouble(),
             scanlator = this@BackupEpisode.scanlator,
             seen = this@BackupEpisode.seen,
             bookmark = this@BackupEpisode.bookmark,
@@ -41,11 +41,11 @@ data class BackupEpisode(
     }
 }
 
-val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean, bookmark: Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Float, source_order: Long, dateFetch: Long, dateUpload: Long, lastModifiedAt: Long ->
+val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean, bookmark: Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Double, source_order: Long, dateFetch: Long, dateUpload: Long, lastModifiedAt: Long ->
     BackupEpisode(
         url = url,
         name = name,
-        episodeNumber = episodeNumber,
+        episodeNumber = episodeNumber.toFloat(),
         scanlator = scanlator,
         seen = seen,
         bookmark = bookmark,

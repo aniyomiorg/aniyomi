@@ -39,7 +39,7 @@ interface MangaTrackService {
     fun getRereadingStatus(): Int
 
     // TODO: Store all scores as 10 point in the future maybe?
-    fun get10PointScore(track: DomainTrack): Float {
+    fun get10PointScore(track: DomainTrack): Double {
         return track.score
     }
 

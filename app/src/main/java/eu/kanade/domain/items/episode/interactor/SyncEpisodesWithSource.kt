@@ -151,9 +151,9 @@ class SyncEpisodesWithSource(
 
         val reAdded = mutableListOf<Episode>()
 
-        val deletedEpisodeNumbers = TreeSet<Float>()
-        val deletedSeenEpisodeNumbers = TreeSet<Float>()
-        val deletedBookmarkedEpisodeNumbers = TreeSet<Float>()
+        val deletedEpisodeNumbers = TreeSet<Double>()
+        val deletedSeenEpisodeNumbers = TreeSet<Double>()
+        val deletedBookmarkedEpisodeNumbers = TreeSet<Double>()
 
         toDelete.forEach { episode ->
             if (episode.seen) deletedSeenEpisodeNumbers.add(episode.episodeNumber)

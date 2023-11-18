@@ -87,7 +87,7 @@ fun AnimeTrackInfoDialogHome(
                     },
                     onEpisodesClick = { onEpisodeClick(item) },
                     score = item.service.animeService.displayScore(item.track.toDbTrack())
-                        .takeIf { supportsScoring && item.track.score != 0F },
+                        .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
                     startDate = remember(item.track.startDate) { dateFormat.format(item.track.startDate) }

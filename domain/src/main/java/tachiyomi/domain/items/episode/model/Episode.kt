@@ -12,7 +12,7 @@ data class Episode(
     val url: String,
     val name: String,
     val dateUpload: Long,
-    val episodeNumber: Float,
+    val episodeNumber: Double,
     val scanlator: String?,
     val lastModifiedAt: Long,
 ) {
@@ -32,7 +32,7 @@ data class Episode(
             url = "",
             name = "",
             dateUpload = -1,
-            episodeNumber = -1f,
+            episodeNumber = -1.0,
             scanlator = null,
             lastModifiedAt = 0,
         )

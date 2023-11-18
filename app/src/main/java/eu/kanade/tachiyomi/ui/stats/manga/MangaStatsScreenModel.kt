@@ -138,15 +138,13 @@ class MangaStatsScreenModel(
     private fun getTrackMeanScore(scoredMangaTrackMap: Map<Long, List<MangaTrack>>): Double {
         return scoredMangaTrackMap
             .map { (_, tracks) ->
-                tracks.map {
-                    get10PointScore(it)
-                }.average()
+                tracks.map(::get10PointScore).average()
             }
             .fastFilter { !it.isNaN() }
             .average()
     }
 
-    private fun get10PointScore(track: MangaTrack): Float {
+    private fun get10PointScore(track: MangaTrack): Double {
         val service = trackManager.getService(track.syncId)!!
         return service.mangaService.get10PointScore(track)
     }

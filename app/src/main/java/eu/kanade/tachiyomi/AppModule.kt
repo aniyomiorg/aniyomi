@@ -5,16 +5,11 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import app.cash.sqldelight.adapter.primitive.FloatColumnAdapter
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import data.Chapters
 import data.History
-import data.Manga_sync
 import data.Mangas
-import dataanime.Anime_sync
 import dataanime.Animehistory
 import dataanime.Animes
-import dataanime.Episodes
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
@@ -55,13 +50,13 @@ import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.provider.AndroidBackupFolderProvider
 import tachiyomi.core.provider.AndroidDownloadFolderProvider
 import tachiyomi.data.Database
-import tachiyomi.data.dateAdapter
+import tachiyomi.data.DateColumnAdapter
+import tachiyomi.data.StringListColumnAdapter
+import tachiyomi.data.UpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.anime.AndroidAnimeDatabaseHandler
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.AndroidMangaDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.data.listOfStringsAdapter
-import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -136,18 +131,12 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             Database(
                 driver = sqlDriverManga,
-                chaptersAdapter = Chapters.Adapter(
-                    chapter_numberAdapter = FloatColumnAdapter,
-                ),
                 historyAdapter = History.Adapter(
-                    last_readAdapter = dateAdapter,
-                ),
-                manga_syncAdapter = Manga_sync.Adapter(
-                    scoreAdapter = FloatColumnAdapter,
+                    last_readAdapter = DateColumnAdapter,
                 ),
                 mangasAdapter = Mangas.Adapter(
-                    genreAdapter = listOfStringsAdapter,
-                    update_strategyAdapter = updateStrategyAdapter,
+                    genreAdapter = StringListColumnAdapter,
+                    update_strategyAdapter = UpdateStrategyColumnAdapter,
                 ),
             )
         }
@@ -155,18 +144,12 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             AnimeDatabase(
                 driver = sqlDriverAnime,
-                episodesAdapter = Episodes.Adapter(
-                    episode_numberAdapter = FloatColumnAdapter,
-                ),
                 animehistoryAdapter = Animehistory.Adapter(
-                    last_seenAdapter = dateAdapter,
-                ),
-                anime_syncAdapter = Anime_sync.Adapter(
-                    scoreAdapter = FloatColumnAdapter,
+                    last_seenAdapter = DateColumnAdapter,
                 ),
                 animesAdapter = Animes.Adapter(
-                    genreAdapter = listOfStringsAdapter,
-                    update_strategyAdapter = updateStrategyAdapter,
+                    genreAdapter = StringListColumnAdapter,
+                    update_strategyAdapter = UpdateStrategyColumnAdapter,
                 ),
             )
         }
