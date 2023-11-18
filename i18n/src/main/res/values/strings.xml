@@ -261,16 +261,6 @@
     <string name="pref_update_only_started">That haven\'t been started</string>
     <string name="pref_update_only_in_release_period">Outside expected release period</string>
 
-    <string name="pref_update_release_grace_period">Expected manga release grace period</string>
-    <plurals name="pref_update_release_leading_days">
-        <item quantity="one">%d day before</item>
-        <item quantity="other">%d days before</item>
-    </plurals>
-    <plurals name="pref_update_release_following_days">
-        <item quantity="one">%d day after</item>
-        <item quantity="other">%d days after</item>
-    </plurals>
-    <string name="pref_update_release_grace_period_info">A low grace period is recommended to minimize stress on sources. The more checks for an entry that are missed, the longer the interval in between checks will be with a maximum of 28 days.</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
@@ -467,6 +457,7 @@
     <string name="enhanced_services_not_installed">Available but source not installed: %s</string>
     <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
     <string name="action_track">Track</string>
+    <string name="track_activity_name">Tracking login</string>
 
     <!-- Browse section -->
     <string name="pref_hide_in_library_items">Hide entries already in library</string>
@@ -624,10 +615,6 @@
     <plurals name="day">
         <item quantity="one">1 day</item>
         <item quantity="other">%d days</item>
-    </plurals>
-    <plurals name="range_interval_day">
-        <item quantity="one">%1$d - %2$d day</item>
-        <item quantity="other">%1$d - %2$d days</item>
     </plurals>
 
     <!-- Item info -->

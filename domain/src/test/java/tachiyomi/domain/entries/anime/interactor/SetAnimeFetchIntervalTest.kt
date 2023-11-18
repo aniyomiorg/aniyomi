@@ -11,6 +11,7 @@ import java.time.ZonedDateTime
 
 @Execution(ExecutionMode.CONCURRENT)
 class SetAnimeFetchIntervalTest {
+
     private val testTime = ZonedDateTime.parse("2020-01-01T00:00:00Z")
     private var episode = Episode.create().copy(
         dateFetch = testTime.toEpochSecond() * 1000,
@@ -19,14 +20,8 @@ class SetAnimeFetchIntervalTest {
 
     private val setAnimeFetchInterval = SetAnimeFetchInterval(mockk())
 
-    private fun episodeAddTime(episode: Episode, duration: Duration): Episode {
-        val newTime = testTime.plus(duration).toEpochSecond() * 1000
-        return episode.copy(dateFetch = newTime, dateUpload = newTime)
-    }
-
-    // default 7 when less than 3 distinct day
     @Test
-    fun `calculateInterval returns 7 when 1 episodes in 1 day`() {
+    fun `calculateInterval returns default of 7 days when less than 3 distinct days`() {
         val episodes = mutableListOf<Episode>()
         (1..1).forEach {
             val duration = Duration.ofHours(10)
@@ -63,9 +58,8 @@ class SetAnimeFetchIntervalTest {
         setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 7
     }
 
-    // Default 1 if interval less than 1
     @Test
-    fun `calculateInterval returns 1 when 5 episodes in 75 hours, 3 days`() {
+    fun `calculateInterval returns default of 1 day when interval less than 1`() {
         val episodes = mutableListOf<Episode>()
         (1..5).forEach {
             val duration = Duration.ofHours(15L * it)
@@ -98,9 +92,8 @@ class SetAnimeFetchIntervalTest {
         setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 2
     }
 
-    // If interval is decimal, floor to closest integer
     @Test
-    fun `calculateInterval returns 1 when 5 episodes in 125 hours, 5 days`() {
+    fun `calculateInterval returns floored value when interval is decimal`() {
         val episodes = mutableListOf<Episode>()
         (1..5).forEach {
             val duration = Duration.ofHours(25L * it)
@@ -121,9 +114,8 @@ class SetAnimeFetchIntervalTest {
         setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 
-    // Use fetch time if upload time not available
     @Test
-    fun `calculateInterval returns 1 when 5 episodes in 125 hours, 5 days of dateFetch`() {
+    fun `calculateInterval returns interval based on fetch time if upload time not available`() {
         val episodes = mutableListOf<Episode>()
         (1..5).forEach {
             val duration = Duration.ofHours(25L * it)
@@ -131,5 +123,10 @@ class SetAnimeFetchIntervalTest {
             episodes.add(newEpisode)
         }
         setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
+    }
+
+    private fun episodeAddTime(episode: Episode, duration: Duration): Episode {
+        val newTime = testTime.plus(duration).toEpochSecond() * 1000
+        return episode.copy(dateFetch = newTime, dateUpload = newTime)
     }
 }

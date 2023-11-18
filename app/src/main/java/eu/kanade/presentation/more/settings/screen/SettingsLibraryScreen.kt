@@ -1,33 +1,18 @@
 package eu.kanade.presentation.more.settings.screen
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastMap
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -54,7 +39,6 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_U
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
-import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -183,13 +167,10 @@ object SettingsLibraryScreen : SearchableSettings {
 
         val libraryUpdateIntervalPref = libraryPreferences.libraryUpdateInterval()
         val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
-        val libraryUpdateDeviceRestrictionPref = libraryPreferences.libraryUpdateDeviceRestriction()
-        val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateItemRestriction()
 
         val animelibUpdateCategoriesPref = libraryPreferences.animeLibraryUpdateCategories()
         val animelibUpdateCategoriesExcludePref =
             libraryPreferences.animeLibraryUpdateCategoriesExclude()
-        val libraryUpdateAnimeRestriction by libraryUpdateMangaRestrictionPref.collectAsState()
 
         val includedAnime by animelibUpdateCategoriesPref.collectAsState()
         val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
@@ -213,27 +194,10 @@ object SettingsLibraryScreen : SearchableSettings {
                 },
             )
         }
-        val leadAnimeRange by libraryPreferences.leadingAnimeExpectedDays().collectAsState()
-        val followAnimeRange by libraryPreferences.followingAnimeExpectedDays().collectAsState()
-
-        var showFetchAnimeRangesDialog by rememberSaveable { mutableStateOf(false) }
-        if (showFetchAnimeRangesDialog) {
-            LibraryExpectedRangeDialog(
-                initialLead = leadAnimeRange,
-                initialFollow = followAnimeRange,
-                onDismissRequest = { showFetchAnimeRangesDialog = false },
-                onValueChanged = { leadValue, followValue ->
-                    libraryPreferences.leadingAnimeExpectedDays().set(leadValue)
-                    libraryPreferences.followingAnimeExpectedDays().set(followValue)
-                    showFetchAnimeRangesDialog = false
-                },
-            )
-        }
 
         val libraryUpdateCategoriesPref = libraryPreferences.mangaLibraryUpdateCategories()
         val libraryUpdateCategoriesExcludePref =
             libraryPreferences.mangaLibraryUpdateCategoriesExclude()
-        val libraryUpdateMangaRestriction by libraryUpdateMangaRestrictionPref.collectAsState()
 
         val includedManga by libraryUpdateCategoriesPref.collectAsState()
         val excludedManga by libraryUpdateCategoriesExcludePref.collectAsState()
@@ -257,25 +221,10 @@ object SettingsLibraryScreen : SearchableSettings {
                 },
             )
         }
-        val leadMangaRange by libraryPreferences.leadingMangaExpectedDays().collectAsState()
-        val followMangaRange by libraryPreferences.followingMangaExpectedDays().collectAsState()
 
-        var showFetchMangaRangesDialog by rememberSaveable { mutableStateOf(false) }
-        if (showFetchMangaRangesDialog) {
-            LibraryExpectedRangeDialog(
-                initialLead = leadMangaRange,
-                initialFollow = followMangaRange,
-                onDismissRequest = { showFetchMangaRangesDialog = false },
-                onValueChanged = { leadValue, followValue ->
-                    libraryPreferences.leadingMangaExpectedDays().set(leadValue)
-                    libraryPreferences.followingMangaExpectedDays().set(followValue)
-                    showFetchMangaRangesDialog = false
-                },
-            )
-        }
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_library_update),
-            preferenceItems = listOfNotNull(
+            preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryUpdateIntervalPref,
                     title = stringResource(R.string.pref_library_update_interval),
@@ -294,7 +243,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryUpdateDeviceRestrictionPref,
+                    pref = libraryPreferences.libraryUpdateDeviceRestriction(),
                     enabled = libraryUpdateInterval > 0,
                     title = stringResource(R.string.pref_library_update_restriction),
                     subtitle = stringResource(R.string.restrictions),
@@ -363,7 +312,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryUpdateMangaRestrictionPref,
+                    pref = libraryPreferences.libraryUpdateItemRestriction(),
                     title = stringResource(R.string.pref_library_update_manga_restriction),
                     entries = mapOf(
                         ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
@@ -372,29 +321,6 @@ object SettingsLibraryScreen : SearchableSettings {
                         ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(R.string.pref_update_only_in_release_period),
                     ),
                 ),
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_update_release_grace_period),
-                    subtitle = listOf(
-                        pluralStringResource(R.plurals.pref_update_release_leading_days, leadMangaRange, leadMangaRange),
-                        pluralStringResource(R.plurals.pref_update_release_following_days, followMangaRange, followMangaRange),
-                    ).joinToString(),
-                    onClick = { showFetchMangaRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
-                Preference.PreferenceItem.InfoPreference(
-                    title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_update_anime_release_grace_period),
-                    subtitle = listOf(
-                        pluralStringResource(R.plurals.pref_update_release_leading_days, leadAnimeRange, leadAnimeRange),
-                        pluralStringResource(R.plurals.pref_update_release_following_days, followAnimeRange, followAnimeRange),
-                    ).joinToString(),
-                    onClick = { showFetchAnimeRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
-                Preference.PreferenceItem.InfoPreference(
-                    title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
-
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.newShowUpdatesCount(),
                     title = stringResource(R.string.pref_library_update_show_tab_badge),
@@ -462,81 +388,6 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                 ),
             ),
-        )
-    }
-
-    @Composable
-    private fun LibraryExpectedRangeDialog(
-        initialLead: Int,
-        initialFollow: Int,
-        onDismissRequest: () -> Unit,
-        onValueChanged: (portrait: Int, landscape: Int) -> Unit,
-    ) {
-        var leadValue by rememberSaveable { mutableIntStateOf(initialLead) }
-        var followValue by rememberSaveable { mutableIntStateOf(initialFollow) }
-
-        AlertDialog(
-            onDismissRequest = onDismissRequest,
-            title = { Text(text = stringResource(R.string.pref_update_release_grace_period)) },
-            text = {
-                Column {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = pluralStringResource(R.plurals.pref_update_release_leading_days, leadValue, leadValue),
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = pluralStringResource(R.plurals.pref_update_release_following_days, followValue, followValue),
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
-                }
-                BoxWithConstraints(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    val size = DpSize(width = maxWidth / 2, height = 128.dp)
-                    val items = (0..28).map(Int::toString)
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        WheelTextPicker(
-                            size = size,
-                            items = items,
-                            startIndex = leadValue,
-                            onSelectionChanged = {
-                                leadValue = it
-                            },
-                        )
-                        WheelTextPicker(
-                            size = size,
-                            items = items,
-                            startIndex = followValue,
-                            onSelectionChanged = {
-                                followValue = it
-                            },
-                        )
-                    }
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(android.R.string.cancel))
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { onValueChanged(leadValue, followValue) }) {
-                    Text(text = stringResource(R.string.action_ok))
-                }
-            },
         )
     }
 }

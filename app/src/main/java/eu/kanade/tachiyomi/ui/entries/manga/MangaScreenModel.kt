@@ -141,8 +141,6 @@ class MangaScreenModel(
     val skipFiltered by readerPreferences.skipFiltered().asState(coroutineScope)
 
     val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
-    val leadDay = libraryPreferences.leadingMangaExpectedDays().get()
-    val followDay = libraryPreferences.followingMangaExpectedDays().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedChapterIds: HashSet<Long> = HashSet()
@@ -449,20 +447,14 @@ class MangaScreenModel(
         }
     }
 
-    fun setFetchInterval(manga: Manga, newInterval: Int) {
-        val interval = when (newInterval) {
-            // reset interval 0 default to trigger recalculation
-            // only reset if interval is custom, which is negative
-            0 -> if (manga.fetchInterval < 0) 0 else manga.fetchInterval
-            else -> -newInterval
-        }
+    fun setFetchInterval(manga: Manga, interval: Int) {
         coroutineScope.launchIO {
             updateManga.awaitUpdateFetchInterval(
-                manga.copy(fetchInterval = interval),
-                successState?.chapters?.map { it.chapter }.orEmpty(),
+                // Custom intervals are negative
+                manga.copy(fetchInterval = -interval),
             )
-            val newManga = mangaRepository.getMangaById(mangaId)
-            updateSuccessState { it.copy(manga = newManga) }
+            val updatedManga = mangaRepository.getMangaById(manga.id)
+            updateSuccessState { it.copy(manga = updatedManga) }
         }
     }
 
@@ -1176,10 +1168,3 @@ data class ChapterItem(
 ) {
     val isDownloaded = downloadState == MangaDownload.State.DOWNLOADED
 }
-
-@Immutable
-data class FetchMangaInterval(
-    val interval: Int,
-    val leadDays: Int,
-    val followDays: Int,
-)

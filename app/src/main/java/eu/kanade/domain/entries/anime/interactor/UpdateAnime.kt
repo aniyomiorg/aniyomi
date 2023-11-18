@@ -7,7 +7,6 @@ import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
-import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -79,16 +78,12 @@ class UpdateAnime(
 
     suspend fun awaitUpdateFetchInterval(
         anime: Anime,
-        episodes: List<Episode>,
-        zonedDateTime: ZonedDateTime = ZonedDateTime.now(),
-        fetchRange: Pair<Long, Long> = setAnimeFetchInterval.getCurrent(zonedDateTime),
+        dateTime: ZonedDateTime = ZonedDateTime.now(),
+        window: Pair<Long, Long> = setAnimeFetchInterval.getWindow(dateTime),
     ): Boolean {
-        val updateAnime = setAnimeFetchInterval.update(anime, episodes, zonedDateTime, fetchRange)
-        return if (updateAnime != null) {
-            animeRepository.updateAnime(updateAnime)
-        } else {
-            true
-        }
+        return setAnimeFetchInterval.toAnimeUpdateOrNull(anime, dateTime, window)
+            ?.let { animeRepository.updateAnime(it) }
+            ?: false
     }
 
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {

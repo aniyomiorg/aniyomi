@@ -7,7 +7,6 @@ import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.entries.manga.repository.MangaRepository
-import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -79,16 +78,12 @@ class UpdateManga(
 
     suspend fun awaitUpdateFetchInterval(
         manga: Manga,
-        chapters: List<Chapter>,
-        zonedDateTime: ZonedDateTime = ZonedDateTime.now(),
-        fetchRange: Pair<Long, Long> = setMangaFetchInterval.getCurrent(zonedDateTime),
+        dateTime: ZonedDateTime = ZonedDateTime.now(),
+        window: Pair<Long, Long> = setMangaFetchInterval.getWindow(dateTime),
     ): Boolean {
-        val updatedManga = setMangaFetchInterval.update(manga, chapters, zonedDateTime, fetchRange)
-        return if (updatedManga != null) {
-            mangaRepository.updateManga(updatedManga)
-        } else {
-            true
-        }
+        return setMangaFetchInterval.toMangaUpdateOrNull(manga, dateTime, window)
+            ?.let { mangaRepository.updateManga(it) }
+            ?: false
     }
 
     suspend fun awaitUpdateLastUpdate(mangaId: Long): Boolean {

@@ -32,7 +32,7 @@ import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.TrackStatus
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -288,10 +288,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
-
-        val now = ZonedDateTime.now()
-        val fetchInterval = setAnimeFetchInterval.getCurrent(now)
-        val higherLimit = fetchInterval.second
+        val fetchWindow = setAnimeFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
             animeToUpdate.groupBy { it.anime.source + (0..4).random() }.values
@@ -313,8 +310,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     when {
-                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > higherLimit ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_in_release_period))
+                                        anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
+                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_always_update))
 
                                         ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
@@ -325,12 +322,12 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_started))
 
-                                        anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_always_update))
+                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > fetchWindow.second ->
+                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_in_release_period))
 
                                         else -> {
                                             try {
-                                                val newEpisodes = updateAnime(anime, now, fetchInterval)
+                                                val newEpisodes = updateAnime(anime, fetchWindow)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newEpisodes.isNotEmpty()) {
@@ -386,6 +383,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             )
         }
         if (skippedUpdates.isNotEmpty()) {
+            // TODO: surface skipped reasons to user
+            logcat {
+                skippedUpdates
+                    .groupBy { it.second }
+                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
+                    .joinToString()
+            }
             notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
@@ -402,7 +406,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      * @param anime the anime to update.
      * @return a pair of the inserted and removed episodes.
      */
-    private suspend fun updateAnime(anime: Anime, zoneDateTime: ZonedDateTime, fetchRange: Pair<Long, Long>): List<Episode> {
+    private suspend fun updateAnime(anime: Anime, fetchWindow: Pair<Long, Long>): List<Episode> {
         val source = sourceManager.getOrStub(anime.source)
 
         // Update anime metadata if needed
@@ -417,7 +421,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         // to get latest data so it doesn't get overwritten later on
         val dbAnime = getAnime.await(anime.id)?.takeIf { it.favorite } ?: return emptyList()
 
-        return syncEpisodesWithSource.await(episodes, dbAnime, source, false, zoneDateTime, fetchRange)
+        return syncEpisodesWithSource.await(episodes, dbAnime, source, false, fetchWindow)
     }
 
     private suspend fun updateCovers() {
