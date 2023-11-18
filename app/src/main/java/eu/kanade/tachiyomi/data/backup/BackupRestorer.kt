@@ -30,10 +30,10 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
+import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
-import tachiyomi.domain.entries.manga.interactor.SetMangaUpdateInterval
+import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -56,15 +56,15 @@ class BackupRestorer(
 ) {
     private val updateManga: UpdateManga = Injekt.get()
     private val chapterRepository: ChapterRepository = Injekt.get()
-    private val setMangaUpdateInterval: SetMangaUpdateInterval = Injekt.get()
+    private val setMangaFetchInterval: SetMangaFetchInterval = Injekt.get()
 
     private val updateAnime: UpdateAnime = Injekt.get()
     private val episodeRepository: EpisodeRepository = Injekt.get()
-    private val setAnimeUpdateInterval: SetAnimeUpdateInterval = Injekt.get()
+    private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
 
     private var zonedDateTime = ZonedDateTime.now()
-    private var currentMangaRange = setMangaUpdateInterval.getCurrentFetchRange(zonedDateTime)
-    private var currentAnimeRange = setAnimeUpdateInterval.getCurrentFetchRange(zonedDateTime)
+    private var currentMangaFetchInterval = setMangaFetchInterval.getCurrent(zonedDateTime)
+    private var currentAnimeFetchInterval = setAnimeFetchInterval.getCurrent(zonedDateTime)
 
     private var backupManager = BackupManager(context)
 
@@ -143,8 +143,8 @@ class BackupRestorer(
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
         zonedDateTime = ZonedDateTime.now()
-        currentMangaRange = setMangaUpdateInterval.getCurrentFetchRange(zonedDateTime)
-        currentAnimeRange = setAnimeUpdateInterval.getCurrentFetchRange(zonedDateTime)
+        currentMangaFetchInterval = setMangaFetchInterval.getCurrent(zonedDateTime)
+        currentAnimeFetchInterval = setAnimeFetchInterval.getCurrent(zonedDateTime)
 
         return coroutineScope {
             // Restore individual manga
@@ -222,7 +222,7 @@ class BackupRestorer(
                 restoreNewManga(updateManga, chapters, categories, history, tracks, backupCategories, customManga)
             }
             val updatedChapters = chapterRepository.getChapterByMangaId(restoredManga.id)
-            updateManga.awaitUpdateFetchInterval(restoredManga, updatedChapters, zonedDateTime, currentMangaRange)
+            updateManga.awaitUpdateFetchInterval(restoredManga, updatedChapters, zonedDateTime, currentMangaFetchInterval)
         } catch (e: Exception) {
             val sourceName = sourceMapping[manga.source] ?: manga.source.toString()
             errors.add(Date() to "${manga.title} [$sourceName]: ${e.message}")
@@ -318,7 +318,7 @@ class BackupRestorer(
                 restoreNewAnime(updateAnime, episodes, categories, history, tracks, backupCategories, customAnime)
             }
             val updatedEpisodes = episodeRepository.getEpisodeByAnimeId(restoredAnime.id)
-            updateAnime.awaitUpdateFetchInterval(restoredAnime, updatedEpisodes, zonedDateTime, currentAnimeRange)
+            updateAnime.awaitUpdateFetchInterval(restoredAnime, updatedEpisodes, zonedDateTime, currentAnimeFetchInterval)
         } catch (e: Exception) {
             val sourceName = sourceMapping[anime.source] ?: anime.source.toString()
             errors.add(Date() to "${anime.title} [$sourceName]: ${e.message}")

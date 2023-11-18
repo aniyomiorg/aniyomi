@@ -80,6 +80,7 @@ import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.ui.entries.anime.FetchAnimeInterval
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.material.TextButton
@@ -167,7 +168,7 @@ fun AnimeActionRow(
     modifier: Modifier = Modifier,
     favorite: Boolean,
     trackingCount: Int,
-    intervalDisplay: () -> Pair<Int, Int>?,
+    fetchInterval: FetchAnimeInterval?,
     isUserIntervalMode: Boolean,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
@@ -176,7 +177,6 @@ fun AnimeActionRow(
     onEditIntervalClicked: (() -> Unit)?,
     onEditCategory: (() -> Unit)?,
 ) {
-    val interval: Pair<Int, Int>? = intervalDisplay()
     val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
 
     Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
@@ -191,13 +191,14 @@ fun AnimeActionRow(
             onClick = onAddToLibraryClicked,
             onLongClick = onEditCategory,
         )
-        if (onEditIntervalClicked != null && interval != null) {
+        if (onEditIntervalClicked != null && fetchInterval != null) {
+            val intervalPair = 1.coerceAtLeast(fetchInterval.interval - fetchInterval.leadDays) to (fetchInterval.interval + fetchInterval.followDays)
             AnimeActionButton(
                 title =
-                if (interval.first == interval.second) {
-                    pluralStringResource(id = R.plurals.day, count = interval.second, interval.second)
+                if (intervalPair.first == intervalPair.second) {
+                    pluralStringResource(id = R.plurals.day, count = intervalPair.second, intervalPair.second)
                 } else {
-                    pluralStringResource(id = R.plurals.range_interval_day, count = interval.second, interval.first, interval.second)
+                    pluralStringResource(id = R.plurals.range_interval_day, count = intervalPair.second, intervalPair.first, intervalPair.second)
                 },
                 icon = Icons.Default.HourglassEmpty,
                 color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,

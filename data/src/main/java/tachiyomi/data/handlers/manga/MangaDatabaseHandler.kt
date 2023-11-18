@@ -1,7 +1,8 @@
 package tachiyomi.data.handlers.manga
 
 import androidx.paging.PagingSource
-import com.squareup.sqldelight.Query
+import app.cash.sqldelight.ExecutableQuery
+import app.cash.sqldelight.Query
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.Database
 
@@ -19,9 +20,19 @@ interface MangaDatabaseHandler {
         block: suspend Database.() -> Query<T>,
     ): T
 
+    suspend fun <T : Any> awaitOneExecutable(
+        inTransaction: Boolean = false,
+        block: suspend Database.() -> ExecutableQuery<T>,
+    ): T
+
     suspend fun <T : Any> awaitOneOrNull(
         inTransaction: Boolean = false,
         block: suspend Database.() -> Query<T>,
+    ): T?
+
+    suspend fun <T : Any> awaitOneOrNullExecutable(
+        inTransaction: Boolean = false,
+        block: suspend Database.() -> ExecutableQuery<T>,
     ): T?
 
     fun <T : Any> subscribeToList(block: Database.() -> Query<T>): Flow<List<T>>

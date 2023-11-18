@@ -9,8 +9,8 @@ UPDATE animes_categories SET last_modified_at = strftime('%s', 'now');
 UPDATE episodes SET last_modified_at = strftime('%s', 'now');
 
 -- Create triggers
-DROP TRIGGER IF EXISTS update_last_modified_at_mangas;
-CREATE TRIGGER update_last_modified_at_mangas
+DROP TRIGGER IF EXISTS update_last_modified_at_animes;
+CREATE TRIGGER update_last_modified_at_animes
 AFTER UPDATE ON animes
 FOR EACH ROW
 BEGIN
@@ -19,8 +19,8 @@ BEGIN
   WHERE _id = new._id;
 END;
 
-DROP TRIGGER IF EXISTS update_favorite_modified_at_mangas;
-CREATE TRIGGER update_last_favorited_at_mangas
+DROP TRIGGER IF EXISTS update_favorite_modified_at_animes;
+CREATE TRIGGER update_last_favorited_at_animes
 AFTER UPDATE OF favorite ON animes
 BEGIN
   UPDATE animes
@@ -28,8 +28,8 @@ BEGIN
   WHERE _id = new._id;
 END;
 
-DROP TRIGGER IF EXISTS update_last_modified_at_chapters;
-CREATE TRIGGER update_last_modified_at_chapters
+DROP TRIGGER IF EXISTS update_last_modified_at_episodes;
+CREATE TRIGGER update_last_modified_at_episodes
 AFTER UPDATE ON episodes
 FOR EACH ROW
 BEGIN
@@ -38,8 +38,8 @@ BEGIN
   WHERE _id = new._id;
 END;
 
-DROP TRIGGER IF EXISTS update_last_modified_at_mangas_categories;
-CREATE TRIGGER update_last_modified_at_mangas_categories
+DROP TRIGGER IF EXISTS update_last_modified_at_animes_categories;
+CREATE TRIGGER update_last_modified_at_animes_categories
 AFTER UPDATE ON animes_categories
 FOR EACH ROW
 BEGIN

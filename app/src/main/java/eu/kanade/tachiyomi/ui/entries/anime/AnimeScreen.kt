@@ -89,6 +89,13 @@ class AnimeScreen(
 
         val successState = state as AnimeScreenModel.State.Success
         val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
+        val fetchInterval = remember(successState.anime.fetchInterval) {
+            FetchAnimeInterval(
+                interval = successState.anime.fetchInterval,
+                leadDays = screenModel.leadDay,
+                followDays = screenModel.followDay,
+            )
+        }
 
         LaunchedEffect(successState.anime, screenModel.source) {
             if (isAnimeHttpSource) {
@@ -106,7 +113,7 @@ class AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
             dateFormat = screenModel.dateFormat,
-            intervalDisplay = screenModel::intervalDisplay,
+            fetchInterval = fetchInterval,
             isTabletUi = isTabletUi(),
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
@@ -144,7 +151,7 @@ class AnimeScreen(
             // SY -->
             onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
             // SY <--
-            onEditIntervalClicked = screenModel::showSetAnimeIntervalDialog.takeIf { screenModel.isIntervalEnabled && successState.anime.favorite },
+            onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf { screenModel.isUpdateIntervalEnabled && successState.anime.favorite },
             onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
             changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
@@ -247,11 +254,11 @@ class AnimeScreen(
                 )
             }
             // SY <--
-            is AnimeScreenModel.Dialog.SetAnimeInterval -> {
+            is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
-                    interval = if (dialog.anime.calculateInterval < 0) -dialog.anime.calculateInterval else 0,
+                    interval = if (dialog.anime.fetchInterval < 0) -dialog.anime.fetchInterval else 0,
                     onDismissRequest = onDismissRequest,
-                    onValueChanged = { screenModel.setFetchRangeInterval(dialog.anime, it) },
+                    onValueChanged = { screenModel.setFetchInterval(dialog.anime, it) },
                 )
             }
             AnimeScreenModel.Dialog.ChangeAnimeSkipIntro -> {

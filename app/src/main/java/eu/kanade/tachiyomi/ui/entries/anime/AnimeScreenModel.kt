@@ -85,7 +85,6 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
-import kotlin.math.absoluteValue
 
 class AnimeScreenModel(
     val context: Context,
@@ -145,9 +144,9 @@ class AnimeScreenModel(
 
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
-    val isIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
-    private val leadDay = libraryPreferences.leadingAnimeExpectedDays().get()
-    private val followDay = libraryPreferences.followingAnimeExpectedDays().get()
+    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
+    val leadDay = libraryPreferences.leadingAnimeExpectedDays().get()
+    val followDay = libraryPreferences.followingAnimeExpectedDays().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
@@ -371,7 +370,7 @@ class AnimeScreenModel(
                 // Add to library
                 // First, check if duplicate exists if callback is provided
                 if (checkDuplicate) {
-                    val duplicate = getDuplicateLibraryAnime.await(anime.title)
+                    val duplicate = getDuplicateLibraryAnime.await(anime).getOrNull(0)
                     if (duplicate != null) {
                         updateSuccessState { it.copy(dialog = Dialog.DuplicateAnime(anime, duplicate)) }
                         return@launchIO
@@ -446,30 +445,23 @@ class AnimeScreenModel(
         }
     }
 
-    fun showSetAnimeIntervalDialog() {
+    fun showSetAnimeFetchIntervalDialog() {
         val anime = successState?.anime ?: return
         updateSuccessState {
-            it.copy(dialog = Dialog.SetAnimeInterval(anime))
+            it.copy(dialog = Dialog.SetAnimeFetchInterval(anime))
         }
     }
 
-    // TODO: this should be in the state/composables
-    fun intervalDisplay(): Pair<Int, Int>? {
-        val anime = successState?.anime ?: return null
-        val effInterval = anime.calculateInterval
-        return 1.coerceAtLeast(effInterval.absoluteValue - leadDay) to (effInterval.absoluteValue + followDay)
-    }
-
-    fun setFetchRangeInterval(anime: Anime, newInterval: Int) {
+    fun setFetchInterval(anime: Anime, newInterval: Int) {
         val interval = when (newInterval) {
             // reset interval 0 default to trigger recalculation
             // only reset if interval is custom, which is negative
-            0 -> if (anime.calculateInterval < 0) 0 else anime.calculateInterval
+            0 -> if (anime.fetchInterval < 0) 0 else anime.fetchInterval
             else -> -newInterval
         }
         coroutineScope.launchIO {
             updateAnime.awaitUpdateFetchInterval(
-                anime.copy(calculateInterval = interval),
+                anime.copy(fetchInterval = interval),
                 successState?.episodes?.map { it.episode }.orEmpty(),
             )
             val newAnime = animeRepository.getAnimeById(animeId)
@@ -1086,7 +1078,7 @@ class AnimeScreenModel(
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
-        data class SetAnimeInterval(val anime: Anime) : Dialog
+        data class SetAnimeFetchInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
 
         // SY -->
@@ -1206,3 +1198,10 @@ data class EpisodeItem(
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
+
+@Immutable
+data class FetchAnimeInterval(
+    val interval: Int,
+    val leadDays: Int,
+    val followDays: Int,
+)

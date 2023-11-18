@@ -5,11 +5,16 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.adapter.primitive.FloatColumnAdapter
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import data.Chapters
 import data.History
+import data.Manga_sync
 import data.Mangas
+import dataanime.Anime_sync
 import dataanime.Animehistory
 import dataanime.Animes
+import dataanime.Episodes
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.source.service.SourcePreferences
@@ -133,8 +138,14 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             Database(
                 driver = sqlDriverManga,
+                chaptersAdapter = Chapters.Adapter(
+                    chapter_numberAdapter = FloatColumnAdapter,
+                ),
                 historyAdapter = History.Adapter(
                     last_readAdapter = dateAdapter,
+                ),
+                manga_syncAdapter = Manga_sync.Adapter(
+                    scoreAdapter = FloatColumnAdapter,
                 ),
                 mangasAdapter = Mangas.Adapter(
                     genreAdapter = listOfStringsAdapter,
@@ -146,8 +157,14 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory {
             AnimeDatabase(
                 driver = sqlDriverAnime,
+                episodesAdapter = Episodes.Adapter(
+                    episode_numberAdapter = FloatColumnAdapter,
+                ),
                 animehistoryAdapter = Animehistory.Adapter(
                     last_seenAdapter = dateAdapter,
+                ),
+                anime_syncAdapter = Anime_sync.Adapter(
+                    scoreAdapter = FloatColumnAdapter,
                 ),
                 animesAdapter = Animes.Adapter(
                     genreAdapter = listOfStringsAdapter,

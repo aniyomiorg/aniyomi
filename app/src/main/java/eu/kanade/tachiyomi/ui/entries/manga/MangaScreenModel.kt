@@ -82,7 +82,6 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import kotlin.math.absoluteValue
 
 class MangaScreenModel(
     val context: Context,
@@ -141,9 +140,9 @@ class MangaScreenModel(
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
     val skipFiltered by readerPreferences.skipFiltered().asState(coroutineScope)
 
-    val isIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
-    private val leadDay = libraryPreferences.leadingMangaExpectedDays().get()
-    private val followDay = libraryPreferences.followingMangaExpectedDays().get()
+    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
+    val leadDay = libraryPreferences.leadingMangaExpectedDays().get()
+    val followDay = libraryPreferences.followingMangaExpectedDays().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedChapterIds: HashSet<Long> = HashSet()
@@ -367,7 +366,7 @@ class MangaScreenModel(
                 // Add to library
                 // First, check if duplicate exists if callback is provided
                 if (checkDuplicate) {
-                    val duplicate = getDuplicateLibraryManga.await(manga.title)
+                    val duplicate = getDuplicateLibraryManga.await(manga).getOrNull(0)
 
                     if (duplicate != null) {
                         updateSuccessState { it.copy(dialog = Dialog.DuplicateManga(manga, duplicate)) }
@@ -443,30 +442,23 @@ class MangaScreenModel(
         }
     }
 
-    fun showSetMangaIntervalDialog() {
+    fun showSetMangaFetchIntervalDialog() {
         val manga = successState?.manga ?: return
         updateSuccessState {
-            it.copy(dialog = Dialog.SetMangaInterval(manga))
+            it.copy(dialog = Dialog.SetMangaFetchInterval(manga))
         }
     }
 
-    // TODO: this should be in the state/composables
-    fun intervalDisplay(): Pair<Int, Int>? {
-        val manga = successState?.manga ?: return null
-        val effInterval = manga.calculateInterval
-        return 1.coerceAtLeast(effInterval.absoluteValue - leadDay) to (effInterval.absoluteValue + followDay)
-    }
-
-    fun setFetchRangeInterval(manga: Manga, newInterval: Int) {
+    fun setFetchInterval(manga: Manga, newInterval: Int) {
         val interval = when (newInterval) {
             // reset interval 0 default to trigger recalculation
             // only reset if interval is custom, which is negative
-            0 -> if (manga.calculateInterval < 0) 0 else manga.calculateInterval
+            0 -> if (manga.fetchInterval < 0) 0 else manga.fetchInterval
             else -> -newInterval
         }
         coroutineScope.launchIO {
             updateManga.awaitUpdateFetchInterval(
-                manga.copy(calculateInterval = interval),
+                manga.copy(fetchInterval = interval),
                 successState?.chapters?.map { it.chapter }.orEmpty(),
             )
             val newManga = mangaRepository.getMangaById(mangaId)
@@ -1086,7 +1078,7 @@ class MangaScreenModel(
         data class EditMangaInfo(val manga: Manga) : Dialog
 
         // SY <--
-        data class SetMangaInterval(val manga: Manga) : Dialog
+        data class SetMangaFetchInterval(val manga: Manga) : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
         data object FullCover : Dialog
@@ -1184,3 +1176,10 @@ data class ChapterItem(
 ) {
     val isDownloaded = downloadState == MangaDownload.State.DOWNLOADED
 }
+
+@Immutable
+data class FetchMangaInterval(
+    val interval: Int,
+    val leadDays: Int,
+    val followDays: Int,
+)

@@ -13,32 +13,32 @@ import kotlin.math.absoluteValue
 
 const val MAX_GRACE_PERIOD = 28
 
-class SetAnimeUpdateInterval(
+class SetAnimeFetchInterval(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
 ) {
 
-    fun updateInterval(
+    fun update(
         anime: Anime,
         episodes: List<Episode>,
         zonedDateTime: ZonedDateTime,
         fetchRange: Pair<Long, Long>,
     ): AnimeUpdate? {
-        val currentFetchRange = if (fetchRange.first == 0L && fetchRange.second == 0L) {
-            getCurrentFetchRange(ZonedDateTime.now())
+        val currentInterval = if (fetchRange.first == 0L && fetchRange.second == 0L) {
+            getCurrent(ZonedDateTime.now())
         } else {
             fetchRange
         }
-        val interval = anime.calculateInterval.takeIf { it < 0 } ?: calculateInterval(episodes, zonedDateTime)
-        val nextUpdate = calculateNextUpdate(anime, interval, zonedDateTime, currentFetchRange)
+        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(episodes, zonedDateTime)
+        val nextUpdate = calculateNextUpdate(anime, interval, zonedDateTime, currentInterval)
 
-        return if (anime.nextUpdate == nextUpdate && anime.calculateInterval == interval) {
+        return if (anime.nextUpdate == nextUpdate && anime.fetchInterval == interval) {
             null
         } else {
-            AnimeUpdate(id = anime.id, nextUpdate = nextUpdate, calculateInterval = interval)
+            AnimeUpdate(id = anime.id, nextUpdate = nextUpdate, fetchInterval = interval)
         }
     }
 
-    fun getCurrentFetchRange(timeToCal: ZonedDateTime): Pair<Long, Long> {
+    fun getCurrent(timeToCal: ZonedDateTime): Pair<Long, Long> {
         // lead range and the following range depend on if updateOnlyExpectedPeriod set.
         var followRange = 0
         var leadRange = 0
@@ -103,7 +103,7 @@ class SetAnimeUpdateInterval(
     ): Long {
         return if (
             anime.nextUpdate !in fetchRange.first.rangeTo(fetchRange.second + 1) ||
-            anime.calculateInterval == 0
+            anime.fetchInterval == 0
         ) {
             val latestDate = ZonedDateTime.ofInstant(Instant.ofEpochMilli(anime.lastUpdate), zonedDateTime.zone).toLocalDate().atStartOfDay()
             val timeSinceLatest = ChronoUnit.DAYS.between(latestDate, zonedDateTime).toInt()

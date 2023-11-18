@@ -74,6 +74,7 @@ import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
+import eu.kanade.tachiyomi.ui.entries.anime.FetchAnimeInterval
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
@@ -97,7 +98,7 @@ import java.util.concurrent.TimeUnit
 fun AnimeScreen(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    intervalDisplay: () -> Pair<Int, Int>?,
+    fetchInterval: FetchAnimeInterval?,
     dateFormat: DateFormat,
     isTabletUi: Boolean,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
@@ -127,7 +128,7 @@ fun AnimeScreen(
     onShareClicked: (() -> Unit)?,
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
-    onEditIntervalClicked: (() -> Unit)?,
+    onEditFetchIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     // SY -->
     onEditInfoClicked: () -> Unit,
@@ -165,7 +166,7 @@ fun AnimeScreen(
             state = state,
             snackbarHostState = snackbarHostState,
             dateFormat = dateFormat,
-            intervalDisplay = intervalDisplay,
+            fetchInterval = fetchInterval,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
@@ -187,7 +188,7 @@ fun AnimeScreen(
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
-            onEditIntervalClicked = onEditIntervalClicked,
+            onEditIntervalClicked = onEditFetchIntervalClicked,
             onMigrateClicked = onMigrateClicked,
             // SY -->
             onEditInfoClicked = onEditInfoClicked,
@@ -212,7 +213,7 @@ fun AnimeScreen(
             showNextEpisodeAirTime = showNextEpisodeAirTime,
             alwaysUseExternalPlayer = alwaysUseExternalPlayer,
             dateFormat = dateFormat,
-            intervalDisplay = intervalDisplay,
+            fetchInterval = fetchInterval,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -230,7 +231,7 @@ fun AnimeScreen(
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
-            onEditIntervalClicked = onEditIntervalClicked,
+            onEditIntervalClicked = onEditFetchIntervalClicked,
             changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMigrateClicked = onMigrateClicked,
             // SY -->
@@ -255,7 +256,7 @@ private fun AnimeScreenSmallImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     dateFormat: DateFormat,
-    intervalDisplay: () -> Pair<Int, Int>?,
+    fetchInterval: FetchAnimeInterval?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -447,8 +448,8 @@ private fun AnimeScreenSmallImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
-                            intervalDisplay = intervalDisplay,
-                            isUserIntervalMode = state.anime.calculateInterval < 0,
+                            fetchInterval = fetchInterval,
+                            isUserIntervalMode = state.anime.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
                             onWebViewLongClicked = onWebViewLongClicked,
@@ -532,7 +533,7 @@ fun AnimeScreenLargeImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     dateFormat: DateFormat,
-    intervalDisplay: () -> Pair<Int, Int>?,
+    fetchInterval: FetchAnimeInterval?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -706,8 +707,8 @@ fun AnimeScreenLargeImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
-                            intervalDisplay = intervalDisplay,
-                            isUserIntervalMode = state.anime.calculateInterval < 0,
+                            fetchInterval = fetchInterval,
+                            isUserIntervalMode = state.anime.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
                             onWebViewLongClicked = onWebViewLongClicked,

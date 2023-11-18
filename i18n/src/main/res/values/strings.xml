@@ -227,7 +227,6 @@
     <string name="pref_show_nsfw_source">Show in sources and extensions lists</string>
     <string name="parental_controls_info">This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app.</string>
 
-    <string name="recently">Recently</string>
     <string name="relative_time_today">Today</string>
     <plurals name="relative_time">
         <item quantity="one">Yesterday</item>
@@ -525,6 +524,7 @@
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
     <string name="pref_invalidate_download_cache">Invalidate downloads index</string>
+    <string name="download_cache_invalidated">Downloads index invalidated</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for entries that are not saved in your library</string>
     <string name="clear_database_source_item_count">%1$d non-library entries in database</string>

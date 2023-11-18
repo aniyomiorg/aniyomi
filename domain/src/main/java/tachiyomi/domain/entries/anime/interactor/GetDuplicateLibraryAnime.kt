@@ -7,7 +7,7 @@ class GetDuplicateLibraryAnime(
     private val animeRepository: AnimeRepository,
 ) {
 
-    suspend fun await(title: String): Anime? {
-        return animeRepository.getDuplicateLibraryAnime(title.lowercase())
+    suspend fun await(anime: Anime): List<Anime> {
+        return animeRepository.getDuplicateLibraryAnime(anime.id, anime.title.lowercase())
     }
 }

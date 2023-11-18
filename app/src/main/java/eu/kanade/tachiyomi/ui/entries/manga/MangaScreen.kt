@@ -84,6 +84,13 @@ class MangaScreen(
 
         val successState = state as MangaScreenModel.State.Success
         val isHttpSource = remember { successState.source is HttpSource }
+        val fetchInterval = remember(successState.manga.fetchInterval) {
+            FetchMangaInterval(
+                interval = successState.manga.fetchInterval,
+                leadDays = screenModel.leadDay,
+                followDays = screenModel.followDay,
+            )
+        }
 
         LaunchedEffect(successState.manga, screenModel.source) {
             if (isHttpSource) {
@@ -101,7 +108,7 @@ class MangaScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
             dateFormat = screenModel.dateFormat,
-            intervalDisplay = screenModel::intervalDisplay,
+            fetchInterval = fetchInterval,
             isTabletUi = isTabletUi(),
             chapterSwipeStartAction = screenModel.chapterSwipeStartAction,
             chapterSwipeEndAction = screenModel.chapterSwipeEndAction,
@@ -127,7 +134,7 @@ class MangaScreen(
             // SY -->
             onEditInfoClicked = screenModel::showEditMangaInfoDialog,
             // SY <--
-            onEditIntervalClicked = screenModel::showSetMangaIntervalDialog.takeIf { screenModel.isIntervalEnabled && successState.manga.favorite },
+            onEditFetchIntervalClicked = screenModel::showSetMangaFetchIntervalDialog.takeIf { screenModel.isUpdateIntervalEnabled && successState.manga.favorite },
             onMigrateClicked = { navigator.push(MigrateSearchScreen(successState.manga.id)) }.takeIf { successState.manga.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkChapters,
             onMultiMarkAsReadClicked = screenModel::markChaptersRead,
@@ -229,11 +236,11 @@ class MangaScreen(
                 )
             }
             // SY <--
-            is MangaScreenModel.Dialog.SetMangaInterval -> {
+            is MangaScreenModel.Dialog.SetMangaFetchInterval -> {
                 SetIntervalDialog(
-                    interval = if (dialog.manga.calculateInterval < 0) -dialog.manga.calculateInterval else 0,
+                    interval = if (dialog.manga.fetchInterval < 0) -dialog.manga.fetchInterval else 0,
                     onDismissRequest = onDismissRequest,
-                    onValueChanged = { screenModel.setFetchRangeInterval(dialog.manga, it) },
+                    onValueChanged = { screenModel.setFetchInterval(dialog.manga, it) },
                 )
             }
         }

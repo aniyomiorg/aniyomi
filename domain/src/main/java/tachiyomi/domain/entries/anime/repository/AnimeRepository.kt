@@ -23,7 +23,7 @@ interface AnimeRepository {
 
     fun getAnimeFavoritesBySourceId(sourceId: Long): Flow<List<Anime>>
 
-    suspend fun getDuplicateLibraryAnime(title: String): Anime?
+    suspend fun getDuplicateLibraryAnime(id: Long, title: String): List<Anime>
 
     suspend fun resetAnimeViewerFlags(): Boolean
 
