@@ -74,11 +74,11 @@ android {
             initWith(getByName("release"))
             buildConfigField("boolean", "PREVIEW", "true")
 
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks.add("release")
             val debugType = getByName("debug")
-            signingConfig = debugType.signingConfig
             versionNameSuffix = debugType.versionNameSuffix
             applicationIdSuffix = debugType.applicationIdSuffix
-            matchingFallbacks.add("release")
         }
         create("benchmark") {
             initWith(getByName("release"))
@@ -178,7 +178,6 @@ dependencies {
     implementation(androidx.paging.compose)
 
     implementation(libs.bundles.sqlite)
-    implementation(libs.sqldelight.primitive.adapters)
 
     implementation(kotlinx.reflect)
 

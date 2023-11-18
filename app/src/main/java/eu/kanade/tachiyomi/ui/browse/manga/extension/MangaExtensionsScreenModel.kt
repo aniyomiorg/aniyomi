@@ -172,8 +172,8 @@ class MangaExtensionsScreenModel(
             .onCompletion { removeDownloadState(extension) }
             .collect()
 
-    fun uninstallExtension(pkgName: String) {
-        extensionManager.uninstallExtension(pkgName)
+    fun uninstallExtension(extension: MangaExtension) {
+        extensionManager.uninstallExtension(extension)
     }
 
     fun findAvailableExtensions() {

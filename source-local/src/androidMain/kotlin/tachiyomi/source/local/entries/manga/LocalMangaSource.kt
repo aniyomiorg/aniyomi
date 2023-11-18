@@ -300,11 +300,9 @@ actual class LocalMangaSource(
                     }
                     date_upload = chapterFile.lastModified()
 
-                    val chapterNumber = ChapterRecognition.parseChapterNumber(
-                        manga.title,
-                        this.name,
-                        this.chapter_number,
-                    )
+                    val chapterNumber = ChapterRecognition
+                        .parseChapterNumber(manga.title, this.name, this.chapter_number.toDouble())
+                        .toFloat()
                     chapter_number = chapterNumber
 
                     val format = Format.valueOf(chapterFile)

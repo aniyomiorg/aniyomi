@@ -98,7 +98,7 @@ fun MangaTrackInfoDialogHome(
                     },
                     onChaptersClick = { onChapterClick(item) },
                     score = item.service.mangaService.displayScore(item.track.toDbTrack())
-                        .takeIf { supportsScoring && item.track.score != 0F },
+                        .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
                     startDate = remember(item.track.startDate) { dateFormat.format(item.track.startDate) }

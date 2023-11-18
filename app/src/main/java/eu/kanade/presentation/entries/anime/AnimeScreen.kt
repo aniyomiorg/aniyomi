@@ -502,7 +502,7 @@ private fun AnimeScreenSmallImpl(
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
-                                        formatEpisodeNumber(state.airingEpisodeNumber.toFloat()),
+                                        formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
                                 )
@@ -768,7 +768,7 @@ fun AnimeScreenLargeImpl(
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
-                                                formatEpisodeNumber(state.airingEpisodeNumber.toFloat()),
+                                                formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
                                         )

@@ -114,14 +114,14 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
         }
     }
 
-    override fun get10PointScore(track: DomainTrack): Float {
+    override fun get10PointScore(track: DomainTrack): Double {
         // Score is stored in 100 point format
-        return track.score / 10f
+        return track.score / 10.0
     }
 
-    override fun get10PointScore(track: DomainAnimeTrack): Float {
+    override fun get10PointScore(track: DomainAnimeTrack): Double {
         // Score is stored in 100 point format
-        return track.score / 10f
+        return track.score / 10.0
     }
 
     override fun indexToScore(index: Int): Float {

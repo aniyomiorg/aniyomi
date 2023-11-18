@@ -41,7 +41,7 @@ fun animeExtensionsTab(
                 onLongClickItem = { extension ->
                     when (extension) {
                         is AnimeExtension.Available -> extensionsScreenModel.installExtension(extension)
-                        else -> extensionsScreenModel.uninstallExtension(extension.pkgName)
+                        else -> extensionsScreenModel.uninstallExtension(extension)
                     }
                 },
                 onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
@@ -49,7 +49,7 @@ fun animeExtensionsTab(
                 onInstallExtension = extensionsScreenModel::installExtension,
                 onOpenExtension = { navigator.push(AnimeExtensionDetailsScreen(it.pkgName)) },
                 onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
-                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it.pkgName) },
+                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it) },
                 onUpdateExtension = extensionsScreenModel::updateExtension,
                 onRefresh = extensionsScreenModel::findAvailableExtensions,
             )

@@ -1,5 +1,4 @@
 import kotlin.Boolean;
-import kotlin.Float;
 
 CREATE TABLE episodes(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -11,7 +10,7 @@ CREATE TABLE episodes(
     bookmark INTEGER AS Boolean NOT NULL,
     last_second_seen INTEGER NOT NULL,
     total_seconds INTEGER NOT NULL,
-    episode_number REAL AS Float NOT NULL,
+    episode_number REAL NOT NULL,
     source_order INTEGER NOT NULL,
     date_fetch INTEGER NOT NULL,
     date_upload INTEGER NOT NULL,

@@ -171,8 +171,8 @@ class AnimeExtensionsScreenModel(
             .onCompletion { removeDownloadState(extension) }
             .collect()
 
-    fun uninstallExtension(pkgName: String) {
-        extensionManager.uninstallExtension(pkgName)
+    fun uninstallExtension(extension: AnimeExtension) {
+        extensionManager.uninstallExtension(extension)
     }
 
     fun findAvailableExtensions() {

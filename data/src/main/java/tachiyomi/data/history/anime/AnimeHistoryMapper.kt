@@ -13,7 +13,7 @@ val animeHistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, s
     )
 }
 
-val animeHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?) -> AnimeHistoryWithRelations = {
+val animeHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Double, Date?) -> AnimeHistoryWithRelations = {
         historyId, animeId, episodeId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, episodeNumber, seenAt ->
     AnimeHistoryWithRelations(
         id = historyId,

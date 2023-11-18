@@ -83,7 +83,7 @@ fun EpisodeListDialog(
                     val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
                             R.string.display_mode_episode,
-                            formatEpisodeNumber(episode.episode_number),
+                            formatEpisodeNumber(episode.episode_number.toDouble()),
                         )
                     } else {
                         episode.name
