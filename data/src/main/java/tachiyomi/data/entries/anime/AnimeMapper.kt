@@ -12,7 +12,7 @@ val animeMapper: (Long, Long, String, String?, String?, String?, List<String>?, 
             favorite = favorite,
             lastUpdate = lastUpdate ?: 0,
             nextUpdate = nextUpdate ?: 0,
-            calculateInterval = calculateInterval.toInt(),
+            fetchInterval = calculateInterval.toInt(),
             dateAdded = dateAdded,
             viewerFlags = viewerFlags,
             episodeFlags = episodeFlags,
@@ -32,7 +32,7 @@ val animeMapper: (Long, Long, String, String?, String?, String?, List<String>?, 
         )
     }
 
-val libraryAnime: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long?, Long, Long, Long, Long, Long, Long, Long) -> LibraryAnime =
+val libraryAnime: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long?, Long, Double, Long, Long, Long, Double, Long) -> LibraryAnime =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, episodeFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt, totalCount, seenCount, latestUpload, episodeFetchedAt, lastSeen, bookmarkCount, category ->
         LibraryAnime(
             anime = animeMapper(
@@ -61,8 +61,8 @@ val libraryAnime: (Long, Long, String, String?, String?, String?, List<String>?,
             ),
             category = category,
             totalEpisodes = totalCount,
-            seenCount = seenCount,
-            bookmarkCount = bookmarkCount,
+            seenCount = seenCount.toLong(),
+            bookmarkCount = bookmarkCount.toLong(),
             latestUpload = latestUpload,
             episodeFetchedAt = episodeFetchedAt,
             lastSeen = lastSeen,

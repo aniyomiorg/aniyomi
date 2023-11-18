@@ -235,6 +235,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     onClick = {
                         Injekt.get<MangaDownloadCache>().invalidateCache()
                         Injekt.get<AnimeDownloadCache>().invalidateCache()
+                        context.toast(R.string.download_cache_invalidated)
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(

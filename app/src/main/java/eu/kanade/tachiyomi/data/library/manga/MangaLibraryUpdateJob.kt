@@ -56,7 +56,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
-import tachiyomi.domain.entries.manga.interactor.SetMangaUpdateInterval
+import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
@@ -104,7 +104,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getTracks: GetMangaTracks = Injekt.get()
     private val insertTrack: InsertMangaTrack = Injekt.get()
     private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get()
-    private val setMangaUpdateInterval: SetMangaUpdateInterval = Injekt.get()
+    private val setMangaFetchInterval: SetMangaFetchInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
 
@@ -232,8 +232,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         val now = ZonedDateTime.now()
-        val fetchRange = setMangaUpdateInterval.getCurrentFetchRange(now)
-        val higherLimit = fetchRange.second
+        val fetchInterval = setMangaFetchInterval.getCurrent(now)
+        val higherLimit = fetchInterval.second
 
         coroutineScope {
             mangaToUpdate.groupBy { it.manga.source }.values
@@ -272,7 +272,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                         else -> {
                                             try {
-                                                val newChapters = updateManga(manga, now, fetchRange)
+                                                val newChapters = updateManga(manga, now, fetchInterval)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newChapters.isNotEmpty()) {

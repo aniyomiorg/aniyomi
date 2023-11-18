@@ -329,7 +329,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return getDuplicateAnimelibAnime.await(anime.title)
+        return getDuplicateAnimelibAnime.await(anime).getOrNull(0)
     }
 
     private fun moveAnimeToCategories(anime: Anime, vararg categories: Category) {

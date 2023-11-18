@@ -1,3 +1,6 @@
+import kotlin.Boolean;
+import kotlin.Float;
+
 CREATE TABLE episodes(
     _id INTEGER NOT NULL PRIMARY KEY,
     anime_id INTEGER NOT NULL,
@@ -10,9 +13,9 @@ CREATE TABLE episodes(
     total_seconds INTEGER NOT NULL,
     episode_number REAL AS Float NOT NULL,
     source_order INTEGER NOT NULL,
-    date_fetch INTEGER AS Long NOT NULL,
-    date_upload INTEGER AS Long NOT NULL,
-    last_modified_at INTEGER AS Long NOT NULL DEFAULT 0,
+    date_fetch INTEGER NOT NULL,
+    date_upload INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
@@ -54,7 +57,7 @@ WHERE url = :episodeUrl;
 getEpisodeByUrlAndAnimeId:
 SELECT *
 FROM episodes
-WHERE url = :chapterUrl
+WHERE url = :episodeUrl
 AND anime_id = :animeId;
 
 removeEpisodesWithIds:

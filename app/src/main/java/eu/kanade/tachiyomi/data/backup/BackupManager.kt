@@ -511,7 +511,7 @@ class BackupManager(
             }
             if (!found) {
                 // Let the db assign the id
-                val id = mangaHandler.awaitOne {
+                val id = mangaHandler.awaitOneExecutable {
                     categoriesQueries.insert(category.name, category.order, category.flags)
                     categoriesQueries.selectLastInsertedRowId()
                 }
@@ -551,7 +551,7 @@ class BackupManager(
             }
             if (!found) {
                 // Let the db assign the id
-                val id = animeHandler.awaitOne {
+                val id = animeHandler.awaitOneExecutable {
                     categoriesQueries.insert(category.name, category.order, category.flags)
                     categoriesQueries.selectLastInsertedRowId()
                 }
@@ -970,7 +970,7 @@ class BackupManager(
      * @return id of [Manga], null if not found
      */
     private suspend fun insertManga(manga: Manga): Long {
-        return mangaHandler.awaitOne(true) {
+        return mangaHandler.awaitOneExecutable(true) {
             mangasQueries.insert(
                 source = manga.source,
                 url = manga.url,
@@ -1002,7 +1002,7 @@ class BackupManager(
      * @return id of [Anime], null if not found
      */
     private suspend fun insertAnime(anime: Anime): Long {
-        return animeHandler.awaitOne(true) {
+        return animeHandler.awaitOneExecutable(true) {
             animesQueries.insert(
                 source = anime.source,
                 url = anime.url,
@@ -1040,11 +1040,11 @@ class BackupManager(
                 title = manga.title,
                 status = manga.status,
                 thumbnailUrl = manga.thumbnailUrl,
-                favorite = manga.favorite.toLong(),
+                favorite = manga.favorite,
                 lastUpdate = manga.lastUpdate,
                 nextUpdate = null,
                 calculateInterval = null,
-                initialized = manga.initialized.toLong(),
+                initialized = manga.initialized,
                 viewer = manga.viewerFlags,
                 chapterFlags = manga.chapterFlags,
                 coverLastModified = manga.coverLastModified,
@@ -1068,11 +1068,11 @@ class BackupManager(
                 title = anime.title,
                 status = anime.status,
                 thumbnailUrl = anime.thumbnailUrl,
-                favorite = anime.favorite.toLong(),
+                favorite = anime.favorite,
                 lastUpdate = anime.lastUpdate,
                 nextUpdate = null,
                 calculateInterval = null,
-                initialized = anime.initialized.toLong(),
+                initialized = anime.initialized,
                 viewer = anime.viewerFlags,
                 episodeFlags = anime.episodeFlags,
                 coverLastModified = anime.coverLastModified,
@@ -1142,8 +1142,8 @@ class BackupManager(
                     url = null,
                     name = null,
                     scanlator = null,
-                    read = chapter.read.toLong(),
-                    bookmark = chapter.bookmark.toLong(),
+                    read = chapter.read,
+                    bookmark = chapter.bookmark,
                     lastPageRead = chapter.lastPageRead,
                     chapterNumber = null,
                     sourceOrder = null,
@@ -1166,8 +1166,8 @@ class BackupManager(
                     url = null,
                     name = null,
                     scanlator = null,
-                    seen = episode.seen.toLong(),
-                    bookmark = episode.bookmark.toLong(),
+                    seen = episode.seen,
+                    bookmark = episode.bookmark,
                     lastSecondSeen = episode.lastSecondSeen,
                     totalSeconds = episode.totalSeconds,
                     episodeNumber = null,

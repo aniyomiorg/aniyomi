@@ -138,7 +138,7 @@ class SyncEpisodesWithSource(
 
         // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
         if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
-            if (manualFetch || anime.calculateInterval == 0 || anime.nextUpdate < fetchRange.first) {
+            if (manualFetch || anime.fetchInterval == 0 || anime.nextUpdate < fetchRange.first) {
                 updateAnime.awaitUpdateFetchInterval(
                     anime,
                     dbEpisodes,

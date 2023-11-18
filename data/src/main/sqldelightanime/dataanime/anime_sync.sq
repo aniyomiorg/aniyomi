@@ -1,3 +1,5 @@
+import kotlin.Float;
+
 CREATE TABLE anime_sync(
     _id INTEGER NOT NULL PRIMARY KEY,
     anime_id INTEGER NOT NULL,
@@ -10,8 +12,8 @@ CREATE TABLE anime_sync(
     status INTEGER NOT NULL,
     score REAL AS Float NOT NULL,
     remote_url TEXT NOT NULL,
-    start_date INTEGER AS Long NOT NULL,
-    finish_date INTEGER AS Long NOT NULL,
+    start_date INTEGER NOT NULL,
+    finish_date INTEGER NOT NULL,
     UNIQUE (anime_id, sync_id) ON CONFLICT REPLACE,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE

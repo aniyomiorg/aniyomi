@@ -121,8 +121,8 @@ internal fun MigrateAnimeDialog(
                 ) {
                     TextButton(
                         onClick = {
-                            onClickTitle()
                             onDismissRequest()
+                            onClickTitle()
                         },
                     ) {
                         Text(text = stringResource(R.string.action_show_anime))

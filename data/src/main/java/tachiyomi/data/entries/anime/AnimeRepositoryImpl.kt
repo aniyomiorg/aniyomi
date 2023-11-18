@@ -48,9 +48,9 @@ class AnimeRepositoryImpl(
         return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
     }
 
-    override suspend fun getDuplicateLibraryAnime(title: String): Anime? {
-        return handler.awaitOneOrNull {
-            animesQueries.getDuplicateLibraryAnime(title, animeMapper)
+    override suspend fun getDuplicateLibraryAnime(id: Long, title: String): List<Anime> {
+        return handler.awaitList {
+            animesQueries.getDuplicateLibraryAnime(title, id, animeMapper)
         }
     }
 
@@ -74,7 +74,7 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun insertAnime(anime: Anime): Long? {
-        return handler.awaitOneOrNull(inTransaction = true) {
+        return handler.awaitOneOrNullExecutable(inTransaction = true) {
             animesQueries.insert(
                 source = anime.source,
                 url = anime.url,
@@ -88,7 +88,7 @@ class AnimeRepositoryImpl(
                 favorite = anime.favorite,
                 lastUpdate = anime.lastUpdate,
                 nextUpdate = anime.nextUpdate,
-                calculateInterval = anime.calculateInterval.toLong(),
+                calculateInterval = anime.fetchInterval.toLong(),
                 initialized = anime.initialized,
                 viewerFlags = anime.viewerFlags,
                 episodeFlags = anime.episodeFlags,
@@ -133,11 +133,11 @@ class AnimeRepositoryImpl(
                     title = value.title,
                     status = value.status,
                     thumbnailUrl = value.thumbnailUrl,
-                    favorite = value.favorite?.toLong(),
+                    favorite = value.favorite,
                     lastUpdate = value.lastUpdate,
                     nextUpdate = value.nextUpdate,
-                    calculateInterval = value.calculateInterval?.toLong(),
-                    initialized = value.initialized?.toLong(),
+                    calculateInterval = value.fetchInterval?.toLong(),
+                    initialized = value.initialized,
                     viewer = value.viewerFlags,
                     episodeFlags = value.episodeFlags,
                     coverLastModified = value.coverLastModified,

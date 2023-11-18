@@ -2,7 +2,6 @@ package tachiyomi.data.items.episode
 
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
-import tachiyomi.core.util.lang.toLong
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.items.episode.model.Episode
@@ -57,8 +56,8 @@ class EpisodeRepositoryImpl(
                     url = episodeUpdate.url,
                     name = episodeUpdate.name,
                     scanlator = episodeUpdate.scanlator,
-                    seen = episodeUpdate.seen?.toLong(),
-                    bookmark = episodeUpdate.bookmark?.toLong(),
+                    seen = episodeUpdate.seen,
+                    bookmark = episodeUpdate.bookmark,
                     lastSecondSeen = episodeUpdate.lastSecondSeen,
                     totalSeconds = episodeUpdate.totalSeconds,
                     episodeNumber = episodeUpdate.episodeNumber?.toDouble(),

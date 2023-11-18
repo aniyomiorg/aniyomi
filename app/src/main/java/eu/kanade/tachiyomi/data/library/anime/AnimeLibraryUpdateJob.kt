@@ -56,7 +56,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
-import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
+import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
@@ -104,7 +104,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get()
-    private val setAnimeUpdateInterval: SetAnimeUpdateInterval = Injekt.get()
+    private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -232,8 +232,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         val now = ZonedDateTime.now()
-        val fetchRange = setAnimeUpdateInterval.getCurrentFetchRange(now)
-        val higherLimit = fetchRange.second
+        val fetchInterval = setAnimeFetchInterval.getCurrent(now)
+        val higherLimit = fetchInterval.second
 
         coroutineScope {
             animeToUpdate.groupBy { it.anime.source }.values
@@ -272,7 +272,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                         else -> {
                                             try {
-                                                val newEpisodes = updateAnime(anime, now, fetchRange)
+                                                val newEpisodes = updateAnime(anime, now, fetchInterval)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newEpisodes.isNotEmpty()) {

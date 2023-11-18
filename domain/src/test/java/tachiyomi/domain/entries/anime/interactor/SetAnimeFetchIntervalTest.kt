@@ -10,14 +10,14 @@ import java.time.Duration
 import java.time.ZonedDateTime
 
 @Execution(ExecutionMode.CONCURRENT)
-class SetAnimeUpdateIntervalTest {
+class SetAnimeFetchIntervalTest {
     private val testTime = ZonedDateTime.parse("2020-01-01T00:00:00Z")
     private var episode = Episode.create().copy(
         dateFetch = testTime.toEpochSecond() * 1000,
         dateUpload = testTime.toEpochSecond() * 1000,
     )
 
-    private val setAnimeUpdateInterval = SetAnimeUpdateInterval(mockk())
+    private val setAnimeFetchInterval = SetAnimeFetchInterval(mockk())
 
     private fun episodeAddTime(episode: Episode, duration: Duration): Episode {
         val newTime = testTime.plus(duration).toEpochSecond() * 1000
@@ -33,7 +33,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 7
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 7
     }
 
     @Test
@@ -44,7 +44,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 7
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 7
     }
 
     @Test
@@ -60,7 +60,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 7
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 7
     }
 
     // Default 1 if interval less than 1
@@ -72,7 +72,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 1
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 
     // Normal interval calculation
@@ -84,7 +84,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 1
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 
     @Test
@@ -95,7 +95,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 2
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 2
     }
 
     // If interval is decimal, floor to closest integer
@@ -107,7 +107,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 1
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 
     @Test
@@ -118,7 +118,7 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 1
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 
     // Use fetch time if upload time not available
@@ -130,6 +130,6 @@ class SetAnimeUpdateIntervalTest {
             val newEpisode = episodeAddTime(episode, duration).copy(dateUpload = 0L)
             episodes.add(newEpisode)
         }
-        setAnimeUpdateInterval.calculateInterval(episodes, testTime) shouldBe 1
+        setAnimeFetchInterval.calculateInterval(episodes, testTime) shouldBe 1
     }
 }

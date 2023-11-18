@@ -81,7 +81,7 @@ import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.interactor.ResetAnimeViewerFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
-import tachiyomi.domain.entries.anime.interactor.SetAnimeUpdateInterval
+import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
@@ -91,7 +91,7 @@ import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.interactor.ResetMangaViewerFlags
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
-import tachiyomi.domain.entries.manga.interactor.SetMangaUpdateInterval
+import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
@@ -184,7 +184,7 @@ class DomainModule : InjektModule {
         addFactory { GetNextEpisodes(get(), get(), get()) }
         addFactory { ResetAnimeViewerFlags(get()) }
         addFactory { SetAnimeEpisodeFlags(get()) }
-        addFactory { SetAnimeUpdateInterval(get()) }
+        addFactory { SetAnimeFetchInterval(get()) }
         addFactory { SetAnimeDefaultEpisodeFlags(get(), get(), get()) }
         addFactory { SetAnimeViewerFlags(get()) }
         addFactory { NetworkToLocalAnime(get()) }
@@ -200,7 +200,7 @@ class DomainModule : InjektModule {
         addFactory { GetNextChapters(get(), get(), get()) }
         addFactory { ResetMangaViewerFlags(get()) }
         addFactory { SetMangaChapterFlags(get()) }
-        addFactory { SetMangaUpdateInterval(get()) }
+        addFactory { SetMangaFetchInterval(get()) }
         addFactory {
             SetMangaDefaultChapterFlags(
                 get(),

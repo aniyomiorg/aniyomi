@@ -81,7 +81,8 @@ class MangaUpdatesScreenModel(
             combine(
                 getUpdates.subscribe(calendar).distinctUntilChanged(),
                 downloadCache.changes,
-            ) { updates, _ -> updates }
+                downloadManager.queueState,
+            ) { updates, _, _ -> updates }
                 .catch {
                     logcat(LogPriority.ERROR, it)
                     _events.send(Event.InternalError)
