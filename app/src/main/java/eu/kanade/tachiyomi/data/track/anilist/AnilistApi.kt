@@ -29,7 +29,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
 
 class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
@@ -37,7 +37,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private val authClient = client.newBuilder()
         .addInterceptor(interceptor)
-        .rateLimit(permits = 85, period = 1, unit = TimeUnit.MINUTES)
+        .rateLimit(permits = 85, period = 1.minutes)
         .build()
 
     suspend fun addLibManga(track: MangaTrack): MangaTrack {

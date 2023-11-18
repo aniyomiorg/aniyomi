@@ -89,13 +89,6 @@ class AnimeScreen(
 
         val successState = state as AnimeScreenModel.State.Success
         val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
-        val fetchInterval = remember(successState.anime.fetchInterval) {
-            FetchAnimeInterval(
-                interval = successState.anime.fetchInterval,
-                leadDays = screenModel.leadDay,
-                followDays = screenModel.followDay,
-            )
-        }
 
         LaunchedEffect(successState.anime, screenModel.source) {
             if (isAnimeHttpSource) {
@@ -113,7 +106,7 @@ class AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
             dateFormat = screenModel.dateFormat,
-            fetchInterval = fetchInterval,
+            fetchInterval = successState.anime.fetchInterval,
             isTabletUi = isTabletUi(),
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
@@ -244,7 +237,7 @@ class AnimeScreen(
             }
             is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
-                    interval = if (dialog.anime.fetchInterval < 0) -dialog.anime.fetchInterval else 0,
+                    interval = dialog.anime.fetchInterval,
                     onDismissRequest = onDismissRequest,
                     onValueChanged = { screenModel.setFetchInterval(dialog.anime, it) },
                 )

@@ -135,8 +135,6 @@ class AnimeScreenModel(
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
     val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
-    val leadDay = libraryPreferences.leadingAnimeExpectedDays().get()
-    val followDay = libraryPreferences.followingAnimeExpectedDays().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
@@ -377,20 +375,14 @@ class AnimeScreenModel(
         }
     }
 
-    fun setFetchInterval(anime: Anime, newInterval: Int) {
-        val interval = when (newInterval) {
-            // reset interval 0 default to trigger recalculation
-            // only reset if interval is custom, which is negative
-            0 -> if (anime.fetchInterval < 0) 0 else anime.fetchInterval
-            else -> -newInterval
-        }
+    fun setFetchInterval(anime: Anime, interval: Int) {
         coroutineScope.launchIO {
             updateAnime.awaitUpdateFetchInterval(
-                anime.copy(fetchInterval = interval),
-                successState?.episodes?.map { it.episode }.orEmpty(),
+                // Custom intervals are negative
+                anime.copy(fetchInterval = -interval),
             )
-            val newAnime = animeRepository.getAnimeById(animeId)
-            updateSuccessState { it.copy(anime = newAnime) }
+            val updatedAnime = animeRepository.getAnimeById(anime.id)
+            updateSuccessState { it.copy(anime = updatedAnime) }
         }
     }
 
@@ -1105,10 +1097,3 @@ data class EpisodeItem(
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
-
-@Immutable
-data class FetchAnimeInterval(
-    val interval: Int,
-    val leadDays: Int,
-    val followDays: Int,
-)

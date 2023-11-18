@@ -50,12 +50,13 @@ class SyncEpisodesWithSource(
         anime: Anime,
         source: AnimeSource,
         manualFetch: Boolean = false,
-        zoneDateTime: ZonedDateTime = ZonedDateTime.now(),
-        fetchRange: Pair<Long, Long> = Pair(0, 0),
+        fetchWindow: Pair<Long, Long> = Pair(0, 0),
     ): List<Episode> {
         if (rawSourceEpisodes.isEmpty() && !source.isLocal()) {
             throw NoEpisodesException()
         }
+
+        val now = ZonedDateTime.now()
 
         val sourceEpisodes = rawSourceEpisodes
             .distinctBy { it.url }
@@ -138,12 +139,11 @@ class SyncEpisodesWithSource(
 
         // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
         if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
-            if (manualFetch || anime.fetchInterval == 0 || anime.nextUpdate < fetchRange.first) {
+            if (manualFetch || anime.fetchInterval == 0 || anime.nextUpdate < fetchWindow.first) {
                 updateAnime.awaitUpdateFetchInterval(
                     anime,
-                    dbEpisodes,
-                    zoneDateTime,
-                    fetchRange,
+                    now,
+                    fetchWindow,
                 )
             }
             return emptyList()
@@ -200,8 +200,7 @@ class SyncEpisodesWithSource(
             val episodeUpdates = toChange.map { it.toEpisodeUpdate() }
             updateEpisode.awaitAll(episodeUpdates)
         }
-        val newChapters = episodeRepository.getEpisodeByAnimeId(anime.id)
-        updateAnime.awaitUpdateFetchInterval(anime, newChapters, zoneDateTime, fetchRange)
+        updateAnime.awaitUpdateFetchInterval(anime, now, fetchWindow)
 
         // Set this anime as updated since episodes were changed
         // Note that last_update actually represents last time the episode list changed at all

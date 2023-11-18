@@ -158,12 +158,12 @@ class MangaExtensionsScreenModel(
         extensionManager.cancelInstallUpdateExtension(extension)
     }
 
-    private fun removeDownloadState(extension: MangaExtension) {
-        _currentDownloads.update { it - extension.pkgName }
-    }
-
     private fun addDownloadState(extension: MangaExtension, installStep: InstallStep) {
         _currentDownloads.update { it + Pair(extension.pkgName, installStep) }
+    }
+
+    private fun removeDownloadState(extension: MangaExtension) {
+        _currentDownloads.update { it - extension.pkgName }
     }
 
     private suspend fun Flow<InstallStep>.collectToInstallUpdate(extension: MangaExtension) =

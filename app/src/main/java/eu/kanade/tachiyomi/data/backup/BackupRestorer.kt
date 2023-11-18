@@ -60,9 +60,9 @@ class BackupRestorer(
     private val episodeRepository: EpisodeRepository = Injekt.get()
     private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
 
-    private var zonedDateTime = ZonedDateTime.now()
-    private var currentMangaFetchInterval = setMangaFetchInterval.getCurrent(zonedDateTime)
-    private var currentAnimeFetchInterval = setAnimeFetchInterval.getCurrent(zonedDateTime)
+    private var now = ZonedDateTime.now()
+    private var currentMangaFetchWindow = setMangaFetchInterval.getWindow(now)
+    private var currentAnimeFetchWindow = setAnimeFetchInterval.getWindow(now)
 
     private var backupManager = BackupManager(context)
 
@@ -140,9 +140,9 @@ class BackupRestorer(
         val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
-        zonedDateTime = ZonedDateTime.now()
-        currentMangaFetchInterval = setMangaFetchInterval.getCurrent(zonedDateTime)
-        currentAnimeFetchInterval = setAnimeFetchInterval.getCurrent(zonedDateTime)
+        now = ZonedDateTime.now()
+        currentMangaFetchWindow = setMangaFetchInterval.getWindow(now)
+        currentAnimeFetchWindow = setAnimeFetchInterval.getWindow(now)
 
         return coroutineScope {
             // Restore individual manga
@@ -216,8 +216,7 @@ class BackupRestorer(
                 // Fetch rest of manga information
                 restoreNewManga(updateManga, chapters, categories, history, tracks, backupCategories)
             }
-            val updatedChapters = chapterRepository.getChapterByMangaId(restoredManga.id)
-            updateManga.awaitUpdateFetchInterval(restoredManga, updatedChapters, zonedDateTime, currentMangaFetchInterval)
+            updateManga.awaitUpdateFetchInterval(restoredManga, now, currentMangaFetchWindow)
         } catch (e: Exception) {
             val sourceName = sourceMapping[manga.source] ?: manga.source.toString()
             errors.add(Date() to "${manga.title} [$sourceName]: ${e.message}")
@@ -291,8 +290,7 @@ class BackupRestorer(
                 // Fetch rest of anime information
                 restoreNewAnime(updateAnime, episodes, categories, history, tracks, backupCategories)
             }
-            val updatedEpisodes = episodeRepository.getEpisodeByAnimeId(restoredAnime.id)
-            updateAnime.awaitUpdateFetchInterval(restoredAnime, updatedEpisodes, zonedDateTime, currentAnimeFetchInterval)
+            updateAnime.awaitUpdateFetchInterval(restoredAnime, now, currentAnimeFetchWindow)
         } catch (e: Exception) {
             val sourceName = sourceMapping[anime.source] ?: anime.source.toString()
             errors.add(Date() to "${anime.title} [$sourceName]: ${e.message}")

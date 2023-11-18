@@ -41,11 +41,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tachiyomi">
 
-        <!-- enable profiling by macrobenchmark -->
-        <profileable
-            android:shell="true"
-            tools:targetApi="q" />
-
         <activity
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTop"
@@ -173,8 +168,8 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.setting.track.AnilistLoginActivity"
-            android:label="Anilist"
+            android:name=".ui.setting.track.TrackLoginActivity"
+            android:label="@string/track_activity_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -182,69 +177,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="anilist-auth"
-                    android:scheme="tachiyomi" />
+                <data android:host="anilist-auth"/>
+                <data android:host="bangumi-auth"/>
+                <data android:host="myanimelist-auth"/>
+                <data android:host="shikimori-auth"/>
+
+                <data android:scheme="tachiyomi"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.setting.track.MyAnimeListLoginActivity"
-            android:label="MyAnimeList"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="myanimelist-auth"
-                    android:scheme="tachiyomi" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.setting.track.ShikimoriLoginActivity"
-            android:label="Shikimori"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="shikimori-auth"
-                    android:scheme="tachiyomi" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.setting.track.BangumiLoginActivity"
-            android:label="Bangumi"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="bangumi-auth"
-                    android:scheme="tachiyomi" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.setting.track.SimklLoginActivity"
-            android:label="Simkl"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="simkl-auth"
-                    android:scheme="aniyomi" />
+                <data android:host="simkl-auth"/>
+                <data android:scheme="aniyomi"/>
             </intent-filter>
         </activity>
 
@@ -292,10 +239,12 @@
             android:name=".data.updater.AppUpdateService"
             android:exported="false" />
 
-        <service android:name=".extension.manga.util.MangaExtensionInstallService"
+        <service
+            android:name=".extension.manga.util.MangaExtensionInstallService"
             android:exported="false" />
 
-        <service android:name=".extension.anime.util.AnimeExtensionInstallService"
+        <service
+            android:name=".extension.anime.util.AnimeExtensionInstallService"
             android:exported="false" />
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

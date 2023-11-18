@@ -19,15 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.hasCustomCover
@@ -74,15 +73,8 @@ internal fun MigrateMangaDialog(
     val scope = rememberCoroutineScope()
     val state by screenModel.state.collectAsState()
 
-    val activeFlags = remember { MangaMigrationFlags.getEnabledFlagsPositions(screenModel.migrateFlags.get()) }
-    val items = remember {
-        MangaMigrationFlags.titles(oldManga)
-            .map { context.getString(it) }
-            .toList()
-    }
-    val selected = remember {
-        mutableStateListOf(*List(items.size) { i -> activeFlags.contains(i) }.toTypedArray())
-    }
+    val flags = remember { MangaMigrationFlags.getFlags(oldManga, screenModel.migrateFlags.get()) }
+    val selectedFlags = remember { flags.map { it.isDefaultSelected }.toMutableStateList() }
 
     if (state.isMigrating) {
         LoadingScreen(
@@ -99,18 +91,16 @@ internal fun MigrateMangaDialog(
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
-                    items.forEachIndexed { index, title ->
-                        val onChange: () -> Unit = {
-                            selected[index] = !selected[index]
-                        }
+                    flags.forEachIndexed { index, flag ->
+                        val onChange = { selectedFlags[index] = !selectedFlags[index] }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable(onClick = onChange),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Checkbox(checked = selected[index], onCheckedChange = { onChange() })
-                            Text(text = title)
+                            Checkbox(checked = selectedFlags[index], onCheckedChange = { onChange() })
+                            Text(text = context.getString(flag.titleId))
                         }
                     }
                 }
@@ -133,7 +123,12 @@ internal fun MigrateMangaDialog(
                     TextButton(
                         onClick = {
                             scope.launchIO {
-                                screenModel.migrateManga(oldManga, newManga, false)
+                                screenModel.migrateManga(
+                                    oldManga,
+                                    newManga,
+                                    false,
+                                    MangaMigrationFlags.getSelectedFlagsBitMap(selectedFlags, flags),
+                                )
                                 withUIContext { onPopScreen() }
                             }
                         },
@@ -143,12 +138,13 @@ internal fun MigrateMangaDialog(
                     TextButton(
                         onClick = {
                             scope.launchIO {
-                                val selectedIndices = mutableListOf<Int>()
-                                selected.fastForEachIndexed { i, b -> if (b) selectedIndices.add(i) }
-                                val newValue =
-                                    MangaMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
-                                screenModel.migrateFlags.set(newValue)
-                                screenModel.migrateManga(oldManga, newManga, true)
+                                screenModel.migrateManga(
+                                    oldManga,
+                                    newManga,
+                                    true,
+                                    MangaMigrationFlags.getSelectedFlagsBitMap(selectedFlags, flags),
+                                )
+
                                 withUIContext { onPopScreen() }
                             }
                         },
@@ -184,7 +180,13 @@ internal class MigrateMangaDialogScreenModel(
         Injekt.get<TrackManager>().services.filterIsInstance<EnhancedMangaTrackService>()
     }
 
-    suspend fun migrateManga(oldManga: Manga, newManga: Manga, replace: Boolean) {
+    suspend fun migrateManga(
+        oldManga: Manga,
+        newManga: Manga,
+        replace: Boolean,
+        flags: Int,
+    ) {
+        migrateFlags.set(flags)
         val source = sourceManager.get(newManga.source) ?: return
         val prevSource = sourceManager.get(oldManga.source)
 
@@ -200,6 +202,7 @@ internal class MigrateMangaDialogScreenModel(
                 newManga = newManga,
                 sourceChapters = chapters,
                 replace = replace,
+                flags = flags,
             )
         } catch (_: Throwable) {
             // Explicitly stop if an error occurred; the dialog normally gets popped at the end
@@ -215,12 +218,10 @@ internal class MigrateMangaDialogScreenModel(
         newManga: Manga,
         sourceChapters: List<SChapter>,
         replace: Boolean,
+        flags: Int,
     ) {
-        val flags = migrateFlags.get()
-
         val migrateChapters = MangaMigrationFlags.hasChapters(flags)
         val migrateCategories = MangaMigrationFlags.hasCategories(flags)
-        val migrateTracks = MangaMigrationFlags.hasTracks(flags)
         val migrateCustomCover = MangaMigrationFlags.hasCustomCover(flags)
         val deleteDownloaded = MangaMigrationFlags.hasDeleteDownloaded(flags)
 
@@ -271,21 +272,20 @@ internal class MigrateMangaDialogScreenModel(
         }
 
         // Update track
-        if (migrateTracks) {
-            val tracks = getTracks.await(oldManga.id).mapNotNull { track ->
-                val updatedTrack = track.copy(mangaId = newManga.id)
+        getTracks.await(oldManga.id).mapNotNull { track ->
+            val updatedTrack = track.copy(mangaId = newManga.id)
 
-                val service = enhancedServices
-                    .firstOrNull { it.isTrackFrom(updatedTrack, oldManga, oldSource) }
+            val service = enhancedServices
+                .firstOrNull { it.isTrackFrom(updatedTrack, oldManga, oldSource) }
 
-                if (service != null) {
-                    service.migrateTrack(updatedTrack, newManga, newSource)
-                } else {
-                    updatedTrack
-                }
+            if (service != null) {
+                service.migrateTrack(updatedTrack, newManga, newSource)
+            } else {
+                updatedTrack
             }
-            insertTrack.awaitAll(tracks)
         }
+            .takeIf { it.isNotEmpty() }
+            ?.let { insertTrack.awaitAll(it) }
 
         // Delete downloaded
         if (deleteDownloaded) {

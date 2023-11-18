@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -195,7 +196,7 @@ class AnimeExtensionManager(
     }
 
     /**
-     * Returns an observable of the installation process for the given anime extension. It will complete
+     * Returns a flow of the installation process for the given anime extension. It will complete
      * once the anime extension is installed or throws an error. The process will be canceled if
      * unsubscribed before its completion.
      *
@@ -206,7 +207,7 @@ class AnimeExtensionManager(
     }
 
     /**
-     * Returns an observable of the installation process for the given anime extension. It will complete
+     * Returns a flow of the installation process for the given anime extension. It will complete
      * once the anime extension is updated or throws an error. The process will be canceled if
      * unsubscribed before its completion.
      *
@@ -356,6 +357,10 @@ class AnimeExtensionManager(
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.animeExtensionUpdatesCount().set(_installedAnimeExtensionsFlow.value.count { it.hasUpdate })
+        val pendingUpdateCount = _installedAnimeExtensionsFlow.value.count { it.hasUpdate }
+        preferences.animeExtensionUpdatesCount().set(pendingUpdateCount)
+        if (pendingUpdateCount == 0) {
+            ExtensionUpdateNotifier(context).dismiss()
+        }
     }
 }
