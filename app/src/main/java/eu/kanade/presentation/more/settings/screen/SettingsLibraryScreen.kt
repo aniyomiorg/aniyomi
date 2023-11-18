@@ -41,7 +41,6 @@ import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
-import eu.kanade.tachiyomi.util.system.isDevFlavor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -358,10 +357,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         pluralStringResource(R.plurals.pref_update_release_following_days, followMangaRange, followMangaRange),
                     ).joinToString(),
                     onClick = { showFetchMangaRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction},
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction},
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateMangaRestriction },
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_update_anime_release_grace_period),
                     subtitle = listOf(
@@ -369,10 +368,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         pluralStringResource(R.plurals.pref_update_release_following_days, followAnimeRange, followAnimeRange),
                     ).joinToString(),
                     onClick = { showFetchAnimeRangesDialog = true },
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction},
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(R.string.pref_update_release_grace_period_info),
-                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction},
+                ).takeIf { ENTRY_OUTSIDE_RELEASE_PERIOD in libraryUpdateAnimeRestriction },
 
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.newShowUpdatesCount(),
