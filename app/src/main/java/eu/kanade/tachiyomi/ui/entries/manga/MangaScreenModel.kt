@@ -779,7 +779,9 @@ class MangaScreenModel(
             if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(
                     categories,
                     downloadPreferences
-                )) return@launchNonCancellable
+                )) {
+                return@launchNonCancellable
+            }
             downloadChapters(chapters)
         }
     }
