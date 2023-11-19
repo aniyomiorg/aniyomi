@@ -16,9 +16,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import logcat.LogPriority
 import okhttp3.Response
 import okio.buffer
 import okio.sink
+import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -109,19 +111,20 @@ class ChapterCache(private val context: Context) {
      * @param file name of file "md5.0".
      * @return status of deletion for the file.
      */
-    fun removeFileFromCache(file: String): Boolean {
-        // Make sure we don't delete the journal file (keeps track of cache).
+    private fun removeFileFromCache(file: String): Boolean {
+        // Make sure we don't delete the journal file (keeps track of cache)
         if (file == "journal" || file.startsWith("journal.")) {
             return false
         }
 
-        try {
+        return try {
             // Remove the extension from the file to get the key of the cache
             val key = file.substringBeforeLast(".")
-            // Remove file from cache.
-            return diskCache.remove(key)
+            // Remove file from cache
+            diskCache.remove(key)
         } catch (e: Exception) {
-            return false
+            logcat(LogPriority.WARN, e) { "Failed to remove file from cache" }
+            false
         }
     }
 
@@ -169,6 +172,7 @@ class ChapterCache(private val context: Context) {
             editor.commit()
             editor.abortUnlessCommitted()
         } catch (e: Exception) {
+            logcat(LogPriority.WARN, e) { "Failed to put page list to cache" }
             // Ignore.
         } finally {
             editor?.abortUnlessCommitted()

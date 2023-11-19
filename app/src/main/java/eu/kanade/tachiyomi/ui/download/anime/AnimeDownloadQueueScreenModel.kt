@@ -231,6 +231,6 @@ class AnimeDownloadQueueScreenModel(
      * @return the holder of the download or null if it's not bound.
      */
     private fun getHolder(download: AnimeDownload): AnimeDownloadHolder? {
-        return controllerBinding.recycler.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
+        return controllerBinding.root.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
     }
 }
