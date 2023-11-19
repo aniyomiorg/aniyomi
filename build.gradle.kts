@@ -23,9 +23,6 @@ subprojects {
         }
     }
 
-    tasks.withType<KtLintFormatTask> {
-    }
-
     tasks.withType<Test> {
         useJUnitPlatform()
         testLogging {
