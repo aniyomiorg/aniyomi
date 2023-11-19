@@ -62,13 +62,13 @@ abstract class AbstractStartupBenchmark(private val startupMode: StartupMode) {
     fun startupBaselineProfileDisabled() = startup(
         CompilationMode.Partial(
             baselineProfileMode = BaselineProfileMode.Disable,
-            warmupIterations = 1
+            warmupIterations = 1,
         ),
     )
 
     @Test
     fun startupBaselineProfile() = startup(
-        CompilationMode.Partial(baselineProfileMode = BaselineProfileMode.Require)
+        CompilationMode.Partial(baselineProfileMode = BaselineProfileMode.Require),
     )
 
     @Test

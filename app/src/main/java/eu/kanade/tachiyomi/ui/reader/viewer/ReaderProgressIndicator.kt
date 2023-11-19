@@ -31,7 +31,7 @@ class ReaderProgressIndicator @JvmOverloads constructor(
     init {
         layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
         setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool
+            ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool,
         )
     }
 

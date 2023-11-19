@@ -23,6 +23,9 @@ import androidx.core.graphics.get
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.hippo.unifile.UniFile
+import logcat.LogPriority
+import tachiyomi.decoder.Format
+import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -31,9 +34,6 @@ import java.net.URLConnection
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
-import logcat.LogPriority
-import tachiyomi.decoder.Format
-import tachiyomi.decoder.ImageDecoder
 
 object ImageUtil {
 
@@ -222,8 +222,9 @@ object ImageUtil {
      */
     fun splitTallImage(tmpDir: UniFile, imageFile: UniFile, filenamePrefix: String): Boolean {
         if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(
-                imageFile.openInputStream()
-            )) {
+                imageFile.openInputStream(),
+            )
+        ) {
             return true
         }
 
@@ -251,7 +252,7 @@ object ImageUtil {
                     0,
                     splitData.topOffset,
                     splitData.splitWidth,
-                    splitData.bottomOffset
+                    splitData.bottomOffset,
                 )
 
                 splitFile.openOutputStream().use { outputStream ->
@@ -279,7 +280,7 @@ object ImageUtil {
     }
 
     private fun splitImageName(filenamePrefix: String, index: Int) = "${filenamePrefix}__${"%03d".format(
-        index + 1
+        index + 1,
     )}.jpg"
 
     /**
@@ -339,7 +340,7 @@ object ImageUtil {
             }
 
             return buildList {
-                val range = 0 ..< partCount
+                val range = 0..<partCount
                 for (index in range) {
                     // Only continue if the list is empty or there is image remaining
                     if (isNotEmpty() && imageHeight <= last().bottomOffset) break
@@ -416,7 +417,7 @@ object ImageUtil {
             topRightPixel,
             botRightPixel,
             bottomCenterPixel,
-            botLeftPixel
+            botLeftPixel,
         )
         val isNotWhiteAndCloseTo = topAndBotPixels.mapIndexed { index, color ->
             val other = topAndBotPixels[(index + 1) % topAndBotPixels.size]
@@ -456,7 +457,7 @@ object ImageUtil {
             var blackStreak = false
             var whiteStreak = false
             val notOffset = x == left || x == right
-            inner@ for ((index, y) in (0 ..< image.height step image.height / 25).withIndex()) {
+            inner@ for ((index, y) in (0..<image.height step image.height / 25).withIndex()) {
                 val pixel = image[x, y]
                 val pixelOff = image[x + (if (x < image.width / 2) -offsetX else offsetX), y]
                 if (pixel.isWhite()) {

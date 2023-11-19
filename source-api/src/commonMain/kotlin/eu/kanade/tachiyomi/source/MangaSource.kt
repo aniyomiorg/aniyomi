@@ -65,7 +65,7 @@ interface MangaSource {
         ReplaceWith("getMangaDetails"),
     )
     fun fetchMangaDetails(manga: SManga): Observable<SManga> = throw IllegalStateException(
-        "Not used"
+        "Not used",
     )
 
     /**
@@ -78,7 +78,7 @@ interface MangaSource {
         ReplaceWith("getChapterList"),
     )
     fun fetchChapterList(manga: SManga): Observable<List<SChapter>> = throw IllegalStateException(
-        "Not used"
+        "Not used",
     )
 
     /**

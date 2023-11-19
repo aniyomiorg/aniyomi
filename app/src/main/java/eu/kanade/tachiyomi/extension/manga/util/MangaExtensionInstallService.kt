@@ -47,7 +47,7 @@ class MangaExtensionInstallService : Service() {
         if (installer == null) {
             installer = when (installerUsed) {
                 BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerManga(
-                    this
+                    this,
                 )
                 BasePreferences.ExtensionInstaller.SHIZUKU -> ShizukuInstallerManga(this)
                 else -> {

@@ -7,14 +7,14 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
-import java.time.OffsetDateTime
-import java.util.Calendar
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.anime.model.Anime
+import java.time.OffsetDateTime
+import java.util.Calendar
 
 class AniChartApi {
     private val client = OkHttpClient()
@@ -22,7 +22,7 @@ class AniChartApi {
     internal suspend fun loadAiringTime(
         anime: Anime,
         trackItems: List<AnimeTrackItem>,
-        manualFetch: Boolean
+        manualFetch: Boolean,
     ): Pair<Int, Long> {
         var airingEpisodeData = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
         if (anime.status == SAnime.COMPLETED.toLong() && !manualFetch) return airingEpisodeData
@@ -123,21 +123,21 @@ class AniChartApi {
                 val data = removeAiredSimkl(body)
 
                 val malId = data.substringAfter("\"simkl_id\":$id,", "").substringAfter(
-                    "\"mal\":\""
+                    "\"mal\":\"",
                 ).substringBefore("\"").toLongOrNull() ?: 0L
                 if (malId != 0L) {
                     return@withIOContext getAnilistAiringEpisodeData(
-                        getAlIdFromMal(malId)
+                        getAlIdFromMal(malId),
                     )
                 }
 
                 val epNum = data.substringAfter("\"simkl_id\":$id,", "").substringBefore("\"}}").substringAfterLast(
-                    "\"episode\":"
+                    "\"episode\":",
                 )
                 episodeNumber = epNum.substringBefore(",").toIntOrNull() ?: episodeNumber
 
                 val date = data.substringBefore("\"simkl_id\":$id,", "").substringAfterLast(
-                    "\"date\":\""
+                    "\"date\":\"",
                 ).substringBefore("\"")
                 airingAt = if (date.isNotBlank()) toUnixTimestamp(date) else airingAt
 

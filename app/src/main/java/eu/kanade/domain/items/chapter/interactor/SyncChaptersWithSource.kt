@@ -9,10 +9,6 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.online.HttpSource
-import java.lang.Long.max
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.TreeSet
 import tachiyomi.data.items.chapter.ChapterSanitizer
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
@@ -25,6 +21,10 @@ import tachiyomi.domain.items.chapter.repository.ChapterRepository
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.api.get
+import java.lang.Long.max
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.TreeSet
 
 class SyncChaptersWithSource(
     private val downloadManager: MangaDownloadManager,
@@ -103,7 +103,7 @@ class SyncChaptersWithSource(
             val chapterNumber = ChapterRecognition.parseChapterNumber(
                 manga.title,
                 chapter.name,
-                chapter.chapterNumber
+                chapter.chapterNumber,
             )
             chapter = chapter.copy(chapterNumber = chapterNumber)
 
@@ -122,13 +122,13 @@ class SyncChaptersWithSource(
                 if (shouldUpdateDbChapter.await(dbChapter, chapter)) {
                     val shouldRenameChapter = downloadProvider.isChapterDirNameChanged(
                         dbChapter,
-                        chapter
+                        chapter,
                     ) &&
                         downloadManager.isChapterDownloaded(
                             dbChapter.name,
                             dbChapter.scanlator,
                             manga.title,
-                            manga.source
+                            manga.source,
                         )
 
                     if (shouldRenameChapter) {

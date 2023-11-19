@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
-import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.io.IOException
 
 class AnilistInterceptor(val anilist: Anilist, private var token: String?) : Interceptor {
 

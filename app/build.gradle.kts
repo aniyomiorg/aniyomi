@@ -1,6 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -110,15 +110,17 @@ android {
     }
 
     packaging {
-        resources.excludes.addAll(listOf(
-            "META-INF/DEPENDENCIES",
-            "LICENSE.txt",
-            "META-INF/LICENSE",
-            "META-INF/LICENSE.txt",
-            "META-INF/README.md",
-            "META-INF/NOTICE",
-            "META-INF/*.kotlin_module",
-        ))
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/DEPENDENCIES",
+                "LICENSE.txt",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/README.md",
+                "META-INF/NOTICE",
+                "META-INF/*.kotlin_module",
+            ),
+        )
     }
 
     dependenciesInfo {
@@ -282,7 +284,7 @@ androidComponents {
         // Disables standardBenchmark
         if (variantBuilder.buildType == "benchmark") {
             variantBuilder.enable = variantBuilder.productFlavors.containsAll(
-                listOf("default" to "dev")
+                listOf("default" to "dev"),
             )
         }
     }
@@ -318,12 +320,12 @@ tasks {
             kotlinOptions.freeCompilerArgs += listOf(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                    project.buildDir.absolutePath + "/compose_metrics"
+                    project.buildDir.absolutePath + "/compose_metrics",
             )
             kotlinOptions.freeCompilerArgs += listOf(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                    project.buildDir.absolutePath + "/compose_metrics"
+                    project.buildDir.absolutePath + "/compose_metrics",
             )
         }
     }

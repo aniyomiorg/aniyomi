@@ -20,7 +20,7 @@ val Context.notificationManager: NotificationManager
 fun Context.notify(
     id: Int,
     channelId: String,
-    block: (NotificationCompat.Builder.() -> Unit)? = null
+    block: (NotificationCompat.Builder.() -> Unit)? = null,
 ) {
     val notification = notificationBuilder(channelId, block).build()
     this.notify(id, notification)
@@ -29,8 +29,9 @@ fun Context.notify(
 fun Context.notify(id: Int, notification: Notification) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(
             this,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PermissionChecker.PERMISSION_GRANTED) {
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) != PermissionChecker.PERMISSION_GRANTED
+    ) {
         return
     }
 
@@ -40,8 +41,9 @@ fun Context.notify(id: Int, notification: Notification) {
 fun Context.notify(notificationWithIdAndTags: List<NotificationWithIdAndTag>) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PermissionChecker.checkSelfPermission(
             this,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PermissionChecker.PERMISSION_GRANTED) {
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) != PermissionChecker.PERMISSION_GRANTED
+    ) {
         return
     }
 
@@ -61,7 +63,7 @@ fun Context.cancelNotification(id: Int) {
  */
 fun Context.notificationBuilder(
     channelId: String,
-    block: (NotificationCompat.Builder.() -> Unit)? = null
+    block: (NotificationCompat.Builder.() -> Unit)? = null,
 ): NotificationCompat.Builder {
     val builder = NotificationCompat.Builder(this, channelId)
         .setColor(getColor(R.color.accent_blue))

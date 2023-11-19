@@ -117,12 +117,12 @@ fun <T> TriStateListDialog(
 
                     if (!listState.isScrolledToStart()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.TopCenter)
+                            modifier = Modifier.align(Alignment.TopCenter),
                         )
                     }
                     if (!listState.isScrolledToEnd()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier.align(Alignment.BottomCenter),
                         )
                     }
                 }

@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
 import eu.kanade.presentation.more.settings.widget.PreferenceGroupHeader
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Preference Screen composable which contains a list of [Preference] items

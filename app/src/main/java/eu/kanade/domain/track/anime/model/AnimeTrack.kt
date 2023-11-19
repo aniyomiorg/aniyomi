@@ -1,7 +1,7 @@
 package eu.kanade.domain.track.anime.model
 
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
 import tachiyomi.domain.track.anime.model.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
 
 fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
     return this.copy(
@@ -14,7 +14,7 @@ fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
 }
 
 fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack.create(
-    syncId
+    syncId,
 ).also {
     it.id = id
     it.anime_id = animeId

@@ -1,6 +1,9 @@
 package eu.kanade.tachiyomi.network.interceptor
 
 import android.os.SystemClock
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import java.io.IOException
 import java.util.ArrayDeque
 import java.util.concurrent.Semaphore
@@ -9,9 +12,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toDuration
 import kotlin.time.toDurationUnit
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Response
 
 /**
  * An OkHttp interceptor that handles rate limiting.

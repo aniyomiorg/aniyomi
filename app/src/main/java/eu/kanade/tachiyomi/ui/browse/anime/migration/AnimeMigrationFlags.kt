@@ -61,14 +61,14 @@ object AnimeMigrationFlags {
                 flags += AnimeMigrationFlag.create(
                     CUSTOM_COVER,
                     defaultSelectedBitMap,
-                    R.string.custom_cover
+                    R.string.custom_cover,
                 )
             }
             if (downloadCache.getDownloadCount(anime) > 0) {
                 flags += AnimeMigrationFlag.create(
                     DELETE_DOWNLOADED,
                     defaultSelectedBitMap,
-                    R.string.delete_downloaded
+                    R.string.delete_downloaded,
                 )
             }
         }

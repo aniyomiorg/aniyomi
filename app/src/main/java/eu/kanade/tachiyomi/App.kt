@@ -46,7 +46,6 @@ import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.notify
-import java.security.Security
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -64,6 +63,7 @@ import tachiyomi.presentation.widget.entries.manga.TachiyomiMangaWidgetManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.security.Security
 
 class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
@@ -216,7 +216,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                 excludeMatchingSharedPreferencesKeys = listOf(
                     ".*username.*",
                     ".*password.*",
-                    ".*token.*"
+                    ".*token.*",
                 )
 
                 reportFormat = StringFormat.JSON

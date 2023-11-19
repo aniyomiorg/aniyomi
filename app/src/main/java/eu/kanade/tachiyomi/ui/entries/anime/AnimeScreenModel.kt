@@ -36,7 +36,6 @@ import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
-import java.util.Calendar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
@@ -79,6 +78,7 @@ import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Calendar
 
 class AnimeScreenModel(
     val context: Context,
@@ -295,9 +295,11 @@ class AnimeScreenModel(
                 if (checkDuplicate) {
                     val duplicate = getDuplicateLibraryAnime.await(anime).getOrNull(0)
                     if (duplicate != null) {
-                        updateSuccessState { it.copy(
-                            dialog = Dialog.DuplicateAnime(anime, duplicate)
-                        ) }
+                        updateSuccessState {
+                            it.copy(
+                                dialog = Dialog.DuplicateAnime(anime, duplicate),
+                            )
+                        }
                         return@launchIO
                     }
                 }
@@ -515,7 +517,7 @@ class AnimeScreenModel(
                     episode.name,
                     episode.scanlator,
                     anime.title,
-                    anime.source
+                    anime.source,
                 )
             }
             val downloadState = when {
@@ -743,7 +745,7 @@ class AnimeScreenModel(
     private fun downloadEpisodes(
         episodes: List<Episode>,
         alt: Boolean = false,
-        video: Video? = null
+        video: Video? = null,
     ) {
         val anime = successState?.anime ?: return
         downloadManager.downloadEpisodes(anime, episodes, true, alt, video)
@@ -791,8 +793,9 @@ class AnimeScreenModel(
             val categories = getCategories.await(anime.id).map { it.id }
             if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(
                     categories,
-                    downloadPreferences
-                )) {
+                    downloadPreferences,
+                )
+            ) {
                 return@launchNonCancellable
             }
             downloadEpisodes(episodes)
@@ -884,7 +887,7 @@ class AnimeScreenModel(
                 setAnimeDefaultEpisodeFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.getString(R.string.episode_settings_updated)
+                message = context.getString(R.string.episode_settings_updated),
             )
         }
     }
@@ -915,10 +918,10 @@ class AnimeScreenModel(
                         // Try to select the items in-between when possible
                         val range: IntRange
                         if (selectedIndex < selectedPositions[0]) {
-                            range = selectedIndex + 1 ..< selectedPositions[0]
+                            range = selectedIndex + 1..<selectedPositions[0]
                             selectedPositions[0] = selectedIndex
                         } else if (selectedIndex > selectedPositions[1]) {
-                            range = (selectedPositions[1] + 1) ..< selectedIndex
+                            range = (selectedPositions[1] + 1)..<selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
                             // Just select itself
@@ -989,10 +992,12 @@ class AnimeScreenModel(
                 .map { tracks ->
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> AnimeTrackItem(
-                            tracks.find { it.syncId == service.id },
-                            service
-                        ) }
+                        .map { service ->
+                            AnimeTrackItem(
+                                tracks.find { it.syncId == service.id },
+                                service,
+                            )
+                        }
                         // Show only if the service supports this anime's source
                         .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source!!) ?: true }
                 }
@@ -1007,7 +1012,7 @@ class AnimeScreenModel(
     private suspend fun updateAiringTime(
         anime: Anime,
         trackItems: List<AnimeTrackItem>,
-        manualFetch: Boolean
+        manualFetch: Boolean,
     ) {
         val airingEpisodeData = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
         setAnimeViewerFlags.awaitSetNextEpisodeAiring(anime.id, airingEpisodeData)
@@ -1019,7 +1024,7 @@ class AnimeScreenModel(
     sealed interface Dialog {
         data class ChangeCategory(
             val anime: Anime,
-            val initialSelection: List<CheckboxState<Category>>
+            val initialSelection: List<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
@@ -1075,7 +1080,7 @@ class AnimeScreenModel(
             val hasPromptedToAddBefore: Boolean = false,
             val nextAiringEpisode: Pair<Int, Long> = Pair(
                 anime.nextEpisodeToAir,
-                anime.nextEpisodeAiringAt
+                anime.nextEpisodeAiringAt,
             ),
         ) : State {
 
@@ -1094,7 +1099,7 @@ class AnimeScreenModel(
 
             val airingTime: Long
                 get() = nextAiringEpisode.second.times(1000L).minus(
-                    Calendar.getInstance().timeInMillis
+                    Calendar.getInstance().timeInMillis,
                 )
 
             /**

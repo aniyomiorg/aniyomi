@@ -176,7 +176,7 @@ fun WebViewScreenContent(
                     textRes = R.string.information_cloudflare_help,
                     modifier = Modifier.clickable {
                         uriHandler.openUri(
-                            "https://aniyomi.org/docs/guides/troubleshooting/#solving-cloudflare-issues"
+                            "https://aniyomi.org/docs/guides/troubleshooting/#solving-cloudflare-issues",
                         )
                     },
                 )

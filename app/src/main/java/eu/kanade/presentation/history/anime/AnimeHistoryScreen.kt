@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import eu.kanade.presentation.animehistory.components.AnimeHistoryContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
-import java.util.Date
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import java.util.Date
 
 @Composable
 fun AnimeHistoryScreen(
@@ -47,9 +47,11 @@ fun AnimeHistoryScreen(
                     contentPadding = contentPadding,
                     onClickCover = { history -> onClickCover(history.animeId) },
                     onClickResume = { history -> onClickResume(history.animeId, history.episodeId) },
-                    onClickDelete = { item -> onDialogChange(
-                        AnimeHistoryScreenModel.Dialog.Delete(item)
-                    ) },
+                    onClickDelete = { item ->
+                        onDialogChange(
+                            AnimeHistoryScreenModel.Dialog.Delete(item),
+                        )
+                    },
                 )
             }
         }

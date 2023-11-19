@@ -51,11 +51,11 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
         activeSession = null
         try {
             val installParams = PackageInstaller.SessionParams(
-                PackageInstaller.SessionParams.MODE_FULL_INSTALL
+                PackageInstaller.SessionParams.MODE_FULL_INSTALL,
             )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 installParams.setRequireUserAction(
-                    PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED
+                    PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED,
                 )
             }
             activeSession = entry to packageInstaller.createSession(installParams)

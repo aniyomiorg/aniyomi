@@ -11,12 +11,12 @@ fun Duration.toDurationString(context: Context, fallback: String): String {
             if (hours != 0) add(context.getString(R.string.hour_short, hours))
             if (minutes != 0 && (days == 0L || hours == 0)) {
                 add(
-                    context.getString(R.string.minute_short, minutes)
+                    context.getString(R.string.minute_short, minutes),
                 )
             }
             if (seconds != 0 && days == 0L && hours == 0) {
                 add(
-                    context.getString(R.string.seconds_short, seconds)
+                    context.getString(R.string.seconds_short, seconds),
                 )
             }
         }.joinToString(" ").ifBlank { fallback }

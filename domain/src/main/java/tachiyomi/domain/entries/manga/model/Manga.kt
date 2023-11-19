@@ -1,8 +1,8 @@
 package tachiyomi.domain.entries.manga.model
 
 import eu.kanade.tachiyomi.model.UpdateStrategy
-import java.io.Serializable
 import tachiyomi.core.preference.TriState
+import java.io.Serializable
 
 data class Manga(
     val id: Long,

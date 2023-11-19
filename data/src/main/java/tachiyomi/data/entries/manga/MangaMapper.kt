@@ -26,7 +26,7 @@ val mangaMapper: (
     UpdateStrategy,
     Long,
     Long,
-    Long?
+    Long?,
 ) -> Manga =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, chapterFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt ->
         Manga(
@@ -84,7 +84,7 @@ val libraryManga: (
     Long,
     Long,
     Double,
-    Long
+    Long,
 ) -> LibraryManga =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, chapterFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt, totalCount, readCount, latestUpload, chapterFetchedAt, lastRead, bookmarkCount, category ->
         LibraryManga(

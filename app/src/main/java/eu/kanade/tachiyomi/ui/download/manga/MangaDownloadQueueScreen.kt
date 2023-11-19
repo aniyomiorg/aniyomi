@@ -37,12 +37,12 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
+import kotlin.math.roundToInt
 
 @Composable
 fun DownloadQueueScreen(
@@ -64,12 +64,12 @@ fun DownloadQueueScreen(
             override fun onPostScroll(
                 consumed: Offset,
                 available: Offset,
-                source: NestedScrollSource
+                source: NestedScrollSource,
             ): Offset {
                 return scrollBehavior.nestedScrollConnection.onPostScroll(
                     consumed,
                     available,
-                    source
+                    source,
                 )
             }
 
@@ -138,14 +138,14 @@ fun DownloadQueueScreen(
             AndroidView(
                 factory = { context ->
                     screenModel.controllerBinding = DownloadListBinding.inflate(
-                        LayoutInflater.from(context)
+                        LayoutInflater.from(context),
                     )
                     screenModel.adapter = MangaDownloadAdapter(screenModel.listener)
                     screenModel.controllerBinding.recycler.adapter = screenModel.adapter
                     screenModel.adapter?.isHandleDragEnabled = true
                     screenModel.adapter?.fastScroller = screenModel.controllerBinding.fastScroller
                     screenModel.controllerBinding.recycler.layoutManager = LinearLayoutManager(
-                        context
+                        context,
                     )
 
                     ViewCompat.setNestedScrollingEnabled(screenModel.controllerBinding.root, true)

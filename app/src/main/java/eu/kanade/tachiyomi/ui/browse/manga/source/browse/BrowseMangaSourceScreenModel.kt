@@ -25,10 +25,8 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.model.Filter as SourceModelFilter
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.util.removeCovers
-import java.util.Date
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -59,6 +57,8 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
+import eu.kanade.tachiyomi.source.model.Filter as SourceModelFilter
 
 class BrowseMangaSourceScreenModel(
     private val sourceId: Long,
@@ -283,8 +283,8 @@ class BrowseMangaSourceScreenModel(
                     setDialog(
                         Dialog.ChangeMangaCategory(
                             manga,
-                            categories.mapAsCheckboxState { it.id in preselectedIds }
-                        )
+                            categories.mapAsCheckboxState { it.id in preselectedIds },
+                        ),
                     )
                 }
             }
@@ -305,7 +305,7 @@ class BrowseMangaSourceScreenModel(
                         syncChapterProgressWithTrack.await(
                             manga.id,
                             track.toDomainTrack()!!,
-                            service.mangaService
+                            service.mangaService,
                         )
                     }
                 } catch (e: Exception) {
@@ -360,7 +360,7 @@ class BrowseMangaSourceScreenModel(
         data object Latest : Listing(query = GetRemoteManga.QUERY_LATEST, filters = FilterList())
         data class Search(override val query: String?, override val filters: FilterList) : Listing(
             query = query,
-            filters = filters
+            filters = filters,
         )
 
         companion object {

@@ -3,8 +3,8 @@ package tachiyomi.data.handlers.anime
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import app.cash.sqldelight.Query
-import kotlin.properties.Delegates
 import tachiyomi.mi.data.AnimeDatabase
+import kotlin.properties.Delegates
 
 class QueryPagingAnimeSource<RowType : Any>(
     val handler: AnimeDatabaseHandler,

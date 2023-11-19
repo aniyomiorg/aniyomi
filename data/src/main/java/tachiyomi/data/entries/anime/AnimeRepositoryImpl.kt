@@ -25,19 +25,23 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
-        return handler.awaitOneOrNull(inTransaction = true) { animesQueries.getAnimeByUrlAndSource(
-            url,
-            sourceId,
-            animeMapper
-        ) }
+        return handler.awaitOneOrNull(inTransaction = true) {
+            animesQueries.getAnimeByUrlAndSource(
+                url,
+                sourceId,
+                animeMapper,
+            )
+        }
     }
 
     override fun getAnimeByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Anime?> {
-        return handler.subscribeToOneOrNull { animesQueries.getAnimeByUrlAndSource(
-            url,
-            sourceId,
-            animeMapper
-        ) }
+        return handler.subscribeToOneOrNull {
+            animesQueries.getAnimeByUrlAndSource(
+                url,
+                sourceId,
+                animeMapper,
+            )
+        }
     }
 
     override suspend fun getAnimeFavorites(): List<Anime> {

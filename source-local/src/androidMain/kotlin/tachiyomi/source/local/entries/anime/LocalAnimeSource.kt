@@ -11,11 +11,6 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.concurrent.TimeUnit
-import kotlin.math.abs
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -33,6 +28,11 @@ import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.io.ArchiveAnime
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import uy.kohesive.injekt.injectLazy
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 actual class LocalAnimeSource(
     private val context: Context,
@@ -83,7 +83,7 @@ actual class LocalAnimeSource(
                         animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
                         animeDirs.sortedWith(
-                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name }
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
                         )
                     }
                 }
@@ -165,10 +165,10 @@ actual class LocalAnimeSource(
             .firstOrNull {
                 it.extension == "json" && it.nameWithoutExtension == "episodes"
             }?.let { file ->
-            runCatching {
-                json.decodeFromStream<List<EpisodeDetails>>(file.inputStream())
-            }.getOrNull()
-        }
+                runCatching {
+                    json.decodeFromStream<List<EpisodeDetails>>(file.inputStream())
+                }.getOrNull()
+            }
 
         return fileSystem.getFilesInAnimeDirectory(anime.url)
             // Only keep supported formats
@@ -186,7 +186,7 @@ actual class LocalAnimeSource(
                     val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
                         anime.title,
                         this.name,
-                        this.episode_number.toDouble()
+                        this.episode_number.toDouble(),
                     ).toFloat()
                     episode_number = episodeNumber
 
@@ -220,7 +220,7 @@ actual class LocalAnimeSource(
 
     // Unused stuff
     override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException(
-        "Unused"
+        "Unused",
     )
 
     private fun updateCoverFromVideo(episode: SEpisode, anime: SAnime) {
@@ -236,7 +236,7 @@ actual class LocalAnimeSource(
         val second = duration.toInt() / 2
 
         com.arthenica.ffmpegkit.FFmpegKit.execute(
-            "-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y"
+            "-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y",
         )
 
         if (File(coverPath).exists()) {

@@ -83,12 +83,12 @@ fun TrackStatusSelector(
             }
             if (!state.isScrolledToStart()) {
                 HorizontalDivider(
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    modifier = Modifier.align(Alignment.TopCenter),
                 )
             }
             if (!state.isScrolledToEnd()) {
                 HorizontalDivider(
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 )
             }
         },
@@ -175,7 +175,7 @@ fun TrackDateSelector(
                         .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(
                         MaterialTheme.padding.small,
-                        Alignment.End
+                        Alignment.End,
                     ),
                 ) {
                     if (onRemove != null) {
@@ -218,7 +218,7 @@ fun BaseSelector(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(
                     MaterialTheme.padding.small,
-                    Alignment.End
+                    Alignment.End,
                 ),
             ) {
                 if (thirdButton != null) {

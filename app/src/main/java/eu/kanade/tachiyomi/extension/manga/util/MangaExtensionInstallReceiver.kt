@@ -61,11 +61,11 @@ internal class MangaExtensionInstallReceiver(private val listener: Listener) :
                 launchNow {
                     when (val result = getExtensionFromIntent(context, intent)) {
                         is MangaLoadResult.Success -> listener.onExtensionInstalled(
-                            result.extension
+                            result.extension,
                         )
 
                         is MangaLoadResult.Untrusted -> listener.onExtensionUntrusted(
-                            result.extension
+                            result.extension,
                         )
                         else -> {}
                     }

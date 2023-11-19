@@ -10,9 +10,9 @@ import androidx.annotation.CallSuper
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import uy.kohesive.injekt.injectLazy
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicReference
-import uy.kohesive.injekt.injectLazy
 
 /**
  * Base implementation class for extension installer. To be used inside a foreground [Service].

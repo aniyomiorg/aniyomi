@@ -155,7 +155,7 @@ class AnimeDownloadQueueScreenModel(
 
     fun <R : Comparable<R>> reorderQueue(
         selector: (AnimeDownloadItem) -> R,
-        reverse: Boolean = false
+        reverse: Boolean = false,
     ) {
         val adapter = adapter ?: return
         val newAnimeDownloads = mutableListOf<AnimeDownload>()

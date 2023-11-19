@@ -94,7 +94,7 @@ class MangaDownloadProvider(
         chapterName: String,
         chapterScanlator: String?,
         mangaTitle: String,
-        source: MangaSource
+        source: MangaSource,
     ): UniFile? {
         val mangaDir = findMangaDir(mangaTitle, source)
         return getValidChapterDirNames(chapterName, chapterScanlator).asSequence()

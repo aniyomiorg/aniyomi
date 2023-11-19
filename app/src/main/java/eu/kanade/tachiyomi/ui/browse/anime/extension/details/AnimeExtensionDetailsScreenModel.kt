@@ -70,7 +70,7 @@ class AnimeExtensionDetailsScreenModel(
                                         item.source.name.takeIf { item.labelAsName }
                                             ?: LocaleHelper.getSourceDisplayName(
                                                 item.source.lang,
-                                                context
+                                                context,
                                             ).lowercase()
                                     },
                                 ),

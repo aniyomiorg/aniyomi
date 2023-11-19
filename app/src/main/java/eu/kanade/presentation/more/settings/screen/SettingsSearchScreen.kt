@@ -48,7 +48,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.UpIcon
@@ -58,6 +57,7 @@ import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
+import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
 class SettingsSearchScreen : Screen() {
     @Composable
@@ -87,9 +87,11 @@ class SettingsSearchScreen : Screen() {
             focusRequester.requestFocus()
         }
 
-        var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(
-            TextFieldValue()
-        ) }
+        var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            mutableStateOf(
+                TextFieldValue(),
+            )
+        }
         Scaffold(
             topBar = {
                 Column {
@@ -115,7 +117,7 @@ class SettingsSearchScreen : Screen() {
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                                 keyboardActions = KeyboardActions(
-                                    onSearch = { focusManager.clearFocus() }
+                                    onSearch = { focusManager.clearFocus() },
                                 ),
                                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                                 decorationBox = {
@@ -208,7 +210,7 @@ private fun SearchResult(
                             breadcrumbs = getLocalizedBreadcrumb(
                                 path = settingsData.title,
                                 node = categoryTitle,
-                                isLtr = isLtr
+                                isLtr = isLtr,
                             ),
                             highlightKey = p.title,
                         )

@@ -292,9 +292,11 @@ class MangaScreenModel(
                     val duplicate = getDuplicateLibraryManga.await(manga).getOrNull(0)
 
                     if (duplicate != null) {
-                        updateSuccessState { it.copy(
-                            dialog = Dialog.DuplicateManga(manga, duplicate)
-                        ) }
+                        updateSuccessState {
+                            it.copy(
+                                dialog = Dialog.DuplicateManga(manga, duplicate),
+                            )
+                        }
                         return@launchIO
                     }
                 }
@@ -512,7 +514,7 @@ class MangaScreenModel(
                     chapter.name,
                     chapter.scanlator,
                     manga.title,
-                    manga.source
+                    manga.source,
                 )
             }
             val downloadState = when {
@@ -778,8 +780,9 @@ class MangaScreenModel(
             val categories = getCategories.await(manga.id).map { it.id }
             if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(
                     categories,
-                    downloadPreferences
-                )) {
+                    downloadPreferences,
+                )
+            ) {
                 return@launchNonCancellable
             }
             downloadChapters(chapters)
@@ -871,7 +874,7 @@ class MangaScreenModel(
                 setMangaDefaultChapterFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.getString(R.string.chapter_settings_updated)
+                message = context.getString(R.string.chapter_settings_updated),
             )
         }
     }
@@ -902,10 +905,10 @@ class MangaScreenModel(
                         // Try to select the items in-between when possible
                         val range: IntRange
                         if (selectedIndex < selectedPositions[0]) {
-                            range = selectedIndex + 1 ..< selectedPositions[0]
+                            range = selectedIndex + 1..<selectedPositions[0]
                             selectedPositions[0] = selectedIndex
                         } else if (selectedIndex > selectedPositions[1]) {
-                            range = (selectedPositions[1] + 1) ..< selectedIndex
+                            range = (selectedPositions[1] + 1)..<selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
                             // Just select itself
@@ -977,10 +980,12 @@ class MangaScreenModel(
                 .map { tracks ->
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> MangaTrackItem(
-                            tracks.find { it.syncId.toLong() == service.id },
-                            service
-                        ) }
+                        .map { service ->
+                            MangaTrackItem(
+                                tracks.find { it.syncId.toLong() == service.id },
+                                service,
+                            )
+                        }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
                 }
@@ -996,7 +1001,7 @@ class MangaScreenModel(
     sealed interface Dialog {
         data class ChangeCategory(
             val manga: Manga,
-            val initialSelection: List<CheckboxState<Category>>
+            val initialSelection: List<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog

@@ -27,8 +27,6 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
-import java.io.File
-import java.util.Date
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -55,6 +53,8 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.io.File
+import java.util.Date
 
 class ExternalIntents {
 
@@ -77,7 +77,7 @@ class ExternalIntents {
         context: Context,
         animeId: Long?,
         episodeId: Long?,
-        chosenVideo: Video?
+        chosenVideo: Video?,
     ): Intent? {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
@@ -306,7 +306,7 @@ class ExternalIntents {
             MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
             MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(
                 packageName,
-                "$packageName.ActivityScreen"
+                "$packageName.ActivityScreen",
             )
             VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
             MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
@@ -378,7 +378,7 @@ class ExternalIntents {
                     currentExtEpisode,
                     anime,
                     currentExtEpisode.totalSeconds,
-                    currentExtEpisode.totalSeconds
+                    currentExtEpisode.totalSeconds,
                 )
             } else {
                 saveEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
@@ -427,7 +427,7 @@ class ExternalIntents {
         currentEpisode: Episode?,
         anime: Anime,
         lastSecondSeen: Long,
-        totalSeconds: Long
+        totalSeconds: Long,
     ) {
         if (basePreferences.incognitoMode().get()) return
         val currEp = currentEpisode ?: return
@@ -535,10 +535,12 @@ class ExternalIntents {
      */
     private suspend fun enqueueDeleteSeenEpisodes(episode: Episode, anime: Anime) {
         if (episode.seen) {
-            withIOContext { downloadManager.enqueueEpisodesToDelete(
-                listOf(episode),
-                anime
-            ) }
+            withIOContext {
+                downloadManager.enqueueEpisodesToDelete(
+                    listOf(episode),
+                    anime,
+                )
+            }
         }
     }
 

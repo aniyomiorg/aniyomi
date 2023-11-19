@@ -9,11 +9,11 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.RelativeDateHeader
 import eu.kanade.presentation.history.anime.AnimeHistoryItem
 import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
-import java.text.DateFormat
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.DateFormat
 
 @Composable
 fun AnimeHistoryContent(

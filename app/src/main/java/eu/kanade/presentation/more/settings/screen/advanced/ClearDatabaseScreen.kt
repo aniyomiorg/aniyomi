@@ -144,9 +144,11 @@ class ClearDatabaseScreen : Screen() {
                                         source = sourceWithCount.source,
                                         count = sourceWithCount.count,
                                         isSelected = s.selection.contains(sourceWithCount.id),
-                                        onClickSelect = { model.toggleSelection(
-                                            sourceWithCount.source
-                                        ) },
+                                        onClickSelect = {
+                                            model.toggleSelection(
+                                                sourceWithCount.source,
+                                            )
+                                        },
                                     )
                                 }
                             }
@@ -208,7 +210,7 @@ class ClearDatabaseScreen : Screen() {
 }
 
 private class ClearDatabaseScreenModel : StateScreenModel<ClearDatabaseScreenModel.State>(
-    State.Loading
+    State.Loading,
 ) {
     private val getSourcesWithNonLibraryManga: GetMangaSourcesWithNonLibraryManga = Injekt.get()
     private val database: Database = Injekt.get()

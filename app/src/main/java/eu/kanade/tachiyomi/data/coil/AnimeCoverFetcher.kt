@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.network.await
-import java.io.File
 import logcat.LogPriority
 import okhttp3.CacheControl
 import okhttp3.Call
@@ -30,6 +29,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.

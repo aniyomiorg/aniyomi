@@ -70,7 +70,7 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (hideCategory.await(category)) {
                 is HideAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError
+                    AnimeCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -81,7 +81,7 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
                 is DeleteAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError
+                    AnimeCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -92,7 +92,7 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError
+                    AnimeCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -103,7 +103,7 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError
+                    AnimeCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -114,7 +114,7 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError
+                    AnimeCategoryEvent.InternalError,
                 )
                 else -> {}
             }

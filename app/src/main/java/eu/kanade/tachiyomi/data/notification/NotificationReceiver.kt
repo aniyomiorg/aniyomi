@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
@@ -26,7 +25,6 @@ import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
-import java.io.File
 import kotlinx.coroutines.runBlocking
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.download.service.DownloadPreferences
@@ -47,6 +45,8 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.io.File
+import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
 
 /**
  * Global [BroadcastReceiver] that runs on UI thread
@@ -69,7 +69,7 @@ class NotificationReceiver : BroadcastReceiver() {
             // Dismiss notification
             ACTION_DISMISS_NOTIFICATION -> dismissNotification(
                 context,
-                intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
             )
             // Resume the download service
             ACTION_RESUME_DOWNLOADS -> mangaDownloadManager.startDownloads()
@@ -133,7 +133,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     dismissNotification(
                         context,
                         notificationId,
-                        intent.getIntExtra(EXTRA_GROUP_ID, 0)
+                        intent.getIntExtra(EXTRA_GROUP_ID, 0),
                     )
                 }
                 val urls = intent.getStringArrayExtra(EXTRA_CHAPTER_URL) ?: return
@@ -149,7 +149,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     dismissNotification(
                         context,
                         notificationId,
-                        intent.getIntExtra(EXTRA_GROUP_ID, 0)
+                        intent.getIntExtra(EXTRA_GROUP_ID, 0),
                     )
                 }
                 val urls = intent.getStringArrayExtra(EXTRA_CHAPTER_URL) ?: return
@@ -165,7 +165,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     dismissNotification(
                         context,
                         notificationId,
-                        intent.getIntExtra(EXTRA_GROUP_ID, 0)
+                        intent.getIntExtra(EXTRA_GROUP_ID, 0),
                     )
                 }
                 val urls = intent.getStringArrayExtra(EXTRA_CHAPTER_URL) ?: return
@@ -181,7 +181,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     dismissNotification(
                         context,
                         notificationId,
-                        intent.getIntExtra(EXTRA_GROUP_ID, 0)
+                        intent.getIntExtra(EXTRA_GROUP_ID, 0),
                     )
                 }
                 val urls = intent.getStringArrayExtra(EXTRA_CHAPTER_URL) ?: return
@@ -455,7 +455,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -473,7 +473,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -491,7 +491,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -509,7 +509,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -527,7 +527,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -545,7 +545,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -565,7 +565,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -579,7 +579,7 @@ class NotificationReceiver : BroadcastReceiver() {
         internal fun dismissNotification(
             context: Context,
             notificationId: Int,
-            groupId: Int? = null
+            groupId: Int? = null,
         ) {
             /*
             Group notifications always have at least 2 notifications:
@@ -629,7 +629,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -644,7 +644,7 @@ class NotificationReceiver : BroadcastReceiver() {
         internal fun deleteImagePendingBroadcast(
             context: Context,
             path: String,
-            notificationId: Int
+            notificationId: Int,
         ): PendingIntent {
             val intent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_DELETE_IMAGE
@@ -655,7 +655,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -672,7 +672,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 anime.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -693,7 +693,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 anime.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -720,7 +720,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 anime.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -737,7 +737,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 manga.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -758,7 +758,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 manga.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -785,7 +785,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 manga.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -812,7 +812,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 manga.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -839,7 +839,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 anime.id.hashCode(),
                 newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -857,7 +857,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -875,7 +875,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -890,7 +890,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -909,7 +909,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -928,7 +928,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -950,7 +950,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -986,7 +986,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
     }

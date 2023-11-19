@@ -118,7 +118,7 @@ fun Date.toRelativeString(
 ): String {
     val now = Date()
     val difference = now.timeWithOffset.floorNearest(MILLISECONDS_IN_DAY) - this.timeWithOffset.floorNearest(
-        MILLISECONDS_IN_DAY
+        MILLISECONDS_IN_DAY,
     )
     val days = difference.floorDiv(MILLISECONDS_IN_DAY).toInt()
     return when {

@@ -24,10 +24,12 @@ fun LibraryTabs(
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
             edgePadding = 0.dp,
-            indicator = { TabIndicator(
-                it[pagerState.currentPage],
-                pagerState.currentPageOffsetFraction
-            ) },
+            indicator = {
+                TabIndicator(
+                    it[pagerState.currentPage],
+                    pagerState.currentPageOffsetFraction,
+                )
+            },
             // TODO: use default when width is fixed upstream
             // https://issuetracker.google.com/issues/242879624
             divider = {},

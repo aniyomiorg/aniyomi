@@ -1,9 +1,9 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.model.UpdateStrategy
+import tachiyomi.core.preference.TriState
 import java.io.Serializable
 import kotlin.math.pow
-import tachiyomi.core.preference.TriState
 
 data class Anime(
     val id: Long,

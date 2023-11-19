@@ -95,7 +95,7 @@ fun View?.isVisibleOnScreen(): Boolean {
         0,
         0,
         Resources.getSystem().displayMetrics.widthPixels,
-        Resources.getSystem().displayMetrics.heightPixels
+        Resources.getSystem().displayMetrics.heightPixels,
     )
     return actualPosition.intersect(screen)
 }

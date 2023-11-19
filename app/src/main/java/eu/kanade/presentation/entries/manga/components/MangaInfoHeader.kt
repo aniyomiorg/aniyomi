@@ -81,13 +81,13 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))
 
@@ -196,7 +196,7 @@ fun MangaActionRow(
                 title = pluralStringResource(
                     id = R.plurals.day,
                     count = fetchInterval.absoluteValue,
-                    fetchInterval.absoluteValue
+                    fetchInterval.absoluteValue,
                 ),
                 icon = Icons.Default.HourglassEmpty,
                 color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
@@ -211,7 +211,7 @@ fun MangaActionRow(
                     pluralStringResource(
                         id = R.plurals.num_trackers,
                         count = trackingCount,
-                        trackingCount
+                        trackingCount,
                     )
                 },
                 icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
@@ -246,7 +246,7 @@ fun ExpandableMangaDescription(
         }
         val desc =
             description.takeIf { !it.isNullOrBlank() } ?: stringResource(
-                R.string.description_placeholder
+                R.string.description_placeholder,
             )
         val trimmedDescription = remember(desc) {
             desc
@@ -426,7 +426,7 @@ private fun MangaAndSourceTitlesLarge(
                         SManga.COMPLETED.toLong() -> stringResource(R.string.completed)
                         SManga.LICENSED.toLong() -> stringResource(R.string.licensed)
                         SManga.PUBLISHING_FINISHED.toLong() -> stringResource(
-                            R.string.publishing_finished
+                            R.string.publishing_finished,
                         )
                         SManga.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                         SManga.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
@@ -561,7 +561,7 @@ private fun MangaAndSourceTitlesSmall(
                             SManga.COMPLETED.toLong() -> stringResource(R.string.completed)
                             SManga.LICENSED.toLong() -> stringResource(R.string.licensed)
                             SManga.PUBLISHING_FINISHED.toLong() -> stringResource(
-                                R.string.publishing_finished
+                                R.string.publishing_finished,
                             )
                             SManga.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                             SManga.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
@@ -627,7 +627,7 @@ private fun MangaSummary(
             )
         }.map { it.measure(constraints) }
         expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(
-            shrunkHeight
+            shrunkHeight,
         ) ?: 0
 
         val actualPlaceable = subcompose("description") {
@@ -652,11 +652,11 @@ private fun MangaSummary(
                 Icon(
                     painter = rememberAnimatedVectorPainter(image, !expanded),
                     contentDescription = stringResource(
-                        if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand
+                        if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand,
                     ),
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.background(
-                        Brush.radialGradient(colors = colors.asReversed())
+                        Brush.radialGradient(colors = colors.asReversed()),
                     ),
                 )
             }

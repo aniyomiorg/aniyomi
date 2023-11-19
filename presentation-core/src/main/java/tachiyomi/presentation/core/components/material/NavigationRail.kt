@@ -50,7 +50,7 @@ fun NavigationRail(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
                 MaterialTheme.padding.tiny,
-                alignment = Alignment.CenterVertically
+                alignment = Alignment.CenterVertically,
             ),
         ) {
             if (header != null) {

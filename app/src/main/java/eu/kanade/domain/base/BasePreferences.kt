@@ -22,11 +22,11 @@ class BasePreferences(
 
     fun acraEnabled() = preferenceStore.getBoolean(
         "acra.enable",
-        isPreviewBuildType || isReleaseBuildType
+        isPreviewBuildType || isReleaseBuildType,
     )
 
     fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(
-        PackageManager.FEATURE_PICTURE_IN_PICTURE
+        PackageManager.FEATURE_PICTURE_IN_PICTURE,
     )
 
     enum class ExtensionInstaller(@StringRes val titleResId: Int) {

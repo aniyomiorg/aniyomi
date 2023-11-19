@@ -21,8 +21,6 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
-import java.util.Calendar
-import java.util.Date
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -47,6 +45,8 @@ import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Calendar
+import java.util.Date
 
 class MangaUpdatesScreenModel(
     private val sourceManager: MangaSourceManager = Injekt.get(),
@@ -294,10 +294,10 @@ class MangaUpdatesScreenModel(
                         // Try to select the items in-between when possible
                         val range: IntRange
                         if (selectedIndex < selectedPositions[0]) {
-                            range = selectedIndex + 1 ..< selectedPositions[0]
+                            range = selectedIndex + 1..<selectedPositions[0]
                             selectedPositions[0] = selectedIndex
                         } else if (selectedIndex > selectedPositions[1]) {
-                            range = (selectedPositions[1] + 1) ..< selectedIndex
+                            range = (selectedPositions[1] + 1)..<selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
                             // Just select itself
@@ -376,7 +376,7 @@ class MangaUpdatesScreenModel(
 
         fun getUiModel(context: Context): List<MangaUpdatesUiModel> {
             val dateFormat by mutableStateOf(
-                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
+                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),
             )
 
             return items

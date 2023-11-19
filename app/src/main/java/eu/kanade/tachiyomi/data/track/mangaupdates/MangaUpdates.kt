@@ -96,7 +96,7 @@ class MangaUpdates(id: Long) : TrackService(id, "MangaUpdates"), MangaTrackServi
 
     override suspend fun login(username: String, password: String) {
         val authenticated = api.authenticate(username, password) ?: throw Throwable(
-            "Unable to login"
+            "Unable to login",
         )
         saveCredentials(authenticated.uid.toString(), authenticated.sessionToken)
         interceptor.newAuth(authenticated.sessionToken)

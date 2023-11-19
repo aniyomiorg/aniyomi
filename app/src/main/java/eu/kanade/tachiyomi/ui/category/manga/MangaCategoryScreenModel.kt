@@ -70,7 +70,7 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (hideCategory.await(category)) {
                 is HideMangaCategory.Result.InternalError -> _events.send(
-                    MangaCategoryEvent.InternalError
+                    MangaCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -81,7 +81,7 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
                 is DeleteMangaCategory.Result.InternalError -> _events.send(
-                    MangaCategoryEvent.InternalError
+                    MangaCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -92,7 +92,7 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
                 is ReorderMangaCategory.Result.InternalError -> _events.send(
-                    MangaCategoryEvent.InternalError
+                    MangaCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -103,7 +103,7 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
                 is ReorderMangaCategory.Result.InternalError -> _events.send(
-                    MangaCategoryEvent.InternalError
+                    MangaCategoryEvent.InternalError,
                 )
                 else -> {}
             }
@@ -114,7 +114,7 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameMangaCategory.Result.InternalError -> _events.send(
-                    MangaCategoryEvent.InternalError
+                    MangaCategoryEvent.InternalError,
                 )
                 else -> {}
             }

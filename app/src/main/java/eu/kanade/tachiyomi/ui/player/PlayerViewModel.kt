@@ -44,8 +44,6 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
 import `is`.xyz.mpv.Utils
-import java.io.InputStream
-import java.util.Date
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -76,6 +74,8 @@ import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.InputStream
+import java.util.Date
 
 class PlayerViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
@@ -178,13 +178,13 @@ class PlayerViewModel @JvmOverloads constructor(
                     it.name,
                     it.scanlator,
                     anime.title,
-                    anime.source
+                    anime.source,
                 ) ||
                 anime.downloadedFilterRaw == Anime.EPISODE_SHOW_NOT_DOWNLOADED && downloadManager.isEpisodeDownloaded(
                     it.name,
                     it.scanlator,
                     anime.title,
-                    anime.source
+                    anime.source,
                 ) ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED && !it.bookmark ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED && it.bookmark
@@ -317,7 +317,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val episode = currentEpisode ?: return null
         return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(
             episode.toDomainEpisode()!!,
-            anime
+            anime,
         )
     }
 
@@ -335,7 +335,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 currentVideoList = EpisodeLoader.getLinks(
                     currentEpisode.toDomainEpisode()!!,
                     anime,
-                    source
+                    source,
                 ).asFlow().first()
                 this@PlayerViewModel.episodeId = currentEpisode.id!!
             } catch (e: Exception) {
@@ -412,7 +412,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val currentEpisodePosition = this.currentPlaylist.indexOf(chosenEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
         val episodeToDelete = this.currentPlaylist.getOrNull(
-            currentEpisodePosition - removeAfterSeenSlots
+            currentEpisodePosition - removeAfterSeenSlots,
         )
         // If episode is completely seen no need to download it
         episodeToDownload = null
@@ -683,7 +683,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val filenameSuffix = " - $timePos"
         return DiskUtil.buildValidFilename(
             "${anime.title} - ${episode.name}".takeBytes(
-                DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()
+                DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize(),
             ),
         ) + filenameSuffix
     }

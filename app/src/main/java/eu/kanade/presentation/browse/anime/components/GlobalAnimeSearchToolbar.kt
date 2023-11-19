@@ -56,7 +56,7 @@ fun GlobalAnimeSearchToolbar(
                 navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior,
             )
-            if (progress in 1..< total) {
+            if (progress in 1..<total) {
                 LinearProgressIndicator(
                     progress = progress / total.toFloat(),
                     modifier = Modifier

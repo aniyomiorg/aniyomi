@@ -63,7 +63,7 @@ fun MoreScreen(
             Column(
                 modifier = Modifier.windowInsetsPadding(
                     WindowInsets.systemBars.only(
-                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal,
                     ),
                 ),
             ) {
@@ -72,7 +72,7 @@ fun MoreScreen(
                         textRes = R.string.fdroid_warning,
                         modifier = Modifier.clickable {
                             uriHandler.openUri(
-                                "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version"
+                                "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version",
                             )
                         },
                     )
@@ -153,7 +153,7 @@ fun MoreScreen(
                             pluralStringResource(
                                 id = R.plurals.download_queue_summary,
                                 count = pending,
-                                pending
+                                pending,
                             )
                         }
                     },

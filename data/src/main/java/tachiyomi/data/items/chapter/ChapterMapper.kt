@@ -15,7 +15,7 @@ val chapterMapper: (
     Long,
     Long,
     Long,
-    Long
+    Long,
 ) -> Chapter =
     { id, mangaId, url, name, scanlator, read, bookmark, lastPageRead, chapterNumber, sourceOrder, dateFetch, dateUpload, lastModifiedAt ->
         Chapter(

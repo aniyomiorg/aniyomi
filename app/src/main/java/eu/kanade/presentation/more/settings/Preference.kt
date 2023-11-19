@@ -74,7 +74,7 @@ sealed class Preference {
         ) : PreferenceItem<T>() {
             internal fun internalSet(newValue: Any) = pref.set(newValue as T)
             internal suspend fun internalOnValueChanged(newValue: Any) = onValueChanged(
-                newValue as T
+                newValue as T,
             )
 
             @Composable

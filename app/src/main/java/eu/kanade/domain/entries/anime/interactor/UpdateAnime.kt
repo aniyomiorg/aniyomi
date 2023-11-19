@@ -3,8 +3,6 @@ package eu.kanade.domain.entries.anime.interactor
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import java.time.ZonedDateTime
-import java.util.Date
 import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
@@ -12,6 +10,8 @@ import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZonedDateTime
+import java.util.Date
 
 class UpdateAnime(
     private val animeRepository: AnimeRepository,
@@ -92,7 +92,7 @@ class UpdateAnime(
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
         return animeRepository.updateAnime(
-            AnimeUpdate(id = mangaId, coverLastModified = Date().time)
+            AnimeUpdate(id = mangaId, coverLastModified = Date().time),
         )
     }
 

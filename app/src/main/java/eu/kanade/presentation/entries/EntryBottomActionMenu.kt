@@ -56,13 +56,13 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun EntryBottomActionMenu(
@@ -90,7 +90,7 @@ fun EntryBottomActionMenu(
             modifier = modifier,
             shape = MaterialTheme.shapes.large.copy(
                 bottomEnd = ZeroCornerSize,
-                bottomStart = ZeroCornerSize
+                bottomStart = ZeroCornerSize,
             ),
             tonalElevation = 3.dp,
         ) {
@@ -270,7 +270,7 @@ fun LibraryBottomActionMenu(
             modifier = modifier,
             shape = MaterialTheme.shapes.large.copy(
                 bottomEnd = ZeroCornerSize,
-                bottomStart = ZeroCornerSize
+                bottomStart = ZeroCornerSize,
             ),
             tonalElevation = 3.dp,
         ) {
@@ -279,7 +279,7 @@ fun LibraryBottomActionMenu(
             var resetJob: Job? = remember { null }
             val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                (0 ..<5).forEach { i -> confirm[i] = i == toConfirmIndex }
+                (0..<5).forEach { i -> confirm[i] = i == toConfirmIndex }
                 resetJob?.cancel()
                 resetJob = scope.launch {
                     delay(1.seconds)

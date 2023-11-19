@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.util.system.toast
-import java.util.Locale
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +26,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
 
 /**
  * The manager of anime extensions installed as another apk which extend the available sources. It handles
@@ -59,7 +59,7 @@ class AnimeExtensionManager(
     private val iconMap = mutableMapOf<String, Drawable>()
 
     private val _installedAnimeExtensionsFlow = MutableStateFlow(
-        emptyList<AnimeExtension.Installed>()
+        emptyList<AnimeExtension.Installed>(),
     )
     val installedExtensionsFlow = _installedAnimeExtensionsFlow.asStateFlow()
 
@@ -77,14 +77,14 @@ class AnimeExtensionManager(
     }
 
     private val _availableAnimeExtensionsFlow = MutableStateFlow(
-        emptyList<AnimeExtension.Available>()
+        emptyList<AnimeExtension.Available>(),
     )
     val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()
 
     private var availableAnimeExtensionsSourcesData: Map<Long, StubAnimeSource> = emptyMap()
 
     private fun setupAvailableAnimeExtensionsSourcesDataMap(
-        animeextensions: List<AnimeExtension.Available>
+        animeextensions: List<AnimeExtension.Available>,
     ) {
         if (animeextensions.isEmpty()) return
         availableAnimeExtensionsSourcesData = animeextensions
@@ -95,7 +95,7 @@ class AnimeExtensionManager(
     fun getSourceData(id: Long) = availableAnimeExtensionsSourcesData[id]
 
     private val _untrustedAnimeExtensionsFlow = MutableStateFlow(
-        emptyList<AnimeExtension.Untrusted>()
+        emptyList<AnimeExtension.Untrusted>(),
     )
     val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()
 
@@ -176,7 +176,7 @@ class AnimeExtensionManager(
      * @param availableAnimeExtensions The list of animeextensions given by the [api].
      */
     private fun updatedInstalledAnimeExtensionsStatuses(
-        availableAnimeExtensions: List<AnimeExtension.Available>
+        availableAnimeExtensions: List<AnimeExtension.Available>,
     ) {
         if (availableAnimeExtensions.isEmpty()) {
             preferences.animeExtensionUpdatesCount().set(0)
@@ -277,10 +277,12 @@ class AnimeExtensionManager(
         launchNow {
             nowTrustedAnimeExtensions
                 .map { animeextension ->
-                    async { AnimeExtensionLoader.loadExtensionFromPkgName(
-                        context,
-                        animeextension.pkgName
-                    ) }.await()
+                    async {
+                        AnimeExtensionLoader.loadExtensionFromPkgName(
+                            context,
+                            animeextension.pkgName,
+                        )
+                    }.await()
                 }
                 .filterIsInstance<AnimeLoadResult.Success>()
                 .forEach { registerNewExtension(it.extension) }
@@ -367,7 +369,7 @@ class AnimeExtensionManager(
     }
 
     private fun AnimeExtension.Installed.updateExists(
-        availableAnimeExtension: AnimeExtension.Available? = null
+        availableAnimeExtension: AnimeExtension.Available? = null,
     ): Boolean {
         val availableExt = availableAnimeExtension ?: _availableAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false

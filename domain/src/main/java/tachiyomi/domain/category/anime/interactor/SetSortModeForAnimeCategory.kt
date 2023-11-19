@@ -15,7 +15,7 @@ class SetSortModeForAnimeCategory(
     suspend fun await(
         categoryId: Long?,
         type: AnimeLibrarySort.Type,
-        direction: AnimeLibrarySort.Direction
+        direction: AnimeLibrarySort.Direction,
     ) {
         val category = categoryId?.let { categoryRepository.getAnimeCategory(it) }
         val flags = (category?.flags ?: 0) + type + direction
@@ -35,7 +35,7 @@ class SetSortModeForAnimeCategory(
     suspend fun await(
         category: Category?,
         type: AnimeLibrarySort.Type,
-        direction: AnimeLibrarySort.Direction
+        direction: AnimeLibrarySort.Direction,
     ) {
         await(category?.id, type, direction)
     }

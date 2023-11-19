@@ -40,7 +40,6 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.browse.anime.migration.AnimeMigrationFlags
-import java.util.Date
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
@@ -59,6 +58,7 @@ import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 
 @Composable
 internal fun MigrateAnimeDialog(
@@ -101,7 +101,7 @@ internal fun MigrateAnimeDialog(
                         ) {
                             Checkbox(
                                 checked = selectedFlags[index],
-                                onCheckedChange = { onChange() }
+                                onCheckedChange = { onChange() },
                             )
                             Text(text = context.getString(flag.titleId))
                         }
@@ -305,7 +305,7 @@ internal class MigrateAnimeDialogScreenModel(
         if (migrateCustomCover && oldAnime.hasCustomCover()) {
             coverCache.setCustomCoverToCache(
                 newAnime,
-                coverCache.getCustomCoverFile(oldAnime.id).inputStream()
+                coverCache.getCustomCoverFile(oldAnime.id).inputStream(),
             )
         }
 

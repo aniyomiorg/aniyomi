@@ -6,9 +6,6 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -17,6 +14,9 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class KitsuSearchManga(obj: JsonObject) {
     val id = obj["id"]!!.jsonPrimitive.long

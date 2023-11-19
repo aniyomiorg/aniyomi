@@ -31,7 +31,7 @@ fun AlertDialogContent(
         content = {
             Column {
                 CompositionLocalProvider(
-                    LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant
+                    LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
                 ) {
                     val textStyle = MaterialTheme.typography.bodyMedium
                     ProvideTextStyle(textStyle) {
@@ -56,7 +56,7 @@ fun AlertDialogContent(
                         .align(Alignment.End),
                 ) {
                     CompositionLocalProvider(
-                        LocalContentColor provides MaterialTheme.colorScheme.primary
+                        LocalContentColor provides MaterialTheme.colorScheme.primary,
                     ) {
                         val textStyle = MaterialTheme.typography.labelLarge
                         ProvideTextStyle(value = textStyle, content = buttons)
@@ -90,7 +90,7 @@ fun AlertDialogContent(
             ) {
                 icon?.let {
                     CompositionLocalProvider(
-                        LocalContentColor provides MaterialTheme.colorScheme.secondary
+                        LocalContentColor provides MaterialTheme.colorScheme.secondary,
                     ) {
                         Box(
                             Modifier
@@ -103,7 +103,7 @@ fun AlertDialogContent(
                 }
                 title?.let {
                     CompositionLocalProvider(
-                        LocalContentColor provides MaterialTheme.colorScheme.onSurface
+                        LocalContentColor provides MaterialTheme.colorScheme.onSurface,
                     ) {
                         val textStyle = MaterialTheme.typography.headlineSmall
                         ProvideTextStyle(textStyle) {

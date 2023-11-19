@@ -56,7 +56,7 @@ fun UpdatesAnimeWidget(data: List<Pair<Long, Bitmap?>>?) {
                             ) {
                                 val intent = Intent(
                                     LocalContext.current,
-                                    Class.forName(Constants.MAIN_ACTIVITY)
+                                    Class.forName(Constants.MAIN_ACTIVITY),
                                 ).apply {
                                     action = Constants.SHORTCUT_ANIME
                                     putExtra(Constants.ANIME_EXTRA, animeId)

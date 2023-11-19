@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.util.lang
 
 import androidx.core.text.parseAsHtml
+import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 import java.nio.charset.StandardCharsets
 import kotlin.math.floor
-import net.greypanther.natsort.CaseInsensitiveSimpleNaturalComparator
 
 /**
  * Replaces the given string to have at most [count] characters using [replacement] at its end.

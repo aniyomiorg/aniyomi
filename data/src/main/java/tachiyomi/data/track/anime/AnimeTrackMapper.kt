@@ -15,7 +15,7 @@ val animeTrackMapper: (
     Double,
     String,
     Long,
-    Long
+    Long,
 ) -> AnimeTrack =
     { id, animeId, syncId, remoteId, libraryId, title, lastEpisodeSeen, totalEpisodes, status, score, remoteUrl, startDate, finishDate ->
         AnimeTrack(

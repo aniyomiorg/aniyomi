@@ -236,7 +236,7 @@ private fun VideoList(
                         listOf(episode),
                         true,
                         it,
-                        selectedVideo
+                        selectedVideo,
                     )
                 }
 
@@ -254,7 +254,7 @@ private fun VideoList(
                                 anime.id,
                                 episode.id,
                                 true,
-                                selectedVideo
+                                selectedVideo,
                             )
                         }
                     },
@@ -274,7 +274,10 @@ private fun VideoList(
                     ClickableRow(
                         text = video.quality,
                         icon = null,
-                        onClick = { selectedVideo = video; showAllQualities = false },
+                        onClick = {
+                            selectedVideo = video
+                            showAllQualities = false
+                        },
                     )
                 }
             }
@@ -301,19 +304,28 @@ private fun QualityOptions(
         ClickableRow(
             text = stringResource(R.string.action_start_download_internally),
             icon = Icons.Outlined.Download,
-            onClick = { onDownloadClicked(); closeMenu() },
+            onClick = {
+                onDownloadClicked()
+                closeMenu()
+            },
         )
 
         ClickableRow(
             text = stringResource(R.string.action_start_download_externally),
             icon = Icons.Outlined.SystemUpdateAlt,
-            onClick = { onExtDownloadClicked(); closeMenu() },
+            onClick = {
+                onExtDownloadClicked()
+                closeMenu()
+            },
         )
 
         ClickableRow(
             text = stringResource(R.string.action_play_externally),
             icon = Icons.Outlined.OpenInNew,
-            onClick = { onExtPlayerClicked(); closeMenu() },
+            onClick = {
+                onExtPlayerClicked()
+                closeMenu()
+            },
         )
     }
 }

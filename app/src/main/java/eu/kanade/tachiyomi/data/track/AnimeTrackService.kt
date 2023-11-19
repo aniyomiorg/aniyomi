@@ -8,7 +8,6 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
-import java.time.ZoneOffset
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
@@ -16,10 +15,11 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
-import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.time.ZoneOffset
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 private val insertTrack: InsertAnimeTrack by injectLazy()
 private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack by injectLazy()
@@ -85,7 +85,7 @@ interface AnimeTrackService {
                         )
                         setRemoteLastEpisodeSeen(
                             track.toDbTrack(),
-                            latestLocalSeenEpisodeNumber.toInt()
+                            latestLocalSeenEpisodeNumber.toInt(),
                         )
                     }
 

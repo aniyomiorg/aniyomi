@@ -104,11 +104,11 @@ private fun MigrateSourceList(
                     when (sortingMode) {
                         SetMigrateSorting.Mode.ALPHABETICAL -> Icon(
                             Icons.Outlined.SortByAlpha,
-                            contentDescription = stringResource(R.string.action_sort_alpha)
+                            contentDescription = stringResource(R.string.action_sort_alpha),
                         )
                         SetMigrateSorting.Mode.TOTAL -> Icon(
                             Icons.Outlined.Numbers,
-                            contentDescription = stringResource(R.string.action_sort_count)
+                            contentDescription = stringResource(R.string.action_sort_count),
                         )
                     }
                 }
@@ -116,11 +116,11 @@ private fun MigrateSourceList(
                     when (sortingDirection) {
                         SetMigrateSorting.Direction.ASCENDING -> Icon(
                             Icons.Outlined.ArrowUpward,
-                            contentDescription = stringResource(R.string.action_asc)
+                            contentDescription = stringResource(R.string.action_asc),
                         )
                         SetMigrateSorting.Direction.DESCENDING -> Icon(
                             Icons.Outlined.ArrowDownward,
-                            contentDescription = stringResource(R.string.action_desc)
+                            contentDescription = stringResource(R.string.action_desc),
                         )
                     }
                 }

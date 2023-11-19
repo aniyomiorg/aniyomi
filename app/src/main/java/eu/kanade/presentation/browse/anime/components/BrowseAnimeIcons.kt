@@ -129,7 +129,7 @@ private fun AnimeExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT
             value = try {
                 val appInfo = AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(
                     context,
-                    pkgName
+                    pkgName,
                 )!!.applicationInfo
                 val appResources = context.packageManager.getResourcesForApplication(appInfo)
                 Result.Success(

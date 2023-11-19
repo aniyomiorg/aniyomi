@@ -15,9 +15,9 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
-import uy.kohesive.injekt.injectLazy
 
 class Anilist(id: Long) : TrackService(id, "AniList"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 

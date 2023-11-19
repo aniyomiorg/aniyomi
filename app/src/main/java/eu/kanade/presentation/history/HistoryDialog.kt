@@ -64,7 +64,7 @@ fun HistoryDeleteDialog(
             TextButton(onClick = {
                 onDelete(removeEverything)
                 onDismissRequest()
-            },) {
+            }) {
                 Text(text = stringResource(R.string.action_remove))
             }
         },
@@ -93,7 +93,7 @@ fun HistoryDeleteAllDialog(
             TextButton(onClick = {
                 onDelete()
                 onDismissRequest()
-            },) {
+            }) {
                 Text(text = stringResource(R.string.action_ok))
             }
         },

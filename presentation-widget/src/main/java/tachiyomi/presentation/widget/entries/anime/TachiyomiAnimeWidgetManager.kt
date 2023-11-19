@@ -22,7 +22,7 @@ class TachiyomiAnimeWidgetManager(
         combine(
             getUpdates.subscribe(
                 seen = false,
-                after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis
+                after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis,
             ),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },

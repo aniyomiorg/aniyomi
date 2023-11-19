@@ -6,8 +6,6 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
-import java.io.IOException
-import java.net.SocketTimeoutException
 import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import okhttp3.Dns
@@ -17,6 +15,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor) {
 
@@ -165,13 +165,13 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
 
     suspend fun updateProgress(track: MangaTrack): MangaTrack {
         val requestUrl = "${getApiFromUrl(track.tracking_url)}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(
-            track.tracking_url
+            track.tracking_url,
         )}&chapterNumber=${track.last_chapter_read}"
         authClient.newCall(
             POST(
                 requestUrl,
-                body = "{}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-            )
+                body = "{}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()),
+            ),
         )
             .awaitSuccess()
         return getTrackSearch(track.tracking_url)

@@ -184,7 +184,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         obj: JsonObject,
         typeName: String,
         type: String,
-        statusString: String
+        statusString: String,
     ): AnimeTrack {
         return AnimeTrack.create(TrackManager.SIMKL).apply {
             title = obj[typeName]!!.jsonObject["title"]!!.jsonPrimitive.content

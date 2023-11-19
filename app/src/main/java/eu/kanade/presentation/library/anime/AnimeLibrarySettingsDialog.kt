@@ -116,7 +116,7 @@ private fun ColumnScope.FilterPage(
         1 -> {
             val service = trackServices[0]
             val filterTracker by screenModel.libraryPreferences.filterTrackedAnime(
-                service.id.toInt()
+                service.id.toInt(),
             ).collectAsState()
             TriStateItem(
                 label = stringResource(R.string.action_filter_tracked),
@@ -128,7 +128,7 @@ private fun ColumnScope.FilterPage(
             HeadingItem(R.string.action_filter_tracked)
             trackServices.map { service ->
                 val filterTracker by screenModel.libraryPreferences.filterTrackedAnime(
-                    service.id.toInt()
+                    service.id.toInt(),
                 ).collectAsState()
                 TriStateItem(
                     label = service.name,

@@ -15,11 +15,13 @@ fun List<Episode>.filterDownloadedEpisodes(anime: Anime): List<Episode> {
 
     val downloadCache: AnimeDownloadCache = Injekt.get()
 
-    return filter { downloadCache.isEpisodeDownloaded(
-        it.name,
-        it.scanlator,
-        anime.title,
-        anime.source,
-        false
-    ) }
+    return filter {
+        downloadCache.isEpisodeDownloaded(
+            it.name,
+            it.scanlator,
+            anime.title,
+            anime.source,
+            false,
+        )
+    }
 }

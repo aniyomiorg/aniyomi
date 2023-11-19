@@ -59,10 +59,6 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -79,11 +75,15 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.DeleteMangaTrack
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.model.MangaTrack
-import tachiyomi.domain.track.manga.model.MangaTrack as DbMangaTrack
 import tachiyomi.presentation.core.components.material.AlertDialogContent
 import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
+import tachiyomi.domain.track.manga.model.MangaTrack as DbMangaTrack
 
 data class MangaTrackInfoDialogHomeScreen(
     private val mangaId: Long,
@@ -96,9 +96,11 @@ data class MangaTrackInfoDialogHomeScreen(
         val context = LocalContext.current
         val sm = rememberScreenModel { Model(mangaId, sourceId) }
 
-        val dateFormat = remember { UiPreferences.dateFormat(
-            Injekt.get<UiPreferences>().dateFormat().get()
-        ) }
+        val dateFormat = remember {
+            UiPreferences.dateFormat(
+                Injekt.get<UiPreferences>().dateFormat().get(),
+            )
+        }
         val state by sm.state.collectAsState()
 
         MangaTrackInfoDialogHome(
@@ -199,9 +201,13 @@ data class MangaTrackInfoDialogHomeScreen(
                     .catch { logcat(LogPriority.ERROR, it) }
                     .distinctUntilChanged()
                     .map { it.mapToTrackItem() }
-                    .collectLatest { trackItems -> mutableState.update { it.copy(
-                        trackItems = trackItems
-                    ) } }
+                    .collectLatest { trackItems ->
+                        mutableState.update {
+                            it.copy(
+                                trackItems = trackItems,
+                            )
+                        }
+                    }
             }
         }
 
@@ -278,7 +284,10 @@ private data class TrackStatusSelectorScreen(
             selection = state.selection,
             onSelectionChange = sm::setSelection,
             selections = remember { sm.getSelections() },
-            onConfirm = { sm.setStatus(); navigator.pop() },
+            onConfirm = {
+                sm.setStatus()
+                navigator.pop()
+            },
             onDismissRequest = navigator::pop,
         )
     }
@@ -329,7 +338,10 @@ private data class TrackChapterSelectorScreen(
             selection = state.selection,
             onSelectionChange = sm::setSelection,
             range = remember { sm.getRange() },
-            onConfirm = { sm.setChapter(); navigator.pop() },
+            onConfirm = {
+                sm.setChapter()
+                navigator.pop()
+            },
             onDismissRequest = navigator::pop,
             isManga = true,
         )
@@ -357,7 +369,7 @@ private data class TrackChapterSelectorScreen(
             coroutineScope.launchNonCancellable {
                 service.mangaService.setRemoteLastChapterRead(
                     track.toDbTrack(),
-                    state.value.selection
+                    state.value.selection,
                 )
             }
         }
@@ -389,7 +401,10 @@ private data class TrackScoreSelectorScreen(
             selection = state.selection,
             onSelectionChange = sm::setSelection,
             selections = remember { sm.getSelections() },
-            onConfirm = { sm.setScore(); navigator.pop() },
+            onConfirm = {
+                sm.setScore()
+                navigator.pop()
+            },
             onDismissRequest = navigator::pop,
         )
     }
@@ -506,7 +521,10 @@ private data class TrackDateSelectorScreen(
             },
             initialSelectedDateMillis = sm.initialSelection,
             selectableDates = selectableDates,
-            onConfirm = { sm.setDate(it); navigator.pop() },
+            onConfirm = {
+                sm.setDate(it)
+                navigator.pop()
+            },
             onRemove = { sm.confirmRemoveDate(navigator) }.takeIf { canRemove },
             onDismissRequest = navigator::pop,
         )
@@ -593,14 +611,17 @@ private data class TrackDateRemoverScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(
                         MaterialTheme.padding.small,
-                        Alignment.End
+                        Alignment.End,
                     ),
                 ) {
                     TextButton(onClick = navigator::pop) {
                         Text(text = stringResource(android.R.string.cancel))
                     }
                     FilledTonalButton(
-                        onClick = { sm.removeDate(); navigator.popUntil { it is MangaTrackInfoDialogHomeScreen } },
+                        onClick = {
+                            sm.removeDate()
+                            navigator.popUntil { it is MangaTrackInfoDialogHomeScreen }
+                        },
                         colors = ButtonDefaults.filledTonalButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
                             contentColor = MaterialTheme.colorScheme.onErrorContainer,
@@ -662,7 +683,10 @@ data class TrackServiceSearchScreen(
             queryResult = state.queryResult,
             selected = state.selected,
             onSelectedChange = sm::updateSelection,
-            onConfirmSelection = { sm.registerTracking(state.selected!!); navigator.pop() },
+            onConfirmSelection = {
+                sm.registerTracking(state.selected!!)
+                navigator.pop()
+            },
             onDismissRequest = navigator::pop,
         )
     }
@@ -760,13 +784,13 @@ private data class TrackMangaServiceRemoveScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Checkbox(
                                 checked = removeRemoteTrack,
-                                onCheckedChange = { removeRemoteTrack = it }
+                                onCheckedChange = { removeRemoteTrack = it },
                             )
                             Text(
                                 text = stringResource(
                                     R.string.track_delete_remote_text,
-                                    serviceName
-                                )
+                                    serviceName,
+                                ),
                             )
                         }
                     }

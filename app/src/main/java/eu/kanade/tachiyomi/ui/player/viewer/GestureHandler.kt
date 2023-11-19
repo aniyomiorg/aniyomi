@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlin.math.abs
 import uy.kohesive.injekt.injectLazy
+import kotlin.math.abs
 
 class GestureHandler(
     private val activity: PlayerActivity,
@@ -34,7 +34,7 @@ class GestureHandler(
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) {
                 activity.doubleTapSeek(
                     -interval,
-                    e
+                    e,
                 )
             } else {
                 return false
@@ -42,7 +42,7 @@ class GestureHandler(
             e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) {
                 activity.doubleTapSeek(
                     interval,
-                    e
+                    e,
                 )
             } else {
                 return false
@@ -58,13 +58,16 @@ class GestureHandler(
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        if (SeekState.mode == SeekState.LOCKED) { playerControls.toggleControls(); return false }
+        if (SeekState.mode == SeekState.LOCKED) {
+            playerControls.toggleControls()
+            return false
+        }
         if (activity.player.timePos == null || activity.player.duration == null) return false
         when {
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) {
                 activity.doubleTapSeek(
                     -interval,
-                    e
+                    e,
                 )
             } else {
                 return false
@@ -72,7 +75,7 @@ class GestureHandler(
             e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) {
                 activity.doubleTapSeek(
                     interval,
-                    e
+                    e,
                 )
             } else {
                 return false
@@ -92,7 +95,8 @@ class GestureHandler(
     ): Boolean {
         if (e1 != null) {
             if (SeekState.mode == SeekState.LOCKED) {
-                playerControls.toggleControls(); return false
+                playerControls.toggleControls()
+                return false
             }
             if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
             val dx = e1.x - e2.x
@@ -144,12 +148,14 @@ class GestureHandler(
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
             if (scrollState == STATE_HORIZONTAL) {
-                scrollDiff?.let { if (preferences.gestureHorizontalSeek().get()) {
-                    activity.horizontalScroll(
-                        it,
-                        final = true
-                    )
-                } }
+                scrollDiff?.let {
+                    if (preferences.gestureHorizontalSeek().get()) {
+                        activity.horizontalScroll(
+                            it,
+                            final = true,
+                        )
+                    }
+                }
                 scrollDiff = null
                 playerControls.resetControlsFade()
             }
@@ -161,7 +167,10 @@ class GestureHandler(
     }
 
     override fun onLongPress(e: MotionEvent) {
-        if (SeekState.mode == SeekState.LOCKED) { playerControls.toggleControls(); return }
+        if (SeekState.mode == SeekState.LOCKED) {
+            playerControls.toggleControls()
+            return
+        }
         activity.viewModel.showScreenshotOptions()
     }
 }

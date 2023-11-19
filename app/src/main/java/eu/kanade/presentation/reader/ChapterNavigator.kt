@@ -78,7 +78,7 @@ fun ChapterNavigator(
                 Icon(
                     imageVector = Icons.Outlined.SkipPrevious,
                     contentDescription = stringResource(
-                        if (isRtl) R.string.action_next_chapter else R.string.action_previous_chapter
+                        if (isRtl) R.string.action_next_chapter else R.string.action_previous_chapter,
                     ),
                 )
             }
@@ -131,7 +131,7 @@ fun ChapterNavigator(
                 Icon(
                     imageVector = Icons.Outlined.SkipNext,
                     contentDescription = stringResource(
-                        if (isRtl) R.string.action_previous_chapter else R.string.action_next_chapter
+                        if (isRtl) R.string.action_previous_chapter else R.string.action_next_chapter,
                     ),
                 )
             }

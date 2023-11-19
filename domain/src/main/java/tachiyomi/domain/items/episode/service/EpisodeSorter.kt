@@ -5,7 +5,7 @@ import tachiyomi.domain.items.episode.model.Episode
 
 fun getEpisodeSort(anime: Anime, sortDescending: Boolean = anime.sortDescending()): (
     Episode,
-    Episode
+    Episode,
 ) -> Int {
     return when (anime.sorting) {
         Anime.EPISODE_SORTING_SOURCE -> when (sortDescending) {

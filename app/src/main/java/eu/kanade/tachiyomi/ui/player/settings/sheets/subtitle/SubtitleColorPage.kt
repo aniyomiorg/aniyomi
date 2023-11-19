@@ -38,12 +38,12 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
-import kotlin.math.floor
-import kotlin.math.max
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.collectAsState
+import kotlin.math.floor
+import kotlin.math.max
 
 @Composable
 fun SubtitleColorPage(screenModel: PlayerSettingsScreenModel) {
@@ -232,7 +232,7 @@ private fun SubtitleColorSlider(
 
 private enum class SubsColor(
     val mpvProperty: String,
-    val preference: (PlayerPreferences) -> Preference<Int>
+    val preference: (PlayerPreferences) -> Preference<Int>,
 ) {
     NONE("", PlayerPreferences::textColorSubtitles),
     TEXT("sub-color", PlayerPreferences::textColorSubtitles),
@@ -245,7 +245,7 @@ private enum class ARGBValue(
     val mask: Long,
     val bitShift: Int,
     val toValue: (Int) -> Int,
-    val asColor: (Int) -> Color
+    val asColor: (Int) -> Color,
 ) {
 
     ALPHA(R.string.color_filter_a_value, 0xFF000000L, 24, ::toAlpha, ::asAlpha),

@@ -18,7 +18,7 @@ val animeUpdateWithRelationMapper: (
     String?,
     Long,
     Long,
-    Long
+    Long,
 ) -> AnimeUpdatesWithRelations = {
         animeId, animeTitle, episodeId, episodeName, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->
     AnimeUpdatesWithRelations(

@@ -26,7 +26,7 @@ val animeMapper: (
     UpdateStrategy,
     Long,
     Long,
-    Long?
+    Long?,
 ) -> Anime =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, episodeFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt ->
         Anime(
@@ -84,7 +84,7 @@ val libraryAnime: (
     Long,
     Long,
     Double,
-    Long
+    Long,
 ) -> LibraryAnime =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, episodeFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt, totalCount, seenCount, latestUpload, episodeFetchedAt, lastSeen, bookmarkCount, category ->
         LibraryAnime(

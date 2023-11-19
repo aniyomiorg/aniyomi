@@ -19,8 +19,8 @@ import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
-import kotlin.math.abs
 import tachiyomi.core.util.lang.withUIContext
+import kotlin.math.abs
 
 class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
@@ -67,7 +67,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 player.timePos = value.toInt()
             } else {
                 MPVLib.command(
-                    arrayOf("seek", value.toInt().toString(), "absolute+keyframes")
+                    arrayOf("seek", value.toInt().toString(), "absolute+keyframes"),
                 )
             }
             SeekState.mode = SeekState.NONE
@@ -93,7 +93,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.unlockBtn.setOnClickListener { lockControls(false) }
 
         // Long click controls
-        binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
+        binding.cycleSpeedBtn.setOnLongClickListener {
+            activity.viewModel.showSpeedPicker()
+            true
+        }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -103,13 +106,16 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
 
-        binding.controlsSkipIntroBtn.setOnLongClickListener { activity.viewModel.showSkipIntroLength(); true }
+        binding.controlsSkipIntroBtn.setOnLongClickListener {
+            activity.viewModel.showSkipIntroLength()
+            true
+        }
 
         binding.playbackPositionBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
                 playerPreferences.invertedDurationTxt().set(false)
                 playerPreferences.invertedPlaybackTxt().set(
-                    !playerPreferences.invertedPlaybackTxt().get()
+                    !playerPreferences.invertedPlaybackTxt().get(),
                 )
                 updatePlaybackPos(player.timePos!!)
                 updatePlaybackDuration(player.duration!!)
@@ -120,16 +126,18 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             if (player.timePos != null && player.duration != null) {
                 playerPreferences.invertedPlaybackTxt().set(false)
                 playerPreferences.invertedDurationTxt().set(
-                    !playerPreferences.invertedDurationTxt().get()
+                    !playerPreferences.invertedDurationTxt().get(),
                 )
                 updatePlaybackPos(player.timePos!!)
                 updatePlaybackDuration(player.duration!!)
             }
         }
 
-        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> toggleAutoplay(
-            isChecked
-        ) }
+        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
+            toggleAutoplay(
+                isChecked,
+            )
+        }
 
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
@@ -154,7 +162,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         val viewModel = activity.viewModel
         val skipIntroText = activity.getString(
             R.string.player_controls_skip_intro_text,
-            viewModel.getAnimeSkipIntroLength()
+            viewModel.getAnimeSkipIntroLength(),
         )
         withUIContext {
             binding.titleMainTxt.text = viewModel.currentAnime?.title
@@ -222,7 +230,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             animationHandler.removeCallbacks(nonSeekViewRunnable)
             animationHandler.postDelayed(
                 nonSeekViewRunnable,
-                600L + resources.getInteger(R.integer.player_animation_duration).toLong()
+                600L + resources.getInteger(R.integer.player_animation_duration).toLong(),
             )
         }
     }
@@ -345,20 +353,20 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         binding.seekBarGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_exit_bottom)
+            AnimationUtils.loadAnimation(context, R.anim.player_exit_bottom),
         )
         if (!showControls) {
             binding.topControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_exit_top)
+                AnimationUtils.loadAnimation(context, R.anim.player_exit_top),
             )
             binding.bottomRightControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_exit_right)
+                AnimationUtils.loadAnimation(context, R.anim.player_exit_right),
             )
             binding.bottomLeftControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_exit_left)
+                AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
             )
             binding.middleControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_fade_out)
+                AnimationUtils.loadAnimation(context, R.anim.player_fade_out),
             )
         }
         showControls = false
@@ -374,19 +382,19 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         binding.seekBarGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_bottom)
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_bottom),
         )
         binding.topControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_top)
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_top),
         )
         binding.bottomRightControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_right)
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_right),
         )
         binding.bottomLeftControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_left)
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
         )
         binding.middleControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_fade_in)
+            AnimationUtils.loadAnimation(context, R.anim.player_fade_in),
         )
     }
 
@@ -482,7 +490,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         AnimationUtils.loadAnimation(context, R.anim.player_exit_left).also { slideAnimation ->
             if (SeekState.mode != SeekState.SCROLL) {
                 binding.volumeView.startAnimation(
-                    slideAnimation
+                    slideAnimation,
                 )
             }
             binding.volumeView.visibility = View.GONE
@@ -494,7 +502,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         AnimationUtils.loadAnimation(context, R.anim.player_exit_right).also { slideAnimation ->
             if (SeekState.mode != SeekState.SCROLL) {
                 binding.brightnessView.startAnimation(
-                    slideAnimation
+                    slideAnimation,
                 )
             }
             binding.brightnessView.visibility = View.GONE
@@ -517,7 +525,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 delay = 750L
                 if (!itemView.isVisible) {
                     itemView.startAnimation(
-                        AnimationUtils.loadAnimation(context, R.anim.player_enter_left)
+                        AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
                     )
                 }
             }
@@ -527,7 +535,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 delay = 750L
                 if (!itemView.isVisible) {
                     itemView.startAnimation(
-                        AnimationUtils.loadAnimation(context, R.anim.player_enter_right)
+                        AnimationUtils.loadAnimation(context, R.anim.player_enter_right),
                     )
                 }
             }
@@ -547,7 +555,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         activity.binding.seekText.text = activity.getString(
             R.string.ui_seek_distance,
             Utils.prettyTime(position),
-            diffText
+            diffText,
         )
         showGestureView("seek")
     }

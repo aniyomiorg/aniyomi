@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +30,7 @@ import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.time.Duration.Companion.seconds
 
 class MangaExtensionsScreenModel(
     preferences: SourcePreferences = Injekt.get(),
@@ -65,17 +65,19 @@ class MangaExtensionsScreenModel(
                             extension.sources.any {
                                 it.name.contains(input, ignoreCase = true) ||
                                     it.id == input.toLongOrNull() ||
-                                    if (it is HttpSource) { it.baseUrl.contains(
-                                        input,
-                                        ignoreCase = true
-                                    ) } else {
+                                    if (it is HttpSource) {
+                                        it.baseUrl.contains(
+                                            input,
+                                            ignoreCase = true,
+                                        )
+                                    } else {
                                         false
                                     }
                             } || extension.name.contains(input, ignoreCase = true)
                         }
                         is MangaExtension.Untrusted -> extension.name.contains(
                             input,
-                            ignoreCase = true
+                            ignoreCase = true,
                         )
                     }
                 }
@@ -93,17 +95,17 @@ class MangaExtensionsScreenModel(
                 val itemsGroups: ItemGroups = mutableMapOf()
 
                 val updates = _updates.filter(queryFilter(searchQuery)).map(
-                    extensionMapper(downloads)
+                    extensionMapper(downloads),
                 )
                 if (updates.isNotEmpty()) {
                     itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(
-                    extensionMapper(downloads)
+                    extensionMapper(downloads),
                 )
                 val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(
-                    extensionMapper(downloads)
+                    extensionMapper(downloads),
                 )
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
                     itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
@@ -115,7 +117,7 @@ class MangaExtensionsScreenModel(
                     .toSortedMap(LocaleHelper.comparator)
                     .map { (lang, exts) ->
                         MangaExtensionUiModel.Header.Text(
-                            LocaleHelper.getSourceDisplayName(lang, context)
+                            LocaleHelper.getSourceDisplayName(lang, context),
                         ) to exts.map(extensionMapper(downloads))
                     }
 

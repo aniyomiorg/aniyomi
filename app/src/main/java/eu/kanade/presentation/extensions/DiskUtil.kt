@@ -12,7 +12,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 @Composable
 fun DiskUtil.RequestStoragePermission() {
     val permissionState = rememberPermissionState(
-        permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()

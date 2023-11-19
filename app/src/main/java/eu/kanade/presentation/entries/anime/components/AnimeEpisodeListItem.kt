@@ -51,13 +51,13 @@ import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import kotlin.math.absoluteValue
 import me.saket.swipe.SwipeableActionsBox
 import me.saket.swipe.rememberSwipeableActionsState
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
 import tachiyomi.presentation.core.util.selectedBackground
+import kotlin.math.absoluteValue
 
 @Composable
 fun AnimeEpisodeListItem(
@@ -157,11 +157,11 @@ fun AnimeEpisodeListItem(
                             Icon(
                                 imageVector = Icons.Filled.Bookmark,
                                 contentDescription = stringResource(
-                                    R.string.action_filter_bookmarked
+                                    R.string.action_filter_bookmarked,
                                 ),
                                 modifier = Modifier
                                     .sizeIn(
-                                        maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }
+                                        maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
                                     ),
                                 tint = MaterialTheme.colorScheme.primary,
                             )

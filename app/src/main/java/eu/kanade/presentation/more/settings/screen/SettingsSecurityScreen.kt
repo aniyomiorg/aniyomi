@@ -57,7 +57,7 @@ object SettingsSecurityScreen : SearchableSettings {
                             else -> pluralStringResource(
                                 id = R.plurals.lock_after_mins,
                                 count = it,
-                                it
+                                it,
                             )
                         }
                     },

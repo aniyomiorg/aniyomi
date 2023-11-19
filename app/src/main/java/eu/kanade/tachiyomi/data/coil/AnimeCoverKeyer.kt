@@ -4,10 +4,10 @@ import coil.key.Keyer
 import coil.request.Options
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
 
 class AnimeKeyer : Keyer<DomainAnime> {
     override fun key(data: DomainAnime, options: Options): String {

@@ -71,8 +71,6 @@ import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenModel
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import java.text.DateFormat
-import java.util.Date
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.service.missingItemsCount
@@ -85,6 +83,8 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
+import java.text.DateFormat
+import java.util.Date
 
 @Composable
 fun MangaScreen(
@@ -593,10 +593,12 @@ fun MangaScreenLargeImpl(
                             }
                             Text(text = stringResource(id))
                         },
-                        icon = { Icon(
-                            imageVector = Icons.Filled.PlayArrow,
-                            contentDescription = null
-                        ) },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.PlayArrow,
+                                contentDescription = null,
+                            )
+                        },
                         onClick = onContinueReading,
                         expanded = chapterListState.isScrollingUp() || chapterListState.isScrolledToEnd(),
                     )
@@ -794,12 +796,14 @@ private fun LazyListScope.sharedChapterItems(
                 onChapterItemClick(
                     chapterItem = chapterItem,
                     chapters = chapters,
-                    onToggleSelection = { onChapterSelected(
-                        chapterItem,
-                        !chapterItem.selected,
-                        true,
-                        false
-                    ) },
+                    onToggleSelection = {
+                        onChapterSelected(
+                            chapterItem,
+                            !chapterItem.selected,
+                            true,
+                            false,
+                        )
+                    },
                     onChapterClicked = onChapterClicked,
                 )
             },

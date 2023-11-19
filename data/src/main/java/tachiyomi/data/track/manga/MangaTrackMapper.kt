@@ -15,7 +15,7 @@ val mangaTrackMapper: (
     Double,
     String,
     Long,
-    Long
+    Long,
 ) -> MangaTrack =
     { id, mangaId, syncId, remoteId, libraryId, title, lastChapterRead, totalChapters, status, score, remoteUrl, startDate, finishDate ->
         MangaTrack(

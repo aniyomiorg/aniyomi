@@ -14,7 +14,7 @@ val Context.animatorDurationScale: Float
     get() = Settings.Global.getFloat(
         this.contentResolver,
         Settings.Global.ANIMATOR_DURATION_SCALE,
-        1f
+        1f,
     )
 
 /** Scale the duration of this [Animation] by [Context.animatorDurationScale] */

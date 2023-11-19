@@ -16,6 +16,6 @@ class BackupPreferences(
 
     fun backupFlags() = preferenceStore.getStringSet(
         "backup_flags",
-        setOf(FLAG_CATEGORIES, FLAG_CHAPTERS, FLAG_HISTORY, FLAG_TRACK)
+        setOf(FLAG_CATEGORIES, FLAG_CHAPTERS, FLAG_HISTORY, FLAG_TRACK),
     )
 }

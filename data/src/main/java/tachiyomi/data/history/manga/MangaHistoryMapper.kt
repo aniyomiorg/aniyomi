@@ -1,9 +1,9 @@
 package tachiyomi.data.history.manga
 
-import java.util.Date
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.history.manga.model.MangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
+import java.util.Date
 
 val mangaHistoryMapper: (Long, Long, Date?, Long) -> MangaHistory = { id, chapterId, readAt, readDuration ->
     MangaHistory(
@@ -25,7 +25,7 @@ val mangaHistoryWithRelationsMapper: (
     Long,
     Double,
     Date?,
-    Long
+    Long,
 ) -> MangaHistoryWithRelations = {
         historyId, mangaId, chapterId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, chapterNumber, readAt, readDuration ->
     MangaHistoryWithRelations(

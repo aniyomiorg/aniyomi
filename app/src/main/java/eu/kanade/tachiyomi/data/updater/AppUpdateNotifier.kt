@@ -41,7 +41,7 @@ internal class AppUpdateNotifier(private val context: Context) {
                 context,
                 0,
                 this,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -51,7 +51,7 @@ internal class AppUpdateNotifier(private val context: Context) {
                 context,
                 release.hashCode(),
                 this,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         }
 
@@ -85,7 +85,7 @@ internal class AppUpdateNotifier(private val context: Context) {
         with(notificationBuilder) {
             title?.let { setContentTitle(title) }
             setContentText(
-                context.getString(R.string.update_check_notification_download_in_progress)
+                context.getString(R.string.update_check_notification_download_in_progress),
             )
             setSmallIcon(android.R.drawable.stat_sys_download)
             setOngoing(true)
@@ -140,7 +140,7 @@ internal class AppUpdateNotifier(private val context: Context) {
                 context.getString(R.string.action_cancel),
                 NotificationReceiver.dismissNotificationPendingBroadcast(
                     context,
-                    Notifications.ID_APP_UPDATE_PROMPT
+                    Notifications.ID_APP_UPDATE_PROMPT,
                 ),
             )
         }
@@ -161,8 +161,8 @@ internal class AppUpdateNotifier(private val context: Context) {
             setContentIntent(
                 NotificationHandler.openUrl(
                     context,
-                    "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version"
-                )
+                    "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version",
+                ),
             )
         }
         notificationBuilder.show(Notifications.ID_APP_UPDATE_PROMPT)

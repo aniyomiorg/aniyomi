@@ -26,10 +26,12 @@ class AnimeHistoryRepositoryImpl(
     }
 
     override suspend fun getHistoryByAnimeId(animeId: Long): List<AnimeHistory> {
-        return handler.awaitList { animehistoryQueries.getHistoryByAnimeId(
-            animeId,
-            animeHistoryMapper
-        ) }
+        return handler.awaitList {
+            animehistoryQueries.getHistoryByAnimeId(
+                animeId,
+                animeHistoryMapper,
+            )
+        }
     }
 
     override suspend fun resetAnimeHistory(historyId: Long) {

@@ -29,9 +29,6 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
-import java.text.Collator
-import java.util.Collections
-import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -68,6 +65,9 @@ import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.Collator
+import java.util.Collections
+import java.util.Locale
 
 /**
  * Typealias for the library manga, using the category as keys, and list of manga as values.
@@ -93,7 +93,7 @@ class MangaLibraryScreenModel(
 ) : StateScreenModel<MangaLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
-        coroutineScope
+        coroutineScope,
     )
 
     init {
@@ -247,7 +247,7 @@ class MangaLibraryScreenModel(
         val sortAlphabetically: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
             collator.compare(
                 i1.libraryManga.manga.title.lowercase(locale),
-                i2.libraryManga.manga.title.lowercase(locale)
+                i2.libraryManga.manga.title.lowercase(locale),
             )
         }
 
@@ -513,7 +513,7 @@ class MangaLibraryScreenModel(
     fun setMangaCategories(
         mangaList: List<Manga>,
         addCategories: List<Long>,
-        removeCategories: List<Long>
+        removeCategories: List<Long>,
     ) {
         coroutineScope.launchNonCancellable {
             mangaList.forEach { manga ->
@@ -534,7 +534,7 @@ class MangaLibraryScreenModel(
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
         return (if (isLandscape) libraryPreferences.mangaLandscapeColumns() else libraryPreferences.mangaPortraitColumns()).asState(
-            coroutineScope
+            coroutineScope,
         )
     }
 
@@ -673,7 +673,7 @@ class MangaLibraryScreenModel(
         data object SettingsSheet : Dialog
         data class ChangeCategory(
             val manga: List<Manga>,
-            val initialSelection: List<CheckboxState<Category>>
+            val initialSelection: List<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteManga(val manga: List<Manga>) : Dialog
     }
