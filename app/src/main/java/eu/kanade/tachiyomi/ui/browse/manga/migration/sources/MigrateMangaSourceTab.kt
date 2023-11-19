@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreen
 fun Screen.migrateMangaSourceTab(): TabContent {
     val uriHandler = LocalUriHandler.current
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = rememberScreenModel { MigrateSourceScreenModel() }
+    val screenModel = rememberScreenModel { MigrateMangaSourceScreenModel() }
     val state by screenModel.state.collectAsState()
 
     return TabContent(

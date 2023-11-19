@@ -26,7 +26,7 @@ import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateSourceScreenModel
+import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceScreenModel
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.presentation.core.components.Badge
@@ -43,7 +43,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MigrateMangaSourceScreen(
-    state: MigrateSourceScreenModel.State,
+    state: MigrateMangaSourceScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (Source) -> Unit,
     onToggleSortingDirection: () -> Unit,

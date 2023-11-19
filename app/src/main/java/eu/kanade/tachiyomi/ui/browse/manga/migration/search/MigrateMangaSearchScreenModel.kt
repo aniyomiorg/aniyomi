@@ -10,7 +10,7 @@ import tachiyomi.domain.entries.manga.interactor.GetManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class MigrateSearchScreenModel(
+class MigrateMangaSearchScreenModel(
     val mangaId: Long,
     initialExtensionFilter: String = "",
     getManga: GetManga = Injekt.get(),

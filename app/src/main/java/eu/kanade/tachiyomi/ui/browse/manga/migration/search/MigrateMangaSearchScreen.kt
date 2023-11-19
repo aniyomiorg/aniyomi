@@ -10,13 +10,13 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSearchScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 
-class MigrateSearchScreen(private val mangaId: Long) : Screen() {
+class MigrateMangaSearchScreen(private val mangaId: Long) : Screen() {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val screenModel = rememberScreenModel { MigrateSearchScreenModel(mangaId = mangaId) }
+        val screenModel = rememberScreenModel { MigrateMangaSearchScreenModel(mangaId = mangaId) }
         val state by screenModel.state.collectAsState()
 
         val dialogScreenModel = rememberScreenModel {

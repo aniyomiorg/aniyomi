@@ -1,6 +1,6 @@
 package eu.kanade.domain
 
-import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
+import eu.kanade.domain.download.anime.interactor.DeleteEpisodeDownload
 import eu.kanade.domain.download.manga.interactor.DeleteChapterDownload
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
@@ -251,7 +251,7 @@ class DomainModule : InjektModule {
         addFactory { UpsertAnimeHistory(get()) }
         addFactory { RemoveAnimeHistory(get()) }
 
-        addFactory { DeleteAnimeDownload(get(), get()) }
+        addFactory { DeleteEpisodeDownload(get(), get()) }
 
         addFactory { GetAnimeExtensionsByType(get(), get()) }
         addFactory { GetAnimeExtensionSources(get()) }

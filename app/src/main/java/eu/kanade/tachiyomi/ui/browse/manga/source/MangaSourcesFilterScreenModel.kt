@@ -17,12 +17,12 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.SortedMap
 
-class SourcesFilterScreenModel(
+class MangaSourcesFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
     private val getLanguagesWithSources: GetLanguagesWithMangaSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-) : StateScreenModel<SourcesFilterScreenModel.State>(State.Loading) {
+) : StateScreenModel<MangaSourcesFilterScreenModel.State>(State.Loading) {
 
     init {
         coroutineScope.launch {

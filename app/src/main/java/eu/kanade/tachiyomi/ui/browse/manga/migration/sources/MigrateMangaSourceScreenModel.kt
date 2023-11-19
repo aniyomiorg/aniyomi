@@ -20,11 +20,11 @@ import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class MigrateSourceScreenModel(
+class MigrateMangaSourceScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val getSourcesWithFavoriteCount: GetMangaSourcesWithFavoriteCount = Injekt.get(),
     private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
-) : StateScreenModel<MigrateSourceScreenModel.State>(State()) {
+) : StateScreenModel<MigrateMangaSourceScreenModel.State>(State()) {
 
     private val _channel = Channel<Event>(Int.MAX_VALUE)
     val channel = _channel.receiveAsFlow()
