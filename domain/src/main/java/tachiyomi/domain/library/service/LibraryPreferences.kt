@@ -328,22 +328,22 @@ class LibraryPreferences(
 
     fun groupAnimeLibraryUpdateType() = preferenceStore.getEnum(
         "group_anime_library_update_type",
-        AnimeGroupLibraryMode.GLOBAL
+        AnimeGroupLibraryMode.GLOBAL,
     )
 
     fun groupMangaLibraryUpdateType() = preferenceStore.getEnum(
         "group_library_update_type",
-        MangaGroupLibraryMode.GLOBAL
+        MangaGroupLibraryMode.GLOBAL,
     )
 
     fun groupAnimeLibraryBy() = preferenceStore.getInt(
         "group_anime_library_by",
-        AnimeLibraryGroup.BY_DEFAULT
+        AnimeLibraryGroup.BY_DEFAULT,
     )
 
     fun groupMangaLibraryBy() = preferenceStore.getInt(
         "group_library_by",
-        MangaLibraryGroup.BY_DEFAULT
+        MangaLibraryGroup.BY_DEFAULT,
     )
 
     // SY <--

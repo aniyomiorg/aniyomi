@@ -434,7 +434,7 @@ object Migrations {
                     connectionsPreferences.setConnectionsCredentials(
                         connectionsManager.discord,
                         "Discord",
-                        "Logged In"
+                        "Logged In",
                     )
                 }
                 // <-- AM (DISCORD)

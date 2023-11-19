@@ -2,6 +2,7 @@ import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.BasePlugin
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
 
 buildscript {
     dependencies {
@@ -20,6 +21,9 @@ subprojects {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
         }
+    }
+
+    tasks.withType<KtLintFormatTask> {
     }
 
     tasks.withType<Test> {

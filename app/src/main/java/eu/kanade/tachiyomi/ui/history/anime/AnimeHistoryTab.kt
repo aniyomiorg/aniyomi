@@ -53,7 +53,7 @@ fun Screen.animeHistoryTab(
                 episode.animeId,
                 episode.id,
                 episode.url,
-                extPlayer
+                extPlayer,
             )
         } else {
             snackbarHostState.showSnackbar(context.getString(R.string.no_next_episode))

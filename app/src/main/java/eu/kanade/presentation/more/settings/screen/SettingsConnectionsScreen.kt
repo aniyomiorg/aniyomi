@@ -91,10 +91,10 @@ object SettingsConnectionsScreen : SearchableSettings {
                         openSettings = { navigator.push(SettingsDiscordScreen) },
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        stringResource(R.string.connections_discord_info)
+                        stringResource(R.string.connections_discord_info),
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        stringResource(R.string.connections_info)
+                        stringResource(R.string.connections_info),
                     ),
                 ),
             ),

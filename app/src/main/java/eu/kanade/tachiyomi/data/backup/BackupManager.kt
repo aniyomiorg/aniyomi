@@ -283,7 +283,7 @@ class BackupManager(
             // SY -->
             if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) {
                 getCustomMangaInfo.get(
-                    manga.id
+                    manga.id,
                 )
             } else {
                 null
@@ -362,7 +362,7 @@ class BackupManager(
             // SY -->
             if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) {
                 getCustomAnimeInfo.get(
-                    anime.id
+                    anime.id,
                 )
             } else {
                 null

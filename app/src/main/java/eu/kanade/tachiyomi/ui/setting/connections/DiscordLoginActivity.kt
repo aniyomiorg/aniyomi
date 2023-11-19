@@ -14,8 +14,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.toast
-import java.io.File
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 
 class DiscordLoginActivity : BaseActivity() {
 
@@ -61,7 +61,7 @@ class DiscordLoginActivity : BaseActivity() {
         connectionsPreferences.setConnectionsCredentials(
             connectionsManager.discord,
             "Discord",
-            "Logged In"
+            "Logged In",
         )
         toast(R.string.login_success)
         applicationInfo.dataDir.let { File("$it/app_webview/").deleteRecursively() }

@@ -794,7 +794,7 @@ class AnimeLibraryScreenModel(
                             sourceManager.getOrStub(it)
                         }
                         .sortedWith(
-                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } }
+                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } },
                         )
                         .map { it.id }
                 }.mapKeys {
@@ -844,7 +844,7 @@ class AnimeLibraryScreenModel(
                             SAnime.CANCELLED.toLong() -> context.getString(R.string.cancelled)
                             SAnime.ON_HIATUS.toLong() -> context.getString(R.string.on_hiatus)
                             SAnime.PUBLISHING_FINISHED.toLong() -> context.getString(
-                                R.string.publishing_finished
+                                R.string.publishing_finished,
                             )
                             SAnime.COMPLETED.toLong() -> context.getString(R.string.completed)
                             else -> context.getString(R.string.unknown)

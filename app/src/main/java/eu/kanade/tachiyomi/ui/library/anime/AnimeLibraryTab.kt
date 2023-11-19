@@ -138,7 +138,7 @@ object AnimeLibraryTab : Tab() {
                 episode.animeId,
                 episode.id,
                 episode.url,
-                extPlayer
+                extPlayer,
             )
         }
 

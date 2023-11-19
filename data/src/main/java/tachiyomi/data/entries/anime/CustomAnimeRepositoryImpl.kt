@@ -1,13 +1,13 @@
 package tachiyomi.data.entries.anime
 
 import android.content.Context
-import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
 import tachiyomi.domain.entries.anime.repository.CustomAnimeRepository
+import java.io.File
 
 class CustomAnimeRepositoryImpl(context: Context) : CustomAnimeRepository {
     private val editJson = File(context.getExternalFilesDir(null), "AnimeEdits.json")

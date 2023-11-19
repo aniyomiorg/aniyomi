@@ -174,7 +174,7 @@ data class ReaderData(
 enum class DiscordScreen(
     @StringRes val text: Int,
     @StringRes val details: Int,
-    val imageUrl: String
+    val imageUrl: String,
 ) {
     APP(R.string.app_name, R.string.browsing, kuukiyomiImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),

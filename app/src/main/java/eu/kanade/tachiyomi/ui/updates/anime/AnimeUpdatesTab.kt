@@ -60,7 +60,7 @@ fun Screen.animeUpdatesTab(
             update.animeId,
             update.episodeId,
             episode?.url,
-            extPlayer
+            extPlayer,
         )
     }
 

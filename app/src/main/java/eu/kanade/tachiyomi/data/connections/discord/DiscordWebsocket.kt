@@ -6,9 +6,6 @@
 package eu.kanade.tachiyomi.data.connections.discord
 
 import android.util.Log
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.CoroutineContext
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,6 +23,9 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration.Companion.milliseconds
 
 sealed interface DiscordWebSocket : CoroutineScope {
     suspend fun sendActivity(presence: Presence)

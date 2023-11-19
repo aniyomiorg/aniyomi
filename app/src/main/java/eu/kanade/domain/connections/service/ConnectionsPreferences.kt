@@ -24,7 +24,7 @@ class ConnectionsPreferences(
 
     fun connectionsToken(sync: ConnectionsService) = preferenceStore.getString(
         connectionsToken(sync.id),
-        ""
+        "",
     )
 
     fun enableDiscordRPC() = preferenceStore.getBoolean("pref_enable_discord_rpc", false)
@@ -35,7 +35,7 @@ class ConnectionsPreferences(
 
     fun discordRPCIncognitoCategories() = preferenceStore.getStringSet(
         "discord_rpc_incognito_categories",
-        emptySet()
+        emptySet(),
     )
 
     companion object {

@@ -117,7 +117,7 @@ private fun onViewCreated(
     anime: Anime,
     context: Context,
     binding: EditAnimeDialogBinding,
-    scope: CoroutineScope
+    scope: CoroutineScope,
 ) {
     loadCover(anime, context, binding)
 
@@ -255,8 +255,9 @@ private fun ChipGroup.setChips(items: List<String>, scope: CoroutineScope) {
 private fun ChipGroup.getTextStrings(): List<String> = children.mapNotNull {
     if (it is Chip && !it.text.toString().contains(
             context.getString(R.string.add_tag),
-            ignoreCase = true
-        )) {
+            ignoreCase = true,
+        )
+    ) {
         it.text.toString()
     } else {
         null
