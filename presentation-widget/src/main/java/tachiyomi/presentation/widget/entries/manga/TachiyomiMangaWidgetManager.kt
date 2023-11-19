@@ -20,7 +20,10 @@ class TachiyomiMangaWidgetManager(
 
     fun Context.init(scope: LifecycleCoroutineScope) {
         combine(
-            getUpdates.subscribe(read = false, after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis),
+            getUpdates.subscribe(
+                read = false,
+                after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis
+            ),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },
         )

@@ -2,8 +2,8 @@ package tachiyomi.source.local.io.anime
 
 import android.content.Context
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import tachiyomi.source.local.R
 import java.io.File
+import tachiyomi.source.local.R
 
 actual class LocalAnimeSourceFileSystem(
     private val context: Context,

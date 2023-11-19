@@ -41,7 +41,11 @@ class KomgaApi(private val client: OkHttpClient) {
                 }
 
                 val progress = client
-                    .newCall(GET("${url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi"))
+                    .newCall(
+                        GET(
+                            "${url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi"
+                        )
+                    )
                     .awaitSuccess().let {
                         with(json) {
                             if (url.contains("/api/v1/series/")) {
@@ -77,7 +81,9 @@ class KomgaApi(private val client: OkHttpClient) {
         }
         client.newCall(
             Request.Builder()
-                .url("${track.tracking_url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi")
+                .url(
+                    "${track.tracking_url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi"
+                )
                 .put(payload.toRequestBody("application/json".toMediaType()))
                 .build(),
         )
@@ -91,7 +97,9 @@ class KomgaApi(private val client: OkHttpClient) {
         it.publishing_status = metadata.status
     }
 
-    private fun ReadListDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackManager.KOMGA).also {
+    private fun ReadListDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(
+        TrackManager.KOMGA
+    ).also {
         it.title = name
     }
 }

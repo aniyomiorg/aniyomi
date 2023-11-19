@@ -75,7 +75,10 @@ class WorkerInfoScreen : Screen() {
                                     title = stringResource(R.string.action_copy_to_clipboard),
                                     icon = Icons.Default.ContentCopy,
                                     onClick = {
-                                        context.copyToClipboard(title, enqueued + finished + running)
+                                        context.copyToClipboard(
+                                            title,
+                                            enqueued + finished + running
+                                        )
                                     },
                                 ),
                             ),
@@ -123,7 +126,13 @@ class WorkerInfoScreen : Screen() {
         private val workManager = context.workManager
 
         val finished = workManager
-            .getWorkInfosLiveData(WorkQuery.fromStates(WorkInfo.State.SUCCEEDED, WorkInfo.State.FAILED, WorkInfo.State.CANCELLED))
+            .getWorkInfosLiveData(
+                WorkQuery.fromStates(
+                    WorkInfo.State.SUCCEEDED,
+                    WorkInfo.State.FAILED,
+                    WorkInfo.State.CANCELLED
+                )
+            )
             .asFlow()
             .map(::constructString)
             .stateIn(ioCoroutineScope, SharingStarted.WhileSubscribed(), "")

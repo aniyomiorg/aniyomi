@@ -9,6 +9,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
+import java.util.concurrent.Executors
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
@@ -26,7 +27,6 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.concurrent.Executors
 
 abstract class MangaSearchScreenModel(
     initialState: State = State(),
@@ -124,7 +124,9 @@ abstract class MangaSearchScreenModel(
         // Reuse previous results if possible
         if (sameQuery) {
             val existingResults = state.value.items
-            updateItems(sources.associateWith { existingResults[it] ?: MangaSearchItemResult.Loading })
+            updateItems(
+                sources.associateWith { existingResults[it] ?: MangaSearchItemResult.Loading }
+            )
         } else {
             updateItems(sources.associateWith { MangaSearchItemResult.Loading })
         }

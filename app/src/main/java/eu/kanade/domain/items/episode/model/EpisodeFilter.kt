@@ -23,7 +23,12 @@ fun List<Episode>.applyFilters(anime: Anime, downloadManager: AnimeDownloadManag
         .filter { episode -> applyFilter(bookmarkedFilter) { episode.bookmark } }
         .filter { episode ->
             applyFilter(downloadedFilter) {
-                val downloaded = downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source)
+                val downloaded = downloadManager.isEpisodeDownloaded(
+                    episode.name,
+                    episode.scanlator,
+                    anime.title,
+                    anime.source
+                )
                 downloaded || isLocalAnime
             }
         }

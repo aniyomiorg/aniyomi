@@ -7,9 +7,9 @@ import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.util.system.hasMiuiPackageInstaller
 import eu.kanade.tachiyomi.util.system.toast
+import kotlin.time.Duration.Companion.seconds
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Activity used to install extensions, because we can only receive the result of the installation

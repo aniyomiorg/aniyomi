@@ -79,7 +79,9 @@ data class BrowseAnimeSourceScreen(
         val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
-                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
+                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
+                    null
+                )
                 else -> navigator.pop()
             }
         }
@@ -214,7 +216,9 @@ data class BrowseAnimeSourceScreen(
                     scope.launchIO {
                         val duplicateAnime = screenModel.getDuplicateAnimelibAnime(anime)
                         when {
-                            anime.favorite -> screenModel.setDialog(BrowseAnimeSourceScreenModel.Dialog.RemoveAnime(anime))
+                            anime.favorite -> screenModel.setDialog(
+                                BrowseAnimeSourceScreenModel.Dialog.RemoveAnime(anime)
+                            )
                             duplicateAnime != null -> screenModel.setDialog(
                                 BrowseAnimeSourceScreenModel.Dialog.AddDuplicateAnime(
                                     anime,

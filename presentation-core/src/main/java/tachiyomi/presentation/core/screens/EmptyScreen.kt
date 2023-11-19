@@ -20,10 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import kotlin.random.Random
 import tachiyomi.presentation.core.components.ActionButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.secondaryItemAlpha
-import kotlin.random.Random
 
 data class EmptyScreenAction(
     @StringRes val stringResId: Int,

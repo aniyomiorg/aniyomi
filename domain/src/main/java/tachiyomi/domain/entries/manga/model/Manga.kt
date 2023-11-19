@@ -1,10 +1,10 @@
 package tachiyomi.domain.entries.manga.model
 
 import eu.kanade.tachiyomi.model.UpdateStrategy
+import java.io.Serializable
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import uy.kohesive.injekt.injectLazy
-import java.io.Serializable
 
 data class Manga(
     val id: Long,

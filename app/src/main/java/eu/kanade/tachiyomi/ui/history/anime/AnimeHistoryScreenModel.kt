@@ -6,6 +6,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.toDateKey
+import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +32,6 @@ import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
 
 class AnimeHistoryScreenModel(
     private val getHistory: GetAnimeHistory = Injekt.get(),
@@ -73,7 +73,9 @@ class AnimeHistoryScreenModel(
                 val beforeDate = before?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(afterDate)
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(
+                        afterDate
+                    )
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }

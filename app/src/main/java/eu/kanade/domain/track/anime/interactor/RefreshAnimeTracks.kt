@@ -33,7 +33,11 @@ class RefreshAnimeTracks(
                             if (service?.isLoggedIn == true) {
                                 val updatedTrack = service.animeService.refresh(track.toDbTrack())
                                 insertTrack.await(updatedTrack.toDomainTrack()!!)
-                                syncEpisodeProgressWithTrack.await(animeId, track, service.animeService)
+                                syncEpisodeProgressWithTrack.await(
+                                    animeId,
+                                    track,
+                                    service.animeService
+                                )
                             }
                             null
                         } catch (e: Throwable) {

@@ -1,9 +1,9 @@
 package tachiyomi.domain.updates.anime.interactor
 
+import java.util.Calendar
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.domain.updates.anime.repository.AnimeUpdatesRepository
-import java.util.Calendar
 
 class GetAnimeUpdates(
     private val repository: AnimeUpdatesRepository,

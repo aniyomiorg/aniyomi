@@ -1,10 +1,10 @@
 package eu.kanade.domain.items.chapter.model
 
 import data.Chapters
+import eu.kanade.tachiyomi.data.database.models.manga.Chapter as DbChapter
 import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.source.model.SChapter
 import tachiyomi.domain.items.chapter.model.Chapter
-import eu.kanade.tachiyomi.data.database.models.manga.Chapter as DbChapter
 
 // TODO: Remove when all deps are migrated
 fun Chapter.toSChapter(): SChapter {

@@ -128,7 +128,13 @@ object MangaLibraryTab : Tab() {
 
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
-        val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_manga_library)
+        val defaultTitle = if (fromMore) {
+            stringResource(R.string.label_library)
+        } else {
+            stringResource(
+                R.string.label_manga_library
+            )
+        }
 
         Scaffold(
             topBar = { scrollBehavior ->
@@ -144,9 +150,13 @@ object MangaLibraryTab : Tab() {
                     title = title,
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
-                    onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
+                    onClickInvertSelection = { screenModel.invertSelection(
+                        screenModel.activeCategoryIndex
+                    ) },
                     onClickFilter = screenModel::showSettingsDialog,
-                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickRefresh = { onClickRefresh(
+                        state.categories[screenModel.activeCategoryIndex]
+                    ) },
                     onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
@@ -154,7 +164,9 @@ object MangaLibraryTab : Tab() {
                             if (randomItem != null) {
                                 navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
                             } else {
-                                snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
+                                snackbarHostState.showSnackbar(
+                                    context.getString(R.string.information_no_entries_found)
+                                )
                             }
                         }
                     },
@@ -189,7 +201,9 @@ object MangaLibraryTab : Tab() {
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
                                 icon = Icons.Outlined.HelpOutline,
-                                onClick = { handler.openUri("https://aniyomi.org/help/guides/getting-started") },
+                                onClick = { handler.openUri(
+                                    "https://aniyomi.org/help/guides/getting-started"
+                                ) },
                             ),
                         ),
                     )
@@ -209,9 +223,17 @@ object MangaLibraryTab : Tab() {
                             scope.launchIO {
                                 val chapter = screenModel.getNextUnreadChapter(it.manga)
                                 if (chapter != null) {
-                                    context.startActivity(ReaderActivity.newIntent(context, chapter.mangaId, chapter.id))
+                                    context.startActivity(
+                                        ReaderActivity.newIntent(
+                                            context,
+                                            chapter.mangaId,
+                                            chapter.id
+                                        )
+                                    )
                                 } else {
-                                    snackbarHostState.showSnackbar(context.getString(R.string.no_next_chapter))
+                                    snackbarHostState.showSnackbar(
+                                        context.getString(R.string.no_next_chapter)
+                                    )
                                 }
                             }
                             Unit
@@ -223,11 +245,15 @@ object MangaLibraryTab : Tab() {
                         },
                         onRefresh = onClickRefresh,
                         onGlobalSearchClicked = {
-                            navigator.push(GlobalMangaSearchScreen(screenModel.state.value.searchQuery ?: ""))
+                            navigator.push(
+                                GlobalMangaSearchScreen(screenModel.state.value.searchQuery ?: "")
+                            )
                         },
                         getNumberOfMangaForCategory = { state.getMangaCountForCategory(it) },
                         getDisplayMode = { screenModel.getDisplayMode() },
-                        getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(it) },
+                        getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(
+                            it
+                        ) },
                     ) { state.getLibraryItemsByPage(it) }
                 }
             }

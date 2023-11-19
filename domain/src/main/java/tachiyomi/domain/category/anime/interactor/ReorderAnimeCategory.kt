@@ -1,5 +1,6 @@
 package tachiyomi.domain.category.anime.interactor
 
+import java.util.Collections
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.LogPriority
@@ -8,7 +9,6 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.category.model.CategoryUpdate
-import java.util.Collections
 
 class ReorderAnimeCategory(
     private val categoryRepository: AnimeCategoryRepository,

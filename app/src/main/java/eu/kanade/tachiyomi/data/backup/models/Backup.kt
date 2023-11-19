@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.protobuf.ProtoNumber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
 data class Backup(

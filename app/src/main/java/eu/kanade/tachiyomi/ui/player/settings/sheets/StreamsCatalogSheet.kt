@@ -36,8 +36,8 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.presentation.core.components.material.padding
 import java.io.File
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun StreamsCatalogSheet(
@@ -122,9 +122,15 @@ private fun StreamsPageBuilder(
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
                     return if (externalTrackCode == "audio") {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_audio_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_audio_intent)
+                        )
                     } else {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_subtitles_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_subtitles_intent)
+                        )
                     }
                 }
             },

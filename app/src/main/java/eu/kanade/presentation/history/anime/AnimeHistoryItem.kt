@@ -41,7 +41,10 @@ fun AnimeHistoryItem(
         modifier = modifier
             .clickable(onClick = onClickResume)
             .height(HISTORY_ITEM_HEIGHT)
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ItemCover.Book(

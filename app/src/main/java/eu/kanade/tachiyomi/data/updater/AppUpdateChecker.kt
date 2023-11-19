@@ -25,7 +25,9 @@ class AppUpdateChecker {
             )
 
             when (result) {
-                is GetApplicationRelease.Result.NewUpdate -> AppUpdateNotifier(context).promptUpdate(result.release)
+                is GetApplicationRelease.Result.NewUpdate -> AppUpdateNotifier(context).promptUpdate(
+                    result.release
+                )
                 is GetApplicationRelease.Result.ThirdPartyInstallation -> AppUpdateNotifier(context).promptFdroidUpdate()
                 else -> {}
             }

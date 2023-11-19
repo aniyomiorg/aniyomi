@@ -122,7 +122,9 @@ fun MangaCoverDialog(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Outlined.Edit,
-                                        contentDescription = stringResource(R.string.action_edit_cover),
+                                        contentDescription = stringResource(
+                                            R.string.action_edit_cover
+                                        ),
                                     )
                                 }
                                 DropdownMenu(

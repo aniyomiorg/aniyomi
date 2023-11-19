@@ -158,7 +158,12 @@ class MangaDownloadManager(
      * @return the list of pages from the chapter.
      */
     fun buildPageList(source: MangaSource, manga: Manga, chapter: Chapter): List<Page> {
-        val chapterDir = provider.findChapterDir(chapter.name, chapter.scanlator, manga.title, source)
+        val chapterDir = provider.findChapterDir(
+            chapter.name,
+            chapter.scanlator,
+            manga.title,
+            source
+        )
         val files = chapterDir?.listFiles().orEmpty()
             .filter { "image" in it.type.orEmpty() }
 
@@ -187,7 +192,13 @@ class MangaDownloadManager(
         sourceId: Long,
         skipCache: Boolean = false,
     ): Boolean {
-        return cache.isChapterDownloaded(chapterName, chapterScanlator, mangaTitle, sourceId, skipCache)
+        return cache.isChapterDownloaded(
+            chapterName,
+            chapterScanlator,
+            mangaTitle,
+            sourceId,
+            skipCache
+        )
     }
 
     /**
@@ -360,7 +371,12 @@ class MangaDownloadManager(
      * @param oldChapter the existing chapter with the old name.
      * @param newChapter the target chapter with the new name.
      */
-    suspend fun renameChapter(source: MangaSource, manga: Manga, oldChapter: Chapter, newChapter: Chapter) {
+    suspend fun renameChapter(
+        source: MangaSource,
+        manga: Manga,
+        oldChapter: Chapter,
+        newChapter: Chapter
+    ) {
         val oldNames = provider.getValidChapterDirNames(oldChapter.name, oldChapter.scanlator)
         val mangaDir = provider.getMangaDir(manga.title, source)
 
@@ -386,7 +402,9 @@ class MangaDownloadManager(
 
     private suspend fun getChaptersToDelete(chapters: List<Chapter>, manga: Manga): List<Chapter> {
         // Retrieve the categories that are set to exclude from being deleted on read
-        val categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(String::toLong)
+        val categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(
+            String::toLong
+        )
 
         val categoriesForManga = getCategories.await(manga.id)
             .map { it.id }

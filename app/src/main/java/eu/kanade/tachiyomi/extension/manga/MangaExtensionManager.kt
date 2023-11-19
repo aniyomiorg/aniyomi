@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
 import eu.kanade.tachiyomi.util.system.toast
+import java.util.Locale
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,6 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Locale
 
 /**
  * The manager of extensions installed as another apk which extend the available sources. It handles
@@ -167,7 +167,9 @@ class MangaExtensionManager(
      *
      * @param availableExtensions The list of extensions given by the [api].
      */
-    private fun updatedInstalledExtensionsStatuses(availableExtensions: List<MangaExtension.Available>) {
+    private fun updatedInstalledExtensionsStatuses(
+        availableExtensions: List<MangaExtension.Available>
+    ) {
         if (availableExtensions.isEmpty()) {
             preferences.mangaExtensionUpdatesCount().set(0)
             return
@@ -267,7 +269,10 @@ class MangaExtensionManager(
         launchNow {
             nowTrustedExtensions
                 .map { extension ->
-                    async { MangaExtensionLoader.loadMangaExtensionFromPkgName(context, extension.pkgName) }.await()
+                    async { MangaExtensionLoader.loadMangaExtensionFromPkgName(
+                        context,
+                        extension.pkgName
+                    ) }.await()
                 }
                 .filterIsInstance<MangaLoadResult.Success>()
                 .forEach { registerNewExtension(it.extension) }
@@ -353,7 +358,9 @@ class MangaExtensionManager(
         }
     }
 
-    private fun MangaExtension.Installed.updateExists(availableExtension: MangaExtension.Available? = null): Boolean {
+    private fun MangaExtension.Installed.updateExists(
+        availableExtension: MangaExtension.Available? = null
+    ): Boolean {
         val availableExt = availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false
 

@@ -10,9 +10,9 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
+import java.io.File
 import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 
 /**
  * Loader used to load a chapter from the downloaded chapters.
@@ -33,7 +33,12 @@ internal class DownloadPageLoader(
 
     override suspend fun getPages(): List<ReaderPage> {
         val dbChapter = chapter.chapter
-        val chapterPath = downloadProvider.findChapterDir(dbChapter.name, dbChapter.scanlator, manga.title, source)
+        val chapterPath = downloadProvider.findChapterDir(
+            dbChapter.name,
+            dbChapter.scanlator,
+            manga.title,
+            source
+        )
         return if (chapterPath?.isFile == true) {
             getPagesFromArchive(chapterPath)
         } else {
@@ -52,7 +57,11 @@ internal class DownloadPageLoader(
     }
 
     private fun getPagesFromDirectory(): List<ReaderPage> {
-        val pages = downloadManager.buildPageList(source, manga, chapter.chapter.toDomainChapter()!!)
+        val pages = downloadManager.buildPageList(
+            source,
+            manga,
+            chapter.chapter.toDomainChapter()!!
+        )
         return pages.map { page ->
             ReaderPage(page.index, page.url, page.imageUrl) {
                 context.contentResolver.openInputStream(page.uri ?: Uri.EMPTY)!!

@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -12,7 +13,6 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.domain.release.model.Release
 import tachiyomi.domain.release.service.ReleaseService
-import java.time.Instant
 
 class GetApplicationReleaseTest {
 
@@ -79,7 +79,9 @@ class GetApplicationReleaseTest {
             ),
         )
 
-        (result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(release).release
+        (result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(
+            release
+        ).release
     }
 
     @Test
@@ -106,7 +108,9 @@ class GetApplicationReleaseTest {
             ),
         )
 
-        (result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(release).release
+        (result as GetApplicationRelease.Result.NewUpdate).release shouldBe GetApplicationRelease.Result.NewUpdate(
+            release
+        ).release
     }
 
     @Test

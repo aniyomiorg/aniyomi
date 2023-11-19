@@ -101,7 +101,9 @@ fun MangaTrackInfoDialogHome(
                         .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
-                    startDate = remember(item.track.startDate) { dateFormat.format(item.track.startDate) }
+                    startDate = remember(item.track.startDate) { dateFormat.format(
+                        item.track.startDate
+                    ) }
                         .takeIf { supportsReadingDates && item.track.startDate != 0L },
                     onStartDateClick = { onStartDateEdit(item) } // TODO
                         .takeIf { supportsReadingDates },

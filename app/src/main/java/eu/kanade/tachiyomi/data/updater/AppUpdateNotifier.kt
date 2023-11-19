@@ -37,12 +37,22 @@ internal class AppUpdateNotifier(private val context: Context) {
         val updateIntent = Intent(context, AppUpdateService::class.java).run {
             putExtra(AppUpdateService.EXTRA_DOWNLOAD_URL, release.getDownloadLink())
             putExtra(AppUpdateService.EXTRA_DOWNLOAD_TITLE, release.version)
-            PendingIntent.getService(context, 0, this, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getService(
+                context,
+                0,
+                this,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
 
         val releaseIntent = Intent(Intent.ACTION_VIEW, release.releaseLink.toUri()).run {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            PendingIntent.getActivity(context, release.hashCode(), this, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(
+                context,
+                release.hashCode(),
+                this,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
 
         with(notificationBuilder) {
@@ -74,7 +84,9 @@ internal class AppUpdateNotifier(private val context: Context) {
     fun onDownloadStarted(title: String? = null): NotificationCompat.Builder {
         with(notificationBuilder) {
             title?.let { setContentTitle(title) }
-            setContentText(context.getString(R.string.update_check_notification_download_in_progress))
+            setContentText(
+                context.getString(R.string.update_check_notification_download_in_progress)
+            )
             setSmallIcon(android.R.drawable.stat_sys_download)
             setOngoing(true)
 
@@ -126,7 +138,10 @@ internal class AppUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel),
-                NotificationReceiver.dismissNotificationPendingBroadcast(context, Notifications.ID_APP_UPDATE_PROMPT),
+                NotificationReceiver.dismissNotificationPendingBroadcast(
+                    context,
+                    Notifications.ID_APP_UPDATE_PROMPT
+                ),
             )
         }
         notificationBuilder.show(Notifications.ID_APP_UPDATE_PROMPT)
@@ -143,7 +158,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             setContentTitle(context.getString(R.string.update_check_notification_update_available))
             setContentText(context.getString(R.string.update_check_fdroid_migration_info))
             setSmallIcon(R.drawable.ic_ani)
-            setContentIntent(NotificationHandler.openUrl(context, "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version"))
+            setContentIntent(
+                NotificationHandler.openUrl(
+                    context,
+                    "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version"
+                )
+            )
         }
         notificationBuilder.show(Notifications.ID_APP_UPDATE_PROMPT)
     }

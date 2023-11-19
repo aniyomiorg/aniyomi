@@ -153,7 +153,10 @@ class AnimeDownloadQueueScreenModel(
         downloadManager.cancelQueuedDownloads(downloads)
     }
 
-    fun <R : Comparable<R>> reorderQueue(selector: (AnimeDownloadItem) -> R, reverse: Boolean = false) {
+    fun <R : Comparable<R>> reorderQueue(
+        selector: (AnimeDownloadItem) -> R,
+        reverse: Boolean = false
+    ) {
         val adapter = adapter ?: return
         val newAnimeDownloads = mutableListOf<AnimeDownload>()
         adapter.headerItems.forEach { headerItem ->

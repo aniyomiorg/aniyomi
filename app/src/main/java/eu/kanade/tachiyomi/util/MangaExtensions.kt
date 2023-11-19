@@ -5,14 +5,14 @@ import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
+import java.io.InputStream
+import java.util.Date
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.source.local.entries.manga.isLocal
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.InputStream
-import java.util.Date
 
 /**
  * Call before updating [Manga.thumbnail_url] to ensure old cover can be cleared from cache

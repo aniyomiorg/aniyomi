@@ -20,9 +20,14 @@ class BasePreferences(
 
     fun extensionInstaller() = ExtensionInstallerPreference(context, preferenceStore)
 
-    fun acraEnabled() = preferenceStore.getBoolean("acra.enable", isPreviewBuildType || isReleaseBuildType)
+    fun acraEnabled() = preferenceStore.getBoolean(
+        "acra.enable",
+        isPreviewBuildType || isReleaseBuildType
+    )
 
-    fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+    fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(
+        PackageManager.FEATURE_PICTURE_IN_PICTURE
+    )
 
     enum class ExtensionInstaller(@StringRes val titleResId: Int) {
         LEGACY(R.string.ext_installer_legacy),

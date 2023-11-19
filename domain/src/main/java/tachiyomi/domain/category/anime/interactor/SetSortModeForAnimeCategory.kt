@@ -13,7 +13,11 @@ class SetSortModeForAnimeCategory(
     private val categoryRepository: AnimeCategoryRepository,
 ) {
 
-    suspend fun await(categoryId: Long?, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
+    suspend fun await(
+        categoryId: Long?,
+        type: AnimeLibrarySort.Type,
+        direction: AnimeLibrarySort.Direction
+    ) {
         // SY -->
         if (preferences.groupAnimeLibraryBy().get() != AnimeLibraryGroup.BY_DEFAULT) {
             preferences.animeSortingMode().set(AnimeLibrarySort(type, direction))
@@ -35,7 +39,11 @@ class SetSortModeForAnimeCategory(
         }
     }
 
-    suspend fun await(category: Category?, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
+    suspend fun await(
+        category: Category?,
+        type: AnimeLibrarySort.Type,
+        direction: AnimeLibrarySort.Direction
+    ) {
         await(category?.id, type, direction)
     }
 }

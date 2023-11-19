@@ -234,7 +234,9 @@ fun AppBarActions(
             ) {
                 Icon(
                     Icons.Outlined.MoreVert,
-                    contentDescription = stringResource(R.string.abc_action_menu_overflow_description),
+                    contentDescription = stringResource(
+                        R.string.abc_action_menu_overflow_description
+                    ),
                 )
             }
         }
@@ -325,7 +327,9 @@ fun SearchToolbar(
                         placeholder = {
                             Text(
                                 modifier = Modifier.secondaryItemAlpha(),
-                                text = (placeholderText ?: stringResource(R.string.action_search_hint)),
+                                text = (placeholderText ?: stringResource(
+                                    R.string.action_search_hint
+                                )),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.titleMedium.copy(

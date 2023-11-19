@@ -48,11 +48,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 private val sheetAnimationSpec = tween<Float>(durationMillis = 350)
 
@@ -190,7 +190,10 @@ fun AdaptiveSheet(
                 shape = MaterialTheme.shapes.extraLarge,
                 tonalElevation = tonalElevation,
                 content = {
-                    BackHandler(enabled = anchoredDraggableState.targetValue == 0, onBack = internalOnDismissRequest)
+                    BackHandler(
+                        enabled = anchoredDraggableState.targetValue == 0,
+                        onBack = internalOnDismissRequest
+                    )
                     content()
                 },
             )

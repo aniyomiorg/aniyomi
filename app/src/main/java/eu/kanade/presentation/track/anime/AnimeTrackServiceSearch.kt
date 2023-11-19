@@ -95,7 +95,9 @@ fun AnimeTrackServiceSearch(
                                 .copy(color = MaterialTheme.colorScheme.onSurface),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                            keyboardActions = KeyboardActions(onSearch = { dispatchQueryAndClearFocus() }),
+                            keyboardActions = KeyboardActions(
+                                onSearch = { dispatchQueryAndClearFocus() }
+                            ),
                             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                             decorationBox = {
                                 if (query.text.isEmpty()) {
@@ -170,9 +172,13 @@ fun AnimeTrackServiceSearch(
                             SearchResultItem(
                                 title = it.title,
                                 coverUrl = it.cover_url,
-                                type = it.publishing_type.toLowerCase(Locale.current).capitalize(Locale.current),
+                                type = it.publishing_type.toLowerCase(Locale.current).capitalize(
+                                    Locale.current
+                                ),
                                 startDate = it.start_date,
-                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(Locale.current),
+                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(
+                                    Locale.current
+                                ),
                                 description = it.summary.trim(),
                                 selected = it == selected,
                                 onClick = { onSelectedChange(it) },

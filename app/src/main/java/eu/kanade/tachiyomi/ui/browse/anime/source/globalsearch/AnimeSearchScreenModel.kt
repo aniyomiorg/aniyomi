@@ -9,6 +9,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import java.util.concurrent.Executors
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
@@ -26,7 +27,6 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.concurrent.Executors
 
 abstract class AnimeSearchScreenModel(
     initialState: State = State(),
@@ -123,7 +123,9 @@ abstract class AnimeSearchScreenModel(
         // Reuse previous results if possible
         if (sameQuery) {
             val existingResults = state.value.items
-            updateItems(sources.associateWith { existingResults[it] ?: AnimeSearchItemResult.Loading })
+            updateItems(
+                sources.associateWith { existingResults[it] ?: AnimeSearchItemResult.Loading }
+            )
         } else {
             updateItems(sources.associateWith { AnimeSearchItemResult.Loading })
         }

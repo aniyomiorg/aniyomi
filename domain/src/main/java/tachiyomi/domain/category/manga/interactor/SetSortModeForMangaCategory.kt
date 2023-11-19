@@ -13,7 +13,11 @@ class SetSortModeForMangaCategory(
     private val categoryRepository: MangaCategoryRepository,
 ) {
 
-    suspend fun await(categoryId: Long?, type: MangaLibrarySort.Type, direction: MangaLibrarySort.Direction) {
+    suspend fun await(
+        categoryId: Long?,
+        type: MangaLibrarySort.Type,
+        direction: MangaLibrarySort.Direction
+    ) {
         // SY -->
         if (preferences.groupMangaLibraryBy().get() != MangaLibraryGroup.BY_DEFAULT) {
             preferences.mangaSortingMode().set(MangaLibrarySort(type, direction))
@@ -35,7 +39,11 @@ class SetSortModeForMangaCategory(
         }
     }
 
-    suspend fun await(category: Category?, type: MangaLibrarySort.Type, direction: MangaLibrarySort.Direction) {
+    suspend fun await(
+        category: Category?,
+        type: MangaLibrarySort.Type,
+        direction: MangaLibrarySort.Direction
+    ) {
         await(category?.id, type, direction)
     }
 }

@@ -18,6 +18,8 @@ import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.dpToPx
+import java.io.BufferedInputStream
+import java.io.InputStream
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
@@ -30,8 +32,6 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
-import java.io.BufferedInputStream
-import java.io.InputStream
 
 /**
  * Holder of the webtoon reader for a single page of a chapter.
@@ -300,7 +300,10 @@ class WebtoonPageHolder(
     private fun initErrorLayout(withOpenInWebView: Boolean): ReaderErrorBinding {
         if (errorLayout == null) {
             errorLayout = ReaderErrorBinding.inflate(LayoutInflater.from(context), frame, true)
-            errorLayout?.root?.layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, (parentHeight * 0.8).toInt())
+            errorLayout?.root?.layoutParams = FrameLayout.LayoutParams(
+                MATCH_PARENT,
+                (parentHeight * 0.8).toInt()
+            )
             errorLayout?.actionRetry?.setOnClickListener {
                 page?.let { it.chapter.pageLoader?.retryPage(it) }
             }

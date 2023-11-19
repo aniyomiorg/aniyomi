@@ -98,5 +98,4 @@ fun StreamsDelayPage(
 private enum class Streams(val mpvProperty: String) {
     SUBTITLES("sub-delay"),
     AUDIO("audio-delay"),
-    ;
 }

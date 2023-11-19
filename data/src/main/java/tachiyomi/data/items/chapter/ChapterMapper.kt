@@ -2,7 +2,21 @@ package tachiyomi.data.items.chapter
 
 import tachiyomi.domain.items.chapter.model.Chapter
 
-val chapterMapper: (Long, Long, String, String, String?, Boolean, Boolean, Long, Double, Long, Long, Long, Long) -> Chapter =
+val chapterMapper: (
+    Long,
+    Long,
+    String,
+    String,
+    String?,
+    Boolean,
+    Boolean,
+    Long,
+    Double,
+    Long,
+    Long,
+    Long,
+    Long
+) -> Chapter =
     { id, mangaId, url, name, scanlator, read, bookmark, lastPageRead, chapterNumber, sourceOrder, dateFetch, dateUpload, lastModifiedAt ->
         Chapter(
             id = id,

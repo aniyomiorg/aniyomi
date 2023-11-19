@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.toast
+import java.util.Date
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.merge
@@ -34,7 +35,6 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
 
 object SettingsAppearanceScreen : SearchableSettings {
 
@@ -122,7 +122,9 @@ object SettingsAppearanceScreen : SearchableSettings {
         uiPreferences: UiPreferences,
     ): Preference.PreferenceGroup {
         val langs = remember { getLangs(context) }
-        var currentLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag() ?: "") }
+        var currentLanguage by remember { mutableStateOf(
+            AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag() ?: ""
+        ) }
         val now = remember { Date().time }
 
         LaunchedEffect(currentLanguage) {

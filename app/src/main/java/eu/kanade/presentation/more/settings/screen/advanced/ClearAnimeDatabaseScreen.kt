@@ -144,7 +144,9 @@ class ClearAnimeDatabaseScreen : Screen() {
                                         source = sourceWithCount.source,
                                         count = sourceWithCount.count,
                                         isSelected = s.selection.contains(sourceWithCount.id),
-                                        onClickSelect = { model.toggleSelection(sourceWithCount.source) },
+                                        onClickSelect = { model.toggleSelection(
+                                            sourceWithCount.source
+                                        ) },
                                     )
                                 }
                             }
@@ -205,7 +207,9 @@ class ClearAnimeDatabaseScreen : Screen() {
     }
 }
 
-private class ClearAnimeDatabaseScreenModel : StateScreenModel<ClearAnimeDatabaseScreenModel.State>(State.Loading) {
+private class ClearAnimeDatabaseScreenModel : StateScreenModel<ClearAnimeDatabaseScreenModel.State>(
+    State.Loading
+) {
     private val getSourcesWithNonLibraryAnime: GetAnimeSourcesWithNonLibraryAnime = Injekt.get()
     private val database: AnimeDatabase = Injekt.get()
 

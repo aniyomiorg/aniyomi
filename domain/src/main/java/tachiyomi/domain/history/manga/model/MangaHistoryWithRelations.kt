@@ -1,7 +1,7 @@
 package tachiyomi.domain.history.manga.model
 
-import tachiyomi.domain.entries.manga.model.MangaCover
 import java.util.Date
+import tachiyomi.domain.entries.manga.model.MangaCover
 
 data class MangaHistoryWithRelations(
     val id: Long,

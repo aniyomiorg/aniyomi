@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
+import java.util.Date
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import java.util.Date
 
 @Composable
 fun MangaHistoryScreen(
@@ -46,7 +46,9 @@ fun MangaHistoryScreen(
                     contentPadding = contentPadding,
                     onClickCover = { history -> onClickCover(history.mangaId) },
                     onClickResume = { history -> onClickResume(history.mangaId, history.chapterId) },
-                    onClickDelete = { item -> onDialogChange(MangaHistoryScreenModel.Dialog.Delete(item)) },
+                    onClickDelete = { item -> onDialogChange(
+                        MangaHistoryScreenModel.Dialog.Delete(item)
+                    ) },
                 )
             }
         }

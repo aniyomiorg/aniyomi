@@ -11,6 +11,8 @@ import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -29,8 +31,6 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) {
 
@@ -277,7 +277,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearch(key: String, query: String): List<MangaTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter")
+                put(
+                    "params",
+                    "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter"
+                )
             }
 
             with(json) {
@@ -308,7 +311,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearchAnime(key: String, query: String): List<AnimeTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilterAnime")
+                put(
+                    "params",
+                    "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilterAnime"
+                )
             }
 
             with(json) {

@@ -69,7 +69,9 @@ class AnimeCategoryScreenModel(
     fun hideCategory(category: Category) {
         coroutineScope.launch {
             when (hideCategory.await(category)) {
-                is HideAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is HideAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError
+                )
                 else -> {}
             }
         }
@@ -78,7 +80,9 @@ class AnimeCategoryScreenModel(
     fun deleteCategory(categoryId: Long) {
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
-                is DeleteAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is DeleteAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError
+                )
                 else -> {}
             }
         }
@@ -87,7 +91,9 @@ class AnimeCategoryScreenModel(
     fun moveUp(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is ReorderAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError
+                )
                 else -> {}
             }
         }
@@ -96,7 +102,9 @@ class AnimeCategoryScreenModel(
     fun moveDown(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is ReorderAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError
+                )
                 else -> {}
             }
         }
@@ -105,7 +113,9 @@ class AnimeCategoryScreenModel(
     fun renameCategory(category: Category, name: String) {
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
-                is RenameAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is RenameAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError
+                )
                 else -> {}
             }
         }

@@ -1,14 +1,14 @@
 package tachiyomi.domain.entries.anime.interactor
 
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.api.get
-import java.time.Instant
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
-import kotlin.math.absoluteValue
 
 const val MAX_FETCH_INTERVAL = 28
 private const val FETCH_INTERVAL_GRACE_PERIOD = 1
@@ -28,7 +28,10 @@ class SetAnimeFetchInterval(
             window
         }
         val episodes = getEpisodeByAnimeId.await(anime.id)
-        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(episodes, dateTime)
+        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
+            episodes,
+            dateTime
+        )
         val nextUpdate = calculateNextUpdate(anime, interval, dateTime, currentWindow)
 
         return if (anime.nextUpdate == nextUpdate && anime.fetchInterval == interval) {
@@ -47,7 +50,9 @@ class SetAnimeFetchInterval(
 
     internal fun calculateInterval(episodes: List<Episode>, zonedDateTime: ZonedDateTime): Int {
         val sortedEpisodes = episodes
-            .sortedWith(compareByDescending<Episode> { it.dateUpload }.thenByDescending { it.dateFetch })
+            .sortedWith(
+                compareByDescending<Episode> { it.dateUpload }.thenByDescending { it.dateFetch }
+            )
             .take(50)
 
         val uploadDates = sortedEpisodes
@@ -96,7 +101,10 @@ class SetAnimeFetchInterval(
             anime.nextUpdate !in window.first.rangeTo(window.second + 1) ||
             anime.fetchInterval == 0
         ) {
-            val latestDate = ZonedDateTime.ofInstant(Instant.ofEpochMilli(anime.lastUpdate), dateTime.zone)
+            val latestDate = ZonedDateTime.ofInstant(
+                Instant.ofEpochMilli(anime.lastUpdate),
+                dateTime.zone
+            )
                 .toLocalDate()
                 .atStartOfDay()
             val timeSinceLatest = ChronoUnit.DAYS.between(latestDate, dateTime).toInt()

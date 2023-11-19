@@ -64,7 +64,9 @@ interface AnimeSource {
         "Use the non-RxJava API instead",
         ReplaceWith("getAnimeDetails"),
     )
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException("Not used")
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException(
+        "Not used"
+    )
 
     /**
      * Returns an observable with all the available episodes for a anime.
@@ -75,7 +77,9 @@ interface AnimeSource {
         "Use the non-RxJava API instead",
         ReplaceWith("getEpisodeList"),
     )
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException("Not used")
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException(
+        "Not used"
+    )
 
     /**
      * Returns an observable with the list of videos a episode has. Videos should be returned

@@ -25,8 +25,10 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.model.Filter as SourceModelFilter
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.util.removeCovers
+import java.util.Date
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -57,8 +59,6 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
-import eu.kanade.tachiyomi.source.model.Filter as SourceModelFilter
 
 class BrowseMangaSourceScreenModel(
     private val sourceId: Long,
@@ -280,7 +280,12 @@ class BrowseMangaSourceScreenModel(
                 // Choose a category
                 else -> {
                     val preselectedIds = getCategories.await(manga.id).map { it.id }
-                    setDialog(Dialog.ChangeMangaCategory(manga, categories.mapAsCheckboxState { it.id in preselectedIds }))
+                    setDialog(
+                        Dialog.ChangeMangaCategory(
+                            manga,
+                            categories.mapAsCheckboxState { it.id in preselectedIds }
+                        )
+                    )
                 }
             }
         }
@@ -297,7 +302,11 @@ class BrowseMangaSourceScreenModel(
                         (service as TrackService).mangaService.bind(track)
                         insertTrack.await(track.toDomainTrack()!!)
 
-                        syncChapterProgressWithTrack.await(manga.id, track.toDomainTrack()!!, service.mangaService)
+                        syncChapterProgressWithTrack.await(
+                            manga.id,
+                            track.toDomainTrack()!!,
+                            service.mangaService
+                        )
                     }
                 } catch (e: Exception) {
                     logcat(LogPriority.WARN, e) { "Could not match manga: ${manga.title} with service $service" }
@@ -349,7 +358,10 @@ class BrowseMangaSourceScreenModel(
     sealed class Listing(open val query: String?, open val filters: FilterList) {
         data object Popular : Listing(query = GetRemoteManga.QUERY_POPULAR, filters = FilterList())
         data object Latest : Listing(query = GetRemoteManga.QUERY_LATEST, filters = FilterList())
-        data class Search(override val query: String?, override val filters: FilterList) : Listing(query = query, filters = filters)
+        data class Search(override val query: String?, override val filters: FilterList) : Listing(
+            query = query,
+            filters = filters
+        )
 
         companion object {
             fun valueOf(query: String?): Listing {

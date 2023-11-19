@@ -29,7 +29,12 @@ object GLUtil {
         // Iterate through all the configurations to located the maximum texture size
         for (i in 0 ..< totalConfigurations[0]) {
             // Only need to check for width since opengl textures are always squared
-            egl.eglGetConfigAttrib(display, configurationsList[i], EGL10.EGL_MAX_PBUFFER_WIDTH, textureSize)
+            egl.eglGetConfigAttrib(
+                display,
+                configurationsList[i],
+                EGL10.EGL_MAX_PBUFFER_WIDTH,
+                textureSize
+            )
 
             // Keep track of the maximum texture size
             if (maximumTextureSize < textureSize[0]) maximumTextureSize = textureSize[0]

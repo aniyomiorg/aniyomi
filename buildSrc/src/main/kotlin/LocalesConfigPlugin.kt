@@ -28,7 +28,7 @@ fun TaskContainerScope.registerLocalesConfigTask(project: Project): TaskProvider
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
 $languages
 </locale-config>
-    """.trimIndent()
+            """.trimIndent()
 
             val localeFile = file("$projectDir/src/main/res/xml/locales_config.xml")
             localeFile.parentFile.mkdirs()
@@ -36,4 +36,3 @@ $languages
         }
     }
 }
-

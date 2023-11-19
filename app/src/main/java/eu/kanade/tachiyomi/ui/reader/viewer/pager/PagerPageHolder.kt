@@ -12,6 +12,9 @@ import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
@@ -21,9 +24,6 @@ import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
-import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
-import java.io.InputStream
 
 /**
  * View of the ViewPager that contains a page of a chapter.
@@ -44,7 +44,9 @@ class PagerPageHolder(
     /**
      * Loading progress bar to indicate the current progress.
      */
-    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(readerThemedContext)
+    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(
+        readerThemedContext
+    )
 
     /**
      * Error layout to show when the image fails to load.

@@ -6,6 +6,10 @@ import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.size
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,10 +43,6 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Cache where we dump the downloads directory from the filesystem. This class is needed because
@@ -333,7 +333,9 @@ class AnimeDownloadCache(
                 }
             }
 
-            val sourceMap = sources.associate { provider.getSourceDirName(it).lowercase() to it.id }
+            val sourceMap = sources.associate {
+                provider.getSourceDirName(it).lowercase() to it.id
+            }
 
             val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
                 .filter { it.isDirectory && !it.name.isNullOrBlank() }
@@ -342,8 +344,9 @@ class AnimeDownloadCache(
                     sourceId?.let { it to SourceDirectory(dir) }
                 }
                 .toMap()
+                .let { ConcurrentHashMap(it) }
 
-            rootDownloadsDir.sourceDirs = sourceDirs as ConcurrentHashMap<Long, SourceDirectory>
+            rootDownloadsDir.sourceDirs = sourceDirs
 
             sourceDirs.values
                 .map { sourceDir ->
@@ -363,9 +366,13 @@ class AnimeDownloadCache(
                                         // Folder of images
                                         it.isDirectory -> it.name
                                         // MP4 files
-                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(".mp4")
+                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(
+                                            ".mp4",
+                                        )
                                         // MKV files
-                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(".mkv")
+                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(
+                                            ".mkv",
+                                        )
                                         // Anything else is irrelevant
                                         else -> null
                                     }

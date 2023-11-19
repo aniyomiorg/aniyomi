@@ -82,7 +82,9 @@ class Suwayomi(id: Long) : TrackService(id, "Suwayomi"), EnhancedMangaTrackServi
         saveCredentials("user", "pass")
     }
 
-    override fun getAcceptedSources(): List<String> = listOf("eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk")
+    override fun getAcceptedSources(): List<String> = listOf(
+        "eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk"
+    )
 
     override suspend fun match(manga: DomainManga): MangaTrackSearch? =
         try {
@@ -91,7 +93,9 @@ class Suwayomi(id: Long) : TrackService(id, "Suwayomi"), EnhancedMangaTrackServi
             null
         }
 
-    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let { accept(it) } == true
+    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let { accept(
+        it
+    ) } == true
 
     override fun migrateTrack(track: DomainTrack, manga: DomainManga, newSource: MangaSource): DomainTrack? =
         if (accept(newSource)) {

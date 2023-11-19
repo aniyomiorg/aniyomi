@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
+import uy.kohesive.injekt.injectLazy
 
 class GestureHandler(
     private val activity: PlayerActivity,
@@ -31,8 +31,22 @@ class GestureHandler(
     override fun onSingleTapUp(e: MotionEvent): Boolean {
         if (SeekState.mode == SeekState.LOCKED || SeekState.mode != SeekState.DOUBLE_TAP || activity.player.timePos == null || activity.player.duration == null) return false
         when {
-            e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) activity.doubleTapSeek(-interval, e) else return false
-            e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) activity.doubleTapSeek(interval, e) else return false
+            e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) {
+                activity.doubleTapSeek(
+                    -interval,
+                    e
+                )
+            } else {
+                return false
+            }
+            e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) {
+                activity.doubleTapSeek(
+                    interval,
+                    e
+                )
+            } else {
+                return false
+            }
             else -> return false
         }
         return true
@@ -47,8 +61,22 @@ class GestureHandler(
         if (SeekState.mode == SeekState.LOCKED) { playerControls.toggleControls(); return false }
         if (activity.player.timePos == null || activity.player.duration == null) return false
         when {
-            e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) activity.doubleTapSeek(-interval, e) else return false
-            e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) activity.doubleTapSeek(interval, e) else return false
+            e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) {
+                activity.doubleTapSeek(
+                    -interval,
+                    e
+                )
+            } else {
+                return false
+            }
+            e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) {
+                activity.doubleTapSeek(
+                    interval,
+                    e
+                )
+            } else {
+                return false
+            }
             else -> activity.doubleTapPlayPause()
         }
         return true
@@ -116,7 +144,12 @@ class GestureHandler(
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
             if (scrollState == STATE_HORIZONTAL) {
-                scrollDiff?.let { if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(it, final = true) }
+                scrollDiff?.let { if (preferences.gestureHorizontalSeek().get()) {
+                    activity.horizontalScroll(
+                        it,
+                        final = true
+                    )
+                } }
                 scrollDiff = null
                 playerControls.resetControlsFade()
             }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults as M3ButtonDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.LocalContentColor
@@ -40,7 +41,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.InternalCoroutinesApi
 import tachiyomi.presentation.core.util.animateElevation
-import androidx.compose.material3.ButtonDefaults as M3ButtonDefaults
 
 /**
  * TextButton with additional onLongClick functionality.

@@ -19,11 +19,11 @@ import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
+import kotlin.math.min
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
-import kotlin.math.min
 
 /**
  * Implementation of a [Viewer] to display pages with a [ViewPager].
@@ -268,7 +268,9 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      * Sets the active [chapters] on this pager.
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
-        val forceTransition = config.alwaysShowChapterTransition || adapter.items.getOrNull(pager.currentItem) is ChapterTransition
+        val forceTransition = config.alwaysShowChapterTransition || adapter.items.getOrNull(
+            pager.currentItem
+        ) is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set

@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
+import java.time.ZoneOffset
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
@@ -15,11 +16,10 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.time.ZoneOffset
-import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 private val insertTrack: InsertMangaTrack by injectLazy()
 private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack by injectLazy()
@@ -83,7 +83,10 @@ interface MangaTrackService {
                         track = track.copy(
                             lastChapterRead = latestLocalReadChapterNumber,
                         )
-                        setRemoteLastChapterRead(track.toDbTrack(), latestLocalReadChapterNumber.toInt())
+                        setRemoteLastChapterRead(
+                            track.toDbTrack(),
+                            latestLocalReadChapterNumber.toInt()
+                        )
                     }
 
                     if (track.startDate <= 0) {

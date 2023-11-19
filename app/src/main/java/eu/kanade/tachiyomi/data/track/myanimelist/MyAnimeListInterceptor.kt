@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.data.track.myanimelist
 
 import eu.kanade.tachiyomi.network.parseAs
+import java.io.IOException
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.Response
 import uy.kohesive.injekt.injectLazy
-import java.io.IOException
 
 class MyAnimeListInterceptor(private val myanimelist: MyAnimeList, private var token: String?) : Interceptor {
 

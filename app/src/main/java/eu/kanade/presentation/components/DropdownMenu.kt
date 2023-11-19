@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.ArrowLeft
 import androidx.compose.material.icons.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
+import androidx.compose.material3.DropdownMenu as ComposeDropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import eu.kanade.tachiyomi.R
-import androidx.compose.material3.DropdownMenu as ComposeDropdownMenu
 
 @Composable
 fun DropdownMenu(

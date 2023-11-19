@@ -63,7 +63,10 @@ fun TabbedDialog(
                 TabRow(
                     modifier = Modifier.weight(1f),
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = { TabIndicator(it[pagerState.currentPage], pagerState.currentPageOffsetFraction) },
+                    indicator = { TabIndicator(
+                        it[pagerState.currentPage],
+                        pagerState.currentPageOffsetFraction
+                    ) },
                     divider = {},
                 ) {
                     tabTitles.fastForEachIndexed { i, tab ->

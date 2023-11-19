@@ -30,7 +30,9 @@ fun ReadingModeSelectDialog(
     onChange: (Int) -> Unit,
 ) {
     val manga by screenModel.mangaFlow.collectAsState()
-    val readingMode = remember(manga) { ReadingModeType.fromPreference(manga?.readingModeType?.toInt()) }
+    val readingMode = remember(manga) { ReadingModeType.fromPreference(
+        manga?.readingModeType?.toInt()
+    ) }
 
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,

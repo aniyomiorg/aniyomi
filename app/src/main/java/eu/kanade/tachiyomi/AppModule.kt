@@ -156,9 +156,15 @@ class AppModule(val app: Application) : InjektModule {
             )
         }
 
-        addSingletonFactory<MangaDatabaseHandler> { AndroidMangaDatabaseHandler(get(), sqlDriverManga) }
+        addSingletonFactory<MangaDatabaseHandler> { AndroidMangaDatabaseHandler(
+            get(),
+            sqlDriverManga
+        ) }
 
-        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
+        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(
+            get(),
+            sqlDriverAnime
+        ) }
 
         addSingletonFactory {
             Json {

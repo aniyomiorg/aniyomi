@@ -1,11 +1,11 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.model.UpdateStrategy
+import java.io.Serializable
+import kotlin.math.pow
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
-import java.io.Serializable
-import kotlin.math.pow
 
 data class Anime(
     val id: Long,

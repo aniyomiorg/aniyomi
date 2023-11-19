@@ -21,6 +21,8 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import java.util.Calendar
+import java.util.Date
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -46,8 +48,6 @@ import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Calendar
-import java.util.Date
 
 class AnimeUpdatesScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -277,7 +277,14 @@ class AnimeUpdatesScreenModel(
     }
 
     private fun showQualitiesDialog(update: AnimeUpdatesWithRelations) {
-        setDialog(Dialog.ShowQualities(update.episodeName, update.episodeId, update.animeId, update.sourceId))
+        setDialog(
+            Dialog.ShowQualities(
+                update.episodeName,
+                update.episodeId,
+                update.animeId,
+                update.sourceId
+            )
+        )
     }
 
     fun toggleSelection(
@@ -387,7 +394,9 @@ class AnimeUpdatesScreenModel(
         val selectionMode = selected.isNotEmpty()
 
         fun getUiModel(context: Context): List<AnimeUpdatesUiModel> {
-            val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
+            val dateFormat by mutableStateOf(
+                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
+            )
 
             return items
                 .map { AnimeUpdatesUiModel.Item(it) }
@@ -408,7 +417,12 @@ class AnimeUpdatesScreenModel(
 
     sealed interface Dialog {
         data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog
-        data class ShowQualities(val episodeTitle: String, val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog
+        data class ShowQualities(
+            val episodeTitle: String,
+            val episodeId: Long,
+            val animeId: Long,
+            val sourceId: Long
+        ) : Dialog
     }
 
     sealed interface Event {

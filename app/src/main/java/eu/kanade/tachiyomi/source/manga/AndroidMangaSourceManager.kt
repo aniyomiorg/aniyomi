@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.online.HttpSource
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,7 +23,6 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.util.concurrent.ConcurrentHashMap
 
 class AndroidMangaSourceManager(
     private val context: Context,

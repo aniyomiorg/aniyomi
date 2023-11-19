@@ -45,16 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMaxBy
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.sample
 import tachiyomi.presentation.core.components.Scroller.STICKY_HEADER_KEY_PREFIX
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
 
 /**
  * Draws vertical fast scroller to a lazy list
@@ -109,7 +109,10 @@ fun VerticalFastScroller(
                 val scrollItemRounded = scrollItem.roundToInt()
                 val scrollItemSize = layoutInfo.visibleItemsInfo.find { it.index == scrollItemRounded }?.size ?: 0
                 val scrollItemOffset = scrollItemSize * (scrollItem - scrollItemRounded)
-                listState.scrollToItem(index = scrollItemRounded, scrollOffset = scrollItemOffset.roundToInt())
+                listState.scrollToItem(
+                    index = scrollItemRounded,
+                    scrollOffset = scrollItemOffset.roundToInt()
+                )
                 scrolled.tryEmit(Unit)
             }
 
@@ -292,7 +295,10 @@ fun VerticalGridFastScroller(
                 }
                 val scrollItemOffset = scrollItemSize * offsetRatio
 
-                state.scrollToItem(index = scrollItemWhole, scrollOffset = scrollItemOffset.roundToInt())
+                state.scrollToItem(
+                    index = scrollItemWhole,
+                    scrollOffset = scrollItemOffset.roundToInt()
+                )
                 scrolled.tryEmit(Unit)
             }
 

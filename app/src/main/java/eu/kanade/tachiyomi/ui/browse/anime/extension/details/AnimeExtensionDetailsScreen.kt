@@ -21,7 +21,10 @@ data class AnimeExtensionDetailsScreen(
     @Composable
     override fun Content() {
         val context = LocalContext.current
-        val screenModel = rememberScreenModel { AnimeExtensionDetailsScreenModel(pkgName = pkgName, context = context) }
+        val screenModel = rememberScreenModel { AnimeExtensionDetailsScreenModel(
+            pkgName = pkgName,
+            context = context
+        ) }
         val state by screenModel.state.collectAsState()
 
         if (state.isLoading) {

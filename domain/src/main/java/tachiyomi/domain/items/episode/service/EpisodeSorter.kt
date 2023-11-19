@@ -3,7 +3,10 @@ package tachiyomi.domain.items.episode.service
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 
-fun getEpisodeSort(anime: Anime, sortDescending: Boolean = anime.sortDescending()): (Episode, Episode) -> Int {
+fun getEpisodeSort(anime: Anime, sortDescending: Boolean = anime.sortDescending()): (
+    Episode,
+    Episode
+) -> Int {
     return when (anime.sorting) {
         Anime.EPISODE_SORTING_SOURCE -> when (sortDescending) {
             true -> { e1, e2 -> e1.sourceOrder.compareTo(e2.sourceOrder) }

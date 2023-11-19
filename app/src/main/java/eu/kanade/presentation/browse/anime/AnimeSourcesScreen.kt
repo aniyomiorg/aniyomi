@@ -101,7 +101,10 @@ private fun AnimeSourceHeader(
     Text(
         text = LocaleHelper.getSourceDisplayName(language, context),
         modifier = modifier
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small
+            ),
         style = MaterialTheme.typography.header,
     )
 }
@@ -144,7 +147,13 @@ private fun AnimeSourcePinButton(
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
-    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(alpha = SecondaryItemAlpha)
+    val tint = if (isPinned) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onBackground.copy(
+            alpha = SecondaryItemAlpha
+        )
+    }
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(

@@ -74,7 +74,9 @@ sealed class Preference {
             val entries: Map<T, String>,
         ) : PreferenceItem<T>() {
             internal fun internalSet(newValue: Any) = pref.set(newValue as T)
-            internal suspend fun internalOnValueChanged(newValue: Any) = onValueChanged(newValue as T)
+            internal suspend fun internalOnValueChanged(newValue: Any) = onValueChanged(
+                newValue as T
+            )
 
             @Composable
             internal fun internalSubtitleProvider(value: Any?, entries: Map<out Any?, String>) =

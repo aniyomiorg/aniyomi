@@ -4,7 +4,30 @@ import eu.kanade.tachiyomi.model.UpdateStrategy
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
 
-val mangaMapper: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long?) -> Manga =
+val mangaMapper: (
+    Long,
+    Long,
+    String,
+    String?,
+    String?,
+    String?,
+    List<String>?,
+    String,
+    Long,
+    String?,
+    Boolean,
+    Long?,
+    Long?,
+    Boolean,
+    Long,
+    Long,
+    Long,
+    Long,
+    UpdateStrategy,
+    Long,
+    Long,
+    Long?
+) -> Manga =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, chapterFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt ->
         Manga(
             id = id,
@@ -34,7 +57,37 @@ val mangaMapper: (Long, Long, String, String?, String?, String?, List<String>?, 
         )
     }
 
-val libraryManga: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long?, Long, Double, Long, Long, Long, Double, Long) -> LibraryManga =
+val libraryManga: (
+    Long,
+    Long,
+    String,
+    String?,
+    String?,
+    String?,
+    List<String>?,
+    String,
+    Long,
+    String?,
+    Boolean,
+    Long?,
+    Long?,
+    Boolean,
+    Long,
+    Long,
+    Long,
+    Long,
+    UpdateStrategy,
+    Long,
+    Long,
+    Long?,
+    Long,
+    Double,
+    Long,
+    Long,
+    Long,
+    Double,
+    Long
+) -> LibraryManga =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, chapterFlags, coverLastModified, dateAdded, updateStrategy, calculateInterval, lastModifiedAt, favoriteModifiedAt, totalCount, readCount, latestUpload, chapterFetchedAt, lastRead, bookmarkCount, category ->
         LibraryManga(
             manga = mangaMapper(

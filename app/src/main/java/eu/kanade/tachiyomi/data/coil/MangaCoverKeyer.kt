@@ -4,10 +4,10 @@ import coil.key.Keyer
 import coil.request.Options
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 import tachiyomi.domain.entries.manga.model.MangaCover
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 class MangaKeyer : Keyer<DomainManga> {
     override fun key(data: DomainManga, options: Options): String {
