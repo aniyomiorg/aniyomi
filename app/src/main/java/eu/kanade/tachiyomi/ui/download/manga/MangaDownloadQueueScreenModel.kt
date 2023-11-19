@@ -261,6 +261,6 @@ class MangaDownloadQueueScreenModel(
      * @return the holder of the download or null if it's not bound.
      */
     private fun getHolder(download: MangaDownload): MangaDownloadHolder? {
-        return controllerBinding.recycler.findViewHolderForItemId(download.chapter.id) as? MangaDownloadHolder
+        return controllerBinding.root.findViewHolderForItemId(download.chapter.id) as? MangaDownloadHolder
     }
 }

@@ -27,7 +27,9 @@ interface AnimeSource {
     /**
      * Get the updated details for a anime.
      *
+     * @since extensions-lib 1.4
      * @param anime the anime to update.
+     * @return the updated anime.
      */
     @Suppress("DEPRECATION")
     suspend fun getAnimeDetails(anime: SAnime): SAnime {
@@ -37,7 +39,9 @@ interface AnimeSource {
     /**
      * Get all the available episodes for a anime.
      *
+     * @since extensions-lib 1.4
      * @param anime the anime to update.
+     * @return the episodes for the anime.
      */
     @Suppress("DEPRECATION")
     suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
@@ -48,7 +52,9 @@ interface AnimeSource {
      * Get the list of videos a episode has. Pages should be returned
      * in the expected order; the index is ignored.
      *
+     * @since extensions-lib 1.4
      * @param episode the episode.
+     * @return the videos for the episode.
      */
     @Suppress("DEPRECATION")
     suspend fun getVideoList(episode: SEpisode): List<Video> {

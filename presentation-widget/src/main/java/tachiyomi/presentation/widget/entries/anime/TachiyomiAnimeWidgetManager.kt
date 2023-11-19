@@ -22,7 +22,7 @@ class TachiyomiAnimeWidgetManager(
         combine(
             getUpdates.subscribe(
                 seen = false,
-                after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis,
+                after = BaseAnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis,
             ),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },
@@ -32,6 +32,7 @@ class TachiyomiAnimeWidgetManager(
             .onEach {
                 try {
                     AnimeUpdatesGridGlanceWidget().updateAll(this)
+                    AnimeUpdatesGridCoverScreenGlanceWidget().updateAll(this)
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e) { "Failed to update widget" }
                 }

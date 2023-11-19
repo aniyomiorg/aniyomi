@@ -22,7 +22,7 @@ class TachiyomiMangaWidgetManager(
         combine(
             getUpdates.subscribe(
                 read = false,
-                after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis,
+                after = BaseMangaUpdatesGridGlanceWidget.DateLimit.timeInMillis,
             ),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },
@@ -32,6 +32,7 @@ class TachiyomiMangaWidgetManager(
             .onEach {
                 try {
                     MangaUpdatesGridGlanceWidget().updateAll(this)
+                    MangaUpdatesGridCoverScreenGlanceWidget().updateAll(this)
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e) { "Failed to update widget" }
                 }
