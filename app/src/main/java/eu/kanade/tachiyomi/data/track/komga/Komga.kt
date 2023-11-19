@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.komga
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -15,7 +14,7 @@ import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Komga(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
+class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, MangaTrackService {
 
     companion object {
         const val UNREAD = 1
@@ -29,9 +28,6 @@ class Komga(private val context: Context, id: Long) : TrackService(id), Enhanced
             .build()
 
     val api by lazy { KomgaApi(client) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_komga
 
     override fun getLogo() = R.drawable.ic_tracker_komga
 

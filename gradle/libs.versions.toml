@@ -32,7 +32,7 @@ junrar = "com.github.junrar:junrar:7.5.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
-sqlite-android = "com.github.requery:sqlite-android:3.42.0"
+sqlite-android = "com.github.requery:sqlite-android:3.43.0"
 
 preferencektx = "androidx.preference:preference-ktx:1.2.1"
 
@@ -89,7 +89,7 @@ voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
-kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
+ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.5.1"
 
 aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.10.n"
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.10"

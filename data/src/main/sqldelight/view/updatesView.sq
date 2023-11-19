@@ -30,4 +30,6 @@ getUpdatesByReadStatus:
 SELECT *
 FROM updatesView
 WHERE read = :read
-AND dateUpload > :after;
+AND dateUpload > :after
+
+LIMIT :limit;

@@ -367,7 +367,7 @@ class MangaLibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, TriState>> {
-        val loggedServices = trackManager.services.filter { it.isLogged && it is MangaTrackService }
+        val loggedServices = trackManager.services.filter { it.isLoggedIn && it is MangaTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
                 .map { libraryPreferences.filterTrackedManga(it.id.toInt()).changes() }

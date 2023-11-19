@@ -39,9 +39,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.domain.track.manga.model.toDbTrack
-import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.track.TrackDateSelector
 import eu.kanade.presentation.track.TrackItemSelector
@@ -72,11 +71,9 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.interactor.GetManga
-import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.DeleteMangaTrack
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
-import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.presentation.core.components.material.AlertDialogContent
 import tachiyomi.presentation.core.components.material.padding
@@ -210,7 +207,7 @@ data class MangaTrackInfoDialogHomeScreen(
                 val manga = Injekt.get<GetManga>().await(mangaId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.service.match(manga) ?: throw Exception()
-                    item.service.mangaService.registerTracking(matchResult, mangaId)
+                    item.service.mangaService.register(matchResult, mangaId)
                 } catch (e: Exception) {
                     withUIContext { Injekt.get<Application>().toast(R.string.error_no_match) }
                 }
@@ -218,48 +215,30 @@ data class MangaTrackInfoDialogHomeScreen(
         }
 
         private suspend fun refreshTrackers() {
-            val insertTrack = Injekt.get<InsertMangaTrack>()
-            val getMangaWithChapters = Injekt.get<GetMangaWithChapters>()
-            val syncTwoWayService = Injekt.get<SyncChaptersWithTrackServiceTwoWay>()
+            val refreshTracks = Injekt.get<RefreshMangaTracks>()
             val context = Injekt.get<Application>()
 
-            try {
-                val trackItems = getTracks.await(mangaId).mapToTrackItem()
-                for (trackItem in trackItems) {
-                    try {
-                        val track = trackItem.track ?: continue
-                        val domainMangaTrack = trackItem.service.mangaService.refresh(track.toDbTrack()).toDomainTrack() ?: continue
-                        insertTrack.await(domainMangaTrack)
-
-                        if (trackItem.service is EnhancedMangaTrackService) {
-                            val allChapters = getMangaWithChapters.awaitChapters(mangaId)
-                            syncTwoWayService.await(allChapters, domainMangaTrack, trackItem.service.mangaService)
-                        }
-                    } catch (e: Exception) {
-                        logcat(
-                            LogPriority.ERROR,
-                            e,
-                        ) { "Failed to refresh track data mangaId=$mangaId for service ${trackItem.service.id}" }
-                        withUIContext {
-                            context.toast(
-                                context.getString(
-                                    R.string.track_error,
-                                    context.getString(trackItem.service.nameRes()),
-                                    e.message,
-                                ),
-                            )
-                        }
+            refreshTracks.await(mangaId)
+                .filter { it.first != null }
+                .forEach { (track, e) ->
+                    logcat(LogPriority.ERROR, e) {
+                        "Failed to refresh track data mangaId=$mangaId for service ${track!!.name}"
+                    }
+                    withUIContext {
+                        context.toast(
+                            context.getString(
+                                R.string.track_error,
+                                track!!.name,
+                                e.message,
+                            ),
+                        )
                     }
                 }
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { "Failed to refresh track data mangaId=$mangaId" }
-                withUIContext { context.toast(e.message) }
-            }
         }
 
         private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {
             val loggedServices = Injekt.get<TrackManager>().services.filter {
-                it.isLogged && it is MangaTrackService
+                it.isLoggedIn && it is MangaTrackService
             }
             val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
             return loggedServices
@@ -593,7 +572,7 @@ private data class TrackDateRemoverScreen(
                 )
             },
             text = {
-                val serviceName = stringResource(sm.getServiceNameRes())
+                val serviceName = sm.getServiceName()
                 Text(
                     text = if (start) {
                         stringResource(R.string.track_remove_start_date_conf_text, serviceName)
@@ -630,7 +609,7 @@ private data class TrackDateRemoverScreen(
         private val start: Boolean,
     ) : ScreenModel {
 
-        fun getServiceNameRes() = service.nameRes()
+        fun getServiceName() = service.name
 
         fun removeDate() {
             coroutineScope.launchNonCancellable {
@@ -715,7 +694,7 @@ data class TrackServiceSearchScreen(
         }
 
         fun registerTracking(item: MangaTrackSearch) {
-            coroutineScope.launchNonCancellable { service.mangaService.registerTracking(item, mangaId) }
+            coroutineScope.launchNonCancellable { service.mangaService.register(item, mangaId) }
         }
 
         fun updateSelection(selected: MangaTrackSearch) {
@@ -746,7 +725,7 @@ private data class TrackMangaServiceRemoveScreen(
                 service = Injekt.get<TrackManager>().getService(serviceId)!!,
             )
         }
-        val serviceName = stringResource(sm.getServiceNameRes())
+        val serviceName = sm.getServiceName()
         var removeRemoteTrack by remember { mutableStateOf(false) }
         AlertDialogContent(
             modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
@@ -811,7 +790,7 @@ private data class TrackMangaServiceRemoveScreen(
         private val deleteTrack: DeleteMangaTrack = Injekt.get(),
     ) : ScreenModel {
 
-        fun getServiceNameRes() = service.nameRes()
+        fun getServiceName() = service.name
 
         fun isServiceDeletable() = service is DeletableMangaTrackService
 

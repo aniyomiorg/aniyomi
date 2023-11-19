@@ -48,7 +48,7 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 .forEach { animeTrack ->
                     try {
                         val service = trackManager.getService(animeTrack.syncId)
-                        if (service != null && service.isLogged) {
+                        if (service != null && service.isLoggedIn) {
                             logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.id}, last episode seen: ${animeTrack.lastEpisodeSeen}" }
                             service.animeService.update(animeTrack.toDbTrack(), true)
                             insertTrack.await(animeTrack)

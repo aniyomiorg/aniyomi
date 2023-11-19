@@ -39,9 +39,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.domain.track.anime.model.toDbTrack
-import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.track.TrackDateSelector
 import eu.kanade.presentation.track.TrackItemSelector
@@ -72,11 +71,9 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetAnime
-import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.DeleteAnimeTrack
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
-import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.presentation.core.components.material.AlertDialogContent
 import tachiyomi.presentation.core.components.material.padding
@@ -210,7 +207,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                 val anime = Injekt.get<GetAnime>().await(animeId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.service.match(anime) ?: throw Exception()
-                    item.service.animeService.registerTracking(matchResult, animeId)
+                    item.service.animeService.register(matchResult, animeId)
                 } catch (e: Exception) {
                     withUIContext { Injekt.get<Application>().toast(R.string.error_no_match) }
                 }
@@ -218,49 +215,30 @@ data class AnimeTrackInfoDialogHomeScreen(
         }
 
         private suspend fun refreshTrackers() {
-            val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
-            val getAnimeWithEpisodes = Injekt.get<GetAnimeWithEpisodes>()
-            val syncTwoWayService = Injekt.get<SyncEpisodesWithTrackServiceTwoWay>()
+            val refreshTracks = Injekt.get<RefreshAnimeTracks>()
             val context = Injekt.get<Application>()
 
-            try {
-                val trackItems = getTracks.await(animeId).mapToTrackItem()
-                for (trackItem in trackItems) {
-                    try {
-                        val track = trackItem.track ?: continue
-                        val domainAnimeTrack = trackItem.service.animeService.refresh(track.toDbTrack()).toDomainTrack() ?: continue
-                        insertAnimeTrack.await(domainAnimeTrack)
-
-                        if (trackItem.service is EnhancedAnimeTrackService) {
-                            val allEpisodes = getAnimeWithEpisodes.awaitEpisodes(animeId)
-                            syncTwoWayService.await(allEpisodes, domainAnimeTrack, trackItem.service.animeService)
-                        }
-                    } catch (e: Exception) {
-                        logcat(
-                            LogPriority.ERROR,
-                            e,
-                        ) { "Failed to refresh track data mangaId=$animeId for service ${trackItem.service.id}" }
-                        withUIContext {
-                            context.toast(
-                                context.getString(
-                                    R.string.track_error,
-                                    context.getString(trackItem.service.nameRes()),
-                                    e.message,
-                                ),
-                            )
-                        }
+            refreshTracks.await(animeId)
+                .filter { it.first != null }
+                .forEach { (track, e) ->
+                    logcat(LogPriority.ERROR, e) {
+                        "Failed to refresh track data mangaId=$animeId for service ${track!!.id}"
+                    }
+                    withUIContext {
+                        context.toast(
+                            context.getString(
+                                R.string.track_error,
+                                track!!.name,
+                                e.message,
+                            ),
+                        )
                     }
                 }
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { "Failed to refresh track data animeId=$animeId" }
-                withUIContext { context.toast(e.message) }
-            }
         }
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
-            val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter {
-                it.isLogged && it is AnimeTrackService
+                it.isLoggedIn && it is AnimeTrackService
             }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedServices
@@ -594,7 +572,7 @@ private data class TrackDateRemoverScreen(
                 )
             },
             text = {
-                val serviceName = stringResource(sm.getServiceNameRes())
+                val serviceName = sm.getServiceName()
                 Text(
                     text = if (start) {
                         stringResource(R.string.track_remove_start_date_conf_text, serviceName)
@@ -631,7 +609,7 @@ private data class TrackDateRemoverScreen(
         private val start: Boolean,
     ) : ScreenModel {
 
-        fun getServiceNameRes() = service.nameRes()
+        fun getServiceName() = service.name
 
         fun removeDate() {
             coroutineScope.launchNonCancellable {
@@ -716,7 +694,7 @@ data class TrackServiceSearchScreen(
         }
 
         fun registerTracking(item: AnimeTrackSearch) {
-            coroutineScope.launchNonCancellable { service.animeService.registerTracking(item, animeId) }
+            coroutineScope.launchNonCancellable { service.animeService.register(item, animeId) }
         }
 
         fun updateSelection(selected: AnimeTrackSearch) {
@@ -747,7 +725,7 @@ private data class TrackAnimeServiceRemoveScreen(
                 service = Injekt.get<TrackManager>().getService(serviceId)!!,
             )
         }
-        val serviceName = stringResource(sm.getServiceNameRes())
+        val serviceName = sm.getServiceName()
         var removeRemoteTrack by remember { mutableStateOf(false) }
         AlertDialogContent(
             modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
@@ -812,7 +790,7 @@ private data class TrackAnimeServiceRemoveScreen(
         private val deleteTrack: DeleteAnimeTrack = Injekt.get(),
     ) : ScreenModel {
 
-        fun getServiceNameRes() = service.nameRes()
+        fun getServiceName() = service.name
 
         fun isServiceDeletable() = service is DeletableAnimeTrackService
 

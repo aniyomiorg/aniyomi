@@ -31,4 +31,6 @@ getUpdatesBySeenStatus:
 SELECT *
 FROM animeupdatesView
 WHERE seen = :seen
-AND dateUpload > :after;
+AND dateUpload > :after
+
+LIMIT :limit;

@@ -18,16 +18,11 @@ import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.track.manga.model.toDbTrack
-import eu.kanade.domain.track.manga.model.toDomainTrack
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
@@ -44,7 +39,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -59,7 +53,6 @@ import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
@@ -73,8 +66,6 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_V
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.manga.model.SourceNotInstalledException
 import tachiyomi.domain.source.manga.service.MangaSourceManager
-import tachiyomi.domain.track.manga.interactor.GetMangaTracks
-import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -92,17 +83,13 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val downloadManager: MangaDownloadManager = Injekt.get()
-    private val trackManager: TrackManager = Injekt.get()
     private val coverCache: MangaCoverCache = Injekt.get()
     private val getLibraryManga: GetLibraryManga = Injekt.get()
     private val getManga: GetManga = Injekt.get()
     private val updateManga: UpdateManga = Injekt.get()
-    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get()
     private val getCategories: GetMangaCategories = Injekt.get()
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
-    private val getTracks: GetMangaTracks = Injekt.get()
-    private val insertTrack: InsertMangaTrack = Injekt.get()
-    private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get()
+    private val refreshMangaTracks: RefreshMangaTracks = Injekt.get()
     private val setMangaFetchInterval: SetMangaFetchInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
@@ -296,8 +283,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     }
 
                                     if (libraryPreferences.autoUpdateTrackers().get()) {
-                                        val loggedServices = trackManager.services.filter { it.isLogged }
-                                        updateTrackings(manga, loggedServices)
+                                        refreshMangaTracks(manga.id)
                                     }
                                 }
                             }
@@ -417,47 +403,24 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private suspend fun updateTrackings() {
         coroutineScope {
             var progressCount = 0
-            val loggedServices = trackManager.services.filter { it.isLogged }
 
             mangaToUpdate.forEach { libraryManga ->
-                val manga = libraryManga.manga
-
                 ensureActive()
 
+                val manga = libraryManga.manga
                 notifier.showProgressNotification(listOf(manga), progressCount++, mangaToUpdate.size)
-
-                // Update the tracking details.
-                updateTrackings(manga, loggedServices)
+                refreshMangaTracks(manga.id)
             }
 
             notifier.cancelProgressNotification()
         }
     }
 
-    private suspend fun updateTrackings(manga: Manga, loggedServices: List<TrackService>) {
-        getTracks.await(manga.id)
-            .map { track ->
-                supervisorScope {
-                    async {
-                        val service = trackManager.getService(track.syncId)
-                        if (service != null && service in loggedServices) {
-                            try {
-                                val updatedTrack = service.mangaService.refresh(track.toDbTrack())
-                                insertTrack.await(updatedTrack.toDomainTrack()!!)
-
-                                if (service is EnhancedMangaTrackService) {
-                                    val chapters = getChapterByMangaId.await(manga.id)
-                                    syncChaptersWithTrackServiceTwoWay.await(chapters, track, service.mangaService)
-                                }
-                            } catch (e: Throwable) {
-                                // Ignore errors and continue
-                                logcat(LogPriority.ERROR, e)
-                            }
-                        }
-                    }
-                }
-            }
-            .awaitAll()
+    private suspend fun refreshMangaTracks(mangaId: Long) {
+        refreshMangaTracks.await(mangaId).forEach { (_, e) ->
+            // Ignore errors and continue
+            logcat(LogPriority.ERROR, e)
+        }
     }
 
     private suspend fun withUpdateNotification(
