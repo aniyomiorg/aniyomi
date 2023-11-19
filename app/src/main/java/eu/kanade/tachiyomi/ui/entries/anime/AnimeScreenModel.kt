@@ -286,7 +286,9 @@ class AnimeScreenModel(
                 ogStatus = status ?: 0,
                 lastUpdate = anime.lastUpdate + 1,
             )
-            (sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource).updateAnimeInfo(anime.toSAnime())
+            (sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource).updateAnimeInfo(
+                anime.toSAnime()
+            )
             coroutineScope.launchNonCancellable {
                 updateAnime.await(
                     AnimeUpdate(

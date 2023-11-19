@@ -109,7 +109,9 @@ object SettingsDiscordScreen : SearchableSettings {
         enabled: Boolean,
     ): Preference.PreferenceGroup {
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
+            initial = runBlocking { getAnimeCategories.await() }
+        )
 
         val discordRPCIncognitoPref = connectionsPreferences.discordRPCIncognito()
         val discordRPCIncognitoCategoriesPref = connectionsPreferences.discordRPCIncognitoCategories()
@@ -152,7 +154,9 @@ object SettingsDiscordScreen : SearchableSettings {
                     ),
                     onClick = { showAnimeDialog = true },
                 ),
-                Preference.PreferenceItem.InfoPreference(stringResource(R.string.pref_discord_incognito_categories_details)),
+                Preference.PreferenceItem.InfoPreference(
+                    stringResource(R.string.pref_discord_incognito_categories_details)
+                ),
             ),
             enabled = enabled,
         )

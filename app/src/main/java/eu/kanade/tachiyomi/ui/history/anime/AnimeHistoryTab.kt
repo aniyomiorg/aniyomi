@@ -48,7 +48,13 @@ fun Screen.animeHistoryTab(
         val playerPreferences: PlayerPreferences by injectLazy()
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
         if (episode != null) {
-            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, episode.url, extPlayer)
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                episode.url,
+                extPlayer
+            )
         } else {
             snackbarHostState.showSnackbar(context.getString(R.string.no_next_episode))
         }

@@ -785,7 +785,9 @@ class MangaLibraryScreenModel(
                         .map {
                             sourceManager.getOrStub(it)
                         }
-                        .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } })
+                        .sortedWith(
+                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } }
+                        )
                         .map { it.id }
                 }.mapKeys {
                     Category(
@@ -833,7 +835,9 @@ class MangaLibraryScreenModel(
                             SManga.LICENSED.toLong() -> context.getString(R.string.licensed)
                             SManga.CANCELLED.toLong() -> context.getString(R.string.cancelled)
                             SManga.ON_HIATUS.toLong() -> context.getString(R.string.on_hiatus)
-                            SManga.PUBLISHING_FINISHED.toLong() -> context.getString(R.string.publishing_finished)
+                            SManga.PUBLISHING_FINISHED.toLong() -> context.getString(
+                                R.string.publishing_finished
+                            )
                             SManga.COMPLETED.toLong() -> context.getString(R.string.completed)
                             else -> context.getString(R.string.unknown)
                         },

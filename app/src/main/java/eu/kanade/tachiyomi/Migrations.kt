@@ -427,7 +427,11 @@ object Migrations {
                 }
 
                 if (connectionsPreferences.connectionsToken(connectionsManager.discord).get().isNotBlank()) {
-                    connectionsPreferences.setConnectionsCredentials(connectionsManager.discord, "Discord", "Logged In")
+                    connectionsPreferences.setConnectionsCredentials(
+                        connectionsManager.discord,
+                        "Discord",
+                        "Logged In"
+                    )
                 }
                 // <-- AM (DISCORD)
             }

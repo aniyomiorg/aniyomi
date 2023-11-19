@@ -281,7 +281,13 @@ class BackupManager(
         val mangaObject = BackupManga.copyFrom(
             manga,
             // SY -->
-            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomMangaInfo.get(manga.id) else null,
+            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) {
+                getCustomMangaInfo.get(
+                    manga.id
+                )
+            } else {
+                null
+            },
             // <-- SY
         )
 
@@ -348,7 +354,13 @@ class BackupManager(
         val animeObject = BackupAnime.copyFrom(
             anime,
             // SY -->
-            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) getCustomAnimeInfo.get(anime.id) else null,
+            if (options and BACKUP_CUSTOM_INFO_MASK == BACKUP_CUSTOM_INFO) {
+                getCustomAnimeInfo.get(
+                    anime.id
+                )
+            } else {
+                null
+            },
             // <-- SY
         )
 

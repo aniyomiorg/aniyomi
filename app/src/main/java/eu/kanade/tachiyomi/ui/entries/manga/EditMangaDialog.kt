@@ -113,7 +113,12 @@ fun EditMangaDialog(
     )
 }
 
-private fun onViewCreated(manga: Manga, context: Context, binding: EditMangaDialogBinding, scope: CoroutineScope) {
+private fun onViewCreated(
+    manga: Manga,
+    context: Context,
+    binding: EditMangaDialogBinding,
+    scope: CoroutineScope
+) {
     loadCover(manga, context, binding)
 
     val statusAdapter: ArrayAdapter<String> = ArrayAdapter(
@@ -248,7 +253,10 @@ private fun ChipGroup.setChips(items: List<String>, scope: CoroutineScope) {
 }
 
 private fun ChipGroup.getTextStrings(): List<String> = children.mapNotNull {
-    if (it is Chip && !it.text.toString().contains(context.getString(R.string.add_tag), ignoreCase = true)) {
+    if (it is Chip && !it.text.toString().contains(
+            context.getString(R.string.add_tag),
+            ignoreCase = true
+        )) {
         it.text.toString()
     } else {
         null

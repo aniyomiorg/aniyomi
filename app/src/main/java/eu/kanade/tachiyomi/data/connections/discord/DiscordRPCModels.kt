@@ -152,7 +152,6 @@ enum class OpCode(val value: Int) {
 
     /** For future use or unknown opcodes. */
     UNKNOWN(-1),
-    ;
 }
 
 data class PlayerData(
@@ -172,7 +171,11 @@ data class ReaderData(
 )
 
 // Enum class for standard Rich Presence in-app screens
-enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, val imageUrl: String) {
+enum class DiscordScreen(
+    @StringRes val text: Int,
+    @StringRes val details: Int,
+    val imageUrl: String
+) {
     APP(R.string.app_name, R.string.browsing, kuukiyomiImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, updatesImageUrl),
@@ -182,8 +185,6 @@ enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, 
     WEBVIEW(R.string.action_web_view, R.string.browsing, webviewImageUrl),
     VIDEO(R.string.video, R.string.watching, videoImageUrl),
     MANGA(R.string.manga, R.string.reading, mangaImageUrl),
-
-    ;
 }
 
 // Constants for standard Rich Presence image urls

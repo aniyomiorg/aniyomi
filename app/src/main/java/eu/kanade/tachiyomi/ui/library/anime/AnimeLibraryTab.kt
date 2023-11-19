@@ -133,7 +133,13 @@ object AnimeLibraryTab : Tab() {
         suspend fun openEpisode(episode: Episode) {
             val playerPreferences: PlayerPreferences by injectLazy()
             val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
-            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, episode.url, extPlayer)
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                episode.url,
+                extPlayer
+            )
         }
 
         val defaultTitle = if (fromMore) {

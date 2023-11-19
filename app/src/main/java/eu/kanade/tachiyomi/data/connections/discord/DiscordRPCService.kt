@@ -21,6 +21,8 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.util.system.notificationBuilder
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
@@ -29,8 +31,6 @@ import tachiyomi.domain.category.model.Category.Companion.UNCATEGORIZED_ID
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import kotlin.math.ceil
-import kotlin.math.floor
 
 class DiscordRPCService : Service() {
 
@@ -126,7 +126,9 @@ class DiscordRPCService : Service() {
 
             val name = playerData.animeTitle ?: context.resources.getString(R.string.app_name)
 
-            val details = playerData.animeTitle ?: context.resources.getString(discordScreen.details)
+            val details = playerData.animeTitle ?: context.resources.getString(
+                discordScreen.details
+            )
 
             val state = playerData.episodeNumber ?: context.resources.getString(discordScreen.text)
 
@@ -160,7 +162,9 @@ class DiscordRPCService : Service() {
 
             val name = readerData.mangaTitle ?: context.resources.getString(R.string.app_name)
 
-            val details = readerData.mangaTitle ?: context.resources.getString(discordScreen.details)
+            val details = readerData.mangaTitle ?: context.resources.getString(
+                discordScreen.details
+            )
 
             val state = readerData.chapterNumber ?: context.resources.getString(discordScreen.text)
 
@@ -183,7 +187,10 @@ class DiscordRPCService : Service() {
             )
         }
 
-        internal suspend fun setPlayerActivity(context: Context, playerData: PlayerData = PlayerData()) {
+        internal suspend fun setPlayerActivity(
+            context: Context,
+            playerData: PlayerData = PlayerData()
+        ) {
             if (rpc == null || playerData.thumbnailUrl == null || playerData.animeId == null) return
 
             val animeCategoryIds = Injekt.get<GetAnimeCategories>()
@@ -215,7 +222,9 @@ class DiscordRPCService : Service() {
                 val client = networkService.client
                 val response = if (!discordIncognito) {
                     try {
-                        client.newCall(GET("https://kizzy-api.vercel.app/image?url=${playerData.thumbnailUrl}")).execute()
+                        client.newCall(
+                            GET("https://kizzy-api.vercel.app/image?url=${playerData.thumbnailUrl}")
+                        ).execute()
                     } catch (e: Throwable) {
                         null
                     }
@@ -224,7 +233,9 @@ class DiscordRPCService : Service() {
                 }
 
                 val animeThumbnail = response?.body?.string()
-                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore("\"}")
+                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore(
+                        "\"}"
+                    )
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setAnimeScreen(
@@ -239,7 +250,10 @@ class DiscordRPCService : Service() {
             }
         }
 
-        internal suspend fun setReaderActivity(context: Context, readerData: ReaderData = ReaderData()) {
+        internal suspend fun setReaderActivity(
+            context: Context,
+            readerData: ReaderData = ReaderData()
+        ) {
             if (rpc == null || readerData.thumbnailUrl == null || readerData.mangaId == null) return
 
             val animeCategoryIds = Injekt.get<GetAnimeCategories>()
@@ -271,7 +285,9 @@ class DiscordRPCService : Service() {
                 val client = networkService.client
                 val response = if (!discordIncognito) {
                     try {
-                        client.newCall(GET("https://kizzy-api.vercel.app/image?url=${readerData.thumbnailUrl}")).execute()
+                        client.newCall(
+                            GET("https://kizzy-api.vercel.app/image?url=${readerData.thumbnailUrl}")
+                        ).execute()
                     } catch (e: Throwable) {
                         null
                     }
@@ -280,7 +296,9 @@ class DiscordRPCService : Service() {
                 }
 
                 val mangaThumbnail = response?.body?.string()
-                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore("\"}")
+                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore(
+                        "\"}"
+                    )
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setMangaScreen(

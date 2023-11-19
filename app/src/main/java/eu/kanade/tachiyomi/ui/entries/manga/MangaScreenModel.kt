@@ -282,7 +282,9 @@ class MangaScreenModel(
                 ogStatus = status ?: 0,
                 lastUpdate = manga.lastUpdate + 1,
             )
-            (sourceManager.get(LocalMangaSource.ID) as LocalMangaSource).updateMangaInfo(manga.toSManga())
+            (sourceManager.get(LocalMangaSource.ID) as LocalMangaSource).updateMangaInfo(
+                manga.toSManga()
+            )
             coroutineScope.launchNonCancellable {
                 updateManga.await(
                     MangaUpdate(
@@ -862,7 +864,9 @@ class MangaScreenModel(
             if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(
                     categories,
                     downloadPreferences
-                )) return@launchNonCancellable
+                )) {
+                return@launchNonCancellable
+            }
             downloadChapters(chapters)
         }
     }

@@ -55,7 +55,13 @@ fun Screen.animeUpdatesTab(
         val update = updateItem.update
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
         val episode = getEpisodeByAnimeId.await(update.animeId).find { it.id == update.episodeId }
-        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, episode?.url, extPlayer)
+        MainActivity.startPlayerActivity(
+            context,
+            update.animeId,
+            update.episodeId,
+            episode?.url,
+            extPlayer
+        )
     }
 
     return TabContent(
