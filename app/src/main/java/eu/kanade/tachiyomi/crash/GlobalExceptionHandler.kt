@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.crash
 
 import android.content.Context
 import android.content.Intent
-import kotlin.system.exitProcess
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -12,6 +11,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
+import kotlin.system.exitProcess
 
 class GlobalExceptionHandler private constructor(
     private val applicationContext: Context,

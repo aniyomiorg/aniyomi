@@ -17,7 +17,7 @@ import kotlin.math.abs
 
 class ReaderNavigationOverlayView(context: Context, attributeSet: AttributeSet) : View(
     context,
-    attributeSet
+    attributeSet,
 ) {
 
     private var viewPropertyAnimator: ViewPropertyAnimator? = null

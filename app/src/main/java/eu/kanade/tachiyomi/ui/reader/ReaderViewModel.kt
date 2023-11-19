@@ -46,7 +46,6 @@ import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
-import java.util.Date
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -85,6 +84,7 @@ import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 
 /**
  * Presenter used by the activity to perform background operations.
@@ -178,18 +178,22 @@ class ReaderViewModel @JvmOverloads constructor(
                         readerPreferences.skipFiltered().get() -> {
                             (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_READ && !it.read) ||
                                 (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_UNREAD && it.read) ||
-                                (manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
-                                    it.name,
-                                    it.scanlator,
-                                    manga.title,
-                                    manga.source
-                                )) ||
-                                (manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
-                                    it.name,
-                                    it.scanlator,
-                                    manga.title,
-                                    manga.source
-                                )) ||
+                                (
+                                    manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
+                                        it.name,
+                                        it.scanlator,
+                                        manga.title,
+                                        manga.source,
+                                    )
+                                    ) ||
+                                (
+                                    manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
+                                        it.name,
+                                        it.scanlator,
+                                        manga.title,
+                                        manga.source,
+                                    )
+                                    ) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_BOOKMARKED && !it.bookmark) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_NOT_BOOKMARKED && it.bookmark)
                         }
@@ -299,7 +303,7 @@ class ReaderViewModel @JvmOverloads constructor(
                         downloadManager,
                         downloadProvider,
                         manga,
-                        source
+                        source,
                     )
 
                     loadChapter(loader!!, chapterList.first { chapterId == it.chapter.id })
@@ -663,7 +667,7 @@ class ReaderViewModel @JvmOverloads constructor(
         runBlocking(Dispatchers.IO) {
             setMangaViewerFlags.awaitSetMangaReadingMode(
                 manga.id,
-                readingModeType.flagValue.toLong()
+                readingModeType.flagValue.toLong(),
             )
             val currChapters = state.value.viewerChapters
             if (currChapters != null) {
@@ -739,7 +743,7 @@ class ReaderViewModel @JvmOverloads constructor(
         val filenameSuffix = " - ${page.number}"
         return DiskUtil.buildValidFilename(
             "${manga.title} - ${chapter.name}".takeBytes(
-                DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()
+                DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize(),
             ),
         ) + filenameSuffix
     }
@@ -790,7 +794,7 @@ class ReaderViewModel @JvmOverloads constructor(
         // Pictures directory.
         val relativePath = if (readerPreferences.folderPerManga().get()) {
             DiskUtil.buildValidFilename(
-                manga.title
+                manga.title,
             )
         } else {
             ""
@@ -914,7 +918,7 @@ class ReaderViewModel @JvmOverloads constructor(
                                 try {
                                     if (!context.isOnline()) {
                                         error(
-                                            "Couldn't update tracker as device is offline"
+                                            "Couldn't update tracker as device is offline",
                                         )
                                     }
                                     service.mangaService.update(updatedTrack.toDbTrack(), true)
@@ -947,7 +951,7 @@ class ReaderViewModel @JvmOverloads constructor(
         viewModelScope.launchNonCancellable {
             downloadManager.enqueueChaptersToDelete(
                 listOf(chapter.chapter.toDomainChapter()!!),
-                manga
+                manga,
             )
         }
     }

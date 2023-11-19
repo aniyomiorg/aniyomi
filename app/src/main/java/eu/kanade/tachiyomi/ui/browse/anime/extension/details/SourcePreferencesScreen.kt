@@ -56,9 +56,11 @@ class SourcePreferencesScreen(val sourceId: Long) : Screen() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(
-                        text = Injekt.get<AnimeSourceManager>().getOrStub(sourceId).toString()
-                    ) },
+                    title = {
+                        Text(
+                            text = Injekt.get<AnimeSourceManager>().getOrStub(sourceId).toString(),
+                        )
+                    },
                     navigationIcon = {
                         IconButton(onClick = navigator::pop) {
                             UpIcon()
@@ -142,7 +144,7 @@ class SourcePreferencesFragment : PreferenceFragmentCompat() {
 
         val sharedPreferences = requireContext().getSharedPreferences(
             source.getPreferenceKey(),
-            Context.MODE_PRIVATE
+            Context.MODE_PRIVATE,
         )
         val dataStore = SharedPreferencesDataStore(sharedPreferences)
         preferenceManager.preferenceDataStore = dataStore

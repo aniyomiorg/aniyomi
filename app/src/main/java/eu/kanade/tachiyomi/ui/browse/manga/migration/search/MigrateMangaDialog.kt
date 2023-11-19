@@ -40,7 +40,6 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
-import java.util.Date
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
@@ -59,6 +58,7 @@ import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 
 @Composable
 internal fun MigrateMangaDialog(
@@ -101,7 +101,7 @@ internal fun MigrateMangaDialog(
                         ) {
                             Checkbox(
                                 checked = selectedFlags[index],
-                                onCheckedChange = { onChange() }
+                                onCheckedChange = { onChange() },
                             )
                             Text(text = context.getString(flag.titleId))
                         }
@@ -305,7 +305,7 @@ internal class MigrateMangaDialogScreenModel(
         if (migrateCustomCover && oldManga.hasCustomCover()) {
             coverCache.setCustomCoverToCache(
                 newManga,
-                coverCache.getCustomCoverFile(oldManga.id).inputStream()
+                coverCache.getCustomCoverFile(oldManga.id).inputStream(),
             )
         }
 

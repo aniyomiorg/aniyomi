@@ -47,7 +47,7 @@ class AnimeExtensionInstallService : Service() {
         if (installer == null) {
             installer = when (installerUsed) {
                 BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(
-                    this
+                    this,
                 )
                 BasePreferences.ExtensionInstaller.SHIZUKU -> ShizukuInstallerAnime(this)
                 else -> {

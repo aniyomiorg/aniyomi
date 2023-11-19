@@ -14,8 +14,8 @@ import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
-import java.util.regex.Pattern
 import uy.kohesive.injekt.injectLazy
+import java.util.regex.Pattern
 
 /**
  * DownloadNotifier is used to show notifications when downloading one or multiple chapters.
@@ -97,7 +97,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
                 val quotedTitle = Pattern.quote(title)
                 val chapter = download.chapter.name.replaceFirst(
                     "$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE),
-                    ""
+                    "",
                 )
                 setContentTitle("$title - $chapter".chop(30))
                 setContentText(downloadingProgressText)
@@ -191,7 +191,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
         with(errorNotificationBuilder) {
             setContentTitle(
                 mangaTitle?.plus(": $chapter") ?: context.getString(
-                    R.string.download_notifier_downloader_title
+                    R.string.download_notifier_downloader_title,
                 ),
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))

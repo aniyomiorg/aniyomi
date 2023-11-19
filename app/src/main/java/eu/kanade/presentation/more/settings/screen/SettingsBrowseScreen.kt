@@ -53,7 +53,7 @@ object SettingsBrowseScreen : SearchableSettings {
                         },
                     ),
                     Preference.PreferenceItem.InfoPreference(
-                        stringResource(R.string.parental_controls_info)
+                        stringResource(R.string.parental_controls_info),
                     ),
                 ),
             ),

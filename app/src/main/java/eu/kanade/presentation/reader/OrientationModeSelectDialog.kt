@@ -30,9 +30,11 @@ fun OrientationModeSelectDialog(
     onChange: (Int) -> Unit,
 ) {
     val manga by screenModel.mangaFlow.collectAsState()
-    val orientationType = remember(manga) { OrientationType.fromPreference(
-        manga?.orientationType?.toInt()
-    ) }
+    val orientationType = remember(manga) {
+        OrientationType.fromPreference(
+            manga?.orientationType?.toInt(),
+        )
+    }
 
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,

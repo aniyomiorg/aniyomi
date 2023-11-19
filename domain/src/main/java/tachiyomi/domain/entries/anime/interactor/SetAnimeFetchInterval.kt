@@ -1,14 +1,14 @@
 package tachiyomi.domain.entries.anime.interactor
 
-import java.time.Instant
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
-import kotlin.math.absoluteValue
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.api.get
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 const val MAX_FETCH_INTERVAL = 28
 private const val FETCH_INTERVAL_GRACE_PERIOD = 1
@@ -30,7 +30,7 @@ class SetAnimeFetchInterval(
         val episodes = getEpisodeByAnimeId.await(anime.id)
         val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
             episodes,
-            dateTime
+            dateTime,
         )
         val nextUpdate = calculateNextUpdate(anime, interval, dateTime, currentWindow)
 
@@ -51,7 +51,7 @@ class SetAnimeFetchInterval(
     internal fun calculateInterval(episodes: List<Episode>, zonedDateTime: ZonedDateTime): Int {
         val sortedEpisodes = episodes
             .sortedWith(
-                compareByDescending<Episode> { it.dateUpload }.thenByDescending { it.dateFetch }
+                compareByDescending<Episode> { it.dateUpload }.thenByDescending { it.dateFetch },
             )
             .take(50)
 
@@ -103,7 +103,7 @@ class SetAnimeFetchInterval(
         ) {
             val latestDate = ZonedDateTime.ofInstant(
                 Instant.ofEpochMilli(anime.lastUpdate),
-                dateTime.zone
+                dateTime.zone,
             )
                 .toLocalDate()
                 .atStartOfDay()

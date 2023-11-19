@@ -297,7 +297,7 @@ private fun AnimeExtensionItemContent(
                     Text(
                         text = LocaleHelper.getSourceDisplayName(
                             extension.lang,
-                            LocalContext.current
+                            LocalContext.current,
                         ),
                     )
                 }

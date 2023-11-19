@@ -124,11 +124,13 @@ class AnimeScreen(
                 screenModel.toggleFavorite()
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             },
-            onWebViewClicked = { openAnimeInWebView(
-                navigator,
-                screenModel.anime,
-                screenModel.source
-            ) }.takeIf { isAnimeHttpSource },
+            onWebViewClicked = {
+                openAnimeInWebView(
+                    navigator,
+                    screenModel.anime,
+                    screenModel.source,
+                )
+            }.takeIf { isAnimeHttpSource },
             onWebViewLongClicked = { copyAnimeUrl(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
@@ -221,7 +223,7 @@ class AnimeScreen(
                 val anime by sm.state.collectAsState()
                 if (anime != null) {
                     val getContent = rememberLauncherForActivityResult(
-                        ActivityResultContracts.GetContent()
+                        ActivityResultContracts.GetContent(),
                     ) {
                         if (it == null) return@rememberLauncherForActivityResult
                         sm.editCover(context, it)
@@ -301,7 +303,7 @@ class AnimeScreen(
     private suspend fun continueWatching(
         context: Context,
         unseenEpisode: Episode?,
-        useExternalPlayer: Boolean
+        useExternalPlayer: Boolean,
     ) {
         if (unseenEpisode != null) openEpisode(context, unseenEpisode, useExternalPlayer)
     }
@@ -314,7 +316,7 @@ class AnimeScreen(
                     episode.animeId,
                     episode.id,
                     episode.url,
-                    true
+                    true,
                 )
             } else {
                 MainActivity.startPlayerActivity(
@@ -322,7 +324,7 @@ class AnimeScreen(
                     episode.animeId,
                     episode.id,
                     episode.url,
-                    useExternalPlayer
+                    useExternalPlayer,
                 )
             }
         }
@@ -402,7 +404,7 @@ class AnimeScreen(
     private suspend fun performGenreSearch(
         navigator: Navigator,
         genreName: String,
-        source: AnimeSource
+        source: AnimeSource,
     ) {
         if (navigator.size < 2) {
             return

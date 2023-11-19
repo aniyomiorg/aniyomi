@@ -12,16 +12,16 @@ import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
+import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.concurrent.TimeUnit
-import uy.kohesive.injekt.injectLazy
 
 class BackupNotifier(private val context: Context) {
 
     private val preferences: SecurityPreferences by injectLazy()
 
     private val progressNotificationBuilder = context.notificationBuilder(
-        Notifications.CHANNEL_BACKUP_RESTORE_PROGRESS
+        Notifications.CHANNEL_BACKUP_RESTORE_PROGRESS,
     ) {
         setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
         setSmallIcon(R.drawable.ic_ani)
@@ -31,7 +31,7 @@ class BackupNotifier(private val context: Context) {
     }
 
     private val completeNotificationBuilder = context.notificationBuilder(
-        Notifications.CHANNEL_BACKUP_RESTORE_COMPLETE
+        Notifications.CHANNEL_BACKUP_RESTORE_COMPLETE,
     ) {
         setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
         setSmallIcon(R.drawable.ic_ani)
@@ -79,7 +79,7 @@ class BackupNotifier(private val context: Context) {
                 NotificationReceiver.shareBackupPendingBroadcast(
                     context,
                     unifile.uri,
-                    Notifications.ID_BACKUP_COMPLETE
+                    Notifications.ID_BACKUP_COMPLETE,
                 ),
             )
 
@@ -91,7 +91,7 @@ class BackupNotifier(private val context: Context) {
         content: String = "",
         contentTitle: String = context.getString(R.string.restoring_backup),
         progress: Int = 0,
-        maxAmount: Int = 100
+        maxAmount: Int = 100,
     ): NotificationCompat.Builder {
         val builder = with(progressNotificationBuilder) {
             setContentTitle(contentTitle)
@@ -109,7 +109,7 @@ class BackupNotifier(private val context: Context) {
                 context.getString(R.string.action_cancel),
                 NotificationReceiver.cancelRestorePendingBroadcast(
                     context,
-                    Notifications.ID_RESTORE_PROGRESS
+                    Notifications.ID_RESTORE_PROGRESS,
                 ),
             )
         }
@@ -135,7 +135,7 @@ class BackupNotifier(private val context: Context) {
         errorCount: Int,
         path: String?,
         file: String?,
-        contentTitle: String = context.getString(R.string.restore_completed)
+        contentTitle: String = context.getString(R.string.restore_completed),
     ) {
         context.cancelNotification(Notifications.ID_RESTORE_PROGRESS)
 
@@ -154,8 +154,8 @@ class BackupNotifier(private val context: Context) {
                     R.plurals.restore_completed_message,
                     errorCount,
                     timeString,
-                    errorCount
-                )
+                    errorCount,
+                ),
             )
 
             clearActions()

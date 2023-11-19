@@ -26,7 +26,7 @@ class AnimeDownloadPendingDeleter(
      */
     private val preferences = context.getSharedPreferences(
         "episodes_to_delete",
-        Context.MODE_PRIVATE
+        Context.MODE_PRIVATE,
     )
 
     /**

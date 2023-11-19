@@ -203,12 +203,12 @@ object SettingsBackupScreen : SearchableSettings {
                     }
                     if (!state.isScrolledToStart()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.TopCenter)
+                            modifier = Modifier.align(Alignment.TopCenter),
                         )
                     }
                     if (!state.isScrolledToEnd()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier.align(Alignment.BottomCenter),
                         )
                     }
                 }
@@ -295,7 +295,7 @@ object SettingsBackupScreen : SearchableSettings {
                                     append(stringResource(R.string.backup_restore_content_full))
                                     if (err.sources.isNotEmpty()) {
                                         append("\n\n").append(
-                                            stringResource(R.string.backup_restore_missing_sources)
+                                            stringResource(R.string.backup_restore_missing_sources),
                                         )
                                         err.sources.joinTo(
                                             this,
@@ -305,7 +305,7 @@ object SettingsBackupScreen : SearchableSettings {
                                     }
                                     if (err.trackers.isNotEmpty()) {
                                         append("\n\n").append(
-                                            stringResource(R.string.backup_restore_missing_trackers)
+                                            stringResource(R.string.backup_restore_missing_trackers),
                                         )
                                         err.trackers.joinTo(
                                             this,
@@ -339,7 +339,7 @@ object SettingsBackupScreen : SearchableSettings {
                     val intent = super.createIntent(context, input)
                     return Intent.createChooser(
                         intent,
-                        context.getString(R.string.file_select_backup)
+                        context.getString(R.string.file_select_backup),
                     )
                 }
             },
@@ -360,7 +360,7 @@ object SettingsBackupScreen : SearchableSettings {
                 error = MissingRestoreComponents(
                     it,
                     results.missingSources,
-                    results.missingTrackers
+                    results.missingTrackers,
                 )
             }
         }

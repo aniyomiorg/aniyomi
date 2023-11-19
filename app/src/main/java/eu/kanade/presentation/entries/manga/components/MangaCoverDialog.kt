@@ -123,7 +123,7 @@ fun MangaCoverDialog(
                                     Icon(
                                         imageVector = Icons.Outlined.Edit,
                                         contentDescription = stringResource(
-                                            R.string.action_edit_cover
+                                            R.string.action_edit_cover,
                                         ),
                                     )
                                 }

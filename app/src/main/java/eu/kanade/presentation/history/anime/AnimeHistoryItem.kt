@@ -43,7 +43,7 @@ fun AnimeHistoryItem(
             .height(HISTORY_ITEM_HEIGHT)
             .padding(
                 horizontal = MaterialTheme.padding.medium,
-                vertical = MaterialTheme.padding.small
+                vertical = MaterialTheme.padding.small,
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {

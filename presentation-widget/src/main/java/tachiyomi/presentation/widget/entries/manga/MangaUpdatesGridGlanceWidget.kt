@@ -24,8 +24,6 @@ import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.util.system.dpToPx
-import java.util.Calendar
-import java.util.Date
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
@@ -39,6 +37,8 @@ import tachiyomi.presentation.widget.util.appWidgetBackgroundRadius
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Calendar
+import java.util.Date
 
 class MangaUpdatesGridGlanceWidget(
     private val context: Context = Injekt.get<Application>(),
@@ -116,7 +116,7 @@ class MangaUpdatesGridGlanceWidget(
                     .build()
                 Pair(
                     updatesView.mangaId,
-                    context.imageLoader.executeBlocking(request).drawable?.toBitmap()
+                    context.imageLoader.executeBlocking(request).drawable?.toBitmap(),
                 )
             }
     }

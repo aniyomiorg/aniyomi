@@ -31,7 +31,7 @@ class BackupFileValidator(
 
         if (backup.backupManga.isEmpty() && backup.backupAnime.isEmpty()) {
             throw IllegalStateException(
-                context.getString(R.string.invalid_backup_file_missing_manga)
+                context.getString(R.string.invalid_backup_file_missing_manga),
             )
         }
 

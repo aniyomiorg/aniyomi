@@ -18,13 +18,13 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.presentation.library.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.material.PullRefresh
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AnimeLibraryContent(

@@ -18,14 +18,14 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toJavaDuration
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.backup.service.BackupPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 class BackupCreateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -51,7 +51,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
             val location = BackupManager(context).createBackup(uri, flags, isAutoBackup)
             if (!isAutoBackup) {
                 notifier.showBackupComplete(
-                    UniFile.fromUri(context, location.toUri())
+                    UniFile.fromUri(context, location.toUri()),
                 )
             }
             Result.success()
@@ -107,7 +107,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                 context.workManager.enqueueUniquePeriodicWork(
                     TAG_AUTO,
                     ExistingPeriodicWorkPolicy.UPDATE,
-                    request
+                    request,
                 )
             } else {
                 context.workManager.cancelUniqueWork(TAG_AUTO)

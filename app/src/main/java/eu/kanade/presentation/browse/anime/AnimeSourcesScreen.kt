@@ -103,7 +103,7 @@ private fun AnimeSourceHeader(
         modifier = modifier
             .padding(
                 horizontal = MaterialTheme.padding.medium,
-                vertical = MaterialTheme.padding.small
+                vertical = MaterialTheme.padding.small,
             ),
         style = MaterialTheme.typography.header,
     )
@@ -151,7 +151,7 @@ private fun AnimeSourcePinButton(
         MaterialTheme.colorScheme.primary
     } else {
         MaterialTheme.colorScheme.onBackground.copy(
-            alpha = SecondaryItemAlpha
+            alpha = SecondaryItemAlpha,
         )
     }
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin

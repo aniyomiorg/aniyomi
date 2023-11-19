@@ -1,13 +1,13 @@
 package tachiyomi.core.util.lang
 
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /*
  * Util functions for bridging RxJava and coroutines. Taken from TachiyomiEH/SY.

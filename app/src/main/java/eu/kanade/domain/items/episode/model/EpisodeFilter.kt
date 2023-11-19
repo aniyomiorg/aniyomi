@@ -27,7 +27,7 @@ fun List<Episode>.applyFilters(anime: Anime, downloadManager: AnimeDownloadManag
                     episode.name,
                     episode.scanlator,
                     anime.title,
-                    anime.source
+                    anime.source,
                 )
                 downloaded || isLocalAnime
             }

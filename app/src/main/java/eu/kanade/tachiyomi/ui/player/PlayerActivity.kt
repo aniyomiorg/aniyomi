@@ -84,11 +84,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 import `is`.xyz.mpv.Utils
-import java.io.File
-import kotlin.math.abs
-import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -103,6 +99,10 @@ import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
+import kotlin.math.abs
+import kotlin.math.roundToInt
+import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
 class PlayerActivity : BaseActivity() {
 
@@ -134,7 +134,7 @@ class PlayerActivity : BaseActivity() {
         NotificationReceiver.dismissNotification(
             this,
             animeId.hashCode(),
-            Notifications.ID_NEW_EPISODES
+            Notifications.ID_NEW_EPISODES,
         )
 
         viewModel.saveCurrentEpisodeWatchingProgress()
@@ -147,7 +147,7 @@ class PlayerActivity : BaseActivity() {
             val initResult = viewModel.init(animeId, episodeId)
             if (!initResult.second.getOrDefault(false)) {
                 val exception = initResult.second.exceptionOrNull() ?: IllegalStateException(
-                    "Unknown error"
+                    "Unknown error",
                 )
                 withUIContext {
                     setInitialEpisodeError(exception)
@@ -414,7 +414,7 @@ class PlayerActivity : BaseActivity() {
                         doubleTapSeek(
                             time = seekDifference,
                             isDoubleTap = false,
-                            videoChapterText = text
+                            videoChapterText = text,
                         )
                     }
                     VideoChaptersSheet(
@@ -458,8 +458,8 @@ class PlayerActivity : BaseActivity() {
                                         "sub-add",
                                         subtitleTracks[index].url,
                                         "select",
-                                        subtitleTracks[index].url
-                                    )
+                                        subtitleTracks[index].url,
+                                    ),
                                 )
                         }
 
@@ -481,8 +481,8 @@ class PlayerActivity : BaseActivity() {
                                         "audio-add",
                                         audioTracks[index].url,
                                         "select",
-                                        audioTracks[index].url
-                                    )
+                                        audioTracks[index].url,
+                                    ),
                                 )
                         }
 
@@ -503,7 +503,7 @@ class PlayerActivity : BaseActivity() {
                     SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(
                             viewModel.playerPreferences,
-                            streams.subtitle.tracks.size > 1
+                            streams.subtitle.tracks.size > 1,
                         ),
                         onDismissRequest = pauseForDialogSheet(fadeControls = true),
                     )
@@ -568,7 +568,7 @@ class PlayerActivity : BaseActivity() {
         if (currentPlayerStatisticsPage != 0) {
             MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
             MPVLib.command(
-                arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage")
+                arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage"),
             )
         }
 
@@ -634,7 +634,7 @@ class PlayerActivity : BaseActivity() {
             MPVLib.setPropertyString("sub-border-color", borderColorSubtitles().get().toHexString())
             MPVLib.setPropertyString(
                 "sub-back-color",
-                backgroundColorSubtitles().get().toHexString()
+                backgroundColorSubtitles().get().toHexString(),
             )
         }
     }
@@ -817,9 +817,11 @@ class PlayerActivity : BaseActivity() {
         super.onResume()
         refreshUi()
         if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let { pip.update(
-                !it
-            ) }
+            player.paused?.let {
+                pip.update(
+                    !it,
+                )
+            }
         }
     }
 
@@ -996,7 +998,7 @@ class PlayerActivity : BaseActivity() {
                     if (switchMethod.first != null) {
                         when {
                             switchMethod.first!!.isEmpty() -> setInitialEpisodeError(
-                                Exception("Video list is empty.")
+                                Exception("Video list is empty."),
                             )
                             else -> setVideoList(qualityIndex = 0, switchMethod.first!!)
                         }
@@ -1147,7 +1149,7 @@ class PlayerActivity : BaseActivity() {
             x,
             y,
             0f,
-            kotlin.math.max(view.height, view.width).toFloat()
+            kotlin.math.max(view.height, view.width).toFloat(),
         ).setDuration(500).start()
 
         ObjectAnimator.ofFloat(view, "alpha", 0f, 0.15f).setDuration(500).start()
@@ -1177,7 +1179,7 @@ class PlayerActivity : BaseActivity() {
             player.timePos = newPos
         } else {
             MPVLib.command(
-                arrayOf("seek", newPos.toString(), "absolute+keyframes")
+                arrayOf("seek", newPos.toString(), "absolute+keyframes"),
             )
         }
         val newDiff = newPos - initialSeek
@@ -1189,7 +1191,7 @@ class PlayerActivity : BaseActivity() {
         if (diff != 0F) {
             fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(
                 0F,
-                maxVolume.toFloat()
+                maxVolume.toFloat(),
             )
         }
         val newVolume = fineVolume.toInt()
@@ -1340,13 +1342,15 @@ class PlayerActivity : BaseActivity() {
                 waitingAniSkip = -1
                 return
             }
-            skipType.let { MPVLib.command(
-                arrayOf(
-                    "seek",
-                    "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
-                    "absolute"
+            skipType.let {
+                MPVLib.command(
+                    arrayOf(
+                        "seek",
+                        "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
+                        "absolute",
+                    ),
                 )
-            ) }
+            }
             AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
         } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
             doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
@@ -1461,7 +1465,7 @@ class PlayerActivity : BaseActivity() {
         qualityIndex: Int,
         videos: List<Video>?,
         fromStart: Boolean = false,
-        position: Long? = null
+        position: Long? = null,
     ) {
         if (playerIsDestroyed) return
         currentVideoList = videos
@@ -1749,19 +1753,21 @@ class PlayerActivity : BaseActivity() {
                 // show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
                     toast(
-                        "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}"
+                        "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
                     )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                 waitingAniSkip--
             } else if (autoSkipAniSkip) {
-                skipType.let { MPVLib.command(
-                    arrayOf(
-                        "seek",
-                        "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
-                        "absolute"
+                skipType.let {
+                    MPVLib.command(
+                        arrayOf(
+                            "seek",
+                            "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
+                            "absolute",
+                        ),
                     )
-                ) }
+                }
             } else {
                 aniSkipPlayerUtils.showSkipButton(skipType)
             }
@@ -1812,10 +1818,12 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { changeEpisode(
-        viewModel.getAdjacentEpisodeId(previous = false),
-        autoPlay = true
-    ) }
+    private val nextEpisodeRunnable = Runnable {
+        changeEpisode(
+            viewModel.getAdjacentEpisodeId(previous = false),
+            autoPlay = true,
+        )
+    }
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)

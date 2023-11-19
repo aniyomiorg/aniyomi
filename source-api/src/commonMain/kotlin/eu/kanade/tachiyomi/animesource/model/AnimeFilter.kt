@@ -5,12 +5,12 @@ sealed class AnimeFilter<T>(val name: String, var state: T) {
     open class Separator(name: String = "") : AnimeFilter<Any>(name, 0)
     abstract class Select<V>(name: String, val values: Array<V>, state: Int = 0) : AnimeFilter<Int>(
         name,
-        state
+        state,
     )
     abstract class Text(name: String, state: String = "") : AnimeFilter<String>(name, state)
     abstract class CheckBox(name: String, state: Boolean = false) : AnimeFilter<Boolean>(
         name,
-        state
+        state,
     )
     abstract class TriState(name: String, state: Int = STATE_IGNORE) : AnimeFilter<Int>(name, state) {
         fun isIgnored() = state == STATE_IGNORE

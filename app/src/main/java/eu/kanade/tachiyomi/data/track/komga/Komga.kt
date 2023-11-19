@@ -72,7 +72,7 @@ class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, Ma
     }
 
     override suspend fun searchManga(query: String): List<MangaTrackSearch> = throw Exception(
-        "Not used"
+        "Not used",
     )
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {

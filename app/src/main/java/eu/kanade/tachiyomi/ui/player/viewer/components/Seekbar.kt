@@ -75,7 +75,7 @@ class Seekbar(
         val thumbRadius by animateDpAsState(if (isDragging) 10.dp else 8.dp, label = "thumbRadius")
         val trackHeight by animateDpAsState(
             targetValue = if (isDragging) 6.dp else 4.dp,
-            label = "trackHeight"
+            label = "trackHeight",
         )
         return Seeker(
             value = value,

@@ -11,8 +11,6 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -28,6 +26,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class BangumiApi(private val client: OkHttpClient, interceptor: BangumiInterceptor) {
 
@@ -113,7 +113,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         return withIOContext {
             val url = "$apiUrl/search/subject/${URLEncoder.encode(
                 search,
-                StandardCharsets.UTF_8.name()
+                StandardCharsets.UTF_8.name(),
             )}"
                 .toUri()
                 .buildUpon()
@@ -140,7 +140,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         return withIOContext {
             val url = "$apiUrl/search/subject/${URLEncoder.encode(
                 search,
-                StandardCharsets.UTF_8.name()
+                StandardCharsets.UTF_8.name(),
             )}"
                 .toUri()
                 .buildUpon()

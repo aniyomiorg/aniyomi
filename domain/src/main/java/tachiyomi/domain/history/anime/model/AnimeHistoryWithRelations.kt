@@ -1,7 +1,7 @@
 package tachiyomi.domain.history.anime.model
 
-import java.util.Date
 import tachiyomi.domain.entries.anime.model.AnimeCover
+import java.util.Date
 
 data class AnimeHistoryWithRelations(
     val id: Long,

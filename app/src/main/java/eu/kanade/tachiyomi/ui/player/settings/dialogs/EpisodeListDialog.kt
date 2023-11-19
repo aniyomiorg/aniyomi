@@ -38,12 +38,12 @@ import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.util.lang.toRelativeString
-import java.text.DateFormat
-import java.util.Date
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import java.text.DateFormat
+import java.util.Date
 
 @Composable
 fun EpisodeListDialog(

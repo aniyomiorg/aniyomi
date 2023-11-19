@@ -114,15 +114,15 @@ fun Screen.animeHistoryTab(
                     when (e) {
                         AnimeHistoryScreenModel.Event.InternalError ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.internal_error)
+                                context.getString(R.string.internal_error),
                             )
                         AnimeHistoryScreenModel.Event.HistoryCleared ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.clear_history_completed)
+                                context.getString(R.string.clear_history_completed),
                             )
                         is AnimeHistoryScreenModel.Event.OpenEpisode -> openEpisode(
                             context,
-                            e.episode
+                            e.episode,
                         )
                     }
                 }

@@ -16,7 +16,7 @@ class SetSortModeForMangaCategory(
     suspend fun await(
         categoryId: Long?,
         type: MangaLibrarySort.Type,
-        direction: MangaLibrarySort.Direction
+        direction: MangaLibrarySort.Direction,
     ) {
         // SY -->
         if (preferences.groupMangaLibraryBy().get() != MangaLibraryGroup.BY_DEFAULT) {
@@ -42,7 +42,7 @@ class SetSortModeForMangaCategory(
     suspend fun await(
         category: Category?,
         type: MangaLibrarySort.Type,
-        direction: MangaLibrarySort.Direction
+        direction: MangaLibrarySort.Direction,
     ) {
         await(category?.id, type, direction)
     }

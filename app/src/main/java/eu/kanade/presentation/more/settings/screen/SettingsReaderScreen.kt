@@ -14,10 +14,10 @@ import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
-import java.text.NumberFormat
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.NumberFormat
 
 object SettingsReaderScreen : SearchableSettings {
 
@@ -191,13 +191,13 @@ object SettingsReaderScreen : SearchableSettings {
                     entries = mapOf(
                         ReaderPreferences.TappingInvertMode.NONE to stringResource(R.string.none),
                         ReaderPreferences.TappingInvertMode.HORIZONTAL to stringResource(
-                            R.string.tapping_inverted_horizontal
+                            R.string.tapping_inverted_horizontal,
                         ),
                         ReaderPreferences.TappingInvertMode.VERTICAL to stringResource(
-                            R.string.tapping_inverted_vertical
+                            R.string.tapping_inverted_vertical,
                         ),
                         ReaderPreferences.TappingInvertMode.BOTH to stringResource(
-                            R.string.tapping_inverted_both
+                            R.string.tapping_inverted_both,
                         ),
                     ),
                     enabled = navMode != 5,
@@ -289,13 +289,13 @@ object SettingsReaderScreen : SearchableSettings {
                     entries = mapOf(
                         ReaderPreferences.TappingInvertMode.NONE to stringResource(R.string.none),
                         ReaderPreferences.TappingInvertMode.HORIZONTAL to stringResource(
-                            R.string.tapping_inverted_horizontal
+                            R.string.tapping_inverted_horizontal,
                         ),
                         ReaderPreferences.TappingInvertMode.VERTICAL to stringResource(
-                            R.string.tapping_inverted_vertical
+                            R.string.tapping_inverted_vertical,
                         ),
                         ReaderPreferences.TappingInvertMode.BOTH to stringResource(
-                            R.string.tapping_inverted_both
+                            R.string.tapping_inverted_both,
                         ),
                     ),
                     enabled = navMode != 5,
@@ -316,16 +316,16 @@ object SettingsReaderScreen : SearchableSettings {
                     title = stringResource(R.string.pref_hide_threshold),
                     entries = mapOf(
                         ReaderPreferences.ReaderHideThreshold.HIGHEST to stringResource(
-                            R.string.pref_highest
+                            R.string.pref_highest,
                         ),
                         ReaderPreferences.ReaderHideThreshold.HIGH to stringResource(
-                            R.string.pref_high
+                            R.string.pref_high,
                         ),
                         ReaderPreferences.ReaderHideThreshold.LOW to stringResource(
-                            R.string.pref_low
+                            R.string.pref_low,
                         ),
                         ReaderPreferences.ReaderHideThreshold.LOWEST to stringResource(
-                            R.string.pref_lowest
+                            R.string.pref_lowest,
                         ),
                     ),
                 ),

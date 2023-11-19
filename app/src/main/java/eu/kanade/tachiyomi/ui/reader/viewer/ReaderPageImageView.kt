@@ -118,7 +118,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
                     } else {
                         PointF(
                             sWidth.toFloat(),
-                            0F
+                            0F,
                         )
                     }
                     ZoomStartPosition.RIGHT -> if (forward) {
@@ -126,7 +126,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
                     } else {
                         PointF(
                             0F,
-                            0F
+                            0F,
                         )
                     }
                     ZoomStartPosition.CENTER -> center
@@ -294,7 +294,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
             is BitmapDrawable -> setImage(ImageSource.bitmap(image.bitmap))
             is InputStream -> setImage(ImageSource.inputStream(image))
             else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}"
+                "Not implemented for class ${image::class.simpleName}",
             )
         }
         isVisible = true
@@ -351,7 +351,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
             is Drawable -> image
             is InputStream -> ByteBuffer.wrap(image.readBytes())
             else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}"
+                "Not implemented for class ${image::class.simpleName}",
             )
         }
         val request = ImageRequest.Builder(context)

@@ -35,13 +35,6 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
-import java.io.File
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -80,6 +73,13 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -300,36 +300,36 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
                                             skippedUpdates.add(
                                                 manga to context.getString(
-                                                    R.string.skipped_reason_not_always_update
-                                                )
+                                                    R.string.skipped_reason_not_always_update,
+                                                ),
                                             )
 
                                         ENTRY_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
                                             skippedUpdates.add(
                                                 manga to context.getString(
-                                                    R.string.skipped_reason_completed
-                                                )
+                                                    R.string.skipped_reason_completed,
+                                                ),
                                             )
 
                                         ENTRY_HAS_UNVIEWED in restrictions && libraryManga.unreadCount != 0L ->
                                             skippedUpdates.add(
                                                 manga to context.getString(
-                                                    R.string.skipped_reason_not_caught_up
-                                                )
+                                                    R.string.skipped_reason_not_caught_up,
+                                                ),
                                             )
 
                                         ENTRY_NON_VIEWED in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
                                             skippedUpdates.add(
                                                 manga to context.getString(
-                                                    R.string.skipped_reason_not_started
-                                                )
+                                                    R.string.skipped_reason_not_started,
+                                                ),
                                             )
 
                                         ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && manga.nextUpdate > fetchWindow.second ->
                                             skippedUpdates.add(
                                                 manga to context.getString(
-                                                    R.string.skipped_reason_not_in_release_period
-                                                )
+                                                    R.string.skipped_reason_not_in_release_period,
+                                                ),
                                             )
 
                                         else -> {
@@ -341,8 +341,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                     val categoryIds = getCategories.await(manga.id).map { it.id }
                                                     if (manga.shouldDownloadNewChapters(
                                                             categoryIds,
-                                                            downloadPreferences
-                                                        )) {
+                                                            downloadPreferences,
+                                                        )
+                                                    ) {
                                                         downloadChapters(manga, newChapters)
                                                         hasDownloads.set(true)
                                                     }
@@ -351,17 +352,17 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                                     // Convert to the manga that contains new chapters
                                                     newUpdates.add(
-                                                        manga to newChapters.toTypedArray()
+                                                        manga to newChapters.toTypedArray(),
                                                     )
                                                 }
                                             } catch (e: Throwable) {
                                                 val errorMessage = when (e) {
                                                     is NoChaptersException -> context.getString(
-                                                        R.string.no_chapters_error
+                                                        R.string.no_chapters_error,
                                                     )
                                                     // failedUpdates will already have the source, don't need to copy it into the message
                                                     is SourceNotInstalledException -> context.getString(
-                                                        R.string.loader_not_implemented_error
+                                                        R.string.loader_not_implemented_error,
                                                     )
                                                     else -> e.message
                                                 }
@@ -465,7 +466,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         val updatedManga = manga.prepUpdateCover(
                                             coverCache,
                                             networkManga,
-                                            true
+                                            true,
                                         )
                                             .copyFrom(networkManga)
                                         try {
@@ -503,7 +504,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 notifier.showProgressNotification(
                     listOf(manga),
                     progressCount++,
-                    mangaToUpdate.size
+                    mangaToUpdate.size,
                 )
                 refreshMangaTracks(manga.id)
             }
@@ -558,7 +559,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val file = context.createFileInCacheDir("tachiyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(
-                        context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n"
+                        context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
                     )
                     // Error file format:
                     // ! Error
@@ -649,7 +650,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 context.workManager.enqueueUniquePeriodicWork(
                     WORK_NAME_AUTO,
                     ExistingPeriodicWorkPolicy.UPDATE,
-                    request
+                    request,
                 )
             } else {
                 context.workManager.cancelUniqueWork(WORK_NAME_AUTO)

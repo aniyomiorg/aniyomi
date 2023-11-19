@@ -157,7 +157,7 @@ object HomeScreen : Screen() {
                             transitionSpec = {
                                 materialFadeThroughIn(
                                     initialScale = 1f,
-                                    durationMillis = TabFadeDuration
+                                    durationMillis = TabFadeDuration,
                                 ) togetherWith
                                     materialFadeThroughOut(durationMillis = TabFadeDuration)
                             },

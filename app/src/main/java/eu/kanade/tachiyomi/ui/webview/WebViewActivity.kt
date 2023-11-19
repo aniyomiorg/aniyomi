@@ -136,7 +136,7 @@ class WebViewActivity : BaseActivity() {
             url: String,
             sourceId: Long? = null,
             title: String? = null,
-            isAnime: Boolean = false
+            isAnime: Boolean = false,
         ): Intent {
             return Intent(context, WebViewActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

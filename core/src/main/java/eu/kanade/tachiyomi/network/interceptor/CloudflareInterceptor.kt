@@ -10,13 +10,13 @@ import eu.kanade.tachiyomi.network.AndroidCookieJar
 import eu.kanade.tachiyomi.util.system.WebViewClientCompat
 import eu.kanade.tachiyomi.util.system.isOutdated
 import eu.kanade.tachiyomi.util.system.toast
-import java.io.IOException
-import java.util.concurrent.CountDownLatch
 import okhttp3.Cookie
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import java.io.IOException
+import java.util.concurrent.CountDownLatch
 
 class CloudflareInterceptor(
     private val context: Context,

@@ -15,11 +15,13 @@ fun List<Chapter>.filterDownloadedChapters(manga: Manga): List<Chapter> {
 
     val downloadCache: MangaDownloadCache = Injekt.get()
 
-    return filter { downloadCache.isChapterDownloaded(
-        it.name,
-        it.scanlator,
-        manga.title,
-        manga.source,
-        false
-    ) }
+    return filter {
+        downloadCache.isChapterDownloaded(
+            it.name,
+            it.scanlator,
+            manga.title,
+            manga.source,
+            false,
+        )
+    }
 }

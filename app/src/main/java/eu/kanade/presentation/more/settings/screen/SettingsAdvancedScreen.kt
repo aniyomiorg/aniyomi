@@ -62,7 +62,6 @@ import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
-import java.io.File
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import okhttp3.Headers
@@ -74,6 +73,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 object SettingsAdvancedScreen : SearchableSettings {
 
@@ -176,7 +176,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                                 context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
                                 context.toast(
-                                    R.string.battery_optimization_setting_activity_not_found
+                                    R.string.battery_optimization_setting_activity_not_found,
                                 )
                             }
                         } else {
@@ -214,7 +214,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     subtitle = stringResource(
                         R.string.used_cache_both,
                         readableAnimeSize,
-                        readableSize
+                        readableSize,
                     ),
                     onClick = {
                         scope.launchNonCancellable {
@@ -222,7 +222,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                                 val deletedFiles = chapterCache.clear() + episodeCache.clear()
                                 withUIContext {
                                     context.toast(
-                                        context.getString(R.string.cache_deleted, deletedFiles)
+                                        context.getString(R.string.cache_deleted, deletedFiles),
                                     )
                                     readableSizeSema++
                                 }
@@ -363,11 +363,11 @@ object SettingsAdvancedScreen : SearchableSettings {
                     onClick = {
                         MangaLibraryUpdateJob.startNow(
                             context,
-                            target = MangaLibraryUpdateJob.Target.COVERS
+                            target = MangaLibraryUpdateJob.Target.COVERS,
                         )
                         AnimeLibraryUpdateJob.startNow(
                             context,
-                            target = AnimeLibraryUpdateJob.Target.COVERS
+                            target = AnimeLibraryUpdateJob.Target.COVERS,
                         )
                     },
                 ),
@@ -378,11 +378,11 @@ object SettingsAdvancedScreen : SearchableSettings {
                     onClick = {
                         MangaLibraryUpdateJob.startNow(
                             context,
-                            target = MangaLibraryUpdateJob.Target.TRACKING
+                            target = MangaLibraryUpdateJob.Target.TRACKING,
                         )
                         AnimeLibraryUpdateJob.startNow(
                             context,
-                            target = AnimeLibraryUpdateJob.Target.TRACKING
+                            target = AnimeLibraryUpdateJob.Target.TRACKING,
                         )
                     },
                 ),
@@ -421,9 +421,11 @@ object SettingsAdvancedScreen : SearchableSettings {
             AlertDialog(
                 onDismissRequest = dismiss,
                 title = { Text(text = stringResource(R.string.ext_installer_shizuku)) },
-                text = { Text(
-                    text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog)
-                ) },
+                text = {
+                    Text(
+                        text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog),
+                    )
+                },
                 dismissButton = {
                     TextButton(onClick = dismiss) {
                         Text(text = stringResource(R.string.action_cancel))

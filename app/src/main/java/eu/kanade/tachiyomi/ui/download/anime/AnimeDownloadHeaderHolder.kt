@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.databinding.DownloadHeaderBinding
 
 class AnimeDownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : ExpandableViewHolder(
     view,
-    adapter
+    adapter,
 ) {
 
     private val binding = DownloadHeaderBinding.bind(view)

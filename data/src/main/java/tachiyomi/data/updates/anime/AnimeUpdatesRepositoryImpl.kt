@@ -25,7 +25,7 @@ class AnimeUpdatesRepositoryImpl(
             animeupdatesViewQueries.getRecentAnimeUpdates(
                 after,
                 limit,
-                animeUpdateWithRelationMapper
+                animeUpdateWithRelationMapper,
             )
         }
     }

@@ -77,7 +77,7 @@ class WorkerInfoScreen : Screen() {
                                     onClick = {
                                         context.copyToClipboard(
                                             title,
-                                            enqueued + finished + running
+                                            enqueued + finished + running,
                                         )
                                     },
                                 ),
@@ -130,8 +130,8 @@ class WorkerInfoScreen : Screen() {
                 WorkQuery.fromStates(
                     WorkInfo.State.SUCCEEDED,
                     WorkInfo.State.FAILED,
-                    WorkInfo.State.CANCELLED
-                )
+                    WorkInfo.State.CANCELLED,
+                ),
             )
             .asFlow()
             .map(::constructString)

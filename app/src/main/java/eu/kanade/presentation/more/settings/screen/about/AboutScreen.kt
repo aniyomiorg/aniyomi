@@ -42,10 +42,6 @@ import eu.kanade.tachiyomi.util.CrashLogUtil
 import eu.kanade.tachiyomi.util.lang.toDateTimestampString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
@@ -57,6 +53,10 @@ import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 object AboutScreen : Screen() {
 
@@ -147,9 +147,11 @@ object AboutScreen : Screen() {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.help_translate),
-                        onPreferenceClick = { uriHandler.openUri(
-                            "https://aniyomi.org/help/contribution/#translation"
-                        ) },
+                        onPreferenceClick = {
+                            uriHandler.openUri(
+                                "https://aniyomi.org/help/contribution/#translation",
+                            )
+                        },
                     )
                 }
 
@@ -211,10 +213,14 @@ object AboutScreen : Screen() {
         val updateChecker = AppUpdateChecker()
         withUIContext {
             try {
-                when (val result = withIOContext { updateChecker.checkForUpdate(
-                    context,
-                    forceCheck = true
-                ) }) {
+                when (
+                    val result = withIOContext {
+                        updateChecker.checkForUpdate(
+                            context,
+                            forceCheck = true,
+                        )
+                    }
+                ) {
                     is GetApplicationRelease.Result.NewUpdate -> {
                         onAvailableUpdate(result)
                     }
@@ -278,7 +284,7 @@ object AboutScreen : Screen() {
             outputDf.timeZone = TimeZone.getDefault()
 
             buildTime!!.toDateTimestampString(
-                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
+                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),
             )
         } catch (e: Exception) {
             BuildConfig.BUILD_TIME

@@ -30,15 +30,21 @@ fun PlayerSettingsSheet(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
-    val verticalGesture by remember { mutableStateOf(
-        screenModel.preferences.gestureVolumeBrightness()
-    ) }
-    val horizontalGesture by remember { mutableStateOf(
-        screenModel.preferences.gestureHorizontalSeek()
-    ) }
-    var statisticsPage by remember { mutableStateOf(
-        screenModel.preferences.playerStatisticsPage().get()
-    ) }
+    val verticalGesture by remember {
+        mutableStateOf(
+            screenModel.preferences.gestureVolumeBrightness(),
+        )
+    }
+    val horizontalGesture by remember {
+        mutableStateOf(
+            screenModel.preferences.gestureHorizontalSeek(),
+        )
+    }
+    var statisticsPage by remember {
+        mutableStateOf(
+            screenModel.preferences.playerStatisticsPage().get(),
+        )
+    }
     var decoder by remember { mutableStateOf(screenModel.preferences.hwDec().get()) }
 
     // TODO: Shift to MPV-Lib
@@ -91,7 +97,7 @@ fun PlayerSettingsSheet(
 
             Column(
                 modifier = Modifier.fillMaxWidth().padding(
-                    horizontal = MaterialTheme.padding.medium
+                    horizontal = MaterialTheme.padding.medium,
                 ),
             ) {
                 Text(
@@ -116,7 +122,7 @@ fun PlayerSettingsSheet(
 
             Column(
                 modifier = Modifier.fillMaxWidth().padding(
-                    horizontal = MaterialTheme.padding.medium
+                    horizontal = MaterialTheme.padding.medium,
                 ),
             ) {
                 Text(

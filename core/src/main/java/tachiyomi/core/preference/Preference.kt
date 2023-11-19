@@ -24,7 +24,7 @@ interface Preference<T> {
 }
 
 inline fun <reified T, R : T> Preference<T>.getAndSet(crossinline block: (T) -> R) = set(
-    block(get())
+    block(get()),
 )
 
 operator fun <T> Preference<Set<T>>.plusAssign(item: T) {

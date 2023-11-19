@@ -162,7 +162,7 @@ class MangaDownloadManager(
             chapter.name,
             chapter.scanlator,
             manga.title,
-            source
+            source,
         )
         val files = chapterDir?.listFiles().orEmpty()
             .filter { "image" in it.type.orEmpty() }
@@ -197,7 +197,7 @@ class MangaDownloadManager(
             chapterScanlator,
             mangaTitle,
             sourceId,
-            skipCache
+            skipCache,
         )
     }
 
@@ -375,7 +375,7 @@ class MangaDownloadManager(
         source: MangaSource,
         manga: Manga,
         oldChapter: Chapter,
-        newChapter: Chapter
+        newChapter: Chapter,
     ) {
         val oldNames = provider.getValidChapterDirNames(oldChapter.name, oldChapter.scanlator)
         val mangaDir = provider.getMangaDir(manga.title, source)
@@ -403,7 +403,7 @@ class MangaDownloadManager(
     private suspend fun getChaptersToDelete(chapters: List<Chapter>, manga: Manga): List<Chapter> {
         // Retrieve the categories that are set to exclude from being deleted on read
         val categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(
-            String::toLong
+            String::toLong,
         )
 
         val categoriesForManga = getCategories.await(manga.id)

@@ -27,13 +27,13 @@ object GLUtil {
         var maximumTextureSize = 0
 
         // Iterate through all the configurations to located the maximum texture size
-        for (i in 0 ..< totalConfigurations[0]) {
+        for (i in 0..<totalConfigurations[0]) {
             // Only need to check for width since opengl textures are always squared
             egl.eglGetConfigAttrib(
                 display,
                 configurationsList[i],
                 EGL10.EGL_MAX_PBUFFER_WIDTH,
-                textureSize
+                textureSize,
             )
 
             // Keep track of the maximum texture size

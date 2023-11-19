@@ -83,10 +83,12 @@ class EpisodeRepositoryImpl(
     }
 
     override suspend fun getBookmarkedEpisodesByAnimeId(animeId: Long): List<Episode> {
-        return handler.awaitList { episodesQueries.getBookmarkedEpisodesByAnimeId(
-            animeId,
-            episodeMapper
-        ) }
+        return handler.awaitList {
+            episodesQueries.getBookmarkedEpisodesByAnimeId(
+                animeId,
+                episodeMapper,
+            )
+        }
     }
 
     override suspend fun getEpisodeById(id: Long): Episode? {
@@ -94,17 +96,21 @@ class EpisodeRepositoryImpl(
     }
 
     override suspend fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
-        return handler.subscribeToList { episodesQueries.getEpisodesByAnimeId(
-            animeId,
-            episodeMapper
-        ) }
+        return handler.subscribeToList {
+            episodesQueries.getEpisodesByAnimeId(
+                animeId,
+                episodeMapper,
+            )
+        }
     }
 
     override suspend fun getEpisodeByUrlAndAnimeId(url: String, animeId: Long): Episode? {
-        return handler.awaitOneOrNull { episodesQueries.getEpisodeByUrlAndAnimeId(
-            url,
-            animeId,
-            episodeMapper
-        ) }
+        return handler.awaitOneOrNull {
+            episodesQueries.getEpisodeByUrlAndAnimeId(
+                url,
+                animeId,
+                episodeMapper,
+            )
+        }
     }
 }

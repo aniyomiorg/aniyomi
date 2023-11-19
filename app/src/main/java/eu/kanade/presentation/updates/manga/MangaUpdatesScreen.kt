@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesScreenModel
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -30,6 +29,7 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MangaUpdateScreen(

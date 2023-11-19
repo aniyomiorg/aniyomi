@@ -69,7 +69,7 @@ fun ChapterTransition(
                     fallbackLabel = stringResource(R.string.transition_no_previous),
                     chapterGap = calculateChapterGap(
                         currChapter.toDomainChapter(),
-                        goingToChapter?.toDomainChapter()
+                        goingToChapter?.toDomainChapter(),
                     ),
                 )
             }
@@ -84,7 +84,7 @@ fun ChapterTransition(
                     fallbackLabel = stringResource(R.string.transition_no_next),
                     chapterGap = calculateChapterGap(
                         goingToChapter?.toDomainChapter(),
-                        currChapter.toDomainChapter()
+                        currChapter.toDomainChapter(),
                     ),
                 )
             }
@@ -202,7 +202,7 @@ private fun ChapterGapWarning(
                 text = pluralStringResource(
                     R.plurals.missing_chapters_warning,
                     count = gapCount,
-                    gapCount
+                    gapCount,
                 ),
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -324,7 +324,7 @@ private fun TransitionTextPreview() {
             ChapterTransition(
                 transition = ChapterTransition.Next(
                     ReaderChapter(FakeChapter),
-                    ReaderChapter(FakeChapter)
+                    ReaderChapter(FakeChapter),
                 ),
                 currChapterDownloaded = false,
                 goingToChapterDownloaded = true,
@@ -341,7 +341,7 @@ private fun TransitionTextLongTitlePreview() {
             ChapterTransition(
                 transition = ChapterTransition.Next(
                     ReaderChapter(FakeChapterLongTitle),
-                    ReaderChapter(FakeChapter)
+                    ReaderChapter(FakeChapter),
                 ),
                 currChapterDownloaded = true,
                 goingToChapterDownloaded = true,
@@ -358,7 +358,7 @@ private fun TransitionTextWithGapPreview() {
             ChapterTransition(
                 transition = ChapterTransition.Next(
                     ReaderChapter(FakeChapter),
-                    ReaderChapter(FakeGapChapter)
+                    ReaderChapter(FakeGapChapter),
                 ),
                 currChapterDownloaded = true,
                 goingToChapterDownloaded = false,

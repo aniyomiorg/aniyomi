@@ -65,7 +65,7 @@ interface AnimeSource {
         ReplaceWith("getAnimeDetails"),
     )
     fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException(
-        "Not used"
+        "Not used",
     )
 
     /**
@@ -78,7 +78,7 @@ interface AnimeSource {
         ReplaceWith("getEpisodeList"),
     )
     fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException(
-        "Not used"
+        "Not used",
     )
 
     /**

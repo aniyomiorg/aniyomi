@@ -24,7 +24,6 @@ import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.tachiyomi.R
-import java.io.File
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
@@ -33,6 +32,7 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 object SettingsDownloadScreen : SearchableSettings {
 
@@ -45,11 +45,11 @@ object SettingsDownloadScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetMangaCategories>() }
         val allCategories by getCategories.subscribe().collectAsState(
-            initial = runBlocking { getCategories.await() }
+            initial = runBlocking { getCategories.await() },
         )
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
-            initial = runBlocking { getAnimeCategories.await() }
+            initial = runBlocking { getAnimeCategories.await() },
         )
 
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
@@ -88,7 +88,7 @@ object SettingsDownloadScreen : SearchableSettings {
             getDownloadAheadGroup(downloadPreferences = downloadPreferences),
             getExternalDownloaderGroup(
                 downloadPreferences = downloadPreferences,
-                basePreferences = basePreferences
+                basePreferences = basePreferences,
             ),
         )
     }
@@ -244,10 +244,10 @@ object SettingsDownloadScreen : SearchableSettings {
                 onDismissRequest = { showAnimeDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
                     downloadNewEpisodeCategoriesPref.set(
-                        newIncluded.fastMap { it.id.toString() }.toSet()
+                        newIncluded.fastMap { it.id.toString() }.toSet(),
                     )
                     downloadNewEpisodeCategoriesExcludePref.set(
-                        newExcluded.fastMap { it.id.toString() }.toSet()
+                        newExcluded.fastMap { it.id.toString() }.toSet(),
                     )
                     showAnimeDialog = false
                 },
@@ -274,10 +274,10 @@ object SettingsDownloadScreen : SearchableSettings {
                 onDismissRequest = { showDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
                     downloadNewChapterCategoriesPref.set(
-                        newIncluded.fastMap { it.id.toString() }.toSet()
+                        newIncluded.fastMap { it.id.toString() }.toSet(),
                     )
                     downloadNewChapterCategoriesExcludePref.set(
-                        newExcluded.fastMap { it.id.toString() }.toSet()
+                        newExcluded.fastMap { it.id.toString() }.toSet(),
                     )
                     showDialog = false
                 },
@@ -336,7 +336,7 @@ object SettingsDownloadScreen : SearchableSettings {
                             pluralStringResource(
                                 id = R.plurals.next_unread_chapters,
                                 count = it,
-                                it
+                                it,
                             )
                         }
                     },
@@ -351,13 +351,13 @@ object SettingsDownloadScreen : SearchableSettings {
                             pluralStringResource(
                                 id = R.plurals.next_unseen_episodes,
                                 count = it,
-                                it
+                                it,
                             )
                         }
                     },
                 ),
                 Preference.PreferenceItem.InfoPreference(
-                    stringResource(R.string.download_ahead_info)
+                    stringResource(R.string.download_ahead_info),
                 ),
             ),
         )
@@ -366,7 +366,7 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     private fun getExternalDownloaderGroup(
         downloadPreferences: DownloadPreferences,
-        basePreferences: BasePreferences
+        basePreferences: BasePreferences,
     ): Preference.PreferenceGroup {
         val useExternalDownloader = downloadPreferences.useExternalDownloader()
         val externalDownloaderPreference = downloadPreferences.externalDownloaderSelection()

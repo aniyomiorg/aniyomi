@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.manga.MangaHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.toDateKey
-import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +31,7 @@ import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 
 class MangaHistoryScreenModel(
     private val getHistory: GetMangaHistory = Injekt.get(),
@@ -74,7 +74,7 @@ class MangaHistoryScreenModel(
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 when {
                     beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(
-                        afterDate
+                        afterDate,
                     )
                     // Return null to avoid adding a separator between two items.
                     else -> null

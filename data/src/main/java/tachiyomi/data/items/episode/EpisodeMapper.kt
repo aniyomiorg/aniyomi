@@ -16,7 +16,7 @@ val episodeMapper: (
     Long,
     Long,
     Long,
-    Long
+    Long,
 ) -> Episode =
     { id, animeId, url, name, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, episodeNumber, sourceOrder, dateFetch, dateUpload, lastModifiedAt ->
         Episode(

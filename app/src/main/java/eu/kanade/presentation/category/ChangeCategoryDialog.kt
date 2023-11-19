@@ -65,7 +65,7 @@ fun ChangeCategoryDialog(
                 TextButton(onClick = {
                     onDismissRequest()
                     onEditCategories()
-                },) {
+                }) {
                     Text(text = stringResource(R.string.action_edit))
                 }
                 Spacer(modifier = Modifier.weight(1f))

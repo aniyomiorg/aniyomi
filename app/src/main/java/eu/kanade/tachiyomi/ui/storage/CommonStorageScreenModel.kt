@@ -5,7 +5,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.presentation.more.storage.StorageItem
 import eu.kanade.presentation.more.storage.StorageScreenState
-import kotlin.random.Random
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,6 +17,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.service.LibraryPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.random.Random
 
 abstract class CommonStorageScreenModel<T>(
     private val downloadCacheChanges: SharedFlow<Unit>,

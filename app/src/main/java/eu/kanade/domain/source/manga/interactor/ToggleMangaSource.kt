@@ -25,7 +25,7 @@ class ToggleMangaSource(
                 disabled.minus(transformedSourceIds)
             } else {
                 disabled.plus(
-                    transformedSourceIds
+                    transformedSourceIds,
                 )
             }
         }

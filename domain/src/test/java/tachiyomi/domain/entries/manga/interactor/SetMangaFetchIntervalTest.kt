@@ -2,14 +2,14 @@ package tachiyomi.domain.entries.manga.interactor
 
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
-import java.time.ZonedDateTime
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.toJavaDuration
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import tachiyomi.domain.items.chapter.model.Chapter
+import java.time.ZonedDateTime
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.toJavaDuration
 
 @Execution(ExecutionMode.CONCURRENT)
 class SetMangaFetchIntervalTest {

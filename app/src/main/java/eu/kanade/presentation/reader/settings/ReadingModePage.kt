@@ -17,12 +17,12 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
-import java.text.NumberFormat
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.util.collectAsState
+import java.text.NumberFormat
 
 private val readingModeOptions = ReadingModeType.entries.map { it.stringRes to it }
 private val orientationTypeOptions = OrientationType.entries.map { it.stringRes to it }
@@ -33,9 +33,11 @@ internal fun ColumnScope.ReadingModePage(screenModel: ReaderSettingsScreenModel)
     HeadingItem(R.string.pref_category_for_this_series)
     val manga by screenModel.mangaFlow.collectAsState()
 
-    val readingMode = remember(manga) { ReadingModeType.fromPreference(
-        manga?.readingModeType?.toInt()
-    ) }
+    val readingMode = remember(manga) {
+        ReadingModeType.fromPreference(
+            manga?.readingModeType?.toInt(),
+        )
+    }
     SettingsChipRow(R.string.pref_category_reading_mode) {
         readingModeOptions.map { (stringRes, it) ->
             FilterChip(
@@ -46,9 +48,11 @@ internal fun ColumnScope.ReadingModePage(screenModel: ReaderSettingsScreenModel)
         }
     }
 
-    val orientationType = remember(manga) { OrientationType.fromPreference(
-        manga?.orientationType?.toInt()
-    ) }
+    val orientationType = remember(manga) {
+        OrientationType.fromPreference(
+            manga?.orientationType?.toInt(),
+        )
+    }
     SettingsChipRow(R.string.rotation_type) {
         orientationTypeOptions.map { (stringRes, it) ->
             FilterChip(

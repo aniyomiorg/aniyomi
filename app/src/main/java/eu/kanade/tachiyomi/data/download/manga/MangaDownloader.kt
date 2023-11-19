@@ -18,11 +18,6 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
-import java.io.BufferedOutputStream
-import java.io.File
-import java.util.zip.CRC32
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,6 +60,11 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.BufferedOutputStream
+import java.io.File
+import java.util.zip.CRC32
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -317,7 +317,7 @@ class MangaDownloader(
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
-                                MangaLibraryUpdateNotifier.HELP_WARNING_URL
+                                MangaLibraryUpdateNotifier.HELP_WARNING_URL,
                             ),
                         )
                     }
@@ -341,14 +341,14 @@ class MangaDownloader(
             notifier.onError(
                 context.getString(R.string.download_insufficient_space),
                 download.chapter.name,
-                download.manga.title
+                download.manga.title,
             )
             return
         }
 
         val chapterDirname = provider.getChapterDirName(
             download.chapter.name,
-            download.chapter.scanlator
+            download.chapter.scanlator,
         )
         val tmpDir = mangaDir.createDirectory(chapterDirname + TMP_DIR_SUFFIX)
 
@@ -362,12 +362,14 @@ class MangaDownloader(
                     throw Exception(context.getString(R.string.page_list_empty_error))
                 }
                 // Don't trust index from source
-                val reIndexedPages = pages.mapIndexed { index, page -> Page(
-                    index,
-                    page.url,
-                    page.imageUrl,
-                    page.uri
-                ) }
+                val reIndexedPages = pages.mapIndexed { index, page ->
+                    Page(
+                        index,
+                        page.url,
+                        page.imageUrl,
+                        page.uri,
+                    )
+                }
                 download.pages = reIndexedPages
                 reIndexedPages
             }
@@ -453,7 +455,7 @@ class MangaDownloader(
         page: Page,
         download: MangaDownload,
         tmpDir: UniFile,
-        dataSaver: DataSaver
+        dataSaver: DataSaver,
     ) {
         // If the image URL is empty, do nothing
         if (page.imageUrl == null) {
@@ -468,9 +470,11 @@ class MangaDownloader(
         tmpFile?.delete()
 
         // Try to find the image file
-        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") || it.name!!.startsWith(
-            "${filename}__001"
-        ) }
+        val imageFile = tmpDir.listFiles()?.firstOrNull {
+            it.name!!.startsWith("$filename.") || it.name!!.startsWith(
+                "${filename}__001",
+            )
+        }
 
         try {
             // If the image is already downloaded, do nothing. Otherwise download from network
@@ -479,7 +483,7 @@ class MangaDownloader(
                 chapterCache.isImageInCache(page.imageUrl!!) -> copyImageFromCache(
                     chapterCache.getImageFile(page.imageUrl!!),
                     tmpDir,
-                    filename
+                    filename,
                 )
                 else -> downloadImage(page, download.source, tmpDir, filename, dataSaver)
             }
@@ -511,7 +515,7 @@ class MangaDownloader(
         source: HttpSource,
         tmpDir: UniFile,
         filename: String,
-        dataSaver: DataSaver
+        dataSaver: DataSaver,
     ): UniFile {
         page.status = Page.State.DOWNLOAD_IMAGE
         page.progress = 0
@@ -584,11 +588,13 @@ class MangaDownloader(
 
         try {
             val filenamePrefix = String.format("%03d", page.number)
-            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(
-                filenamePrefix
-            ) }
+            val imageFile = tmpDir.listFiles()?.firstOrNull {
+                it.name.orEmpty().startsWith(
+                    filenamePrefix,
+                )
+            }
                 ?: error(
-                    context.getString(R.string.download_notifier_split_page_not_found, page.number)
+                    context.getString(R.string.download_notifier_split_page_not_found, page.number),
                 )
 
             // If the original page was previously split, then skip

@@ -36,11 +36,11 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
-import java.io.File
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.collectAsState
+import java.io.File
 
 @Composable
 fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {

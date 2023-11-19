@@ -11,14 +11,6 @@ import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
-import java.io.IOException
-import java.net.URI
-import java.net.URISyntaxException
-import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Headers
@@ -27,6 +19,14 @@ import okhttp3.Request
 import okhttp3.Response
 import rx.Observable
 import uy.kohesive.injekt.injectLazy
+import java.io.IOException
+import java.net.URI
+import java.net.URISyntaxException
+import java.security.MessageDigest
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * A simple implementation for sources from a website.
@@ -345,7 +345,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         return suspendCoroutine { continuation ->
             animeDownloadClient.newCachelessCallWithProgress(
                 videoRequest(video, video.totalBytesDownloaded),
-                video
+                video,
             )
                 .enqueue(
                     object : Callback {

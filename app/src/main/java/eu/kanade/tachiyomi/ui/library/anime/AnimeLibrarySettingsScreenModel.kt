@@ -52,7 +52,7 @@ class AnimeLibrarySettingsScreenModel(
     fun setSort(
         category: Category?,
         mode: AnimeLibrarySort.Type,
-        direction: AnimeLibrarySort.Direction
+        direction: AnimeLibrarySort.Direction,
     ) {
         coroutineScope.launchIO {
             setSortModeForCategory.await(category, mode, direction)

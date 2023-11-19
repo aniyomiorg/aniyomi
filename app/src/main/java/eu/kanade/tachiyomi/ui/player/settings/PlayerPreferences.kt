@@ -9,7 +9,7 @@ class PlayerPreferences(
 ) {
     fun preserveWatchingPosition() = preferenceStore.getBoolean(
         "pref_preserve_watching_position",
-        false
+        false,
     )
 
     fun enablePip() = preferenceStore.getBoolean("pref_enable_pip", true)
@@ -33,20 +33,20 @@ class PlayerPreferences(
 
     fun defaultPlayerOrientationType() = preferenceStore.getInt(
         "pref_default_player_orientation_type_key",
-        10
+        10,
     )
     fun adjustOrientationVideoDimensions() = preferenceStore.getBoolean(
         "pref_adjust_orientation_video_dimensions",
-        true
+        true,
     )
 
     fun defaultPlayerOrientationLandscape() = preferenceStore.getInt(
         "pref_default_player_orientation_landscape_key",
-        6
+        6,
     )
     fun defaultPlayerOrientationPortrait() = preferenceStore.getInt(
         "pref_default_player_orientation_portrait_key",
-        7
+        7,
     )
 
     fun playerSpeed() = preferenceStore.getFloat("pref_player_speed", 1F)
@@ -65,14 +65,14 @@ class PlayerPreferences(
 
     fun gestureVolumeBrightness() = preferenceStore.getBoolean(
         "pref_gesture_volume_brightness",
-        true
+        true,
     )
     fun gestureHorizontalSeek() = preferenceStore.getBoolean("pref_gesture_horizontal_seek", true)
     fun playerStatisticsPage() = preferenceStore.getInt("pref_player_statistics_page", 0)
 
     fun alwaysUseExternalPlayer() = preferenceStore.getBoolean(
         "pref_always_use_external_player",
-        false
+        false,
     )
     fun externalPlayerPreference() = preferenceStore.getString("external_player_preference", "")
 
@@ -86,7 +86,7 @@ class PlayerPreferences(
     fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean(
         "pref_enable_netflixStyle_aniskip",
-        false
+        false,
     )
 
     fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
@@ -97,7 +97,7 @@ class PlayerPreferences(
 
     fun rememberSubtitlesDelay() = preferenceStore.getBoolean(
         "pref_remember_subtitles_delay",
-        false
+        false,
     )
     fun subtitlesDelay() = preferenceStore.getInt("pref_subtitles_delay", 0)
 

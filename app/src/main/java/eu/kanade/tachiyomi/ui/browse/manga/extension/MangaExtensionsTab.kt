@@ -41,7 +41,7 @@ fun mangaExtensionsTab(
                 onLongClickItem = { extension ->
                     when (extension) {
                         is MangaExtension.Available -> extensionsScreenModel.installExtension(
-                            extension
+                            extension,
                         )
                         else -> extensionsScreenModel.uninstallExtension(extension)
                     }

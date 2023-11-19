@@ -76,9 +76,6 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import java.text.DateFormat
-import java.util.Date
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -92,6 +89,9 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
+import java.text.DateFormat
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AnimeScreen(
@@ -672,10 +672,12 @@ fun AnimeScreenLargeImpl(
                             }
                             Text(text = stringResource(id))
                         },
-                        icon = { Icon(
-                            imageVector = Icons.Filled.PlayArrow,
-                            contentDescription = null
-                        ) },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.PlayArrow,
+                                contentDescription = null,
+                            )
+                        },
                         onClick = onContinueWatching,
                         expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
                     )
@@ -907,12 +909,14 @@ private fun LazyListScope.sharedEpisodeItems(
                 onEpisodeItemClick(
                     episodeItem = episodeItem,
                     episodes = episodes,
-                    onToggleSelection = { onEpisodeSelected(
-                        episodeItem,
-                        !episodeItem.selected,
-                        true,
-                        false
-                    ) },
+                    onToggleSelection = {
+                        onEpisodeSelected(
+                            episodeItem,
+                            !episodeItem.selected,
+                            true,
+                            false,
+                        )
+                    },
                     onEpisodeClicked = onEpisodeClicked,
                 )
             },

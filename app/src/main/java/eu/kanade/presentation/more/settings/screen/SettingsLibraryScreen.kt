@@ -330,14 +330,14 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_library_update_manga_restriction),
                     entries = mapOf(
                         ENTRY_HAS_UNVIEWED to stringResource(
-                            R.string.pref_update_only_completely_read
+                            R.string.pref_update_only_completely_read,
                         ),
                         ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
                         ENTRY_NON_COMPLETED to stringResource(
-                            R.string.pref_update_only_non_completed
+                            R.string.pref_update_only_non_completed,
                         ),
                         ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(
-                            R.string.pref_update_only_in_release_period
+                            R.string.pref_update_only_in_release_period,
                         ),
                     ),
                 ),
@@ -361,16 +361,16 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_chapter_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(
-                            R.string.action_disable
+                            R.string.action_disable,
                         ),
                         LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(
-                            R.string.action_bookmark
+                            R.string.action_bookmark,
                         ),
                         LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(
-                            R.string.action_mark_as_read
+                            R.string.action_mark_as_read,
                         ),
                         LibraryPreferences.ChapterSwipeAction.Download to stringResource(
-                            R.string.action_download
+                            R.string.action_download,
                         ),
                     ),
                 ),
@@ -379,16 +379,16 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_chapter_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(
-                            R.string.action_disable
+                            R.string.action_disable,
                         ),
                         LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(
-                            R.string.action_bookmark
+                            R.string.action_bookmark,
                         ),
                         LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(
-                            R.string.action_mark_as_read
+                            R.string.action_mark_as_read,
                         ),
                         LibraryPreferences.ChapterSwipeAction.Download to stringResource(
-                            R.string.action_download
+                            R.string.action_download,
                         ),
                     ),
                 ),
@@ -408,16 +408,16 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_episode_swipe_start),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(
-                            R.string.action_disable
+                            R.string.action_disable,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(
-                            R.string.action_bookmark_episode
+                            R.string.action_bookmark_episode,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(
-                            R.string.action_mark_as_seen
+                            R.string.action_mark_as_seen,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.Download to stringResource(
-                            R.string.action_download
+                            R.string.action_download,
                         ),
                     ),
                 ),
@@ -426,16 +426,16 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_episode_swipe_end),
                     entries = mapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(
-                            R.string.action_disable
+                            R.string.action_disable,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(
-                            R.string.action_bookmark_episode
+                            R.string.action_bookmark_episode,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(
-                            R.string.action_mark_as_seen
+                            R.string.action_mark_as_seen,
                         ),
                         LibraryPreferences.EpisodeSwipeAction.Download to stringResource(
-                            R.string.action_download
+                            R.string.action_download,
                         ),
                     ),
                 ),

@@ -161,7 +161,7 @@ class MangaDownloadQueueScreenModel(
 
     fun <R : Comparable<R>> reorderQueue(
         selector: (MangaDownloadItem) -> R,
-        reverse: Boolean = false
+        reverse: Boolean = false,
     ) {
         val adapter = adapter ?: return
         val newDownloads = mutableListOf<MangaDownload>()

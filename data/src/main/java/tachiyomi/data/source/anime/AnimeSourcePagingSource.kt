@@ -13,7 +13,7 @@ import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 class AnimeSourceSearchPagingSource(
     source: AnimeCatalogueSource,
     val query: String,
-    val filters: AnimeFilterList
+    val filters: AnimeFilterList,
 ) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()

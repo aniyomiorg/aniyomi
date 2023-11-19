@@ -50,7 +50,7 @@ fun PlayerDialog(
         Surface(
             shape = MaterialTheme.shapes.large,
             modifier = Modifier.fillMaxWidth(),
-            tonalElevation = 1.dp
+            tonalElevation = 1.dp,
         ) {
             if (hideSystemBars) {
                 rememberSystemUiController().apply {
@@ -71,7 +71,7 @@ fun PlayerDialog(
                 if (onConfirmRequest != null) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         TextButton(onClick = onDismissRequest) {
                             Text(stringResource(R.string.action_cancel))

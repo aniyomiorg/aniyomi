@@ -62,7 +62,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel),
-                cancelIntent
+                cancelIntent,
             )
         }
     }
@@ -148,7 +148,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_LIBRARY_SKIPPED,
         ) {
             setContentTitle(
-                context.resources.getString(R.string.notification_update_skipped, skipped)
+                context.resources.getString(R.string.notification_update_skipped, skipped),
             )
             setContentText(context.getString(R.string.learn_more))
             setSmallIcon(R.drawable.ic_ani)
@@ -175,8 +175,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     context.resources.getQuantityString(
                         R.plurals.notification_new_chapters_summary,
                         updates.size,
-                        updates.size
-                    )
+                        updates.size,
+                    ),
                 )
 
                 if (!preferences.hideNotificationContent().get()) {
@@ -209,7 +209,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     updates.map { (manga, chapters) ->
                         NotificationManagerCompat.NotificationWithIdAndTag(
                             manga.id.hashCode(),
-                            createNewChaptersNotification(manga, chapters)
+                            createNewChaptersNotification(manga, chapters),
                         )
                     },
                 )
@@ -315,7 +315,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 context.resources.getQuantityString(
                     R.plurals.notification_chapters_generic,
                     chapters.size,
-                    chapters.size
+                    chapters.size,
                 )
             }
             // Only 1 chapter has a parsed chapter number
@@ -325,14 +325,14 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     // "Chapter 2.5"
                     context.resources.getString(
                         R.string.notification_chapters_single,
-                        displayableChapterNumbers.first()
+                        displayableChapterNumbers.first(),
                     )
                 } else {
                     // "Chapter 2.5 and 10 more"
                     context.resources.getString(
                         R.string.notification_chapters_single_and_more,
                         displayableChapterNumbers.first(),
-                        remaining
+                        remaining,
                     )
                 }
             }
@@ -343,19 +343,19 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     // "Chapters 1, 2.5, 3, 4, 5 and 10 more"
                     val remaining = displayableChapterNumbers.size - NOTIF_MAX_CHAPTERS
                     val joinedChapterNumbers = displayableChapterNumbers.take(NOTIF_MAX_CHAPTERS).joinToString(
-                        ", "
+                        ", ",
                     )
                     context.resources.getQuantityString(
                         R.plurals.notification_chapters_multiple_and_more,
                         remaining,
                         joinedChapterNumbers,
-                        remaining
+                        remaining,
                     )
                 } else {
                     // "Chapters 1, 2.5, 3"
                     context.resources.getString(
                         R.string.notification_chapters_multiple,
-                        displayableChapterNumbers.joinToString(", ")
+                        displayableChapterNumbers.joinToString(", "),
                     )
                 }
             }

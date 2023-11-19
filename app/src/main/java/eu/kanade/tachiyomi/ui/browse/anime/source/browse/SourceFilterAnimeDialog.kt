@@ -64,7 +64,7 @@ fun SourceFilterAnimeDialog(
                     Button(onClick = {
                         onFilter()
                         onDismissRequest()
-                    },) {
+                    }) {
                         Text(stringResource(R.string.action_filter))
                     }
                 }

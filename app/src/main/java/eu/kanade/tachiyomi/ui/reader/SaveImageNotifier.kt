@@ -88,7 +88,7 @@ class SaveImageNotifier(private val context: Context) {
                 NotificationReceiver.deleteImagePendingBroadcast(
                     context,
                     uri.path!!,
-                    notificationId
+                    notificationId,
                 ),
             )
 

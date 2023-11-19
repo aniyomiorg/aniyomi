@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 enum class ReadingModeType(
     @StringRes val stringRes: Int,
     @DrawableRes val iconRes: Int,
-    val flagValue: Int
+    val flagValue: Int,
 ) {
     DEFAULT(R.string.label_default, R.drawable.ic_reader_default_24dp, 0x00000000),
     LEFT_TO_RIGHT(R.string.left_to_right_viewer, R.drawable.ic_reader_ltr_24dp, 0x00000001),
@@ -23,7 +23,7 @@ enum class ReadingModeType(
     CONTINUOUS_VERTICAL(
         R.string.vertical_plus_viewer,
         R.drawable.ic_reader_continuous_vertical_24dp,
-        0x00000005
+        0x00000005,
     ),
     ;
 
@@ -45,7 +45,7 @@ enum class ReadingModeType(
                 WEBTOON -> WebtoonViewer(activity)
                 CONTINUOUS_VERTICAL -> WebtoonViewer(activity, isContinuous = false)
                 DEFAULT -> throw IllegalStateException(
-                    "Preference value must be resolved: $preference"
+                    "Preference value must be resolved: $preference",
                 )
             }
         }

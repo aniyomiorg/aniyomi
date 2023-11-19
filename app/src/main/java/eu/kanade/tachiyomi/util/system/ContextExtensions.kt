@@ -23,12 +23,12 @@ import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.setting.connections.DiscordLoginActivity
 import eu.kanade.tachiyomi.util.lang.truncateCenter
-import java.io.File
 import logcat.LogPriority
 import rikka.sui.Sui
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 /**
  * Copies a string to clipboard
@@ -62,7 +62,7 @@ fun Context.copyToClipboard(label: String, content: String) {
  */
 fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(
     this,
-    permission
+    permission,
 ) == PermissionChecker.PERMISSION_GRANTED
 
 val Context.powerManager: PowerManager
@@ -122,7 +122,7 @@ private fun Context.defaultBrowserPackageName(): String? {
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         packageManager.resolveActivity(
             browserIntent,
-            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()),
         )
     } else {
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
@@ -165,7 +165,7 @@ fun Context.createReaderThemeContext(): Context {
         wrappedContext.applyOverrideConfiguration(overrideConf)
         ThemingDelegate.getThemeResIds(
             preferences.appTheme().get(),
-            preferences.themeDarkAmoled().get()
+            preferences.themeDarkAmoled().get(),
         )
             .forEach { wrappedContext.theme.applyStyle(it, true) }
         return wrappedContext

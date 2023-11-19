@@ -11,7 +11,7 @@ import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.source.manga.repository.SourcePagingSourceType
 
 class SourceSearchPagingSource(source: CatalogueSource, val query: String, val filters: FilterList) : SourcePagingSource(
-    source
+    source,
 ) {
     override suspend fun requestNextPage(currentPage: Int): MangasPage {
         return source.fetchSearchManga(currentPage, query, filters).awaitSingle()

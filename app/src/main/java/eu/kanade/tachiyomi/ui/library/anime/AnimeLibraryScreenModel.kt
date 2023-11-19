@@ -31,9 +31,6 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
-import java.text.Collator
-import java.util.Collections
-import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -74,6 +71,9 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.Collator
+import java.util.Collections
+import java.util.Locale
 
 /**
  * Typealias for the library anime, using the category as keys, and list of anime as values.
@@ -102,7 +102,7 @@ class AnimeLibraryScreenModel(
 ) : StateScreenModel<AnimeLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedAnimeCategory().asState(
-        coroutineScope
+        coroutineScope,
     )
 
     init {
@@ -279,7 +279,7 @@ class AnimeLibraryScreenModel(
         val sortAlphabetically: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
             collator.compare(
                 i1.libraryAnime.anime.title.lowercase(locale),
-                i2.libraryAnime.anime.title.lowercase(locale)
+                i2.libraryAnime.anime.title.lowercase(locale),
             )
         }
 
@@ -320,7 +320,7 @@ class AnimeLibraryScreenModel(
                     i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) -1 else 1
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
-                        i2.libraryAnime.anime.nextEpisodeAiringAt
+                        i2.libraryAnime.anime.nextEpisodeAiringAt,
                     )
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
@@ -586,7 +586,7 @@ class AnimeLibraryScreenModel(
     fun setAnimeCategories(
         animeList: List<Anime>,
         addCategories: List<Long>,
-        removeCategories: List<Long>
+        removeCategories: List<Long>,
     ) {
         coroutineScope.launchNonCancellable {
             animeList.forEach { anime ->
@@ -607,7 +607,7 @@ class AnimeLibraryScreenModel(
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
         return (if (isLandscape) libraryPreferences.animeLandscapeColumns() else libraryPreferences.animePortraitColumns()).asState(
-            coroutineScope
+            coroutineScope,
         )
     }
 
@@ -746,7 +746,7 @@ class AnimeLibraryScreenModel(
         data object SettingsSheet : Dialog
         data class ChangeCategory(
             val anime: List<Anime>,
-            val initialSelection: List<CheckboxState<Category>>
+            val initialSelection: List<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteAnime(val anime: List<Anime>) : Dialog
     }

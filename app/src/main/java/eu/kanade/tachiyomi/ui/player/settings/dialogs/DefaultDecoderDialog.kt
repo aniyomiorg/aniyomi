@@ -27,7 +27,7 @@ fun DefaultDecoderDialog(
             index = 0,
             Pair(
                 "${HwDecState.HW_PLUS.title} (${HwDecState.HW_PLUS.mpvValue})",
-                HwDecState.HW_PLUS.mpvValue
+                HwDecState.HW_PLUS.mpvValue,
             ),
         )
     }

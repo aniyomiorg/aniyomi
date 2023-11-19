@@ -71,12 +71,12 @@ fun <T> ListPreferenceWidget(
                     }
                     if (!state.isScrolledToStart()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.TopCenter)
+                            modifier = Modifier.align(Alignment.TopCenter),
                         )
                     }
                     if (!state.isScrolledToEnd()) {
                         HorizontalDivider(
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier.align(Alignment.BottomCenter),
                         )
                     }
                 }

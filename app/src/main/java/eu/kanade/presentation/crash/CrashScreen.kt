@@ -35,7 +35,7 @@ fun CrashScreen(
         headingText = stringResource(R.string.crash_screen_title),
         subtitleText = stringResource(
             R.string.crash_screen_description,
-            stringResource(R.string.app_name)
+            stringResource(R.string.app_name),
         ),
         acceptText = stringResource(R.string.pref_dump_crash_logs),
         onAcceptClick = {

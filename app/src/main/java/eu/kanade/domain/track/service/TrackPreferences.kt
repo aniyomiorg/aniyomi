@@ -27,7 +27,7 @@ class TrackPreferences(
 
     fun showNextEpisodeAiringTime() = preferenceStore.getBoolean(
         "show_next_episode_airing_time",
-        true
+        true,
     )
 
     companion object {

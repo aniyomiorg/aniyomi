@@ -1,7 +1,7 @@
 package eu.kanade.domain.track.manga.model
 
-import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack as DbMangaTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack as DbMangaTrack
 
 fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
     return this.copy(
@@ -14,7 +14,7 @@ fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
 }
 
 fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(
-    syncId
+    syncId,
 ).also {
     it.id = id
     it.manga_id = mangaId

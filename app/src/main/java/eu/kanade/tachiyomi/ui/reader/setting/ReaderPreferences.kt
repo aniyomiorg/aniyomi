@@ -31,23 +31,23 @@ class ReaderPreferences(
 
     fun defaultReadingMode() = preferenceStore.getInt(
         "pref_default_reading_mode_key",
-        ReadingModeType.RIGHT_TO_LEFT.flagValue
+        ReadingModeType.RIGHT_TO_LEFT.flagValue,
     )
 
     fun defaultOrientationType() = preferenceStore.getInt(
         "pref_default_orientation_type_key",
-        OrientationType.FREE.flagValue
+        OrientationType.FREE.flagValue,
     )
 
     // TODO: Enable in release build when the feature is stable
     fun longStripSplitWebtoon() = preferenceStore.getBoolean(
         "pref_long_strip_split_webtoon",
-        !isReleaseBuildType
+        !isReleaseBuildType,
     )
 
     fun webtoonDoubleTapZoomEnabled() = preferenceStore.getBoolean(
         "pref_enable_double_tap_zoom_webtoon",
-        true
+        true,
     )
 
     fun imageScaleType() = preferenceStore.getInt("pref_image_scale_type_key", 1)
@@ -58,12 +58,12 @@ class ReaderPreferences(
 
     fun alwaysShowChapterTransition() = preferenceStore.getBoolean(
         "always_show_chapter_transition",
-        true
+        true,
     )
 
     fun preserveReadingPosition() = preferenceStore.getBoolean(
         "pref_preserve_reading_position",
-        false
+        false,
     )
 
     fun cropBorders() = preferenceStore.getBoolean("crop_borders", false)
@@ -78,7 +78,7 @@ class ReaderPreferences(
 
     fun readerHideThreshold() = preferenceStore.getEnum(
         "reader_hide_threshold",
-        ReaderHideThreshold.LOW
+        ReaderHideThreshold.LOW,
     )
 
     fun folderPerManga() = preferenceStore.getBoolean("create_folder_per_manga", false)
@@ -105,7 +105,7 @@ class ReaderPreferences(
 
     fun dualPageRotateToFitInvert() = preferenceStore.getBoolean(
         "pref_dual_page_rotate_invert",
-        false
+        false,
     )
 
     // endregion
@@ -136,7 +136,7 @@ class ReaderPreferences(
 
     fun readWithVolumeKeysInverted() = preferenceStore.getBoolean(
         "reader_volume_keys_inverted",
-        false
+        false,
     )
 
     fun navigationModePager() = preferenceStore.getInt("reader_navigation_mode_pager", 0)
@@ -145,22 +145,22 @@ class ReaderPreferences(
 
     fun pagerNavInverted() = preferenceStore.getEnum(
         "reader_tapping_inverted",
-        TappingInvertMode.NONE
+        TappingInvertMode.NONE,
     )
 
     fun webtoonNavInverted() = preferenceStore.getEnum(
         "reader_tapping_inverted_webtoon",
-        TappingInvertMode.NONE
+        TappingInvertMode.NONE,
     )
 
     fun showNavigationOverlayNewUser() = preferenceStore.getBoolean(
         "reader_navigation_overlay_new_user",
-        true
+        true,
     )
 
     fun showNavigationOverlayOnStart() = preferenceStore.getBoolean(
         "reader_navigation_overlay_on_start",
-        false
+        false,
     )
 
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
@@ -178,7 +178,7 @@ class ReaderPreferences(
         BOTH(
             R.string.tapping_inverted_both,
             shouldInvertHorizontal = true,
-            shouldInvertVertical = true
+            shouldInvertVertical = true,
         ),
     }
 

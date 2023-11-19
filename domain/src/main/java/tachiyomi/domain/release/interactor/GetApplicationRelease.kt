@@ -1,11 +1,11 @@
 package tachiyomi.domain.release.interactor
 
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.domain.release.model.Release
 import tachiyomi.domain.release.service.ReleaseService
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class GetApplicationRelease(
     private val service: ReleaseService,
@@ -21,8 +21,9 @@ class GetApplicationRelease(
 
         // Limit checks to once every 3 days at most
         if (arguments.forceCheck.not() && now.isBefore(
-                Instant.ofEpochMilli(lastChecked.get()).plus(3, ChronoUnit.DAYS)
-            )) {
+                Instant.ofEpochMilli(lastChecked.get()).plus(3, ChronoUnit.DAYS),
+            )
+        ) {
             return Result.NoNewUpdate
         }
 
@@ -35,7 +36,7 @@ class GetApplicationRelease(
             arguments.isPreview,
             arguments.commitCount,
             arguments.versionName,
-            release.version
+            release.version,
         )
         return when {
             isNewVersion && arguments.isThirdParty -> Result.ThirdPartyInstallation
@@ -48,7 +49,7 @@ class GetApplicationRelease(
         isPreview: Boolean,
         commitCount: Int,
         versionName: String,
-        versionTag: String
+        versionTag: String,
     ): Boolean {
         // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")

@@ -19,9 +19,11 @@ class MigrateSearchScreen(private val mangaId: Long) : Screen() {
         val screenModel = rememberScreenModel { MigrateSearchScreenModel(mangaId = mangaId) }
         val state by screenModel.state.collectAsState()
 
-        val dialogScreenModel = rememberScreenModel { MangaMigrateSearchScreenDialogScreenModel(
-            mangaId = mangaId
-        ) }
+        val dialogScreenModel = rememberScreenModel {
+            MangaMigrateSearchScreenDialogScreenModel(
+                mangaId = mangaId,
+            )
+        }
         val dialogState by dialogScreenModel.state.collectAsState()
 
         MigrateMangaSearchScreen(
@@ -35,12 +37,14 @@ class MigrateSearchScreen(private val mangaId: Long) : Screen() {
             onToggleResults = screenModel::toggleFilterResults,
             onClickSource = {
                 navigator.push(
-                    MangaSourceSearchScreen(dialogState.manga!!, it.id, state.searchQuery)
+                    MangaSourceSearchScreen(dialogState.manga!!, it.id, state.searchQuery),
                 )
             },
-            onClickItem = { dialogScreenModel.setDialog(
-                MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate(it)
-            ) },
+            onClickItem = {
+                dialogScreenModel.setDialog(
+                    MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate(it),
+                )
+            },
             onLongClickItem = { navigator.push(MangaScreen(it.id, true)) },
         )
 

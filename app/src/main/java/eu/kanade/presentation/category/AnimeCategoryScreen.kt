@@ -49,7 +49,7 @@ fun AnimeCategoryScreen(
             categories = state.categories,
             lazyListState = lazyListState,
             paddingValues = contentPadding + topSmallPaddingValues + PaddingValues(
-                horizontal = MaterialTheme.padding.medium
+                horizontal = MaterialTheme.padding.medium,
             ),
             onClickRename = onClickRename,
             onClickHide = onClickHide,

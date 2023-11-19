@@ -19,7 +19,6 @@ import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isServiceRunning
-import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +28,7 @@ import kotlinx.coroutines.launch
 import okhttp3.internal.http2.ErrorCode
 import okhttp3.internal.http2.StreamResetException
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 
 class AppUpdateService : Service() {
 
@@ -163,7 +163,7 @@ class AppUpdateService : Service() {
         fun start(
             context: Context,
             url: String,
-            title: String? = context.getString(R.string.app_name)
+            title: String? = context.getString(R.string.app_name),
         ) {
             if (isRunning(context)) return
 
@@ -196,7 +196,7 @@ class AppUpdateService : Service() {
                     context,
                     0,
                     this,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
                 )
             }
         }

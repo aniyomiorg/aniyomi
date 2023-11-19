@@ -26,7 +26,7 @@ class MangaDownloadPendingDeleter(
      */
     private val preferences = context.getSharedPreferences(
         "chapters_to_delete",
-        Context.MODE_PRIVATE
+        Context.MODE_PRIVATE,
     )
 
     /**

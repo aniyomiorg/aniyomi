@@ -45,16 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMaxBy
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.sample
 import tachiyomi.presentation.core.components.Scroller.STICKY_HEADER_KEY_PREFIX
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 /**
  * Draws vertical fast scroller to a lazy list
@@ -111,7 +111,7 @@ fun VerticalFastScroller(
                 val scrollItemOffset = scrollItemSize * (scrollItem - scrollItemRounded)
                 listState.scrollToItem(
                     index = scrollItemRounded,
-                    scrollOffset = scrollItemOffset.roundToInt()
+                    scrollOffset = scrollItemOffset.roundToInt(),
                 )
                 scrolled.tryEmit(Unit)
             }
@@ -202,7 +202,8 @@ private fun rememberColumnWidthSums(
     horizontalArrangement,
     contentPadding,
 ) {
-    { constraints ->
+    {
+            constraints ->
         require(constraints.maxWidth != Constraints.Infinity) {
             "LazyVerticalGrid's width should be bound by parent"
         }
@@ -214,7 +215,7 @@ private fun rememberColumnWidthSums(
                 gridWidth,
                 horizontalArrangement.spacing.roundToPx(),
             ).toMutableList().apply {
-                for (i in 1 ..< size) {
+                for (i in 1..<size) {
                     this[i] += this[i - 1]
                 }
             }
@@ -297,7 +298,7 @@ fun VerticalGridFastScroller(
 
                 state.scrollToItem(
                     index = scrollItemWhole,
-                    scrollOffset = scrollItemOffset.roundToInt()
+                    scrollOffset = scrollItemOffset.roundToInt(),
                 )
                 scrolled.tryEmit(Unit)
             }

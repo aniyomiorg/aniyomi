@@ -9,10 +9,6 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
-import java.lang.Long.max
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.TreeSet
 import tachiyomi.data.items.episode.EpisodeSanitizer
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
@@ -25,6 +21,10 @@ import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.api.get
+import java.lang.Long.max
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.TreeSet
 
 class SyncEpisodesWithSource(
     private val downloadManager: AnimeDownloadManager,
@@ -103,7 +103,7 @@ class SyncEpisodesWithSource(
             val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
                 anime.title,
                 episode.name,
-                episode.episodeNumber
+                episode.episodeNumber,
             )
             episode = episode.copy(episodeNumber = episodeNumber)
 
@@ -122,13 +122,13 @@ class SyncEpisodesWithSource(
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
                     val shouldRenameEpisode = downloadProvider.isEpisodeDirNameChanged(
                         dbEpisode,
-                        episode
+                        episode,
                     ) &&
                         downloadManager.isEpisodeDownloaded(
                             dbEpisode.name,
                             dbEpisode.scanlator,
                             anime.title,
-                            anime.source
+                            anime.source,
                         )
 
                     if (shouldRenameEpisode) {
@@ -142,7 +142,7 @@ class SyncEpisodesWithSource(
                     )
                     if (episode.dateUpload != 0L) {
                         toChangeEpisode = toChangeEpisode.copy(
-                            dateUpload = sourceEpisode.dateUpload
+                            dateUpload = sourceEpisode.dateUpload,
                         )
                     }
                     toChange.add(toChangeEpisode)

@@ -34,7 +34,7 @@ class GlobalMangaSearchScreen(
         val state by screenModel.state.collectAsState()
         var showSingleLoadingScreen by remember {
             mutableStateOf(
-                searchQuery.isNotEmpty() && !extensionFilter.isNullOrEmpty() && state.total == 1
+                searchQuery.isNotEmpty() && !extensionFilter.isNullOrEmpty() && state.total == 1,
             )
         }
 

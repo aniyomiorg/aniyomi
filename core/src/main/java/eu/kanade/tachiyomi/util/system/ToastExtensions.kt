@@ -13,7 +13,7 @@ import androidx.annotation.StringRes
 fun Context.toast(
     @StringRes resource: Int,
     duration: Int = Toast.LENGTH_SHORT,
-    block: (Toast) -> Unit = {}
+    block: (Toast) -> Unit = {},
 ): Toast {
     return toast(getString(resource), duration, block)
 }

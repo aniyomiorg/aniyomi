@@ -20,10 +20,10 @@ import eu.kanade.presentation.more.stats.components.StatsSection
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.presentation.util.toDurationString
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.material.padding
 import java.util.Locale
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
-import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun AnimeStatsScreenContent(

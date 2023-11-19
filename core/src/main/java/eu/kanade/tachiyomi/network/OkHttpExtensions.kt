@@ -1,8 +1,5 @@
 package eu.kanade.tachiyomi.network
 
-import java.io.IOException
-import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.DeserializationStrategy
@@ -18,6 +15,9 @@ import okhttp3.Response
 import rx.Observable
 import rx.Producer
 import rx.Subscription
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.resumeWithException
 
 val jsonMime = "application/json; charset=utf-8".toMediaType()
 

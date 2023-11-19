@@ -30,9 +30,11 @@ fun animeExtensionsTab(
             AppBar.Action(
                 title = stringResource(R.string.action_filter),
                 icon = Icons.Outlined.Translate,
-                onClick = { navigator.push(
-                    eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterScreen()
-                ) },
+                onClick = {
+                    navigator.push(
+                        eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterScreen(),
+                    )
+                },
             ),
         ),
         content = { contentPadding, _ ->
@@ -43,7 +45,7 @@ fun animeExtensionsTab(
                 onLongClickItem = { extension ->
                     when (extension) {
                         is AnimeExtension.Available -> extensionsScreenModel.installExtension(
-                            extension
+                            extension,
                         )
                         else -> extensionsScreenModel.uninstallExtension(extension)
                     }

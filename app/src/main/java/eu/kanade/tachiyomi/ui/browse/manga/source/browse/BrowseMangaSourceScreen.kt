@@ -80,7 +80,7 @@ data class BrowseMangaSourceScreen(
         val navigateUp: () -> Unit = {
             when {
                 !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
-                    null
+                    null,
                 )
                 else -> navigator.pop()
             }
@@ -217,7 +217,7 @@ data class BrowseMangaSourceScreen(
                         val duplicateManga = screenModel.getDuplicateLibraryManga(manga)
                         when {
                             manga.favorite -> screenModel.setDialog(
-                                BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga)
+                                BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga),
                             )
                             duplicateManga != null -> screenModel.setDialog(
                                 BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga(

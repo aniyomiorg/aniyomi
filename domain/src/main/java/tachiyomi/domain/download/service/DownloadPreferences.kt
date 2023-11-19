@@ -10,19 +10,19 @@ class DownloadPreferences(
 
     fun downloadsDirectory() = preferenceStore.getString(
         "download_directory",
-        folderProvider.path()
+        folderProvider.path(),
     )
 
     fun downloadOnlyOverWifi() = preferenceStore.getBoolean(
         "pref_download_only_over_wifi_key",
-        true
+        true,
     )
 
     fun useExternalDownloader() = preferenceStore.getBoolean("use_external_downloader", false)
 
     fun externalDownloaderSelection() = preferenceStore.getString(
         "external_downloader_selection",
-        ""
+        "",
     )
 
     fun saveChaptersAsCBZ() = preferenceStore.getBoolean("save_chapter_as_cbz", true)
@@ -36,18 +36,18 @@ class DownloadPreferences(
 
     fun removeAfterMarkedAsRead() = preferenceStore.getBoolean(
         "pref_remove_after_marked_as_read_key",
-        false
+        false,
     )
 
     fun removeBookmarkedChapters() = preferenceStore.getBoolean("pref_remove_bookmarked", false)
 
     fun removeExcludeCategories() = preferenceStore.getStringSet(
         "remove_exclude_categories",
-        emptySet()
+        emptySet(),
     )
     fun removeExcludeAnimeCategories() = preferenceStore.getStringSet(
         "remove_exclude_anime_categories",
-        emptySet()
+        emptySet(),
     )
 
     fun downloadNewChapters() = preferenceStore.getBoolean("download_new", false)
@@ -55,20 +55,20 @@ class DownloadPreferences(
 
     fun downloadNewChapterCategories() = preferenceStore.getStringSet(
         "download_new_categories",
-        emptySet()
+        emptySet(),
     )
     fun downloadNewEpisodeCategories() = preferenceStore.getStringSet(
         "download_new_anime_categories",
-        emptySet()
+        emptySet(),
     )
 
     fun downloadNewChapterCategoriesExclude() = preferenceStore.getStringSet(
         "download_new_categories_exclude",
-        emptySet()
+        emptySet(),
     )
     fun downloadNewEpisodeCategoriesExclude() = preferenceStore.getStringSet(
         "download_new_anime_categories_exclude",
-        emptySet()
+        emptySet(),
     )
 
     fun numberOfDownloads() = preferenceStore.getInt("download_slots", 1)

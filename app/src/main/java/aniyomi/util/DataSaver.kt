@@ -78,7 +78,7 @@ private class BandwidthHeroDataSaver(preferences: SourcePreferences) : DataSaver
                     imageUrl
                 } else {
                     getUrl(
-                        imageUrl
+                        imageUrl,
                     )
                 }
                 imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
@@ -110,7 +110,7 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
                 imageUrl
             } else {
                 getUrl(
-                    imageUrl
+                    imageUrl,
                 )
             }
             imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
@@ -122,8 +122,9 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
         // Network Request sent to wsrv
         return "https://wsrv.nl/?url=$imageUrl" + if (imageUrl.contains(".webp", true) || imageUrl.contains(
                 ".gif",
-                true
-            )) {
+                true,
+            )
+        ) {
             if (!format) {
                 // Preserve output image extension for animated images(.webp and .gif)
                 "&q=$quality&n=-1"
@@ -159,7 +160,7 @@ private class ReSmushItDataSaver(preferences: SourcePreferences) : DataSaver {
                 imageUrl
             } else {
                 getUrl(
-                    imageUrl
+                    imageUrl,
                 )
             }
             imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)

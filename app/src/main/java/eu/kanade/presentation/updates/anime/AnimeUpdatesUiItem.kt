@@ -43,14 +43,14 @@ import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
-import java.util.Date
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.selectedBackground
+import java.util.Date
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesLastUpdatedItem(
@@ -71,14 +71,14 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
                 .animateItemPlacement()
                 .padding(
                     horizontal = MaterialTheme.padding.medium,
-                    vertical = MaterialTheme.padding.small
+                    vertical = MaterialTheme.padding.small,
                 ),
         ) {
             Text(
                 text = if (time.isNullOrEmpty()) {
                     stringResource(
                         R.string.updates_last_update_info,
-                        stringResource(R.string.updates_last_update_info_just_now)
+                        stringResource(R.string.updates_last_update_info_just_now),
                     )
                 } else {
                     stringResource(R.string.updates_last_update_info, time)
@@ -144,7 +144,7 @@ fun LazyListScope.animeUpdatesUiItems(
                                 updatesItem,
                                 !updatesItem.selected,
                                 true,
-                                false
+                                false,
                             )
                             else -> onClickUpdate(updatesItem, false)
                         }
@@ -231,7 +231,7 @@ fun AnimeUpdatesUiItem(
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(
-                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }
+                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
                             ),
                         tint = MaterialTheme.colorScheme.primary,
                     )

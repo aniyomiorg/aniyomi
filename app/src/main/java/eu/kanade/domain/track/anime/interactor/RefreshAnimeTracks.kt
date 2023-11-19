@@ -36,7 +36,7 @@ class RefreshAnimeTracks(
                                 syncEpisodeProgressWithTrack.await(
                                     animeId,
                                     track,
-                                    service.animeService
+                                    service.animeService,
                                 )
                             }
                             null

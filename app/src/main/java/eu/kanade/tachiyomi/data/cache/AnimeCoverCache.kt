@@ -2,10 +2,10 @@ package eu.kanade.tachiyomi.data.cache
 
 import android.content.Context
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import tachiyomi.domain.entries.anime.model.Anime
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import tachiyomi.domain.entries.anime.model.Anime
 
 /**
  * Class used to create cover cache.

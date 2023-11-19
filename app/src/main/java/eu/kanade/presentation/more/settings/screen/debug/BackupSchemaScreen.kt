@@ -39,9 +39,11 @@ class BackupSchemaScreen : Screen() {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
 
-        val schema = remember { ProtoBufSchemaGenerator.generateSchemaText(
-            Backup.serializer().descriptor
-        ) }
+        val schema = remember {
+            ProtoBufSchemaGenerator.generateSchemaText(
+                Backup.serializer().descriptor,
+            )
+        }
 
         Scaffold(
             topBar = {

@@ -1,9 +1,9 @@
 package tachiyomi.data.history.anime
 
-import java.util.Date
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.history.anime.model.AnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
+import java.util.Date
 
 val animeHistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, seenAt ->
     AnimeHistory(
@@ -23,7 +23,7 @@ val animeHistoryWithRelationsMapper: (
     Boolean,
     Long,
     Double,
-    Date?
+    Date?,
 ) -> AnimeHistoryWithRelations = {
         historyId, animeId, episodeId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, episodeNumber, seenAt ->
     AnimeHistoryWithRelations(

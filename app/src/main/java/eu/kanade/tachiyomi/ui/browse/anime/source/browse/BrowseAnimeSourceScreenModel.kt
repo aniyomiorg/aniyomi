@@ -22,14 +22,12 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.animesource.model.AnimeFilter as AnimeSourceModelFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.removeCovers
-import java.util.Date
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -61,6 +59,8 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter as AnimeSourceModelFilter
 
 class BrowseAnimeSourceScreenModel(
     private val sourceId: Long,
@@ -305,7 +305,7 @@ class BrowseAnimeSourceScreenModel(
                         syncEpisodeProgressWithTrack.await(
                             anime.id,
                             track.toDomainTrack()!!,
-                            service.animeService
+                            service.animeService,
                         )
                     }
                 } catch (e: Exception) {
@@ -361,15 +361,15 @@ class BrowseAnimeSourceScreenModel(
     sealed class Listing(open val query: String?, open val filters: AnimeFilterList) {
         data object Popular : Listing(
             query = GetRemoteAnime.QUERY_POPULAR,
-            filters = AnimeFilterList()
+            filters = AnimeFilterList(),
         )
         data object Latest : Listing(
             query = GetRemoteAnime.QUERY_LATEST,
-            filters = AnimeFilterList()
+            filters = AnimeFilterList(),
         )
         data class Search(override val query: String?, override val filters: AnimeFilterList) : Listing(
             query = query,
-            filters = filters
+            filters = filters,
         )
 
         companion object {

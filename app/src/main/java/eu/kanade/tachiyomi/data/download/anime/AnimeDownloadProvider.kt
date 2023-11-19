@@ -94,7 +94,7 @@ class AnimeDownloadProvider(
         episodeName: String,
         episodeScanlator: String?,
         animeTitle: String,
-        source: AnimeSource
+        source: AnimeSource,
     ): UniFile? {
         val animeDir = findAnimeDir(animeTitle, source)
         return getValidEpisodeDirNames(episodeName, episodeScanlator).asSequence()

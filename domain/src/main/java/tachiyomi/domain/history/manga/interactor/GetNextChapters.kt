@@ -1,11 +1,11 @@
 package tachiyomi.domain.history.manga.interactor
 
-import kotlin.math.max
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.history.manga.repository.MangaHistoryRepository
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import kotlin.math.max
 
 class GetNextChapters(
     private val getChapterByMangaId: GetChapterByMangaId,

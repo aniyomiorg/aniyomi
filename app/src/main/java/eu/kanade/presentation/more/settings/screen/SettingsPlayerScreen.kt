@@ -80,7 +80,7 @@ object SettingsPlayerScreen : SearchableSettings {
             if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
             getExternalPlayerGroup(
                 playerPreferences = playerPreferences,
-                basePreferences = basePreferences
+                basePreferences = basePreferences,
             ),
         )
     }
@@ -152,25 +152,25 @@ object SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_default_player_orientation),
                     entries = mapOf(
                         ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(
-                            R.string.rotation_free
+                            R.string.rotation_free,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            R.string.rotation_portrait
+                            R.string.rotation_portrait,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            R.string.rotation_reverse_portrait
+                            R.string.rotation_reverse_portrait,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            R.string.rotation_landscape
+                            R.string.rotation_landscape,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            R.string.rotation_reverse_landscape
+                            R.string.rotation_reverse_landscape,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            R.string.rotation_sensor_portrait
+                            R.string.rotation_sensor_portrait,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            R.string.rotation_sensor_landscape
+                            R.string.rotation_sensor_landscape,
                         ),
                     ),
                 ),
@@ -183,13 +183,13 @@ object SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_default_portrait_orientation),
                     entries = mapOf(
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            R.string.rotation_portrait
+                            R.string.rotation_portrait,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            R.string.rotation_reverse_portrait
+                            R.string.rotation_reverse_portrait,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            R.string.rotation_sensor_portrait
+                            R.string.rotation_sensor_portrait,
                         ),
                     ),
                 ),
@@ -198,13 +198,13 @@ object SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_default_landscape_orientation),
                     entries = mapOf(
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            R.string.rotation_landscape
+                            R.string.rotation_landscape,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            R.string.rotation_reverse_landscape
+                            R.string.rotation_reverse_landscape,
                         ),
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            R.string.rotation_sensor_landscape
+                            R.string.rotation_sensor_landscape,
                         ),
                     ),
                 ),
@@ -341,7 +341,7 @@ object SettingsPlayerScreen : SearchableSettings {
     @Composable
     private fun getExternalPlayerGroup(
         playerPreferences: PlayerPreferences,
-        basePreferences: BasePreferences
+        basePreferences: BasePreferences,
     ): Preference.PreferenceGroup {
         val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer()
         val externalPlayerPreference = playerPreferences.externalPlayerPreference()

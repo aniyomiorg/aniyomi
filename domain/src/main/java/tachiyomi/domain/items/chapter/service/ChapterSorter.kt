@@ -5,7 +5,7 @@ import tachiyomi.domain.items.chapter.model.Chapter
 
 fun getChapterSort(manga: Manga, sortDescending: Boolean = manga.sortDescending()): (
     Chapter,
-    Chapter
+    Chapter,
 ) -> Int {
     return when (manga.sorting) {
         Manga.CHAPTER_SORTING_SOURCE -> when (sortDescending) {

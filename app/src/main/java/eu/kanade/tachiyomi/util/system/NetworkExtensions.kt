@@ -22,7 +22,7 @@ fun Context.isOnline(): Boolean {
         else -> NetworkCapabilities.TRANSPORT_VPN
     }
     return (NetworkCapabilities.TRANSPORT_CELLULAR..maxTransport).any(
-        networkCapabilities::hasTransport
+        networkCapabilities::hasTransport,
     )
 }
 

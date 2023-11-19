@@ -17,7 +17,7 @@ val mangaUpdateWithRelationMapper: (
     String?,
     Long,
     Long,
-    Long
+    Long,
 ) -> MangaUpdatesWithRelations = {
         mangaId, mangaTitle, chapterId, chapterName, scanlator, read, bookmark, lastPageRead, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->
     MangaUpdatesWithRelations(

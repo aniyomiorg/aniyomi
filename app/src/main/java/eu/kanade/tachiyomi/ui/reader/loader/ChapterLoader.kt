@@ -83,7 +83,7 @@ class ChapterLoader(
             dbChapter.scanlator,
             manga.title,
             manga.source,
-            skipCache = true
+            skipCache = true,
         )
         return when {
             isDownloaded -> DownloadPageLoader(
@@ -91,7 +91,7 @@ class ChapterLoader(
                 manga,
                 source,
                 downloadManager,
-                downloadProvider
+                downloadProvider,
             )
             source is LocalMangaSource -> source.getFormat(chapter.chapter).let { format ->
                 when (format) {
@@ -107,7 +107,7 @@ class ChapterLoader(
             }
             source is HttpSource -> HttpPageLoader(chapter, source)
             source is StubMangaSource -> error(
-                context.getString(R.string.source_not_installed, source.toString())
+                context.getString(R.string.source_not_installed, source.toString()),
             )
             else -> error(context.getString(R.string.loader_not_implemented_error))
         }

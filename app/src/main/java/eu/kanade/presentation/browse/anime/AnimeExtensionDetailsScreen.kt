@@ -237,7 +237,7 @@ private fun DetailsHeader(
             )
 
             val strippedPkgName = extension.pkgName.substringAfter(
-                "eu.kanade.tachiyomi.animeextension."
+                "eu.kanade.tachiyomi.animeextension.",
             )
 
             Text(

@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.workManager
-import java.io.File
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getAndSet
@@ -32,6 +31,7 @@ import tachiyomi.core.preference.plusAssign
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import java.io.File
 
 object Migrations {
 
@@ -116,7 +116,7 @@ object Migrations {
                 // Reset sorting preference if using removed sort by source
                 val oldMangaSortingMode = prefs.getInt(
                     libraryPreferences.mangaSortingMode().key(),
-                    0
+                    0,
                 )
 
                 if (oldMangaSortingMode == 5) { // SOURCE = 5
@@ -127,7 +127,7 @@ object Migrations {
 
                 val oldAnimeSortingMode = prefs.getInt(
                     libraryPreferences.animeSortingMode().key(),
-                    0
+                    0,
                 )
 
                 if (oldAnimeSortingMode == 5) { // SOURCE = 5
@@ -149,19 +149,19 @@ object Migrations {
                 prefs.edit {
                     putInt(
                         libraryPreferences.filterDownloadedManga().key(),
-                        convertBooleanPrefToTriState("pref_filter_downloaded_key")
+                        convertBooleanPrefToTriState("pref_filter_downloaded_key"),
                     )
                     remove("pref_filter_downloaded_key")
 
                     putInt(
                         libraryPreferences.filterUnread().key(),
-                        convertBooleanPrefToTriState("pref_filter_unread_key")
+                        convertBooleanPrefToTriState("pref_filter_unread_key"),
                     )
                     remove("pref_filter_unread_key")
 
                     putInt(
                         libraryPreferences.filterCompletedManga().key(),
-                        convertBooleanPrefToTriState("pref_filter_completed_key")
+                        convertBooleanPrefToTriState("pref_filter_completed_key"),
                     )
                     remove("pref_filter_completed_key")
                 }
@@ -231,11 +231,11 @@ object Migrations {
             if (oldVersion < 64) {
                 val oldMangaSortingMode = prefs.getInt(
                     libraryPreferences.mangaSortingMode().key(),
-                    0
+                    0,
                 )
                 val oldAnimeSortingMode = prefs.getInt(
                     libraryPreferences.animeSortingMode().key(),
-                    0
+                    0,
                 )
                 val oldSortingDirection = prefs.getBoolean("library_sorting_ascending", true)
 
@@ -297,7 +297,7 @@ object Migrations {
             if (oldVersion < 72) {
                 val oldUpdateOngoingOnly = prefs.getBoolean(
                     "pref_update_only_non_completed_key",
-                    true
+                    true,
                 )
                 if (!oldUpdateOngoingOnly) {
                     libraryPreferences.autoUpdateItemRestrictions() -= ENTRY_NON_COMPLETED
@@ -307,12 +307,12 @@ object Migrations {
                 val oldSecureScreen = prefs.getBoolean("secure_screen", false)
                 if (oldSecureScreen) {
                     securityPreferences.secureScreen().set(
-                        SecurityPreferences.SecureScreenMode.ALWAYS
+                        SecurityPreferences.SecureScreenMode.ALWAYS,
                     )
                 }
                 if (DeviceUtil.isMiui && basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER) {
                     basePreferences.extensionInstaller().set(
-                        BasePreferences.ExtensionInstaller.LEGACY
+                        BasePreferences.ExtensionInstaller.LEGACY,
                     )
                 }
             }
@@ -329,19 +329,23 @@ object Migrations {
             if (oldVersion < 81) {
                 // Handle renamed enum values
                 prefs.edit {
-                    val newMangaSortingMode = when (val oldSortingMode = prefs.getString(
-                        libraryPreferences.mangaSortingMode().key(),
-                        "ALPHABETICAL"
-                    )) {
+                    val newMangaSortingMode = when (
+                        val oldSortingMode = prefs.getString(
+                            libraryPreferences.mangaSortingMode().key(),
+                            "ALPHABETICAL",
+                        )
+                    ) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
                         else -> oldSortingMode
                     }
-                    val newAnimeSortingMode = when (val oldSortingMode = prefs.getString(
-                        libraryPreferences.animeSortingMode().key(),
-                        "ALPHABETICAL"
-                    )) {
+                    val newAnimeSortingMode = when (
+                        val oldSortingMode = prefs.getString(
+                            libraryPreferences.animeSortingMode().key(),
+                            "ALPHABETICAL",
+                        )
+                    ) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
@@ -355,11 +359,11 @@ object Migrations {
                 prefs.edit {
                     val mangasort = prefs.getString(
                         libraryPreferences.mangaSortingMode().key(),
-                        null
+                        null,
                     ) ?: return@edit
                     val animesort = prefs.getString(
                         libraryPreferences.animeSortingMode().key(),
-                        null
+                        null,
                     ) ?: return@edit
                     val direction = prefs.getString("library_sorting_ascending", "ASCENDING")!!
                     putString(libraryPreferences.mangaSortingMode().key(), "$mangasort,$direction")
@@ -511,7 +515,7 @@ object Migrations {
                                 }
 
                                 preferenceStore.getEnum("${key}_v2", TriState.DISABLED).set(
-                                    newValue
+                                    newValue,
                                 )
                             }
                         }

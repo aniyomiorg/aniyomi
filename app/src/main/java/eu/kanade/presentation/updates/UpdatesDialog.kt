@@ -23,7 +23,7 @@ fun UpdatesDeleteConfirmationDialog(
             TextButton(onClick = {
                 onConfirm()
                 onDismissRequest()
-            },) {
+            }) {
                 Text(text = stringResource(R.string.action_ok))
             }
         },

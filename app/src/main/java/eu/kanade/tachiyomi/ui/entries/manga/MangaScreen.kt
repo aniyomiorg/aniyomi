@@ -112,11 +112,13 @@ class MangaScreen(
                 screenModel.toggleFavorite()
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             },
-            onWebViewClicked = { openMangaInWebView(
-                navigator,
-                screenModel.manga,
-                screenModel.source
-            ) }.takeIf { isHttpSource },
+            onWebViewClicked = {
+                openMangaInWebView(
+                    navigator,
+                    screenModel.manga,
+                    screenModel.source,
+                )
+            }.takeIf { isHttpSource },
             onWebViewLongClicked = { copyMangaUrl(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
@@ -203,7 +205,7 @@ class MangaScreen(
                 val manga by sm.state.collectAsState()
                 if (manga != null) {
                     val getContent = rememberLauncherForActivityResult(
-                        ActivityResultContracts.GetContent()
+                        ActivityResultContracts.GetContent(),
                     ) {
                         if (it == null) return@rememberLauncherForActivityResult
                         sm.editCover(context, it)
@@ -327,7 +329,7 @@ class MangaScreen(
     private suspend fun performGenreSearch(
         navigator: Navigator,
         genreName: String,
-        source: MangaSource
+        source: MangaSource,
     ) {
         if (navigator.size < 2) {
             return
