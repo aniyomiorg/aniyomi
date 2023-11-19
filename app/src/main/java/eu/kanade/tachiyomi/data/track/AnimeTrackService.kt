@@ -17,8 +17,11 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.time.ZoneOffset
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+
+private val insertTrack: InsertAnimeTrack by injectLazy()
 
 interface AnimeTrackService {
 
@@ -63,7 +66,7 @@ interface AnimeTrackService {
 
                 var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertAnimeTrack>().await(track)
+                insertTrack.await(track)
 
                 // Update episode progress if newer episodes marked seen locally
                 if (hasSeenEpisodes) {
@@ -71,7 +74,7 @@ interface AnimeTrackService {
                         .sortedBy { it.episodeNumber }
                         .takeWhile { it.seen }
                         .lastOrNull()
-                        ?.episodeNumber?.toDouble() ?: -1.0
+                        ?.episodeNumber ?: -1.0
 
                     if (latestLocalSeenEpisodeNumber > track.lastEpisodeSeen) {
                         track = track.copy(
@@ -123,6 +126,7 @@ interface AnimeTrackService {
         track.last_episode_seen = episodeNumber.toFloat()
         if (track.total_episodes != 0 && track.last_episode_seen.toInt() == track.total_episodes) {
             track.status = getCompletionStatus()
+            track.finished_watching_date = System.currentTimeMillis()
         }
         withIOContext { updateRemote(track) }
     }
@@ -147,7 +151,7 @@ interface AnimeTrackService {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertAnimeTrack>().await(it)
+                    insertTrack.await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

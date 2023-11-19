@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.util.size
@@ -361,14 +360,16 @@ class MangaDownloadCache(
                 }
             }
 
+            val sourceMap = sources.associate { provider.getSourceDirName(it).lowercase() to it.id }
+
             rootDownloadsDirLock.withLock {
                 val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
-                    .associate { it.name to SourceDirectory(it) }
-                    .mapNotNullKeys { entry ->
-                        sources.find {
-                            provider.getSourceDirName(it).equals(entry.key, ignoreCase = true)
-                        }?.id
+                    .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                    .mapNotNull { dir ->
+                        val sourceId = sourceMap[dir.name!!.lowercase()]
+                        sourceId?.let { it to SourceDirectory(dir) }
                     }
+                    .toMap()
 
                 rootDownloadsDir.sourceDirs = sourceDirs
 
@@ -376,7 +377,7 @@ class MangaDownloadCache(
                     .map { sourceDir ->
                         async {
                             val mangaDirs = sourceDir.dir.listFiles().orEmpty()
-                                .filterNot { it.name.isNullOrBlank() }
+                                .filter { it.isDirectory && !it.name.isNullOrBlank() }
                                 .associate { it.name!! to MangaDirectory(it) }
 
                             sourceDir.mangaDirs = ConcurrentHashMap(mangaDirs)

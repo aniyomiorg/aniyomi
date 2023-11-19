@@ -203,7 +203,7 @@ dependencies {
     implementation(androidx.bundles.workmanager)
 
     // RxJava
-    implementation(libs.bundles.reactivex)
+    implementation(libs.rxjava)
     implementation(libs.flowreactivenetwork)
 
     // Networking

@@ -32,6 +32,7 @@ sealed class AnimeExtension {
         val hasUpdate: Boolean = false,
         val isObsolete: Boolean = false,
         val isUnofficial: Boolean = false,
+        val isShared: Boolean,
     ) : AnimeExtension()
 
     data class Available(

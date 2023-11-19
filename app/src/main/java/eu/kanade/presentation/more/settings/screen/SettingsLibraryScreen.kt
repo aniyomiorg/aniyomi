@@ -35,6 +35,9 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.anime.model.AnimeGroupLibraryMode
 import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
@@ -165,15 +168,15 @@ object SettingsLibraryScreen : SearchableSettings {
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
 
-        val libraryUpdateIntervalPref = libraryPreferences.libraryUpdateInterval()
-        val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
+        val autoUpdateIntervalPref = libraryPreferences.autoUpdateInterval()
+        val autoUpdateInterval by autoUpdateIntervalPref.collectAsState()
 
-        val animelibUpdateCategoriesPref = libraryPreferences.animeLibraryUpdateCategories()
-        val animelibUpdateCategoriesExcludePref =
-            libraryPreferences.animeLibraryUpdateCategoriesExclude()
+        val animeAutoUpdateCategoriesPref = libraryPreferences.animeUpdateCategories()
+        val animeAutoUpdateCategoriesExcludePref =
+            libraryPreferences.animeUpdateCategoriesExclude()
 
-        val includedAnime by animelibUpdateCategoriesPref.collectAsState()
-        val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
+        val includedAnime by animeAutoUpdateCategoriesPref.collectAsState()
+        val excludedAnime by animeAutoUpdateCategoriesExcludePref.collectAsState()
         var showAnimeCategoriesDialog by rememberSaveable { mutableStateOf(false) }
         if (showAnimeCategoriesDialog) {
             TriStateListDialog(
@@ -185,8 +188,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 itemLabel = { it.visualName },
                 onDismissRequest = { showAnimeCategoriesDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
-                    animelibUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    animelibUpdateCategoriesExcludePref.set(
+                    animeAutoUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    animeAutoUpdateCategoriesExcludePref.set(
                         newExcluded.map { it.id.toString() }
                             .toSet(),
                     )
@@ -195,12 +198,12 @@ object SettingsLibraryScreen : SearchableSettings {
             )
         }
 
-        val libraryUpdateCategoriesPref = libraryPreferences.mangaLibraryUpdateCategories()
-        val libraryUpdateCategoriesExcludePref =
-            libraryPreferences.mangaLibraryUpdateCategoriesExclude()
+        val autoUpdateCategoriesPref = libraryPreferences.mangaUpdateCategories()
+        val autoUpdateCategoriesExcludePref =
+            libraryPreferences.mangaUpdateCategoriesExclude()
 
-        val includedManga by libraryUpdateCategoriesPref.collectAsState()
-        val excludedManga by libraryUpdateCategoriesExcludePref.collectAsState()
+        val includedManga by autoUpdateCategoriesPref.collectAsState()
+        val excludedManga by autoUpdateCategoriesExcludePref.collectAsState()
         var showMangaCategoriesDialog by rememberSaveable { mutableStateOf(false) }
         if (showMangaCategoriesDialog) {
             TriStateListDialog(
@@ -212,8 +215,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 itemLabel = { it.visualName },
                 onDismissRequest = { showMangaCategoriesDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
-                    libraryUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    libraryUpdateCategoriesExcludePref.set(
+                    autoUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    autoUpdateCategoriesExcludePref.set(
                         newExcluded.map { it.id.toString() }
                             .toSet(),
                     )
@@ -226,7 +229,7 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(R.string.pref_category_library_update),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryUpdateIntervalPref,
+                    pref = autoUpdateIntervalPref,
                     title = stringResource(R.string.pref_library_update_interval),
                     entries = mapOf(
                         0 to stringResource(R.string.update_never),
@@ -243,15 +246,14 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryPreferences.libraryUpdateDeviceRestriction(),
-                    enabled = libraryUpdateInterval > 0,
+                    pref = libraryPreferences.autoUpdateDeviceRestrictions(),
+                    enabled = autoUpdateInterval > 0,
                     title = stringResource(R.string.pref_library_update_restriction),
                     subtitle = stringResource(R.string.restrictions),
                     entries = mapOf(
-                        ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
-                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
-                        ENTRY_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
-                        ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(R.string.pref_update_only_in_release_period),
+                        DEVICE_ONLY_ON_WIFI to stringResource(R.string.connected_to_wifi),
+                        DEVICE_NETWORK_NOT_METERED to stringResource(R.string.network_not_metered),
+                        DEVICE_CHARGING to stringResource(R.string.charging),
                     ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
@@ -312,7 +314,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryPreferences.libraryUpdateItemRestriction(),
+                    pref = libraryPreferences.autoUpdateItemRestrictions(),
                     title = stringResource(R.string.pref_library_update_manga_restriction),
                     entries = mapOf(
                         ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),

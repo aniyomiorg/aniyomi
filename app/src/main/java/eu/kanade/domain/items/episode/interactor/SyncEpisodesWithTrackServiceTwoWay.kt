@@ -9,12 +9,11 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.domain.track.anime.model.AnimeTrack
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class SyncEpisodesWithTrackServiceTwoWay(
-    private val updateEpisode: UpdateEpisode = Injekt.get(),
-    private val insertTrack: InsertAnimeTrack = Injekt.get(),
+    private val updateEpisode: UpdateEpisode,
+    private val insertTrack: InsertAnimeTrack,
 ) {
 
     suspend fun await(

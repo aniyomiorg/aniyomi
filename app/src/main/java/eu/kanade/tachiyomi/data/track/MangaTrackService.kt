@@ -17,8 +17,11 @@ import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.time.ZoneOffset
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
+
+private val insertTrack: InsertMangaTrack by injectLazy()
 
 interface MangaTrackService {
 
@@ -63,7 +66,7 @@ interface MangaTrackService {
 
                 var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertMangaTrack>().await(track)
+                insertTrack.await(track)
 
                 // Update chapter progress if newer chapters marked read locally
                 if (hasReadChapters) {
@@ -71,7 +74,7 @@ interface MangaTrackService {
                         .sortedBy { it.chapterNumber }
                         .takeWhile { it.read }
                         .lastOrNull()
-                        ?.chapterNumber?.toDouble() ?: -1.0
+                        ?.chapterNumber ?: -1.0
 
                     if (latestLocalReadChapterNumber > track.lastChapterRead) {
                         track = track.copy(
@@ -123,6 +126,7 @@ interface MangaTrackService {
         track.last_chapter_read = chapterNumber.toFloat()
         if (track.total_chapters != 0 && track.last_chapter_read.toInt() == track.total_chapters) {
             track.status = getCompletionStatus()
+            track.finished_reading_date = System.currentTimeMillis()
         }
         withIOContext { updateRemote(track) }
     }
@@ -147,7 +151,7 @@ interface MangaTrackService {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertMangaTrack>().await(it)
+                    insertTrack.await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

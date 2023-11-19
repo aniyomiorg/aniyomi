@@ -20,7 +20,6 @@ import tachiyomi.domain.items.chapter.model.toChapterUpdate
 import tachiyomi.domain.items.chapter.repository.ChapterRepository
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.entries.manga.isLocal
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
 import java.time.ZonedDateTime
@@ -28,13 +27,13 @@ import java.util.Date
 import java.util.TreeSet
 
 class SyncChaptersWithSource(
-    private val downloadManager: MangaDownloadManager = Injekt.get(),
-    private val downloadProvider: MangaDownloadProvider = Injekt.get(),
-    private val chapterRepository: ChapterRepository = Injekt.get(),
-    private val shouldUpdateDbChapter: ShouldUpdateDbChapter = Injekt.get(),
-    private val updateManga: UpdateManga = Injekt.get(),
-    private val updateChapter: UpdateChapter = Injekt.get(),
-    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val downloadManager: MangaDownloadManager,
+    private val downloadProvider: MangaDownloadProvider,
+    private val chapterRepository: ChapterRepository,
+    private val shouldUpdateDbChapter: ShouldUpdateDbChapter,
+    private val updateManga: UpdateManga,
+    private val updateChapter: UpdateChapter,
+    private val getChapterByMangaId: GetChapterByMangaId,
 ) {
 
     /**

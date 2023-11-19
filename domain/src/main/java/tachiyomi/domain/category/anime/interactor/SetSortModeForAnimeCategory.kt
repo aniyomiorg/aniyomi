@@ -30,7 +30,7 @@ class SetSortModeForAnimeCategory(
                 ),
             )
         } else {
-            preferences.libraryAnimeSortingMode().set(AnimeLibrarySort(type, direction))
+            preferences.animeSortingMode().set(AnimeLibrarySort(type, direction))
             categoryRepository.updateAllAnimeCategoryFlags(flags)
         }
     }

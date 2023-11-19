@@ -12,9 +12,11 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.storage.getUriCompat
+import eu.kanade.tachiyomi.util.system.isPackageInstalled
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -157,6 +159,35 @@ internal class MangaExtensionInstaller(private val context: Context) {
 
                 context.startActivity(intent)
             }
+            BasePreferences.ExtensionInstaller.PRIVATE -> {
+                val extensionManager = Injekt.get<MangaExtensionManager>()
+                val tempFile = File(context.cacheDir, "temp_$downloadId")
+
+                if (tempFile.exists() && !tempFile.delete()) {
+                    // Unlikely but just in case
+                    extensionManager.updateInstallStep(downloadId, InstallStep.Error)
+                    return
+                }
+
+                try {
+                    context.contentResolver.openInputStream(uri)?.use { input ->
+                        tempFile.outputStream().use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+
+                    if (MangaExtensionLoader.installPrivateExtensionFile(context, tempFile)) {
+                        extensionManager.updateInstallStep(downloadId, InstallStep.Installed)
+                    } else {
+                        extensionManager.updateInstallStep(downloadId, InstallStep.Error)
+                    }
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR, e) { "Failed to read downloaded extension file." }
+                    extensionManager.updateInstallStep(downloadId, InstallStep.Error)
+                }
+
+                tempFile.delete()
+            }
             else -> {
                 val intent =
                     MangaExtensionInstallService.getIntent(context, downloadId, uri, installer)
@@ -180,10 +211,15 @@ internal class MangaExtensionInstaller(private val context: Context) {
      * @param pkgName The package name of the extension to uninstall
      */
     fun uninstallApk(pkgName: String) {
-        val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, "package:$pkgName".toUri())
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-        context.startActivity(intent)
+        if (context.isPackageInstalled(pkgName)) {
+            @Suppress("DEPRECATION")
+            val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, "package:$pkgName".toUri())
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        } else {
+            MangaExtensionLoader.uninstallPrivateExtension(context, pkgName)
+            MangaExtensionInstallReceiver.notifyRemoved(context, pkgName)
+        }
     }
 
     /**
