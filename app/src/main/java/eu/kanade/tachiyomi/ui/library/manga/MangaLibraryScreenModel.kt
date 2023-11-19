@@ -117,7 +117,7 @@ class MangaLibraryScreenModel(
                 // SY -->
                 combine(
                     state.map { it.groupType }.distinctUntilChanged(),
-                    libraryPreferences.libraryMangaSortingMode().changes(),
+                    libraryPreferences.mangaSortingMode().changes(),
                     ::Pair,
                 ),
                 // SY <--

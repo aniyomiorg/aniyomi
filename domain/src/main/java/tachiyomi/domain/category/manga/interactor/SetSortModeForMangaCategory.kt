@@ -16,7 +16,7 @@ class SetSortModeForMangaCategory(
     suspend fun await(categoryId: Long?, type: MangaLibrarySort.Type, direction: MangaLibrarySort.Direction) {
         // SY -->
         if (preferences.groupMangaLibraryBy().get() != MangaLibraryGroup.BY_DEFAULT) {
-            preferences.libraryMangaSortingMode().set(MangaLibrarySort(type, direction))
+            preferences.mangaSortingMode().set(MangaLibrarySort(type, direction))
             return
         }
         // SY <--

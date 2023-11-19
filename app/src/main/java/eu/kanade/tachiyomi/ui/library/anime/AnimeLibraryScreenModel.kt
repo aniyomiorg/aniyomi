@@ -117,7 +117,7 @@ class AnimeLibraryScreenModel(
                 // SY -->
                 combine(
                     state.map { it.groupType }.distinctUntilChanged(),
-                    libraryPreferences.libraryAnimeSortingMode().changes(),
+                    libraryPreferences.animeSortingMode().changes(),
                     ::Pair,
                 ),
                 // SY <--

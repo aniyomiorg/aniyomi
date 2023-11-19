@@ -16,7 +16,7 @@ class SetSortModeForAnimeCategory(
     suspend fun await(categoryId: Long?, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
         // SY -->
         if (preferences.groupAnimeLibraryBy().get() != AnimeLibraryGroup.BY_DEFAULT) {
-            preferences.libraryAnimeSortingMode().set(AnimeLibrarySort(type, direction))
+            preferences.animeSortingMode().set(AnimeLibrarySort(type, direction))
             return
         }
         // SY <--

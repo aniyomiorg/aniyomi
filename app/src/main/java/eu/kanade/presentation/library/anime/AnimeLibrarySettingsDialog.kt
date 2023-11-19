@@ -158,7 +158,7 @@ private fun ColumnScope.SortPage(
     screenModel: AnimeLibrarySettingsScreenModel,
 ) {
     // SY -->
-    val globalSortMode by screenModel.libraryPreferences.libraryAnimeSortingMode().collectAsState()
+    val globalSortMode by screenModel.libraryPreferences.animeSortingMode().collectAsState()
     val sortingMode = if (screenModel.grouping == AnimeLibraryGroup.BY_DEFAULT) {
         category.sort.type
     } else {
