@@ -60,7 +60,7 @@ class EpisodeRepositoryImpl(
                     bookmark = episodeUpdate.bookmark,
                     lastSecondSeen = episodeUpdate.lastSecondSeen,
                     totalSeconds = episodeUpdate.totalSeconds,
-                    episodeNumber = episodeUpdate.episodeNumber?.toDouble(),
+                    episodeNumber = episodeUpdate.episodeNumber,
                     sourceOrder = episodeUpdate.sourceOrder,
                     dateFetch = episodeUpdate.dateFetch,
                     dateUpload = episodeUpdate.dateUpload,

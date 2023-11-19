@@ -20,7 +20,6 @@ import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
 import java.time.ZonedDateTime
@@ -28,13 +27,13 @@ import java.util.Date
 import java.util.TreeSet
 
 class SyncEpisodesWithSource(
-    private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val downloadProvider: AnimeDownloadProvider = Injekt.get(),
-    private val episodeRepository: EpisodeRepository = Injekt.get(),
-    private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode = Injekt.get(),
-    private val updateAnime: UpdateAnime = Injekt.get(),
-    private val updateEpisode: UpdateEpisode = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager,
+    private val downloadProvider: AnimeDownloadProvider,
+    private val episodeRepository: EpisodeRepository,
+    private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode,
+    private val updateAnime: UpdateAnime,
+    private val updateEpisode: UpdateEpisode,
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
 ) {
 
     /**

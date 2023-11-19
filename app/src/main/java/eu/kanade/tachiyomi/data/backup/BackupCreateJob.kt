@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.work.BackoffPolicy
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
@@ -78,6 +79,10 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                 s.toInt(16)
             }
             if (interval > 0) {
+                val constraints = Constraints(
+                    requiresBatteryNotLow = true,
+                )
+
                 val request = PeriodicWorkRequestBuilder<BackupCreateJob>(
                     interval.toLong(),
                     TimeUnit.HOURS,
@@ -86,6 +91,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                 )
                     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10.minutes.toJavaDuration())
                     .addTag(TAG_AUTO)
+                    .setConstraints(constraints)
                     .setInputData(
                         workDataOf(
                             IS_AUTO_BACKUP_KEY to true,

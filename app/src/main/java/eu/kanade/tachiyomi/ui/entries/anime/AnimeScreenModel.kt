@@ -134,7 +134,7 @@ class AnimeScreenModel(
 
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
-    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.libraryUpdateItemRestriction().get()
+    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()

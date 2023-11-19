@@ -20,39 +20,38 @@ class LibraryPreferences(
     fun isDefaultHomeTabLibraryManga() =
         preferenceStore.getBoolean("default_home_tab_library", false)
 
-    fun libraryDisplayMode() = preferenceStore.getObject(
+    fun displayMode() = preferenceStore.getObject(
         "pref_display_mode_library",
         LibraryDisplayMode.default,
         LibraryDisplayMode.Serializer::serialize,
         LibraryDisplayMode.Serializer::deserialize,
     )
 
-    fun libraryMangaSortingMode() = preferenceStore.getObject(
+    fun mangaSortingMode() = preferenceStore.getObject(
         "library_sorting_mode",
         MangaLibrarySort.default,
         MangaLibrarySort.Serializer::serialize,
         MangaLibrarySort.Serializer::deserialize,
     )
 
-    fun libraryAnimeSortingMode() = preferenceStore.getObject(
+    fun animeSortingMode() = preferenceStore.getObject(
         "animelib_sorting_mode",
         AnimeLibrarySort.default,
         AnimeLibrarySort.Serializer::serialize,
         AnimeLibrarySort.Serializer::deserialize,
     )
 
-    fun libraryUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 0)
+    fun lastUpdatedTimestamp() = preferenceStore.getLong("library_update_last_timestamp", 0L)
+    fun autoUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 0)
 
-    fun libraryUpdateLastTimestamp() = preferenceStore.getLong("library_update_last_timestamp", 0L)
-
-    fun libraryUpdateDeviceRestriction() = preferenceStore.getStringSet(
+    fun autoUpdateDeviceRestrictions() = preferenceStore.getStringSet(
         "library_update_restriction",
         setOf(
             DEVICE_ONLY_ON_WIFI,
         ),
     )
 
-    fun libraryUpdateItemRestriction() = preferenceStore.getStringSet(
+    fun autoUpdateItemRestrictions() = preferenceStore.getStringSet(
         "library_update_manga_restriction",
         setOf(
             ENTRY_HAS_UNVIEWED,
@@ -172,16 +171,16 @@ class LibraryPreferences(
     fun lastUsedAnimeCategory() = preferenceStore.getInt("last_used_anime_category", 0)
     fun lastUsedMangaCategory() = preferenceStore.getInt("last_used_category", 0)
 
-    fun animeLibraryUpdateCategories() =
+    fun animeUpdateCategories() =
         preferenceStore.getStringSet("animelib_update_categories", emptySet())
 
-    fun mangaLibraryUpdateCategories() =
+    fun mangaUpdateCategories() =
         preferenceStore.getStringSet("library_update_categories", emptySet())
 
-    fun animeLibraryUpdateCategoriesExclude() =
+    fun animeUpdateCategoriesExclude() =
         preferenceStore.getStringSet("animelib_update_categories_exclude", emptySet())
 
-    fun mangaLibraryUpdateCategoriesExclude() =
+    fun mangaUpdateCategoriesExclude() =
         preferenceStore.getStringSet("library_update_categories_exclude", emptySet())
 
     // Mixture Item
@@ -291,7 +290,6 @@ class LibraryPreferences(
         const val DEVICE_ONLY_ON_WIFI = "wifi"
         const val DEVICE_NETWORK_NOT_METERED = "network_not_metered"
         const val DEVICE_CHARGING = "ac"
-        const val DEVICE_BATTERY_NOT_LOW = "battery_not_low"
 
         const val ENTRY_NON_COMPLETED = "manga_ongoing"
         const val ENTRY_HAS_UNVIEWED = "manga_fully_read"

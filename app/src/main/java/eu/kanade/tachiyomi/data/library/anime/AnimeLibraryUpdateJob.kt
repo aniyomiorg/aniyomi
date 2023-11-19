@@ -64,7 +64,6 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
@@ -113,7 +112,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     override suspend fun doWork(): Result {
         if (tags.contains(WORK_NAME_AUTO)) {
             val preferences = Injekt.get<LibraryPreferences>()
-            val restrictions = preferences.libraryUpdateDeviceRestriction().get()
+            val restrictions = preferences.autoUpdateDeviceRestrictions().get()
             if ((DEVICE_ONLY_ON_WIFI in restrictions) && !context.isConnectedToWifi()) {
                 return Result.failure()
             }
@@ -134,7 +133,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // If this is a chapter update, set the last update time to now
         if (target == Target.EPISODES) {
-            libraryPreferences.libraryUpdateLastTimestamp().set(Date().time)
+            libraryPreferences.lastUpdatedTimestamp().set(Date().time)
         }
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
@@ -181,14 +180,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val listToUpdate = if (categoryId != -1L) {
             libraryAnime.filter { it.category == categoryId }
         } else {
-            val categoriesToUpdate = libraryPreferences.animeLibraryUpdateCategories().get().map { it.toLong() }
+            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToUpdate }
             } else {
                 libraryAnime
             }
 
-            val categoriesToExclude = libraryPreferences.animeLibraryUpdateCategoriesExclude().get().map { it.toLong() }
+            val categoriesToExclude = libraryPreferences.animeUpdateCategoriesExclude().get().map { it.toLong() }
             val excludedAnimeIds = if (categoriesToExclude.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToExclude }.map { it.anime.id }
             } else {
@@ -229,7 +228,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val skippedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
+        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val fetchWindow = setAnimeFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
@@ -558,13 +557,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             prefInterval: Int? = null,
         ) {
             val preferences = Injekt.get<LibraryPreferences>()
-            val interval = prefInterval ?: preferences.libraryUpdateInterval().get()
+            val interval = prefInterval ?: preferences.autoUpdateInterval().get()
             if (interval > 0) {
-                val restrictions = preferences.libraryUpdateDeviceRestriction().get()
+                val restrictions = preferences.autoUpdateDeviceRestrictions().get()
                 val constraints = Constraints(
                     requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) { NetworkType.UNMETERED } else { NetworkType.CONNECTED },
                     requiresCharging = DEVICE_CHARGING in restrictions,
-                    requiresBatteryNotLow = DEVICE_BATTERY_NOT_LOW in restrictions,
+                    requiresBatteryNotLow = true,
                 )
 
                 val request = PeriodicWorkRequestBuilder<AnimeLibraryUpdateJob>(

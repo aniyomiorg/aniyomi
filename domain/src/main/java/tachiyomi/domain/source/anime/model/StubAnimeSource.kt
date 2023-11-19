@@ -12,7 +12,7 @@ class StubAnimeSource(
     override val name: String,
 ) : AnimeSource {
 
-    val isInvalid: Boolean = name.isBlank() || lang.isBlank()
+    private val isInvalid: Boolean = name.isBlank() || lang.isBlank()
 
     override suspend fun getAnimeDetails(anime: SAnime): SAnime {
         throw AnimeSourceNotInstalledException()

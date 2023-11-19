@@ -66,7 +66,10 @@ class AnimeExtensionManager(
     fun getAppIconForSource(sourceId: Long): Drawable? {
         val pkgName = _installedAnimeExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
         if (pkgName != null) {
-            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
+            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) {
+                AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo
+                    .loadIcon(context.packageManager)
+            }
         }
         return null
     }
@@ -333,6 +336,7 @@ class AnimeExtensionManager(
         }
 
         override fun onPackageUninstalled(pkgName: String) {
+            AnimeExtensionLoader.uninstallPrivateExtension(context, pkgName)
             unregisterAnimeExtension(pkgName)
             updatePendingUpdatesCount()
         }

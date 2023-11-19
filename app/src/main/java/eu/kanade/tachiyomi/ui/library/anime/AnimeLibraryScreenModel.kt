@@ -526,7 +526,7 @@ class AnimeLibraryScreenModel(
     }
 
     fun getDisplayMode(): PreferenceMutableState<LibraryDisplayMode> {
-        return libraryPreferences.libraryDisplayMode().asState(coroutineScope)
+        return libraryPreferences.displayMode().asState(coroutineScope)
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {

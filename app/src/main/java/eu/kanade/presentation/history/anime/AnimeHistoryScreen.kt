@@ -30,7 +30,7 @@ fun AnimeHistoryScreen(
     ) { _ ->
         state.list.let {
             if (it == null) {
-                LoadingScreen(modifier = Modifier.padding(contentPadding))
+                LoadingScreen(Modifier.padding(contentPadding))
             } else if (it.isEmpty()) {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
                     R.string.no_results_found

@@ -165,7 +165,7 @@ object MangaLibraryTab : Tab() {
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         ) { contentPadding ->
             when {
-                state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+                state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
                 state.searchQuery.isNullOrEmpty() && !state.hasActiveFilters && state.isLibraryEmpty -> {
                     val handler = LocalUriHandler.current
                     EmptyScreen(

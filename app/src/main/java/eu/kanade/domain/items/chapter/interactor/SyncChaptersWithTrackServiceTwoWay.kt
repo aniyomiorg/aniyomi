@@ -9,12 +9,11 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.toChapterUpdate
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class SyncChaptersWithTrackServiceTwoWay(
-    private val updateChapter: UpdateChapter = Injekt.get(),
-    private val insertTrack: InsertMangaTrack = Injekt.get(),
+    private val updateChapter: UpdateChapter,
+    private val insertTrack: InsertMangaTrack,
 ) {
 
     suspend fun await(

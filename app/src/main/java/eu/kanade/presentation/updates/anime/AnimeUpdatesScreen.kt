@@ -69,7 +69,7 @@ fun AnimeUpdateScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) {
         when {
-            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(
                 textResource = R.string.information_no_recent,
                 modifier = Modifier.padding(contentPadding),

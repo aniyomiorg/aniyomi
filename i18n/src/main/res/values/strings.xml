@@ -253,7 +253,6 @@
     <string name="connected_to_wifi">Only on Wi-Fi</string>
     <string name="network_not_metered">Only on unmetered network</string>
     <string name="charging">When charging</string>
-    <string name="battery_not_low">When battery not low</string>
     <string name="restrictions">Restrictions: %s</string>
 
     <string name="pref_library_update_manga_restriction">Skip updating entries</string>
@@ -313,6 +312,7 @@
     <string name="ext_installer_packageinstaller" translatable="false">PackageInstaller</string>
     <string name="ext_installer_shizuku" translatable="false">Shizuku</string>
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
+    <string name="ext_installer_private" translatable="false">Private</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
 
     <!-- Reader section -->
@@ -489,6 +489,7 @@
     <string name="creating_backup_error">Backup failed</string>
     <string name="missing_storage_permission">Storage permissions not granted</string>
     <string name="empty_backup_error">No library entries to back up</string>
+    <string name="create_backup_file_error">Couldn\'t create a backup file</string>
     <string name="restore_miui_warning">Backup/restore may not function properly if MIUI Optimization is disabled.</string>
     <string name="restore_in_progress">Restore is already in progress</string>
     <string name="restoring_backup">Restoring backup</string>
@@ -594,8 +595,6 @@
     <!-- missing prompt after Compose rewrite #7901 -->
     <string name="no_more_results">No more results</string>
     <string name="no_results_found">No results found</string>
-    <!-- Do not translate "WebView" -->
-    <string name="http_error_hint">Check website in WebView</string>
     <string name="local_source">Local source</string>
     <string name="other_source">Other</string>
     <string name="last_used_source">Last used</string>
@@ -927,4 +926,10 @@
     <string name="appwidget_updates_description">See your recently updated library entries</string>
     <string name="appwidget_unavailable_locked">Widget not available when app lock is enabled</string>
     <string name="remove_manga">You are about to remove \"%s\" from your library</string>
+
+    <!-- Common exceptions -->
+    <!-- Do not translate "WebView" -->
+    <string name="exception_http">HTTP %d, check website in WebView</string>
+    <string name="exception_offline">No Internet connection</string>
+    <string name="exception_unknown_host">Couldn\'t reach %s</string>
 </resources>

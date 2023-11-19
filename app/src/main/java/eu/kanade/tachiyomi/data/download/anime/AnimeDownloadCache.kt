@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.size
@@ -334,21 +333,23 @@ class AnimeDownloadCache(
                 }
             }
 
-            val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
-                .associate { it.name to SourceDirectory(it) }
-                .mapNotNullKeys { entry ->
-                    sources.find {
-                        provider.getSourceDirName(it).equals(entry.key, ignoreCase = true)
-                    }?.id
-                }
+            val sourceMap = sources.associate { provider.getSourceDirName(it).lowercase() to it.id }
 
-            rootDownloadsDir.sourceDirs = sourceDirs
+            val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
+                .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                .mapNotNull { dir ->
+                    val sourceId = sourceMap[dir.name!!.lowercase()]
+                    sourceId?.let { it to SourceDirectory(dir) }
+                }
+                .toMap()
+
+            rootDownloadsDir.sourceDirs = sourceDirs as ConcurrentHashMap<Long, SourceDirectory>
 
             sourceDirs.values
                 .map { sourceDir ->
                     async {
                         val animeDirs = sourceDir.dir.listFiles().orEmpty()
-                            .filterNot { it.name.isNullOrBlank() }
+                            .filter { it.isDirectory && !it.name.isNullOrBlank() }
                             .associate { it.name!! to AnimeDirectory(it) }
 
                         sourceDir.animeDirs = ConcurrentHashMap(animeDirs)

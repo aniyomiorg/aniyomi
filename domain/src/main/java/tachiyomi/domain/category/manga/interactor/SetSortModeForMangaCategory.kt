@@ -23,7 +23,7 @@ class SetSortModeForMangaCategory(
                 ),
             )
         } else {
-            preferences.libraryMangaSortingMode().set(MangaLibrarySort(type, direction))
+            preferences.mangaSortingMode().set(MangaLibrarySort(type, direction))
             categoryRepository.updateAllMangaCategoryFlags(flags)
         }
     }
