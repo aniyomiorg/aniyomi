@@ -17,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
+class MyAnimeList(id: Long) : TrackService(id, "MyAnimeList"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -38,9 +38,6 @@ class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackSer
 
     private val interceptor by lazy { MyAnimeListInterceptor(this, getPassword()) }
     private val api by lazy { MyAnimeListApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_myanimelist
 
     override val supportsReadingDates: Boolean = true
 

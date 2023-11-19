@@ -13,11 +13,11 @@ import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
+import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
@@ -235,7 +235,7 @@ class DomainModule : InjektModule {
         addFactory { SetSeenStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbEpisode() }
         addFactory { SyncEpisodesWithSource(get(), get(), get(), get(), get(), get(), get()) }
-        addFactory { SyncEpisodesWithTrackServiceTwoWay(get(), get()) }
+        addFactory { SyncEpisodeProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
         addFactory { GetChapter(get()) }
@@ -244,7 +244,7 @@ class DomainModule : InjektModule {
         addFactory { SetReadStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbChapter() }
         addFactory { SyncChaptersWithSource(get(), get(), get(), get(), get(), get(), get()) }
-        addFactory { SyncChaptersWithTrackServiceTwoWay(get(), get()) }
+        addFactory { SyncChapterProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
         addFactory { GetAnimeHistory(get()) }

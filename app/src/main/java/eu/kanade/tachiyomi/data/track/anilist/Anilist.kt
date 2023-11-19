@@ -19,7 +19,7 @@ import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
+class Anilist(id: Long) : TrackService(id, "AniList"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -58,9 +58,6 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
             scorePreference.delete()
         }
     }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_anilist
 
     override fun getLogo() = R.drawable.ic_tracker_anilist
 

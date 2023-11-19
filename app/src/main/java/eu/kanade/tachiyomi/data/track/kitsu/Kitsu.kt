@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 
-class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
+class Kitsu(id: Long) : TrackService(id, "Kitsu"), AnimeTrackService, MangaTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -29,9 +29,6 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService, 
         const val PLAN_TO_READ = 5
         const val PLAN_TO_WATCH = 15
     }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_kitsu
 
     override val supportsReadingDates: Boolean = true
 

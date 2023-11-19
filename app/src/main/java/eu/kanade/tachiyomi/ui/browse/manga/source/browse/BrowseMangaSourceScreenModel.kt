@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
@@ -17,7 +16,7 @@ import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toDomainManga
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.presentation.util.ioCoroutineScope
@@ -34,7 +33,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -52,7 +50,6 @@ import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
@@ -74,17 +71,16 @@ class BrowseMangaSourceScreenModel(
     private val getRemoteManga: GetRemoteManga = Injekt.get(),
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
-    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     private val setMangaDefaultChapterFlags: SetMangaDefaultChapterFlags = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val insertTrack: InsertMangaTrack = Injekt.get(),
-    private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get(),
+    private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack = Injekt.get(),
 ) : StateScreenModel<BrowseMangaSourceScreenModel.State>(State(Listing.valueOf(listingQuery))) {
 
-    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLogged } }
+    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLoggedIn } }
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
@@ -301,8 +297,7 @@ class BrowseMangaSourceScreenModel(
                         (service as TrackService).mangaService.bind(track)
                         insertTrack.await(track.toDomainTrack()!!)
 
-                        val chapters = getChapterByMangaId.await(manga.id)
-                        syncChaptersWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service.mangaService)
+                        syncChapterProgressWithTrack.await(manga.id, track.toDomainTrack()!!, service.mangaService)
                     }
                 } catch (e: Exception) {
                     logcat(LogPriority.WARN, e) { "Could not match manga: ${manga.title} with service $service" }

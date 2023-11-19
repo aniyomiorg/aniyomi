@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -22,6 +22,7 @@ import java.time.ZoneOffset
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 private val insertTrack: InsertMangaTrack by injectLazy()
+private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack by injectLazy()
 
 interface MangaTrackService {
 
@@ -56,7 +57,8 @@ interface MangaTrackService {
 
     suspend fun refresh(track: MangaTrack): MangaTrack
 
-    suspend fun registerTracking(item: MangaTrack, mangaId: Long) {
+    // TODO: move this to an interactor, and update all trackers based on common data
+    suspend fun register(item: MangaTrack, mangaId: Long) {
         item.manga_id = mangaId
         try {
             withIOContext {
@@ -68,6 +70,7 @@ interface MangaTrackService {
 
                 insertTrack.await(track)
 
+                // TODO: merge into SyncChaptersWithTrackServiceTwoWay?
                 // Update chapter progress if newer chapters marked read locally
                 if (hasReadChapters) {
                     val latestLocalReadChapterNumber = allChapters
@@ -102,9 +105,7 @@ interface MangaTrackService {
                     }
                 }
 
-                if (this is EnhancedMangaTrackService) {
-                    Injekt.get<SyncChaptersWithTrackServiceTwoWay>().await(allChapters, track, this@MangaTrackService)
-                }
+                syncChapterProgressWithTrack.await(mangaId, track, this@MangaTrackService)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }

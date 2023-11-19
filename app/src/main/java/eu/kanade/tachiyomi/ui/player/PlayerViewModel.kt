@@ -575,7 +575,7 @@ class PlayerViewModel @JvmOverloads constructor(
             getTracks.await(anime.id)
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLogged && episodeSeen > track.lastEpisodeSeen) {
+                    if (service != null && service.isLoggedIn && episodeSeen > track.lastEpisodeSeen) {
                         val updatedTrack = track.copy(lastEpisodeSeen = episodeSeen)
 
                         // We want these to execute even if the presenter is destroyed and leaks

@@ -28,7 +28,7 @@ class MangaLibrarySettingsScreenModel(
 ) : ScreenModel {
 
     val trackServices
-        get() = trackManager.services.filter { it.isLogged }
+        get() = trackManager.services.filter { it.isLoggedIn }
 
     // SY -->
     val grouping by libraryPreferences.groupMangaLibraryBy().asState(coroutineScope)

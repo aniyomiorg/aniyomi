@@ -19,18 +19,13 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.track.anime.model.toDbTrack
-import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -46,7 +41,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -61,7 +55,6 @@ import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
@@ -78,7 +71,6 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSI
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
-import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -96,17 +88,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
-    private val trackManager: TrackManager = Injekt.get()
     private val coverCache: AnimeCoverCache = Injekt.get()
     private val getLibraryAnime: GetLibraryAnime = Injekt.get()
     private val getAnime: GetAnime = Injekt.get()
     private val updateAnime: UpdateAnime = Injekt.get()
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get()
     private val getCategories: GetAnimeCategories = Injekt.get()
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
-    private val insertTrack: InsertAnimeTrack = Injekt.get()
-    private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get()
+    private val refreshAnimeTracks: RefreshAnimeTracks = Injekt.get()
     private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
@@ -354,8 +343,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     }
 
                                     if (libraryPreferences.autoUpdateTrackers().get()) {
-                                        val loggedServices = trackManager.services.filter { it.isLogged }
-                                        updateTrackings(anime, loggedServices)
+                                        refreshAnimeTracks(anime.id)
                                     }
                                 }
                             }
@@ -475,47 +463,24 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private suspend fun updateTrackings() {
         coroutineScope {
             var progressCount = 0
-            val loggedServices = trackManager.services.filter { it.isLogged }
 
             animeToUpdate.forEach { libraryAnime ->
-                val anime = libraryAnime.anime
-
                 ensureActive()
 
+                val anime = libraryAnime.anime
                 notifier.showProgressNotification(listOf(anime), progressCount++, animeToUpdate.size)
-
-                // Update the tracking details.
-                updateTrackings(anime, loggedServices)
+                refreshAnimeTracks(anime.id)
             }
 
             notifier.cancelProgressNotification()
         }
     }
 
-    private suspend fun updateTrackings(anime: Anime, loggedServices: List<TrackService>) {
-        getTracks.await(anime.id)
-            .map { track ->
-                supervisorScope {
-                    async {
-                        val service = trackManager.getService(track.syncId)
-                        if (service != null && service in loggedServices) {
-                            try {
-                                val updatedTrack = service.animeService.refresh(track.toDbTrack())
-                                insertTrack.await(updatedTrack.toDomainTrack()!!)
-
-                                if (service is EnhancedAnimeTrackService) {
-                                    val episodes = getEpisodeByAnimeId.await(anime.id)
-                                    syncEpisodesWithTrackServiceTwoWay.await(episodes, track, service.animeService)
-                                }
-                            } catch (e: Throwable) {
-                                // Ignore errors and continue
-                                logcat(LogPriority.ERROR, e)
-                            }
-                        }
-                    }
-                }
-            }
-            .awaitAll()
+    private suspend fun refreshAnimeTracks(animeId: Long) {
+        refreshAnimeTracks.await(animeId).forEach { (_, e) ->
+            // Ignore errors and continue
+            logcat(LogPriority.ERROR, e)
+        }
     }
 
     private suspend fun withUpdateNotification(

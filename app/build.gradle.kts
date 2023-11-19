@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -294,10 +293,6 @@ androidComponents {
 }
 
 tasks {
-    withType<LintTask>().configureEach {
-        exclude { it.file.path.contains("generated[\\\\/]".toRegex()) }
-    }
-
     // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api(-markers)
     withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs += listOf(

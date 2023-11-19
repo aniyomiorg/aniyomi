@@ -17,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
+class Shikimori(id: Long) : TrackService(id, "Shikimori"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -33,9 +33,6 @@ class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackServi
     private val interceptor by lazy { ShikimoriInterceptor(this) }
 
     private val api by lazy { ShikimoriApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_shikimori
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)

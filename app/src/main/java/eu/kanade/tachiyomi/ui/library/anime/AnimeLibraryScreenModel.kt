@@ -438,7 +438,7 @@ class AnimeLibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, TriState>> {
-        val loggedServices = trackManager.services.filter { it.isLogged && it is AnimeTrackService }
+        val loggedServices = trackManager.services.filter { it.isLoggedIn && it is AnimeTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
                 .map { libraryPreferences.filterTrackedAnime(it.id.toInt()).changes() }

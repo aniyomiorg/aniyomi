@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
@@ -22,6 +22,7 @@ import java.time.ZoneOffset
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 private val insertTrack: InsertAnimeTrack by injectLazy()
+private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack by injectLazy()
 
 interface AnimeTrackService {
 
@@ -56,7 +57,8 @@ interface AnimeTrackService {
 
     suspend fun refresh(track: AnimeTrack): AnimeTrack
 
-    suspend fun registerTracking(item: AnimeTrack, animeId: Long) {
+    // TODO: move this to an interactor, and update all trackers based on common data
+    suspend fun register(item: AnimeTrack, animeId: Long) {
         item.anime_id = animeId
         try {
             withIOContext {
@@ -68,6 +70,7 @@ interface AnimeTrackService {
 
                 insertTrack.await(track)
 
+                // TODO: merge into SyncChaptersWithTrackServiceTwoWay?
                 // Update episode progress if newer episodes marked seen locally
                 if (hasSeenEpisodes) {
                     val latestLocalSeenEpisodeNumber = allEpisodes
@@ -102,9 +105,7 @@ interface AnimeTrackService {
                     }
                 }
 
-                if (this is EnhancedAnimeTrackService) {
-                    Injekt.get<SyncEpisodesWithTrackServiceTwoWay>().await(allEpisodes, track, this@AnimeTrackService)
-                }
+                syncEpisodeProgressWithTrack.await(animeId, track, this@AnimeTrackService)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }

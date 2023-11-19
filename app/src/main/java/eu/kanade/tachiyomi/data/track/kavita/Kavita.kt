@@ -15,7 +15,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import java.security.MessageDigest
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Kavita(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
+class Kavita(private val context: Context, id: Long) : TrackService(id, "Kavita"), EnhancedMangaTrackService, MangaTrackService {
 
     companion object {
         const val UNREAD = 1
@@ -27,9 +27,6 @@ class Kavita(private val context: Context, id: Long) : TrackService(id), Enhance
 
     private val interceptor by lazy { KavitaInterceptor(this) }
     val api by lazy { KavitaApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_kavita
 
     override fun getLogo(): Int = R.drawable.ic_tracker_kavita
 

@@ -37,7 +37,7 @@ class AnimeStatsScreenModel(
     private val trackManager: TrackManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
 
-    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLogged && it is AnimeTrackService } }
+    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLoggedIn && it is AnimeTrackService } }
 
     init {
         coroutineScope.launchIO {

@@ -12,7 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Simkl(id: Long) : TrackService(id), AnimeTrackService {
+class Simkl(id: Long) : TrackService(id, "Simkl"), AnimeTrackService {
 
     companion object {
         const val WATCHING = 1
@@ -27,9 +27,6 @@ class Simkl(id: Long) : TrackService(id), AnimeTrackService {
     private val interceptor by lazy { SimklInterceptor(this) }
 
     private val api by lazy { SimklApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_simkl
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)

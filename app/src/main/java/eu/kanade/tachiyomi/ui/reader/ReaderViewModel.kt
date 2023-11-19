@@ -877,7 +877,7 @@ class ReaderViewModel @JvmOverloads constructor(
             getTracks.await(manga.id)
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLogged && chapterRead > track.lastChapterRead) {
+                    if (service != null && service.isLoggedIn && chapterRead > track.lastChapterRead) {
                         val updatedTrack = track.copy(lastChapterRead = chapterRead)
 
                         // We want these to execute even if the presenter is destroyed and leaks

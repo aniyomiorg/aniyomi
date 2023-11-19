@@ -212,7 +212,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun findLibManga(track: MangaTrack, user_id: String): MangaTrack? {
+    suspend fun findLibManga(track: MangaTrack, userId: String): MangaTrack? {
         return withIOContext {
             val urlMangas = "$apiUrl/mangas".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
@@ -224,7 +224,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             }
 
             val url = "$apiUrl/v2/user_rates".toUri().buildUpon()
-                .appendQueryParameter("user_id", user_id)
+                .appendQueryParameter("user_id", userId)
                 .appendQueryParameter("target_id", track.media_id.toString())
                 .appendQueryParameter("target_type", "Manga")
                 .build()

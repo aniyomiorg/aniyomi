@@ -9,11 +9,12 @@ class MangaUpdatesRepositoryImpl(
     private val databaseHandler: MangaDatabaseHandler,
 ) : MangaUpdatesRepository {
 
-    override suspend fun awaitWithRead(read: Boolean, after: Long): List<MangaUpdatesWithRelations> {
+    override suspend fun awaitWithRead(read: Boolean, after: Long, limit: Long): List<MangaUpdatesWithRelations> {
         return databaseHandler.awaitList {
             updatesViewQueries.getUpdatesByReadStatus(
                 read = read,
                 after = after,
+                limit = limit,
                 mapper = mangaUpdateWithRelationMapper,
             )
         }
@@ -25,11 +26,12 @@ class MangaUpdatesRepositoryImpl(
         }
     }
 
-    override fun subscribeWithRead(read: Boolean, after: Long): Flow<List<MangaUpdatesWithRelations>> {
+    override fun subscribeWithRead(read: Boolean, after: Long, limit: Long): Flow<List<MangaUpdatesWithRelations>> {
         return databaseHandler.subscribeToList {
             updatesViewQueries.getUpdatesByReadStatus(
                 read = read,
                 after = after,
+                limit = limit,
                 mapper = mangaUpdateWithRelationMapper,
             )
         }
