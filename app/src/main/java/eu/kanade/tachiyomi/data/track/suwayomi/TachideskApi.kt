@@ -10,6 +10,8 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.PUT
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
+import java.nio.charset.Charset
+import java.security.MessageDigest
 import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.Dns
@@ -20,8 +22,6 @@ import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.nio.charset.Charset
-import java.security.MessageDigest
 
 class TachideskApi {
 
@@ -113,7 +113,10 @@ class TachideskApi {
 
     private fun getPrefBaseUrl(): String = preferences.getString(ADDRESS_TITLE, ADDRESS_DEFAULT)!!
     private fun getPrefBaseLogin(): String = preferences.getString(LOGIN_TITLE, LOGIN_DEFAULT)!!
-    private fun getPrefBasePassword(): String = preferences.getString(PASSWORD_TITLE, PASSWORD_DEFAULT)!!
+    private fun getPrefBasePassword(): String = preferences.getString(
+        PASSWORD_TITLE,
+        PASSWORD_DEFAULT
+    )!!
 
     companion object {
         private const val ADDRESS_TITLE = "Server URL Address"

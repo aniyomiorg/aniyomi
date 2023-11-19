@@ -296,7 +296,10 @@ private fun ExtensionItemContent(
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is MangaExtension.Installed && extension.lang.isNotEmpty()) {
                     Text(
-                        text = LocaleHelper.getSourceDisplayName(extension.lang, LocalContext.current),
+                        text = LocaleHelper.getSourceDisplayName(
+                            extension.lang,
+                            LocalContext.current
+                        ),
                     )
                 }
 

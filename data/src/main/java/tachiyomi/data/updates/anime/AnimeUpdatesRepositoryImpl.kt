@@ -22,7 +22,11 @@ class AnimeUpdatesRepositoryImpl(
 
     override fun subscribeAllAnimeUpdates(after: Long, limit: Long): Flow<List<AnimeUpdatesWithRelations>> {
         return databaseHandler.subscribeToList {
-            animeupdatesViewQueries.getRecentAnimeUpdates(after, limit, animeUpdateWithRelationMapper)
+            animeupdatesViewQueries.getRecentAnimeUpdates(
+                after,
+                limit,
+                animeUpdateWithRelationMapper
+            )
         }
     }
 

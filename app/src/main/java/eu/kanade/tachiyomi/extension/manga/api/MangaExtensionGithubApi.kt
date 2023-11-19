@@ -10,6 +10,8 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
+import java.util.Date
+import kotlin.time.Duration.Companion.days
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import logcat.LogPriority
@@ -18,8 +20,6 @@ import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
-import java.util.Date
-import kotlin.time.Duration.Companion.days
 
 internal class MangaExtensionGithubApi {
 

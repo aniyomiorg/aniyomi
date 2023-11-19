@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -281,7 +281,9 @@ androidComponents {
     beforeVariants { variantBuilder ->
         // Disables standardBenchmark
         if (variantBuilder.buildType == "benchmark") {
-            variantBuilder.enable = variantBuilder.productFlavors.containsAll(listOf("default" to "dev"))
+            variantBuilder.enable = variantBuilder.productFlavors.containsAll(
+                listOf("default" to "dev")
+            )
         }
     }
     onVariants(selector().withFlavor("default" to "standard")) {

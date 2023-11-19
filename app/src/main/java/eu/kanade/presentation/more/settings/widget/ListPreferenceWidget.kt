@@ -69,8 +69,16 @@ fun <T> ListPreferenceWidget(
                             }
                         }
                     }
-                    if (!state.isScrolledToStart()) HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
-                    if (!state.isScrolledToEnd()) HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
+                    if (!state.isScrolledToStart()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
+                    }
+                    if (!state.isScrolledToEnd()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
+                    }
                 }
             },
             confirmButton = {

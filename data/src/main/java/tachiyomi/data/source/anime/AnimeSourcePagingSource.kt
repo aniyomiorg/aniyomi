@@ -10,7 +10,11 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 
-class AnimeSourceSearchPagingSource(source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
+class AnimeSourceSearchPagingSource(
+    source: AnimeCatalogueSource,
+    val query: String,
+    val filters: AnimeFilterList
+) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
     }

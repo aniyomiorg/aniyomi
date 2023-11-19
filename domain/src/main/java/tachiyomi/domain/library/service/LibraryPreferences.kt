@@ -132,25 +132,55 @@ class LibraryPreferences(
     fun filterCompletedManga() =
         preferenceStore.getEnum("pref_filter_library_completed_v2", TriState.DISABLED)
 
-    fun filterIntervalCustomAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_custom", TriState.DISABLED)
+    fun filterIntervalCustomAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_custom",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalCustomManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_custom", TriState.DISABLED)
+    fun filterIntervalCustomManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_custom",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalLongAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_long", TriState.DISABLED)
+    fun filterIntervalLongAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_long",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalLongManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_long", TriState.DISABLED)
+    fun filterIntervalLongManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_long",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalLateAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_late", TriState.DISABLED)
+    fun filterIntervalLateAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_late",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalLateManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_late", TriState.DISABLED)
+    fun filterIntervalLateManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_late",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalDroppedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_dropped", TriState.DISABLED)
+    fun filterIntervalDroppedAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_dropped",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalDroppedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_dropped", TriState.DISABLED)
+    fun filterIntervalDroppedManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_dropped",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalPassedAnime() = preferenceStore.getEnum("pref_filter_anime_library_interval_passed", TriState.DISABLED)
+    fun filterIntervalPassedAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_passed",
+        TriState.DISABLED
+    )
 
-    fun filterIntervalPassedManga() = preferenceStore.getEnum("pref_filter_manga_library_interval_passed", TriState.DISABLED)
+    fun filterIntervalPassedManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_passed",
+        TriState.DISABLED
+    )
 
     fun filterTrackedAnime(id: Int) =
         preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriState.DISABLED)
@@ -240,7 +270,9 @@ class LibraryPreferences(
         filterEpisodeByBookmarked().set(anime.bookmarkedFilterRaw)
         sortEpisodeBySourceOrNumber().set(anime.sorting)
         displayEpisodeByNameOrNumber().set(anime.displayMode)
-        sortEpisodeByAscendingOrDescending().set(if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC)
+        sortEpisodeByAscendingOrDescending().set(
+            if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC
+        )
     }
 
     fun setChapterSettingsDefault(manga: Manga) {
@@ -249,7 +281,9 @@ class LibraryPreferences(
         filterChapterByBookmarked().set(manga.bookmarkedFilterRaw)
         sortChapterBySourceOrNumber().set(manga.sorting)
         displayChapterByNameOrNumber().set(manga.displayMode)
-        sortChapterByAscendingOrDescending().set(if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC)
+        sortChapterByAscendingOrDescending().set(
+            if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC
+        )
     }
 
     // region Swipe Actions

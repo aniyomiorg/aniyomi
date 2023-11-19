@@ -23,9 +23,6 @@ import androidx.core.graphics.get
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.hippo.unifile.UniFile
-import logcat.LogPriority
-import tachiyomi.decoder.Format
-import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -34,6 +31,9 @@ import java.net.URLConnection
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import logcat.LogPriority
+import tachiyomi.decoder.Format
+import tachiyomi.decoder.ImageDecoder
 
 object ImageUtil {
 
@@ -221,7 +221,9 @@ object ImageUtil {
      * Splits tall images to improve performance of reader
      */
     fun splitTallImage(tmpDir: UniFile, imageFile: UniFile, filenamePrefix: String): Boolean {
-        if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(imageFile.openInputStream())) {
+        if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(
+                imageFile.openInputStream()
+            )) {
             return true
         }
 
@@ -245,7 +247,12 @@ object ImageUtil {
 
                 val splitFile = tmpDir.createFile(splitImageName)
 
-                val region = Rect(0, splitData.topOffset, splitData.splitWidth, splitData.bottomOffset)
+                val region = Rect(
+                    0,
+                    splitData.topOffset,
+                    splitData.splitWidth,
+                    splitData.bottomOffset
+                )
 
                 splitFile.openOutputStream().use { outputStream ->
                     val splitBitmap = bitmapRegionDecoder.decodeRegion(region, options)
@@ -271,7 +278,9 @@ object ImageUtil {
         }
     }
 
-    private fun splitImageName(filenamePrefix: String, index: Int) = "${filenamePrefix}__${"%03d".format(index + 1)}.jpg"
+    private fun splitImageName(filenamePrefix: String, index: Int) = "${filenamePrefix}__${"%03d".format(
+        index + 1
+    )}.jpg"
 
     /**
      * Check whether the image is a long Strip that needs splitting
@@ -401,7 +410,14 @@ object ImageUtil {
         var darkBG = (topLeftIsDark && (botLeftIsDark || botRightIsDark || topRightIsDark || midLeftIsDark || topMidIsDark)) ||
             (topRightIsDark && (botRightIsDark || botLeftIsDark || midRightIsDark || topMidIsDark))
 
-        val topAndBotPixels = listOf(topLeftPixel, topCenterPixel, topRightPixel, botRightPixel, bottomCenterPixel, botLeftPixel)
+        val topAndBotPixels = listOf(
+            topLeftPixel,
+            topCenterPixel,
+            topRightPixel,
+            botRightPixel,
+            bottomCenterPixel,
+            botLeftPixel
+        )
         val isNotWhiteAndCloseTo = topAndBotPixels.mapIndexed { index, color ->
             val other = topAndBotPixels[(index + 1) % topAndBotPixels.size]
             !color.isWhite() && color.isCloseTo(other)

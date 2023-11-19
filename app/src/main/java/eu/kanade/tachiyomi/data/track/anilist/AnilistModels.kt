@@ -6,10 +6,10 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import kotlinx.serialization.Serializable
-import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlinx.serialization.Serializable
+import uy.kohesive.injekt.injectLazy
 
 data class ALManga(
     val media_id: Long,

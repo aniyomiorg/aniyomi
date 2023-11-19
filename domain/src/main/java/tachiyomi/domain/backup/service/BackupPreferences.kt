@@ -14,5 +14,8 @@ class BackupPreferences(
 
     fun backupInterval() = preferenceStore.getInt("backup_interval", 12)
 
-    fun backupFlags() = preferenceStore.getStringSet("backup_flags", setOf(FLAG_CATEGORIES, FLAG_CHAPTERS, FLAG_HISTORY, FLAG_TRACK))
+    fun backupFlags() = preferenceStore.getStringSet(
+        "backup_flags",
+        setOf(FLAG_CATEGORIES, FLAG_CHAPTERS, FLAG_HISTORY, FLAG_TRACK)
+    )
 }

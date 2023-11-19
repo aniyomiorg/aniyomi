@@ -84,6 +84,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import eu.kanade.tachiyomi.widget.listener.SimpleAnimationListener
+import kotlin.math.abs
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -103,7 +104,6 @@ import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.widget.util.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import kotlin.math.abs
 
 class ReaderActivity : BaseActivity() {
 
@@ -161,12 +161,18 @@ class ReaderActivity : BaseActivity() {
                 finish()
                 return
             }
-            NotificationReceiver.dismissNotification(this, manga.hashCode(), Notifications.ID_NEW_CHAPTERS)
+            NotificationReceiver.dismissNotification(
+                this,
+                manga.hashCode(),
+                Notifications.ID_NEW_CHAPTERS
+            )
 
             lifecycleScope.launchNonCancellable {
                 val initResult = viewModel.init(manga, chapter)
                 if (!initResult.getOrDefault(false)) {
-                    val exception = initResult.exceptionOrNull() ?: IllegalStateException("Unknown err")
+                    val exception = initResult.exceptionOrNull() ?: IllegalStateException(
+                        "Unknown err"
+                    )
                     withUIContext {
                         setInitialChapterError(exception)
                     }
@@ -494,9 +500,13 @@ class ReaderActivity : BaseActivity() {
                 )
 
                 BottomReaderBar(
-                    readingMode = ReadingModeType.fromPreference(viewModel.getMangaReadingMode(resolveDefault = false)),
+                    readingMode = ReadingModeType.fromPreference(
+                        viewModel.getMangaReadingMode(resolveDefault = false)
+                    ),
                     onClickReadingMode = viewModel::openReadingModeSelectDialog,
-                    orientationMode = OrientationType.fromPreference(viewModel.getMangaOrientationType(resolveDefault = false)),
+                    orientationMode = OrientationType.fromPreference(
+                        viewModel.getMangaOrientationType(resolveDefault = false)
+                    ),
                     onClickOrientationMode = viewModel::openOrientationModeSelectDialog,
                     cropEnabled = cropEnabled,
                     onClickCropBorder = {
@@ -550,7 +560,9 @@ class ReaderActivity : BaseActivity() {
                     object : SimpleAnimationListener() {
                         override fun onAnimationStart(animation: Animation) {
                             // Fix status bar being translucent the first time it's opened.
-                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                            window.addFlags(
+                                WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+                            )
                         }
                     },
                 )
@@ -915,8 +927,14 @@ class ReaderActivity : BaseActivity() {
                 .onEach { setColorFilter(readerPreferences.colorFilter().get()) }
                 .launchIn(lifecycleScope)
 
-            merge(readerPreferences.grayscale().changes(), readerPreferences.invertedColors().changes())
-                .onEach { setLayerPaint(readerPreferences.grayscale().get(), readerPreferences.invertedColors().get()) }
+            merge(
+                readerPreferences.grayscale().changes(),
+                readerPreferences.invertedColors().changes()
+            )
+                .onEach { setLayerPaint(
+                    readerPreferences.grayscale().get(),
+                    readerPreferences.invertedColors().get()
+                ) }
                 .launchIn(lifecycleScope)
 
             readerPreferences.fullscreen().changes()

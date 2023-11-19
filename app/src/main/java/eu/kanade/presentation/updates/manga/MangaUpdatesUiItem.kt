@@ -43,13 +43,13 @@ import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
+import java.util.Date
+import kotlin.time.Duration.Companion.minutes
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.selectedBackground
-import java.util.Date
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.mangaUpdatesLastUpdatedItem(
@@ -68,11 +68,17 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
         Box(
             modifier = Modifier
                 .animateItemPlacement()
-                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+                .padding(
+                    horizontal = MaterialTheme.padding.medium,
+                    vertical = MaterialTheme.padding.small
+                ),
         ) {
             Text(
                 text = if (time.isNullOrEmpty()) {
-                    stringResource(R.string.updates_last_update_info, stringResource(R.string.updates_last_update_info_just_now))
+                    stringResource(
+                        R.string.updates_last_update_info,
+                        stringResource(R.string.updates_last_update_info_just_now)
+                    )
                 } else {
                     stringResource(R.string.updates_last_update_info, time)
                 },
@@ -132,7 +138,12 @@ fun LazyListScope.mangaUpdatesUiItems(
                     },
                     onClick = {
                         when {
-                            selectionMode -> onUpdateSelected(updatesItem, !updatesItem.selected, true, false)
+                            selectionMode -> onUpdateSelected(
+                                updatesItem,
+                                !updatesItem.selected,
+                                true,
+                                false
+                            )
                             else -> onClickUpdate(updatesItem)
                         }
                     },
@@ -216,7 +227,9 @@ fun MangaUpdatesUiItem(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
                         modifier = Modifier
-                            .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                            .sizeIn(
+                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }
+                            ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(2.dp))

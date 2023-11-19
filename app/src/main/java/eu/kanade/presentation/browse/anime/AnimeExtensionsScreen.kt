@@ -295,7 +295,10 @@ private fun AnimeExtensionItemContent(
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is AnimeExtension.Installed && extension.lang.isNotEmpty()) {
                     Text(
-                        text = LocaleHelper.getSourceDisplayName(extension.lang, LocalContext.current),
+                        text = LocaleHelper.getSourceDisplayName(
+                            extension.lang,
+                            LocalContext.current
+                        ),
                     )
                 }
 

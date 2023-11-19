@@ -12,11 +12,11 @@ import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import java.text.DecimalFormat
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
-import java.text.DecimalFormat
 
 class Kitsu(id: Long) : TrackService(id, "Kitsu"), AnimeTrackService, MangaTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 

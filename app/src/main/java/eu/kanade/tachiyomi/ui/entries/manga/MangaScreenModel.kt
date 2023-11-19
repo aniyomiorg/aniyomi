@@ -292,7 +292,9 @@ class MangaScreenModel(
                     val duplicate = getDuplicateLibraryManga.await(manga).getOrNull(0)
 
                     if (duplicate != null) {
-                        updateSuccessState { it.copy(dialog = Dialog.DuplicateManga(manga, duplicate)) }
+                        updateSuccessState { it.copy(
+                            dialog = Dialog.DuplicateManga(manga, duplicate)
+                        ) }
                         return@launchIO
                     }
                 }
@@ -506,7 +508,12 @@ class MangaScreenModel(
             val downloaded = if (isLocal) {
                 true
             } else {
-                downloadManager.isChapterDownloaded(chapter.name, chapter.scanlator, manga.title, manga.source)
+                downloadManager.isChapterDownloaded(
+                    chapter.name,
+                    chapter.scanlator,
+                    manga.title,
+                    manga.source
+                )
             }
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
@@ -769,7 +776,10 @@ class MangaScreenModel(
         coroutineScope.launchNonCancellable {
             val manga = successState?.manga ?: return@launchNonCancellable
             val categories = getCategories.await(manga.id).map { it.id }
-            if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(categories, downloadPreferences)) return@launchNonCancellable
+            if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(
+                    categories,
+                    downloadPreferences
+                )) return@launchNonCancellable
             downloadChapters(chapters)
         }
     }
@@ -858,7 +868,9 @@ class MangaScreenModel(
             if (applyToExisting) {
                 setMangaDefaultChapterFlags.awaitAll()
             }
-            snackbarHostState.showSnackbar(message = context.getString(R.string.chapter_settings_updated))
+            snackbarHostState.showSnackbar(
+                message = context.getString(R.string.chapter_settings_updated)
+            )
         }
     }
 
@@ -963,7 +975,10 @@ class MangaScreenModel(
                 .map { tracks ->
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> MangaTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
+                        .map { service -> MangaTrackItem(
+                            tracks.find { it.syncId.toLong() == service.id },
+                            service
+                        ) }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
                 }
@@ -977,7 +992,10 @@ class MangaScreenModel(
     // Track sheet - end
 
     sealed interface Dialog {
-        data class ChangeCategory(val manga: Manga, val initialSelection: List<CheckboxState<Category>>) : Dialog
+        data class ChangeCategory(
+            val manga: Manga,
+            val initialSelection: List<CheckboxState<Category>>
+        ) : Dialog
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog
         data class SetMangaFetchInterval(val manga: Manga) : Dialog

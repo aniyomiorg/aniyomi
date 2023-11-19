@@ -7,6 +7,7 @@ import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.ToggleLanguage
+import java.util.SortedMap
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -15,7 +16,6 @@ import kotlinx.coroutines.launch
 import tachiyomi.domain.source.anime.model.AnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.SortedMap
 
 class AnimeSourcesFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),

@@ -33,7 +33,10 @@ fun CrashScreen(
     InfoScreen(
         icon = Icons.Outlined.BugReport,
         headingText = stringResource(R.string.crash_screen_title),
-        subtitleText = stringResource(R.string.crash_screen_description, stringResource(R.string.app_name)),
+        subtitleText = stringResource(
+            R.string.crash_screen_description,
+            stringResource(R.string.app_name)
+        ),
         acceptText = stringResource(R.string.pref_dump_crash_logs),
         onAcceptClick = {
             scope.launch {

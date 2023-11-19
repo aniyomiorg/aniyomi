@@ -127,7 +127,10 @@ private fun AnimeExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT
     return produceState<Result<ImageBitmap>>(initialValue = Result.Loading, this) {
         withIOContext {
             value = try {
-                val appInfo = AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo
+                val appInfo = AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(
+                    context,
+                    pkgName
+                )!!.applicationInfo
                 val appResources = context.packageManager.getResourcesForApplication(appInfo)
                 Result.Success(
                     appResources.getDrawableForDensity(appInfo.icon, density, null)!!

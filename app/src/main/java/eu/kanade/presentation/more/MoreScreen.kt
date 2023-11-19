@@ -62,14 +62,18 @@ fun MoreScreen(
         topBar = {
             Column(
                 modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
+                    WindowInsets.systemBars.only(
+                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                    ),
                 ),
             ) {
                 if (isFDroid) {
                     WarningBanner(
                         textRes = R.string.fdroid_warning,
                         modifier = Modifier.clickable {
-                            uriHandler.openUri("https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version")
+                            uriHandler.openUri(
+                                "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version"
+                            )
                         },
                     )
                 }
@@ -136,17 +140,21 @@ fun MoreScreen(
                                 stringResource(R.string.paused)
                             } else {
                                 "${stringResource(R.string.paused)} • ${
-                                pluralStringResource(
-                                    id = R.plurals.download_queue_summary,
-                                    count = pending,
-                                    pending,
-                                )
+                                    pluralStringResource(
+                                        id = R.plurals.download_queue_summary,
+                                        count = pending,
+                                        pending,
+                                    )
                                 }"
                             }
                         }
                         is DownloadQueueState.Downloading -> {
                             val pending = downloadQueueState.pending
-                            pluralStringResource(id = R.plurals.download_queue_summary, count = pending, pending)
+                            pluralStringResource(
+                                id = R.plurals.download_queue_summary,
+                                count = pending,
+                                pending
+                            )
                         }
                     },
                     icon = Icons.Outlined.GetApp,

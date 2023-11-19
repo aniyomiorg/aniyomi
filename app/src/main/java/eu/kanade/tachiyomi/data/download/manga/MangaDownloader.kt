@@ -18,6 +18,11 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
+import java.io.BufferedOutputStream
+import java.io.File
+import java.util.zip.CRC32
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,11 +65,6 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.BufferedOutputStream
-import java.io.File
-import java.util.zip.CRC32
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -315,7 +315,10 @@ class MangaDownloader(
                         notifier.onWarning(
                             context.getString(R.string.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
-                            NotificationHandler.openUrl(context, MangaLibraryUpdateNotifier.HELP_WARNING_URL),
+                            NotificationHandler.openUrl(
+                                context,
+                                MangaLibraryUpdateNotifier.HELP_WARNING_URL
+                            ),
                         )
                     }
                 }
@@ -335,11 +338,18 @@ class MangaDownloader(
         val availSpace = DiskUtil.getAvailableStorageSpace(mangaDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = MangaDownload.State.ERROR
-            notifier.onError(context.getString(R.string.download_insufficient_space), download.chapter.name, download.manga.title)
+            notifier.onError(
+                context.getString(R.string.download_insufficient_space),
+                download.chapter.name,
+                download.manga.title
+            )
             return
         }
 
-        val chapterDirname = provider.getChapterDirName(download.chapter.name, download.chapter.scanlator)
+        val chapterDirname = provider.getChapterDirName(
+            download.chapter.name,
+            download.chapter.scanlator
+        )
         val tmpDir = mangaDir.createDirectory(chapterDirname + TMP_DIR_SUFFIX)
 
         try {
@@ -352,7 +362,12 @@ class MangaDownloader(
                     throw Exception(context.getString(R.string.page_list_empty_error))
                 }
                 // Don't trust index from source
-                val reIndexedPages = pages.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+                val reIndexedPages = pages.mapIndexed { index, page -> Page(
+                    index,
+                    page.url,
+                    page.imageUrl,
+                    page.uri
+                ) }
                 download.pages = reIndexedPages
                 reIndexedPages
             }
@@ -434,7 +449,12 @@ class MangaDownloader(
      * @param download the download of the page.
      * @param tmpDir the temporary directory of the download.
      */
-    private suspend fun getOrDownloadImage(page: Page, download: MangaDownload, tmpDir: UniFile, dataSaver: DataSaver) {
+    private suspend fun getOrDownloadImage(
+        page: Page,
+        download: MangaDownload,
+        tmpDir: UniFile,
+        dataSaver: DataSaver
+    ) {
         // If the image URL is empty, do nothing
         if (page.imageUrl == null) {
             return
@@ -448,13 +468,19 @@ class MangaDownloader(
         tmpFile?.delete()
 
         // Try to find the image file
-        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") || it.name!!.startsWith("${filename}__001") }
+        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") || it.name!!.startsWith(
+            "${filename}__001"
+        ) }
 
         try {
             // If the image is already downloaded, do nothing. Otherwise download from network
             val file = when {
                 imageFile != null -> imageFile
-                chapterCache.isImageInCache(page.imageUrl!!) -> copyImageFromCache(chapterCache.getImageFile(page.imageUrl!!), tmpDir, filename)
+                chapterCache.isImageInCache(page.imageUrl!!) -> copyImageFromCache(
+                    chapterCache.getImageFile(page.imageUrl!!),
+                    tmpDir,
+                    filename
+                )
                 else -> downloadImage(page, download.source, tmpDir, filename, dataSaver)
             }
 
@@ -480,7 +506,13 @@ class MangaDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the image.
      */
-    private suspend fun downloadImage(page: Page, source: HttpSource, tmpDir: UniFile, filename: String, dataSaver: DataSaver): UniFile {
+    private suspend fun downloadImage(
+        page: Page,
+        source: HttpSource,
+        tmpDir: UniFile,
+        filename: String,
+        dataSaver: DataSaver
+    ): UniFile {
         page.status = Page.State.DOWNLOAD_IMAGE
         page.progress = 0
         return flow {
@@ -552,8 +584,12 @@ class MangaDownloader(
 
         try {
             val filenamePrefix = String.format("%03d", page.number)
-            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
-                ?: error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
+            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(
+                filenamePrefix
+            ) }
+                ?: error(
+                    context.getString(R.string.download_notifier_split_page_not_found, page.number)
+                )
 
             // If the original page was previously split, then skip
             if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return

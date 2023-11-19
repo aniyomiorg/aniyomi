@@ -29,6 +29,9 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
+import java.text.Collator
+import java.util.Collections
+import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -65,9 +68,6 @@ import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.Collator
-import java.util.Collections
-import java.util.Locale
 
 /**
  * Typealias for the library manga, using the category as keys, and list of manga as values.
@@ -92,7 +92,9 @@ class MangaLibraryScreenModel(
     private val trackManager: TrackManager = Injekt.get(),
 ) : StateScreenModel<MangaLibraryScreenModel.State>(State()) {
 
-    var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(coroutineScope)
+    var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
+        coroutineScope
+    )
 
     init {
         coroutineScope.launchIO {
@@ -243,7 +245,10 @@ class MangaLibraryScreenModel(
             strength = Collator.PRIMARY
         }
         val sortAlphabetically: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
-            collator.compare(i1.libraryManga.manga.title.lowercase(locale), i2.libraryManga.manga.title.lowercase(locale))
+            collator.compare(
+                i1.libraryManga.manga.title.lowercase(locale),
+                i2.libraryManga.manga.title.lowercase(locale)
+            )
         }
 
         val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
@@ -505,7 +510,11 @@ class MangaLibraryScreenModel(
      * @param addCategories the categories to add for all mangas.
      * @param removeCategories the categories to remove in all mangas.
      */
-    fun setMangaCategories(mangaList: List<Manga>, addCategories: List<Long>, removeCategories: List<Long>) {
+    fun setMangaCategories(
+        mangaList: List<Manga>,
+        addCategories: List<Long>,
+        removeCategories: List<Long>
+    ) {
         coroutineScope.launchNonCancellable {
             mangaList.forEach { manga ->
                 val categoryIds = getCategories.await(manga.id)
@@ -524,7 +533,9 @@ class MangaLibraryScreenModel(
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
-        return (if (isLandscape) libraryPreferences.mangaLandscapeColumns() else libraryPreferences.mangaPortraitColumns()).asState(coroutineScope)
+        return (if (isLandscape) libraryPreferences.mangaLandscapeColumns() else libraryPreferences.mangaPortraitColumns()).asState(
+            coroutineScope
+        )
     }
 
     suspend fun getRandomLibraryItemForCurrentCategory(): MangaLibraryItem? {
@@ -660,7 +671,10 @@ class MangaLibraryScreenModel(
 
     sealed interface Dialog {
         data object SettingsSheet : Dialog
-        data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog
+        data class ChangeCategory(
+            val manga: List<Manga>,
+            val initialSelection: List<CheckboxState<Category>>
+        ) : Dialog
         data class DeleteManga(val manga: List<Manga>) : Dialog
     }
 

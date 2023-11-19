@@ -27,6 +27,11 @@ import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
 import eu.kanade.tachiyomi.util.BackupUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
+import java.io.File
+import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
@@ -42,11 +47,6 @@ import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.text.SimpleDateFormat
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.Locale
 
 class BackupRestorer(
     private val context: Context,
@@ -92,7 +92,13 @@ class BackupRestorer(
         val logFile = writeErrorLog()
 
         if (sync) {
-            notifier.showRestoreComplete(time, errors.size, logFile.parent, logFile.name, contentTitle = context.getString(R.string.library_sync_complete))
+            notifier.showRestoreComplete(
+                time,
+                errors.size,
+                logFile.parent,
+                logFile.name,
+                contentTitle = context.getString(R.string.library_sync_complete)
+            )
         } else {
             notifier.showRestoreComplete(time, errors.size, logFile.parent, logFile.name)
         }
@@ -137,7 +143,10 @@ class BackupRestorer(
         val backupMaps = backup.backupBrokenSources.map { BackupSource(it.name, it.sourceId) } + backup.backupSources
         sourceMapping = backupMaps.associate { it.sourceId to it.name }
 
-        val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
+        val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(
+            it.name,
+            it.sourceId
+        ) } + backup.backupAnimeSources
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
         now = ZonedDateTime.now()
@@ -186,17 +195,31 @@ class BackupRestorer(
         backupManager.restoreCategories(backupCategories)
 
         restoreProgress += 1
-        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.manga_categories), context.getString(R.string.restoring_backup))
+        showRestoreProgress(
+            restoreProgress,
+            restoreAmount,
+            context.getString(R.string.manga_categories),
+            context.getString(R.string.restoring_backup)
+        )
     }
 
     private suspend fun restoreAnimeCategories(backupCategories: List<BackupCategory>) {
         backupManager.restoreAnimeCategories(backupCategories)
 
         restoreProgress += 1
-        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.anime_categories), context.getString(R.string.restoring_backup))
+        showRestoreProgress(
+            restoreProgress,
+            restoreAmount,
+            context.getString(R.string.anime_categories),
+            context.getString(R.string.restoring_backup)
+        )
     }
 
-    private suspend fun restoreManga(backupManga: BackupManga, backupCategories: List<BackupCategory>, sync: Boolean) {
+    private suspend fun restoreManga(
+        backupManga: BackupManga,
+        backupCategories: List<BackupCategory>,
+        sync: Boolean
+    ) {
         val manga = backupManga.getMangaImpl()
         val chapters = backupManga.getChaptersImpl()
         val categories = backupManga.categories.map { it.toInt() }
@@ -214,7 +237,14 @@ class BackupRestorer(
                 // Copy information from manga already in database
                 val updateManga = backupManager.restoreExistingManga(manga, dbManga)
                 // Fetch rest of manga information
-                restoreNewManga(updateManga, chapters, categories, history, tracks, backupCategories)
+                restoreNewManga(
+                    updateManga,
+                    chapters,
+                    categories,
+                    history,
+                    tracks,
+                    backupCategories
+                )
             }
             updateManga.awaitUpdateFetchInterval(restoredManga, now, currentMangaFetchWindow)
         } catch (e: Exception) {
@@ -224,9 +254,19 @@ class BackupRestorer(
 
         restoreProgress += 1
         if (sync) {
-            showRestoreProgress(restoreProgress, restoreAmount, manga.title, context.getString(R.string.syncing_library))
+            showRestoreProgress(
+                restoreProgress,
+                restoreAmount,
+                manga.title,
+                context.getString(R.string.syncing_library)
+            )
         } else {
-            showRestoreProgress(restoreProgress, restoreAmount, manga.title, context.getString(R.string.restoring_backup))
+            showRestoreProgress(
+                restoreProgress,
+                restoreAmount,
+                manga.title,
+                context.getString(R.string.restoring_backup)
+            )
         }
     }
 
@@ -264,13 +304,23 @@ class BackupRestorer(
         return backupManga
     }
 
-    private suspend fun restoreExtras(manga: Manga, categories: List<Int>, history: List<BackupHistory>, tracks: List<MangaTrack>, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreExtras(
+        manga: Manga,
+        categories: List<Int>,
+        history: List<BackupHistory>,
+        tracks: List<MangaTrack>,
+        backupCategories: List<BackupCategory>
+    ) {
         backupManager.restoreCategories(manga, categories, backupCategories)
         backupManager.restoreHistory(history)
         backupManager.restoreTracking(manga, tracks)
     }
 
-    private suspend fun restoreAnime(backupAnime: BackupAnime, backupCategories: List<BackupCategory>, sync: Boolean) {
+    private suspend fun restoreAnime(
+        backupAnime: BackupAnime,
+        backupCategories: List<BackupCategory>,
+        sync: Boolean
+    ) {
         val anime = backupAnime.getAnimeImpl()
         val episodes = backupAnime.getEpisodesImpl()
         val categories = backupAnime.categories.map { it.toInt() }
@@ -288,7 +338,14 @@ class BackupRestorer(
                 // Copy information from anime already in database
                 val updateAnime = backupManager.restoreExistingAnime(anime, dbAnime)
                 // Fetch rest of anime information
-                restoreNewAnime(updateAnime, episodes, categories, history, tracks, backupCategories)
+                restoreNewAnime(
+                    updateAnime,
+                    episodes,
+                    categories,
+                    history,
+                    tracks,
+                    backupCategories
+                )
             }
             updateAnime.awaitUpdateFetchInterval(restoredAnime, now, currentAnimeFetchWindow)
         } catch (e: Exception) {
@@ -298,9 +355,19 @@ class BackupRestorer(
 
         restoreProgress += 1
         if (sync) {
-            showRestoreProgress(restoreProgress, restoreAmount, anime.title, context.getString(R.string.syncing_library))
+            showRestoreProgress(
+                restoreProgress,
+                restoreAmount,
+                anime.title,
+                context.getString(R.string.syncing_library)
+            )
         } else {
-            showRestoreProgress(restoreProgress, restoreAmount, anime.title, context.getString(R.string.restoring_backup))
+            showRestoreProgress(
+                restoreProgress,
+                restoreAmount,
+                anime.title,
+                context.getString(R.string.restoring_backup)
+            )
         }
     }
 
@@ -338,13 +405,22 @@ class BackupRestorer(
         return backupAnime
     }
 
-    private suspend fun restoreExtras(anime: Anime, categories: List<Int>, history: List<BackupAnimeHistory>, tracks: List<AnimeTrack>, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreExtras(
+        anime: Anime,
+        categories: List<Int>,
+        history: List<BackupAnimeHistory>,
+        tracks: List<AnimeTrack>,
+        backupCategories: List<BackupCategory>
+    ) {
         backupManager.restoreAnimeCategories(anime, categories, backupCategories)
         backupManager.restoreAnimeHistory(history)
         backupManager.restoreAnimeTracking(anime, tracks)
     }
 
-    private fun restorePreferences(preferences: List<BackupPreference>, sharedPrefs: SharedPreferences) {
+    private fun restorePreferences(
+        preferences: List<BackupPreference>,
+        sharedPrefs: SharedPreferences
+    ) {
         preferences.forEach { pref ->
             when (pref.value) {
                 is IntPreferenceValue -> {
@@ -396,8 +472,13 @@ class BackupRestorer(
                 val file = File(context.cacheDir, "${it.pkgName}.apk")
                 file.writeBytes(it.apk)
                 val intent = Intent(Intent.ACTION_VIEW)
-                    .setDataAndType(file.getUriCompat(context), "application/vnd.android.package-archive")
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .setDataAndType(
+                        file.getUriCompat(context),
+                        "application/vnd.android.package-archive"
+                    )
+                    .setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
                 context.startActivity(intent)
             }
         }

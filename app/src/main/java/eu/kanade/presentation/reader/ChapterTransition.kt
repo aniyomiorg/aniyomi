@@ -67,7 +67,10 @@ fun ChapterTransition(
                     bottomChapter = currChapter,
                     bottomChapterDownloaded = currChapterDownloaded,
                     fallbackLabel = stringResource(R.string.transition_no_previous),
-                    chapterGap = calculateChapterGap(currChapter.toDomainChapter(), goingToChapter?.toDomainChapter()),
+                    chapterGap = calculateChapterGap(
+                        currChapter.toDomainChapter(),
+                        goingToChapter?.toDomainChapter()
+                    ),
                 )
             }
             is ChapterTransition.Next -> {
@@ -79,7 +82,10 @@ fun ChapterTransition(
                     bottomChapter = goingToChapter,
                     bottomChapterDownloaded = goingToChapterDownloaded,
                     fallbackLabel = stringResource(R.string.transition_no_next),
-                    chapterGap = calculateChapterGap(goingToChapter?.toDomainChapter(), currChapter.toDomainChapter()),
+                    chapterGap = calculateChapterGap(
+                        goingToChapter?.toDomainChapter(),
+                        currChapter.toDomainChapter()
+                    ),
                 )
             }
         }
@@ -193,7 +199,11 @@ private fun ChapterGapWarning(
             )
 
             Text(
-                text = pluralStringResource(R.plurals.missing_chapters_warning, count = gapCount, gapCount),
+                text = pluralStringResource(
+                    R.plurals.missing_chapters_warning,
+                    count = gapCount,
+                    gapCount
+                ),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
@@ -312,7 +322,10 @@ private fun TransitionTextPreview() {
     TachiyomiTheme {
         Surface(modifier = Modifier.padding(48.dp)) {
             ChapterTransition(
-                transition = ChapterTransition.Next(ReaderChapter(FakeChapter), ReaderChapter(FakeChapter)),
+                transition = ChapterTransition.Next(
+                    ReaderChapter(FakeChapter),
+                    ReaderChapter(FakeChapter)
+                ),
                 currChapterDownloaded = false,
                 goingToChapterDownloaded = true,
             )
@@ -326,7 +339,10 @@ private fun TransitionTextLongTitlePreview() {
     TachiyomiTheme {
         Surface(modifier = Modifier.padding(48.dp)) {
             ChapterTransition(
-                transition = ChapterTransition.Next(ReaderChapter(FakeChapterLongTitle), ReaderChapter(FakeChapter)),
+                transition = ChapterTransition.Next(
+                    ReaderChapter(FakeChapterLongTitle),
+                    ReaderChapter(FakeChapter)
+                ),
                 currChapterDownloaded = true,
                 goingToChapterDownloaded = true,
             )
@@ -340,7 +356,10 @@ private fun TransitionTextWithGapPreview() {
     TachiyomiTheme {
         Surface(modifier = Modifier.padding(48.dp)) {
             ChapterTransition(
-                transition = ChapterTransition.Next(ReaderChapter(FakeChapter), ReaderChapter(FakeGapChapter)),
+                transition = ChapterTransition.Next(
+                    ReaderChapter(FakeChapter),
+                    ReaderChapter(FakeGapChapter)
+                ),
                 currChapterDownloaded = true,
                 goingToChapterDownloaded = false,
             )

@@ -100,10 +100,17 @@ fun Screen.mangaHistoryTab(
                 screenModel.events.collectLatest { e ->
                     when (e) {
                         MangaHistoryScreenModel.Event.InternalError ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.internal_error))
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.internal_error)
+                            )
                         MangaHistoryScreenModel.Event.HistoryCleared ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.clear_history_completed))
-                        is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(context, e.chapter)
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.clear_history_completed)
+                            )
+                        is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(
+                            context,
+                            e.chapter
+                        )
                     }
                 }
             }

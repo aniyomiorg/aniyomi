@@ -15,14 +15,14 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.storage.getUriCompat
-import logcat.LogPriority
-import okio.IOException
-import tachiyomi.core.util.system.ImageUtil
-import tachiyomi.core.util.system.logcat
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import logcat.LogPriority
+import okio.IOException
+import tachiyomi.core.util.system.ImageUtil
+import tachiyomi.core.util.system.logcat
 
 class ImageSaver(
     val context: Context,
@@ -42,7 +42,9 @@ class ImageSaver(
         val pictureDir =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
-        val folderRelativePath = "${Environment.DIRECTORY_PICTURES}/${context.getString(R.string.app_name)}/"
+        val folderRelativePath = "${Environment.DIRECTORY_PICTURES}/${context.getString(
+            R.string.app_name
+        )}/"
         val imageLocation = (image.location as Location.Pictures).relativePath
 
         val contentValues = contentValuesOf(
@@ -111,9 +113,14 @@ class ImageSaver(
         ).use { cursor ->
             if (cursor != null && cursor.count >= 1) {
                 cursor.moveToFirst().let {
-                    val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                    val id = cursor.getLong(
+                        cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
+                    )
 
-                    return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                    return ContentUris.withAppendedId(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        id
+                    )
                 }
             }
         }

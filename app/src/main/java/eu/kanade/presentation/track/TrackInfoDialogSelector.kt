@@ -81,8 +81,16 @@ fun TrackStatusSelector(
                     }
                 }
             }
-            if (!state.isScrolledToStart()) HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
-            if (!state.isScrolledToEnd()) HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
+            if (!state.isScrolledToStart()) {
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
+            }
+            if (!state.isScrolledToEnd()) {
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         },
         onConfirm = onConfirm,
         onDismissRequest = onDismissRequest,
@@ -165,7 +173,10 @@ fun TrackDateSelector(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small, Alignment.End),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        MaterialTheme.padding.small,
+                        Alignment.End
+                    ),
                 ) {
                     if (onRemove != null) {
                         TextButton(onClick = onRemove) {
@@ -205,7 +216,10 @@ fun BaseSelector(
         buttons = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small, Alignment.End),
+                horizontalArrangement = Arrangement.spacedBy(
+                    MaterialTheme.padding.small,
+                    Alignment.End
+                ),
             ) {
                 if (thirdButton != null) {
                     thirdButton()

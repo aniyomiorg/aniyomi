@@ -79,7 +79,9 @@ data class BrowseMangaSourceScreen(
         val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
-                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
+                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
+                    null
+                )
                 else -> navigator.pop()
             }
         }
@@ -214,7 +216,9 @@ data class BrowseMangaSourceScreen(
                     scope.launchIO {
                         val duplicateManga = screenModel.getDuplicateLibraryManga(manga)
                         when {
-                            manga.favorite -> screenModel.setDialog(BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga))
+                            manga.favorite -> screenModel.setDialog(
+                                BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga)
+                            )
                             duplicateManga != null -> screenModel.setDialog(
                                 BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga(
                                     manga,

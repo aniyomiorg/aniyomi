@@ -22,12 +22,12 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.lang.truncateCenter
+import java.io.File
 import logcat.LogPriority
 import rikka.sui.Sui
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 /**
  * Copies a string to clipboard
@@ -59,7 +59,10 @@ fun Context.copyToClipboard(label: String, content: String) {
  * @param permission the permission to check.
  * @return true if it has permissions.
  */
-fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED
+fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(
+    this,
+    permission
+) == PermissionChecker.PERMISSION_GRANTED
 
 val Context.powerManager: PowerManager
     get() = getSystemService()!!
@@ -105,7 +108,10 @@ fun Context.openInBrowser(uri: Uri, forceDefaultBrowser: Boolean = false) {
 private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        packageManager.resolveActivity(browserIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()))
+        packageManager.resolveActivity(
+            browserIntent,
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+        )
     } else {
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
     }
@@ -145,7 +151,10 @@ fun Context.createReaderThemeContext(): Context {
 
         val wrappedContext = ContextThemeWrapper(this, R.style.Theme_Tachiyomi)
         wrappedContext.applyOverrideConfiguration(overrideConf)
-        ThemingDelegate.getThemeResIds(preferences.appTheme().get(), preferences.themeDarkAmoled().get())
+        ThemingDelegate.getThemeResIds(
+            preferences.appTheme().get(),
+            preferences.themeDarkAmoled().get()
+        )
             .forEach { wrappedContext.theme.applyStyle(it, true) }
         return wrappedContext
     }

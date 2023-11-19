@@ -15,13 +15,13 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceFactory
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
+import java.io.File
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 
 /**
  * Class that handles the loading of the extensions installed in the system.
@@ -62,9 +62,15 @@ internal object AnimeExtensionLoader {
     private fun getPrivateExtensionDir(context: Context) = File(context.filesDir, "exts")
 
     fun installPrivateExtensionFile(context: Context, file: File): Boolean {
-        val extension = context.packageManager.getPackageArchiveInfo(file.absolutePath, PACKAGE_FLAGS)
+        val extension = context.packageManager.getPackageArchiveInfo(
+            file.absolutePath,
+            PACKAGE_FLAGS
+        )
             ?.takeIf { isPackageAnExtension(it) } ?: return false
-        val currentExtension = getAnimeExtensionPackageInfoFromPkgName(context, extension.packageName)
+        val currentExtension = getAnimeExtensionPackageInfoFromPkgName(
+            context,
+            extension.packageName
+        )
 
         if (currentExtension != null) {
             if (PackageInfoCompat.getLongVersionCode(extension) <
@@ -86,7 +92,10 @@ internal object AnimeExtensionLoader {
             }
         }
 
-        val target = File(getPrivateExtensionDir(context), "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION")
+        val target = File(
+            getPrivateExtensionDir(context),
+            "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION"
+        )
         return try {
             file.copyTo(target, overwrite = true)
             if (currentExtension != null) {
@@ -115,7 +124,9 @@ internal object AnimeExtensionLoader {
         val pkgManager = context.packageManager
 
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
+            pkgManager.getInstalledPackages(
+                PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong())
+            )
         } else {
             pkgManager.getInstalledPackages(PACKAGE_FLAGS)
         }
@@ -178,9 +189,15 @@ internal object AnimeExtensionLoader {
     }
 
     private fun getAnimeExtensionInfoFromPkgName(context: Context, pkgName: String): AnimeExtensionInfo? {
-        val privateExtensionFile = File(getPrivateExtensionDir(context), "$pkgName.$PRIVATE_EXTENSION_EXTENSION")
+        val privateExtensionFile = File(
+            getPrivateExtensionDir(context),
+            "$pkgName.$PRIVATE_EXTENSION_EXTENSION"
+        )
         val privatePkg = if (privateExtensionFile.isFile) {
-            context.packageManager.getPackageArchiveInfo(privateExtensionFile.absolutePath, PACKAGE_FLAGS)
+            context.packageManager.getPackageArchiveInfo(
+                privateExtensionFile.absolutePath,
+                PACKAGE_FLAGS
+            )
                 ?.takeIf { isPackageAnExtension(it) }
                 ?.let {
                     it.applicationInfo.fixBasePaths(privateExtensionFile.absolutePath)

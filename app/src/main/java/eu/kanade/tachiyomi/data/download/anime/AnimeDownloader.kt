@@ -23,6 +23,9 @@ import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
+import java.io.File
+import java.util.Locale
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,9 +59,6 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.io.File
-import java.util.Locale
-import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * This class is the one in charge of downloading episodes.
@@ -289,7 +289,13 @@ class AnimeDownloader(
      * @param episodes the list of episodes to download.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false, video: Video? = null) = launchIO {
+    fun queueEpisodes(
+        anime: Anime,
+        episodes: List<Episode>,
+        autoStart: Boolean,
+        changeDownloader: Boolean = false,
+        video: Video? = null
+    ) = launchIO {
         if (episodes.isEmpty()) {
             return@launchIO
         }
@@ -363,7 +369,10 @@ class AnimeDownloader(
             return
         }
 
-        val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
+        val episodeDirname = provider.getEpisodeDirName(
+            download.episode.name,
+            download.episode.scanlator
+        )
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
         notifier.onProgressChange(download)
 
@@ -431,7 +440,11 @@ class AnimeDownloader(
      * @param download the download of the video.
      * @param tmpDir the temporary directory of the download.
      */
-    private suspend fun getOrAnimeDownloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile): Video {
+    private suspend fun getOrAnimeDownloadVideo(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile
+    ): Video {
         // If the video URL is empty, do nothing
         if (video.videoUrl == null) {
             return video
@@ -451,12 +464,18 @@ class AnimeDownloader(
         // If the video is already downloaded, do nothing. Otherwise download from network
         val file = when {
             videoFile != null -> videoFile
-            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
+            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(
+                episodeCache.getVideoFile(video.videoUrl!!),
+                tmpDir,
+                filename
+            )
             else -> {
                 if (preferences.useExternalDownloader().get() == download.changeDownloader) {
                     downloadVideo(video, download, tmpDir, filename)
                 } else {
-                    val betterFileName = DiskUtil.buildValidFilename("${download.anime.title} - ${download.episode.name}")
+                    val betterFileName = DiskUtil.buildValidFilename(
+                        "${download.anime.title} - ${download.episode.name}"
+                    )
                     downloadVideoExternal(video, download.source, tmpDir, betterFileName)
                 }
             }
@@ -485,7 +504,12 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private suspend fun downloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
+    private suspend fun downloadVideo(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String
+    ): UniFile {
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         var tries = 0
@@ -513,7 +537,12 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    private suspend fun ffmpegDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile = coroutineScope {
+    private suspend fun ffmpegDownload(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String
+    ): UniFile = coroutineScope {
         isFFmpegRunning = true
         val headers = video.headers ?: download.source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") {
@@ -524,7 +553,9 @@ class AnimeDownloader(
 
         val ffmpegOptions = getFFmpegOptions(video, headerOptions, ffmpegFilename())
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
-            FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
+            FFmpegKitConfig.parseArguments(
+                "${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\""
+            )
         }
         var duration = 0L
         var nextLineIsDuration = false
@@ -629,7 +660,12 @@ class AnimeDownloader(
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
-    private suspend fun newDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
+    private suspend fun newDownload(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String
+    ): UniFile {
         // Check if the download is paused before starting
         while (isPaused) {
             delay(1000) // This is a pause check delay, adjust the timing as needed.
@@ -682,7 +718,12 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): UniFile {
+    private fun downloadVideoExternal(
+        video: Video,
+        source: AnimeHttpSource,
+        tmpDir: UniFile,
+        filename: String
+    ): UniFile {
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
 
@@ -695,12 +736,17 @@ class AnimeDownloader(
             val pkgName = preferences.externalDownloaderSelection().get()
             val intent: Intent
             if (!pkgName.isNullOrEmpty()) {
-                intent = pm.getLaunchIntentForPackage(pkgName) ?: throw Exception("Launch intent not found")
+                intent = pm.getLaunchIntentForPackage(pkgName) ?: throw Exception(
+                    "Launch intent not found"
+                )
                 when {
                     // 1DM
                     pkgName.startsWith("idm.internet.download.manager") -> {
                         intent.apply {
-                            component = ComponentName(pkgName, "idm.internet.download.manager.Downloader")
+                            component = ComponentName(
+                                pkgName,
+                                "idm.internet.download.manager.Downloader"
+                            )
                             action = Intent.ACTION_VIEW
                             data = Uri.parse(video.videoUrl)
                             putExtra("extra_filename", filename)
@@ -710,13 +756,22 @@ class AnimeDownloader(
                     pkgName.startsWith("com.dv.adm") -> {
                         val headers = (video.headers ?: source.headers).toList()
                         val bundle = Bundle()
-                        headers.forEach { a -> bundle.putString(a.first, a.second.replace("http", "h_ttp")) }
+                        headers.forEach { a -> bundle.putString(
+                            a.first,
+                            a.second.replace("http", "h_ttp")
+                        ) }
 
                         intent.apply {
                             component = ComponentName(pkgName, "$pkgName.AEditor")
                             action = Intent.ACTION_VIEW
-                            putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
-                            putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
+                            putExtra(
+                                "com.dv.get.ACTION_LIST_ADD",
+                                "${Uri.parse(video.videoUrl)}<info>$filename.mp4"
+                            )
+                            putExtra(
+                                "com.dv.get.ACTION_LIST_PATH",
+                                tmpDir.filePath!!.substringBeforeLast("_")
+                            )
                             putExtra("android.media.intent.extra.HTTP_HEADERS", bundle)
                         }
                         file.delete()

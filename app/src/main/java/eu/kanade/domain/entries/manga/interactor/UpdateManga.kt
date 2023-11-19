@@ -3,6 +3,8 @@ package eu.kanade.domain.entries.manga.interactor
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
+import java.time.ZonedDateTime
+import java.util.Date
 import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
@@ -10,8 +12,6 @@ import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.ZonedDateTime
-import java.util.Date
 
 class UpdateManga(
     private val mangaRepository: MangaRepository,
@@ -91,7 +91,9 @@ class UpdateManga(
     }
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
-        return mangaRepository.updateManga(MangaUpdate(id = mangaId, coverLastModified = Date().time))
+        return mangaRepository.updateManga(
+            MangaUpdate(id = mangaId, coverLastModified = Date().time)
+        )
     }
 
     suspend fun awaitUpdateFavorite(mangaId: Long, favorite: Boolean): Boolean {

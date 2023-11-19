@@ -40,7 +40,9 @@ fun mangaExtensionsTab(
                 searchQuery = state.searchQuery,
                 onLongClickItem = { extension ->
                     when (extension) {
-                        is MangaExtension.Available -> extensionsScreenModel.installExtension(extension)
+                        is MangaExtension.Available -> extensionsScreenModel.installExtension(
+                            extension
+                        )
                         else -> extensionsScreenModel.uninstallExtension(extension)
                     }
                 },

@@ -81,13 +81,13 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
 
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))
 
@@ -193,7 +193,11 @@ fun MangaActionRow(
         )
         if (onEditIntervalClicked != null && fetchInterval != null) {
             MangaActionButton(
-                title = pluralStringResource(id = R.plurals.day, count = fetchInterval.absoluteValue, fetchInterval.absoluteValue),
+                title = pluralStringResource(
+                    id = R.plurals.day,
+                    count = fetchInterval.absoluteValue,
+                    fetchInterval.absoluteValue
+                ),
                 icon = Icons.Default.HourglassEmpty,
                 color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
                 onClick = onEditIntervalClicked,
@@ -204,7 +208,11 @@ fun MangaActionRow(
                 title = if (trackingCount == 0) {
                     stringResource(R.string.manga_tracking_tab)
                 } else {
-                    pluralStringResource(id = R.plurals.num_trackers, count = trackingCount, trackingCount)
+                    pluralStringResource(
+                        id = R.plurals.num_trackers,
+                        count = trackingCount,
+                        trackingCount
+                    )
                 },
                 icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
                 color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
@@ -237,7 +245,9 @@ fun ExpandableMangaDescription(
             mutableStateOf(defaultExpandState)
         }
         val desc =
-            description.takeIf { !it.isNullOrBlank() } ?: stringResource(R.string.description_placeholder)
+            description.takeIf { !it.isNullOrBlank() } ?: stringResource(
+                R.string.description_placeholder
+            )
         val trimmedDescription = remember(desc) {
             desc
                 .replace(whitespaceLineRegex, "\n")
@@ -415,7 +425,9 @@ private fun MangaAndSourceTitlesLarge(
                         SManga.ONGOING.toLong() -> stringResource(R.string.ongoing)
                         SManga.COMPLETED.toLong() -> stringResource(R.string.completed)
                         SManga.LICENSED.toLong() -> stringResource(R.string.licensed)
-                        SManga.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
+                        SManga.PUBLISHING_FINISHED.toLong() -> stringResource(
+                            R.string.publishing_finished
+                        )
                         SManga.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                         SManga.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
                         else -> stringResource(R.string.unknown)
@@ -548,7 +560,9 @@ private fun MangaAndSourceTitlesSmall(
                             SManga.ONGOING.toLong() -> stringResource(R.string.ongoing)
                             SManga.COMPLETED.toLong() -> stringResource(R.string.completed)
                             SManga.LICENSED.toLong() -> stringResource(R.string.licensed)
-                            SManga.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
+                            SManga.PUBLISHING_FINISHED.toLong() -> stringResource(
+                                R.string.publishing_finished
+                            )
                             SManga.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                             SManga.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
                             else -> stringResource(R.string.unknown)
@@ -612,7 +626,9 @@ private fun MangaSummary(
                 style = MaterialTheme.typography.bodyMedium,
             )
         }.map { it.measure(constraints) }
-        expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(shrunkHeight) ?: 0
+        expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(
+            shrunkHeight
+        ) ?: 0
 
         val actualPlaceable = subcompose("description") {
             SelectionContainer {
@@ -635,9 +651,13 @@ private fun MangaSummary(
                 val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_caret_down)
                 Icon(
                     painter = rememberAnimatedVectorPainter(image, !expanded),
-                    contentDescription = stringResource(if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand),
+                    contentDescription = stringResource(
+                        if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand
+                    ),
                     tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.background(Brush.radialGradient(colors = colors.asReversed())),
+                    modifier = Modifier.background(
+                        Brush.radialGradient(colors = colors.asReversed())
+                    ),
                 )
             }
         }.map { it.measure(Constraints.fixed(width = constraints.maxWidth, height = scrimHeight)) }

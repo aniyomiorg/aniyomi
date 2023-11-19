@@ -2,11 +2,11 @@ package eu.kanade.domain.source.anime.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import java.util.SortedMap
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
-import java.util.SortedMap
 
 class GetLanguagesWithAnimeSources(
     private val repository: AnimeSourceRepository,

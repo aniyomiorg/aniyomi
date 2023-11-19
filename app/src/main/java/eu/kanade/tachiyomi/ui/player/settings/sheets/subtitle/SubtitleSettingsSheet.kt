@@ -39,8 +39,8 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
-import tachiyomi.presentation.core.components.material.padding
 import java.io.File
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun SubtitleSettingsSheet(

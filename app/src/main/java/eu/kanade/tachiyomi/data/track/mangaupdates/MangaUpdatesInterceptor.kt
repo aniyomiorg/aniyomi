@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.track.mangaupdates
 
+import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 
 class MangaUpdatesInterceptor(
     mangaUpdates: MangaUpdates,

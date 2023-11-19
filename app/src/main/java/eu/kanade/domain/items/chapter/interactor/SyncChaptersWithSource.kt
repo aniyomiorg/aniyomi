@@ -9,6 +9,10 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.online.HttpSource
+import java.lang.Long.max
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.TreeSet
 import tachiyomi.data.items.chapter.ChapterSanitizer
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
@@ -21,10 +25,6 @@ import tachiyomi.domain.items.chapter.repository.ChapterRepository
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.api.get
-import java.lang.Long.max
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.TreeSet
 
 class SyncChaptersWithSource(
     private val downloadManager: MangaDownloadManager,
@@ -100,7 +100,11 @@ class SyncChaptersWithSource(
             }
 
             // Recognize chapter number for the chapter.
-            val chapterNumber = ChapterRecognition.parseChapterNumber(manga.title, chapter.name, chapter.chapterNumber)
+            val chapterNumber = ChapterRecognition.parseChapterNumber(
+                manga.title,
+                chapter.name,
+                chapter.chapterNumber
+            )
             chapter = chapter.copy(chapterNumber = chapterNumber)
 
             val dbChapter = dbChapters.find { it.url == chapter.url }
@@ -116,8 +120,16 @@ class SyncChaptersWithSource(
                 toAdd.add(toAddChapter)
             } else {
                 if (shouldUpdateDbChapter.await(dbChapter, chapter)) {
-                    val shouldRenameChapter = downloadProvider.isChapterDirNameChanged(dbChapter, chapter) &&
-                        downloadManager.isChapterDownloaded(dbChapter.name, dbChapter.scanlator, manga.title, manga.source)
+                    val shouldRenameChapter = downloadProvider.isChapterDirNameChanged(
+                        dbChapter,
+                        chapter
+                    ) &&
+                        downloadManager.isChapterDownloaded(
+                            dbChapter.name,
+                            dbChapter.scanlator,
+                            manga.title,
+                            manga.source
+                        )
 
                     if (shouldRenameChapter) {
                         downloadManager.renameChapter(source, manga, dbChapter, chapter)

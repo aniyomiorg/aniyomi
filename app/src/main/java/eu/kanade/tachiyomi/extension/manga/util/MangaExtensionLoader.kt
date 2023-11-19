@@ -16,13 +16,13 @@ import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
+import java.io.File
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 
 /**
  * Class that handles the loading of the extensions. Supports two kinds of extensions:
@@ -74,9 +74,15 @@ internal object MangaExtensionLoader {
     private fun getPrivateExtensionDir(context: Context) = File(context.filesDir, "exts")
 
     fun installPrivateExtensionFile(context: Context, file: File): Boolean {
-        val extension = context.packageManager.getPackageArchiveInfo(file.absolutePath, PACKAGE_FLAGS)
+        val extension = context.packageManager.getPackageArchiveInfo(
+            file.absolutePath,
+            PACKAGE_FLAGS
+        )
             ?.takeIf { isPackageAnExtension(it) } ?: return false
-        val currentExtension = getMangaExtensionPackageInfoFromPkgName(context, extension.packageName)
+        val currentExtension = getMangaExtensionPackageInfoFromPkgName(
+            context,
+            extension.packageName
+        )
 
         if (currentExtension != null) {
             if (PackageInfoCompat.getLongVersionCode(extension) <
@@ -98,7 +104,10 @@ internal object MangaExtensionLoader {
             }
         }
 
-        val target = File(getPrivateExtensionDir(context), "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION")
+        val target = File(
+            getPrivateExtensionDir(context),
+            "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION"
+        )
         return try {
             file.copyTo(target, overwrite = true)
             if (currentExtension != null) {
@@ -127,7 +136,9 @@ internal object MangaExtensionLoader {
         val pkgManager = context.packageManager
 
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
+            pkgManager.getInstalledPackages(
+                PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong())
+            )
         } else {
             pkgManager.getInstalledPackages(PACKAGE_FLAGS)
         }
@@ -190,9 +201,15 @@ internal object MangaExtensionLoader {
     }
 
     private fun getMangaExtensionInfoFromPkgName(context: Context, pkgName: String): MangaExtensionInfo? {
-        val privateExtensionFile = File(getPrivateExtensionDir(context), "$pkgName.$PRIVATE_EXTENSION_EXTENSION")
+        val privateExtensionFile = File(
+            getPrivateExtensionDir(context),
+            "$pkgName.$PRIVATE_EXTENSION_EXTENSION"
+        )
         val privatePkg = if (privateExtensionFile.isFile) {
-            context.packageManager.getPackageArchiveInfo(privateExtensionFile.absolutePath, PACKAGE_FLAGS)
+            context.packageManager.getPackageArchiveInfo(
+                privateExtensionFile.absolutePath,
+                PACKAGE_FLAGS
+            )
                 ?.takeIf { isPackageAnExtension(it) }
                 ?.let {
                     it.applicationInfo.fixBasePaths(privateExtensionFile.absolutePath)
@@ -233,7 +250,9 @@ internal object MangaExtensionLoader {
         val appInfo = pkgInfo.applicationInfo
         val pkgName = pkgInfo.packageName
 
-        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
+        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter(
+            "Tachiyomi: "
+        )
         val versionName = pkgInfo.versionName
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 

@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.network.interceptor
 
+import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 
 /**
  * Catches any uncaught exceptions from later in the chain and rethrows as a non-fatal

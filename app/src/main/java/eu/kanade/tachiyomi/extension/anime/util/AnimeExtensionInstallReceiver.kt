@@ -60,9 +60,13 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
 
                 launchNow {
                     when (val result = getExtensionFromIntent(context, intent)) {
-                        is AnimeLoadResult.Success -> listener.onExtensionInstalled(result.extension)
+                        is AnimeLoadResult.Success -> listener.onExtensionInstalled(
+                            result.extension
+                        )
 
-                        is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(result.extension)
+                        is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(
+                            result.extension
+                        )
                         else -> {}
                     }
                 }

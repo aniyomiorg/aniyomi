@@ -37,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion as ComposeColor
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -113,7 +114,6 @@ import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import androidx.compose.ui.graphics.Color.Companion as ComposeColor
 
 class MainActivity : BaseActivity() {
 
@@ -213,7 +213,10 @@ class MainActivity : BaseActivity() {
 
             Navigator(
                 screen = HomeScreen,
-                disposeBehavior = NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = true),
+                disposeBehavior = NavigatorDisposeBehavior(
+                    disposeNestedNavigators = false,
+                    disposeSteps = true
+                ),
             ) { navigator ->
 
                 LaunchedEffect(navigator) {
@@ -276,7 +279,9 @@ class MainActivity : BaseActivity() {
             if (showChangelog) {
                 AlertDialog(
                     onDismissRequest = { showChangelog = false },
-                    title = { Text(text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME)) },
+                    title = { Text(
+                        text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME)
+                    ) },
                     dismissButton = {
                         TextButton(onClick = { openInBrowser(RELEASE_URL) }) {
                             Text(text = stringResource(R.string.whats_new))
@@ -303,7 +308,9 @@ class MainActivity : BaseActivity() {
             episodeCache.clear()
         }
 
-        externalPlayerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        externalPlayerResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 ExternalIntents.externalIntents.onActivityResult(result.data)
             }
@@ -413,7 +420,11 @@ class MainActivity : BaseActivity() {
     private fun handleIntentAction(intent: Intent, navigator: Navigator): Boolean {
         val notificationId = intent.getIntExtra("notificationId", -1)
         if (notificationId > -1) {
-            NotificationReceiver.dismissNotification(applicationContext, notificationId, intent.getIntExtra("groupId", 0))
+            NotificationReceiver.dismissNotification(
+                applicationContext,
+                notificationId,
+                intent.getIntExtra("groupId", 0)
+            )
         }
 
         val tabToOpen = when (intent.action) {
@@ -446,7 +457,9 @@ class MainActivity : BaseActivity() {
                 // or the Google-specific search intent (triggered by saying or typing "search *query* on *Tachiyomi*" in Google Search/Google Assistant)
 
                 // Get the search query provided in extras, and if not null, perform a global search with it.
-                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(Intent.EXTRA_TEXT)
+                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(
+                    Intent.EXTRA_TEXT
+                )
                 if (!query.isNullOrEmpty()) {
                     navigator.popUntilRoot()
                     navigator.push(GlobalMangaSearchScreen(query))
@@ -496,7 +509,13 @@ class MainActivity : BaseActivity() {
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
-        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
+        suspend fun startPlayerActivity(
+            context: Context,
+            animeId: Long,
+            episodeId: Long,
+            extPlayer: Boolean,
+            video: Video? = null
+        ) {
             if (extPlayer) {
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)

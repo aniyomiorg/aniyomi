@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -52,7 +53,6 @@ import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.Scaffold
-import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
 object SettingsMainScreen : Screen() {
     @Composable
@@ -146,7 +146,9 @@ object SettingsMainScreen : Screen() {
                                 .clip(RoundedCornerShape(24.dp))
                                 .then(
                                     if (selected) {
-                                        Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+                                        Modifier.background(
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                        )
                                     } else {
                                         Modifier
                                     },
@@ -247,7 +249,9 @@ object SettingsMainScreen : Screen() {
             titleRes = R.string.pref_category_about,
             subtitleRes = 0,
             formatSubtitle = {
-                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(withBuildDate = false)}"
+                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(
+                    withBuildDate = false
+                )}"
             },
             icon = Icons.Outlined.Info,
             screen = AboutScreen,

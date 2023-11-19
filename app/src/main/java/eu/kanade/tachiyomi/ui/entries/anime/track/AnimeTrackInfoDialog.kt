@@ -59,6 +59,10 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -75,15 +79,11 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.DeleteAnimeTrack
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.domain.track.anime.model.AnimeTrack as DbAnimeTrack
 import tachiyomi.presentation.core.components.material.AlertDialogContent
 import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
-import tachiyomi.domain.track.anime.model.AnimeTrack as DbAnimeTrack
 
 data class AnimeTrackInfoDialogHomeScreen(
     private val animeId: Long,
@@ -96,7 +96,9 @@ data class AnimeTrackInfoDialogHomeScreen(
         val context = LocalContext.current
         val sm = rememberScreenModel { Model(animeId, sourceId) }
 
-        val dateFormat = remember { UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()) }
+        val dateFormat = remember { UiPreferences.dateFormat(
+            Injekt.get<UiPreferences>().dateFormat().get()
+        ) }
         val state by sm.state.collectAsState()
 
         AnimeTrackInfoDialogHome(
@@ -197,7 +199,9 @@ data class AnimeTrackInfoDialogHomeScreen(
                     .catch { logcat(LogPriority.ERROR, it) }
                     .distinctUntilChanged()
                     .map { it.mapToTrackItem() }
-                    .collectLatest { trackItems -> mutableState.update { it.copy(trackItems = trackItems) } }
+                    .collectLatest { trackItems -> mutableState.update { it.copy(
+                        trackItems = trackItems
+                    ) } }
             }
         }
 
@@ -351,7 +355,10 @@ private data class TrackEpisodeSelectorScreen(
 
         fun setEpisode() {
             coroutineScope.launchNonCancellable {
-                service.animeService.setRemoteLastEpisodeSeen(track.toDbTrack(), state.value.selection)
+                service.animeService.setRemoteLastEpisodeSeen(
+                    track.toDbTrack(),
+                    state.value.selection
+                )
             }
         }
 
@@ -584,7 +591,10 @@ private data class TrackDateRemoverScreen(
             buttons = {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small, Alignment.End),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        MaterialTheme.padding.small,
+                        Alignment.End
+                    ),
                 ) {
                     TextButton(onClick = navigator::pop) {
                         Text(text = stringResource(android.R.string.cancel))
@@ -748,8 +758,16 @@ private data class TrackAnimeServiceRemoveScreen(
                     )
                     if (sm.isServiceDeletable()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = removeRemoteTrack, onCheckedChange = { removeRemoteTrack = it })
-                            Text(text = stringResource(R.string.track_delete_remote_text, serviceName))
+                            Checkbox(
+                                checked = removeRemoteTrack,
+                                onCheckedChange = { removeRemoteTrack = it }
+                            )
+                            Text(
+                                text = stringResource(
+                                    R.string.track_delete_remote_text,
+                                    serviceName
+                                )
+                            )
                         }
                     }
                 }

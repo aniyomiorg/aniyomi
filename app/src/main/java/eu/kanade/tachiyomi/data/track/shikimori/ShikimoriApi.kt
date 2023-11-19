@@ -64,7 +64,10 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(track, user_id)
+    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(
+        track,
+        user_id
+    )
 
     suspend fun deleteLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
@@ -105,7 +108,10 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(track, user_id)
+    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(
+        track,
+        user_id
+    )
 
     suspend fun deleteLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {

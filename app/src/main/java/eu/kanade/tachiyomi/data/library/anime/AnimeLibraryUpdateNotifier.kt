@@ -59,7 +59,11 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             setLargeIcon(notificationBitmap)
             setOngoing(true)
             setOnlyAlertOnce(true)
-            addAction(R.drawable.ic_close_24dp, context.getString(R.string.action_cancel), cancelIntent)
+            addAction(
+                R.drawable.ic_close_24dp,
+                context.getString(R.string.action_cancel),
+                cancelIntent
+            )
         }
     }
 
@@ -96,7 +100,11 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_LIBRARY_PROGRESS,
         ) {
             setContentTitle(context.getString(R.string.label_warning))
-            setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_size_warning)))
+            setStyle(
+                NotificationCompat.BigTextStyle().bigText(
+                    context.getString(R.string.notification_size_warning)
+                )
+            )
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setTimeoutAfter(AnimeDownloader.WARNING_NOTIF_TIMEOUT_MS)
             setContentIntent(NotificationHandler.openUrl(context, HELP_WARNING_URL))
@@ -140,7 +148,9 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             Notifications.ID_LIBRARY_SKIPPED,
             Notifications.CHANNEL_LIBRARY_SKIPPED,
         ) {
-            setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
+            setContentTitle(
+                context.resources.getString(R.string.notification_update_skipped, skipped)
+            )
             setContentText(context.getString(R.string.learn_more))
             setSmallIcon(R.drawable.ic_ani)
             setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_ANIME_URL))
@@ -162,7 +172,13 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
                 setContentText(updates.first().first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN))
             } else {
-                setContentText(context.resources.getQuantityString(R.plurals.notification_new_episodes_summary, updates.size, updates.size))
+                setContentText(
+                    context.resources.getQuantityString(
+                        R.plurals.notification_new_episodes_summary,
+                        updates.size,
+                        updates.size
+                    )
+                )
 
                 if (!preferences.hideNotificationContent().get()) {
                     setStyle(
@@ -192,7 +208,10 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             launchUI {
                 context.notify(
                     updates.map { (anime, episodes) ->
-                        NotificationManagerCompat.NotificationWithIdAndTag(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
+                        NotificationManagerCompat.NotificationWithIdAndTag(
+                            anime.id.hashCode(),
+                            createNewEpisodesNotification(anime, episodes)
+                        )
                     },
                 )
             }
@@ -219,7 +238,9 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             priority = NotificationCompat.PRIORITY_HIGH
 
             // Open first episode on tap
-            setContentIntent(NotificationReceiver.openEpisodePendingActivity(context, anime, episodes.first()))
+            setContentIntent(
+                NotificationReceiver.openEpisodePendingActivity(context, anime, episodes.first())
+            )
             setAutoCancel(true)
 
             // Mark episodes as read action
@@ -288,17 +309,28 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             // No sensible episode numbers to show (i.e. no episodes have parsed episode number)
             0 -> {
                 // "1 new episode" or "5 new episodes"
-                context.resources.getQuantityString(R.plurals.notification_episodes_generic, episodes.size, episodes.size)
+                context.resources.getQuantityString(
+                    R.plurals.notification_episodes_generic,
+                    episodes.size,
+                    episodes.size
+                )
             }
             // Only 1 episode has a parsed episode number
             1 -> {
                 val remaining = episodes.size - displayableEpisodeNumbers.size
                 if (remaining == 0) {
                     // "Episode 2.5"
-                    context.resources.getString(R.string.notification_episodes_single, displayableEpisodeNumbers.first())
+                    context.resources.getString(
+                        R.string.notification_episodes_single,
+                        displayableEpisodeNumbers.first()
+                    )
                 } else {
                     // "Episode 2.5 and 10 more"
-                    context.resources.getString(R.string.notification_episodes_single_and_more, displayableEpisodeNumbers.first(), remaining)
+                    context.resources.getString(
+                        R.string.notification_episodes_single_and_more,
+                        displayableEpisodeNumbers.first(),
+                        remaining
+                    )
                 }
             }
             // Everything else (i.e. multiple parsed episode numbers)
@@ -307,11 +339,21 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                 if (shouldTruncate) {
                     // "Episodes 1, 2.5, 3, 4, 5 and 10 more"
                     val remaining = displayableEpisodeNumbers.size - NOTIF_MAX_EPISODES
-                    val joinedEpisodeNumbers = displayableEpisodeNumbers.take(NOTIF_MAX_EPISODES).joinToString(", ")
-                    context.resources.getQuantityString(R.plurals.notification_episodes_multiple_and_more, remaining, joinedEpisodeNumbers, remaining)
+                    val joinedEpisodeNumbers = displayableEpisodeNumbers.take(NOTIF_MAX_EPISODES).joinToString(
+                        ", "
+                    )
+                    context.resources.getQuantityString(
+                        R.plurals.notification_episodes_multiple_and_more,
+                        remaining,
+                        joinedEpisodeNumbers,
+                        remaining
+                    )
                 } else {
                     // "Episodes 1, 2.5, 3"
-                    context.resources.getString(R.string.notification_episodes_multiple, displayableEpisodeNumbers.joinToString(", "))
+                    context.resources.getString(
+                        R.string.notification_episodes_multiple,
+                        displayableEpisodeNumbers.joinToString(", ")
+                    )
                 }
             }
         }
@@ -325,7 +367,12 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             action = Constants.SHORTCUT_UPDATES
         }
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     companion object {

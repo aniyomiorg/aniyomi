@@ -62,6 +62,7 @@ import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
+import java.io.File
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import okhttp3.Headers
@@ -73,7 +74,6 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 object SettingsAdvancedScreen : SearchableSettings {
 
@@ -175,7 +175,9 @@ object SettingsAdvancedScreen : SearchableSettings {
                                 }
                                 context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
-                                context.toast(R.string.battery_optimization_setting_activity_not_found)
+                                context.toast(
+                                    R.string.battery_optimization_setting_activity_not_found
+                                )
                             }
                         } else {
                             context.toast(R.string.battery_optimization_disabled)
@@ -209,13 +211,19 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_chapter_cache),
-                    subtitle = stringResource(R.string.used_cache_both, readableAnimeSize, readableSize),
+                    subtitle = stringResource(
+                        R.string.used_cache_both,
+                        readableAnimeSize,
+                        readableSize
+                    ),
                     onClick = {
                         scope.launchNonCancellable {
                             try {
                                 val deletedFiles = chapterCache.clear() + episodeCache.clear()
                                 withUIContext {
-                                    context.toast(context.getString(R.string.cache_deleted, deletedFiles))
+                                    context.toast(
+                                        context.getString(R.string.cache_deleted, deletedFiles)
+                                    )
                                     readableSizeSema++
                                 }
                             } catch (e: Throwable) {
@@ -353,8 +361,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_covers),
                     onClick = {
-                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.COVERS)
-                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.COVERS)
+                        MangaLibraryUpdateJob.startNow(
+                            context,
+                            target = MangaLibraryUpdateJob.Target.COVERS
+                        )
+                        AnimeLibraryUpdateJob.startNow(
+                            context,
+                            target = AnimeLibraryUpdateJob.Target.COVERS
+                        )
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -362,8 +376,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
                     enabled = trackManager.hasLoggedServices(),
                     onClick = {
-                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.TRACKING)
-                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.TRACKING)
+                        MangaLibraryUpdateJob.startNow(
+                            context,
+                            target = MangaLibraryUpdateJob.Target.TRACKING
+                        )
+                        AnimeLibraryUpdateJob.startNow(
+                            context,
+                            target = AnimeLibraryUpdateJob.Target.TRACKING
+                        )
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -401,7 +421,9 @@ object SettingsAdvancedScreen : SearchableSettings {
             AlertDialog(
                 onDismissRequest = dismiss,
                 title = { Text(text = stringResource(R.string.ext_installer_shizuku)) },
-                text = { Text(text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog)) },
+                text = { Text(
+                    text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog)
+                ) },
                 dismissButton = {
                     TextButton(onClick = dismiss) {
                         Text(text = stringResource(R.string.action_cancel))

@@ -54,7 +54,10 @@ fun UpdatesMangaWidget(data: List<Pair<Long, Bitmap?>>?) {
                                     .padding(horizontal = 3.dp),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                val intent = Intent(LocalContext.current, Class.forName(Constants.MAIN_ACTIVITY)).apply {
+                                val intent = Intent(
+                                    LocalContext.current,
+                                    Class.forName(Constants.MAIN_ACTIVITY)
+                                ).apply {
                                     action = Constants.SHORTCUT_MANGA
                                     putExtra(Constants.MANGA_EXTRA, mangaId)
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -73,7 +73,10 @@ class Seekbar(
         val isDragging by interactionSource.collectIsDraggedAsState()
         val gap by animateDpAsState(if (isDragging) 5.dp else 2.dp, label = "gap")
         val thumbRadius by animateDpAsState(if (isDragging) 10.dp else 8.dp, label = "thumbRadius")
-        val trackHeight by animateDpAsState(targetValue = if (isDragging) 6.dp else 4.dp, label = "trackHeight")
+        val trackHeight by animateDpAsState(
+            targetValue = if (isDragging) 6.dp else 4.dp,
+            label = "trackHeight"
+        )
         return Seeker(
             value = value,
             readAheadValue = readAheadValue,

@@ -139,13 +139,19 @@ object SettingsTrackingScreen : SearchableSettings {
                     Preference.PreferenceItem.TrackingPreference(
                         title = trackManager.myAnimeList.name,
                         service = trackManager.myAnimeList,
-                        login = { context.openInBrowser(MyAnimeListApi.authUrl(), forceDefaultBrowser = true) },
+                        login = { context.openInBrowser(
+                            MyAnimeListApi.authUrl(),
+                            forceDefaultBrowser = true
+                        ) },
                         logout = { dialog = LogoutDialog(trackManager.myAnimeList) },
                     ),
                     Preference.PreferenceItem.TrackingPreference(
                         title = trackManager.aniList.name,
                         service = trackManager.aniList,
-                        login = { context.openInBrowser(AnilistApi.authUrl(), forceDefaultBrowser = true) },
+                        login = { context.openInBrowser(
+                            AnilistApi.authUrl(),
+                            forceDefaultBrowser = true
+                        ) },
                         logout = { dialog = LogoutDialog(trackManager.aniList) },
                     ),
                     Preference.PreferenceItem.TrackingPreference(
@@ -163,19 +169,28 @@ object SettingsTrackingScreen : SearchableSettings {
                     Preference.PreferenceItem.TrackingPreference(
                         title = trackManager.shikimori.name,
                         service = trackManager.shikimori,
-                        login = { context.openInBrowser(ShikimoriApi.authUrl(), forceDefaultBrowser = true) },
+                        login = { context.openInBrowser(
+                            ShikimoriApi.authUrl(),
+                            forceDefaultBrowser = true
+                        ) },
                         logout = { dialog = LogoutDialog(trackManager.shikimori) },
                     ),
                     Preference.PreferenceItem.TrackingPreference(
                         title = trackManager.simkl.name,
                         service = trackManager.simkl,
-                        login = { context.openInBrowser(SimklApi.authUrl(), forceDefaultBrowser = true) },
+                        login = { context.openInBrowser(
+                            SimklApi.authUrl(),
+                            forceDefaultBrowser = true
+                        ) },
                         logout = { dialog = LogoutDialog(trackManager.simkl) },
                     ),
                     Preference.PreferenceItem.TrackingPreference(
                         title = trackManager.bangumi.name,
                         service = trackManager.bangumi,
-                        login = { context.openInBrowser(BangumiApi.authUrl(), forceDefaultBrowser = true) },
+                        login = { context.openInBrowser(
+                            BangumiApi.authUrl(),
+                            forceDefaultBrowser = true
+                        ) },
                         logout = { dialog = LogoutDialog(trackManager.bangumi) },
                     ),
                     Preference.PreferenceItem.InfoPreference(stringResource(R.string.tracking_info)),

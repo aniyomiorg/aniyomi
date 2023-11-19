@@ -58,10 +58,18 @@ object MangaMigrationFlags {
 
         if (manga != null) {
             if (manga.hasCustomCover(coverCache)) {
-                flags += MangaMigrationFlag.create(CUSTOM_COVER, defaultSelectedBitMap, R.string.custom_cover)
+                flags += MangaMigrationFlag.create(
+                    CUSTOM_COVER,
+                    defaultSelectedBitMap,
+                    R.string.custom_cover
+                )
             }
             if (downloadCache.getDownloadCount(manga) > 0) {
-                flags += MangaMigrationFlag.create(DELETE_DOWNLOADED, defaultSelectedBitMap, R.string.delete_downloaded)
+                flags += MangaMigrationFlag.create(
+                    DELETE_DOWNLOADED,
+                    defaultSelectedBitMap,
+                    R.string.delete_downloaded
+                )
             }
         }
         return flags

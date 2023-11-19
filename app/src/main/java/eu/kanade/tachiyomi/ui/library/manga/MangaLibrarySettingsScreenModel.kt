@@ -42,7 +42,11 @@ class MangaLibrarySettingsScreenModel(
         setMangaDisplayMode.await(mode)
     }
 
-    fun setSort(category: Category?, mode: MangaLibrarySort.Type, direction: MangaLibrarySort.Direction) {
+    fun setSort(
+        category: Category?,
+        mode: MangaLibrarySort.Type,
+        direction: MangaLibrarySort.Direction
+    ) {
         coroutineScope.launchIO {
             setSortModeForCategory.await(category, mode, direction)
         }

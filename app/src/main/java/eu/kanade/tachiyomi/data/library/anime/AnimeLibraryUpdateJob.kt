@@ -33,6 +33,13 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
+import java.io.File
+import java.time.ZonedDateTime
+import java.util.Date
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -68,13 +75,6 @@ import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.time.ZonedDateTime
-import java.util.Date
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 
 class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -239,19 +239,39 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                 ) {
                                     when {
                                         anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_always_update))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_always_update
+                                                )
+                                            )
 
                                         ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_completed
+                                                )
+                                            )
 
                                         ENTRY_HAS_UNVIEWED in restrictions && libraryAnime.unseenCount != 0L ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_caught_up))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_caught_up
+                                                )
+                                            )
 
                                         ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_started))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_started
+                                                )
+                                            )
 
                                         ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > fetchWindow.second ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_in_release_period))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_in_release_period
+                                                )
+                                            )
 
                                         else -> {
                                             try {
@@ -260,7 +280,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                                                 if (newEpisodes.isNotEmpty()) {
                                                     val categoryIds = getCategories.await(anime.id).map { it.id }
-                                                    if (anime.shouldDownloadNewEpisodes(categoryIds, downloadPreferences)) {
+                                                    if (anime.shouldDownloadNewEpisodes(
+                                                            categoryIds,
+                                                            downloadPreferences
+                                                        )) {
                                                         downloadEpisodes(anime, newEpisodes)
                                                         hasDownloads.set(true)
                                                     }
@@ -268,13 +291,19 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                     libraryPreferences.newAnimeUpdatesCount().getAndSet { it + newEpisodes.size }
 
                                                     // Convert to the anime that contains new chapters
-                                                    newUpdates.add(anime to newEpisodes.toTypedArray())
+                                                    newUpdates.add(
+                                                        anime to newEpisodes.toTypedArray()
+                                                    )
                                                 }
                                             } catch (e: Throwable) {
                                                 val errorMessage = when (e) {
-                                                    is NoEpisodesException -> context.getString(R.string.no_episodes_error)
+                                                    is NoEpisodesException -> context.getString(
+                                                        R.string.no_episodes_error
+                                                    )
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is AnimeSourceNotInstalledException -> context.getString(
+                                                        R.string.loader_not_implemented_error
+                                                    )
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(anime to errorMessage)
@@ -374,7 +403,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
                                     try {
                                         val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime.prepUpdateCover(coverCache, networkAnime, true)
+                                        val updatedAnime = anime.prepUpdateCover(
+                                            coverCache,
+                                            networkAnime,
+                                            true
+                                        )
                                             .copyFrom(networkAnime)
                                         try {
                                             updateAnime.await(updatedAnime.toAnimeUpdate())
@@ -408,7 +441,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 ensureActive()
 
                 val anime = libraryAnime.anime
-                notifier.showProgressNotification(listOf(anime), progressCount++, animeToUpdate.size)
+                notifier.showProgressNotification(
+                    listOf(anime),
+                    progressCount++,
+                    animeToUpdate.size
+                )
                 refreshAnimeTracks(anime.id)
             }
 
@@ -461,7 +498,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             if (errors.isNotEmpty()) {
                 val file = context.createFileInCacheDir("aniyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
-                    out.write(context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
+                    out.write(
+                        context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n"
+                    )
                     // Error file format:
                     // ! Error
                     //   # Source
@@ -541,7 +580,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
                     .build()
 
-                context.workManager.enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(
+                    WORK_NAME_AUTO,
+                    ExistingPeriodicWorkPolicy.UPDATE,
+                    request
+                )
             } else {
                 context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }

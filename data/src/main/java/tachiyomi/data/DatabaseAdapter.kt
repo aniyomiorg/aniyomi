@@ -17,7 +17,9 @@ object StringListColumnAdapter : ColumnAdapter<List<String>, String> {
         } else {
             databaseValue.split(LIST_OF_STRINGS_SEPARATOR)
         }
-    override fun encode(value: List<String>) = value.joinToString(separator = LIST_OF_STRINGS_SEPARATOR)
+    override fun encode(value: List<String>) = value.joinToString(
+        separator = LIST_OF_STRINGS_SEPARATOR
+    )
 }
 
 object UpdateStrategyColumnAdapter : ColumnAdapter<UpdateStrategy, Long> {

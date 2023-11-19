@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.PkceUtil
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.Json
@@ -31,8 +33,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListInterceptor) {
 
@@ -125,7 +125,10 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return withIOContext {
             val url = "$baseApiUrl/manga".toUri().buildUpon()
                 .appendPath(id.toString())
-                .appendQueryParameter("fields", "id,title,synopsis,num_chapters,main_picture,status,media_type,start_date")
+                .appendQueryParameter(
+                    "fields",
+                    "id,title,synopsis,num_chapters,main_picture,status,media_type,start_date"
+                )
                 .build()
             with(json) {
                 authClient.newCall(GET(url.toString()))
@@ -162,7 +165,10 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return withIOContext {
             val url = "$baseApiUrl/anime".toUri().buildUpon()
                 .appendPath(id.toString())
-                .appendQueryParameter("fields", "id,title,synopsis,num_episodes,main_picture,status,media_type,start_date")
+                .appendQueryParameter(
+                    "fields",
+                    "id,title,synopsis,num_episodes,main_picture,status,media_type,start_date"
+                )
                 .build()
             with(json) {
                 authClient.newCall(GET(url.toString()))
@@ -281,7 +287,10 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return withIOContext {
             val uri = "$baseApiUrl/manga".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
-                .appendQueryParameter("fields", "num_chapters,my_list_status{start_date,finish_date}")
+                .appendQueryParameter(
+                    "fields",
+                    "num_chapters,my_list_status{start_date,finish_date}"
+                )
                 .build()
             with(json) {
                 authClient.newCall(GET(uri.toString()))
@@ -301,7 +310,10 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return withIOContext {
             val uri = "$baseApiUrl/anime".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
-                .appendQueryParameter("fields", "num_episodes,my_list_status{start_date,finish_date}")
+                .appendQueryParameter(
+                    "fields",
+                    "num_episodes,my_list_status{start_date,finish_date}"
+                )
                 .build()
             with(json) {
                 authClient.newCall(GET(uri.toString()))
@@ -396,7 +408,13 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         val obj = response.jsonObject
         return track.apply {
             val isRereading = obj["is_rereading"]!!.jsonPrimitive.boolean
-            status = if (isRereading) MyAnimeList.REREADING else getStatus(obj["status"]?.jsonPrimitive?.content)
+            status = if (isRereading) {
+                MyAnimeList.REREADING
+            } else {
+                getStatus(
+                    obj["status"]?.jsonPrimitive?.content
+                )
+            }
             last_chapter_read = obj["num_chapters_read"]!!.jsonPrimitive.float
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {
@@ -412,7 +430,13 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         val obj = response.jsonObject
         return track.apply {
             val isRereading = obj["is_rewatching"]!!.jsonPrimitive.boolean
-            status = if (isRereading) MyAnimeList.REWATCHING else getStatus(obj["status"]!!.jsonPrimitive.content)
+            status = if (isRereading) {
+                MyAnimeList.REWATCHING
+            } else {
+                getStatus(
+                    obj["status"]!!.jsonPrimitive.content
+                )
+            }
             last_episode_seen = obj["num_episodes_watched"]!!.jsonPrimitive.float
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {

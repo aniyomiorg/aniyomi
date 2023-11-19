@@ -77,7 +77,9 @@ object AnimeLibraryTab : Tab() {
                 R.string.label_anime_library
             }
             val isSelected = LocalTabNavigator.current.current.key == key
-            val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_animelibrary_leave)
+            val image = AnimatedImageVector.animatedVectorResource(
+                R.drawable.anim_animelibrary_leave
+            )
             return TabOptions(
                 index = 0u,
                 title = stringResource(title),
@@ -118,7 +120,13 @@ object AnimeLibraryTab : Tab() {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
-        val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_anime_library)
+        val defaultTitle = if (fromMore) {
+            stringResource(R.string.label_library)
+        } else {
+            stringResource(
+                R.string.label_anime_library
+            )
+        }
 
         Scaffold(
             topBar = { scrollBehavior ->
@@ -134,9 +142,13 @@ object AnimeLibraryTab : Tab() {
                     title = title,
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
-                    onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
+                    onClickInvertSelection = { screenModel.invertSelection(
+                        screenModel.activeCategoryIndex
+                    ) },
                     onClickFilter = screenModel::showSettingsDialog,
-                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickRefresh = { onClickRefresh(
+                        state.categories[screenModel.activeCategoryIndex]
+                    ) },
                     onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
@@ -144,7 +156,9 @@ object AnimeLibraryTab : Tab() {
                             if (randomItem != null) {
                                 navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
-                                snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
+                                snackbarHostState.showSnackbar(
+                                    context.getString(R.string.information_no_entries_found)
+                                )
                             }
                         }
                     },
@@ -178,7 +192,9 @@ object AnimeLibraryTab : Tab() {
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
                                 icon = Icons.Outlined.HelpOutline,
-                                onClick = { handler.openUri("https://aniyomi.org/help/guides/getting-started") },
+                                onClick = { handler.openUri(
+                                    "https://aniyomi.org/help/guides/getting-started"
+                                ) },
                             ),
                         ),
                     )
@@ -208,11 +224,15 @@ object AnimeLibraryTab : Tab() {
                         },
                         onRefresh = onClickRefresh,
                         onGlobalSearchClicked = {
-                            navigator.push(GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""))
+                            navigator.push(
+                                GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: "")
+                            )
                         },
                         getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
                         getDisplayMode = { screenModel.getDisplayMode() },
-                        getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(it) },
+                        getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(
+                            it
+                        ) },
                     ) { state.getAnimelibItemsByPage(it) }
                 }
             }

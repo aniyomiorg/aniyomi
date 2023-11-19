@@ -90,7 +90,12 @@ class AnimeDownloadProvider(
      * @param animeTitle the title of the anime to query.
      * @param source the source of the episode.
      */
-    fun findEpisodeDir(episodeName: String, episodeScanlator: String?, animeTitle: String, source: AnimeSource): UniFile? {
+    fun findEpisodeDir(
+        episodeName: String,
+        episodeScanlator: String?,
+        animeTitle: String,
+        source: AnimeSource
+    ): UniFile? {
         val animeDir = findAnimeDir(animeTitle, source)
         return getValidEpisodeDirNames(episodeName, episodeScanlator).asSequence()
             .mapNotNull { animeDir?.findFile(it, true) }

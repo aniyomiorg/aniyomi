@@ -197,8 +197,16 @@ object SettingsBackupScreen : SearchableSettings {
                             }
                         }
                     }
-                    if (!state.isScrolledToStart()) HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
-                    if (!state.isScrolledToEnd()) HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
+                    if (!state.isScrolledToStart()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
+                    }
+                    if (!state.isScrolledToEnd()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
+                    }
                 }
             },
             dismissButton = {
@@ -282,7 +290,9 @@ object SettingsBackupScreen : SearchableSettings {
                                 val msg = buildString {
                                     append(stringResource(R.string.backup_restore_content_full))
                                     if (err.sources.isNotEmpty()) {
-                                        append("\n\n").append(stringResource(R.string.backup_restore_missing_sources))
+                                        append("\n\n").append(
+                                            stringResource(R.string.backup_restore_missing_sources)
+                                        )
                                         err.sources.joinTo(
                                             this,
                                             separator = "\n- ",
@@ -290,7 +300,9 @@ object SettingsBackupScreen : SearchableSettings {
                                         )
                                     }
                                     if (err.trackers.isNotEmpty()) {
-                                        append("\n\n").append(stringResource(R.string.backup_restore_missing_trackers))
+                                        append("\n\n").append(
+                                            stringResource(R.string.backup_restore_missing_trackers)
+                                        )
                                         err.trackers.joinTo(
                                             this,
                                             separator = "\n- ",
@@ -321,7 +333,10 @@ object SettingsBackupScreen : SearchableSettings {
             object : ActivityResultContracts.GetContent() {
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
-                    return Intent.createChooser(intent, context.getString(R.string.file_select_backup))
+                    return Intent.createChooser(
+                        intent,
+                        context.getString(R.string.file_select_backup)
+                    )
                 }
             },
         ) {
@@ -338,7 +353,11 @@ object SettingsBackupScreen : SearchableSettings {
                     return@rememberLauncherForActivityResult
                 }
 
-                error = MissingRestoreComponents(it, results.missingSources, results.missingTrackers)
+                error = MissingRestoreComponents(
+                    it,
+                    results.missingSources,
+                    results.missingTrackers
+                )
             }
         }
 

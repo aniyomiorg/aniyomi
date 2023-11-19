@@ -71,7 +71,9 @@ class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, Ma
         return track
     }
 
-    override suspend fun searchManga(query: String): List<MangaTrackSearch> = throw Exception("Not used")
+    override suspend fun searchManga(query: String): List<MangaTrackSearch> = throw Exception(
+        "Not used"
+    )
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {
         val remoteTrack = api.getTrackSearch(track.tracking_url)
