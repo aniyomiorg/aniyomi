@@ -342,8 +342,9 @@ class AnimeDownloadCache(
                     sourceId?.let { it to SourceDirectory(dir) }
                 }
                 .toMap()
+                .let { ConcurrentHashMap(it) }
 
-            rootDownloadsDir.sourceDirs = sourceDirs as ConcurrentHashMap<Long, SourceDirectory>
+            rootDownloadsDir.sourceDirs = sourceDirs
 
             sourceDirs.values
                 .map { sourceDir ->
