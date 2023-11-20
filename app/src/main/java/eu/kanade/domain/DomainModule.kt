@@ -30,6 +30,10 @@ import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.ToggleLanguage
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
+import eu.kanade.domain.track.manga.interactor.TrackChapter
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
 import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
 import tachiyomi.data.entries.anime.AnimeRepositoryImpl
@@ -217,12 +221,16 @@ class DomainModule : InjektModule {
         addFactory { GetApplicationRelease(get(), get()) }
 
         addSingletonFactory<AnimeTrackRepository> { AnimeTrackRepositoryImpl(get()) }
+        addFactory { TrackEpisode(get(), get(), get(), get()) }
+        addFactory { RefreshAnimeTracks(get(), get(), get(), get()) }
         addFactory { DeleteAnimeTrack(get()) }
         addFactory { GetTracksPerAnime(get()) }
         addFactory { GetAnimeTracks(get()) }
         addFactory { InsertAnimeTrack(get()) }
 
         addSingletonFactory<MangaTrackRepository> { MangaTrackRepositoryImpl(get()) }
+        addFactory { TrackChapter(get(), get(), get(), get()) }
+        addFactory { RefreshMangaTracks(get(), get(), get(), get()) }
         addFactory { DeleteMangaTrack(get()) }
         addFactory { GetTracksPerManga(get()) }
         addFactory { GetMangaTracks(get()) }

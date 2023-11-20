@@ -10,6 +10,7 @@ import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
@@ -84,12 +85,11 @@ class PlayerViewModel @JvmOverloads constructor(
     private val imageSaver: ImageSaver = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
+    private val trackEpisode: TrackEpisode = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
-    private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
@@ -306,7 +306,6 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private var hasTrackers: Boolean = false
-
     private val checkTrackers: (Anime) -> Unit = { anime ->
         val tracks = runBlocking { getTracks.await(anime.id) }
         hasTrackers = tracks.isNotEmpty()
@@ -585,38 +584,11 @@ class PlayerViewModel @JvmOverloads constructor(
         if (!trackPreferences.autoUpdateTrack().get()) return
 
         val anime = currentAnime ?: return
-        val episodeSeen = episode.episode_number.toDouble()
 
-        val trackManager = Injekt.get<TrackManager>()
         val context = Injekt.get<Application>()
 
         viewModelScope.launchNonCancellable {
-            getTracks.await(anime.id)
-                .mapNotNull { track ->
-                    val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLoggedIn && episodeSeen > track.lastEpisodeSeen) {
-                        val updatedTrack = track.copy(lastEpisodeSeen = episodeSeen)
-
-                        // We want these to execute even if the presenter is destroyed and leaks
-                        // for a while. The view can still be garbage collected.
-                        async {
-                            runCatching {
-                                if (context.isOnline()) {
-                                    service.animeService.update(updatedTrack.toDbTrack(), true)
-                                    insertTrack.await(updatedTrack)
-                                } else {
-                                    delayedTrackingStore.addAnimeItem(updatedTrack)
-                                    DelayedAnimeTrackingUpdateJob.setupTask(context)
-                                }
-                            }
-                        }
-                    } else {
-                        null
-                    }
-                }
-                .awaitAll()
-                .mapNotNull { it.exceptionOrNull() }
-                .forEach { logcat(LogPriority.INFO, it) }
+            trackEpisode.await(context, anime.id, episode.episode_number.toDouble())
         }
     }
 

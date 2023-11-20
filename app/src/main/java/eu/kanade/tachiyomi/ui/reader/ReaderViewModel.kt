@@ -11,6 +11,7 @@ import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.model.orientationType
 import eu.kanade.domain.entries.manga.model.readingModeType
 import eu.kanade.domain.items.chapter.model.toDbChapter
+import eu.kanade.domain.track.manga.interactor.TrackChapter
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.service.DelayedMangaTrackingUpdateJob
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
@@ -98,12 +99,10 @@ class ReaderViewModel @JvmOverloads constructor(
     private val basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedMangaTrackingStore = Injekt.get(),
+    private val trackChapter: TrackChapter = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
-    private val getTracks: GetMangaTracks = Injekt.get(),
-    private val insertTrack: InsertMangaTrack = Injekt.get(),
     private val upsertHistory: UpsertMangaHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
@@ -222,12 +221,6 @@ class ReaderViewModel @JvmOverloads constructor(
             .map(::ReaderChapter)
     }
 
-    private var hasTrackers: Boolean = false
-    private val checkTrackers: (Manga) -> Unit = { manga ->
-        val tracks = runBlocking { getTracks.await(manga.id) }
-        hasTrackers = tracks.isNotEmpty()
-    }
-
     private val incognitoMode = preferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileReading().get()
 
@@ -285,8 +278,6 @@ class ReaderViewModel @JvmOverloads constructor(
                 if (manga != null) {
                     mutableState.update { it.copy(manga = manga) }
                     if (chapterId == -1L) chapterId = initialChapterId
-
-                    checkTrackers(manga)
 
                     val context = Injekt.get<Application>()
                     val source = sourceManager.getOrStub(manga.source)
@@ -566,18 +557,19 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     fun flushReadTimer() {
-        viewModelScope.launchNonCancellable {
-            updateHistory()
+        getCurrentChapter()?.let {
+            viewModelScope.launchNonCancellable {
+                updateHistory(it)
+            }
         }
     }
 
     /**
      * Saves the chapter last read history if incognito mode isn't on.
      */
-    private suspend fun updateHistory() {
+    private suspend fun updateHistory(readerChapter: ReaderChapter) {
         if (incognitoMode) return
 
-        val readerChapter = getCurrentChapter() ?: return
         val chapterId = readerChapter.chapter.id!!
         val readAt = Date()
         val sessionReadDuration = chapterReadStartTime?.let { readAt.time - it } ?: 0
@@ -887,48 +879,14 @@ class ReaderViewModel @JvmOverloads constructor(
      * will run in a background thread and errors are ignored.
      */
     private fun updateTrackChapterRead(readerChapter: ReaderChapter) {
-        if (incognitoMode || !hasTrackers) return
+        if (incognitoMode) return
         if (!trackPreferences.autoUpdateTrack().get()) return
 
         val manga = manga ?: return
-        val chapterRead = readerChapter.chapter.chapter_number.toDouble()
-
-        val trackManager = Injekt.get<TrackManager>()
         val context = Injekt.get<Application>()
 
         viewModelScope.launchNonCancellable {
-            getTracks.await(manga.id)
-                .mapNotNull { track ->
-                    val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLoggedIn && chapterRead > track.lastChapterRead) {
-                        val updatedTrack = track.copy(lastChapterRead = chapterRead)
-
-                        // We want these to execute even if the presenter is destroyed and leaks
-                        // for a while. The view can still be garbage collected.
-                        async {
-                            runCatching {
-                                try {
-                                    if (!context.isOnline()) {
-                                        error(
-                                            "Couldn't update tracker as device is offline",
-                                        )
-                                    }
-                                    service.mangaService.update(updatedTrack.toDbTrack(), true)
-                                    insertTrack.await(updatedTrack)
-                                } catch (e: Exception) {
-                                    delayedTrackingStore.addMangaItem(updatedTrack)
-                                    DelayedMangaTrackingUpdateJob.setupTask(context)
-                                    throw e
-                                }
-                            }
-                        }
-                    } else {
-                        null
-                    }
-                }
-                .awaitAll()
-                .mapNotNull { it.exceptionOrNull() }
-                .forEach { logcat(LogPriority.INFO, it) }
+            trackChapter.await(context, manga.id, readerChapter.chapter.chapter_number.toDouble())
         }
     }
 
