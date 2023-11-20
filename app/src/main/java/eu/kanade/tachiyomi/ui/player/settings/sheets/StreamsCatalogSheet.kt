@@ -68,24 +68,26 @@ fun StreamsCatalogSheet(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(vertical = TabbedDialogPaddings.Vertical)
-                .verticalScroll(rememberScrollState()),
+                .padding(vertical = TabbedDialogPaddings.Vertical),
         ) {
-            @Composable fun QualityTracksPage() = StreamsPageBuilder(
+            @Composable
+            fun QualityTracksPage() = StreamsPageBuilder(
                 externalTrackCode = null,
                 stream = videoStreams.quality,
                 openContentFd = openContentFd,
                 onTrackSelected = onQualitySelected,
             )
 
-            @Composable fun SubtitleTracksPage() = StreamsPageBuilder(
+            @Composable
+            fun SubtitleTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "sub",
                 stream = videoStreams.subtitle,
                 openContentFd = openContentFd,
                 onTrackSelected = onSubtitleSelected,
             )
 
-            @Composable fun AudioTracksPage() = StreamsPageBuilder(
+            @Composable
+            fun AudioTracksPage() = StreamsPageBuilder(
                 externalTrackCode = "audio",
                 stream = videoStreams.audio,
                 openContentFd = openContentFd,
@@ -167,22 +169,28 @@ private fun StreamsPageBuilder(
         }
     }
 
-    tracks.forEachIndexed { i, track ->
-        val selected = index == i
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        tracks.forEachIndexed { i, track ->
+            val selected = index == i
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = { onSelected(i) })
-                .padding(sheetDialogPadding),
-        ) {
-            Text(
-                text = track.lang,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                fontStyle = if (selected) FontStyle.Italic else FontStyle.Normal,
-                style = MaterialTheme.typography.bodyMedium,
-                color = if (selected) MaterialTheme.colorScheme.primary else Color.Unspecified,
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = { onSelected(i) })
+                    .padding(sheetDialogPadding),
+            ) {
+                Text(
+                    text = track.lang,
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                    fontStyle = if (selected) FontStyle.Italic else FontStyle.Normal,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (selected) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                )
+            }
         }
     }
 }
