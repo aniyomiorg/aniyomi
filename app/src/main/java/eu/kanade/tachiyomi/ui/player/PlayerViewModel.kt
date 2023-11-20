@@ -573,11 +573,10 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode) {
-        if (basePreferences.incognitoMode().get()) return
+        if (basePreferences.incognitoMode().get() || !hasTrackers) return
         if (!trackPreferences.autoUpdateTrack().get()) return
 
         val anime = currentAnime ?: return
-
         val context = Injekt.get<Application>()
 
         viewModelScope.launchNonCancellable {

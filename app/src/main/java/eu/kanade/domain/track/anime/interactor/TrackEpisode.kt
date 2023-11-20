@@ -5,6 +5,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.util.system.isOnline
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -34,13 +35,12 @@ class TrackEpisode(
 
                     async {
                         runCatching {
-                            try {
+                            if (context.isOnline()) {
                                 service.animeService.update(updatedTrack.toDbTrack(), true)
                                 insertTrack.await(updatedTrack)
-                            } catch (e: Exception) {
+                            } else {
                                 delayedTrackingStore.addAnimeItem(updatedTrack)
                                 DelayedAnimeTrackingUpdateJob.setupTask(context)
-                                throw e
                             }
                         }
                     }
