@@ -84,9 +84,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         addView(binding.root)
     }
 
-    @Suppress("DEPRECATION")
     override fun onViewAdded(child: View?) {
-        binding.backArrowBtn.setOnClickListener { activity.onBackPressed() }
 
         // Lock and Unlock controls
         binding.lockBtn.setOnClickListener { lockControls(true) }
@@ -147,10 +145,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
 
-        binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
-
-        binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
-
         binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
     }
 
@@ -165,8 +159,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             viewModel.getAnimeSkipIntroLength(),
         )
         withUIContext {
-            binding.titleMainTxt.text = viewModel.currentAnime?.title
-            binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
+            //binding.titleMainTxt.text = viewModel.currentAnime?.title
+            //binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
             binding.controlsSkipIntroBtn.text = skipIntroText
         }
     }
