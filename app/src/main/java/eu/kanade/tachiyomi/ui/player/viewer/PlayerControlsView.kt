@@ -131,21 +131,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
         }
 
-        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
-            toggleAutoplay(
-                isChecked,
-            )
-        }
-
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
-
-        binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
-
-        binding.streamsBtn.setOnClickListener { activity.viewModel.showStreamsCatalog() }
-
-        binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
-
-        binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
     }
 
     private fun switchEpisode(previous: Boolean) {
@@ -453,12 +439,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun toggleAutoplay(isAutoplay: Boolean) {
-        binding.toggleAutoplay.isChecked = isAutoplay
-        binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
-            ContextCompat.getDrawable(context, R.drawable.ic_play_circle_filled_24)
-        } else {
-            ContextCompat.getDrawable(context, R.drawable.ic_pause_circle_filled_24)
-        }
 
         if (isAutoplay) {
             binding.playerInformation.text = activity.getString(R.string.enable_auto_play)
