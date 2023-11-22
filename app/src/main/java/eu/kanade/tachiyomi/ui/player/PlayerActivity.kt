@@ -1497,13 +1497,12 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = if (position != null) {
-                        position
-                    } else if ((episode.seen && !preservePos) || fromStart) {
-                        0L
-                    } else {
-                        episode.last_second_seen
-                    }
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
                     playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
