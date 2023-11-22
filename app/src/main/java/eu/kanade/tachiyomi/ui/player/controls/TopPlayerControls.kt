@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.viewer
+package eu.kanade.tachiyomi.ui.player.controls
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,7 +18,6 @@ import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.VideoSettings
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -35,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,42 +43,7 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
-fun PlayerControls(
-    activity: PlayerActivity,
-) {
-    TopControls(activity)
-}
-
-@Composable
-private fun PlayerIcon(
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    IconButton(onClick = onClick){
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = modifier.size(20.dp)
-        )
-    }
-}
-
-@Composable
-private fun PlayerRow(
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    content: @Composable RowScope.() -> Unit
-) = Row(
-    modifier = modifier,
-    horizontalArrangement = horizontalArrangement,
-    verticalAlignment = verticalAlignment,
-    content = content
-)
-
-@Composable
-private fun TopControls(
+fun TopPlayerControls(
     activity: PlayerActivity,
 ) {
     val viewModel = activity.viewModel
@@ -194,6 +155,5 @@ private fun AutoplaySwitch(
                 )
             }
         }
-
     )
 }
