@@ -282,7 +282,7 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
-    private var videoChapters: List<VideoChapter> = emptyList()
+    internal var videoChapters: List<VideoChapter> = emptyList()
         set(value) {
             field = value
             runOnUiThread {
@@ -893,7 +893,6 @@ class PlayerActivity : BaseActivity() {
         super.onDestroy()
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (pip.supportedAndEnabled) {
@@ -939,35 +938,9 @@ class PlayerActivity : BaseActivity() {
                 if (deviceWidth <= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
                 }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = playerControls.binding.toggleAutoplay.id
-                    rightToRight = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.UNSET
-                    leftToRight = playerControls.binding.episodeListBtn.id
-                }
             } else {
                 if (deviceWidth >= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
-                }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.UNSET
-                    topToBottom = playerControls.binding.episodeListBtn.id
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-                    leftToRight = ConstraintLayout.LayoutParams.UNSET
                 }
             }
             setupGestures()
@@ -1425,7 +1398,6 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1751,7 +1723,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
