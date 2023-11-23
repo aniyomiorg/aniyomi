@@ -674,7 +674,7 @@ class AnimeDownloader(
         if (isHls(video) || isMpd(video)) {
             return ffmpegDownload(video, download, tmpDir, filename)
         } else {
-            val response = download.source.fetchVideo(video)
+            val response = download.source.getVideo(video)
             val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
 
             // Write to file with pause/resume capability

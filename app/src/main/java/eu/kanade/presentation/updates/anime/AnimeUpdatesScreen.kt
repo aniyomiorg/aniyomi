@@ -38,6 +38,7 @@ import kotlin.time.Duration.Companion.seconds
 fun AnimeUpdateScreen(
     state: AnimeUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
+    relativeTime: Boolean,
     contentPadding: PaddingValues,
     lastUpdated: Long,
     onClickCover: (AnimeUpdatesItem) -> Unit,
@@ -100,7 +101,7 @@ fun AnimeUpdateScreen(
                             animeUpdatesLastUpdatedItem(lastUpdated)
                         }
                         animeUpdatesUiItems(
-                            uiModels = state.getUiModel(context),
+                            uiModels = state.getUiModel(context, relativeTime),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,

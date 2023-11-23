@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
@@ -138,7 +137,7 @@ abstract class MangaSearchScreenModel(
                     }
                     try {
                         val page = withContext(coroutineDispatcher) {
-                            source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
+                            source.getSearchManga(1, query, source.getFilterList())
                         }
 
                         val titles = page.mangas.map {

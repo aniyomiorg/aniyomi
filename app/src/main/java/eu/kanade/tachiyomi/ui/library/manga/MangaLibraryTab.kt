@@ -191,7 +191,7 @@ object MangaLibraryTab : Tab() {
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
                                 icon = Icons.Outlined.HelpOutline,
-                                onClick = { handler.openUri("https://akiled.org/help/guides/getting-started") },
+                                onClick = { handler.openUri("https://akiled.org/docs/guides/getting-started") },
                             ),
                         ),
                     )

@@ -159,7 +159,7 @@ fun EntryBottomActionMenu(
                     val previousUnviewed = if (isManga) R.string.action_mark_previous_as_read else R.string.action_mark_previous_as_seen
                     Button(
                         title = stringResource(previousUnviewed),
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_done_prev_24dp),
+                        icon = ImageVector.vectorResource(R.drawable.ic_done_prev_24dp),
                         toConfirm = confirm[4],
                         onLongClick = { onLongClickItem(4) },
                         onClick = onMarkPreviousAsViewedClicked,

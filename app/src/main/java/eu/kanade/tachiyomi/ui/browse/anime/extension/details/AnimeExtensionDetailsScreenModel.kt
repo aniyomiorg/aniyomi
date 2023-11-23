@@ -105,7 +105,7 @@ class AnimeExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://akiled.org/help/faq/#extensions"
+            return "https://akiled.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.core
 
 object Constants {
-    const val URL_HELP = "https://akiled.org/help/"
+    const val URL_HELP = "https://akiled.org/docs/guides/troubleshooting/"
 
     const val MANGA_EXTRA = "manga"
 
