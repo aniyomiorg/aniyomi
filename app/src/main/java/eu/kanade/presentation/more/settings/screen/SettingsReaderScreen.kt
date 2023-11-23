@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.NumberFormat
 
 object SettingsReaderScreen : SearchableSettings {
 
@@ -122,6 +123,9 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getReadingGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val preloadSizePref = readerPreferences.preloadSize()
+
+        val preloadSize by preloadSizePref.collectAsState()
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_reading),
             preferenceItems = listOf(
@@ -144,6 +148,16 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.preserveReadingPosition(),
                     title = stringResource(R.string.pref_preserve_reading_position),
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(R.string.pref_page_preload_amount),
+                    min = ReaderPreferences.PRELOAD_SIZE_MIN,
+                    max = ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
                 ),
             ),
         )
@@ -252,12 +266,13 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getWebtoonGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val numberFormat = remember { NumberFormat.getPercentInstance() }
         val navModePref = readerPreferences.navigationModeWebtoon()
         val dualPageSplitPref = readerPreferences.dualPageSplitWebtoon()
-
+        val webtoonSidePaddingPref = readerPreferences.webtoonSidePadding()
         val navMode by navModePref.collectAsState()
         val dualPageSplit by dualPageSplitPref.collectAsState()
-
+        val webtoonSidePadding by webtoonSidePaddingPref.collectAsState()
         return Preference.PreferenceGroup(
             title = stringResource(R.string.webtoon_viewer),
             preferenceItems = listOf(
@@ -278,6 +293,7 @@ object SettingsReaderScreen : SearchableSettings {
                         ReaderPreferences.TappingInvertMode.BOTH to stringResource(R.string.tapping_inverted_both),
                     ),
                     enabled = navMode != 5,
+
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = readerPreferences.webtoonSidePadding(),

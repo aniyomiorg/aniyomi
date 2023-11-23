@@ -54,7 +54,7 @@ class ReaderPreferences(
 
     fun cropBordersWebtoon() = preferenceStore.getBoolean("crop_borders_webtoon", false)
 
-    fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", 0)
+    fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", WEBTOON_PADDING_MIN)
 
     fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", ReaderHideThreshold.LOW)
 
@@ -121,6 +121,7 @@ class ReaderPreferences(
     fun showNavigationOverlayNewUser() = preferenceStore.getBoolean("reader_navigation_overlay_new_user", true)
 
     fun showNavigationOverlayOnStart() = preferenceStore.getBoolean("reader_navigation_overlay_on_start", false)
+    fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
 
     // endregion
 
@@ -136,5 +137,12 @@ class ReaderPreferences(
         HIGH(13),
         LOW(31),
         LOWEST(47),
+    }
+    companion object {
+        const val WEBTOON_PADDING_MIN = 0
+        const val WEBTOON_PADDING_MAX = 25
+
+        const val PRELOAD_SIZE_MIN = 4
+        const val PRELOAD_SIZE_MAX = 20
     }
 }

@@ -336,8 +336,8 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        // TODO: Change when implemented on Aniyomi website
-        const val HELP_WARNING_URL = "https://aniyomi.org/help/faq/#why-does-the-app-warn-about-large-bulk-updates-and-downloads"
+        // TODO: Change when implemented on AnimeTail website
+        const val HELP_WARNING_URL = "https://akiled.org/help/faq/#why-does-the-app-warn-about-large-bulk-updates-and-downloads"
     }
 }
 
@@ -345,5 +345,5 @@ private const val NOTIF_MAX_EPISODES = 5
 private const val NOTIF_ANIME_TITLE_MAX_LEN = 45
 private const val NOTIF_ANIME_ICON_SIZE = 192
 
-// TODO: Change when implemented on Aniyomi website
-private const val HELP_SKIPPED_ANIME_URL = "https://aniyomi.org/help/faq/#why-does-global-update-skip-some-entries"
+// TODO: Change when implemented on AnimeTail website
+private const val HELP_SKIPPED_ANIME_URL = "https://akiled.org/help/faq/#why-does-global-update-skip-some-entries"

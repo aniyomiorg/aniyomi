@@ -14,6 +14,7 @@ import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.service.DelayedMangaTrackingUpdateJob
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
@@ -22,6 +23,7 @@ import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
@@ -116,6 +118,12 @@ class ReaderViewModel @JvmOverloads constructor(
     val manga: Manga?
         get() = state.value.manga
 
+    val currentChapter: Chapter?
+        get() = state.value.chapter
+
+    val currentSource: MangaSource?
+        get() = state.value.source
+
     /**
      * The chapter id of the currently loaded chapter. Used to restore from process kill.
      */
@@ -193,7 +201,7 @@ class ReaderViewModel @JvmOverloads constructor(
         hasTrackers = tracks.isNotEmpty()
     }
 
-    private val incognitoMode = preferences.incognitoMode().get()
+    internal val incognitoMode = preferences.incognitoMode().get()
 
     init {
         // To save state
@@ -871,7 +879,9 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     data class State(
+        val chapter: Chapter? = null,
         val manga: Manga? = null,
+        val source: MangaSource? = null,
         val viewerChapters: ViewerChapters? = null,
         val isLoadingAdjacentChapter: Boolean = false,
     )

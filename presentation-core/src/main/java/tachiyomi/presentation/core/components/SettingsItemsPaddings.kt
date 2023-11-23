@@ -3,6 +3,7 @@ package tachiyomi.presentation.core.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +18,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tachiyomi.presentation.core.theme.header
@@ -133,6 +137,51 @@ fun RadioItem(
         },
         onClick = onClick,
     )
+}
+
+@Composable
+fun SliderItem(
+    label: String,
+    value: Int,
+    valueText: String,
+    onChange: (Int) -> Unit,
+    max: Int,
+    min: Int = 0,
+) {
+    val haptic = LocalHapticFeedback.current
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = SettingsItemsPaddings.Horizontal,
+                vertical = SettingsItemsPaddings.Vertical,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
+    ) {
+        Column(modifier = Modifier.weight(0.5f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(valueText)
+        }
+
+        Slider(
+            value = value.toFloat(),
+            onValueChange = {
+                val newValue = it.toInt()
+                if (newValue != value) {
+                    onChange(newValue)
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                }
+            },
+            modifier = Modifier.weight(1.5f),
+            valueRange = min.toFloat()..max.toFloat(),
+            steps = max - min,
+        )
+    }
 }
 
 @Composable

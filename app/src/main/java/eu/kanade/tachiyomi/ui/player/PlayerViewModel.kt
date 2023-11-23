@@ -103,7 +103,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    internal val incognitoMode = basePreferences.incognitoMode().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
@@ -270,13 +270,11 @@ class PlayerViewModel @JvmOverloads constructor(
             Pair(defaultResult, Result.failure(e))
         }
     }
-
     data class InitResult(
         val videoList: List<Video>?,
         val videoIndex: Int,
         val position: Long?,
     )
-
     private fun initEpisodeList(anime: Anime): List<Episode> {
         val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
 
@@ -333,7 +331,6 @@ class PlayerViewModel @JvmOverloads constructor(
         // Save last second seen and mark as seen if needed
         currentEp.last_second_seen = seconds
         currentEp.total_seconds = totalSeconds
-
         episodePosition = seconds
 
         val progress = playerPreferences.progressPreference().get()
@@ -754,6 +751,7 @@ class PlayerViewModel @JvmOverloads constructor(
     sealed class Event {
         data class SetAnimeSkipIntro(val duration: Int) : Event()
         data class SetCoverResult(val result: SetAsCover) : Event()
+
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }

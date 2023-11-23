@@ -120,7 +120,7 @@ object AboutScreen : Screen() {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.help_translate),
-                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.org/help/contribution/#translation") },
+                        onPreferenceClick = { uriHandler.openUri("https://akiled.org/help/contribution/#translation") },
                     )
                 }
 
@@ -134,7 +134,7 @@ object AboutScreen : Screen() {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.privacy_policy),
-                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.org/privacy") },
+                        onPreferenceClick = { uriHandler.openUri("https://akiled.org/privacy") },
                     )
                 }
 
@@ -148,7 +148,7 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = stringResource(R.string.website),
                             icon = Icons.Outlined.Public,
-                            url = "https://aniyomi.org",
+                            url = "https://akiled.org",
                         )
                         LinkIcon(
                             label = "Discord",
@@ -158,12 +158,12 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "Reddit",
                             icon = SimpleIcons.Reddit,
-                            url = "https://www.reddit.com/r/Aniyomi",
+                            url = "https://www.reddit.com/r/AnimeTail",
                         )
                         LinkIcon(
                             label = "GitHub",
                             icon = SimpleIcons.Github,
-                            url = "https://github.com/aniyomiorg/aniyomi",
+                            url = "https://github.com/Dark25/animetailv2",
                         )
                     }
                 }
