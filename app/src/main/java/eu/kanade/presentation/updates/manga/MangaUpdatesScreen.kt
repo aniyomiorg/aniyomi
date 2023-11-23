@@ -35,6 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 fun MangaUpdateScreen(
     state: MangaUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
+    relativeTime: Boolean,
     contentPadding: PaddingValues,
     lastUpdated: Long,
     onClickCover: (MangaUpdatesItem) -> Unit,
@@ -97,7 +98,7 @@ fun MangaUpdateScreen(
                         }
 
                         mangaUpdatesUiItems(
-                            uiModels = state.getUiModel(context),
+                            uiModels = state.getUiModel(context, relativeTime),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,

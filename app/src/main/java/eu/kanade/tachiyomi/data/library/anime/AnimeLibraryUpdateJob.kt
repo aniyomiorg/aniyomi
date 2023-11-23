@@ -50,9 +50,9 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
-import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.model.Episode
@@ -96,7 +96,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val refreshAnimeTracks: RefreshAnimeTracks = Injekt.get()
-    private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
+    private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -276,7 +276,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
-        val fetchWindow = setAnimeFetchInterval.getWindow(ZonedDateTime.now())
+        val fetchWindow = animeFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
             animeToUpdate.groupBy { it.anime.source + (0..4).random() }.values
@@ -597,7 +597,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         private const val WORK_NAME_AUTO = "AnimeLibraryUpdate-auto"
         private const val WORK_NAME_MANUAL = "AnimeLibraryUpdate-manual"
 
-        private const val ERROR_LOG_HELP_URL = "https://aniyomi.org/help/guides/troubleshooting"
+        private const val ERROR_LOG_HELP_URL = "https://aniyomi.org/docs/guides/troubleshooting/"
 
         private const val ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
 

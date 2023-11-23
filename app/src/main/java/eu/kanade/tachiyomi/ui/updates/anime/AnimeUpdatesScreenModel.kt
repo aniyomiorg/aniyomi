@@ -60,6 +60,7 @@ class AnimeUpdatesScreenModel(
     private val getEpisode: GetEpisode = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    uiPreferences: UiPreferences = Injekt.get(),
     downloadPreferences: DownloadPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesScreenModel.State>(State()) {
 
@@ -67,6 +68,7 @@ class AnimeUpdatesScreenModel(
     val events: Flow<Event> = _events.receiveAsFlow()
 
     val lastUpdated by libraryPreferences.lastUpdatedTimestamp().asState(coroutineScope)
+    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
 
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
@@ -393,7 +395,7 @@ class AnimeUpdatesScreenModel(
         val selected = items.filter { it.selected }
         val selectionMode = selected.isNotEmpty()
 
-        fun getUiModel(context: Context): List<AnimeUpdatesUiModel> {
+        fun getUiModel(context: Context, relativeTime: Boolean): List<AnimeUpdatesUiModel> {
             val dateFormat by mutableStateOf(
                 UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),
             )
@@ -405,7 +407,11 @@ class AnimeUpdatesScreenModel(
                     val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
                     when {
                         beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                            val text = afterDate.toRelativeString(context, dateFormat)
+                            val text = afterDate.toRelativeString(
+                                context = context,
+                                relative = relativeTime,
+                                dateFormat = dateFormat,
+                            )
                             AnimeUpdatesUiModel.Header(text)
                         }
                         // Return null to avoid adding a separator between two items.

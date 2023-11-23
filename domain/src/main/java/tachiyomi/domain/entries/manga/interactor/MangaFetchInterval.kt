@@ -1,75 +1,73 @@
-package tachiyomi.domain.entries.anime.interactor
+package tachiyomi.domain.entries.manga.interactor
 
-import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.AnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
-import tachiyomi.domain.items.episode.model.Episode
-import uy.kohesive.injekt.api.get
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.MangaUpdate
+import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.model.Chapter
 import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
 
-const val MAX_FETCH_INTERVAL = 28
-private const val FETCH_INTERVAL_GRACE_PERIOD = 1
-
-class SetAnimeFetchInterval(
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
+class MangaFetchInterval(
+    private val getChapterByMangaId: GetChapterByMangaId,
 ) {
 
-    suspend fun toAnimeUpdateOrNull(
-        anime: Anime,
+    suspend fun toMangaUpdateOrNull(
+        manga: Manga,
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
-    ): AnimeUpdate? {
+    ): MangaUpdate? {
         val currentWindow = if (window.first == 0L && window.second == 0L) {
             getWindow(ZonedDateTime.now())
         } else {
             window
         }
-        val episodes = getEpisodeByAnimeId.await(anime.id)
-        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
-            episodes,
-            dateTime,
+        val chapters = getChapterByMangaId.await(manga.id)
+        val interval = manga.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
+            chapters,
+            dateTime.zone,
         )
-        val nextUpdate = calculateNextUpdate(anime, interval, dateTime, currentWindow)
+        val nextUpdate = calculateNextUpdate(manga, interval, dateTime, currentWindow)
 
-        return if (anime.nextUpdate == nextUpdate && anime.fetchInterval == interval) {
+        return if (manga.nextUpdate == nextUpdate && manga.fetchInterval == interval) {
             null
         } else {
-            AnimeUpdate(id = anime.id, nextUpdate = nextUpdate, fetchInterval = interval)
+            MangaUpdate(id = manga.id, nextUpdate = nextUpdate, fetchInterval = interval)
         }
     }
 
     fun getWindow(dateTime: ZonedDateTime): Pair<Long, Long> {
         val today = dateTime.toLocalDate().atStartOfDay(dateTime.zone)
-        val lowerBound = today.minusDays(FETCH_INTERVAL_GRACE_PERIOD.toLong())
-        val upperBound = today.plusDays(FETCH_INTERVAL_GRACE_PERIOD.toLong())
+        val lowerBound = today.minusDays(GRACE_PERIOD)
+        val upperBound = today.plusDays(GRACE_PERIOD)
         return Pair(lowerBound.toEpochSecond() * 1000, upperBound.toEpochSecond() * 1000 - 1)
     }
 
-    internal fun calculateInterval(episodes: List<Episode>, zonedDateTime: ZonedDateTime): Int {
-        val sortedEpisodes = episodes
-            .sortedWith(
-                compareByDescending<Episode> { it.dateUpload }.thenByDescending { it.dateFetch },
-            )
-            .take(50)
-
-        val uploadDates = sortedEpisodes
+    internal fun calculateInterval(chapters: List<Chapter>, zone: ZoneId): Int {
+        val uploadDates = chapters.asSequence()
             .filter { it.dateUpload > 0L }
+            .sortedByDescending { it.dateUpload }
             .map {
-                ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.dateUpload), zonedDateTime.zone)
+                ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.dateUpload), zone)
                     .toLocalDate()
                     .atStartOfDay()
             }
             .distinct()
-        val fetchDates = sortedEpisodes
+            .take(10)
+            .toList()
+
+        val fetchDates = chapters.asSequence()
+            .sortedByDescending { it.dateFetch }
             .map {
-                ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.dateFetch), zonedDateTime.zone)
+                ZonedDateTime.ofInstant(Instant.ofEpochMilli(it.dateFetch), zone)
                     .toLocalDate()
                     .atStartOfDay()
             }
             .distinct()
+            .take(10)
+            .toList()
 
         val interval = when {
             // Enough upload date from source
@@ -88,21 +86,21 @@ class SetAnimeFetchInterval(
             else -> 7
         }
 
-        return interval.coerceIn(1, MAX_FETCH_INTERVAL)
+        return interval.coerceIn(1, MAX_INTERVAL)
     }
 
     private fun calculateNextUpdate(
-        anime: Anime,
+        manga: Manga,
         interval: Int,
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
     ): Long {
         return if (
-            anime.nextUpdate !in window.first.rangeTo(window.second + 1) ||
-            anime.fetchInterval == 0
+            manga.nextUpdate !in window.first.rangeTo(window.second + 1) ||
+            manga.fetchInterval == 0
         ) {
             val latestDate = ZonedDateTime.ofInstant(
-                Instant.ofEpochMilli(anime.lastUpdate),
+                Instant.ofEpochMilli(manga.lastUpdate),
                 dateTime.zone,
             )
                 .toLocalDate()
@@ -114,12 +112,12 @@ class SetAnimeFetchInterval(
             )
             latestDate.plusDays((cycle + 1) * interval.toLong()).toEpochSecond(dateTime.offset) * 1000
         } else {
-            anime.nextUpdate
+            manga.nextUpdate
         }
     }
 
     private fun doubleInterval(delta: Int, timeSinceLatest: Int, doubleWhenOver: Int): Int {
-        if (delta >= MAX_FETCH_INTERVAL) return MAX_FETCH_INTERVAL
+        if (delta >= MAX_INTERVAL) return MAX_INTERVAL
 
         // double delta again if missed more than 9 check in new delta
         val cycle = timeSinceLatest.floorDiv(delta) + 1
@@ -128,5 +126,11 @@ class SetAnimeFetchInterval(
         } else {
             delta
         }
+    }
+
+    companion object {
+        const val MAX_INTERVAL = 28
+
+        private const val GRACE_PERIOD = 1L
     }
 }

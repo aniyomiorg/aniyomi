@@ -84,13 +84,17 @@ class MangaDownloadQueueScreenModel(
                         }
                         reorder(newDownloads)
                     }
-                    R.id.move_to_top_series -> {
+                    R.id.move_to_top_series, R.id.move_to_bottom_series -> {
                         val (selectedSeries, otherSeries) = adapter?.currentItems
                             ?.filterIsInstance<MangaDownloadItem>()
                             ?.map(MangaDownloadItem::download)
                             ?.partition { item.download.manga.id == it.manga.id }
                             ?: Pair(emptyList(), emptyList())
-                        reorder(selectedSeries + otherSeries)
+                        if (menuItem.itemId == R.id.move_to_top_series) {
+                            reorder(selectedSeries + otherSeries)
+                        } else {
+                            reorder(otherSeries + selectedSeries)
+                        }
                     }
                     R.id.cancel_download -> {
                         cancel(listOf(item.download))

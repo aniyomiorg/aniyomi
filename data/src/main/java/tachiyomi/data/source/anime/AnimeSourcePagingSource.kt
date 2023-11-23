@@ -16,18 +16,21 @@ class AnimeSourceSearchPagingSource(
     val filters: AnimeFilterList,
 ) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getSearchAnime
         return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
     }
 }
 
 class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getPopularAnime
         return source.fetchPopularAnime(currentPage).awaitSingle()
     }
 }
 
 class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getLatestUpdates
         return source.fetchLatestUpdates(currentPage).awaitSingle()
     }
 }

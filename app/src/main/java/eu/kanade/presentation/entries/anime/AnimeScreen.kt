@@ -98,6 +98,7 @@ fun AnimeScreen(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
     fetchInterval: Int?,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     isTabletUi: Boolean,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
@@ -164,6 +165,7 @@ fun AnimeScreen(
         AnimeScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
             dateFormat = dateFormat,
             fetchInterval = fetchInterval,
             episodeSwipeStartAction = episodeSwipeStartAction,
@@ -207,6 +209,7 @@ fun AnimeScreen(
         AnimeScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
@@ -254,6 +257,7 @@ fun AnimeScreen(
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     fetchInterval: Int?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
@@ -328,11 +332,9 @@ private fun AnimeScreenSmallImpl(
             }
             val animatedTitleAlpha by animateFloatAsState(
                 if (firstVisibleItemIndex > 0) 1f else 0f,
-                label = "titleAlpha",
             )
             val animatedBgAlpha by animateFloatAsState(
                 if (firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0) 1f else 0f,
-                label = "bgAlpha",
             )
             EntryToolbar(
                 title = state.anime.title,
@@ -512,6 +514,7 @@ private fun AnimeScreenSmallImpl(
                     sharedEpisodeItems(
                         anime = state.anime,
                         episodes = episodes,
+                        dateRelativeTime = dateRelativeTime,
                         dateFormat = dateFormat,
                         episodeSwipeStartAction = episodeSwipeStartAction,
                         episodeSwipeEndAction = episodeSwipeEndAction,
@@ -531,6 +534,7 @@ private fun AnimeScreenSmallImpl(
 fun AnimeScreenLargeImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     fetchInterval: Int?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
@@ -783,6 +787,7 @@ fun AnimeScreenLargeImpl(
                             sharedEpisodeItems(
                                 anime = state.anime,
                                 episodes = episodes,
+                                dateRelativeTime = dateRelativeTime,
                                 dateFormat = dateFormat,
                                 episodeSwipeStartAction = episodeSwipeStartAction,
                                 episodeSwipeEndAction = episodeSwipeEndAction,
@@ -853,6 +858,7 @@ private fun SharedAnimeBottomActionMenu(
 private fun LazyListScope.sharedEpisodeItems(
     anime: Anime,
     episodes: List<EpisodeItem>,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
@@ -881,7 +887,11 @@ private fun LazyListScope.sharedEpisodeItems(
             date = episodeItem.episode.dateUpload
                 .takeIf { it > 0L }
                 ?.let {
-                    Date(it).toRelativeString(context, dateFormat)
+                    Date(it).toRelativeString(
+                        context,
+                        dateRelativeTime,
+                        dateFormat,
+                    )
                 },
             watchProgress = episodeItem.episode.lastSecondSeen
                 .takeIf { !episodeItem.episode.seen && it > 0L }

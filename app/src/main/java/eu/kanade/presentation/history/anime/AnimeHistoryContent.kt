@@ -13,7 +13,6 @@ import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DateFormat
 
 @Composable
 fun AnimeHistoryContent(
@@ -24,7 +23,8 @@ fun AnimeHistoryContent(
     onClickDelete: (AnimeHistoryWithRelations) -> Unit,
     preferences: UiPreferences = Injekt.get(),
 ) {
-    val dateFormat: DateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }
+    val relativeTime = remember { preferences.relativeTime().get() }
+    val dateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }
 
     FastScrollLazyColumn(
         contentPadding = contentPadding,
@@ -44,6 +44,7 @@ fun AnimeHistoryContent(
                     RelativeDateHeader(
                         modifier = Modifier.animateItemPlacement(),
                         date = item.date,
+                        relativeTime = relativeTime,
                         dateFormat = dateFormat,
                     )
                 }

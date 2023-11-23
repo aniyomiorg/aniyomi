@@ -30,10 +30,10 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
+import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
-import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
+import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
 import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -56,15 +56,15 @@ class BackupRestorer(
 ) {
     private val updateManga: UpdateManga = Injekt.get()
     private val chapterRepository: ChapterRepository = Injekt.get()
-    private val setMangaFetchInterval: SetMangaFetchInterval = Injekt.get()
+    private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
 
     private val updateAnime: UpdateAnime = Injekt.get()
     private val episodeRepository: EpisodeRepository = Injekt.get()
-    private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
+    private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
 
     private var now = ZonedDateTime.now()
-    private var currentMangaFetchWindow = setMangaFetchInterval.getWindow(now)
-    private var currentAnimeFetchWindow = setAnimeFetchInterval.getWindow(now)
+    private var currentMangaFetchWindow = mangaFetchInterval.getWindow(now)
+    private var currentAnimeFetchWindow = animeFetchInterval.getWindow(now)
 
     private var backupManager = BackupManager(context)
 
@@ -154,8 +154,8 @@ class BackupRestorer(
         animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
         now = ZonedDateTime.now()
-        currentMangaFetchWindow = setMangaFetchInterval.getWindow(now)
-        currentAnimeFetchWindow = setAnimeFetchInterval.getWindow(now)
+        currentMangaFetchWindow = mangaFetchInterval.getWindow(now)
+        currentAnimeFetchWindow = animeFetchInterval.getWindow(now)
 
         return coroutineScope {
             // Restore individual manga

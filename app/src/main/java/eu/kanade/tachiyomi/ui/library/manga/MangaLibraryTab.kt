@@ -207,7 +207,7 @@ object MangaLibraryTab : Tab() {
                                 icon = Icons.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(
-                                        "https://aniyomi.org/help/guides/getting-started",
+                                        "https://aniyomi.org/docs/guides/getting-started",
                                     )
                                 },
                             ),

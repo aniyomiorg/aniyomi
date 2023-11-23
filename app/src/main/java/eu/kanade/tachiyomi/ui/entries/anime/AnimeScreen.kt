@@ -105,6 +105,7 @@ class AnimeScreen(
         AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
+            dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
             fetchInterval = successState.anime.fetchInterval,
             isTabletUi = isTabletUi(),

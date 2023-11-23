@@ -52,7 +52,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
-import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
+import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -96,7 +96,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
     private val getTracks: GetMangaTracks = Injekt.get()
     private val refreshMangaTracks: RefreshMangaTracks = Injekt.get()
-    private val setMangaFetchInterval: SetMangaFetchInterval = Injekt.get()
+    private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
 
@@ -275,7 +275,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
-        val fetchWindow = setMangaFetchInterval.getWindow(ZonedDateTime.now())
+        val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
             mangaToUpdate.groupBy { it.manga.source + (0..4).random() }.values

@@ -50,7 +50,7 @@ fun EpisodeListDialog(
     displayMode: Long,
     currentEpisodeIndex: Int,
     episodeList: List<Episode>,
-    relativeTime: Int,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     onBookmarkClicked: (Long?, Boolean) -> Unit,
     onEpisodeClicked: (Long?) -> Unit,
@@ -92,7 +92,7 @@ fun EpisodeListDialog(
                     val date = episode.date_upload
                         .takeIf { it > 0L }
                         ?.let {
-                            Date(it).toRelativeString(context, dateFormat)
+                            Date(it).toRelativeString(context, dateRelativeTime, dateFormat)
                         } ?: ""
 
                     EpisodeListItem(

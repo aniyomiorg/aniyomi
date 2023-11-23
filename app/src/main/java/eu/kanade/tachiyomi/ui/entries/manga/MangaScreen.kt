@@ -100,6 +100,7 @@ class MangaScreen(
         MangaScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
+            dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
             fetchInterval = successState.manga.fetchInterval,
             isTabletUi = isTabletUi(),
