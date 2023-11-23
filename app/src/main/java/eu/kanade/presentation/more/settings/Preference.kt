@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.ConnectionsService
 import eu.kanade.tachiyomi.data.track.TrackService
 import tachiyomi.core.preference.Preference as PreferenceData
 
@@ -159,6 +160,23 @@ sealed class Preference {
             override val icon: ImageVector? = null
             override val onValueChanged: suspend (newValue: String) -> Boolean = { true }
         }
+
+        // AM (CONNECTIONS) -->
+        /**
+         * A [PreferenceItem] for individual connections service.
+         */
+        data class ConnectionsPreference(
+            val service: ConnectionsService,
+            override val title: String,
+            val login: () -> Unit,
+            val openSettings: () -> Unit,
+        ) : PreferenceItem<String>() {
+            override val enabled: Boolean = true
+            override val subtitle: String? = null
+            override val icon: ImageVector? = null
+            override val onValueChanged: suspend (newValue: String) -> Boolean = { true }
+        }
+        // <-- AM (CONNECTIONS)
 
         data class InfoPreference(
             override val title: String,

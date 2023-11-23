@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_updates">Verschiebe Neues in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_manga">Verschiebe Manga in den Mehr-Tab</string>
-    <string name="unlock_app">Aniyomi entsperren</string>
+    <string name="unlock_app">AnimeTail entsperren</string>
     <string name="action_filter_unseen">Ungesehen</string>
     <string name="action_sort_total_episodes">Folgenanzahl</string>
     <string name="action_sort_last_seen">Zuletzt gesehen</string>
@@ -64,7 +64,7 @@
 \nEine bösartige Erweiterung könnte in Tachiyomi gespeicherte Anmeldedaten auslesen oder einen schädlichen Code ausführen.
 \n
 \nDurch das Vertrauen dieses Zertifikats akzeptierst du diese Risiken.</string>
-    <string name="unofficial_extension_message_aniyomi">Diese Erweiterung stammt nicht von der offiziellen Aniyomi-Erweiterungsliste.</string>
+    <string name="unofficial_extension_message_aniyomi">Diese Erweiterung stammt nicht von der offiziellen AnimeTail-Erweiterungsliste.</string>
     <string name="rotation_reverse_landscape">Umgekehrtes Querformat</string>
     <string name="rotation_sensor_portrait">Sensor-Hochformat</string>
     <string name="rotation_sensor_landscape">Sensor-Querformat</string>
@@ -262,7 +262,7 @@
     <string name="pref_category_volume_brightness">Lautstärke und Helligkeit</string>
     <string name="pref_default_home_tab_library">Startbildschirm zum Manga-Tab setzen</string>
     <string name="pref_search_pinned_manga_sources_only">In der globalen Suche nur angeheftete Mangaquellen durchsuchen</string>
-    <string name="unofficial_anime_extension_message">Diese Erweiterung kommt nicht von der offiziellen Aniyomi Erweiterungs Liste.</string>
+    <string name="unofficial_anime_extension_message">Diese Erweiterung kommt nicht von der offiziellen AnimeTail Erweiterungs Liste.</string>
     <string name="pref_enable_pip">Aktiviere Nutzung des Bild-im-Bild (PiP) Modus</string>
     <string name="pref_category_pip">Bild-im-Bild (PiP)</string>
     <string name="pref_category_player_seeking">Suchen</string>

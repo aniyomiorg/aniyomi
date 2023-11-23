@@ -26,7 +26,7 @@
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
-    <string name="unlock_app_title">Unlock Aniyomi</string>
+    <string name="unlock_app">Unlock AnimeTail</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_global_manga_search">Global Manga Search</string>
     <string name="action_global_anime_search">Global Anime Search</string>
@@ -77,12 +77,12 @@
     <string name="default_anime_category">Default anime category</string>
     <string name="pref_manga_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="pref_anime_library_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
-    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any stored login credentials or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
-    <string name="unofficial_extension_message_aniyomi">This extension is not from the official list.</string>
+    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any login credentials stored in AnimeTail or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
+    <string name="unofficial_extension_message_aniyomi">This extension is not from the official AnimeTail extensions list.</string>
     <string name="rotation_reverse_landscape">Reverse landscape</string>
     <string name="rotation_sensor_portrait">Sensor portrait</string>
     <string name="rotation_sensor_landscape">Sensor landscape</string>
-    <string name="unofficial_anime_extension_message">This extension is not from the official list.</string>
+    <string name="unofficial_anime_extension_message">This extension is not from the official AnimeTail extensions list.</string>
     <!-- Player section -->
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
@@ -228,7 +228,7 @@
     <string name="pref_debanding_gpu">GPU</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking AnimeTail. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_episodes_summary">
@@ -241,7 +241,7 @@
     </plurals>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <!-- Do not translate "WebView" -->
-    <string name="information_webview_required">WebView is required for the app to function</string>
+    <string name="information_webview_required">WebView is required for AnimeTail</string>
     <string name="episode_settings_updated">Updated default episode settings</string>
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
@@ -266,7 +266,7 @@
     <string name="video_crop_screen">"Cropped to screen"</string>
     <string name="video_stretch_screen">"Stretched to screen"</string>
     <string name="video_custom_screen">"Custom aspect ratio"</string>
-    <!-- Aniyomi stuff -->
+    <!-- AnimeTail stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
     <string name="settings_dialog_header">Player settings</string>
@@ -335,10 +335,6 @@
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
-    <string name="player_add_external_audio">Add external audio</string>
-    <string name="player_add_external_audio_intent">Select an audio file.</string>
-    <string name="player_add_external_subtitles">Add external subtitles</string>
-    <string name="player_add_external_subtitles_intent">Select a subtitle file.</string>
     <string name="player_subtitle_empty_warning">Has no effect because there aren\'t any subtitle tracks in this video</string>
     <string name="player_override_ass_subtitles">Override ASS subtitles</string>
     <string name="player_reset_subtitles">Reset subtitles to default</string>
@@ -352,6 +348,10 @@
     <string name="player_subtitle_border_color">Border</string>
     <string name="player_subtitle_background_color">Background</string>
     <string name="player_subtitle_font_text_field">Font Name</string>
+    <string name="player_add_external_audio">Add external audio</string>
+    <string name="player_add_external_audio_intent">Select an audio file.</string>
+    <string name="player_add_external_subtitles">Add external subtitles</string>
+    <string name="player_add_external_subtitles_intent">Select a subtitle file.</string>
 
     <!-- TachiyomiSY -->
     <string name="data_saver_exclude">Exclude from data saver</string>
@@ -373,5 +373,34 @@
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
     <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
+
+
+    <!-- Connections section -->
+    <string name="special_services">Special Services</string>
+    <string name="pref_category_connections">Connections</string>
+    <string name="pref_connections_summary">Discord, more to come..</string>
+    <string name="connections_info">Special Services that are unique to Animetail and enhance the way you use the app</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Kuukiyomi does not share it anywhere else</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
+    <string name="pref_discord_idle">🌙 Idle</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord Incognito mode</string>
+    <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
+    <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Browsing</string>
+    <string name="scrolling">Scrolling through</string>
+    <string name="messing">Messing around with</string>
+    <string name="video">Video</string>
+    <string name="comic">Comic</string>
+    <!-- Prefs -->
+    <string name="pref_page_preload_amount">Page preload amount</string>
+
     <string name="unseen">Unseen</string>
 </resources>

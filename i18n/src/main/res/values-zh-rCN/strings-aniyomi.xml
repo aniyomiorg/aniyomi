@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">将历史记录移至“更多”选项</string>
     <string name="pref_bottom_nav_no_updates">将更新移至“更多”选项</string>
     <string name="pref_bottom_nav_no_manga">将漫画移至“更多”选项</string>
-    <string name="unlock_app">解锁 Aniyomi</string>
+    <string name="unlock_app">解锁 AnimeTail</string>
     <string name="action_filter_unseen">未观看</string>
     <string name="action_sort_total_episodes">所有选集</string>
     <string name="action_sort_last_seen">上次观看</string>
@@ -64,7 +64,7 @@
 \n恶意的插件可能会读取储存在 Tachiyomi 中的任何登录凭据或执行任意代码。
 \n
 \n信任这个证书，即代表你愿意承担上述风险。</string>
-    <string name="unofficial_extension_message_aniyomi">此插件不是Aniyomi官方插件。</string>
+    <string name="unofficial_extension_message_aniyomi">此插件不是AnimeTail官方插件。</string>
     <string name="rotation_reverse_landscape">横向翻转</string>
     <string name="rotation_sensor_portrait">竖向传感器</string>
     <string name="rotation_sensor_landscape">横向传感器</string>
@@ -211,5 +211,5 @@
     <string name="label_anime">动画</string>
     <string name="action_global_manga_search">全局漫画搜索</string>
     <string name="action_global_anime_search">全局动画搜索</string>
-    <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
+    <string name="unofficial_anime_extension_message">此插件不是AnimeTail官方插件。</string>
 </resources>

@@ -21,6 +21,7 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
+import eu.kanade.tachiyomi.ui.setting.connections.DiscordLoginActivity
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import logcat.LogPriority
 import rikka.sui.Sui
@@ -105,6 +106,17 @@ fun Context.openInBrowser(uri: Uri, forceDefaultBrowser: Boolean = false) {
     }
 }
 
+// AM (DISCORD) -->
+fun Context.openDiscordLoginActivity() {
+    try {
+        val intent = Intent(this, DiscordLoginActivity::class.java)
+        startActivity(intent)
+    } catch (e: Exception) {
+        toast(e.message)
+    }
+}
+
+// <-- AM (DISCORD)
 private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

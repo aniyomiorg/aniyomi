@@ -1,15 +1,15 @@
-| Build | Preview Release | Codefactor | Stable | Translate Aniyomi                                                                                                                                 | Discord Server |
+| Build | Preview Release | Codefactor | Stable | Translate aniyomi                                                                                                                                 | Discord Server |
 |-------|-----------|-------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [![CI](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| [![CI](https://github.com/Dark25/animetailv2/actions/workflows/build_push.yml/badge.svg)](https://github.com/Dark25/animetailv2/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/Dark25/animetailv2-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/Dark25/animetailv2/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
-# ![app icon](.github/readme-images/app-icon.png)Aniyomi
-Aniyomi is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
+# ![app icon](.github/readme-images/app-icon.png)aniyomi
+aniyomi is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
 
 ## Features
 
 Features include:
-* Watching anime from [a variety of sources](https://github.com/aniyomiorg/aniyomi-extensions)
+* Watching anime from [a variety of sources](https://github.com/Dark25/animetailv2-extensions)
 * Everything you know and love about Tachiyomi: 
     * Online reading from a variety of sources
     * Local reading of downloaded content
@@ -21,9 +21,9 @@ Features include:
     * Create backups locally to read offline or to your desired cloud service
 
 ## Download
-Get the app from the [releases page](https://github.com/aniyomiorg/aniyomi/releases).
+Get the app from the [releases page](https://github.com/Dark25/animetailv2/releases).
 
-If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/aniyomiorg/aniyomi-preview/releases).
+If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/Dark25/animetailv2-preview/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -31,7 +31,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/aniyomiorg/aniyomi/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/Dark25/animetailv2/issues).**
 2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
 
 </details>
@@ -57,7 +57,7 @@ DON'T: https://github.com/tachiyomiorg/tachiyomi/issues/75
 * Write a detailed issue, explaining what it should do or how. Avoid writing just "like X app does"
 * Include screenshot (if needed)
 
-Source requests should be created at https://github.com/aniyomiorg/aniyomi-extensions, they do not belong in this repository.
+Source requests should be created at https://github.com/Dark25/animetailv2-extensions, they do not belong in this repository.
 </details>
 
 <details><summary>Contributing</summary>
