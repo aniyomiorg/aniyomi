@@ -146,7 +146,7 @@ class BackupManager(
 
                     // Delete older backups
                     val numberOfBackups = backupPreferences.numberOfBackups().get()
-                    val backupRegex = Regex("""aniyomi_\d+-\d+-\d+_\d+-\d+.proto.gz""")
+                    val backupRegex = Regex("""animetail_\d+-\d+-\d+_\d+-\d+.proto.gz""")
                     dir.listFiles { _, filename -> backupRegex.matches(filename) }
                         .orEmpty()
                         .sortedByDescending { it.name }
@@ -382,6 +382,9 @@ class BackupManager(
         if (flags and BACKUP_PREFS_MASK != BACKUP_PREFS) return emptyList()
         val backupPreferences = mutableListOf<BackupPreference>()
         for (pref in prefs.all) {
+            // AM (CONNECTIONS) -->
+            if (pref.key.contains("connection")) continue
+            // <-- AM (CONNECTIONS)
             val toAdd = when (pref.value) {
                 is Int -> {
                     BackupPreference(pref.key, IntPreferenceValue(pref.value as Int))

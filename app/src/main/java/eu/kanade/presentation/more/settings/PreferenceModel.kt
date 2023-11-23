@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.ConnectionsService
 import eu.kanade.tachiyomi.data.track.TrackService
 import tachiyomi.core.preference.Preference as PreferenceData
 
@@ -42,6 +43,20 @@ sealed class Preference {
             override val enabled: Boolean = true,
             override val onValueChanged: suspend (newValue: Boolean) -> Boolean = { true },
         ) : PreferenceItem<Boolean>()
+
+        /**
+         * A [PreferenceItem] that provides a slider to select an integer number.
+         */
+        data class SliderPreference(
+            val value: Int,
+            val min: Int = 0,
+            val max: Int,
+            override val title: String = "",
+            override val subtitle: String? = null,
+            override val icon: ImageVector? = null,
+            override val enabled: Boolean = true,
+            override val onValueChanged: suspend (newValue: Int) -> Boolean = { true },
+        ) : PreferenceItem<Int>()
 
         /**
          * A [PreferenceItem] that displays a list of entries as a dialog.
@@ -157,6 +172,23 @@ sealed class Preference {
             override val icon: ImageVector? = null
             override val onValueChanged: suspend (newValue: String) -> Boolean = { true }
         }
+
+        // AM (CONNECTIONS) -->
+        /**
+         * A [PreferenceItem] for individual connections service.
+         */
+        data class ConnectionsPreference(
+            val service: ConnectionsService,
+            override val title: String,
+            val login: () -> Unit,
+            val openSettings: () -> Unit,
+        ) : PreferenceItem<String>() {
+            override val enabled: Boolean = true
+            override val subtitle: String? = null
+            override val icon: ImageVector? = null
+            override val onValueChanged: suspend (newValue: String) -> Boolean = { true }
+        }
+        // <-- AM (CONNECTIONS)
 
         data class InfoPreference(
             override val title: String,

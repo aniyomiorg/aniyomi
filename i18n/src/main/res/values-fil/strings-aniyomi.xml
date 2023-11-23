@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorya ng Manga</string>
-    <string name="unlock_app">Buksan ang Aniyomi</string>
+    <string name="unlock_app">Buksan ang AnimeTail</string>
     <string name="action_sort_last_manga_update">Huling update ng pag-tsek</string>
     <string name="action_show_manga">Ipakita ang mga entry</string>
     <string name="action_display_local_badge_manga">Lokal na pinanggagalingan</string>
@@ -56,10 +56,10 @@
     <string name="action_order_by_episode_number">Ayon sa bilang ng episode</string>
     <string name="pref_player_summary">Pagkontrol ng progress, panloob na player, panlabas na player</string>
     <string name="default_anime_category">Default na kategorya ng anime</string>
-    <string name="unofficial_extension_message_aniyomi">Ang extension na ito ay hindi mula sa opisyal na listahan ng mga extension ng Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Ang extension na ito ay hindi mula sa opisyal na listahan ng mga extension ng AnimeTail.</string>
     <string name="rotation_sensor_portrait">Sensor na portrait</string>
     <string name="rotation_sensor_landscape">Sensor na landscape</string>
-    <string name="unofficial_anime_extension_message">Ang extension na ito ay hindi mula sa opisyal na listahan ng mga extension ng Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Ang extension na ito ay hindi mula sa opisyal na listahan ng mga extension ng AnimeTail.</string>
     <string name="pref_default_player_orientation">Default na oryentasyon</string>
     <string name="pref_adjust_orientation_video_dimensions">Isaayos ang oryentasyon batay sa mga sukat ng video</string>
     <string name="pref_default_portrait_orientation">Default na portrait</string>

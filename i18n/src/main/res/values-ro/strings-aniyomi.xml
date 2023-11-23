@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categorii</string>
-    <string name="unlock_app">Deblochează Aniyomi</string>
+    <string name="unlock_app">Deblochează AnimeTail</string>
     <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
     <string name="action_show_manga">Afișați manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>

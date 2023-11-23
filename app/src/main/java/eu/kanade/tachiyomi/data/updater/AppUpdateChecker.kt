@@ -92,9 +92,9 @@ class AppUpdateChecker {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "aniyomiorg/aniyomi-preview"
+        "Dark25/animetailv2-preview"
     } else {
-        "aniyomiorg/aniyomi"
+        "Dark25/animetailv2"
     }
 }
 

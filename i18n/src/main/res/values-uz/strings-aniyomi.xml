@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategoriyalar</string>
-    <string name="unlock_app">Aniyomini ochish</string>
+    <string name="unlock_app">AnimeTailni ochish</string>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
