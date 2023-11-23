@@ -22,7 +22,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
-import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesState
+import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -36,11 +36,10 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AnimeUpdateScreen(
-    state: AnimeUpdatesState,
+    state: AnimeUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
     lastUpdated: Long,
-    relativeTime: Int,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
@@ -70,7 +69,7 @@ fun AnimeUpdateScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) {
         when {
-            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(
                 textResource = R.string.information_no_recent,
                 modifier = Modifier.padding(contentPadding),
@@ -101,7 +100,7 @@ fun AnimeUpdateScreen(
                             animeUpdatesLastUpdatedItem(lastUpdated)
                         }
                         animeUpdatesUiItems(
-                            uiModels = state.getUiModel(context, relativeTime),
+                            uiModels = state.getUiModel(context),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,
@@ -158,7 +157,7 @@ private fun AnimeUpdatesBottomBar(
     )
 }
 
-sealed class AnimeUpdatesUiModel {
-    data class Header(val date: String) : AnimeUpdatesUiModel()
-    data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel()
+sealed interface AnimeUpdatesUiModel {
+    data class Header(val date: String) : AnimeUpdatesUiModel
+    data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel
 }

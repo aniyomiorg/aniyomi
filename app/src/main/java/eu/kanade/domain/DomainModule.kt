@@ -1,6 +1,6 @@
 package eu.kanade.domain
 
-import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
+import eu.kanade.domain.download.anime.interactor.DeleteEpisodeDownload
 import eu.kanade.domain.download.manga.interactor.DeleteChapterDownload
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
@@ -13,11 +13,11 @@ import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
+import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
@@ -30,6 +30,10 @@ import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.ToggleLanguage
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
+import eu.kanade.domain.track.manga.interactor.TrackChapter
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
 import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
 import tachiyomi.data.entries.anime.AnimeRepositoryImpl
@@ -38,10 +42,11 @@ import tachiyomi.data.history.anime.AnimeHistoryRepositoryImpl
 import tachiyomi.data.history.manga.MangaHistoryRepositoryImpl
 import tachiyomi.data.items.chapter.ChapterRepositoryImpl
 import tachiyomi.data.items.episode.EpisodeRepositoryImpl
-import tachiyomi.data.source.anime.AnimeSourceDataRepositoryImpl
+import tachiyomi.data.release.ReleaseServiceImpl
 import tachiyomi.data.source.anime.AnimeSourceRepositoryImpl
-import tachiyomi.data.source.manga.MangaSourceDataRepositoryImpl
+import tachiyomi.data.source.anime.AnimeStubSourceRepositoryImpl
 import tachiyomi.data.source.manga.MangaSourceRepositoryImpl
+import tachiyomi.data.source.manga.MangaStubSourceRepositoryImpl
 import tachiyomi.data.track.anime.AnimeTrackRepositoryImpl
 import tachiyomi.data.track.manga.MangaTrackRepositoryImpl
 import tachiyomi.data.updates.anime.AnimeUpdatesRepositoryImpl
@@ -55,7 +60,7 @@ import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
 import tachiyomi.domain.category.anime.interactor.ResetAnimeCategoryFlags
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
-import tachiyomi.domain.category.anime.interactor.SetDisplayModeForAnimeCategory
+import tachiyomi.domain.category.anime.interactor.SetAnimeDisplayMode
 import tachiyomi.domain.category.anime.interactor.SetSortModeForAnimeCategory
 import tachiyomi.domain.category.anime.interactor.UpdateAnimeCategory
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
@@ -67,8 +72,8 @@ import tachiyomi.domain.category.manga.interactor.HideMangaCategory
 import tachiyomi.domain.category.manga.interactor.RenameMangaCategory
 import tachiyomi.domain.category.manga.interactor.ReorderMangaCategory
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
-import tachiyomi.domain.category.manga.interactor.SetDisplayModeForMangaCategory
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
+import tachiyomi.domain.category.manga.interactor.SetMangaDisplayMode
 import tachiyomi.domain.category.manga.interactor.SetSortModeForMangaCategory
 import tachiyomi.domain.category.manga.interactor.UpdateMangaCategory
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
@@ -80,6 +85,7 @@ import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.interactor.ResetAnimeViewerFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
+import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
@@ -89,6 +95,7 @@ import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.interactor.ResetMangaViewerFlags
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
+import tachiyomi.domain.entries.manga.interactor.SetMangaFetchInterval
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
@@ -113,14 +120,16 @@ import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.items.episode.interactor.ShouldUpdateDbEpisode
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
+import tachiyomi.domain.release.interactor.GetApplicationRelease
+import tachiyomi.domain.release.service.ReleaseService
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
-import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
+import tachiyomi.domain.source.anime.repository.AnimeStubSourceRepository
 import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
-import tachiyomi.domain.source.manga.repository.MangaSourceDataRepository
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
+import tachiyomi.domain.source.manga.repository.MangaStubSourceRepository
 import tachiyomi.domain.track.anime.interactor.DeleteAnimeTrack
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
@@ -148,7 +157,7 @@ class DomainModule : InjektModule {
         addFactory { GetAnimeCategories(get()) }
         addFactory { GetVisibleAnimeCategories(get()) }
         addFactory { ResetAnimeCategoryFlags(get(), get()) }
-        addFactory { SetDisplayModeForAnimeCategory(get(), get()) }
+        addFactory { SetAnimeDisplayMode(get()) }
         addFactory { SetSortModeForAnimeCategory(get(), get()) }
         addFactory { CreateAnimeCategoryWithName(get(), get()) }
         addFactory { RenameAnimeCategory(get()) }
@@ -161,7 +170,7 @@ class DomainModule : InjektModule {
         addFactory { GetMangaCategories(get()) }
         addFactory { GetVisibleMangaCategories(get()) }
         addFactory { ResetMangaCategoryFlags(get(), get()) }
-        addFactory { SetDisplayModeForMangaCategory(get(), get()) }
+        addFactory { SetMangaDisplayMode(get()) }
         addFactory { SetSortModeForMangaCategory(get(), get()) }
         addFactory { CreateMangaCategoryWithName(get(), get()) }
         addFactory { RenameMangaCategory(get()) }
@@ -179,10 +188,11 @@ class DomainModule : InjektModule {
         addFactory { GetNextEpisodes(get(), get(), get()) }
         addFactory { ResetAnimeViewerFlags(get()) }
         addFactory { SetAnimeEpisodeFlags(get()) }
+        addFactory { SetAnimeFetchInterval(get()) }
         addFactory { SetAnimeDefaultEpisodeFlags(get(), get(), get()) }
         addFactory { SetAnimeViewerFlags(get()) }
         addFactory { NetworkToLocalAnime(get()) }
-        addFactory { UpdateAnime(get()) }
+        addFactory { UpdateAnime(get(), get()) }
         addFactory { SetAnimeCategories(get()) }
 
         addSingletonFactory<MangaRepository> { MangaRepositoryImpl(get()) }
@@ -194,6 +204,7 @@ class DomainModule : InjektModule {
         addFactory { GetNextChapters(get(), get(), get()) }
         addFactory { ResetMangaViewerFlags(get()) }
         addFactory { SetMangaChapterFlags(get()) }
+        addFactory { SetMangaFetchInterval(get()) }
         addFactory {
             SetMangaDefaultChapterFlags(
                 get(),
@@ -203,16 +214,23 @@ class DomainModule : InjektModule {
         }
         addFactory { SetMangaViewerFlags(get()) }
         addFactory { NetworkToLocalManga(get()) }
-        addFactory { UpdateManga(get()) }
+        addFactory { UpdateManga(get(), get()) }
         addFactory { SetMangaCategories(get()) }
 
+        addSingletonFactory<ReleaseService> { ReleaseServiceImpl(get(), get()) }
+        addFactory { GetApplicationRelease(get(), get()) }
+
         addSingletonFactory<AnimeTrackRepository> { AnimeTrackRepositoryImpl(get()) }
+        addFactory { TrackEpisode(get(), get(), get(), get()) }
+        addFactory { RefreshAnimeTracks(get(), get(), get(), get()) }
         addFactory { DeleteAnimeTrack(get()) }
         addFactory { GetTracksPerAnime(get()) }
         addFactory { GetAnimeTracks(get()) }
         addFactory { InsertAnimeTrack(get()) }
 
         addSingletonFactory<MangaTrackRepository> { MangaTrackRepositoryImpl(get()) }
+        addFactory { TrackChapter(get(), get(), get(), get()) }
+        addFactory { RefreshMangaTracks(get(), get(), get(), get()) }
         addFactory { DeleteMangaTrack(get()) }
         addFactory { GetTracksPerManga(get()) }
         addFactory { GetMangaTracks(get()) }
@@ -224,8 +242,8 @@ class DomainModule : InjektModule {
         addFactory { UpdateEpisode(get()) }
         addFactory { SetSeenStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbEpisode() }
-        addFactory { SyncEpisodesWithSource(get(), get(), get(), get()) }
-        addFactory { SyncEpisodesWithTrackServiceTwoWay(get(), get()) }
+        addFactory { SyncEpisodesWithSource(get(), get(), get(), get(), get(), get(), get()) }
+        addFactory { SyncEpisodeProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
         addFactory { GetChapter(get()) }
@@ -233,15 +251,15 @@ class DomainModule : InjektModule {
         addFactory { UpdateChapter(get()) }
         addFactory { SetReadStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbChapter() }
-        addFactory { SyncChaptersWithSource(get(), get(), get(), get()) }
-        addFactory { SyncChaptersWithTrackServiceTwoWay(get(), get()) }
+        addFactory { SyncChaptersWithSource(get(), get(), get(), get(), get(), get(), get()) }
+        addFactory { SyncChapterProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
         addFactory { GetAnimeHistory(get()) }
         addFactory { UpsertAnimeHistory(get()) }
         addFactory { RemoveAnimeHistory(get()) }
 
-        addFactory { DeleteAnimeDownload(get(), get()) }
+        addFactory { DeleteEpisodeDownload(get(), get()) }
 
         addFactory { GetAnimeExtensionsByType(get(), get()) }
         addFactory { GetAnimeExtensionSources(get()) }
@@ -266,7 +284,7 @@ class DomainModule : InjektModule {
         addFactory { GetMangaUpdates(get()) }
 
         addSingletonFactory<AnimeSourceRepository> { AnimeSourceRepositoryImpl(get(), get()) }
-        addSingletonFactory<AnimeSourceDataRepository> { AnimeSourceDataRepositoryImpl(get()) }
+        addSingletonFactory<AnimeStubSourceRepository> { AnimeStubSourceRepositoryImpl(get()) }
         addFactory { GetEnabledAnimeSources(get(), get()) }
         addFactory { GetLanguagesWithAnimeSources(get(), get()) }
         addFactory { GetRemoteAnime(get()) }
@@ -276,7 +294,7 @@ class DomainModule : InjektModule {
         addFactory { ToggleAnimeSourcePin(get()) }
 
         addSingletonFactory<MangaSourceRepository> { MangaSourceRepositoryImpl(get(), get()) }
-        addSingletonFactory<MangaSourceDataRepository> { MangaSourceDataRepositoryImpl(get()) }
+        addSingletonFactory<MangaStubSourceRepository> { MangaStubSourceRepositoryImpl(get()) }
         addFactory { GetEnabledMangaSources(get(), get()) }
         addFactory { GetLanguagesWithMangaSources(get(), get()) }
         addFactory { GetRemoteManga(get()) }

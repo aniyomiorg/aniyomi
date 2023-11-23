@@ -21,6 +21,8 @@ interface Episode : SEpisode, Serializable {
     var date_fetch: Long
 
     var source_order: Int
+
+    var last_modified: Long
 }
 
 fun Episode.toDomainEpisode(): DomainEpisode? {
@@ -37,7 +39,8 @@ fun Episode.toDomainEpisode(): DomainEpisode? {
         url = url,
         name = name,
         dateUpload = date_upload,
-        episodeNumber = episode_number,
+        episodeNumber = episode_number.toDouble(),
         scanlator = scanlator,
+        lastModifiedAt = last_modified,
     )
 }

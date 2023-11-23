@@ -90,7 +90,12 @@ class MangaDownloadProvider(
      * @param mangaTitle the title of the manga to query.
      * @param source the source of the chapter.
      */
-    fun findChapterDir(chapterName: String, chapterScanlator: String?, mangaTitle: String, source: MangaSource): UniFile? {
+    fun findChapterDir(
+        chapterName: String,
+        chapterScanlator: String?,
+        mangaTitle: String,
+        source: MangaSource,
+    ): UniFile? {
         val mangaDir = findMangaDir(mangaTitle, source)
         return getValidChapterDirNames(chapterName, chapterScanlator).asSequence()
             .mapNotNull { mangaDir?.findFile(it, true) }

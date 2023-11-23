@@ -153,7 +153,10 @@ class AnimeDownloadQueueScreenModel(
         downloadManager.cancelQueuedDownloads(downloads)
     }
 
-    fun <R : Comparable<R>> reorderQueue(selector: (AnimeDownloadItem) -> R, reverse: Boolean = false) {
+    fun <R : Comparable<R>> reorderQueue(
+        selector: (AnimeDownloadItem) -> R,
+        reverse: Boolean = false,
+    ) {
         val adapter = adapter ?: return
         val newAnimeDownloads = mutableListOf<AnimeDownload>()
         adapter.headerItems.forEach { headerItem ->
@@ -228,6 +231,6 @@ class AnimeDownloadQueueScreenModel(
      * @return the holder of the download or null if it's not bound.
      */
     private fun getHolder(download: AnimeDownload): AnimeDownloadHolder? {
-        return controllerBinding.recycler.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
+        return controllerBinding.root.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
     }
 }

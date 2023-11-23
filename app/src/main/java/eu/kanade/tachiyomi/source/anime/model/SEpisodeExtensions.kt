@@ -7,6 +7,6 @@ fun SEpisode.copyFrom(other: Episodes) {
     name = other.name
     url = other.url
     date_upload = other.date_upload
-    episode_number = other.episode_number
+    episode_number = other.episode_number.toFloat()
     scanlator = other.scanlator
 }

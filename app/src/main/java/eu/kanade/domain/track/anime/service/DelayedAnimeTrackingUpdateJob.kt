@@ -19,19 +19,24 @@ import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
+        if (runAttemptCount > 3) {
+            return Result.failure()
+        }
+
         val getTracks = Injekt.get<GetAnimeTracks>()
         val insertTrack = Injekt.get<InsertAnimeTrack>()
 
         val trackManager = Injekt.get<TrackManager>()
         val delayedTrackingStore = Injekt.get<DelayedAnimeTrackingStore>()
 
-        val results = withIOContext {
+        withIOContext {
             delayedTrackingStore.getAnimeItems()
                 .mapNotNull {
                     val track = getTracks.awaitOne(it.trackId)
@@ -40,10 +45,10 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                     }
                     track?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
                 }
-                .mapNotNull { animeTrack ->
+                .forEach { animeTrack ->
                     try {
                         val service = trackManager.getService(animeTrack.syncId)
-                        if (service != null && service.isLogged) {
+                        if (service != null && service.isLoggedIn) {
                             logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.id}, last episode seen: ${animeTrack.lastEpisodeSeen}" }
                             service.animeService.update(animeTrack.toDbTrack(), true)
                             insertTrack.await(animeTrack)
@@ -57,7 +62,7 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 }
         }
 
-        return if (results.isNotEmpty()) Result.failure() else Result.success()
+        return if (delayedTrackingStore.getAnimeItems().isEmpty()) Result.success() else Result.retry()
     }
 
     companion object {
@@ -70,7 +75,7 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
 
             val request = OneTimeWorkRequestBuilder<DelayedAnimeTrackingUpdateJob>()
                 .setConstraints(constraints)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 5.minutes.toJavaDuration())
                 .addTag(TAG)
                 .build()
 

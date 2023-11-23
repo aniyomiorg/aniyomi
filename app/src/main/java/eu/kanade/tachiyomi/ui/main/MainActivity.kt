@@ -11,9 +11,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +35,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
@@ -68,7 +65,6 @@ import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
 import eu.kanade.presentation.components.IndexingBannerBackgroundColor
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
@@ -82,7 +78,6 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
-import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
@@ -91,6 +86,7 @@ import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
+import eu.kanade.tachiyomi.ui.deeplink.manga.DeepLinkMangaScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
@@ -103,7 +99,6 @@ import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
@@ -115,11 +110,12 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import kotlin.time.Duration.Companion.seconds
 import androidx.compose.ui.graphics.Color.Companion as ComposeColor
 
 class MainActivity : BaseActivity() {
@@ -129,11 +125,10 @@ class MainActivity : BaseActivity() {
     private val uiPreferences: UiPreferences by injectLazy()
     private val preferences: BasePreferences by injectLazy()
 
-    private val episodeCache: EpisodeCache by injectLazy()
-    private val chapterCache: ChapterCache by injectLazy()
-
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
+    private val chapterCache: ChapterCache by injectLazy()
+    private val episodeCache: EpisodeCache by injectLazy()
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
@@ -144,13 +139,19 @@ class MainActivity : BaseActivity() {
     private val connectionsPreferences: ConnectionsPreferences by injectLazy()
     // <-- AM (CONNECTIONS)
 
+    init {
+        registerSecureActivity(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val isLaunch = savedInstanceState == null
+
         // Prevent splash screen showing up on configuration changes
-        val splashScreen = if (savedInstanceState == null) installSplashScreen() else null
+        val splashScreen = if (isLaunch) installSplashScreen() else null
 
         super.onCreate(savedInstanceState)
 
-        val didMigration = if (savedInstanceState == null) {
+        val didMigration = if (isLaunch) {
             Migrations.upgrade(
                 context = applicationContext,
                 basePreferences = preferences,
@@ -188,7 +189,7 @@ class MainActivity : BaseActivity() {
             val indexing by downloadCache.isInitializing.collectAsState()
             val indexingAnime by animeDownloadCache.isInitializing.collectAsState()
 
-            // Set statusbar color considering the top app state banner
+            // Set status bar color considering the top app state banner
             val systemUiController = rememberSystemUiController()
             val isSystemInDarkTheme = isSystemInDarkTheme()
             val statusBarBackgroundColor = when {
@@ -223,16 +224,16 @@ class MainActivity : BaseActivity() {
 
             Navigator(
                 screen = HomeScreen,
-                disposeBehavior = NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = true),
+                disposeBehavior = NavigatorDisposeBehavior(
+                    disposeNestedNavigators = false,
+                    disposeSteps = true,
+                ),
             ) { navigator ->
-                if (navigator.size == 1) {
-                    ConfirmExit()
-                }
 
                 LaunchedEffect(navigator) {
                     this@MainActivity.navigator = navigator
 
-                    if (savedInstanceState == null) {
+                    if (isLaunch) {
                         // Set start screen
                         handleIntentAction(intent, navigator)
 
@@ -310,7 +311,11 @@ class MainActivity : BaseActivity() {
             if (showChangelog) {
                 AlertDialog(
                     onDismissRequest = { showChangelog = false },
-                    title = { Text(text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME)) },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME),
+                        )
+                    },
                     dismissButton = {
                         TextButton(onClick = { openInBrowser(RELEASE_URL) }) {
                             Text(text = stringResource(R.string.whats_new))
@@ -318,7 +323,7 @@ class MainActivity : BaseActivity() {
                     },
                     confirmButton = {
                         TextButton(onClick = { showChangelog = false }) {
-                            Text(text = stringResource(android.R.string.ok))
+                            Text(text = stringResource(R.string.action_ok))
                         }
                     },
                 )
@@ -326,13 +331,20 @@ class MainActivity : BaseActivity() {
         }
 
         val startTime = System.currentTimeMillis()
-        splashScreen?.setKeepVisibleCondition {
+        splashScreen?.setKeepOnScreenCondition {
             val elapsed = System.currentTimeMillis() - startTime
             elapsed <= SPLASH_MIN_DURATION || !ready && elapsed <= SPLASH_MAX_DURATION
         }
         setSplashScreenExitAnimation(splashScreen)
 
-        externalPlayerResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (isLaunch && libraryPreferences.autoClearItemCache().get()) {
+            chapterCache.clear()
+            episodeCache.clear()
+        }
+
+        externalPlayerResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 ExternalIntents.externalIntents.onActivityResult(this@MainActivity, result.data)
             }
@@ -349,23 +361,7 @@ class MainActivity : BaseActivity() {
     }
 
     @Composable
-    private fun ConfirmExit() {
-        val scope = rememberCoroutineScope()
-        val confirmExit by preferences.confirmExit().collectAsState()
-        var waitingConfirmation by remember { mutableStateOf(false) }
-        BackHandler(enabled = !waitingConfirmation && confirmExit) {
-            scope.launch {
-                waitingConfirmation = true
-                val toast = toast(R.string.confirm_exit, Toast.LENGTH_LONG)
-                delay(2.seconds)
-                toast.cancel()
-                waitingConfirmation = false
-            }
-        }
-    }
-
-    @Composable
-    fun HandleOnNewIntent(context: Context, navigator: Navigator) {
+    private fun HandleOnNewIntent(context: Context, navigator: Navigator) {
         LaunchedEffect(Unit) {
             callbackFlow<Intent> {
                 val componentActivity = context as ComponentActivity
@@ -386,7 +382,7 @@ class MainActivity : BaseActivity() {
             if (BuildConfig.INCLUDE_UPDATER) {
                 try {
                     val result = AppUpdateChecker().checkForUpdate(context)
-                    if (result is AppUpdateResult.NewUpdate) {
+                    if (result is GetApplicationRelease.Result.NewUpdate) {
                         val updateScreen = NewUpdateScreen(
                             versionName = result.release.version,
                             changelogInfo = result.release.info,
@@ -458,7 +454,11 @@ class MainActivity : BaseActivity() {
     private fun handleIntentAction(intent: Intent, navigator: Navigator): Boolean {
         val notificationId = intent.getIntExtra("notificationId", -1)
         if (notificationId > -1) {
-            NotificationReceiver.dismissNotification(applicationContext, notificationId, intent.getIntExtra("groupId", 0))
+            NotificationReceiver.dismissNotification(
+                applicationContext,
+                notificationId,
+                intent.getIntExtra("groupId", 0),
+            )
         }
 
         val tabToOpen = when (intent.action) {
@@ -491,17 +491,20 @@ class MainActivity : BaseActivity() {
                 // or the Google-specific search intent (triggered by saying or typing "search *query* on *Tachiyomi*" in Google Search/Google Assistant)
 
                 // Get the search query provided in extras, and if not null, perform a global search with it.
-                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(Intent.EXTRA_TEXT)
+                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(
+                    Intent.EXTRA_TEXT,
+                )
                 if (!query.isNullOrEmpty()) {
                     navigator.popUntilRoot()
                     navigator.push(GlobalMangaSearchScreen(query))
+                    navigator.push(DeepLinkMangaScreen(query))
                 }
                 null
             }
             INTENT_SEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
-                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
+                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                     navigator.popUntilRoot()
                     navigator.push(GlobalMangaSearchScreen(query, filter))
                 }
@@ -510,7 +513,7 @@ class MainActivity : BaseActivity() {
             INTENT_ANIMESEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
-                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
+                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                     navigator.popUntilRoot()
                     navigator.push(GlobalAnimeSearchScreen(query, filter))
                 }
@@ -527,21 +530,6 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-    override fun onBackPressed() {
-        if (navigator?.size == 1 &&
-            !onBackPressedDispatcher.hasEnabledCallbacks() &&
-            libraryPreferences.autoClearItemCache().get()
-        ) {
-            chapterCache.clear()
-            episodeCache.clear()
-        }
-        super.onBackPressed()
-    }
-
-    init {
-        registerSecureActivity(this)
-    }
-
     companion object {
         // Splash screen
         private const val SPLASH_MIN_DURATION = 500 // ms
@@ -555,7 +543,13 @@ class MainActivity : BaseActivity() {
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
-        suspend fun startPlayerActivity(context: Context, animeId: Long, episodeId: Long, extPlayer: Boolean, video: Video? = null) {
+        suspend fun startPlayerActivity(
+            context: Context,
+            animeId: Long,
+            episodeId: Long,
+            extPlayer: Boolean,
+            video: Video? = null,
+        ) {
             if (extPlayer) {
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)

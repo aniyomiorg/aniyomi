@@ -4,24 +4,18 @@ import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.network.NetworkHelper
 import okhttp3.OkHttpClient
 import uy.kohesive.injekt.injectLazy
 
-abstract class TrackService(val id: Long) {
+abstract class TrackService(val id: Long, val name: String) {
 
-    val preferences: BasePreferences by injectLazy()
     val trackPreferences: TrackPreferences by injectLazy()
     val networkService: NetworkHelper by injectLazy()
 
     open val client: OkHttpClient
         get() = networkService.client
-
-    // Name of the manga sync service to display
-    @StringRes
-    abstract fun nameRes(): Int
 
     // Application and remote support for reading dates
     open val supportsReadingDates: Boolean = false
@@ -42,7 +36,7 @@ abstract class TrackService(val id: Long) {
         trackPreferences.setTrackCredentials(this, "", "")
     }
 
-    open val isLogged: Boolean
+    open val isLoggedIn: Boolean
         get() = getUsername().isNotEmpty() &&
             getPassword().isNotEmpty()
 

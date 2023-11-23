@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.extension.anime.model
 
 import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 
 sealed class AnimeExtension {
 
@@ -32,6 +32,7 @@ sealed class AnimeExtension {
         val hasUpdate: Boolean = false,
         val isObsolete: Boolean = false,
         val isUnofficial: Boolean = false,
+        val isShared: Boolean,
     ) : AnimeExtension()
 
     data class Available(
@@ -44,10 +45,26 @@ sealed class AnimeExtension {
         override val isNsfw: Boolean,
         override val hasReadme: Boolean,
         override val hasChangelog: Boolean,
-        val sources: List<AvailableAnimeSources>,
+        val sources: List<AnimeSource>,
         val apkName: String,
         val iconUrl: String,
-    ) : AnimeExtension()
+    ) : AnimeExtension() {
+
+        data class AnimeSource(
+            val id: Long,
+            val lang: String,
+            val name: String,
+            val baseUrl: String,
+        ) {
+            fun toStubSource(): StubAnimeSource {
+                return StubAnimeSource(
+                    id = this.id,
+                    lang = this.lang,
+                    name = this.name,
+                )
+            }
+        }
+    }
 
     data class Untrusted(
         override val name: String,
@@ -61,19 +78,4 @@ sealed class AnimeExtension {
         override val hasReadme: Boolean = false,
         override val hasChangelog: Boolean = false,
     ) : AnimeExtension()
-}
-
-data class AvailableAnimeSources(
-    val id: Long,
-    val lang: String,
-    val name: String,
-    val baseUrl: String,
-) {
-    fun toAnimeSourceData(): AnimeSourceData {
-        return AnimeSourceData(
-            id = this.id,
-            lang = this.lang,
-            name = this.name,
-        )
-    }
 }

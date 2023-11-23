@@ -10,8 +10,7 @@ class ResetMangaCategoryFlags(
 ) {
 
     suspend fun await() {
-        val display = preferences.libraryDisplayMode().get()
-        val sort = preferences.libraryMangaSortingMode().get()
-        categoryRepository.updateAllMangaCategoryFlags(display + sort.type + sort.direction)
+        val sort = preferences.mangaSortingMode().get()
+        categoryRepository.updateAllMangaCategoryFlags(sort.type + sort.direction)
     }
 }

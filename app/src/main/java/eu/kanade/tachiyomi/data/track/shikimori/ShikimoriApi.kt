@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -37,20 +38,42 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
 
     suspend fun addLibManga(track: MangaTrack, user_id: String): MangaTrack {
         return withIOContext {
-            val payload = buildJsonObject {
-                putJsonObject("user_rate") {
-                    put("user_id", user_id)
-                    put("target_id", track.media_id)
-                    put("target_type", "Manga")
-                    put("chapters", track.last_chapter_read.toInt())
-                    put("score", track.score.toInt())
-                    put("status", track.toShikimoriStatus())
+            with(json) {
+                val payload = buildJsonObject {
+                    putJsonObject("user_rate") {
+                        put("user_id", user_id)
+                        put("target_id", track.media_id)
+                        put("target_type", "Manga")
+                        put("chapters", track.last_chapter_read.toInt())
+                        put("score", track.score.toInt())
+                        put("status", track.toShikimoriStatus())
+                    }
                 }
+                authClient.newCall(
+                    POST(
+                        "$apiUrl/v2/user_rates",
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                ).awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        track.library_id = it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                    }
+                track
             }
+        }
+    }
+
+    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(
+        track,
+        user_id,
+    )
+
+    suspend fun deleteLibManga(track: MangaTrack): MangaTrack {
+        return withIOContext {
             authClient.newCall(
-                POST(
-                    "$apiUrl/v2/user_rates",
-                    body = payload.toString().toRequestBody(jsonMime),
+                DELETE(
+                    "$apiUrl/v2/user_rates/${track.library_id}",
                 ),
             ).awaitSuccess()
             track
@@ -59,29 +82,47 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
 
     suspend fun addLibAnime(track: AnimeTrack, user_id: String): AnimeTrack {
         return withIOContext {
-            val payload = buildJsonObject {
-                putJsonObject("user_rate") {
-                    put("user_id", user_id)
-                    put("target_id", track.media_id)
-                    put("target_type", "Manga")
-                    put("chapters", track.last_episode_seen.toInt())
-                    put("score", track.score.toInt())
-                    put("status", track.toShikimoriStatus())
+            with(json) {
+                val payload = buildJsonObject {
+                    putJsonObject("user_rate") {
+                        put("user_id", user_id)
+                        put("target_id", track.media_id)
+                        put("target_type", "Anime")
+                        put("chapters", track.last_episode_seen.toInt())
+                        put("score", track.score.toInt())
+                        put("status", track.toShikimoriStatus())
+                    }
                 }
+                authClient.newCall(
+                    POST(
+                        "$apiUrl/v2/user_rates",
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                ).awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        track.library_id = it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                    }
+                track
             }
+        }
+    }
+
+    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(
+        track,
+        user_id,
+    )
+
+    suspend fun deleteLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
             authClient.newCall(
-                POST(
-                    "$apiUrl/v2/user_rates",
-                    body = payload.toString().toRequestBody(jsonMime),
+                DELETE(
+                    "$apiUrl/v2/user_rates/${track.library_id}",
                 ),
             ).awaitSuccess()
             track
         }
     }
-
-    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(track, user_id)
-
-    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(track, user_id)
 
     suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
@@ -156,6 +197,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             title = mangas["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.long
             total_chapters = mangas["chapters"]!!.jsonPrimitive.int
+            library_id = obj["id"]!!.jsonPrimitive.long
             last_chapter_read = obj["chapters"]!!.jsonPrimitive.float
             score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
@@ -168,6 +210,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             title = animes["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.long
             total_episodes = animes["episodes"]!!.jsonPrimitive.int
+            library_id = obj["id"]!!.jsonPrimitive.long
             last_episode_seen = obj["episodes"]!!.jsonPrimitive.float
             score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
@@ -175,7 +218,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun findLibManga(track: MangaTrack, user_id: String): MangaTrack? {
+    suspend fun findLibManga(track: MangaTrack, userId: String): MangaTrack? {
         return withIOContext {
             val urlMangas = "$apiUrl/mangas".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
@@ -187,7 +230,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             }
 
             val url = "$apiUrl/v2/user_rates".toUri().buildUpon()
-                .appendQueryParameter("user_id", user_id)
+                .appendQueryParameter("user_id", userId)
                 .appendQueryParameter("target_id", track.media_id.toString())
                 .appendQueryParameter("target_type", "Manga")
                 .build()

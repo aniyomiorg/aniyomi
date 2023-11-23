@@ -26,6 +26,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Close
@@ -43,11 +44,11 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -55,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
@@ -84,6 +86,7 @@ import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))
@@ -121,6 +124,7 @@ fun AnimeInfoBox(
                         brush = Brush.verticalGradient(colors = backdropGradientColors),
                     )
                 }
+                .blur(4.dp)
                 .alpha(.2f),
         )
 
@@ -164,14 +168,18 @@ fun AnimeActionRow(
     modifier: Modifier = Modifier,
     favorite: Boolean,
     trackingCount: Int,
+    fetchInterval: Int?,
+    isUserIntervalMode: Boolean,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
+    onEditIntervalClicked: (() -> Unit)?,
     onEditCategory: (() -> Unit)?,
 ) {
+    val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+
     Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
-        val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
         AnimeActionButton(
             title = if (favorite) {
                 stringResource(R.string.in_library)
@@ -183,12 +191,28 @@ fun AnimeActionRow(
             onClick = onAddToLibraryClicked,
             onLongClick = onEditCategory,
         )
+        if (onEditIntervalClicked != null && fetchInterval != null) {
+            AnimeActionButton(
+                title = pluralStringResource(
+                    id = R.plurals.day,
+                    count = fetchInterval.absoluteValue,
+                    fetchInterval.absoluteValue,
+                ),
+                icon = Icons.Default.HourglassEmpty,
+                color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
+                onClick = onEditIntervalClicked,
+            )
+        }
         if (onTrackingClicked != null) {
             AnimeActionButton(
                 title = if (trackingCount == 0) {
                     stringResource(R.string.manga_tracking_tab)
                 } else {
-                    pluralStringResource(id = R.plurals.num_trackers, count = trackingCount, trackingCount)
+                    pluralStringResource(
+                        id = R.plurals.num_trackers,
+                        count = trackingCount,
+                        trackingCount,
+                    )
                 },
                 icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
                 color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
@@ -221,7 +245,9 @@ fun ExpandableAnimeDescription(
             mutableStateOf(defaultExpandState)
         }
         val desc =
-            description.takeIf { !it.isNullOrBlank() } ?: stringResource(R.string.description_placeholder)
+            description.takeIf { !it.isNullOrBlank() } ?: stringResource(
+                R.string.description_placeholder,
+            )
         val trimmedDescription = remember(desc) {
             desc
                 .replace(whitespaceLineRegex, "\n")
@@ -399,7 +425,9 @@ private fun AnimeAndSourceTitlesLarge(
                         SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
                         SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
                         SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
-                        SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
+                        SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(
+                            R.string.publishing_finished,
+                        )
                         SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                         SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
                         else -> stringResource(R.string.unknown)
@@ -532,7 +560,9 @@ private fun AnimeAndSourceTitlesSmall(
                             SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
                             SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
                             SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
-                            SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
+                            SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(
+                                R.string.publishing_finished,
+                            )
                             SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
                             SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
                             else -> stringResource(R.string.unknown)
@@ -575,8 +605,8 @@ private fun AnimeSummary(
     expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    var expandedHeight by remember { mutableStateOf(0) }
-    var shrunkHeight by remember { mutableStateOf(0) }
+    var expandedHeight by remember { mutableIntStateOf(0) }
+    var shrunkHeight by remember { mutableIntStateOf(0) }
     val heightDelta = remember(expandedHeight, shrunkHeight) { expandedHeight - shrunkHeight }
     val animProgress by animateFloatAsState(if (expanded) 1f else 0f)
     val scrimHeight = with(LocalDensity.current) { remember { 24.sp.roundToPx() } }
@@ -596,7 +626,9 @@ private fun AnimeSummary(
                 style = MaterialTheme.typography.bodyMedium,
             )
         }.map { it.measure(constraints) }
-        expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(shrunkHeight) ?: 0
+        expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(
+            shrunkHeight,
+        ) ?: 0
 
         val actualPlaceable = subcompose("description") {
             SelectionContainer {
@@ -619,9 +651,13 @@ private fun AnimeSummary(
                 val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_caret_down)
                 Icon(
                     painter = rememberAnimatedVectorPainter(image, !expanded),
-                    contentDescription = stringResource(if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand),
+                    contentDescription = stringResource(
+                        if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand,
+                    ),
                     tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.background(Brush.radialGradient(colors = colors.asReversed())),
+                    modifier = Modifier.background(
+                        Brush.radialGradient(colors = colors.asReversed()),
+                    ),
                 )
             }
         }.map { it.measure(Constraints.fixed(width = constraints.maxWidth, height = scrimHeight)) }
@@ -651,11 +687,6 @@ private fun TagsChip(
             modifier = modifier,
             onClick = onClick,
             label = { Text(text = text, style = MaterialTheme.typography.bodySmall) },
-            border = null,
-            colors = SuggestionChipDefaults.suggestionChipColors(
-                containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                labelColor = MaterialTheme.colorScheme.onSurface,
-            ),
         )
     }
 }

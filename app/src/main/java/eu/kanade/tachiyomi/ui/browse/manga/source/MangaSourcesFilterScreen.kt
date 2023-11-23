@@ -19,15 +19,15 @@ class MangaSourcesFilterScreen : Screen() {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = rememberScreenModel { SourcesFilterScreenModel() }
+        val screenModel = rememberScreenModel { MangaSourcesFilterScreenModel() }
         val state by screenModel.state.collectAsState()
 
-        if (state is MangaSourcesFilterState.Loading) {
+        if (state is MangaSourcesFilterScreenModel.State.Loading) {
             LoadingScreen()
             return
         }
 
-        if (state is MangaSourcesFilterState.Error) {
+        if (state is MangaSourcesFilterScreenModel.State.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
                 context.toast(R.string.internal_error)
@@ -36,7 +36,7 @@ class MangaSourcesFilterScreen : Screen() {
             return
         }
 
-        val successState = state as MangaSourcesFilterState.Success
+        val successState = state as MangaSourcesFilterScreenModel.State.Success
 
         MangaSourcesFilterScreen(
             navigateUp = navigator::pop,

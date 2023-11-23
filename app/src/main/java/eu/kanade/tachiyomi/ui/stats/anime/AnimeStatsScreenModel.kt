@@ -37,7 +37,7 @@ class AnimeStatsScreenModel(
     private val trackManager: TrackManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
 
-    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLogged && it is AnimeTrackService } }
+    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLoggedIn && it is AnimeTrackService } }
 
     init {
         coroutineScope.launchIO {
@@ -88,14 +88,14 @@ class AnimeStatsScreenModel(
     }
 
     private fun getGlobalUpdateItemCount(libraryAnime: List<LibraryAnime>): Int {
-        val includedCategories = preferences.animeLibraryUpdateCategories().get().map { it.toLong() }
+        val includedCategories = preferences.animeUpdateCategories().get().map { it.toLong() }
         val includedAnime = if (includedCategories.isNotEmpty()) {
             libraryAnime.filter { it.category in includedCategories }
         } else {
             libraryAnime
         }
 
-        val excludedCategories = preferences.animeLibraryUpdateCategoriesExclude().get().map { it.toLong() }
+        val excludedCategories = preferences.animeUpdateCategoriesExclude().get().map { it.toLong() }
         val excludedMangaIds = if (excludedCategories.isNotEmpty()) {
             libraryAnime.fastMapNotNull { anime ->
                 anime.id.takeIf { anime.category in excludedCategories }
@@ -104,7 +104,7 @@ class AnimeStatsScreenModel(
             emptyList()
         }
 
-        val updateRestrictions = preferences.libraryUpdateItemRestriction().get()
+        val updateRestrictions = preferences.autoUpdateItemRestrictions().get()
         return includedAnime
             .fastFilterNot { it.anime.id in excludedMangaIds }
             .fastDistinctBy { it.anime.id }
@@ -153,15 +153,13 @@ class AnimeStatsScreenModel(
     private fun getTrackMeanScore(scoredAnimeTrackMap: Map<Long, List<AnimeTrack>>): Double {
         return scoredAnimeTrackMap
             .map { (_, tracks) ->
-                tracks.map {
-                    get10PointScore(it)
-                }.average()
+                tracks.map(::get10PointScore).average()
             }
             .fastFilter { !it.isNaN() }
             .average()
     }
 
-    private fun get10PointScore(track: AnimeTrack): Float {
+    private fun get10PointScore(track: AnimeTrack): Double {
         val service = trackManager.getService(track.syncId)!!
         return service.animeService.get10PointScore(track)
     }

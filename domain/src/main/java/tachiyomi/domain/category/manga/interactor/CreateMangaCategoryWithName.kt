@@ -14,10 +14,8 @@ class CreateMangaCategoryWithName(
 
     private val initialFlags: Long
         get() {
-            val sort = preferences.libraryMangaSortingMode().get()
-            return preferences.libraryDisplayMode().get().flag or
-                sort.type.flag or
-                sort.direction.flag
+            val sort = preferences.mangaSortingMode().get()
+            return sort.type.flag or sort.direction.flag
         }
 
     suspend fun await(name: String): Result = withNonCancellableContext {
@@ -40,8 +38,8 @@ class CreateMangaCategoryWithName(
         }
     }
 
-    sealed class Result {
-        object Success : Result()
-        data class InternalError(val error: Throwable) : Result()
+    sealed interface Result {
+        data object Success : Result
+        data class InternalError(val error: Throwable) : Result
     }
 }

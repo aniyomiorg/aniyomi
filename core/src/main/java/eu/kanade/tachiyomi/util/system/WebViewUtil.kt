@@ -6,13 +6,15 @@ import android.content.pm.PackageManager
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
+import kotlinx.coroutines.suspendCancellableCoroutine
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
+import kotlin.coroutines.resume
 
 object WebViewUtil {
     const val SPOOF_PACKAGE_NAME = "org.chromium.chrome"
 
-    const val MINIMUM_WEBVIEW_VERSION = 108
+    const val MINIMUM_WEBVIEW_VERSION = 111
 
     fun supportsWebView(context: Context): Boolean {
         try {
@@ -32,6 +34,10 @@ fun WebView.isOutdated(): Boolean {
     return getWebViewMajorVersion() < WebViewUtil.MINIMUM_WEBVIEW_VERSION
 }
 
+suspend fun WebView.getHtml(): String = suspendCancellableCoroutine {
+    evaluateJavascript("document.documentElement.outerHTML") { html -> it.resume(html) }
+}
+
 @SuppressLint("SetJavaScriptEnabled")
 fun WebView.setDefaultSettings() {
     with(settings) {
@@ -47,6 +53,8 @@ fun WebView.setDefaultSettings() {
         builtInZoomControls = true
         displayZoomControls = false
     }
+
+    CookieManager.getInstance().acceptThirdPartyCookies(this)
 }
 
 private fun WebView.getWebViewMajorVersion(): Int {

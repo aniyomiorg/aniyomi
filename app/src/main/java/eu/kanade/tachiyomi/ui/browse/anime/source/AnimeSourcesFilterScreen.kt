@@ -22,12 +22,12 @@ class AnimeSourcesFilterScreen : Screen() {
         val screenModel = rememberScreenModel { AnimeSourcesFilterScreenModel() }
         val state by screenModel.state.collectAsState()
 
-        if (state is AnimeSourcesFilterState.Loading) {
+        if (state is AnimeSourcesFilterScreenModel.State.Loading) {
             LoadingScreen()
             return
         }
 
-        if (state is AnimeSourcesFilterState.Error) {
+        if (state is AnimeSourcesFilterScreenModel.State.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
                 context.toast(R.string.internal_error)
@@ -36,7 +36,7 @@ class AnimeSourcesFilterScreen : Screen() {
             return
         }
 
-        val successState = state as AnimeSourcesFilterState.Success
+        val successState = state as AnimeSourcesFilterScreenModel.State.Success
 
         AnimeSourcesFilterScreen(
             navigateUp = navigator::pop,

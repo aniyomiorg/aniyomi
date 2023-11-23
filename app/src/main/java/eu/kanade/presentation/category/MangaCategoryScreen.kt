@@ -48,7 +48,9 @@ fun MangaCategoryScreen(
         CategoryContent(
             categories = state.categories,
             lazyListState = lazyListState,
-            paddingValues = contentPadding + topSmallPaddingValues + PaddingValues(horizontal = MaterialTheme.padding.medium),
+            paddingValues = contentPadding + topSmallPaddingValues + PaddingValues(
+                horizontal = MaterialTheme.padding.medium,
+            ),
             onClickRename = onClickRename,
             onClickHide = onClickHide,
             onClickDelete = onClickDelete,

@@ -26,20 +26,20 @@ import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
-import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun EpisodeSettingsDialog(
     onDismissRequest: () -> Unit,
     anime: Anime? = null,
-    onDownloadFilterChanged: (TriStateFilter) -> Unit,
-    onUnseenFilterChanged: (TriStateFilter) -> Unit,
-    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
+    onDownloadFilterChanged: (TriState) -> Unit,
+    onUnseenFilterChanged: (TriState) -> Unit,
+    onBookmarkedFilterChanged: (TriState) -> Unit,
     onSortModeChanged: (Long) -> Unit,
     onDisplayModeChanged: (Long) -> Unit,
     onSetAsDefault: (applyToExistingAnime: Boolean) -> Unit,
@@ -68,21 +68,20 @@ fun EpisodeSettingsDialog(
                 },
             )
         },
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
                 0 -> {
                     FilterPage(
-                        downloadFilter = anime?.downloadedFilter ?: TriStateFilter.DISABLED,
+                        downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
                         onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { anime?.forceDownloaded() == true },
-                        unseenFilter = anime?.unseenFilter ?: TriStateFilter.DISABLED,
+                        unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
-                        bookmarkedFilter = anime?.bookmarkedFilter ?: TriStateFilter.DISABLED,
+                        bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,
                         onBookmarkedFilterChanged = onBookmarkedFilterChanged,
                     )
                 }
@@ -106,12 +105,12 @@ fun EpisodeSettingsDialog(
 
 @Composable
 private fun FilterPage(
-    downloadFilter: TriStateFilter,
-    onDownloadFilterChanged: ((TriStateFilter) -> Unit)?,
-    unseenFilter: TriStateFilter,
-    onUnseenFilterChanged: (TriStateFilter) -> Unit,
-    bookmarkedFilter: TriStateFilter,
-    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
+    downloadFilter: TriState,
+    onDownloadFilterChanged: ((TriState) -> Unit)?,
+    unseenFilter: TriState,
+    onUnseenFilterChanged: (TriState) -> Unit,
+    bookmarkedFilter: TriState,
+    onBookmarkedFilterChanged: (TriState) -> Unit,
 ) {
     TriStateItem(
         label = stringResource(R.string.label_downloaded),
@@ -213,7 +212,7 @@ private fun SetAsDefaultDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(R.string.action_ok))
             }
         },
     )

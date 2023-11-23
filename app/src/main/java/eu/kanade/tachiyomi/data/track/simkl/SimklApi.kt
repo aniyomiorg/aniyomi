@@ -180,7 +180,12 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         }
     }
 
-    private fun jsonToAnimeTrack(obj: JsonObject, typeName: String, type: String, statusString: String): AnimeTrack {
+    private fun jsonToAnimeTrack(
+        obj: JsonObject,
+        typeName: String,
+        type: String,
+        statusString: String,
+    ): AnimeTrack {
         return AnimeTrack.create(TrackManager.SIMKL).apply {
             title = obj[typeName]!!.jsonObject["title"]!!.jsonPrimitive.content
             val id = obj[typeName]!!.jsonObject["ids"]!!.jsonObject["simkl"]!!.jsonPrimitive.long

@@ -64,10 +64,9 @@ fun StreamsCatalogSheet(
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
         hideSystemBars = true,
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -123,9 +122,15 @@ private fun StreamsPageBuilder(
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
                     return if (externalTrackCode == "audio") {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_audio_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_audio_intent),
+                        )
                     } else {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_subtitles_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_subtitles_intent),
+                        )
                     }
                 }
             },

@@ -12,7 +12,7 @@ fun Episode.toSEpisode(): SEpisode {
         it.url = url
         it.name = name
         it.date_upload = dateUpload
-        it.episode_number = episodeNumber
+        it.episode_number = episodeNumber.toFloat()
         it.scanlator = scanlator
     }
 }
@@ -22,7 +22,7 @@ fun Episode.copyFromSEpisode(sEpisode: SEpisode): Episode {
         name = sEpisode.name,
         url = sEpisode.url,
         dateUpload = sEpisode.date_upload,
-        episodeNumber = sEpisode.episode_number,
+        episodeNumber = sEpisode.episode_number.toDouble(),
         scanlator = sEpisode.scanlator?.ifBlank { null },
     )
 }
@@ -49,6 +49,6 @@ fun Episode.toDbEpisode(): DbEpisode = EpisodeImpl().also {
     it.total_seconds = totalSeconds
     it.date_fetch = dateFetch
     it.date_upload = dateUpload
-    it.episode_number = episodeNumber
+    it.episode_number = episodeNumber.toFloat()
     it.source_order = sourceOrder.toInt()
 }

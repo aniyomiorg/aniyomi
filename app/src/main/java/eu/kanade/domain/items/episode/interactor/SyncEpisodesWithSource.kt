@@ -20,20 +20,20 @@ import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.TreeSet
 
 class SyncEpisodesWithSource(
-    private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val downloadProvider: AnimeDownloadProvider = Injekt.get(),
-    private val episodeRepository: EpisodeRepository = Injekt.get(),
-    private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode = Injekt.get(),
-    private val updateAnime: UpdateAnime = Injekt.get(),
-    private val updateEpisode: UpdateEpisode = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager,
+    private val downloadProvider: AnimeDownloadProvider,
+    private val episodeRepository: EpisodeRepository,
+    private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode,
+    private val updateAnime: UpdateAnime,
+    private val updateEpisode: UpdateEpisode,
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
 ) {
 
     /**
@@ -48,10 +48,14 @@ class SyncEpisodesWithSource(
         rawSourceEpisodes: List<SEpisode>,
         anime: Anime,
         source: AnimeSource,
+        manualFetch: Boolean = false,
+        fetchWindow: Pair<Long, Long> = Pair(0, 0),
     ): List<Episode> {
         if (rawSourceEpisodes.isEmpty() && !source.isLocal()) {
             throw NoEpisodesException()
         }
+
+        val now = ZonedDateTime.now()
 
         val sourceEpisodes = rawSourceEpisodes
             .distinctBy { it.url }
@@ -96,7 +100,11 @@ class SyncEpisodesWithSource(
             }
 
             // Recognize episode number for the episode.
-            val episodeNumber = EpisodeRecognition.parseEpisodeNumber(anime.title, episode.name, episode.episodeNumber)
+            val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
+                anime.title,
+                episode.name,
+                episode.episodeNumber,
+            )
             episode = episode.copy(episodeNumber = episodeNumber)
 
             val dbEpisode = dbEpisodes.find { it.url == episode.url }
@@ -112,8 +120,16 @@ class SyncEpisodesWithSource(
                 toAdd.add(toAddEpisode)
             } else {
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
-                    val shouldRenameEpisode = downloadProvider.isEpisodeDirNameChanged(dbEpisode, episode) &&
-                        downloadManager.isEpisodeDownloaded(dbEpisode.name, dbEpisode.scanlator, anime.title, anime.source)
+                    val shouldRenameEpisode = downloadProvider.isEpisodeDirNameChanged(
+                        dbEpisode,
+                        episode,
+                    ) &&
+                        downloadManager.isEpisodeDownloaded(
+                            dbEpisode.name,
+                            dbEpisode.scanlator,
+                            anime.title,
+                            anime.source,
+                        )
 
                     if (shouldRenameEpisode) {
                         downloadManager.renameEpisode(source, anime, dbEpisode, episode)
@@ -125,7 +141,9 @@ class SyncEpisodesWithSource(
                         sourceOrder = episode.sourceOrder,
                     )
                     if (episode.dateUpload != 0L) {
-                        toChangeEpisode = toChangeEpisode.copy(dateUpload = sourceEpisode.dateUpload)
+                        toChangeEpisode = toChangeEpisode.copy(
+                            dateUpload = sourceEpisode.dateUpload,
+                        )
                     }
                     toChange.add(toChangeEpisode)
                 }
@@ -134,14 +152,21 @@ class SyncEpisodesWithSource(
 
         // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
         if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
+            if (manualFetch || anime.fetchInterval == 0 || anime.nextUpdate < fetchWindow.first) {
+                updateAnime.awaitUpdateFetchInterval(
+                    anime,
+                    now,
+                    fetchWindow,
+                )
+            }
             return emptyList()
         }
 
         val reAdded = mutableListOf<Episode>()
 
-        val deletedEpisodeNumbers = TreeSet<Float>()
-        val deletedSeenEpisodeNumbers = TreeSet<Float>()
-        val deletedBookmarkedEpisodeNumbers = TreeSet<Float>()
+        val deletedEpisodeNumbers = TreeSet<Double>()
+        val deletedSeenEpisodeNumbers = TreeSet<Double>()
+        val deletedBookmarkedEpisodeNumbers = TreeSet<Double>()
 
         toDelete.forEach { episode ->
             if (episode.seen) deletedSeenEpisodeNumbers.add(episode.episodeNumber)
@@ -188,6 +213,7 @@ class SyncEpisodesWithSource(
             val episodeUpdates = toChange.map { it.toEpisodeUpdate() }
             updateEpisode.awaitAll(episodeUpdates)
         }
+        updateAnime.awaitUpdateFetchInterval(anime, now, fetchWindow)
 
         // Set this anime as updated since episodes were changed
         // Note that last_update actually represents last time the episode list changed at all

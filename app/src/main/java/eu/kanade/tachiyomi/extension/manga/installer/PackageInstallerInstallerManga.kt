@@ -50,9 +50,13 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
         super.processEntry(entry)
         activeSession = null
         try {
-            val installParams = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+            val installParams = PackageInstaller.SessionParams(
+                PackageInstaller.SessionParams.MODE_FULL_INSTALL,
+            )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                installParams.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
+                installParams.setRequireUserAction(
+                    PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED,
+                )
             }
             activeSession = entry to packageInstaller.createSession(installParams)
             val fileSize = service.getUriSize(entry.uri) ?: throw IllegalStateException()

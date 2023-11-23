@@ -18,19 +18,14 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.track.anime.model.toDbTrack
-import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -44,7 +39,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -56,27 +50,26 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.SetAnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
-import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
-import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -90,17 +83,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
-    private val trackManager: TrackManager = Injekt.get()
     private val coverCache: AnimeCoverCache = Injekt.get()
     private val getLibraryAnime: GetLibraryAnime = Injekt.get()
     private val getAnime: GetAnime = Injekt.get()
     private val updateAnime: UpdateAnime = Injekt.get()
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get()
     private val getCategories: GetAnimeCategories = Injekt.get()
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
-    private val getTracks: GetAnimeTracks = Injekt.get()
-    private val insertTrack: InsertAnimeTrack = Injekt.get()
-    private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get()
+    private val refreshAnimeTracks: RefreshAnimeTracks = Injekt.get()
+    private val setAnimeFetchInterval: SetAnimeFetchInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -109,7 +99,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     override suspend fun doWork(): Result {
         if (tags.contains(WORK_NAME_AUTO)) {
             val preferences = Injekt.get<LibraryPreferences>()
-            val restrictions = preferences.libraryUpdateDeviceRestriction().get()
+            val restrictions = preferences.autoUpdateDeviceRestrictions().get()
             if ((DEVICE_ONLY_ON_WIFI in restrictions) && !context.isConnectedToWifi()) {
                 return Result.failure()
             }
@@ -130,7 +120,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // If this is a chapter update, set the last update time to now
         if (target == Target.EPISODES) {
-            libraryPreferences.libraryUpdateLastTimestamp().set(Date().time)
+            libraryPreferences.lastUpdatedTimestamp().set(Date().time)
         }
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
@@ -177,14 +167,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val listToUpdate = if (categoryId != -1L) {
             libraryAnime.filter { it.category == categoryId }
         } else {
-            val categoriesToUpdate = libraryPreferences.animeLibraryUpdateCategories().get().map { it.toLong() }
+            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToUpdate }
             } else {
                 libraryAnime
             }
 
-            val categoriesToExclude = libraryPreferences.animeLibraryUpdateCategoriesExclude().get().map { it.toLong() }
+            val categoriesToExclude = libraryPreferences.animeUpdateCategoriesExclude().get().map { it.toLong() }
             val excludedAnimeIds = if (categoriesToExclude.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToExclude }.map { it.anime.id }
             } else {
@@ -225,8 +215,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val skippedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
-        val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
+        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
+        val fetchWindow = setAnimeFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
             animeToUpdate.groupBy { it.anime.source }.values
@@ -248,26 +238,53 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     when {
+                                        anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_always_update,
+                                                ),
+                                            )
+
                                         ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_completed,
+                                                ),
+                                            )
 
                                         ENTRY_HAS_UNVIEWED in restrictions && libraryAnime.unseenCount != 0L ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_caught_up))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_caught_up,
+                                                ),
+                                            )
 
                                         ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_started))
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_started,
+                                                ),
+                                            )
 
-                                        anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
-                                            skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_always_update))
+                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > fetchWindow.second ->
+                                            skippedUpdates.add(
+                                                anime to context.getString(
+                                                    R.string.skipped_reason_not_in_release_period,
+                                                ),
+                                            )
 
                                         else -> {
                                             try {
-                                                val newEpisodes = updateAnime(anime)
+                                                val newEpisodes = updateAnime(anime, fetchWindow)
                                                     .sortedByDescending { it.sourceOrder }
 
                                                 if (newEpisodes.isNotEmpty()) {
                                                     val categoryIds = getCategories.await(anime.id).map { it.id }
-                                                    if (anime.shouldDownloadNewEpisodes(categoryIds, downloadPreferences)) {
+                                                    if (anime.shouldDownloadNewEpisodes(
+                                                            categoryIds,
+                                                            downloadPreferences,
+                                                        )
+                                                    ) {
                                                         downloadEpisodes(anime, newEpisodes)
                                                         hasDownloads.set(true)
                                                     }
@@ -275,13 +292,19 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                     libraryPreferences.newAnimeUpdatesCount().getAndSet { it + newEpisodes.size }
 
                                                     // Convert to the anime that contains new chapters
-                                                    newUpdates.add(anime to newEpisodes.toTypedArray())
+                                                    newUpdates.add(
+                                                        anime to newEpisodes.toTypedArray(),
+                                                    )
                                                 }
                                             } catch (e: Throwable) {
                                                 val errorMessage = when (e) {
-                                                    is NoEpisodesException -> context.getString(R.string.no_episodes_error)
+                                                    is NoEpisodesException -> context.getString(
+                                                        R.string.no_episodes_error,
+                                                    )
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is AnimeSourceNotInstalledException -> context.getString(
+                                                        R.string.loader_not_implemented_error,
+                                                    )
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(anime to errorMessage)
@@ -290,7 +313,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     }
 
                                     if (libraryPreferences.autoUpdateTrackers().get()) {
-                                        updateTrackings(anime, loggedServices)
+                                        refreshAnimeTracks(anime.id)
                                     }
                                 }
                             }
@@ -317,6 +340,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             )
         }
         if (skippedUpdates.isNotEmpty()) {
+            // TODO: surface skipped reasons to user
+            logcat {
+                skippedUpdates
+                    .groupBy { it.second }
+                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
+                    .joinToString()
+            }
             notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
@@ -333,7 +363,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      * @param anime the anime to update.
      * @return a pair of the inserted and removed episodes.
      */
-    private suspend fun updateAnime(anime: Anime): List<Episode> {
+    private suspend fun updateAnime(anime: Anime, fetchWindow: Pair<Long, Long>): List<Episode> {
         val source = sourceManager.getOrStub(anime.source)
 
         // Update anime metadata if needed
@@ -348,7 +378,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         // to get latest data so it doesn't get overwritten later on
         val dbAnime = getAnime.await(anime.id)?.takeIf { it.favorite } ?: return emptyList()
 
-        return syncEpisodesWithSource.await(episodes, dbAnime, source)
+        return syncEpisodesWithSource.await(episodes, dbAnime, source, false, fetchWindow)
     }
 
     private suspend fun updateCovers() {
@@ -374,7 +404,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
                                     try {
                                         val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime.prepUpdateCover(coverCache, networkAnime, true)
+                                        val updatedAnime = anime.prepUpdateCover(
+                                            coverCache,
+                                            networkAnime,
+                                            true,
+                                        )
                                             .copyFrom(networkAnime)
                                         try {
                                             updateAnime.await(updatedAnime.toAnimeUpdate())
@@ -403,47 +437,28 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private suspend fun updateTrackings() {
         coroutineScope {
             var progressCount = 0
-            val loggedServices = trackManager.services.filter { it.isLogged }
 
             animeToUpdate.forEach { libraryAnime ->
-                val anime = libraryAnime.anime
-
                 ensureActive()
 
-                notifier.showProgressNotification(listOf(anime), progressCount++, animeToUpdate.size)
-
-                // Update the tracking details.
-                updateTrackings(anime, loggedServices)
+                val anime = libraryAnime.anime
+                notifier.showProgressNotification(
+                    listOf(anime),
+                    progressCount++,
+                    animeToUpdate.size,
+                )
+                refreshAnimeTracks(anime.id)
             }
 
             notifier.cancelProgressNotification()
         }
     }
 
-    private suspend fun updateTrackings(anime: Anime, loggedServices: List<TrackService>) {
-        getTracks.await(anime.id)
-            .map { track ->
-                supervisorScope {
-                    async {
-                        val service = trackManager.getService(track.syncId)
-                        if (service != null && service in loggedServices) {
-                            try {
-                                val updatedTrack = service.animeService.refresh(track.toDbTrack())
-                                insertTrack.await(updatedTrack.toDomainTrack()!!)
-
-                                if (service is EnhancedAnimeTrackService) {
-                                    val episodes = getEpisodeByAnimeId.await(anime.id)
-                                    syncEpisodesWithTrackServiceTwoWay.await(episodes, track, service.animeService)
-                                }
-                            } catch (e: Throwable) {
-                                // Ignore errors and continue
-                                logcat(LogPriority.ERROR, e)
-                            }
-                        }
-                    }
-                }
-            }
-            .awaitAll()
+    private suspend fun refreshAnimeTracks(animeId: Long) {
+        refreshAnimeTracks.await(animeId).forEach { (_, e) ->
+            // Ignore errors and continue
+            logcat(LogPriority.ERROR, e)
+        }
     }
 
     private suspend fun withUpdateNotification(
@@ -484,7 +499,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             if (errors.isNotEmpty()) {
                 val file = context.createFileInCacheDir("animetail  _update_errors.txt")
                 file.bufferedWriter().use { out ->
-                    out.write(context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
+                    out.write(
+                        context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
+                    )
                     // Error file format:
                     // ! Error
                     //   # Source
@@ -543,13 +560,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             prefInterval: Int? = null,
         ) {
             val preferences = Injekt.get<LibraryPreferences>()
-            val interval = prefInterval ?: preferences.libraryUpdateInterval().get()
+            val interval = prefInterval ?: preferences.autoUpdateInterval().get()
             if (interval > 0) {
-                val restrictions = preferences.libraryUpdateDeviceRestriction().get()
+                val restrictions = preferences.autoUpdateDeviceRestrictions().get()
                 val constraints = Constraints(
                     requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) { NetworkType.UNMETERED } else { NetworkType.CONNECTED },
                     requiresCharging = DEVICE_CHARGING in restrictions,
-                    requiresBatteryNotLow = DEVICE_BATTERY_NOT_LOW in restrictions,
+                    requiresBatteryNotLow = true,
                 )
 
                 val request = PeriodicWorkRequestBuilder<AnimeLibraryUpdateJob>(
@@ -564,7 +581,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
                     .build()
 
-                context.workManager.enqueueUniquePeriodicWork(WORK_NAME_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(
+                    WORK_NAME_AUTO,
+                    ExistingPeriodicWorkPolicy.UPDATE,
+                    request,
+                )
             } else {
                 context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }

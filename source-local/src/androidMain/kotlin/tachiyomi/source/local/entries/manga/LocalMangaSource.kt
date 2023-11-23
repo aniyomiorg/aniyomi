@@ -96,7 +96,9 @@ actual class LocalMangaSource(
                     mangaDirs = if (filter.state!!.ascending) {
                         mangaDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
-                        mangaDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name })
+                        mangaDirs.sortedWith(
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
+                        )
                     }
                 }
                 is MangaOrderBy.Latest -> {
@@ -282,11 +284,9 @@ actual class LocalMangaSource(
                     }
                     date_upload = chapterFile.lastModified()
 
-                    val chapterNumber = ChapterRecognition.parseChapterNumber(
-                        manga.title,
-                        this.name,
-                        this.chapter_number,
-                    )
+                    val chapterNumber = ChapterRecognition
+                        .parseChapterNumber(manga.title, this.name, this.chapter_number.toDouble())
+                        .toFloat()
                     chapter_number = chapterNumber
 
                     val format = Format.valueOf(chapterFile)
@@ -325,7 +325,9 @@ actual class LocalMangaSource(
     override fun getFilterList() = FilterList(MangaOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getPageList(chapter: SChapter) = throw UnsupportedOperationException("Unused")
+    override suspend fun getPageList(chapter: SChapter) = throw UnsupportedOperationException(
+        "Unused",
+    )
 
     fun getFormat(chapter: SChapter): Format {
         try {
@@ -346,7 +348,11 @@ actual class LocalMangaSource(
             when (val format = getFormat(chapter)) {
                 is Format.Directory -> {
                     val entry = format.file.listFiles()
-                        ?.sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                        ?.sortedWith { f1, f2 ->
+                            f1.name.compareToCaseInsensitiveNaturalOrder(
+                                f2.name,
+                            )
+                        }
                         ?.find { !it.isDirectory && ImageUtil.isImage(it.name) { FileInputStream(it) } }
 
                     entry?.let { coverManager.update(manga, it.inputStream()) }
@@ -354,7 +360,11 @@ actual class LocalMangaSource(
                 is Format.Zip -> {
                     ZipFile(format.file).use { zip ->
                         val entry = zip.entries().toList()
-                            .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                            .sortedWith { f1, f2 ->
+                                f1.name.compareToCaseInsensitiveNaturalOrder(
+                                    f2.name,
+                                )
+                            }
                             .find {
                                 !it.isDirectory && ImageUtil.isImage(it.name) {
                                     zip.getInputStream(
@@ -369,7 +379,11 @@ actual class LocalMangaSource(
                 is Format.Rar -> {
                     JunrarArchive(format.file).use { archive ->
                         val entry = archive.fileHeaders
-                            .sortedWith { f1, f2 -> f1.fileName.compareToCaseInsensitiveNaturalOrder(f2.fileName) }
+                            .sortedWith { f1, f2 ->
+                                f1.fileName.compareToCaseInsensitiveNaturalOrder(
+                                    f2.fileName,
+                                )
+                            }
                             .find {
                                 !it.isDirectory && ImageUtil.isImage(it.fileName) {
                                     archive.getInputStream(

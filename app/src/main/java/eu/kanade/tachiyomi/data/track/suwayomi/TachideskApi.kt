@@ -28,12 +28,12 @@ class TachideskApi {
     private val network by injectLazy<NetworkHelper>()
     private val json: Json by injectLazy()
 
-    val client: OkHttpClient =
+    private val client: OkHttpClient =
         network.client.newBuilder()
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
 
-    fun headersBuilder(): Headers.Builder = Headers.Builder().apply {
+    private fun headersBuilder(): Headers.Builder = Headers.Builder().apply {
         add("User-Agent", network.defaultUserAgentProvider())
         if (basePassword.isNotEmpty() && baseLogin.isNotEmpty()) {
             val credentials = Credentials.basic(baseLogin, basePassword)
@@ -41,7 +41,7 @@ class TachideskApi {
         }
     }
 
-    val headers: Headers by lazy { headersBuilder().build() }
+    private val headers: Headers by lazy { headersBuilder().build() }
 
     private val baseUrl by lazy { getPrefBaseUrl() }
     private val baseLogin by lazy { getPrefBaseLogin() }
@@ -101,7 +101,7 @@ class TachideskApi {
         return getTrackSearch(track.tracking_url)
     }
 
-    val tachideskExtensionId by lazy {
+    private val tachideskExtensionId by lazy {
         val key = "tachidesk/en/1"
         val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
         (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE
@@ -111,6 +111,13 @@ class TachideskApi {
         Injekt.get<Application>().getSharedPreferences("source_$tachideskExtensionId", 0x0000)
     }
 
+    private fun getPrefBaseUrl(): String = preferences.getString(ADDRESS_TITLE, ADDRESS_DEFAULT)!!
+    private fun getPrefBaseLogin(): String = preferences.getString(LOGIN_TITLE, LOGIN_DEFAULT)!!
+    private fun getPrefBasePassword(): String = preferences.getString(
+        PASSWORD_TITLE,
+        PASSWORD_DEFAULT,
+    )!!
+
     companion object {
         private const val ADDRESS_TITLE = "Server URL Address"
         private const val ADDRESS_DEFAULT = ""
@@ -119,8 +126,4 @@ class TachideskApi {
         private const val PASSWORD_TITLE = "Password (Basic Auth)"
         private const val PASSWORD_DEFAULT = ""
     }
-
-    private fun getPrefBaseUrl(): String = preferences.getString(ADDRESS_TITLE, ADDRESS_DEFAULT)!!
-    private fun getPrefBaseLogin(): String = preferences.getString(LOGIN_TITLE, LOGIN_DEFAULT)!!
-    private fun getPrefBasePassword(): String = preferences.getString(PASSWORD_TITLE, PASSWORD_DEFAULT)!!
 }

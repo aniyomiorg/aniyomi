@@ -26,6 +26,7 @@ import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
 import eu.kanade.presentation.entries.EditCoverAction
+import eu.kanade.presentation.entries.SetIntervalDialog
 import eu.kanade.presentation.entries.manga.ChapterSettingsDialog
 import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.entries.manga.MangaScreen
@@ -37,7 +38,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.isLocalOrStub
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateSearchScreen
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -72,16 +73,16 @@ class MangaScreen(
         val context = LocalContext.current
         val haptic = LocalHapticFeedback.current
         val scope = rememberCoroutineScope()
-        val screenModel = rememberScreenModel { MangaInfoScreenModel(context, mangaId, fromSource) }
+        val screenModel = rememberScreenModel { MangaScreenModel(context, mangaId, fromSource) }
 
         val state by screenModel.state.collectAsState()
 
-        if (state is MangaScreenState.Loading) {
+        if (state is MangaScreenModel.State.Loading) {
             LoadingScreen()
             return
         }
 
-        val successState = state as MangaScreenState.Success
+        val successState = state as MangaScreenModel.State.Success
         val isHttpSource = remember { successState.source is HttpSource }
 
         LaunchedEffect(successState.manga, screenModel.source) {
@@ -99,11 +100,11 @@ class MangaScreen(
         MangaScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
-            dateRelativeTime = screenModel.relativeTime,
             dateFormat = screenModel.dateFormat,
+            fetchInterval = successState.manga.fetchInterval,
             isTabletUi = isTabletUi(),
-            chapterSwipeEndAction = screenModel.chapterSwipeEndAction,
             chapterSwipeStartAction = screenModel.chapterSwipeStartAction,
+            chapterSwipeEndAction = screenModel.chapterSwipeEndAction,
             onBackClicked = navigator::pop,
             onChapterClicked = { openChapter(context, it) },
             onDownloadChapter = screenModel::runChapterDownloadActions.takeIf { !successState.source.isLocalOrStub() },
@@ -111,7 +112,13 @@ class MangaScreen(
                 screenModel.toggleFavorite()
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             },
-            onWebViewClicked = { openMangaInWebView(navigator, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
+            onWebViewClicked = {
+                openMangaInWebView(
+                    navigator,
+                    screenModel.manga,
+                    screenModel.source,
+                )
+            }.takeIf { isHttpSource },
             onWebViewLongClicked = { copyMangaUrl(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
@@ -122,8 +129,9 @@ class MangaScreen(
             onCoverClicked = screenModel::showCoverDialog,
             onShareClicked = { shareManga(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
-            onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.manga.favorite },
-            onMigrateClicked = { navigator.push(MigrateSearchScreen(successState.manga.id)) }.takeIf { successState.manga.favorite },
+            onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.manga.favorite },
+            onEditFetchIntervalClicked = screenModel::showSetMangaFetchIntervalDialog.takeIf { screenModel.isUpdateIntervalEnabled && successState.manga.favorite },
+            onMigrateClicked = { navigator.push(MigrateMangaSearchScreen(successState.manga.id)) }.takeIf { successState.manga.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkChapters,
             onMultiMarkAsReadClicked = screenModel::markChaptersRead,
             onMarkPreviousAsReadClicked = screenModel::markPreviousChapterRead,
@@ -141,9 +149,9 @@ class MangaScreen(
                 screenModel.showTrackDialog()
             }
         }
-        when (val dialog = (state as? MangaScreenState.Success)?.dialog) {
+        when (val dialog = successState.dialog) {
             null -> {}
-            is MangaInfoScreenModel.Dialog.ChangeCategory -> {
+            is MangaScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
@@ -153,7 +161,7 @@ class MangaScreen(
                     },
                 )
             }
-            is MangaInfoScreenModel.Dialog.DeleteChapters -> {
+            is MangaScreenModel.Dialog.DeleteChapters -> {
                 DeleteItemsDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
@@ -163,12 +171,12 @@ class MangaScreen(
                     isManga = true,
                 )
             }
-            is MangaInfoScreenModel.Dialog.DuplicateManga -> DuplicateMangaDialog(
+            is MangaScreenModel.Dialog.DuplicateManga -> DuplicateMangaDialog(
                 onDismissRequest = onDismissRequest,
                 onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
                 onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
             )
-            MangaInfoScreenModel.Dialog.SettingsSheet -> ChapterSettingsDialog(
+            MangaScreenModel.Dialog.SettingsSheet -> ChapterSettingsDialog(
                 onDismissRequest = onDismissRequest,
                 manga = successState.manga,
                 onDownloadFilterChanged = screenModel::setDownloadedFilter,
@@ -178,7 +186,7 @@ class MangaScreen(
                 onDisplayModeChanged = screenModel::setDisplayMode,
                 onSetAsDefault = screenModel::setCurrentSettingsAsDefault,
             )
-            MangaInfoScreenModel.Dialog.TrackSheet -> {
+            MangaScreenModel.Dialog.TrackSheet -> {
                 NavigatorAdaptiveSheet(
                     screen = MangaTrackInfoDialogHomeScreen(
                         mangaId = successState.manga.id,
@@ -189,11 +197,13 @@ class MangaScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            MangaInfoScreenModel.Dialog.FullCover -> {
+            MangaScreenModel.Dialog.FullCover -> {
                 val sm = rememberScreenModel { MangaCoverScreenModel(successState.manga.id) }
                 val manga by sm.state.collectAsState()
                 if (manga != null) {
-                    val getContent = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+                    val getContent = rememberLauncherForActivityResult(
+                        ActivityResultContracts.GetContent(),
+                    ) {
                         if (it == null) return@rememberLauncherForActivityResult
                         sm.editCover(context, it)
                     }
@@ -214,6 +224,13 @@ class MangaScreen(
                 } else {
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
+            }
+            is MangaScreenModel.Dialog.SetMangaFetchInterval -> {
+                SetIntervalDialog(
+                    interval = dialog.manga.fetchInterval,
+                    onDismissRequest = onDismissRequest,
+                    onValueChanged = { screenModel.setFetchInterval(dialog.manga, it) },
+                )
             }
         }
     }
@@ -297,7 +314,11 @@ class MangaScreen(
      *
      * @param genreName the search genre to the parent controller
      */
-    private suspend fun performGenreSearch(navigator: Navigator, genreName: String, source: MangaSource) {
+    private suspend fun performGenreSearch(
+        navigator: Navigator,
+        genreName: String,
+        source: MangaSource,
+    ) {
         if (navigator.size < 2) {
             return
         }

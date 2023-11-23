@@ -1,21 +1,28 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
+import java.time.ZoneOffset
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+
+private val insertTrack: InsertAnimeTrack by injectLazy()
+private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack by injectLazy()
 
 interface AnimeTrackService {
 
@@ -36,7 +43,7 @@ interface AnimeTrackService {
     fun getRewatchingStatus(): Int
 
     // TODO: Store all scores as 10 point in the future maybe?
-    fun get10PointScore(track: DomainAnimeTrack): Float {
+    fun get10PointScore(track: DomainAnimeTrack): Double {
         return track.score
     }
 
@@ -50,7 +57,8 @@ interface AnimeTrackService {
 
     suspend fun refresh(track: AnimeTrack): AnimeTrack
 
-    suspend fun registerTracking(item: AnimeTrack, animeId: Long) {
+    // TODO: move this to an interactor, and update all trackers based on common data
+    suspend fun register(item: AnimeTrack, animeId: Long) {
         item.anime_id = animeId
         try {
             withIOContext {
@@ -58,29 +66,49 @@ interface AnimeTrackService {
                 val hasSeenEpisodes = allEpisodes.any { it.seen }
                 bind(item, hasSeenEpisodes)
 
-                val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
+                var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertAnimeTrack>().await(track)
+                insertTrack.await(track)
 
+                // TODO: merge into SyncChaptersWithTrackServiceTwoWay?
                 // Update episode progress if newer episodes marked seen locally
                 if (hasSeenEpisodes) {
                     val latestLocalSeenEpisodeNumber = allEpisodes
                         .sortedBy { it.episodeNumber }
                         .takeWhile { it.seen }
                         .lastOrNull()
-                        ?.episodeNumber?.toDouble() ?: -1.0
+                        ?.episodeNumber ?: -1.0
 
                     if (latestLocalSeenEpisodeNumber > track.lastEpisodeSeen) {
-                        val updatedTrack = track.copy(
+                        track = track.copy(
                             lastEpisodeSeen = latestLocalSeenEpisodeNumber,
                         )
-                        setRemoteLastEpisodeSeen(updatedTrack.toDbTrack(), latestLocalSeenEpisodeNumber.toInt())
+                        setRemoteLastEpisodeSeen(
+                            track.toDbTrack(),
+                            latestLocalSeenEpisodeNumber.toInt(),
+                        )
+                    }
+
+                    if (track.startDate <= 0) {
+                        val firstReadChapterDate = Injekt.get<GetAnimeHistory>().await(animeId)
+                            .sortedBy { it.seenAt }
+                            .firstOrNull()
+                            ?.seenAt
+
+                        firstReadChapterDate?.let {
+                            val startDate = firstReadChapterDate.time.convertEpochMillisZone(
+                                ZoneOffset.systemDefault(),
+                                ZoneOffset.UTC,
+                            )
+                            track = track.copy(
+                                startDate = startDate,
+                            )
+                            setRemoteStartDate(track.toDbTrack(), startDate)
+                        }
                     }
                 }
 
-                if (this is EnhancedAnimeTrackService) {
-                    Injekt.get<SyncEpisodesWithTrackServiceTwoWay>().await(allEpisodes, track, this@AnimeTrackService)
-                }
+                syncEpisodeProgressWithTrack.await(animeId, track, this@AnimeTrackService)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }
@@ -96,12 +124,13 @@ interface AnimeTrackService {
     }
 
     suspend fun setRemoteLastEpisodeSeen(track: AnimeTrack, episodeNumber: Int) {
-        if (track.last_episode_seen == 0F && track.last_episode_seen < episodeNumber && track.status != getRewatchingStatus()) {
+        if (track.last_episode_seen == 0f && track.last_episode_seen < episodeNumber && track.status != getRewatchingStatus()) {
             track.status = getWatchingStatus()
         }
         track.last_episode_seen = episodeNumber.toFloat()
         if (track.total_episodes != 0 && track.last_episode_seen.toInt() == track.total_episodes) {
             track.status = getCompletionStatus()
+            track.finished_watching_date = System.currentTimeMillis()
         }
         withIOContext { updateRemote(track) }
     }
@@ -126,7 +155,7 @@ interface AnimeTrackService {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertAnimeTrack>().await(it)
+                    insertTrack.await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

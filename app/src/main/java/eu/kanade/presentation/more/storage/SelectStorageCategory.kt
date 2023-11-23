@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import eu.kanade.presentation.components.SelectItem
 import eu.kanade.tachiyomi.R
 import tachiyomi.domain.category.model.Category
+import tachiyomi.presentation.core.components.SelectItem
 
 @Composable
 fun SelectStorageCategory(

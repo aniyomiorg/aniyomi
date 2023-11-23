@@ -26,11 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 import java.io.InputStream
 
 @Composable
@@ -94,7 +94,14 @@ fun ScreenshotOptionsSheet(
         PlayerDialog(
             titleRes = R.string.confirm_set_image_as_cover,
             modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.padding.medium),
-            onConfirmRequest = { onSetAsCover { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! } },
+            onConfirmRequest = {
+                onSetAsCover {
+                    screenModel.takeScreenshot(
+                        cachePath,
+                        showSubtitles.get(),
+                    )!!
+                }
+            },
             onDismissRequest = { showSetCoverDialog = false },
         )
     }

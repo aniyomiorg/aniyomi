@@ -116,7 +116,9 @@ private class MoreScreenModel(
     var downloadedOnly by preferences.downloadedOnly().asState(coroutineScope)
     var incognitoMode by preferences.incognitoMode().asState(coroutineScope)
 
-    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(DownloadQueueState.Stopped)
+    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
+        DownloadQueueState.Stopped,
+    )
     val downloadQueueState: StateFlow<DownloadQueueState> = _state.asStateFlow()
 
     init {
@@ -130,7 +132,12 @@ private class MoreScreenModel(
                     combine(
                         animeDownloadManager.isDownloaderRunning,
                         animeDownloadManager.queueState,
-                    ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
+                    ) { isRunningAnime, animeDownloadQueue ->
+                        Pair(
+                            isRunningAnime,
+                            animeDownloadQueue.size,
+                        )
+                    }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
                             val isDownloading = isDownloadingAnime || isDownloadingManga
                             val downloadQueueSize = mangaDownloadQueueSize + animeDownloadQueueSize
@@ -146,8 +153,8 @@ private class MoreScreenModel(
     }
 }
 
-sealed class DownloadQueueState {
-    object Stopped : DownloadQueueState()
-    data class Paused(val pending: Int) : DownloadQueueState()
-    data class Downloading(val pending: Int) : DownloadQueueState()
+sealed interface DownloadQueueState {
+    data object Stopped : DownloadQueueState
+    data class Paused(val pending: Int) : DownloadQueueState
+    data class Downloading(val pending: Int) : DownloadQueueState
 }

@@ -48,11 +48,7 @@ class MangaUpdatesApi(
 
     suspend fun getSeriesListItem(track: MangaTrack): Pair<ListItem, Rating?> {
         val listItem = with(json) {
-            authClient.newCall(
-                GET(
-                    url = "$baseUrl/v1/lists/series/${track.media_id}",
-                ),
-            )
+            authClient.newCall(GET("$baseUrl/v1/lists/series/${track.media_id}"))
                 .awaitSuccess()
                 .parseAs<ListItem>()
         }
@@ -110,14 +106,23 @@ class MangaUpdatesApi(
         updateSeriesRating(track)
     }
 
-    suspend fun getSeriesRating(track: MangaTrack): Rating? {
+    suspend fun deleteSeriesFromList(track: MangaTrack) {
+        val body = buildJsonArray {
+            add(track.media_id)
+        }
+        authClient.newCall(
+            POST(
+                url = "$baseUrl/v1/lists/series/delete",
+                body = body.toString().toRequestBody(contentType),
+            ),
+        )
+            .awaitSuccess()
+    }
+
+    private suspend fun getSeriesRating(track: MangaTrack): Rating? {
         return try {
             with(json) {
-                authClient.newCall(
-                    GET(
-                        url = "$baseUrl/v1/series/${track.media_id}/rating",
-                    ),
-                )
+                authClient.newCall(GET("$baseUrl/v1/series/${track.media_id}/rating"))
                     .awaitSuccess()
                     .parseAs<Rating>()
             }
@@ -126,7 +131,7 @@ class MangaUpdatesApi(
         }
     }
 
-    suspend fun updateSeriesRating(track: MangaTrack) {
+    private suspend fun updateSeriesRating(track: MangaTrack) {
         if (track.score != 0f) {
             val body = buildJsonObject {
                 put("rating", track.score)

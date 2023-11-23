@@ -6,6 +6,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTrackService
+import eu.kanade.tachiyomi.data.track.DeletableMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -15,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class Shikimori(id: Long) : TrackService(id, "Shikimori"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -31,9 +33,6 @@ class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackServi
     private val interceptor by lazy { ShikimoriInterceptor(this) }
 
     private val api by lazy { ShikimoriApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_shikimori
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)
@@ -87,6 +86,14 @@ class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackServi
         return api.updateLibAnime(track, getUsername())
     }
 
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        return api.deleteLibManga(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        return api.deleteLibAnime(track)
+    }
+
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findLibManga(track, getUsername())
         return if (remoteTrack != null) {
@@ -137,6 +144,7 @@ class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackServi
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {
         api.findLibManga(track, getUsername())?.let { remoteTrack ->
+            track.library_id = remoteTrack.library_id
             track.copyPersonalFrom(remoteTrack)
             track.total_chapters = remoteTrack.total_chapters
         }
@@ -145,6 +153,7 @@ class Shikimori(id: Long) : TrackService(id), MangaTrackService, AnimeTrackServi
 
     override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         api.findLibAnime(track, getUsername())?.let { remoteTrack ->
+            track.library_id = remoteTrack.library_id
             track.copyPersonalFrom(remoteTrack)
             track.total_episodes = remoteTrack.total_episodes
         }

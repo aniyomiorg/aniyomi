@@ -42,7 +42,9 @@ class ImageSaver(
         val pictureDir =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
-        val folderRelativePath = "${Environment.DIRECTORY_PICTURES}/${context.getString(R.string.app_name)}/"
+        val folderRelativePath = "${Environment.DIRECTORY_PICTURES}/${context.getString(
+            R.string.app_name,
+        )}/"
         val imageLocation = (image.location as Location.Pictures).relativePath
 
         val contentValues = contentValuesOf(
@@ -60,7 +62,6 @@ class ImageSaver(
 
         try {
             data().use { input ->
-                @Suppress("BlockingMethodInNonBlockingContext")
                 context.contentResolver.openOutputStream(picture, "w").use { output ->
                     input.copyTo(output!!)
                 }
@@ -112,9 +113,14 @@ class ImageSaver(
         ).use { cursor ->
             if (cursor != null && cursor.count >= 1) {
                 cursor.moveToFirst().let {
-                    val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                    val id = cursor.getLong(
+                        cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID),
+                    )
 
-                    return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                    return ContentUris.withAppendedId(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        id,
+                    )
                 }
             }
         }
@@ -153,8 +159,8 @@ sealed class Image(
         }
 }
 
-sealed class Location {
-    data class Pictures private constructor(val relativePath: String) : Location() {
+sealed interface Location {
+    data class Pictures private constructor(val relativePath: String) : Location {
         companion object {
             fun create(relativePath: String = ""): Pictures {
                 return Pictures(relativePath)
@@ -162,7 +168,7 @@ sealed class Location {
         }
     }
 
-    object Cache : Location()
+    data object Cache : Location
 
     fun directory(context: Context): File {
         return when (this) {

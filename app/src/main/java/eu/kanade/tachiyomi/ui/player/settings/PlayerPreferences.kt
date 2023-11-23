@@ -7,7 +7,10 @@ import tachiyomi.core.preference.PreferenceStore
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
-    fun preserveWatchingPosition() = preferenceStore.getBoolean("pref_preserve_watching_position", false)
+    fun preserveWatchingPosition() = preferenceStore.getBoolean(
+        "pref_preserve_watching_position",
+        false,
+    )
 
     fun enablePip() = preferenceStore.getBoolean("pref_enable_pip", true)
     fun pipEpisodeToasts() = preferenceStore.getBoolean("pref_pip_episode_toasts", true)
@@ -28,11 +31,23 @@ class PlayerPreferences(
 
     fun mpvInput() = preferenceStore.getString("pref_mpv_input", "")
 
-    fun defaultPlayerOrientationType() = preferenceStore.getInt("pref_default_player_orientation_type_key", 10)
-    fun adjustOrientationVideoDimensions() = preferenceStore.getBoolean("pref_adjust_orientation_video_dimensions", true)
+    fun defaultPlayerOrientationType() = preferenceStore.getInt(
+        "pref_default_player_orientation_type_key",
+        10,
+    )
+    fun adjustOrientationVideoDimensions() = preferenceStore.getBoolean(
+        "pref_adjust_orientation_video_dimensions",
+        true,
+    )
 
-    fun defaultPlayerOrientationLandscape() = preferenceStore.getInt("pref_default_player_orientation_landscape_key", 6)
-    fun defaultPlayerOrientationPortrait() = preferenceStore.getInt("pref_default_player_orientation_portrait_key", 7)
+    fun defaultPlayerOrientationLandscape() = preferenceStore.getInt(
+        "pref_default_player_orientation_landscape_key",
+        6,
+    )
+    fun defaultPlayerOrientationPortrait() = preferenceStore.getInt(
+        "pref_default_player_orientation_portrait_key",
+        7,
+    )
 
     fun playerSpeed() = preferenceStore.getFloat("pref_player_speed", 1F)
 
@@ -48,11 +63,17 @@ class PlayerPreferences(
 
     fun screenshotSubtitles() = preferenceStore.getBoolean("pref_screenshot_subtitles", false)
 
-    fun gestureVolumeBrightness() = preferenceStore.getBoolean("pref_gesture_volume_brightness", true)
+    fun gestureVolumeBrightness() = preferenceStore.getBoolean(
+        "pref_gesture_volume_brightness",
+        true,
+    )
     fun gestureHorizontalSeek() = preferenceStore.getBoolean("pref_gesture_horizontal_seek", true)
     fun playerStatisticsPage() = preferenceStore.getInt("pref_player_statistics_page", 0)
 
-    fun alwaysUseExternalPlayer() = preferenceStore.getBoolean("pref_always_use_external_player", false)
+    fun alwaysUseExternalPlayer() = preferenceStore.getBoolean(
+        "pref_always_use_external_player",
+        false,
+    )
     fun externalPlayerPreference() = preferenceStore.getString("external_player_preference", "")
 
     fun progressPreference() = preferenceStore.getFloat("pref_progress_preference", 0.85F)
@@ -63,7 +84,10 @@ class PlayerPreferences(
     fun aniSkipEnabled() = preferenceStore.getBoolean("pref_enable_ani_skip", false)
     fun autoSkipAniSkip() = preferenceStore.getBoolean("pref_enable_auto_skip_ani_skip", false)
     fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
-    fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
+    fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean(
+        "pref_enable_netflixStyle_aniskip",
+        false,
+    )
 
     fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
     fun deband() = preferenceStore.getInt("pref_deband", 0)
@@ -71,7 +95,10 @@ class PlayerPreferences(
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
     fun audioDelay() = preferenceStore.getInt("pref_audio_delay", 0)
 
-    fun rememberSubtitlesDelay() = preferenceStore.getBoolean("pref_remember_subtitles_delay", false)
+    fun rememberSubtitlesDelay() = preferenceStore.getBoolean(
+        "pref_remember_subtitles_delay",
+        false,
+    )
     fun subtitlesDelay() = preferenceStore.getInt("pref_subtitles_delay", 0)
 
     fun overrideSubsASS() = preferenceStore.getBoolean("pref_override_subtitles_ass", false)

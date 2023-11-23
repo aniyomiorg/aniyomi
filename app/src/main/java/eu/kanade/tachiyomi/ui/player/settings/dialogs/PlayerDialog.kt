@@ -20,7 +20,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.TextButton
 
-// TODO: (Merge_Change) stringResource "android.R.string.ok" to be replaced with
+// TODO: (Merge_Change) stringResource "R.string.action_ok" to be replaced with
 //  "R.string.action_ok"
 
 @Composable
@@ -47,7 +47,11 @@ fun PlayerDialog(
             decorFitsSystemWindows = false,
         ),
     ) {
-        Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth(), tonalElevation = 1.dp) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            modifier = Modifier.fillMaxWidth(),
+            tonalElevation = 1.dp,
+        ) {
             if (hideSystemBars) {
                 rememberSystemUiController().apply {
                     isSystemBarsVisible = false
@@ -65,13 +69,16 @@ fun PlayerDialog(
                 content?.invoke()
 
                 if (onConfirmRequest != null) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
                         TextButton(onClick = onDismissRequest) {
                             Text(stringResource(R.string.action_cancel))
                         }
 
                         TextButton(onClick = onConfirm) {
-                            Text(stringResource(android.R.string.ok))
+                            Text(stringResource(R.string.action_ok))
                         }
                     }
                 }

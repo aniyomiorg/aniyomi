@@ -1,21 +1,22 @@
 [versions]
-compiler = "1.4.4"
-compose-bom = "2023.03.00"
-accompanist = "0.30.1"
+compiler = "1.5.2"
+compose-bom = "2023.09.00-alpha02"
+accompanist = "0.33.1-alpha"
 
 [libraries]
-activity = "androidx.activity:activity-compose:1.7.1"
+activity = "androidx.activity:activity-compose:1.7.2"
 bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
 foundation = { module = "androidx.compose.foundation:foundation" }
 animation = { module = "androidx.compose.animation:animation" }
 animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 ui-util = { module = "androidx.compose.ui:ui-util" }
 
 material3-core = { module = "androidx.compose.material3:material3" }
 material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
-# Here until M3's swipeable became public https://issuetracker.google.com/issues/234640556
+# Some components aren't available in Material3
 material-core = { module = "androidx.compose.material:material" }
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }

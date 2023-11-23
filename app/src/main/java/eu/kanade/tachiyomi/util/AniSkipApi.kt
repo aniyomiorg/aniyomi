@@ -76,7 +76,9 @@ class AniSkipApi {
             }
             withUIContext {
                 playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
+                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
+                    skipButtonString,
+                )
             }
         }
 
@@ -93,7 +95,9 @@ class AniSkipApi {
                 if (waitingTime > 0) {
                     withUIContext {
                         playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
+                            R.string.player_aniskip_dontskip,
+                        )
                     }
                 } else {
                     seekTo(skipTime.endTime)
@@ -106,7 +110,10 @@ class AniSkipApi {
         }
 
         fun skipAnimation(skipType: SkipType) {
-            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(R.string.player_aniskip_skip, skipType.getString())
+            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(
+                R.string.player_aniskip_skip,
+                skipType.getString(),
+            )
 
             binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 rightToRight = ConstraintLayout.LayoutParams.PARENT_ID

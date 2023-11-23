@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.extension.manga.model
 
-sealed class MangaLoadResult {
-    class Success(val extension: MangaExtension.Installed) : MangaLoadResult()
-    class Untrusted(val extension: MangaExtension.Untrusted) : MangaLoadResult()
-    object Error : MangaLoadResult()
+sealed interface MangaLoadResult {
+    data class Success(val extension: MangaExtension.Installed) : MangaLoadResult
+    data class Untrusted(val extension: MangaExtension.Untrusted) : MangaLoadResult
+    data object Error : MangaLoadResult
 }

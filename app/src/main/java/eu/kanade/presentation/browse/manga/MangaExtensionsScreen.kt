@@ -43,7 +43,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsState
+import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
@@ -57,7 +57,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MangaExtensionScreen(
-    state: MangaExtensionsState,
+    state: MangaExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     searchQuery: String?,
     onLongClickItem: (MangaExtension) -> Unit,
@@ -76,7 +76,7 @@ fun MangaExtensionScreen(
         enabled = !state.isLoading,
     ) {
         when {
-            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.isEmpty -> {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
                     R.string.no_results_found
@@ -108,7 +108,7 @@ fun MangaExtensionScreen(
 
 @Composable
 private fun ExtensionContent(
-    state: MangaExtensionsState,
+    state: MangaExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (MangaExtension) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
@@ -296,7 +296,10 @@ private fun ExtensionItemContent(
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is MangaExtension.Installed && extension.lang.isNotEmpty()) {
                     Text(
-                        text = LocaleHelper.getSourceDisplayName(extension.lang, LocalContext.current),
+                        text = LocaleHelper.getSourceDisplayName(
+                            extension.lang,
+                            LocalContext.current,
+                        ),
                     )
                 }
 

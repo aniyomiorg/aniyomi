@@ -88,7 +88,10 @@ fun EntryBottomActionMenu(
         val playerPreferences: PlayerPreferences = Injekt.get()
         Surface(
             modifier = modifier,
-            shape = MaterialTheme.shapes.large.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
+            shape = MaterialTheme.shapes.large.copy(
+                bottomEnd = ZeroCornerSize,
+                bottomStart = ZeroCornerSize,
+            ),
             tonalElevation = 3.dp,
         ) {
             val haptic = LocalHapticFeedback.current
@@ -96,7 +99,7 @@ fun EntryBottomActionMenu(
             var resetJob: Job? = remember { null }
             val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                (0 until 9).forEach { i -> confirm[i] = i == toConfirmIndex }
+                (0..<9).forEach { i -> confirm[i] = i == toConfirmIndex }
                 resetJob?.cancel()
                 resetJob = scope.launch {
                     delay(1.seconds)
@@ -265,7 +268,10 @@ fun LibraryBottomActionMenu(
         val scope = rememberCoroutineScope()
         Surface(
             modifier = modifier,
-            shape = MaterialTheme.shapes.large.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
+            shape = MaterialTheme.shapes.large.copy(
+                bottomEnd = ZeroCornerSize,
+                bottomStart = ZeroCornerSize,
+            ),
             tonalElevation = 3.dp,
         ) {
             val haptic = LocalHapticFeedback.current
@@ -273,7 +279,7 @@ fun LibraryBottomActionMenu(
             var resetJob: Job? = remember { null }
             val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                (0 until 5).forEach { i -> confirm[i] = i == toConfirmIndex }
+                (0..<5).forEach { i -> confirm[i] = i == toConfirmIndex }
                 resetJob?.cancel()
                 resetJob = scope.launch {
                     delay(1.seconds)

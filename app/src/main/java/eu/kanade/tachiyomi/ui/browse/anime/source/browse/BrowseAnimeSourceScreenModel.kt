@@ -14,9 +14,10 @@ import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.presentation.util.ioCoroutineScope
@@ -51,7 +52,6 @@ import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
@@ -67,22 +67,22 @@ class BrowseAnimeSourceScreenModel(
     listingQuery: String?,
     sourceManager: AnimeSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
     private val getDuplicateAnimelibAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
-    private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get(),
+    private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack = Injekt.get(),
 ) : StateScreenModel<BrowseAnimeSourceScreenModel.State>(State(Listing.valueOf(listingQuery))) {
 
-    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLogged } }
+    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLoggedIn } }
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
@@ -105,6 +105,10 @@ class BrowseAnimeSourceScreenModel(
                     toolbarQuery = query,
                 )
             }
+        }
+
+        if (!basePreferences.incognitoMode().get()) {
+            sourcePreferences.lastUsedAnimeSource().set(source.id)
         }
     }
 
@@ -152,7 +156,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun setListing(listing: Listing) {
-        mutableState.update { it.copy(listing = listing) }
+        mutableState.update { it.copy(listing = listing, toolbarQuery = null) }
     }
 
     fun setFilters(filters: AnimeFilterList) {
@@ -298,8 +302,11 @@ class BrowseAnimeSourceScreenModel(
                         (service as TrackService).animeService.bind(track)
                         insertTrack.await(track.toDomainTrack()!!)
 
-                        val chapters = getEpisodeByAnimeId.await(anime.id)
-                        syncEpisodesWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service.animeService)
+                        syncEpisodeProgressWithTrack.await(
+                            anime.id,
+                            track.toDomainTrack()!!,
+                            service.animeService,
+                        )
                     }
                 } catch (e: Exception) {
                     logcat(
@@ -323,7 +330,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return getDuplicateAnimelibAnime.await(anime.title)
+        return getDuplicateAnimelibAnime.await(anime).getOrNull(0)
     }
 
     private fun moveAnimeToCategories(anime: Anime, vararg categories: Category) {
@@ -352,9 +359,18 @@ class BrowseAnimeSourceScreenModel(
     }
 
     sealed class Listing(open val query: String?, open val filters: AnimeFilterList) {
-        object Popular : Listing(query = GetRemoteAnime.QUERY_POPULAR, filters = AnimeFilterList())
-        object Latest : Listing(query = GetRemoteAnime.QUERY_LATEST, filters = AnimeFilterList())
-        data class Search(override val query: String?, override val filters: AnimeFilterList) : Listing(query = query, filters = filters)
+        data object Popular : Listing(
+            query = GetRemoteAnime.QUERY_POPULAR,
+            filters = AnimeFilterList(),
+        )
+        data object Latest : Listing(
+            query = GetRemoteAnime.QUERY_LATEST,
+            filters = AnimeFilterList(),
+        )
+        data class Search(override val query: String?, override val filters: AnimeFilterList) : Listing(
+            query = query,
+            filters = filters,
+        )
 
         companion object {
             fun valueOf(query: String?): Listing {
@@ -367,15 +383,15 @@ class BrowseAnimeSourceScreenModel(
         }
     }
 
-    sealed class Dialog {
-        object Filter : Dialog()
-        data class RemoveAnime(val anime: Anime) : Dialog()
-        data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
+    sealed interface Dialog {
+        data object Filter : Dialog
+        data class RemoveAnime(val anime: Anime) : Dialog
+        data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
         data class ChangeAnimeCategory(
             val anime: Anime,
             val initialSelection: List<CheckboxState.State<Category>>,
-        ) : Dialog()
-        data class Migrate(val newAnime: Anime) : Dialog()
+        ) : Dialog
+        data class Migrate(val newAnime: Anime) : Dialog
     }
 
     @Immutable

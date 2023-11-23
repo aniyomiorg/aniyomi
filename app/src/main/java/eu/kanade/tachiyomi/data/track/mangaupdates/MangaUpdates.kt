@@ -4,13 +4,14 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.DeletableMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 
-class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
+class MangaUpdates(id: Long) : TrackService(id, "MangaUpdates"), MangaTrackService, DeletableMangaTrackService {
 
     companion object {
         const val READING_LIST = 0
@@ -23,9 +24,6 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
     private val interceptor by lazy { MangaUpdatesInterceptor(this) }
 
     private val api by lazy { MangaUpdatesApi(interceptor, client) }
-
-    @StringRes
-    override fun nameRes(): Int = R.string.tracker_manga_updates
 
     override fun getLogo(): Int = R.drawable.ic_manga_updates
 
@@ -67,6 +65,11 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
         return track
     }
 
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        api.deleteSeriesFromList(track)
+        return track
+    }
+
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         return try {
             val (series, rating) = api.getSeriesListItem(track)
@@ -92,7 +95,9 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
     }
 
     override suspend fun login(username: String, password: String) {
-        val authenticated = api.authenticate(username, password) ?: throw Throwable("Unable to login")
+        val authenticated = api.authenticate(username, password) ?: throw Throwable(
+            "Unable to login",
+        )
         saveCredentials(authenticated.uid.toString(), authenticated.sessionToken)
         interceptor.newAuth(authenticated.sessionToken)
     }

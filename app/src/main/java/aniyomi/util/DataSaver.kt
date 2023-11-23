@@ -74,7 +74,13 @@ private class BandwidthHeroDataSaver(preferences: SourcePreferences) : DataSaver
     override fun compress(imageUrl: String): String {
         return if (dataSavedServer.isNotBlank() && !imageUrl.contains(dataSavedServer)) {
             when {
-                imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) imageUrl else getUrl(imageUrl)
+                imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) {
+                    imageUrl
+                } else {
+                    getUrl(
+                        imageUrl,
+                    )
+                }
                 imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
                 else -> getUrl(imageUrl)
             }
@@ -100,7 +106,13 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
 
     override fun compress(imageUrl: String): String {
         return when {
-            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) imageUrl else getUrl(imageUrl)
+            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) {
+                imageUrl
+            } else {
+                getUrl(
+                    imageUrl,
+                )
+            }
             imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
             else -> getUrl(imageUrl)
         }
@@ -108,7 +120,11 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
 
     private fun getUrl(imageUrl: String): String {
         // Network Request sent to wsrv
-        return "https://wsrv.nl/?url=$imageUrl" + if (imageUrl.contains(".webp", true) || imageUrl.contains(".gif", true)) {
+        return "https://wsrv.nl/?url=$imageUrl" + if (imageUrl.contains(".webp", true) || imageUrl.contains(
+                ".gif",
+                true,
+            )
+        ) {
             if (!format) {
                 // Preserve output image extension for animated images(.webp and .gif)
                 "&q=$quality&n=-1"
@@ -140,7 +156,13 @@ private class ReSmushItDataSaver(preferences: SourcePreferences) : DataSaver {
 
     override fun compress(imageUrl: String): String {
         return when {
-            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) imageUrl else getUrl(imageUrl)
+            imageUrl.contains(".jpeg", true) || imageUrl.contains(".jpg", true) -> if (ignoreJpg) {
+                imageUrl
+            } else {
+                getUrl(
+                    imageUrl,
+                )
+            }
             imageUrl.contains(".gif", true) -> if (ignoreGif) imageUrl else getUrl(imageUrl)
             else -> getUrl(imageUrl)
         }

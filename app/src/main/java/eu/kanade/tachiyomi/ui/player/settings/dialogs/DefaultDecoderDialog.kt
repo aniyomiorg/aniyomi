@@ -25,7 +25,10 @@ fun DefaultDecoderDialog(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         items.add(
             index = 0,
-            Pair("${HwDecState.HW_PLUS.title} (${HwDecState.HW_PLUS.mpvValue})", HwDecState.HW_PLUS.mpvValue),
+            Pair(
+                "${HwDecState.HW_PLUS.title} (${HwDecState.HW_PLUS.mpvValue})",
+                HwDecState.HW_PLUS.mpvValue,
+            ),
         )
     }
 

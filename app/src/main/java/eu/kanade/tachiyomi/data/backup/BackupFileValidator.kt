@@ -30,7 +30,9 @@ class BackupFileValidator(
         }
 
         if (backup.backupManga.isEmpty() && backup.backupAnime.isEmpty()) {
-            throw IllegalStateException(context.getString(R.string.invalid_backup_file_missing_manga))
+            throw IllegalStateException(
+                context.getString(R.string.invalid_backup_file_missing_manga),
+            )
         }
 
         val sources = backup.backupSources.associate { it.sourceId to it.name }
@@ -69,8 +71,8 @@ class BackupFileValidator(
             .distinct()
         val missingTrackers = trackers
             .mapNotNull { trackManager.getService(it.toLong()) }
-            .filter { !it.isLogged }
-            .map { context.getString(it.nameRes()) }
+            .filter { !it.isLoggedIn }
+            .map { it.name }
             .sorted()
 
         return Results(missingSources, missingTrackers)

@@ -26,20 +26,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
-import eu.kanade.tachiyomi.util.preference.toggle
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.toggle
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.InputStream
 
-val sheetDialogPadding = PaddingValues(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
+val sheetDialogPadding = PaddingValues(
+    vertical = MaterialTheme.padding.small,
+    horizontal = MaterialTheme.padding.medium,
+)
 
 class PlayerSettingsScreenModel(
     val preferences: PlayerPreferences = Injekt.get(),

@@ -15,7 +15,7 @@ import eu.kanade.presentation.browse.anime.MigrateAnimeSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrationAnimeScreen
+import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreen
 
 @Composable
 fun Screen.migrateAnimeSourceTab(): TabContent {
@@ -39,7 +39,9 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
             MigrateAnimeSourceScreen(
                 state = state,
                 contentPadding = contentPadding,
-                onClickItem = { source -> navigator.push(MigrationAnimeScreen(source.id)) },
+                onClickItem = { source ->
+                    navigator.push(MigrateAnimeScreen(source.id))
+                },
                 onToggleSortingDirection = screenModel::toggleSortingDirection,
                 onToggleSortingMode = screenModel::toggleSortingMode,
             )

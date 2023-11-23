@@ -3,9 +3,9 @@ package eu.kanade.presentation.more.stats
 import androidx.compose.runtime.Immutable
 import eu.kanade.presentation.more.stats.data.StatsData
 
-sealed class StatsScreenState {
+sealed interface StatsScreenState {
     @Immutable
-    object Loading : StatsScreenState()
+    data object Loading : StatsScreenState
 
     @Immutable
     data class SuccessManga(
@@ -13,7 +13,7 @@ sealed class StatsScreenState {
         val titles: StatsData.MangaTitles,
         val chapters: StatsData.Chapters,
         val trackers: StatsData.Trackers,
-    ) : StatsScreenState()
+    ) : StatsScreenState
 
     @Immutable
     data class SuccessAnime(
@@ -21,5 +21,5 @@ sealed class StatsScreenState {
         val titles: StatsData.AnimeTitles,
         val episodes: StatsData.Episodes,
         val trackers: StatsData.Trackers,
-    ) : StatsScreenState()
+    ) : StatsScreenState
 }

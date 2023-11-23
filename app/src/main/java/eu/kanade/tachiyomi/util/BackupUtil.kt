@@ -45,7 +45,10 @@ object BackupUtil {
         return try {
             backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
         } catch (e: SerializationException) {
-            val fullBackup = backupManager.parser.decodeFromByteArray(FullBackupSerializer, backupString)
+            val fullBackup = backupManager.parser.decodeFromByteArray(
+                FullBackupSerializer,
+                backupString,
+            )
             val backupPreferences = fullBackup.backupPreferences.map {
                 val value = when (it.value) {
                     is FullIntPreferenceValue -> IntPreferenceValue(it.value.value)

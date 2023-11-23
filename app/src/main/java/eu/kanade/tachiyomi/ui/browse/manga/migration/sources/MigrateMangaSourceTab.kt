@@ -15,13 +15,13 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrationMangaScreen
+import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreen
 
 @Composable
 fun Screen.migrateMangaSourceTab(): TabContent {
     val uriHandler = LocalUriHandler.current
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = rememberScreenModel { MigrateSourceScreenModel() }
+    val screenModel = rememberScreenModel { MigrateMangaSourceScreenModel() }
     val state by screenModel.state.collectAsState()
 
     return TabContent(
@@ -40,7 +40,7 @@ fun Screen.migrateMangaSourceTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source ->
-                    navigator.push(MigrationMangaScreen(source.id))
+                    navigator.push(MigrateMangaScreen(source.id))
                 },
                 onToggleSortingDirection = screenModel::toggleSortingDirection,
                 onToggleSortingMode = screenModel::toggleSortingMode,

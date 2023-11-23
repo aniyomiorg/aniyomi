@@ -5,7 +5,6 @@ import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
-import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -126,22 +125,11 @@ internal class AnimeExtensionGithubApi {
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
                     hasChangelog = it.hasChangelog == 1,
-                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),
+                    sources = it.sources?.map(extensionAnimeSourceMapper).orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
+                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
                 )
             }
-    }
-
-    private fun List<AnimeExtensionSourceJsonObject>.toAnimeExtensionSources(): List<AvailableAnimeSources> {
-        return this.map {
-            AvailableAnimeSources(
-                id = it.id,
-                lang = it.lang,
-                name = it.name,
-                baseUrl = it.baseUrl,
-            )
-        }
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
@@ -185,3 +173,12 @@ private data class AnimeExtensionSourceJsonObject(
     val name: String,
     val baseUrl: String,
 )
+
+private val extensionAnimeSourceMapper: (AnimeExtensionSourceJsonObject) -> AnimeExtension.Available.AnimeSource = {
+    AnimeExtension.Available.AnimeSource(
+        id = it.id,
+        lang = it.lang,
+        name = it.name,
+        baseUrl = it.baseUrl,
+    )
+}

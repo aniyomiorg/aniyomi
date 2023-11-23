@@ -1,21 +1,28 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
+import java.time.ZoneOffset
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
+
+private val insertTrack: InsertMangaTrack by injectLazy()
+private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack by injectLazy()
 
 interface MangaTrackService {
 
@@ -36,7 +43,7 @@ interface MangaTrackService {
     fun getRereadingStatus(): Int
 
     // TODO: Store all scores as 10 point in the future maybe?
-    fun get10PointScore(track: DomainTrack): Float {
+    fun get10PointScore(track: DomainTrack): Double {
         return track.score
     }
 
@@ -50,7 +57,8 @@ interface MangaTrackService {
 
     suspend fun refresh(track: MangaTrack): MangaTrack
 
-    suspend fun registerTracking(item: MangaTrack, mangaId: Long) {
+    // TODO: move this to an interactor, and update all trackers based on common data
+    suspend fun register(item: MangaTrack, mangaId: Long) {
         item.manga_id = mangaId
         try {
             withIOContext {
@@ -58,29 +66,49 @@ interface MangaTrackService {
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 
-                val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
+                var track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertMangaTrack>().await(track)
+                insertTrack.await(track)
 
+                // TODO: merge into SyncChaptersWithTrackServiceTwoWay?
                 // Update chapter progress if newer chapters marked read locally
                 if (hasReadChapters) {
                     val latestLocalReadChapterNumber = allChapters
                         .sortedBy { it.chapterNumber }
                         .takeWhile { it.read }
                         .lastOrNull()
-                        ?.chapterNumber?.toDouble() ?: -1.0
+                        ?.chapterNumber ?: -1.0
 
                     if (latestLocalReadChapterNumber > track.lastChapterRead) {
-                        val updatedTrack = track.copy(
+                        track = track.copy(
                             lastChapterRead = latestLocalReadChapterNumber,
                         )
-                        setRemoteLastChapterRead(updatedTrack.toDbTrack(), latestLocalReadChapterNumber.toInt())
+                        setRemoteLastChapterRead(
+                            track.toDbTrack(),
+                            latestLocalReadChapterNumber.toInt(),
+                        )
+                    }
+
+                    if (track.startDate <= 0) {
+                        val firstReadChapterDate = Injekt.get<GetMangaHistory>().await(mangaId)
+                            .sortedBy { it.readAt }
+                            .firstOrNull()
+                            ?.readAt
+
+                        firstReadChapterDate?.let {
+                            val startDate = firstReadChapterDate.time.convertEpochMillisZone(
+                                ZoneOffset.systemDefault(),
+                                ZoneOffset.UTC,
+                            )
+                            track = track.copy(
+                                startDate = startDate,
+                            )
+                            setRemoteStartDate(track.toDbTrack(), startDate)
+                        }
                     }
                 }
 
-                if (this is EnhancedMangaTrackService) {
-                    Injekt.get<SyncChaptersWithTrackServiceTwoWay>().await(allChapters, track, this@MangaTrackService)
-                }
+                syncChapterProgressWithTrack.await(mangaId, track, this@MangaTrackService)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }
@@ -96,12 +124,13 @@ interface MangaTrackService {
     }
 
     suspend fun setRemoteLastChapterRead(track: MangaTrack, chapterNumber: Int) {
-        if (track.last_chapter_read == 0F && track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()) {
+        if (track.last_chapter_read == 0f && track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()) {
             track.status = getReadingStatus()
         }
         track.last_chapter_read = chapterNumber.toFloat()
         if (track.total_chapters != 0 && track.last_chapter_read.toInt() == track.total_chapters) {
             track.status = getCompletionStatus()
+            track.finished_reading_date = System.currentTimeMillis()
         }
         withIOContext { updateRemote(track) }
     }
@@ -126,7 +155,7 @@ interface MangaTrackService {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertMangaTrack>().await(it)
+                    insertTrack.await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

@@ -19,7 +19,11 @@ import java.util.Calendar
 class AniChartApi {
     private val client = OkHttpClient()
 
-    internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean): Pair<Int, Long> {
+    internal suspend fun loadAiringTime(
+        anime: Anime,
+        trackItems: List<AnimeTrackItem>,
+        manualFetch: Boolean,
+    ): Pair<Int, Long> {
         var airingEpisodeData = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
         if (anime.status == SAnime.COMPLETED.toLong() && !manualFetch) return airingEpisodeData
 
@@ -118,13 +122,23 @@ class AniChartApi {
 
                 val data = removeAiredSimkl(body)
 
-                val malId = data.substringAfter("\"simkl_id\":$id,", "").substringAfter("\"mal\":\"").substringBefore("\"").toLongOrNull() ?: 0L
-                if (malId != 0L) return@withIOContext getAnilistAiringEpisodeData(getAlIdFromMal(malId))
+                val malId = data.substringAfter("\"simkl_id\":$id,", "").substringAfter(
+                    "\"mal\":\"",
+                ).substringBefore("\"").toLongOrNull() ?: 0L
+                if (malId != 0L) {
+                    return@withIOContext getAnilistAiringEpisodeData(
+                        getAlIdFromMal(malId),
+                    )
+                }
 
-                val epNum = data.substringAfter("\"simkl_id\":$id,", "").substringBefore("\"}}").substringAfterLast("\"episode\":")
+                val epNum = data.substringAfter("\"simkl_id\":$id,", "").substringBefore("\"}}").substringAfterLast(
+                    "\"episode\":",
+                )
                 episodeNumber = epNum.substringBefore(",").toIntOrNull() ?: episodeNumber
 
-                val date = data.substringBefore("\"simkl_id\":$id,", "").substringAfterLast("\"date\":\"").substringBefore("\"")
+                val date = data.substringBefore("\"simkl_id\":$id,", "").substringAfterLast(
+                    "\"date\":\"",
+                ).substringBefore("\"")
                 airingAt = if (date.isNotBlank()) toUnixTimestamp(date) else airingAt
 
                 if (airingAt != 0L) return@withIOContext Pair(episodeNumber, airingAt)

@@ -95,7 +95,10 @@ internal class MangaDownloadNotifier(private val context: Context) {
             } else {
                 val title = download.manga.title.chop(15)
                 val quotedTitle = Pattern.quote(title)
-                val chapter = download.chapter.name.replaceFirst("$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE), "")
+                val chapter = download.chapter.name.replaceFirst(
+                    "$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE),
+                    "",
+                )
                 setContentTitle("$title - $chapter".chop(30))
                 setContentText(downloadingProgressText)
             }
@@ -187,7 +190,9 @@ internal class MangaDownloadNotifier(private val context: Context) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
-                mangaTitle?.plus(": $chapter") ?: context.getString(R.string.download_notifier_downloader_title),
+                mangaTitle?.plus(": $chapter") ?: context.getString(
+                    R.string.download_notifier_downloader_title,
+                ),
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)

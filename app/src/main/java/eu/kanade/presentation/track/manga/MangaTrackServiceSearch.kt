@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -60,7 +61,6 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -112,7 +112,9 @@ fun MangaTrackServiceSearch(
                                 .copy(color = MaterialTheme.colorScheme.onSurface),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                            keyboardActions = KeyboardActions(onSearch = { dispatchQueryAndClearFocus() }),
+                            keyboardActions = KeyboardActions(
+                                onSearch = { dispatchQueryAndClearFocus() },
+                            ),
                             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                             decorationBox = {
                                 if (query.text.isEmpty()) {
@@ -143,7 +145,7 @@ fun MangaTrackServiceSearch(
                         }
                     },
                 )
-                Divider()
+                HorizontalDivider()
             }
         },
         bottomBar = {
@@ -187,9 +189,13 @@ fun MangaTrackServiceSearch(
                             SearchResultItem(
                                 title = it.title,
                                 coverUrl = it.cover_url,
-                                type = it.publishing_type.toLowerCase(Locale.current).capitalize(Locale.current),
+                                type = it.publishing_type.toLowerCase(Locale.current).capitalize(
+                                    Locale.current,
+                                ),
                                 startDate = it.start_date,
-                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(Locale.current),
+                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(
+                                    Locale.current,
+                                ),
                                 description = it.summary.trim(),
                                 selected = it == selected,
                                 onClick = { onSelectedChange(it) },

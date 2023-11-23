@@ -1,0 +1,49 @@
+ALTER TABLE animes ADD COLUMN last_modified_at INTEGER AS Long NOT NULL DEFAULT 0;
+ALTER TABLE animes ADD COLUMN favorite_modified_at INTEGER AS Long;
+ALTER TABLE animes_categories ADD COLUMN last_modified_at INTEGER AS Long NOT NULL DEFAULT 0;
+ALTER TABLE episodes ADD COLUMN last_modified_at INTEGER AS Long NOT NULL DEFAULT 0;
+
+UPDATE animes SET last_modified_at = strftime('%s', 'now');
+UPDATE animes SET favorite_modified_at = strftime('%s', 'now') WHERE favorite = 1;
+UPDATE animes_categories SET last_modified_at = strftime('%s', 'now');
+UPDATE episodes SET last_modified_at = strftime('%s', 'now');
+
+-- Create triggers
+DROP TRIGGER IF EXISTS update_last_modified_at_animes;
+CREATE TRIGGER update_last_modified_at_animes
+AFTER UPDATE ON animes
+FOR EACH ROW
+BEGIN
+  UPDATE animes
+  SET last_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
+
+DROP TRIGGER IF EXISTS update_favorite_modified_at_animes;
+CREATE TRIGGER update_last_favorited_at_animes
+AFTER UPDATE OF favorite ON animes
+BEGIN
+  UPDATE animes
+  SET favorite_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
+
+DROP TRIGGER IF EXISTS update_last_modified_at_episodes;
+CREATE TRIGGER update_last_modified_at_episodes
+AFTER UPDATE ON episodes
+FOR EACH ROW
+BEGIN
+  UPDATE episodes
+  SET last_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
+
+DROP TRIGGER IF EXISTS update_last_modified_at_animes_categories;
+CREATE TRIGGER update_last_modified_at_animes_categories
+AFTER UPDATE ON animes_categories
+FOR EACH ROW
+BEGIN
+  UPDATE animes_categories
+  SET last_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;

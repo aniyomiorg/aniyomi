@@ -21,12 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
@@ -42,7 +41,10 @@ fun AnimeHistoryItem(
         modifier = modifier
             .clickable(onClick = onClickResume)
             .height(HISTORY_ITEM_HEIGHT)
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ItemCover.Book(
@@ -68,7 +70,7 @@ fun AnimeHistoryItem(
                 text = if (history.episodeNumber > -1) {
                     stringResource(
                         R.string.recent_anime_time,
-                        episodeFormatter.format(history.episodeNumber),
+                        formatEpisodeNumber(history.episodeNumber),
                         seenAt,
                     )
                 } else {
@@ -88,8 +90,3 @@ fun AnimeHistoryItem(
         }
     }
 }
-
-private val episodeFormatter = DecimalFormat(
-    "#.###",
-    DecimalFormatSymbols().apply { decimalSeparator = '.' },
-)

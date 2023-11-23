@@ -12,11 +12,8 @@ import eu.kanade.tachiyomi.source.MangaSource
 import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
+class Suwayomi(id: Long) : TrackService(id, "Suwayomi"), EnhancedMangaTrackService, MangaTrackService {
     val api by lazy { TachideskApi() }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_suwayomi
 
     override fun getLogo() = R.drawable.ic_tracker_suwayomi
 
@@ -85,7 +82,9 @@ class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTra
         saveCredentials("user", "pass")
     }
 
-    override fun getAcceptedSources(): List<String> = listOf("eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk")
+    override fun getAcceptedSources(): List<String> = listOf(
+        "eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk",
+    )
 
     override suspend fun match(manga: DomainManga): MangaTrackSearch? =
         try {
@@ -94,7 +93,11 @@ class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTra
             null
         }
 
-    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let { accept(it) } == true
+    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let {
+        accept(
+            it,
+        )
+    } == true
 
     override fun migrateTrack(track: DomainTrack, manga: DomainManga, newSource: MangaSource): DomainTrack? =
         if (accept(newSource)) {

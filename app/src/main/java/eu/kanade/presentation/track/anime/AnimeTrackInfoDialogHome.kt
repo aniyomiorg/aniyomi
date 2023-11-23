@@ -18,9 +18,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,8 +41,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import tachiyomi.presentation.core.components.material.Divider
-import tachiyomi.presentation.core.components.material.VerticalDivider
 import java.text.DateFormat
 
 private const val UnsetStatusTextAlpha = 0.5F
@@ -87,10 +87,14 @@ fun AnimeTrackInfoDialogHome(
                     },
                     onEpisodesClick = { onEpisodeClick(item) },
                     score = item.service.animeService.displayScore(item.track.toDbTrack())
-                        .takeIf { supportsScoring && item.track.score != 0F },
+                        .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
-                    startDate = remember(item.track.startDate) { dateFormat.format(item.track.startDate) }
+                    startDate = remember(item.track.startDate) {
+                        dateFormat.format(
+                            item.track.startDate,
+                        )
+                    }
                         .takeIf { supportsReadingDates && item.track.startDate != 0L },
                     onStartDateClick = { onStartDateEdit(item) } // TODO
                         .takeIf { supportsReadingDates },
@@ -200,7 +204,7 @@ private fun TrackInfoItem(
                 }
 
                 if (onStartDateClick != null && onEndDateClick != null) {
-                    Divider()
+                    HorizontalDivider()
                     Row(modifier = Modifier.height(IntrinsicSize.Min)) {
                         TrackDetailsItem(
                             modifier = Modifier.weight(1F),

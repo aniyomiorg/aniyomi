@@ -5,7 +5,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import data.History
 import data.Mangas
 import dataanime.Animehistory
@@ -47,19 +47,18 @@ import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
-import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.provider.AndroidBackupFolderProvider
 import tachiyomi.core.provider.AndroidDownloadFolderProvider
 import tachiyomi.data.Database
-import tachiyomi.data.dateAdapter
+import tachiyomi.data.DateColumnAdapter
+import tachiyomi.data.StringListColumnAdapter
+import tachiyomi.data.UpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.anime.AndroidAnimeDatabaseHandler
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.AndroidMangaDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.data.listOfStringsAdapter
-import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -135,11 +134,11 @@ class AppModule(val app: Application) : InjektModule {
             Database(
                 driver = sqlDriverManga,
                 historyAdapter = History.Adapter(
-                    last_readAdapter = dateAdapter,
+                    last_readAdapter = DateColumnAdapter,
                 ),
                 mangasAdapter = Mangas.Adapter(
-                    genreAdapter = listOfStringsAdapter,
-                    update_strategyAdapter = updateStrategyAdapter,
+                    genreAdapter = StringListColumnAdapter,
+                    update_strategyAdapter = UpdateStrategyColumnAdapter,
                 ),
             )
         }
@@ -148,18 +147,28 @@ class AppModule(val app: Application) : InjektModule {
             AnimeDatabase(
                 driver = sqlDriverAnime,
                 animehistoryAdapter = Animehistory.Adapter(
-                    last_seenAdapter = dateAdapter,
+                    last_seenAdapter = DateColumnAdapter,
                 ),
                 animesAdapter = Animes.Adapter(
-                    genreAdapter = listOfStringsAdapter,
-                    update_strategyAdapter = updateStrategyAdapter,
+                    genreAdapter = StringListColumnAdapter,
+                    update_strategyAdapter = UpdateStrategyColumnAdapter,
                 ),
             )
         }
 
-        addSingletonFactory<MangaDatabaseHandler> { AndroidMangaDatabaseHandler(get(), sqlDriverManga) }
+        addSingletonFactory<MangaDatabaseHandler> {
+            AndroidMangaDatabaseHandler(
+                get(),
+                sqlDriverManga,
+            )
+        }
 
-        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
+        addSingletonFactory<AnimeDatabaseHandler> {
+            AndroidAnimeDatabaseHandler(
+                get(),
+                sqlDriverAnime,
+            )
+        }
 
         addSingletonFactory {
             Json {
@@ -169,10 +178,12 @@ class AppModule(val app: Application) : InjektModule {
         }
         addSingletonFactory {
             XML {
-                unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
+                defaultPolicy {
+                    ignoreUnknownChildren()
+                }
                 autoPolymorphic = true
                 xmlDeclMode = XmlDeclMode.Charset
-                indent = 4
+                indent = 2
                 xmlVersion = XmlVersion.XML10
             }
         }

@@ -4,11 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ChromeReaderMode
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -22,8 +22,6 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.Sync
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -48,11 +46,12 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
+import eu.kanade.presentation.components.UpIcon
+import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
@@ -96,10 +95,7 @@ object SettingsMainScreen : Screen() {
                     },
                     navigationIcon = {
                         IconButton(onClick = backPress::invoke) {
-                            Icon(
-                                imageVector = Icons.Outlined.ArrowBack,
-                                contentDescription = stringResource(R.string.abc_action_bar_up_description),
-                            )
+                            UpIcon()
                         }
                     },
                     actions = {
@@ -151,7 +147,9 @@ object SettingsMainScreen : Screen() {
                                 .clip(RoundedCornerShape(24.dp))
                                 .then(
                                     if (selected) {
-                                        Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+                                        Modifier.background(
+                                            MaterialTheme.colorScheme.surfaceVariant,
+                                        )
                                     } else {
                                         Modifier
                                     },
@@ -188,12 +186,6 @@ object SettingsMainScreen : Screen() {
     )
 
     private val items = listOf(
-        Item(
-            titleRes = R.string.pref_category_general,
-            subtitleRes = R.string.pref_general_summary,
-            icon = Icons.Outlined.Tune,
-            screen = SettingsGeneralScreen,
-        ),
         Item(
             titleRes = R.string.pref_category_appearance,
             subtitleRes = R.string.pref_appearance_summary,
@@ -266,7 +258,9 @@ object SettingsMainScreen : Screen() {
             titleRes = R.string.pref_category_about,
             subtitleRes = 0,
             formatSubtitle = {
-                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(withBuildDate = false)}"
+                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(
+                    withBuildDate = false,
+                )}"
             },
             icon = Icons.Outlined.Info,
             screen = AboutScreen,

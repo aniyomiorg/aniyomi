@@ -3,6 +3,7 @@ package eu.kanade.presentation.more.settings.screen
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import android.webkit.WebStorage
 import android.webkit.WebView
@@ -13,6 +14,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,8 +30,9 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.SourcePreferences.DataSaver
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.screen.advanced.ClearAnimeDatabaseScreen
+import eu.kanade.presentation.more.settings.screen.advanced.ClearDatabaseScreen
 import eu.kanade.presentation.more.settings.screen.debug.DebugInfoScreen
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
@@ -67,11 +70,13 @@ import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
 object SettingsAdvancedScreen : SearchableSettings {
+
     @ReadOnlyComposable
     @Composable
     @StringRes
@@ -86,44 +91,65 @@ object SettingsAdvancedScreen : SearchableSettings {
         val basePreferences = remember { Injekt.get<BasePreferences>() }
         val networkPreferences = remember { Injekt.get<NetworkPreferences>() }
 
-        return listOf(
-            Preference.PreferenceItem.SwitchPreference(
-                pref = basePreferences.acraEnabled(),
-                title = stringResource(R.string.pref_enable_acra),
-                subtitle = stringResource(R.string.pref_acra_summary),
-                enabled = isPreviewBuildType || isReleaseBuildType,
-            ),
-            Preference.PreferenceItem.TextPreference(
-                title = stringResource(R.string.pref_dump_crash_logs),
-                subtitle = stringResource(R.string.pref_dump_crash_logs_summary),
-                onClick = {
-                    scope.launch {
-                        CrashLogUtil(context).dumpLogs()
-                    }
-                },
-            ),
-            Preference.PreferenceItem.SwitchPreference(
-                pref = networkPreferences.verboseLogging(),
-                title = stringResource(R.string.pref_verbose_logging),
-                subtitle = stringResource(R.string.pref_verbose_logging_summary),
-                onValueChanged = {
-                    context.toast(R.string.requires_app_restart)
-                    true
-                },
-            ),
-            Preference.PreferenceItem.TextPreference(
-                title = stringResource(R.string.pref_debug_info),
-                onClick = { navigator.push(DebugInfoScreen) },
-            ),
-            getBackgroundActivityGroup(),
-            getDataGroup(),
-            getNetworkGroup(networkPreferences = networkPreferences),
-            getLibraryGroup(),
-            getExtensionsGroup(basePreferences = basePreferences),
-            // SY -->
-            getDataSaverGroup(),
-            // SY <--
-        )
+        return buildList {
+            addAll(
+                listOf(
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = basePreferences.acraEnabled(),
+                        title = stringResource(R.string.pref_enable_acra),
+                        subtitle = stringResource(R.string.pref_acra_summary),
+                        enabled = isPreviewBuildType || isReleaseBuildType,
+                    ),
+                    Preference.PreferenceItem.TextPreference(
+                        title = stringResource(R.string.pref_dump_crash_logs),
+                        subtitle = stringResource(R.string.pref_dump_crash_logs_summary),
+                        onClick = {
+                            scope.launch {
+                                CrashLogUtil(context).dumpLogs()
+                            }
+                        },
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = networkPreferences.verboseLogging(),
+                        title = stringResource(R.string.pref_verbose_logging),
+                        subtitle = stringResource(R.string.pref_verbose_logging_summary),
+                        onValueChanged = {
+                            context.toast(R.string.requires_app_restart)
+                            true
+                        },
+                    ),
+                    Preference.PreferenceItem.TextPreference(
+                        title = stringResource(R.string.pref_debug_info),
+                        onClick = { navigator.push(DebugInfoScreen()) },
+                    ),
+                ),
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                add(
+                    Preference.PreferenceItem.TextPreference(
+                        title = stringResource(R.string.pref_manage_notifications),
+                        onClick = {
+                            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                            }
+                            context.startActivity(intent)
+                        },
+                    ),
+                )
+            }
+            addAll(
+                listOf(
+                    getBackgroundActivityGroup(),
+                    getDataGroup(),
+                    getNetworkGroup(networkPreferences = networkPreferences),
+                    getLibraryGroup(),
+                    getExtensionsGroup(basePreferences = basePreferences),
+                    // SY -->
+                    getDataSaverGroup(),
+                    // SY <--
+                ),
+            )
+        }
     }
 
     @Composable
@@ -149,7 +175,9 @@ object SettingsAdvancedScreen : SearchableSettings {
                                 }
                                 context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
-                                context.toast(R.string.battery_optimization_setting_activity_not_found)
+                                context.toast(
+                                    R.string.battery_optimization_setting_activity_not_found,
+                                )
                             }
                         } else {
                             context.toast(R.string.battery_optimization_disabled)
@@ -174,7 +202,7 @@ object SettingsAdvancedScreen : SearchableSettings {
 
         val chapterCache = remember { Injekt.get<ChapterCache>() }
         val episodeCache = remember { Injekt.get<EpisodeCache>() }
-        var readableSizeSema by remember { mutableStateOf(0) }
+        var readableSizeSema by remember { mutableIntStateOf(0) }
         val readableSize = remember(readableSizeSema) { chapterCache.readableSize }
         val readableAnimeSize = remember(readableSizeSema) { episodeCache.readableSize }
 
@@ -183,13 +211,19 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_chapter_cache),
-                    subtitle = stringResource(R.string.used_cache_both, readableAnimeSize, readableSize),
+                    subtitle = stringResource(
+                        R.string.used_cache_both,
+                        readableAnimeSize,
+                        readableSize,
+                    ),
                     onClick = {
                         scope.launchNonCancellable {
                             try {
                                 val deletedFiles = chapterCache.clear() + episodeCache.clear()
                                 withUIContext {
-                                    context.toast(context.getString(R.string.cache_deleted, deletedFiles))
+                                    context.toast(
+                                        context.getString(R.string.cache_deleted, deletedFiles),
+                                    )
                                     readableSizeSema++
                                 }
                             } catch (e: Throwable) {
@@ -209,6 +243,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     onClick = {
                         Injekt.get<MangaDownloadCache>().invalidateCache()
                         Injekt.get<AnimeDownloadCache>().invalidateCache()
+                        context.toast(R.string.download_cache_invalidated)
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -326,8 +361,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_covers),
                     onClick = {
-                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.COVERS)
-                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.COVERS)
+                        MangaLibraryUpdateJob.startNow(
+                            context,
+                            target = MangaLibraryUpdateJob.Target.COVERS,
+                        )
+                        AnimeLibraryUpdateJob.startNow(
+                            context,
+                            target = AnimeLibraryUpdateJob.Target.COVERS,
+                        )
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -335,8 +376,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
                     enabled = trackManager.hasLoggedServices(),
                     onClick = {
-                        MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.TRACKING)
-                        AnimeLibraryUpdateJob.startNow(context, target = AnimeLibraryUpdateJob.Target.TRACKING)
+                        MangaLibraryUpdateJob.startNow(
+                            context,
+                            target = MangaLibraryUpdateJob.Target.TRACKING,
+                        )
+                        AnimeLibraryUpdateJob.startNow(
+                            context,
+                            target = AnimeLibraryUpdateJob.Target.TRACKING,
+                        )
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -374,7 +421,11 @@ object SettingsAdvancedScreen : SearchableSettings {
             AlertDialog(
                 onDismissRequest = dismiss,
                 title = { Text(text = stringResource(R.string.ext_installer_shizuku)) },
-                text = { Text(text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog)) },
+                text = {
+                    Text(
+                        text = stringResource(R.string.ext_installer_shizuku_unavailable_dialog),
+                    )
+                },
                 dismissButton = {
                     TextButton(onClick = dismiss) {
                         Text(text = stringResource(R.string.action_cancel))
@@ -387,7 +438,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                             uriHandler.openUri("https://shizuku.rikka.app/download")
                         },
                     ) {
-                        Text(text = stringResource(android.R.string.ok))
+                        Text(text = stringResource(R.string.action_ok))
                     }
                 },
             )

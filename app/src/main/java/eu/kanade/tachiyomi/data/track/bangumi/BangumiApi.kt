@@ -111,7 +111,10 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
+            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+                search,
+                StandardCharsets.UTF_8.name(),
+            )}"
                 .toUri()
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")
@@ -135,7 +138,10 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
+            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+                search,
+                StandardCharsets.UTF_8.name(),
+            )}"
                 .toUri()
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")

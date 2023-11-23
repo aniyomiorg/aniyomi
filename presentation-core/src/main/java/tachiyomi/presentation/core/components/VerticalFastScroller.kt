@@ -28,7 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMaxBy
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +61,7 @@ import kotlin.math.roundToInt
  *
  * Set key with [STICKY_HEADER_KEY_PREFIX] prefix to any sticky header item in the list.
  */
+@OptIn(FlowPreview::class)
 @Composable
 fun VerticalFastScroller(
     listState: LazyListState,
@@ -83,7 +85,7 @@ fun VerticalFastScroller(
             if (!showScroller) return@subcompose
 
             val thumbTopPadding = with(LocalDensity.current) { topContentPadding.toPx() }
-            var thumbOffsetY by remember(thumbTopPadding) { mutableStateOf(thumbTopPadding) }
+            var thumbOffsetY by remember(thumbTopPadding) { mutableFloatStateOf(thumbTopPadding) }
 
             val dragInteractionSource = remember { MutableInteractionSource() }
             val isThumbDragged by dragInteractionSource.collectIsDraggedAsState()
@@ -107,7 +109,10 @@ fun VerticalFastScroller(
                 val scrollItemRounded = scrollItem.roundToInt()
                 val scrollItemSize = layoutInfo.visibleItemsInfo.find { it.index == scrollItemRounded }?.size ?: 0
                 val scrollItemOffset = scrollItemSize * (scrollItem - scrollItemRounded)
-                listState.scrollToItem(index = scrollItemRounded, scrollOffset = scrollItemOffset.roundToInt())
+                listState.scrollToItem(
+                    index = scrollItemRounded,
+                    scrollOffset = scrollItemOffset.roundToInt(),
+                )
                 scrolled.tryEmit(Unit)
             }
 
@@ -197,7 +202,8 @@ private fun rememberColumnWidthSums(
     horizontalArrangement,
     contentPadding,
 ) {
-    { constraints ->
+    {
+            constraints ->
         require(constraints.maxWidth != Constraints.Infinity) {
             "LazyVerticalGrid's width should be bound by parent"
         }
@@ -209,7 +215,7 @@ private fun rememberColumnWidthSums(
                 gridWidth,
                 horizontalArrangement.spacing.roundToPx(),
             ).toMutableList().apply {
-                for (i in 1 until size) {
+                for (i in 1..<size) {
                     this[i] += this[i - 1]
                 }
             }
@@ -217,6 +223,7 @@ private fun rememberColumnWidthSums(
     }
 }
 
+@OptIn(FlowPreview::class)
 @Composable
 fun VerticalGridFastScroller(
     state: LazyGridState,
@@ -248,7 +255,7 @@ fun VerticalGridFastScroller(
             val showScroller = layoutInfo.visibleItemsInfo.size < layoutInfo.totalItemsCount
             if (!showScroller) return@subcompose
             val thumbTopPadding = with(LocalDensity.current) { topContentPadding.toPx() }
-            var thumbOffsetY by remember(thumbTopPadding) { mutableStateOf(thumbTopPadding) }
+            var thumbOffsetY by remember(thumbTopPadding) { mutableFloatStateOf(thumbTopPadding) }
 
             val dragInteractionSource = remember { MutableInteractionSource() }
             val isThumbDragged by dragInteractionSource.collectIsDraggedAsState()
@@ -289,7 +296,10 @@ fun VerticalGridFastScroller(
                 }
                 val scrollItemOffset = scrollItemSize * offsetRatio
 
-                state.scrollToItem(index = scrollItemWhole, scrollOffset = scrollItemOffset.roundToInt())
+                state.scrollToItem(
+                    index = scrollItemWhole,
+                    scrollOffset = scrollItemOffset.roundToInt(),
+                )
                 scrolled.tryEmit(Unit)
             }
 

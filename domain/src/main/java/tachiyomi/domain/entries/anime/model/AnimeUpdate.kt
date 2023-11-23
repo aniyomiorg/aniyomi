@@ -1,6 +1,6 @@
 package tachiyomi.domain.entries.anime.model
 
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import eu.kanade.tachiyomi.model.UpdateStrategy
 
 data class AnimeUpdate(
     val id: Long,
@@ -8,7 +8,7 @@ data class AnimeUpdate(
     val favorite: Boolean? = null,
     val lastUpdate: Long? = null,
     val nextUpdate: Long? = null,
-    val calculateInterval: Int? = null,
+    val fetchInterval: Int? = null,
     val dateAdded: Long? = null,
     val viewerFlags: Long? = null,
     val episodeFlags: Long? = null,
@@ -32,7 +32,7 @@ fun Anime.toAnimeUpdate(): AnimeUpdate {
         favorite = favorite,
         lastUpdate = lastUpdate,
         nextUpdate = nextUpdate,
-        calculateInterval = calculateInterval,
+        fetchInterval = fetchInterval,
         dateAdded = dateAdded,
         viewerFlags = viewerFlags,
         episodeFlags = episodeFlags,

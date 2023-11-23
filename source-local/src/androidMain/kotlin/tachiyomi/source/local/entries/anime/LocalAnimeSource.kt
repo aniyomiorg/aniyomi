@@ -82,7 +82,9 @@ actual class LocalAnimeSource(
                     animeDirs = if (filter.state!!.ascending) {
                         animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
-                        animeDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name })
+                        animeDirs.sortedWith(
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
+                        )
                     }
                 }
                 is AnimeOrderBy.Latest -> {
@@ -184,8 +186,8 @@ actual class LocalAnimeSource(
                     val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
                         anime.title,
                         this.name,
-                        this.episode_number,
-                    )
+                        this.episode_number.toDouble(),
+                    ).toFloat()
                     episode_number = episodeNumber
 
                     // Overwrite data from episodes.json file
@@ -217,7 +219,9 @@ actual class LocalAnimeSource(
     override fun getFilterList() = AnimeFilterList(AnimeOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException("Unused")
+    override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException(
+        "Unused",
+    )
 
     private fun updateCoverFromVideo(episode: SEpisode, anime: SAnime) {
         val baseDirsFiles = getBaseDirectoriesFiles(context)
@@ -231,7 +235,9 @@ actual class LocalAnimeSource(
         val duration = ffProbe.allLogsAsString.trim().toFloat()
         val second = duration.toInt() / 2
 
-        com.arthenica.ffmpegkit.FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y")
+        com.arthenica.ffmpegkit.FFmpegKit.execute(
+            "-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y",
+        )
 
         if (File(coverPath).exists()) {
             anime.thumbnail_url = coverPath

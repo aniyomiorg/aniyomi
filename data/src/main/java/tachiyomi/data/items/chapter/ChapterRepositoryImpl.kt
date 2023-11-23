@@ -2,7 +2,6 @@ package tachiyomi.data.items.chapter
 
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
-import tachiyomi.core.util.lang.toLong
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -56,10 +55,10 @@ class ChapterRepositoryImpl(
                     url = chapterUpdate.url,
                     name = chapterUpdate.name,
                     scanlator = chapterUpdate.scanlator,
-                    read = chapterUpdate.read?.toLong(),
-                    bookmark = chapterUpdate.bookmark?.toLong(),
+                    read = chapterUpdate.read,
+                    bookmark = chapterUpdate.bookmark,
                     lastPageRead = chapterUpdate.lastPageRead,
-                    chapterNumber = chapterUpdate.chapterNumber?.toDouble(),
+                    chapterNumber = chapterUpdate.chapterNumber,
                     sourceOrder = chapterUpdate.sourceOrder,
                     dateFetch = chapterUpdate.dateFetch,
                     dateUpload = chapterUpdate.dateUpload,
@@ -82,7 +81,12 @@ class ChapterRepositoryImpl(
     }
 
     override suspend fun getBookmarkedChaptersByMangaId(mangaId: Long): List<Chapter> {
-        return handler.awaitList { chaptersQueries.getBookmarkedChaptersByMangaId(mangaId, chapterMapper) }
+        return handler.awaitList {
+            chaptersQueries.getBookmarkedChaptersByMangaId(
+                mangaId,
+                chapterMapper,
+            )
+        }
     }
 
     override suspend fun getChapterById(id: Long): Chapter? {
@@ -90,10 +94,21 @@ class ChapterRepositoryImpl(
     }
 
     override suspend fun getChapterByMangaIdAsFlow(mangaId: Long): Flow<List<Chapter>> {
-        return handler.subscribeToList { chaptersQueries.getChaptersByMangaId(mangaId, chapterMapper) }
+        return handler.subscribeToList {
+            chaptersQueries.getChaptersByMangaId(
+                mangaId,
+                chapterMapper,
+            )
+        }
     }
 
     override suspend fun getChapterByUrlAndMangaId(url: String, mangaId: Long): Chapter? {
-        return handler.awaitOneOrNull { chaptersQueries.getChapterByUrlAndMangaId(url, mangaId, chapterMapper) }
+        return handler.awaitOneOrNull {
+            chaptersQueries.getChapterByUrlAndMangaId(
+                url,
+                mangaId,
+                chapterMapper,
+            )
+        }
     }
 }
