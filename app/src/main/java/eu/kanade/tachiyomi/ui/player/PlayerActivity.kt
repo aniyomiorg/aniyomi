@@ -340,7 +340,7 @@ class PlayerActivity : BaseActivity() {
                             displayMode = state.anime!!.displayMode,
                             episodeList = viewModel.currentPlaylist,
                             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
-                            relativeTime = viewModel.relativeTime,
+                            dateRelativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,

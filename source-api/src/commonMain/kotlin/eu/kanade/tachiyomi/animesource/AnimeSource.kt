@@ -27,7 +27,7 @@ interface AnimeSource {
     /**
      * Get the updated details for a anime.
      *
-     * @since extensions-lib 1.4
+     * @since extensions-lib 1.5
      * @param anime the anime to update.
      * @return the updated anime.
      */
@@ -39,7 +39,7 @@ interface AnimeSource {
     /**
      * Get all the available episodes for a anime.
      *
-     * @since extensions-lib 1.4
+     * @since extensions-lib 1.5
      * @param anime the anime to update.
      * @return the episodes for the anime.
      */
@@ -52,7 +52,7 @@ interface AnimeSource {
      * Get the list of videos a episode has. Pages should be returned
      * in the expected order; the index is ignored.
      *
-     * @since extensions-lib 1.4
+     * @since extensions-lib 1.5
      * @param episode the episode.
      * @return the videos for the episode.
      */
@@ -61,41 +61,24 @@ interface AnimeSource {
         return fetchVideoList(episode).awaitSingle()
     }
 
-    /**
-     * Returns an observable with the updated details for a anime.
-     *
-     * @param anime the anime to update.
-     */
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getAnimeDetails"),
     )
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException(
-        "Not used",
-    )
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> =
+        throw IllegalStateException("Not used")
 
-    /**
-     * Returns an observable with all the available episodes for a anime.
-     *
-     * @param anime the anime to update.
-     */
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getEpisodeList"),
     )
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException(
-        "Not used",
-    )
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> =
+        throw IllegalStateException("Not used")
 
-    /**
-     * Returns an observable with the list of videos a episode has. Videos should be returned
-     * in the expected order; the index is ignored.
-     *
-     * @param episode the episode.
-     */
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getVideoList"),
     )
-    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = Observable.empty()
+    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> =
+        throw IllegalStateException("Not used")
 }

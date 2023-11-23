@@ -14,20 +14,16 @@ class StubAnimeSource(
 
     private val isInvalid: Boolean = name.isBlank() || lang.isBlank()
 
-    override suspend fun getAnimeDetails(anime: SAnime): SAnime {
+    override suspend fun getAnimeDetails(anime: SAnime): SAnime =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
+    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override suspend fun getVideoList(episode: SEpisode): List<Video> {
+    override suspend fun getVideoList(episode: SEpisode): List<Video> =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override fun toString(): String {
-        return if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
-    }
+    override fun toString(): String =
+        if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
 }
 class AnimeSourceNotInstalledException : Exception()

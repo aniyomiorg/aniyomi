@@ -31,10 +31,8 @@ import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -115,25 +113,20 @@ class BrowseAnimeSourceScreenModel(
     /**
      * Flow of Pager flow tied to [State.listing]
      */
+    private val hideInLibraryItems = sourcePreferences.hideInAnimeLibraryItems().get()
     val animePagerFlowFlow = state.map { it.listing }
         .distinctUntilChanged()
         .map { listing ->
-            Pager(
-                PagingConfig(pageSize = 25),
-            ) {
+            Pager(PagingConfig(pageSize = 25)) {
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData.map {
                     networkToLocalAnime.await(it.toDomainAnime(sourceId))
-                        .let { localAnime ->
-                            getAnime.subscribe(localAnime.url, localAnime.source)
-                        }
+                        .let { localAnime -> getAnime.subscribe(localAnime.url, localAnime.source) }
                         .filterNotNull()
-                        .filter { localAnime ->
-                            !sourcePreferences.hideInAnimeLibraryItems().get() || !localAnime.favorite
-                        }
                         .stateIn(ioCoroutineScope)
                 }
+                    .filter { !hideInLibraryItems || !it.value.favorite }
             }
                 .cachedIn(ioCoroutineScope)
         }
@@ -301,7 +294,6 @@ class BrowseAnimeSourceScreenModel(
                         track.anime_id = anime.id
                         (service as TrackService).animeService.bind(track)
                         insertTrack.await(track.toDomainTrack()!!)
-
                         syncEpisodeProgressWithTrack.await(
                             anime.id,
                             track.toDomainTrack()!!,

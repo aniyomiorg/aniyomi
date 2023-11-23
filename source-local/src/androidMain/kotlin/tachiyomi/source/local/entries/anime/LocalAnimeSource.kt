@@ -56,11 +56,11 @@ actual class LocalAnimeSource(
     override val supportsLatest = true
 
     // Browse related
-    override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
+    override suspend fun getPopularAnime(page: Int) = getSearchAnime(page, "", POPULAR_FILTERS)
 
-    override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LATEST_FILTERS)
+    override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
 
-    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
+    override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage {
         val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
         val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
@@ -132,6 +132,85 @@ actual class LocalAnimeSource(
             }
         }
 
+        return AnimesPage(animes.toList(), false)
+    }
+
+    // Old fetch functions
+
+    // TODO: Should be replaced when Anime Extensions get to 1.15
+
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getPopularAnime"))
+    override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
+
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getLatestUpdates"))
+    override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LATEST_FILTERS)
+
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
+    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
+        val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
+        val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+        var animeDirs = baseDirsFiles
+            // Filter out files that are hidden and is not a folder
+            .filter { it.isDirectory && !it.name.startsWith('.') }
+            .distinctBy { it.name }
+            .filter { // Filter by query or last modified
+                if (lastModifiedLimit == 0L) {
+                    it.name.contains(query, ignoreCase = true)
+                } else {
+                    it.lastModified() >= lastModifiedLimit
+                }
+            }
+        filters.forEach { filter ->
+            when (filter) {
+                is AnimeOrderBy.Popular -> {
+                    animeDirs = if (filter.state!!.ascending) {
+                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+                    } else {
+                        animeDirs.sortedWith(
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
+                        )
+                    }
+                }
+                is AnimeOrderBy.Latest -> {
+                    animeDirs = if (filter.state!!.ascending) {
+                        animeDirs.sortedBy(File::lastModified)
+                    } else {
+                        animeDirs.sortedByDescending(File::lastModified)
+                    }
+                }
+                else -> {
+                    /* Do nothing */
+                }
+            }
+        }
+        // Transform animeDirs to list of SAnime
+        val animes = animeDirs.map { animeDir ->
+            SAnime.create().apply {
+                title = animeDir.name
+                url = animeDir.name
+                // Try to find the cover
+                coverManager.find(animeDir.name)
+                    ?.takeIf(File::exists)
+                    ?.let { thumbnail_url = it.absolutePath }
+            }
+        }
+        // Fetch episodes of all the anime
+        animes.forEach { anime ->
+            runBlocking {
+                val episodes = getEpisodeList(anime)
+                if (episodes.isNotEmpty()) {
+                    val episode = episodes.last()
+                    // Copy the cover from the first episode found if not available
+                    if (anime.thumbnail_url == null) {
+                        try {
+                            updateCoverFromVideo(episode, anime)
+                        } catch (e: Exception) {
+                            logcat(LogPriority.ERROR) { "Couldn't extract thumbnail from video." }
+                        }
+                    }
+                }
+            }
+        }
         return Observable.just(AnimesPage(animes.toList(), false))
     }
 

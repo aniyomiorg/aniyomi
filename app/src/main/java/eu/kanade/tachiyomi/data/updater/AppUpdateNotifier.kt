@@ -161,7 +161,7 @@ internal class AppUpdateNotifier(private val context: Context) {
             setContentIntent(
                 NotificationHandler.openUrl(
                     context,
-                    "https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version",
+                    "https://aniyomi.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds",
                 ),
             )
         }
