@@ -41,24 +41,35 @@ import kotlin.math.roundToLong
  */
 class ChapterCache(private val context: Context) {
 
+    companion object {
+        /** Name of cache directory.  */
+        const val PARAMETER_CACHE_DIRECTORY = "chapter_disk_cache"
+
+        /** Application cache version.  */
+        const val PARAMETER_APP_VERSION = 1
+
+        /** The number of values per cache entry. Must be positive.  */
+        const val PARAMETER_VALUE_COUNT = 1
+
+        /** The maximum number of bytes this cache should use to store.  */
+        const val PARAMETER_CACHE_SIZE = 50L * 1024 * 1024
+    }
+
+    /** Google Json class used for parsing JSON files.  */
     private val json: Json by injectLazy()
 
     private val readerPreferences: ReaderPreferences = Injekt.get()
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-    /** Cache class used for cache management. */
-    private val diskCache = DiskLruCache.open(
-        File(context.cacheDir, "chapter_disk_cache"),
-        PARAMETER_APP_VERSION,
-        PARAMETER_VALUE_COUNT,
-        PARAMETER_CACHE_SIZE,
-    )
+    /** Cache class used for cache management.  */
+    private var diskCache = setupDiskCache(readerPreferences.preloadSize().get())
 
     /**
      * Returns directory of cache.
      */
-    private val cacheDir: File = diskCache.directory
+    val cacheDir: File
+        get() = diskCache.directory
 
     /**
      * Returns real size of directory.
@@ -100,19 +111,20 @@ class ChapterCache(private val context: Context) {
      * @param file name of file "md5.0".
      * @return status of deletion for the file.
      */
-    fun removeFileFromCache(file: String): Boolean {
-        // Make sure we don't delete the journal file (keeps track of cache).
+    private fun removeFileFromCache(file: String): Boolean {
+        // Make sure we don't delete the journal file (keeps track of cache)
         if (file == "journal" || file.startsWith("journal.")) {
             return false
         }
 
-        try {
+        return try {
             // Remove the extension from the file to get the key of the cache
             val key = file.substringBeforeLast(".")
-            // Remove file from cache.
-            return diskCache.remove(key)
+            // Remove file from cache
+            diskCache.remove(key)
         } catch (e: Exception) {
-            return false
+            logcat(LogPriority.WARN, e) { "Failed to remove file from cache" }
+            false
         }
     }
 
@@ -231,39 +243,7 @@ class ChapterCache(private val context: Context) {
         return deletedFiles
     }
 
-    /**
-     * Remove file from cache.
-     *
-     * @param file name of file "md5.0".
-     * @return status of deletion for the file.
-     */
-    private fun removeFileFromCache(file: String): Boolean {
-        // Make sure we don't delete the journal file (keeps track of cache)
-        if (file == "journal" || file.startsWith("journal.")) {
-            return false
-        }
-
-        return try {
-            // Remove the extension from the file to get the key of the cache
-            val key = file.substringBeforeLast(".")
-            // Remove file from cache
-            diskCache.remove(key)
-        } catch (e: Exception) {
-            logcat(LogPriority.WARN, e) { "Failed to remove file from cache" }
-            false
-        }
-    }
-
     private fun getKey(chapter: Chapter): String {
         return "${chapter.mangaId}${chapter.url}"
     }
 }
-
-/** Application cache version.  */
-private const val PARAMETER_APP_VERSION = 1
-
-/** The number of values per cache entry. Must be positive.  */
-private const val PARAMETER_VALUE_COUNT = 1
-
-/** The maximum number of bytes this cache should use to store.  */
-private const val PARAMETER_CACHE_SIZE = 100L * 1024 * 1024

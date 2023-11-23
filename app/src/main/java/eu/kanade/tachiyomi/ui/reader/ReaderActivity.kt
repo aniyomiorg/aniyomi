@@ -109,7 +109,6 @@ import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.widget.util.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 
 class ReaderActivity : BaseActivity() {
@@ -125,10 +124,7 @@ class ReaderActivity : BaseActivity() {
 
         // AM (CONNECTIONS) -->
         private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
-
         // <-- AM (CONNECTIONS)
-        private const val ENABLED_BUTTON_IMAGE_ALPHA = 255
-        private const val DISABLED_BUTTON_IMAGE_ALPHA = 64
     }
 
     private val readerPreferences = Injekt.get<ReaderPreferences>()
@@ -260,21 +256,9 @@ class ReaderActivity : BaseActivity() {
         config = null
         menuToggleToast?.cancel()
         readingModeToast?.cancel()
-        progressDialog?.dismiss()
-        progressDialog = null
         // AM (DISCORD) -->
         updateDiscordRPC(exitingReader = true)
         // <-- AM (DISCORD)
-    }
-
-    /**
-     * Called when the activity is saving instance state. Current progress is persisted if this
-     * activity isn't changing configurations.
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(::menuVisible.name, menuVisible)
-        viewModel.onSaveInstanceState()
-        super.onSaveInstanceState(outState)
     }
 
     override fun onPause() {
@@ -1120,4 +1104,5 @@ class ReaderActivity : BaseActivity() {
             }
         }
     }
+    // <-- AM (DISCORD)
 }

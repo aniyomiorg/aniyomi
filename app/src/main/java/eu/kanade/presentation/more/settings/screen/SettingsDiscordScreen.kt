@@ -22,11 +22,11 @@ import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -109,7 +109,9 @@ object SettingsDiscordScreen : SearchableSettings {
         enabled: Boolean,
     ): Preference.PreferenceGroup {
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
+            initial = runBlocking { getAnimeCategories.await() },
+        )
 
         val discordRPCIncognitoPref = connectionsPreferences.discordRPCIncognito()
         val discordRPCIncognitoCategoriesPref = connectionsPreferences.discordRPCIncognitoCategories()
@@ -152,7 +154,9 @@ object SettingsDiscordScreen : SearchableSettings {
                     ),
                     onClick = { showAnimeDialog = true },
                 ),
-                Preference.PreferenceItem.InfoPreference(stringResource(R.string.pref_discord_incognito_categories_details)),
+                Preference.PreferenceItem.InfoPreference(
+                    stringResource(R.string.pref_discord_incognito_categories_details),
+                ),
             ),
             enabled = enabled,
         )
