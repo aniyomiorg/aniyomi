@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
-    <string name="unlock_app">Desbloquear Aniyomi</string>
+    <string name="unlock_app">Desbloquear AnimeTail</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
     <string name="action_sort_last_seen">Ultimo visto</string>
@@ -61,10 +61,10 @@
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="untrusted_extension_message">Esta extensión está firmada por una fuente sin certificar y por lo tanto no se ha activado.
 \n
-\nUna extensión maliciosa puede leer credenciales de inicio guardadas en Aniyomi o ejecutar cualquier tipo de código en tu dispositivo.
+\nUna extensión maliciosa puede leer credenciales de inicio guardadas en AnimeTail o ejecutar cualquier tipo de código en tu dispositivo.
 \n
 \nAl confiar en este certificado aceptas estos riesgos.</string>
-    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de AnimeTail.</string>
     <string name="rotation_reverse_landscape">Paisaje invertido</string>
     <string name="rotation_sensor_portrait">Retrato del sensor</string>
     <string name="rotation_sensor_landscape">Paisaje de sensores</string>
@@ -268,7 +268,7 @@
     <string name="pref_search_pinned_manga_sources_only">Buscar sólo fuentes de manga incrustadas en la búsqueda global</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
     <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes del anime incrustadas en la búsqueda global</string>
-    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de AnimeTail.</string>
     <string name="pref_category_volume_brightness">Volumen y Brillo</string>
     <string name="pref_category_pip">Imagen en imagen (PiP)</string>
     <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
@@ -325,4 +325,32 @@
     <string name="label_recent_anime_updates">Actualizaciones del anime</string>
     <string name="theme_cottoncandy">Algodón de azúcar</string>
     <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
+    <string name="player_add_external_audio">Agregar audio externo</string>
+    <string name="player_add_external_audio_intent">Seleccione un archivo de audio.</string>
+    <string name="player_add_external_subtitles">Agregar subtítulos externos</string>
+    <string name="player_add_external_subtitles_intent">Seleccione un archivo de subtítulos.</string>
+    <string name="special_services">Servicios Especiales</string>
+    <string name="pref_category_connections">Conexiones</string>
+    <string name="pref_connections_summary">Discord, ¡más por venir!</string>
+    <string name="connections_info">Servicios especiales únicos para Animetail que mejoran la forma en que utilizas la aplicación</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">Este servicio de Discord funciona mediante el registro de token. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Kuukiyomi no lo comparte en ningún otro lugar.</string>
+    <string name="pref_discord_rpc">Presencia Rica de Discord</string>
+    <string name="pref_enable_discord_rpc">Habilitar Presencia Rica de Discord</string>
+    <string name="pref_discord_status">Estado de Discord</string>
+    <string name="pref_discord_dnd">⛔ No molestar</string>
+    <string name="pref_discord_idle">🌙 Inactivo</string>
+    <string name="pref_discord_online">🟢 En línea</string>
+    <string name="pref_category_discord_incognito">RPC Incógnito</string>
+    <string name="pref_discord_incognito">Modo Incógnito de Discord</string>
+    <string name="pref_discord_incognito_summary">Anulado cuando el Modo Incógnito está habilitado</string>
+    <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+
+    <!-- Sección de Discord -->
+    <string name="browsing">Navegación</string>
+    <string name="scrolling">Desplazamiento por</string>
+    <string name="messing">Trasteando con</string>
+    <string name="video">Video</string>
+    <string name="comic">Cómic</string>
+
 </resources>

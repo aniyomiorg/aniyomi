@@ -158,12 +158,7 @@ internal class AppUpdateNotifier(private val context: Context) {
             setContentTitle(context.getString(R.string.update_check_notification_update_available))
             setContentText(context.getString(R.string.update_check_fdroid_migration_info))
             setSmallIcon(R.drawable.ic_ani)
-            setContentIntent(
-                NotificationHandler.openUrl(
-                    context,
-                    "https://aniyomi.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds",
-                ),
-            )
+            setContentIntent(NotificationHandler.openUrl(context, "https://akiled.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds"))
         }
         notificationBuilder.show(Notifications.ID_APP_UPDATE_PROMPT)
     }
