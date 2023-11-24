@@ -189,7 +189,7 @@ object SettingsMainScreen : Screen() {
         Item(
             titleRes = R.string.pref_category_reader,
             subtitleRes = R.string.pref_reader_summary,
-            icon = Icons.Outlined.ChromeReaderMode,
+            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
             screen = SettingsReaderScreen,
         ),
         Item(
