@@ -30,10 +30,14 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.injectLazy
+import java.text.NumberFormat
 
 class AnimeLibraryUpdateNotifier(private val context: Context) {
 
     private val preferences: SecurityPreferences by injectLazy()
+    private val percentFormatter = NumberFormat.getPercentInstance().apply {
+        maximumFractionDigits = 0
+    }
 
     /**
      * Pending intent of action that cancels the library update
@@ -82,7 +86,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
         } else {
             val updatingText = anime.joinToString("\n") { it.title.chop(40) }
             progressNotificationBuilder
-                .setContentTitle(context.getString(R.string.notification_updating, current, total))
+                .setContentTitle(context.getString(R.string.notification_updating_progress, percentFormatter.format(current.toFloat() / total)))
                 .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 

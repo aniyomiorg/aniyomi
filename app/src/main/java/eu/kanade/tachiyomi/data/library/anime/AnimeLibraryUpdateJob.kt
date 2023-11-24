@@ -243,10 +243,43 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             // SY <--
         }
 
+        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
+        val skippedUpdates = mutableListOf<Pair<Anime, String?>>()
+        val fetchWindow = animeFetchInterval.getWindow(ZonedDateTime.now())
+
         animeToUpdate = listToUpdate
             // SY -->
             .distinctBy { it.anime.id }
             // SY <--
+            .filter {
+                when {
+                    it.anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
+                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_always_update))
+                        false
+                    }
+
+                    ENTRY_NON_COMPLETED in restrictions && it.anime.status.toInt() == SAnime.COMPLETED -> {
+                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_completed))
+                        false
+                    }
+
+                    ENTRY_HAS_UNVIEWED in restrictions && it.unseenCount != 0L -> {
+                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_caught_up))
+                        false
+                    }
+
+                    ENTRY_NON_VIEWED in restrictions && it.totalEpisodes > 0L && !it.hasStarted -> {
+                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_started))
+                        false
+                    }
+
+                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.anime.nextUpdate > fetchWindow.second -> {
+                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_in_release_period))
+                        false
+                    }
+                    else -> true
+                }
+            }
             .sortedBy { it.anime.title }
 
         // Warn when excessively checking a single source
@@ -256,6 +289,17 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
             notifier.showQueueSizeWarningNotification()
+        }
+
+        if (skippedUpdates.isNotEmpty()) {
+            // TODO: surface skipped reasons to user?
+            logcat {
+                skippedUpdates
+                    .groupBy { it.second }
+                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
+                    .joinToString()
+            }
+            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 
@@ -272,10 +316,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val progressCount = AtomicInteger(0)
         val currentlyUpdatingAnime = CopyOnWriteArrayList<Anime>()
         val newUpdates = CopyOnWriteArrayList<Pair<Anime, Array<Episode>>>()
-        val skippedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val fetchWindow = animeFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
@@ -297,79 +339,30 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     progressCount,
                                     anime,
                                 ) {
-                                    when {
-                                        anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
-                                            skippedUpdates.add(
-                                                anime to context.getString(
-                                                    R.string.skipped_reason_not_always_update,
-                                                ),
-                                            )
+                                    try {
+                                        val newChapters = updateAnime(anime, fetchWindow)
+                                            .sortedByDescending { it.sourceOrder }
 
-                                        ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
-                                            skippedUpdates.add(
-                                                anime to context.getString(
-                                                    R.string.skipped_reason_completed,
-                                                ),
-                                            )
-
-                                        ENTRY_HAS_UNVIEWED in restrictions && libraryAnime.unseenCount != 0L ->
-                                            skippedUpdates.add(
-                                                anime to context.getString(
-                                                    R.string.skipped_reason_not_caught_up,
-                                                ),
-                                            )
-
-                                        ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
-                                            skippedUpdates.add(
-                                                anime to context.getString(
-                                                    R.string.skipped_reason_not_started,
-                                                ),
-                                            )
-
-                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && anime.nextUpdate > fetchWindow.second ->
-                                            skippedUpdates.add(
-                                                anime to context.getString(
-                                                    R.string.skipped_reason_not_in_release_period,
-                                                ),
-                                            )
-
-                                        else -> {
-                                            try {
-                                                val newEpisodes = updateAnime(anime, fetchWindow)
-                                                    .sortedByDescending { it.sourceOrder }
-
-                                                if (newEpisodes.isNotEmpty()) {
-                                                    val categoryIds = getCategories.await(anime.id).map { it.id }
-                                                    if (anime.shouldDownloadNewEpisodes(
-                                                            categoryIds,
-                                                            downloadPreferences,
-                                                        )
-                                                    ) {
-                                                        downloadEpisodes(anime, newEpisodes)
-                                                        hasDownloads.set(true)
-                                                    }
-
-                                                    libraryPreferences.newAnimeUpdatesCount().getAndSet { it + newEpisodes.size }
-
-                                                    // Convert to the anime that contains new chapters
-                                                    newUpdates.add(
-                                                        anime to newEpisodes.toTypedArray(),
-                                                    )
-                                                }
-                                            } catch (e: Throwable) {
-                                                val errorMessage = when (e) {
-                                                    is NoEpisodesException -> context.getString(
-                                                        R.string.no_episodes_error,
-                                                    )
-                                                    // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is AnimeSourceNotInstalledException -> context.getString(
-                                                        R.string.loader_not_implemented_error,
-                                                    )
-                                                    else -> e.message
-                                                }
-                                                failedUpdates.add(anime to errorMessage)
+                                        if (newChapters.isNotEmpty()) {
+                                            val categoryIds = getCategories.await(anime.id).map { it.id }
+                                            if (anime.shouldDownloadNewEpisodes(categoryIds, downloadPreferences)) {
+                                                downloadEpisodes(anime, newChapters)
+                                                hasDownloads.set(true)
                                             }
+
+                                            libraryPreferences.newAnimeUpdatesCount().getAndSet { it + newChapters.size }
+
+                                            // Convert to the manga that contains new chapters
+                                            newUpdates.add(anime to newChapters.toTypedArray())
                                         }
+                                    } catch (e: Throwable) {
+                                        val errorMessage = when (e) {
+                                            is NoEpisodesException -> context.getString(R.string.no_chapters_error)
+                                            // failedUpdates will already have the source, don't need to copy it into the message
+                                            is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                            else -> e.message
+                                        }
+                                        failedUpdates.add(anime to errorMessage)
                                     }
 
                                     if (libraryPreferences.autoUpdateTrackers().get()) {
@@ -398,16 +391,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 failedUpdates.size,
                 errorFile.getUriCompat(context),
             )
-        }
-        if (skippedUpdates.isNotEmpty()) {
-            // TODO: surface skipped reasons to user
-            logcat {
-                skippedUpdates
-                    .groupBy { it.second }
-                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
-                    .joinToString()
-            }
-            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 
@@ -526,29 +509,27 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         completed: AtomicInteger,
         anime: Anime,
         block: suspend () -> Unit,
-    ) {
-        coroutineScope {
-            ensureActive()
+    ) = coroutineScope {
+        ensureActive()
 
-            updatingAnime.add(anime)
-            notifier.showProgressNotification(
-                updatingAnime,
-                completed.get(),
-                animeToUpdate.size,
-            )
+        updatingAnime.add(anime)
+        notifier.showProgressNotification(
+            updatingAnime,
+            completed.get(),
+            animeToUpdate.size,
+        )
 
-            block()
+        block()
 
-            ensureActive()
+        ensureActive()
 
-            updatingAnime.remove(anime)
-            completed.getAndIncrement()
-            notifier.showProgressNotification(
-                updatingAnime,
-                completed.get(),
-                animeToUpdate.size,
-            )
-        }
+        updatingAnime.remove(anime)
+        completed.getAndIncrement()
+        notifier.showProgressNotification(
+            updatingAnime,
+            completed.get(),
+            animeToUpdate.size,
+        )
     }
 
     /**

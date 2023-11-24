@@ -57,6 +57,27 @@ class ReorderAnimeCategory(
         }
     }
 
+    suspend fun sortAlphabetically() = withNonCancellableContext {
+        mutex.withLock {
+            val updates = categoryRepository.getAllAnimeCategories()
+                .sortedBy { category -> category.name }
+                .mapIndexed { index, category ->
+                    CategoryUpdate(
+                        id = category.id,
+                        order = index.toLong(),
+                    )
+                }
+
+            try {
+                categoryRepository.updatePartialAnimeCategories(updates)
+                Result.Success
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e)
+                Result.InternalError(e)
+            }
+        }
+    }
+
     sealed interface Result {
         data object Success : Result
         data object Unchanged : Result

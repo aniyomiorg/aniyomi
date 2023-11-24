@@ -88,6 +88,15 @@ class MangaCategoryScreenModel(
         }
     }
 
+    fun sortAlphabetically() {
+        coroutineScope.launch {
+            when (reorderCategory.sortAlphabetically()) {
+                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                else -> {}
+            }
+        }
+    }
+
     fun moveUp(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
@@ -142,6 +151,7 @@ class MangaCategoryScreenModel(
 
 sealed interface MangaCategoryDialog {
     data object Create : MangaCategoryDialog
+    data object SortAlphabetically : MangaCategoryDialog
     data class Rename(val category: Category) : MangaCategoryDialog
     data class Delete(val category: Category) : MangaCategoryDialog
 }

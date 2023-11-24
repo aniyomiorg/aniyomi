@@ -298,7 +298,7 @@ fun ExpandableAnimeDescription(
                     ) {
                         tags.forEach {
                             TagsChip(
-                                modifier = Modifier.padding(vertical = 4.dp),
+                                modifier = DefaultTagChipModifier,
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -314,7 +314,7 @@ fun ExpandableAnimeDescription(
                     ) {
                         items(items = tags) {
                             TagsChip(
-                                modifier = Modifier.padding(vertical = 4.dp),
+                                modifier = DefaultTagChipModifier,
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -675,6 +675,8 @@ private fun AnimeSummary(
         }
     }
 }
+
+private val DefaultTagChipModifier = Modifier.padding(vertical = 4.dp)
 
 @Composable
 private fun TagsChip(

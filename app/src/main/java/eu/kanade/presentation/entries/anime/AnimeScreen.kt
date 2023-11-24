@@ -314,8 +314,14 @@ private fun AnimeScreenSmallImpl(
 
     val episodes = remember(state) { state.processedEpisodes }
 
+    val isAnySelected by remember {
+        derivedStateOf {
+            episodes.fastAny { it.selected }
+        }
+    }
+
     val internalOnBackPressed = {
-        if (episodes.fastAny { it.selected }) {
+        if (isAnySelected) {
             onAllEpisodeSelected(false)
         } else {
             onBackClicked()
@@ -324,17 +330,22 @@ private fun AnimeScreenSmallImpl(
     BackHandler(onBack = internalOnBackPressed)
     Scaffold(
         topBar = {
-            val firstVisibleItemIndex by remember {
-                derivedStateOf { episodeListState.firstVisibleItemIndex }
+            val selectedEpisodeCount: Int = remember(episodes) {
+                episodes.count { it.selected }
             }
-            val firstVisibleItemScrollOffset by remember {
-                derivedStateOf { episodeListState.firstVisibleItemScrollOffset }
+            val isFirstItemVisible by remember {
+                derivedStateOf { episodeListState.firstVisibleItemIndex == 0 }
+            }
+            val isFirstItemScrolled by remember {
+                derivedStateOf { episodeListState.firstVisibleItemScrollOffset > 0 }
             }
             val animatedTitleAlpha by animateFloatAsState(
-                if (firstVisibleItemIndex > 0) 1f else 0f,
+                if (!isFirstItemVisible) 1f else 0f,
+                label = "Top Bar Title",
             )
             val animatedBgAlpha by animateFloatAsState(
-                if (firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0) 1f else 0f,
+                if (!isFirstItemVisible || isFirstItemScrolled) 1f else 0f,
+                label = "Top Bar Background",
             )
             EntryToolbar(
                 title = state.anime.title,
@@ -352,7 +363,7 @@ private fun AnimeScreenSmallImpl(
                 onClickEditInfo = onEditInfoClicked.takeIf { state.anime.favorite },
                 // SY <--
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
-                actionModeCounter = episodes.count { it.selected },
+                actionModeCounter = selectedEpisodeCount,
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = false,
@@ -360,8 +371,11 @@ private fun AnimeScreenSmallImpl(
             )
         },
         bottomBar = {
+            val selectedEpisodes = remember(episodes) {
+                episodes.filter { it.selected }
+            }
             SharedAnimeBottomActionMenu(
-                selected = episodes.filter { it.selected },
+                selected = selectedEpisodes,
                 onEpisodeClicked = onEpisodeClicked,
                 onMultiBookmarkClicked = onMultiBookmarkClicked,
                 onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
@@ -374,19 +388,20 @@ private fun AnimeScreenSmallImpl(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
+            val isFABVisible = remember(episodes) {
+                episodes.fastAny { !it.episode.seen } && !isAnySelected
+            }
             AnimatedVisibility(
-                visible = episodes.fastAny { !it.episode.seen } && episodes.fastAll { !it.selected },
+                visible = isFABVisible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        val id = if (state.episodes.fastAny { it.episode.seen }) {
-                            R.string.action_resume
-                        } else {
-                            R.string.action_start
+                        val isWatching = remember(state.episodes) {
+                            state.episodes.fastAny { it.episode.seen }
                         }
-                        Text(text = stringResource(id))
+                        Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
                     },
                     icon = {
                         Icon(
@@ -405,7 +420,7 @@ private fun AnimeScreenSmallImpl(
         PullRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
-            enabled = episodes.fastAll { !it.selected },
+            enabled = !isAnySelected,
             indicatorPadding = WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues(),
         ) {
             val layoutDirection = LocalLayoutDirection.current
@@ -477,10 +492,13 @@ private fun AnimeScreenSmallImpl(
                         key = EntryScreenItem.ITEM_HEADER,
                         contentType = EntryScreenItem.ITEM_HEADER,
                     ) {
+                        val missingItemsCount = remember(episodes) {
+                            episodes.map { it.episode.episodeNumber }.missingItemsCount()
+                        }
                         ItemHeader(
-                            enabled = episodes.fastAll { !it.selected },
+                            enabled = !isAnySelected,
                             itemCount = episodes.size,
-                            missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
+                            missingItemsCount = missingItemsCount,
                             onClick = onFilterClicked,
                             isManga = false,
                         )
@@ -592,13 +610,19 @@ fun AnimeScreenLargeImpl(
 
     val episodes = remember(state) { state.processedEpisodes }
 
+    val isAnySelected by remember {
+        derivedStateOf {
+            episodes.fastAny { it.selected }
+        }
+    }
+
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
 
     PullRefresh(
         refreshing = state.isRefreshingData,
         onRefresh = onRefresh,
-        enabled = episodes.fastAll { !it.selected },
+        enabled = !isAnySelected,
         indicatorPadding = PaddingValues(
             start = insetPadding.calculateStartPadding(layoutDirection),
             top = with(density) { topBarHeight.toDp() },
@@ -608,7 +632,7 @@ fun AnimeScreenLargeImpl(
         val episodeListState = rememberLazyListState()
 
         val internalOnBackPressed = {
-            if (episodes.fastAny { it.selected }) {
+            if (isAnySelected) {
                 onAllEpisodeSelected(false)
             } else {
                 onBackClicked()
@@ -618,10 +642,13 @@ fun AnimeScreenLargeImpl(
 
         Scaffold(
             topBar = {
+                val selectedEpisodeCount = remember(episodes) {
+                    episodes.count { it.selected }
+                }
                 EntryToolbar(
                     modifier = Modifier.onSizeChanged { topBarHeight = (it.height) },
                     title = state.anime.title,
-                    titleAlphaProvider = { if (episodes.fastAny { it.selected }) 1f else 0f },
+                    titleAlphaProvider = { if (isAnySelected) 1f else 0f },
                     backgroundAlphaProvider = { 1f },
                     hasFilters = state.anime.episodesFiltered(),
                     onBackClicked = internalOnBackPressed,
@@ -635,7 +662,7 @@ fun AnimeScreenLargeImpl(
                     onClickEditInfo = onEditInfoClicked.takeIf { state.anime.favorite },
                     // SY <--
                     changeAnimeSkipIntro = changeAnimeSkipIntro,
-                    actionModeCounter = episodes.count { it.selected },
+                    actionModeCounter = selectedEpisodeCount,
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = false,
@@ -647,8 +674,11 @@ fun AnimeScreenLargeImpl(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd,
                 ) {
+                    val selectedEpisodes = remember(episodes) {
+                        episodes.filter { it.selected }
+                    }
                     SharedAnimeBottomActionMenu(
-                        selected = episodes.filter { it.selected },
+                        selected = selectedEpisodes,
                         onEpisodeClicked = onEpisodeClicked,
                         onMultiBookmarkClicked = onMultiBookmarkClicked,
                         onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
@@ -662,19 +692,20 @@ fun AnimeScreenLargeImpl(
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             floatingActionButton = {
+                val isFABVisible = remember(episodes) {
+                    episodes.fastAny { !it.episode.seen } && !isAnySelected
+                }
                 AnimatedVisibility(
-                    visible = episodes.fastAny { !it.episode.seen } && episodes.fastAll { !it.selected },
+                    visible = isFABVisible,
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (state.episodes.fastAny { it.episode.seen }) {
-                                R.string.action_resume
-                            } else {
-                                R.string.action_start
+                            val isWatching = remember(state.episodes) {
+                                state.episodes.fastAny { it.episode.seen }
                             }
-                            Text(text = stringResource(id))
+                            Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
                         },
                         icon = {
                             Icon(
@@ -750,10 +781,13 @@ fun AnimeScreenLargeImpl(
                                 key = EntryScreenItem.ITEM_HEADER,
                                 contentType = EntryScreenItem.ITEM_HEADER,
                             ) {
+                                val missingItemsCount = remember(episodes) {
+                                    episodes.map { it.episode.episodeNumber }.missingItemsCount()
+                                }
                                 ItemHeader(
-                                    enabled = episodes.fastAll { !it.selected },
+                                    enabled = !isAnySelected,
                                     itemCount = episodes.size,
-                                    missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
+                                    missingItemsCount = missingItemsCount,
                                     onClick = onFilterButtonClicked,
                                     isManga = false,
                                 )

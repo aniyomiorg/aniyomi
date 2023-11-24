@@ -295,8 +295,14 @@ private fun MangaScreenSmallImpl(
 
     val chapters = remember(state) { state.processedChapters }
 
+    val isAnySelected by remember {
+        derivedStateOf {
+            chapters.fastAny { it.selected }
+        }
+    }
+
     val internalOnBackPressed = {
-        if (chapters.fastAny { it.selected }) {
+        if (isAnySelected) {
             onAllChapterSelected(false)
         } else {
             onBackClicked()
@@ -306,17 +312,22 @@ private fun MangaScreenSmallImpl(
 
     Scaffold(
         topBar = {
-            val firstVisibleItemIndex by remember {
-                derivedStateOf { chapterListState.firstVisibleItemIndex }
+            val selectedChapterCount: Int = remember(chapters) {
+                chapters.count { it.selected }
             }
-            val firstVisibleItemScrollOffset by remember {
-                derivedStateOf { chapterListState.firstVisibleItemScrollOffset }
+            val isFirstItemVisible by remember {
+                derivedStateOf { chapterListState.firstVisibleItemIndex == 0 }
+            }
+            val isFirstItemScrolled by remember {
+                derivedStateOf { chapterListState.firstVisibleItemScrollOffset > 0 }
             }
             val animatedTitleAlpha by animateFloatAsState(
-                if (firstVisibleItemIndex > 0) 1f else 0f,
+                if (!isFirstItemVisible) 1f else 0f,
+                label = "Top Bar Title",
             )
             val animatedBgAlpha by animateFloatAsState(
-                if (firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0) 1f else 0f,
+                if (!isFirstItemVisible || isFirstItemScrolled) 1f else 0f,
+                label = "Top Bar Background",
             )
             EntryToolbar(
                 title = state.manga.title,
@@ -334,7 +345,7 @@ private fun MangaScreenSmallImpl(
                 onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
                 // SY <--
                 changeAnimeSkipIntro = null,
-                actionModeCounter = chapters.count { it.selected },
+                actionModeCounter = selectedChapterCount,
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = true,
@@ -342,8 +353,11 @@ private fun MangaScreenSmallImpl(
             )
         },
         bottomBar = {
+            val selectedChapters = remember(chapters) {
+                chapters.filter { it.selected }
+            }
             SharedMangaBottomActionMenu(
-                selected = chapters.filter { it.selected },
+                selected = selectedChapters,
                 onMultiBookmarkClicked = onMultiBookmarkClicked,
                 onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
                 onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -354,19 +368,20 @@ private fun MangaScreenSmallImpl(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
+            val isFABVisible = remember(chapters) {
+                chapters.fastAny { !it.chapter.read } && !isAnySelected
+            }
             AnimatedVisibility(
-                visible = chapters.fastAny { !it.chapter.read } && chapters.fastAll { !it.selected },
+                visible = isFABVisible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        val id = if (state.chapters.fastAny { it.chapter.read }) {
-                            R.string.action_resume
-                        } else {
-                            R.string.action_start
+                        val isReading = remember(state.chapters) {
+                            state.chapters.fastAny { it.chapter.read }
                         }
-                        Text(text = stringResource(id))
+                        Text(text = stringResource(if (isReading) R.string.action_resume else R.string.action_start))
                     },
                     icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
                     onClick = onContinueReading,
@@ -380,7 +395,7 @@ private fun MangaScreenSmallImpl(
         PullRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
-            enabled = chapters.fastAll { !it.selected },
+            enabled = !isAnySelected,
             indicatorPadding = WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues(),
         ) {
             val layoutDirection = LocalLayoutDirection.current
@@ -452,10 +467,13 @@ private fun MangaScreenSmallImpl(
                         key = EntryScreenItem.ITEM_HEADER,
                         contentType = EntryScreenItem.ITEM_HEADER,
                     ) {
+                        val missingItemsCount = remember(chapters) {
+                            chapters.map { it.chapter.chapterNumber }.missingItemsCount()
+                        }
                         ItemHeader(
-                            enabled = chapters.fastAll { !it.selected },
+                            enabled = !isAnySelected,
                             itemCount = chapters.size,
-                            missingItemsCount = chapters.map { it.chapter.chapterNumber }.missingItemsCount(),
+                            missingItemsCount = missingItemsCount,
                             onClick = onFilterClicked,
                             isManga = true,
                         )
@@ -539,12 +557,18 @@ fun MangaScreenLargeImpl(
 
     val chapters = remember(state) { state.processedChapters }
 
+    val isAnySelected by remember {
+        derivedStateOf {
+            chapters.fastAny { it.selected }
+        }
+    }
+
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
     PullRefresh(
         refreshing = state.isRefreshingData,
         onRefresh = onRefresh,
-        enabled = chapters.fastAll { !it.selected },
+        enabled = !isAnySelected,
         indicatorPadding = PaddingValues(
             start = insetPadding.calculateStartPadding(layoutDirection),
             top = with(density) { topBarHeight.toDp() },
@@ -554,7 +578,7 @@ fun MangaScreenLargeImpl(
         val chapterListState = rememberLazyListState()
 
         val internalOnBackPressed = {
-            if (chapters.fastAny { it.selected }) {
+            if (isAnySelected) {
                 onAllChapterSelected(false)
             } else {
                 onBackClicked()
@@ -564,10 +588,13 @@ fun MangaScreenLargeImpl(
 
         Scaffold(
             topBar = {
+                val selectedChapterCount = remember(chapters) {
+                    chapters.count { it.selected }
+                }
                 EntryToolbar(
                     modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                     title = state.manga.title,
-                    titleAlphaProvider = { if (chapters.fastAny { it.selected }) 1f else 0f },
+                    titleAlphaProvider = { if (isAnySelected) 1f else 0f },
                     backgroundAlphaProvider = { 1f },
                     hasFilters = state.manga.chaptersFiltered(),
                     onBackClicked = internalOnBackPressed,
@@ -581,7 +608,7 @@ fun MangaScreenLargeImpl(
                     onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
                     // SY <--
                     changeAnimeSkipIntro = null,
-                    actionModeCounter = chapters.count { it.selected },
+                    actionModeCounter = selectedChapterCount,
                     onSelectAll = { onAllChapterSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = true,
@@ -593,8 +620,11 @@ fun MangaScreenLargeImpl(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd,
                 ) {
+                    val selectedChapters = remember(chapters) {
+                        chapters.filter { it.selected }
+                    }
                     SharedMangaBottomActionMenu(
-                        selected = chapters.filter { it.selected },
+                        selected = selectedChapters,
                         onMultiBookmarkClicked = onMultiBookmarkClicked,
                         onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
                         onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -606,19 +636,20 @@ fun MangaScreenLargeImpl(
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             floatingActionButton = {
+                val isFABVisible = remember(chapters) {
+                    chapters.fastAny { !it.chapter.read } && !isAnySelected
+                }
                 AnimatedVisibility(
-                    visible = chapters.fastAny { !it.chapter.read } && chapters.fastAll { !it.selected },
+                    visible = isFABVisible,
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (state.chapters.fastAny { it.chapter.read }) {
-                                R.string.action_resume
-                            } else {
-                                R.string.action_start
+                            val isReading = remember(state.chapters) {
+                                state.chapters.fastAny { it.chapter.read }
                             }
-                            Text(text = stringResource(id))
+                            Text(text = stringResource(if (isReading) R.string.action_resume else R.string.action_start))
                         },
                         icon = {
                             Icon(
@@ -694,10 +725,13 @@ fun MangaScreenLargeImpl(
                                 key = EntryScreenItem.ITEM_HEADER,
                                 contentType = EntryScreenItem.ITEM_HEADER,
                             ) {
+                                val missingItemsCount = remember(chapters) {
+                                    chapters.map { it.chapter.chapterNumber }.missingItemsCount()
+                                }
                                 ItemHeader(
-                                    enabled = chapters.fastAll { !it.selected },
+                                    enabled = !isAnySelected,
                                     itemCount = chapters.size,
-                                    missingItemsCount = chapters.map { it.chapter.chapterNumber }.missingItemsCount(),
+                                    missingItemsCount = missingItemsCount,
                                     onClick = onFilterButtonClicked,
                                     isManga = true,
                                 )
