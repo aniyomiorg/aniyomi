@@ -102,8 +102,8 @@ class AnimeCoverScreenModel(
             imageSaver.save(
                 Image.Cover(
                     bitmap = bitmap,
-                    name = anime.title,
-                    location = if (temp) Location.Cache else Location.Pictures.create(),
+                    name = "cover",
+                    location = if (temp) Location.Cache else Location.Pictures(anime.title),
                 ),
             )
         }

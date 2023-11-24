@@ -173,19 +173,12 @@ sealed class Image(
 }
 
 sealed interface Location {
-    data class Pictures private constructor(val relativePath: String) : Location {
-        companion object {
-            fun create(relativePath: String = ""): Pictures {
-                return Pictures(relativePath)
-            }
-        }
-    }
+    data class Pictures(val relativePath: String) : Location
 
     data object Cache : Location
 
     fun directory(context: Context): File {
         return when (this) {
-            Cache -> context.cacheImageDir
             is Pictures -> {
                 val file = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -199,6 +192,7 @@ sealed interface Location {
                 }
                 file
             }
+            Cache -> context.cacheImageDir
         }
     }
 }

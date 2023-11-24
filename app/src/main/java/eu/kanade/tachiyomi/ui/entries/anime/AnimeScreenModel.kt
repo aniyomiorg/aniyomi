@@ -16,6 +16,7 @@ import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
@@ -103,6 +104,7 @@ class AnimeScreenModel(
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
+    private val addTracks: AddAnimeTracks = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val animeRepository: AnimeRepository = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
@@ -333,24 +335,7 @@ class AnimeScreenModel(
                 }
 
                 // Finally match with enhanced tracking when available
-                val source = state.source
-                state.trackItems
-                    .map { it.tracker }
-                    .filterIsInstance<EnhancedAnimeTracker>()
-                    .filter { it.accept(source) }
-                    .forEach { service ->
-                        launchIO {
-                            try {
-                                service.match(anime)?.let { track ->
-                                    (service as AnimeTracker).register(track, animeId)
-                                }
-                            } catch (e: Exception) {
-                                logcat(LogPriority.WARN, e) {
-                                    "Could not match anime: ${anime.title} with service $service"
-                                }
-                            }
-                        }
-                    }
+                addTracks.bindEnhancedTracks(anime, state.source)
                 if (autoOpenTrack) {
                     showTrackDialog()
                 }

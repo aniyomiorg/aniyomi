@@ -20,6 +20,35 @@ import tachiyomi.domain.category.model.Category
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
+fun CategorySortAlphabeticallyDialog(
+    onDismissRequest: () -> Unit,
+    onSort: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = {
+                onSort()
+                onDismissRequest()
+            }) {
+                Text(text = stringResource(R.string.action_ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(R.string.action_cancel))
+            }
+        },
+        title = {
+            Text(text = stringResource(R.string.action_sort_category))
+        },
+        text = {
+            Text(text = stringResource(R.string.sort_category_confirmation))
+        },
+    )
+}
+
+@Composable
 fun CategoryCreateDialog(
     onDismissRequest: () -> Unit,
     onCreate: (String) -> Unit,

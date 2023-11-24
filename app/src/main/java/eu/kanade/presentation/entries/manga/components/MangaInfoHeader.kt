@@ -298,7 +298,7 @@ fun ExpandableMangaDescription(
                     ) {
                         tags.forEach {
                             TagsChip(
-                                modifier = Modifier.padding(vertical = 4.dp),
+                                modifier = DefaultTagChipModifier,
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -314,7 +314,7 @@ fun ExpandableMangaDescription(
                     ) {
                         items(items = tags) {
                             TagsChip(
-                                modifier = Modifier.padding(vertical = 4.dp),
+                                modifier = DefaultTagChipModifier,
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -675,6 +675,8 @@ private fun MangaSummary(
         }
     }
 }
+
+private val DefaultTagChipModifier = Modifier.padding(vertical = 4.dp)
 
 @Composable
 private fun TagsChip(

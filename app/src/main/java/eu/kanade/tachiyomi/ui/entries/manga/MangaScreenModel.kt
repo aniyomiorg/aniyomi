@@ -15,6 +15,7 @@ import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
@@ -99,6 +100,7 @@ class MangaScreenModel(
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
     private val getTracks: GetMangaTracks = Injekt.get(),
+    private val addTracks: AddMangaTracks = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     private val mangaRepository: MangaRepository = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
@@ -329,24 +331,7 @@ class MangaScreenModel(
                 }
 
                 // Finally match with enhanced tracking when available
-                val source = state.source
-                state.trackItems
-                    .map { it.tracker }
-                    .filterIsInstance<EnhancedMangaTracker>()
-                    .filter { it.accept(source) }
-                    .forEach { service ->
-                        launchIO {
-                            try {
-                                service.match(manga)?.let { track ->
-                                    (service as MangaTracker).register(track, mangaId)
-                                }
-                            } catch (e: Exception) {
-                                logcat(LogPriority.WARN, e) {
-                                    "Could not match manga: ${manga.title} with service $service"
-                                }
-                            }
-                        }
-                    }
+                addTracks.bindEnhancedTracks(manga, state.source)
                 if (autoOpenTrack) {
                     showTrackDialog()
                 }

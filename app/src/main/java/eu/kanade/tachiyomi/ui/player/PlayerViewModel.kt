@@ -498,7 +498,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     image = Image.Page(
                         inputStream = imageStream,
                         name = filename,
-                        location = Location.Pictures.create(relativePath),
+                        location = Location.Pictures(relativePath),
                     ),
                 )
                 notifier.onComplete(uri)

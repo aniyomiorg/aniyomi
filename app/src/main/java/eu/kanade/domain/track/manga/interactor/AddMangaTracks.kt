@@ -17,31 +17,29 @@ class AddMangaTracks(
     private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack,
 ) {
 
-    suspend fun bindEnhancedTracks(manga: Manga, source: MangaSource) {
-        withNonCancellableContext {
-            getTracks.await(manga.id)
-                .filterIsInstance<EnhancedMangaTracker>()
-                .filter { it.accept(source) }
-                .forEach { service ->
-                    try {
-                        service.match(manga)?.let { track ->
-                            track.manga_id = manga.id
-                            (service as Tracker).mangaService.bind(track)
-                            insertTrack.await(track.toDomainTrack()!!)
+    suspend fun bindEnhancedTracks(manga: Manga, source: MangaSource) = withNonCancellableContext {
+        getTracks.await(manga.id)
+            .filterIsInstance<EnhancedMangaTracker>()
+            .filter { it.accept(source) }
+            .forEach { service ->
+                try {
+                    service.match(manga)?.let { track ->
+                        track.manga_id = manga.id
+                        (service as Tracker).mangaService.bind(track)
+                        insertTrack.await(track.toDomainTrack()!!)
 
-                            syncChapterProgressWithTrack.await(
-                                manga.id,
-                                track.toDomainTrack()!!,
-                                service.mangaService,
-                            )
-                        }
-                    } catch (e: Exception) {
-                        logcat(
-                            LogPriority.WARN,
-                            e,
-                        ) { "Could not match manga: ${manga.title} with service $service" }
+                        syncChapterProgressWithTrack.await(
+                            manga.id,
+                            track.toDomainTrack()!!,
+                            service.mangaService,
+                        )
                     }
+                } catch (e: Exception) {
+                    logcat(
+                        LogPriority.WARN,
+                        e,
+                    ) { "Could not match manga: ${manga.title} with service $service" }
                 }
-        }
+            }
     }
 }
