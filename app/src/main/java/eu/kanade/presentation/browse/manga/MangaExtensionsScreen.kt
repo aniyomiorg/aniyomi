@@ -247,7 +247,10 @@ private fun ExtensionItem(
                     )
                 }
 
-                val padding by animateDpAsState(targetValue = if (idle) 0.dp else 8.dp)
+                val padding by animateDpAsState(
+                    targetValue = if (idle) 0.dp else 8.dp,
+                    label = "iconPadding",
+                )
                 MangaExtensionIcon(
                     extension = extension,
                     modifier = Modifier

@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.PrimaryScrollableTabRow
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -142,7 +142,7 @@ private fun FlexibleTabRow(
     block: @Composable () -> Unit,
 ) {
     return if (scrollable) {
-        ScrollableTabRow(
+        PrimaryScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
             indicator = indicator,
             edgePadding = 13.dp,
@@ -150,7 +150,7 @@ private fun FlexibleTabRow(
             block()
         }
     } else {
-        TabRow(
+        PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
             indicator = indicator,
         ) {

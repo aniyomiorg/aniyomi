@@ -136,6 +136,7 @@ private fun DownloadingIndicator(
             val animatedProgress by animateFloatAsState(
                 targetValue = downloadProgress / 100f,
                 animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                label = "progress",
             )
             arrowColor = if (animatedProgress < 0.5f) {
                 strokeColor
@@ -143,7 +144,7 @@ private fun DownloadingIndicator(
                 MaterialTheme.colorScheme.background
             }
             CircularProgressIndicator(
-                progress = animatedProgress,
+                progress = { animatedProgress },
                 modifier = IndicatorModifier,
                 color = strokeColor,
                 strokeWidth = IndicatorSize / 2,

@@ -220,7 +220,10 @@ private fun SearchResult(
             .toList()
     }
 
-    Crossfade(targetState = result) {
+    Crossfade(
+        targetState = result,
+        label = "results",
+    ) {
         when {
             it == null -> {}
             it.isEmpty() -> {

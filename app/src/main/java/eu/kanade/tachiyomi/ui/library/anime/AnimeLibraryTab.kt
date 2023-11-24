@@ -195,7 +195,7 @@ object AnimeLibraryTab : Tab() {
                         actions = listOf(
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
-                                icon = Icons.Outlined.HelpOutline,
+                                icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(
                                         "https://aniyomi.org/docs/guides/getting-started",
