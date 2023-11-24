@@ -157,7 +157,7 @@ class MainActivity : BaseActivity() {
                 readerPreferences = Injekt.get(),
                 playerPreferences = Injekt.get(),
                 backupPreferences = Injekt.get(),
-                trackManager = Injekt.get(),
+                trackerManager = Injekt.get(),
             )
         } else {
             false

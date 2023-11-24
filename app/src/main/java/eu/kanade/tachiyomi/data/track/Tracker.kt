@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import okhttp3.OkHttpClient
 import uy.kohesive.injekt.injectLazy
 
-abstract class TrackService(val id: Long, val name: String) {
+abstract class Tracker(val id: Long, val name: String) {
 
     val trackPreferences: TrackPreferences by injectLazy()
     val networkService: NetworkHelper by injectLazy()
@@ -33,7 +33,7 @@ abstract class TrackService(val id: Long, val name: String) {
 
     @CallSuper
     open fun logout() {
-        trackPreferences.setTrackCredentials(this, "", "")
+        trackPreferences.setCredentials(this, "", "")
     }
 
     open val isLoggedIn: Boolean
@@ -45,12 +45,12 @@ abstract class TrackService(val id: Long, val name: String) {
     fun getPassword() = trackPreferences.trackPassword(this).get()
 
     fun saveCredentials(username: String, password: String) {
-        trackPreferences.setTrackCredentials(this, username, password)
+        trackPreferences.setCredentials(this, username, password)
     }
 
-    open val animeService: AnimeTrackService
-        get() = this as AnimeTrackService
+    open val animeService: AnimeTracker
+        get() = this as AnimeTracker
 
-    open val mangaService: MangaTrackService
-        get() = this as MangaTrackService
+    open val mangaService: MangaTracker
+        get() = this as MangaTracker
 }

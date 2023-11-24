@@ -17,14 +17,10 @@ import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toDomainManga
-import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.track.manga.model.toDomainTrack
+import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.util.removeCovers
@@ -37,11 +33,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
@@ -54,7 +48,6 @@ import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
 import tachiyomi.domain.source.manga.service.MangaSourceManager
-import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -76,11 +69,8 @@ class BrowseMangaSourceScreenModel(
     private val getManga: GetManga = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
-    private val insertTrack: InsertMangaTrack = Injekt.get(),
-    private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack = Injekt.get(),
+    private val addTracks: AddMangaTracks = Injekt.get(),
 ) : StateScreenModel<BrowseMangaSourceScreenModel.State>(State(Listing.valueOf(listingQuery))) {
-
-    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLoggedIn } }
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
@@ -243,8 +233,7 @@ class BrowseMangaSourceScreenModel(
                 new = new.removeCovers(coverCache)
             } else {
                 setMangaDefaultChapterFlags.await(manga)
-
-                autoAddTrack(manga)
+                addTracks.bindEnhancedTracks(manga, source)
             }
 
             updateManga.await(new.toMangaUpdate())
@@ -284,28 +273,6 @@ class BrowseMangaSourceScreenModel(
                 }
             }
         }
-    }
-
-    private suspend fun autoAddTrack(manga: Manga) {
-        loggedServices
-            .filterIsInstance<EnhancedMangaTrackService>()
-            .filter { it.accept(source) }
-            .forEach { service ->
-                try {
-                    service.match(manga)?.let { track ->
-                        track.manga_id = manga.id
-                        (service as TrackService).mangaService.bind(track)
-                        insertTrack.await(track.toDomainTrack()!!)
-                        syncChapterProgressWithTrack.await(
-                            manga.id,
-                            track.toDomainTrack()!!,
-                            service.mangaService,
-                        )
-                    }
-                } catch (e: Exception) {
-                    logcat(LogPriority.WARN, e) { "Could not match manga: ${manga.title} with service $service" }
-                }
-            }
     }
 
     /**

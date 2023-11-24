@@ -10,7 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
@@ -33,7 +33,7 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
         val getTracks = Injekt.get<GetAnimeTracks>()
         val insertTrack = Injekt.get<InsertAnimeTrack>()
 
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         val delayedTrackingStore = Injekt.get<DelayedAnimeTrackingStore>()
 
         withIOContext {
@@ -47,10 +47,10 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 }
                 .forEach { animeTrack ->
                     try {
-                        val service = trackManager.getService(animeTrack.syncId)
-                        if (service != null && service.isLoggedIn) {
+                        val tracker = trackerManager.get(animeTrack.syncId)
+                        if (tracker != null && tracker.isLoggedIn) {
                             logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.id}, last episode seen: ${animeTrack.lastEpisodeSeen}" }
-                            service.animeService.update(animeTrack.toDbTrack(), true)
+                            tracker.animeService.update(animeTrack.toDbTrack(), true)
                             insertTrack.await(animeTrack)
                         }
                         delayedTrackingStore.removeAnimeItem(animeTrack.id)

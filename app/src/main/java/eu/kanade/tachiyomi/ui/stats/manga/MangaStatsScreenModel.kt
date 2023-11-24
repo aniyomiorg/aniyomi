@@ -10,8 +10,8 @@ import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.model.SManga
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
@@ -34,10 +34,10 @@ class MangaStatsScreenModel(
     private val getTotalReadDuration: GetTotalReadDuration = Injekt.get(),
     private val getTracks: GetMangaTracks = Injekt.get(),
     private val preferences: LibraryPreferences = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get(),
+    private val trackerManager: TrackerManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
 
-    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLoggedIn && it is MangaTrackService } }
+    private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is MangaTracker } }
 
     init {
         coroutineScope.launchIO {
@@ -73,7 +73,7 @@ class MangaStatsScreenModel(
             val trackersStatData = StatsData.Trackers(
                 trackedTitleCount = mangaTrackMap.count { it.value.isNotEmpty() },
                 meanScore = meanScore,
-                trackerCount = loggedServices.size,
+                trackerCount = loggedInTrackers.size,
             )
 
             mutableState.update {
@@ -116,10 +116,10 @@ class MangaStatsScreenModel(
     }
 
     private suspend fun getMangaTrackMap(libraryManga: List<LibraryManga>): Map<Long, List<MangaTrack>> {
-        val loggedServicesIds = loggedServices.map { it.id }.toHashSet()
+        val loggedInTrackerIds = loggedInTrackers.map { it.id }.toHashSet()
         return libraryManga.associate { manga ->
             val tracks = getTracks.await(manga.id)
-                .fastFilter { it.syncId in loggedServicesIds }
+                .fastFilter { it.syncId in loggedInTrackerIds }
 
             manga.id to tracks
         }
@@ -145,7 +145,7 @@ class MangaStatsScreenModel(
     }
 
     private fun get10PointScore(track: MangaTrack): Double {
-        val service = trackManager.getService(track.syncId)!!
-        return service.mangaService.get10PointScore(track)
+        val tracker = trackerManager.get(track.syncId)!!
+        return tracker.mangaService.get10PointScore(track)
     }
 }

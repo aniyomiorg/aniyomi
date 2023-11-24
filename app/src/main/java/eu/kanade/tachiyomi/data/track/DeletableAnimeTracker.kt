@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.data.track
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 
 /**
- * For track services api that support deleting a manga entry for a user's list
+ *Tracker that support deleting am entry from a user's list
  */
-interface DeletableAnimeTrackService {
+interface DeletableAnimeTracker {
 
     suspend fun delete(track: AnimeTrack): AnimeTrack
 }

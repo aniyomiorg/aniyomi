@@ -11,8 +11,6 @@ import uy.kohesive.injekt.api.get
 
 fun MangaSource.icon(): Drawable? = Injekt.get<MangaExtensionManager>().getAppIconForSource(this.id)
 
-fun MangaSource.getPreferenceKey(): String = "source_$id"
-
 fun MangaSource.toStubSource(): StubMangaSource = StubMangaSource(id = id, lang = lang, name = name)
 
 fun MangaSource.getNameForMangaInfo(): String {

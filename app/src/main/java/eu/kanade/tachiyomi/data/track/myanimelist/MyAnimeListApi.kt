@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
@@ -34,7 +33,11 @@ import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListInterceptor) {
+class MyAnimeListApi(
+    private val trackId: Long,
+    private val client: OkHttpClient,
+    interceptor: MyAnimeListInterceptor,
+) {
 
     private val json: Json by injectLazy()
 
@@ -136,7 +139,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                     .parseAs<JsonObject>()
                     .let {
                         val obj = it.jsonObject
-                        MangaTrackSearch.create(TrackManager.MYANIMELIST).apply {
+                        MangaTrackSearch.create(trackId).apply {
                             media_id = obj["id"]!!.jsonPrimitive.long
                             title = obj["title"]!!.jsonPrimitive.content
                             summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
@@ -176,7 +179,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                     .parseAs<JsonObject>()
                     .let {
                         val obj = it.jsonObject
-                        AnimeTrackSearch.create(TrackManager.MYANIMELIST).apply {
+                        AnimeTrackSearch.create(trackId).apply {
                             media_id = obj["id"]!!.jsonPrimitive.long
                             title = obj["title"]!!.jsonPrimitive.content
                             summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""

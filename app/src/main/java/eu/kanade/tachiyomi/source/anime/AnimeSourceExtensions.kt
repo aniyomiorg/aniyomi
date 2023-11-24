@@ -11,8 +11,6 @@ import uy.kohesive.injekt.api.get
 
 fun AnimeSource.icon(): Drawable? = Injekt.get<AnimeExtensionManager>().getAppIconForSource(this.id)
 
-fun AnimeSource.getPreferenceKey(): String = "source_$id"
-
 fun AnimeSource.toStubSource(): StubAnimeSource = StubAnimeSource(id = id, lang = lang, name = name)
 
 fun AnimeSource.getNameForAnimeInfo(): String {

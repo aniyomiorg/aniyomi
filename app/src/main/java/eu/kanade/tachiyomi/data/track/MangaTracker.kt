@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
+import eu.kanade.domain.track.manga.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -24,7 +24,7 @@ import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 private val insertTrack: InsertMangaTrack by injectLazy()
 private val syncChapterProgressWithTrack: SyncChapterProgressWithTrack by injectLazy()
 
-interface MangaTrackService {
+interface MangaTracker {
 
     // Common functions
     fun getCompletionStatus(): Int
@@ -108,7 +108,7 @@ interface MangaTrackService {
                     }
                 }
 
-                syncChapterProgressWithTrack.await(mangaId, track, this@MangaTrackService)
+                syncChapterProgressWithTrack.await(mangaId, track, this@MangaTracker)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }

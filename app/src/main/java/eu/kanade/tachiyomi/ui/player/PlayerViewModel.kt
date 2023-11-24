@@ -24,7 +24,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -658,7 +658,7 @@ class PlayerViewModel @JvmOverloads constructor(
      */
     suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
         val animeId = currentAnime?.id ?: return null
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         var malId: Long?
         val episodeNumber = currentEpisode?.episode_number?.toInt() ?: return null
         if (getTracks.await(animeId).isEmpty()) {
@@ -667,8 +667,8 @@ class PlayerViewModel @JvmOverloads constructor(
         }
 
         getTracks.await(animeId).map { track ->
-            val service = trackManager.getService(track.syncId)
-            malId = when (service) {
+            val tracker = trackerManager.get(track.syncId)
+            malId = when (tracker) {
                 is MyAnimeList -> track.remoteId
                 is Anilist -> AniSkipApi().getMalIdFromAL(track.remoteId)
                 else -> null

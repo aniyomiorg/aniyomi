@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.track.suwayomi
 import android.app.Application
 import android.content.SharedPreferences
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -23,7 +22,7 @@ import uy.kohesive.injekt.injectLazy
 import java.nio.charset.Charset
 import java.security.MessageDigest
 
-class TachideskApi {
+class SuwayomiApi(private val trackId: Long) {
 
     private val network by injectLazy<NetworkHelper>()
     private val json: Json by injectLazy()
@@ -62,7 +61,7 @@ class TachideskApi {
                 .parseAs<MangaDataClass>()
         }
 
-        MangaTrackSearch.create(TrackManager.SUWAYOMI).apply {
+        MangaTrackSearch.create(trackId).apply {
             title = manga.title
             cover_url = "$url/thumbnail"
             summary = manga.description.orEmpty()
@@ -101,14 +100,14 @@ class TachideskApi {
         return getTrackSearch(track.tracking_url)
     }
 
-    private val tachideskExtensionId by lazy {
+    private val sourceId by lazy {
         val key = "tachidesk/en/1"
         val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
         (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE
     }
 
     private val preferences: SharedPreferences by lazy {
-        Injekt.get<Application>().getSharedPreferences("source_$tachideskExtensionId", 0x0000)
+        Injekt.get<Application>().getSharedPreferences("source_$sourceId", 0x0000)
     }
 
     private fun getPrefBaseUrl(): String = preferences.getString(ADDRESS_TITLE, ADDRESS_DEFAULT)!!
@@ -117,13 +116,11 @@ class TachideskApi {
         PASSWORD_TITLE,
         PASSWORD_DEFAULT,
     )!!
-
-    companion object {
-        private const val ADDRESS_TITLE = "Server URL Address"
-        private const val ADDRESS_DEFAULT = ""
-        private const val LOGIN_TITLE = "Login (Basic Auth)"
-        private const val LOGIN_DEFAULT = ""
-        private const val PASSWORD_TITLE = "Password (Basic Auth)"
-        private const val PASSWORD_DEFAULT = ""
-    }
 }
+
+private const val ADDRESS_TITLE = "Server URL Address"
+private const val ADDRESS_DEFAULT = ""
+private const val LOGIN_TITLE = "Login (Basic Auth)"
+private const val LOGIN_DEFAULT = ""
+private const val PASSWORD_TITLE = "Password (Basic Auth)"
+private const val PASSWORD_DEFAULT = ""

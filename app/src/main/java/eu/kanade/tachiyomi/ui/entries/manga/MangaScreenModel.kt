@@ -24,9 +24,9 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
@@ -86,7 +86,7 @@ class MangaScreenModel(
     readerPreferences: ReaderPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get(),
+    private val trackerManager: TrackerManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val getMangaAndChapters: GetMangaWithChapters = Injekt.get(),
@@ -107,7 +107,7 @@ class MangaScreenModel(
     private val successState: State.Success?
         get() = state.value as? State.Success
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLoggedIn && it is MangaTrackService } }
+    private val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker } }
 
     val manga: Manga?
         get() = successState?.manga
@@ -331,14 +331,14 @@ class MangaScreenModel(
                 // Finally match with enhanced tracking when available
                 val source = state.source
                 state.trackItems
-                    .map { it.service }
-                    .filterIsInstance<EnhancedMangaTrackService>()
+                    .map { it.tracker }
+                    .filterIsInstance<EnhancedMangaTracker>()
                     .filter { it.accept(source) }
                     .forEach { service ->
                         launchIO {
                             try {
                                 service.match(manga)?.let { track ->
-                                    (service as MangaTrackService).register(track, mangaId)
+                                    (service as MangaTracker).register(track, mangaId)
                                 }
                             } catch (e: Exception) {
                                 logcat(LogPriority.WARN, e) {
@@ -979,7 +979,7 @@ class MangaScreenModel(
             getTracks.subscribe(manga.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    loggedServices
+                    loggedInTrackers
                         // Map to TrackItem
                         .map { service ->
                             MangaTrackItem(
@@ -988,7 +988,7 @@ class MangaScreenModel(
                             )
                         }
                         // Show only if the service supports this manga's source
-                        .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
+                        .filter { (it.tracker as? EnhancedMangaTracker)?.accept(source!!) ?: true }
                 }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->

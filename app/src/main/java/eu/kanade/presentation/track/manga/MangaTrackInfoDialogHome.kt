@@ -49,7 +49,7 @@ import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import java.text.DateFormat
@@ -80,12 +80,12 @@ fun MangaTrackInfoDialogHome(
     ) {
         trackItems.forEach { item ->
             if (item.track != null) {
-                val supportsScoring = item.service.mangaService.getScoreList().isNotEmpty()
-                val supportsReadingDates = item.service.supportsReadingDates
+                val supportsScoring = item.tracker.mangaService.getScoreList().isNotEmpty()
+                val supportsReadingDates = item.tracker.supportsReadingDates
                 TrackInfoItem(
                     title = item.track.title,
-                    service = item.service,
-                    status = item.service.getStatus(item.track.status.toInt()),
+                    tracker = item.tracker,
+                    status = item.tracker.getStatus(item.track.status.toInt()),
                     onStatusClick = { onStatusClick(item) },
                     chapters = "${item.track.lastChapterRead.toInt()}".let {
                         val totalChapters = item.track.totalChapters
@@ -97,7 +97,7 @@ fun MangaTrackInfoDialogHome(
                         }
                     },
                     onChaptersClick = { onChapterClick(item) },
-                    score = item.service.mangaService.displayScore(item.track.toDbTrack())
+                    score = item.tracker.mangaService.displayScore(item.track.toDbTrack())
                         .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
@@ -119,7 +119,7 @@ fun MangaTrackInfoDialogHome(
                 )
             } else {
                 TrackInfoItemEmpty(
-                    service = item.service,
+                    tracker = item.tracker,
                     onNewSearch = { onNewSearch(item) },
                 )
             }
@@ -130,7 +130,7 @@ fun MangaTrackInfoDialogHome(
 @Composable
 private fun TrackInfoItem(
     title: String,
-    service: TrackService,
+    tracker: Tracker,
     @StringRes status: Int?,
     onStatusClick: () -> Unit,
     chapters: String,
@@ -151,7 +151,7 @@ private fun TrackInfoItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             TrackLogoIcon(
-                service = service,
+                tracker = tracker,
                 onClick = onOpenInBrowser,
             )
             Box(
@@ -264,13 +264,13 @@ fun TrackDetailsItem(
 
 @Composable
 private fun TrackInfoItemEmpty(
-    service: TrackService,
+    tracker: Tracker,
     onNewSearch: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TrackLogoIcon(service)
+        TrackLogoIcon(tracker)
         TextButton(
             onClick = onNewSearch,
             modifier = Modifier

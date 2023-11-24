@@ -38,8 +38,8 @@ import eu.kanade.presentation.components.UpIcon
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.sourcePreferences
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
-import eu.kanade.tachiyomi.source.anime.getPreferenceKey
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -138,15 +138,9 @@ class SourcePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun populateScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
-        val source = Injekt.get<AnimeSourceManager>().get(sourceId)!!
+        val source = Injekt.get<AnimeSourceManager>().get(sourceId)!! as ConfigurableAnimeSource
 
-        check(source is ConfigurableAnimeSource)
-
-        val sharedPreferences = requireContext().getSharedPreferences(
-            source.getPreferenceKey(),
-            Context.MODE_PRIVATE,
-        )
-        val dataStore = SharedPreferencesDataStore(sharedPreferences)
+        val dataStore = SharedPreferencesDataStore(source.sourcePreferences())
         preferenceManager.preferenceDataStore = dataStore
 
         val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())

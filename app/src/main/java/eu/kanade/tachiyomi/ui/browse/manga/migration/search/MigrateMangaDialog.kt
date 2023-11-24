@@ -35,8 +35,8 @@ import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
@@ -180,7 +180,7 @@ internal class MigrateMangaDialogScreenModel(
     }
 
     private val enhancedServices by lazy {
-        Injekt.get<TrackManager>().services.filterIsInstance<EnhancedMangaTrackService>()
+        Injekt.get<TrackerManager>().trackers.filterIsInstance<EnhancedMangaTracker>()
     }
 
     suspend fun migrateManga(

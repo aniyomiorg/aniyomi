@@ -23,8 +23,8 @@ import eu.kanade.presentation.library.LibraryToolbarTitle
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
@@ -89,7 +89,7 @@ class MangaLibraryScreenModel(
     private val sourceManager: MangaSourceManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadCache: MangaDownloadCache = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get(),
+    private val trackerManager: TrackerManager = Injekt.get(),
 ) : StateScreenModel<MangaLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
@@ -104,9 +104,9 @@ class MangaLibraryScreenModel(
                 getTracksPerManga.subscribe(),
                 getTrackingFilterFlow(),
                 downloadCache.changes,
-            ) { searchQuery, library, tracks, loggedInTrackServices, _ ->
+            ) { searchQuery, library, tracks, loggedInTrackers, _ ->
                 library
-                    .applyFilters(tracks, loggedInTrackServices)
+                    .applyFilters(tracks, loggedInTrackers)
                     .applySort()
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
@@ -172,7 +172,7 @@ class MangaLibraryScreenModel(
      */
     private suspend fun MangaLibraryMap.applyFilters(
         trackMap: Map<Long, List<Long>>,
-        loggedInTrackServices: Map<Long, TriState>,
+        loggedInTrackers: Map<Long, TriState>,
     ): MangaLibraryMap {
         val prefs = getLibraryItemPreferencesFlow().first()
         val downloadedOnly = prefs.globalFilterDownloaded
@@ -183,10 +183,10 @@ class MangaLibraryScreenModel(
         val filterBookmarked = prefs.filterBookmarked
         val filterCompleted = prefs.filterCompleted
 
-        val isNotLoggedInAnyTrack = loggedInTrackServices.isEmpty()
+        val isNotLoggedInAnyTrack = loggedInTrackers.isEmpty()
 
-        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_NOT) it.key else null }
-        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_IS) it.key else null }
+        val excludedTracks = loggedInTrackers.mapNotNull { if (it.value == TriState.ENABLED_NOT) it.key else null }
+        val includedTracks = loggedInTrackers.mapNotNull { if (it.value == TriState.ENABLED_IS) it.key else null }
         val trackFiltersIsIgnored = includedTracks.isEmpty() && excludedTracks.isEmpty()
 
         val filterFnDownloaded: (MangaLibraryItem) -> Boolean = {
@@ -372,14 +372,14 @@ class MangaLibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, TriState>> {
-        val loggedServices = trackManager.services.filter { it.isLoggedIn && it is MangaTrackService }
-        return if (loggedServices.isNotEmpty()) {
-            val prefFlows = loggedServices
+        val loggedInTrackers = trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker }
+        return if (loggedInTrackers.isNotEmpty()) {
+            val prefFlows = loggedInTrackers
                 .map { libraryPreferences.filterTrackedManga(it.id.toInt()).changes() }
                 .toTypedArray()
             combine(*prefFlows) {
-                loggedServices
-                    .mapIndexed { index, trackService -> trackService.id to it[index] }
+                loggedInTrackers
+                    .mapIndexed { index, tracker -> tracker.id to it[index] }
                     .toMap()
             }
         } else {
