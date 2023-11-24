@@ -383,8 +383,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        // TODO: Change when implemented on Aniyomi website
-        const val HELP_WARNING_URL = "https://aniyomi.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
+        // TODO: Change when implemented on AnimeTail website
+        const val HELP_WARNING_URL = "https://akiled.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
     }
 }
 
@@ -392,5 +392,5 @@ private const val NOTIF_MAX_CHAPTERS = 5
 private const val NOTIF_MANGA_TITLE_MAX_LEN = 45
 private const val NOTIF_MANGA_ICON_SIZE = 192
 
-// TODO: Change when implemented on Aniyomi website
-private const val HELP_SKIPPED_MANGA_URL = "https://aniyomi.org/docs/faq/library#why-is-global-update-skipping-entries"
+// TODO: Change when implemented on AnimeTail website
+private const val HELP_SKIPPED_MANGA_URL = "https://akiled.org/docs/faq/library#why-is-global-update-skipping-entries"

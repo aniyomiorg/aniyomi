@@ -478,7 +478,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         private const val WORK_NAME_AUTO = "LibraryUpdate-auto"
         private const val WORK_NAME_MANUAL = "LibraryUpdate-manual"
 
-        private const val ERROR_LOG_HELP_URL = "https://aniyomi.org/help/guides/troubleshooting"
+        private const val ERROR_LOG_HELP_URL = "https://akiled.org/help/guides/troubleshooting"
         private const val MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
 
         /**

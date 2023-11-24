@@ -40,13 +40,17 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
@@ -69,6 +73,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
+import eu.kanade.tachiyomi.ui.player.viewer.PlayerControls
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.util.AniSkipApi
@@ -87,6 +92,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
@@ -115,6 +121,10 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    // AM (CONNECTIONS) -->
+    private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
+
+    // <-- AM (CONNECTIONS)
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
@@ -274,7 +284,7 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
-    private var videoChapters: List<VideoChapter> = emptyList()
+    internal var videoChapters: List<VideoChapter> = emptyList()
         set(value) {
             field = value
             runOnUiThread {
@@ -504,6 +514,12 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
+        binding.controlsRoot.setComposeContent {
+            PlayerControls(
+                activity = this,
+            )
+        }
+
         playerIsDestroyed = false
 
         registerReceiver(
@@ -642,7 +658,7 @@ class PlayerActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun setupMediaSession() {
-        mediaSession = MediaSessionCompat(this, "Aniyomi_Player_Session").apply {
+        mediaSession = MediaSessionCompat(this, "AnimeTail_Player_Session").apply {
             // Enable callbacks from MediaButtons and TransportControls
             setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
@@ -852,10 +868,12 @@ class PlayerActivity : BaseActivity() {
             player.destroy()
         }
         abandonAudioFocus()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingPlayer = true)
+        // <-- AM (DISCORD)
         super.onDestroy()
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (pip.supportedAndEnabled) {
@@ -901,35 +919,9 @@ class PlayerActivity : BaseActivity() {
                 if (deviceWidth <= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
                 }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = playerControls.binding.toggleAutoplay.id
-                    rightToRight = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.UNSET
-                    leftToRight = playerControls.binding.episodeListBtn.id
-                }
             } else {
                 if (deviceWidth >= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
-                }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.UNSET
-                    topToBottom = playerControls.binding.episodeListBtn.id
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-                    leftToRight = ConstraintLayout.LayoutParams.UNSET
                 }
             }
             setupGestures()
@@ -1358,6 +1350,9 @@ class PlayerActivity : BaseActivity() {
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateSpeedButton()
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingPlayer = false)
+            // <-- AM (DISCORD)
             withIOContext { player.loadTracks() }
         }
     }
@@ -1391,7 +1386,6 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1460,13 +1454,12 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = if (position != null) {
-                        position
-                    } else if ((episode.seen && !preservePos) || fromStart) {
-                        0L
-                    } else {
-                        episode.last_second_seen
-                    }
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
                     playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
@@ -1711,7 +1704,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
@@ -1816,4 +1808,29 @@ class PlayerActivity : BaseActivity() {
             animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
         }
     }
+
+    // AM (DISCORD) -->
+    private fun updateDiscordRPC(exitingPlayer: Boolean) {
+        if (connectionsPreferences.enableDiscordRPC().get()) {
+            viewModel.viewModelScope.launchIO {
+                if (!exitingPlayer) {
+                    DiscordRPCService.setPlayerActivity(
+                        context = this@PlayerActivity,
+                        PlayerData(
+                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
+                            animeId = viewModel.currentAnime?.id,
+                            // AM (CU)>
+                            animeTitle = viewModel.currentAnime?.title,
+                            episodeNumber = viewModel.currentEpisode?.episode_number?.toString(),
+                            thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                        ),
+                    )
+                } else {
+                    val lastUsedScreen = DiscordRPCService.lastUsedScreen
+                    DiscordRPCService.setAnimeScreen(this@PlayerActivity, lastUsedScreen)
+                }
+            }
+        }
+    }
+    // <-- AM (DISCORD)
 }

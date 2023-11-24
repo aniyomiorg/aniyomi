@@ -27,9 +27,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 private const val URL_EXTENSION_COMMITS =
-    "https://github.com/aniyomiorg/aniyomi-extensions/commits/master"
+    "https://github.com/Dark25/animetailv2-extensions/commits/master"
 private const val URL_EXTENSION_BLOB =
-    "https://github.com/aniyomiorg/aniyomi-extensions/blob/master"
+    "https://github.com/Dark25/animetailv2-extensions/blob/master"
 
 class AnimeExtensionDetailsScreenModel(
     pkgName: String,
@@ -105,7 +105,7 @@ class AnimeExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://aniyomi.org/docs/faq/browse/extensions"
+            return "https://akiled.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")

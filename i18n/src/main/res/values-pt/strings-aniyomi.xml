@@ -14,7 +14,7 @@
     <string name="pref_bottom_nav_no_history">Mover Histórico para o separador Mais</string>
     <string name="pref_bottom_nav_no_updates">Mover Atualizações para o separador Mais</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para o separador Mais</string>
-    <string name="unlock_app">Desbloquear o Aniyomi</string>
+    <string name="unlock_app">Desbloquear o AnimeTail</string>
     <string name="action_sort_total_episodes">Total de episódios</string>
     <string name="action_sort_last_seen">Visto da última vez</string>
     <string name="action_sort_last_checked">Última verificação</string>
@@ -48,10 +48,10 @@
     <string name="pref_anime_library_update_categories_details">Os animes nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
     <string name="untrusted_extension_message">Esta extensão possui um certificado não confiável e não foi ativada.
 \n
-\nUma extensão maliciosa pode ler qualquer credencial de entrada armazenada no Aniyomi ou executar código arbitrário.
+\nUma extensão maliciosa pode ler qualquer credencial de entrada armazenada no AnimeTail ou executar código arbitrário.
 \n
 \nAo confiar neste certificado serão aceites estes riscos.</string>
-    <string name="unofficial_extension_message_aniyomi">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensão não está na lista oficial de extensões do AnimeTail.</string>
     <string name="pref_category_progress">Progresso</string>
     <string name="pref_progress_mark_as_seen">Em que ponto marcar o episódio como visto</string>
     <string name="pref_preserve_watching_position">Lembrar a posição de reprodução nos episódios vistos</string>
@@ -128,7 +128,7 @@
     <string name="video_list_empty_error">Nenhum vídeo encontrado</string>
     <string name="notification_new_episodes">Novos episódios encontrados</string>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>
-    <string name="information_webview_required">WebView é necessário para Aniyomi</string>
+    <string name="information_webview_required">WebView é necessário para AnimeTail</string>
     <string name="download_notifier_download_paused_chapters">Descargas pausados</string>
     <string name="channel_new_chapters_episodes">Atualizações de capítulos/episódios</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
@@ -217,7 +217,7 @@
     <string name="pref_bottom_nav_style">Estilo de navegação inferior</string>
     <string name="rotation_reverse_landscape">Paisagem reversa</string>
     <string name="rotation_sensor_portrait">Retrato (Sensor)</string>
-    <string name="unofficial_anime_extension_message">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Esta extensão não está na lista oficial de extensões do AnimeTail.</string>
     <string name="pref_default_landscape_orientation">Paisagem padrão</string>
     <string name="pref_category_volume_brightness">Volume e Brilho</string>
     <string name="pref_category_player_seeking">A buscar</string>
