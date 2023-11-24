@@ -67,8 +67,6 @@ fun StreamsCatalogSheet(
     ) { page ->
         Column(
             modifier = Modifier
-
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical),
         ) {
             @Composable
