@@ -35,21 +35,21 @@ class TrackEpisode(
                     return@mapNotNull null
                 }
 
-                    async {
-                        runCatching {
-                            if (context.isOnline()) {
-                                val updatedTrack = service.animeService.refresh(track.toDbTrack())
-                                    .toDomainTrack(idRequired = true)!!
-                                    .copy(lastEpisodeSeen = episodeNumber)
-                                service.animeService.update(updatedTrack.toDbTrack(), true)
-                                insertTrack.await(updatedTrack)
-                                delayedTrackingStore.removeAnimeItem(track.id)
-                            } else {
-                                delayedTrackingStore.addAnime(track.id, episodeNumber)
-                                DelayedAnimeTrackingUpdateJob.setupTask(context)
-                            }
+                async {
+                    runCatching {
+                        if (context.isOnline()) {
+                            val updatedTrack = service.animeService.refresh(track.toDbTrack())
+                                .toDomainTrack(idRequired = true)!!
+                                .copy(lastEpisodeSeen = episodeNumber)
+                            service.animeService.update(updatedTrack.toDbTrack(), true)
+                            insertTrack.await(updatedTrack)
+                            delayedTrackingStore.removeAnimeItem(track.id)
+                        } else {
+                            delayedTrackingStore.addAnime(track.id, episodeNumber)
+                            DelayedAnimeTrackingUpdateJob.setupTask(context)
                         }
                     }
+                }
             }
                 .awaitAll()
                 .mapNotNull { it.exceptionOrNull() }

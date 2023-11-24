@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.core.content.edit
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.track.anime.model.AnimeTrack
 
 class DelayedAnimeTrackingStore(context: Context) {
 

@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.reader
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.assist.AssistContent
 import android.content.Context
 import android.content.Intent

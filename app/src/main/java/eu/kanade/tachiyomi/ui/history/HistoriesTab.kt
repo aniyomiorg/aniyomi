@@ -28,7 +28,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class HistoriesTab(
     private val fromMore: Boolean,
-    private val preferences: UiPreferences
+    private val preferences: UiPreferences,
 ) : Tab() {
 
     override val options: TabOptions

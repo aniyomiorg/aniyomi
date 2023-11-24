@@ -2,20 +2,13 @@ package eu.kanade.presentation.history.manga
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.RelativeDateHeader
-import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
-import tachiyomi.core.preference.InMemoryPreferenceStore
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
-import tachiyomi.presentation.core.util.ThemePreviews
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 @Composable

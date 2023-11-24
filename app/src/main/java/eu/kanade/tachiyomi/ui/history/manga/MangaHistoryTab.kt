@@ -35,7 +35,7 @@ val resumeLastChapterReadEvent = Channel<Unit>()
 fun Screen.mangaHistoryTab(
     context: Context,
     fromMore: Boolean,
-    preferences: UiPreferences
+    preferences: UiPreferences,
 ): TabContent {
     val snackbarHostState = SnackbarHostState()
 
@@ -67,7 +67,7 @@ fun Screen.mangaHistoryTab(
                 onClickCover = { navigator.push(MangaScreen(it)) },
                 onClickResume = screenModel::getNextChapterForManga,
                 onDialogChange = screenModel::setDialog,
-                preferences = preferences
+                preferences = preferences,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }

@@ -49,8 +49,8 @@ class TrackChapter(
                             DelayedMangaTrackingUpdateJob.setupTask(context)
                             throw e
                         }
-                        }
                     }
+                }
             }
                 .awaitAll()
                 .mapNotNull { it.exceptionOrNull() }

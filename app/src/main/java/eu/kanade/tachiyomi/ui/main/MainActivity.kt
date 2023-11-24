@@ -531,7 +531,6 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-
 }
 
 // Splash screen

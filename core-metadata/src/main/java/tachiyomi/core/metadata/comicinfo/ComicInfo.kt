@@ -8,7 +8,6 @@ import nl.adaptivity.xmlutil.serialization.XmlValue
 
 const val COMIC_INFO_FILE = "ComicInfo.xml"
 
-
 fun SManga.getComicInfo() = ComicInfo(
     series = ComicInfo.Series(title),
     summary = description?.let { ComicInfo.Summary(it) },

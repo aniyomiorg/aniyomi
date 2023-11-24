@@ -35,7 +35,7 @@ val resumeLastEpisodeSeenEvent = Channel<Unit>()
 fun Screen.animeHistoryTab(
     context: Context,
     fromMore: Boolean,
-    preferences: UiPreferences
+    preferences: UiPreferences,
 ): TabContent {
     val snackbarHostState = SnackbarHostState()
 
@@ -68,7 +68,7 @@ fun Screen.animeHistoryTab(
                 onClickCover = { navigator.push(AnimeScreen(it)) },
                 onClickResume = screenModel::getNextEpisodeForAnime,
                 onDialogChange = screenModel::setDialog,
-                preferences = preferences
+                preferences = preferences,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }

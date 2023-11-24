@@ -93,7 +93,7 @@ class AnimeHistoryScreenModelStateProvider : PreviewParameterProvider<AnimeHisto
                         animeId = Random.nextLong(),
                         title = "Test Title",
                         episodeNumber = Random.nextDouble(),
-                        seenAt  = Date.from(Instant.now()),
+                        seenAt = Date.from(Instant.now()),
                         coverData = AnimeCover(
                             animeId = Random.nextLong(),
                             sourceId = Random.nextLong(),

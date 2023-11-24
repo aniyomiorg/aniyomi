@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.core.content.edit
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.track.manga.model.MangaTrack
 
 class DelayedMangaTrackingStore(context: Context) {
 
@@ -18,7 +17,7 @@ class DelayedMangaTrackingStore(context: Context) {
         if (lastChapterRead > previousLastChapterRead) {
             logcat(LogPriority.DEBUG) { "Queuing track item: $trackId, last chapter read: $lastChapterRead" }
             preferences.edit {
-                putFloat(trackId.toString(),lastChapterRead.toFloat())
+                putFloat(trackId.toString(), lastChapterRead.toFloat())
             }
         }
     }

@@ -1,7 +1,6 @@
 package eu.kanade.presentation.more.settings.screen.debug
 
 import android.os.Build
-import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue

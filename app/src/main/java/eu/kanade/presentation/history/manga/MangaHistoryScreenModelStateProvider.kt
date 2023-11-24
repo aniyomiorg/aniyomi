@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit
 import java.util.Date
 import kotlin.random.Random
 
-class MangaHistoryScreenModelStateProvider: PreviewParameterProvider<MangaHistoryScreenModel.State> {
+class MangaHistoryScreenModelStateProvider : PreviewParameterProvider<MangaHistoryScreenModel.State> {
 
     private val multiPage = MangaHistoryScreenModel.State(
         searchQuery = null,
