@@ -127,7 +127,7 @@ internal class AnimeExtensionGithubApi {
                     hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.map(extensionAnimeSourceMapper).orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
+                    iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
                 )
             }
     }

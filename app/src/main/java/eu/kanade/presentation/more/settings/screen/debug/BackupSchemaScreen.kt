@@ -47,13 +47,9 @@ class BackupSchemaScreen : Screen() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(text = title) },
-                    navigationIcon = {
-                        IconButton(onClick = navigator::pop) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-                        }
-                    },
+                AppBar(
+                    title = title,
+                    navigateUp = navigator::pop,
                     actions = {
                         AppBarActions(
                             listOf(

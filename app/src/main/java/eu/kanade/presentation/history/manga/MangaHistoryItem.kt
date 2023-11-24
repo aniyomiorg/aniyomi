@@ -19,13 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.ThemePreviews
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
@@ -88,5 +91,21 @@ fun MangaHistoryItem(
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
+    }
+}
+
+@ThemePreviews
+@Composable
+internal fun HistoryItemPreviews(
+    @PreviewParameter(MangaHistoryWithRelationsProvider::class)
+    historyWithRelations: MangaHistoryWithRelations,
+) {
+    TachiyomiTheme {
+        MangaHistoryItem(
+            history = historyWithRelations,
+            onClickCover = {},
+            onClickResume = {},
+            onClickDelete = {},
+        )
     }
 }

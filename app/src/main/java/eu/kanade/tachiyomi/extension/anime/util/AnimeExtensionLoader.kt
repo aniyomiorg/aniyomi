@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceFactory
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
+import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -97,7 +98,8 @@ internal object AnimeExtensionLoader {
             "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION",
         )
         return try {
-            file.copyTo(target, overwrite = true)
+            target.delete()
+            file.copyAndSetReadOnlyTo(target, overwrite = true)
             if (currentExtension != null) {
                 AnimeExtensionInstallReceiver.notifyReplaced(context, extension.packageName)
             } else {

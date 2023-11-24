@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.UpIcon
 import tachiyomi.presentation.core.components.material.Scaffold
 
@@ -19,15 +20,9 @@ fun PreferenceScaffold(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(titleRes)) },
-                navigationIcon = {
-                    if (onBackPressed != null) {
-                        IconButton(onClick = onBackPressed) {
-                            UpIcon()
-                        }
-                    }
-                },
+            AppBar(
+                title = stringResource(titleRes),
+                navigateUp = onBackPressed,
                 actions = actions,
                 scrollBehavior = it,
             )

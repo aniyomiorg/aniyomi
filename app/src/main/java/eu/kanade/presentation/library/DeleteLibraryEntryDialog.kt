@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.tachiyomi.R
 import tachiyomi.core.preference.CheckboxState
+import tachiyomi.presentation.core.components.LabeledCheckbox
 
 @Composable
 fun DeleteLibraryEntryDialog(
@@ -65,27 +66,18 @@ fun DeleteLibraryEntryDialog(
         text = {
             Column {
                 list.forEach { state ->
-                    val onCheck = {
-                        val index = list.indexOf(state)
-                        if (index != -1) {
-                            val mutableList = list.toMutableList()
-                            mutableList[index] = state.next() as CheckboxState.State<Int>
-                            list = mutableList.toList()
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onCheck() },
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Checkbox(
-                            checked = state.isChecked,
-                            onCheckedChange = { onCheck() },
-                        )
-                        Text(text = stringResource(state.value))
-                    }
+                    LabeledCheckbox(
+                        label = stringResource(state.value),
+                        checked = state.isChecked,
+                        onCheckedChange = {
+                            val index = list.indexOf(state)
+                            if (index != -1) {
+                                val mutableList = list.toMutableList()
+                                mutableList[index] = state.next() as CheckboxState.State<Int>
+                                list = mutableList.toList()
+                            }
+                        },
+                    )
                 }
             }
         },

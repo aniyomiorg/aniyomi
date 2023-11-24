@@ -55,6 +55,7 @@ import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -92,19 +93,11 @@ internal fun MigrateAnimeDialog(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
                     flags.forEachIndexed { index, flag ->
-                        val onChange = { selectedFlags[index] = !selectedFlags[index] }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(onClick = onChange),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Checkbox(
-                                checked = selectedFlags[index],
-                                onCheckedChange = { onChange() },
-                            )
-                            Text(text = context.getString(flag.titleId))
-                        }
+                        LabeledCheckbox(
+                            label = stringResource(flag.titleId),
+                            checked = selectedFlags[index],
+                            onCheckedChange = { selectedFlags[index] = it },
+                        )
                     }
                 }
             },

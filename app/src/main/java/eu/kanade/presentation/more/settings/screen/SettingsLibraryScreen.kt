@@ -285,12 +285,6 @@ object SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.pref_library_update_refresh_metadata),
                     subtitle = stringResource(R.string.pref_library_update_refresh_metadata_summary),
                 ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoUpdateTrackers(),
-                    enabled = Injekt.get<TrackerManager>().hasLoggedIn(),
-                    title = stringResource(R.string.pref_library_update_refresh_trackers),
-                    subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
-                ),
                 Preference.PreferenceItem.MultiSelectListPreference(
                     pref = libraryPreferences.autoUpdateItemRestrictions(),
                     title = stringResource(R.string.pref_library_update_manga_restriction),

@@ -82,21 +82,13 @@ object SettingsMainScreen : Screen() {
         val backPress = LocalBackPress.currentOrThrow
         val containerColor = if (twoPane) getPalerSurface() else MaterialTheme.colorScheme.surface
         val topBarState = rememberTopAppBarState()
+
         Scaffold(
             topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState),
             topBar = { scrollBehavior ->
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(R.string.label_settings),
-                            modifier = Modifier.padding(start = 8.dp),
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = backPress::invoke) {
-                            UpIcon()
-                        }
-                    },
+                AppBar(
+                    title = stringResource(R.string.label_settings),
+                    navigateUp = backPress::invoke,
                     actions = {
                         AppBarActions(
                             listOf(

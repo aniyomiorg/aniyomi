@@ -19,15 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.history.manga.MangaHistoryItem
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.ThemePreviews
 
-private val HISTORY_ITEM_HEIGHT = 96.dp
+private val HistoryItemHeight = 96.dp
 
 @Composable
 fun AnimeHistoryItem(
@@ -40,7 +45,7 @@ fun AnimeHistoryItem(
     Row(
         modifier = modifier
             .clickable(onClick = onClickResume)
-            .height(HISTORY_ITEM_HEIGHT)
+            .height(HistoryItemHeight)
             .padding(
                 horizontal = MaterialTheme.padding.medium,
                 vertical = MaterialTheme.padding.small,
@@ -88,5 +93,21 @@ fun AnimeHistoryItem(
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun HistoryItemPreviews(
+    @PreviewParameter(AnimeHistoryWithRelationsProvider::class)
+    historyWithRelations: AnimeHistoryWithRelations,
+) {
+    TachiyomiTheme {
+        AnimeHistoryItem(
+            history = historyWithRelations,
+            onClickCover = {},
+            onClickResume = {},
+            onClickDelete = {},
+        )
     }
 }

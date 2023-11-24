@@ -63,8 +63,6 @@ class LibraryPreferences(
 
     fun autoUpdateMetadata() = preferenceStore.getBoolean("auto_update_metadata", false)
 
-    fun autoUpdateTrackers() = preferenceStore.getBoolean("auto_update_trackers", false)
-
     fun showContinueViewingButton() =
         preferenceStore.getBoolean("display_continue_reading_button", false)
 

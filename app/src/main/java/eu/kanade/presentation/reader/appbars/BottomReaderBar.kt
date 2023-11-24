@@ -1,4 +1,4 @@
-package eu.kanade.presentation.reader
+package eu.kanade.presentation.reader.appbars
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,6 +15,7 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 
 @Composable
 fun BottomReaderBar(
+    backgroundColor: Color,
     readingMode: ReadingModeType,
     onClickReadingMode: () -> Unit,
     orientationMode: OrientationType,
@@ -32,11 +34,6 @@ fun BottomReaderBar(
     onClickCropBorder: () -> Unit,
     onClickSettings: () -> Unit,
 ) {
-    // Match with toolbar background color set in ReaderActivity
-    val backgroundColor = MaterialTheme.colorScheme
-        .surfaceColorAtElevation(3.dp)
-        .copy(alpha = if (isSystemInDarkTheme()) 0.9f else 0.95f)
-
     Row(
         modifier = Modifier
             .fillMaxWidth()

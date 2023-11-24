@@ -8,6 +8,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -22,7 +23,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
-class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParameters) :
+class DelayedAnimeTrackingUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -31,9 +32,8 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
         }
 
         val getTracks = Injekt.get<GetAnimeTracks>()
-        val insertTrack = Injekt.get<InsertAnimeTrack>()
+        val trackEpisode = Injekt.get<TrackEpisode>()
 
-        val trackerManager = Injekt.get<TrackerManager>()
         val delayedTrackingStore = Injekt.get<DelayedAnimeTrackingStore>()
 
         withIOContext {
@@ -46,19 +46,8 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
                     track?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
                 }
                 .forEach { animeTrack ->
-                    try {
-                        val tracker = trackerManager.get(animeTrack.syncId)
-                        if (tracker != null && tracker.isLoggedIn) {
-                            logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.id}, last episode seen: ${animeTrack.lastEpisodeSeen}" }
-                            tracker.animeService.update(animeTrack.toDbTrack(), true)
-                            insertTrack.await(animeTrack)
-                        }
-                        delayedTrackingStore.removeAnimeItem(animeTrack.id)
-                        null
-                    } catch (e: Exception) {
-                        logcat(LogPriority.ERROR, e)
-                        false
-                    }
+                    logcat(LogPriority.DEBUG) { "Updating delayed track item: ${animeTrack.animeId}, last chapter read: ${animeTrack.lastEpisodeSeen}" }
+                    trackEpisode.await(context, animeTrack.animeId, animeTrack.lastEpisodeSeen)
                 }
         }
 

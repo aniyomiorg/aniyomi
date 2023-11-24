@@ -8,6 +8,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
+import eu.kanade.domain.track.manga.interactor.TrackChapter
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -22,7 +23,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
-class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParameters) :
+class DelayedMangaTrackingUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -31,9 +32,8 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
         }
 
         val getTracks = Injekt.get<GetMangaTracks>()
-        val insertTrack = Injekt.get<InsertMangaTrack>()
+        val trackChapter = Injekt.get<TrackChapter>()
 
-        val trackerManager = Injekt.get<TrackerManager>()
         val delayedTrackingStore = Injekt.get<DelayedMangaTrackingStore>()
 
         withIOContext {
@@ -46,19 +46,8 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
                     track?.copy(lastChapterRead = it.lastChapterRead.toDouble())
                 }
                 .forEach { track ->
-                    try {
-                        val tracker = trackerManager.get(track.syncId)
-                        if (tracker != null && tracker.isLoggedIn) {
-                            logcat(LogPriority.DEBUG) { "Updating delayed track item: ${track.id}, last chapter read: ${track.lastChapterRead}" }
-                            tracker.mangaService.update(track.toDbTrack(), true)
-                            insertTrack.await(track)
-                        }
-                        delayedTrackingStore.removeMangaItem(track.id)
-                        null
-                    } catch (e: Exception) {
-                        logcat(LogPriority.ERROR, e)
-                        false
-                    }
+                    logcat(LogPriority.DEBUG) { "Updating delayed track item: ${track.mangaId}, last chapter read: ${track.lastChapterRead}" }
+                    trackChapter.await(context, track.mangaId, track.lastChapterRead)
                 }
         }
 

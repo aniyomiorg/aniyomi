@@ -41,19 +41,9 @@ class OpenSourceLibraryLicenseScreen(
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = navigator::pop) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-                        }
-                    },
+                AppBar(
+                    title = name,
+                    navigateUp = navigator::pop,
                     actions = {
                         if (!website.isNullOrEmpty()) {
                             AppBarActions(

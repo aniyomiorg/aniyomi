@@ -34,6 +34,7 @@ import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.UpIcon
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
@@ -55,17 +56,9 @@ class SourcePreferencesScreen(val sourceId: Long) : Screen() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = Injekt.get<AnimeSourceManager>().getOrStub(sourceId).toString(),
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = navigator::pop) {
-                            UpIcon()
-                        }
-                    },
+                AppBar(
+                    title = Injekt.get<AnimeSourceManager>().getOrStub(sourceId).toString(),
+                    navigateUp = navigator::pop,
                     scrollBehavior = it,
                 )
             },

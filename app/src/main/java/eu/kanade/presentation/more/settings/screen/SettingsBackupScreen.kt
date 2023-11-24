@@ -62,6 +62,7 @@ import tachiyomi.domain.backup.service.FLAG_EXT_SETTINGS
 import tachiyomi.domain.backup.service.FLAG_HISTORY
 import tachiyomi.domain.backup.service.FLAG_SETTINGS
 import tachiyomi.domain.backup.service.FLAG_TRACK
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.core.util.isScrolledToEnd
@@ -175,22 +176,23 @@ object SettingsBackupScreen : SearchableSettings {
                     val state = rememberLazyListState()
                     ScrollbarLazyColumn(state = state) {
                         item {
-                            CreateBackupDialogItem(
-                                isSelected = true,
-                                title = stringResource(R.string.entries),
+                            LabeledCheckbox(
+                                label = stringResource(R.string.entries),
+                                checked = true,
+                                onCheckedChange = {},
                             )
                         }
                         choices.forEach { (k, v) ->
                             item {
                                 val isSelected = flags.contains(k)
-                                CreateBackupDialogItem(
-                                    isSelected = isSelected,
-                                    title = stringResource(v),
-                                    modifier = Modifier.clickable {
-                                        if (isSelected) {
-                                            flags.remove(k)
-                                        } else {
+                                LabeledCheckbox(
+                                    label = stringResource(v),
+                                    checked = isSelected,
+                                    onCheckedChange = {
+                                        if (it) {
                                             flags.add(k)
+                                        } else {
+                                            flags.remove(k)
                                         }
                                     },
                                 )
@@ -228,29 +230,6 @@ object SettingsBackupScreen : SearchableSettings {
     }
 
     @Composable
-    private fun CreateBackupDialogItem(
-        modifier: Modifier = Modifier,
-        isSelected: Boolean,
-        title: String,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth(),
-        ) {
-            Checkbox(
-                modifier = Modifier.heightIn(min = 48.dp),
-                checked = isSelected,
-                onCheckedChange = null,
-            )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyMedium.merge(),
-                modifier = Modifier.padding(start = 24.dp),
-            )
-        }
-    }
-
-    @Composable
     private fun getRestoreBackupPref(): Preference.PreferenceItem.TextPreference {
         val context = LocalContext.current
         var error by remember { mutableStateOf<Any?>(null) }
@@ -261,7 +240,7 @@ object SettingsBackupScreen : SearchableSettings {
                     AlertDialog(
                         onDismissRequest = onDismissRequest,
                         title = { Text(text = stringResource(R.string.invalid_backup_file)) },
-                        text = { Text(text = "${err.uri}\n\n${err.message}") },
+                        text = { Text(text = listOfNotNull(err.uri, err.message).joinToString("\n\n")) },
                         dismissButton = {
                             TextButton(
                                 onClick = {
@@ -269,7 +248,7 @@ object SettingsBackupScreen : SearchableSettings {
                                     onDismissRequest()
                                 },
                             ) {
-                                Text(text = stringResource(android.R.string.copy))
+                                Text(text = stringResource(R.string.action_copy_to_clipboard))
                             }
                         },
                         confirmButton = {
@@ -340,25 +319,24 @@ object SettingsBackupScreen : SearchableSettings {
                 }
             },
         ) {
-            if (it != null) {
-                val results = try {
-                    BackupFileValidator().validate(context, it)
-                } catch (e: Exception) {
-                    error = InvalidRestore(it, e.message.toString())
-                    return@rememberLauncherForActivityResult
-                }
-
-                if (results.missingSources.isEmpty() && results.missingTrackers.isEmpty()) {
-                    BackupRestoreJob.start(context, it)
-                    return@rememberLauncherForActivityResult
-                }
-
-                error = MissingRestoreComponents(
-                    it,
-                    results.missingSources,
-                    results.missingTrackers,
-                )
+            if (it == null) {
+                error = InvalidRestore(message = context.getString(R.string.file_null_uri_error))
+                return@rememberLauncherForActivityResult
             }
+
+            val results = try {
+                BackupFileValidator().validate(context, it)
+            } catch (e: Exception) {
+                error = InvalidRestore(it, e.message.toString())
+                return@rememberLauncherForActivityResult
+            }
+
+            if (results.missingSources.isEmpty() && results.missingTrackers.isEmpty()) {
+                BackupRestoreJob.start(context, it)
+                return@rememberLauncherForActivityResult
+            }
+
+            error = MissingRestoreComponents(it, results.missingSources, results.missingTrackers)
         }
 
         return Preference.PreferenceItem.TextPreference(
@@ -476,6 +454,6 @@ private data class MissingRestoreComponents(
 )
 
 private data class InvalidRestore(
-    val uri: Uri,
+    val uri: Uri? = null,
     val message: String,
 )

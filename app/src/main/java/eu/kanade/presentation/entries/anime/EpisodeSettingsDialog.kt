@@ -29,6 +29,7 @@ import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
@@ -184,25 +185,16 @@ private fun SetAsDefaultDialog(
             ) {
                 Text(text = stringResource(R.string.confirm_set_chapter_settings))
 
-                Row(
-                    modifier = Modifier
-                        .clickable { optionalChecked = !optionalChecked }
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(
-                        checked = optionalChecked,
-                        onCheckedChange = null,
-                    )
-                    Text(text = stringResource(R.string.also_set_episode_settings_for_library))
-                }
+                LabeledCheckbox(
+                    label = stringResource(R.string.also_set_episode_settings_for_library),
+                    checked = optionalChecked,
+                    onCheckedChange = { optionalChecked = it },
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(R.string.action_cancel))
             }
         },
         confirmButton = {

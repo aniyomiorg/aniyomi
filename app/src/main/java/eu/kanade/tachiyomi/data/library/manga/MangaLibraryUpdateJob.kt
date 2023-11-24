@@ -89,7 +89,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val updateManga: UpdateManga = Injekt.get()
     private val getCategories: GetMangaCategories = Injekt.get()
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
-    private val refreshMangaTracks: RefreshMangaTracks = Injekt.get()
     private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
@@ -131,7 +130,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 when (target) {
                     Target.CHAPTERS -> updateChapterList()
                     Target.COVERS -> updateCovers()
-                    Target.TRACKING -> updateTrackings()
                 }
                 Result.success()
             } catch (e: Exception) {
@@ -303,10 +301,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                         failedUpdates.add(manga to errorMessage)
                                     }
-
-                                    if (libraryPreferences.autoUpdateTrackers().get()) {
-                                        refreshMangaTracks(manga.id)
-                                    }
                                 }
                             }
                         }
@@ -412,37 +406,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         notifier.cancelProgressNotification()
     }
 
-    /**
-     * Method that updates the metadata of the connected tracking services. It's called in a
-     * background thread, so it's safe to do heavy operations or network calls here.
-     */
-    private suspend fun updateTrackings() {
-        coroutineScope {
-            var progressCount = 0
-
-            mangaToUpdate.forEach { libraryManga ->
-                ensureActive()
-
-                val manga = libraryManga.manga
-                notifier.showProgressNotification(
-                    listOf(manga),
-                    progressCount++,
-                    mangaToUpdate.size,
-                )
-                refreshMangaTracks(manga.id)
-            }
-
-            notifier.cancelProgressNotification()
-        }
-    }
-
-    private suspend fun refreshMangaTracks(mangaId: Long) {
-        refreshMangaTracks.await(mangaId).forEach { (_, e) ->
-            // Ignore errors and continue
-            logcat(LogPriority.ERROR, e)
-        }
-    }
-
     private suspend fun withUpdateNotification(
         updatingManga: CopyOnWriteArrayList<Manga>,
         completed: AtomicInteger,
@@ -509,7 +472,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     enum class Target {
         CHAPTERS, // Manga chapters
         COVERS, // Manga covers
-        TRACKING, // Tracking metadata
     }
 
     companion object {
