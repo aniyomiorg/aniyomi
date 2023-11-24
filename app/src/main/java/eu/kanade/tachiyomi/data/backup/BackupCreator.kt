@@ -49,7 +49,9 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
+import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
@@ -78,6 +80,11 @@ class BackupCreator(
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get()
     private val getMangaHistory: GetMangaHistory = Injekt.get()
     private val getAnimeHistory: GetAnimeHistory = Injekt.get()
+
+    // SY -->
+    private val getCustomMangaInfo: GetCustomMangaInfo = Injekt.get()
+    private val getCustomAnimeInfo: GetCustomAnimeInfo = Injekt.get()
+    // SY <--
 
     internal val parser = ProtoBuf
 
@@ -234,7 +241,18 @@ class BackupCreator(
      */
     private suspend fun backupManga(manga: Manga, options: Int): BackupManga {
         // Entry for this manga
-        val mangaObject = BackupManga.copyFrom(manga)
+        val mangaObject = BackupManga.copyFrom(
+            manga,
+            // SY -->
+            if (options and BackupConst.BACKUP_CUSTOM_INFO_MASK == BackupConst.BACKUP_CUSTOM_INFO) {
+                getCustomMangaInfo.get(
+                    manga.id,
+                )
+            } else {
+                null
+            },
+            // <-- SY
+        )
 
         // Check if user wants chapter information in backup
         if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
@@ -302,7 +320,18 @@ class BackupCreator(
      */
     private suspend fun backupAnime(anime: Anime, options: Int): BackupAnime {
         // Entry for this anime
-        val animeObject = BackupAnime.copyFrom(anime)
+        val animeObject = BackupAnime.copyFrom(
+            anime,
+            // SY -->
+            if (options and BackupConst.BACKUP_CUSTOM_INFO_MASK == BackupConst.BACKUP_CUSTOM_INFO) {
+                getCustomAnimeInfo.get(
+                    anime.id,
+                )
+            } else {
+                null
+            },
+            // <-- SY
+        )
 
         // Check if user wants chapter information in backup
         if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
@@ -417,6 +446,9 @@ class BackupCreator(
         if (flags and BackupConst.BACKUP_PREFS_MASK != BackupConst.BACKUP_PREFS) return emptyList()
         val backupPreferences = mutableListOf<BackupPreference>()
         for (pref in prefs.all) {
+            // AM (CONNECTIONS) -->
+            if (pref.key.contains("connection")) continue
+            // <-- AM (CONNECTIONS)
             val toAdd = when (pref.value) {
                 is Int -> {
                     BackupPreference(pref.key, IntPreferenceValue(pref.value as Int))

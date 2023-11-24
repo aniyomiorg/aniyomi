@@ -44,11 +44,9 @@ import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
-import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.interactor.SetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
-import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
 import tachiyomi.domain.entries.manga.interactor.SetCustomMangaInfo
 import tachiyomi.domain.entries.manga.model.CustomMangaInfo
