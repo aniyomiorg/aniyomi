@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
+import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -109,7 +110,8 @@ internal object MangaExtensionLoader {
             "${extension.packageName}.$PRIVATE_EXTENSION_EXTENSION",
         )
         return try {
-            file.copyTo(target, overwrite = true)
+            target.delete()
+            file.copyAndSetReadOnlyTo(target, overwrite = true)
             if (currentExtension != null) {
                 MangaExtensionInstallReceiver.notifyReplaced(context, extension.packageName)
             } else {

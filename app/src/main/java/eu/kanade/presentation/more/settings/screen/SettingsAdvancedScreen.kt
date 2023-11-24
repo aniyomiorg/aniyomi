@@ -372,21 +372,6 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_refresh_library_tracking),
-                    subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
-                    enabled = trackerManager.hasLoggedIn(),
-                    onClick = {
-                        MangaLibraryUpdateJob.startNow(
-                            context,
-                            target = MangaLibraryUpdateJob.Target.TRACKING,
-                        )
-                        AnimeLibraryUpdateJob.startNow(
-                            context,
-                            target = AnimeLibraryUpdateJob.Target.TRACKING,
-                        )
-                    },
-                ),
-                Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_reset_viewer_flags),
                     subtitle = stringResource(R.string.pref_reset_viewer_flags_summary),
                     onClick = {

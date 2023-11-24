@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
+import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -39,12 +40,12 @@ class ShikimoriApi(
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
-    suspend fun addLibManga(track: MangaTrack, user_id: String): MangaTrack {
+    suspend fun addLibManga(track: MangaTrack, userId: String): MangaTrack {
         return withIOContext {
             with(json) {
                 val payload = buildJsonObject {
                     putJsonObject("user_rate") {
-                        put("user_id", user_id)
+                        put("user_id", userId)
                         put("target_id", track.media_id)
                         put("target_type", "Manga")
                         put("chapters", track.last_chapter_read.toInt())
@@ -67,9 +68,9 @@ class ShikimoriApi(
         }
     }
 
-    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(
+    suspend fun updateLibManga(track: MangaTrack, userId: String): MangaTrack = addLibManga(
         track,
-        user_id,
+        userId,
     )
 
     suspend fun deleteLibManga(track: MangaTrack): MangaTrack {
@@ -83,12 +84,12 @@ class ShikimoriApi(
         }
     }
 
-    suspend fun addLibAnime(track: AnimeTrack, user_id: String): AnimeTrack {
+    suspend fun addLibAnime(track: AnimeTrack, userId: String): AnimeTrack {
         return withIOContext {
             with(json) {
                 val payload = buildJsonObject {
                     putJsonObject("user_rate") {
-                        put("user_id", user_id)
+                        put("user_id", userId)
                         put("target_id", track.media_id)
                         put("target_type", "Anime")
                         put("chapters", track.last_episode_seen.toInt())
@@ -111,9 +112,9 @@ class ShikimoriApi(
         }
     }
 
-    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(
+    suspend fun updateLibAnime(track: AnimeTrack, userId: String): AnimeTrack = addLibAnime(
         track,
-        user_id,
+        userId,
     )
 
     suspend fun deleteLibAnime(track: AnimeTrack): AnimeTrack {
@@ -323,14 +324,14 @@ class ShikimoriApi(
         private const val clientId = "1aaf4cf232372708e98b5abc813d795b539c5a916dbbfe9ac61bf02a360832cc"
         private const val clientSecret = "229942c742dd4cde803125d17d64501d91c0b12e14cb1e5120184d77d67024c0"
 
-        private const val baseUrl = "https://shikimori.me"
+        private const val baseUrl = "https://shikimori.one"
         private const val apiUrl = "$baseUrl/api"
         private const val oauthUrl = "$baseUrl/oauth/token"
         private const val loginUrl = "$baseUrl/oauth/authorize"
 
         private const val redirectUrl = "tachiyomi://shikimori-auth"
 
-        fun authUrl() = loginUrl.toUri().buildUpon()
+        fun authUrl(): Uri = loginUrl.toUri().buildUpon()
             .appendQueryParameter("client_id", clientId)
             .appendQueryParameter("redirect_uri", redirectUrl)
             .appendQueryParameter("response_type", "code")

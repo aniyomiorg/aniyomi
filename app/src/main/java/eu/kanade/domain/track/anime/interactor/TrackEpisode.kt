@@ -2,6 +2,7 @@ package eu.kanade.domain.track.anime.interactor
 
 import android.content.Context
 import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -29,23 +30,25 @@ class TrackEpisode(
             if (tracks.isEmpty()) return@launchNonCancellable
 
             tracks.mapNotNull { track ->
-                val tracker = trackerManager.get(track.syncId)
-                if (tracker != null && tracker.isLoggedIn && episodeNumber > track.lastEpisodeSeen) {
-                    val updatedTrack = track.copy(lastEpisodeSeen = episodeNumber)
+                val service = trackerManager.get(track.syncId)
+                if (service == null || !service.isLoggedIn || episodeNumber <= track.lastEpisodeSeen) {
+                    return@mapNotNull null
+                }
 
-                    async {
-                        runCatching {
-                            if (context.isOnline()) {
-                                tracker.animeService.update(updatedTrack.toDbTrack(), true)
-                                insertTrack.await(updatedTrack)
-                            } else {
-                                delayedTrackingStore.addAnimeItem(updatedTrack)
-                                DelayedAnimeTrackingUpdateJob.setupTask(context)
-                            }
+                async {
+                    runCatching {
+                        if (context.isOnline()) {
+                            val updatedTrack = service.animeService.refresh(track.toDbTrack())
+                                .toDomainTrack(idRequired = true)!!
+                                .copy(lastEpisodeSeen = episodeNumber)
+                            service.animeService.update(updatedTrack.toDbTrack(), true)
+                            insertTrack.await(updatedTrack)
+                            delayedTrackingStore.removeAnimeItem(track.id)
+                        } else {
+                            delayedTrackingStore.addAnime(track.id, episodeNumber)
+                            DelayedAnimeTrackingUpdateJob.setupTask(context)
                         }
                     }
-                } else {
-                    null
                 }
             }
                 .awaitAll()

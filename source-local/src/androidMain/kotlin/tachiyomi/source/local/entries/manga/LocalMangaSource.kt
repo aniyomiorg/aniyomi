@@ -1,6 +1,7 @@
 package tachiyomi.source.local.entries.manga
 
 import android.content.Context
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.UnmeteredSource
@@ -10,7 +11,6 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.EpubFile
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
@@ -20,6 +20,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.copyFromComicInfo
+import tachiyomi.core.metadata.comicinfo.getComicInfo
 import tachiyomi.core.metadata.tachiyomi.ChapterDetails
 import tachiyomi.core.metadata.tachiyomi.MangaDetails
 import tachiyomi.core.util.lang.withIOContext
@@ -130,22 +131,20 @@ actual class LocalMangaSource(
 
         // Fetch chapters of all the manga
         mangas.forEach { manga ->
-            runBlocking {
-                val chapters = getChapterList(manga)
-                if (chapters.isNotEmpty()) {
-                    val chapter = chapters.last()
-                    val format = getFormat(chapter)
+            val chapters = getChapterList(manga)
+            if (chapters.isNotEmpty()) {
+                val chapter = chapters.last()
+                val format = getFormat(chapter)
 
-                    if (format is Format.Epub) {
-                        EpubFile(format.file).use { epub ->
-                            epub.fillMangaMetadata(manga)
-                        }
+                if (format is Format.Epub) {
+                    EpubFile(format.file).use { epub ->
+                        epub.fillMangaMetadata(manga)
                     }
+                }
 
-                    // Copy the cover from the first chapter found if not available
-                    if (manga.thumbnail_url == null) {
-                        updateCover(chapter, manga)
-                    }
+                // Copy the cover from the first chapter found if not available
+                if (manga.thumbnail_url == null) {
+                    updateCover(chapter, manga)
                 }
             }
         }
@@ -178,6 +177,7 @@ actual class LocalMangaSource(
 
         // Augment manga details based on metadata files
         try {
+            val mangaDir = fileSystem.getMangaDirectory(manga.url)
             val mangaDirFiles = fileSystem.getFilesInMangaDirectory(manga.url).toList()
 
             val comicInfoFile = mangaDirFiles
@@ -194,7 +194,8 @@ actual class LocalMangaSource(
                     setMangaDetailsFromComicInfoFile(comicInfoFile.inputStream(), manga)
                 }
 
-                // TODO: automatically convert these to ComicInfo.xml
+                // Old custom JSON format
+                // TODO: remove support for this entirely after a while
                 legacyJsonDetailsFile != null -> {
                     json.decodeFromStream<MangaDetails>(legacyJsonDetailsFile.inputStream()).run {
                         title?.let { manga.title = it }
@@ -204,6 +205,16 @@ actual class LocalMangaSource(
                         genre?.let { manga.genre = it.joinToString() }
                         status?.let { manga.status = it }
                     }
+                    // Replace with ComicInfo.xml file
+                    val comicInfo = manga.getComicInfo()
+                    UniFile.fromFile(mangaDir)
+                        ?.createFile(COMIC_INFO_FILE)
+                        ?.openOutputStream()
+                        ?.use {
+                            val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
+                            it.write(comicInfoString.toByteArray())
+                            legacyJsonDetailsFile.delete()
+                        }
                 }
 
                 // Copy ComicInfo.xml from chapter archive to top level if found
@@ -212,7 +223,6 @@ actual class LocalMangaSource(
                         .filter(ArchiveManga::isSupported)
                         .toList()
 
-                    val mangaDir = fileSystem.getMangaDirectory(manga.url)
                     val folderPath = mangaDir?.absolutePath
 
                     val copiedFile = copyComicInfoFileFromArchive(chapterArchives, folderPath)

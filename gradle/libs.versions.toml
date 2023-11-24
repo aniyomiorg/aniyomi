@@ -2,7 +2,7 @@
 aboutlib_version = "10.9.1"
 okhttp_version = "5.0.0-alpha.11"
 shizuku_version = "12.2.0"
-sqlite = "2.3.1"
+sqlite = "2.4.0"
 sqldelight = "2.0.0"
 leakcanary = "2.12"
 voyager = "1.0.0-rc07"
@@ -88,7 +88,7 @@ voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
-ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.6.0"
+ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.6.1"
 
 aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.10.n"
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.10"

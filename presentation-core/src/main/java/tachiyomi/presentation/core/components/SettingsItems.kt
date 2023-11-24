@@ -50,7 +50,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -196,6 +198,8 @@ fun SliderItem(
     valueText: String,
     onChange: (Int) -> Unit,
 ) {
+    val haptic = LocalHapticFeedback.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -216,7 +220,13 @@ fun SliderItem(
 
         Slider(
             value = value.toFloat(),
-            onValueChange = { onChange(it.toInt()) },
+            onValueChange = {
+                val newValue = it.toInt()
+                if (newValue != value) {
+                    onChange(newValue)
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                }
+            },
             modifier = Modifier.weight(1.5f),
             valueRange = min.toFloat()..max.toFloat(),
             steps = max - min,

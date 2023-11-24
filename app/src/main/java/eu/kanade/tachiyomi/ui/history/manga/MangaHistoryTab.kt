@@ -13,8 +13,10 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.components.preferences
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.manga.MangaHistoryScreen
@@ -35,6 +37,7 @@ val resumeLastChapterReadEvent = Channel<Unit>()
 fun Screen.mangaHistoryTab(
     context: Context,
     fromMore: Boolean,
+    preferences: UiPreferences,
 ): TabContent {
     val snackbarHostState = SnackbarHostState()
 
@@ -66,6 +69,7 @@ fun Screen.mangaHistoryTab(
                 onClickCover = { navigator.push(MangaScreen(it)) },
                 onClickResume = screenModel::getNextChapterForManga,
                 onDialogChange = screenModel::setDialog,
+                preferences = preferences,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }

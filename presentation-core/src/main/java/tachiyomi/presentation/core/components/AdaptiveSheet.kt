@@ -175,7 +175,10 @@ fun AdaptiveSheet(
                     .offset {
                         IntOffset(
                             0,
-                            anchoredDraggableState.offset.takeIf { it.isFinite() }?.roundToInt() ?: 0,
+                            anchoredDraggableState.offset
+                                .takeIf { it.isFinite() }
+                                ?.roundToInt()
+                                ?: 0,
                         )
                     }
                     .anchoredDraggable(
@@ -245,8 +248,13 @@ private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() 
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        settle(velocity = available.toFloat())
-        return available
+        val toFling = available.toFloat()
+        return if (toFling > 0) {
+            settle(toFling)
+            available
+        } else {
+            Velocity.Zero
+        }
     }
 
     private fun Float.toOffset(): Offset = Offset(0f, this)

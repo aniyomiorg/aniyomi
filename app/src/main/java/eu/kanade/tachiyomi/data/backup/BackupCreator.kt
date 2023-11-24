@@ -393,11 +393,11 @@ class BackupCreator(
     private fun backupExtensionPreferences(flags: Int): List<BackupExtensionPreferences> {
         if (flags and BackupConst.BACKUP_EXT_PREFS_MASK != BackupConst.BACKUP_EXT_PREFS) return emptyList()
         val prefs = mutableListOf<Pair<String, SharedPreferences>>()
-        Injekt.get<AnimeSourceManager>().getOnlineSources().forEach {
+        Injekt.get<AnimeSourceManager>().getCatalogueSources().forEach {
             val name = it.getPreferenceKey()
             prefs += Pair(name, context.getSharedPreferences(name, 0x0))
         }
-        Injekt.get<MangaSourceManager>().getOnlineSources().forEach {
+        Injekt.get<MangaSourceManager>().getCatalogueSources().forEach {
             val name = it.getPreferenceKey()
             prefs += Pair(name, context.getSharedPreferences(name, 0x0))
         }

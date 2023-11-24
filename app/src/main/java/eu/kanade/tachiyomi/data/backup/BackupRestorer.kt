@@ -30,6 +30,8 @@ import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.source.anime.model.copyFrom
 import eu.kanade.tachiyomi.source.manga.model.copyFrom
 import eu.kanade.tachiyomi.util.BackupUtil
@@ -1271,6 +1273,10 @@ class BackupRestorer(
         preferences: List<BackupPreference>,
         sharedPrefs: SharedPreferences,
     ) {
+        MangaLibraryUpdateJob.setupTask(context)
+        AnimeLibraryUpdateJob.setupTask(context)
+        BackupCreateJob.setupTask(context)
+
         preferences.forEach { pref ->
             when (pref.value) {
                 is IntPreferenceValue -> {

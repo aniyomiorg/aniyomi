@@ -19,7 +19,6 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -95,7 +94,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getCategories: GetAnimeCategories = Injekt.get()
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
-    private val refreshAnimeTracks: RefreshAnimeTracks = Injekt.get()
     private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
@@ -141,7 +139,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 when (target) {
                     Target.EPISODES -> updateEpisodeList()
                     Target.COVERS -> updateCovers()
-                    Target.TRACKING -> updateTrackings()
                 }
                 Result.success()
             } catch (e: Exception) {
@@ -364,10 +361,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                         failedUpdates.add(anime to errorMessage)
                                     }
-
-                                    if (libraryPreferences.autoUpdateTrackers().get()) {
-                                        refreshAnimeTracks(anime.id)
-                                    }
                                 }
                             }
                         }
@@ -473,37 +466,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         notifier.cancelProgressNotification()
     }
 
-    /**
-     * Method that updates the metadata of the connected tracking services. It's called in a
-     * background thread, so it's safe to do heavy operations or network calls here.
-     */
-    private suspend fun updateTrackings() {
-        coroutineScope {
-            var progressCount = 0
-
-            animeToUpdate.forEach { libraryAnime ->
-                ensureActive()
-
-                val anime = libraryAnime.anime
-                notifier.showProgressNotification(
-                    listOf(anime),
-                    progressCount++,
-                    animeToUpdate.size,
-                )
-                refreshAnimeTracks(anime.id)
-            }
-
-            notifier.cancelProgressNotification()
-        }
-    }
-
-    private suspend fun refreshAnimeTracks(animeId: Long) {
-        refreshAnimeTracks.await(animeId).forEach { (_, e) ->
-            // Ignore errors and continue
-            logcat(LogPriority.ERROR, e)
-        }
-    }
-
     private suspend fun withUpdateNotification(
         updatingAnime: CopyOnWriteArrayList<Anime>,
         completed: AtomicInteger,
@@ -570,7 +532,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     enum class Target {
         EPISODES, // Anime episodes
         COVERS, // Anime covers
-        TRACKING, // Tracking metadata
     }
 
     companion object {
