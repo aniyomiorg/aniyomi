@@ -13,7 +13,7 @@ import java.util.Date
 fun RelativeDateHeader(
     modifier: Modifier = Modifier,
     date: Date,
-    relativeTime: Int,
+    relativeTime: Boolean,
     dateFormat: DateFormat,
 ) {
     val context = LocalContext.current

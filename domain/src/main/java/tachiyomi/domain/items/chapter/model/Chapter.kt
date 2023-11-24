@@ -11,8 +11,9 @@ data class Chapter(
     val url: String,
     val name: String,
     val dateUpload: Long,
-    val chapterNumber: Float,
+    val chapterNumber: Double,
     val scanlator: String?,
+    val lastModifiedAt: Long,
 ) {
     val isRecognizedNumber: Boolean
         get() = chapterNumber >= 0f
@@ -29,8 +30,9 @@ data class Chapter(
             url = "",
             name = "",
             dateUpload = -1,
-            chapterNumber = -1f,
+            chapterNumber = -1.0,
             scanlator = null,
+            lastModifiedAt = 0,
         )
     }
 }

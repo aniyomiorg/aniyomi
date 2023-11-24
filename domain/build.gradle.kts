@@ -10,7 +10,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
 }
 
 dependencies {
@@ -23,4 +22,13 @@ dependencies {
     api(libs.sqldelight.android.paging)
 
     testImplementation(libs.bundles.test)
+    testImplementation(kotlinx.coroutines.test)
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        )
+    }
 }

@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
+import androidx.core.content.ContextCompat
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import kotlinx.coroutines.CoroutineStart
@@ -27,7 +30,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
      * Registers this broadcast receiver
      */
     fun register(context: Context) {
-        context.registerReceiver(this, filter)
+        ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     /**
@@ -38,6 +41,9 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addAction(Intent.ACTION_PACKAGE_REPLACED)
             addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addAction(ACTION_EXTENSION_ADDED)
+            addAction(ACTION_EXTENSION_REPLACED)
+            addAction(ACTION_EXTENSION_REMOVED)
             addDataScheme("package")
         }
 
@@ -49,19 +55,23 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
         if (intent == null) return
 
         when (intent.action) {
-            Intent.ACTION_PACKAGE_ADDED -> {
+            Intent.ACTION_PACKAGE_ADDED, ACTION_EXTENSION_ADDED -> {
                 if (isReplacing(intent)) return
 
                 launchNow {
                     when (val result = getExtensionFromIntent(context, intent)) {
-                        is AnimeLoadResult.Success -> listener.onExtensionInstalled(result.extension)
+                        is AnimeLoadResult.Success -> listener.onExtensionInstalled(
+                            result.extension,
+                        )
 
-                        is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(result.extension)
+                        is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(
+                            result.extension,
+                        )
                         else -> {}
                     }
                 }
             }
-            Intent.ACTION_PACKAGE_REPLACED -> {
+            Intent.ACTION_PACKAGE_REPLACED, ACTION_EXTENSION_REPLACED -> {
                 launchNow {
                     when (val result = getExtensionFromIntent(context, intent)) {
                         is AnimeLoadResult.Success -> listener.onExtensionUpdated(result.extension)
@@ -71,7 +81,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                     }
                 }
             }
-            Intent.ACTION_PACKAGE_REMOVED -> {
+            Intent.ACTION_PACKAGE_REMOVED, ACTION_EXTENSION_REMOVED -> {
                 if (isReplacing(intent)) return
 
                 val pkgName = getPackageNameFromIntent(intent)
@@ -126,5 +136,31 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
         fun onExtensionUpdated(extension: AnimeExtension.Installed)
         fun onExtensionUntrusted(extension: AnimeExtension.Untrusted)
         fun onPackageUninstalled(pkgName: String)
+    }
+
+    companion object {
+        private const val ACTION_EXTENSION_ADDED = "${BuildConfig.APPLICATION_ID}.ACTION_EXTENSION_ADDED"
+        private const val ACTION_EXTENSION_REPLACED = "${BuildConfig.APPLICATION_ID}.ACTION_EXTENSION_REPLACED"
+        private const val ACTION_EXTENSION_REMOVED = "${BuildConfig.APPLICATION_ID}.ACTION_EXTENSION_REMOVED"
+
+        fun notifyAdded(context: Context, pkgName: String) {
+            notify(context, pkgName, ACTION_EXTENSION_ADDED)
+        }
+
+        fun notifyReplaced(context: Context, pkgName: String) {
+            notify(context, pkgName, ACTION_EXTENSION_REPLACED)
+        }
+
+        fun notifyRemoved(context: Context, pkgName: String) {
+            notify(context, pkgName, ACTION_EXTENSION_REMOVED)
+        }
+
+        private fun notify(context: Context, pkgName: String, action: String) {
+            Intent(action).apply {
+                data = Uri.parse("package:$pkgName")
+                `package` = context.packageName
+                context.sendBroadcast(this)
+            }
+        }
     }
 }

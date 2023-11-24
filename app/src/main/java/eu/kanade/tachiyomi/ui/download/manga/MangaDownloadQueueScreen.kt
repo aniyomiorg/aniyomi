@@ -1,12 +1,12 @@
 package eu.kanade.tachiyomi.ui.download.manga
 
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
@@ -32,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.tachiyomi.R
@@ -61,8 +60,16 @@ fun DownloadQueueScreen(
                 return scrollBehavior.nestedScrollConnection.onPreScroll(available, source)
             }
 
-            override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                return scrollBehavior.nestedScrollConnection.onPostScroll(consumed, available, source)
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource,
+            ): Offset {
+                return scrollBehavior.nestedScrollConnection.onPostScroll(
+                    consumed,
+                    available,
+                    source,
+                )
             }
 
             override suspend fun onPreFling(available: Velocity): Velocity {
@@ -119,6 +126,7 @@ fun DownloadQueueScreen(
             )
             return@Scaffold
         }
+
         val density = LocalDensity.current
         val layoutDirection = LocalLayoutDirection.current
         val left = with(density) { contentPadding.calculateLeftPadding(layoutDirection).toPx().roundToInt() }
@@ -128,13 +136,17 @@ fun DownloadQueueScreen(
 
         Box(modifier = Modifier.nestedScroll(nestedScrollConnection)) {
             AndroidView(
+                modifier = Modifier.fillMaxWidth(),
                 factory = { context ->
-                    screenModel.controllerBinding = DownloadListBinding.inflate(LayoutInflater.from(context))
+                    screenModel.controllerBinding = DownloadListBinding.inflate(
+                        LayoutInflater.from(context),
+                    )
                     screenModel.adapter = MangaDownloadAdapter(screenModel.listener)
-                    screenModel.controllerBinding.recycler.adapter = screenModel.adapter
+                    screenModel.controllerBinding.root.adapter = screenModel.adapter
                     screenModel.adapter?.isHandleDragEnabled = true
-                    screenModel.adapter?.fastScroller = screenModel.controllerBinding.fastScroller
-                    screenModel.controllerBinding.recycler.layoutManager = LinearLayoutManager(context)
+                    screenModel.controllerBinding.root.layoutManager = LinearLayoutManager(
+                        context,
+                    )
 
                     ViewCompat.setNestedScrollingEnabled(screenModel.controllerBinding.root, true)
 
@@ -150,21 +162,13 @@ fun DownloadQueueScreen(
                     screenModel.controllerBinding.root
                 },
                 update = {
-                    screenModel.controllerBinding.recycler
+                    screenModel.controllerBinding.root
                         .updatePadding(
                             left = left,
                             top = top,
                             right = right,
                             bottom = bottom,
                         )
-
-                    screenModel.controllerBinding.fastScroller
-                        .updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                            leftMargin = left
-                            topMargin = top
-                            rightMargin = right
-                            bottomMargin = bottom
-                        }
 
                     screenModel.adapter?.updateDataSet(downloadList)
                 },

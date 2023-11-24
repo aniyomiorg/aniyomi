@@ -16,7 +16,6 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
-import rx.Observable
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.copyFromComicInfo
@@ -70,11 +69,11 @@ actual class LocalMangaSource(
     override val supportsLatest: Boolean = true
 
     // Browse related
-    override fun fetchPopularManga(page: Int) = fetchSearchManga(page, "", POPULAR_FILTERS)
+    override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", POPULAR_FILTERS)
 
-    override fun fetchLatestUpdates(page: Int) = fetchSearchManga(page, "", LATEST_FILTERS)
+    override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LATEST_FILTERS)
 
-    override fun fetchSearchManga(page: Int, query: String, filters: FilterList): Observable<MangasPage> {
+    override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage {
         val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
         val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
@@ -96,7 +95,9 @@ actual class LocalMangaSource(
                     mangaDirs = if (filter.state!!.ascending) {
                         mangaDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
-                        mangaDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name })
+                        mangaDirs.sortedWith(
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
+                        )
                     }
                 }
                 is MangaOrderBy.Latest -> {
@@ -148,7 +149,7 @@ actual class LocalMangaSource(
             }
         }
 
-        return Observable.just(MangasPage(mangas.toList(), false))
+        return MangasPage(mangas.toList(), false)
     }
 
     // Manga details related
@@ -282,11 +283,9 @@ actual class LocalMangaSource(
                     }
                     date_upload = chapterFile.lastModified()
 
-                    val chapterNumber = ChapterRecognition.parseChapterNumber(
-                        manga.title,
-                        this.name,
-                        this.chapter_number,
-                    )
+                    val chapterNumber = ChapterRecognition
+                        .parseChapterNumber(manga.title, this.name, this.chapter_number.toDouble())
+                        .toFloat()
                     chapter_number = chapterNumber
 
                     val format = Format.valueOf(chapterFile)
@@ -325,7 +324,9 @@ actual class LocalMangaSource(
     override fun getFilterList() = FilterList(MangaOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getPageList(chapter: SChapter) = throw UnsupportedOperationException("Unused")
+    override suspend fun getPageList(chapter: SChapter) = throw UnsupportedOperationException(
+        "Unused",
+    )
 
     fun getFormat(chapter: SChapter): Format {
         try {
@@ -346,7 +347,11 @@ actual class LocalMangaSource(
             when (val format = getFormat(chapter)) {
                 is Format.Directory -> {
                     val entry = format.file.listFiles()
-                        ?.sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                        ?.sortedWith { f1, f2 ->
+                            f1.name.compareToCaseInsensitiveNaturalOrder(
+                                f2.name,
+                            )
+                        }
                         ?.find { !it.isDirectory && ImageUtil.isImage(it.name) { FileInputStream(it) } }
 
                     entry?.let { coverManager.update(manga, it.inputStream()) }
@@ -354,7 +359,11 @@ actual class LocalMangaSource(
                 is Format.Zip -> {
                     ZipFile(format.file).use { zip ->
                         val entry = zip.entries().toList()
-                            .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                            .sortedWith { f1, f2 ->
+                                f1.name.compareToCaseInsensitiveNaturalOrder(
+                                    f2.name,
+                                )
+                            }
                             .find {
                                 !it.isDirectory && ImageUtil.isImage(it.name) {
                                     zip.getInputStream(
@@ -369,7 +378,11 @@ actual class LocalMangaSource(
                 is Format.Rar -> {
                     JunrarArchive(format.file).use { archive ->
                         val entry = archive.fileHeaders
-                            .sortedWith { f1, f2 -> f1.fileName.compareToCaseInsensitiveNaturalOrder(f2.fileName) }
+                            .sortedWith { f1, f2 ->
+                                f1.fileName.compareToCaseInsensitiveNaturalOrder(
+                                    f2.fileName,
+                                )
+                            }
                             .find {
                                 !it.isDirectory && ImageUtil.isImage(it.fileName) {
                                     archive.getInputStream(
@@ -399,7 +412,7 @@ actual class LocalMangaSource(
 
     companion object {
         const val ID = 0L
-        const val HELP_URL = "https://aniyomi.org/help/guides/local-manga/"
+        const val HELP_URL = "https://akiled.org/help/guides/local-manga/"
 
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
     }

@@ -3,16 +3,19 @@ package eu.kanade.domain.entries.anime.interactor
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.ZonedDateTime
 import java.util.Date
 
 class UpdateAnime(
     private val animeRepository: AnimeRepository,
+    private val animeFetchInterval: AnimeFetchInterval,
 ) {
 
     suspend fun await(animeUpdate: AnimeUpdate): Boolean {
@@ -73,12 +76,24 @@ class UpdateAnime(
         )
     }
 
+    suspend fun awaitUpdateFetchInterval(
+        anime: Anime,
+        dateTime: ZonedDateTime = ZonedDateTime.now(),
+        window: Pair<Long, Long> = animeFetchInterval.getWindow(dateTime),
+    ): Boolean {
+        return animeFetchInterval.toAnimeUpdateOrNull(anime, dateTime, window)
+            ?.let { animeRepository.updateAnime(it) }
+            ?: false
+    }
+
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {
         return animeRepository.updateAnime(AnimeUpdate(id = animeId, lastUpdate = Date().time))
     }
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
-        return animeRepository.updateAnime(AnimeUpdate(id = mangaId, coverLastModified = Date().time))
+        return animeRepository.updateAnime(
+            AnimeUpdate(id = mangaId, coverLastModified = Date().time),
+        )
     }
 
     suspend fun awaitUpdateFavorite(animeId: Long, favorite: Boolean): Boolean {

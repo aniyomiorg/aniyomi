@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -113,7 +115,7 @@ private fun <T> WheelPicker(
     val haptic = LocalHapticFeedback.current
     val lazyListState = rememberLazyListState(startIndex)
 
-    var internalIndex by remember { mutableStateOf(startIndex) }
+    var internalIndex by remember { mutableIntStateOf(startIndex) }
     val internalOnSelectionChanged: (Int) -> Unit = {
         internalIndex = it
         onSelectionChanged(it)
@@ -142,7 +144,12 @@ private fun <T> WheelPicker(
         if (showManualInput) {
             var value by remember {
                 val currentString = items[internalIndex].toString()
-                mutableStateOf(TextFieldValue(text = currentString, selection = TextRange(currentString.length)))
+                mutableStateOf(
+                    TextFieldValue(
+                        text = currentString,
+                        selection = TextRange(currentString.length),
+                    ),
+                )
             }
 
             val scope = rememberCoroutineScope()
@@ -188,7 +195,9 @@ private fun <T> WheelPicker(
                         }
                     },
                 state = lazyListState,
-                contentPadding = PaddingValues(vertical = size.height / RowCount * ((RowCount - 1) / 2)),
+                contentPadding = PaddingValues(
+                    vertical = size.height / RowCount * ((RowCount - 1) / 2),
+                ),
                 flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
             ) {
                 itemsIndexed(items) { index, item ->

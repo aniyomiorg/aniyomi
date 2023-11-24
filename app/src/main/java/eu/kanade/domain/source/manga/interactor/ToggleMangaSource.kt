@@ -21,7 +21,13 @@ class ToggleMangaSource(
     fun await(sourceIds: List<Long>, enable: Boolean) {
         val transformedSourceIds = sourceIds.map { it.toString() }
         preferences.disabledMangaSources().getAndSet { disabled ->
-            if (enable) disabled.minus(transformedSourceIds) else disabled.plus(transformedSourceIds)
+            if (enable) {
+                disabled.minus(transformedSourceIds)
+            } else {
+                disabled.plus(
+                    transformedSourceIds,
+                )
+            }
         }
     }
 

@@ -5,7 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -155,7 +155,10 @@ object HomeScreen : Screen() {
                         AnimatedContent(
                             targetState = tabNavigator.current,
                             transitionSpec = {
-                                materialFadeThroughIn(initialScale = 1f, durationMillis = TabFadeDuration) with
+                                materialFadeThroughIn(
+                                    initialScale = 1f,
+                                    durationMillis = TabFadeDuration,
+                                ) togetherWith
                                     materialFadeThroughOut(durationMillis = TabFadeDuration)
                             },
                             content = {
@@ -336,12 +339,12 @@ object HomeScreen : Screen() {
         showBottomNavEvent.send(show)
     }
 
-    sealed class Tab {
-        data class Animelib(val animeIdToOpen: Long? = null) : Tab()
-        data class Library(val mangaIdToOpen: Long? = null) : Tab()
-        object Updates : Tab()
-        object History : Tab()
-        data class Browse(val toExtensions: Boolean = false) : Tab()
-        data class More(val toDownloads: Boolean) : Tab()
+    sealed interface Tab {
+        data class Animelib(val animeIdToOpen: Long? = null) : Tab
+        data class Library(val mangaIdToOpen: Long? = null) : Tab
+        data object Updates : Tab
+        data object History : Tab
+        data class Browse(val toExtensions: Boolean = false) : Tab
+        data class More(val toDownloads: Boolean) : Tab
     }
 }

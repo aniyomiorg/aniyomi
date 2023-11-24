@@ -1,15 +1,26 @@
 package eu.kanade.presentation.browse.anime.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import eu.kanade.presentation.browse.GlobalSearchCard
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.browse.InLibraryBadge
+import eu.kanade.presentation.library.CommonEntryItemDefaults
+import eu.kanade.presentation.library.EntryComfortableGridItem
+import eu.kanade.tachiyomi.R
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.entries.anime.model.asAnimeCover
 import tachiyomi.presentation.core.components.material.padding
 
@@ -20,13 +31,18 @@ fun GlobalAnimeSearchCardRow(
     onClick: (Anime) -> Unit,
     onLongClick: (Anime) -> Unit,
 ) {
+    if (titles.isEmpty()) {
+        EmptyResultItem()
+        return
+    }
+
     LazyRow(
         contentPadding = PaddingValues(MaterialTheme.padding.small),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
     ) {
         items(titles) {
             val title by getAnime(it)
-            GlobalSearchCard(
+            AnimeItem(
                 title = title.title,
                 cover = title.asAnimeCover(),
                 isFavorite = title.favorite,
@@ -35,4 +51,39 @@ fun GlobalAnimeSearchCardRow(
             )
         }
     }
+}
+
+@Composable
+private fun AnimeItem(
+    title: String,
+    cover: AnimeCover,
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+) {
+    Box(modifier = Modifier.width(96.dp)) {
+        EntryComfortableGridItem(
+            title = title,
+            titleMaxLines = 3,
+            coverData = cover,
+            coverBadgeStart = {
+                InLibraryBadge(enabled = isFavorite)
+            },
+            coverAlpha = if (isFavorite) CommonEntryItemDefaults.BrowseFavoriteCoverAlpha else 1f,
+            onClick = onClick,
+            onLongClick = onLongClick,
+        )
+    }
+}
+
+@Composable
+private fun EmptyResultItem() {
+    Text(
+        text = stringResource(R.string.no_results_found),
+        modifier = Modifier
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
+            ),
+    )
 }

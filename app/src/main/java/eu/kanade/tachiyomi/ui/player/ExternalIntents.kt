@@ -19,9 +19,12 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -73,7 +76,12 @@ class ExternalIntents {
      * @param animeId the id of the anime.
      * @param episodeId the id of the episode.
      */
-    suspend fun getExternalIntent(context: Context, animeId: Long?, episodeId: Long?, chosenVideo: Video?): Intent? {
+    suspend fun getExternalIntent(
+        context: Context,
+        animeId: Long?,
+        episodeId: Long?,
+        chosenVideo: Video?,
+    ): Intent? {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
@@ -85,7 +93,21 @@ class ExternalIntents {
         val videoUrl = getVideoUrl(context, video) ?: return null
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
-
+        // AM (DISCORD) -->
+        withIOContext {
+            DiscordRPCService.setPlayerActivity(
+                context = context,
+                playerData = PlayerData(
+                    incognitoMode = source.isNsfw() || basePreferences.incognitoMode().get(),
+                    animeId = anime.id,
+                    // AM (CU)>
+                    animeTitle = anime.title,
+                    episodeNumber = episode.episodeNumber.toString(),
+                    thumbnailUrl = anime.thumbnailUrl,
+                ),
+            )
+        }
+        // <-- AM (DISCORD)
         return if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
@@ -105,7 +127,7 @@ class ExternalIntents {
      */
     private suspend fun getVideoUrl(context: Context, video: Video): Uri? {
         if (video.videoUrl == null) {
-            makeErrorToast(context, Exception("Video URL is null."))
+            makeErrorToast(context, Exception("Video URL is null. Instead watch Suavemente!"))
             return null
         } else {
             val uri = video.videoUrl!!.toUri()
@@ -299,7 +321,10 @@ class ExternalIntents {
     private fun getComponent(packageName: String): ComponentName? {
         return when (packageName) {
             MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
-            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(packageName, "$packageName.ActivityScreen")
+            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(
+                packageName,
+                "$packageName.ActivityScreen",
+            )
             VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
             MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
@@ -331,7 +356,7 @@ class ExternalIntents {
      */
     @OptIn(DelicateCoroutinesApi::class)
     @Suppress("DEPRECATION")
-    fun onActivityResult(intent: Intent?) {
+    fun onActivityResult(context: Context, intent: Intent?) {
         val data = intent ?: return
         val anime = anime
         val currentExtEpisode = episode
@@ -365,8 +390,16 @@ class ExternalIntents {
 
         // Update the episode's progress and history
         launchIO {
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordRPCService.lastUsedScreen)
+            // <-- AM (DISCORD)
             if (cause == "playback_completion" || (currentPosition == duration && duration == 0L)) {
-                saveEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.totalSeconds, currentExtEpisode.totalSeconds)
+                saveEpisodeProgress(
+                    currentExtEpisode,
+                    anime,
+                    currentExtEpisode.totalSeconds,
+                    currentExtEpisode.totalSeconds,
+                )
             } else {
                 saveEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
@@ -410,7 +443,12 @@ class ExternalIntents {
      * @param lastSecondSeen the position of the episode.
      * @param totalSeconds the duration of the episode.
      */
-    private suspend fun saveEpisodeProgress(currentEpisode: Episode?, anime: Anime, lastSecondSeen: Long, totalSeconds: Long) {
+    private suspend fun saveEpisodeProgress(
+        currentEpisode: Episode?,
+        anime: Anime,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+    ) {
         if (basePreferences.incognitoMode().get()) return
         val currEp = currentEpisode ?: return
 
@@ -474,15 +512,15 @@ class ExternalIntents {
     private suspend fun updateTrackEpisodeSeen(episodeNumber: Double, anime: Anime) {
         if (!trackPreferences.autoUpdateTrack().get()) return
 
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         val context = Injekt.get<Application>()
 
         withIOContext {
             getTracks.await(anime.id)
                 .mapNotNull { track ->
-                    val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLogged &&
-                        service is AnimeTrackService && episodeNumber > track.lastEpisodeSeen
+                    val tracker = trackerManager.get(track.syncId)
+                    if (tracker != null && tracker.isLoggedIn &&
+                        tracker is AnimeTracker && episodeNumber > track.lastEpisodeSeen
                     ) {
                         val updatedTrack = track.copy(lastEpisodeSeen = episodeNumber)
 
@@ -491,7 +529,7 @@ class ExternalIntents {
                         async {
                             runCatching {
                                 if (context.isOnline()) {
-                                    service.animeService.update(updatedTrack.toDbTrack(), true)
+                                    tracker.animeService.update(updatedTrack.toDbTrack(), true)
                                     insertTrack.await(updatedTrack)
                                 } else {
                                     delayedTrackingStore.addAnimeItem(updatedTrack)
@@ -516,7 +554,14 @@ class ExternalIntents {
      * @param anime the anime of the episode.
      */
     private suspend fun enqueueDeleteSeenEpisodes(episode: Episode, anime: Anime) {
-        if (episode.seen) withIOContext { downloadManager.enqueueEpisodesToDelete(listOf(episode), anime) }
+        if (episode.seen) {
+            withIOContext {
+                downloadManager.enqueueEpisodesToDelete(
+                    listOf(episode),
+                    anime,
+                )
+            }
+        }
     }
 
     companion object {

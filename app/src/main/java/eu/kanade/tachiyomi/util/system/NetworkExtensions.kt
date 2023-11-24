@@ -21,7 +21,9 @@ fun Context.isOnline(): Boolean {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> NetworkCapabilities.TRANSPORT_WIFI_AWARE
         else -> NetworkCapabilities.TRANSPORT_VPN
     }
-    return (NetworkCapabilities.TRANSPORT_CELLULAR..maxTransport).any(networkCapabilities::hasTransport)
+    return (NetworkCapabilities.TRANSPORT_CELLULAR..maxTransport).any(
+        networkCapabilities::hasTransport,
+    )
 }
 
 /**

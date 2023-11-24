@@ -1,6 +1,6 @@
 package eu.kanade.domain.items.episode.interactor
 
-import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
+import eu.kanade.domain.download.anime.interactor.DeleteEpisodeDownload
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
@@ -13,7 +13,7 @@ import tachiyomi.domain.items.episode.repository.EpisodeRepository
 
 class SetSeenStatus(
     private val downloadPreferences: DownloadPreferences,
-    private val deleteDownload: DeleteAnimeDownload,
+    private val deleteDownload: DeleteEpisodeDownload,
     private val animeRepository: AnimeRepository,
     private val episodeRepository: EpisodeRepository,
 ) {
@@ -72,9 +72,9 @@ class SetSeenStatus(
     suspend fun await(anime: Anime, seen: Boolean) =
         await(anime.id, seen)
 
-    sealed class Result {
-        object Success : Result()
-        object NoEpisodes : Result()
-        data class InternalError(val error: Throwable) : Result()
+    sealed interface Result {
+        data object Success : Result
+        data object NoEpisodes : Result
+        data class InternalError(val error: Throwable) : Result
     }
 }

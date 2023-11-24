@@ -1,6 +1,5 @@
 package eu.kanade.presentation.browse.anime.components
 
-import android.content.pm.PackageManager
 import android.util.DisplayMetrics
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -31,6 +30,7 @@ import eu.kanade.domain.source.anime.model.icon
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
@@ -127,7 +127,10 @@ private fun AnimeExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT
     return produceState<Result<ImageBitmap>>(initialValue = Result.Loading, this) {
         withIOContext {
             value = try {
-                val appInfo = context.packageManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
+                val appInfo = AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(
+                    context,
+                    pkgName,
+                )!!.applicationInfo
                 val appResources = context.packageManager.getResourcesForApplication(appInfo)
                 Result.Success(
                     appResources.getDrawableForDensity(appInfo.icon, density, null)!!
@@ -142,7 +145,7 @@ private fun AnimeExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT
 }
 
 sealed class Result<out T> {
-    object Loading : Result<Nothing>()
-    object Error : Result<Nothing>()
+    data object Loading : Result<Nothing>()
+    data object Error : Result<Nothing>()
     data class Success<out T>(val value: T) : Result<T>()
 }

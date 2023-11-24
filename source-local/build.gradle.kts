@@ -4,7 +4,7 @@ plugins {
 }
 
 kotlin {
-    android()
+    androidTarget()
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -38,5 +38,13 @@ android {
     dependencies {
         // FFmpeg-kit
         implementation(libs.ffmpeg.kit)
+    }
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        )
     }
 }

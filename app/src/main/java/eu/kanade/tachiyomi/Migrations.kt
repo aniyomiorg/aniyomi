@@ -4,32 +4,32 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.backup.BackupCreateJob
+import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import eu.kanade.tachiyomi.util.preference.minusAssign
-import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.DeviceUtil
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.workManager
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.TriState
+import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.preference.getEnum
+import tachiyomi.core.preference.minusAssign
+import tachiyomi.core.preference.plusAssign
 import tachiyomi.domain.backup.service.BackupPreferences
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import java.io.File
 
 object Migrations {
@@ -51,7 +51,11 @@ object Migrations {
         readerPreferences: ReaderPreferences,
         playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
-        trackManager: TrackManager,
+        trackerManager: TrackerManager,
+        // AM (CONNECTIONS) -->
+        connectionsPreferences: ConnectionsPreferences,
+        connectionsManager: ConnectionsManager,
+        // <-- AM (CONNECTIONS)
     ): Boolean {
         val lastVersionCode = preferenceStore.getInt("last_version_code", 0)
         val oldVersion = lastVersionCode.get()
@@ -109,19 +113,25 @@ object Migrations {
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
-                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(
+                    libraryPreferences.mangaSortingMode().key(),
+                    0,
+                )
 
                 if (oldMangaSortingMode == 5) { // SOURCE = 5
                     prefs.edit {
-                        putInt(libraryPreferences.libraryMangaSortingMode().key(), 0) // ALPHABETICAL = 0
+                        putInt(libraryPreferences.mangaSortingMode().key(), 0) // ALPHABETICAL = 0
                     }
                 }
 
-                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
+                val oldAnimeSortingMode = prefs.getInt(
+                    libraryPreferences.animeSortingMode().key(),
+                    0,
+                )
 
                 if (oldAnimeSortingMode == 5) { // SOURCE = 5
                     prefs.edit {
-                        putInt(libraryPreferences.libraryAnimeSortingMode().key(), 0) // ALPHABETICAL = 0
+                        putInt(libraryPreferences.animeSortingMode().key(), 0) // ALPHABETICAL = 0
                     }
                 }
             }
@@ -136,13 +146,22 @@ object Migrations {
                     }
                 }
                 prefs.edit {
-                    putInt(libraryPreferences.filterDownloadedManga().key(), convertBooleanPrefToTriState("pref_filter_downloaded_key"))
+                    putInt(
+                        libraryPreferences.filterDownloadedManga().key(),
+                        convertBooleanPrefToTriState("pref_filter_downloaded_key"),
+                    )
                     remove("pref_filter_downloaded_key")
 
-                    putInt(libraryPreferences.filterUnread().key(), convertBooleanPrefToTriState("pref_filter_unread_key"))
+                    putInt(
+                        libraryPreferences.filterUnread().key(),
+                        convertBooleanPrefToTriState("pref_filter_unread_key"),
+                    )
                     remove("pref_filter_unread_key")
 
-                    putInt(libraryPreferences.filterCompletedManga().key(), convertBooleanPrefToTriState("pref_filter_completed_key"))
+                    putInt(
+                        libraryPreferences.filterCompletedManga().key(),
+                        convertBooleanPrefToTriState("pref_filter_completed_key"),
+                    )
                     remove("pref_filter_completed_key")
                 }
             }
@@ -150,9 +169,8 @@ object Migrations {
                 // Force MAL log out due to login flow change
                 // v52: switched from scraping to WebView
                 // v53: switched from WebView to OAuth
-                val trackManager = Injekt.get<TrackManager>()
-                if (trackManager.myAnimeList.isLogged) {
-                    trackManager.myAnimeList.logout()
+                if (trackerManager.myAnimeList.isLoggedIn) {
+                    trackerManager.myAnimeList.logout()
                     context.toast(R.string.myanimelist_relogin)
                 }
             }
@@ -197,9 +215,9 @@ object Migrations {
             }
             if (oldVersion < 61) {
                 // Handle removed every 1 or 2 hour library updates
-                val updateInterval = libraryPreferences.libraryUpdateInterval().get()
+                val updateInterval = libraryPreferences.autoUpdateInterval().get()
                 if (updateInterval == 1 || updateInterval == 2) {
-                    libraryPreferences.libraryUpdateInterval().set(3)
+                    libraryPreferences.autoUpdateInterval().set(3)
                     MangaLibraryUpdateJob.setupTask(context, 3)
                     AnimeLibraryUpdateJob.setupTask(context, 3)
                 }
@@ -210,8 +228,14 @@ object Migrations {
                 AnimeLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 64) {
-                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
-                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(
+                    libraryPreferences.mangaSortingMode().key(),
+                    0,
+                )
+                val oldAnimeSortingMode = prefs.getInt(
+                    libraryPreferences.animeSortingMode().key(),
+                    0,
+                )
                 val oldSortingDirection = prefs.getBoolean("library_sorting_ascending", true)
 
                 val newMangaSortingMode = when (oldMangaSortingMode) {
@@ -244,14 +268,14 @@ object Migrations {
                 }
 
                 prefs.edit(commit = true) {
-                    remove(libraryPreferences.libraryMangaSortingMode().key())
-                    remove(libraryPreferences.libraryAnimeSortingMode().key())
+                    remove(libraryPreferences.mangaSortingMode().key())
+                    remove(libraryPreferences.animeSortingMode().key())
                     remove("library_sorting_ascending")
                 }
 
                 prefs.edit {
-                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
-                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
+                    putString(libraryPreferences.mangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.animeSortingMode().key(), newAnimeSortingMode)
                     putString("library_sorting_ascending", newSortingDirection)
                 }
             }
@@ -262,26 +286,33 @@ object Migrations {
             }
             if (oldVersion < 71) {
                 // Handle removed every 3, 4, 6, and 8 hour library updates
-                val updateInterval = libraryPreferences.libraryUpdateInterval().get()
+                val updateInterval = libraryPreferences.autoUpdateInterval().get()
                 if (updateInterval in listOf(3, 4, 6, 8)) {
-                    libraryPreferences.libraryUpdateInterval().set(12)
+                    libraryPreferences.autoUpdateInterval().set(12)
                     MangaLibraryUpdateJob.setupTask(context, 12)
                     AnimeLibraryUpdateJob.setupTask(context, 12)
                 }
             }
             if (oldVersion < 72) {
-                val oldUpdateOngoingOnly = prefs.getBoolean("pref_update_only_non_completed_key", true)
+                val oldUpdateOngoingOnly = prefs.getBoolean(
+                    "pref_update_only_non_completed_key",
+                    true,
+                )
                 if (!oldUpdateOngoingOnly) {
-                    libraryPreferences.libraryUpdateItemRestriction() -= ENTRY_NON_COMPLETED
+                    libraryPreferences.autoUpdateItemRestrictions() -= ENTRY_NON_COMPLETED
                 }
             }
             if (oldVersion < 75) {
                 val oldSecureScreen = prefs.getBoolean("secure_screen", false)
                 if (oldSecureScreen) {
-                    securityPreferences.secureScreen().set(SecurityPreferences.SecureScreenMode.ALWAYS)
+                    securityPreferences.secureScreen().set(
+                        SecurityPreferences.SecureScreenMode.ALWAYS,
+                    )
                 }
                 if (DeviceUtil.isMiui && basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER) {
-                    basePreferences.extensionInstaller().set(BasePreferences.ExtensionInstaller.LEGACY)
+                    basePreferences.extensionInstaller().set(
+                        BasePreferences.ExtensionInstaller.LEGACY,
+                    )
                 }
             }
             if (oldVersion < 76) {
@@ -297,29 +328,45 @@ object Migrations {
             if (oldVersion < 81) {
                 // Handle renamed enum values
                 prefs.edit {
-                    val newMangaSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), "ALPHABETICAL")) {
+                    val newMangaSortingMode = when (
+                        val oldSortingMode = prefs.getString(
+                            libraryPreferences.mangaSortingMode().key(),
+                            "ALPHABETICAL",
+                        )
+                    ) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
                         else -> oldSortingMode
                     }
-                    val newAnimeSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), "ALPHABETICAL")) {
+                    val newAnimeSortingMode = when (
+                        val oldSortingMode = prefs.getString(
+                            libraryPreferences.animeSortingMode().key(),
+                            "ALPHABETICAL",
+                        )
+                    ) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
                         else -> oldSortingMode
                     }
-                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
-                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
+                    putString(libraryPreferences.mangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.animeSortingMode().key(), newAnimeSortingMode)
                 }
             }
             if (oldVersion < 82) {
                 prefs.edit {
-                    val mangasort = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), null) ?: return@edit
-                    val animesort = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), null) ?: return@edit
+                    val mangasort = prefs.getString(
+                        libraryPreferences.mangaSortingMode().key(),
+                        null,
+                    ) ?: return@edit
+                    val animesort = prefs.getString(
+                        libraryPreferences.animeSortingMode().key(),
+                        null,
+                    ) ?: return@edit
                     val direction = prefs.getString("library_sorting_ascending", "ASCENDING")!!
-                    putString(libraryPreferences.libraryMangaSortingMode().key(), "$mangasort,$direction")
-                    putString(libraryPreferences.libraryAnimeSortingMode().key(), "$animesort,$direction")
+                    putString(libraryPreferences.mangaSortingMode().key(), "$mangasort,$direction")
+                    putString(libraryPreferences.animeSortingMode().key(), "$animesort,$direction")
                     remove("library_sorting_ascending")
                 }
             }
@@ -366,6 +413,26 @@ object Migrations {
                     }
                 }
             }
+            if (connectionsPreferences.discordRPCStatus().isSet()) {
+                prefs.edit {
+                    val oldString = try {
+                        prefs.getString(connectionsPreferences.discordRPCStatus().key(), null)
+                    } catch (e: ClassCastException) {
+                        null
+                    } ?: return@edit
+                    val newInt = when (oldString) {
+                        "dnd" -> -1
+                        "idle" -> 0
+                        else -> 1
+                    }
+                    putInt(connectionsPreferences.discordRPCStatus().key(), newInt)
+                }
+            }
+
+            if (connectionsPreferences.connectionsToken(connectionsManager.discord).get().isNotBlank()) {
+                connectionsPreferences.setConnectionsCredentials(connectionsManager.discord, "Discord", "Logged In")
+            }
+            // <-- AM (DISCORD)
             if (oldVersion < 92) {
                 if (playerPreferences.progressPreference().isSet()) {
                     prefs.edit {
@@ -428,7 +495,7 @@ object Migrations {
                             "pref_filter_library_started",
                             "pref_filter_library_bookmarked",
                             "pref_filter_library_completed",
-                        ) + trackManager.services.map { "pref_filter_library_tracked_${it.id}" }
+                        ) + trackerManager.trackers.map { "pref_filter_library_tracked_${it.id}" }
 
                         prefKeys.forEach { key ->
                             val pref = preferenceStore.getInt(key, 0)
@@ -436,23 +503,30 @@ object Migrations {
                                 remove(key)
 
                                 val newValue = when (pref.get()) {
-                                    1 -> TriStateFilter.ENABLED_IS
-                                    2 -> TriStateFilter.ENABLED_NOT
-                                    else -> TriStateFilter.DISABLED
+                                    1 -> TriState.ENABLED_IS
+                                    2 -> TriState.ENABLED_NOT
+                                    else -> TriState.DISABLED
                                 }
 
-                                preferenceStore.getEnum("${key}_v2", TriStateFilter.DISABLED).set(newValue)
+                                preferenceStore.getEnum("${key}_v2", TriState.DISABLED).set(
+                                    newValue,
+                                )
                             }
                         }
                     }
                     if (oldVersion < 100) {
                         BackupCreateJob.setupTask(context)
                     }
-                    if (oldVersion < 102) {
-                        // This was accidentally visible from the reader settings sheet, but should always
-                        // be disabled in release builds.
-                        if (isReleaseBuildType) {
-                            readerPreferences.longStripSplitWebtoon().set(false)
+                    if (oldVersion < 105) {
+                        val pref = libraryPreferences.autoUpdateDeviceRestrictions()
+                        if (pref.isSet() && "battery_not_low" in pref.get()) {
+                            pref.getAndSet { it - "battery_not_low" }
+                        }
+                    }
+                    if (oldVersion < 106) {
+                        val pref = preferenceStore.getInt("relative_time", 7)
+                        if (pref.get() == 0) {
+                            uiPreferences.relativeTime().set(false)
                         }
                     }
                     return true

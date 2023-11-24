@@ -12,7 +12,7 @@ import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesFilterState
+import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesFilterScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -22,7 +22,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 @Composable
 fun MangaSourcesFilterScreen(
     navigateUp: () -> Unit,
-    state: MangaSourcesFilterState.Success,
+    state: MangaSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (Source) -> Unit,
 ) {
@@ -54,7 +54,7 @@ fun MangaSourcesFilterScreen(
 @Composable
 private fun SourcesFilterContent(
     contentPadding: PaddingValues,
-    state: MangaSourcesFilterState.Success,
+    state: MangaSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (Source) -> Unit,
 ) {
@@ -64,7 +64,7 @@ private fun SourcesFilterContent(
         state.items.forEach { (language, sources) ->
             val enabled = language in state.enabledLanguages
             item(
-                key = language.hashCode(),
+                key = language,
                 contentType = "source-filter-header",
             ) {
                 SourcesFilterHeader(
@@ -74,18 +74,19 @@ private fun SourcesFilterContent(
                     onClickItem = onClickLanguage,
                 )
             }
-            if (!enabled) return@forEach
-            items(
-                items = sources,
-                key = { "source-filter-${it.key()}" },
-                contentType = { "source-filter-item" },
-            ) { source ->
-                SourcesFilterItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    source = source,
-                    enabled = "${source.id}" !in state.disabledSources,
-                    onClickItem = onClickSource,
-                )
+            if (enabled) {
+                items(
+                    items = sources,
+                    key = { "source-filter-${it.key()}" },
+                    contentType = { "source-filter-item" },
+                ) { source ->
+                    SourcesFilterItem(
+                        modifier = Modifier.animateItemPlacement(),
+                        source = source,
+                        enabled = "${source.id}" !in state.disabledSources,
+                        onClickItem = onClickSource,
+                    )
+                }
             }
         }
     }

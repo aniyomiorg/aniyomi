@@ -36,6 +36,7 @@ import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -133,11 +134,11 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        with(TachiyomiMangaWidgetManager(Injekt.get())) {
+        with(TachiyomiMangaWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
-        with(TachiyomiAnimeWidgetManager(Injekt.get())) {
+        with(TachiyomiAnimeWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
@@ -182,10 +183,16 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
     override fun onStart(owner: LifecycleOwner) {
         SecureActivityDelegate.onApplicationStart()
+        // AM (DISCORD) -->
+        DiscordRPCService.start(applicationContext)
+        // <-- AM (DISCORD)
     }
 
     override fun onStop(owner: LifecycleOwner) {
         SecureActivityDelegate.onApplicationStopped()
+        // AM (DISCORD) -->
+        DiscordRPCService.stop(applicationContext)
+        // <-- AM (DISCORD)
     }
 
     override fun getPackageName(): String {
@@ -213,7 +220,11 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         if (BuildConfig.ACRA_URI.isNotEmpty() && isPreviewBuildType || isReleaseBuildType) {
             initAcra {
                 buildConfigClass = BuildConfig::class.java
-                excludeMatchingSharedPreferencesKeys = listOf(".*username.*", ".*password.*", ".*token.*")
+                excludeMatchingSharedPreferencesKeys = listOf(
+                    ".*username.*",
+                    ".*password.*",
+                    ".*token.*",
+                )
 
                 reportFormat = StringFormat.JSON
                 httpSender {

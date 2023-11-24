@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,18 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.presentation.components.SelectItem
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.core.preference.TriState
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.CollapsibleBox
 import tachiyomi.presentation.core.components.HeadingItem
-import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.SelectItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TextItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun SourceFilterAnimeDialog(
@@ -42,10 +42,8 @@ fun SourceFilterAnimeDialog(
 
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,
-    ) { contentPadding ->
-        LazyColumn(
-            contentPadding = contentPadding,
-        ) {
+    ) {
+        LazyColumn {
             stickyHeader {
                 Row(
                     modifier = Modifier
@@ -66,11 +64,11 @@ fun SourceFilterAnimeDialog(
                     Button(onClick = {
                         onFilter()
                         onDismissRequest()
-                    },) {
+                    }) {
                         Text(stringResource(R.string.action_filter))
                     }
                 }
-                Divider()
+                HorizontalDivider()
             }
 
             items(filters) {
@@ -87,7 +85,7 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
             HeadingItem(filter.name)
         }
         is AnimeFilter.Separator -> {
-            Divider()
+            HorizontalDivider()
         }
         is AnimeFilter.CheckBox -> {
             CheckboxItem(
@@ -167,19 +165,19 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
     }
 }
 
-private fun Int.toTriStateFilter(): TriStateFilter {
+private fun Int.toTriStateFilter(): TriState {
     return when (this) {
-        AnimeFilter.TriState.STATE_IGNORE -> TriStateFilter.DISABLED
-        AnimeFilter.TriState.STATE_INCLUDE -> TriStateFilter.ENABLED_IS
-        AnimeFilter.TriState.STATE_EXCLUDE -> TriStateFilter.ENABLED_NOT
+        AnimeFilter.TriState.STATE_IGNORE -> TriState.DISABLED
+        AnimeFilter.TriState.STATE_INCLUDE -> TriState.ENABLED_IS
+        AnimeFilter.TriState.STATE_EXCLUDE -> TriState.ENABLED_NOT
         else -> throw IllegalStateException("Unknown TriState state: $this")
     }
 }
 
-private fun TriStateFilter.toTriStateInt(): Int {
+private fun TriState.toTriStateInt(): Int {
     return when (this) {
-        TriStateFilter.DISABLED -> AnimeFilter.TriState.STATE_IGNORE
-        TriStateFilter.ENABLED_IS -> AnimeFilter.TriState.STATE_INCLUDE
-        TriStateFilter.ENABLED_NOT -> AnimeFilter.TriState.STATE_EXCLUDE
+        TriState.DISABLED -> AnimeFilter.TriState.STATE_IGNORE
+        TriState.ENABLED_IS -> AnimeFilter.TriState.STATE_INCLUDE
+        TriState.ENABLED_NOT -> AnimeFilter.TriState.STATE_EXCLUDE
     }
 }

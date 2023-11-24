@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,28 +30,29 @@ import tachiyomi.presentation.core.components.Pill
 private fun Modifier.tabIndicatorOffset(
     currentTabPosition: TabPosition,
     currentPageOffsetFraction: Float,
-) = composed {
-    val currentTabWidth by animateDpAsState(
-        targetValue = currentTabPosition.width,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-    )
-    val offset by animateDpAsState(
-        targetValue = currentTabPosition.left + (currentTabWidth * currentPageOffsetFraction),
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-    )
-    fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
-        .offset { IntOffset(x = offset.roundToPx(), y = 0) }
-        .width(currentTabWidth)
-}
+) = fillMaxWidth()
+    .wrapContentSize(Alignment.BottomStart)
+    .composed {
+        val currentTabWidth by animateDpAsState(
+            targetValue = currentTabPosition.width,
+            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        )
+        val offset by animateDpAsState(
+            targetValue = currentTabPosition.left + (currentTabWidth * currentPageOffsetFraction),
+            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        )
+        Modifier
+            .offset { IntOffset(x = offset.roundToPx(), y = 0) }
+            .width(currentTabWidth)
+    }
 
 @Composable
 fun TabIndicator(
     currentTabPosition: TabPosition,
     currentPageOffsetFraction: Float,
 ) {
-    TabRowDefaults.Indicator(
-        Modifier
+    SecondaryIndicator(
+        modifier = Modifier
             .tabIndicatorOffset(currentTabPosition, currentPageOffsetFraction)
             .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(topStart = 3.dp, topEnd = 3.dp)),

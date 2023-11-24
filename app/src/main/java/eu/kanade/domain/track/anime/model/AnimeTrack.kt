@@ -13,7 +13,9 @@ fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
     )
 }
 
-fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack.create(syncId).also {
+fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack.create(
+    syncId,
+).also {
     it.id = id
     it.anime_id = animeId
     it.media_id = remoteId
@@ -22,7 +24,7 @@ fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.mod
     it.last_episode_seen = lastEpisodeSeen.toFloat()
     it.total_episodes = totalEpisodes.toInt()
     it.status = status.toInt()
-    it.score = score
+    it.score = score.toFloat()
     it.tracking_url = remoteUrl
     it.started_watching_date = startDate
     it.finished_watching_date = finishDate
@@ -40,7 +42,7 @@ fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
         lastEpisodeSeen = last_episode_seen.toDouble(),
         totalEpisodes = total_episodes.toLong(),
         status = status.toLong(),
-        score = score,
+        score = score.toDouble(),
         remoteUrl = tracking_url,
         startDate = started_watching_date,
         finishDate = finished_watching_date,

@@ -55,10 +55,9 @@ fun SubtitleSettingsSheet(
             stringResource(id = R.string.player_subtitle_settings_color_tab),
         ),
         hideSystemBars = true,
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(top = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {

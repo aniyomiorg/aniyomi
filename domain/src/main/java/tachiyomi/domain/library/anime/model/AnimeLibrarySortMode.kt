@@ -24,15 +24,15 @@ data class AnimeLibrarySort(
 
         override val mask: Long = 0b00111100L
 
-        object Alphabetical : Type(0b00000000)
-        object LastSeen : Type(0b00000100)
-        object LastUpdate : Type(0b00001000)
-        object UnseenCount : Type(0b00001100)
-        object TotalEpisodes : Type(0b00010000)
-        object LatestEpisode : Type(0b00010100)
-        object EpisodeFetchDate : Type(0b00011000)
-        object DateAdded : Type(0b00011100)
-        object AiringTime : Type(0b00100000)
+        data object Alphabetical : Type(0b00000000)
+        data object LastSeen : Type(0b00000100)
+        data object LastUpdate : Type(0b00001000)
+        data object UnseenCount : Type(0b00001100)
+        data object TotalEpisodes : Type(0b00010000)
+        data object LatestEpisode : Type(0b00010100)
+        data object EpisodeFetchDate : Type(0b00011000)
+        data object DateAdded : Type(0b00011100)
+        data object AiringTime : Type(0b00100000)
 
         companion object {
             fun valueOf(flag: Long): Type {
@@ -47,8 +47,8 @@ data class AnimeLibrarySort(
 
         override val mask: Long = 0b01000000L
 
-        object Ascending : Direction(0b01000000)
-        object Descending : Direction(0b00000000)
+        data object Ascending : Direction(0b01000000)
+        data object Descending : Direction(0b00000000)
 
         companion object {
             fun valueOf(flag: Long): Direction {

@@ -19,6 +19,8 @@ import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.manga.MangaHistoryScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -97,13 +99,23 @@ fun Screen.mangaHistoryTab(
             }
 
             LaunchedEffect(Unit) {
+                // AM (DISCORD) -->
+                DiscordRPCService.setMangaScreen(context, DiscordScreen.HISTORY)
+                // <-- AM (DISCORD)
                 screenModel.events.collectLatest { e ->
                     when (e) {
                         MangaHistoryScreenModel.Event.InternalError ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.internal_error))
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.internal_error),
+                            )
                         MangaHistoryScreenModel.Event.HistoryCleared ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.clear_history_completed))
-                        is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(context, e.chapter)
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.clear_history_completed),
+                            )
+                        is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(
+                            context,
+                            e.chapter,
+                        )
                     }
                 }
             }

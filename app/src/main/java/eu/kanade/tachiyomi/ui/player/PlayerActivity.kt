@@ -40,13 +40,17 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
@@ -69,6 +73,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
+import eu.kanade.tachiyomi.ui.player.viewer.PlayerControls
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.util.AniSkipApi
@@ -87,6 +92,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
@@ -115,6 +121,10 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    // AM (CONNECTIONS) -->
+    private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
+
+    // <-- AM (CONNECTIONS)
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
@@ -122,7 +132,11 @@ class PlayerActivity : BaseActivity() {
             finish()
             return
         }
-        NotificationReceiver.dismissNotification(this, animeId.hashCode(), Notifications.ID_NEW_EPISODES)
+        NotificationReceiver.dismissNotification(
+            this,
+            animeId.hashCode(),
+            Notifications.ID_NEW_EPISODES,
+        )
 
         viewModel.saveCurrentEpisodeWatchingProgress()
 
@@ -133,7 +147,9 @@ class PlayerActivity : BaseActivity() {
 
             val initResult = viewModel.init(animeId, episodeId)
             if (!initResult.second.getOrDefault(false)) {
-                val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown error")
+                val exception = initResult.second.exceptionOrNull() ?: IllegalStateException(
+                    "Unknown error",
+                )
                 withUIContext {
                     setInitialEpisodeError(exception)
                 }
@@ -268,7 +284,7 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
-    private var videoChapters: List<VideoChapter> = emptyList()
+    internal var videoChapters: List<VideoChapter> = emptyList()
         set(value) {
             field = value
             runOnUiThread {
@@ -334,7 +350,7 @@ class PlayerActivity : BaseActivity() {
                             displayMode = state.anime!!.displayMode,
                             episodeList = viewModel.currentPlaylist,
                             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
-                            relativeTime = viewModel.relativeTime,
+                            dateRelativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,
@@ -396,7 +412,11 @@ class PlayerActivity : BaseActivity() {
                 is PlayerViewModel.Sheet.VideoChapters -> {
                     fun setChapter(videoChapter: VideoChapter, text: String) {
                         val seekDifference = videoChapter.time.roundToInt() - (player.timePos ?: 0)
-                        doubleTapSeek(time = seekDifference, isDoubleTap = false, videoChapterText = text)
+                        doubleTapSeek(
+                            time = seekDifference,
+                            isDoubleTap = false,
+                            videoChapterText = text,
+                        )
                     }
                     VideoChaptersSheet(
                         timePosition = player.timePos ?: 0,
@@ -434,7 +454,14 @@ class PlayerActivity : BaseActivity() {
                                     it.mpvId.toString() == subtitleTracks[index].url
                             }
                             selectedLoadedTrack?.let { player.sid = it.mpvId }
-                                ?: MPVLib.command(arrayOf("sub-add", subtitleTracks[index].url, "select", subtitleTracks[index].url))
+                                ?: MPVLib.command(
+                                    arrayOf(
+                                        "sub-add",
+                                        subtitleTracks[index].url,
+                                        "select",
+                                        subtitleTracks[index].url,
+                                    ),
+                                )
                         }
 
                         fun onAudioSelected(index: Int) {
@@ -450,7 +477,14 @@ class PlayerActivity : BaseActivity() {
                                     it.mpvId.toString() == audioTracks[index].url
                             }
                             selectedLoadedTrack?.let { player.aid = it.mpvId }
-                                ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
+                                ?: MPVLib.command(
+                                    arrayOf(
+                                        "audio-add",
+                                        audioTracks[index].url,
+                                        "select",
+                                        audioTracks[index].url,
+                                    ),
+                                )
                         }
 
                         StreamsCatalogSheet(
@@ -468,13 +502,22 @@ class PlayerActivity : BaseActivity() {
 
                 is PlayerViewModel.Sheet.SubtitleSettings -> {
                     SubtitleSettingsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences, streams.subtitle.tracks.size > 1),
+                        screenModel = PlayerSettingsScreenModel(
+                            viewModel.playerPreferences,
+                            streams.subtitle.tracks.size > 1,
+                        ),
                         onDismissRequest = pauseForDialogSheet(fadeControls = true),
                     )
                 }
 
                 null -> {}
             }
+        }
+
+        binding.controlsRoot.setComposeContent {
+            PlayerControls(
+                activity = this,
+            )
         }
 
         playerIsDestroyed = false
@@ -531,7 +574,9 @@ class PlayerActivity : BaseActivity() {
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
         if (currentPlayerStatisticsPage != 0) {
             MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
-            MPVLib.command(arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage"))
+            MPVLib.command(
+                arrayOf("script-binding", "stats/display-page-$currentPlayerStatisticsPage"),
+            )
         }
 
         MPVLib.setOptionString("input-default-bindings", "yes")
@@ -594,7 +639,10 @@ class PlayerActivity : BaseActivity() {
             MPVLib.setPropertyInt("sub-font-size", subtitleFontSize().get())
             MPVLib.setPropertyString("sub-color", textColorSubtitles().get().toHexString())
             MPVLib.setPropertyString("sub-border-color", borderColorSubtitles().get().toHexString())
-            MPVLib.setPropertyString("sub-back-color", backgroundColorSubtitles().get().toHexString())
+            MPVLib.setPropertyString(
+                "sub-back-color",
+                backgroundColorSubtitles().get().toHexString(),
+            )
         }
     }
 
@@ -610,7 +658,7 @@ class PlayerActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun setupMediaSession() {
-        mediaSession = MediaSessionCompat(this, "Aniyomi_Player_Session").apply {
+        mediaSession = MediaSessionCompat(this, "AnimeTail_Player_Session").apply {
             // Enable callbacks from MediaButtons and TransportControls
             setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
@@ -775,7 +823,13 @@ class PlayerActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         refreshUi()
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) player.paused?.let { pip.update(!it) }
+        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
+            player.paused?.let {
+                pip.update(
+                    !it,
+                )
+            }
+        }
     }
 
     override fun onPause() {
@@ -814,10 +868,12 @@ class PlayerActivity : BaseActivity() {
             player.destroy()
         }
         abandonAudioFocus()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingPlayer = true)
+        // <-- AM (DISCORD)
         super.onDestroy()
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (pip.supportedAndEnabled) {
@@ -863,35 +919,9 @@ class PlayerActivity : BaseActivity() {
                 if (deviceWidth <= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
                 }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = playerControls.binding.toggleAutoplay.id
-                    rightToRight = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.UNSET
-                    leftToRight = playerControls.binding.episodeListBtn.id
-                }
             } else {
                 if (deviceWidth >= deviceHeight) {
                     deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
-                }
-
-                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-                playerControls.binding.settingsBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    topToTop = ConstraintLayout.LayoutParams.UNSET
-                    topToBottom = playerControls.binding.episodeListBtn.id
-                }
-                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-                    leftToRight = ConstraintLayout.LayoutParams.UNSET
                 }
             }
             setupGestures()
@@ -947,7 +977,9 @@ class PlayerActivity : BaseActivity() {
                 else -> {
                     if (switchMethod.first != null) {
                         when {
-                            switchMethod.first!!.isEmpty() -> setInitialEpisodeError(Exception("Video list is empty."))
+                            switchMethod.first!!.isEmpty() -> setInitialEpisodeError(
+                                Exception("Video list is empty."),
+                            )
                             else -> setVideoList(qualityIndex = 0, switchMethod.first!!)
                         }
                     } else {
@@ -1092,7 +1124,13 @@ class PlayerActivity : BaseActivity() {
             playerControls.hideUiForSeek()
         }
         binding.secondsView.start()
-        ViewAnimationUtils.createCircularReveal(view, x, y, 0f, kotlin.math.max(view.height, view.width).toFloat()).setDuration(500).start()
+        ViewAnimationUtils.createCircularReveal(
+            view,
+            x,
+            y,
+            0f,
+            kotlin.math.max(view.height, view.width).toFloat(),
+        ).setDuration(500).start()
 
         ObjectAnimator.ofFloat(view, "alpha", 0f, 0.15f).setDuration(500).start()
         ObjectAnimator.ofFloat(view, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
@@ -1117,14 +1155,25 @@ class PlayerActivity : BaseActivity() {
             return
         }
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
-        if (playerPreferences.playerSmoothSeek().get() && final) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        if (playerPreferences.playerSmoothSeek().get() && final) {
+            player.timePos = newPos
+        } else {
+            MPVLib.command(
+                arrayOf("seek", newPos.toString(), "absolute+keyframes"),
+            )
+        }
         val newDiff = newPos - initialSeek
 
         playerControls.showSeekText(newPos, newDiff)
     }
 
     fun verticalScrollRight(diff: Float) {
-        if (diff != 0F) fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
+        if (diff != 0F) {
+            fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(
+                0F,
+                maxVolume.toFloat(),
+            )
+        }
         val newVolume = fineVolume.toInt()
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
 
@@ -1273,7 +1322,15 @@ class PlayerActivity : BaseActivity() {
                 waitingAniSkip = -1
                 return
             }
-            skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+            skipType.let {
+                MPVLib.command(
+                    arrayOf(
+                        "seek",
+                        "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
+                        "absolute",
+                    ),
+                )
+            }
             AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
         } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
             doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
@@ -1293,6 +1350,9 @@ class PlayerActivity : BaseActivity() {
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateSpeedButton()
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingPlayer = false)
+            // <-- AM (DISCORD)
             withIOContext { player.loadTracks() }
         }
     }
@@ -1326,7 +1386,6 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1381,7 +1440,12 @@ class PlayerActivity : BaseActivity() {
         finish()
     }
 
-    private fun setVideoList(qualityIndex: Int, videos: List<Video>?, fromStart: Boolean = false, position: Long? = null) {
+    private fun setVideoList(
+        qualityIndex: Int,
+        videos: List<Video>?,
+        fromStart: Boolean = false,
+        position: Long? = null,
+    ) {
         if (playerIsDestroyed) return
         currentVideoList = videos
         currentVideoList?.getOrNull(qualityIndex)?.let {
@@ -1390,13 +1454,12 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = if (position != null) {
-                        position
-                    } else if ((episode.seen && !preservePos) || fromStart) {
-                        0L
-                    } else {
-                        episode.last_second_seen
-                    }
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
                     playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
@@ -1641,7 +1704,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
@@ -1667,12 +1729,22 @@ class PlayerActivity : BaseActivity() {
             if (netflixStyle) {
                 // show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
-                    toast("AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}")
+                    toast(
+                        "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
+                    )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                 waitingAniSkip--
             } else if (autoSkipAniSkip) {
-                skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+                skipType.let {
+                    MPVLib.command(
+                        arrayOf(
+                            "seek",
+                            "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
+                            "absolute",
+                        ),
+                    )
+                }
             } else {
                 aniSkipPlayerUtils.showSkipButton(skipType)
             }
@@ -1723,7 +1795,12 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { changeEpisode(viewModel.getAdjacentEpisodeId(previous = false), autoPlay = true) }
+    private val nextEpisodeRunnable = Runnable {
+        changeEpisode(
+            viewModel.getAdjacentEpisodeId(previous = false),
+            autoPlay = true,
+        )
+    }
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
@@ -1731,4 +1808,29 @@ class PlayerActivity : BaseActivity() {
             animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
         }
     }
+
+    // AM (DISCORD) -->
+    private fun updateDiscordRPC(exitingPlayer: Boolean) {
+        if (connectionsPreferences.enableDiscordRPC().get()) {
+            viewModel.viewModelScope.launchIO {
+                if (!exitingPlayer) {
+                    DiscordRPCService.setPlayerActivity(
+                        context = this@PlayerActivity,
+                        PlayerData(
+                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
+                            animeId = viewModel.currentAnime?.id,
+                            // AM (CU)>
+                            animeTitle = viewModel.currentAnime?.title,
+                            episodeNumber = viewModel.currentEpisode?.episode_number?.toString(),
+                            thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                        ),
+                    )
+                } else {
+                    val lastUsedScreen = DiscordRPCService.lastUsedScreen
+                    DiscordRPCService.setAnimeScreen(this@PlayerActivity, lastUsedScreen)
+                }
+            }
+        }
+    }
+    // <-- AM (DISCORD)
 }

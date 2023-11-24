@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -57,7 +58,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.source.anime.model.StubAnimeSource
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
@@ -79,7 +79,9 @@ data class BrowseAnimeSourceScreen(
         val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
-                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
+                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
+                    null,
+                )
                 else -> navigator.pop()
             }
         }
@@ -192,7 +194,7 @@ data class BrowseAnimeSourceScreen(
                         }
                     }
 
-                    Divider()
+                    HorizontalDivider()
                 }
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -214,7 +216,9 @@ data class BrowseAnimeSourceScreen(
                     scope.launchIO {
                         val duplicateAnime = screenModel.getDuplicateAnimelibAnime(anime)
                         when {
-                            anime.favorite -> screenModel.setDialog(BrowseAnimeSourceScreenModel.Dialog.RemoveAnime(anime))
+                            anime.favorite -> screenModel.setDialog(
+                                BrowseAnimeSourceScreenModel.Dialog.RemoveAnime(anime),
+                            )
                             duplicateAnime != null -> screenModel.setDialog(
                                 BrowseAnimeSourceScreenModel.Dialog.AddDuplicateAnime(
                                     anime,

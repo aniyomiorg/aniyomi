@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +24,6 @@ import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.PagerState
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.util.plus
 
@@ -31,12 +31,11 @@ import tachiyomi.presentation.core.util.plus
 fun MangaLibraryPager(
     state: PagerState,
     contentPadding: PaddingValues,
-    pageCount: Int,
     hasActiveFilters: Boolean,
     selectedManga: List<LibraryManga>,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<MangaLibraryItem>,
     onClickManga: (LibraryManga) -> Unit,
@@ -44,7 +43,6 @@ fun MangaLibraryPager(
     onClickContinueReading: ((LibraryManga) -> Unit)?,
 ) {
     HorizontalPager(
-        count = pageCount,
         modifier = Modifier.fillMaxSize(),
         state = state,
         verticalAlignment = Alignment.Top,
@@ -65,14 +63,14 @@ fun MangaLibraryPager(
             return@HorizontalPager
         }
 
-        val displayMode = getDisplayModeForPage(page)
+        val displayMode by getDisplayMode(page)
         val columns by if (displayMode != LibraryDisplayMode.List) {
             val configuration = LocalConfiguration.current
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
             remember(isLandscape) { getColumnsForOrientation(isLandscape) }
         } else {
-            remember { mutableStateOf(0) }
+            remember { mutableIntStateOf(0) }
         }
 
         when (displayMode) {

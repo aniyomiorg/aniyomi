@@ -10,7 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
@@ -19,19 +19,24 @@ import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
+        if (runAttemptCount > 3) {
+            return Result.failure()
+        }
+
         val getTracks = Injekt.get<GetMangaTracks>()
         val insertTrack = Injekt.get<InsertMangaTrack>()
 
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         val delayedTrackingStore = Injekt.get<DelayedMangaTrackingStore>()
 
-        val results = withIOContext {
+        withIOContext {
             delayedTrackingStore.getMangaItems()
                 .mapNotNull {
                     val track = getTracks.awaitOne(it.trackId)
@@ -40,12 +45,12 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
                     }
                     track?.copy(lastChapterRead = it.lastChapterRead.toDouble())
                 }
-                .mapNotNull { track ->
+                .forEach { track ->
                     try {
-                        val service = trackManager.getService(track.syncId)
-                        if (service != null && service.isLogged) {
+                        val tracker = trackerManager.get(track.syncId)
+                        if (tracker != null && tracker.isLoggedIn) {
                             logcat(LogPriority.DEBUG) { "Updating delayed track item: ${track.id}, last chapter read: ${track.lastChapterRead}" }
-                            service.mangaService.update(track.toDbTrack(), true)
+                            tracker.mangaService.update(track.toDbTrack(), true)
                             insertTrack.await(track)
                         }
                         delayedTrackingStore.removeMangaItem(track.id)
@@ -57,7 +62,7 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 }
         }
 
-        return if (results.isNotEmpty()) Result.failure() else Result.success()
+        return if (delayedTrackingStore.getMangaItems().isEmpty()) Result.success() else Result.retry()
     }
 
     companion object {
@@ -70,7 +75,7 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
 
             val request = OneTimeWorkRequestBuilder<DelayedMangaTrackingUpdateJob>()
                 .setConstraints(constraints)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 20, TimeUnit.SECONDS)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 5.minutes.toJavaDuration())
                 .addTag(TAG)
                 .build()
 

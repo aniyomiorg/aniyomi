@@ -5,9 +5,11 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.decodeFromString
@@ -15,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class MyAnimeList(id: Long) : Tracker(id, "MyAnimeList"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
 
     companion object {
         const val READING = 1
@@ -35,10 +37,7 @@ class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackSer
     private val json: Json by injectLazy()
 
     private val interceptor by lazy { MyAnimeListInterceptor(this, getPassword()) }
-    private val api by lazy { MyAnimeListApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_myanimelist
+    private val api by lazy { MyAnimeListApi(id, client, interceptor) }
 
     override val supportsReadingDates: Boolean = true
 
@@ -138,6 +137,14 @@ class MyAnimeList(id: Long) : TrackService(id), MangaTrackService, AnimeTrackSer
         }
 
         return api.updateItem(track)
+    }
+
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        return api.deleteMangaItem(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        return api.deleteAnimeItem(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.material.icons.rounded.DisabledByDefault
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -28,8 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
-import tachiyomi.presentation.core.components.LazyColumn
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
 
@@ -47,6 +47,8 @@ fun <T> TriStateListDialog(
     itemLabel: @Composable (T) -> String,
     onDismissRequest: () -> Unit,
     onValueChanged: (newIncluded: List<T>, newExcluded: List<T>) -> Unit,
+    // AM (DISCORD)>
+    onlyChecked: Boolean = false,
 ) {
     val selected = remember {
         items
@@ -82,7 +84,8 @@ fun <T> TriStateListDialog(
                                     .clickable {
                                         selected[index] = when (state) {
                                             State.UNCHECKED -> State.CHECKED
-                                            State.CHECKED -> State.INVERSED
+                                            // AM (DISCORD)>
+                                            State.CHECKED -> if (onlyChecked) State.UNCHECKED else State.INVERSED
                                             State.INVERSED -> State.UNCHECKED
                                         }
                                     }
@@ -115,8 +118,16 @@ fun <T> TriStateListDialog(
                         }
                     }
 
-                    if (!listState.isScrolledToStart()) Divider(modifier = Modifier.align(Alignment.TopCenter))
-                    if (!listState.isScrolledToEnd()) Divider(modifier = Modifier.align(Alignment.BottomCenter))
+                    if (!listState.isScrolledToStart()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                        )
+                    }
+                    if (!listState.isScrolledToEnd()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        )
+                    }
                 }
             }
         },
@@ -137,7 +148,7 @@ fun <T> TriStateListDialog(
                     onValueChanged(included, excluded)
                 },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(R.string.action_ok))
             }
         },
     )

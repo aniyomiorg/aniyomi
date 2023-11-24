@@ -60,6 +60,17 @@ class AnimeDownloadStore(
     }
 
     /**
+     * Removes a list of downloads from the store.
+     *
+     * @param downloads the download to remove.
+     */
+    fun removeAll(downloads: List<AnimeDownload>) {
+        preferences.edit {
+            downloads.forEach { remove(getKey(it)) }
+        }
+    }
+
+    /**
      * Removes all the downloads from the store.
      */
     fun clear() {

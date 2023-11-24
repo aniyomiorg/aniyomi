@@ -84,13 +84,17 @@ class MangaDownloadQueueScreenModel(
                         }
                         reorder(newDownloads)
                     }
-                    R.id.move_to_top_series -> {
+                    R.id.move_to_top_series, R.id.move_to_bottom_series -> {
                         val (selectedSeries, otherSeries) = adapter?.currentItems
                             ?.filterIsInstance<MangaDownloadItem>()
                             ?.map(MangaDownloadItem::download)
                             ?.partition { item.download.manga.id == it.manga.id }
                             ?: Pair(emptyList(), emptyList())
-                        reorder(selectedSeries + otherSeries)
+                        if (menuItem.itemId == R.id.move_to_top_series) {
+                            reorder(selectedSeries + otherSeries)
+                        } else {
+                            reorder(otherSeries + selectedSeries)
+                        }
                     }
                     R.id.cancel_download -> {
                         cancel(listOf(item.download))
@@ -159,7 +163,10 @@ class MangaDownloadQueueScreenModel(
         downloadManager.cancelQueuedDownloads(downloads)
     }
 
-    fun <R : Comparable<R>> reorderQueue(selector: (MangaDownloadItem) -> R, reverse: Boolean = false) {
+    fun <R : Comparable<R>> reorderQueue(
+        selector: (MangaDownloadItem) -> R,
+        reverse: Boolean = false,
+    ) {
         val adapter = adapter ?: return
         val newDownloads = mutableListOf<MangaDownload>()
         adapter.headerItems.forEach { headerItem ->
@@ -258,6 +265,6 @@ class MangaDownloadQueueScreenModel(
      * @return the holder of the download or null if it's not bound.
      */
     private fun getHolder(download: MangaDownload): MangaDownloadHolder? {
-        return controllerBinding.recycler.findViewHolderForItemId(download.chapter.id) as? MangaDownloadHolder
+        return controllerBinding.root.findViewHolderForItemId(download.chapter.id) as? MangaDownloadHolder
     }
 }

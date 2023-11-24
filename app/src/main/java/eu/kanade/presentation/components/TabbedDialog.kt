@@ -4,11 +4,13 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,9 +32,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.TabIndicator
-import tachiyomi.presentation.core.components.rememberPagerState
 
 object TabbedDialogPaddings {
     val Horizontal = 24.dp
@@ -41,27 +41,34 @@ object TabbedDialogPaddings {
 
 @Composable
 fun TabbedDialog(
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     tabTitles: List<String>,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
     onOverflowMenuClicked: (() -> Unit)? = null,
     overflowIcon: ImageVector? = null,
     hideSystemBars: Boolean = false,
-    content: @Composable (PaddingValues, Int) -> Unit,
+    pagerState: PagerState = rememberPagerState { tabTitles.size },
+    content: @Composable (Int) -> Unit,
 ) {
     AdaptiveSheet(
         hideSystemBars = hideSystemBars,
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
-    ) { contentPadding ->
+    ) {
         val scope = rememberCoroutineScope()
-        val pagerState = rememberPagerState()
 
         Column {
             Row {
                 TabRow(
                     modifier = Modifier.weight(1f),
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = { TabIndicator(it[pagerState.currentPage], pagerState.currentPageOffsetFraction) },
+                    indicator = {
+                        TabIndicator(
+                            it[pagerState.currentPage],
+                            pagerState.currentPageOffsetFraction,
+                        )
+                    },
                     divider = {},
                 ) {
                     tabTitles.fastForEachIndexed { i, tab ->
@@ -85,15 +92,14 @@ fun TabbedDialog(
 
                 MoreMenu(onOverflowMenuClicked, tabOverflowMenuContent, overflowIcon)
             }
-            Divider()
+            HorizontalDivider()
 
             HorizontalPager(
                 modifier = Modifier.animateContentSize(),
-                count = tabTitles.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
             ) { page ->
-                content(contentPadding, page)
+                content(page)
             }
         }
     }

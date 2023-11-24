@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.more.settings.LocalPreferenceHighlighted
+import eu.kanade.presentation.more.settings.LocalPreferenceMinHeight
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -44,10 +45,11 @@ internal fun BasePreferenceWidget(
     widget: @Composable (() -> Unit)? = null,
 ) {
     val highlighted = LocalPreferenceHighlighted.current
+    val minHeight = LocalPreferenceMinHeight.current
     Row(
         modifier = modifier
             .highlightBackground(highlighted)
-            .sizeIn(minHeight = 56.dp)
+            .sizeIn(minHeight = minHeight)
             .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -113,7 +115,7 @@ internal fun Modifier.highlightBackground(highlighted: Boolean): Modifier = comp
             tween(200)
         },
     )
-    then(Modifier.background(color = highlight))
+    Modifier.background(color = highlight)
 }
 
 internal val TrailingWidgetBuffer = 16.dp

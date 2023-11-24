@@ -5,9 +5,11 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.decodeFromString
@@ -17,7 +19,7 @@ import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
+class Anilist(id: Long) : Tracker(id, "AniList"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
 
     companion object {
         const val READING = 1
@@ -56,9 +58,6 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
             scorePreference.delete()
         }
     }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_anilist
 
     override fun getLogo() = R.drawable.ic_tracker_anilist
 
@@ -112,14 +111,14 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
         }
     }
 
-    override fun get10PointScore(track: DomainTrack): Float {
+    override fun get10PointScore(track: DomainTrack): Double {
         // Score is stored in 100 point format
-        return track.score / 10f
+        return track.score / 10.0
     }
 
-    override fun get10PointScore(track: DomainAnimeTrack): Float {
+    override fun get10PointScore(track: DomainAnimeTrack): Double {
         // Score is stored in 100 point format
-        return track.score / 10f
+        return track.score / 10.0
     }
 
     override fun indexToScore(index: Int): Float {
@@ -236,6 +235,24 @@ class Anilist(id: Long) : TrackService(id), MangaTrackService, AnimeTrackService
         }
 
         return api.updateLibAnime(track)
+    }
+
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        if (track.library_id == null || track.library_id!! == 0L) {
+            val libManga = api.findLibManga(track, getUsername().toInt()) ?: return track
+            track.library_id = libManga.library_id
+        }
+
+        return api.deleteLibManga(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        if (track.library_id == null || track.library_id!! == 0L) {
+            val libManga = api.findLibAnime(track, getUsername().toInt()) ?: return track
+            track.library_id = libManga.library_id
+        }
+
+        return api.deleteLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {

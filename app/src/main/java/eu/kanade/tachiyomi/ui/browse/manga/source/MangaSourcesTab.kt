@@ -47,7 +47,6 @@ fun Screen.mangaSourcesTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source, listing ->
-                    screenModel.onOpenSource(source)
                     navigator.push(BrowseMangaSourceScreen(source.id, listing.query))
                 },
                 onClickPin = screenModel::togglePin,

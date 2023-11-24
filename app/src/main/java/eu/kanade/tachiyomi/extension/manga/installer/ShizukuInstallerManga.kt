@@ -43,7 +43,6 @@ class ShizukuInstallerManga(private val service: Service) : InstallerManga(servi
 
     override var ready = false
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override fun processEntry(entry: Entry) {
         super.processEntry(entry)
         scope.launch {

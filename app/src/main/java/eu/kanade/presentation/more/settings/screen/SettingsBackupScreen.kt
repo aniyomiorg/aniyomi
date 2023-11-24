@@ -10,19 +10,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,7 +43,6 @@ import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.extensions.RequestStoragePermission
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst
 import eu.kanade.tachiyomi.data.backup.BackupCreateJob
@@ -59,7 +63,7 @@ import tachiyomi.domain.backup.service.FLAG_HISTORY
 import tachiyomi.domain.backup.service.FLAG_SETTINGS
 import tachiyomi.domain.backup.service.FLAG_TRACK
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
 import uy.kohesive.injekt.Injekt
@@ -90,7 +94,7 @@ object SettingsBackupScreen : SearchableSettings {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
 
-        var flag by rememberSaveable { mutableStateOf(0) }
+        var flag by rememberSaveable { mutableIntStateOf(0) }
         val chooseBackupDir = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.CreateDocument("application/*"),
         ) {
@@ -111,7 +115,7 @@ object SettingsBackupScreen : SearchableSettings {
                     showCreateDialog = false
                     flag = it
                     try {
-                        chooseBackupDir.launch(Backup.getBackupFilename())
+                        chooseBackupDir.launch(Backup.getFilename())
                     } catch (e: ActivityNotFoundException) {
                         flag = 0
                         context.toast(R.string.file_picker_error)
@@ -193,8 +197,16 @@ object SettingsBackupScreen : SearchableSettings {
                             }
                         }
                     }
-                    if (!state.isScrolledToStart()) Divider(modifier = Modifier.align(Alignment.TopCenter))
-                    if (!state.isScrolledToEnd()) Divider(modifier = Modifier.align(Alignment.BottomCenter))
+                    if (!state.isScrolledToStart()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                        )
+                    }
+                    if (!state.isScrolledToEnd()) {
+                        HorizontalDivider(
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        )
+                    }
                 }
             },
             dismissButton = {
@@ -209,7 +221,7 @@ object SettingsBackupScreen : SearchableSettings {
                         onConfirm(flag)
                     },
                 ) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(R.string.action_ok))
                 }
             },
         )
@@ -262,7 +274,7 @@ object SettingsBackupScreen : SearchableSettings {
                         },
                         confirmButton = {
                             TextButton(onClick = onDismissRequest) {
-                                Text(text = stringResource(android.R.string.ok))
+                                Text(text = stringResource(R.string.action_ok))
                             }
                         },
                     )
@@ -272,18 +284,34 @@ object SettingsBackupScreen : SearchableSettings {
                         onDismissRequest = onDismissRequest,
                         title = { Text(text = stringResource(R.string.pref_restore_backup)) },
                         text = {
-                            val msg = buildString {
-                                append(stringResource(R.string.backup_restore_content_full))
-                                if (err.sources.isNotEmpty()) {
-                                    append("\n\n").append(stringResource(R.string.backup_restore_missing_sources))
-                                    err.sources.joinTo(this, separator = "\n- ", prefix = "\n- ")
+                            Column(
+                                modifier = Modifier.verticalScroll(rememberScrollState()),
+                            ) {
+                                val msg = buildString {
+                                    append(stringResource(R.string.backup_restore_content_full))
+                                    if (err.sources.isNotEmpty()) {
+                                        append("\n\n").append(
+                                            stringResource(R.string.backup_restore_missing_sources),
+                                        )
+                                        err.sources.joinTo(
+                                            this,
+                                            separator = "\n- ",
+                                            prefix = "\n- ",
+                                        )
+                                    }
+                                    if (err.trackers.isNotEmpty()) {
+                                        append("\n\n").append(
+                                            stringResource(R.string.backup_restore_missing_trackers),
+                                        )
+                                        err.trackers.joinTo(
+                                            this,
+                                            separator = "\n- ",
+                                            prefix = "\n- ",
+                                        )
+                                    }
                                 }
-                                if (err.trackers.isNotEmpty()) {
-                                    append("\n\n").append(stringResource(R.string.backup_restore_missing_trackers))
-                                    err.trackers.joinTo(this, separator = "\n- ", prefix = "\n- ")
-                                }
+                                Text(text = msg)
                             }
-                            Text(text = msg)
                         },
                         confirmButton = {
                             TextButton(
@@ -305,7 +333,10 @@ object SettingsBackupScreen : SearchableSettings {
             object : ActivityResultContracts.GetContent() {
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
-                    return Intent.createChooser(intent, context.getString(R.string.file_select_backup))
+                    return Intent.createChooser(
+                        intent,
+                        context.getString(R.string.file_select_backup),
+                    )
                 }
             },
         ) {
@@ -322,7 +353,11 @@ object SettingsBackupScreen : SearchableSettings {
                     return@rememberLauncherForActivityResult
                 }
 
-                error = MissingRestoreComponents(it, results.missingSources, results.missingTrackers)
+                error = MissingRestoreComponents(
+                    it,
+                    results.missingSources,
+                    results.missingTrackers,
+                )
             }
         }
 
@@ -344,7 +379,7 @@ object SettingsBackupScreen : SearchableSettings {
     }
 
     @Composable
-    fun getAutomaticBackupGroup(
+    private fun getAutomaticBackupGroup(
         backupPreferences: BackupPreferences,
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
@@ -440,7 +475,7 @@ private data class MissingRestoreComponents(
     val trackers: List<String>,
 )
 
-data class InvalidRestore(
+private data class InvalidRestore(
     val uri: Uri,
     val message: String,
 )

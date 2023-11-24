@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.more.settings.screen.AboutScreen
+import eu.kanade.presentation.more.settings.screen.SettingsAppearanceScreen
 import eu.kanade.presentation.more.settings.screen.SettingsBackupScreen
-import eu.kanade.presentation.more.settings.screen.SettingsGeneralScreen
 import eu.kanade.presentation.more.settings.screen.SettingsMainScreen
+import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
@@ -59,7 +59,7 @@ class SettingsScreen private constructor(
                 } else if (toAbout) {
                     AboutScreen
                 } else {
-                    SettingsGeneralScreen
+                    SettingsAppearanceScreen
                 },
             ) {
                 val insets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)

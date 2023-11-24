@@ -2,8 +2,23 @@ package tachiyomi.data.items.episode
 
 import tachiyomi.domain.items.episode.model.Episode
 
-val episodeMapper: (Long, Long, String, String, String?, Boolean, Boolean, Long, Long, Float, Long, Long, Long) -> Episode =
-    { id, animeId, url, name, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, episodeNumber, sourceOrder, dateFetch, dateUpload ->
+val episodeMapper: (
+    Long,
+    Long,
+    String,
+    String,
+    String?,
+    Boolean,
+    Boolean,
+    Long,
+    Long,
+    Double,
+    Long,
+    Long,
+    Long,
+    Long,
+) -> Episode =
+    { id, animeId, url, name, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, episodeNumber, sourceOrder, dateFetch, dateUpload, lastModifiedAt ->
         Episode(
             id = id,
             animeId = animeId,
@@ -18,5 +33,6 @@ val episodeMapper: (Long, Long, String, String, String?, Boolean, Boolean, Long,
             dateUpload = dateUpload,
             episodeNumber = episodeNumber,
             scanlator = scanlator,
+            lastModifiedAt = lastModifiedAt,
         )
     }
