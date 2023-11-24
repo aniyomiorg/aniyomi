@@ -28,7 +28,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
         fun parseTrackerStatus(tracker: Long, statusLong: Long): TrackStatus? {
             val status = statusLong.toInt()
             return when (tracker) {
-                TrackManager.MYANIMELIST -> {
+                (1L) -> {
                     when (status) {
                         MyAnimeList.READING -> READING
                         MyAnimeList.WATCHING -> WATCHING
@@ -42,7 +42,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.ANILIST -> {
+                TrackerManager.ANILIST -> {
                     when (status) {
                         Anilist.READING -> READING
                         Anilist.WATCHING -> WATCHING
@@ -56,7 +56,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.KITSU -> {
+                TrackerManager.KITSU -> {
                     when (status) {
                         Kitsu.READING -> READING
                         Kitsu.WATCHING -> WATCHING
@@ -68,7 +68,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.SHIKIMORI -> {
+                (4L) -> {
                     when (status) {
                         Shikimori.READING -> READING
                         Shikimori.COMPLETED -> COMPLETED
@@ -79,7 +79,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.BANGUMI -> {
+                (5L) -> {
                     when (status) {
                         Bangumi.READING -> READING
                         Bangumi.COMPLETED -> COMPLETED
@@ -89,7 +89,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.KOMGA -> {
+                (6L) -> {
                     when (status) {
                         Komga.READING -> READING
                         Komga.COMPLETED -> COMPLETED
@@ -97,7 +97,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.MANGA_UPDATES -> {
+                (7L) -> {
                     when (status) {
                         MangaUpdates.READING_LIST -> READING
                         MangaUpdates.COMPLETE_LIST -> COMPLETED
@@ -107,7 +107,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                         else -> null
                     }
                 }
-                TrackManager.SIMKL -> {
+                TrackerManager.SIMKL -> {
                     when (status) {
                         Simkl.WATCHING -> WATCHING
                         Simkl.COMPLETED -> COMPLETED

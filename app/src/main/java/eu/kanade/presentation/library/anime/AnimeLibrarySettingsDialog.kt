@@ -298,13 +298,13 @@ private fun ColumnScope.GroupPage(
     screenModel: AnimeLibrarySettingsScreenModel,
     hasCategories: Boolean,
 ) {
-    val groups = remember(hasCategories, screenModel.trackServices) {
+    val groups = remember(hasCategories, screenModel.trackers) {
         buildList {
             add(AnimeLibraryGroup.BY_DEFAULT)
             add(AnimeLibraryGroup.BY_SOURCE)
             add(AnimeLibraryGroup.BY_TAG)
             add(AnimeLibraryGroup.BY_STATUS)
-            if (screenModel.trackServices.isNotEmpty()) {
+            if (screenModel.trackers.isNotEmpty()) {
                 add(AnimeLibraryGroup.BY_TRACK_STATUS)
             }
             if (hasCategories) {
