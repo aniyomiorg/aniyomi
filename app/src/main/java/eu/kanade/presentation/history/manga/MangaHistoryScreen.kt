@@ -6,12 +6,19 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
+import tachiyomi.core.preference.InMemoryPreferenceStore
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.util.ThemePreviews
+import uy.kohesive.injekt.api.get
 import java.util.Date
 
 @Composable
@@ -23,6 +30,7 @@ fun MangaHistoryScreen(
     onClickCover: (mangaId: Long) -> Unit,
     onClickResume: (mangaId: Long, chapterId: Long) -> Unit,
     onDialogChange: (MangaHistoryScreenModel.Dialog?) -> Unit,
+    preferences: UiPreferences,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -51,6 +59,7 @@ fun MangaHistoryScreen(
                             MangaHistoryScreenModel.Dialog.Delete(item),
                         )
                     },
+                    preferences = preferences,
                 )
             }
         }
@@ -60,4 +69,34 @@ fun MangaHistoryScreen(
 sealed interface MangaHistoryUiModel {
     data class Header(val date: Date) : MangaHistoryUiModel
     data class Item(val item: MangaHistoryWithRelations) : MangaHistoryUiModel
+}
+
+@ThemePreviews
+@Composable
+internal fun HistoryScreenPreviews(
+    @PreviewParameter(MangaHistoryScreenModelStateProvider::class)
+    historyState: MangaHistoryScreenModel.State,
+) {
+    TachiyomiTheme {
+        MangaHistoryScreen(
+            state = historyState,
+            contentPadding = topSmallPaddingValues,
+            snackbarHostState = SnackbarHostState(),
+            searchQuery = null,
+            onClickCover = {},
+            onClickResume = { _, _ -> run {} },
+            onDialogChange = {},
+            preferences = UiPreferences(
+                InMemoryPreferenceStore(
+                    sequenceOf(
+                        InMemoryPreferenceStore.InMemoryPreference(
+                            key = "relative_time_v2",
+                            data = false,
+                            defaultValue = false,
+                        ),
+                    ),
+                ),
+            ),
+        )
+    }
 }

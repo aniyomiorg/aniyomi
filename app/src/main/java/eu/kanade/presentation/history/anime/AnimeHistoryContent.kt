@@ -1,4 +1,4 @@
-package eu.kanade.presentation.animehistory.components
+package eu.kanade.presentation.history.anime
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.items
@@ -7,12 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.RelativeDateHeader
-import eu.kanade.presentation.history.anime.AnimeHistoryItem
-import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 @Composable
 fun AnimeHistoryContent(
@@ -21,7 +17,7 @@ fun AnimeHistoryContent(
     onClickCover: (AnimeHistoryWithRelations) -> Unit,
     onClickResume: (AnimeHistoryWithRelations) -> Unit,
     onClickDelete: (AnimeHistoryWithRelations) -> Unit,
-    preferences: UiPreferences = Injekt.get(),
+    preferences: UiPreferences,
 ) {
     val relativeTime = remember { preferences.relativeTime().get() }
     val dateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }

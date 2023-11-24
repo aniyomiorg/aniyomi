@@ -165,7 +165,6 @@
     <string name="pref_clear_manga_database_summary">Delete history for manga that are not saved in your library</string>
     <string name="pref_clear_anime_database_summary">Delete history for anime that are not saved in your library</string>
     <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
-    <string name="pref_refresh_library_tracking_summary">Updates status, score and progress from the tracking services</string>
     <string name="pref_incognito_mode_summary">Pauses your history</string>
     <string name="manga_from_library">Manga from library</string>
     <string name="anime_from_library">Anime from library</string>
