@@ -1,24 +1,35 @@
-package eu.kanade.presentation.track.anime
+package eu.kanade.presentation.track.manga
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,9 +41,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -40,26 +54,29 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.track.manga.SearchResultItem
+import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
-fun AnimeTrackServiceSearch(
+fun MangaTrackerSearch(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     onDispatchQuery: () -> Unit,
-    queryResult: Result<List<AnimeTrackSearch>>?,
-    selected: AnimeTrackSearch?,
-    onSelectedChange: (AnimeTrackSearch) -> Unit,
+    queryResult: Result<List<MangaTrackSearch>>?,
+    selected: MangaTrackSearch?,
+    onSelectedChange: (MangaTrackSearch) -> Unit,
     onConfirmSelection: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -194,5 +211,113 @@ fun AnimeTrackServiceSearch(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SearchResultItem(
+    title: String,
+    coverUrl: String,
+    type: String,
+    startDate: String,
+    status: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val shape = RoundedCornerShape(16.dp)
+    val borderColor = if (selected) MaterialTheme.colorScheme.outline else Color.Transparent
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 2.dp,
+                color = borderColor,
+                shape = shape,
+            )
+            .selectable(selected = selected, onClick = onClick)
+            .padding(12.dp),
+    ) {
+        if (selected) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = null,
+                modifier = Modifier.align(Alignment.TopEnd),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Column {
+            Row {
+                ItemCover.Book(
+                    data = coverUrl,
+                    modifier = Modifier.height(96.dp),
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        text = title,
+                        modifier = Modifier.padding(end = 28.dp),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    if (type.isNotBlank()) {
+                        SearchResultItemDetails(
+                            title = stringResource(R.string.track_type),
+                            text = type,
+                        )
+                    }
+                    if (startDate.isNotBlank()) {
+                        SearchResultItemDetails(
+                            title = stringResource(R.string.label_started),
+                            text = startDate,
+                        )
+                    }
+                    if (status.isNotBlank()) {
+                        SearchResultItemDetails(
+                            title = stringResource(R.string.track_status),
+                            text = status,
+                        )
+                    }
+                }
+            }
+            if (description.isNotBlank()) {
+                Text(
+                    text = description,
+                    modifier = Modifier
+                        .paddingFromBaseline(top = 24.dp)
+                        .secondaryItemAlpha(),
+                    maxLines = 4,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchResultItemDetails(
+    title: String,
+    text: String,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
+        Text(
+            text = title,
+            maxLines = 1,
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = text,
+            modifier = Modifier
+                .weight(1f)
+                .secondaryItemAlpha(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }

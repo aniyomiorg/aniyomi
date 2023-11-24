@@ -12,7 +12,7 @@ import eu.kanade.tachiyomi.data.backup.BackupCreateJob
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -52,7 +52,7 @@ object Migrations {
         readerPreferences: ReaderPreferences,
         playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
-        trackManager: TrackManager,
+        trackerManager: TrackerManager,
         // AM (CONNECTIONS) -->
         connectionsPreferences: ConnectionsPreferences,
         connectionsManager: ConnectionsManager,
@@ -170,8 +170,8 @@ object Migrations {
                 // Force MAL log out due to login flow change
                 // v52: switched from scraping to WebView
                 // v53: switched from WebView to OAuth
-                if (trackManager.myAnimeList.isLoggedIn) {
-                    trackManager.myAnimeList.logout()
+                if (trackerManager.myAnimeList.isLoggedIn) {
+                    trackerManager.myAnimeList.logout()
                     context.toast(R.string.myanimelist_relogin)
                 }
             }
@@ -501,7 +501,7 @@ object Migrations {
                             "pref_filter_library_started",
                             "pref_filter_library_bookmarked",
                             "pref_filter_library_completed",
-                        ) + trackManager.services.map { "pref_filter_library_tracked_${it.id}" }
+                        ) + trackerManager.trackers.map { "pref_filter_library_tracked_${it.id}" }
 
                         prefKeys.forEach { key ->
                             val pref = preferenceStore.getInt(key, 0)

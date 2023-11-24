@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.track.kitsu
 import androidx.annotation.CallSuper
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.Serializable
@@ -37,7 +37,7 @@ class KitsuSearchManga(obj: JsonObject) {
     private val endDate = obj["endDate"]?.jsonPrimitive?.contentOrNull
 
     @CallSuper
-    fun toTrack() = MangaTrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackerManager.KITSU).apply {
         media_id = this@KitsuSearchManga.id
         title = canonicalTitle
         total_chapters = chapterCount ?: 0
@@ -73,7 +73,7 @@ class KitsuSearchAnime(obj: JsonObject) {
     private val endDate = obj["endDate"]?.jsonPrimitive?.contentOrNull
 
     @CallSuper
-    fun toTrack() = AnimeTrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = AnimeTrackSearch.create(TrackerManager.KITSU).apply {
         media_id = this@KitsuSearchAnime.id
         title = canonicalTitle
         total_episodes = episodeCount ?: 0
@@ -105,7 +105,7 @@ class KitsuLibManga(obj: JsonObject, manga: JsonObject) {
     private val ratingTwenty = obj["attributes"]!!.jsonObject["ratingTwenty"]?.jsonPrimitive?.contentOrNull
     val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
 
-    fun toTrack() = MangaTrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackerManager.KITSU).apply {
         media_id = libraryId
         title = canonicalTitle
         total_chapters = chapterCount ?: 0
@@ -147,7 +147,7 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
     private val ratingTwenty = obj["attributes"]!!.jsonObject["ratingTwenty"]?.jsonPrimitive?.contentOrNull
     val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
 
-    fun toTrack() = AnimeTrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = AnimeTrackSearch.create(TrackerManager.KITSU).apply {
         media_id = libraryId
         title = canonicalTitle
         total_episodes = episodeCount ?: 0

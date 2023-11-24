@@ -29,9 +29,9 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -96,7 +96,7 @@ class AnimeScreenModel(
     uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get(),
+    private val trackerManager: TrackerManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
@@ -122,7 +122,7 @@ class AnimeScreenModel(
     private val successState: State.Success?
         get() = state.value as? State.Success
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLoggedIn && it is AnimeTrackService } }
+    private val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is AnimeTracker } }
 
     val anime: Anime?
         get() = successState?.anime
@@ -412,14 +412,14 @@ class AnimeScreenModel(
                 // Finally match with enhanced tracking when available
                 val source = state.source
                 state.trackItems
-                    .map { it.service }
-                    .filterIsInstance<EnhancedAnimeTrackService>()
+                    .map { it.tracker }
+                    .filterIsInstance<EnhancedAnimeTracker>()
                     .filter { it.accept(source) }
                     .forEach { service ->
                         launchIO {
                             try {
                                 service.match(anime)?.let { track ->
-                                    (service as AnimeTrackService).register(track, animeId)
+                                    (service as AnimeTracker).register(track, animeId)
                                 }
                             } catch (e: Exception) {
                                 logcat(LogPriority.WARN, e) {
@@ -1069,7 +1069,7 @@ class AnimeScreenModel(
             getTracks.subscribe(anime.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    loggedServices
+                    loggedInTrackers
                         // Map to TrackItem
                         .map { service ->
                             AnimeTrackItem(
@@ -1078,7 +1078,7 @@ class AnimeScreenModel(
                             )
                         }
                         // Show only if the service supports this anime's source
-                        .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source!!) ?: true }
+                        .filter { (it.tracker as? EnhancedAnimeTracker)?.accept(source!!) ?: true }
                 }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->

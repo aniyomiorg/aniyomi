@@ -10,7 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
@@ -33,7 +33,7 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
         val getTracks = Injekt.get<GetMangaTracks>()
         val insertTrack = Injekt.get<InsertMangaTrack>()
 
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         val delayedTrackingStore = Injekt.get<DelayedMangaTrackingStore>()
 
         withIOContext {
@@ -47,10 +47,10 @@ class DelayedMangaTrackingUpdateJob(context: Context, workerParams: WorkerParame
                 }
                 .forEach { track ->
                     try {
-                        val service = trackManager.getService(track.syncId)
-                        if (service != null && service.isLoggedIn) {
+                        val tracker = trackerManager.get(track.syncId)
+                        if (tracker != null && tracker.isLoggedIn) {
                             logcat(LogPriority.DEBUG) { "Updating delayed track item: ${track.id}, last chapter read: ${track.lastChapterRead}" }
-                            service.mangaService.update(track.toDbTrack(), true)
+                            tracker.mangaService.update(track.toDbTrack(), true)
                             insertTrack.await(track)
                         }
                         delayedTrackingStore.removeMangaItem(track.id)

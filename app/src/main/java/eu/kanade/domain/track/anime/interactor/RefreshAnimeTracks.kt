@@ -1,10 +1,9 @@
 package eu.kanade.domain.track.anime.interactor
 
-import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.Tracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
@@ -13,7 +12,7 @@ import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 
 class RefreshAnimeTracks(
     private val getTracks: GetAnimeTracks,
-    private val trackManager: TrackManager,
+    private val trackerManager: TrackerManager,
     private val insertTrack: InsertAnimeTrack,
     private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack,
 ) {
@@ -23,22 +22,17 @@ class RefreshAnimeTracks(
      *
      * @return Failed updates.
      */
-    suspend fun await(animeId: Long): List<Pair<TrackService?, Throwable>> {
+    suspend fun await(animeId: Long): List<Pair<Tracker?, Throwable>> {
         return supervisorScope {
             return@supervisorScope getTracks.await(animeId)
-                .map { track ->
+                .map { it to trackerManager.get(it.syncId) }
+                .filter { (_, service) -> service?.isLoggedIn == true }
+                .map { (track, service) ->
                     async {
-                        val service = trackManager.getService(track.syncId)
                         return@async try {
-                            if (service?.isLoggedIn == true) {
-                                val updatedTrack = service.animeService.refresh(track.toDbTrack())
-                                insertTrack.await(updatedTrack.toDomainTrack()!!)
-                                syncEpisodeProgressWithTrack.await(
-                                    animeId,
-                                    track,
-                                    service.animeService,
-                                )
-                            }
+                            val updatedTrack = service!!.animeService.refresh(track.toDbTrack())
+                            insertTrack.await(updatedTrack.toDomainTrack()!!)
+                            syncEpisodeProgressWithTrack.await(animeId, track, service.animeService)
                             null
                         } catch (e: Throwable) {
                             service to e

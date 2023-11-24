@@ -4,16 +4,17 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
 import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Suwayomi(id: Long) : TrackService(id, "Suwayomi"), EnhancedMangaTrackService, MangaTrackService {
-    val api by lazy { TachideskApi() }
+class Suwayomi(id: Long) : Tracker(id, "Suwayomi"), EnhancedMangaTracker, MangaTracker {
+
+    val api by lazy { SuwayomiApi(id) }
 
     override fun getLogo() = R.drawable.ic_tracker_suwayomi
 

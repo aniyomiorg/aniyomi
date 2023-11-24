@@ -272,7 +272,7 @@ private fun getIndex() = settingScreens
         SettingsData(
             title = stringResource(screen.getTitleRes()),
             route = screen,
-            contents = screen.getPreferences(),
+            contents = screen.sourcePreferences(),
         )
     }
 

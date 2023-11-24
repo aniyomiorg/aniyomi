@@ -9,9 +9,9 @@ import tachiyomi.domain.track.anime.model.AnimeTrack
  * An Enhanced Track Service will never prompt the user to match a manga with the remote.
  * It is expected that such Track Service can only work with specific sources and unique IDs.
  */
-interface EnhancedAnimeTrackService {
+interface EnhancedAnimeTracker {
     /**
-     * This TrackService will only work with the sources that are accepted by this filter function.
+     * This Tracker will only work with the sources that are accepted by this filter function.
      */
     fun accept(source: AnimeSource): Boolean {
         return source::class.qualifiedName in getAcceptedSources()
@@ -25,12 +25,12 @@ interface EnhancedAnimeTrackService {
     fun loginNoop()
 
     /**
-     * match is similar to TrackService.search, but only return zero or one match.
+     * match is similar to Tracker.search, but only return zero or one match.
      */
     suspend fun match(anime: Anime): AnimeTrackSearch?
 
     /**
-     * Checks whether the provided source/track/anime triplet is from this AnimeTrackService
+     * Checks whether the provided source/track/anime triplet is from this AnimeTracker
      */
     fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?): Boolean
 

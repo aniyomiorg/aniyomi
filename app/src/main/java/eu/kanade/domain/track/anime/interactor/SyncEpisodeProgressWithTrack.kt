@@ -1,8 +1,8 @@
-package eu.kanade.domain.items.episode.interactor
+package eu.kanade.domain.track.anime.interactor
 
 import eu.kanade.domain.track.anime.model.toDbTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
@@ -10,7 +10,6 @@ import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.domain.track.anime.model.AnimeTrack
-import uy.kohesive.injekt.api.get
 
 class SyncEpisodeProgressWithTrack(
     private val updateEpisode: UpdateEpisode,
@@ -21,9 +20,9 @@ class SyncEpisodeProgressWithTrack(
     suspend fun await(
         animeId: Long,
         remoteTrack: AnimeTrack,
-        service: AnimeTrackService,
+        service: AnimeTracker,
     ) {
-        if (service !is EnhancedAnimeTrackService) {
+        if (service !is EnhancedAnimeTracker) {
             return
         }
 

@@ -17,16 +17,12 @@ import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,11 +33,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
@@ -54,7 +48,6 @@ import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
-import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -76,11 +69,8 @@ class BrowseAnimeSourceScreenModel(
     private val getAnime: GetAnime = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
-    private val insertTrack: InsertAnimeTrack = Injekt.get(),
-    private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack = Injekt.get(),
+    private val addTracks: AddAnimeTracks = Injekt.get(),
 ) : StateScreenModel<BrowseAnimeSourceScreenModel.State>(State(Listing.valueOf(listingQuery))) {
-
-    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLoggedIn } }
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
@@ -242,8 +232,7 @@ class BrowseAnimeSourceScreenModel(
                 new = new.removeCovers(coverCache)
             } else {
                 setAnimeDefaultEpisodeFlags.await(anime)
-
-                autoAddTrack(anime)
+                addTracks.bindEnhancedTracks(anime, source)
             }
 
             updateAnime.await(new.toAnimeUpdate())
@@ -282,31 +271,6 @@ class BrowseAnimeSourceScreenModel(
                 }
             }
         }
-    }
-
-    private suspend fun autoAddTrack(anime: Anime) {
-        loggedServices
-            .filterIsInstance<EnhancedAnimeTrackService>()
-            .filter { it.accept(source) }
-            .forEach { service ->
-                try {
-                    service.match(anime)?.let { track ->
-                        track.anime_id = anime.id
-                        (service as TrackService).animeService.bind(track)
-                        insertTrack.await(track.toDomainTrack()!!)
-                        syncEpisodeProgressWithTrack.await(
-                            anime.id,
-                            track.toDomainTrack()!!,
-                            service.animeService,
-                        )
-                    }
-                } catch (e: Exception) {
-                    logcat(
-                        LogPriority.WARN,
-                        e,
-                    ) { "Could not match anime: ${anime.title} with service $service" }
-                }
-            }
     }
 
     /**
