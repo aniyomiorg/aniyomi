@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.track.shikimori
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.DELETE
@@ -30,7 +29,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 
-class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInterceptor) {
+class ShikimoriApi(
+    private val trackId: Long,
+    private val client: OkHttpClient,
+    interceptor: ShikimoriInterceptor,
+) {
 
     private val json: Json by injectLazy()
 
@@ -165,7 +168,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
     }
 
     private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
-        return MangaTrackSearch.create(TrackManager.SHIKIMORI).apply {
+        return MangaTrackSearch.create(trackId).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name"]!!.jsonPrimitive.content
             total_chapters = obj["chapters"]!!.jsonPrimitive.int
@@ -179,7 +182,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
     }
 
     private fun jsonToAnimeSearch(obj: JsonObject): AnimeTrackSearch {
-        return AnimeTrackSearch.create(TrackManager.SHIKIMORI).apply {
+        return AnimeTrackSearch.create(trackId).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name"]!!.jsonPrimitive.content
             total_episodes = obj["episodes"]!!.jsonPrimitive.int
@@ -193,7 +196,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
     }
 
     private fun jsonToTrack(obj: JsonObject, mangas: JsonObject): MangaTrack {
-        return MangaTrack.create(TrackManager.SHIKIMORI).apply {
+        return MangaTrack.create(trackId).apply {
             title = mangas["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.long
             total_chapters = mangas["chapters"]!!.jsonPrimitive.int
@@ -206,7 +209,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
     }
 
     private fun jsonToAnimeTrack(obj: JsonObject, animes: JsonObject): AnimeTrack {
-        return AnimeTrack.create(TrackManager.SHIKIMORI).apply {
+        return AnimeTrack.create(trackId).apply {
             title = animes["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.long
             total_episodes = animes["episodes"]!!.jsonPrimitive.int

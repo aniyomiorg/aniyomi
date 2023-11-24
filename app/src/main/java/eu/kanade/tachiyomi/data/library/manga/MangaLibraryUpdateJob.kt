@@ -186,7 +186,40 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 .distinctBy { it.manga.id }
         }
 
+        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
+        val skippedUpdates = mutableListOf<Pair<Manga, String?>>()
+        val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
+
         mangaToUpdate = listToUpdate
+            .filter {
+                when {
+                    it.manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
+                        skippedUpdates.add(it.manga to context.getString(R.string.skipped_reason_not_always_update))
+                        false
+                    }
+
+                    ENTRY_NON_COMPLETED in restrictions && it.manga.status.toInt() == SManga.COMPLETED -> {
+                        skippedUpdates.add(it.manga to context.getString(R.string.skipped_reason_completed))
+                        false
+                    }
+
+                    ENTRY_HAS_UNVIEWED in restrictions && it.unreadCount != 0L -> {
+                        skippedUpdates.add(it.manga to context.getString(R.string.skipped_reason_not_caught_up))
+                        false
+                    }
+
+                    ENTRY_NON_VIEWED in restrictions && it.totalChapters > 0L && !it.hasStarted -> {
+                        skippedUpdates.add(it.manga to context.getString(R.string.skipped_reason_not_started))
+                        false
+                    }
+
+                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.manga.nextUpdate > fetchWindow.second -> {
+                        skippedUpdates.add(it.manga to context.getString(R.string.skipped_reason_not_in_release_period))
+                        false
+                    }
+                    else -> true
+                }
+            }
             .sortedBy { it.manga.title }
 
         // Warn when excessively checking a single source
@@ -196,6 +229,17 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
             notifier.showQueueSizeWarningNotification()
+        }
+
+        if (skippedUpdates.isNotEmpty()) {
+            // TODO: surface skipped reasons to user?
+            logcat {
+                skippedUpdates
+                    .groupBy { it.second }
+                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
+                    .joinToString()
+            }
+            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 
@@ -212,10 +256,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val progressCount = AtomicInteger(0)
         val currentlyUpdatingManga = CopyOnWriteArrayList<Manga>()
         val newUpdates = CopyOnWriteArrayList<Pair<Manga, Array<Chapter>>>()
-        val skippedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
@@ -237,79 +279,29 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     progressCount,
                                     manga,
                                 ) {
-                                    when {
-                                        manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
-                                            skippedUpdates.add(
-                                                manga to context.getString(
-                                                    R.string.skipped_reason_not_always_update,
-                                                ),
-                                            )
+                                    try {
+                                        val newChapters = updateManga(manga, fetchWindow)
+                                            .sortedByDescending { it.sourceOrder }
 
-                                        ENTRY_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
-                                            skippedUpdates.add(
-                                                manga to context.getString(
-                                                    R.string.skipped_reason_completed,
-                                                ),
-                                            )
-
-                                        ENTRY_HAS_UNVIEWED in restrictions && libraryManga.unreadCount != 0L ->
-                                            skippedUpdates.add(
-                                                manga to context.getString(
-                                                    R.string.skipped_reason_not_caught_up,
-                                                ),
-                                            )
-
-                                        ENTRY_NON_VIEWED in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
-                                            skippedUpdates.add(
-                                                manga to context.getString(
-                                                    R.string.skipped_reason_not_started,
-                                                ),
-                                            )
-
-                                        ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && manga.nextUpdate > fetchWindow.second ->
-                                            skippedUpdates.add(
-                                                manga to context.getString(
-                                                    R.string.skipped_reason_not_in_release_period,
-                                                ),
-                                            )
-
-                                        else -> {
-                                            try {
-                                                val newChapters = updateManga(manga, fetchWindow)
-                                                    .sortedByDescending { it.sourceOrder }
-
-                                                if (newChapters.isNotEmpty()) {
-                                                    val categoryIds = getCategories.await(manga.id).map { it.id }
-                                                    if (manga.shouldDownloadNewChapters(
-                                                            categoryIds,
-                                                            downloadPreferences,
-                                                        )
-                                                    ) {
-                                                        downloadChapters(manga, newChapters)
-                                                        hasDownloads.set(true)
-                                                    }
-
-                                                    libraryPreferences.newMangaUpdatesCount().getAndSet { it + newChapters.size }
-
-                                                    // Convert to the manga that contains new chapters
-                                                    newUpdates.add(
-                                                        manga to newChapters.toTypedArray(),
-                                                    )
-                                                }
-                                            } catch (e: Throwable) {
-                                                val errorMessage = when (e) {
-                                                    is NoChaptersException -> context.getString(
-                                                        R.string.no_chapters_error,
-                                                    )
-                                                    // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is SourceNotInstalledException -> context.getString(
-                                                        R.string.loader_not_implemented_error,
-                                                    )
-                                                    else -> e.message
-                                                }
-                                                failedUpdates.add(manga to errorMessage)
+                                        if (newChapters.isNotEmpty()) {
+                                            val categoryIds = getCategories.await(manga.id).map { it.id }
+                                            if (manga.shouldDownloadNewChapters(categoryIds, downloadPreferences)) {
+                                                downloadChapters(manga, newChapters)
+                                                hasDownloads.set(true)
                                             }
+                                            libraryPreferences.newMangaUpdatesCount().getAndSet { it + newChapters.size }
+
+                                            // Convert to the manga that contains new chapters
+                                            newUpdates.add(manga to newChapters.toTypedArray())
                                         }
+                                    } catch (e: Throwable) {
+                                        val errorMessage = when (e) {
+                                            is NoChaptersException -> context.getString(R.string.no_chapters_error)
+                                            // failedUpdates will already have the source, don't need to copy it into the message
+                                            is SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                            else -> e.message
+                                        }
+                                        failedUpdates.add(manga to errorMessage)
                                     }
 
                                     if (libraryPreferences.autoUpdateTrackers().get()) {
@@ -338,16 +330,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 failedUpdates.size,
                 errorFile.getUriCompat(context),
             )
-        }
-        if (skippedUpdates.isNotEmpty()) {
-            // TODO: surface skipped reasons to user
-            logcat {
-                skippedUpdates
-                    .groupBy { it.second }
-                    .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
-                    .joinToString()
-            }
-            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 
@@ -466,29 +448,27 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         completed: AtomicInteger,
         manga: Manga,
         block: suspend () -> Unit,
-    ) {
-        coroutineScope {
-            ensureActive()
+    ) = coroutineScope {
+        ensureActive()
 
-            updatingManga.add(manga)
-            notifier.showProgressNotification(
-                updatingManga,
-                completed.get(),
-                mangaToUpdate.size,
-            )
+        updatingManga.add(manga)
+        notifier.showProgressNotification(
+            updatingManga,
+            completed.get(),
+            mangaToUpdate.size,
+        )
 
-            block()
+        block()
 
-            ensureActive()
+        ensureActive()
 
-            updatingManga.remove(manga)
-            completed.getAndIncrement()
-            notifier.showProgressNotification(
-                updatingManga,
-                completed.get(),
-                mangaToUpdate.size,
-            )
-        }
+        updatingManga.remove(manga)
+        completed.getAndIncrement()
+        notifier.showProgressNotification(
+            updatingManga,
+            completed.get(),
+            mangaToUpdate.size,
+        )
     }
 
     /**

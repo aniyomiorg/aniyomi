@@ -13,10 +13,8 @@ import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
-import eu.kanade.domain.items.chapter.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
-import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
@@ -30,9 +28,13 @@ import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.ToggleLanguage
+import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
+import eu.kanade.domain.track.anime.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
+import eu.kanade.domain.track.manga.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.track.manga.interactor.TrackChapter
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
 import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
@@ -222,19 +224,23 @@ class DomainModule : InjektModule {
 
         addSingletonFactory<AnimeTrackRepository> { AnimeTrackRepositoryImpl(get()) }
         addFactory { TrackEpisode(get(), get(), get(), get()) }
+        addFactory { AddAnimeTracks(get(), get(), get()) }
         addFactory { RefreshAnimeTracks(get(), get(), get(), get()) }
         addFactory { DeleteAnimeTrack(get()) }
         addFactory { GetTracksPerAnime(get()) }
         addFactory { GetAnimeTracks(get()) }
         addFactory { InsertAnimeTrack(get()) }
+        addFactory { SyncEpisodeProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<MangaTrackRepository> { MangaTrackRepositoryImpl(get()) }
         addFactory { TrackChapter(get(), get(), get(), get()) }
+        addFactory { AddMangaTracks(get(), get(), get()) }
         addFactory { RefreshMangaTracks(get(), get(), get(), get()) }
         addFactory { DeleteMangaTrack(get()) }
         addFactory { GetTracksPerManga(get()) }
         addFactory { GetMangaTracks(get()) }
         addFactory { InsertMangaTrack(get()) }
+        addFactory { SyncChapterProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<EpisodeRepository> { EpisodeRepositoryImpl(get()) }
         addFactory { GetEpisode(get()) }
@@ -243,7 +249,6 @@ class DomainModule : InjektModule {
         addFactory { SetSeenStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbEpisode() }
         addFactory { SyncEpisodesWithSource(get(), get(), get(), get(), get(), get(), get()) }
-        addFactory { SyncEpisodeProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
         addFactory { GetChapter(get()) }
@@ -252,7 +257,6 @@ class DomainModule : InjektModule {
         addFactory { SetReadStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbChapter() }
         addFactory { SyncChaptersWithSource(get(), get(), get(), get(), get(), get(), get()) }
-        addFactory { SyncChapterProgressWithTrack(get(), get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
         addFactory { GetAnimeHistory(get()) }

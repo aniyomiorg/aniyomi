@@ -11,8 +11,8 @@ import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
@@ -34,10 +34,10 @@ class AnimeStatsScreenModel(
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val preferences: LibraryPreferences = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get(),
+    private val trackerManager: TrackerManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
 
-    private val loggedServices by lazy { trackManager.services.fastFilter { it.isLoggedIn && it is AnimeTrackService } }
+    private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is AnimeTracker } }
 
     init {
         coroutineScope.launchIO {
@@ -73,7 +73,7 @@ class AnimeStatsScreenModel(
             val trackersStatData = StatsData.Trackers(
                 trackedTitleCount = animeTrackMap.count { it.value.isNotEmpty() },
                 meanScore = meanScore,
-                trackerCount = loggedServices.size,
+                trackerCount = loggedInTrackers.size,
             )
 
             mutableState.update {
@@ -116,10 +116,10 @@ class AnimeStatsScreenModel(
     }
 
     private suspend fun getAnimeTrackMap(libraryAnime: List<LibraryAnime>): Map<Long, List<AnimeTrack>> {
-        val loggedServicesIds = loggedServices.map { it.id }.toHashSet()
+        val loggedInTrackerIds = loggedInTrackers.map { it.id }.toHashSet()
         return libraryAnime.associate { anime ->
             val tracks = getTracks.await(anime.id)
-                .fastFilter { it.syncId in loggedServicesIds }
+                .fastFilter { it.syncId in loggedInTrackerIds }
 
             anime.id to tracks
         }
@@ -160,7 +160,7 @@ class AnimeStatsScreenModel(
     }
 
     private fun get10PointScore(track: AnimeTrack): Double {
-        val service = trackManager.getService(track.syncId)!!
-        return service.animeService.get10PointScore(track)
+        val tracker = trackerManager.get(track.syncId)!!
+        return tracker.animeService.get10PointScore(track)
     }
 }

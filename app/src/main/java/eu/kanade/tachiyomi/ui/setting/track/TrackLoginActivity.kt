@@ -21,11 +21,11 @@ class TrackLoginActivity : BaseOAuthLoginActivity() {
         val matchResult = regex.find(data.fragment.toString())
         if (matchResult?.groups?.get(1) != null) {
             lifecycleScope.launchIO {
-                trackManager.aniList.login(matchResult.groups[1]!!.value)
+                trackerManager.aniList.login(matchResult.groups[1]!!.value)
                 returnToSettings()
             }
         } else {
-            trackManager.aniList.logout()
+            trackerManager.aniList.logout()
             returnToSettings()
         }
     }
@@ -34,11 +34,11 @@ class TrackLoginActivity : BaseOAuthLoginActivity() {
         val code = data.getQueryParameter("code")
         if (code != null) {
             lifecycleScope.launchIO {
-                trackManager.bangumi.login(code)
+                trackerManager.bangumi.login(code)
                 returnToSettings()
             }
         } else {
-            trackManager.bangumi.logout()
+            trackerManager.bangumi.logout()
             returnToSettings()
         }
     }
@@ -47,11 +47,11 @@ class TrackLoginActivity : BaseOAuthLoginActivity() {
         val code = data.getQueryParameter("code")
         if (code != null) {
             lifecycleScope.launchIO {
-                trackManager.myAnimeList.login(code)
+                trackerManager.myAnimeList.login(code)
                 returnToSettings()
             }
         } else {
-            trackManager.myAnimeList.logout()
+            trackerManager.myAnimeList.logout()
             returnToSettings()
         }
     }
@@ -60,11 +60,11 @@ class TrackLoginActivity : BaseOAuthLoginActivity() {
         val code = data.getQueryParameter("code")
         if (code != null) {
             lifecycleScope.launchIO {
-                trackManager.shikimori.login(code)
+                trackerManager.shikimori.login(code)
                 returnToSettings()
             }
         } else {
-            trackManager.shikimori.logout()
+            trackerManager.shikimori.logout()
             returnToSettings()
         }
     }
@@ -73,11 +73,11 @@ class TrackLoginActivity : BaseOAuthLoginActivity() {
         val code = data?.getQueryParameter("code")
         if (code != null) {
             lifecycleScope.launchIO {
-                trackManager.simkl.login(code)
+                trackerManager.simkl.login(code)
                 returnToSettings()
             }
         } else {
-            trackManager.simkl.logout()
+            trackerManager.simkl.logout()
             returnToSettings()
         }
     }

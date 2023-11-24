@@ -248,7 +248,6 @@ dependencies {
     implementation(libs.aboutLibraries.compose)
     implementation(libs.bundles.voyager)
     implementation(libs.compose.materialmotion)
-    implementation(libs.compose.simpleicons)
     implementation(libs.swipe)
 
     // Logging

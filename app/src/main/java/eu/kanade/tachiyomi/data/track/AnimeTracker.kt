@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.episode.interactor.SyncEpisodeProgressWithTrack
+import eu.kanade.domain.track.anime.interactor.SyncEpisodeProgressWithTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
@@ -24,7 +24,7 @@ import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 private val insertTrack: InsertAnimeTrack by injectLazy()
 private val syncEpisodeProgressWithTrack: SyncEpisodeProgressWithTrack by injectLazy()
 
-interface AnimeTrackService {
+interface AnimeTracker {
 
     // Common functions
     fun getCompletionStatus(): Int
@@ -108,7 +108,7 @@ interface AnimeTrackService {
                     }
                 }
 
-                syncEpisodeProgressWithTrack.await(animeId, track, this@AnimeTrackService)
+                syncEpisodeProgressWithTrack.await(animeId, track, this@AnimeTracker)
             }
         } catch (e: Throwable) {
             withUIContext { Injekt.get<Application>().toast(e.message) }

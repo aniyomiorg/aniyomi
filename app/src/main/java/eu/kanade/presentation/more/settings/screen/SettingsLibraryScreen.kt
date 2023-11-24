@@ -24,7 +24,7 @@ import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -287,7 +287,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.autoUpdateTrackers(),
-                    enabled = Injekt.get<TrackManager>().hasLoggedServices(),
+                    enabled = Injekt.get<TrackerManager>().hasLoggedIn(),
                     title = stringResource(R.string.pref_library_update_refresh_trackers),
                     subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
                 ),

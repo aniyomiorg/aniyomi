@@ -14,8 +14,14 @@ interface ConfigurableAnimeSource : AnimeSource {
      *
      * @since extensions-lib 1.5
      */
-    fun getPreferences(): SharedPreferences =
-        Injekt.get<Application>().getSharedPreferences("source_$id", Context.MODE_PRIVATE)
+    fun getSourcePreferences(): SharedPreferences =
+        Injekt.get<Application>().getSharedPreferences(preferenceKey(), Context.MODE_PRIVATE)
 
     fun setupPreferenceScreen(screen: PreferenceScreen)
 }
+
+private fun ConfigurableAnimeSource.preferenceKey(): String = "source_$id"
+
+// TODO: use getSourcePreferences once all extensions are on ext-lib 1.5
+fun ConfigurableAnimeSource.sourcePreferences(): SharedPreferences =
+    Injekt.get<Application>().getSharedPreferences(preferenceKey(), Context.MODE_PRIVATE)

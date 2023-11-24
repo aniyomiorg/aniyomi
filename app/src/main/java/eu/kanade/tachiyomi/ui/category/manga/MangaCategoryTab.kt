@@ -1,8 +1,11 @@
 package eu.kanade.tachiyomi.ui.category.manga
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.SortByAlpha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -11,6 +14,8 @@ import eu.kanade.presentation.category.MangaCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
+import eu.kanade.presentation.category.components.CategorySortAlphabeticallyDialog
+import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -25,6 +30,13 @@ fun Screen.mangaCategoryTab(): TabContent {
     return TabContent(
         titleRes = R.string.label_manga,
         searchEnabled = false,
+        actions = listOf(
+            AppBar.Action(
+                title = stringResource(R.string.action_sort),
+                icon = Icons.Outlined.SortByAlpha,
+                onClick = { screenModel.showDialog(MangaCategoryDialog.SortAlphabetically) },
+            ),
+        ),
         content = { contentPadding, _ ->
 
             if (state is MangaCategoryScreenState.Loading) {
@@ -65,6 +77,12 @@ fun Screen.mangaCategoryTab(): TabContent {
                             onDismissRequest = screenModel::dismissDialog,
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
                             category = dialog.category,
+                        )
+                    }
+                    is MangaCategoryDialog.SortAlphabetically -> {
+                        CategorySortAlphabeticallyDialog(
+                            onDismissRequest = screenModel::dismissDialog,
+                            onSort = { screenModel.sortAlphabetically() },
                         )
                     }
                 }

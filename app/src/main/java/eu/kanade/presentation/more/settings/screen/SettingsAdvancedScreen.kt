@@ -40,7 +40,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_360
@@ -353,7 +353,7 @@ object SettingsAdvancedScreen : SearchableSettings {
     private fun getLibraryGroup(): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        val trackManager = remember { Injekt.get<TrackManager>() }
+        val trackerManager = remember { Injekt.get<TrackerManager>() }
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_library),
@@ -374,7 +374,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_tracking),
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
-                    enabled = trackManager.hasLoggedServices(),
+                    enabled = trackerManager.hasLoggedIn(),
                     onClick = {
                         MangaLibraryUpdateJob.startNow(
                             context,

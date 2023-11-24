@@ -12,35 +12,29 @@ import eu.kanade.tachiyomi.data.track.shikimori.Shikimori
 import eu.kanade.tachiyomi.data.track.simkl.Simkl
 import eu.kanade.tachiyomi.data.track.suwayomi.Suwayomi
 
-class TrackManager(context: Context) {
+class TrackerManager(context: Context) {
 
     companion object {
-        const val MYANIMELIST = 1L
         const val ANILIST = 2L
         const val KITSU = 3L
-        const val SHIKIMORI = 4L
-        const val BANGUMI = 5L
-        const val KOMGA = 6L
-        const val MANGA_UPDATES = 7L
         const val KAVITA = 8L
-        const val SUWAYOMI = 9L
         const val SIMKL = 101L
     }
 
-    val myAnimeList = MyAnimeList(MYANIMELIST)
+    val myAnimeList = MyAnimeList(1L)
     val aniList = Anilist(ANILIST)
     val kitsu = Kitsu(KITSU)
-    val shikimori = Shikimori(SHIKIMORI)
-    val bangumi = Bangumi(BANGUMI)
-    val komga = Komga(KOMGA)
-    val mangaUpdates = MangaUpdates(MANGA_UPDATES)
+    val shikimori = Shikimori(4L)
+    val bangumi = Bangumi(5L)
+    val komga = Komga(6L)
+    val mangaUpdates = MangaUpdates(7L)
     val kavita = Kavita(context, KAVITA)
-    val suwayomi = Suwayomi(SUWAYOMI)
+    val suwayomi = Suwayomi(9L)
     val simkl = Simkl(SIMKL)
 
-    val services = listOf(myAnimeList, aniList, kitsu, shikimori, bangumi, komga, mangaUpdates, kavita, suwayomi, simkl)
+    val trackers = listOf(myAnimeList, aniList, kitsu, shikimori, bangumi, komga, mangaUpdates, kavita, suwayomi, simkl)
 
-    fun getService(id: Long) = services.find { it.id == id }
+    fun get(id: Long) = trackers.find { it.id == id }
 
-    fun hasLoggedServices() = services.any { it.isLoggedIn }
+    fun hasLoggedIn() = trackers.any { it.isLoggedIn }
 }

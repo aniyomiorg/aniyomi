@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.track.komga
 
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -19,7 +18,10 @@ import uy.kohesive.injekt.injectLazy
 
 private const val READLIST_API = "/api/v1/readlists"
 
-class KomgaApi(private val client: OkHttpClient) {
+class KomgaApi(
+    private val trackId: Long,
+    private val client: OkHttpClient,
+) {
 
     private val json: Json by injectLazy()
 
@@ -91,14 +93,14 @@ class KomgaApi(private val client: OkHttpClient) {
         return getTrackSearch(track.tracking_url)
     }
 
-    private fun SeriesDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackManager.KOMGA).also {
+    private fun SeriesDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(trackId).also {
         it.title = metadata.title
         it.summary = metadata.summary
         it.publishing_status = metadata.status
     }
 
     private fun ReadListDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(
-        TrackManager.KOMGA,
+        trackId,
     ).also {
         it.title = name
     }

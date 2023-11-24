@@ -4,9 +4,9 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
 import okhttp3.Dns
@@ -14,7 +14,7 @@ import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, MangaTrackService {
+class Komga(id: Long) : Tracker(id, "Komga"), EnhancedMangaTracker, MangaTracker {
 
     companion object {
         const val UNREAD = 1
@@ -27,7 +27,7 @@ class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, Ma
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
 
-    val api by lazy { KomgaApi(client) }
+    val api by lazy { KomgaApi(id, client) }
 
     override fun getLogo() = R.drawable.ic_tracker_komga
 
@@ -86,7 +86,7 @@ class Komga(id: Long) : TrackService(id, "Komga"), EnhancedMangaTrackService, Ma
         saveCredentials("user", "pass")
     }
 
-    // TrackService.isLogged works by checking that credentials are saved.
+    // [Tracker].isLogged works by checking that credentials are saved.
     // By saving dummy, unused credentials, we can activate the tracker simply by login/logout
     override fun loginNoop() {
         saveCredentials("user", "pass")

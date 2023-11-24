@@ -5,11 +5,11 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.DeletableAnimeTrackService
-import eu.kanade.tachiyomi.data.track.DeletableMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.decodeFromString
@@ -17,7 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Shikimori(id: Long) : TrackService(id, "Shikimori"), MangaTrackService, AnimeTrackService, DeletableMangaTrackService, DeletableAnimeTrackService {
+class Shikimori(id: Long) : Tracker(id, "Shikimori"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
 
     companion object {
         const val READING = 1
@@ -32,7 +32,7 @@ class Shikimori(id: Long) : TrackService(id, "Shikimori"), MangaTrackService, An
 
     private val interceptor by lazy { ShikimoriInterceptor(this) }
 
-    private val api by lazy { ShikimoriApi(client, interceptor) }
+    private val api by lazy { ShikimoriApi(id, client, interceptor) }
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)
