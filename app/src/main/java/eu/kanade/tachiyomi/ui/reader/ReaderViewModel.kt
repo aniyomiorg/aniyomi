@@ -13,6 +13,7 @@ import eu.kanade.domain.entries.manga.model.readingModeType
 import eu.kanade.domain.items.chapter.model.toDbChapter
 import eu.kanade.domain.track.manga.interactor.TrackChapter
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
@@ -20,6 +21,7 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
+import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
@@ -109,6 +111,12 @@ class ReaderViewModel @JvmOverloads constructor(
      */
     val manga: Manga?
         get() = state.value.manga
+
+    val currentChapter: Chapter?
+        get() = state.value.chapter
+
+    val currentSource: MangaSource?
+        get() = state.value.source
 
     /**
      * The chapter id of the currently loaded chapter. Used to restore from process kill.
@@ -211,7 +219,7 @@ class ReaderViewModel @JvmOverloads constructor(
             .map(::ReaderChapter)
     }
 
-    private val incognitoMode = preferences.incognitoMode().get()
+    internal val incognitoMode = preferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileReading().get()
 
     init {
@@ -899,7 +907,9 @@ class ReaderViewModel @JvmOverloads constructor(
 
     @Immutable
     data class State(
+        val chapter: Chapter? = null,
         val manga: Manga? = null,
+        val source: MangaSource? = null,
         val viewerChapters: ViewerChapters? = null,
         val isLoadingAdjacentChapter: Boolean = false,
         val currentPage: Int = -1,

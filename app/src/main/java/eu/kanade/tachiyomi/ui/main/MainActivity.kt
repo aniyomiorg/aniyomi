@@ -56,6 +56,7 @@ import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppStateBanners
@@ -71,6 +72,8 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -132,6 +135,10 @@ class MainActivity : BaseActivity() {
 
     private var navigator: Navigator? = null
 
+    // AM (CONNECTIONS) -->
+    private val connectionsPreferences: ConnectionsPreferences by injectLazy()
+    // <-- AM (CONNECTIONS)
+
     init {
         registerSecureActivity(this)
     }
@@ -158,6 +165,10 @@ class MainActivity : BaseActivity() {
                 playerPreferences = Injekt.get(),
                 backupPreferences = Injekt.get(),
                 trackerManager = Injekt.get(),
+                // AM (CONNECTIONS) -->
+                connectionsPreferences = connectionsPreferences,
+                connectionsManager = Injekt.get(),
+                // <-- AM (CONNECTIONS)
             )
         } else {
             false
@@ -269,6 +280,27 @@ class MainActivity : BaseActivity() {
                             }
                         }
                         .launchIn(this)
+
+                    // AM (DISCORD) -->
+                    connectionsPreferences.enableDiscordRPC().changes()
+                        .drop(1)
+                        .onEach {
+                            if (it) {
+                                DiscordRPCService.start(this@MainActivity.applicationContext)
+                            } else {
+                                DiscordRPCService.stop(this@MainActivity.applicationContext, 0L)
+                            }
+                        }.launchIn(this)
+
+                    connectionsPreferences.discordRPCStatus().changes()
+                        .drop(1)
+                        .onEach {
+                            DiscordRPCService.stop(this@MainActivity.applicationContext, 0L)
+                            DiscordRPCService.start(this@MainActivity.applicationContext)
+                            DiscordRPCService.setAnimeScreen(this@MainActivity, DiscordScreen.MORE)
+                            DiscordRPCService.setMangaScreen(this@MainActivity, DiscordScreen.MORE)
+                        }.launchIn(this)
+                    // <-- AM (DISCORD)
                 }
 
                 HandleOnNewIntent(context = context, navigator = navigator)
@@ -315,7 +347,7 @@ class MainActivity : BaseActivity() {
             ActivityResultContracts.StartActivityForResult(),
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                ExternalIntents.externalIntents.onActivityResult(result.data)
+                ExternalIntents.externalIntents.onActivityResult(this@MainActivity, result.data)
             }
         }
     }

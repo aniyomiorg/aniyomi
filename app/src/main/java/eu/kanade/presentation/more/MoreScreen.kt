@@ -71,9 +71,7 @@ fun MoreScreen(
                     WarningBanner(
                         textRes = R.string.fdroid_warning,
                         modifier = Modifier.clickable {
-                            uriHandler.openUri(
-                                "https://aniyomi.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds",
-                            )
+                            uriHandler.openUri("https://akiled.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds")
                         },
                     )
                 }
