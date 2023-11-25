@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,7 +29,7 @@ fun Screen.migrateMangaSourceTab(): TabContent {
         actions = listOf(
             AppBar.Action(
                 title = stringResource(R.string.migration_help_guide),
-                icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                icon = Icons.Outlined.HelpOutline,
                 onClick = {
                     uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")
                 },

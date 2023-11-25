@@ -28,7 +28,7 @@ class TrackerManager(context: Context) {
     val bangumi = Bangumi(5L)
     val komga = Komga(6L)
     val mangaUpdates = MangaUpdates(7L)
-    val kavita = Kavita(context, KAVITA)
+    val kavita = Kavita(KAVITA)
     val suwayomi = Suwayomi(9L)
     val simkl = Simkl(SIMKL)
 

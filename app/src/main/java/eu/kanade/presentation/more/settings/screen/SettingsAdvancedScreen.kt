@@ -195,48 +195,12 @@ object SettingsAdvancedScreen : SearchableSettings {
 
     @Composable
     private fun getDataGroup(): Preference.PreferenceGroup {
-        val scope = rememberCoroutineScope()
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
-        val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
-
-        val chapterCache = remember { Injekt.get<ChapterCache>() }
-        val episodeCache = remember { Injekt.get<EpisodeCache>() }
-        var readableSizeSema by remember { mutableIntStateOf(0) }
-        val readableSize = remember(readableSizeSema) { chapterCache.readableSize }
-        val readableAnimeSize = remember(readableSizeSema) { episodeCache.readableSize }
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_data),
             preferenceItems = listOf(
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_clear_chapter_cache),
-                    subtitle = stringResource(
-                        R.string.used_cache_both,
-                        readableAnimeSize,
-                        readableSize,
-                    ),
-                    onClick = {
-                        scope.launchNonCancellable {
-                            try {
-                                val deletedFiles = chapterCache.clear() + episodeCache.clear()
-                                withUIContext {
-                                    context.toast(
-                                        context.getString(R.string.cache_deleted, deletedFiles),
-                                    )
-                                    readableSizeSema++
-                                }
-                            } catch (e: Throwable) {
-                                logcat(LogPriority.ERROR, e)
-                                withUIContext { context.toast(R.string.cache_delete_error) }
-                            }
-                        }
-                    },
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoClearItemCache(),
-                    title = stringResource(R.string.pref_auto_clear_chapter_cache),
-                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_invalidate_download_cache),
                     subtitle = stringResource(R.string.pref_invalidate_download_cache_summary),

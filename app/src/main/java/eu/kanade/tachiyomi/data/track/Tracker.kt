@@ -25,7 +25,8 @@ interface Tracker {
 
     @StringRes
     fun getStatus(status: Int): Int?
-
+    fun getCompletionStatus(): Int
+    fun getScoreList(): List<String>
     suspend fun login(username: String, password: String)
 
     @CallSuper

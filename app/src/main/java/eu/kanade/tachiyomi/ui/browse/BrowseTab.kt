@@ -14,7 +14,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
-import eu.kanade.presentation.extensions.RequestStoragePermission
+import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
@@ -27,7 +27,6 @@ import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
 import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class BrowseTab(
     private val toExtensions: Boolean = false,
@@ -80,7 +79,7 @@ data class BrowseTab(
         )
 
         // For local source
-        DiskUtil.RequestStoragePermission()
+        PermissionRequestHelper.requestStoragePermission()
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true

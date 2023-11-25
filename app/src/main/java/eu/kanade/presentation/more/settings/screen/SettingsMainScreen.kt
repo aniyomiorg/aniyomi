@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
+import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -188,7 +189,7 @@ object SettingsMainScreen : Screen() {
         Item(
             titleRes = R.string.pref_category_reader,
             subtitleRes = R.string.pref_reader_summary,
-            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
+            icon = Icons.Outlined.ChromeReaderMode,
             screen = SettingsReaderScreen,
         ),
         Item(
@@ -216,10 +217,10 @@ object SettingsMainScreen : Screen() {
             screen = SettingsBrowseScreen,
         ),
         Item(
-            titleRes = R.string.label_backup,
+            titleRes = R.string.label_data_storage,
             subtitleRes = R.string.pref_backup_summary,
-            icon = Icons.Outlined.SettingsBackupRestore,
-            screen = SettingsBackupScreen,
+            icon = Icons.Outlined.Storage,
+            screen = SettingsDataScreen,
         ),
         Item(
             titleRes = R.string.pref_category_security,

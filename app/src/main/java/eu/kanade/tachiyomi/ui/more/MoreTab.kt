@@ -81,7 +81,7 @@ object MoreTab : Tab() {
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
             onClickStorage = { navigator.push(StorageTab()) },
-            onClickBackupAndRestore = { navigator.push(SettingsScreen.toBackupScreen()) },
+            onClickDataAndStorage = { navigator.push(SettingsScreen.toDataAndStorageScreen()) },
             onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
             onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
         )
