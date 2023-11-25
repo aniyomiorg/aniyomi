@@ -162,7 +162,8 @@ object SettingsDownloadScreen : SearchableSettings {
         return remember {
             val file = UniFile.fromFile(
                 File(
-                    "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}${Environment.DIRECTORY_DOWNLOADS}${File.separator}$appName",
+                    Environment.getExternalStorageDirectory().absolutePath +
+                        "${File.separator}${Environment.DIRECTORY_DOWNLOADS}${File.separator}$appName",
                     "downloads",
                 ),
             )!!

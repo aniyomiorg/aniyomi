@@ -25,7 +25,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
@@ -42,6 +41,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.TriState
+import tachiyomi.core.util.lang.compareToWithCollator
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
@@ -62,12 +62,11 @@ import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
+import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.Collator
 import java.util.Collections
-import java.util.Locale
 
 /**
  * Typealias for the library anime, using the category as keys, and list of anime as values.
@@ -107,7 +106,7 @@ class AnimeLibraryScreenModel(
             ) { searchQuery, library, tracks, loggedInTrackers, _ ->
                 library
                     .applyFilters(tracks, loggedInTrackers)
-                    .applySort()
+                    .applySort(tracks)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
                             // Filter query
@@ -171,7 +170,7 @@ class AnimeLibraryScreenModel(
      * Applies library filters to the given map of anime.
      */
     private suspend fun AnimeLibraryMap.applyFilters(
-        trackMap: Map<Long, List<Long>>,
+        trackMap: Map<Long, List<AnimeTrack>>,
         loggedInTrackers: Map<Long, TriState>,
     ): AnimeLibraryMap {
         val prefs = getAnimelibItemPreferencesFlow().first()
@@ -216,7 +215,9 @@ class AnimeLibraryScreenModel(
         val filterFnTracking: (AnimeLibraryItem) -> Boolean = tracking@{ item ->
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
-            val animeTracks = trackMap[item.libraryAnime.id].orEmpty()
+            val animeTracks = trackMap
+                .mapValues { entry -> entry.value.map { it.syncId } }[item.libraryAnime.id]
+                .orEmpty()
 
             val isExcluded = excludedTracks.isNotEmpty() && animeTracks.fastAny { it in excludedTracks }
             val isIncluded = includedTracks.isEmpty() || animeTracks.fastAny { it in includedTracks }
@@ -239,16 +240,26 @@ class AnimeLibraryScreenModel(
     /**
      * Applies library sorting to the given map of anime.
      */
-    private fun AnimeLibraryMap.applySort(): AnimeLibraryMap {
-        val locale = Locale.getDefault()
-        val collator = Collator.getInstance(locale).apply {
-            strength = Collator.PRIMARY
-        }
+    private fun AnimeLibraryMap.applySort(
+        // Map<MangaId, List<Track>>
+        trackMap: Map<Long, List<AnimeTrack>>,
+    ): AnimeLibraryMap {
         val sortAlphabetically: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
-            collator.compare(
-                i1.libraryAnime.anime.title.lowercase(locale),
-                i2.libraryAnime.anime.title.lowercase(locale),
-            )
+            i1.libraryAnime.anime.title.lowercase().compareToWithCollator(i2.libraryAnime.anime.title.lowercase())
+        }
+
+        val defaultTrackerScoreSortValue = -1.0
+        val trackerScores by lazy {
+            val trackerMap = trackerManager.loggedInTrackers().associateBy { e -> e.id }
+            trackMap.mapValues { entry ->
+                when {
+                    entry.value.isEmpty() -> null
+                    else ->
+                        entry.value
+                            .mapNotNull { trackerMap[it.syncId]?.animeService?.get10PointScore(it) }
+                            .average()
+                }
+            }
         }
 
         val sortFn: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
@@ -282,12 +293,18 @@ class AnimeLibraryScreenModel(
                 AnimeLibrarySort.Type.DateAdded -> {
                     i1.libraryAnime.anime.dateAdded.compareTo(i2.libraryAnime.anime.dateAdded)
                 }
+                AnimeLibrarySort.Type.TrackerMean -> {
+                    val item1Score = trackerScores[i1.libraryAnime.id] ?: defaultTrackerScoreSortValue
+                    val item2Score = trackerScores[i2.libraryAnime.id] ?: defaultTrackerScoreSortValue
+                    item1Score.compareTo(item2Score)
+                }
                 AnimeLibrarySort.Type.AiringTime -> when {
                     i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) -1 else 1
-                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
-                        i2.libraryAnime.anime.nextEpisodeAiringAt,
-                    )
+                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount ->
+                        i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
+                            i2.libraryAnime.anime.nextEpisodeAiringAt,
+                        )
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
             }
@@ -380,7 +397,7 @@ class AnimeLibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, TriState>> {
-        val loggedInTrackers = trackerManager.trackers.filter { it.isLoggedIn && it is AnimeTracker }
+        val loggedInTrackers = trackerManager.loggedInTrackers()
         return if (loggedInTrackers.isNotEmpty()) {
             val prefFlows = loggedInTrackers
                 .map { libraryPreferences.filterTrackedAnime(it.id.toInt()).changes() }
@@ -541,7 +558,13 @@ class AnimeLibraryScreenModel(
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
-        return (if (isLandscape) libraryPreferences.animeLandscapeColumns() else libraryPreferences.animePortraitColumns()).asState(
+        return (
+            if (isLandscape) {
+                libraryPreferences.animeLandscapeColumns()
+            } else {
+                libraryPreferences.animePortraitColumns()
+            }
+            ).asState(
             screenModelScope,
         )
     }

@@ -19,7 +19,15 @@ import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Anilist(id: Long) : BaseTracker(id, "AniList"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
+class Anilist(id: Long) :
+    BaseTracker(
+        id,
+        "AniList",
+    ),
+    MangaTracker,
+    AnimeTracker,
+    DeletableMangaTracker,
+    DeletableAnimeTracker {
 
     companion object {
         const val READING = 1

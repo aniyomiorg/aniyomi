@@ -141,7 +141,8 @@ class AnimeScreenModel(
     val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
-    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
+    val isUpdateIntervalEnabled =
+        LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
@@ -338,7 +339,7 @@ class AnimeScreenModel(
                 }
 
                 // Finally match with enhanced tracking when available
-                addTracks.bindEnhancedTracks(anime, state.source)
+                addTracks.bindEnhancedTrackers(anime, state.source)
                 if (autoOpenTrack) {
                     showTrackDialog()
                 }

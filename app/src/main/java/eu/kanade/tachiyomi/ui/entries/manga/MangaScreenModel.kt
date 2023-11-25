@@ -136,7 +136,8 @@ class MangaScreenModel(
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
     val skipFiltered by readerPreferences.skipFiltered().asState(screenModelScope)
 
-    val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
+    val isUpdateIntervalEnabled =
+        LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedChapterIds: HashSet<Long> = HashSet()
@@ -334,7 +335,7 @@ class MangaScreenModel(
                 }
 
                 // Finally match with enhanced tracking when available
-                addTracks.bindEnhancedTracks(manga, state.source)
+                addTracks.bindEnhancedTrackers(manga, state.source)
                 if (autoOpenTrack) {
                     showTrackDialog()
                 }

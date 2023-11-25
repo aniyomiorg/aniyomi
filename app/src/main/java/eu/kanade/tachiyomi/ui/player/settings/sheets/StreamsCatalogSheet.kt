@@ -153,7 +153,13 @@ private fun StreamsPageBuilder(
             }
         }
 
-        val addTrackRes = if (externalTrackCode == "sub") R.string.player_add_external_subtitles else R.string.player_add_external_audio
+        val addTrackRes =
+            if (externalTrackCode == "sub") {
+                R.string.player_add_external_subtitles
+            } else {
+                R.string.player_add_external_audio
+            }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -17,7 +17,15 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Shikimori(id: Long) : BaseTracker(id, "Shikimori"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
+class Shikimori(id: Long) :
+    BaseTracker(
+        id,
+        "Shikimori",
+    ),
+    MangaTracker,
+    AnimeTracker,
+    DeletableMangaTracker,
+    DeletableAnimeTracker {
 
     companion object {
         const val READING = 1

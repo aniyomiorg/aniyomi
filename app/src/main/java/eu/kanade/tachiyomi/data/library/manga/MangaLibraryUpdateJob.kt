@@ -286,7 +286,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 downloadChapters(manga, newChapters)
                                                 hasDownloads.set(true)
                                             }
-                                            libraryPreferences.newMangaUpdatesCount().getAndSet { it + newChapters.size }
+                                            libraryPreferences.newMangaUpdatesCount()
+                                                .getAndSet { it + newChapters.size }
 
                                             // Convert to the manga that contains new chapters
                                             newUpdates.add(manga to newChapters.toTypedArray())
@@ -295,7 +296,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         val errorMessage = when (e) {
                                             is NoChaptersException -> context.getString(R.string.no_chapters_error)
                                             // failedUpdates will already have the source, don't need to copy it into the message
-                                            is SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                            is SourceNotInstalledException -> context.getString(
+                                                R.string.loader_not_implemented_error,
+                                            )
                                             else -> e.message
                                         }
                                         failedUpdates.add(manga to errorMessage)
@@ -504,7 +507,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             if (interval > 0) {
                 val restrictions = preferences.autoUpdateDeviceRestrictions().get()
                 val constraints = Constraints(
-                    requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) { NetworkType.UNMETERED } else { NetworkType.CONNECTED },
+                    requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) {
+                        NetworkType.UNMETERED
+                    } else { NetworkType.CONNECTED },
                     requiresCharging = DEVICE_CHARGING in restrictions,
                     requiresBatteryNotLow = true,
                 )

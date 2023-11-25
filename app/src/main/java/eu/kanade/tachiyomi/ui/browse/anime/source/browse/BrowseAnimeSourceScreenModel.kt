@@ -232,7 +232,7 @@ class BrowseAnimeSourceScreenModel(
                 new = new.removeCovers(coverCache)
             } else {
                 setAnimeDefaultEpisodeFlags.await(anime)
-                addTracks.bindEnhancedTracks(anime, source)
+                addTracks.bindEnhancedTrackers(anime, source)
             }
 
             updateAnime.await(new.toAnimeUpdate())

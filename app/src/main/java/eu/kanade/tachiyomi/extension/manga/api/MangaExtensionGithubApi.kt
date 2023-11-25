@@ -72,7 +72,10 @@ internal class MangaExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<MangaExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false,
+    ): List<MangaExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null

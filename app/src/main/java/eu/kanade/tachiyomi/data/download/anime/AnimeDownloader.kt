@@ -206,7 +206,9 @@ class AnimeDownloader(
             val activeDownloadsFlow = queueState.transformLatest { queue ->
                 while (true) {
                     val activeDownloads = queue.asSequence()
-                        .filter { it.status.value <= AnimeDownload.State.DOWNLOADING.value } // Ignore completed downloads, leave them in the queue
+                        .filter {
+                            it.status.value <= AnimeDownload.State.DOWNLOADING.value
+                        } // Ignore completed downloads, leave them in the queue
                         .groupBy { it.source }
                         .toList().take(3) // Concurrently download from 5 different sources
                         .map { (_, downloads) -> downloads.first() }
@@ -554,7 +556,8 @@ class AnimeDownloader(
         val ffmpegOptions = getFFmpegOptions(video, headerOptions, ffmpegFilename())
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
             FFmpegKitConfig.parseArguments(
-                "${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"",
+                "${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries " +
+                    "format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"",
             )
         }
         var duration = 0L
@@ -905,7 +908,9 @@ class AnimeDownloader(
             val downloads = queue.filter { predicate(it) }
             store.removeAll(downloads)
             downloads.forEach { download ->
-                if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                if (download.status == AnimeDownload.State.DOWNLOADING ||
+                    download.status == AnimeDownload.State.QUEUE
+                ) {
                     download.status = AnimeDownload.State.NOT_DOWNLOADED
                 }
             }
@@ -927,7 +932,9 @@ class AnimeDownloader(
             it.forEach { download ->
                 download.progressSubject = null
                 download.progressCallback = null
-                if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                if (download.status == AnimeDownload.State.DOWNLOADING ||
+                    download.status == AnimeDownload.State.QUEUE
+                ) {
                     download.status = AnimeDownload.State.NOT_DOWNLOADED
                 }
             }

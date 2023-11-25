@@ -599,7 +599,9 @@ private fun MangaSummary(
                     val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_caret_down)
                     Icon(
                         painter = rememberAnimatedVectorPainter(image, !expanded),
-                        contentDescription = stringResource(if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand),
+                        contentDescription = stringResource(
+                            if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand,
+                        ),
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.background(Brush.radialGradient(colors = colors.asReversed())),
                     )

@@ -29,7 +29,14 @@ class GestureHandler(
     private val playerControls = activity.playerControls
 
     override fun onSingleTapUp(e: MotionEvent): Boolean {
-        if (SeekState.mode == SeekState.LOCKED || SeekState.mode != SeekState.DOUBLE_TAP || activity.player.timePos == null || activity.player.duration == null) return false
+        if (SeekState.mode == SeekState.LOCKED ||
+            SeekState.mode != SeekState.DOUBLE_TAP ||
+            activity.player.timePos == null ||
+            activity.player.duration == null
+        ) {
+            return false
+        }
+
         when {
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) {
                 activity.doubleTapSeek(

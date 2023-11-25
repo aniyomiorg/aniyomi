@@ -105,7 +105,12 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
     }
 
     init {
-        ContextCompat.registerReceiver(service, packageActionReceiver, IntentFilter(INSTALL_ACTION), ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            service,
+            packageActionReceiver,
+            IntentFilter(INSTALL_ACTION),
+            ContextCompat.RECEIVER_EXPORTED,
+        )
     }
 }
 

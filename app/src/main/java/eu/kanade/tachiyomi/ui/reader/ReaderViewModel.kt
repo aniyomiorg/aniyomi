@@ -161,20 +161,22 @@ class ReaderViewModel @JvmOverloads constructor(
                             (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_READ && !it.read) ||
                                 (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_UNREAD && it.read) ||
                                 (
-                                    manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
-                                        it.name,
-                                        it.scanlator,
-                                        manga.title,
-                                        manga.source,
-                                    )
+                                    manga.downloadedFilterRaw ==
+                                        Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
+                                            it.name,
+                                            it.scanlator,
+                                            manga.title,
+                                            manga.source,
+                                        )
                                     ) ||
                                 (
-                                    manga.downloadedFilterRaw == Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
-                                        it.name,
-                                        it.scanlator,
-                                        manga.title,
-                                        manga.source,
-                                    )
+                                    manga.downloadedFilterRaw ==
+                                        Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
+                                            it.name,
+                                            it.scanlator,
+                                            manga.title,
+                                            manga.source,
+                                        )
                                     ) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_BOOKMARKED && !it.bookmark) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_NOT_BOOKMARKED && it.bookmark)
@@ -783,14 +785,23 @@ class ReaderViewModel @JvmOverloads constructor(
 
         val filename = generateFilename(manga, page)
 
-        // Copy file in background
+        // Pictures directory.
+        val relativePath = if (readerPreferences.folderPerManga().get()) {
+            DiskUtil.buildValidFilename(
+                manga.title,
+            )
+        } else {
+            ""
+        }
+
+        // Copy file in background.
         viewModelScope.launchNonCancellable {
             try {
                 val uri = imageSaver.save(
                     image = Image.Page(
                         inputStream = page.stream!!,
                         name = filename,
-                        location = Location.Pictures(DiskUtil.buildValidFilename(manga.title)),
+                        location = Location.Pictures.create(relativePath),
                     ),
                 )
                 withUIContext {

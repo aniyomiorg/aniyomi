@@ -132,7 +132,13 @@ class AnimeScreen(
                     screenModel.source,
                 )
             }.takeIf { isAnimeHttpSource },
-            onWebViewLongClicked = { copyAnimeUrl(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
+            onWebViewLongClicked = {
+                copyAnimeUrl(
+                    context,
+                    screenModel.anime,
+                    screenModel.source,
+                )
+            }.takeIf { isAnimeHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
             onFilterButtonClicked = screenModel::showSettingsDialog,
@@ -145,11 +151,21 @@ class AnimeScreen(
             },
             onSearch = { query, global -> scope.launch { performSearch(navigator, query, global) } },
             onCoverClicked = screenModel::showCoverDialog,
-            onShareClicked = { shareAnime(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
+            onShareClicked = {
+                shareAnime(
+                    context,
+                    screenModel.anime,
+                    screenModel.source,
+                )
+            }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
-            onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf { screenModel.isUpdateIntervalEnabled && successState.anime.favorite },
-            onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
+            onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
+                screenModel.isUpdateIntervalEnabled && successState.anime.favorite
+            },
+            onMigrateClicked = {
+                navigator.push(MigrateAnimeSearchScreen(successState.anime.id))
+            }.takeIf { successState.anime.favorite },
             changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
             onMultiMarkAsSeenClicked = screenModel::markEpisodesSeen,

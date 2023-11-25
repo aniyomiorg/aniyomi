@@ -86,7 +86,12 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
         } else {
             val updatingText = anime.joinToString("\n") { it.title.chop(40) }
             progressNotificationBuilder
-                .setContentTitle(context.getString(R.string.notification_updating_progress, percentFormatter.format(current.toFloat() / total)))
+                .setContentTitle(
+                    context.getString(
+                        R.string.notification_updating_progress,
+                        percentFormatter.format(current.toFloat() / total),
+                    ),
+                )
                 .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
@@ -381,7 +386,8 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
 
     companion object {
         // TODO: Change when implemented on Aniyomi website
-        const val HELP_WARNING_URL = "https://aniyomi.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
+        const val HELP_WARNING_URL =
+            "https://aniyomi.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
     }
 }
 
