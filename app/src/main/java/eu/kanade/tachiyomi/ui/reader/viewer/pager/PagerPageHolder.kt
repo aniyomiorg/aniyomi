@@ -111,7 +111,7 @@ class PagerPageHolder(
      */
     private fun setQueued() {
         progressIndicator.show()
-        errorLayout?.root?.isVisible = false
+        removeErrorLayout()
     }
 
     /**
@@ -119,7 +119,7 @@ class PagerPageHolder(
      */
     private fun setLoading() {
         progressIndicator.show()
-        errorLayout?.root?.isVisible = false
+        removeErrorLayout()
     }
 
     /**
@@ -127,7 +127,7 @@ class PagerPageHolder(
      */
     private fun setDownloading() {
         progressIndicator.show()
-        errorLayout?.root?.isVisible = false
+        removeErrorLayout()
     }
 
     /**
@@ -135,7 +135,6 @@ class PagerPageHolder(
      */
     private suspend fun setImage() {
         progressIndicator.setProgress(0)
-        errorLayout?.root?.isVisible = false
 
         val streamFn = page.stream ?: return
 
@@ -172,6 +171,7 @@ class PagerPageHolder(
                     pageBackground = background
                 }
             }
+            removeErrorLayout()
         }
     }
 
@@ -281,5 +281,13 @@ class PagerPageHolder(
         errorLayout?.actionOpenInWebView?.isVisible = withOpenInWebView
         errorLayout?.root?.isVisible = true
         return errorLayout!!
+    }
+
+    /**
+     * Removes the decode error layout from the holder, if found.
+     */
+    private fun removeErrorLayout() {
+        errorLayout?.root?.isVisible = false
+        errorLayout = null
     }
 }

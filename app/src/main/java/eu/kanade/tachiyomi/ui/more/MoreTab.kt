@@ -11,8 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -116,8 +116,8 @@ private class MoreScreenModel(
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
 
-    var downloadedOnly by preferences.downloadedOnly().asState(coroutineScope)
-    var incognitoMode by preferences.incognitoMode().asState(coroutineScope)
+    var downloadedOnly by preferences.downloadedOnly().asState(screenModelScope)
+    var incognitoMode by preferences.incognitoMode().asState(screenModelScope)
 
     private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
         DownloadQueueState.Stopped,
@@ -126,7 +126,7 @@ private class MoreScreenModel(
 
     init {
         // Handle running/paused status change and queue progress updating
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 downloadManager.isDownloaderRunning,
                 downloadManager.queueState,

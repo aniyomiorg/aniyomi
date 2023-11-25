@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.fastDistinctBy
@@ -102,11 +102,11 @@ class MangaLibraryScreenModel(
 ) : StateScreenModel<MangaLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
-        coroutineScope,
+        screenModelScope,
     )
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
@@ -164,7 +164,7 @@ class MangaLibraryScreenModel(
                     )
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
 
         combine(
             getLibraryItemPreferencesFlow(),
@@ -186,7 +186,7 @@ class MangaLibraryScreenModel(
                     state.copy(hasActiveFilters = it)
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
 
         // SY -->
         libraryPreferences.groupMangaLibraryBy().changes()
@@ -195,7 +195,7 @@ class MangaLibraryScreenModel(
                     state.copy(groupType = it)
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
         // SY <--
     }
 
@@ -500,7 +500,7 @@ class MangaLibraryScreenModel(
      * @param amount the amount to queue or null to queue all
      */
     private fun downloadUnreadChapters(mangas: List<Manga>, amount: Int?) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             mangas.forEach { manga ->
                 val chapters = getNextChapters.await(manga.id)
                     .fastFilterNot { chapter ->
@@ -524,7 +524,7 @@ class MangaLibraryScreenModel(
      */
     fun markReadSelection(read: Boolean) {
         val mangas = state.value.selection.toList()
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             mangas.forEach { manga ->
                 setReadStatus.await(
                     manga = manga.manga,
@@ -543,7 +543,7 @@ class MangaLibraryScreenModel(
      * @param deleteChapters whether to delete downloaded chapters.
      */
     fun removeMangas(mangaList: List<Manga>, deleteFromLibrary: Boolean, deleteChapters: Boolean) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             val mangaToDelete = mangaList.distinctBy { it.id }
 
             if (deleteFromLibrary) {
@@ -580,7 +580,7 @@ class MangaLibraryScreenModel(
         addCategories: List<Long>,
         removeCategories: List<Long>,
     ) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             mangaList.forEach { manga ->
                 val categoryIds = getCategories.await(manga.id)
                     .map { it.id }
@@ -594,12 +594,12 @@ class MangaLibraryScreenModel(
     }
 
     fun getDisplayMode(): PreferenceMutableState<LibraryDisplayMode> {
-        return libraryPreferences.displayMode().asState(coroutineScope)
+        return libraryPreferences.displayMode().asState(screenModelScope)
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
         return (if (isLandscape) libraryPreferences.mangaLandscapeColumns() else libraryPreferences.mangaPortraitColumns()).asState(
-            coroutineScope,
+            screenModelScope,
         )
     }
 
@@ -703,7 +703,7 @@ class MangaLibraryScreenModel(
     }
 
     fun openChangeCategoryDialog() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             // Create a copy of selected manga
             val mangaList = state.value.selection.map { it.manga }
 

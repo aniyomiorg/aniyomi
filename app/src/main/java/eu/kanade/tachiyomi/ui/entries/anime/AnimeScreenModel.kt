@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import aniyomi.util.nullIfEmpty
 import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
@@ -145,7 +145,7 @@ class AnimeScreenModel(
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
-    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
+    val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
     val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
     val isUpdateIntervalEnabled = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
@@ -171,7 +171,7 @@ class AnimeScreenModel(
     }
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 getAnimeAndEpisodes.subscribe(animeId).distinctUntilChanged(),
                 downloadCache.changes,
@@ -189,7 +189,7 @@ class AnimeScreenModel(
 
         observeDownloads()
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val anime = getAnimeAndEpisodes.awaitAnime(animeId)
             val episodes = getAnimeAndEpisodes.awaitEpisodes(animeId)
                 .toEpisodeItems(anime)
@@ -216,7 +216,7 @@ class AnimeScreenModel(
             observeTrackers()
 
             // Fetch info-episodes when needed
-            if (coroutineScope.isActive) {
+            if (screenModelScope.isActive) {
                 val fetchFromSourceTasks = listOf(
                     async { if (needRefreshInfo) fetchAnimeFromSource() },
                     async { if (needRefreshEpisode) fetchEpisodesFromSource() },
@@ -230,7 +230,7 @@ class AnimeScreenModel(
     }
 
     fun fetchAllFromSource(manualFetch: Boolean = true) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             updateSuccessState { it.copy(isRefreshingData = true) }
             val fetchFromSourceTasks = listOf(
                 async { fetchAnimeFromSource(manualFetch) },
@@ -259,7 +259,7 @@ class AnimeScreenModel(
             if (e is HttpException && e.code == 103) return
 
             logcat(LogPriority.ERROR, e)
-            coroutineScope.launch {
+            screenModelScope.launch {
                 snackbarHostState.showSnackbar(message = with(context) { e.formattedMessage })
             }
         }
@@ -335,7 +335,7 @@ class AnimeScreenModel(
     fun toggleFavorite() {
         toggleFavorite(
             onRemoved = {
-                coroutineScope.launch {
+                screenModelScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
                         message = context.getString(R.string.delete_downloads_for_anime),
@@ -358,7 +358,7 @@ class AnimeScreenModel(
         checkDuplicate: Boolean = true,
     ) {
         val state = successState ?: return
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val anime = state.anime
 
             if (isFavorited) {
@@ -422,7 +422,7 @@ class AnimeScreenModel(
 
     fun showChangeCategoryDialog() {
         val anime = successState?.anime ?: return
-        coroutineScope.launch {
+        screenModelScope.launch {
             val categories = getCategories()
             val selection = getAnimeCategoryIds(anime)
             updateSuccessState { successState ->
@@ -444,7 +444,7 @@ class AnimeScreenModel(
     }
 
     fun setFetchInterval(anime: Anime, interval: Int) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             updateAnime.awaitUpdateFetchInterval(
                 // Custom intervals are negative
                 anime.copy(fetchInterval = -interval),
@@ -494,7 +494,7 @@ class AnimeScreenModel(
         moveAnimeToCategory(categories)
         if (anime.favorite) return
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             updateAnime.awaitUpdateFavorite(anime.id, true)
         }
     }
@@ -510,7 +510,7 @@ class AnimeScreenModel(
     }
 
     private fun moveAnimeToCategory(categoryIds: List<Long>) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             setAnimeCategories.await(animeId, categoryIds)
         }
     }
@@ -529,7 +529,7 @@ class AnimeScreenModel(
     // Episodes list - start
 
     private fun observeDownloads() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             downloadManager.statusFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
@@ -540,7 +540,7 @@ class AnimeScreenModel(
                 }
         }
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             downloadManager.progressFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
@@ -627,7 +627,7 @@ class AnimeScreenModel(
                 with(context) { e.formattedMessage }
             }
 
-            coroutineScope.launch {
+            screenModelScope.launch {
                 snackbarHostState.showSnackbar(message = message)
             }
             val newAnime = animeRepository.getAnimeById(animeId)
@@ -639,7 +639,7 @@ class AnimeScreenModel(
      * @throws IllegalStateException if the swipe action is [LibraryPreferences.EpisodeSwipeAction.Disabled]
      */
     fun episodeSwipe(episodeItem: EpisodeItem, swipeAction: LibraryPreferences.EpisodeSwipeAction) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             executeEpisodeSwipeAction(episodeItem, swipeAction)
         }
     }
@@ -717,7 +717,7 @@ class AnimeScreenModel(
             updateSuccessState { state ->
                 state.copy(hasPromptedToAddBefore = true)
             }
-            coroutineScope.launch {
+            screenModelScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(R.string.snack_add_to_anime_library),
                     actionLabel = context.getString(R.string.action_add),
@@ -793,7 +793,7 @@ class AnimeScreenModel(
      * @param seen whether to mark episodes as seen or unseen.
      */
     fun markEpisodesSeen(episodes: List<Episode>, seen: Boolean) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             setSeenStatus.await(
                 seen = seen,
                 episodes = episodes.toTypedArray(),
@@ -821,7 +821,7 @@ class AnimeScreenModel(
      * @param episodes the list of episodes to bookmark.
      */
     fun bookmarkEpisodes(episodes: List<Episode>, bookmarked: Boolean) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             episodes
                 .filterNot { it.bookmark == bookmarked }
                 .map { EpisodeUpdate(id = it.id, bookmark = bookmarked) }
@@ -836,7 +836,7 @@ class AnimeScreenModel(
      * @param episodes the list of episodes to delete.
      */
     fun deleteEpisodes(episodes: List<Episode>) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             try {
                 successState?.let { state ->
                     downloadManager.deleteEpisodes(
@@ -852,7 +852,7 @@ class AnimeScreenModel(
     }
 
     private fun downloadNewEpisodes(episodes: List<Episode>) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             val anime = successState?.anime ?: return@launchNonCancellable
             val categories = getCategories.await(anime.id).map { it.id }
             if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(
@@ -878,7 +878,7 @@ class AnimeScreenModel(
             TriState.ENABLED_IS -> Anime.EPISODE_SHOW_UNSEEN
             TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_SEEN
         }
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetUnseenFilter(anime, flag)
         }
     }
@@ -896,7 +896,7 @@ class AnimeScreenModel(
             TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_DOWNLOADED
         }
 
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetDownloadedFilter(anime, flag)
         }
     }
@@ -914,7 +914,7 @@ class AnimeScreenModel(
             TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
         }
 
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetBookmarkFilter(anime, flag)
         }
     }
@@ -926,7 +926,7 @@ class AnimeScreenModel(
     fun setDisplayMode(mode: Long) {
         val anime = successState?.anime ?: return
 
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetDisplayMode(anime, mode)
         }
     }
@@ -938,14 +938,14 @@ class AnimeScreenModel(
     fun setSorting(sort: Long) {
         val anime = successState?.anime ?: return
 
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetSortingModeOrFlipOrder(anime, sort)
         }
     }
 
     fun setCurrentSettingsAsDefault(applyToExisting: Boolean) {
         val anime = successState?.anime ?: return
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             libraryPreferences.setEpisodeSettingsDefault(anime)
             if (applyToExisting) {
                 setAnimeDefaultEpisodeFlags.awaitAll()
@@ -1050,7 +1050,7 @@ class AnimeScreenModel(
 
     private fun observeTrackers() {
         val anime = successState?.anime ?: return
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getTracks.subscribe(anime.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->

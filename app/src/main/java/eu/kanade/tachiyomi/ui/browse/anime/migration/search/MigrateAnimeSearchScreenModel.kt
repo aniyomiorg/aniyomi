@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.anime.migration.search
 
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSourceFilter
@@ -18,7 +18,7 @@ class MigrateAnimeSearchScreenModel(
 
     init {
         extensionFilter = initialExtensionFilter
-        coroutineScope.launch {
+        screenModelScope.launch {
             val anime = getAnime.await(animeId)!!
             mutableState.update {
                 it.copy(

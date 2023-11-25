@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.deeplink.manga
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
@@ -32,7 +32,7 @@ class DeepLinkMangaScreenModel(
 ) : StateScreenModel<DeepLinkMangaScreenModel.State>(State.Loading) {
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val source = sourceManager.getCatalogueSources()
                 .filterIsInstance<ResolvableMangaSource>()
                 .firstOrNull { it.getUriType(query) != UriType.Unknown }

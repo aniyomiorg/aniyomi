@@ -39,6 +39,7 @@ fun ChapterSettingsDialog(
     onSortModeChanged: (Long) -> Unit,
     onDisplayModeChanged: (Long) -> Unit,
     onSetAsDefault: (applyToExistingManga: Boolean) -> Unit,
+    onResetToDefault: () -> Unit,
 ) {
     var showSetAsDefaultDialog by rememberSaveable { mutableStateOf(false) }
     if (showSetAsDefaultDialog) {
@@ -60,6 +61,13 @@ fun ChapterSettingsDialog(
                 text = { Text(stringResource(R.string.set_chapter_settings_as_default)) },
                 onClick = {
                     showSetAsDefaultDialog = true
+                    closeMenu()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.action_reset)) },
+                onClick = {
+                    onResetToDefault()
                     closeMenu()
                 },
             )
