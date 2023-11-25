@@ -17,7 +17,15 @@ import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 
-class Kitsu(id: Long) : BaseTracker(id, "Kitsu"), AnimeTracker, MangaTracker, DeletableMangaTracker, DeletableAnimeTracker {
+class Kitsu(id: Long) :
+    BaseTracker(
+        id,
+        "Kitsu",
+    ),
+    AnimeTracker,
+    MangaTracker,
+    DeletableMangaTracker,
+    DeletableAnimeTracker {
 
     companion object {
         const val READING = 1

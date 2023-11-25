@@ -172,7 +172,9 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             title = obj["title_romaji"]?.jsonPrimitive?.content ?: obj["title"]!!.jsonPrimitive.content
             total_episodes = obj["ep_count"]?.jsonPrimitive?.intOrNull ?: 1
             cover_url = "https://simkl.in/posters/" + obj["poster"]!!.jsonPrimitive.content + "_m.webp"
-            summary = obj["all_titles"]?.jsonArray?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
+            summary = obj["all_titles"]?.jsonArray
+                ?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
+
             tracking_url = obj["url"]!!.jsonPrimitive.content
             publishing_status = obj["status"]?.jsonPrimitive?.content ?: "ended"
             publishing_type = obj["type"]?.jsonPrimitive?.content ?: type

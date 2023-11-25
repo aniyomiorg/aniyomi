@@ -24,7 +24,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.model.SManga
@@ -45,6 +44,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.TriState
+import tachiyomi.core.util.lang.compareToWithCollator
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
@@ -67,13 +67,12 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
+import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.Collator
 import java.util.Collections
-import java.util.Locale
 
 /**
  * Typealias for the library manga, using the category as keys, and list of manga as values.
@@ -129,7 +128,7 @@ class MangaLibraryScreenModel(
                     .applyGrouping(groupType)
                     // SY <--
                     .applyFilters(tracks, loggedInTrackers)
-                    .applySort(sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT })
+                    .applySort(tracks, sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT })
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
                             // Filter query
@@ -203,7 +202,7 @@ class MangaLibraryScreenModel(
      * Applies library filters to the given map of manga.
      */
     private suspend fun MangaLibraryMap.applyFilters(
-        trackMap: Map<Long, List<Long>>,
+        trackMap: Map<Long, List<MangaTrack>>,
         loggedInTrackers: Map<Long, TriState>,
     ): MangaLibraryMap {
         val prefs = getLibraryItemPreferencesFlow().first()
@@ -248,7 +247,9 @@ class MangaLibraryScreenModel(
         val filterFnTracking: (MangaLibraryItem) -> Boolean = tracking@{ item ->
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
-            val mangaTracks = trackMap[item.libraryManga.id].orEmpty()
+            val mangaTracks = trackMap
+                .mapValues { entry -> entry.value.map { it.syncId } }[item.libraryManga.id]
+                .orEmpty()
 
             val isExcluded = excludedTracks.isNotEmpty() && mangaTracks.fastAny { it in excludedTracks }
             val isIncluded = includedTracks.isEmpty() || mangaTracks.fastAny { it in includedTracks }
@@ -271,16 +272,27 @@ class MangaLibraryScreenModel(
     /**
      * Applies library sorting to the given map of manga.
      */
-    private fun MangaLibraryMap.applySort(groupSort: MangaLibrarySort? = null): MangaLibraryMap {
-        val locale = Locale.getDefault()
-        val collator = Collator.getInstance(locale).apply {
-            strength = Collator.PRIMARY
-        }
+    private fun MangaLibraryMap.applySort(
+        // Map<MangaId, List<Track>>
+        trackMap: Map<Long, List<MangaTrack>>,
+        groupSort: MangaLibrarySort? = null,
+    ): MangaLibraryMap {
         val sortAlphabetically: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
-            collator.compare(
-                i1.libraryManga.manga.title.lowercase(locale),
-                i2.libraryManga.manga.title.lowercase(locale),
-            )
+            i1.libraryManga.manga.title.lowercase().compareToWithCollator(i2.libraryManga.manga.title.lowercase())
+        }
+
+        val defaultTrackerScoreSortValue = -1.0
+        val trackerScores by lazy {
+            val trackerMap = trackerManager.loggedInTrackers().associateBy { e -> e.id }
+            trackMap.mapValues { entry ->
+                when {
+                    entry.value.isEmpty() -> null
+                    else ->
+                        entry.value
+                            .mapNotNull { trackerMap[it.syncId]?.mangaService?.get10PointScore(it) }
+                            .average()
+                }
+            }
         }
 
         val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
@@ -315,6 +327,11 @@ class MangaLibraryScreenModel(
                 }
                 MangaLibrarySort.Type.DateAdded -> {
                     i1.libraryManga.manga.dateAdded.compareTo(i2.libraryManga.manga.dateAdded)
+                }
+                MangaLibrarySort.Type.TrackerMean -> {
+                    val item1Score = trackerScores[i1.libraryManga.id] ?: defaultTrackerScoreSortValue
+                    val item2Score = trackerScores[i2.libraryManga.id] ?: defaultTrackerScoreSortValue
+                    item1Score.compareTo(item2Score)
                 }
             }
         }
@@ -437,7 +454,7 @@ class MangaLibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, TriState>> {
-        val loggedInTrackers = trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker }
+        val loggedInTrackers = trackerManager.loggedInTrackers()
         return if (loggedInTrackers.isNotEmpty()) {
             val prefFlows = loggedInTrackers
                 .map { libraryPreferences.filterTrackedManga(it.id.toInt()).changes() }
@@ -598,7 +615,13 @@ class MangaLibraryScreenModel(
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
-        return (if (isLandscape) libraryPreferences.mangaLandscapeColumns() else libraryPreferences.mangaPortraitColumns()).asState(
+        return (
+            if (isLandscape) {
+                libraryPreferences.mangaLandscapeColumns()
+            } else {
+                libraryPreferences.mangaPortraitColumns()
+            }
+            ).asState(
             screenModelScope,
         )
     }
@@ -770,7 +793,9 @@ class MangaLibraryScreenModel(
                             .find { it.int == id }
                             .let { it ?: TrackStatus.OTHER }
                             .let { context.getString(it.res) },
-                        order = TrackStatus.entries.toTypedArray().indexOfFirst { it.int == id }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
+                        order = TrackStatus.entries.toTypedArray().indexOfFirst {
+                            it.int == id
+                        }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
                         flags = 0,
                         hidden = false,
                     )

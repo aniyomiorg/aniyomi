@@ -37,7 +37,9 @@ class AndroidAnimeSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
-    override val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+    override val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map {
+        it.values.filterIsInstance<AnimeCatalogueSource>()
+    }
 
     init {
         scope.launch {

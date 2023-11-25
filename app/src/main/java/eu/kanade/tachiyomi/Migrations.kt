@@ -310,7 +310,9 @@ object Migrations {
                         SecurityPreferences.SecureScreenMode.ALWAYS,
                     )
                 }
-                if (DeviceUtil.isMiui && basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER) {
+                if (DeviceUtil.isMiui &&
+                    basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER
+                ) {
                     basePreferences.extensionInstaller().set(
                         BasePreferences.ExtensionInstaller.LEGACY,
                     )
@@ -538,7 +540,10 @@ object Migrations {
                     if (oldVersion < 107) {
                         replacePreferences(
                             preferenceStore = preferenceStore,
-                            filterPredicate = { it.key.startsWith("pref_mangasync_") || it.key.startsWith("track_token_") },
+                            filterPredicate = {
+                                it.key.startsWith("pref_mangasync_") ||
+                                    it.key.startsWith("track_token_")
+                            },
                             newKey = { Preference.privateKey(it) },
                         )
                     }

@@ -63,7 +63,8 @@ actual class LocalAnimeSource(
 
     override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage {
         val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
-        val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+        val lastModifiedLimit by
+            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
         var animeDirs = baseDirsFiles
             // Filter out files that are hidden and is not a folder
@@ -149,7 +150,8 @@ actual class LocalAnimeSource(
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
         val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
-        val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+        val lastModifiedLimit by
+            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
         var animeDirs = baseDirsFiles
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.startsWith('.') }

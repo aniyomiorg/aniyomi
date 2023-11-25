@@ -17,7 +17,15 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class MyAnimeList(id: Long) : BaseTracker(id, "MyAnimeList"), MangaTracker, AnimeTracker, DeletableMangaTracker, DeletableAnimeTracker {
+class MyAnimeList(id: Long) :
+    BaseTracker(
+        id,
+        "MyAnimeList",
+    ),
+    MangaTracker,
+    AnimeTracker,
+    DeletableMangaTracker,
+    DeletableAnimeTracker {
 
     companion object {
         const val READING = 1

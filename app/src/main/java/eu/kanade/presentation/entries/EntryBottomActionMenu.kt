@@ -126,7 +126,11 @@ fun EntryBottomActionMenu(
                     )
                 }
                 if (onRemoveBookmarkClicked != null) {
-                    val removeBookmark = if (isManga) R.string.action_remove_bookmark else R.string.action_remove_bookmark_episode
+                    val removeBookmark = if (isManga) {
+                        R.string.action_remove_bookmark
+                    } else {
+                        R.string.action_remove_bookmark_episode
+                    }
                     Button(
                         title = stringResource(removeBookmark),
                         icon = Icons.Outlined.BookmarkRemove,
@@ -156,7 +160,11 @@ fun EntryBottomActionMenu(
                     )
                 }
                 if (onMarkPreviousAsViewedClicked != null) {
-                    val previousUnviewed = if (isManga) R.string.action_mark_previous_as_read else R.string.action_mark_previous_as_seen
+                    val previousUnviewed = if (isManga) {
+                        R.string.action_mark_previous_as_read
+                    } else {
+                        R.string.action_mark_previous_as_seen
+                    }
                     Button(
                         title = stringResource(previousUnviewed),
                         icon = ImageVector.vectorResource(R.drawable.ic_done_prev_24dp),

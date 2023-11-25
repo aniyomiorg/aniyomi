@@ -77,7 +77,8 @@ actual class LocalMangaSource(
 
     override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage {
         val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
-        val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+        val lastModifiedLimit by
+            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
         var mangaDirs = baseDirsFiles
             // Filter out files that are hidden and is not a folder

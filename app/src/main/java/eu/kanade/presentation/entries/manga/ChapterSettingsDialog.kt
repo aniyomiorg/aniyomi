@@ -82,7 +82,8 @@ fun ChapterSettingsDialog(
                 0 -> {
                     FilterPage(
                         downloadFilter = manga?.downloadedFilter ?: TriState.DISABLED,
-                        onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { manga?.forceDownloaded() == true },
+                        onDownloadFilterChanged = onDownloadFilterChanged
+                            .takeUnless { manga?.forceDownloaded() == true },
                         unreadFilter = manga?.unreadFilter ?: TriState.DISABLED,
                         onUnreadFilterChanged = onUnreadFilterChanged,
                         bookmarkedFilter = manga?.bookmarkedFilter ?: TriState.DISABLED,
@@ -153,6 +154,11 @@ private fun SortPage(
         label = stringResource(R.string.sort_by_upload_date),
         sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_UPLOAD_DATE },
         onClick = { onItemSelected(Manga.CHAPTER_SORTING_UPLOAD_DATE) },
+    )
+    SortItem(
+        label = stringResource(R.string.action_sort_alpha),
+        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_ALPHABET },
+        onClick = { onItemSelected(Manga.CHAPTER_SORTING_ALPHABET) },
     )
 }
 

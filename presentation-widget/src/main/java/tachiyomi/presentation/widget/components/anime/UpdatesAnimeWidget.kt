@@ -70,7 +70,10 @@ fun UpdatesAnimeWidget(
                                         .padding(horizontal = 3.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    val intent = Intent(LocalContext.current, Class.forName(Constants.MAIN_ACTIVITY)).apply {
+                                    val intent = Intent(
+                                        LocalContext.current,
+                                        Class.forName(Constants.MAIN_ACTIVITY),
+                                    ).apply {
                                         action = Constants.SHORTCUT_ANIME
                                         putExtra(Constants.ANIME_EXTRA, animeId)
                                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

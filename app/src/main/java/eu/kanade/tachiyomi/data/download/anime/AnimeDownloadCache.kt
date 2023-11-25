@@ -138,7 +138,10 @@ class AnimeDownloadCache(
         if (sourceDir != null) {
             val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(animeTitle)]
             if (animeDir != null) {
-                return provider.getValidEpisodeDirNames(episodeName, episodeScanlator).any { it in animeDir.episodeDirs }
+                return provider.getValidEpisodeDirNames(
+                    episodeName,
+                    episodeScanlator,
+                ).any { it in animeDir.episodeDirs }
             }
         }
         return false

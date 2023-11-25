@@ -71,10 +71,9 @@ class ReaderPreferences(
 
     fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", WEBTOON_PADDING_MIN)
 
-    fun readerHideThreshold() = preferenceStore.getEnum(
-        "reader_hide_threshold",
-        ReaderHideThreshold.LOW,
-    )
+    fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", ReaderHideThreshold.LOW)
+
+    fun folderPerManga() = preferenceStore.getBoolean("create_folder_per_manga", false)
 
     fun skipRead() = preferenceStore.getBoolean("skip_read", false)
 

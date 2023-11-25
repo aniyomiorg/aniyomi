@@ -159,7 +159,9 @@ class BackupRestorer(
     private suspend fun performRestore(uri: Uri, sync: Boolean): Boolean {
         val backup = BackupUtil.decodeBackup(context, uri)
 
-        restoreAmount = backup.backupManga.size + backup.backupAnime.size + 3 // +3 for categories, app prefs, source prefs
+        restoreAmount =
+            backup.backupManga.size +
+            backup.backupAnime.size + 3 // +3 for categories, app prefs, source prefs
 
         // Restore categories
         if (backup.backupCategories.isNotEmpty()) {
@@ -1330,7 +1332,12 @@ class BackupRestorer(
         }
 
         restoreProgress += 1
-        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.extension_settings), context.getString(R.string.restoring_backup))
+        showRestoreProgress(
+            restoreProgress,
+            restoreAmount,
+            context.getString(R.string.extension_settings),
+            context.getString(R.string.restoring_backup),
+        )
     }
 
     private fun restoreExtensions(extensions: List<BackupExtension>) {

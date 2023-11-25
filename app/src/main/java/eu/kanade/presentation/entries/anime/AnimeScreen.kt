@@ -525,7 +525,9 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                            if (timer > 0L && showNextEpisodeAirTime &&
+                                state.anime.status.toInt() != SAnime.COMPLETED
+                            ) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
@@ -715,7 +717,11 @@ fun AnimeScreenLargeImpl(
                             val isWatching = remember(state.episodes) {
                                 state.episodes.fastAny { it.episode.seen }
                             }
-                            Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
+                            Text(
+                                text = stringResource(
+                                    if (isWatching) R.string.action_resume else R.string.action_start,
+                                ),
+                            )
                         },
                         icon = {
                             Icon(
@@ -816,7 +822,9 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                                    if (timer > 0L && showNextEpisodeAirTime &&
+                                        state.anime.status.toInt() != SAnime.COMPLETED
+                                    ) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
