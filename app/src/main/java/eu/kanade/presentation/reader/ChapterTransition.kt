@@ -34,6 +34,7 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.common.io.Files.append
@@ -45,7 +46,6 @@ import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import tachiyomi.domain.items.service.calculateChapterGap
-import tachiyomi.presentation.core.util.ThemePreviews
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
@@ -317,7 +317,7 @@ private val FakeChapterLongTitle = previewChapter(
     chapterNumber = 1f,
 )
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TransitionTextPreview() {
     TachiyomiTheme {
@@ -334,7 +334,7 @@ private fun TransitionTextPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TransitionTextLongTitlePreview() {
     TachiyomiTheme {
@@ -351,7 +351,7 @@ private fun TransitionTextLongTitlePreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TransitionTextWithGapPreview() {
     TachiyomiTheme {
@@ -368,7 +368,7 @@ private fun TransitionTextWithGapPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TransitionTextNoNextPreview() {
     TachiyomiTheme {
@@ -382,7 +382,7 @@ private fun TransitionTextNoNextPreview() {
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TransitionTextNoPreviousPreview() {
     TachiyomiTheme {

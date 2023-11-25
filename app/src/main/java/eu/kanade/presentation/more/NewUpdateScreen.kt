@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.material3.Material3RichText
@@ -24,7 +25,6 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.InfoScreen
-import tachiyomi.presentation.core.util.ThemePreviews
 
 @Composable
 fun NewUpdateScreen(
@@ -67,7 +67,7 @@ fun NewUpdateScreen(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun NewUpdateScreenPreview() {
     TachiyomiTheme {

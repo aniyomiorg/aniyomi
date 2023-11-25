@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.track.manga.model.toDbTrack
@@ -54,7 +55,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import tachiyomi.presentation.core.util.ThemePreviews
 import java.text.DateFormat
 
 private const val UnsetStatusTextAlpha = 0.5F
@@ -322,7 +322,7 @@ fun TrackInfoItemMenu(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun TrackInfoDialogHomePreviews(
     @PreviewParameter(MangaTrackInfoDialogHomePreviewProvider::class)
