@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
@@ -161,19 +160,19 @@ class Kitsu(id: Long) : BaseTracker(id, "Kitsu"), AnimeTracker, MangaTracker, De
         }
     }
 
-    override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack, hasWatchedEpisodes: Boolean): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUserId())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
             track.media_id = remoteTrack.media_id
 
             if (track.status != COMPLETED) {
-                track.status = if (hasReadChapters) WATCHING else track.status
+                track.status = if (hasWatchedEpisodes) WATCHING else track.status
             }
 
             update(track)
         } else {
-            track.status = if (hasReadChapters) WATCHING else PLAN_TO_WATCH
+            track.status = if (hasWatchedEpisodes) WATCHING else PLAN_TO_WATCH
             track.score = 0F
             add(track)
         }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MoreVert
@@ -401,7 +400,7 @@ fun SearchToolbar(
 @Composable
 fun UpIcon(navigationIcon: ImageVector? = null) {
     val icon = navigationIcon
-        ?: Icons.AutoMirrored.Outlined.ArrowBack
+        ?: Icons.Outlined.ArrowBack
     Icon(
         imageVector = icon,
         contentDescription = stringResource(R.string.abc_action_bar_up_description),

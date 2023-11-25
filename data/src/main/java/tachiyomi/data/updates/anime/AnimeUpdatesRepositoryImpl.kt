@@ -2,6 +2,7 @@ package tachiyomi.data.updates.anime
 
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.domain.updates.anime.repository.AnimeUpdatesRepository
 
@@ -15,7 +16,7 @@ class AnimeUpdatesRepositoryImpl(
                 seen = seen,
                 after = after,
                 limit = limit,
-                mapper = animeUpdateWithRelationMapper,
+                mapper = ::mapUpdatesWithRelations,
             )
         }
     }
@@ -25,7 +26,7 @@ class AnimeUpdatesRepositoryImpl(
             animeupdatesViewQueries.getRecentAnimeUpdates(
                 after,
                 limit,
-                animeUpdateWithRelationMapper,
+                ::mapUpdatesWithRelations,
             )
         }
     }
@@ -36,8 +37,45 @@ class AnimeUpdatesRepositoryImpl(
                 seen = seen,
                 after = after,
                 limit = limit,
-                mapper = animeUpdateWithRelationMapper,
+                mapper = ::mapUpdatesWithRelations,
             )
         }
     }
+
+    private fun mapUpdatesWithRelations(
+        animeId: Long,
+        animeTitle: String,
+        episodeId: Long,
+        episodeName: String,
+        scanlator: String?,
+        seen: Boolean,
+        bookmark: Boolean,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+        sourceId: Long,
+        favorite: Boolean,
+        thumbnailUrl: String?,
+        coverLastModified: Long,
+        dateUpload: Long,
+        dateFetch: Long,
+    ): AnimeUpdatesWithRelations = AnimeUpdatesWithRelations(
+        animeId = animeId,
+        animeTitle = animeTitle,
+        episodeId = episodeId,
+        episodeName = episodeName,
+        scanlator = scanlator,
+        seen = seen,
+        bookmark = bookmark,
+        lastSecondSeen = lastSecondSeen,
+        totalSeconds = totalSeconds,
+        sourceId = sourceId,
+        dateFetch = dateFetch,
+        coverData = AnimeCover(
+            animeId = animeId,
+            sourceId = sourceId,
+            isAnimeFavorite = favorite,
+            url = thumbnailUrl,
+            lastModified = coverLastModified,
+        ),
+    )
 }

@@ -15,13 +15,13 @@ class MangaHistoryRepositoryImpl(
 
     override fun getMangaHistory(query: String): Flow<List<MangaHistoryWithRelations>> {
         return handler.subscribeToList {
-            historyViewQueries.history(query, mangaHistoryWithRelationsMapper)
+            historyViewQueries.history(query, MangaHistoryMapper::mapMangaHistoryWithRelations)
         }
     }
 
     override suspend fun getLastMangaHistory(): MangaHistoryWithRelations? {
         return handler.awaitOneOrNull {
-            historyViewQueries.getLatestHistory(mangaHistoryWithRelationsMapper)
+            historyViewQueries.getLatestHistory(MangaHistoryMapper::mapMangaHistoryWithRelations)
         }
     }
 
@@ -30,7 +30,7 @@ class MangaHistoryRepositoryImpl(
     }
 
     override suspend fun getHistoryByMangaId(mangaId: Long): List<MangaHistory> {
-        return handler.awaitList { historyQueries.getHistoryByMangaId(mangaId, mangaHistoryMapper) }
+        return handler.awaitList { historyQueries.getHistoryByMangaId(mangaId, MangaHistoryMapper::mapMangaHistory) }
     }
 
     override suspend fun resetMangaHistory(historyId: Long) {

@@ -10,13 +10,12 @@ import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
-import eu.kanade.presentation.extensions.RequestStoragePermission
+import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.download.anime.animeDownloadTab
 import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.util.storage.DiskUtil
 
 data class DownloadsTab(
     private val isManga: Boolean = false,
@@ -51,6 +50,6 @@ data class DownloadsTab(
         }
 
         // For local source
-        DiskUtil.RequestStoragePermission()
+        PermissionRequestHelper.requestStoragePermission()
     }
 }

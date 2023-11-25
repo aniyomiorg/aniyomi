@@ -52,7 +52,7 @@ fun CategoryListItem(
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Icons.AutoMirrored.Outlined.Label, contentDescription = "")
+            Icon(imageVector = Icons.Outlined.Label, contentDescription = "")
             Text(
                 text = category.name,
                 modifier = Modifier

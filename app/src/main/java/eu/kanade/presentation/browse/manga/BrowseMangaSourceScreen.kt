@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
@@ -80,7 +79,7 @@ fun BrowseSourceContent(
                 listOf(
                     EmptyScreenAction(
                         stringResId = R.string.local_source_help_guide,
-                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        icon = Icons.Outlined.HelpOutline,
                         onClick = onLocalSourceHelpClick,
                     ),
                 )
@@ -98,7 +97,7 @@ fun BrowseSourceContent(
                     ),
                     EmptyScreenAction(
                         stringResId = R.string.label_help,
-                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                        icon = Icons.Outlined.HelpOutline,
                         onClick = onHelpClick,
                     ),
                 )

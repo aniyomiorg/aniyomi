@@ -56,7 +56,7 @@ fun BrowseMangaSourceToolbar(
                 actions = listOfNotNull(
                     AppBar.Action(
                         title = stringResource(R.string.action_display_mode),
-                        icon = if (displayMode == LibraryDisplayMode.List) Icons.AutoMirrored.Filled.ViewList else Icons.Filled.ViewModule,
+                        icon = if (displayMode == LibraryDisplayMode.List) Icons.Filled.ViewList else Icons.Filled.ViewModule,
                         onClick = { selectingDisplayMode = true },
                     ),
                     if (isLocalSource) {
