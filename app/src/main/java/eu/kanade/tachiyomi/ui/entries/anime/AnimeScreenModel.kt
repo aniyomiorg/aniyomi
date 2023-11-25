@@ -293,7 +293,7 @@ class AnimeScreenModel(
             (sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource).updateAnimeInfo(
                 anime.toSAnime(),
             )
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 updateAnime.await(
                     AnimeUpdate(
                         anime.id,

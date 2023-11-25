@@ -288,7 +288,7 @@ class MangaScreenModel(
             (sourceManager.get(LocalMangaSource.ID) as LocalMangaSource).updateMangaInfo(
                 manga.toSManga(),
             )
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 updateManga.await(
                     MangaUpdate(
                         manga.id,
