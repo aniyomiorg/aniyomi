@@ -12,6 +12,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
+import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.toSManga
@@ -76,6 +77,7 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.items.service.calculateChapterGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
@@ -83,6 +85,7 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.math.floor
 
 class MangaScreenModel(
     val context: Context,
@@ -130,10 +133,10 @@ class MangaScreenModel(
     private val isFavorited: Boolean
         get() = manga?.favorite ?: false
 
-    private val allChapters: List<ChapterItem>?
+    private val allChapters: List<ChapterList.Item>?
         get() = successState?.chapters
 
-    private val filteredChapters: List<ChapterItem>?
+    private val filteredChapters: List<ChapterList.Item>?
         get() = successState?.processedChapters
 
     val chapterSwipeStartAction = libraryPreferences.swipeChapterEndAction().get()
@@ -176,7 +179,7 @@ class MangaScreenModel(
                     updateSuccessState {
                         it.copy(
                             manga = manga,
-                            chapters = chapters.toChapterItems(manga),
+                            chapters = chapters.toChapterListItems(manga),
                         )
                     }
                 }
@@ -187,7 +190,7 @@ class MangaScreenModel(
         screenModelScope.launchIO {
             val manga = getMangaAndChapters.awaitManga(mangaId)
             val chapters = getMangaAndChapters.awaitChapters(mangaId)
-                .toChapterItems(manga)
+                .toChapterListItems(manga)
 
             if (!manga.favorite) {
                 setMangaDefaultChapterFlags.await(manga)
@@ -550,7 +553,7 @@ class MangaScreenModel(
 
     private fun updateDownloadState(download: MangaDownload) {
         updateSuccessState { successState ->
-            val modifiedIndex = successState.chapters.indexOfFirst { it.chapter.id == download.chapter.id }
+            val modifiedIndex = successState.chapters.indexOfFirst { it.id == download.chapter.id }
             if (modifiedIndex < 0) return@updateSuccessState successState
 
             val newChapters = successState.chapters.toMutableList().apply {
@@ -562,7 +565,7 @@ class MangaScreenModel(
         }
     }
 
-    private fun List<Chapter>.toChapterItems(manga: Manga): List<ChapterItem> {
+    private fun List<Chapter>.toChapterListItems(manga: Manga): List<ChapterList.Item> {
         val isLocal = manga.isLocal()
         return map { chapter ->
             val activeDownload = if (isLocal) {
@@ -586,7 +589,7 @@ class MangaScreenModel(
                 else -> MangaDownload.State.NOT_DOWNLOADED
             }
 
-            ChapterItem(
+            ChapterList.Item(
                 chapter = chapter,
                 downloadState = downloadState,
                 downloadProgress = activeDownload?.progress ?: 0,
@@ -634,7 +637,7 @@ class MangaScreenModel(
     /**
      * @throws IllegalStateException if the swipe action is [LibraryPreferences.ChapterSwipeAction.Disabled]
      */
-    fun chapterSwipe(chapterItem: ChapterItem, swipeAction: LibraryPreferences.ChapterSwipeAction) {
+    fun chapterSwipe(chapterItem: ChapterList.Item, swipeAction: LibraryPreferences.ChapterSwipeAction) {
         screenModelScope.launch {
             executeChapterSwipeAction(chapterItem, swipeAction)
         }
@@ -644,7 +647,7 @@ class MangaScreenModel(
      * @throws IllegalStateException if the swipe action is [LibraryPreferences.ChapterSwipeAction.Disabled]
      */
     private fun executeChapterSwipeAction(
-        chapterItem: ChapterItem,
+        chapterItem: ChapterList.Item,
         swipeAction: LibraryPreferences.ChapterSwipeAction,
     ) {
         val chapter = chapterItem.chapter
@@ -730,7 +733,7 @@ class MangaScreenModel(
     }
 
     fun runChapterDownloadActions(
-        items: List<ChapterItem>,
+        items: List<ChapterList.Item>,
         action: ChapterDownloadAction,
     ) {
         when (action) {
@@ -747,7 +750,7 @@ class MangaScreenModel(
             }
 
             ChapterDownloadAction.CANCEL -> {
-                val chapterId = items.singleOrNull()?.chapter?.id ?: return
+                val chapterId = items.singleOrNull()?.id ?: return
                 cancelDownload(chapterId)
             }
 
@@ -958,14 +961,14 @@ class MangaScreenModel(
     }
 
     fun toggleSelection(
-        item: ChapterItem,
+        item: ChapterList.Item,
         selected: Boolean,
         userSelected: Boolean = false,
         fromLongPress: Boolean = false,
     ) {
         updateSuccessState { successState ->
             val newChapters = successState.processedChapters.toMutableList().apply {
-                val selectedIndex = successState.processedChapters.indexOfFirst { it.chapter.id == item.chapter.id }
+                val selectedIndex = successState.processedChapters.indexOfFirst { it.id == item.chapter.id }
                 if (selectedIndex < 0) return@apply
 
                 val selectedItem = get(selectedIndex)
@@ -973,7 +976,7 @@ class MangaScreenModel(
 
                 val firstSelection = none { it.selected }
                 set(selectedIndex, selectedItem.copy(selected = selected))
-                selectedChapterIds.addOrRemove(item.chapter.id, selected)
+                selectedChapterIds.addOrRemove(item.id, selected)
 
                 if (selected && userSelected && fromLongPress) {
                     if (firstSelection) {
@@ -996,7 +999,7 @@ class MangaScreenModel(
                         range.forEach {
                             val inbetweenItem = get(it)
                             if (!inbetweenItem.selected) {
-                                selectedChapterIds.add(inbetweenItem.chapter.id)
+                                selectedChapterIds.add(inbetweenItem.id)
                                 set(it, inbetweenItem.copy(selected = true))
                             }
                         }
@@ -1024,7 +1027,7 @@ class MangaScreenModel(
     fun toggleAllSelection(selected: Boolean) {
         updateSuccessState { successState ->
             val newChapters = successState.chapters.map {
-                selectedChapterIds.addOrRemove(it.chapter.id, selected)
+                selectedChapterIds.addOrRemove(it.id, selected)
                 it.copy(selected = selected)
             }
             selectedPositions[0] = -1
@@ -1036,7 +1039,7 @@ class MangaScreenModel(
     fun invertSelection() {
         updateSuccessState { successState ->
             val newChapters = successState.chapters.map {
-                selectedChapterIds.addOrRemove(it.chapter.id, !it.selected)
+                selectedChapterIds.addOrRemove(it.id, !it.selected)
                 it.copy(selected = !it.selected)
             }
             selectedPositions[0] = -1
@@ -1136,7 +1139,7 @@ class MangaScreenModel(
             val manga: Manga,
             val source: MangaSource,
             val isFromSource: Boolean,
-            val chapters: List<ChapterItem>,
+            val chapters: List<ChapterList.Item>,
             val trackItems: List<MangaTrackItem> = emptyList(),
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
@@ -1145,6 +1148,33 @@ class MangaScreenModel(
 
             val processedChapters by lazy {
                 chapters.applyFilters(manga).toList()
+            }
+
+            val chapterListItems by lazy {
+                processedChapters.insertSeparators { before, after ->
+                    val (lowerChapter, higherChapter) = if (manga.sortDescending()) {
+                        after to before
+                    } else {
+                        before to after
+                    }
+                    if (higherChapter == null) return@insertSeparators null
+
+                    if (lowerChapter == null) {
+                        floor(higherChapter.chapter.chapterNumber)
+                            .toInt()
+                            .minus(1)
+                            .coerceAtLeast(0)
+                    } else {
+                        calculateChapterGap(higherChapter.chapter, lowerChapter.chapter)
+                    }
+                        .takeIf { it > 0 }
+                        ?.let { missingCount ->
+                            ChapterList.MissingCount(
+                                id = "${lowerChapter?.id}-${higherChapter.id}",
+                                count = missingCount,
+                            )
+                        }
+                }
             }
 
             val trackingAvailable: Boolean
@@ -1157,7 +1187,7 @@ class MangaScreenModel(
              * Applies the view filters to the list of chapters obtained from the database.
              * @return an observable of the list of chapters filtered and sorted.
              */
-            private fun List<ChapterItem>.applyFilters(manga: Manga): Sequence<ChapterItem> {
+            private fun List<ChapterList.Item>.applyFilters(manga: Manga): Sequence<ChapterList.Item> {
                 val isLocalManga = manga.isLocal()
                 val unreadFilter = manga.unreadFilter
                 val downloadedFilter = manga.downloadedFilter
@@ -1178,11 +1208,21 @@ class MangaScreenModel(
 }
 
 @Immutable
-data class ChapterItem(
-    val chapter: Chapter,
-    val downloadState: MangaDownload.State,
-    val downloadProgress: Int,
-    val selected: Boolean = false,
-) {
-    val isDownloaded = downloadState == MangaDownload.State.DOWNLOADED
+sealed class ChapterList {
+    @Immutable
+    data class MissingCount(
+        val id: String,
+        val count: Int,
+    ) : ChapterList()
+
+    @Immutable
+    data class Item(
+        val chapter: Chapter,
+        val downloadState: MangaDownload.State,
+        val downloadProgress: Int,
+        val selected: Boolean = false,
+    ) : ChapterList() {
+        val id = chapter.id
+        val isDownloaded = downloadState == MangaDownload.State.DOWNLOADED
+    }
 }

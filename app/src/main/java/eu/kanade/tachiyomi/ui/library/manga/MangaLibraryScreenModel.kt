@@ -56,7 +56,7 @@ import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.history.manga.interactor.GetNextChapters
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.manga.model.MangaLibraryGroup
@@ -85,7 +85,7 @@ class MangaLibraryScreenModel(
     private val getCategories: GetVisibleMangaCategories = Injekt.get(),
     private val getTracksPerManga: GetTracksPerManga = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
-    private val getChaptersByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val getChaptersByMangaId: GetChaptersByMangaId = Injekt.get(),
     private val setReadStatus: SetReadStatus = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),

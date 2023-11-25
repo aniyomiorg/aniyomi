@@ -1,6 +1,7 @@
 package eu.kanade.domain.source.service
 
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -35,7 +36,7 @@ class SourcePreferences(
         SetMigrateSorting.Direction.ASCENDING,
     )
 
-    fun trustedSignatures() = preferenceStore.getStringSet("trusted_signatures", emptySet())
+    fun trustedSignatures() = preferenceStore.getStringSet(Preference.appStateKey("trusted_signatures"), emptySet())
 
     // Mixture Sources
 
@@ -45,8 +46,14 @@ class SourcePreferences(
     fun pinnedAnimeSources() = preferenceStore.getStringSet("pinned_anime_catalogues", emptySet())
     fun pinnedMangaSources() = preferenceStore.getStringSet("pinned_catalogues", emptySet())
 
-    fun lastUsedAnimeSource() = preferenceStore.getLong("last_anime_catalogue_source", -1)
-    fun lastUsedMangaSource() = preferenceStore.getLong("last_catalogue_source", -1)
+    fun lastUsedAnimeSource() = preferenceStore.getLong(
+        Preference.appStateKey("last_anime_catalogue_source"),
+        -1,
+    )
+    fun lastUsedMangaSource() = preferenceStore.getLong(
+        Preference.appStateKey("last_catalogue_source"),
+        -1,
+    )
 
     fun animeExtensionUpdatesCount() = preferenceStore.getInt("animeext_updates_count", 0)
     fun mangaExtensionUpdatesCount() = preferenceStore.getInt("ext_updates_count", 0)

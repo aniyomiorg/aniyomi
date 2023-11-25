@@ -1,6 +1,5 @@
 package eu.kanade.presentation.entries.anime.components
 
-import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -29,6 +28,7 @@ import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.PersonOutline
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Close
@@ -43,6 +43,7 @@ import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SuggestionChip
@@ -128,7 +129,7 @@ fun AnimeInfoBox(
                 .alpha(.2f),
         )
 
-        // Manga & source info
+        // Anime & source info
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
             if (!isTabletUi) {
                 AnimeAndSourceTitlesSmall(
@@ -136,7 +137,6 @@ fun AnimeInfoBox(
                     coverDataProvider = coverDataProvider,
                     onCoverClick = onCoverClick,
                     title = title,
-                    context = LocalContext.current,
                     doSearch = doSearch,
                     author = author,
                     artist = artist,
@@ -150,7 +150,6 @@ fun AnimeInfoBox(
                     coverDataProvider = coverDataProvider,
                     onCoverClick = onCoverClick,
                     title = title,
-                    context = LocalContext.current,
                     doSearch = doSearch,
                     author = author,
                     artist = artist,
@@ -335,7 +334,6 @@ private fun AnimeAndSourceTitlesLarge(
     coverDataProvider: () -> Anime,
     onCoverClick: () -> Unit,
     title: String,
-    context: Context,
     doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
     artist: String?,
@@ -356,104 +354,16 @@ private fun AnimeAndSourceTitlesLarge(
             onClick = onCoverClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = title.ifBlank { stringResource(R.string.unknown_title) },
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.clickableNoIndication(
-                onLongClick = { if (title.isNotBlank()) context.copyToClipboard(title, title) },
-                onClick = { if (title.isNotBlank()) doSearch(title, true) },
-            ),
+        AnimeContentInfo(
+            title = title,
+            doSearch = doSearch,
+            author = author,
+            artist = artist,
+            status = status,
+            sourceName = sourceName,
+            isStubSource = isStubSource,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = author?.takeIf { it.isNotBlank() } ?: stringResource(R.string.unknown_studio),
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier
-                .secondaryItemAlpha()
-                .padding(top = 2.dp)
-                .clickableNoIndication(
-                    onLongClick = {
-                        if (!author.isNullOrBlank()) {
-                            context.copyToClipboard(
-                                author,
-                                author,
-                            )
-                        }
-                    },
-                    onClick = { if (!author.isNullOrBlank()) doSearch(author, true) },
-                ),
-            textAlign = TextAlign.Center,
-        )
-        if (!artist.isNullOrBlank() && author != artist) {
-            Text(
-                text = artist,
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier
-                    .secondaryItemAlpha()
-                    .padding(top = 2.dp)
-                    .clickableNoIndication(
-                        onLongClick = { context.copyToClipboard(artist, artist) },
-                        onClick = { doSearch(artist, true) },
-                    ),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.secondaryItemAlpha(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = when (status) {
-                    SAnime.ONGOING.toLong() -> Icons.Outlined.Schedule
-                    SAnime.COMPLETED.toLong() -> Icons.Outlined.DoneAll
-                    SAnime.LICENSED.toLong() -> Icons.Outlined.AttachMoney
-                    SAnime.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
-                    SAnime.CANCELLED.toLong() -> Icons.Outlined.Close
-                    SAnime.ON_HIATUS.toLong() -> Icons.Outlined.Pause
-                    else -> Icons.Outlined.Block
-                },
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 4.dp)
-                    .size(16.dp),
-            )
-            ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
-                Text(
-                    text = when (status) {
-                        SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
-                        SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
-                        SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
-                        SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(
-                            R.string.publishing_finished,
-                        )
-                        SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
-                        SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
-                        else -> stringResource(R.string.unknown)
-                    },
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                )
-                DotSeparatorText()
-                if (isStubSource) {
-                    Icon(
-                        imageVector = Icons.Outlined.Warning,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .size(16.dp),
-                        tint = MaterialTheme.colorScheme.error,
-                    )
-                }
-                Text(
-                    text = sourceName,
-                    modifier = Modifier.clickableNoIndication { doSearch(sourceName, false) },
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                )
-            }
-        }
     }
 }
 
@@ -463,7 +373,6 @@ private fun AnimeAndSourceTitlesSmall(
     coverDataProvider: () -> Anime,
     onCoverClick: () -> Unit,
     title: String,
-    context: Context,
     doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
     artist: String?,
@@ -489,137 +398,161 @@ private fun AnimeAndSourceTitlesSmall(
         Column(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
-            Text(
-                text = title.ifBlank { stringResource(R.string.unknown_title) },
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.clickableNoIndication(
+            AnimeContentInfo(
+                title = title,
+                doSearch = doSearch,
+                author = author,
+                artist = artist,
+                status = status,
+                sourceName = sourceName,
+                isStubSource = isStubSource,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AnimeContentInfo(
+    title: String,
+    textAlign: TextAlign? = LocalTextStyle.current.textAlign,
+    doSearch: (query: String, global: Boolean) -> Unit,
+    author: String?,
+    artist: String?,
+    status: Long,
+    sourceName: String,
+    isStubSource: Boolean,
+) {
+    val context = LocalContext.current
+    Text(
+        text = title.ifBlank { stringResource(R.string.unknown_title) },
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.clickableNoIndication(
+            onLongClick = {
+                if (title.isNotBlank()) {
+                    context.copyToClipboard(
+                        title,
+                        title,
+                    )
+                }
+            },
+            onClick = { if (title.isNotBlank()) doSearch(title, true) },
+        ),
+        textAlign = textAlign,
+    )
+
+    Spacer(modifier = Modifier.height(2.dp))
+
+    Row(
+        modifier = Modifier.secondaryItemAlpha(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = Icons.Filled.PersonOutline,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+        )
+        Text(
+            text = author?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.unknown_author),
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier
+                .clickableNoIndication(
                     onLongClick = {
-                        if (title.isNotBlank()) {
+                        if (!author.isNullOrBlank()) {
                             context.copyToClipboard(
-                                title,
-                                title,
+                                author,
+                                author,
                             )
                         }
                     },
-                    onClick = { if (title.isNotBlank()) doSearch(title, true) },
+                    onClick = { if (!author.isNullOrBlank()) doSearch(author, true) },
                 ),
+            textAlign = textAlign,
+        )
+    }
+
+    if (!artist.isNullOrBlank() && author != artist) {
+        Row(
+            modifier = Modifier.secondaryItemAlpha(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Brush,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
             )
+            Text(
+                text = artist,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .clickableNoIndication(
+                        onLongClick = { context.copyToClipboard(artist, artist) },
+                        onClick = { doSearch(artist, true) },
+                    ),
+                textAlign = textAlign,
+            )
+        }
+    }
 
-            Spacer(modifier = Modifier.height(2.dp))
+    Spacer(modifier = Modifier.height(2.dp))
 
-            Row(
-                modifier = Modifier.secondaryItemAlpha(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+    Row(
+        modifier = Modifier.secondaryItemAlpha(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = when (status) {
+                SAnime.ONGOING.toLong() -> Icons.Outlined.Schedule
+                SAnime.COMPLETED.toLong() -> Icons.Outlined.DoneAll
+                SAnime.LICENSED.toLong() -> Icons.Outlined.AttachMoney
+                SAnime.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
+                SAnime.CANCELLED.toLong() -> Icons.Outlined.Close
+                SAnime.ON_HIATUS.toLong() -> Icons.Outlined.Pause
+                else -> Icons.Outlined.Block
+            },
+            contentDescription = null,
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .size(16.dp),
+        )
+        ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
+            Text(
+                text = when (status) {
+                    SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
+                    SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
+                    SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
+                    SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
+                    SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
+                    SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
+                    else -> stringResource(R.string.unknown)
+                },
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+            DotSeparatorText()
+            if (isStubSource) {
                 Icon(
-                    imageVector = Icons.Filled.PersonOutline,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
-                Text(
-                    text = author?.takeIf { it.isNotBlank() }
-                        ?: stringResource(R.string.unknown_author),
-                    style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier
-                        .clickableNoIndication(
-                            onLongClick = {
-                                if (!author.isNullOrBlank()) {
-                                    context.copyToClipboard(
-                                        author,
-                                        author,
-                                    )
-                                }
-                            },
-                            onClick = { if (!author.isNullOrBlank()) doSearch(author, true) },
-                        ),
-                )
-            }
-
-            if (!artist.isNullOrBlank() && author != artist) {
-                Row(
-                    modifier = Modifier.secondaryItemAlpha(),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Brush,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Text(
-                        text = artist,
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier
-                            .clickableNoIndication(
-                                onLongClick = { context.copyToClipboard(artist, artist) },
-                                onClick = { doSearch(artist, true) },
-                            ),
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(2.dp))
-
-            Row(
-                modifier = Modifier.secondaryItemAlpha(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = when (status) {
-                        SAnime.ONGOING.toLong() -> Icons.Outlined.Schedule
-                        SAnime.COMPLETED.toLong() -> Icons.Outlined.DoneAll
-                        SAnime.LICENSED.toLong() -> Icons.Outlined.AttachMoney
-                        SAnime.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
-                        SAnime.CANCELLED.toLong() -> Icons.Outlined.Close
-                        SAnime.ON_HIATUS.toLong() -> Icons.Outlined.Pause
-                        else -> Icons.Outlined.Block
-                    },
+                    imageVector = Icons.Filled.Warning,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 4.dp)
                         .size(16.dp),
+                    tint = MaterialTheme.colorScheme.error,
                 )
-                ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
-                    Text(
-                        text = when (status) {
-                            SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
-                            SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
-                            SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
-                            SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(
-                                R.string.publishing_finished,
-                            )
-                            SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
-                            SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
-                            else -> stringResource(R.string.unknown)
-                        },
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
-                    DotSeparatorText()
-                    if (isStubSource) {
-                        Icon(
-                            imageVector = Icons.Outlined.Warning,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(end = 4.dp)
-                                .size(16.dp),
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                    }
-                    Text(
-                        text = sourceName,
-                        modifier = Modifier.clickableNoIndication {
-                            doSearch(
-                                sourceName,
-                                false,
-                            )
-                        },
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
-                }
             }
+            Text(
+                text = sourceName,
+                modifier = Modifier.clickableNoIndication {
+                    doSearch(
+                        sourceName,
+                        false,
+                    )
+                },
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
         }
     }
 }

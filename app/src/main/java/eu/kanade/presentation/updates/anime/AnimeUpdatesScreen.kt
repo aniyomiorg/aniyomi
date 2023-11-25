@@ -97,9 +97,8 @@ fun AnimeUpdateScreen(
                     FastScrollLazyColumn(
                         contentPadding = contentPadding,
                     ) {
-                        if (lastUpdated > 0L) {
-                            animeUpdatesLastUpdatedItem(lastUpdated)
-                        }
+                        animeUpdatesLastUpdatedItem(lastUpdated)
+
                         animeUpdatesUiItems(
                             uiModels = state.getUiModel(context, relativeTime),
                             selectionMode = state.selectionMode,

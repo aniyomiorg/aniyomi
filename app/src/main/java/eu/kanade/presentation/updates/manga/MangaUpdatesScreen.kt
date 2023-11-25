@@ -93,9 +93,7 @@ fun MangaUpdateScreen(
                     FastScrollLazyColumn(
                         contentPadding = contentPadding,
                     ) {
-                        if (lastUpdated > 0L) {
-                            mangaUpdatesLastUpdatedItem(lastUpdated)
-                        }
+                        mangaUpdatesLastUpdatedItem(lastUpdated)
 
                         mangaUpdatesUiItems(
                             uiModels = state.getUiModel(context, relativeTime),

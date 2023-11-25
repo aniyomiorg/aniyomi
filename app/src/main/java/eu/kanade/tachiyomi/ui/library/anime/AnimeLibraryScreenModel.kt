@@ -56,7 +56,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
@@ -85,7 +85,7 @@ class AnimeLibraryScreenModel(
     private val getCategories: GetVisibleAnimeCategories = Injekt.get(),
     private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
-    private val getEpisodesByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val setSeenStatus: SetSeenStatus = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),

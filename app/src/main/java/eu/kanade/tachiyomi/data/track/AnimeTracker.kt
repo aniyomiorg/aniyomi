@@ -13,7 +13,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -62,7 +62,7 @@ interface AnimeTracker {
         item.anime_id = animeId
         try {
             withIOContext {
-                val allEpisodes = Injekt.get<GetEpisodeByAnimeId>().await(animeId)
+                val allEpisodes = Injekt.get<GetEpisodesByAnimeId>().await(animeId)
                 val hasSeenEpisodes = allEpisodes.any { it.seen }
                 bind(item, hasSeenEpisodes)
 

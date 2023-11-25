@@ -45,7 +45,7 @@ import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
@@ -84,7 +84,7 @@ class ExternalIntents {
     ): Intent? {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
-        episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
+        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
         val video = chosenVideo
             ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first().firstOrNull()
@@ -441,7 +441,7 @@ class ExternalIntents {
     private val updateEpisode: UpdateEpisode = Injekt.get()
     private val getAnime: GetAnime = Injekt.get()
     private val sourceManager: AnimeSourceManager = Injekt.get()
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get()
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val downloadManager: AnimeDownloadManager by injectLazy()
@@ -518,7 +518,7 @@ class ExternalIntents {
             else -> throw NotImplementedError("Unknown sorting method")
         }
 
-        val episodes = getEpisodeByAnimeId.await(anime.id)
+        val episodes = getEpisodesByAnimeId.await(anime.id)
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
         val currentEpisodePosition = episodes.indexOf(episode)

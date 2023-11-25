@@ -68,7 +68,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.manga.interactor.GetNextChapters
 import tachiyomi.domain.history.manga.interactor.UpsertMangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.service.getChapterSort
@@ -94,7 +94,7 @@ class ReaderViewModel @JvmOverloads constructor(
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val trackChapter: TrackChapter = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
-    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val getChaptersByMangaId: GetChaptersByMangaId = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
     private val upsertHistory: UpsertMangaHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
@@ -155,7 +155,7 @@ class ReaderViewModel @JvmOverloads constructor(
      */
     private val chapterList by lazy {
         val manga = manga!!
-        val chapters = runBlocking { getChapterByMangaId.await(manga.id) }
+        val chapters = runBlocking { getChaptersByMangaId.await(manga.id) }
 
         val selectedChapter = chapters.find { it.id == chapterId }
             ?: error("Requested chapter of id $chapterId not found in chapter list")

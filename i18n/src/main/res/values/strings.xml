@@ -66,6 +66,7 @@
     <string name="action_sort_latest_chapter">Latest chapter</string>
     <string name="action_sort_chapter_fetch_date">Chapter fetch date</string>
     <string name="action_sort_date_added">Date added</string>
+    <string name="action_sort_tracker_score">Tracker score</string>
     <string name="action_sort_airing_time">Airing time</string>
     <string name="action_search">Search</string>
     <string name="action_search_hint">Search…</string>
@@ -499,6 +500,11 @@
     <string name="restoring_backup_error">Restoring backup failed</string>
     <string name="restoring_backup_canceled">Canceled restore</string>
     <string name="backup_info">You should keep copies of backups in other places as well.</string>
+    <string name="last_auto_backup_info">Last automatically backed up: %s</string>
+    <string name="label_data">Data</string>
+    <string name="used_cache">Used: %1$s</string>
+    <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
+    <string name="cache_delete_error">Error occurred while clearing</string>
 
     <!-- Sync section -->
     <string name="syncing_library">Syncing library</string>
@@ -514,10 +520,6 @@
     <string name="pref_reset_user_agent_string">Reset default user agent string</string>
     <string name="requires_app_restart">Requires app restart to take effect</string>
     <string name="cookies_cleared">Cookies cleared</string>
-    <string name="label_data">Data</string>
-    <string name="used_cache">Used: %1$s</string>
-    <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
-    <string name="cache_delete_error">Error occurred while clearing</string>
     <string name="pref_invalidate_download_cache">Invalidate downloads index</string>
     <string name="download_cache_invalidated">Downloads index invalidated</string>
     <string name="pref_clear_database">Clear database</string>
@@ -766,6 +768,7 @@
     <string name="cant_open_last_read_chapter">Unable to open last read chapter</string>
     <string name="updates_last_update_info">Library last updated: %s</string>
     <string name="updates_last_update_info_just_now">Just now</string>
+    <string name="relative_time_span_never">Never</string>
 
     <!-- History -->
     <string name="recent_manga_time">Ch. %1$s - %2$s</string>
