@@ -180,7 +180,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         } else if (
             group == AnimeLibraryGroup.BY_DEFAULT ||
             groupAnimeLibraryUpdateType == AnimeGroupLibraryMode.GLOBAL ||
-            (groupAnimeLibraryUpdateType == AnimeGroupLibraryMode.ALL_BUT_UNGROUPED && group == AnimeLibraryGroup.UNGROUPED)
+            (
+                groupAnimeLibraryUpdateType == AnimeGroupLibraryMode.ALL_BUT_UNGROUPED &&
+                    group == AnimeLibraryGroup.UNGROUPED
+                )
         ) {
             val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {

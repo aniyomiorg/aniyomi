@@ -111,7 +111,16 @@ class DiscordRPCService : Service() {
 
         internal var lastUsedScreen = DiscordScreen.APP
             set(value) {
-                field = if ((value == DiscordScreen.VIDEO || value == DiscordScreen.MANGA) || value == DiscordScreen.WEBVIEW) field else value
+                field = if ((
+                        value == DiscordScreen.VIDEO ||
+                            value == DiscordScreen.MANGA
+                        ) ||
+                    value == DiscordScreen.WEBVIEW
+                ) {
+                    field
+                } else {
+                    value
+                }
             }
 
         internal suspend fun setAnimeScreen(

@@ -180,7 +180,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         } else if (
             group == MangaLibraryGroup.BY_DEFAULT ||
             groupMangaLibraryUpdateType == MangaGroupLibraryMode.GLOBAL ||
-            (groupMangaLibraryUpdateType == MangaGroupLibraryMode.ALL_BUT_UNGROUPED && group == MangaLibraryGroup.UNGROUPED)
+            (
+                groupMangaLibraryUpdateType == MangaGroupLibraryMode.ALL_BUT_UNGROUPED &&
+                    group == MangaLibraryGroup.UNGROUPED
+                )
         ) {
             val categoriesToUpdate = libraryPreferences.mangaUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
