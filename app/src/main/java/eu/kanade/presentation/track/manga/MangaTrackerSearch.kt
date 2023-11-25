@@ -247,7 +247,7 @@ fun SearchResultItem(
     ) {
         if (selected) {
             Icon(
-                imageVector = Icons.Default.CheckCircle,
+                imageVector = Icons.Filled.CheckCircle,
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.TopEnd),
                 tint = MaterialTheme.colorScheme.primary,

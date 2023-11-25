@@ -13,7 +13,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -62,7 +62,7 @@ interface MangaTracker {
         item.manga_id = mangaId
         try {
             withIOContext {
-                val allChapters = Injekt.get<GetChapterByMangaId>().await(mangaId)
+                val allChapters = Injekt.get<GetChaptersByMangaId>().await(mangaId)
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 

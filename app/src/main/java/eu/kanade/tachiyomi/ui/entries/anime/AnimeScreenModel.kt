@@ -10,6 +10,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
+import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
@@ -74,6 +75,7 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.items.service.calculateEpisodeGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
@@ -81,6 +83,7 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
+import kotlin.math.floor
 
 class AnimeScreenModel(
     val context: Context,
@@ -125,7 +128,7 @@ class AnimeScreenModel(
     private val isFavorited: Boolean
         get() = anime?.favorite ?: false
 
-    private val processedEpisodes: List<EpisodeItem>?
+    private val processedEpisodes: List<EpisodeList.Item>?
         get() = successState?.processedEpisodes
 
     val episodeSwipeStartAction = libraryPreferences.swipeEpisodeEndAction().get()
@@ -171,7 +174,7 @@ class AnimeScreenModel(
                     updateSuccessState {
                         it.copy(
                             anime = anime,
-                            episodes = episodes.toEpisodeItems(anime),
+                            episodes = episodes.toEpisodeListItems(anime),
                         )
                     }
                 }
@@ -182,7 +185,7 @@ class AnimeScreenModel(
         screenModelScope.launchIO {
             val anime = getAnimeAndEpisodes.awaitAnime(animeId)
             val episodes = getAnimeAndEpisodes.awaitEpisodes(animeId)
-                .toEpisodeItems(anime)
+                .toEpisodeListItems(anime)
 
             if (!anime.favorite) {
                 setAnimeDefaultEpisodeFlags.await(anime)
@@ -477,7 +480,7 @@ class AnimeScreenModel(
 
     private fun updateDownloadState(download: AnimeDownload) {
         updateSuccessState { successState ->
-            val modifiedIndex = successState.episodes.indexOfFirst { it.episode.id == download.episode.id }
+            val modifiedIndex = successState.episodes.indexOfFirst { it.id == download.episode.id }
             if (modifiedIndex < 0) return@updateSuccessState successState
 
             val newEpisodes = successState.episodes.toMutableList().apply {
@@ -489,7 +492,7 @@ class AnimeScreenModel(
         }
     }
 
-    private fun List<Episode>.toEpisodeItems(anime: Anime): List<EpisodeItem> {
+    private fun List<Episode>.toEpisodeListItems(anime: Anime): List<EpisodeList.Item> {
         val isLocal = anime.isLocal()
         return map { episode ->
             val activeDownload = if (isLocal) {
@@ -513,7 +516,7 @@ class AnimeScreenModel(
                 else -> AnimeDownload.State.NOT_DOWNLOADED
             }
 
-            EpisodeItem(
+            EpisodeList.Item(
                 episode = episode,
                 downloadState = downloadState,
                 downloadProgress = activeDownload?.progress ?: 0,
@@ -561,7 +564,7 @@ class AnimeScreenModel(
     /**
      * @throws IllegalStateException if the swipe action is [LibraryPreferences.EpisodeSwipeAction.Disabled]
      */
-    fun episodeSwipe(episodeItem: EpisodeItem, swipeAction: LibraryPreferences.EpisodeSwipeAction) {
+    fun episodeSwipe(episodeItem: EpisodeList.Item, swipeAction: LibraryPreferences.EpisodeSwipeAction) {
         screenModelScope.launch {
             executeEpisodeSwipeAction(episodeItem, swipeAction)
         }
@@ -571,7 +574,7 @@ class AnimeScreenModel(
      * @throws IllegalStateException if the swipe action is [LibraryPreferences.EpisodeSwipeAction.Disabled]
      */
     private fun executeEpisodeSwipeAction(
-        episodeItem: EpisodeItem,
+        episodeItem: EpisodeList.Item,
         swipeAction: LibraryPreferences.EpisodeSwipeAction,
     ) {
         val episode = episodeItem.episode
@@ -654,7 +657,7 @@ class AnimeScreenModel(
     }
 
     fun runEpisodeDownloadActions(
-        items: List<EpisodeItem>,
+        items: List<EpisodeList.Item>,
         action: EpisodeDownloadAction,
     ) {
         when (action) {
@@ -669,7 +672,7 @@ class AnimeScreenModel(
                 startDownload(listOf(episode), true)
             }
             EpisodeDownloadAction.CANCEL -> {
-                val episodeId = items.singleOrNull()?.episode?.id ?: return
+                val episodeId = items.singleOrNull()?.id ?: return
                 cancelDownload(episodeId)
             }
             EpisodeDownloadAction.DELETE -> {
@@ -880,14 +883,14 @@ class AnimeScreenModel(
     }
 
     fun toggleSelection(
-        item: EpisodeItem,
+        item: EpisodeList.Item,
         selected: Boolean,
         userSelected: Boolean = false,
         fromLongPress: Boolean = false,
     ) {
         updateSuccessState { successState ->
             val newEpisodes = successState.processedEpisodes.toMutableList().apply {
-                val selectedIndex = successState.processedEpisodes.indexOfFirst { it.episode.id == item.episode.id }
+                val selectedIndex = successState.processedEpisodes.indexOfFirst { it.id == item.episode.id }
                 if (selectedIndex < 0) return@apply
 
                 val selectedItem = get(selectedIndex)
@@ -895,7 +898,7 @@ class AnimeScreenModel(
 
                 val firstSelection = none { it.selected }
                 set(selectedIndex, selectedItem.copy(selected = selected))
-                selectedEpisodeIds.addOrRemove(item.episode.id, selected)
+                selectedEpisodeIds.addOrRemove(item.id, selected)
 
                 if (selected && userSelected && fromLongPress) {
                     if (firstSelection) {
@@ -918,7 +921,7 @@ class AnimeScreenModel(
                         range.forEach {
                             val inbetweenItem = get(it)
                             if (!inbetweenItem.selected) {
-                                selectedEpisodeIds.add(inbetweenItem.episode.id)
+                                selectedEpisodeIds.add(inbetweenItem.id)
                                 set(it, inbetweenItem.copy(selected = true))
                             }
                         }
@@ -946,7 +949,7 @@ class AnimeScreenModel(
     fun toggleAllSelection(selected: Boolean) {
         updateSuccessState { successState ->
             val newEpisodes = successState.episodes.map {
-                selectedEpisodeIds.addOrRemove(it.episode.id, selected)
+                selectedEpisodeIds.addOrRemove(it.id, selected)
                 it.copy(selected = selected)
             }
             selectedPositions[0] = -1
@@ -958,7 +961,7 @@ class AnimeScreenModel(
     fun invertSelection() {
         updateSuccessState { successState ->
             val newEpisodes = successState.episodes.map {
-                selectedEpisodeIds.addOrRemove(it.episode.id, !it.selected)
+                selectedEpisodeIds.addOrRemove(it.id, !it.selected)
                 it.copy(selected = !it.selected)
             }
             selectedPositions[0] = -1
@@ -1060,7 +1063,7 @@ class AnimeScreenModel(
             val anime: Anime,
             val source: AnimeSource,
             val isFromSource: Boolean,
-            val episodes: List<EpisodeItem>,
+            val episodes: List<EpisodeList.Item>,
             val trackItems: List<AnimeTrackItem> = emptyList(),
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
@@ -1073,6 +1076,33 @@ class AnimeScreenModel(
 
             val processedEpisodes by lazy {
                 episodes.applyFilters(anime).toList()
+            }
+
+            val episodeListItems by lazy {
+                processedEpisodes.insertSeparators { before, after ->
+                    val (lowerEpisode, higherEpisode) = if (anime.sortDescending()) {
+                        after to before
+                    } else {
+                        before to after
+                    }
+                    if (higherEpisode == null) return@insertSeparators null
+
+                    if (lowerEpisode == null) {
+                        floor(higherEpisode.episode.episodeNumber)
+                            .toInt()
+                            .minus(1)
+                            .coerceAtLeast(0)
+                    } else {
+                        calculateEpisodeGap(higherEpisode.episode, lowerEpisode.episode)
+                    }
+                        .takeIf { it > 0 }
+                        ?.let { missingCount ->
+                            EpisodeList.MissingCount(
+                                id = "${lowerEpisode?.id}-${higherEpisode.id}",
+                                count = missingCount,
+                            )
+                        }
+                }
             }
 
             val trackingAvailable: Boolean
@@ -1093,7 +1123,7 @@ class AnimeScreenModel(
              * Applies the view filters to the list of episodes obtained from the database.
              * @return an observable of the list of episodes filtered and sorted.
              */
-            private fun List<EpisodeItem>.applyFilters(anime: Anime): Sequence<EpisodeItem> {
+            private fun List<EpisodeList.Item>.applyFilters(anime: Anime): Sequence<EpisodeList.Item> {
                 val isLocalAnime = anime.isLocal()
                 val unseenFilter = anime.unseenFilter
                 val downloadedFilter = anime.downloadedFilter
@@ -1114,11 +1144,21 @@ class AnimeScreenModel(
 }
 
 @Immutable
-data class EpisodeItem(
-    val episode: Episode,
-    val downloadState: AnimeDownload.State,
-    val downloadProgress: Int,
-    val selected: Boolean = false,
-) {
-    val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
+sealed class EpisodeList {
+    @Immutable
+    data class MissingCount(
+        val id: String,
+        val count: Int,
+    ) : EpisodeList()
+
+    @Immutable
+    data class Item(
+        val episode: Episode,
+        val downloadState: AnimeDownload.State,
+        val downloadProgress: Int,
+        val selected: Boolean = false,
+    ) : EpisodeList() {
+        val id = episode.id
+        val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
+    }
 }

@@ -2,7 +2,7 @@ package eu.kanade.domain.items.chapter.model
 
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
+import eu.kanade.tachiyomi.ui.entries.manga.ChapterList
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -39,7 +39,7 @@ fun List<Chapter>.applyFilters(manga: Manga, downloadManager: MangaDownloadManag
  * Applies the view filters to the list of chapters obtained from the database.
  * @return an observable of the list of chapters filtered and sorted.
  */
-fun List<ChapterItem>.applyFilters(manga: Manga): Sequence<ChapterItem> {
+fun List<ChapterList.Item>.applyFilters(manga: Manga): Sequence<ChapterList.Item> {
     val isLocalManga = manga.isLocal()
     val unreadFilter = manga.unreadFilter
     val downloadedFilter = manga.downloadedFilter

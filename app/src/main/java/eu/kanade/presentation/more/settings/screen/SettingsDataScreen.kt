@@ -4,12 +4,15 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
+import android.text.format.Formatter
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.widget.BasePreferenceWidget
+import eu.kanade.presentation.more.settings.widget.PrefsHorizontalPadding
 import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst
@@ -41,6 +46,7 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
+import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
@@ -403,19 +409,22 @@ object SettingsDataScreen : SearchableSettings {
 
         val chapterCache = remember { Injekt.get<ChapterCache>() }
         val episodeCache = remember { Injekt.get<EpisodeCache>() }
-        var readableSizeSema by remember { mutableIntStateOf(0) }
-        val readableSize = remember(readableSizeSema) { chapterCache.readableSize }
-        val readableAnimeSize = remember(readableSizeSema) { episodeCache.readableSize }
+        var cacheReadableSizeSema by remember { mutableIntStateOf(0) }
+        val cacheReadableMangaSize = remember(cacheReadableSizeSema) { chapterCache.readableSize }
+        val cacheReadableAnimeSize = remember(cacheReadableSizeSema) { episodeCache.readableSize }
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_data),
             preferenceItems = listOf(
+                getMangaStorageInfoPref(cacheReadableMangaSize),
+                getAnimeStorageInfoPref(cacheReadableAnimeSize),
+
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_chapter_cache),
                     subtitle = stringResource(
                         R.string.used_cache_both,
-                        readableAnimeSize,
-                        readableSize,
+                        cacheReadableAnimeSize,
+                        cacheReadableMangaSize,
                     ),
                     onClick = {
                         scope.launchNonCancellable {
@@ -423,7 +432,7 @@ object SettingsDataScreen : SearchableSettings {
                                 val deletedFiles = chapterCache.clear() + episodeCache.clear()
                                 withUIContext {
                                     context.toast(context.getString(R.string.cache_deleted, deletedFiles))
-                                    readableSizeSema++
+                                    cacheReadableSizeSema++
                                 }
                             } catch (e: Throwable) {
                                 logcat(LogPriority.ERROR, e)
@@ -459,6 +468,60 @@ object SettingsDataScreen : SearchableSettings {
                 ),
             ),
         )
+    }
+
+    @Composable
+    fun getMangaStorageInfoPref(
+        chapterCacheReadableSize: String,
+    ): Preference.PreferenceItem.CustomPreference {
+        val context = LocalContext.current
+        val available = remember {
+            Formatter.formatFileSize(context, DiskUtil.getAvailableStorageSpace(Environment.getDataDirectory()))
+        }
+        val total = remember {
+            Formatter.formatFileSize(context, DiskUtil.getTotalStorageSpace(Environment.getDataDirectory()))
+        }
+
+        return Preference.PreferenceItem.CustomPreference(
+            title = stringResource(R.string.pref_manga_storage_usage),
+        ) {
+            BasePreferenceWidget(
+                title = stringResource(R.string.pref_manga_storage_usage),
+                subcomponent = {
+                    // TODO: downloads, SD cards, bar representation?, i18n
+                    Box(modifier = Modifier.padding(horizontal = PrefsHorizontalPadding)) {
+                        Text(text = "Available: $available / $total (chapter cache: $chapterCacheReadableSize)")
+                    }
+                },
+            )
+        }
+    }
+
+    @Composable
+    fun getAnimeStorageInfoPref(
+        episodeCacheReadableSize: String,
+    ): Preference.PreferenceItem.CustomPreference {
+        val context = LocalContext.current
+        val available = remember {
+            Formatter.formatFileSize(context, DiskUtil.getAvailableStorageSpace(Environment.getDataDirectory()))
+        }
+        val total = remember {
+            Formatter.formatFileSize(context, DiskUtil.getTotalStorageSpace(Environment.getDataDirectory()))
+        }
+
+        return Preference.PreferenceItem.CustomPreference(
+            title = stringResource(R.string.pref_anime_storage_usage),
+        ) {
+            BasePreferenceWidget(
+                title = stringResource(R.string.pref_anime_storage_usage),
+                subcomponent = {
+                    // TODO: downloads, SD cards, bar representation?, i18n
+                    Box(modifier = Modifier.padding(horizontal = PrefsHorizontalPadding)) {
+                        Text(text = "Available: $available / $total (Episode cache: $episodeCacheReadableSize)")
+                    }
+                },
+            )
+        }
     }
 }
 

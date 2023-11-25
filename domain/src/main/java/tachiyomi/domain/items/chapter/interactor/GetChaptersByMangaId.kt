@@ -5,7 +5,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.repository.ChapterRepository
 
-class GetChapterByMangaId(
+class GetChaptersByMangaId(
     private val chapterRepository: ChapterRepository,
 ) {
 
