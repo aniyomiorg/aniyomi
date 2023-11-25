@@ -42,4 +42,6 @@ class DownloadPreferences(
     fun downloadNewEpisodeCategoriesExclude() = preferenceStore.getStringSet("download_new_anime_categories_exclude", emptySet())
 
     fun numberOfDownloads() = preferenceStore.getInt("download_slots", 1)
+    fun multiThread() = preferenceStore.getBoolean("download_multithread", false)
+    fun multiThreadNumber() = preferenceStore.getInt("download_multithread_number", 4)
 }

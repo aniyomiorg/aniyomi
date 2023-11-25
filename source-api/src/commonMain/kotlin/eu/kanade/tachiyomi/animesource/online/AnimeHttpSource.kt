@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import okhttp3.Headers
@@ -301,6 +302,57 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param response the response from the site.
      */
     protected abstract fun videoUrlParse(response: Response): String
+
+    /**
+     * Return the size of the video in bytes
+     *
+     * @param video the video whose size has to be fetched
+     * @return the size of the video in bytes or -1 if the size cannot be determined
+     */
+    fun fetchVideoSize(video: Video, tries: Int): Long {
+        val animeDownloadClient = client.newBuilder()
+            .callTimeout(30, TimeUnit.MINUTES)
+            .build()
+        var headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build()
+        val request = GET(video.videoUrl!!, headers)
+        val response = animeDownloadClient.newCall(request).execute()
+        // parse the response headers to get the size of the video, in particular the content-range header
+        val contentRange = response.header("Content-Range")
+        if (contentRange != null) {
+            return contentRange.split("/")[1].toLong()
+        }
+        if (tries > 0) {
+            return fetchVideoSize(video, tries - 1)
+        }
+//        logcat(LogPriority.ERROR) { "Error: Content-Range header not found and exhausted tries" }
+//        logcat { "Response headers: ${response.headers}" }
+//        logcat { "Request headers: ${request.headers}" }
+        return -1L
+    }
+
+    /**
+     * Returns an observable with the response of the source chunk.
+     *
+     * @param video the video whose source chunk has to be downloaded.
+     */
+    fun fetchVideoChunk(video: Video, start: Long, end: Long, listener: ProgressListener): Observable<Response> {
+        val animeDownloadClient = client.newBuilder()
+            .callTimeout(30, TimeUnit.MINUTES)
+            .build()
+
+        return animeDownloadClient.newCachelessCallWithProgress(chunkRequest(video, start, end), listener).asObservableSuccess()
+    }
+
+    private fun chunkRequest(video: Video, start: Long, end: Long): Request {
+        val headers = video.headers ?: headers
+        val newHeaders = if (end - start > 0L) {
+            Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build()
+        } else {
+//            logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
+            null
+        }
+        return GET(video.videoUrl!!, newHeaders ?: headers)
+    }
 
     /**
      * Returns an observable with the response of the source image.

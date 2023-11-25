@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -31,7 +32,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import logcat.LogPriority
+import logcat.asLog
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.Response
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -612,24 +615,172 @@ class AnimeDownloader(
         return if (isHls(video) || isMpd(video)) {
             ffmpegObservable(video, download, tmpDir, filename)
         } else {
-            download.source.fetchVideo(video)
-                .map { response ->
-                    val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
-                    try {
-                        response.body.source().saveTo(file.openOutputStream(true))
-                        // val extension = getImageExtension(response, file)
-                        // TODO: support other file formats!!
-                        file.renameTo("$filename.mp4")
-                    } catch (e: Exception) {
-                        response.close()
-                        if (!queueState.value.equals(download)) file.delete()
-                        // file.delete()
-                        throw e
+            if (preferences.multiThread().get()) // multi thread download is true
+                {
+                    val threadCount = preferences.multiThreadNumber().get()
+                    val videoSize = download.source.fetchVideoSize(video, 3)
+                    val partSize = videoSize / (threadCount + 1)
+                    var errorThrew = false
+                    var e: Throwable? = null
+                    if (partSize > 200) // if the size is too small or if  video size <0 (error on fetching file size), don't use multi thread
+                        {
+                            var completed = false
+                            // delete the final file if it exists
+                            tmpDir.findFile("$filename.mp4")?.delete()
+                            // list of progresses for each chunk chunkNumber elements long
+                            val progresses = FloatArray(threadCount)
+                            var downloadedChunks = 0
+                            video.status = Video.State.DOWNLOAD_IMAGE
+                            val observables = mutableListOf<Observable<Response>>()
+                            for (i in 0 until threadCount) {
+                                tmpDir.findFile("$filename.tmp.$i")?.delete()
+                                if (errorThrew) {
+                                    break
+                                }
+                                val start = i * partSize
+                                val end = if (i == (threadCount - 1)) {
+                                    videoSize
+                                } else {
+                                    (i + 1) * partSize - 1
+                                }
+                                val progressListener: ProgressListener =
+                                    createProgressListener(videoSize, progresses, i, video)
+                                observables.add(
+                                    download.source.fetchVideoChunk(video, start, end, progressListener).subscribeOn(Schedulers.io()),
+                                )
+                                observables[i].subscribe(
+                                    { response ->
+                                        if (errorThrew) {
+                                            response.close()
+                                            for (it in 0 until threadCount) {
+                                                tmpDir.findFile("$filename.tmp.$it")
+                                                    ?: tmpDir.createFile("$filename.tmp.$it").delete()
+                                            }
+                                            throw Exception("Error in chunk download:")
+                                        }
+                                        val file = tmpDir.findFile("$filename.tmp.$i")
+                                            ?: tmpDir.createFile("$filename.tmp.$i")
+                                        try {
+                                            response.body.source().saveTo(file.openOutputStream(true))
+                                            val fileLength2 = file.length()
+                                            if (fileLength2 >= end - start + 1) {
+                                                downloadedChunks++
+                                            }
+                                        } catch (e: Exception) {
+                                            response.close()
+                                            if (!queueState.value.equals(download)) file.delete()
+                                            // remove all chunks
+                                            errorThrew = true
+
+                                            throw e
+                                        }
+                                        if (downloadedChunks >= threadCount - 1 && !errorThrew) {
+                                            try {
+                                                downloadedChunks = -1
+                                                // find the 0 file
+                                                val file0 = tmpDir.findFile("$filename.tmp.0")
+                                                    ?: tmpDir.createFile(
+                                                        "$filename.tmp.0",
+                                                    )
+                                                // merge all the files into one
+                                                for (j in 1 until threadCount) {
+                                                    val filej = tmpDir.findFile("$filename.tmp.$j")!!
+                                                    file0.openOutputStream(true).use { output ->
+                                                        filej.openInputStream().use { input ->
+                                                            input.copyTo(output)
+                                                        }
+                                                    }
+                                                    filej.delete()
+                                                }
+                                                file0.renameTo("$filename.mp4")
+                                                completed = true
+                                            } catch (error: Exception) {
+                                                response.close()
+                                                if (!queueState.value.equals(download)) file.delete()
+                                                errorThrew = true
+                                                e = error
+                                            }
+                                        }
+                                    },
+                                    { error ->
+                                        errorThrew = true
+                                        e = error
+
+                                        // purge all the files
+                                        for (it in 0 until threadCount) {
+                                            tmpDir.findFile("$filename.tmp.$it")
+                                                ?: tmpDir.createFile("$filename.tmp.$it").delete()
+                                        }
+                                        // delete the final file if it exists
+                                        tmpDir.findFile("$filename.mp4")?.delete()
+                                        observables.forEach {
+                                            it.unsubscribeOn(Schedulers.io())
+                                        }
+                                    },
+                                )
+                            }
+
+                            return Observable.unsafeCreate emitter@{ subscriber ->
+                                while (!completed) {
+                                    if (errorThrew) {
+                                        e!!.printStackTrace()
+                                        subscriber.onNext(defaultObservable(download, video, tmpDir, filename).toBlocking().first())
+                                    }
+                                    Thread.sleep(100)
+                                }
+                                subscriber.onNext(tmpDir.findFile("$filename.mp4")!!)
+                                subscriber.onCompleted()
+                            }.subscribeOn(Schedulers.io())
+                        }
+                    // log if the video is too small or if the video size <0 (error on fetching file size)
+                    if (videoSize < 0) {
+                        logcat(LogPriority.ERROR) { "Error getting video size, falling back to single thread mode" }
                     }
-                    file
+                    if (errorThrew) {
+                        logcat(LogPriority.ERROR) { "Error in chunk download, falling back to single thread mode" }
+                        if (e != null) {
+                            logcat(LogPriority.ERROR) { e!!.asLog() }
+                        }
+                    }
                 }
+            return defaultObservable(download, video, tmpDir, filename)
         }
     }
+
+    private fun createProgressListener(videoSize: Long, progresses: FloatArray, i: Int, video: Video) =
+        object : ProgressListener {
+            override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+                val chunkWeight: Float =
+                    contentLength / videoSize.toFloat()
+                val chunkProgress: Float = if (!done) {
+                    bytesRead.toFloat() / contentLength.toFloat() * chunkWeight * 100
+                } else {
+                    100 * chunkWeight
+                }
+                progresses[i] = chunkProgress
+                video.progress = progresses.sum().toInt()
+                // println("progress: ${video.progress}")
+            }
+        }
+
+    private fun defaultObservable(download: AnimeDownload, video: Video, tmpDir: UniFile, filename: String): Observable<UniFile> =
+        download.source.fetchVideo(video)
+            .map { response ->
+                val file = tmpDir.findFile("$filename.tmp")
+                    ?: tmpDir.createFile("$filename.tmp")
+                try {
+                    response.body.source().saveTo(file.openOutputStream(true))
+                    // val extension = getImageExtension(response, file)
+                    // TODO: support other file formats!!
+                    file.renameTo("$filename.mp4")
+                } catch (e: Exception) {
+                    response.close()
+                    if (!queueState.value.equals(download)) file.delete()
+                    // file.delete()
+                    throw e
+                }
+                file
+            }
 
     /**
      * Returns the observable which downloads the video with an external downloader.
