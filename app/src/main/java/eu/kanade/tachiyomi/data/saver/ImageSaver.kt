@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import java.util.Date
 
 class ImageSaver(
     val context: Context,
@@ -79,6 +80,7 @@ class ImageSaver(
             MediaStore.Images.Media.RELATIVE_PATH to relativePath,
             MediaStore.Images.Media.DISPLAY_NAME to image.name,
             MediaStore.Images.Media.MIME_TYPE to type.mime,
+            MediaStore.Images.Media.DATE_MODIFIED to Date().time * 1000,
         )
 
         val picture = findUriOrDefault(relativePath, filename) {
@@ -173,12 +175,19 @@ sealed class Image(
 }
 
 sealed interface Location {
-    data class Pictures(val relativePath: String) : Location
+    data class Pictures(val relativePath: String) : Location {
+        companion object {
+            fun create(relativePath: String = ""): Pictures {
+                return Pictures(relativePath)
+            }
+        }
+    }
 
     data object Cache : Location
 
     fun directory(context: Context): File {
         return when (this) {
+            Cache -> context.cacheImageDir
             is Pictures -> {
                 val file = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -192,7 +201,6 @@ sealed interface Location {
                 }
                 file
             }
-            Cache -> context.cacheImageDir
         }
     }
 }

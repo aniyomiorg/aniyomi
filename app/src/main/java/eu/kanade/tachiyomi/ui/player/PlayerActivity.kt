@@ -442,7 +442,11 @@ class PlayerActivity : BaseActivity() {
                         }
 
                         fun onSubtitleSelected(index: Int) {
-                            if (streams.subtitle.index == index || streams.subtitle.index > subtitleTracks.lastIndex) return
+                            if (streams.subtitle.index == index ||
+                                streams.subtitle.index > subtitleTracks.lastIndex
+                            ) {
+                                return
+                            }
                             streams.subtitle.index = index
                             if (index == 0) {
                                 player.sid = -1
@@ -647,7 +651,10 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerBrightness() {
-        val useDeviceBrightness = playerPreferences.playerBrightnessValue().get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
+        val useDeviceBrightness =
+            playerPreferences.playerBrightnessValue().get() == -1.0F ||
+                !playerPreferences.rememberPlayerBrightness().get()
+
         brightness = if (useDeviceBrightness) {
             Utils.getScreenBrightness(this) ?: 0.5F
         } else {
@@ -1614,10 +1621,14 @@ class PlayerActivity : BaseActivity() {
         viewModel.viewModelScope.launchUI {
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
-                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
+                    this@PlayerActivity.requestedOrientation =
+                        playerPreferences.defaultPlayerOrientationLandscape().get()
+
                     switchControlsOrientation(true)
                 } else {
-                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
+                    this@PlayerActivity.requestedOrientation =
+                        playerPreferences.defaultPlayerOrientationPortrait().get()
+
                     switchControlsOrientation(false)
                 }
             }
@@ -1723,7 +1734,11 @@ class PlayerActivity : BaseActivity() {
         val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
 
         skipType =
-            aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
+            aniSkipInterval
+                ?.firstOrNull {
+                    it.interval.startTime <= position &&
+                        it.interval.endTime > position
+                }?.skipType
         skipType?.let { skipType ->
             val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
             if (netflixStyle) {

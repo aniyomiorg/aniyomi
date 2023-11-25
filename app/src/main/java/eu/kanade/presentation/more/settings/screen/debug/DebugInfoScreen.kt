@@ -76,15 +76,28 @@ class DebugInfoScreen : Screen() {
         val status by produceState(initialValue = "-") {
             val result = ProfileVerifier.getCompilationStatusAsync().await().profileInstallResultCode
             value = when (result) {
-                ProfileVerifier.CompilationStatus.RESULT_CODE_NO_PROFILE -> "No profile installed"
-                ProfileVerifier.CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> "Compiled"
-                ProfileVerifier.CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE_NON_MATCHING -> "Compiled non-matching"
-                ProfileVerifier.CompilationStatus.RESULT_CODE_ERROR_CACHE_FILE_EXISTS_BUT_CANNOT_BE_READ,
-                ProfileVerifier.CompilationStatus.RESULT_CODE_ERROR_CANT_WRITE_PROFILE_VERIFICATION_RESULT_CACHE_FILE,
-                ProfileVerifier.CompilationStatus.RESULT_CODE_ERROR_PACKAGE_NAME_DOES_NOT_EXIST,
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_NO_PROFILE,
+                -> "No profile installed"
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_COMPILED_WITH_PROFILE,
+                -> "Compiled"
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_COMPILED_WITH_PROFILE_NON_MATCHING,
+                -> "Compiled non-matching"
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_ERROR_CACHE_FILE_EXISTS_BUT_CANNOT_BE_READ,
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_ERROR_CANT_WRITE_PROFILE_VERIFICATION_RESULT_CACHE_FILE,
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_ERROR_PACKAGE_NAME_DOES_NOT_EXIST,
                 -> "Error $result"
-                ProfileVerifier.CompilationStatus.RESULT_CODE_ERROR_UNSUPPORTED_API_VERSION -> "Not supported"
-                ProfileVerifier.CompilationStatus.RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION -> "Pending compilation"
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_ERROR_UNSUPPORTED_API_VERSION,
+                -> "Not supported"
+                ProfileVerifier.CompilationStatus
+                    .RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION,
+                -> "Pending compilation"
                 else -> "Unknown code $result"
             }
         }

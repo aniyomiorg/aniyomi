@@ -13,6 +13,8 @@ class ReaderPreferences(
 
     fun pageTransitions() = preferenceStore.getBoolean("pref_enable_transitions_key", true)
 
+    fun flashOnPageChange() = preferenceStore.getBoolean("pref_reader_flash", false)
+
     fun doubleTapAnimSpeed() = preferenceStore.getInt("pref_double_tap_anim_speed", 500)
 
     fun showPageNumber() = preferenceStore.getBoolean("pref_show_page_number_key", true)
@@ -69,10 +71,9 @@ class ReaderPreferences(
 
     fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", WEBTOON_PADDING_MIN)
 
-    fun readerHideThreshold() = preferenceStore.getEnum(
-        "reader_hide_threshold",
-        ReaderHideThreshold.LOW,
-    )
+    fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", ReaderHideThreshold.LOW)
+
+    fun folderPerManga() = preferenceStore.getBoolean("create_folder_per_manga", false)
 
     fun skipRead() = preferenceStore.getBoolean("skip_read", false)
 

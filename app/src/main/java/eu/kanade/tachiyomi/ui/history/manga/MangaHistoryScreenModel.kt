@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.history.manga
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.manga.MangaHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -46,7 +46,7 @@ class MangaHistoryScreenModel(
     val query: StateFlow<String?> = _query.asStateFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _query.collectLatest { query ->
                 getHistory.subscribe(query ?: "")
                     .distinctUntilChanged()
@@ -62,7 +62,7 @@ class MangaHistoryScreenModel(
     }
 
     fun search(query: String?) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             _query.emit(query)
         }
     }
@@ -87,7 +87,7 @@ class MangaHistoryScreenModel(
     }
 
     fun getNextChapterForManga(mangaId: Long, chapterId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             sendNextChapterEvent(getNextChapters.await(mangaId, chapterId, onlyUnread = false))
         }
     }
@@ -98,19 +98,19 @@ class MangaHistoryScreenModel(
     }
 
     fun removeFromHistory(history: MangaHistoryWithRelations) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(history)
         }
     }
 
     fun removeAllFromHistory(mangaId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(mangaId)
         }
     }
 
     fun removeAllHistory() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val result = removeHistory.awaitAll()
             if (!result) return@launchIO
             _events.send(Event.HistoryCleared)

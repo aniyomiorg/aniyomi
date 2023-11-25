@@ -15,13 +15,13 @@ class AnimeHistoryRepositoryImpl(
 
     override fun getAnimeHistory(query: String): Flow<List<AnimeHistoryWithRelations>> {
         return handler.subscribeToList {
-            animehistoryViewQueries.animehistory(query, animeHistoryWithRelationsMapper)
+            animehistoryViewQueries.animehistory(query, AnimeHistoryMapper::mapAnimeHistoryWithRelations)
         }
     }
 
     override suspend fun getLastAnimeHistory(): AnimeHistoryWithRelations? {
         return handler.awaitOneOrNull {
-            animehistoryViewQueries.getLatestAnimeHistory(animeHistoryWithRelationsMapper)
+            animehistoryViewQueries.getLatestAnimeHistory(AnimeHistoryMapper::mapAnimeHistoryWithRelations)
         }
     }
 
@@ -29,7 +29,7 @@ class AnimeHistoryRepositoryImpl(
         return handler.awaitList {
             animehistoryQueries.getHistoryByAnimeId(
                 animeId,
-                animeHistoryMapper,
+                AnimeHistoryMapper::mapAnimeHistory,
             )
         }
     }

@@ -206,7 +206,9 @@ class MangaDownloader(
             val activeDownloadsFlow = queueState.transformLatest { queue ->
                 while (true) {
                     val activeDownloads = queue.asSequence()
-                        .filter { it.status.value <= MangaDownload.State.DOWNLOADING.value } // Ignore completed downloads, leave them in the queue
+                        .filter {
+                            it.status.value <= MangaDownload.State.DOWNLOADING.value
+                        } // Ignore completed downloads, leave them in the queue
                         .groupBy { it.source }
                         .toList().take(5) // Concurrently download from 5 different sources
                         .map { (_, downloads) -> downloads.first() }
@@ -726,7 +728,9 @@ class MangaDownloader(
             val downloads = queue.filter { predicate(it) }
             store.removeAll(downloads)
             downloads.forEach { download ->
-                if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
+                if (download.status == MangaDownload.State.DOWNLOADING ||
+                    download.status == MangaDownload.State.QUEUE
+                ) {
                     download.status = MangaDownload.State.NOT_DOWNLOADED
                 }
             }
@@ -746,7 +750,9 @@ class MangaDownloader(
     private fun _clearQueue() {
         _queueState.update {
             it.forEach { download ->
-                if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
+                if (download.status == MangaDownload.State.DOWNLOADING ||
+                    download.status == MangaDownload.State.QUEUE
+                ) {
                     download.status = MangaDownload.State.NOT_DOWNLOADED
                 }
             }

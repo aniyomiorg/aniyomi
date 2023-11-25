@@ -17,11 +17,11 @@ class AnimeRepositoryImpl(
 ) : AnimeRepository {
 
     override suspend fun getAnimeById(id: Long): Anime {
-        return handler.awaitOne { animesQueries.getAnimeById(id, animeMapper) }
+        return handler.awaitOne { animesQueries.getAnimeById(id, AnimeMapper::mapAnime) }
     }
 
     override suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime> {
-        return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
+        return handler.subscribeToOne { animesQueries.getAnimeById(id, AnimeMapper::mapAnime) }
     }
 
     override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
@@ -29,7 +29,7 @@ class AnimeRepositoryImpl(
             animesQueries.getAnimeByUrlAndSource(
                 url,
                 sourceId,
-                animeMapper,
+                AnimeMapper::mapAnime,
             )
         }
     }
@@ -39,30 +39,30 @@ class AnimeRepositoryImpl(
             animesQueries.getAnimeByUrlAndSource(
                 url,
                 sourceId,
-                animeMapper,
+                AnimeMapper::mapAnime,
             )
         }
     }
 
     override suspend fun getAnimeFavorites(): List<Anime> {
-        return handler.awaitList { animesQueries.getFavorites(animeMapper) }
+        return handler.awaitList { animesQueries.getFavorites(AnimeMapper::mapAnime) }
     }
 
     override suspend fun getLibraryAnime(): List<LibraryAnime> {
-        return handler.awaitList { animelibViewQueries.animelib(libraryAnime) }
+        return handler.awaitList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }
 
     override fun getLibraryAnimeAsFlow(): Flow<List<LibraryAnime>> {
-        return handler.subscribeToList { animelibViewQueries.animelib(libraryAnime) }
+        return handler.subscribeToList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }
 
     override fun getAnimeFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
-        return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
+        return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, AnimeMapper::mapAnime) }
     }
 
     override suspend fun getDuplicateLibraryAnime(id: Long, title: String): List<Anime> {
         return handler.awaitList {
-            animesQueries.getDuplicateLibraryAnime(title, id, animeMapper)
+            animesQueries.getDuplicateLibraryAnime(title, id, AnimeMapper::mapAnime)
         }
     }
 

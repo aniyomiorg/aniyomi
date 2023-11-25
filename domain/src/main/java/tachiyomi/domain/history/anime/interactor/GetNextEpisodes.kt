@@ -2,13 +2,13 @@ package tachiyomi.domain.history.anime.interactor
 
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.history.anime.repository.AnimeHistoryRepository
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import kotlin.math.max
 
 class GetNextEpisodes(
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
     private val getAnime: GetAnime,
     private val historyRepository: AnimeHistoryRepository,
 ) {
@@ -20,7 +20,7 @@ class GetNextEpisodes(
 
     suspend fun await(animeId: Long, onlyUnseen: Boolean = true): List<Episode> {
         val anime = getAnime.await(animeId) ?: return emptyList()
-        val episodes = getEpisodeByAnimeId.await(animeId)
+        val episodes = getEpisodesByAnimeId.await(animeId)
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
 
         return if (onlyUnseen) {

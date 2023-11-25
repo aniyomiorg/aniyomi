@@ -32,6 +32,7 @@ data class AnimeLibrarySort(
         data object LatestEpisode : Type(0b00010100)
         data object EpisodeFetchDate : Type(0b00011000)
         data object DateAdded : Type(0b00011100)
+        data object TrackerMean : Type(0b000100000)
         data object AiringTime : Type(0b00100000)
 
         companion object {
@@ -78,6 +79,7 @@ data class AnimeLibrarySort(
                 Type.LatestEpisode,
                 Type.EpisodeFetchDate,
                 Type.DateAdded,
+                Type.TrackerMean,
                 Type.AiringTime,
             )
         }
@@ -105,6 +107,7 @@ data class AnimeLibrarySort(
                     "LATEST_EPISODE" -> Type.LatestEpisode
                     "EPISODE_FETCH_DATE" -> Type.EpisodeFetchDate
                     "DATE_ADDED" -> Type.DateAdded
+                    "TRACKER_MEAN" -> Type.TrackerMean
                     "AIRING_TIME" -> Type.AiringTime
                     else -> Type.Alphabetical
                 }
@@ -126,6 +129,7 @@ data class AnimeLibrarySort(
             Type.LatestEpisode -> "LATEST_EPISODE"
             Type.EpisodeFetchDate -> "EPISODE_FETCH_DATE"
             Type.DateAdded -> "DATE_ADDED"
+            Type.TrackerMean -> "TRACKER_MEAN"
             Type.AiringTime -> "AIRING_TIME"
         }
         val direction = if (direction == Direction.Ascending) "ASCENDING" else "DESCENDING"

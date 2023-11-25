@@ -4,14 +4,14 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
-import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 
-class MangaUpdates(id: Long) : Tracker(id, "MangaUpdates"), MangaTracker, DeletableMangaTracker {
+class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, DeletableMangaTracker {
 
     companion object {
         const val READING_LIST = 0

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
@@ -84,7 +84,7 @@ class MangaExtensionsScreenModel(
             }
         }
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.distinctUntilChanged().debounce(SEARCH_DEBOUNCE_MILLIS),
                 _currentDownloads,
@@ -137,11 +137,11 @@ class MangaExtensionsScreenModel(
                 }
         }
 
-        coroutineScope.launchIO { findAvailableExtensions() }
+        screenModelScope.launchIO { findAvailableExtensions() }
 
         preferences.mangaExtensionUpdatesCount().changes()
             .onEach { mutableState.update { state -> state.copy(updates = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
     }
 
     fun search(query: String?) {
@@ -151,7 +151,7 @@ class MangaExtensionsScreenModel(
     }
 
     fun updateAllExtensions() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             state.value.items.values.flatten()
                 .map { it.extension }
                 .filterIsInstance<MangaExtension.Installed>()
@@ -161,13 +161,13 @@ class MangaExtensionsScreenModel(
     }
 
     fun installExtension(extension: MangaExtension.Available) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             extensionManager.installExtension(extension).collectToInstallUpdate(extension)
         }
     }
 
     fun updateExtension(extension: MangaExtension.Installed) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             extensionManager.updateExtension(extension).collectToInstallUpdate(extension)
         }
     }
@@ -195,7 +195,7 @@ class MangaExtensionsScreenModel(
     }
 
     fun findAvailableExtensions() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             mutableState.update { it.copy(isRefreshing = true) }
 
             extensionManager.findAvailableExtensions()

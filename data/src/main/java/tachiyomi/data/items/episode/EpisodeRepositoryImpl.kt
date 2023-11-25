@@ -79,27 +79,27 @@ class EpisodeRepositoryImpl(
     }
 
     override suspend fun getEpisodeByAnimeId(animeId: Long): List<Episode> {
-        return handler.awaitList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
+        return handler.awaitList { episodesQueries.getEpisodesByAnimeId(animeId, ::mapEpisode) }
     }
 
     override suspend fun getBookmarkedEpisodesByAnimeId(animeId: Long): List<Episode> {
         return handler.awaitList {
             episodesQueries.getBookmarkedEpisodesByAnimeId(
                 animeId,
-                episodeMapper,
+                ::mapEpisode,
             )
         }
     }
 
     override suspend fun getEpisodeById(id: Long): Episode? {
-        return handler.awaitOneOrNull { episodesQueries.getEpisodeById(id, episodeMapper) }
+        return handler.awaitOneOrNull { episodesQueries.getEpisodeById(id, ::mapEpisode) }
     }
 
     override suspend fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
         return handler.subscribeToList {
             episodesQueries.getEpisodesByAnimeId(
                 animeId,
-                episodeMapper,
+                ::mapEpisode,
             )
         }
     }
@@ -109,8 +109,40 @@ class EpisodeRepositoryImpl(
             episodesQueries.getEpisodeByUrlAndAnimeId(
                 url,
                 animeId,
-                episodeMapper,
+                ::mapEpisode,
             )
         }
     }
+
+    private fun mapEpisode(
+        id: Long,
+        animeId: Long,
+        url: String,
+        name: String,
+        scanlator: String?,
+        seen: Boolean,
+        bookmark: Boolean,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+        episodeNumber: Double,
+        sourceOrder: Long,
+        dateFetch: Long,
+        dateUpload: Long,
+        lastModifiedAt: Long,
+    ): Episode = Episode(
+        id = id,
+        animeId = animeId,
+        seen = seen,
+        bookmark = bookmark,
+        lastSecondSeen = lastSecondSeen,
+        totalSeconds = totalSeconds,
+        dateFetch = dateFetch,
+        sourceOrder = sourceOrder,
+        url = url,
+        name = name,
+        dateUpload = dateUpload,
+        episodeNumber = episodeNumber,
+        scanlator = scanlator,
+        lastModifiedAt = lastModifiedAt,
+    )
 }

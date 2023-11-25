@@ -391,9 +391,10 @@ class MangaDownloadCache(
                                             // Folder of images
                                             it.isDirectory -> it.name
                                             // CBZ files
-                                            it.isFile && it.name?.endsWith(".cbz") == true -> it.name!!.substringBeforeLast(
-                                                ".cbz",
-                                            )
+                                            it.isFile && it.name?.endsWith(".cbz") == true ->
+                                                it.name!!.substringBeforeLast(
+                                                    ".cbz",
+                                                )
                                             // Anything else is irrelevant
                                             else -> null
                                         }

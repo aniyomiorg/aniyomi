@@ -74,7 +74,8 @@ fun EpisodeSettingsDialog(
                 0 -> {
                     FilterPage(
                         downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
-                        onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { anime?.forceDownloaded() == true },
+                        onDownloadFilterChanged = onDownloadFilterChanged
+                            .takeUnless { anime?.forceDownloaded() == true },
                         unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
                         bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,
@@ -145,6 +146,11 @@ private fun SortPage(
         label = stringResource(R.string.sort_by_upload_date),
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_UPLOAD_DATE },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_UPLOAD_DATE) },
+    )
+    SortItem(
+        label = stringResource(R.string.action_sort_alpha),
+        sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_ALPHABET },
+        onClick = { onItemSelected(Anime.EPISODE_SORTING_ALPHABET) },
     )
 }
 

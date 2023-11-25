@@ -4,53 +4,45 @@ import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.tachiyomi.network.NetworkHelper
 import okhttp3.OkHttpClient
-import uy.kohesive.injekt.injectLazy
 
-abstract class Tracker(val id: Long, val name: String) {
+interface Tracker {
 
-    val trackPreferences: TrackPreferences by injectLazy()
-    val networkService: NetworkHelper by injectLazy()
+    val id: Long
 
-    open val client: OkHttpClient
-        get() = networkService.client
+    val name: String
+
+    val client: OkHttpClient
 
     // Application and remote support for reading dates
-    open val supportsReadingDates: Boolean = false
+    val supportsReadingDates: Boolean
 
     @DrawableRes
-    abstract fun getLogo(): Int
+    fun getLogo(): Int
 
     @ColorInt
-    abstract fun getLogoColor(): Int
+    fun getLogoColor(): Int
 
     @StringRes
-    abstract fun getStatus(status: Int): Int?
-
-    abstract suspend fun login(username: String, password: String)
+    fun getStatus(status: Int): Int?
+    fun getCompletionStatus(): Int
+    fun getScoreList(): List<String>
+    suspend fun login(username: String, password: String)
 
     @CallSuper
-    open fun logout() {
-        trackPreferences.setCredentials(this, "", "")
-    }
+    fun logout()
 
-    open val isLoggedIn: Boolean
-        get() = getUsername().isNotEmpty() &&
-            getPassword().isNotEmpty()
+    val isLoggedIn: Boolean
 
-    fun getUsername() = trackPreferences.trackUsername(this).get()
+    fun getUsername(): String
 
-    fun getPassword() = trackPreferences.trackPassword(this).get()
+    fun getPassword(): String
 
-    fun saveCredentials(username: String, password: String) {
-        trackPreferences.setCredentials(this, username, password)
-    }
+    fun saveCredentials(username: String, password: String)
 
-    open val animeService: AnimeTracker
+    val animeService: AnimeTracker
         get() = this as AnimeTracker
 
-    open val mangaService: MangaTracker
+    val mangaService: MangaTracker
         get() = this as MangaTracker
 }

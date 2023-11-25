@@ -122,7 +122,8 @@ private fun Modifier.drawScrollbar(
         items
             .fastFirstOrNull { (it.key as? String)?.startsWith(STICKY_HEADER_KEY_PREFIX)?.not() ?: true }!!
             .run {
-                val startPadding = if (reverseDirection) layoutInfo.afterContentPadding else layoutInfo.beforeContentPadding
+                val startPadding =
+                    if (reverseDirection) layoutInfo.afterContentPadding else layoutInfo.beforeContentPadding
                 startPadding + ((estimatedItemSize * index - offset) / totalSize * viewportSize)
             }
     }

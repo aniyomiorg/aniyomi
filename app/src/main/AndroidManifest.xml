@@ -234,10 +234,6 @@
             android:exported="false" />
 
         <service
-            android:name=".data.updater.AppUpdateService"
-            android:exported="false" />
-
-        <service
             android:name=".extension.manga.util.MangaExtensionInstallService"
             android:exported="false" />
 
