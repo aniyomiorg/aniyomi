@@ -1,5 +1,6 @@
 package tachiyomi.domain.library.service
 
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getEnum
@@ -41,7 +42,7 @@ class LibraryPreferences(
         AnimeLibrarySort.Serializer::deserialize,
     )
 
-    fun lastUpdatedTimestamp() = preferenceStore.getLong("library_update_last_timestamp", 0L)
+    fun lastUpdatedTimestamp() = preferenceStore.getLong(Preference.appStateKey("library_update_last_timestamp"), 0L)
     fun autoUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 0)
 
     fun autoUpdateDeviceRestrictions() = preferenceStore.getStringSet(
@@ -196,8 +197,8 @@ class LibraryPreferences(
     fun defaultAnimeCategory() = preferenceStore.getInt("default_anime_category", -1)
     fun defaultMangaCategory() = preferenceStore.getInt("default_category", -1)
 
-    fun lastUsedAnimeCategory() = preferenceStore.getInt("last_used_anime_category", 0)
-    fun lastUsedMangaCategory() = preferenceStore.getInt("last_used_category", 0)
+    fun lastUsedAnimeCategory() = preferenceStore.getInt(Preference.appStateKey("last_used_anime_category"), 0)
+    fun lastUsedMangaCategory() = preferenceStore.getInt(Preference.appStateKey("last_used_category"), 0)
 
     fun animeUpdateCategories() =
         preferenceStore.getStringSet("animelib_update_categories", emptySet())

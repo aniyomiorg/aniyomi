@@ -138,7 +138,9 @@ internal class MangaExtensionInstaller(private val context: Context) {
             emit(downloadStatus)
 
             // Stop polling when the download fails or finishes
-            if (downloadStatus == DownloadManager.STATUS_SUCCESSFUL || downloadStatus == DownloadManager.STATUS_FAILED) {
+            if (downloadStatus == DownloadManager.STATUS_SUCCESSFUL ||
+                downloadStatus == DownloadManager.STATUS_FAILED
+            ) {
                 return@flow
             }
 

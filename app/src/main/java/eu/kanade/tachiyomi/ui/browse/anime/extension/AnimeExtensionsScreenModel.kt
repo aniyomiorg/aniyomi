@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
@@ -84,7 +84,7 @@ class AnimeExtensionsScreenModel(
             }
         }
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.distinctUntilChanged().debounce(SEARCH_DEBOUNCE_MILLIS),
                 _currentDownloads,
@@ -136,11 +136,11 @@ class AnimeExtensionsScreenModel(
                     }
                 }
         }
-        coroutineScope.launchIO { findAvailableExtensions() }
+        screenModelScope.launchIO { findAvailableExtensions() }
 
         preferences.animeExtensionUpdatesCount().changes()
             .onEach { mutableState.update { state -> state.copy(updates = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
     }
 
     fun search(query: String?) {
@@ -150,7 +150,7 @@ class AnimeExtensionsScreenModel(
     }
 
     fun updateAllExtensions() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             state.value.items.values.flatten()
                 .map { it.extension }
                 .filterIsInstance<AnimeExtension.Installed>()
@@ -160,13 +160,13 @@ class AnimeExtensionsScreenModel(
     }
 
     fun installExtension(extension: AnimeExtension.Available) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             extensionManager.installExtension(extension).collectToInstallUpdate(extension)
         }
     }
 
     fun updateExtension(extension: AnimeExtension.Installed) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             extensionManager.updateExtension(extension).collectToInstallUpdate(extension)
         }
     }
@@ -194,7 +194,7 @@ class AnimeExtensionsScreenModel(
     }
 
     fun findAvailableExtensions() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             mutableState.update { it.copy(isRefreshing = true) }
             extensionManager.findAvailableExtensions()
 

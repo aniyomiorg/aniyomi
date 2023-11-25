@@ -72,7 +72,22 @@ data class BackupAnimeTracking(
     }
 }
 
-val backupAnimeTrackMapper = { _id: Long, anime_id: Long, syncId: Long, mediaId: Long, libraryId: Long?, title: String, lastEpisodeSeen: Double, totalEpisodes: Long, status: Long, score: Double, remoteUrl: String, startDate: Long, finishDate: Long ->
+val backupAnimeTrackMapper = {
+        _id: Long,
+        anime_id:
+        Long,
+        syncId: Long,
+        mediaId: Long,
+        libraryId: Long?,
+        title: String,
+        lastEpisodeSeen: Double,
+        totalEpisodes: Long,
+        status: Long,
+        score: Double,
+        remoteUrl: String,
+        startDate: Long,
+        finishDate: Long,
+    ->
     BackupAnimeTracking(
         syncId = syncId.toInt(),
         mediaId = mediaId,

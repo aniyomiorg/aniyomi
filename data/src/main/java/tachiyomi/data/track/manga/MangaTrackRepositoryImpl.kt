@@ -10,24 +10,24 @@ class MangaTrackRepositoryImpl(
 ) : MangaTrackRepository {
 
     override suspend fun getTrackByMangaId(id: Long): MangaTrack? {
-        return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, mangaTrackMapper) }
+        return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, ::mapTrack) }
     }
 
     override suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack> {
         return handler.awaitList {
-            manga_syncQueries.getTracksByMangaId(mangaId, mangaTrackMapper)
+            manga_syncQueries.getTracksByMangaId(mangaId, ::mapTrack)
         }
     }
 
     override fun getMangaTracksAsFlow(): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
-            manga_syncQueries.getTracks(mangaTrackMapper)
+            manga_syncQueries.getTracks(::mapTrack)
         }
     }
 
     override fun getTracksByMangaIdAsFlow(mangaId: Long): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
-            manga_syncQueries.getTracksByMangaId(mangaId, mangaTrackMapper)
+            manga_syncQueries.getTracksByMangaId(mangaId, ::mapTrack)
         }
     }
 
@@ -68,4 +68,34 @@ class MangaTrackRepositoryImpl(
             }
         }
     }
+
+    private fun mapTrack(
+        id: Long,
+        mangaId: Long,
+        syncId: Long,
+        remoteId: Long,
+        libraryId: Long?,
+        title: String,
+        lastChapterRead: Double,
+        totalChapters: Long,
+        status: Long,
+        score: Double,
+        remoteUrl: String,
+        startDate: Long,
+        finishDate: Long,
+    ): MangaTrack = MangaTrack(
+        id = id,
+        mangaId = mangaId,
+        syncId = syncId,
+        remoteId = remoteId,
+        libraryId = libraryId,
+        title = title,
+        lastChapterRead = lastChapterRead,
+        totalChapters = totalChapters,
+        status = status,
+        score = score,
+        remoteUrl = remoteUrl,
+        startDate = startDate,
+        finishDate = finishDate,
+    )
 }

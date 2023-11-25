@@ -1,20 +1,17 @@
 package tachiyomi.domain.items.chapter.interactor
 
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.repository.ChapterRepository
 
-class GetChapterByMangaId(
+class GetChapterByUrlAndMangaId(
     private val chapterRepository: ChapterRepository,
 ) {
 
-    suspend fun await(mangaId: Long): List<Chapter> {
+    suspend fun await(url: String, sourceId: Long): Chapter? {
         return try {
-            chapterRepository.getChapterByMangaId(mangaId)
+            chapterRepository.getChapterByUrlAndMangaId(url, sourceId)
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-            emptyList()
+            null
         }
     }
 }

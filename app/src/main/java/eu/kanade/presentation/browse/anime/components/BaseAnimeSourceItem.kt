@@ -26,7 +26,9 @@ fun BaseAnimeSourceItem(
     action: @Composable RowScope.(AnimeSource) -> Unit = {},
     content: @Composable RowScope.(AnimeSource, String?) -> Unit = defaultContent,
 ) {
-    val sourceLangString = LocaleHelper.getSourceDisplayName(source.lang, LocalContext.current).takeIf { showLanguageInContent }
+    val sourceLangString = LocaleHelper.getSourceDisplayName(source.lang, LocalContext.current).takeIf {
+        showLanguageInContent
+    }
     BaseBrowseItem(
         modifier = modifier,
         onClickItem = onClickItem,

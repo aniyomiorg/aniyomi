@@ -1,20 +1,17 @@
 package tachiyomi.domain.items.episode.interactor
 
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 
-class GetEpisodeByAnimeId(
+class GetEpisodeByUrlAndAnimeId(
     private val episodeRepository: EpisodeRepository,
 ) {
 
-    suspend fun await(animeId: Long): List<Episode> {
+    suspend fun await(url: String, sourceId: Long): Episode? {
         return try {
-            episodeRepository.getEpisodeByAnimeId(animeId)
+            episodeRepository.getEpisodeByUrlAndAnimeId(url, sourceId)
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-            emptyList()
+            null
         }
     }
 }

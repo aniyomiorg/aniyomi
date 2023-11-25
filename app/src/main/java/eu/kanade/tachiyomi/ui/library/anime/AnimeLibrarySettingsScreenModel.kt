@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.library.anime
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import tachiyomi.core.preference.Preference
@@ -47,7 +47,7 @@ class AnimeLibrarySettingsScreenModel(
         mode: AnimeLibrarySort.Type,
         direction: AnimeLibrarySort.Direction,
     ) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             setSortModeForCategory.await(category, mode, direction)
         }
     }

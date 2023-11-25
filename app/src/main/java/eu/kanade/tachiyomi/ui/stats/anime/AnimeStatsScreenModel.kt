@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.stats.anime
 
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.fastCountNot
 import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
@@ -31,7 +31,7 @@ import uy.kohesive.injekt.api.get
 class AnimeStatsScreenModel(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val getAnimelibAnime: GetLibraryAnime = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val preferences: LibraryPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
@@ -40,7 +40,7 @@ class AnimeStatsScreenModel(
     private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is AnimeTracker } }
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val animelibAnime = getAnimelibAnime.await()
 
             val distinctLibraryAnime = animelibAnime.fastDistinctBy { it.id }
@@ -128,7 +128,7 @@ class AnimeStatsScreenModel(
     private suspend fun getWatchTime(libraryAnimeList: List<LibraryAnime>): Long {
         var watchTime = 0L
         libraryAnimeList.forEach { libraryAnime ->
-            getEpisodeByAnimeId.await(libraryAnime.anime.id).forEach { episode ->
+            getEpisodesByAnimeId.await(libraryAnime.anime.id).forEach { episode ->
                 watchTime += if (episode.seen) {
                     episode.totalSeconds
                 } else {

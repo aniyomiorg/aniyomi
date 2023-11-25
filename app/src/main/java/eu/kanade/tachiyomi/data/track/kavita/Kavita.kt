@@ -1,14 +1,13 @@
 package eu.kanade.tachiyomi.data.track.kavita
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import com.google.common.base.Strings.isNullOrEmpty
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
-import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.MangaSource
@@ -19,7 +18,7 @@ import uy.kohesive.injekt.injectLazy
 import java.security.MessageDigest
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Kavita(private val context: Context, id: Long) : Tracker(id, "Kavita"), EnhancedMangaTracker, MangaTracker {
+class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaTracker {
 
     companion object {
         const val UNREAD = 1

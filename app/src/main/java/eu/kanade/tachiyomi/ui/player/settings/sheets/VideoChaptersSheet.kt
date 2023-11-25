@@ -63,7 +63,13 @@ fun VideoChaptersSheet(
                 val nextChapterTime = videoChapters.getOrNull(index + 1)?.time?.toInt()
 
                 val selected = (index == videoChapters.lastIndex && currentTimePosition >= videoChapterTime) ||
-                    (currentTimePosition >= videoChapterTime && (nextChapterTime == null || currentTimePosition < nextChapterTime))
+                    (
+                        currentTimePosition >= videoChapterTime &&
+                            (
+                                nextChapterTime == null ||
+                                    currentTimePosition < nextChapterTime
+                                )
+                        )
 
                 val onClick = {
                     currentTimePosition = videoChapter.time.roundToInt()

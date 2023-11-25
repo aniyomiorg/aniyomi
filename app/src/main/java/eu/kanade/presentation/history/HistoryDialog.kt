@@ -34,7 +34,11 @@ fun HistoryDeleteDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val subtitle = if (isManga) R.string.dialog_with_checkbox_remove_description else R.string.dialog_with_checkbox_remove_description_anime
+                val subtitle = if (isManga) {
+                    R.string.dialog_with_checkbox_remove_description
+                } else {
+                    R.string.dialog_with_checkbox_remove_description_anime
+                }
                 Text(text = stringResource(subtitle))
 
                 LabeledCheckbox(

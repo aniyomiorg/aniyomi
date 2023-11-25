@@ -220,7 +220,10 @@ private fun SearchResult(
             .toList()
     }
 
-    Crossfade(targetState = result) {
+    Crossfade(
+        targetState = result,
+        label = "results",
+    ) {
         when {
             it == null -> {}
             it.isEmpty() -> {
@@ -301,7 +304,7 @@ private val settingScreens = listOf(
     // AM (CONNECTIONS) -->
     SettingsConnectionsScreen,
     // <-- AM (CONNECTIONS)
-    SettingsBackupScreen,
+    SettingsDataScreen,
     SettingsSecurityScreen,
     SettingsAdvancedScreen,
     AdvancedPlayerSettingsScreen,

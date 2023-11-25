@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.updater.AppUpdateService
+import eu.kanade.tachiyomi.data.updater.AppUpdateDownloadJob
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -108,6 +108,8 @@ class NotificationReceiver : BroadcastReceiver() {
             // Cancel library update and dismiss notification
             ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context)
             ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context)
+            // Start downloading app update
+            ACTION_START_APP_UPDATE -> startDownloadAppUpdate(context, intent)
             // Cancel downloading app update
             ACTION_CANCEL_APP_UPDATE_DOWNLOAD -> cancelDownloadAppUpdate(context)
             // Open reader activity
@@ -301,18 +303,22 @@ class NotificationReceiver : BroadcastReceiver() {
         MangaLibraryUpdateJob.stop(context)
     }
 
-    private fun cancelDownloadAppUpdate(context: Context) {
-        AppUpdateService.stop(context)
-    }
-
     /**
      * Method called when user wants to stop a library update
      *
      * @param context context of application
-     * @param notificationId id of notification
      */
     private fun cancelAnimelibUpdate(context: Context) {
         AnimeLibraryUpdateJob.stop(context)
+    }
+
+    private fun startDownloadAppUpdate(context: Context, intent: Intent) {
+        val url = intent.getStringExtra(AppUpdateDownloadJob.EXTRA_DOWNLOAD_URL) ?: return
+        AppUpdateDownloadJob.start(context, url)
+    }
+
+    private fun cancelDownloadAppUpdate(context: Context) {
+        AppUpdateDownloadJob.stop(context)
     }
 
     /**
@@ -414,6 +420,7 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val ACTION_CANCEL_LIBRARY_UPDATE = "$ID.$NAME.CANCEL_LIBRARY_UPDATE"
         private const val ACTION_CANCEL_ANIMELIB_UPDATE = "$ID.$NAME.CANCEL_ANIMELIB_UPDATE"
 
+        private const val ACTION_START_APP_UPDATE = "$ID.$NAME.ACTION_START_APP_UPDATE"
         private const val ACTION_CANCEL_APP_UPDATE_DOWNLOAD = "$ID.$NAME.CANCEL_APP_UPDATE_DOWNLOAD"
 
         private const val ACTION_MARK_AS_READ = "$ID.$NAME.MARK_AS_READ"
@@ -880,9 +887,33 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         /**
+         * Returns [PendingIntent] that starts the [AppUpdateDownloadJob] to download an app update.
+         *
+         * @param context context of application
+         * @return [PendingIntent]
+         */
+        internal fun downloadAppUpdatePendingBroadcast(
+            context: Context,
+            url: String,
+            title: String? = null,
+        ): PendingIntent {
+            return Intent(context, NotificationReceiver::class.java).run {
+                action = ACTION_START_APP_UPDATE
+                putExtra(AppUpdateDownloadJob.EXTRA_DOWNLOAD_URL, url)
+                title?.let { putExtra(AppUpdateDownloadJob.EXTRA_DOWNLOAD_TITLE, it) }
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    this,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
+            }
+        }
+
+        /**
          *
          */
-        internal fun cancelUpdateDownloadPendingBroadcast(context: Context): PendingIntent {
+        internal fun cancelDownloadAppUpdatePendingBroadcast(context: Context): PendingIntent {
             val intent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_CANCEL_APP_UPDATE_DOWNLOAD
             }

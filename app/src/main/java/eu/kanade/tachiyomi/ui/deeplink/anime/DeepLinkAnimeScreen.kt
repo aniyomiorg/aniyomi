@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -14,6 +15,7 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.LoadingScreen
 
@@ -23,6 +25,7 @@ class DeepLinkAnimeScreen(
 
     @Composable
     override fun Content() {
+        val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
 
         val screenModel = rememberScreenModel {
@@ -46,12 +49,22 @@ class DeepLinkAnimeScreen(
                     navigator.replace(GlobalAnimeSearchScreen(query))
                 }
                 is DeepLinkAnimeScreenModel.State.Result -> {
-                    navigator.replace(
-                        AnimeScreen(
-                            (state as DeepLinkAnimeScreenModel.State.Result).anime.id,
-                            true,
-                        ),
-                    )
+                    val resultState = state as DeepLinkAnimeScreenModel.State.Result
+                    if (resultState.episodeId == null) {
+                        navigator.replace(
+                            AnimeScreen(
+                                resultState.anime.id,
+                                true,
+                            ),
+                        )
+                    } else {
+                        navigator.pop()
+                        PlayerActivity.newIntent(
+                            context,
+                            resultState.anime.id,
+                            resultState.episodeId,
+                        ).also(context::startActivity)
+                    }
                 }
             }
         }

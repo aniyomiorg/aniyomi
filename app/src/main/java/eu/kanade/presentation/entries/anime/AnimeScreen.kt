@@ -5,9 +5,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
@@ -27,7 +29,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -47,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
@@ -73,7 +78,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
-import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
+import eu.kanade.tachiyomi.ui.entries.anime.EpisodeList
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
@@ -87,8 +92,10 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 import java.text.DateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -107,7 +114,7 @@ fun AnimeScreen(
     alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
-    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+    onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
@@ -139,10 +146,10 @@ fun AnimeScreen(
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 
     // For episode swipe
-    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 
     // Episode selection
-    onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
+    onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onAllEpisodeSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
@@ -257,7 +264,7 @@ private fun AnimeScreenSmallImpl(
     alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
-    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+    onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
@@ -291,16 +298,17 @@ private fun AnimeScreenSmallImpl(
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 
     // For episode swipe
-    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 
     // Episode selection
-    onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
+    onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onAllEpisodeSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
     val episodeListState = rememberLazyListState()
 
     val episodes = remember(state) { state.processedEpisodes }
+    val listItem = remember(state) { state.episodeListItems }
 
     val isAnySelected by remember {
         derivedStateOf {
@@ -502,7 +510,9 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                            if (timer > 0L && showNextEpisodeAirTime &&
+                                state.anime.status.toInt() != SAnime.COMPLETED
+                            ) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
@@ -516,7 +526,8 @@ private fun AnimeScreenSmallImpl(
 
                     sharedEpisodeItems(
                         anime = state.anime,
-                        episodes = episodes,
+                        episodes = listItem,
+                        isAnyEpisodeSelected = episodes.fastAny { it.selected },
                         dateRelativeTime = dateRelativeTime,
                         dateFormat = dateFormat,
                         episodeSwipeStartAction = episodeSwipeStartAction,
@@ -546,7 +557,7 @@ fun AnimeScreenLargeImpl(
     alwaysUseExternalPlayer: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
-    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+    onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
@@ -580,10 +591,10 @@ fun AnimeScreenLargeImpl(
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 
     // For swipe actions
-    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 
     // Episode selection
-    onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
+    onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onAllEpisodeSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
@@ -591,6 +602,7 @@ fun AnimeScreenLargeImpl(
     val density = LocalDensity.current
 
     val episodes = remember(state) { state.processedEpisodes }
+    val listItem = remember(state) { state.episodeListItems }
 
     val isAnySelected by remember {
         derivedStateOf {
@@ -684,7 +696,11 @@ fun AnimeScreenLargeImpl(
                             val isWatching = remember(state.episodes) {
                                 state.episodes.fastAny { it.episode.seen }
                             }
-                            Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
+                            Text(
+                                text = stringResource(
+                                    if (isWatching) R.string.action_resume else R.string.action_start,
+                                ),
+                            )
                         },
                         icon = {
                             Icon(
@@ -785,7 +801,9 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime && state.anime.status.toInt() != SAnime.COMPLETED) {
+                                    if (timer > 0L && showNextEpisodeAirTime &&
+                                        state.anime.status.toInt() != SAnime.COMPLETED
+                                    ) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
                                                 R.string.display_mode_episode,
@@ -799,7 +817,8 @@ fun AnimeScreenLargeImpl(
 
                             sharedEpisodeItems(
                                 anime = state.anime,
-                                episodes = episodes,
+                                episodes = listItem,
+                                isAnyEpisodeSelected = episodes.fastAny { it.selected },
                                 dateRelativeTime = dateRelativeTime,
                                 dateFormat = dateFormat,
                                 episodeSwipeStartAction = episodeSwipeStartAction,
@@ -819,13 +838,13 @@ fun AnimeScreenLargeImpl(
 
 @Composable
 private fun SharedAnimeBottomActionMenu(
-    selected: List<EpisodeItem>,
+    selected: List<EpisodeList.Item>,
     modifier: Modifier = Modifier,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
-    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+    onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
     fillFraction: Float,
     alwaysUseExternalPlayer: Boolean,
@@ -870,100 +889,123 @@ private fun SharedAnimeBottomActionMenu(
 
 private fun LazyListScope.sharedEpisodeItems(
     anime: Anime,
-    episodes: List<EpisodeItem>,
+    episodes: List<EpisodeList>,
+    isAnyEpisodeSelected: Boolean,
     dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
-    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
-    onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
-    onEpisodeSwipe: (EpisodeItem, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
+    onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
+    onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
 ) {
     items(
         items = episodes,
-        key = { "episode-${it.episode.id}" },
+        key = { item ->
+            when (item) {
+                is EpisodeList.MissingCount -> "missing-count-${item.id}"
+                is EpisodeList.Item -> "episode-${item.id}"
+            }
+        },
         contentType = { EntryScreenItem.ITEM },
-    ) { episodeItem ->
+    ) { item ->
         val haptic = LocalHapticFeedback.current
         val context = LocalContext.current
 
-        AnimeEpisodeListItem(
-            title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                stringResource(
-                    R.string.display_mode_episode,
-                    formatEpisodeNumber(episodeItem.episode.episodeNumber),
-                )
-            } else {
-                episodeItem.episode.name
-            },
-            date = episodeItem.episode.dateUpload
-                .takeIf { it > 0L }
-                ?.let {
-                    Date(it).toRelativeString(
-                        context,
-                        dateRelativeTime,
-                        dateFormat,
+        when (item) {
+            is EpisodeList.MissingCount -> {
+                Row(
+                    modifier = Modifier.padding(
+                        horizontal = MaterialTheme.padding.medium,
+                        vertical = MaterialTheme.padding.small,
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
+                ) {
+                    HorizontalDivider(modifier = Modifier.weight(1f))
+                    Text(
+                        text = pluralStringResource(
+                            id = R.plurals.missing_items,
+                            count = item.count,
+                            item.count,
+                        ),
+                        modifier = Modifier.secondaryItemAlpha(),
                     )
-                },
-            watchProgress = episodeItem.episode.lastSecondSeen
-                .takeIf { !episodeItem.episode.seen && it > 0L }
-                ?.let {
-                    stringResource(
-                        R.string.episode_progress,
-                        formatTime(it),
-                        formatTime(episodeItem.episode.totalSeconds),
-                    )
-                },
-            scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
-            seen = episodeItem.episode.seen,
-            bookmark = episodeItem.episode.bookmark,
-            selected = episodeItem.selected,
-            downloadIndicatorEnabled = episodes.fastAll { !it.selected },
-            downloadStateProvider = { episodeItem.downloadState },
-            downloadProgressProvider = { episodeItem.downloadProgress },
-            episodeSwipeStartAction = episodeSwipeStartAction,
-            episodeSwipeEndAction = episodeSwipeEndAction,
-            onLongClick = {
-                onEpisodeSelected(episodeItem, !episodeItem.selected, true, true)
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-            },
-            onClick = {
-                onEpisodeItemClick(
-                    episodeItem = episodeItem,
-                    episodes = episodes,
-                    onToggleSelection = {
-                        onEpisodeSelected(
-                            episodeItem,
-                            !episodeItem.selected,
-                            true,
-                            false,
+                    HorizontalDivider(modifier = Modifier.weight(1f))
+                }
+            }
+            is EpisodeList.Item -> {
+                AnimeEpisodeListItem(
+                    title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
+                        stringResource(
+                            R.string.display_mode_episode,
+                            formatEpisodeNumber(item.episode.episodeNumber),
+                        )
+                    } else {
+                        item.episode.name
+                    },
+                    date = item.episode.dateUpload
+                        .takeIf { it > 0L }
+                        ?.let {
+                            Date(it).toRelativeString(
+                                context,
+                                dateRelativeTime,
+                                dateFormat,
+                            )
+                        },
+                    watchProgress = item.episode.lastSecondSeen
+                        .takeIf { !item.episode.seen && it > 0L }
+                        ?.let {
+                            stringResource(
+                                R.string.episode_progress,
+                                it + 1,
+                            )
+                        },
+                    scanlator = item.episode.scanlator.takeIf { !it.isNullOrBlank() },
+                    seen = item.episode.seen,
+                    bookmark = item.episode.bookmark,
+                    selected = item.selected,
+                    downloadIndicatorEnabled = !isAnyEpisodeSelected,
+                    downloadStateProvider = { item.downloadState },
+                    downloadProgressProvider = { item.downloadProgress },
+                    episodeSwipeStartAction = episodeSwipeStartAction,
+                    episodeSwipeEndAction = episodeSwipeEndAction,
+                    onLongClick = {
+                        onEpisodeSelected(item, !item.selected, true, true)
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    },
+                    onClick = {
+                        onEpisodeItemClick(
+                            episodeItem = item,
+                            isAnyEpisodeSelected = isAnyEpisodeSelected,
+                            onToggleSelection = { onEpisodeSelected(item, !item.selected, true, false) },
+                            onEpisodeClicked = onEpisodeClicked,
                         )
                     },
-                    onEpisodeClicked = onEpisodeClicked,
+                    onDownloadClick = if (onDownloadEpisode != null) {
+                        { onDownloadEpisode(listOf(item), it) }
+                    } else {
+                        null
+                    },
+                    onEpisodeSwipe = {
+                        onEpisodeSwipe(item, it)
+                    },
                 )
-            },
-            onDownloadClick = if (onDownloadEpisode != null) {
-                { onDownloadEpisode(listOf(episodeItem), it) }
-            } else {
-                null
-            },
-            onEpisodeSwipe = {
-                onEpisodeSwipe(episodeItem, it)
-            },
-        )
+            }
+        }
     }
 }
 
 private fun onEpisodeItemClick(
-    episodeItem: EpisodeItem,
-    episodes: List<EpisodeItem>,
+    episodeItem: EpisodeList.Item,
+    isAnyEpisodeSelected: Boolean,
     onToggleSelection: (Boolean) -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
 ) {
     when {
         episodeItem.selected -> onToggleSelection(false)
-        episodes.fastAny { it.selected } -> onToggleSelection(true)
+        isAnyEpisodeSelected -> onToggleSelection(true)
         else -> onEpisodeClicked(episodeItem.episode, false)
     }
 }

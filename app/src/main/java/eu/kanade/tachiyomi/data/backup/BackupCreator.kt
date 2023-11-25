@@ -41,6 +41,7 @@ import logcat.LogPriority
 import okio.buffer
 import okio.gzip
 import okio.sink
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
@@ -444,6 +445,6 @@ class BackupCreator(
             }
             backupPreferences.add(toAdd)
         }
-        return backupPreferences
+        return backupPreferences.filter { !Preference.isPrivate(it.key) && !Preference.isAppState(it.key) }
     }
 }

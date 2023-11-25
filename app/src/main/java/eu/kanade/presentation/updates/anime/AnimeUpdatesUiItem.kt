@@ -1,6 +1,5 @@
 package eu.kanade.presentation.updates.anime
 
-import android.text.format.DateUtils
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -40,6 +39,7 @@ import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
+import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
@@ -48,24 +48,13 @@ import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.selectedBackground
-import java.util.Date
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
     item(key = "animeUpdates-lastUpdated") {
-        val time = remember(lastUpdated) {
-            val now = Date().time
-            if (now - lastUpdated < 1.minutes.inWholeMilliseconds) {
-                null
-            } else {
-                DateUtils.getRelativeTimeSpanString(lastUpdated, now, DateUtils.MINUTE_IN_MILLIS)
-            }
-        }
-
         Box(
             modifier = Modifier
                 .animateItemPlacement()
@@ -75,14 +64,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
                 ),
         ) {
             Text(
-                text = if (time.isNullOrEmpty()) {
-                    stringResource(
-                        R.string.updates_last_update_info,
-                        stringResource(R.string.updates_last_update_info_just_now),
-                    )
-                } else {
-                    stringResource(R.string.updates_last_update_info, time)
-                },
+                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }

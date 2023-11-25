@@ -59,7 +59,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
@@ -81,7 +81,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
@@ -282,7 +282,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val position: Long?,
     )
     private fun initEpisodeList(anime: Anime): List<Episode> {
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
+        val episodes = runBlocking { getEpisodesByAnimeId.await(anime.id) }
 
         return episodes
             .sortedWith(getEpisodeSort(anime, sortDescending = false))

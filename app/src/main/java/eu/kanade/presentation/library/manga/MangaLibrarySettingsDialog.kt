@@ -148,6 +148,13 @@ private fun ColumnScope.SortPage(
     val sortingMode = category.sort.type
     val sortDescending = !category.sort.isAscending
 
+    val trackerSortOption =
+        if (screenModel.trackers.isEmpty()) {
+            emptyList()
+        } else {
+            listOf(R.string.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean)
+        }
+
     listOf(
         R.string.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
         R.string.action_sort_total to MangaLibrarySort.Type.TotalChapters,
@@ -157,15 +164,23 @@ private fun ColumnScope.SortPage(
         R.string.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
         R.string.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
         R.string.action_sort_date_added to MangaLibrarySort.Type.DateAdded,
-    ).map { (titleRes, mode) ->
+    ).plus(trackerSortOption).map { (titleRes, mode) ->
         SortItem(
             label = stringResource(titleRes),
             sortDescending = sortDescending.takeIf { sortingMode == mode },
             onClick = {
                 val isTogglingDirection = sortingMode == mode
                 val direction = when {
-                    isTogglingDirection -> if (sortDescending) MangaLibrarySort.Direction.Ascending else MangaLibrarySort.Direction.Descending
-                    else -> if (sortDescending) MangaLibrarySort.Direction.Descending else MangaLibrarySort.Direction.Ascending
+                    isTogglingDirection -> if (sortDescending) {
+                        MangaLibrarySort.Direction.Ascending
+                    } else {
+                        MangaLibrarySort.Direction.Descending
+                    }
+                    else -> if (sortDescending) {
+                        MangaLibrarySort.Direction.Descending
+                    } else {
+                        MangaLibrarySort.Direction.Ascending
+                    }
                 }
                 screenModel.setSort(category, mode, direction)
             },

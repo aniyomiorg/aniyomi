@@ -219,7 +219,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         animationHandler.removeCallbacks(fadeOutControlsRunnable)
         animationHandler.removeCallbacks(hideUiForSeekRunnable)
 
-        if (!(binding.topControlsGroup.visibility == View.INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
+        if (!(
+                binding.topControlsGroup.visibility == View.INVISIBLE &&
+                    binding.middleControlsGroup.visibility == INVISIBLE &&
+                    binding.bottomControlsGroup.visibility == INVISIBLE
+                )
+        ) {
             wasPausedBeforeSeeking = player.paused!!
             showControls = binding.unlockedView.isVisible
             binding.topControlsGroup.visibility = View.INVISIBLE
