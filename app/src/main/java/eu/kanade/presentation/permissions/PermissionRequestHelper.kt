@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.google.accompanist.permissions.rememberPermissionState
 
-
 /**
  * Launches request for [Manifest.permission.WRITE_EXTERNAL_STORAGE] permission
  */

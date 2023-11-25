@@ -115,7 +115,7 @@ class AnimeCategoryRepositoryImpl(
             name = name,
             order = order,
             flags = flags,
-            hidden = hidden == 1L
+            hidden = hidden == 1L,
         )
     }
 }

@@ -92,7 +92,6 @@ import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.presentation.widget.util.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import kotlin.math.abs
 
 class ReaderActivity : BaseActivity() {
 

@@ -6,7 +6,6 @@ import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import okhttp3.OkHttpClient
-import tachiyomi.domain.track.manga.model.MangaTrack
 
 data class DummyTracker(
     override val id: Long,

@@ -6,7 +6,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.dev.preview.DummyTracker
 
-
 internal class TrackLogoIconPreviewProvider : PreviewParameterProvider<Tracker> {
 
     override val values: Sequence<Tracker>

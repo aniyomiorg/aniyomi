@@ -402,7 +402,7 @@ object SettingsDataScreen : SearchableSettings {
         val backupInterval by backupIntervalPref.collectAsState()
 
         val chapterCache = remember { Injekt.get<ChapterCache>() }
-        val episodeCache = remember { Injekt.get<EpisodeCache>()}
+        val episodeCache = remember { Injekt.get<EpisodeCache>() }
         var readableSizeSema by remember { mutableIntStateOf(0) }
         val readableSize = remember(readableSizeSema) { chapterCache.readableSize }
         val readableAnimeSize = remember(readableSizeSema) { episodeCache.readableSize }

@@ -73,7 +73,6 @@ private fun DialogContent(
     }
 }
 
-
 @ThemePreviews
 @Composable
 private fun DialogContentPreview() {

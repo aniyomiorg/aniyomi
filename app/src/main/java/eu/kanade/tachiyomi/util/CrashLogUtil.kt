@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.util
 
 import android.content.Context
 import android.os.Build
-import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.util.storage.getUriCompat
