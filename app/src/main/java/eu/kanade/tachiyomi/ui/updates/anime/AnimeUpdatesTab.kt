@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -48,7 +48,7 @@ fun Screen.animeUpdatesTab(
 
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
-    val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get()
+    val getEpisodeByAnimeId: GetEpisodesByAnimeId = Injekt.get()
 
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
