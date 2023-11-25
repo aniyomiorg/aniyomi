@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader
 
 import android.app.Application
 import android.net.Uri
+import androidx.annotation.IntRange
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -449,6 +450,8 @@ class ReaderViewModel @JvmOverloads constructor(
         if (inDownloadRange) {
             downloadNextChapters()
         }
+
+        eventChannel.trySend(Event.PageChanged)
     }
 
     private fun downloadNextChapters() {
@@ -650,7 +653,7 @@ class ReaderViewModel @JvmOverloads constructor(
     fun setMangaReadingMode(readingModeType: ReadingModeType) {
         val manga = manga ?: return
         runBlocking(Dispatchers.IO) {
-            setMangaViewerFlags.awaitSetMangaReadingMode(
+            setMangaViewerFlags.awaitSetReadingMode(
                 manga.id,
                 readingModeType.flagValue.toLong(),
             )
@@ -689,7 +692,7 @@ class ReaderViewModel @JvmOverloads constructor(
     fun setMangaOrientationType(rotationType: OrientationType) {
         val manga = manga ?: return
         viewModelScope.launchIO {
-            setMangaViewerFlags.awaitSetOrientationType(manga.id, rotationType.flagValue.toLong())
+            setMangaViewerFlags.awaitSetOrientation(manga.id, rotationType.flagValue.toLong())
             val currChapters = state.value.viewerChapters
             if (currChapters != null) {
                 // Save current page
@@ -926,7 +929,7 @@ class ReaderViewModel @JvmOverloads constructor(
         val viewer: Viewer? = null,
         val dialog: Dialog? = null,
         val menuVisible: Boolean = false,
-        val brightnessOverlayValue: Int = 0,
+        @IntRange(from = -100, to = 100) val brightnessOverlayValue: Int = 0,
     ) {
         val currentChapter: ReaderChapter?
             get() = viewerChapters?.currChapter
@@ -945,6 +948,7 @@ class ReaderViewModel @JvmOverloads constructor(
 
     sealed interface Event {
         data object ReloadViewerChapters : Event
+        data object PageChanged : Event
         data class SetOrientation(val orientation: Int) : Event
         data class SetCoverResult(val result: SetAsCoverResult) : Event
 

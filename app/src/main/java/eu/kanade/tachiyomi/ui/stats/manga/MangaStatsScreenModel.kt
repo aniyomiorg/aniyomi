@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.stats.manga
 
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.fastCountNot
 import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
@@ -40,7 +40,7 @@ class MangaStatsScreenModel(
     private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is MangaTracker } }
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val libraryManga = getLibraryManga.await()
 
             val distinctLibraryManga = libraryManga.fastDistinctBy { it.id }

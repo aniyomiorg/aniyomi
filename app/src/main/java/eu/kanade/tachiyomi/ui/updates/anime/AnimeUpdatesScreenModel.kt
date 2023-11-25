@@ -7,7 +7,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
@@ -67,8 +67,8 @@ class AnimeUpdatesScreenModel(
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
 
-    val lastUpdated by libraryPreferences.lastUpdatedTimestamp().asState(coroutineScope)
-    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
+    val lastUpdated by libraryPreferences.lastUpdatedTimestamp().asState(screenModelScope)
+    val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
 
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
 
@@ -77,7 +77,7 @@ class AnimeUpdatesScreenModel(
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             // Set date limit for recent episodes
             val calendar = Calendar.getInstance().apply {
                 time = Date()
@@ -103,7 +103,7 @@ class AnimeUpdatesScreenModel(
                 }
         }
 
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             merge(downloadManager.statusFlow(), downloadManager.progressFlow())
                 .catch { logcat(LogPriority.ERROR, it) }
                 .collect(this@AnimeUpdatesScreenModel::updateDownloadState)
@@ -135,7 +135,7 @@ class AnimeUpdatesScreenModel(
 
     fun updateLibrary(): Boolean {
         val started = AnimeLibraryUpdateJob.startNow(Injekt.get<Application>())
-        coroutineScope.launch {
+        screenModelScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }
         return started
@@ -167,7 +167,7 @@ class AnimeUpdatesScreenModel(
 
     fun downloadEpisodes(items: List<AnimeUpdatesItem>, action: EpisodeDownloadAction) {
         if (items.isEmpty()) return
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (action) {
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items)
@@ -211,7 +211,7 @@ class AnimeUpdatesScreenModel(
      * @param seen whether to mark episodes as seen or unseen.
      */
     fun markUpdatesSeen(updates: List<AnimeUpdatesItem>, seen: Boolean) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             setSeenStatus.await(
                 seen = seen,
                 episodes = updates
@@ -227,7 +227,7 @@ class AnimeUpdatesScreenModel(
      * @param updates the list of episodes to bookmark.
      */
     fun bookmarkUpdates(updates: List<AnimeUpdatesItem>, bookmark: Boolean) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             updates
                 .filterNot { it.update.bookmark == bookmark }
                 .map { EpisodeUpdate(id = it.update.episodeId, bookmark = bookmark) }
@@ -241,7 +241,7 @@ class AnimeUpdatesScreenModel(
      * @param updatesItem the list of episodes to download.
      */
     private fun downloadEpisodes(updatesItem: List<AnimeUpdatesItem>, alt: Boolean = false) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             val groupedUpdates = updatesItem.groupBy { it.update.animeId }.values
             for (updates in groupedUpdates) {
                 val animeId = updates.first().update.animeId
@@ -260,7 +260,7 @@ class AnimeUpdatesScreenModel(
      * @param updatesItem list of episodes
      */
     fun deleteEpisodes(updatesItem: List<AnimeUpdatesItem>) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             updatesItem
                 .groupBy { it.update.animeId }
                 .entries

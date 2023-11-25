@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.download.manga
 
 import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
@@ -114,7 +114,7 @@ class MangaDownloadQueueScreenModel(
     }
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             downloadManager.queueState
                 .map { downloads ->
                     downloads
@@ -211,7 +211,7 @@ class MangaDownloadQueueScreenModel(
      * @param download the download to observe its progress.
      */
     private fun launchProgressJob(download: MangaDownload) {
-        val job = coroutineScope.launch {
+        val job = screenModelScope.launch {
             while (download.pages == null) {
                 delay(50)
             }

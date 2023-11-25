@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.deeplink.anime
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
@@ -32,7 +32,7 @@ class DeepLinkAnimeScreenModel(
 ) : StateScreenModel<DeepLinkAnimeScreenModel.State>(State.Loading) {
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val source = sourceManager.getCatalogueSources()
                 .filterIsInstance<ResolvableAnimeSource>()
                 .firstOrNull { it.getUriType(query) != UriType.Unknown }

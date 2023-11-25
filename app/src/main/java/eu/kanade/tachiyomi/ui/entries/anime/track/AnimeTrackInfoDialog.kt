@@ -34,8 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -193,11 +193,11 @@ data class AnimeTrackInfoDialogHomeScreen(
     ) : StateScreenModel<Model.State>(State()) {
 
         init {
-            coroutineScope.launch {
+            screenModelScope.launch {
                 refreshTrackers()
             }
 
-            coroutineScope.launch {
+            screenModelScope.launch {
                 getTracks.subscribe(animeId)
                     .catch { logcat(LogPriority.ERROR, it) }
                     .distinctUntilChanged()
@@ -214,7 +214,7 @@ data class AnimeTrackInfoDialogHomeScreen(
 
         fun registerEnhancedTracking(item: AnimeTrackItem) {
             item.tracker as EnhancedAnimeTracker
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 val anime = Injekt.get<GetAnime>().await(animeId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.tracker.match(anime) ?: throw Exception()
@@ -307,7 +307,7 @@ private data class TrackStatusSelectorScreen(
         }
 
         fun setStatus() {
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 tracker.animeService.setRemoteAnimeStatus(track.toDbTrack(), state.value.selection)
             }
         }
@@ -367,7 +367,7 @@ private data class TrackEpisodeSelectorScreen(
         }
 
         fun setEpisode() {
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 tracker.animeService.setRemoteLastEpisodeSeen(
                     track.toDbTrack(),
                     state.value.selection,
@@ -424,7 +424,7 @@ private data class TrackScoreSelectorScreen(
         }
 
         fun setScore() {
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 tracker.animeService.setRemoteScore(track.toDbTrack(), state.value.selection)
             }
         }
@@ -552,7 +552,7 @@ private data class TrackDateSelectorScreen(
             // Convert to local time
             val localMillis =
                 millis.convertEpochMillisZone(ZoneOffset.UTC, ZoneOffset.systemDefault())
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 if (start) {
                     tracker.animeService.setRemoteStartDate(track.toDbTrack(), localMillis)
                 } else {
@@ -644,7 +644,7 @@ private data class TrackDateRemoverScreen(
         fun getName() = tracker.name
 
         fun removeDate() {
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 if (start) {
                     tracker.animeService.setRemoteStartDate(track.toDbTrack(), 0)
                 } else {
@@ -707,7 +707,7 @@ data class TrackServiceSearchScreen(
         }
 
         fun trackingSearch(query: String) {
-            coroutineScope.launch {
+            screenModelScope.launch {
                 // To show loading state
                 mutableState.update { it.copy(queryResult = null, selected = null) }
 
@@ -729,7 +729,7 @@ data class TrackServiceSearchScreen(
         }
 
         fun registerTracking(item: AnimeTrackSearch) {
-            coroutineScope.launchNonCancellable { tracker.animeService.register(item, animeId) }
+            screenModelScope.launchNonCancellable { tracker.animeService.register(item, animeId) }
         }
 
         fun updateSelection(selected: AnimeTrackSearch) {
@@ -833,13 +833,13 @@ private data class TrackerAnimeRemoveScreen(
         fun isDeletable() = tracker is DeletableAnimeTracker
 
         fun deleteAnimeFromService() {
-            coroutineScope.launchNonCancellable {
+            screenModelScope.launchNonCancellable {
                 (tracker as DeletableAnimeTracker).delete(track.toDbTrack())
             }
         }
 
         fun unregisterTracking(serviceId: Long) {
-            coroutineScope.launchNonCancellable { deleteTrack.await(animeId, serviceId) }
+            screenModelScope.launchNonCancellable { deleteTrack.await(animeId, serviceId) }
         }
     }
 }

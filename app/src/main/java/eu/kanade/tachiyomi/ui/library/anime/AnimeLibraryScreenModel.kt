@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.fastDistinctBy
@@ -93,11 +93,11 @@ class AnimeLibraryScreenModel(
 ) : StateScreenModel<AnimeLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedAnimeCategory().asState(
-        coroutineScope,
+        screenModelScope,
     )
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
@@ -142,7 +142,7 @@ class AnimeLibraryScreenModel(
                     )
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
 
         combine(
             getAnimelibItemPreferencesFlow(),
@@ -164,7 +164,7 @@ class AnimeLibraryScreenModel(
                     state.copy(hasActiveFilters = it)
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
     }
 
     /**
@@ -443,7 +443,7 @@ class AnimeLibraryScreenModel(
      * @param amount the amount to queue or null to queue all
      */
     private fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             animes.forEach { anime ->
                 val episodes = getNextEpisodes.await(anime.id)
                     .fastFilterNot { episode ->
@@ -467,7 +467,7 @@ class AnimeLibraryScreenModel(
      */
     fun markSeenSelection(seen: Boolean) {
         val animes = state.value.selection.toList()
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             animes.forEach { anime ->
                 setSeenStatus.await(
                     anime = anime.anime,
@@ -486,7 +486,7 @@ class AnimeLibraryScreenModel(
      * @param deleteEpisodes whether to delete downloaded episodes.
      */
     fun removeAnimes(animeList: List<Anime>, deleteFromLibrary: Boolean, deleteEpisodes: Boolean) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             val animeToDelete = animeList.distinctBy { it.id }
 
             if (deleteFromLibrary) {
@@ -523,7 +523,7 @@ class AnimeLibraryScreenModel(
         addCategories: List<Long>,
         removeCategories: List<Long>,
     ) {
-        coroutineScope.launchNonCancellable {
+        screenModelScope.launchNonCancellable {
             animeList.forEach { anime ->
                 val categoryIds = getCategories.await(anime.id)
                     .map { it.id }
@@ -537,12 +537,12 @@ class AnimeLibraryScreenModel(
     }
 
     fun getDisplayMode(): PreferenceMutableState<LibraryDisplayMode> {
-        return libraryPreferences.displayMode().asState(coroutineScope)
+        return libraryPreferences.displayMode().asState(screenModelScope)
     }
 
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
         return (if (isLandscape) libraryPreferences.animeLandscapeColumns() else libraryPreferences.animePortraitColumns()).asState(
-            coroutineScope,
+            screenModelScope,
         )
     }
 
@@ -646,7 +646,7 @@ class AnimeLibraryScreenModel(
     }
 
     fun openChangeCategoryDialog() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             // Create a copy of selected anime
             val animeList = state.value.selection.map { it.anime }
 

@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
@@ -30,7 +30,7 @@ class MigrateMangaSourceScreenModel(
     val channel = _channel.receiveAsFlow()
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getSourcesWithFavoriteCount.subscribe()
                 .catch {
                     logcat(LogPriority.ERROR, it)
@@ -48,11 +48,11 @@ class MigrateMangaSourceScreenModel(
 
         preferences.migrationSortingDirection().changes()
             .onEach { mutableState.update { state -> state.copy(sortingDirection = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
 
         preferences.migrationSortingMode().changes()
             .onEach { mutableState.update { state -> state.copy(sortingMode = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
     }
 
     fun toggleSortingMode() {
