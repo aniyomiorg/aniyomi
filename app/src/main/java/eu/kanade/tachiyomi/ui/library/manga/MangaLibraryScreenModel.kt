@@ -482,7 +482,7 @@ class MangaLibraryScreenModel(
     }
 
     suspend fun getNextUnreadChapter(manga: Manga): Chapter? {
-        return getChaptersByMangaId.await(manga.id).getNextUnread(manga, downloadManager)
+        return getChaptersByMangaId.await(manga.id, applyScanlatorFilter = true).getNextUnread(manga, downloadManager)
     }
 
     /**
