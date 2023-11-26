@@ -21,11 +21,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -34,13 +32,14 @@ import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -166,19 +165,17 @@ object SettingsLibraryScreen : SearchableSettings {
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
 
-        val libraryUpdateIntervalPref = libraryPreferences.libraryUpdateInterval()
-        val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
-        val libraryUpdateDeviceRestrictionPref = libraryPreferences.libraryUpdateDeviceRestriction()
-        val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateItemRestriction()
+        val autoUpdateIntervalPref = libraryPreferences.autoUpdateInterval()
+        val autoUpdateInterval by autoUpdateIntervalPref.collectAsState()
 
-        val animelibUpdateCategoriesPref = libraryPreferences.animeLibraryUpdateCategories()
-        val animelibUpdateCategoriesExcludePref =
-            libraryPreferences.animeLibraryUpdateCategoriesExclude()
+        val animeAutoUpdateCategoriesPref = libraryPreferences.animeUpdateCategories()
+        val animeAutoUpdateCategoriesExcludePref =
+            libraryPreferences.animeUpdateCategoriesExclude()
 
-        val includedAnime by animelibUpdateCategoriesPref.collectAsState()
-        val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
-        var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
-        if (showAnimeDialog) {
+        val includedAnime by animeAutoUpdateCategoriesPref.collectAsState()
+        val excludedAnime by animeAutoUpdateCategoriesExcludePref.collectAsState()
+        var showAnimeCategoriesDialog by rememberSaveable { mutableStateOf(false) }
+        if (showAnimeCategoriesDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.anime_categories),
                 message = stringResource(R.string.pref_anime_library_update_categories_details),
@@ -186,26 +183,26 @@ object SettingsLibraryScreen : SearchableSettings {
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 itemLabel = { it.visualName },
-                onDismissRequest = { showAnimeDialog = false },
+                onDismissRequest = { showAnimeCategoriesDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
-                    animelibUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    animelibUpdateCategoriesExcludePref.set(
+                    animeAutoUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    animeAutoUpdateCategoriesExcludePref.set(
                         newExcluded.map { it.id.toString() }
                             .toSet(),
                     )
-                    showAnimeDialog = false
+                    showAnimeCategoriesDialog = false
                 },
             )
         }
 
-        val libraryUpdateCategoriesPref = libraryPreferences.mangaLibraryUpdateCategories()
-        val libraryUpdateCategoriesExcludePref =
-            libraryPreferences.mangaLibraryUpdateCategoriesExclude()
+        val autoUpdateCategoriesPref = libraryPreferences.mangaUpdateCategories()
+        val autoUpdateCategoriesExcludePref =
+            libraryPreferences.mangaUpdateCategoriesExclude()
 
-        val includedManga by libraryUpdateCategoriesPref.collectAsState()
-        val excludedManga by libraryUpdateCategoriesExcludePref.collectAsState()
-        var showMangaDialog by rememberSaveable { mutableStateOf(false) }
-        if (showMangaDialog) {
+        val includedManga by autoUpdateCategoriesPref.collectAsState()
+        val excludedManga by autoUpdateCategoriesExcludePref.collectAsState()
+        var showMangaCategoriesDialog by rememberSaveable { mutableStateOf(false) }
+        if (showMangaCategoriesDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.manga_categories),
                 message = stringResource(R.string.pref_manga_library_update_categories_details),
@@ -213,22 +210,23 @@ object SettingsLibraryScreen : SearchableSettings {
                 initialChecked = includedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
                 initialInversed = excludedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
                 itemLabel = { it.visualName },
-                onDismissRequest = { showMangaDialog = false },
+                onDismissRequest = { showMangaCategoriesDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
-                    libraryUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
-                    libraryUpdateCategoriesExcludePref.set(
+                    autoUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    autoUpdateCategoriesExcludePref.set(
                         newExcluded.map { it.id.toString() }
                             .toSet(),
                     )
-                    showMangaDialog = false
+                    showMangaCategoriesDialog = false
                 },
             )
         }
+
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_library_update),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryUpdateIntervalPref,
+                    pref = autoUpdateIntervalPref,
                     title = stringResource(R.string.pref_library_update_interval),
                     entries = mapOf(
                         0 to stringResource(R.string.update_never),
@@ -245,15 +243,14 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryUpdateDeviceRestrictionPref,
-                    enabled = libraryUpdateInterval > 0,
+                    pref = libraryPreferences.autoUpdateDeviceRestrictions(),
+                    enabled = autoUpdateInterval > 0,
                     title = stringResource(R.string.pref_library_update_restriction),
                     subtitle = stringResource(R.string.restrictions),
                     entries = mapOf(
                         DEVICE_ONLY_ON_WIFI to stringResource(R.string.connected_to_wifi),
                         DEVICE_NETWORK_NOT_METERED to stringResource(R.string.network_not_metered),
                         DEVICE_CHARGING to stringResource(R.string.charging),
-                        DEVICE_BATTERY_NOT_LOW to stringResource(R.string.battery_not_low),
                     ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
@@ -264,15 +261,6 @@ object SettingsLibraryScreen : SearchableSettings {
                         true
                     },
                 ),
-                Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryUpdateMangaRestrictionPref,
-                    title = stringResource(R.string.pref_library_update_manga_restriction),
-                    entries = mapOf(
-                        ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
-                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
-                        ENTRY_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
-                    ),
-                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.anime_categories),
                     subtitle = getCategoriesLabel(
@@ -280,7 +268,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         included = includedAnime,
                         excluded = excludedAnime,
                     ),
-                    onClick = { showAnimeDialog = true },
+                    onClick = { showAnimeCategoriesDialog = true },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.manga_categories),
@@ -289,18 +277,32 @@ object SettingsLibraryScreen : SearchableSettings {
                         included = includedManga,
                         excluded = excludedManga,
                     ),
-                    onClick = { showMangaDialog = true },
+                    onClick = { showMangaCategoriesDialog = true },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.autoUpdateMetadata(),
                     title = stringResource(R.string.pref_library_update_refresh_metadata),
                     subtitle = stringResource(R.string.pref_library_update_refresh_metadata_summary),
                 ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    pref = libraryPreferences.autoUpdateItemRestrictions(),
+                    title = stringResource(R.string.pref_library_update_manga_restriction),
+                    entries = mapOf(
+                        ENTRY_HAS_UNVIEWED to stringResource(
+                            R.string.pref_update_only_completely_read,
+                        ),
+                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
+                        ENTRY_NON_COMPLETED to stringResource(
+                            R.string.pref_update_only_non_completed,
+                        ),
+                        ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(
+                            R.string.pref_update_only_in_release_period,
+                        ),
+                    ),
+                ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoUpdateTrackers(),
-                    enabled = Injekt.get<TrackManager>().hasLoggedServices(),
-                    title = stringResource(R.string.pref_library_update_refresh_trackers),
-                    subtitle = stringResource(R.string.pref_library_update_refresh_trackers_summary),
+                    pref = libraryPreferences.newShowUpdatesCount(),
+                    title = stringResource(R.string.pref_library_update_show_tab_badge),
                 ),
             ),
         )
@@ -317,20 +319,36 @@ object SettingsLibraryScreen : SearchableSettings {
                     pref = libraryPreferences.swipeChapterStartAction(),
                     title = stringResource(R.string.pref_chapter_swipe_start),
                     entries = mapOf(
-                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
-                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
-                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(R.string.action_mark_as_read),
-                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(R.string.action_download),
+                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(
+                            R.string.action_disable,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(
+                            R.string.action_bookmark,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(
+                            R.string.action_mark_as_read,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(
+                            R.string.action_download,
+                        ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.swipeChapterEndAction(),
                     title = stringResource(R.string.pref_chapter_swipe_end),
                     entries = mapOf(
-                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(R.string.action_disable),
-                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark),
-                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(R.string.action_mark_as_read),
-                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(R.string.action_download),
+                        LibraryPreferences.ChapterSwipeAction.Disabled to stringResource(
+                            R.string.action_disable,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to stringResource(
+                            R.string.action_bookmark,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.ToggleRead to stringResource(
+                            R.string.action_mark_as_read,
+                        ),
+                        LibraryPreferences.ChapterSwipeAction.Download to stringResource(
+                            R.string.action_download,
+                        ),
                     ),
                 ),
             ),
@@ -348,20 +366,36 @@ object SettingsLibraryScreen : SearchableSettings {
                     pref = libraryPreferences.swipeEpisodeStartAction(),
                     title = stringResource(R.string.pref_episode_swipe_start),
                     entries = mapOf(
-                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
-                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
-                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(R.string.action_mark_as_seen),
-                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(R.string.action_download),
+                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(
+                            R.string.action_disable,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(
+                            R.string.action_bookmark_episode,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(
+                            R.string.action_mark_as_seen,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(
+                            R.string.action_download,
+                        ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.swipeEpisodeEndAction(),
                     title = stringResource(R.string.pref_episode_swipe_end),
                     entries = mapOf(
-                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(R.string.action_disable),
-                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(R.string.action_bookmark_episode),
-                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(R.string.action_mark_as_seen),
-                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(R.string.action_download),
+                        LibraryPreferences.EpisodeSwipeAction.Disabled to stringResource(
+                            R.string.action_disable,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to stringResource(
+                            R.string.action_bookmark_episode,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleSeen to stringResource(
+                            R.string.action_mark_as_seen,
+                        ),
+                        LibraryPreferences.EpisodeSwipeAction.Download to stringResource(
+                            R.string.action_download,
+                        ),
                     ),
                 ),
             ),

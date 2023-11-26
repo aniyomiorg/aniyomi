@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
+import java.util.SortedMap
 
 class GetLanguagesWithMangaSources(
     private val repository: MangaSourceRepository,
     private val preferences: SourcePreferences,
 ) {
 
-    fun subscribe(): Flow<Map<String, List<Source>>> {
+    fun subscribe(): Flow<SortedMap<String, List<Source>>> {
         return combine(
             preferences.enabledLanguages().changes(),
             preferences.disabledMangaSources().changes(),
@@ -23,7 +24,8 @@ class GetLanguagesWithMangaSources(
                     .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name },
             )
 
-            sortedSources.groupBy { it.lang }
+            sortedSources
+                .groupBy { it.lang }
                 .toSortedMap(
                     compareBy<String> { it !in enabledLanguage }.then(LocaleHelper.comparator),
                 )

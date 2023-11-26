@@ -23,7 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -69,11 +69,17 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
         Box(
             modifier = Modifier
                 .animateItemPlacement()
-                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+                .padding(
+                    horizontal = MaterialTheme.padding.medium,
+                    vertical = MaterialTheme.padding.small,
+                ),
         ) {
             Text(
                 text = if (time.isNullOrEmpty()) {
-                    stringResource(R.string.updates_last_update_info, stringResource(R.string.updates_last_update_info_just_now))
+                    stringResource(
+                        R.string.updates_last_update_info,
+                        stringResource(R.string.updates_last_update_info_just_now),
+                    )
                 } else {
                     stringResource(R.string.updates_last_update_info, time)
                 },
@@ -134,7 +140,12 @@ fun LazyListScope.animeUpdatesUiItems(
                     },
                     onClick = {
                         when {
-                            selectionMode -> onUpdateSelected(updatesItem, !updatesItem.selected, true, false)
+                            selectionMode -> onUpdateSelected(
+                                updatesItem,
+                                !updatesItem.selected,
+                                true,
+                                false,
+                            )
                             else -> onClickUpdate(updatesItem, false)
                         }
                     },
@@ -203,7 +214,7 @@ fun AnimeUpdatesUiItem(
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                var textHeight by remember { mutableStateOf(0) }
+                var textHeight by remember { mutableIntStateOf(0) }
                 if (!update.seen) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
@@ -219,7 +230,9 @@ fun AnimeUpdatesUiItem(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
                         modifier = Modifier
-                            .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                            .sizeIn(
+                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
+                            ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(2.dp))

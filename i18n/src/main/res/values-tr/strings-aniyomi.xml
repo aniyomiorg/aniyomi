@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Geçmiş\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_updates">Güncellemeler\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_manga">Manga\'yı Daha Fazla Sekmesine Taşı</string>
-    <string name="unlock_app">Aniyomi\'yi Aç</string>
+    <string name="unlock_app">AnimeTail\'yi Aç</string>
     <string name="action_filter_unseen">İzlenmemiş</string>
     <string name="action_sort_total_episodes">Toplam Anime Bölüm Sayısı</string>
     <string name="action_sort_last_seen">Son Görülen</string>
@@ -63,7 +63,7 @@
 \nKötü niyetli bir uzantı, Tachiyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
 \n
 \nBu sertifikaya güvenerek bu riskleri kabul etmiş oluyorsunuz.</string>
-    <string name="unofficial_extension_message_aniyomi">Bu uzantı, resmi Aniyomi uzantıları listesinden değildir.</string>
+    <string name="unofficial_extension_message_aniyomi">Bu uzantı, resmi AnimeTail uzantıları listesinden değildir.</string>
     <string name="pref_category_player">Oynatıcı</string>
     <string name="pref_category_progress">İlerleyiş</string>
     <string name="pref_preserve_watching_position">İzlenen bölümlerde izleme konumunu koru</string>
@@ -218,7 +218,7 @@
     <string name="not_interesting">İlginç değil</string>
     <string name="action_global_manga_search">Global Manga arama</string>
     <string name="action_global_anime_search">Global Anime Arama</string>
-    <string name="unofficial_anime_extension_message">Bu uzantı, resmi Aniyomi uzantıları listesinden değil.</string>
+    <string name="unofficial_anime_extension_message">Bu uzantı, resmi AnimeTail uzantıları listesinden değil.</string>
     <string name="watching">İzleniyor</string>
     <string name="repeating_anime">Tekrar izleniyor</string>
     <string name="want_to_read">Daha sonra oku</string>

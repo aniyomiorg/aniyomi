@@ -11,9 +11,10 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
+import eu.kanade.domain.connections.service.ConnectionsPreferences
+import androidx.compose.ui.unit.dp
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
+import eu.kanade.presentation.more.settings.widget.ConnectionsPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.EditTextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.InfoWidget
 import eu.kanade.presentation.more.settings.widget.ListPreferenceWidget
@@ -21,13 +22,15 @@ import eu.kanade.presentation.more.settings.widget.MultiSelectListPreferenceWidg
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TrackingPreferenceWidget
-import eu.kanade.presentation.util.collectAsState
 import kotlinx.coroutines.launch
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.presentation.core.components.SliderItem
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 val LocalPreferenceHighlighted = compositionLocalOf(structuralEqualityPolicy()) { false }
+val LocalPreferenceMinHeight = compositionLocalOf(structuralEqualityPolicy()) { 56.dp }
 
 @Composable
 fun StatusWrapper(
@@ -73,6 +76,21 @@ internal fun PreferenceItem(
                             if (item.onValueChanged(newValue)) {
                                 item.pref.set(newValue)
                             }
+                        }
+                    },
+                )
+            }
+            is Preference.PreferenceItem.SliderPreference -> {
+                // TODO: use different composable?
+                SliderItem(
+                    label = item.title,
+                    min = item.min,
+                    max = item.max,
+                    value = item.value,
+                    valueText = item.subtitle.takeUnless { it.isNullOrEmpty() } ?: item.value.toString(),
+                    onChange = {
+                        scope.launch {
+                            item.onValueChanged(it)
                         }
                     },
                 )
@@ -155,30 +173,37 @@ internal fun PreferenceItem(
                     singleLine = false,
                 )
             }
-            is Preference.PreferenceItem.AppThemePreference -> {
-                val value by item.pref.collectAsState()
-                val amoled by Injekt.get<UiPreferences>().themeDarkAmoled().collectAsState()
-                AppThemePreferenceWidget(
-                    title = item.title,
-                    value = value,
-                    amoled = amoled,
-                    onItemClick = { scope.launch { item.pref.set(it) } },
-                )
-            }
-            is Preference.PreferenceItem.TrackingPreference -> {
+            is Preference.PreferenceItem.TrackerPreference -> {
                 val uName by Injekt.get<PreferenceStore>()
-                    .getString(TrackPreferences.trackUsername(item.service.id))
+                    .getString(TrackPreferences.trackUsername(item.tracker.id))
                     .collectAsState()
-                item.service.run {
+                item.tracker.run {
                     TrackingPreferenceWidget(
-                        service = this,
+                        tracker = this,
                         checked = uName.isNotEmpty(),
-                        onClick = { if (isLogged) item.logout() else item.login() },
+                        onClick = { if (isLoggedIn) item.logout() else item.login() },
                     )
                 }
             }
+            // AM (CONNECTIONS) -->
+            is Preference.PreferenceItem.ConnectionsPreference -> {
+                val uName by Injekt.get<PreferenceStore>()
+                    .getString(ConnectionsPreferences.connectionsUsername(item.service.id))
+                    .collectAsState()
+                item.service.run {
+                    ConnectionsPreferenceWidget(
+                        service = this,
+                        checked = uName.isNotEmpty(),
+                        onClick = { if (isLogged) item.openSettings() else item.login() },
+                    )
+                }
+            }
+            // <-- AM (CONNECTIONS)
             is Preference.PreferenceItem.InfoPreference -> {
                 InfoWidget(text = item.title)
+            }
+            is Preference.PreferenceItem.CustomPreference -> {
+                item.content(item)
             }
         }
     }

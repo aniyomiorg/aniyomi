@@ -19,14 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
+import tachiyomi.presentation.core.util.ThemePreviews
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
@@ -42,7 +44,10 @@ fun MangaHistoryItem(
         modifier = modifier
             .clickable(onClick = onClickResume)
             .height(HISTORY_ITEM_HEIGHT)
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ItemCover.Book(
@@ -68,7 +73,7 @@ fun MangaHistoryItem(
                 text = if (history.chapterNumber > -1) {
                     stringResource(
                         R.string.recent_manga_time,
-                        chapterFormatter.format(history.chapterNumber),
+                        formatChapterNumber(history.chapterNumber),
                         readAt,
                     )
                 } else {
@@ -89,7 +94,18 @@ fun MangaHistoryItem(
     }
 }
 
-private val chapterFormatter = DecimalFormat(
-    "#.###",
-    DecimalFormatSymbols().apply { decimalSeparator = '.' },
-)
+@ThemePreviews
+@Composable
+internal fun HistoryItemPreviews(
+    @PreviewParameter(MangaHistoryWithRelationsProvider::class)
+    historyWithRelations: MangaHistoryWithRelations,
+) {
+    TachiyomiTheme {
+        MangaHistoryItem(
+            history = historyWithRelations,
+            onClickCover = {},
+            onClickResume = {},
+            onClickDelete = {},
+        )
+    }
+}

@@ -1,13 +1,13 @@
 package eu.kanade.presentation.browse.anime.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.browse.manga.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.library.CommonEntryItemDefaults
@@ -15,7 +15,6 @@ import eu.kanade.presentation.library.EntryListItem
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeCover
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.util.plus
 
 @Composable
@@ -34,9 +33,8 @@ fun BrowseAnimeSourceList(
             }
         }
 
-        items(animeList) { animeflow ->
-            animeflow ?: return@items
-            val anime by animeflow.collectAsState()
+        items(count = animeList.itemCount) { index ->
+            val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceListItem(
                 anime = anime,
                 onClick = { onAnimeClick(anime) },

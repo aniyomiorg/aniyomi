@@ -4,25 +4,26 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
-import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
-import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import logcat.LogPriority
-import rx.Observable
+import tachiyomi.core.preference.plusAssign
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.source.manga.model.MangaSourceData
+import tachiyomi.domain.source.manga.model.StubMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Locale
@@ -65,7 +66,10 @@ class MangaExtensionManager(
     fun getAppIconForSource(sourceId: Long): Drawable? {
         val pkgName = _installedExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
         if (pkgName != null) {
-            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
+            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) {
+                MangaExtensionLoader.getMangaExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo
+                    .loadIcon(context.packageManager)
+            }
         }
         return null
     }
@@ -73,12 +77,12 @@ class MangaExtensionManager(
     private val _availableExtensionsFlow = MutableStateFlow(emptyList<MangaExtension.Available>())
     val availableExtensionsFlow = _availableExtensionsFlow.asStateFlow()
 
-    private var availableExtensionsSourcesData: Map<Long, MangaSourceData> = emptyMap()
+    private var availableExtensionsSourcesData: Map<Long, StubMangaSource> = emptyMap()
 
     private fun setupAvailableExtensionsSourcesDataMap(extensions: List<MangaExtension.Available>) {
         if (extensions.isEmpty()) return
         availableExtensionsSourcesData = extensions
-            .flatMap { ext -> ext.sources.map { it.toSourceData() } }
+            .flatMap { ext -> ext.sources.map { it.toStubSource() } }
             .associateBy { it.id }
     }
 
@@ -145,8 +149,8 @@ class MangaExtensionManager(
         // Use the source lang as some aren't present on the extension level.
         val availableLanguages = extensions
             .flatMap(MangaExtension.Available::sources)
-            .distinctBy(AvailableMangaSources::lang)
-            .map(AvailableMangaSources::lang)
+            .distinctBy(MangaExtension.Available.MangaSource::lang)
+            .map(MangaExtension.Available.MangaSource::lang)
 
         val deviceLanguage = Locale.getDefault().language
         val defaultLanguages = preferences.enabledLanguages().defaultValue()
@@ -163,7 +167,9 @@ class MangaExtensionManager(
      *
      * @param availableExtensions The list of extensions given by the [api].
      */
-    private fun updatedInstalledExtensionsStatuses(availableExtensions: List<MangaExtension.Available>) {
+    private fun updatedInstalledExtensionsStatuses(
+        availableExtensions: List<MangaExtension.Available>,
+    ) {
         if (availableExtensions.isEmpty()) {
             preferences.mangaExtensionUpdatesCount().set(0)
             return
@@ -195,26 +201,26 @@ class MangaExtensionManager(
     }
 
     /**
-     * Returns an observable of the installation process for the given extension. It will complete
+     * Returns a flow of the installation process for the given extension. It will complete
      * once the extension is installed or throws an error. The process will be canceled if
      * unsubscribed before its completion.
      *
      * @param extension The extension to be installed.
      */
-    fun installExtension(extension: MangaExtension.Available): Observable<InstallStep> {
+    fun installExtension(extension: MangaExtension.Available): Flow<InstallStep> {
         return installer.downloadAndInstall(api.getApkUrl(extension), extension)
     }
 
     /**
-     * Returns an observable of the installation process for the given extension. It will complete
+     * Returns a flow of the installation process for the given extension. It will complete
      * once the extension is updated or throws an error. The process will be canceled if
      * unsubscribed before its completion.
      *
      * @param extension The extension to be updated.
      */
-    fun updateExtension(extension: MangaExtension.Installed): Observable<InstallStep> {
+    fun updateExtension(extension: MangaExtension.Installed): Flow<InstallStep> {
         val availableExt = _availableExtensionsFlow.value.find { it.pkgName == extension.pkgName }
-            ?: return Observable.empty()
+            ?: return emptyFlow()
         return installExtension(availableExt)
     }
 
@@ -238,10 +244,10 @@ class MangaExtensionManager(
     /**
      * Uninstalls the extension that matches the given package name.
      *
-     * @param pkgName The package name of the application to uninstall.
+     * @param extension The extension to uninstall.
      */
-    fun uninstallExtension(pkgName: String) {
-        installer.uninstallApk(pkgName)
+    fun uninstallExtension(extension: MangaExtension) {
+        installer.uninstallApk(extension.pkgName)
     }
 
     /**
@@ -260,18 +266,18 @@ class MangaExtensionManager(
         val nowTrustedExtensions = _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }
         _untrustedExtensionsFlow.value -= nowTrustedExtensions
 
-        val ctx = context
         launchNow {
             nowTrustedExtensions
                 .map { extension ->
-                    async { MangaExtensionLoader.loadMangaExtensionFromPkgName(ctx, extension.pkgName) }
+                    async {
+                        MangaExtensionLoader.loadMangaExtensionFromPkgName(
+                            context,
+                            extension.pkgName,
+                        )
+                    }.await()
                 }
-                .map { it.await() }
-                .forEach { result ->
-                    if (result is MangaLoadResult.Success) {
-                        registerNewExtension(result.extension)
-                    }
-                }
+                .filterIsInstance<MangaLoadResult.Success>()
+                .forEach { registerNewExtension(it.extension) }
         }
     }
 
@@ -337,6 +343,7 @@ class MangaExtensionManager(
         }
 
         override fun onPackageUninstalled(pkgName: String) {
+            MangaExtensionLoader.uninstallPrivateExtension(context, pkgName)
             unregisterExtension(pkgName)
             updatePendingUpdatesCount()
         }
@@ -353,7 +360,9 @@ class MangaExtensionManager(
         }
     }
 
-    private fun MangaExtension.Installed.updateExists(availableExtension: MangaExtension.Available? = null): Boolean {
+    private fun MangaExtension.Installed.updateExists(
+        availableExtension: MangaExtension.Available? = null,
+    ): Boolean {
         val availableExt = availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false
 
@@ -361,6 +370,10 @@ class MangaExtensionManager(
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.mangaExtensionUpdatesCount().set(_installedExtensionsFlow.value.count { it.hasUpdate })
+        val pendingUpdateCount = _installedExtensionsFlow.value.count { it.hasUpdate }
+        preferences.mangaExtensionUpdatesCount().set(pendingUpdateCount)
+        if (pendingUpdateCount == 0) {
+            ExtensionUpdateNotifier(context).dismiss()
+        }
     }
 }

@@ -29,7 +29,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
 
 class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
@@ -37,7 +37,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private val authClient = client.newBuilder()
         .addInterceptor(interceptor)
-        .rateLimit(permits = 85, period = 1, unit = TimeUnit.MINUTES)
+        .rateLimit(permits = 85, period = 1.minutes)
         .build()
 
     suspend fun addLibManga(track: MangaTrack): MangaTrack {
@@ -112,6 +112,28 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
+    suspend fun deleteLibManga(track: MangaTrack): MangaTrack {
+        return withIOContext {
+            val query = """
+            |mutation DeleteManga(${'$'}listId: Int) {
+                |DeleteMediaListEntry(id: ${'$'}listId) { 
+                    |deleted
+                |} 
+            |}
+            |
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("listId", track.library_id)
+                }
+            }
+            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+                .awaitSuccess()
+            track
+        }
+    }
+
     suspend fun addLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val query = """
@@ -176,6 +198,28 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("score", track.score.toInt())
                     put("startedAt", createDate(track.started_watching_date))
                     put("completedAt", createDate(track.finished_watching_date))
+                }
+            }
+            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+                .awaitSuccess()
+            track
+        }
+    }
+
+    suspend fun deleteLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            val query = """
+            |mutation DeleteAnime(${'$'}listId: Int) {
+                |DeleteMediaListEntry(id: ${'$'}listId) { 
+                    |deleted
+                |} 
+            |}
+            |
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("listId", track.library_id)
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))

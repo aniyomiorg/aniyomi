@@ -39,7 +39,7 @@ fun BrowseMangaSourceComfortableGrid(
             }
         }
 
-        items(mangaList.itemCount) { index ->
+        items(count = mangaList.itemCount) { index ->
             val manga by mangaList[index]?.collectAsState() ?: return@items
             BrowseMangaSourceComfortableGridItem(
                 manga = manga,

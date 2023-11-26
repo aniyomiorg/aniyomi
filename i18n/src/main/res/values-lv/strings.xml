@@ -760,7 +760,6 @@
         <item quantity="one">Nākamā nelasītā nodaļa</item>
         <item quantity="other">Nākamās %d nelasītas nodaļas</item>
     </plurals>
-    <string name="pref_worker_info">Worker info</string>
     <string name="action_not_now">Ne tagad</string>
     <string name="action_search_hint">Meklē…</string>
     <string name="fdroid_warning">F-Droid versijas netiek oficiāli atbalstītas.

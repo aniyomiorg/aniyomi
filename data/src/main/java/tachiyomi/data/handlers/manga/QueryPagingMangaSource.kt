@@ -2,7 +2,7 @@ package tachiyomi.data.handlers.manga
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.squareup.sqldelight.Query
+import app.cash.sqldelight.Query
 import tachiyomi.data.Database
 import kotlin.properties.Delegates
 

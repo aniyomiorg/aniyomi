@@ -7,7 +7,10 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.viewholders.ExpandableViewHolder
 import eu.kanade.tachiyomi.databinding.DownloadHeaderBinding
 
-class MangaDownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : ExpandableViewHolder(view, adapter) {
+class MangaDownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : ExpandableViewHolder(
+    view,
+    adapter,
+) {
 
     private val binding = DownloadHeaderBinding.bind(view)
 

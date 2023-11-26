@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
@@ -42,6 +41,7 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 import kotlin.math.floor
 import kotlin.math.max
 
@@ -230,21 +230,28 @@ private fun SubtitleColorSlider(
     }
 }
 
-private enum class SubsColor(val mpvProperty: String, val preference: (PlayerPreferences) -> Preference<Int>) {
+private enum class SubsColor(
+    val mpvProperty: String,
+    val preference: (PlayerPreferences) -> Preference<Int>,
+) {
     NONE("", PlayerPreferences::textColorSubtitles),
     TEXT("sub-color", PlayerPreferences::textColorSubtitles),
     BORDER("sub-border-color", PlayerPreferences::borderColorSubtitles),
     BACKGROUND("sub-back-color", PlayerPreferences::backgroundColorSubtitles),
-    ;
 }
 
-private enum class ARGBValue(@StringRes val label: Int, val mask: Long, val bitShift: Int, val toValue: (Int) -> Int, val asColor: (Int) -> Color) {
+private enum class ARGBValue(
+    @StringRes val label: Int,
+    val mask: Long,
+    val bitShift: Int,
+    val toValue: (Int) -> Int,
+    val asColor: (Int) -> Color,
+) {
 
     ALPHA(R.string.color_filter_a_value, 0xFF000000L, 24, ::toAlpha, ::asAlpha),
     RED(R.string.color_filter_r_value, 0x00FF0000L, 16, ::toRed, ::asRed),
     GREEN(R.string.color_filter_g_value, 0x0000FF00L, 8, ::toGreen, ::asGreen),
     BLUE(R.string.color_filter_b_value, 0x000000FFL, 0, ::toBlue, ::asBlue),
-    ;
 }
 
 private fun toAlpha(color: Int) = (color ushr 24) and 0xFF

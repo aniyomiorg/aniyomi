@@ -1,6 +1,7 @@
-import eu.kanade.tachiyomi.source.model.UpdateStrategy;
-import java.lang.String;
+import eu.kanade.tachiyomi.model.UpdateStrategy;
 import kotlin.collections.List;
+import kotlin.Boolean;
+import kotlin.String;
 
 CREATE TABLE animes(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -14,19 +15,38 @@ CREATE TABLE animes(
     status INTEGER NOT NULL,
     thumbnail_url TEXT,
     favorite INTEGER AS Boolean NOT NULL,
-    last_update INTEGER AS Long,
-    next_update INTEGER AS Long,
+    last_update INTEGER,
+    next_update INTEGER,
     initialized INTEGER AS Boolean NOT NULL,
     viewer INTEGER NOT NULL,
     episode_flags INTEGER NOT NULL,
-    cover_last_modified INTEGER AS Long NOT NULL,
-    date_added INTEGER AS Long NOT NULL,
+    cover_last_modified INTEGER NOT NULL,
+    date_added INTEGER NOT NULL,
     update_strategy INTEGER AS UpdateStrategy NOT NULL DEFAULT 0,
-    calculate_interval INTEGER DEFAULT 0 NOT NULL
+    calculate_interval INTEGER DEFAULT 0 NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
+    favorite_modified_at INTEGER
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
 CREATE INDEX animes_url_index ON animes(url);
+
+CREATE TRIGGER update_last_favorite_at_animes
+AFTER UPDATE OF favorite ON animes
+BEGIN
+  UPDATE animes
+  SET favorite_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
+
+CREATE TRIGGER update_last_modified_at_animes
+AFTER UPDATE ON animes
+FOR EACH ROW
+BEGIN
+  UPDATE animes
+  SET last_modified_at = strftime('%s', 'now')
+  WHERE _id = new._id;
+END;
 
 getAnimeById:
 SELECT *
@@ -44,6 +64,15 @@ getFavorites:
 SELECT *
 FROM animes
 WHERE favorite = 1;
+
+getAllAnime:
+SELECT *
+FROM animes;
+
+getAnimesWithFavoriteTimestamp:
+SELECT *
+FROM animes
+WHERE favorite_modified_at IS NOT NULL;
 
 getAnimeSourceIdWithFavoriteCount:
 SELECT
@@ -64,7 +93,7 @@ SELECT *
 FROM animes
 WHERE favorite = 1
 AND LOWER(title) = :title
-LIMIT 1;
+AND _id != :id;
 
 resetViewerFlags:
 UPDATE animes
@@ -81,8 +110,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;
 
 insert:
-INSERT INTO animes(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,episode_flags,cover_last_modified,date_added,update_strategy,calculate_interval)
-VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnailUrl,:favorite,:lastUpdate,:nextUpdate,:initialized,:viewerFlags,:episodeFlags,:coverLastModified,:dateAdded,:updateStrategy,:calculateInterval);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, strftime('%s', 'now'));
 
 update:
 UPDATE animes SET

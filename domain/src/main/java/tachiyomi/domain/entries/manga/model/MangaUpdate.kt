@@ -1,6 +1,6 @@
 package tachiyomi.domain.entries.manga.model
 
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import eu.kanade.tachiyomi.model.UpdateStrategy
 
 data class MangaUpdate(
     val id: Long,
@@ -8,7 +8,7 @@ data class MangaUpdate(
     val favorite: Boolean? = null,
     val lastUpdate: Long? = null,
     val nextUpdate: Long? = null,
-    val calculateInterval: Int? = null,
+    val fetchInterval: Int? = null,
     val dateAdded: Long? = null,
     val viewerFlags: Long? = null,
     val chapterFlags: Long? = null,
@@ -32,7 +32,7 @@ fun Manga.toMangaUpdate(): MangaUpdate {
         favorite = favorite,
         lastUpdate = lastUpdate,
         nextUpdate = nextUpdate,
-        calculateInterval = calculateInterval,
+        fetchInterval = fetchInterval,
         dateAdded = dateAdded,
         viewerFlags = viewerFlags,
         chapterFlags = chapterFlags,

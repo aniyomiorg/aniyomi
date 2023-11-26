@@ -10,7 +10,11 @@ import androidx.annotation.StringRes
  * @param resource the text resource.
  * @param duration the duration of the toast. Defaults to short.
  */
-fun Context.toast(@StringRes resource: Int, duration: Int = Toast.LENGTH_SHORT, block: (Toast) -> Unit = {}): Toast {
+fun Context.toast(
+    @StringRes resource: Int,
+    duration: Int = Toast.LENGTH_SHORT,
+    block: (Toast) -> Unit = {},
+): Toast {
     return toast(getString(resource), duration, block)
 }
 

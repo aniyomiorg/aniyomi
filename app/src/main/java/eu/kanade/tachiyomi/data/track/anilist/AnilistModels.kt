@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.track.anilist
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.Serializable
@@ -22,7 +22,7 @@ data class ALManga(
     val total_chapters: Int,
 ) {
 
-    fun toTrack() = MangaTrackSearch.create(TrackManager.ANILIST).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackerManager.ANILIST).apply {
         media_id = this@ALManga.media_id
         title = title_user_pref
         total_chapters = this@ALManga.total_chapters
@@ -53,7 +53,7 @@ data class ALAnime(
     val total_episodes: Int,
 ) {
 
-    fun toTrack() = AnimeTrackSearch.create(TrackManager.ANILIST).apply {
+    fun toTrack() = AnimeTrackSearch.create(TrackerManager.ANILIST).apply {
         media_id = this@ALAnime.media_id
         title = title_user_pref
         total_episodes = this@ALAnime.total_episodes
@@ -83,7 +83,7 @@ data class ALUserManga(
     val manga: ALManga,
 ) {
 
-    fun toTrack() = MangaTrack.create(TrackManager.ANILIST).apply {
+    fun toTrack() = MangaTrack.create(TrackerManager.ANILIST).apply {
         media_id = manga.media_id
         title = manga.title_user_pref
         status = toTrackStatus()
@@ -95,7 +95,7 @@ data class ALUserManga(
         total_chapters = manga.total_chapters
     }
 
-    fun toTrackStatus() = when (list_status) {
+    private fun toTrackStatus() = when (list_status) {
         "CURRENT" -> Anilist.READING
         "COMPLETED" -> Anilist.COMPLETED
         "PAUSED" -> Anilist.PAUSED
@@ -116,7 +116,7 @@ data class ALUserAnime(
     val anime: ALAnime,
 ) {
 
-    fun toTrack() = AnimeTrack.create(TrackManager.ANILIST).apply {
+    fun toTrack() = AnimeTrack.create(TrackerManager.ANILIST).apply {
         media_id = anime.media_id
         title = anime.title_user_pref
         status = toTrackStatus()
@@ -128,7 +128,7 @@ data class ALUserAnime(
         total_episodes = anime.total_episodes
     }
 
-    fun toTrackStatus() = when (list_status) {
+    private fun toTrackStatus() = when (list_status) {
         "CURRENT" -> Anilist.WATCHING
         "COMPLETED" -> Anilist.COMPLETED
         "PAUSED" -> Anilist.PAUSED

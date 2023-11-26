@@ -3,7 +3,10 @@ package tachiyomi.domain.items.chapter.service
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 
-fun getChapterSort(manga: Manga, sortDescending: Boolean = manga.sortDescending()): (Chapter, Chapter) -> Int {
+fun getChapterSort(manga: Manga, sortDescending: Boolean = manga.sortDescending()): (
+    Chapter,
+    Chapter,
+) -> Int {
     return when (manga.sorting) {
         Manga.CHAPTER_SORTING_SOURCE -> when (sortDescending) {
             true -> { c1, c2 -> c1.sourceOrder.compareTo(c2.sourceOrder) }

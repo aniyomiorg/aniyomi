@@ -13,12 +13,15 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.anime.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -34,6 +37,7 @@ val resumeLastEpisodeSeenEvent = Channel<Unit>()
 fun Screen.animeHistoryTab(
     context: Context,
     fromMore: Boolean,
+    preferences: UiPreferences,
 ): TabContent {
     val snackbarHostState = SnackbarHostState()
 
@@ -66,6 +70,7 @@ fun Screen.animeHistoryTab(
                 onClickCover = { navigator.push(AnimeScreen(it)) },
                 onClickResume = screenModel::getNextEpisodeForAnime,
                 onDialogChange = screenModel::setDialog,
+                preferences = preferences,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }
@@ -99,13 +104,23 @@ fun Screen.animeHistoryTab(
             }
 
             LaunchedEffect(Unit) {
+                // AM (DISCORD) -->
+                DiscordRPCService.setAnimeScreen(context, DiscordScreen.HISTORY)
+                // <-- AM (DISCORD)
                 screenModel.events.collectLatest { e ->
                     when (e) {
                         AnimeHistoryScreenModel.Event.InternalError ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.internal_error))
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.internal_error),
+                            )
                         AnimeHistoryScreenModel.Event.HistoryCleared ->
-                            snackbarHostState.showSnackbar(context.getString(R.string.clear_history_completed))
-                        is AnimeHistoryScreenModel.Event.OpenEpisode -> openEpisode(context, e.episode)
+                            snackbarHostState.showSnackbar(
+                                context.getString(R.string.clear_history_completed),
+                            )
+                        is AnimeHistoryScreenModel.Event.OpenEpisode -> openEpisode(
+                            context,
+                            e.episode,
+                        )
                     }
                 }
             }

@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesState
+import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.anime.model.AnimeSource
@@ -40,14 +40,14 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 @Composable
 fun AnimeSourcesScreen(
-    state: AnimeSourcesState,
+    state: AnimeSourcesScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (AnimeSource, Listing) -> Unit,
     onClickPin: (AnimeSource) -> Unit,
     onLongClickItem: (AnimeSource) -> Unit,
 ) {
     when {
-        state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+        state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
             textResource = R.string.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
@@ -101,7 +101,10 @@ private fun AnimeSourceHeader(
     Text(
         text = LocaleHelper.getSourceDisplayName(language, context),
         modifier = modifier
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
+            ),
         style = MaterialTheme.typography.header,
     )
 }
@@ -144,7 +147,13 @@ private fun AnimeSourcePinButton(
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
-    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(alpha = SecondaryItemAlpha)
+    val tint = if (isPinned) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onBackground.copy(
+            alpha = SecondaryItemAlpha,
+        )
+    }
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(
@@ -192,7 +201,7 @@ fun AnimeSourceOptionsDialog(
     )
 }
 
-sealed class AnimeSourceUiModel {
-    data class Item(val source: AnimeSource) : AnimeSourceUiModel()
-    data class Header(val language: String) : AnimeSourceUiModel()
+sealed interface AnimeSourceUiModel {
+    data class Item(val source: AnimeSource) : AnimeSourceUiModel
+    data class Header(val language: String) : AnimeSourceUiModel
 }

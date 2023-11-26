@@ -115,8 +115,8 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
     }
 
     private fun getLatestChapterRead(url: String): Float {
-        val serieId = getIdFromUrl(url)
-        val requestUrl = "${getApiFromUrl(url)}/Tachiyomi/latest-chapter?seriesId=$serieId"
+        val seriesId = getIdFromUrl(url)
+        val requestUrl = "${getApiFromUrl(url)}/Tachiyomi/latest-chapter?seriesId=$seriesId"
         try {
             with(json) {
                 authClient.newCall(GET(requestUrl)).execute().use {
@@ -137,21 +137,21 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
 
     suspend fun getTrackSearch(url: String): MangaTrackSearch = withIOContext {
         try {
-            val serieDto: SeriesDto = with(json) {
+            val seriesDto: SeriesDto = with(json) {
                 authClient.newCall(GET(url))
                     .awaitSuccess()
                     .parseAs()
             }
 
-            val track = serieDto.toTrack()
+            val track = seriesDto.toTrack()
             track.apply {
-                cover_url = serieDto.thumbnail_url.toString()
+                cover_url = seriesDto.thumbnail_url.toString()
                 tracking_url = url
                 total_chapters = getTotalChapters(url)
 
-                title = serieDto.name
-                status = when (serieDto.pagesRead) {
-                    serieDto.pages -> Kavita.COMPLETED
+                title = seriesDto.name
+                status = when (seriesDto.pagesRead) {
+                    seriesDto.pages -> Kavita.COMPLETED
                     0 -> Kavita.UNREAD
                     else -> Kavita.READING
                 }
@@ -164,8 +164,15 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
     }
 
     suspend fun updateProgress(track: MangaTrack): MangaTrack {
-        val requestUrl = "${getApiFromUrl(track.tracking_url)}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(track.tracking_url)}&chapterNumber=${track.last_chapter_read}"
-        authClient.newCall(POST(requestUrl, body = "{}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())))
+        val requestUrl = "${getApiFromUrl(track.tracking_url)}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(
+            track.tracking_url,
+        )}&chapterNumber=${track.last_chapter_read}"
+        authClient.newCall(
+            POST(
+                requestUrl,
+                body = "{}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()),
+            ),
+        )
             .awaitSuccess()
         return getTrackSearch(track.tracking_url)
     }

@@ -27,9 +27,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 private const val URL_EXTENSION_COMMITS =
-    "https://github.com/aniyomiorg/aniyomi-extensions/commits/master"
+    "https://github.com/Dark25/animetailv2-extensions/commits/master"
 private const val URL_EXTENSION_BLOB =
-    "https://github.com/aniyomiorg/aniyomi-extensions/blob/master"
+    "https://github.com/Dark25/animetailv2-extensions/blob/master"
 
 class AnimeExtensionDetailsScreenModel(
     pkgName: String,
@@ -38,7 +38,7 @@ class AnimeExtensionDetailsScreenModel(
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
     private val getExtensionSources: GetAnimeExtensionSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
-) : StateScreenModel<AnimeExtensionDetailsState>(AnimeExtensionDetailsState()) {
+) : StateScreenModel<AnimeExtensionDetailsScreenModel.State>(State()) {
 
     private val _events: Channel<AnimeExtensionDetailsEvent> = Channel()
     val events: Flow<AnimeExtensionDetailsEvent> = _events.receiveAsFlow()
@@ -68,7 +68,10 @@ class AnimeExtensionDetailsScreenModel(
                                     { !it.enabled },
                                     { item ->
                                         item.source.name.takeIf { item.labelAsName }
-                                            ?: LocaleHelper.getSourceDisplayName(item.source.lang, context).lowercase()
+                                            ?: LocaleHelper.getSourceDisplayName(
+                                                item.source.lang,
+                                                context,
+                                            ).lowercase()
                                     },
                                 ),
                             )
@@ -102,7 +105,7 @@ class AnimeExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://aniyomi.org/help/faq/#extensions"
+            return "https://akiled.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
@@ -132,7 +135,7 @@ class AnimeExtensionDetailsScreenModel(
 
     fun uninstallExtension() {
         val extension = state.value.extension ?: return
-        extensionManager.uninstallExtension(extension.pkgName)
+        extensionManager.uninstallExtension(extension)
     }
 
     fun toggleSource(sourceId: Long) {
@@ -160,21 +163,21 @@ class AnimeExtensionDetailsScreenModel(
             url + "/src/" + pkgName.replace(".", "/") + path
         }
     }
+
+    @Immutable
+    data class State(
+        val extension: AnimeExtension.Installed? = null,
+        private val _sources: List<AnimeExtensionSourceItem>? = null,
+    ) {
+
+        val sources: List<AnimeExtensionSourceItem>
+            get() = _sources.orEmpty()
+
+        val isLoading: Boolean
+            get() = extension == null || _sources == null
+    }
 }
 
-sealed class AnimeExtensionDetailsEvent {
-    object Uninstalled : AnimeExtensionDetailsEvent()
-}
-
-@Immutable
-data class AnimeExtensionDetailsState(
-    val extension: AnimeExtension.Installed? = null,
-    private val _sources: List<AnimeExtensionSourceItem>? = null,
-) {
-
-    val sources: List<AnimeExtensionSourceItem>
-        get() = _sources.orEmpty()
-
-    val isLoading: Boolean
-        get() = extension == null || _sources == null
+sealed interface AnimeExtensionDetailsEvent {
+    data object Uninstalled : AnimeExtensionDetailsEvent
 }

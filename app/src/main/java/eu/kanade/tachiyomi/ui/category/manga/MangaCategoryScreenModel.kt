@@ -69,7 +69,9 @@ class MangaCategoryScreenModel(
     fun hideCategory(category: Category) {
         coroutineScope.launch {
             when (hideCategory.await(category)) {
-                is HideMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                is HideMangaCategory.Result.InternalError -> _events.send(
+                    MangaCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
@@ -78,7 +80,18 @@ class MangaCategoryScreenModel(
     fun deleteCategory(categoryId: Long) {
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
-                is DeleteMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                is DeleteMangaCategory.Result.InternalError -> _events.send(
+                    MangaCategoryEvent.InternalError,
+                )
+                else -> {}
+            }
+        }
+    }
+
+    fun sortAlphabetically() {
+        coroutineScope.launch {
+            when (reorderCategory.sortAlphabetically()) {
+                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -87,7 +100,9 @@ class MangaCategoryScreenModel(
     fun moveUp(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
-                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(
+                    MangaCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
@@ -96,7 +111,9 @@ class MangaCategoryScreenModel(
     fun moveDown(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
-                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(
+                    MangaCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
@@ -105,7 +122,9 @@ class MangaCategoryScreenModel(
     fun renameCategory(category: Category, name: String) {
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
-                is RenameMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                is RenameMangaCategory.Result.InternalError -> _events.send(
+                    MangaCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
@@ -130,27 +149,28 @@ class MangaCategoryScreenModel(
     }
 }
 
-sealed class MangaCategoryDialog {
-    object Create : MangaCategoryDialog()
-    data class Rename(val category: Category) : MangaCategoryDialog()
-    data class Delete(val category: Category) : MangaCategoryDialog()
+sealed interface MangaCategoryDialog {
+    data object Create : MangaCategoryDialog
+    data object SortAlphabetically : MangaCategoryDialog
+    data class Rename(val category: Category) : MangaCategoryDialog
+    data class Delete(val category: Category) : MangaCategoryDialog
 }
 
-sealed class MangaCategoryEvent {
-    sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent()
-    object InternalError : LocalizedMessage(R.string.internal_error)
+sealed interface MangaCategoryEvent {
+    sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent
+    data object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
-sealed class MangaCategoryScreenState {
+sealed interface MangaCategoryScreenState {
 
     @Immutable
-    object Loading : MangaCategoryScreenState()
+    data object Loading : MangaCategoryScreenState
 
     @Immutable
     data class Success(
         val categories: List<Category>,
         val dialog: MangaCategoryDialog? = null,
-    ) : MangaCategoryScreenState() {
+    ) : MangaCategoryScreenState {
 
         val isEmpty: Boolean
             get() = categories.isEmpty()

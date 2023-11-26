@@ -30,14 +30,6 @@ object SettingsBrowseScreen : SearchableSettings {
                 title = stringResource(R.string.label_sources),
                 preferenceItems = listOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.searchPinnedAnimeSourcesOnly(),
-                        title = stringResource(R.string.pref_search_pinned_anime_sources_only),
-                    ),
-                    Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.searchPinnedMangaSourcesOnly(),
-                        title = stringResource(R.string.pref_search_pinned_manga_sources_only),
-                    ),
-                    Preference.PreferenceItem.SwitchPreference(
                         pref = sourcePreferences.hideInAnimeLibraryItems(),
                         title = stringResource(R.string.pref_hide_in_anime_library_items),
                     ),
@@ -60,7 +52,9 @@ object SettingsBrowseScreen : SearchableSettings {
                             )
                         },
                     ),
-                    Preference.PreferenceItem.InfoPreference(stringResource(R.string.parental_controls_info)),
+                    Preference.PreferenceItem.InfoPreference(
+                        stringResource(R.string.parental_controls_info),
+                    ),
                 ),
             ),
         )

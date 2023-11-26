@@ -3,24 +3,36 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import kotlinx.coroutines.runBlocking
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
+data class AnimeMigrationFlag(
+    val flag: Int,
+    val isDefaultSelected: Boolean,
+    val titleId: Int,
+) {
+    companion object {
+        fun create(flag: Int, defaultSelectionMap: Int, titleId: Int): AnimeMigrationFlag {
+            return AnimeMigrationFlag(
+                flag = flag,
+                isDefaultSelected = defaultSelectionMap and flag != 0,
+                titleId = titleId,
+            )
+        }
+    }
+}
+
 object AnimeMigrationFlags {
 
-    private const val EPISODES = 0b0001
-    private const val CATEGORIES = 0b0010
-    private const val TRACK = 0b0100
-    private const val CUSTOM_COVER = 0b1000
+    private const val EPISODES = 0b00001
+    private const val CATEGORIES = 0b00010
+    private const val CUSTOM_COVER = 0b01000
+    private const val DELETE_DOWNLOADED = 0b10000
 
     private val coverCache: AnimeCoverCache by injectLazy()
-    private val getTracks: GetAnimeTracks = Injekt.get()
-
-    val flags get() = arrayOf(EPISODES, CATEGORIES, TRACK, CUSTOM_COVER)
+    private val downloadCache: AnimeDownloadCache by injectLazy()
 
     fun hasEpisodes(value: Int): Boolean {
         return value and EPISODES != 0
@@ -30,33 +42,48 @@ object AnimeMigrationFlags {
         return value and CATEGORIES != 0
     }
 
-    fun hasTracks(value: Int): Boolean {
-        return value and TRACK != 0
-    }
-
     fun hasCustomCover(value: Int): Boolean {
         return value and CUSTOM_COVER != 0
     }
 
-    fun getEnabledFlagsPositions(value: Int): List<Int> {
-        return flags.mapIndexedNotNull { index, flag -> if (value and flag != 0) index else null }
+    fun hasDeleteDownloaded(value: Int): Boolean {
+        return value and DELETE_DOWNLOADED != 0
     }
 
-    fun getFlagsFromPositions(positions: Array<Int>): Int {
-        return positions.fold(0) { accumulated, position -> accumulated or (1 shl position) }
-    }
+    /** Returns information about applicable flags with default selections. */
+    fun getFlags(anime: Anime?, defaultSelectedBitMap: Int): List<AnimeMigrationFlag> {
+        val flags = mutableListOf<AnimeMigrationFlag>()
+        flags += AnimeMigrationFlag.create(EPISODES, defaultSelectedBitMap, R.string.chapters)
+        flags += AnimeMigrationFlag.create(CATEGORIES, defaultSelectedBitMap, R.string.categories)
 
-    fun titles(anime: Anime?): Array<Int> {
-        val titles = arrayOf(R.string.episodes, R.string.anime_categories).toMutableList()
         if (anime != null) {
-            if (runBlocking { getTracks.await(anime.id) }.isNotEmpty()) {
-                titles.add(R.string.track)
-            }
-
             if (anime.hasCustomCover(coverCache)) {
-                titles.add(R.string.custom_cover)
+                flags += AnimeMigrationFlag.create(
+                    CUSTOM_COVER,
+                    defaultSelectedBitMap,
+                    R.string.custom_cover,
+                )
+            }
+            if (downloadCache.getDownloadCount(anime) > 0) {
+                flags += AnimeMigrationFlag.create(
+                    DELETE_DOWNLOADED,
+                    defaultSelectedBitMap,
+                    R.string.delete_downloaded,
+                )
             }
         }
-        return titles.toTypedArray()
+        return flags
+    }
+
+    /** Returns a bit map of selected flags. */
+    fun getSelectedFlagsBitMap(
+        selectedFlags: List<Boolean>,
+        flags: List<AnimeMigrationFlag>,
+    ): Int {
+        return selectedFlags
+            .zip(flags)
+            .filter { (isSelected, _) -> isSelected }
+            .map { (_, flag) -> flag.flag }
+            .reduceOrNull { acc, mask -> acc or mask } ?: 0
     }
 }

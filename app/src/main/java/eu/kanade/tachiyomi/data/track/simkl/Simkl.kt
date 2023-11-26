@@ -4,15 +4,15 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Simkl(id: Long) : TrackService(id), AnimeTrackService {
+class Simkl(id: Long) : Tracker(id, "Simkl"), AnimeTracker {
 
     companion object {
         const val WATCHING = 1
@@ -27,9 +27,6 @@ class Simkl(id: Long) : TrackService(id), AnimeTrackService {
     private val interceptor by lazy { SimklInterceptor(this) }
 
     private val api by lazy { SimklApi(client, interceptor) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_simkl
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)

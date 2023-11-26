@@ -3,16 +3,48 @@ package eu.kanade.tachiyomi.util.system
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
+import kotlinx.coroutines.suspendCancellableCoroutine
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
+import kotlin.coroutines.resume
 
 object WebViewUtil {
     const val SPOOF_PACKAGE_NAME = "org.chromium.chrome"
 
-    const val MINIMUM_WEBVIEW_VERSION = 108
+    const val MINIMUM_WEBVIEW_VERSION = 114
+
+    /**
+     * Uses the WebView's user agent string to create something similar to what Chrome on Android
+     * would return.
+     *
+     * Example of WebView user agent string:
+     *   Mozilla/5.0 (Linux; Android 13; Pixel 7 Build/TQ3A.230901.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/116.0.0.0 Mobile Safari/537.36
+     *
+     * Example of Chrome on Android:
+     *   Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.3
+     */
+    fun getInferredUserAgent(context: Context): String {
+        return WebView(context)
+            .getDefaultUserAgentString()
+            .replace("; Android .*?\\)".toRegex(), "; Android 10; K)")
+            .replace("Version/.* Chrome/".toRegex(), "Chrome/")
+    }
+
+    fun getVersion(context: Context): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val webView = WebView.getCurrentWebViewPackage() ?: return "how did you get here?"
+            val pm = context.packageManager
+            val label = webView.applicationInfo.loadLabel(pm)
+            val version = webView.versionName
+            "$label $version"
+        } else {
+            "Unknown"
+        }
+    }
 
     fun supportsWebView(context: Context): Boolean {
         try {
@@ -32,6 +64,10 @@ fun WebView.isOutdated(): Boolean {
     return getWebViewMajorVersion() < WebViewUtil.MINIMUM_WEBVIEW_VERSION
 }
 
+suspend fun WebView.getHtml(): String = suspendCancellableCoroutine {
+    evaluateJavascript("document.documentElement.outerHTML") { html -> it.resume(html) }
+}
+
 @SuppressLint("SetJavaScriptEnabled")
 fun WebView.setDefaultSettings() {
     with(settings) {
@@ -47,6 +83,8 @@ fun WebView.setDefaultSettings() {
         builtInZoomControls = true
         displayZoomControls = false
     }
+
+    CookieManager.getInstance().acceptThirdPartyCookies(this)
 }
 
 private fun WebView.getWebViewMajorVersion(): Int {

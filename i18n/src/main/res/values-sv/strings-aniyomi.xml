@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorier</string>
-    <string name="unlock_app">Lås upp Aniyomi</string>
+    <string name="unlock_app">Lås upp AnimeTail</string>
     <string name="action_sort_last_manga_update">Senaste uppdateringskontroll</string>
     <string name="action_show_manga">Visa inlägg</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>

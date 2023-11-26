@@ -34,7 +34,7 @@ import java.io.File
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.
  *
- * It uses [Anime.thumbnail_url] if custom cover is not set by the user.
+ * It uses [Anime.thumbnailUrl] if custom cover is not set by the user.
  * Disk caching for library items is handled by [AnimeCoverCache], otherwise
  * handled by Coil's [DiskCache].
  *

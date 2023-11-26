@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.size
@@ -24,7 +23,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
@@ -35,6 +39,7 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
@@ -77,6 +82,10 @@ class AnimeDownloadCache(
         .debounce(1000L) // Don't notify if it finishes quickly enough
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
+    private val diskCacheFile: File
+        get() = File(context.cacheDir, "dl_index_cache")
+
+    private val rootDownloadsDirLock = Mutex()
     private var rootDownloadsDir = RootDirectory(getDirectoryFromPreference())
 
     init {
@@ -86,6 +95,21 @@ class AnimeDownloadCache(
                 invalidateCache()
             }
             .launchIn(scope)
+
+        // Attempt to read cache file
+        scope.launch {
+            rootDownloadsDirLock.withLock {
+                try {
+                    val diskCache = diskCacheFile.inputStream().use {
+                        ProtoBuf.decodeFromByteArray<RootDirectory>(it.readBytes())
+                    }
+                    rootDownloadsDir = diskCache
+                    lastRenew = System.currentTimeMillis()
+                } catch (e: Throwable) {
+                    diskCacheFile.delete()
+                }
+            }
+        }
     }
 
     /**
@@ -309,13 +333,18 @@ class AnimeDownloadCache(
                 }
             }
 
+            val sourceMap = sources.associate {
+                provider.getSourceDirName(it).lowercase() to it.id
+            }
+
             val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
-                .associate { it.name to SourceDirectory(it) }
-                .mapNotNullKeys { entry ->
-                    sources.find {
-                        provider.getSourceDirName(it).equals(entry.key, ignoreCase = true)
-                    }?.id
+                .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                .mapNotNull { dir ->
+                    val sourceId = sourceMap[dir.name!!.lowercase()]
+                    sourceId?.let { it to SourceDirectory(dir) }
                 }
+                .toMap()
+                .let { ConcurrentHashMap(it) }
 
             rootDownloadsDir.sourceDirs = sourceDirs
 
@@ -323,7 +352,7 @@ class AnimeDownloadCache(
                 .map { sourceDir ->
                     async {
                         val animeDirs = sourceDir.dir.listFiles().orEmpty()
-                            .filterNot { it.name.isNullOrBlank() }
+                            .filter { it.isDirectory && !it.name.isNullOrBlank() }
                             .associate { it.name!! to AnimeDirectory(it) }
 
                         sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
@@ -337,9 +366,13 @@ class AnimeDownloadCache(
                                         // Folder of images
                                         it.isDirectory -> it.name
                                         // MP4 files
-                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(".mp4")
+                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(
+                                            ".mp4",
+                                        )
                                         // MKV files
-                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(".mkv")
+                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(
+                                            ".mkv",
+                                        )
                                         // Anything else is irrelevant
                                         else -> null
                                     }

@@ -14,10 +14,8 @@ class CreateAnimeCategoryWithName(
 
     private val initialFlags: Long
         get() {
-            val sort = preferences.libraryAnimeSortingMode().get()
-            return preferences.libraryDisplayMode().get().flag or
-                sort.type.flag or
-                sort.direction.flag
+            val sort = preferences.animeSortingMode().get()
+            return sort.type.flag or sort.direction.flag
         }
 
     suspend fun await(name: String): Result = withNonCancellableContext {
@@ -40,8 +38,8 @@ class CreateAnimeCategoryWithName(
         }
     }
 
-    sealed class Result {
-        object Success : Result()
-        data class InternalError(val error: Throwable) : Result()
+    sealed interface Result {
+        data object Success : Result
+        data class InternalError(val error: Throwable) : Result
     }
 }

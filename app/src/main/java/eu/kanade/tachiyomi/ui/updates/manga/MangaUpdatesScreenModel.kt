@@ -60,12 +60,12 @@ class MangaUpdatesScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     uiPreferences: UiPreferences = Injekt.get(),
-) : StateScreenModel<UpdatesState>(UpdatesState()) {
+) : StateScreenModel<MangaUpdatesScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
 
-    val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
+    val lastUpdated by libraryPreferences.lastUpdatedTimestamp().asState(coroutineScope)
     val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
 
     // First and last selected index in list
@@ -83,7 +83,8 @@ class MangaUpdatesScreenModel(
             combine(
                 getUpdates.subscribe(calendar).distinctUntilChanged(),
                 downloadCache.changes,
-            ) { updates, _ -> updates }
+                downloadManager.queueState,
+            ) { updates, _, _ -> updates }
                 .catch {
                     logcat(LogPriority.ERROR, it)
                     _events.send(Event.InternalError)
@@ -295,10 +296,10 @@ class MangaUpdatesScreenModel(
                         // Try to select the items in-between when possible
                         val range: IntRange
                         if (selectedIndex < selectedPositions[0]) {
-                            range = selectedIndex + 1 until selectedPositions[0]
+                            range = selectedIndex + 1..<selectedPositions[0]
                             selectedPositions[0] = selectedIndex
                         } else if (selectedIndex > selectedPositions[1]) {
-                            range = (selectedPositions[1] + 1) until selectedIndex
+                            range = (selectedPositions[1] + 1)..<selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
                             // Just select itself
@@ -366,46 +367,48 @@ class MangaUpdatesScreenModel(
         libraryPreferences.newMangaUpdatesCount().set(0)
     }
 
-    sealed class Dialog {
-        data class DeleteConfirmation(val toDelete: List<MangaUpdatesItem>) : Dialog()
-    }
+    @Immutable
+    data class State(
+        val isLoading: Boolean = true,
+        val items: List<MangaUpdatesItem> = emptyList(),
+        val dialog: Dialog? = null,
+    ) {
+        val selected = items.filter { it.selected }
+        val selectionMode = selected.isNotEmpty()
 
-    sealed class Event {
-        object InternalError : Event()
-        data class LibraryUpdateTriggered(val started: Boolean) : Event()
-    }
-}
+        fun getUiModel(context: Context, relativeTime: Boolean): List<MangaUpdatesUiModel> {
+            val dateFormat by mutableStateOf(
+                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),
+            )
 
-@Immutable
-data class UpdatesState(
-    val isLoading: Boolean = true,
-    val items: List<MangaUpdatesItem> = emptyList(),
-    val dialog: MangaUpdatesScreenModel.Dialog? = null,
-) {
-    val selected = items.filter { it.selected }
-    val selectionMode = selected.isNotEmpty()
-
-    fun getUiModel(context: Context, relativeTime: Int): List<MangaUpdatesUiModel> {
-        val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
-
-        return items
-            .map { MangaUpdatesUiModel.Item(it) }
-            .insertSeparators { before, after ->
-                val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                        val text = afterDate.toRelativeString(
-                            context = context,
-                            range = relativeTime,
-                            dateFormat = dateFormat,
-                        )
-                        MangaUpdatesUiModel.Header(text)
+            return items
+                .map { MangaUpdatesUiModel.Item(it) }
+                .insertSeparators { before, after ->
+                    val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    when {
+                        beforeDate.time != afterDate.time && afterDate.time != 0L -> {
+                            val text = afterDate.toRelativeString(
+                                context = context,
+                                relative = relativeTime,
+                                dateFormat = dateFormat,
+                            )
+                            MangaUpdatesUiModel.Header(text)
+                        }
+                        // Return null to avoid adding a separator between two items.
+                        else -> null
                     }
-                    // Return null to avoid adding a separator between two items.
-                    else -> null
                 }
-            }
+        }
+    }
+
+    sealed interface Dialog {
+        data class DeleteConfirmation(val toDelete: List<MangaUpdatesItem>) : Dialog
+    }
+
+    sealed interface Event {
+        data object InternalError : Event
+        data class LibraryUpdateTriggered(val started: Boolean) : Event
     }
 }
 

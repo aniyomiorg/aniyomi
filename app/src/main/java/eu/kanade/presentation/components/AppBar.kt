@@ -1,5 +1,6 @@
 package eu.kanade.presentation.components
 
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -13,13 +14,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltipBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,15 +40,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.R
@@ -59,12 +66,13 @@ const val SEARCH_DEBOUNCE_MILLIS = 250L
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
+    backgroundColor: Color? = null,
     // Text
     title: String?,
     subtitle: String? = null,
     // Up button
     navigateUp: (() -> Unit)? = null,
-    navigationIcon: ImageVector = Icons.Outlined.ArrowBack,
+    navigationIcon: ImageVector? = null,
     // Menu
     actions: @Composable RowScope.() -> Unit = {},
     // Action mode
@@ -80,6 +88,7 @@ fun AppBar(
 
     AppBar(
         modifier = modifier,
+        backgroundColor = backgroundColor,
         titleContent = {
             if (isActionMode) {
                 AppBarTitle(actionModeCounter.toString())
@@ -105,11 +114,12 @@ fun AppBar(
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
+    backgroundColor: Color? = null,
     // Title
     titleContent: @Composable () -> Unit,
     // Up button
     navigateUp: (() -> Unit)? = null,
-    navigationIcon: ImageVector = Icons.Outlined.ArrowBack,
+    navigationIcon: ImageVector? = null,
     // Menu
     actions: @Composable RowScope.() -> Unit = {},
     // Action mode
@@ -133,10 +143,7 @@ fun AppBar(
                 } else {
                     navigateUp?.let {
                         IconButton(onClick = it) {
-                            Icon(
-                                imageVector = navigationIcon,
-                                contentDescription = stringResource(R.string.abc_action_bar_up_description),
-                            )
+                            UpIcon(navigationIcon)
                         }
                     }
                 }
@@ -144,7 +151,7 @@ fun AppBar(
             title = titleContent,
             actions = actions,
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                containerColor = backgroundColor ?: MaterialTheme.colorScheme.surfaceColorAtElevation(
                     elevation = if (isActionMode) 3.dp else 0.dp,
                 ),
             ),
@@ -190,6 +197,9 @@ fun AppBarTitle(
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.basicMarquee(
+                        delayMillis = 2_000,
+                    ),
                 )
             }
         }
@@ -203,21 +213,39 @@ fun AppBarActions(
     var showMenu by remember { mutableStateOf(false) }
 
     actions.filterIsInstance<AppBar.Action>().map {
-        IconButton(
-            onClick = it.onClick,
-            enabled = it.enabled,
+        PlainTooltipBox(
+            tooltip = { Text(it.title) },
         ) {
-            Icon(
-                imageVector = it.icon,
-                contentDescription = it.title,
-            )
+            IconButton(
+                onClick = it.onClick,
+                enabled = it.enabled,
+                modifier = Modifier.tooltipTrigger(),
+            ) {
+                Icon(
+                    imageVector = it.icon,
+                    tint = it.iconTint ?: LocalContentColor.current,
+                    contentDescription = it.title,
+                )
+            }
         }
     }
 
     val overflowActions = actions.filterIsInstance<AppBar.OverflowAction>()
     if (overflowActions.isNotEmpty()) {
-        IconButton(onClick = { showMenu = !showMenu }) {
-            Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.abc_action_menu_overflow_description))
+        PlainTooltipBox(
+            tooltip = { Text(stringResource(R.string.abc_action_menu_overflow_description)) },
+        ) {
+            IconButton(
+                onClick = { showMenu = !showMenu },
+                modifier = Modifier.tooltipTrigger(),
+            ) {
+                Icon(
+                    Icons.Outlined.MoreVert,
+                    contentDescription = stringResource(
+                        R.string.abc_action_menu_overflow_description,
+                    ),
+                )
+            }
         }
 
         DropdownMenu(
@@ -306,7 +334,11 @@ fun SearchToolbar(
                         placeholder = {
                             Text(
                                 modifier = Modifier.secondaryItemAlpha(),
-                                text = (placeholderText ?: stringResource(R.string.action_search_hint)),
+                                text = (
+                                    placeholderText ?: stringResource(
+                                        R.string.action_search_hint,
+                                    )
+                                    ),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.titleMedium.copy(
@@ -327,17 +359,35 @@ fun SearchToolbar(
                 if (!searchEnabled) {
                     // Don't show search action
                 } else if (searchQuery == null) {
-                    IconButton(onClick) {
-                        Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
+                    PlainTooltipBox(
+                        tooltip = { Text(stringResource(R.string.action_search)) },
+                    ) {
+                        IconButton(
+                            onClick = onClick,
+                            modifier = Modifier.tooltipTrigger(),
+                        ) {
+                            Icon(
+                                Icons.Outlined.Search,
+                                contentDescription = stringResource(R.string.action_search),
+                            )
+                        }
                     }
                 } else if (searchQuery.isNotEmpty()) {
-                    IconButton(
-                        onClick = {
-                            onClick()
-                            focusRequester.requestFocus()
-                        },
+                    PlainTooltipBox(
+                        tooltip = { Text(stringResource(R.string.action_reset)) },
                     ) {
-                        Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_reset))
+                        IconButton(
+                            onClick = {
+                                onClick()
+                                focusRequester.requestFocus()
+                            },
+                            modifier = Modifier.tooltipTrigger(),
+                        ) {
+                            Icon(
+                                Icons.Outlined.Close,
+                                contentDescription = stringResource(R.string.action_reset),
+                            )
+                        }
                     }
                 }
             }
@@ -350,12 +400,23 @@ fun SearchToolbar(
     )
 }
 
+@Composable
+fun UpIcon(navigationIcon: ImageVector? = null) {
+    val icon = navigationIcon
+        ?: if (LocalLayoutDirection.current == LayoutDirection.Ltr) Icons.Outlined.ArrowBack else Icons.Outlined.ArrowForward
+    Icon(
+        imageVector = icon,
+        contentDescription = stringResource(R.string.abc_action_bar_up_description),
+    )
+}
+
 sealed interface AppBar {
     sealed interface AppBarAction
 
     data class Action(
         val title: String,
         val icon: ImageVector,
+        val iconTint: Color? = null,
         val onClick: () -> Unit,
         val enabled: Boolean = true,
     ) : AppBarAction

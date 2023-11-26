@@ -10,20 +10,27 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 
-class AnimeSourceSearchPagingSource(source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
+class AnimeSourceSearchPagingSource(
+    source: AnimeCatalogueSource,
+    val query: String,
+    val filters: AnimeFilterList,
+) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getSearchAnime
         return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
     }
 }
 
 class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getPopularAnime
         return source.fetchPopularAnime(currentPage).awaitSingle()
     }
 }
 
 class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        // Replace with getLatestUpdates
         return source.fetchLatestUpdates(currentPage).awaitSingle()
     }
 }

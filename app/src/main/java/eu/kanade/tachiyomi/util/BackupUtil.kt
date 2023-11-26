@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.util
 
 import android.content.Context
 import android.net.Uri
-import eu.kanade.tachiyomi.data.backup.BackupManager
+import eu.kanade.tachiyomi.data.backup.BackupCreator
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
@@ -29,7 +29,7 @@ object BackupUtil {
      * Decode a potentially-gzipped backup.
      */
     fun decodeBackup(context: Context, uri: Uri): Backup {
-        val backupManager = BackupManager(context)
+        val backupCreator = BackupCreator(context)
 
         val backupStringSource = context.contentResolver.openInputStream(uri)!!.source().buffer()
 
@@ -43,9 +43,12 @@ object BackupUtil {
         }.use { it.readByteArray() }
 
         return try {
-            backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
+            backupCreator.parser.decodeFromByteArray(BackupSerializer, backupString)
         } catch (e: SerializationException) {
-            val fullBackup = backupManager.parser.decodeFromByteArray(FullBackupSerializer, backupString)
+            val fullBackup = backupCreator.parser.decodeFromByteArray(
+                FullBackupSerializer,
+                backupString,
+            )
             val backupPreferences = fullBackup.backupPreferences.map {
                 val value = when (it.value) {
                     is FullIntPreferenceValue -> IntPreferenceValue(it.value.value)

@@ -4,6 +4,7 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -19,15 +20,19 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.history.HistoriesTab
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
 import eu.kanade.tachiyomi.ui.storage.StorageTab
@@ -83,14 +88,24 @@ object MoreTab : Tab() {
             onClickBackupAndRestore = { navigator.push(SettingsScreen.toBackupScreen()) },
             onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
             onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
+
         )
+        LaunchedEffect(Unit) {
+            (context as? MainActivity)?.ready = true
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordScreen.MORE)
+            DiscordRPCService.setMangaScreen(context, DiscordScreen.MORE)
+            // <-- AM (DISCORD)
+        }
     }
 }
 
 private val libraryPreferences: LibraryPreferences by injectLazy()
 
+private val uiPreferences: UiPreferences by injectLazy()
+
 private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true)
+    0 -> HistoriesTab(true, uiPreferences)
     1 -> UpdatesTab(fromMore = true, inMiddle = false)
     else -> MangaLibraryTab
 }
@@ -104,7 +119,9 @@ private class MoreScreenModel(
     var downloadedOnly by preferences.downloadedOnly().asState(coroutineScope)
     var incognitoMode by preferences.incognitoMode().asState(coroutineScope)
 
-    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(DownloadQueueState.Stopped)
+    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
+        DownloadQueueState.Stopped,
+    )
     val downloadQueueState: StateFlow<DownloadQueueState> = _state.asStateFlow()
 
     init {
@@ -118,7 +135,12 @@ private class MoreScreenModel(
                     combine(
                         animeDownloadManager.isDownloaderRunning,
                         animeDownloadManager.queueState,
-                    ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
+                    ) { isRunningAnime, animeDownloadQueue ->
+                        Pair(
+                            isRunningAnime,
+                            animeDownloadQueue.size,
+                        )
+                    }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
                             val isDownloading = isDownloadingAnime || isDownloadingManga
                             val downloadQueueSize = mangaDownloadQueueSize + animeDownloadQueueSize
@@ -134,8 +156,8 @@ private class MoreScreenModel(
     }
 }
 
-sealed class DownloadQueueState {
-    object Stopped : DownloadQueueState()
-    data class Paused(val pending: Int) : DownloadQueueState()
-    data class Downloading(val pending: Int) : DownloadQueueState()
+sealed interface DownloadQueueState {
+    data object Stopped : DownloadQueueState
+    data class Paused(val pending: Int) : DownloadQueueState
+    data class Downloading(val pending: Int) : DownloadQueueState
 }

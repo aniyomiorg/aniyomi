@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.track.komga
 
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -17,9 +16,12 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 
-const val READLIST_API = "/api/v1/readlists"
+private const val READLIST_API = "/api/v1/readlists"
 
-class KomgaApi(private val client: OkHttpClient) {
+class KomgaApi(
+    private val trackId: Long,
+    private val client: OkHttpClient,
+) {
 
     private val json: Json by injectLazy()
 
@@ -41,7 +43,11 @@ class KomgaApi(private val client: OkHttpClient) {
                 }
 
                 val progress = client
-                    .newCall(GET("${url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi"))
+                    .newCall(
+                        GET(
+                            "${url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi",
+                        ),
+                    )
                     .awaitSuccess().let {
                         with(json) {
                             if (url.contains("/api/v1/series/")) {
@@ -77,7 +83,9 @@ class KomgaApi(private val client: OkHttpClient) {
         }
         client.newCall(
             Request.Builder()
-                .url("${track.tracking_url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi")
+                .url(
+                    "${track.tracking_url.replace("/api/v1/series/", "/api/v2/series/")}/read-progress/tachiyomi",
+                )
                 .put(payload.toRequestBody("application/json".toMediaType()))
                 .build(),
         )
@@ -85,13 +93,15 @@ class KomgaApi(private val client: OkHttpClient) {
         return getTrackSearch(track.tracking_url)
     }
 
-    private fun SeriesDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackManager.KOMGA).also {
+    private fun SeriesDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(trackId).also {
         it.title = metadata.title
         it.summary = metadata.summary
         it.publishing_status = metadata.status
     }
 
-    private fun ReadListDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackManager.KOMGA).also {
+    private fun ReadListDto.toTrack(): MangaTrackSearch = MangaTrackSearch.create(
+        trackId,
+    ).also {
         it.title = name
     }
 }

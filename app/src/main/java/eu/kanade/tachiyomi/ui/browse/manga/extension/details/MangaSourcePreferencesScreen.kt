@@ -7,20 +7,14 @@ import android.view.View
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
@@ -37,11 +31,12 @@ import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
-import eu.kanade.tachiyomi.source.manga.getPreferenceKey
+import eu.kanade.tachiyomi.source.sourcePreferences
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -57,16 +52,9 @@ class MangaSourcePreferencesScreen(val sourceId: Long) : Screen() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(text = Injekt.get<MangaSourceManager>().getOrStub(sourceId).toString()) },
-                    navigationIcon = {
-                        IconButton(onClick = navigator::pop) {
-                            Icon(
-                                imageVector = Icons.Outlined.ArrowBack,
-                                contentDescription = stringResource(R.string.abc_action_bar_up_description),
-                            )
-                        }
-                    },
+                AppBar(
+                    title = Injekt.get<MangaSourceManager>().getOrStub(sourceId).toString(),
+                    navigateUp = navigator::pop,
                     scrollBehavior = it,
                 )
             },
@@ -93,7 +81,7 @@ class MangaSourcePreferencesScreen(val sourceId: Long) : Screen() {
         commit: FragmentTransaction.(containerId: Int) -> Unit,
     ) {
         val containerId by rememberSaveable {
-            mutableStateOf(View.generateViewId())
+            mutableIntStateOf(View.generateViewId())
         }
         var initialized by rememberSaveable { mutableStateOf(false) }
         AndroidView(
@@ -139,19 +127,17 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun populateScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
-        val source = Injekt.get<MangaSourceManager>().get(sourceId)!!
+        val source = Injekt.get<MangaSourceManager>().get(sourceId)!! as ConfigurableSource
 
-        check(source is ConfigurableSource)
-
-        val sharedPreferences = requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
-        val dataStore = SharedPreferencesDataStore(sharedPreferences)
+        val dataStore = SharedPreferencesDataStore(source.sourcePreferences())
         preferenceManager.preferenceDataStore = dataStore
 
         val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
         source.setupPreferenceScreen(sourceScreen)
         sourceScreen.forEach { pref ->
             pref.isIconSpaceReserved = false
-            if (pref is DialogPreference) {
+            pref.isSingleLineTitle = false
+            if (pref is DialogPreference && pref.dialogTitle.isNullOrEmpty()) {
                 pref.dialogTitle = pref.title
             }
 

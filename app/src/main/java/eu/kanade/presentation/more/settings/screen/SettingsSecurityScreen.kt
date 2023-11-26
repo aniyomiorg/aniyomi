@@ -10,11 +10,11 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.authenticate
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.isAuthenticationSupported
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -32,7 +32,6 @@ object SettingsSecurityScreen : SearchableSettings {
         val authSupported = remember { context.isAuthenticationSupported() }
 
         val useAuthPref = securityPreferences.useAuthenticator()
-
         val useAuth by useAuthPref.collectAsState()
 
         return listOf(
@@ -55,7 +54,11 @@ object SettingsSecurityScreen : SearchableSettings {
                         when (it) {
                             -1 -> stringResource(R.string.lock_never)
                             0 -> stringResource(R.string.lock_always)
-                            else -> pluralStringResource(id = R.plurals.lock_after_mins, count = it, it)
+                            else -> pluralStringResource(
+                                id = R.plurals.lock_after_mins,
+                                count = it,
+                                it,
+                            )
                         }
                     },
                 onValueChanged = {
@@ -71,7 +74,7 @@ object SettingsSecurityScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 pref = securityPreferences.secureScreen(),
                 title = stringResource(R.string.secure_screen),
-                entries = SecurityPreferences.SecureScreenMode.values()
+                entries = SecurityPreferences.SecureScreenMode.entries
                     .associateWith { stringResource(it.titleResId) },
             ),
             Preference.PreferenceItem.InfoPreference(stringResource(R.string.secure_screen_summary)),
