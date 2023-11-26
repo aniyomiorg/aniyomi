@@ -38,17 +38,14 @@ import androidx.compose.ui.tooling.preview.Preview
  */
 @Composable
 fun CombinedCircularProgressIndicator(
-    progress: Float,
+    progress: () -> Float,
+    modifier: Modifier = Modifier,
 ) {
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-        label = "progress",
-    )
     AnimatedContent(
-        targetState = progress == 0f,
+        targetState = progress() == 0f,
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         label = "progressState",
+        modifier = modifier,
     ) { indeterminate ->
         if (indeterminate) {
             // Indeterminate
@@ -65,8 +62,13 @@ fun CombinedCircularProgressIndicator(
                 ),
                 label = "rotation",
             )
+            val animatedProgress by animateFloatAsState(
+                targetValue = progress(),
+                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                label = "progress",
+            )
             CircularProgressIndicator(
-                progress = animatedProgress,
+                progress = { animatedProgress },
                 modifier = Modifier.rotate(rotation),
             )
         }
@@ -103,7 +105,7 @@ private fun CombinedCircularProgressIndicatorPreview() {
                     .fillMaxSize()
                     .padding(it),
             ) {
-                CombinedCircularProgressIndicator(progress = progress)
+                CombinedCircularProgressIndicator(progress = { progress })
             }
         }
     }

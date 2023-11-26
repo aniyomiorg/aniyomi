@@ -22,17 +22,18 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import eu.kanade.tachiyomi.core.Constants
+import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.presentation.widget.R
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import tachiyomi.presentation.widget.util.stringResource
 
 @Composable
 fun UpdatesAnimeWidget(
-    data: List<Pair<Long, Bitmap?>>?,
-    modifier: GlanceModifier = GlanceModifier,
+    data: ImmutableList<Pair<Long, Bitmap?>>?,
     contentColor: ColorProvider,
     topPadding: Dp,
     bottomPadding: Dp,
+    modifier: GlanceModifier = GlanceModifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -70,7 +71,10 @@ fun UpdatesAnimeWidget(
                                         .padding(horizontal = 3.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    val intent = Intent(LocalContext.current, Class.forName(Constants.MAIN_ACTIVITY)).apply {
+                                    val intent = Intent(
+                                        LocalContext.current,
+                                        Class.forName(Constants.MAIN_ACTIVITY),
+                                    ).apply {
                                         action = Constants.SHORTCUT_ANIME
                                         putExtra(Constants.ANIME_EXTRA, animeId)
                                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -80,8 +84,8 @@ fun UpdatesAnimeWidget(
                                         addCategory(animeId.toString())
                                     }
                                     UpdatesAnimeCover(
-                                        modifier = GlanceModifier.clickable(actionStartActivity(intent)),
                                         cover = cover,
+                                        modifier = GlanceModifier.clickable(actionStartActivity(intent)),
                                     )
                                 }
                             }

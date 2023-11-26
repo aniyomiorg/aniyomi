@@ -11,11 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.LabeledCheckbox
-import tachiyomi.presentation.core.util.ThemePreviews
 import kotlin.random.Random
 
 @Composable
@@ -34,7 +34,11 @@ fun HistoryDeleteDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val subtitle = if (isManga) R.string.dialog_with_checkbox_remove_description else R.string.dialog_with_checkbox_remove_description_anime
+                val subtitle = if (isManga) {
+                    R.string.dialog_with_checkbox_remove_description
+                } else {
+                    R.string.dialog_with_checkbox_remove_description_anime
+                }
                 Text(text = stringResource(subtitle))
 
                 LabeledCheckbox(
@@ -90,7 +94,7 @@ fun HistoryDeleteAllDialog(
     )
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun HistoryDeleteDialogPreview() {
     TachiyomiTheme {

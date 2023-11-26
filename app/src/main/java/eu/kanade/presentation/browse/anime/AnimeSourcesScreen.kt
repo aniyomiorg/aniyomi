@@ -74,12 +74,12 @@ fun AnimeSourcesScreen(
                     when (model) {
                         is AnimeSourceUiModel.Header -> {
                             AnimeSourceHeader(
-                                modifier = Modifier.animateItemPlacement(),
+
                                 language = model.language,
                             )
                         }
                         is AnimeSourceUiModel.Item -> AnimeSourceItem(
-                            modifier = Modifier.animateItemPlacement(),
+
                             source = model.source,
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,
@@ -94,8 +94,8 @@ fun AnimeSourcesScreen(
 
 @Composable
 private fun AnimeSourceHeader(
-    modifier: Modifier = Modifier,
     language: String,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Text(
@@ -111,11 +111,11 @@ private fun AnimeSourceHeader(
 
 @Composable
 private fun AnimeSourceItem(
-    modifier: Modifier = Modifier,
     source: AnimeSource,
     onClickItem: (AnimeSource, Listing) -> Unit,
     onLongClickItem: (AnimeSource) -> Unit,
     onClickPin: (AnimeSource) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseAnimeSourceItem(
         modifier = modifier,

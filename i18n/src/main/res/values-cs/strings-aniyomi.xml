@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Manga Kategorie</string>
-    <string name="unlock_app">Odemknout AnimeTail</string>
+    <string name="unlock_app">Odemknout Animetail</string>
     <string name="action_sort_last_manga_update">Poslední kontrola aktualizace</string>
     <string name="action_show_manga">Zobrazit položku</string>
     <string name="action_display_local_badge_manga">Lokální zdroj</string>
@@ -11,7 +11,7 @@
     <string name="pref_manga_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
     <string name="untrusted_extension_message">Toto rozšíření bylo podepsané nedůvěryhodným certifikátem a nebylo aktivované.
 \n
-\nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v AnimeTail nebo spustit libovolný kód.
+\nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v Aniyomi nebo spustit libovolný kód.
 \n
 \nDůvěřováním tomuto certifikátu přijímáte tato rizika.</string>
     <string name="pref_category_delete_chapters">Smazat kapitoly</string>
@@ -34,7 +34,7 @@
     <string name="also_set_chapter_settings_for_library">Také nastavit pro všechny položky v mé knihovně</string>
     <string name="dialog_with_checkbox_reset">Obnovit všechny kapitoly pro tento záznam</string>
     <string name="download_insufficient_space">Nelze stáhnout kvůli nedostatku místa</string>
-    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují AnimeTail. Klepnutím se dozvíte více.</string>
+    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Aniyomi. Klepnutím se dozvíte více.</string>
     <string name="information_webview_required">Je nutné mít nainstalovanou aplikaci WebView</string>
     <string name="download_notifier_download_paused_chapters">Stahování kapitoly pozastaveno</string>
     <string name="channel_new_chapters_episodes">Aktualizace kapitol/epizod</string>
@@ -42,7 +42,7 @@
     <string name="pref_anime_library_update_categories_details">Anime odebrané z kategorií nebudou aktualizována, ani když jsou zároveň v zahrnutých kategoriích.</string>
     <string name="action_start_download_internally">Použít stahovač uvnitř aplikace</string>
     <string name="pref_player_summary">Ovládání průběhu, interní přehrávač, externí přehrávač</string>
-    <string name="unofficial_extension_message_aniyomi">Toto rozšíření není z oficiálního seznamu AnimeTail rozšíření.</string>
+    <string name="unofficial_extension_message_aniyomi">Toto rozšíření není z oficiálního seznamu Aniyomi rozšíření.</string>
     <string name="pref_category_player">Přehrávač</string>
     <string name="pref_progress_mark_as_seen">Od jakého okamžiku označovat epizodu jako viděnou</string>
     <string name="pref_category_player_orientation">Orientace</string>

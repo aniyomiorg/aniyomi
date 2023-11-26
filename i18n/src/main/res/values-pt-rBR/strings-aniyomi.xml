@@ -14,7 +14,7 @@
     <string name="pref_bottom_nav_no_history">Mover Histórico para a guia Mais</string>
     <string name="pref_bottom_nav_no_updates">Mover Atualizações para a guia Mais</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para a guia Mais</string>
-    <string name="unlock_app">Desbloquear o AnimeTail</string>
+    <string name="unlock_app">Desbloquear o Animetail</string>
     <string name="action_sort_total_episodes">Total de episódios</string>
     <string name="action_sort_last_seen">Visto da última vez</string>
     <string name="action_sort_last_checked">Última verificação</string>
@@ -51,10 +51,10 @@
     <string name="pref_anime_library_update_categories_details">Os animes nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
     <string name="untrusted_extension_message">Esta extensão foi assinada com um certificado não confiável e não foi ativada.
 \n
-\nUma extensão maliciosa pode ler qualquer credencial de login armazenada no AnimeTail ou executar código arbitrário.
+\nUma extensão maliciosa pode ler qualquer credencial de login armazenada no Aniyomi ou executar código arbitrário.
 \n
 \nAo confiar neste certificado, você estará aceitando estes riscos.</string>
-    <string name="unofficial_extension_message_aniyomi">Esta extensão não está na lista oficial de extensões do AnimeTail.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
     <string name="pref_category_progress">Progresso</string>
     <string name="pref_progress_mark_as_seen">Em que ponto marcar o episódio como visto</string>
     <string name="pref_preserve_watching_position">Lembrar a posição de reprodução nos episódios vistos</string>
@@ -136,7 +136,7 @@
     <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Não foi possível fazer o download devido ao pouco espaço de armazenamento</string>
-    <string name="download_queue_size_warning">Aviso: grandes downloads em massa podem tornar as fontes mais lentas e/ou começarem a bloquear o AnimeTail. Toque para saber mais.</string>
+    <string name="download_queue_size_warning">Aviso: grandes downloads em massa podem tornar as fontes mais lentas e/ou começarem a bloquear o Aniyomi. Toque para saber mais.</string>
     <string name="video_list_empty_error">Nenhum vídeo encontrado</string>
     <string name="notification_new_episodes">Novos episódios encontrados</string>
     <plurals name="notification_episodes_generic">
@@ -145,7 +145,7 @@
         <item quantity="other">%1$d novos episódios</item>
     </plurals>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>
-    <string name="information_webview_required">A WebView é necessária para AnimeTail</string>
+    <string name="information_webview_required">A WebView é necessária para Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Download pausado</string>
     <string name="channel_new_chapters_episodes">Atualizações de capítulo/episódio</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
@@ -243,7 +243,7 @@
         <item quantity="many">Próximos %d episódios não vistos</item>
         <item quantity="other">Próximos %d episódios não vistos</item>
     </plurals>
-    <string name="unofficial_anime_extension_message">Esta extensão não está na lista oficial de extensões do AnimeTail.</string>
+    <string name="unofficial_anime_extension_message">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
     <string name="pref_player_fullscreen">Mostrar conteúdo no recorte de exibição</string>
     <string name="enable_volume_brightness_gestures">Ativar Gestos de Volume e Brilho</string>
     <string name="pref_default_intro_length">Duração padrão do pulo de abertura</string>

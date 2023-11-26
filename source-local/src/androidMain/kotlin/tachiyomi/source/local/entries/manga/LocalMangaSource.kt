@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.EpubFile
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
@@ -75,10 +76,11 @@ actual class LocalMangaSource(
     override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LATEST_FILTERS)
 
     override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage {
-        val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
-        val lastModifiedLimit by lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
+        val lastModifiedLimit by
+            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
-        var mangaDirs = baseDirsFiles
+        var mangaDirs = baseDirFiles
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.startsWith('.') }
             .distinctBy { it.name }
@@ -150,6 +152,23 @@ actual class LocalMangaSource(
 
         return MangasPage(mangas.toList(), false)
     }
+
+    // SY -->
+    fun updateMangaInfo(manga: SManga) {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it, manga.url) }.find {
+            it.exists()
+        } ?: return
+        val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
+        val file = File(directory, existingFileName ?: "info.json")
+        file.outputStream().use {
+            json.encodeToStream(manga.toJson(), it)
+        }
+    }
+
+    private fun SManga.toJson(): MangaDetails {
+        return MangaDetails(title, author, artist, description, genre?.split(", "), status)
+    }
+    // SY <--
 
     // Manga details related
     override suspend fun getMangaDetails(manga: SManga): SManga = withIOContext {
@@ -340,9 +359,8 @@ actual class LocalMangaSource(
 
     fun getFormat(chapter: SChapter): Format {
         try {
-            return fileSystem.getBaseDirectories()
-                .map { dir -> File(dir, chapter.url) }
-                .find { it.exists() }
+            return File(fileSystem.getBaseDirectory(), chapter.url)
+                .takeIf { it.exists() }
                 ?.let(Format.Companion::valueOf)
                 ?: throw Exception(context.getString(R.string.chapter_not_found))
         } catch (e: Format.UnknownFormatException) {
@@ -422,7 +440,7 @@ actual class LocalMangaSource(
 
     companion object {
         const val ID = 0L
-        const val HELP_URL = "https://akiled.org/help/guides/local-manga/"
+        const val HELP_URL = "https://aniyomi.org/help/guides/local-manga/"
 
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
     }

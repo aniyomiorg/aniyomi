@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Input
+import androidx.compose.material.icons.automirrored.outlined.Label
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.Delete
@@ -126,7 +129,11 @@ fun EntryBottomActionMenu(
                     )
                 }
                 if (onRemoveBookmarkClicked != null) {
-                    val removeBookmark = if (isManga) R.string.action_remove_bookmark else R.string.action_remove_bookmark_episode
+                    val removeBookmark = if (isManga) {
+                        R.string.action_remove_bookmark
+                    } else {
+                        R.string.action_remove_bookmark_episode
+                    }
                     Button(
                         title = stringResource(removeBookmark),
                         icon = Icons.Outlined.BookmarkRemove,
@@ -156,7 +163,11 @@ fun EntryBottomActionMenu(
                     )
                 }
                 if (onMarkPreviousAsViewedClicked != null) {
-                    val previousUnviewed = if (isManga) R.string.action_mark_previous_as_read else R.string.action_mark_previous_as_seen
+                    val previousUnviewed = if (isManga) {
+                        R.string.action_mark_previous_as_read
+                    } else {
+                        R.string.action_mark_previous_as_seen
+                    }
                     Button(
                         title = stringResource(previousUnviewed),
                         icon = ImageVector.vectorResource(R.drawable.ic_done_prev_24dp),
@@ -186,7 +197,7 @@ fun EntryBottomActionMenu(
                 if (!isManga && onExternalClicked != null && !playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(R.string.action_play_externally),
-                        icon = Icons.Outlined.OpenInNew,
+                        icon = Icons.AutoMirrored.Outlined.OpenInNew,
                         toConfirm = confirm[7],
                         onLongClick = { onLongClickItem(7) },
                         onClick = onExternalClicked,
@@ -195,7 +206,7 @@ fun EntryBottomActionMenu(
                 if (!isManga && onInternalClicked != null && playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(R.string.action_play_internally),
-                        icon = Icons.Outlined.Input,
+                        icon = Icons.AutoMirrored.Outlined.Input,
                         toConfirm = confirm[8],
                         onLongClick = { onLongClickItem(8) },
                         onClick = onInternalClicked,
@@ -296,7 +307,7 @@ fun LibraryBottomActionMenu(
             ) {
                 Button(
                     title = stringResource(R.string.action_move_category),
-                    icon = Icons.Outlined.Label,
+                    icon = Icons.AutoMirrored.Outlined.Label,
                     toConfirm = confirm[0],
                     onLongClick = { onLongClickItem(0) },
                     onClick = onChangeCategoryClicked,

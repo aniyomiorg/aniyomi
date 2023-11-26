@@ -181,7 +181,6 @@ class WebtoonPageHolder(
      */
     private suspend fun setImage() {
         progressIndicator.setProgress(0)
-        removeErrorLayout()
 
         val streamFn = page?.stream ?: return
 
@@ -202,6 +201,7 @@ class WebtoonPageHolder(
                     cropBorders = viewer.config.imageCropBorders,
                 ),
             )
+            removeErrorLayout()
         }
         // Suspend the coroutine to close the input stream only when the WebtoonPageHolder is recycled
         suspendCancellableCoroutine<Nothing> { continuation ->
@@ -210,6 +210,10 @@ class WebtoonPageHolder(
     }
 
     private fun process(imageStream: BufferedInputStream): InputStream {
+        if (viewer.config.dualPageRotateToFit) {
+            return rotateDualPage(imageStream)
+        }
+
         if (viewer.config.dualPageSplit) {
             val isDoublePage = ImageUtil.isWideImage(imageStream)
             if (isDoublePage) {
@@ -219,6 +223,16 @@ class WebtoonPageHolder(
         }
 
         return imageStream
+    }
+
+    private fun rotateDualPage(imageStream: BufferedInputStream): InputStream {
+        val isDoublePage = ImageUtil.isWideImage(imageStream)
+        return if (isDoublePage) {
+            val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
+            ImageUtil.rotateImage(imageStream, rotation)
+        } else {
+            imageStream
+        }
     }
 
     /**
@@ -234,6 +248,7 @@ class WebtoonPageHolder(
      */
     private fun onImageDecoded() {
         progressContainer.isVisible = false
+        removeErrorLayout()
     }
 
     /**

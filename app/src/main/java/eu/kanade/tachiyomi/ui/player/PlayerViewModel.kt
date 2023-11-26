@@ -59,7 +59,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
@@ -81,7 +81,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
@@ -276,13 +276,15 @@ class PlayerViewModel @JvmOverloads constructor(
             Pair(defaultResult, Result.failure(e))
         }
     }
+
     data class InitResult(
         val videoList: List<Video>?,
         val videoIndex: Int,
         val position: Long?,
     )
+
     private fun initEpisodeList(anime: Anime): List<Episode> {
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
+        val episodes = runBlocking { getEpisodesByAnimeId.await(anime.id) }
 
         return episodes
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
@@ -350,6 +352,7 @@ class PlayerViewModel @JvmOverloads constructor(
         // Save last second seen and mark as seen if needed
         currentEp.last_second_seen = seconds
         currentEp.total_seconds = totalSeconds
+
         episodePosition = seconds
 
         val progress = playerPreferences.progressPreference().get()
@@ -748,7 +751,6 @@ class PlayerViewModel @JvmOverloads constructor(
     sealed class Event {
         data class SetAnimeSkipIntro(val duration: Int) : Event()
         data class SetCoverResult(val result: SetAsCover) : Event()
-
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }

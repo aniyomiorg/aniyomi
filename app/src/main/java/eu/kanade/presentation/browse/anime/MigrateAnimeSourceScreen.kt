@@ -132,7 +132,7 @@ private fun MigrateAnimeSourceList(
             key = { (source, _) -> "migrate-${source.id}" },
         ) { (source, count) ->
             MigrateAnimeSourceItem(
-                modifier = Modifier.animateItemPlacement(),
+
                 source = source,
                 count = count,
                 onClickItem = { onClickItem(source) },
@@ -144,11 +144,11 @@ private fun MigrateAnimeSourceList(
 
 @Composable
 private fun MigrateAnimeSourceItem(
-    modifier: Modifier = Modifier,
     source: AnimeSource,
     count: Long,
     onClickItem: () -> Unit,
     onLongClickItem: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseAnimeSourceItem(
         modifier = modifier,

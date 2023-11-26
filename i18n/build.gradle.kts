@@ -24,4 +24,9 @@ tasks {
     preBuild {
         dependsOn(copyHebrewStrings, localesConfigTask)
     }
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-Xexpect-actual-classes",
+        )
+    }
 }

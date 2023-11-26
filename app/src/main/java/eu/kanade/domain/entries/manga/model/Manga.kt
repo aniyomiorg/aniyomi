@@ -3,8 +3,8 @@ package eu.kanade.domain.entries.manga.model
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
+import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.ComicInfoPublishingStatus
 import tachiyomi.core.preference.TriState
@@ -14,11 +14,11 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 // TODO: move these into the domain model
-val Manga.readingModeType: Long
-    get() = viewerFlags and ReadingModeType.MASK.toLong()
+val Manga.readingMode: Long
+    get() = viewerFlags and ReadingMode.MASK.toLong()
 
-val Manga.orientationType: Long
-    get() = viewerFlags and OrientationType.MASK.toLong()
+val Manga.readerOrientation: Long
+    get() = viewerFlags and ReaderOrientation.MASK.toLong()
 
 val Manga.downloadedFilter: TriState
     get() {
@@ -51,22 +51,28 @@ fun Manga.toSManga(): SManga = SManga.create().also {
 }
 
 fun Manga.copyFrom(other: SManga): Manga {
-    val author = other.author ?: author
-    val artist = other.artist ?: artist
-    val description = other.description ?: description
+    // SY -->
+    val author = other.author ?: ogAuthor
+    val artist = other.artist ?: ogArtist
+    val description = other.description ?: ogDescription
     val genres = if (other.genre != null) {
         other.getGenres()
     } else {
-        genre
+        ogGenre
     }
+    // SY <--
     val thumbnailUrl = other.thumbnail_url ?: thumbnailUrl
     return this.copy(
-        author = author,
-        artist = artist,
-        description = description,
-        genre = genres,
+        // SY -->
+        ogAuthor = author,
+        ogArtist = artist,
+        ogDescription = description,
+        ogGenre = genres,
+        // SY <--
         thumbnailUrl = thumbnailUrl,
-        status = other.status.toLong(),
+        // SY -->
+        ogStatus = other.status.toLong(),
+        // SY <--
         updateStrategy = other.update_strategy,
         initialized = other.initialized && initialized,
     )
@@ -75,12 +81,14 @@ fun Manga.copyFrom(other: SManga): Manga {
 fun SManga.toDomainManga(sourceId: Long): Manga {
     return Manga.create().copy(
         url = url,
-        title = title,
-        artist = artist,
-        author = author,
-        description = description,
-        genre = getGenres(),
-        status = status.toLong(),
+        // SY -->
+        ogTitle = title,
+        ogArtist = artist,
+        ogAuthor = author,
+        ogDescription = description,
+        ogGenre = getGenres(),
+        ogStatus = status.toLong(),
+        // SY <--
         thumbnailUrl = thumbnail_url,
         updateStrategy = update_strategy,
         initialized = initialized,

@@ -8,11 +8,20 @@ import android.net.Uri
 import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CATEGORY
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CHAPTER
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CUSTOM_INFO
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXTENSIONS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXT_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_HISTORY
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_TRACK
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupChapter
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
@@ -41,20 +50,21 @@ import logcat.LogPriority
 import okio.buffer
 import okio.gzip
 import okio.sink
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
+import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
@@ -70,14 +80,17 @@ class BackupCreator(
     private val animeHandler: AnimeDatabaseHandler = Injekt.get()
     private val mangaSourceManager: MangaSourceManager = Injekt.get()
     private val animeSourceManager: AnimeSourceManager = Injekt.get()
-    private val backupPreferences: BackupPreferences = Injekt.get()
-    private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val getMangaCategories: GetMangaCategories = Injekt.get()
     private val getAnimeCategories: GetAnimeCategories = Injekt.get()
     private val getMangaFavorites: GetMangaFavorites = Injekt.get()
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get()
     private val getMangaHistory: GetMangaHistory = Injekt.get()
     private val getAnimeHistory: GetAnimeHistory = Injekt.get()
+
+    // SY -->
+    private val getCustomMangaInfo: GetCustomMangaInfo = Injekt.get()
+    private val getCustomAnimeInfo: GetCustomAnimeInfo = Injekt.get()
+    // SY <--
 
     internal val parser = ProtoBuf
 
@@ -116,15 +129,14 @@ class BackupCreator(
             file = (
                 if (isAutoBackup) {
                     // Get dir of file and create
-                    var dir = UniFile.fromUri(context, uri)
-                    dir = dir.createDirectory("automatic")
+                    val dir = UniFile.fromUri(context, uri)
+                        .createDirectory("automatic")
 
                     // Delete older backups
-                    val numberOfBackups = backupPreferences.numberOfBackups().get()
                     dir.listFiles { _, filename -> Backup.filenameRegex.matches(filename) }
                         .orEmpty()
                         .sortedByDescending { it.name }
-                        .drop(numberOfBackups - 1)
+                        .drop(MAX_AUTO_BACKUPS - 1)
                         .forEach { it.delete() }
 
                     // Create new file to place backup
@@ -188,7 +200,7 @@ class BackupCreator(
      */
     private suspend fun backupCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
-        return if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        return if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             getMangaCategories.await()
                 .filterNot(Category::isSystemCategory)
                 .map(backupCategoryMapper)
@@ -204,7 +216,7 @@ class BackupCreator(
      */
     private suspend fun backupAnimeCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
-        return if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        return if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             getAnimeCategories.await()
                 .filterNot(Category::isSystemCategory)
                 .map(backupCategoryMapper)
@@ -234,24 +246,35 @@ class BackupCreator(
      */
     private suspend fun backupManga(manga: Manga, options: Int): BackupManga {
         // Entry for this manga
-        val mangaObject = BackupManga.copyFrom(manga)
+        val mangaObject = BackupManga.copyFrom(
+            manga,
+            // SY -->
+            if (options and BACKUP_CUSTOM_INFO == BACKUP_CUSTOM_INFO) {
+                getCustomMangaInfo.get(
+                    manga.id,
+                )
+            } else {
+                null
+            },
+            // <-- SY
+        )
 
         // Check if user wants chapter information in backup
-        if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
+        if (options and BACKUP_CHAPTER == BACKUP_CHAPTER) {
             // Backup all the chapters
-            val chapters = mangaHandler.awaitList {
+            mangaHandler.awaitList {
                 chaptersQueries.getChaptersByMangaId(
-                    manga.id,
-                    backupChapterMapper,
+                    mangaId = manga.id,
+                    applyScanlatorFilter = 0, // false
+                    mapper = backupChapterMapper,
                 )
             }
-            if (chapters.isNotEmpty()) {
-                mangaObject.chapters = chapters
-            }
+                .takeUnless(List<BackupChapter>::isEmpty)
+                ?.let { mangaObject.chapters = it }
         }
 
         // Check if user wants category information in backup
-        if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             // Backup categories for this manga
             val categoriesForManga = getMangaCategories.await(manga.id)
             if (categoriesForManga.isNotEmpty()) {
@@ -260,7 +283,7 @@ class BackupCreator(
         }
 
         // Check if user wants track information in backup
-        if (options and BackupConst.BACKUP_TRACK_MASK == BackupConst.BACKUP_TRACK) {
+        if (options and BACKUP_TRACK == BACKUP_TRACK) {
             val tracks = mangaHandler.awaitList {
                 manga_syncQueries.getTracksByMangaId(
                     manga.id,
@@ -273,7 +296,7 @@ class BackupCreator(
         }
 
         // Check if user wants history information in backup
-        if (options and BackupConst.BACKUP_HISTORY_MASK == BackupConst.BACKUP_HISTORY) {
+        if (options and BACKUP_HISTORY == BACKUP_HISTORY) {
             val historyByMangaId = getMangaHistory.await(manga.id)
             if (historyByMangaId.isNotEmpty()) {
                 val history = historyByMangaId.map { history ->
@@ -302,10 +325,21 @@ class BackupCreator(
      */
     private suspend fun backupAnime(anime: Anime, options: Int): BackupAnime {
         // Entry for this anime
-        val animeObject = BackupAnime.copyFrom(anime)
+        val animeObject = BackupAnime.copyFrom(
+            anime,
+            // SY -->
+            if (options and BACKUP_CUSTOM_INFO == BACKUP_CUSTOM_INFO) {
+                getCustomAnimeInfo.get(
+                    anime.id,
+                )
+            } else {
+                null
+            },
+            // <-- SY
+        )
 
         // Check if user wants chapter information in backup
-        if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
+        if (options and BACKUP_CHAPTER == BACKUP_CHAPTER) {
             // Backup all the chapters
             val episodes = animeHandler.awaitList {
                 episodesQueries.getEpisodesByAnimeId(
@@ -319,7 +353,7 @@ class BackupCreator(
         }
 
         // Check if user wants category information in backup
-        if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             // Backup categories for this manga
             val categoriesForAnime = getAnimeCategories.await(anime.id)
             if (categoriesForAnime.isNotEmpty()) {
@@ -328,7 +362,7 @@ class BackupCreator(
         }
 
         // Check if user wants track information in backup
-        if (options and BackupConst.BACKUP_TRACK_MASK == BackupConst.BACKUP_TRACK) {
+        if (options and BACKUP_TRACK == BACKUP_TRACK) {
             val tracks = animeHandler.awaitList {
                 anime_syncQueries.getTracksByAnimeId(
                     anime.id,
@@ -341,7 +375,7 @@ class BackupCreator(
         }
 
         // Check if user wants history information in backup
-        if (options and BackupConst.BACKUP_HISTORY_MASK == BackupConst.BACKUP_HISTORY) {
+        if (options and BACKUP_HISTORY == BACKUP_HISTORY) {
             val historyByAnimeId = getAnimeHistory.await(anime.id)
             if (historyByAnimeId.isNotEmpty()) {
                 val history = historyByAnimeId.map { history ->
@@ -362,7 +396,7 @@ class BackupCreator(
     }
 
     private fun backupExtensionPreferences(flags: Int): List<BackupExtensionPreferences> {
-        if (flags and BackupConst.BACKUP_EXT_PREFS_MASK != BackupConst.BACKUP_EXT_PREFS) return emptyList()
+        if (flags and BACKUP_EXT_PREFS != BACKUP_EXT_PREFS) return emptyList()
         val prefs = mutableListOf<Pair<String, SharedPreferences>>()
         Injekt.get<AnimeSourceManager>().getCatalogueSources().forEach {
             val name = it.getPreferenceKey()
@@ -375,14 +409,14 @@ class BackupCreator(
         return prefs.map {
             BackupExtensionPreferences(
                 it.first,
-                backupPreferences(it.second, BackupConst.BACKUP_PREFS),
+                backupPreferences(it.second, BACKUP_PREFS),
             )
         }
     }
 
     @Suppress("DEPRECATION")
     private fun backupExtensions(flags: Int): List<BackupExtension> {
-        if (flags and BackupConst.BACKUP_EXTENSIONS_MASK != BackupConst.BACKUP_EXTENSIONS) return emptyList()
+        if (flags and BACKUP_EXTENSIONS != BACKUP_EXTENSIONS) return emptyList()
         val installedExtensions = mutableListOf<BackupExtension>()
         Injekt.get<AnimeExtensionManager>().installedExtensionsFlow.value.forEach {
             val packageName = it.pkgName
@@ -414,9 +448,12 @@ class BackupCreator(
     }
 
     private fun backupPreferences(prefs: SharedPreferences, flags: Int): List<BackupPreference> {
-        if (flags and BackupConst.BACKUP_PREFS_MASK != BackupConst.BACKUP_PREFS) return emptyList()
+        if (flags and BACKUP_PREFS != BACKUP_PREFS) return emptyList()
         val backupPreferences = mutableListOf<BackupPreference>()
         for (pref in prefs.all) {
+            // AM (CONNECTIONS) -->
+            if (pref.key.contains("connection")) continue
+            // <-- AM (CONNECTIONS)
             val toAdd = when (pref.value) {
                 is Int -> {
                     BackupPreference(pref.key, IntPreferenceValue(pref.value as Int))
@@ -444,6 +481,8 @@ class BackupCreator(
             }
             backupPreferences.add(toAdd)
         }
-        return backupPreferences
+        return backupPreferences.filter { !Preference.isPrivate(it.key) && !Preference.isAppState(it.key) }
     }
 }
+
+private val MAX_AUTO_BACKUPS: Int = 4

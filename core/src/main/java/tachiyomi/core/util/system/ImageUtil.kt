@@ -366,8 +366,26 @@ object ImageUtil {
         val botLeftIsDark = botLeftPixel.isDark()
         val botRightIsDark = botRightPixel.isDark()
 
-        var darkBG = (topLeftIsDark && (botLeftIsDark || botRightIsDark || topRightIsDark || midLeftIsDark || topMidIsDark)) ||
-            (topRightIsDark && (botRightIsDark || botLeftIsDark || midRightIsDark || topMidIsDark))
+        var darkBG =
+            (
+                topLeftIsDark &&
+                    (
+                        botLeftIsDark ||
+                            botRightIsDark ||
+                            topRightIsDark ||
+                            midLeftIsDark ||
+                            topMidIsDark
+                        )
+                ) ||
+                (
+                    topRightIsDark &&
+                        (
+                            botRightIsDark ||
+                                botLeftIsDark ||
+                                midRightIsDark ||
+                                topMidIsDark
+                            )
+                    )
 
         val topAndBotPixels = listOf(
             topLeftPixel,
@@ -521,10 +539,26 @@ object ImageUtil {
             darkBG -> {
                 return ColorDrawable(blackColor)
             }
-            topIsBlackStreak || (topCornersIsDark && topOffsetCornersIsDark && (topMidIsDark || overallBlackPixels > 9)) -> {
+            topIsBlackStreak ||
+                (
+                    topCornersIsDark &&
+                        topOffsetCornersIsDark &&
+                        (
+                            topMidIsDark ||
+                                overallBlackPixels > 9
+                            )
+                    ) -> {
                 intArrayOf(blackColor, blackColor, whiteColor, whiteColor)
             }
-            bottomIsBlackStreak || (botCornersIsDark && botOffsetCornersIsDark && (bottomCenterPixel.isDark() || overallBlackPixels > 9)) -> {
+            bottomIsBlackStreak ||
+                (
+                    botCornersIsDark &&
+                        botOffsetCornersIsDark &&
+                        (
+                            bottomCenterPixel.isDark() ||
+                                overallBlackPixels > 9
+                            )
+                    ) -> {
                 intArrayOf(whiteColor, whiteColor, blackColor, blackColor)
             }
             else -> {

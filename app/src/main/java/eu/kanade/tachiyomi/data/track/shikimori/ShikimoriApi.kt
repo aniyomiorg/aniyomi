@@ -61,7 +61,8 @@ class ShikimoriApi(
                 ).awaitSuccess()
                     .parseAs<JsonObject>()
                     .let {
-                        track.library_id = it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                        track.library_id =
+                            it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
                     }
                 track
             }
@@ -105,7 +106,8 @@ class ShikimoriApi(
                 ).awaitSuccess()
                     .parseAs<JsonObject>()
                     .let {
-                        track.library_id = it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                        track.library_id =
+                            it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
                     }
                 track
             }

@@ -47,8 +47,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import eu.kanade.core.util.asFlow
 import eu.kanade.presentation.components.TabbedDialogPaddings
@@ -116,7 +116,7 @@ class EpisodeOptionsDialogScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             // To show loading state
             mutableState.update { it.copy(episode = null, anime = null, resultList = null) }
 
@@ -253,6 +253,7 @@ private fun VideoList(
                                 context,
                                 anime.id,
                                 episode.id,
+                                selectedVideo.videoUrl,
                                 true,
                                 selectedVideo,
                             )

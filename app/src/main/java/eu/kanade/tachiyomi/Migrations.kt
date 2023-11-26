@@ -16,11 +16,12 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.workManager
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getAndSet
@@ -57,7 +58,7 @@ object Migrations {
         connectionsManager: ConnectionsManager,
         // <-- AM (CONNECTIONS)
     ): Boolean {
-        val lastVersionCode = preferenceStore.getInt("last_version_code", 0)
+        val lastVersionCode = preferenceStore.getInt(Preference.appStateKey("last_version_code"), 0)
         val oldVersion = lastVersionCode.get()
         if (oldVersion < BuildConfig.VERSION_CODE) {
             lastVersionCode.set(BuildConfig.VERSION_CODE)
@@ -195,12 +196,12 @@ object Migrations {
             if (oldVersion < 60) {
                 // Migrate Rotation and Viewer values to default values for viewer_flags
                 val newOrientation = when (prefs.getInt("pref_rotation_type_key", 1)) {
-                    1 -> OrientationType.FREE.flagValue
-                    2 -> OrientationType.PORTRAIT.flagValue
-                    3 -> OrientationType.LANDSCAPE.flagValue
-                    4 -> OrientationType.LOCKED_PORTRAIT.flagValue
-                    5 -> OrientationType.LOCKED_LANDSCAPE.flagValue
-                    else -> OrientationType.FREE.flagValue
+                    1 -> ReaderOrientation.FREE.flagValue
+                    2 -> ReaderOrientation.PORTRAIT.flagValue
+                    3 -> ReaderOrientation.LANDSCAPE.flagValue
+                    4 -> ReaderOrientation.LOCKED_PORTRAIT.flagValue
+                    5 -> ReaderOrientation.LOCKED_LANDSCAPE.flagValue
+                    else -> ReaderOrientation.FREE.flagValue
                 }
 
                 // Reading mode flag and prefValue is the same value
@@ -309,7 +310,9 @@ object Migrations {
                         SecurityPreferences.SecureScreenMode.ALWAYS,
                     )
                 }
-                if (DeviceUtil.isMiui && basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER) {
+                if (DeviceUtil.isMiui &&
+                    basePreferences.extensionInstaller().get() == BasePreferences.ExtensionInstaller.PACKAGEINSTALLER
+                ) {
                     basePreferences.extensionInstaller().set(
                         BasePreferences.ExtensionInstaller.LEGACY,
                     )
@@ -371,9 +374,6 @@ object Migrations {
                 }
             }
             if (oldVersion < 84) {
-                if (backupPreferences.numberOfBackups().get() == 1) {
-                    backupPreferences.numberOfBackups().set(2)
-                }
                 if (backupPreferences.backupInterval().get() == 0) {
                     backupPreferences.backupInterval().set(12)
                     BackupCreateJob.setupTask(context)
@@ -412,27 +412,32 @@ object Migrations {
                         putString(uiPreferences.themeMode().key(), themeMode.uppercase())
                     }
                 }
-            }
-            if (connectionsPreferences.discordRPCStatus().isSet()) {
-                prefs.edit {
-                    val oldString = try {
-                        prefs.getString(connectionsPreferences.discordRPCStatus().key(), null)
-                    } catch (e: ClassCastException) {
-                        null
-                    } ?: return@edit
-                    val newInt = when (oldString) {
-                        "dnd" -> -1
-                        "idle" -> 0
-                        else -> 1
+                // AM (DISCORD) -->
+                if (connectionsPreferences.discordRPCStatus().isSet()) {
+                    prefs.edit {
+                        val oldString = try {
+                            prefs.getString(connectionsPreferences.discordRPCStatus().key(), null)
+                        } catch (e: ClassCastException) {
+                            null
+                        } ?: return@edit
+                        val newInt = when (oldString) {
+                            "dnd" -> -1
+                            "idle" -> 0
+                            else -> 1
+                        }
+                        putInt(connectionsPreferences.discordRPCStatus().key(), newInt)
                     }
-                    putInt(connectionsPreferences.discordRPCStatus().key(), newInt)
                 }
-            }
 
-            if (connectionsPreferences.connectionsToken(connectionsManager.discord).get().isNotBlank()) {
-                connectionsPreferences.setConnectionsCredentials(connectionsManager.discord, "Discord", "Logged In")
+                if (connectionsPreferences.connectionsToken(connectionsManager.discord).get().isNotBlank()) {
+                    connectionsPreferences.setConnectionsCredentials(
+                        connectionsManager.discord,
+                        "Discord",
+                        "Logged In",
+                    )
+                }
+                // <-- AM (DISCORD)
             }
-            // <-- AM (DISCORD)
             if (oldVersion < 92) {
                 if (playerPreferences.progressPreference().isSet()) {
                     prefs.edit {
@@ -529,10 +534,78 @@ object Migrations {
                             uiPreferences.relativeTime().set(false)
                         }
                     }
+                    if (oldVersion < 107) {
+                        replacePreferences(
+                            preferenceStore = preferenceStore,
+                            filterPredicate = {
+                                it.key.startsWith("pref_mangasync_") ||
+                                    it.key.startsWith("track_token_")
+                            },
+                            newKey = { Preference.privateKey(it) },
+                        )
+                    }
+                    if (oldVersion < 110) {
+                        val prefsToReplace = listOf(
+                            "pref_download_only",
+                            "incognito_mode",
+                            "last_catalogue_source",
+                            "trusted_signatures",
+                            "last_app_closed",
+                            "library_update_last_timestamp",
+                            "library_unseen_updates_count",
+                            "last_used_category",
+                            "last_app_check",
+                            "last_ext_check",
+                            "last_version_code",
+                        )
+                        replacePreferences(
+                            preferenceStore = preferenceStore,
+                            filterPredicate = { it.key in prefsToReplace },
+                            newKey = { Preference.appStateKey(it) },
+                        )
+                    }
                     return true
                 }
             }
         }
         return false
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+private fun replacePreferences(
+    preferenceStore: PreferenceStore,
+    filterPredicate: (Map.Entry<String, Any?>) -> Boolean,
+    newKey: (String) -> String,
+) {
+    preferenceStore.getAll()
+        .filter(filterPredicate)
+        .forEach { (key, value) ->
+            when (value) {
+                is Int -> {
+                    preferenceStore.getInt(newKey(key)).set(value)
+                    preferenceStore.getInt(key).delete()
+                }
+                is Long -> {
+                    preferenceStore.getLong(newKey(key)).set(value)
+                    preferenceStore.getLong(key).delete()
+                }
+                is Float -> {
+                    preferenceStore.getFloat(newKey(key)).set(value)
+                    preferenceStore.getFloat(key).delete()
+                }
+                is String -> {
+                    preferenceStore.getString(newKey(key)).set(value)
+                    preferenceStore.getString(key).delete()
+                }
+                is Boolean -> {
+                    preferenceStore.getBoolean(newKey(key)).set(value)
+                    preferenceStore.getBoolean(key).delete()
+                }
+                is Set<*> -> (value as? Set<String>)?.let {
+                    preferenceStore.getStringSet(newKey(key)).set(value)
+                    preferenceStore.getStringSet(key).delete()
+                }
+            }
+        }
 }

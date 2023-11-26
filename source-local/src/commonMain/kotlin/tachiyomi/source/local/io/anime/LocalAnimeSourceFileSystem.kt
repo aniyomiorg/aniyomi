@@ -4,11 +4,11 @@ import java.io.File
 
 expect class LocalAnimeSourceFileSystem {
 
-    fun getBaseDirectories(): Sequence<File>
+    fun getBaseDirectory(): File
 
-    fun getFilesInBaseDirectories(): Sequence<File>
+    fun getFilesInBaseDirectory(): List<File>
 
     fun getAnimeDirectory(name: String): File?
 
-    fun getFilesInAnimeDirectory(name: String): Sequence<File>
+    fun getFilesInAnimeDirectory(name: String): List<File>
 }

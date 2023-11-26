@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.anime.migration.sources
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreen
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun Screen.migrateAnimeSourceTab(): TabContent {
@@ -26,12 +28,12 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
 
     return TabContent(
         titleRes = R.string.label_migration_anime,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.migration_help_guide),
-                icon = Icons.Outlined.HelpOutline,
+                icon = Icons.AutoMirrored.Outlined.HelpOutline,
                 onClick = {
-                    uriHandler.openUri("https://akiled.org/help/guides/source-migration/")
+                    uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")
                 },
             ),
         ),

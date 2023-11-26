@@ -1,5 +1,6 @@
 package eu.kanade.domain.items.chapter.interactor
 
+import eu.kanade.domain.entries.manga.interactor.GetExcludedScanlators
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.model.copyFromSChapter
@@ -11,7 +12,7 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.online.HttpSource
 import tachiyomi.data.items.chapter.ChapterSanitizer
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.interactor.ShouldUpdateDbChapter
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -20,7 +21,6 @@ import tachiyomi.domain.items.chapter.model.toChapterUpdate
 import tachiyomi.domain.items.chapter.repository.ChapterRepository
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.entries.manga.isLocal
-import uy.kohesive.injekt.api.get
 import java.lang.Long.max
 import java.time.ZonedDateTime
 import java.util.Date
@@ -33,7 +33,8 @@ class SyncChaptersWithSource(
     private val shouldUpdateDbChapter: ShouldUpdateDbChapter,
     private val updateManga: UpdateManga,
     private val updateChapter: UpdateChapter,
-    private val getChapterByMangaId: GetChapterByMangaId,
+    private val getChaptersByMangaId: GetChaptersByMangaId,
+    private val getExcludedScanlators: GetExcludedScanlators,
 ) {
 
     /**
@@ -67,7 +68,7 @@ class SyncChaptersWithSource(
             }
 
         // Chapters from db.
-        val dbChapters = getChapterByMangaId.await(manga.id)
+        val dbChapters = getChaptersByMangaId.await(manga.id)
 
         // Chapters from the source not in db.
         val toAdd = mutableListOf<Chapter>()
@@ -219,6 +220,10 @@ class SyncChaptersWithSource(
 
         val reAddedUrls = reAdded.map { it.url }.toHashSet()
 
-        return updatedToAdd.filterNot { it.url in reAddedUrls }
+        val excludedScanlators = getExcludedScanlators.await(manga.id).toHashSet()
+
+        return updatedToAdd.filterNot {
+            it.url in reAddedUrls || it.scanlator in excludedScanlators
+        }
     }
 }

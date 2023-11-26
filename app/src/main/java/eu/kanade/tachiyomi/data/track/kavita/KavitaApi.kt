@@ -48,11 +48,19 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
                     when (it.code) {
                         200 -> return it.parseAs<AuthenticationDto>().token
                         401 -> {
-                            logcat(LogPriority.WARN) { "Unauthorized / api key not valid: Cleaned api URL: $apiUrl, Api key is empty: ${apiKey.isEmpty()}" }
+                            logcat(LogPriority.WARN) {
+                                "Unauthorized / api key not valid: Cleaned api URL: " +
+                                    "$apiUrl, Api key is empty: ${apiKey.isEmpty()}"
+                            }
                             throw IOException("Unauthorized / api key not valid")
                         }
                         500 -> {
-                            logcat(LogPriority.WARN) { "Error fetching JWT token. Cleaned api URL: $apiUrl, Api key is empty: ${apiKey.isEmpty()}" }
+                            logcat(
+                                LogPriority.WARN,
+                            ) {
+                                "Error fetching JWT token. Cleaned api URL: " +
+                                    "$apiUrl, Api key is empty: ${apiKey.isEmpty()}"
+                            }
                             throw IOException("Error fetching JWT token")
                         }
                         else -> {}
@@ -62,7 +70,8 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
             // Not sure which one to catch
         } catch (e: SocketTimeoutException) {
             logcat(LogPriority.WARN) {
-                "Could not fetch JWT token. Probably due to connectivity issue or the url '$apiUrl' is not available, skipping"
+                "Could not fetch JWT token. Probably due to connectivity " +
+                    "issue or the url '$apiUrl' is not available, skipping"
             }
             return null
         } catch (e: Exception) {
@@ -129,7 +138,10 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
                 }
             }
         } catch (e: Exception) {
-            logcat(LogPriority.WARN, e) { "Exception getting latest chapter read. Could not get itemRequest: $requestUrl" }
+            logcat(
+                LogPriority.WARN,
+                e,
+            ) { "Exception getting latest chapter read. Could not get itemRequest: $requestUrl" }
             throw e
         }
         return 0F
@@ -164,7 +176,9 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
     }
 
     suspend fun updateProgress(track: MangaTrack): MangaTrack {
-        val requestUrl = "${getApiFromUrl(track.tracking_url)}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(
+        val requestUrl = "${getApiFromUrl(
+            track.tracking_url,
+        )}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(
             track.tracking_url,
         )}&chapterNumber=${track.last_chapter_read}"
         authClient.newCall(

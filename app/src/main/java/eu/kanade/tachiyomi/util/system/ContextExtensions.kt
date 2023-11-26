@@ -115,8 +115,8 @@ fun Context.openDiscordLoginActivity() {
         toast(e.message)
     }
 }
-
 // <-- AM (DISCORD)
+
 private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

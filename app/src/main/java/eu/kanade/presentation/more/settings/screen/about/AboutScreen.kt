@@ -184,7 +184,7 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "Discord",
                             icon = CustomIcons.Discord,
-                            url = "https://discord.gg/F32UjdJZrR",
+                            url = "https://discord.gg/s82Vu589Ya",
                         )
                         LinkIcon(
                             label = "Reddit",
@@ -194,7 +194,7 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "GitHub",
                             icon = CustomIcons.Github,
-                            url = "https://github.com/aniyomiorg/aniyomi",
+                            url = "https://github.com/dark25/animetailv2",
                         )
                     }
                 }
@@ -226,6 +226,9 @@ object AboutScreen : Screen() {
                     }
                     is GetApplicationRelease.Result.NoNewUpdate -> {
                         context.toast(R.string.update_check_no_new_updates)
+                    }
+                    is GetApplicationRelease.Result.OsTooOld -> {
+                        context.toast(R.string.update_check_eol)
                     }
                     else -> {}
                 }

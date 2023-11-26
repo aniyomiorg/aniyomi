@@ -6,8 +6,8 @@ permissions:
 on:
   push:
     branches:
-      - main
-      - dev
+      - animetail
+      - kuuki-prev
     tags:
       - v*
 
@@ -52,13 +52,13 @@ jobs:
 
       - name: Get tag name
 
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Dark25/AnimeTail-source'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/animetailv2'
         run: |
           set -x
           echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Sign APK
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Dark25/AnimeTail-source'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/animetailv2'
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/apk/standard/release
@@ -68,7 +68,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Clean up build artifacts
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Dark25/AnimeTail-source'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/animetailv2'
         run: |
           set -e
 
@@ -93,11 +93,11 @@ jobs:
           echo "APK_X86_64_SHA=$sha" >> $GITHUB_ENV
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'animetailorg/animetail'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/animetailv2'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}
-          name: animetail ${{ env.VERSION_TAG }}
+          name: Animetail ${{ env.VERSION_TAG }}
           body: |
             ---
 

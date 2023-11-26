@@ -282,6 +282,13 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     protected abstract fun episodeListParse(response: Response): List<SEpisode>
 
     /**
+     * Parses the response from the site and returns a SEpisode Object.
+     *
+     * @param response the response from the site.
+     */
+    protected abstract fun episodeVideoParse(response: Response): SEpisode
+
+    /**
      * Get the list of videos a episode has. Videos should be returned
      * in the expected order; the index is ignored.
      *

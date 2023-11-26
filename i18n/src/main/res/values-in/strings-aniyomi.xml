@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Pindahkan Riwayat ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_updates">Pindahkan Update ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke tab Lainnya</string>
-    <string name="unlock_app">Buka AnimeTail</string>
+    <string name="unlock_app">Buka Animetail</string>
     <string name="action_filter_unseen">Belum dilihat</string>
     <string name="action_sort_total_episodes">total episode</string>
     <string name="action_sort_last_seen">Terakhir dilihat</string>
@@ -64,7 +64,7 @@
 \nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Tachiyomi atau mengeksekusi kode berbahaya.
 \n
 \nDengan mempercayai sertifikat ini Anda menyetujui resiko tersebut.</string>
-    <string name="unofficial_extension_message_aniyomi">Ektension ini bukan dari daftar ekstension official AnimeTail.</string>
+    <string name="unofficial_extension_message_aniyomi">Ektension ini bukan dari daftar ekstension official Aniyomi.</string>
     <string name="rotation_reverse_landscape">Lanskap terbalik</string>
     <string name="rotation_sensor_portrait">Sensor potret</string>
     <string name="rotation_sensor_landscape">Sensor pemandangan</string>
@@ -256,7 +256,7 @@
     <string name="pref_search_pinned_manga_sources_only">Hanya cari sumber manga tersemat di pencarian global</string>
     <string name="action_global_manga_search">Pencarian Manga Global</string>
     <string name="action_global_anime_search">Pencarian Anime Global</string>
-    <string name="unofficial_anime_extension_message">Ekstensi ini bukan dari daftar ekstensi resmi AnimeTail.</string>
+    <string name="unofficial_anime_extension_message">Ekstensi ini bukan dari daftar ekstensi resmi Aniyomi.</string>
     <string name="pref_enable_pip">Aktifkan penggunaan mode PiP</string>
     <string name="pref_category_volume_brightness">Volume dan Kecerahan</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>

@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.anime.source
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.service.SourcePreferences
@@ -25,7 +25,7 @@ class AnimeSourcesFilterScreenModel(
 ) : StateScreenModel<AnimeSourcesFilterScreenModel.State>(State.Loading) {
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             combine(
                 getLanguagesWithSources.subscribe(),
                 preferences.enabledLanguages().changes(),

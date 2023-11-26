@@ -16,20 +16,18 @@ import kotlinx.serialization.json.JsonElement
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
-private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
+private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
 
 // Constant for buttons list
-// private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
+private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
 
 // Constant for metadata list
-/*private val RICH_PRESENCE_METADATA = Activity.Metadata(
+private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/",
-        "https://discord.gg/",
+        "https://github.com/dark25/animetailv2",
+        "https://discord.gg/s82Vu589Ya",
     ),
 )
-
- */
 
 @Serializable
 data class Activity(
@@ -41,8 +39,8 @@ data class Activity(
     val type: Int? = null,
     val timestamps: Timestamps? = null,
     val assets: Assets? = null,
-    // val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
-    // val metadata: Metadata? = RICH_PRESENCE_METADATA,
+    val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
+    val metadata: Metadata? = RICH_PRESENCE_METADATA,
 ) {
     @Serializable
     data class Assets(
@@ -154,7 +152,6 @@ enum class OpCode(val value: Int) {
 
     /** For future use or unknown opcodes. */
     UNKNOWN(-1),
-    ;
 }
 
 data class PlayerData(
@@ -174,8 +171,12 @@ data class ReaderData(
 )
 
 // Enum class for standard Rich Presence in-app screens
-enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, val imageUrl: String) {
-    APP(R.string.app_name, R.string.browsing, kuukiyomiImageUrl),
+enum class DiscordScreen(
+    @StringRes val text: Int,
+    @StringRes val details: Int,
+    val imageUrl: String,
+) {
+    APP(R.string.app_name, R.string.browsing, animetailImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, updatesImageUrl),
     HISTORY(R.string.label_recent_manga, R.string.scrolling, historyImageUrl),
@@ -184,13 +185,11 @@ enum class DiscordScreen(@StringRes val text: Int, @StringRes val details: Int, 
     WEBVIEW(R.string.action_web_view, R.string.browsing, webviewImageUrl),
     VIDEO(R.string.video, R.string.watching, videoImageUrl),
     MANGA(R.string.manga, R.string.reading, mangaImageUrl),
-
-    ;
 }
 
 // Constants for standard Rich Presence image urls
-// change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val kuukiyomiImageUrl = "attachments/1174858955244179519/1174872993458049075/ic_launcher_round_1.png"
+// change the image Urls used here to match animetail brown/ green theme, Luft
+private const val animetailImageUrl = "attachments/1174858955244179519/1174872993458049075/ic_launcher_round_1.png"
 private const val libraryImageUrl = "attachments/1174858955244179519/1174872992946327632/argus.png"
 private const val updatesImageUrl = "attachments/1174858955244179519/1174872993994911844/update_1.png"
 private const val historyImageUrl = "attachments/1174858955244179519/1174864383571148912/history.png"

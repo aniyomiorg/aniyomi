@@ -6,6 +6,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
@@ -17,7 +18,6 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import tachiyomi.presentation.core.util.ThemePreviews
 import java.util.Date
 
 @Composable
@@ -70,7 +70,7 @@ sealed interface AnimeHistoryUiModel {
     data class Item(val item: AnimeHistoryWithRelations) : AnimeHistoryUiModel
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 internal fun HistoryScreenPreviews(
     @PreviewParameter(AnimeHistoryScreenModelStateProvider::class)

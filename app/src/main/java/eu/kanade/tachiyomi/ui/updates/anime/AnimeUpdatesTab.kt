@@ -29,8 +29,12 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 @Composable
@@ -45,11 +49,20 @@ fun Screen.animeUpdatesTab(
 
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
+    val getEpisodeByAnimeId: GetEpisodesByAnimeId = Injekt.get()
+
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
         val update = updateItem.update
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
-        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, extPlayer)
+        val episode = getEpisodeByAnimeId.await(update.animeId).find { it.id == update.episodeId }
+        MainActivity.startPlayerActivity(
+            context,
+            update.animeId,
+            update.episodeId,
+            episode?.url,
+            extPlayer,
+        )
     }
 
     return TabContent(
@@ -146,7 +159,7 @@ fun Screen.animeUpdatesTab(
         },
         actions =
         if (screenModel.state.collectAsState().value.selected.isNotEmpty()) {
-            listOf(
+            persistentListOf(
                 AppBar.Action(
                     title = stringResource(R.string.action_select_all),
                     icon = Icons.Outlined.SelectAll,
@@ -159,7 +172,7 @@ fun Screen.animeUpdatesTab(
                 ),
             )
         } else {
-            listOf(
+            persistentListOf(
                 AppBar.Action(
                     title = stringResource(R.string.action_update_library),
                     icon = Icons.Outlined.Refresh,

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
@@ -28,17 +30,16 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.util.ThemePreviews
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
 @Composable
 fun MangaHistoryItem(
-    modifier: Modifier = Modifier,
     history: MangaHistoryWithRelations,
     onClickCover: () -> Unit,
     onClickResume: () -> Unit,
     onClickDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -94,18 +95,20 @@ fun MangaHistoryItem(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 internal fun HistoryItemPreviews(
     @PreviewParameter(MangaHistoryWithRelationsProvider::class)
     historyWithRelations: MangaHistoryWithRelations,
 ) {
     TachiyomiTheme {
-        MangaHistoryItem(
-            history = historyWithRelations,
-            onClickCover = {},
-            onClickResume = {},
-            onClickDelete = {},
-        )
+        Surface {
+            MangaHistoryItem(
+                history = historyWithRelations,
+                onClickCover = {},
+                onClickResume = {},
+                onClickDelete = {},
+            )
+        }
     }
 }

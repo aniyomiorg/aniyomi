@@ -13,6 +13,8 @@ class ReaderPreferences(
 
     fun pageTransitions() = preferenceStore.getBoolean("pref_enable_transitions_key", true)
 
+    fun flashOnPageChange() = preferenceStore.getBoolean("pref_reader_flash", false)
+
     fun doubleTapAnimSpeed() = preferenceStore.getInt("pref_double_tap_anim_speed", 500)
 
     fun showPageNumber() = preferenceStore.getBoolean("pref_show_page_number_key", true)
@@ -30,12 +32,12 @@ class ReaderPreferences(
 
     fun defaultReadingMode() = preferenceStore.getInt(
         "pref_default_reading_mode_key",
-        ReadingModeType.RIGHT_TO_LEFT.flagValue,
+        ReadingMode.RIGHT_TO_LEFT.flagValue,
     )
 
     fun defaultOrientationType() = preferenceStore.getInt(
         "pref_default_orientation_type_key",
-        OrientationType.FREE.flagValue,
+        ReaderOrientation.FREE.flagValue,
     )
 
     fun webtoonDoubleTapZoomEnabled() = preferenceStore.getBoolean(
@@ -69,10 +71,9 @@ class ReaderPreferences(
 
     fun webtoonSidePadding() = preferenceStore.getInt("webtoon_side_padding", WEBTOON_PADDING_MIN)
 
-    fun readerHideThreshold() = preferenceStore.getEnum(
-        "reader_hide_threshold",
-        ReaderHideThreshold.LOW,
-    )
+    fun readerHideThreshold() = preferenceStore.getEnum("reader_hide_threshold", ReaderHideThreshold.LOW)
+
+    fun folderPerManga() = preferenceStore.getBoolean("create_folder_per_manga", false)
 
     fun skipRead() = preferenceStore.getBoolean("skip_read", false)
 
@@ -96,6 +97,16 @@ class ReaderPreferences(
 
     fun dualPageRotateToFitInvert() = preferenceStore.getBoolean(
         "pref_dual_page_rotate_invert",
+        false,
+    )
+
+    fun dualPageRotateToFitWebtoon() = preferenceStore.getBoolean(
+        "pref_dual_page_rotate_webtoon",
+        false,
+    )
+
+    fun dualPageRotateToFitInvertWebtoon() = preferenceStore.getBoolean(
+        "pref_dual_page_rotate_invert_webtoon",
         false,
     )
 
@@ -153,6 +164,7 @@ class ReaderPreferences(
         "reader_navigation_overlay_on_start",
         false,
     )
+
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
 
     // endregion
@@ -211,5 +223,4 @@ class ReaderPreferences(
             R.string.zoom_start_center,
         )
     }
-    
 }

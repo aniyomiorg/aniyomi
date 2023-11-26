@@ -44,9 +44,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.presentation.components.DropdownMenu
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
@@ -172,6 +175,7 @@ private fun TrackInfoItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
             VerticalDivider()
@@ -239,10 +243,10 @@ private fun TrackInfoItem(
 
 @Composable
 fun TrackDetailsItem(
-    modifier: Modifier = Modifier,
     text: String?,
-    placeholder: String = "",
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
 ) {
     Box(
         modifier = modifier
@@ -258,6 +262,7 @@ fun TrackDetailsItem(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -315,4 +320,13 @@ fun TrackInfoItemMenu(
             )
         }
     }
+}
+
+@PreviewLightDark
+@Composable
+private fun TrackInfoDialogHomePreviews(
+    @PreviewParameter(MangaTrackInfoDialogHomePreviewProvider::class)
+    content: @Composable () -> Unit,
+) {
+    TachiyomiTheme { content() }
 }

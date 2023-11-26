@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categories Manga</string>
-    <string name="unlock_app">Desbloca el AnimeTail</string>
+    <string name="unlock_app">Desbloca el Animetail</string>
     <string name="action_sort_last_manga_update">Darrera actualització de Manga</string>
     <string name="action_show_manga">Mostra Manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>
@@ -226,9 +226,9 @@
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar l\'anime</string>
     <string name="settings">Ajustaments</string>
-    <string name="unofficial_extension_message_aniyomi">Aquesta extensió no és de la llista oficial d\'extensions d\'AnimeTail.</string>
+    <string name="unofficial_extension_message_aniyomi">Aquesta extensió no és de la llista oficial d\'extensions d\'Aniyomi.</string>
     <string name="pref_category_progress">Progrès</string>
-    <string name="unofficial_anime_extension_message">Aquesta extensió no és del llistat d\'extensions oficials d\'AnimeTail.</string>
+    <string name="unofficial_anime_extension_message">Aquesta extensió no és del llistat d\'extensions oficials d\'Aniyomi.</string>
     <string name="pref_default_player_orientation">Orientació per defecte</string>
     <string name="pref_adjust_orientation_video_dimensions">Ajustar la orientació segons les dimensions del vídeo</string>
     <string name="pref_category_volume_brightness">Volum i lluentor</string>

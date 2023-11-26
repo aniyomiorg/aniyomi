@@ -274,8 +274,14 @@ class MainActivity : BaseActivity() {
                         .filter { !it }
                         .onEach {
                             val currentScreen = navigator.lastItem
-                            if ((currentScreen is BrowseMangaSourceScreen || (currentScreen is MangaScreen && currentScreen.fromSource)) ||
-                                (currentScreen is BrowseAnimeSourceScreen || (currentScreen is AnimeScreen && currentScreen.fromSource))
+                            if ((
+                                    currentScreen is BrowseMangaSourceScreen ||
+                                        (currentScreen is MangaScreen && currentScreen.fromSource)
+                                    ) ||
+                                (
+                                    currentScreen is BrowseAnimeSourceScreen ||
+                                        (currentScreen is AnimeScreen && currentScreen.fromSource)
+                                    )
                             ) {
                                 navigator.popUntilRoot()
                             }
@@ -546,10 +552,11 @@ class MainActivity : BaseActivity() {
             context: Context,
             animeId: Long,
             episodeId: Long,
+            episodeUrl: String?,
             extPlayer: Boolean,
             video: Video? = null,
         ) {
-            if (extPlayer) {
+            if (extPlayer || (episodeUrl?.startsWith("magnet:") == true)) {
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)
                 } catch (e: Exception) {

@@ -1,6 +1,5 @@
 package eu.kanade.domain.items.chapter.model
 
-import data.Chapters
 import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.source.model.SChapter
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -23,17 +22,7 @@ fun Chapter.copyFromSChapter(sChapter: SChapter): Chapter {
         url = sChapter.url,
         dateUpload = sChapter.date_upload,
         chapterNumber = sChapter.chapter_number.toDouble(),
-        scanlator = sChapter.scanlator?.ifBlank { null },
-    )
-}
-
-fun Chapter.copyFrom(other: Chapters): Chapter {
-    return copy(
-        name = other.name,
-        url = other.url,
-        dateUpload = other.date_upload,
-        chapterNumber = other.chapter_number,
-        scanlator = other.scanlator?.ifBlank { null },
+        scanlator = sChapter.scanlator?.ifBlank { null }?.trim(),
     )
 }
 

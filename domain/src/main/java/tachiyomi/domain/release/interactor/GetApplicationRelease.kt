@@ -13,15 +13,15 @@ class GetApplicationRelease(
 ) {
 
     private val lastChecked: Preference<Long> by lazy {
-        preferenceStore.getLong("last_app_check", 0)
+        preferenceStore.getLong(Preference.appStateKey("last_app_check"), 0)
     }
 
     suspend fun await(arguments: Arguments): Result {
         val now = Instant.now()
 
-        // Limit checks to once every 3 days at most
+        // Limit checks to once a day at most
         if (arguments.forceCheck.not() && now.isBefore(
-                Instant.ofEpochMilli(lastChecked.get()).plus(3, ChronoUnit.DAYS),
+                Instant.ofEpochMilli(lastChecked.get()).plus(1, ChronoUnit.DAYS),
             )
         ) {
             return Result.NoNewUpdate
@@ -54,11 +54,11 @@ class GetApplicationRelease(
         // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
         return if (isPreview) {
-            // Preview builds: based on releases in "tachiyomiorg/tachiyomi-preview" repo
+            // Preview builds: based on releases in "dark25/animetailv2-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > commitCount
         } else {
-            // Release builds: based on releases in "tachiyomiorg/tachiyomi" repo
+            // Release builds: based on releases in "dark25/animetailv2" repo
             // tagged as something like "v0.1.2"
             val oldVersion = versionName.replace("[^\\d.]".toRegex(), "")
 
@@ -87,6 +87,7 @@ class GetApplicationRelease(
     sealed interface Result {
         data class NewUpdate(val release: Release) : Result
         data object NoNewUpdate : Result
+        data object OsTooOld : Result
         data object ThirdPartyInstallation : Result
     }
 }

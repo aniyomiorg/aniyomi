@@ -21,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -31,8 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.WheelNumberPicker
 import tachiyomi.presentation.core.components.WheelTextPicker
@@ -111,9 +116,9 @@ fun TrackItemSelector(
         title = stringResource(titleText),
         content = {
             WheelNumberPicker(
+                items = range.toImmutableList(),
                 modifier = Modifier.align(Alignment.Center),
                 startIndex = selection,
-                items = range.toList(),
                 onSelectionChanged = { onSelectionChange(it) },
             )
         },
@@ -126,7 +131,7 @@ fun TrackItemSelector(
 fun TrackScoreSelector(
     selection: String,
     onSelectionChange: (String) -> Unit,
-    selections: List<String>,
+    selections: ImmutableList<String>,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -134,9 +139,9 @@ fun TrackScoreSelector(
         title = stringResource(R.string.score),
         content = {
             WheelTextPicker(
+                items = selections,
                 modifier = Modifier.align(Alignment.Center),
                 startIndex = selections.indexOf(selection).takeIf { it > 0 } ?: (selections.size / 2),
-                items = selections,
                 onSelectionChanged = { onSelectionChange(selections[it]) },
             )
         },
@@ -200,9 +205,9 @@ fun TrackDateSelector(
 fun BaseSelector(
     title: String,
     content: @Composable BoxScope.() -> Unit,
-    thirdButton: @Composable (RowScope.() -> Unit)? = null,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
+    thirdButton: @Composable (RowScope.() -> Unit)? = null,
 ) {
     AlertDialogContent(
         modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
@@ -234,4 +239,30 @@ fun BaseSelector(
             }
         },
     )
+}
+
+@PreviewLightDark
+@Composable
+private fun TrackStatusSelectorPreviews() {
+    TachiyomiTheme {
+        Surface {
+            TrackStatusSelector(
+                selection = 1,
+                onSelectionChange = {},
+                selections = mapOf(
+                    // Anilist values
+                    1 to R.string.reading,
+                    2 to R.string.plan_to_read,
+                    3 to R.string.completed,
+                    4 to R.string.on_hold,
+                    5 to R.string.dropped,
+                    6 to R.string.repeating,
+                    7 to R.string.watching,
+                    8 to R.string.plan_to_watch,
+                ),
+                onConfirm = {},
+                onDismissRequest = {},
+            )
+        }
+    }
 }

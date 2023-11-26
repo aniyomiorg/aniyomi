@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.anime.extension.details
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.anime.interactor.AnimeExtensionSourceItem
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
@@ -12,6 +12,9 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,9 +30,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 private const val URL_EXTENSION_COMMITS =
-    "https://github.com/Dark25/animetailv2-extensions/commits/master"
+    "https://github.com/aniyomiorg/aniyomi-extensions/commits/master"
 private const val URL_EXTENSION_BLOB =
-    "https://github.com/Dark25/animetailv2-extensions/blob/master"
+    "https://github.com/aniyomiorg/aniyomi-extensions/blob/master"
 
 class AnimeExtensionDetailsScreenModel(
     pkgName: String,
@@ -44,7 +47,7 @@ class AnimeExtensionDetailsScreenModel(
     val events: Flow<AnimeExtensionDetailsEvent> = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             launch {
                 extensionManager.installedExtensionsFlow
                     .map { it.firstOrNull { extension -> extension.pkgName == pkgName } }
@@ -78,10 +81,10 @@ class AnimeExtensionDetailsScreenModel(
                         }
                         .catch { throwable ->
                             logcat(LogPriority.ERROR, throwable)
-                            mutableState.update { it.copy(_sources = emptyList()) }
+                            mutableState.update { it.copy(_sources = persistentListOf()) }
                         }
                         .collectLatest { sources ->
-                            mutableState.update { it.copy(_sources = sources) }
+                            mutableState.update { it.copy(_sources = sources.toImmutableList()) }
                         }
                 }
             }
@@ -105,7 +108,7 @@ class AnimeExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://akiled.org/docs/faq/browse/extensions"
+            return "https://aniyomi.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
@@ -167,11 +170,11 @@ class AnimeExtensionDetailsScreenModel(
     @Immutable
     data class State(
         val extension: AnimeExtension.Installed? = null,
-        private val _sources: List<AnimeExtensionSourceItem>? = null,
+        private val _sources: ImmutableList<AnimeExtensionSourceItem>? = null,
     ) {
 
-        val sources: List<AnimeExtensionSourceItem>
-            get() = _sources.orEmpty()
+        val sources: ImmutableList<AnimeExtensionSourceItem>
+            get() = _sources ?: persistentListOf()
 
         val isLoading: Boolean
             get() = extension == null || _sources == null

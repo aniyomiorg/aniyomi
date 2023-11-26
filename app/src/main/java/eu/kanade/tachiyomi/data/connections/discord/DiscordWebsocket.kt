@@ -13,7 +13,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -50,7 +49,7 @@ open class DiscordWebSocketImpl(
         .build()
 
     private val request = Request.Builder()
-        .url("wss://gateway.discord.gg/?v=10&encoding=json")
+        .url("wss://gateway.discord.gg/?encoding=json&v=10")
         .build()
 
     private var webSocket: WebSocket? = client.newWebSocket(request, Listener())
@@ -159,7 +158,7 @@ open class DiscordWebSocketImpl(
     }
 
     private fun log(message: String) {
-        Log.i("discord_rpc_kuukiyomi", message)
+        Log.i("discord_rpc_animetail", message)
     }
 }
 // <-- AM (DISCORD)

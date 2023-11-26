@@ -74,12 +74,12 @@ fun MangaSourcesScreen(
                     when (model) {
                         is MangaSourceUiModel.Header -> {
                             SourceHeader(
-                                modifier = Modifier.animateItemPlacement(),
+
                                 language = model.language,
                             )
                         }
                         is MangaSourceUiModel.Item -> SourceItem(
-                            modifier = Modifier.animateItemPlacement(),
+
                             source = model.source,
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,
@@ -94,8 +94,8 @@ fun MangaSourcesScreen(
 
 @Composable
 private fun SourceHeader(
-    modifier: Modifier = Modifier,
     language: String,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Text(
@@ -111,11 +111,11 @@ private fun SourceHeader(
 
 @Composable
 private fun SourceItem(
-    modifier: Modifier = Modifier,
     source: Source,
     onClickItem: (Source, Listing) -> Unit,
     onLongClickItem: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseMangaSourceItem(
         modifier = modifier,

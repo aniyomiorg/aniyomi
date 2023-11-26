@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.extension.details
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.MangaExtensionSourceItem
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
@@ -12,6 +12,9 @@ import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -44,7 +47,7 @@ class MangaExtensionDetailsScreenModel(
     val events: Flow<MangaExtensionDetailsEvent> = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             launch {
                 extensionManager.installedExtensionsFlow
                     .map { it.firstOrNull { extension -> extension.pkgName == pkgName } }
@@ -78,10 +81,10 @@ class MangaExtensionDetailsScreenModel(
                         }
                         .catch { throwable ->
                             logcat(LogPriority.ERROR, throwable)
-                            mutableState.update { it.copy(_sources = emptyList()) }
+                            mutableState.update { it.copy(_sources = persistentListOf()) }
                         }
                         .collectLatest { sources ->
-                            mutableState.update { it.copy(_sources = sources) }
+                            mutableState.update { it.copy(_sources = sources.toImmutableList()) }
                         }
                 }
             }
@@ -105,7 +108,7 @@ class MangaExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://akiled.org/docs/faq/browse/extensions"
+            return "https://aniyomi.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")
@@ -167,11 +170,11 @@ class MangaExtensionDetailsScreenModel(
     @Immutable
     data class State(
         val extension: MangaExtension.Installed? = null,
-        private val _sources: List<MangaExtensionSourceItem>? = null,
+        private val _sources: ImmutableList<MangaExtensionSourceItem>? = null,
     ) {
 
-        val sources: List<MangaExtensionSourceItem>
-            get() = _sources.orEmpty()
+        val sources: ImmutableList<MangaExtensionSourceItem>
+            get() = _sources ?: persistentListOf()
 
         val isLoading: Boolean
             get() = extension == null || _sources == null

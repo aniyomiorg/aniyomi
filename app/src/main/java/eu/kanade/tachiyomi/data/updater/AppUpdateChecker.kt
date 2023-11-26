@@ -12,6 +12,11 @@ class AppUpdateChecker {
     private val getApplicationRelease: GetApplicationRelease by injectLazy()
 
     suspend fun checkForUpdate(context: Context, forceCheck: Boolean = false): GetApplicationRelease.Result {
+        // Disabling app update checks for older Android versions that we're going to drop support for
+        // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+        //    return GetApplicationRelease.Result.OsTooOld
+        // }
+
         return withIOContext {
             val result = getApplicationRelease.await(
                 GetApplicationRelease.Arguments(
@@ -28,7 +33,9 @@ class AppUpdateChecker {
                 is GetApplicationRelease.Result.NewUpdate -> AppUpdateNotifier(context).promptUpdate(
                     result.release,
                 )
-                is GetApplicationRelease.Result.ThirdPartyInstallation -> AppUpdateNotifier(context).promptFdroidUpdate()
+                is GetApplicationRelease.Result.ThirdPartyInstallation -> AppUpdateNotifier(
+                    context,
+                ).promptFdroidUpdate()
                 else -> {}
             }
 
@@ -39,9 +46,9 @@ class AppUpdateChecker {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "Dark25/animetailv2-preview"
+        "dark25/animetailv2-preview"
     } else {
-        "Dark25/animetailv2"
+        "dark25/animetailv2"
     }
 }
 

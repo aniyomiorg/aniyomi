@@ -7,6 +7,7 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
@@ -24,6 +25,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -47,6 +49,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -56,6 +59,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -108,7 +112,21 @@ object AnimeLibraryTab : Tab() {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = { category ->
-            val started = AnimeLibraryUpdateJob.startNow(context, category)
+            // SY -->
+            val started = AnimeLibraryUpdateJob.startNow(
+                context = context,
+                category = if (state.groupType == AnimeLibraryGroup.BY_DEFAULT) category else null,
+                group = state.groupType,
+                groupExtra = when (state.groupType) {
+                    AnimeLibraryGroup.BY_DEFAULT -> null
+                    AnimeLibraryGroup.BY_SOURCE, AnimeLibraryGroup.BY_TRACK_STATUS,
+                    AnimeLibraryGroup.BY_TAG,
+                    -> category?.id?.toString()
+                    AnimeLibraryGroup.BY_STATUS -> category?.id?.minus(1)?.toString()
+                    else -> null
+                },
+            )
+            // SY <--
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
@@ -119,7 +137,13 @@ object AnimeLibraryTab : Tab() {
         suspend fun openEpisode(episode: Episode) {
             val playerPreferences: PlayerPreferences by injectLazy()
             val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
-            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                episode.url,
+                extPlayer,
+            )
         }
 
         val defaultTitle = if (fromMore) {
@@ -194,11 +218,15 @@ object AnimeLibraryTab : Tab() {
                     EmptyScreen(
                         textResource = R.string.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
-                        actions = listOf(
+                        actions = persistentListOf(
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
-                                icon = Icons.Outlined.HelpOutline,
-                                onClick = { handler.openUri("https://akiled.org/docs/guides/getting-started") },
+                                icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                                onClick = {
+                                    handler.openUri(
+                                        "https://aniyomi.org/docs/guides/getting-started",
+                                    )
+                                },
                             ),
                         ),
                     )
@@ -256,6 +284,9 @@ object AnimeLibraryTab : Tab() {
                     onDismissRequest = onDismissRequest,
                     screenModel = settingsScreenModel,
                     category = category,
+                    // SY -->
+                    hasCategories = state.categories.fastAny { !it.isSystemCategory },
+                    // SY <--
                 )
             }
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {

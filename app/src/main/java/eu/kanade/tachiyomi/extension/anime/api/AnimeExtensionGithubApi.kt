@@ -29,7 +29,7 @@ internal class AnimeExtensionGithubApi {
     private val json: Json by injectLazy()
 
     private val lastExtCheck: Preference<Long> by lazy {
-        preferenceStore.getLong("last_ext_check", 0)
+        preferenceStore.getLong(Preference.appStateKey("last_ext_check"), 0)
     }
 
     private var requiresFallbackSource = false
@@ -72,7 +72,10 @@ internal class AnimeExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<AnimeExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false,
+    ): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
@@ -116,7 +119,7 @@ internal class AnimeExtensionGithubApi {
             }
             .map {
                 AnimeExtension.Available(
-                    name = it.name.substringAfter("Animetail: "),
+                    name = it.name.substringAfter("Aniyomi: "),
                     pkgName = it.pkg,
                     versionName = it.version,
                     versionCode = it.code,
@@ -149,8 +152,8 @@ private fun AnimeExtensionJsonObject.extractLibVersion(): Double {
     return version.substringBeforeLast('.').toDouble()
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/Dark25/animmetailv2-extensions/master/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://cdn.jsdelivr.net/gh/Dark25/animmetailv2-extensions@master/"
+private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo/"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo/"
 
 @Serializable
 private data class AnimeExtensionJsonObject(

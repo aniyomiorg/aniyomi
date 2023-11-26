@@ -191,7 +191,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:host="simkl-auth"/>
-                <data android:scheme="aniyomi"/>
+
+                <data android:scheme="animetail"/>
             </intent-filter>
         </activity>
 
@@ -231,10 +232,6 @@
 
         <service
             android:name=".data.download.anime.AnimeDownloadService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.updater.AppUpdateService"
             android:exported="false" />
 
         <service

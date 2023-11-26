@@ -17,5 +17,19 @@ data class EpisodeUpdate(
 )
 
 fun Episode.toEpisodeUpdate(): EpisodeUpdate {
-    return EpisodeUpdate(id, animeId, seen, bookmark, lastSecondSeen, totalSeconds, dateFetch, sourceOrder, url, name, dateUpload, episodeNumber, scanlator)
+    return EpisodeUpdate(
+        id,
+        animeId,
+        seen,
+        bookmark,
+        lastSecondSeen,
+        totalSeconds,
+        dateFetch,
+        sourceOrder,
+        url,
+        name,
+        dateUpload,
+        episodeNumber,
+        scanlator,
+    )
 }

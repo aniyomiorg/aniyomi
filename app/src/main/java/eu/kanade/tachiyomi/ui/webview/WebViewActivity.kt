@@ -96,8 +96,8 @@ class WebViewActivity : BaseActivity() {
         }
         super.onDestroy()
     }
-
     // <-- AM (DISCORD)
+
     override fun onProvideAssistContent(outContent: AssistContent) {
         super.onProvideAssistContent(outContent)
         assistUrl?.let { outContent.webUri = it.toUri() }

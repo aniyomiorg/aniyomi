@@ -3,8 +3,10 @@ package eu.kanade.tachiyomi.ui.category.anime
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -37,7 +39,7 @@ class AnimeCategoryScreenModel(
     val events = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val allCategories = if (libraryPreferences.hideHiddenCategoriesSettings().get()) {
                 getVisibleCategories.subscribe()
             } else {
@@ -47,7 +49,9 @@ class AnimeCategoryScreenModel(
             allCategories.collectLatest { categories ->
                 mutableState.update {
                     AnimeCategoryScreenState.Success(
-                        categories = categories.filterNot(Category::isSystemCategory),
+                        categories = categories
+                            .filterNot(Category::isSystemCategory)
+                            .toImmutableList(),
                     )
                 }
             }
@@ -55,7 +59,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun createCategory(name: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -67,7 +71,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun hideCategory(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (hideCategory.await(category)) {
                 is HideAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -78,7 +82,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun deleteCategory(categoryId: Long) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
                 is DeleteAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -89,7 +93,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun sortAlphabetically() {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (reorderCategory.sortAlphabetically()) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
                 else -> {}
@@ -98,7 +102,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun moveUp(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (reorderCategory.moveUp(category)) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -109,7 +113,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun moveDown(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (reorderCategory.moveDown(category)) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -120,7 +124,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun renameCategory(category: Category, name: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -168,7 +172,7 @@ sealed interface AnimeCategoryScreenState {
 
     @Immutable
     data class Success(
-        val categories: List<Category>,
+        val categories: ImmutableList<Category>,
         val dialog: AnimeCategoryDialog? = null,
     ) : AnimeCategoryScreenState {
 

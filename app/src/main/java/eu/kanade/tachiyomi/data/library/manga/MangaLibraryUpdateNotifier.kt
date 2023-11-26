@@ -30,12 +30,14 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.injectLazy
+import java.math.RoundingMode
 import java.text.NumberFormat
 
 class MangaLibraryUpdateNotifier(private val context: Context) {
 
     private val preferences: SecurityPreferences by injectLazy()
     private val percentFormatter = NumberFormat.getPercentInstance().apply {
+        roundingMode = RoundingMode.DOWN
         maximumFractionDigits = 0
     }
 
@@ -79,15 +81,17 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
      * @param total the total progress.
      */
     fun showProgressNotification(manga: List<Manga>, current: Int, total: Int) {
-        if (preferences.hideNotificationContent().get()) {
-            progressNotificationBuilder
-                .setContentTitle(context.getString(R.string.notification_check_updates))
-                .setContentText("($current/$total)")
-        } else {
+        progressNotificationBuilder
+            .setContentTitle(
+                context.getString(
+                    R.string.notification_updating_progress,
+                    percentFormatter.format(current.toFloat() / total),
+                ),
+            )
+
+        if (!preferences.hideNotificationContent().get()) {
             val updatingText = manga.joinToString("\n") { it.title.chop(40) }
-            progressNotificationBuilder
-                .setContentTitle(context.getString(R.string.notification_updating_progress, percentFormatter.format(current.toFloat() / total)))
-                .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
+            progressNotificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
         context.notify(
@@ -383,8 +387,9 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        // TODO: Change when implemented on AnimeTail website
-        const val HELP_WARNING_URL = "https://akiled.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
+        // TODO: Change when implemented on Aniyomi website
+        const val HELP_WARNING_URL =
+            "https://aniyomi.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
     }
 }
 
@@ -392,5 +397,5 @@ private const val NOTIF_MAX_CHAPTERS = 5
 private const val NOTIF_MANGA_TITLE_MAX_LEN = 45
 private const val NOTIF_MANGA_ICON_SIZE = 192
 
-// TODO: Change when implemented on AnimeTail website
-private const val HELP_SKIPPED_MANGA_URL = "https://akiled.org/docs/faq/library#why-is-global-update-skipping-entries"
+// TODO: Change when implemented on Aniyomi website
+private const val HELP_SKIPPED_MANGA_URL = "https://aniyomi.org/docs/faq/library#why-is-global-update-skipping-entries"

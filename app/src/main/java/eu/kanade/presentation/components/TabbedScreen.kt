@@ -10,12 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -25,16 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.TabIndicator
 import tachiyomi.presentation.core.components.material.TabText
 
 @Composable
 fun TabbedScreen(
     @StringRes titleRes: Int?,
-    tabs: List<TabContent>,
+    tabs: ImmutableList<TabContent>,
+    modifier: Modifier = Modifier,
     startIndex: Int? = null,
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
@@ -42,6 +44,7 @@ fun TabbedScreen(
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
+
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -69,7 +72,14 @@ fun TabbedScreen(
                 }
 
                 SearchToolbar(
-                    titleContent = { AppBarTitle(stringResource(titleRes), null, tab.numberTitle) },
+                    titleContent = {
+                        AppBarTitle(
+                            stringResource(titleRes),
+                            modifier = modifier,
+                            null,
+                            tab.numberTitle,
+                        )
+                    },
                     searchEnabled = searchEnabled,
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,
@@ -92,7 +102,6 @@ fun TabbedScreen(
             FlexibleTabRow(
                 scrollable = scrollable,
                 selectedTabIndex = state.currentPage,
-                indicator = { TabIndicator(it[state.currentPage], state.currentPageOffsetFraction) },
             ) {
                 tabs.forEachIndexed { index, tab ->
                     Tab(
@@ -127,7 +136,7 @@ data class TabContent(
     @StringRes val titleRes: Int,
     val badgeNumber: Int? = null,
     val searchEnabled: Boolean = false,
-    val actions: List<AppBar.Action> = emptyList(),
+    val actions: ImmutableList<AppBar.Action> = persistentListOf(),
     val content: @Composable (contentPadding: PaddingValues, snackbarHostState: SnackbarHostState) -> Unit,
     val numberTitle: Int = 0,
     val cancelAction: () -> Unit = {},
@@ -138,21 +147,20 @@ data class TabContent(
 private fun FlexibleTabRow(
     scrollable: Boolean,
     selectedTabIndex: Int,
-    indicator: @Composable (List<TabPosition>) -> Unit,
     block: @Composable () -> Unit,
 ) {
     return if (scrollable) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            indicator = indicator,
             edgePadding = 13.dp,
+            modifier = Modifier.zIndex(1f),
         ) {
             block()
         }
     } else {
-        TabRow(
+        PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
-            indicator = indicator,
+            modifier = Modifier.zIndex(1f),
         ) {
             block()
         }

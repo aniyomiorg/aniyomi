@@ -2,6 +2,8 @@ package tachiyomi.domain.entries.manga.model
 
 import eu.kanade.tachiyomi.model.UpdateStrategy
 import tachiyomi.core.preference.TriState
+import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
+import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
 
 data class Manga(
@@ -16,18 +18,46 @@ data class Manga(
     val chapterFlags: Long,
     val coverLastModified: Long,
     val url: String,
-    val title: String,
-    val artist: String?,
-    val author: String?,
-    val description: String?,
-    val genre: List<String>?,
-    val status: Long,
+    // SY -->
+    val ogTitle: String,
+    val ogArtist: String?,
+    val ogAuthor: String?,
+    val ogDescription: String?,
+    val ogGenre: List<String>?,
+    val ogStatus: Long,
+    // SY <--
     val thumbnailUrl: String?,
     val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
 ) : Serializable {
+
+    // SY -->
+    private val customMangaInfo = if (favorite) {
+        getCustomMangaInfo.get(id)
+    } else {
+        null
+    }
+
+    val title: String
+        get() = customMangaInfo?.title ?: ogTitle
+
+    val author: String?
+        get() = customMangaInfo?.author ?: ogAuthor
+
+    val artist: String?
+        get() = customMangaInfo?.artist ?: ogArtist
+
+    val description: String?
+        get() = customMangaInfo?.description ?: ogDescription
+
+    val genre: List<String>?
+        get() = customMangaInfo?.genre ?: ogGenre
+
+    val status: Long
+        get() = customMangaInfo?.status ?: ogStatus
+    // SY <--
 
     val sorting: Long
         get() = chapterFlags and CHAPTER_SORTING_MASK
@@ -85,6 +115,7 @@ data class Manga(
         const val CHAPTER_SORTING_SOURCE = 0x00000000L
         const val CHAPTER_SORTING_NUMBER = 0x00000100L
         const val CHAPTER_SORTING_UPLOAD_DATE = 0x00000200L
+        const val CHAPTER_SORTING_ALPHABET = 0x00000300L
         const val CHAPTER_SORTING_MASK = 0x00000300L
 
         const val CHAPTER_DISPLAY_NAME = 0x00000000L
@@ -94,7 +125,9 @@ data class Manga(
         fun create() = Manga(
             id = -1L,
             url = "",
-            title = "",
+            // Sy -->
+            ogTitle = "",
+            // SY <--
             source = -1L,
             favorite = false,
             lastUpdate = 0L,
@@ -104,16 +137,22 @@ data class Manga(
             viewerFlags = 0L,
             chapterFlags = 0L,
             coverLastModified = 0L,
-            artist = null,
-            author = null,
-            description = null,
-            genre = null,
-            status = 0L,
+            // SY -->
+            ogArtist = null,
+            ogAuthor = null,
+            ogDescription = null,
+            ogGenre = null,
+            ogStatus = 0L,
+            // SY <--
             thumbnailUrl = null,
             updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
         )
+
+        // SY -->
+        private val getCustomMangaInfo: GetCustomMangaInfo by injectLazy()
+        // SY <--
     }
 }

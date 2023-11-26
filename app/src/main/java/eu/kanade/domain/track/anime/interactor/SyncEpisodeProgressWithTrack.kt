@@ -5,7 +5,7 @@ import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
@@ -14,7 +14,7 @@ import tachiyomi.domain.track.anime.model.AnimeTrack
 class SyncEpisodeProgressWithTrack(
     private val updateEpisode: UpdateEpisode,
     private val insertTrack: InsertAnimeTrack,
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
 ) {
 
     suspend fun await(
@@ -26,7 +26,7 @@ class SyncEpisodeProgressWithTrack(
             return
         }
 
-        val sortedEpisodes = getEpisodeByAnimeId.await(animeId)
+        val sortedEpisodes = getEpisodesByAnimeId.await(animeId)
             .sortedBy { it.episodeNumber }
             .filter { it.isRecognizedNumber }
 

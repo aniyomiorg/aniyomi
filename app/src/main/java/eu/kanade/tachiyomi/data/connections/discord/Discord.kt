@@ -1,4 +1,5 @@
 // AM (DISCORD) -->
+
 // Taken from Animiru. Thank you Quickdev for permission!
 
 package eu.kanade.tachiyomi.data.connections.discord

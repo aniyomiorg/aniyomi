@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorier</string>
-    <string name="unlock_app">Lås opp AnimeTail</string>
+    <string name="unlock_app">Lås opp Animetail</string>
     <string name="action_sort_last_manga_update">Siste oppdateringssjekk</string>
     <string name="action_show_manga">Vis oppføring</string>
     <string name="action_display_local_badge_manga">Lokal kilde</string>

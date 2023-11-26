@@ -10,9 +10,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -32,7 +32,7 @@ object SettingsReaderScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 pref = readerPref.defaultReadingMode(),
                 title = stringResource(R.string.pref_viewer_type),
-                entries = ReadingModeType.entries.drop(1)
+                entries = ReadingMode.entries.drop(1)
                     .associate { it.flagValue to stringResource(it.stringRes) },
             ),
             Preference.PreferenceItem.ListPreference(
@@ -64,6 +64,11 @@ object SettingsReaderScreen : SearchableSettings {
                 pref = readerPref.pageTransitions(),
                 title = stringResource(R.string.pref_page_transitions),
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = readerPref.flashOnPageChange(),
+                title = stringResource(R.string.pref_flash_page),
+                subtitle = stringResource(R.string.pref_flash_page_summ),
+            ),
             getDisplayGroup(readerPreferences = readerPref),
             getReadingGroup(readerPreferences = readerPref),
             getPagedGroup(readerPreferences = readerPref),
@@ -83,7 +88,7 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = readerPreferences.defaultOrientationType(),
                     title = stringResource(R.string.pref_rotation_type),
-                    entries = OrientationType.entries.drop(1)
+                    entries = ReaderOrientation.entries.drop(1)
                         .associate { it.flagValue to stringResource(it.stringRes) },
                 ),
                 Preference.PreferenceItem.ListPreference(
@@ -124,6 +129,7 @@ object SettingsReaderScreen : SearchableSettings {
         val preloadSizePref = readerPreferences.preloadSize()
 
         val preloadSize by preloadSizePref.collectAsState()
+
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_reading),
             preferenceItems = listOf(
@@ -265,10 +271,12 @@ object SettingsReaderScreen : SearchableSettings {
 
         val navModePref = readerPreferences.navigationModeWebtoon()
         val dualPageSplitPref = readerPreferences.dualPageSplitWebtoon()
+        val rotateToFitPref = readerPreferences.dualPageRotateToFitWebtoon()
         val webtoonSidePaddingPref = readerPreferences.webtoonSidePadding()
 
         val navMode by navModePref.collectAsState()
         val dualPageSplit by dualPageSplitPref.collectAsState()
+        val rotateToFit by rotateToFitPref.collectAsState()
         val webtoonSidePadding by webtoonSidePaddingPref.collectAsState()
 
         return Preference.PreferenceGroup(
@@ -297,7 +305,6 @@ object SettingsReaderScreen : SearchableSettings {
                         ),
                     ),
                     enabled = navMode != 5,
-
                 ),
                 Preference.PreferenceItem.SliderPreference(
                     value = webtoonSidePadding,
@@ -335,12 +342,29 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = dualPageSplitPref,
                     title = stringResource(R.string.pref_dual_page_split),
+                    onValueChanged = {
+                        rotateToFitPref.set(false)
+                        true
+                    },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.dualPageInvertWebtoon(),
                     title = stringResource(R.string.pref_dual_page_invert),
                     subtitle = stringResource(R.string.pref_dual_page_invert_summary),
                     enabled = dualPageSplit,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = rotateToFitPref,
+                    title = stringResource(R.string.pref_page_rotate),
+                    onValueChanged = {
+                        dualPageSplitPref.set(false)
+                        true
+                    },
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = readerPreferences.dualPageRotateToFitInvertWebtoon(),
+                    title = stringResource(R.string.pref_page_rotate_invert),
+                    enabled = rotateToFit,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.webtoonDoubleTapZoomEnabled(),
@@ -379,6 +403,11 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.readWithLongTap(),
                     title = stringResource(R.string.pref_read_with_long_tap),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = readerPreferences.folderPerManga(),
+                    title = stringResource(R.string.pref_create_folder_per_manga),
+                    subtitle = stringResource(R.string.pref_create_folder_per_manga_summary),
                 ),
             ),
         )

@@ -11,8 +11,8 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
-import eu.kanade.domain.connections.service.ConnectionsPreferences
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.more.settings.widget.ConnectionsPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.EditTextPreferenceWidget

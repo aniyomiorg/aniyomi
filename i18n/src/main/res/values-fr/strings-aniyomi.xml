@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_manga">Déplacer le Manga vers l\'onglet Plus</string>
-    <string name="unlock_app">Déverrouiller AnimeTail</string>
+    <string name="unlock_app">Déverrouiller Animetail</string>
     <string name="action_filter_unseen">Non vus</string>
     <string name="action_sort_total_episodes">Nombre d\'épisodes</string>
     <string name="action_sort_last_seen">Dernier vu</string>
@@ -63,7 +63,7 @@
 \nUne extension malveillante pourrait lire n\'importe quel identifiant de connexion stocké dans Tachiyomi ou exécuter un code arbitraire.
 \n
 \nEn faisant confiance à ce certificat, vous acceptez ces risques.</string>
-    <string name="unofficial_extension_message_aniyomi">Cette extension ne fait pas partie de la liste officielle des extensions d\'AnimeTail.</string>
+    <string name="unofficial_extension_message_aniyomi">Cette extension ne fait pas partie de la liste officielle des extensions d\'Aniyomi.</string>
     <string name="rotation_reverse_landscape">Paysage inversé</string>
     <string name="rotation_sensor_portrait">Portrait du capteur</string>
     <string name="rotation_sensor_landscape">Pysage du capteur</string>
@@ -267,7 +267,7 @@
     <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
     <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
-    <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions AnimeTail.</string>
+    <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
     <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
     <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>

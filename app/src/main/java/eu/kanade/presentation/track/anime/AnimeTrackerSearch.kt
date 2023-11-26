@@ -18,8 +18,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -41,7 +42,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.manga.SearchResultItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -77,7 +81,7 @@ fun AnimeTrackerSearch(
                     navigationIcon = {
                         IconButton(onClick = onDismissRequest) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -195,4 +199,13 @@ fun AnimeTrackerSearch(
             }
         }
     }
+}
+
+@PreviewLightDark
+@Composable
+private fun TrackerSearchPreviews(
+    @PreviewParameter(AnimeTrackerSearchPreviewProvider::class)
+    content: @Composable () -> Unit,
+) {
+    TachiyomiTheme { content() }
 }

@@ -14,6 +14,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
@@ -22,6 +23,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
@@ -55,6 +57,8 @@ import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
@@ -65,6 +69,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_V
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.manga.model.SourceNotInstalledException
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -88,6 +93,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val updateManga: UpdateManga = Injekt.get()
     private val getCategories: GetMangaCategories = Injekt.get()
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
+    private val getTracks: GetMangaTracks = Injekt.get()
     private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
@@ -122,7 +128,11 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         }
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
-        addMangaToQueue(categoryId)
+        // SY -->
+        val group = inputData.getInt(KEY_GROUP, MangaLibraryGroup.BY_DEFAULT)
+        val groupExtra = inputData.getString(KEY_GROUP_EXTRA)
+        // SY <--
+        addMangaToQueue(categoryId, group, groupExtra)
 
         return withIOContext {
             try {
@@ -158,12 +168,23 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addMangaToQueue(categoryId: Long) {
+    private fun addMangaToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryManga = runBlocking { getLibraryManga.await() }
+
+        // SY -->
+        val groupMangaLibraryUpdateType = libraryPreferences.groupMangaLibraryUpdateType().get()
+        // SY <--
 
         val listToUpdate = if (categoryId != -1L) {
             libraryManga.filter { it.category == categoryId }
-        } else {
+        } else if (
+            group == MangaLibraryGroup.BY_DEFAULT ||
+            groupMangaLibraryUpdateType == MangaGroupLibraryMode.GLOBAL ||
+            (
+                groupMangaLibraryUpdateType == MangaGroupLibraryMode.ALL_BUT_UNGROUPED &&
+                    group == MangaLibraryGroup.UNGROUPED
+                )
+        ) {
             val categoriesToUpdate = libraryPreferences.mangaUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToUpdate }
@@ -180,7 +201,45 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             includedManga
                 .filterNot { it.manga.id in excludedMangaIds }
-                .distinctBy { it.manga.id }
+        } else {
+            when (group) {
+                MangaLibraryGroup.BY_TRACK_STATUS -> {
+                    val trackingExtra = groupExtra?.toIntOrNull() ?: -1
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
+
+                    libraryManga.filter { (manga) ->
+                        val status = tracks[manga.id]?.firstNotNullOfOrNull { track ->
+                            TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                        } ?: TrackStatus.OTHER
+                        status.int == trackingExtra
+                    }
+                }
+                MangaLibraryGroup.BY_SOURCE -> {
+                    val sourceExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val source = libraryManga.map { it.manga.source }
+                        .distinct()
+                        .sorted()
+                        .getOrNull(sourceExtra ?: -1)
+
+                    if (source != null) libraryManga.filter { it.manga.source == source } else emptyList()
+                }
+                MangaLibraryGroup.BY_TAG -> {
+                    val tagExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val tag = libraryManga.map { it.manga.genre }
+                        .distinct()
+                        .getOrNull(tagExtra ?: -1)
+                    if (tag != null) libraryManga.filter { it.manga.genre == tag } else emptyList()
+                }
+                MangaLibraryGroup.BY_STATUS -> {
+                    val statusExtra = groupExtra?.toLongOrNull() ?: -1
+                    libraryManga.filter {
+                        it.manga.status == statusExtra
+                    }
+                }
+                MangaLibraryGroup.UNGROUPED -> libraryManga
+                else -> libraryManga
+            }
+            // SY <--
         }
 
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
@@ -188,6 +247,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         mangaToUpdate = listToUpdate
+            // SY -->
+            .distinctBy { it.manga.id }
+            // SY <--
             .filter {
                 when {
                     it.manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
@@ -221,7 +283,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = mangaToUpdate
-            .groupBy { it.manga.source }
+            .groupBy { it.manga.source + (0..4).random() }
             .filterKeys { sourceManager.get(it) !is UnmeteredSource }
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
@@ -258,7 +320,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source }.values
+            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }.values
                 .map { mangaInSource ->
                     async {
                         semaphore.withPermit {
@@ -286,7 +348,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 downloadChapters(manga, newChapters)
                                                 hasDownloads.set(true)
                                             }
-                                            libraryPreferences.newMangaUpdatesCount().getAndSet { it + newChapters.size }
+                                            libraryPreferences.newMangaUpdatesCount()
+                                                .getAndSet { it + newChapters.size }
 
                                             // Convert to the manga that contains new chapters
                                             newUpdates.add(manga to newChapters.toTypedArray())
@@ -295,7 +358,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         val errorMessage = when (e) {
                                             is NoChaptersException -> context.getString(R.string.no_chapters_error)
                                             // failedUpdates will already have the source, don't need to copy it into the message
-                                            is SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                            is SourceNotInstalledException -> context.getString(
+                                                R.string.loader_not_implemented_error,
+                                            )
                                             else -> e.message
                                         }
                                         failedUpdates.add(manga to errorMessage)
@@ -362,7 +427,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val currentlyUpdatingManga = CopyOnWriteArrayList<Manga>()
 
         coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source }
+            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }
                 .values
                 .map { mangaInSource ->
                     async {
@@ -478,7 +543,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         private const val WORK_NAME_AUTO = "LibraryUpdate-auto"
         private const val WORK_NAME_MANUAL = "LibraryUpdate-manual"
 
-        private const val ERROR_LOG_HELP_URL = "https://akiled.org/help/guides/troubleshooting"
+        private const val ERROR_LOG_HELP_URL = "https://aniyomi.org/help/guides/troubleshooting"
         private const val MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
 
         /**
@@ -490,6 +555,14 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          * Key that defines what should be updated.
          */
         private const val KEY_TARGET = "target"
+
+        // SY -->
+        /**
+         * Key for group to update.
+         */
+        const val KEY_GROUP = "group"
+        const val KEY_GROUP_EXTRA = "group_extra"
+        // SY <--
 
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)
@@ -504,7 +577,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             if (interval > 0) {
                 val restrictions = preferences.autoUpdateDeviceRestrictions().get()
                 val constraints = Constraints(
-                    requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) { NetworkType.UNMETERED } else { NetworkType.CONNECTED },
+                    requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) {
+                        NetworkType.UNMETERED
+                    } else { NetworkType.CONNECTED },
                     requiresCharging = DEVICE_CHARGING in restrictions,
                     requiresBatteryNotLow = true,
                 )
@@ -535,6 +610,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             context: Context,
             category: Category? = null,
             target: Target = Target.CHAPTERS,
+            // SY -->
+            group: Int = MangaLibraryGroup.BY_DEFAULT,
+            groupExtra: String? = null,
+            // SY <--
         ): Boolean {
             val wm = context.workManager
             if (wm.isRunning(TAG)) {
@@ -545,6 +624,10 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             val inputData = workDataOf(
                 KEY_CATEGORY to category?.id,
                 KEY_TARGET to target.name,
+                // SY -->
+                KEY_GROUP to group,
+                KEY_GROUP_EXTRA to groupExtra,
+                // SY <--
             )
             val request = OneTimeWorkRequestBuilder<MangaLibraryUpdateJob>()
                 .addTag(TAG)

@@ -1,6 +1,7 @@
 package eu.kanade.presentation.browse.anime.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.filled.ViewModule
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
@@ -53,28 +55,44 @@ fun BrowseAnimeSourceToolbar(
         onClickCloseSearch = navigateUp,
         actions = {
             AppBarActions(
-                actions = listOfNotNull(
-                    AppBar.Action(
-                        title = stringResource(R.string.action_display_mode),
-                        icon = if (displayMode == LibraryDisplayMode.List) Icons.Filled.ViewList else Icons.Filled.ViewModule,
-                        onClick = { selectingDisplayMode = true },
-                    ),
-                    if (isLocalSource) {
-                        AppBar.OverflowAction(
-                            title = stringResource(R.string.label_help),
-                            onClick = onHelpClick,
+                actions = persistentListOf<AppBar.AppBarAction>().builder()
+                    .apply {
+                        add(
+                            AppBar.Action(
+                                title = stringResource(R.string.action_display_mode),
+                                icon = if (displayMode == LibraryDisplayMode.List) {
+                                    Icons.AutoMirrored.Filled.ViewList
+                                } else {
+                                    Icons.Filled.ViewModule
+                                },
+                                onClick = { selectingDisplayMode = true },
+                            ),
                         )
-                    } else {
-                        AppBar.OverflowAction(
-                            title = stringResource(R.string.action_open_in_web_view),
-                            onClick = onWebViewClick,
-                        )
-                    },
-                    AppBar.OverflowAction(
-                        title = stringResource(R.string.action_settings),
-                        onClick = onSettingsClick,
-                    ).takeIf { isConfigurableSource },
-                ),
+                        if (isLocalSource) {
+                            add(
+                                AppBar.OverflowAction(
+                                    title = stringResource(R.string.label_help),
+                                    onClick = onHelpClick,
+                                ),
+                            )
+                        } else {
+                            add(
+                                AppBar.OverflowAction(
+                                    title = stringResource(R.string.action_open_in_web_view),
+                                    onClick = onWebViewClick,
+                                ),
+                            )
+                        }
+                        if (isConfigurableSource) {
+                            add(
+                                AppBar.OverflowAction(
+                                    title = stringResource(R.string.action_settings),
+                                    onClick = onSettingsClick,
+                                ),
+                            )
+                        }
+                    }
+                    .build(),
             )
 
             DropdownMenu(

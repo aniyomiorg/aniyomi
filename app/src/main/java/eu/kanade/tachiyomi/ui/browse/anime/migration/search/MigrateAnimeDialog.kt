@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
@@ -44,7 +43,7 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -65,7 +64,6 @@ internal fun MigrateAnimeDialog(
     onClickTitle: () -> Unit,
     onPopScreen: () -> Unit,
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val state by screenModel.state.collectAsState()
 
@@ -152,7 +150,7 @@ internal class MigrateAnimeDialogScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
@@ -224,8 +222,8 @@ internal class MigrateAnimeDialogScreenModel(
 
         // Update chapters read, bookmark and dateFetch
         if (migrateEpisodes) {
-            val prevAnimeEpisodes = getEpisodeByAnimeId.await(oldAnime.id)
-            val animeEpisodes = getEpisodeByAnimeId.await(newAnime.id)
+            val prevAnimeEpisodes = getEpisodesByAnimeId.await(oldAnime.id)
+            val animeEpisodes = getEpisodesByAnimeId.await(newAnime.id)
 
             val maxEpisodeSeen = prevAnimeEpisodes
                 .filter { it.seen }

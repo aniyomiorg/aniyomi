@@ -1240,29 +1240,29 @@ class PlayerActivity : BaseActivity() {
             }
             // Not entirely sure how to handle these KeyCodes yet, need to learn some more
             /**
-            KeyEvent.KEYCODE_MEDIA_NEXT -> {
-            switchEpisode(false)
-            return true
-            }
+             KeyEvent.KEYCODE_MEDIA_NEXT -> {
+             switchEpisode(false)
+             return true
+             }
 
-            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-            switchEpisode(true)
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PLAY -> {
-            player.paused = true
-            doubleTapPlayPause()
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PAUSE -> {
-            player.paused = false
-            doubleTapPlayPause()
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-            doubleTapPlayPause()
-            return true
-            }
+             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+             switchEpisode(true)
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY -> {
+             player.paused = true
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+             player.paused = false
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+             doubleTapPlayPause()
+             return true
+             }
              */
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 doubleTapSeek(playerPreferences.skipLengthPreference().get())
@@ -1389,9 +1389,9 @@ class PlayerActivity : BaseActivity() {
         val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LOW_PROFILE
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -1858,7 +1858,7 @@ class PlayerActivity : BaseActivity() {
                             incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
                             animeId = viewModel.currentAnime?.id,
                             // AM (CU)>
-                            animeTitle = viewModel.currentAnime?.title,
+                            animeTitle = viewModel.currentAnime?.ogTitle,
                             episodeNumber = viewModel.currentEpisode?.episode_number?.toString(),
                             thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
                         ),

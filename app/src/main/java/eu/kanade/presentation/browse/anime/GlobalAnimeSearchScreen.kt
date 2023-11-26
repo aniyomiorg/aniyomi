@@ -60,13 +60,13 @@ fun GlobalAnimeSearchScreen(
 
 @Composable
 internal fun GlobalSearchContent(
-    fromSourceId: Long? = null,
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
     getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
+    fromSourceId: Long? = null,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -74,7 +74,8 @@ internal fun GlobalSearchContent(
         items.forEach { (source, result) ->
             item(key = source.id) {
                 GlobalSearchResultItem(
-                    title = fromSourceId?.let { "▶ ${source.name}".takeIf { source.id == fromSourceId } } ?: source.name,
+                    title = fromSourceId
+                        ?.let { "▶ ${source.name}".takeIf { source.id == fromSourceId } } ?: source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {

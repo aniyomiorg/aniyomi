@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.anime.source
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
@@ -11,6 +11,9 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.browse.anime.AnimeSourceUiModel
 import eu.kanade.tachiyomi.util.system.LAST_USED_KEY
 import eu.kanade.tachiyomi.util.system.PINNED_KEY
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -37,7 +40,7 @@ class AnimeSourcesScreenModel(
     val events = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getEnabledAnimeSources.subscribe()
                 .catch {
                     logcat(LogPriority.ERROR, it)
@@ -71,14 +74,16 @@ class AnimeSourcesScreenModel(
 
             state.copy(
                 isLoading = false,
-                items = byLang.flatMap {
-                    listOf(
-                        AnimeSourceUiModel.Header(it.key),
-                        *it.value.map { source ->
-                            AnimeSourceUiModel.Item(source)
-                        }.toTypedArray(),
-                    )
-                },
+                items = byLang
+                    .flatMap {
+                        listOf(
+                            AnimeSourceUiModel.Header(it.key),
+                            *it.value.map { source ->
+                                AnimeSourceUiModel.Item(source)
+                            }.toTypedArray(),
+                        )
+                    }
+                    .toImmutableList(),
             )
         }
     }
@@ -109,7 +114,7 @@ class AnimeSourcesScreenModel(
     data class State(
         val dialog: Dialog? = null,
         val isLoading: Boolean = true,
-        val items: List<AnimeSourceUiModel> = emptyList(),
+        val items: ImmutableList<AnimeSourceUiModel> = persistentListOf(),
     ) {
         val isEmpty = items.isEmpty()
     }

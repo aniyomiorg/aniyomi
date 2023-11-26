@@ -31,11 +31,7 @@ class KitsuSearchManga(obj: JsonObject) {
     }
     private val synopsis = obj["synopsis"]?.jsonPrimitive?.contentOrNull
     private var startDate = obj["startDate"]?.jsonPrimitive?.contentOrNull?.let {
-        val outputDf = SimpleDateFormat(
-            "yyyy-MM-dd",
-            Locale
-                .US,
-        )
+        val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         outputDf.format(Date(it.toLong() * 1000))
     }
     private val endDate = obj["endDate"]?.jsonPrimitive?.contentOrNull

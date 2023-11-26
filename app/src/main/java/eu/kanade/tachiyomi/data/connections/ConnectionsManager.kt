@@ -1,4 +1,3 @@
-
 // AM (CONNECTIONS) -->
 package eu.kanade.tachiyomi.data.connections
 

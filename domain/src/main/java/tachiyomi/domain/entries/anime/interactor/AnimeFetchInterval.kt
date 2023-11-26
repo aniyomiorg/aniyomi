@@ -2,7 +2,7 @@ package tachiyomi.domain.entries.anime.interactor
 
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import java.time.Instant
 import java.time.ZoneId
@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
 
 class AnimeFetchInterval(
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId,
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
 ) {
 
     suspend fun toAnimeUpdateOrNull(
@@ -24,7 +24,7 @@ class AnimeFetchInterval(
         } else {
             window
         }
-        val episodes = getEpisodeByAnimeId.await(anime.id)
+        val episodes = getEpisodesByAnimeId.await(anime.id)
         val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
             episodes,
             dateTime.zone,
