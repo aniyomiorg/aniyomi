@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -40,6 +42,10 @@ class MyAnimeList(id: Long) :
 
         private const val SEARCH_ID_PREFIX = "id:"
         private const val SEARCH_LIST_PREFIX = "my:"
+
+        private val SCORE_LIST = IntRange(0, 10)
+            .map(Int::toString)
+            .toImmutableList()
     }
 
     private val json: Json by injectLazy()
@@ -85,9 +91,7 @@ class MyAnimeList(id: Long) :
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> {
-        return IntRange(0, 10).map(Int::toString)
-    }
+    override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
     override fun indexToScore(index: Int): Float {
         return index.toFloat()

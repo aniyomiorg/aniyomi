@@ -29,6 +29,7 @@ import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.components.UpIcon
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.theme.active
 
 @Composable
@@ -78,7 +79,7 @@ fun EntryToolbar(
             actions = {
                 if (isActionMode) {
                     AppBarActions(
-                        listOf(
+                        persistentListOf(
                             AppBar.Action(
                                 title = stringResource(R.string.action_select_all),
                                 icon = Icons.Outlined.SelectAll,
@@ -105,82 +106,75 @@ fun EntryToolbar(
 
                     val filterTint = if (hasFilters) MaterialTheme.colorScheme.active else LocalContentColor.current
                     AppBarActions(
-                        actions = buildList {
-                            if (onClickDownload != null) {
+                        actions = persistentListOf<AppBar.AppBarAction>().builder()
+                            .apply {
+                                if (onClickDownload != null) {
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(R.string.manga_download),
+                                            icon = Icons.Outlined.Download,
+                                            onClick = { downloadExpanded = !downloadExpanded },
+                                        ),
+                                    )
+                                }
                                 add(
                                     AppBar.Action(
-                                        title = stringResource(R.string.manga_download),
-                                        icon = Icons.Outlined.Download,
-                                        onClick = { downloadExpanded = !downloadExpanded },
+                                        title = stringResource(R.string.action_filter),
+                                        icon = Icons.Outlined.FilterList,
+                                        iconTint = filterTint,
+                                        onClick = onClickFilter,
                                     ),
                                 )
-                            }
-                            add(
-                                AppBar.Action(
-                                    title = stringResource(R.string.action_filter),
-                                    icon = Icons.Outlined.FilterList,
-                                    iconTint = filterTint,
-                                    onClick = onClickFilter,
-                                ),
-                            )
-                            add(
-                                AppBar.OverflowAction(
-                                    title = stringResource(R.string.action_webview_refresh),
-                                    onClick = onClickRefresh,
-                                ),
-                            )
-
-                            // SY -->
-                            if (onClickEditInfo != null) {
+                                // SY -->
+                                if (onClickEditInfo != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_edit_info),
+                                            onClick = onClickEditInfo,
+                                        ),
+                                    )
+                                }
+                                // SY <--
+                                if (changeAnimeSkipIntro != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_change_intro_length),
+                                            onClick = changeAnimeSkipIntro,
+                                        ),
+                                    )
+                                }
                                 add(
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_edit_info),
-                                        onClick = onClickEditInfo,
+                                        title = stringResource(R.string.action_webview_refresh),
+                                        onClick = onClickRefresh,
                                     ),
                                 )
+                                if (onClickEditCategory != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_edit_categories),
+                                            onClick = onClickEditCategory,
+                                        ),
+                                    )
+                                }
+                                if (onClickMigrate != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_migrate),
+                                            onClick = onClickMigrate,
+                                        ),
+                                    )
+                                }
+                                if (onClickShare != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_share),
+                                            onClick = onClickShare,
+                                        ),
+                                    )
+                                }
                             }
-                            // SY <--
-                            if (onClickEditCategory != null) {
-                                add(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_edit_categories),
-                                        onClick = onClickEditCategory,
-                                    ),
-                                )
-                            }
-                            if (onClickMigrate != null) {
-                                add(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_migrate),
-                                        onClick = onClickMigrate,
-                                    ),
-                                )
-                            }
-                            if (changeAnimeSkipIntro != null) {
-                                add(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_change_intro_length),
-                                        onClick = changeAnimeSkipIntro,
-                                    ),
-                                )
-                            }
-                            if (onClickSettings != null) {
-                                add(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.settings),
-                                        onClick = onClickSettings,
-                                    ),
-                                )
-                            }
-                            if (onClickShare != null) {
-                                add(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_share),
-                                        onClick = onClickShare,
-                                    ),
-                                )
-                            }
-                        },
+                            .build(),
                     )
                 }
             },

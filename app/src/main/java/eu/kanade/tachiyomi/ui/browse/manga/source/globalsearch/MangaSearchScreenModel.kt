@@ -9,6 +9,10 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
@@ -124,10 +128,16 @@ abstract class MangaSearchScreenModel(
         if (sameQuery) {
             val existingResults = state.value.items
             updateItems(
-                sources.associateWith { existingResults[it] ?: MangaSearchItemResult.Loading },
+                sources
+                    .associateWith { existingResults[it] ?: MangaSearchItemResult.Loading }
+                    .toPersistentMap(),
             )
         } else {
-            updateItems(sources.associateWith { MangaSearchItemResult.Loading })
+            updateItems(
+                sources
+                    .associateWith { MangaSearchItemResult.Loading }
+                    .toPersistentMap(),
+            )
         }
         searchJob = ioCoroutineScope.launch {
             sources.map { source ->
@@ -158,14 +168,21 @@ abstract class MangaSearchScreenModel(
         }
     }
 
-    private fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>) {
-        mutableState.update { it.copy(items = items.toSortedMap(sortComparator(items))) }
+    private fun updateItems(items: PersistentMap<CatalogueSource, MangaSearchItemResult>) {
+        mutableState.update {
+            it.copy(
+                items = items
+                    .toSortedMap(sortComparator(items))
+                    .toPersistentMap(),
+            )
+        }
     }
 
     private fun updateItem(source: CatalogueSource, result: MangaSearchItemResult) {
-        val mutableItems = state.value.items.toMutableMap()
-        mutableItems[source] = result
-        updateItems(mutableItems)
+        val newItems = state.value.items.mutate {
+            it[source] = result
+        }
+        updateItems(newItems)
     }
 
     @Immutable
@@ -174,7 +191,7 @@ abstract class MangaSearchScreenModel(
         val searchQuery: String? = null,
         val sourceFilter: MangaSourceFilter = MangaSourceFilter.PinnedOnly,
         val onlyShowHasResults: Boolean = false,
-        val items: Map<CatalogueSource, MangaSearchItemResult> = emptyMap(),
+        val items: PersistentMap<CatalogueSource, MangaSearchItemResult> = persistentMapOf(),
     ) {
         val progress: Int = items.count { it.value !is MangaSearchItemResult.Loading }
         val total: Int = items.size

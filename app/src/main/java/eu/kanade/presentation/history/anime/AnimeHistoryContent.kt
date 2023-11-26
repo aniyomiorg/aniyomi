@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.RelativeDateHeader
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
@@ -38,7 +37,7 @@ fun AnimeHistoryContent(
             when (item) {
                 is AnimeHistoryUiModel.Header -> {
                     RelativeDateHeader(
-                        modifier = Modifier.animateItemPlacement(),
+
                         date = item.date,
                         relativeTime = relativeTime,
                         dateFormat = dateFormat,
@@ -47,7 +46,7 @@ fun AnimeHistoryContent(
                 is AnimeHistoryUiModel.Item -> {
                     val value = item.item
                     AnimeHistoryItem(
-                        modifier = Modifier.animateItemPlacement(),
+
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

@@ -17,10 +17,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LabeledCheckbox(
-    modifier: Modifier = Modifier,
     label: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
@@ -37,6 +38,7 @@ fun LabeledCheckbox(
         Checkbox(
             checked = checked,
             onCheckedChange = null,
+            enabled = enabled,
         )
 
         Text(text = label)

@@ -7,6 +7,8 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -20,6 +22,10 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
         const val ON_HOLD = 3
         const val NOT_INTERESTING = 4
         const val PLAN_TO_WATCH = 5
+
+        private val SCORE_LIST = IntRange(0, 10)
+            .map(Int::toString)
+            .toImmutableList()
     }
 
     private val json: Json by injectLazy()
@@ -28,9 +34,7 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
     private val api by lazy { SimklApi(client, interceptor) }
 
-    override fun getScoreList(): List<String> {
-        return IntRange(0, 10).map(Int::toString)
-    }
+    override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
     override fun displayScore(track: AnimeTrack): String {
         return track.score.toInt().toString()

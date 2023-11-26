@@ -81,7 +81,6 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
@@ -346,12 +345,12 @@ private fun MangaScreenSmallImpl(
                 // SY -->
                 onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
                 // SY <--
+                onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = null,
                 actionModeCounter = selectedChapterCount,
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = true,
-                onClickSettings = onSettingsClicked,
             )
         },
         bottomBar = {
@@ -611,12 +610,12 @@ fun MangaScreenLargeImpl(
                     // SY -->
                     onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
                     // SY <--
+                    onClickSettings = onSettingsClicked,
                     changeAnimeSkipIntro = null,
                     actionModeCounter = selectedChapterCount,
                     onSelectAll = { onAllChapterSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = true,
-                    onClickSettings = onSettingsClicked,
                 )
             },
             bottomBar = {

@@ -6,6 +6,11 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.ToggleLanguage
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -41,8 +46,8 @@ class AnimeExtensionFilterScreenModel(
                 .collectLatest { (extensionLanguages, enabledLanguages) ->
                     mutableState.update {
                         AnimeExtensionFilterState.Success(
-                            languages = extensionLanguages,
-                            enabledLanguages = enabledLanguages,
+                            languages = extensionLanguages.toImmutableList(),
+                            enabledLanguages = enabledLanguages.toImmutableSet(),
                         )
                     }
                 }
@@ -65,8 +70,8 @@ sealed interface AnimeExtensionFilterState {
 
     @Immutable
     data class Success(
-        val languages: List<String>,
-        val enabledLanguages: Set<String> = emptySet(),
+        val languages: ImmutableList<String>,
+        val enabledLanguages: ImmutableSet<String> = persistentSetOf(),
     ) : AnimeExtensionFilterState {
 
         val isEmpty: Boolean

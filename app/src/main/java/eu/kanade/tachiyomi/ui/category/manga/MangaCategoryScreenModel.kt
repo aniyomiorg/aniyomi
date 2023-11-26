@@ -5,6 +5,8 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -47,7 +49,9 @@ class MangaCategoryScreenModel(
             allCategories.collectLatest { categories ->
                 mutableState.update {
                     MangaCategoryScreenState.Success(
-                        categories = categories.filterNot(Category::isSystemCategory),
+                        categories = categories
+                            .filterNot(Category::isSystemCategory)
+                            .toImmutableList(),
                     )
                 }
             }
@@ -168,7 +172,7 @@ sealed interface MangaCategoryScreenState {
 
     @Immutable
     data class Success(
-        val categories: List<Category>,
+        val categories: ImmutableList<Category>,
         val dialog: MangaCategoryDialog? = null,
     ) : MangaCategoryScreenState {
 

@@ -29,6 +29,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
@@ -158,7 +159,7 @@ fun Screen.animeUpdatesTab(
         },
         actions =
         if (screenModel.state.collectAsState().value.selected.isNotEmpty()) {
-            listOf(
+            persistentListOf(
                 AppBar.Action(
                     title = stringResource(R.string.action_select_all),
                     icon = Icons.Outlined.SelectAll,
@@ -171,7 +172,7 @@ fun Screen.animeUpdatesTab(
                 ),
             )
         } else {
-            listOf(
+            persistentListOf(
                 AppBar.Action(
                     title = stringResource(R.string.action_update_library),
                     icon = Icons.Outlined.Refresh,

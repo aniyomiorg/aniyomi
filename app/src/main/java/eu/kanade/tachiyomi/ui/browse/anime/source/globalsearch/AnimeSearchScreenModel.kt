@@ -9,6 +9,10 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
@@ -124,10 +128,16 @@ abstract class AnimeSearchScreenModel(
         if (sameQuery) {
             val existingResults = state.value.items
             updateItems(
-                sources.associateWith { existingResults[it] ?: AnimeSearchItemResult.Loading },
+                sources
+                    .associateWith { existingResults[it] ?: AnimeSearchItemResult.Loading }
+                    .toPersistentMap(),
             )
         } else {
-            updateItems(sources.associateWith { AnimeSearchItemResult.Loading })
+            updateItems(
+                sources
+                    .associateWith { AnimeSearchItemResult.Loading }
+                    .toPersistentMap(),
+            )
         }
 
         searchJob = ioCoroutineScope.launch {
@@ -159,14 +169,21 @@ abstract class AnimeSearchScreenModel(
         }
     }
 
-    private fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
-        mutableState.update { it.copy(items = items.toSortedMap(sortComparator(items))) }
+    private fun updateItems(items: PersistentMap<AnimeCatalogueSource, AnimeSearchItemResult>) {
+        mutableState.update {
+            it.copy(
+                items = items
+                    .toSortedMap(sortComparator(items))
+                    .toPersistentMap(),
+            )
+        }
     }
 
     private fun updateItem(source: AnimeCatalogueSource, result: AnimeSearchItemResult) {
-        val mutableItems = state.value.items.toMutableMap()
-        mutableItems[source] = result
-        updateItems(mutableItems)
+        val newItems = state.value.items.mutate {
+            it[source] = result
+        }
+        updateItems(newItems)
     }
 
     @Immutable
@@ -175,7 +192,7 @@ abstract class AnimeSearchScreenModel(
         val searchQuery: String? = null,
         val sourceFilter: AnimeSourceFilter = AnimeSourceFilter.PinnedOnly,
         val onlyShowHasResults: Boolean = false,
-        val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+        val items: PersistentMap<AnimeCatalogueSource, AnimeSearchItemResult> = persistentMapOf(),
     ) {
         val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }
         val total: Int = items.size

@@ -21,6 +21,10 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -106,27 +110,29 @@ class MangaUpdatesScreenModel(
         }
     }
 
-    private fun List<MangaUpdatesWithRelations>.toUpdateItems(): List<MangaUpdatesItem> {
-        return this.map { update ->
-            val activeDownload = downloadManager.getQueuedDownloadOrNull(update.chapterId)
-            val downloaded = downloadManager.isChapterDownloaded(
-                update.chapterName,
-                update.scanlator,
-                update.mangaTitle,
-                update.sourceId,
-            )
-            val downloadState = when {
-                activeDownload != null -> activeDownload.status
-                downloaded -> MangaDownload.State.DOWNLOADED
-                else -> MangaDownload.State.NOT_DOWNLOADED
+    private fun List<MangaUpdatesWithRelations>.toUpdateItems(): PersistentList<MangaUpdatesItem> {
+        return this
+            .map { update ->
+                val activeDownload = downloadManager.getQueuedDownloadOrNull(update.chapterId)
+                val downloaded = downloadManager.isChapterDownloaded(
+                    update.chapterName,
+                    update.scanlator,
+                    update.mangaTitle,
+                    update.sourceId,
+                )
+                val downloadState = when {
+                    activeDownload != null -> activeDownload.status
+                    downloaded -> MangaDownload.State.DOWNLOADED
+                    else -> MangaDownload.State.NOT_DOWNLOADED
+                }
+                MangaUpdatesItem(
+                    update = update,
+                    downloadStateProvider = { downloadState },
+                    downloadProgressProvider = { activeDownload?.progress ?: 0 },
+                    selected = update.chapterId in selectedChapterIds,
+                )
             }
-            MangaUpdatesItem(
-                update = update,
-                downloadStateProvider = { downloadState },
-                downloadProgressProvider = { activeDownload?.progress ?: 0 },
-                selected = update.chapterId in selectedChapterIds,
-            )
-        }
+            .toPersistentList()
     }
 
     fun updateLibrary(): Boolean {
@@ -144,17 +150,14 @@ class MangaUpdatesScreenModel(
      */
     private fun updateDownloadState(download: MangaDownload) {
         mutableState.update { state ->
-            val newItems = state.items.toMutableList().apply {
-                val modifiedIndex = indexOfFirst { it.update.chapterId == download.chapter.id }
-                if (modifiedIndex < 0) return@apply
+            val newItems = state.items.mutate { list ->
+                val modifiedIndex = list.indexOfFirst { it.update.chapterId == download.chapter.id }
+                if (modifiedIndex < 0) return@mutate
 
-                val item = get(modifiedIndex)
-                set(
-                    modifiedIndex,
-                    item.copy(
-                        downloadStateProvider = { download.status },
-                        downloadProgressProvider = { download.progress },
-                    ),
+                val item = list[modifiedIndex]
+                list[modifiedIndex] = item.copy(
+                    downloadStateProvider = { download.status },
+                    downloadProgressProvider = { download.progress },
                 )
             }
             state.copy(items = newItems)
@@ -330,7 +333,7 @@ class MangaUpdatesScreenModel(
                     }
                 }
             }
-            state.copy(items = newItems)
+            state.copy(items = newItems.toPersistentList())
         }
     }
 
@@ -340,7 +343,7 @@ class MangaUpdatesScreenModel(
                 selectedChapterIds.addOrRemove(it.update.chapterId, selected)
                 it.copy(selected = selected)
             }
-            state.copy(items = newItems)
+            state.copy(items = newItems.toPersistentList())
         }
 
         selectedPositions[0] = -1
@@ -353,7 +356,7 @@ class MangaUpdatesScreenModel(
                 selectedChapterIds.addOrRemove(it.update.chapterId, !it.selected)
                 it.copy(selected = !it.selected)
             }
-            state.copy(items = newItems)
+            state.copy(items = newItems.toPersistentList())
         }
         selectedPositions[0] = -1
         selectedPositions[1] = -1
@@ -370,7 +373,7 @@ class MangaUpdatesScreenModel(
     @Immutable
     data class State(
         val isLoading: Boolean = true,
-        val items: List<MangaUpdatesItem> = emptyList(),
+        val items: PersistentList<MangaUpdatesItem> = persistentListOf(),
         val dialog: Dialog? = null,
     ) {
         val selected = items.filter { it.selected }

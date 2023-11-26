@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LinkIcon(
-    modifier: Modifier = Modifier,
     label: String,
     icon: ImageVector,
     url: String,
+    modifier: Modifier = Modifier,
 ) {
     val uriHandler = LocalUriHandler.current
     IconButton(

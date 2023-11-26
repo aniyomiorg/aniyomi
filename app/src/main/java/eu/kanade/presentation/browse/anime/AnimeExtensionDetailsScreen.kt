@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
@@ -54,6 +55,7 @@ import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
@@ -79,40 +81,42 @@ fun AnimeExtensionDetailsScreen(
                 navigateUp = navigateUp,
                 actions = {
                     AppBarActions(
-                        actions = buildList {
-                            if (state.extension?.isUnofficial == false) {
-                                add(
-                                    AppBar.Action(
-                                        title = stringResource(R.string.whats_new),
-                                        icon = Icons.Outlined.History,
-                                        onClick = onClickWhatsNew,
-                                    ),
-                                )
-                                add(
-                                    AppBar.Action(
-                                        title = stringResource(R.string.action_faq_and_guides),
-                                        icon = Icons.Outlined.HelpOutline,
-                                        onClick = onClickReadme,
+                        actions = persistentListOf<AppBar.AppBarAction>().builder()
+                            .apply {
+                                if (state.extension?.isUnofficial == false) {
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(R.string.whats_new),
+                                            icon = Icons.Outlined.History,
+                                            onClick = onClickWhatsNew,
+                                        ),
+                                    )
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(R.string.action_faq_and_guides),
+                                            icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                                            onClick = onClickReadme,
+                                        ),
+                                    )
+                                }
+                                addAll(
+                                    listOf(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_enable_all),
+                                            onClick = onClickEnableAll,
+                                        ),
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_disable_all),
+                                            onClick = onClickDisableAll,
+                                        ),
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.pref_clear_cookies),
+                                            onClick = onClickClearCookies,
+                                        ),
                                     ),
                                 )
                             }
-                            addAll(
-                                listOf(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_enable_all),
-                                        onClick = onClickEnableAll,
-                                    ),
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_disable_all),
-                                        onClick = onClickDisableAll,
-                                    ),
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.pref_clear_cookies),
-                                        onClick = onClickClearCookies,
-                                    ),
-                                ),
-                            )
-                        },
+                            .build(),
                     )
                 },
                 scrollBehavior = scrollBehavior,
@@ -186,7 +190,6 @@ private fun AnimeExtensionDetails(
             key = { it.source.id },
         ) { source ->
             SourceSwitchPreference(
-                modifier = Modifier.animateItemPlacement(),
                 source = source,
                 onClickSourcePreferences = onClickSourcePreferences,
                 onClickSource = onClickSource,
@@ -321,10 +324,10 @@ private fun DetailsHeader(
 
 @Composable
 private fun InfoText(
-    modifier: Modifier,
     primaryText: String,
-    primaryTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     secondaryText: String,
+    modifier: Modifier = Modifier,
+    primaryTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     onClick: (() -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -364,10 +367,10 @@ private fun InfoDivider() {
 
 @Composable
 private fun SourceSwitchPreference(
-    modifier: Modifier = Modifier,
     source: AnimeExtensionSourceItem,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 

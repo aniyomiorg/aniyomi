@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi
+package eu.kanade.tachiyomi.di
 
 import android.app.Application
 import android.os.Build
@@ -10,15 +10,9 @@ import data.History
 import data.Mangas
 import dataanime.Animehistory
 import dataanime.Animes
-import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
-import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
-import eu.kanade.tachiyomi.core.security.SecurityPreferences
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
@@ -36,21 +30,14 @@ import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.JavaScriptEngine
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.anime.AndroidAnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import eu.kanade.tachiyomi.util.system.isDevFlavor
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.provider.AndroidBackupFolderProvider
-import tachiyomi.core.provider.AndroidDownloadFolderProvider
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
 import tachiyomi.data.StringListColumnAdapter
@@ -59,9 +46,6 @@ import tachiyomi.data.handlers.anime.AndroidAnimeDatabaseHandler
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.AndroidMangaDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.domain.backup.service.BackupPreferences
-import tachiyomi.domain.download.service.DownloadPreferences
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.mi.data.AnimeDatabase
@@ -242,64 +226,5 @@ class AppModule(val app: Application) : InjektModule {
             get<MangaDownloadManager>()
             get<AnimeDownloadManager>()
         }
-    }
-}
-
-class PreferenceModule(val application: Application) : InjektModule {
-    override fun InjektRegistrar.registerInjectables() {
-        addSingletonFactory<PreferenceStore> {
-            AndroidPreferenceStore(application)
-        }
-        addSingletonFactory {
-            NetworkPreferences(
-                preferenceStore = get(),
-                verboseLogging = isDevFlavor,
-            )
-        }
-        addSingletonFactory {
-            SourcePreferences(get())
-        }
-        addSingletonFactory {
-            SecurityPreferences(get())
-        }
-        addSingletonFactory {
-            LibraryPreferences(get())
-        }
-        addSingletonFactory {
-            ReaderPreferences(get())
-        }
-        addSingletonFactory {
-            PlayerPreferences(get())
-        }
-        addSingletonFactory {
-            TrackPreferences(get())
-        }
-        addSingletonFactory {
-            AndroidDownloadFolderProvider(application)
-        }
-        addSingletonFactory {
-            DownloadPreferences(
-                folderProvider = get<AndroidDownloadFolderProvider>(),
-                preferenceStore = get(),
-            )
-        }
-        addSingletonFactory {
-            AndroidBackupFolderProvider(application)
-        }
-        addSingletonFactory {
-            BackupPreferences(
-                folderProvider = get<AndroidBackupFolderProvider>(),
-                preferenceStore = get(),
-            )
-        }
-        addSingletonFactory {
-            UiPreferences(get())
-        }
-        addSingletonFactory {
-            BasePreferences(application, get())
-        }
-        // AM (CONNECTIONS) -->
-        addSingletonFactory { ConnectionsPreferences(get()) }
-        // <-- AM (CONNECTIONS)
     }
 }

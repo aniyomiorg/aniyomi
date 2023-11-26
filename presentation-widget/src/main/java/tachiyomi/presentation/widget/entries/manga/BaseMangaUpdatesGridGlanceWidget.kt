@@ -30,6 +30,8 @@ import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.util.system.dpToPx
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.manga.model.MangaCover
@@ -96,10 +98,10 @@ abstract class BaseMangaUpdatesGridGlanceWidget(
             val data by flow.collectAsState(initial = null)
             UpdatesMangaWidget(
                 data = data,
-                modifier = containerModifier,
                 contentColor = foreground,
                 topPadding = topPadding,
                 bottomPadding = bottomPadding,
+                modifier = containerModifier,
             )
         }
     }
@@ -107,7 +109,7 @@ abstract class BaseMangaUpdatesGridGlanceWidget(
     private suspend fun List<MangaUpdatesWithRelations>.prepareData(
         rowCount: Int,
         columnCount: Int,
-    ): List<Pair<Long, Bitmap?>> {
+    ): ImmutableList<Pair<Long, Bitmap?>> {
         // Resize to cover size
         val widthPx = CoverWidth.value.toInt().dpToPx
         val heightPx = CoverHeight.value.toInt().dpToPx
@@ -141,6 +143,7 @@ abstract class BaseMangaUpdatesGridGlanceWidget(
                         .build()
                     Pair(updatesView.mangaId, context.imageLoader.executeBlocking(request).drawable?.toBitmap())
                 }
+                .toImmutableList()
         }
     }
 

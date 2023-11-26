@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import kotlinx.collections.immutable.ImmutableList
 import okhttp3.OkHttpClient
 
 interface Tracker {
@@ -25,8 +26,11 @@ interface Tracker {
 
     @StringRes
     fun getStatus(status: Int): Int?
+
     fun getCompletionStatus(): Int
-    fun getScoreList(): List<String>
+
+    fun getScoreList(): ImmutableList<String>
+
     suspend fun login(username: String, password: String)
 
     @CallSuper

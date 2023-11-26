@@ -17,8 +17,8 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun BaseMangaSourceItem(
-    modifier: Modifier = Modifier,
     source: Source,
+    modifier: Modifier = Modifier,
     showLanguageInContent: Boolean = true,
     onClickItem: () -> Unit = {},
     onLongClickItem: () -> Unit = {},

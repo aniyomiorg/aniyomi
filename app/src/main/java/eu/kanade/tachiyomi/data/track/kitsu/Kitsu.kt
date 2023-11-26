@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
@@ -79,9 +81,9 @@ class Kitsu(id: Long) :
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> {
+    override fun getScoreList(): ImmutableList<String> {
         val df = DecimalFormat("0.#")
-        return listOf("0") + IntRange(2, 20).map { df.format(it / 2f) }
+        return (listOf("0") + IntRange(2, 20).map { df.format(it / 2f) }).toImmutableList()
     }
 
     override fun indexToScore(index: Int): Float {

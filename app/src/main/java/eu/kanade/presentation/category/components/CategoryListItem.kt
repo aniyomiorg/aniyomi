@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.ArrowDropUp
 import androidx.compose.material.icons.outlined.Delete
@@ -28,7 +29,6 @@ import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun CategoryListItem(
-    modifier: Modifier = Modifier,
     category: Category,
     canMoveUp: Boolean,
     canMoveDown: Boolean,
@@ -37,6 +37,7 @@ fun CategoryListItem(
     onRename: () -> Unit,
     onHide: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
         modifier = modifier,
@@ -52,7 +53,7 @@ fun CategoryListItem(
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Icons.Outlined.Label, contentDescription = "")
+            Icon(imageVector = Icons.AutoMirrored.Outlined.Label, contentDescription = "")
             Text(
                 text = category.name,
                 modifier = Modifier

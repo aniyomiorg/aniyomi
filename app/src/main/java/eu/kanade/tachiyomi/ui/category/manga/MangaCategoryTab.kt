@@ -18,6 +18,7 @@ import eu.kanade.presentation.category.components.CategorySortAlphabeticallyDial
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -30,7 +31,7 @@ fun Screen.mangaCategoryTab(): TabContent {
     return TabContent(
         titleRes = R.string.label_manga,
         searchEnabled = false,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.action_sort),
                 icon = Icons.Outlined.SortByAlpha,

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -25,16 +26,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.TabIndicator
 import tachiyomi.presentation.core.components.material.TabText
 
 @Composable
 fun TabbedScreen(
     @StringRes titleRes: Int?,
-    tabs: List<TabContent>,
+    tabs: ImmutableList<TabContent>,
     startIndex: Int? = null,
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
@@ -89,10 +91,8 @@ fun TabbedScreen(
                 end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
             ),
         ) {
-            FlexibleTabRow(
-                scrollable = scrollable,
+            PrimaryTabRow(
                 selectedTabIndex = state.currentPage,
-                indicator = { TabIndicator(it[state.currentPage], state.currentPageOffsetFraction) },
             ) {
                 tabs.forEachIndexed { index, tab ->
                     Tab(
@@ -127,7 +127,7 @@ data class TabContent(
     @StringRes val titleRes: Int,
     val badgeNumber: Int? = null,
     val searchEnabled: Boolean = false,
-    val actions: List<AppBar.Action> = emptyList(),
+    val actions: ImmutableList<AppBar.Action> = persistentListOf(),
     val content: @Composable (contentPadding: PaddingValues, snackbarHostState: SnackbarHostState) -> Unit,
     val numberTitle: Int = 0,
     val cancelAction: () -> Unit = {},

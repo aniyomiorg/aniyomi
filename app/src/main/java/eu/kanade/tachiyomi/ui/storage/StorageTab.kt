@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
+import kotlinx.collections.immutable.persistentListOf
 
 data class StorageTab(
     private val isManga: Boolean = false,
@@ -38,7 +39,7 @@ data class StorageTab(
 
         TabbedScreen(
             titleRes = R.string.label_storage,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeStorageTab(),
                 mangaStorageTab(),
             ),

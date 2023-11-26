@@ -36,6 +36,7 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.material.padding
 import java.io.File
 
@@ -50,7 +51,7 @@ fun StreamsCatalogSheet(
     onSettingsClicked: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val tabTitles = mutableListOf(
+    val tabTitles = persistentListOf(
         stringResource(id = R.string.subtitle_dialog_header),
         stringResource(id = R.string.audio_dialog_header),
     )

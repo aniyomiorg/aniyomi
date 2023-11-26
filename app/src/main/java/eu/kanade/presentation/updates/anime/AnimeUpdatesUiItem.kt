@@ -98,14 +98,14 @@ fun LazyListScope.animeUpdatesUiItems(
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
                 ListGroupHeader(
-                    modifier = Modifier.animateItemPlacement(),
+
                     text = item.date,
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 AnimeUpdatesUiItem(
-                    modifier = Modifier.animateItemPlacement(),
+
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     watchProgress = updatesItem.update.lastSecondSeen
@@ -146,7 +146,6 @@ fun LazyListScope.animeUpdatesUiItems(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimeUpdatesUiItem(
-    modifier: Modifier,
     update: AnimeUpdatesWithRelations,
     selected: Boolean,
     watchProgress: String?,
@@ -157,6 +156,7 @@ fun AnimeUpdatesUiItem(
     // Download Indicator
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
+    modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
     val textAlpha = if (update.seen) ReadItemAlpha else 1f

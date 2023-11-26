@@ -3,7 +3,7 @@ package eu.kanade.presentation.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
@@ -84,7 +84,7 @@ fun NestedMenuItem(
         onClick = { nestedExpanded = true },
         trailingIcon = {
             Icon(
-                imageVector = if (isLtr) Icons.Outlined.ArrowRight else Icons.Outlined.ArrowLeft,
+                imageVector = Icons.AutoMirrored.Outlined.ArrowRight,
                 contentDescription = null,
             )
         },

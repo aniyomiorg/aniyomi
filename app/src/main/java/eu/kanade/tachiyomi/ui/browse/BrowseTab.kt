@@ -29,6 +29,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
 import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import kotlinx.collections.immutable.persistentListOf
 
 data class BrowseTab(
     private val toExtensions: Boolean = false,
@@ -64,7 +65,7 @@ data class BrowseTab(
 
         TabbedScreen(
             titleRes = R.string.browse,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeSourcesTab(),
                 mangaSourcesTab(),
                 animeExtensionsTab(animeExtensionsScreenModel),

@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -131,7 +132,7 @@ fun Screen.mangaHistoryTab(
             }
         },
         actions =
-        listOf(
+        persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,

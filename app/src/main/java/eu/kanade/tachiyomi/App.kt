@@ -39,6 +39,8 @@ import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.di.AppModule
+import eu.kanade.tachiyomi.di.PreferenceModule
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
@@ -60,8 +62,8 @@ import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.util.system.logcat
-import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
-import tachiyomi.presentation.widget.entries.manga.TachiyomiMangaWidgetManager
+import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
+import tachiyomi.presentation.widget.entries.manga.MangaWidgetManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -135,11 +137,11 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        with(TachiyomiMangaWidgetManager(Injekt.get(), Injekt.get())) {
+        with(MangaWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
-        with(TachiyomiAnimeWidgetManager(Injekt.get(), Injekt.get())) {
+        with(AnimeWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
