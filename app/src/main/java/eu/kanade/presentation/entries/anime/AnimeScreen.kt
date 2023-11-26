@@ -93,6 +93,7 @@ import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun AnimeScreen(
@@ -833,7 +834,6 @@ fun AnimeScreenLargeImpl(
 @Composable
 private fun SharedAnimeBottomActionMenu(
     selected: List<EpisodeList.Item>,
-    modifier: Modifier = Modifier,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
@@ -842,6 +842,7 @@ private fun SharedAnimeBottomActionMenu(
     onMultiDeleteClicked: (List<Episode>) -> Unit,
     fillFraction: Float,
     alwaysUseExternalPlayer: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     EntryBottomActionMenu(
         visible = selected.isNotEmpty(),
@@ -935,7 +936,8 @@ private fun LazyListScope.sharedEpisodeItems(
                         ?.let {
                             stringResource(
                                 R.string.episode_progress,
-                                it + 1,
+                                formatProgress(it),
+                                formatProgress(item.episode.totalSeconds),
                             )
                         },
                     scanlator = item.episode.scanlator.takeIf { !it.isNullOrBlank() },
@@ -970,6 +972,26 @@ private fun LazyListScope.sharedEpisodeItems(
                 )
             }
         }
+    }
+}
+
+private fun formatProgress(milliseconds: Long): String {
+    return if (milliseconds > 3600000L) {
+        String.format(
+            "%d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(milliseconds),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else {
+        String.format(
+            "%d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
     }
 }
 

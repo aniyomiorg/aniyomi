@@ -61,7 +61,6 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun AnimeEpisodeListItem(
-    modifier: Modifier = Modifier,
     title: String,
     date: String?,
     watchProgress: String?,
@@ -78,6 +77,7 @@ fun AnimeEpisodeListItem(
     onClick: () -> Unit,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
     val density = LocalDensity.current
@@ -261,9 +261,9 @@ private fun getSwipeAction(
 
 @Composable
 fun NextEpisodeAiringListItem(
-    modifier: Modifier = Modifier,
     title: String,
     date: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
