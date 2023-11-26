@@ -10,6 +10,7 @@ import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CHAPTER
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CUSTOM_INFO
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXTENSIONS
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXT_PREFS
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_HISTORY
@@ -253,7 +254,7 @@ class BackupCreator(
         val mangaObject = BackupManga.copyFrom(
             manga,
             // SY -->
-            if (options and BackupConst.BACKUP_CUSTOM_INFO_MASK == BackupConst.BACKUP_CUSTOM_INFO) {
+            if (options and BACKUP_CUSTOM_INFO == BACKUP_CUSTOM_INFO) {
                 getCustomMangaInfo.get(
                     manga.id,
                 )
@@ -332,7 +333,7 @@ class BackupCreator(
         val animeObject = BackupAnime.copyFrom(
             anime,
             // SY -->
-            if (options and BackupConst.BACKUP_CUSTOM_INFO_MASK == BackupConst.BACKUP_CUSTOM_INFO) {
+            if (options and BACKUP_CUSTOM_INFO == BACKUP_CUSTOM_INFO) {
                 getCustomAnimeInfo.get(
                     anime.id,
                 )
