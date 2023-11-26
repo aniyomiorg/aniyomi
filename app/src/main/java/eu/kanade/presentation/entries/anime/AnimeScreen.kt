@@ -913,32 +913,32 @@ private fun LazyListScope.sharedEpisodeItems(
 ) {
     items(
         items = episodes,
-        key = { item ->
-            when (item) {
-                is EpisodeList.MissingCount -> "missing-count-${item.id}"
-                is EpisodeList.Item -> "episode-${item.id}"
+        key = { episodeItem ->
+            when (episodeItem) {
+                is EpisodeList.MissingCount -> "missing-count-${episodeItem.id}"
+                is EpisodeList.Item -> "episode-${episodeItem.id}"
             }
         },
         contentType = { EntryScreenItem.ITEM },
-    ) { item ->
+    ) { episodeItem ->
         val haptic = LocalHapticFeedback.current
         val context = LocalContext.current
 
-        when (item) {
+        when (episodeItem) {
             is EpisodeList.MissingCount -> {
-                MissingEpisodeCountListItem(count = item.count)
+                MissingEpisodeCountListItem(count = episodeItem.count)
             }
             is EpisodeList.Item -> {
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
                             R.string.display_mode_episode,
-                            formatEpisodeNumber(item.episode.episodeNumber),
+                            formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
                     } else {
-                        item.episode.name
+                        episodeItem.episode.name
                     },
-                    date = item.episode.dateUpload
+                    date = episodeItem.episode.dateUpload
                         .takeIf { it > 0L }
                         ?.let {
                             Date(it).toRelativeString(
@@ -947,43 +947,43 @@ private fun LazyListScope.sharedEpisodeItems(
                                 dateFormat,
                             )
                         },
-                    watchProgress = item.episode.lastSecondSeen
-                        .takeIf { !item.episode.seen && it > 0L }
+                    watchProgress = episodeItem.episode.lastSecondSeen
+                        .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
                             stringResource(
                                 R.string.episode_progress,
                                 formatTime(it),
-                                formatTime(item.episode.totalSeconds),
+                                formatTime(episodeItem.episode.totalSeconds),
                             )
                         },
-                    scanlator = item.episode.scanlator.takeIf { !it.isNullOrBlank() },
-                    seen = item.episode.seen,
-                    bookmark = item.episode.bookmark,
-                    selected = item.selected,
+                    scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
+                    seen = episodeItem.episode.seen,
+                    bookmark = episodeItem.episode.bookmark,
+                    selected = episodeItem.selected,
                     downloadIndicatorEnabled = !isAnyEpisodeSelected,
-                    downloadStateProvider = { item.downloadState },
-                    downloadProgressProvider = { item.downloadProgress },
+                    downloadStateProvider = { episodeItem.downloadState },
+                    downloadProgressProvider = { episodeItem.downloadProgress },
                     episodeSwipeStartAction = episodeSwipeStartAction,
                     episodeSwipeEndAction = episodeSwipeEndAction,
                     onLongClick = {
-                        onEpisodeSelected(item, !item.selected, true, true)
+                        onEpisodeSelected(episodeItem, !episodeItem.selected, true, true)
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     },
                     onClick = {
                         onEpisodeItemClick(
-                            episodeItem = item,
+                            episodeItem = episodeItem,
                             isAnyEpisodeSelected = isAnyEpisodeSelected,
-                            onToggleSelection = { onEpisodeSelected(item, !item.selected, true, false) },
+                            onToggleSelection = { onEpisodeSelected(episodeItem, !episodeItem.selected, true, false) },
                             onEpisodeClicked = onEpisodeClicked,
                         )
                     },
                     onDownloadClick = if (onDownloadEpisode != null) {
-                        { onDownloadEpisode(listOf(item), it) }
+                        { onDownloadEpisode(listOf(episodeItem), it) }
                     } else {
                         null
                     },
                     onEpisodeSwipe = {
-                        onEpisodeSwipe(item, it)
+                        onEpisodeSwipe(episodeItem, it)
                     },
                 )
             }
