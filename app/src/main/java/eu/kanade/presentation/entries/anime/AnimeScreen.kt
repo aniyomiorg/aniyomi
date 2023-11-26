@@ -957,8 +957,8 @@ private fun LazyListScope.sharedEpisodeItems(
                         ?.let {
                             stringResource(
                                 R.string.episode_progress,
-                                formatProgress(it),
-                                formatProgress(item.episode.totalSeconds),
+                                formatTime(it),
+                                formatTime(item.episode.totalSeconds),
                             )
                         },
                     scanlator = item.episode.scanlator.takeIf { !it.isNullOrBlank() },
@@ -993,26 +993,6 @@ private fun LazyListScope.sharedEpisodeItems(
                 )
             }
         }
-    }
-}
-
-private fun formatProgress(milliseconds: Long): String {
-    return if (milliseconds > 3600000L) {
-        String.format(
-            "%d:%02d:%02d",
-            TimeUnit.MILLISECONDS.toHours(milliseconds),
-            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
-                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
-            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
-        )
-    } else {
-        String.format(
-            "%d:%02d",
-            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
-            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
-        )
     }
 }
 
