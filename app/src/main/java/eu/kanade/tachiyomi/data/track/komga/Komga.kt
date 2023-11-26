@@ -9,6 +9,8 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
@@ -51,7 +53,7 @@ class Komga(id: Long) : BaseTracker(id, "Komga"), EnhancedMangaTracker, MangaTra
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> = emptyList()
+    override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {

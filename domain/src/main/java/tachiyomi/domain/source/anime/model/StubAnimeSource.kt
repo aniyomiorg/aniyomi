@@ -25,5 +25,11 @@ class StubAnimeSource(
 
     override fun toString(): String =
         if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
+
+    companion object {
+        fun from(source: AnimeSource): StubAnimeSource {
+            return StubAnimeSource(id = source.id, lang = source.lang, name = source.name)
+        }
+    }
 }
 class AnimeSourceNotInstalledException : Exception()

@@ -18,8 +18,8 @@ val CoverHeight = 87.dp
 
 @Composable
 fun UpdatesAnimeCover(
-    modifier: GlanceModifier = GlanceModifier,
     cover: Bitmap?,
+    modifier: GlanceModifier = GlanceModifier,
 ) {
     Box(
         modifier = modifier

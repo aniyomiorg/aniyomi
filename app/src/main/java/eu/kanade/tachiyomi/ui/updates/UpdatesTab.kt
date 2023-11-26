@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.updates.anime.animeUpdatesTab
 import eu.kanade.tachiyomi.ui.updates.manga.mangaUpdatesTab
+import kotlinx.collections.immutable.persistentListOf
 
 data class UpdatesTab(
     private val fromMore: Boolean,
@@ -45,7 +46,7 @@ data class UpdatesTab(
 
         TabbedScreen(
             titleRes = R.string.label_recent_updates,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeUpdatesTab(context, fromMore),
                 mangaUpdatesTab(context, fromMore),
             ),

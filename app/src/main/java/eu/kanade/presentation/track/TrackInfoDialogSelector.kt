@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.WheelNumberPicker
 import tachiyomi.presentation.core.components.WheelTextPicker
@@ -114,9 +116,9 @@ fun TrackItemSelector(
         title = stringResource(titleText),
         content = {
             WheelNumberPicker(
+                items = range.toImmutableList(),
                 modifier = Modifier.align(Alignment.Center),
                 startIndex = selection,
-                items = range.toList(),
                 onSelectionChanged = { onSelectionChange(it) },
             )
         },
@@ -129,7 +131,7 @@ fun TrackItemSelector(
 fun TrackScoreSelector(
     selection: String,
     onSelectionChange: (String) -> Unit,
-    selections: List<String>,
+    selections: ImmutableList<String>,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -137,9 +139,9 @@ fun TrackScoreSelector(
         title = stringResource(R.string.score),
         content = {
             WheelTextPicker(
+                items = selections,
                 modifier = Modifier.align(Alignment.Center),
                 startIndex = selections.indexOf(selection).takeIf { it > 0 } ?: (selections.size / 2),
-                items = selections,
                 onSelectionChanged = { onSelectionChange(selections[it]) },
             )
         },
@@ -203,9 +205,9 @@ fun TrackDateSelector(
 fun BaseSelector(
     title: String,
     content: @Composable BoxScope.() -> Unit,
-    thirdButton: @Composable (RowScope.() -> Unit)? = null,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
+    thirdButton: @Composable (RowScope.() -> Unit)? = null,
 ) {
     AlertDialogContent(
         modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),

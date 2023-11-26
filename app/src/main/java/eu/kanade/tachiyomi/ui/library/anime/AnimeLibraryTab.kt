@@ -7,6 +7,7 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
@@ -45,6 +46,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -192,10 +194,10 @@ object AnimeLibraryTab : Tab() {
                     EmptyScreen(
                         textResource = R.string.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
-                        actions = listOf(
+                        actions = persistentListOf(
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
-                                icon = Icons.Outlined.HelpOutline,
+                                icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(
                                         "https://aniyomi.org/docs/guides/getting-started",

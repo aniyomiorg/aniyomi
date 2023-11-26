@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.download.anime.animeDownloadTab
 import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import kotlinx.collections.immutable.persistentListOf
 
 data class DownloadsTab(
     private val isManga: Boolean = false,
@@ -39,7 +40,7 @@ data class DownloadsTab(
 
         TabbedScreen(
             titleRes = R.string.label_download_queue,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeDownloadTab(),
                 mangaDownloadTab(),
             ),

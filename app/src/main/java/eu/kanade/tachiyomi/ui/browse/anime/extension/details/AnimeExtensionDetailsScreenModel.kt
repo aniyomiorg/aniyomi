@@ -12,6 +12,9 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -78,10 +81,10 @@ class AnimeExtensionDetailsScreenModel(
                         }
                         .catch { throwable ->
                             logcat(LogPriority.ERROR, throwable)
-                            mutableState.update { it.copy(_sources = emptyList()) }
+                            mutableState.update { it.copy(_sources = persistentListOf()) }
                         }
                         .collectLatest { sources ->
-                            mutableState.update { it.copy(_sources = sources) }
+                            mutableState.update { it.copy(_sources = sources.toImmutableList()) }
                         }
                 }
             }
@@ -167,11 +170,11 @@ class AnimeExtensionDetailsScreenModel(
     @Immutable
     data class State(
         val extension: AnimeExtension.Installed? = null,
-        private val _sources: List<AnimeExtensionSourceItem>? = null,
+        private val _sources: ImmutableList<AnimeExtensionSourceItem>? = null,
     ) {
 
-        val sources: List<AnimeExtensionSourceItem>
-            get() = _sources.orEmpty()
+        val sources: ImmutableList<AnimeExtensionSourceItem>
+            get() = _sources ?: persistentListOf()
 
         val isLoading: Boolean
             get() = extension == null || _sources == null

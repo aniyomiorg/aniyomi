@@ -1,10 +1,12 @@
-package eu.kanade.tachiyomi.dev.preview
+package eu.kanade.test
 
 import android.graphics.Color
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import okhttp3.OkHttpClient
 
 data class DummyTracker(
@@ -16,7 +18,7 @@ data class DummyTracker(
     val valLogo: Int = R.drawable.ic_tracker_anilist,
     val valStatuses: List<Int> = (1..6).toList(),
     val valCompletionStatus: Int = 2,
-    val valScoreList: List<String> = (0..10).map(Int::toString),
+    val valScoreList: ImmutableList<String> = (0..10).map(Int::toString).toImmutableList(),
     val val10PointScore: Double = 5.4,
     val valMangaSearchResults: List<MangaTrackSearch> = listOf(),
     val valAnimeSearchResults: List<AnimeTrackSearch> = listOf(),
@@ -43,7 +45,7 @@ data class DummyTracker(
 
     override fun getCompletionStatus(): Int = valCompletionStatus
 
-    override fun getScoreList(): List<String> = valScoreList
+    override fun getScoreList(): ImmutableList<String> = valScoreList
 
     override suspend fun login(username: String, password: String) = Unit
 

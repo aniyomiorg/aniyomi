@@ -8,6 +8,13 @@ import android.net.Uri
 import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CATEGORY
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CHAPTER
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXTENSIONS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXT_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_HISTORY
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_TRACK
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
@@ -190,7 +197,7 @@ class BackupCreator(
      */
     private suspend fun backupCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
-        return if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        return if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             getMangaCategories.await()
                 .filterNot(Category::isSystemCategory)
                 .map(backupCategoryMapper)
@@ -206,7 +213,7 @@ class BackupCreator(
      */
     private suspend fun backupAnimeCategories(options: Int): List<BackupCategory> {
         // Check if user wants category information in backup
-        return if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        return if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             getAnimeCategories.await()
                 .filterNot(Category::isSystemCategory)
                 .map(backupCategoryMapper)
@@ -239,7 +246,7 @@ class BackupCreator(
         val mangaObject = BackupManga.copyFrom(manga)
 
         // Check if user wants chapter information in backup
-        if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
+        if (options and BACKUP_CHAPTER == BACKUP_CHAPTER) {
             // Backup all the chapters
             mangaHandler.awaitList {
                 chaptersQueries.getChaptersByMangaId(
@@ -253,7 +260,7 @@ class BackupCreator(
         }
 
         // Check if user wants category information in backup
-        if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             // Backup categories for this manga
             val categoriesForManga = getMangaCategories.await(manga.id)
             if (categoriesForManga.isNotEmpty()) {
@@ -262,7 +269,7 @@ class BackupCreator(
         }
 
         // Check if user wants track information in backup
-        if (options and BackupConst.BACKUP_TRACK_MASK == BackupConst.BACKUP_TRACK) {
+        if (options and BACKUP_TRACK == BACKUP_TRACK) {
             val tracks = mangaHandler.awaitList {
                 manga_syncQueries.getTracksByMangaId(
                     manga.id,
@@ -275,7 +282,7 @@ class BackupCreator(
         }
 
         // Check if user wants history information in backup
-        if (options and BackupConst.BACKUP_HISTORY_MASK == BackupConst.BACKUP_HISTORY) {
+        if (options and BACKUP_HISTORY == BACKUP_HISTORY) {
             val historyByMangaId = getMangaHistory.await(manga.id)
             if (historyByMangaId.isNotEmpty()) {
                 val history = historyByMangaId.map { history ->
@@ -307,7 +314,7 @@ class BackupCreator(
         val animeObject = BackupAnime.copyFrom(anime)
 
         // Check if user wants chapter information in backup
-        if (options and BackupConst.BACKUP_CHAPTER_MASK == BackupConst.BACKUP_CHAPTER) {
+        if (options and BACKUP_CHAPTER == BACKUP_CHAPTER) {
             // Backup all the chapters
             val episodes = animeHandler.awaitList {
                 episodesQueries.getEpisodesByAnimeId(
@@ -321,7 +328,7 @@ class BackupCreator(
         }
 
         // Check if user wants category information in backup
-        if (options and BackupConst.BACKUP_CATEGORY_MASK == BackupConst.BACKUP_CATEGORY) {
+        if (options and BACKUP_CATEGORY == BACKUP_CATEGORY) {
             // Backup categories for this manga
             val categoriesForAnime = getAnimeCategories.await(anime.id)
             if (categoriesForAnime.isNotEmpty()) {
@@ -330,7 +337,7 @@ class BackupCreator(
         }
 
         // Check if user wants track information in backup
-        if (options and BackupConst.BACKUP_TRACK_MASK == BackupConst.BACKUP_TRACK) {
+        if (options and BACKUP_TRACK == BACKUP_TRACK) {
             val tracks = animeHandler.awaitList {
                 anime_syncQueries.getTracksByAnimeId(
                     anime.id,
@@ -343,7 +350,7 @@ class BackupCreator(
         }
 
         // Check if user wants history information in backup
-        if (options and BackupConst.BACKUP_HISTORY_MASK == BackupConst.BACKUP_HISTORY) {
+        if (options and BACKUP_HISTORY == BACKUP_HISTORY) {
             val historyByAnimeId = getAnimeHistory.await(anime.id)
             if (historyByAnimeId.isNotEmpty()) {
                 val history = historyByAnimeId.map { history ->
@@ -364,7 +371,7 @@ class BackupCreator(
     }
 
     private fun backupExtensionPreferences(flags: Int): List<BackupExtensionPreferences> {
-        if (flags and BackupConst.BACKUP_EXT_PREFS_MASK != BackupConst.BACKUP_EXT_PREFS) return emptyList()
+        if (flags and BACKUP_EXT_PREFS != BACKUP_EXT_PREFS) return emptyList()
         val prefs = mutableListOf<Pair<String, SharedPreferences>>()
         Injekt.get<AnimeSourceManager>().getCatalogueSources().forEach {
             val name = it.getPreferenceKey()
@@ -377,14 +384,14 @@ class BackupCreator(
         return prefs.map {
             BackupExtensionPreferences(
                 it.first,
-                backupPreferences(it.second, BackupConst.BACKUP_PREFS),
+                backupPreferences(it.second, BACKUP_PREFS),
             )
         }
     }
 
     @Suppress("DEPRECATION")
     private fun backupExtensions(flags: Int): List<BackupExtension> {
-        if (flags and BackupConst.BACKUP_EXTENSIONS_MASK != BackupConst.BACKUP_EXTENSIONS) return emptyList()
+        if (flags and BACKUP_EXTENSIONS != BACKUP_EXTENSIONS) return emptyList()
         val installedExtensions = mutableListOf<BackupExtension>()
         Injekt.get<AnimeExtensionManager>().installedExtensionsFlow.value.forEach {
             val packageName = it.pkgName
@@ -416,7 +423,7 @@ class BackupCreator(
     }
 
     private fun backupPreferences(prefs: SharedPreferences, flags: Int): List<BackupPreference> {
-        if (flags and BackupConst.BACKUP_PREFS_MASK != BackupConst.BACKUP_PREFS) return emptyList()
+        if (flags and BACKUP_PREFS != BACKUP_PREFS) return emptyList()
         val backupPreferences = mutableListOf<BackupPreference>()
         for (pref in prefs.all) {
             val toAdd = when (pref.value) {

@@ -28,10 +28,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -99,7 +98,7 @@ fun MangaTrackerSearch(
                     navigationIcon = {
                         IconButton(onClick = onDismissRequest) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

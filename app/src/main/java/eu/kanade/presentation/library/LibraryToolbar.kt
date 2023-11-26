@@ -21,6 +21,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.Pill
 import tachiyomi.presentation.core.theme.active
 
@@ -99,7 +100,7 @@ fun LibraryRegularToolbar(
         actions = {
             val filterTint = if (hasFilters) MaterialTheme.colorScheme.active else LocalContentColor.current
             AppBarActions(
-                listOf(
+                persistentListOf(
                     AppBar.Action(
                         title = stringResource(R.string.action_filter),
                         icon = Icons.Outlined.FilterList,
@@ -138,7 +139,7 @@ fun LibrarySelectionToolbar(
         titleContent = { Text(text = "$selectedCount") },
         actions = {
             AppBarActions(
-                listOf(
+                persistentListOf(
                     AppBar.Action(
                         title = stringResource(R.string.action_select_all),
                         icon = Icons.Outlined.SelectAll,

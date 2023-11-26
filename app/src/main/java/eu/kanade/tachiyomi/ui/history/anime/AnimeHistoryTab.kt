@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -127,7 +128,7 @@ fun Screen.animeHistoryTab(
             }
         },
         actions =
-        listOf(
+        persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,

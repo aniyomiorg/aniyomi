@@ -35,11 +35,11 @@ private val HISTORY_ITEM_HEIGHT = 96.dp
 
 @Composable
 fun MangaHistoryItem(
-    modifier: Modifier = Modifier,
     history: MangaHistoryWithRelations,
     onClickCover: () -> Unit,
     onClickResume: () -> Unit,
     onClickDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

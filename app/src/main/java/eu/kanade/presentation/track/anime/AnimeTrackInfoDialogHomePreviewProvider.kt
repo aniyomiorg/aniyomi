@@ -2,8 +2,8 @@ package eu.kanade.presentation.track.anime
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import eu.kanade.tachiyomi.dev.preview.DummyTracker
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import eu.kanade.test.DummyTracker
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import java.text.DateFormat
 

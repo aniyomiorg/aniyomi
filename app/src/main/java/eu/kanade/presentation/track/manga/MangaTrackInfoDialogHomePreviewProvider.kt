@@ -2,8 +2,8 @@ package eu.kanade.presentation.track.manga
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import eu.kanade.tachiyomi.dev.preview.DummyTracker
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
+import eu.kanade.test.DummyTracker
 import tachiyomi.domain.track.manga.model.MangaTrack
 import java.text.DateFormat
 

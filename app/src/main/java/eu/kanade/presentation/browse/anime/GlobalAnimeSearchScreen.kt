@@ -60,13 +60,13 @@ fun GlobalAnimeSearchScreen(
 
 @Composable
 internal fun GlobalSearchContent(
-    fromSourceId: Long? = null,
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
     getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
+    fromSourceId: Long? = null,
 ) {
     LazyColumn(
         contentPadding = contentPadding,

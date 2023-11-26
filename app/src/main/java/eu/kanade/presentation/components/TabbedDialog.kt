@@ -14,8 +14,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,9 +29,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.material.TabIndicator
 import tachiyomi.presentation.core.components.material.TabText
 
 object TabbedDialogPaddings {
@@ -41,9 +41,9 @@ object TabbedDialogPaddings {
 
 @Composable
 fun TabbedDialog(
-    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    tabTitles: List<String>,
+    tabTitles: ImmutableList<String>,
+    modifier: Modifier = Modifier,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
     onOverflowMenuClicked: (() -> Unit)? = null,
     overflowIcon: ImageVector? = null,
@@ -60,15 +60,9 @@ fun TabbedDialog(
 
         Column {
             Row {
-                TabRow(
+                PrimaryTabRow(
                     modifier = Modifier.weight(1f),
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = {
-                        TabIndicator(
-                            it[pagerState.currentPage],
-                            pagerState.currentPageOffsetFraction,
-                        )
-                    },
                     divider = {},
                 ) {
                     tabTitles.fastForEachIndexed { index, tab ->

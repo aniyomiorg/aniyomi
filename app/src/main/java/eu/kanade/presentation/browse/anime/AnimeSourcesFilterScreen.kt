@@ -68,7 +68,7 @@ private fun AnimeSourcesFilterContent(
                 contentType = "source-filter-header",
             ) {
                 AnimeSourcesFilterHeader(
-                    modifier = Modifier.animateItemPlacement(),
+
                     language = language,
                     enabled = enabled,
                     onClickItem = onClickLanguage,
@@ -81,7 +81,7 @@ private fun AnimeSourcesFilterContent(
                     contentType = { "source-filter-item" },
                 ) { source ->
                     AnimeSourcesFilterItem(
-                        modifier = Modifier.animateItemPlacement(),
+
                         source = source,
                         isEnabled = "${source.id}" !in state.disabledSources,
                         onClickItem = onClickSource,
@@ -94,10 +94,10 @@ private fun AnimeSourcesFilterContent(
 
 @Composable
 fun AnimeSourcesFilterHeader(
-    modifier: Modifier,
     language: String,
     enabled: Boolean,
     onClickItem: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SwitchPreferenceWidget(
         modifier = modifier,
@@ -109,10 +109,10 @@ fun AnimeSourcesFilterHeader(
 
 @Composable
 private fun AnimeSourcesFilterItem(
-    modifier: Modifier,
     source: AnimeSource,
     isEnabled: Boolean,
     onClickItem: (AnimeSource) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseAnimeSourceItem(
         modifier = modifier,

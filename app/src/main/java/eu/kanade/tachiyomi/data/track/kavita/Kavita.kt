@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.sourcePreferences
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
@@ -53,7 +55,7 @@ class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaT
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> = emptyList()
+    override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
     override fun displayScore(track: MangaTrack): String = ""
 

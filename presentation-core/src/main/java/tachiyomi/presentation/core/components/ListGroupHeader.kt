@@ -10,8 +10,8 @@ import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun ListGroupHeader(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = text,

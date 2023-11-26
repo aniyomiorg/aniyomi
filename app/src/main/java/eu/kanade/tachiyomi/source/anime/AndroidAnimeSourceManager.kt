@@ -57,7 +57,7 @@ class AndroidAnimeSourceManager(
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it
-                            registerStubSource(it.toStubSource())
+                            registerStubSource(StubAnimeSource.from(it))
                         }
                     }
                     sourcesMapFlow.value = mutableMap

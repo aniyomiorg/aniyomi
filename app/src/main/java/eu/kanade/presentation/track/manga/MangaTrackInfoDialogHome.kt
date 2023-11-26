@@ -243,10 +243,10 @@ private fun TrackInfoItem(
 
 @Composable
 fun TrackDetailsItem(
-    modifier: Modifier = Modifier,
     text: String?,
-    placeholder: String = "",
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
 ) {
     Box(
         modifier = modifier

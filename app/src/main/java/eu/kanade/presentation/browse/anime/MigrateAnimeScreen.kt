@@ -70,10 +70,10 @@ private fun MigrateAnimeContent(
 
 @Composable
 private fun MigrateAnimeItem(
-    modifier: Modifier = Modifier,
     anime: Anime,
     onClickItem: (Anime) -> Unit,
     onClickCover: (Anime) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseAnimeListItem(
         modifier = modifier,

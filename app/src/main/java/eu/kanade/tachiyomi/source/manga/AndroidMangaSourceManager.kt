@@ -57,7 +57,7 @@ class AndroidMangaSourceManager(
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it
-                            registerStubSource(it.toStubSource())
+                            registerStubSource(StubMangaSource.from(it))
                         }
                     }
                     sourcesMapFlow.value = mutableMap

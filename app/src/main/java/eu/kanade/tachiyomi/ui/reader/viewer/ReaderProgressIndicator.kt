@@ -40,7 +40,7 @@ class ReaderProgressIndicator @JvmOverloads constructor(
     @Composable
     override fun Content() {
         TachiyomiTheme {
-            CombinedCircularProgressIndicator(progress = progress)
+            CombinedCircularProgressIndicator(progress = { progress })
         }
     }
 

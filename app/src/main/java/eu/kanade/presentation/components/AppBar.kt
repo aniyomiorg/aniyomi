@@ -13,7 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
@@ -22,11 +22,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltipBox
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -52,6 +55,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.presentation.core.components.Pill
 import tachiyomi.presentation.core.util.clearFocusOnSoftKeyboardHide
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
@@ -205,18 +209,23 @@ fun AppBarTitle(
 
 @Composable
 fun AppBarActions(
-    actions: List<AppBar.AppBarAction>,
+    actions: ImmutableList<AppBar.AppBarAction>,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
     actions.filterIsInstance<AppBar.Action>().map {
-        PlainTooltipBox(
-            tooltip = { Text(it.title) },
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+            tooltip = {
+                PlainTooltip {
+                    Text(it.title)
+                }
+            },
+            state = rememberTooltipState(),
         ) {
             IconButton(
                 onClick = it.onClick,
                 enabled = it.enabled,
-                modifier = Modifier.tooltipTrigger(),
             ) {
                 Icon(
                     imageVector = it.icon,
@@ -229,12 +238,17 @@ fun AppBarActions(
 
     val overflowActions = actions.filterIsInstance<AppBar.OverflowAction>()
     if (overflowActions.isNotEmpty()) {
-        PlainTooltipBox(
-            tooltip = { Text(stringResource(R.string.abc_action_menu_overflow_description)) },
+        TooltipBox(
+            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+            tooltip = {
+                PlainTooltip {
+                    Text(stringResource(R.string.abc_action_menu_overflow_description))
+                }
+            },
+            state = rememberTooltipState(),
         ) {
             IconButton(
                 onClick = { showMenu = !showMenu },
-                modifier = Modifier.tooltipTrigger(),
             ) {
                 Icon(
                     Icons.Outlined.MoreVert,
@@ -356,12 +370,17 @@ fun SearchToolbar(
                 if (!searchEnabled) {
                     // Don't show search action
                 } else if (searchQuery == null) {
-                    PlainTooltipBox(
-                        tooltip = { Text(stringResource(R.string.action_search)) },
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip {
+                                Text(stringResource(R.string.action_search))
+                            }
+                        },
+                        state = rememberTooltipState(),
                     ) {
                         IconButton(
                             onClick = onClick,
-                            modifier = Modifier.tooltipTrigger(),
                         ) {
                             Icon(
                                 Icons.Outlined.Search,
@@ -370,15 +389,20 @@ fun SearchToolbar(
                         }
                     }
                 } else if (searchQuery.isNotEmpty()) {
-                    PlainTooltipBox(
-                        tooltip = { Text(stringResource(R.string.action_reset)) },
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip {
+                                Text(stringResource(R.string.action_reset))
+                            }
+                        },
+                        state = rememberTooltipState(),
                     ) {
                         IconButton(
                             onClick = {
                                 onClick()
                                 focusRequester.requestFocus()
                             },
-                            modifier = Modifier.tooltipTrigger(),
                         ) {
                             Icon(
                                 Icons.Outlined.Close,
@@ -400,7 +424,7 @@ fun SearchToolbar(
 @Composable
 fun UpIcon(navigationIcon: ImageVector? = null) {
     val icon = navigationIcon
-        ?: Icons.Outlined.ArrowBack
+        ?: Icons.AutoMirrored.Outlined.ArrowBack
     Icon(
         imageVector = icon,
         contentDescription = stringResource(R.string.abc_action_bar_up_description),

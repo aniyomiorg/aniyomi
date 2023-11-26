@@ -147,14 +147,13 @@ private fun AnimeExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-                            modifier = Modifier.animateItemPlacement(),
                             action = action,
                         )
                     }
                     is AnimeExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-                            modifier = Modifier.animateItemPlacement(),
+
                         )
                     }
                 }
@@ -166,7 +165,7 @@ private fun AnimeExtensionContent(
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
                 AnimeExtensionItem(
-                    modifier = Modifier.animateItemPlacement(),
+
                     item = item,
                     onClickItem = {
                         when (it) {
@@ -216,12 +215,12 @@ private fun AnimeExtensionContent(
 
 @Composable
 private fun AnimeExtensionItem(
-    modifier: Modifier = Modifier,
     item: AnimeExtensionUiModel.Item,
     onClickItem: (AnimeExtension) -> Unit,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onClickItemAction: (AnimeExtension) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val (extension, installStep) = item
     BaseBrowseItem(

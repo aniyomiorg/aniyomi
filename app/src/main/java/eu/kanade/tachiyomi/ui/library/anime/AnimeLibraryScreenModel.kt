@@ -28,6 +28,9 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -584,16 +587,16 @@ class AnimeLibraryScreenModel(
     }
 
     fun clearSelection() {
-        mutableState.update { it.copy(selection = emptyList()) }
+        mutableState.update { it.copy(selection = persistentListOf()) }
     }
 
     fun toggleSelection(anime: LibraryAnime) {
         mutableState.update { state ->
-            val newSelection = state.selection.toMutableList().apply {
-                if (fastAny { it.id == anime.id }) {
-                    removeAll { it.id == anime.id }
+            val newSelection = state.selection.mutate { list ->
+                if (list.fastAny { it.id == anime.id }) {
+                    list.removeAll { it.id == anime.id }
                 } else {
-                    add(anime)
+                    list.add(anime)
                 }
             }
             state.copy(selection = newSelection)
@@ -606,11 +609,11 @@ class AnimeLibraryScreenModel(
      */
     fun toggleRangeSelection(anime: LibraryAnime) {
         mutableState.update { state ->
-            val newSelection = state.selection.toMutableList().apply {
-                val lastSelected = lastOrNull()
+            val newSelection = state.selection.mutate { list ->
+                val lastSelected = list.lastOrNull()
                 if (lastSelected?.category != anime.category) {
-                    add(anime)
-                    return@apply
+                    list.add(anime)
+                    return@mutate
                 }
 
                 val items = state.getAnimelibItemsByCategoryId(anime.category)
@@ -618,17 +621,17 @@ class AnimeLibraryScreenModel(
                 val lastAnimeIndex = items.indexOf(lastSelected)
                 val curAnimeIndex = items.indexOf(anime)
 
-                val selectedIds = fastMap { it.id }
+                val selectedIds = list.fastMap { it.id }
                 val selectionRange = when {
                     lastAnimeIndex < curAnimeIndex -> IntRange(lastAnimeIndex, curAnimeIndex)
                     curAnimeIndex < lastAnimeIndex -> IntRange(curAnimeIndex, lastAnimeIndex)
                     // We shouldn't reach this point
-                    else -> return@apply
+                    else -> return@mutate
                 }
                 val newSelections = selectionRange.mapNotNull { index ->
                     items[index].takeUnless { it.id in selectedIds }
                 }
-                addAll(newSelections)
+                list.addAll(newSelections)
             }
             state.copy(selection = newSelection)
         }
@@ -636,14 +639,14 @@ class AnimeLibraryScreenModel(
 
     fun selectAll(index: Int) {
         mutableState.update { state ->
-            val newSelection = state.selection.toMutableList().apply {
+            val newSelection = state.selection.mutate { list ->
                 val categoryId = state.categories.getOrNull(index)?.id ?: -1
-                val selectedIds = fastMap { it.id }
+                val selectedIds = list.fastMap { it.id }
                 state.getAnimelibItemsByCategoryId(categoryId)
                     ?.fastMapNotNull { item ->
                         item.libraryAnime.takeUnless { it.id in selectedIds }
                     }
-                    ?.let { addAll(it) }
+                    ?.let { list.addAll(it) }
             }
             state.copy(selection = newSelection)
         }
@@ -651,14 +654,14 @@ class AnimeLibraryScreenModel(
 
     fun invertSelection(index: Int) {
         mutableState.update { state ->
-            val newSelection = state.selection.toMutableList().apply {
+            val newSelection = state.selection.mutate { list ->
                 val categoryId = state.categories[index].id
                 val items = state.getAnimelibItemsByCategoryId(categoryId)?.fastMap { it.libraryAnime }.orEmpty()
-                val selectedIds = fastMap { it.id }
+                val selectedIds = list.fastMap { it.id }
                 val (toRemove, toAdd) = items.fastPartition { it.id in selectedIds }
                 val toRemoveIds = toRemove.fastMap { it.id }
-                removeAll { it.id in toRemoveIds }
-                addAll(toAdd)
+                list.removeAll { it.id in toRemoveIds }
+                list.addAll(toAdd)
             }
             state.copy(selection = newSelection)
         }
@@ -728,7 +731,7 @@ class AnimeLibraryScreenModel(
         val isLoading: Boolean = true,
         val library: AnimeLibraryMap = emptyMap(),
         val searchQuery: String? = null,
-        val selection: List<LibraryAnime> = emptyList(),
+        val selection: PersistentList<LibraryAnime> = persistentListOf(),
         val hasActiveFilters: Boolean = false,
         val showCategoryTabs: Boolean = false,
         val showAnimeCount: Boolean = false,

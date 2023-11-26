@@ -13,7 +13,7 @@ import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 
-class TachiyomiMangaWidgetManager(
+class MangaWidgetManager(
     private val getUpdates: GetMangaUpdates,
     private val securityPreferences: SecurityPreferences,
 ) {

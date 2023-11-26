@@ -88,7 +88,6 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
@@ -350,12 +349,12 @@ private fun AnimeScreenSmallImpl(
                 onClickEditCategory = onEditCategoryClicked,
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
+                onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = selectedEpisodeCount,
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = false,
-                onClickSettings = onSettingsClicked,
             )
         },
         bottomBar = {
@@ -647,12 +646,12 @@ fun AnimeScreenLargeImpl(
                     onClickEditCategory = onEditCategoryClicked,
                     onClickRefresh = onRefresh,
                     onClickMigrate = onMigrateClicked,
+                    onClickSettings = onSettingsClicked,
                     changeAnimeSkipIntro = changeAnimeSkipIntro,
                     actionModeCounter = selectedEpisodeCount,
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
                     isManga = false,
-                    onClickSettings = onSettingsClicked,
                 )
             },
             bottomBar = {

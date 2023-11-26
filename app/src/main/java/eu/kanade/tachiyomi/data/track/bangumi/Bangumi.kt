@@ -10,6 +10,8 @@ import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -23,9 +25,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
 
     private val api by lazy { BangumiApi(id, client, interceptor) }
 
-    override fun getScoreList(): List<String> {
-        return IntRange(0, 10).map(Int::toString)
-    }
+    override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
     override fun indexToScore(index: Int): Float {
         return index.toFloat()
@@ -218,5 +218,9 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
         const val ON_HOLD = 4
         const val DROPPED = 5
         const val PLAN_TO_READ = 1
+
+        private val SCORE_LIST = IntRange(0, 10)
+            .map(Int::toString)
+            .toImmutableList()
     }
 }

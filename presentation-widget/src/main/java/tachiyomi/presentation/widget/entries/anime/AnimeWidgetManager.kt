@@ -13,7 +13,7 @@ import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
 
-class TachiyomiAnimeWidgetManager(
+class AnimeWidgetManager(
     private val getUpdates: GetAnimeUpdates,
     private val securityPreferences: SecurityPreferences,
 ) {
