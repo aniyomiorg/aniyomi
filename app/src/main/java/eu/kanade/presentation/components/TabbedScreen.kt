@@ -30,6 +30,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
+import tachiyomi.presentation.core.components.Scroller
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
 
@@ -91,7 +92,8 @@ fun TabbedScreen(
                 end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
             ),
         ) {
-            PrimaryTabRow(
+            FlexibleTabRow(
+                scrollable = scrollable,
                 selectedTabIndex = state.currentPage,
             ) {
                 tabs.forEachIndexed { index, tab ->
@@ -138,21 +140,18 @@ data class TabContent(
 private fun FlexibleTabRow(
     scrollable: Boolean,
     selectedTabIndex: Int,
-    indicator: @Composable (List<TabPosition>) -> Unit,
     block: @Composable () -> Unit,
 ) {
     return if (scrollable) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            indicator = indicator,
             edgePadding = 13.dp,
         ) {
             block()
         }
     } else {
-        TabRow(
+        PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
-            indicator = indicator,
         ) {
             block()
         }
