@@ -69,30 +69,3 @@ fun RadioMenuItem(
         },
     )
 }
-
-@Composable
-fun NestedMenuItem(
-    text: @Composable () -> Unit,
-    children: @Composable ColumnScope.(() -> Unit) -> Unit,
-) {
-    var nestedExpanded by remember { mutableStateOf(false) }
-    val closeMenu = { nestedExpanded = false }
-    val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
-
-    DropdownMenuItem(
-        text = text,
-        onClick = { nestedExpanded = true },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.ArrowRight,
-                contentDescription = null,
-            )
-        },
-    )
-    DropdownMenu(
-        expanded = nestedExpanded,
-        onDismissRequest = closeMenu,
-    ) {
-        children(closeMenu)
-    }
-}
