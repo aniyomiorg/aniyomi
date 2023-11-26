@@ -19,10 +19,10 @@ android {
 
     defaultConfig {
 
-        applicationId = "xyz.luft.tachiyomi.mi"
+        applicationId = "com.dark.animetailv2"
 
         versionCode = 110
-        versionName = "0.2.2"
+        versionName = "0.14.18"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
