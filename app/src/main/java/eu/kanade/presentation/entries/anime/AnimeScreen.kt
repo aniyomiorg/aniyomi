@@ -423,8 +423,8 @@ private fun AnimeScreenSmallImpl(
         PullRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
-            enabled = !isAnySelected,
-            indicatorPadding = WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues(),
+            enabled = { !isAnySelected },
+            indicatorPadding = PaddingValues(top = topPadding),
         ) {
             val layoutDirection = LocalLayoutDirection.current
             VerticalFastScroller(
@@ -626,110 +626,105 @@ fun AnimeScreenLargeImpl(
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
 
-    PullRefresh(
-        refreshing = state.isRefreshingData,
-        onRefresh = onRefresh,
-        enabled = !isAnySelected,
-        indicatorPadding = PaddingValues(
-            start = insetPadding.calculateStartPadding(layoutDirection),
-            top = with(density) { topBarHeight.toDp() },
-            end = insetPadding.calculateEndPadding(layoutDirection),
-        ),
-    ) {
-        val episodeListState = rememberLazyListState()
+    val episodeListState = rememberLazyListState()
 
-        val internalOnBackPressed = {
-            if (isAnySelected) {
-                onAllEpisodeSelected(false)
-            } else {
-                onBackClicked()
-            }
+    val internalOnBackPressed = {
+        if (isAnySelected) {
+            onAllEpisodeSelected(false)
+        } else {
+            onBackClicked()
         }
-        BackHandler(onBack = internalOnBackPressed)
+    }
+    BackHandler(onBack = internalOnBackPressed)
 
-        Scaffold(
-            topBar = {
-                val selectedEpisodeCount = remember(episodes) {
-                    episodes.count { it.selected }
+    Scaffold(
+        topBar = {
+            val selectedChapterCount = remember(episodes) {
+                episodes.count { it.selected }
+            }
+            EntryToolbar(
+                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
+                title = state.anime.title,
+                titleAlphaProvider = { if (isAnySelected) 1f else 0f },
+                backgroundAlphaProvider = { 1f },
+                hasFilters = state.anime.episodesFiltered(),
+                onBackClicked = internalOnBackPressed,
+                onClickFilter = onFilterButtonClicked,
+                onClickShare = onShareClicked,
+                onClickDownload = onDownloadActionClicked,
+                onClickEditCategory = onEditCategoryClicked,
+                onClickRefresh = onRefresh,
+                onClickMigrate = onMigrateClicked,
+                // SY -->
+                onClickEditInfo = onEditInfoClicked.takeIf { state.anime.favorite },
+                // SY <--
+                onClickSettings = onSettingsClicked,
+                changeAnimeSkipIntro = changeAnimeSkipIntro,
+                actionModeCounter = selectedChapterCount,
+                onSelectAll = { onAllEpisodeSelected(true) },
+                onInvertSelection = { onInvertSelection() },
+                isManga = false,
+            )
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.BottomEnd,
+            ) {
+                val selectedEpisodes = remember(episodes) {
+                    episodes.filter { it.selected }
                 }
-                EntryToolbar(
-                    modifier = Modifier.onSizeChanged { topBarHeight = (it.height) },
-                    title = state.anime.title,
-                    titleAlphaProvider = { if (isAnySelected) 1f else 0f },
-                    backgroundAlphaProvider = { 1f },
-                    hasFilters = state.anime.episodesFiltered(),
-                    onBackClicked = internalOnBackPressed,
-                    onClickFilter = onFilterButtonClicked,
-                    onClickShare = onShareClicked,
-                    onClickDownload = onDownloadActionClicked,
-                    onClickEditCategory = onEditCategoryClicked,
-                    onClickRefresh = onRefresh,
-                    onClickMigrate = onMigrateClicked,
-                    // SY -->
-                    onClickEditInfo = onEditInfoClicked.takeIf { state.anime.favorite },
-                    // SY <--
-                    onClickSettings = onSettingsClicked,
-                    changeAnimeSkipIntro = changeAnimeSkipIntro,
-                    actionModeCounter = selectedEpisodeCount,
-                    onSelectAll = { onAllEpisodeSelected(true) },
-                    onInvertSelection = { onInvertSelection() },
-                    isManga = false,
+                SharedAnimeBottomActionMenu(
+                    selected = selectedEpisodes,
+                    onEpisodeClicked = onEpisodeClicked,
+                    onMultiBookmarkClicked = onMultiBookmarkClicked,
+                    onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
+                    onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
+                    onDownloadEpisode = onDownloadEpisode,
+                    onMultiDeleteClicked = onMultiDeleteClicked,
+                    fillFraction = 0.5f,
+                    alwaysUseExternalPlayer = alwaysUseExternalPlayer,
                 )
-            },
-            bottomBar = {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomEnd,
-                ) {
-                    val selectedEpisodes = remember(episodes) {
-                        episodes.filter { it.selected }
-                    }
-                    SharedAnimeBottomActionMenu(
-                        selected = selectedEpisodes,
-                        onEpisodeClicked = onEpisodeClicked,
-                        onMultiBookmarkClicked = onMultiBookmarkClicked,
-                        onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
-                        onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
-                        onDownloadEpisode = onDownloadEpisode,
-                        onMultiDeleteClicked = onMultiDeleteClicked,
-                        fillFraction = 0.5f,
-                        alwaysUseExternalPlayer = alwaysUseExternalPlayer,
-                    )
-                }
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            floatingActionButton = {
-                val isFABVisible = remember(episodes) {
-                    episodes.fastAny { !it.episode.seen } && !isAnySelected
-                }
-                AnimatedVisibility(
-                    visible = isFABVisible,
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                ) {
-                    ExtendedFloatingActionButton(
-                        text = {
-                            val isWatching = remember(state.episodes) {
-                                state.episodes.fastAny { it.episode.seen }
-                            }
-                            Text(
-                                text = stringResource(
-                                    if (isWatching) R.string.action_resume else R.string.action_start,
-                                ),
-                            )
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.PlayArrow,
-                                contentDescription = null,
-                            )
-                        },
-                        onClick = onContinueWatching,
-                        expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
-                    )
-                }
-            },
-        ) { contentPadding ->
+            }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        floatingActionButton = {
+            val isFABVisible = remember(episodes) {
+                episodes.fastAny { !it.episode.seen } && !isAnySelected
+            }
+            AnimatedVisibility(
+                visible = isFABVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                ExtendedFloatingActionButton(
+                    text = {
+                        val isWatching = remember(state.episodes) {
+                            state.episodes.fastAny { it.episode.seen }
+                        }
+                        Text(
+                            text = stringResource(
+                                if (isWatching) R.string.action_resume else R.string.action_start,
+                            ),
+                        )
+                    },
+                    icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
+                    onClick = onContinueWatching,
+                    expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
+                )
+            }
+        },
+    ) { contentPadding ->
+        PullRefresh(
+            refreshing = state.isRefreshingData,
+            onRefresh = onRefresh,
+            enabled = { !isAnySelected },
+            indicatorPadding = PaddingValues(
+                start = insetPadding.calculateStartPadding(layoutDirection),
+                top = with(density) { topBarHeight.toDp() },
+                end = insetPadding.calculateEndPadding(layoutDirection),
+            ),
+        ) {
             TwoPanelBox(
                 modifier = Modifier.padding(
                     start = contentPadding.calculateStartPadding(layoutDirection),

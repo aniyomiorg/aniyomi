@@ -58,7 +58,7 @@ object Migrations {
         connectionsManager: ConnectionsManager,
         // <-- AM (CONNECTIONS)
     ): Boolean {
-        val lastVersionCode = preferenceStore.getInt("last_version_code", 0)
+        val lastVersionCode = preferenceStore.getInt(Preference.appStateKey("last_version_code"), 0)
         val oldVersion = lastVersionCode.get()
         if (oldVersion < BuildConfig.VERSION_CODE) {
             lastVersionCode.set(BuildConfig.VERSION_CODE)
@@ -374,9 +374,6 @@ object Migrations {
                 }
             }
             if (oldVersion < 84) {
-                if (backupPreferences.numberOfBackups().get() == 1) {
-                    backupPreferences.numberOfBackups().set(2)
-                }
                 if (backupPreferences.backupInterval().get() == 0) {
                     backupPreferences.backupInterval().set(12)
                     BackupCreateJob.setupTask(context)
@@ -547,7 +544,7 @@ object Migrations {
                             newKey = { Preference.privateKey(it) },
                         )
                     }
-                    if (oldVersion < 108) {
+                    if (oldVersion < 110) {
                         val prefsToReplace = listOf(
                             "pref_download_only",
                             "incognito_mode",
@@ -557,6 +554,9 @@ object Migrations {
                             "library_update_last_timestamp",
                             "library_unseen_updates_count",
                             "last_used_category",
+                            "last_app_check",
+                            "last_ext_check",
+                            "last_version_code",
                         )
                         replacePreferences(
                             preferenceStore = preferenceStore,

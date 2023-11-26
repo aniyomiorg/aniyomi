@@ -1,9 +1,5 @@
 package eu.kanade.presentation.more.settings.screen
 
-import android.content.Intent
-import android.os.Environment
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -13,12 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastMap
-import androidx.core.net.toUri
-import com.hippo.unifile.UniFile
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
@@ -32,7 +25,6 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 object SettingsDownloadScreen : SearchableSettings {
 
@@ -56,7 +48,6 @@ object SettingsDownloadScreen : SearchableSettings {
         val basePreferences = remember { Injekt.get<BasePreferences>() }
 
         return listOf(
-            getDownloadLocationPreference(downloadPreferences = downloadPreferences),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(R.string.connected_to_wifi),
@@ -91,84 +82,6 @@ object SettingsDownloadScreen : SearchableSettings {
                 basePreferences = basePreferences,
             ),
         )
-    }
-
-    @Composable
-    private fun getDownloadLocationPreference(
-        downloadPreferences: DownloadPreferences,
-    ): Preference.PreferenceItem.ListPreference<String> {
-        val context = LocalContext.current
-        val currentDirPref = downloadPreferences.downloadsDirectory()
-        val currentDir by currentDirPref.collectAsState()
-
-        val pickLocation = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.OpenDocumentTree(),
-        ) { uri ->
-            if (uri != null) {
-                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-
-                context.contentResolver.takePersistableUriPermission(uri, flags)
-
-                val file = UniFile.fromUri(context, uri)
-                currentDirPref.set(file.uri.toString())
-            }
-        }
-
-        val defaultDirPair = rememberDefaultDownloadDir()
-        val externalDownloaderDirPair = rememberExternalDownloaderDownloadDir()
-        val customDirEntryKey = currentDir.takeIf { it != defaultDirPair.first } ?: "custom"
-
-        return Preference.PreferenceItem.ListPreference(
-            pref = currentDirPref,
-            title = stringResource(R.string.pref_download_directory),
-            subtitleProvider = { value, _ ->
-                remember(value) {
-                    UniFile.fromUri(context, value.toUri())?.filePath
-                } ?: stringResource(R.string.invalid_location, value)
-            },
-            entries = mapOf(
-                defaultDirPair,
-                externalDownloaderDirPair,
-                customDirEntryKey to stringResource(R.string.custom_dir),
-            ),
-            onValueChanged = {
-                val default = it == defaultDirPair.first
-                if (!default) {
-                    pickLocation.launch(null)
-                }
-                default // Don't update when non-default chosen
-            },
-        )
-    }
-
-    @Composable
-    private fun rememberDefaultDownloadDir(): Pair<String, String> {
-        val appName = stringResource(R.string.app_name)
-        return remember {
-            val file = UniFile.fromFile(
-                File(
-                    "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}$appName",
-                    "downloads",
-                ),
-            )!!
-            file.uri.toString() to file.filePath!!
-        }
-    }
-
-    @Composable
-    private fun rememberExternalDownloaderDownloadDir(): Pair<String, String> {
-        val appName = stringResource(R.string.app_name)
-        return remember {
-            val file = UniFile.fromFile(
-                File(
-                    Environment.getExternalStorageDirectory().absolutePath +
-                        "${File.separator}${Environment.DIRECTORY_DOWNLOADS}${File.separator}$appName",
-                    "downloads",
-                ),
-            )!!
-            "(ADM)" + file.uri.toString() to file.filePath!!
-        }
     }
 
     @Composable

@@ -9,7 +9,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
-import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -62,11 +61,11 @@ actual class LocalAnimeSource(
     override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
 
     override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage {
-        val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
+        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
         val lastModifiedLimit by
             lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
-        var animeDirs = baseDirsFiles
+        var animeDirs = baseDirFiles
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.startsWith('.') }
             .distinctBy { it.name }
@@ -149,10 +148,10 @@ actual class LocalAnimeSource(
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
-        val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
+        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
         val lastModifiedLimit by
             lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
-        var animeDirs = baseDirsFiles
+        var animeDirs = baseDirFiles
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.startsWith('.') }
             .distinctBy { it.name }
@@ -323,8 +322,8 @@ actual class LocalAnimeSource(
     )
 
     private fun updateCoverFromVideo(episode: SEpisode, anime: SAnime) {
-        val baseDirsFiles = getBaseDirectoriesFiles(context)
-        val animeDir = getAnimeDir(anime.url, baseDirsFiles) ?: return
+        val baseDirFiles = getBaseDirectoryFiles()
+        val animeDir = getAnimeDir(anime.url, baseDirFiles) ?: return
         val coverPath = "${animeDir.absolutePath}/$DEFAULT_COVER_NAME"
 
         val episodeFilename = { episode.url.toFFmpegString(context) }
@@ -343,6 +342,25 @@ actual class LocalAnimeSource(
         }
     }
 
+    private fun getBaseDirectoryFiles(): List<File> {
+        val baseDir = fileSystem.getBaseDirectory()
+
+        fun getAllFiles(dir: File, accumulator: MutableList<File>) {
+            dir.listFiles()?.forEach { file ->
+                if (file.isDirectory) {
+                    getAllFiles(file, accumulator)
+                } else {
+                    accumulator.add(file)
+                }
+            }
+        }
+
+        val allFiles = mutableListOf<File>()
+        getAllFiles(baseDir, allFiles)
+
+        return allFiles
+    }
+
     companion object {
         const val ID = 0L
         const val HELP_URL = "https://aniyomi.org/help/guides/local-anime/"
@@ -350,20 +368,7 @@ actual class LocalAnimeSource(
         private const val DEFAULT_COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
 
-        private fun getBaseDirectories(context: Context): Sequence<File> {
-            val localFolder = context.getString(R.string.app_name) + File.separator + "localanime"
-            return DiskUtil.getExternalStorages(context)
-                .map { File(it.absolutePath, localFolder) }
-                .asSequence()
-        }
-
-        private fun getBaseDirectoriesFiles(context: Context): Sequence<File> {
-            return getBaseDirectories(context)
-                // Get all the files inside all baseDir
-                .flatMap { it.listFiles().orEmpty().toList() }
-        }
-
-        private fun getAnimeDir(animeUrl: String, baseDirsFile: Sequence<File>): File? {
+        private fun getAnimeDir(animeUrl: String, baseDirsFile: List<File>): File? {
             return baseDirsFile
                 // Get the first animeDir or null
                 .firstOrNull { it.isDirectory && it.name == animeUrl }

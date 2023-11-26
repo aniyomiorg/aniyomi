@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.util.lang.htmlDecode
 import kotlinx.serialization.Serializable
 import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
@@ -27,7 +28,7 @@ data class ALManga(
         title = title_user_pref
         total_chapters = this@ALManga.total_chapters
         cover_url = image_url_lge
-        summary = description ?: ""
+        summary = description?.htmlDecode() ?: ""
         tracking_url = AnilistApi.mangaUrl(media_id)
         publishing_status = this@ALManga.publishing_status
         publishing_type = format
@@ -58,7 +59,7 @@ data class ALAnime(
         title = title_user_pref
         total_episodes = this@ALAnime.total_episodes
         cover_url = image_url_lge
-        summary = description ?: ""
+        summary = description?.htmlDecode() ?: ""
         tracking_url = AnilistApi.animeUrl(media_id)
         publishing_status = this@ALAnime.publishing_status
         publishing_type = format

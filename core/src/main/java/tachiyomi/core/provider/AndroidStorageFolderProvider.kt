@@ -6,8 +6,8 @@ import androidx.core.net.toUri
 import eu.kanade.tachiyomi.core.R
 import java.io.File
 
-class AndroidDownloadFolderProvider(
-    val context: Context,
+class AndroidStorageFolderProvider(
+    private val context: Context,
 ) : FolderProvider {
 
     override fun directory(): File {

@@ -66,10 +66,11 @@ const val SEARCH_DEBOUNCE_MILLIS = 250L
 
 @Composable
 fun AppBar(
+    title: String?,
+
     modifier: Modifier = Modifier,
     backgroundColor: Color? = null,
     // Text
-    title: String?,
     subtitle: String? = null,
     // Up button
     navigateUp: (() -> Unit)? = null,
@@ -94,7 +95,7 @@ fun AppBar(
             if (isActionMode) {
                 AppBarTitle(actionModeCounter.toString())
             } else {
-                AppBarTitle(title, subtitle)
+                AppBarTitle(title, subtitle = subtitle)
             }
         },
         navigateUp = navigateUp,
@@ -114,10 +115,11 @@ fun AppBar(
 
 @Composable
 fun AppBar(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color? = null,
     // Title
     titleContent: @Composable () -> Unit,
+
+    modifier: Modifier = Modifier,
+    backgroundColor: Color? = null,
     // Up button
     navigateUp: (() -> Unit)? = null,
     navigationIcon: ImageVector? = null,
@@ -144,7 +146,7 @@ fun AppBar(
                 } else {
                     navigateUp?.let {
                         IconButton(onClick = it) {
-                            UpIcon(navigationIcon)
+                            UpIcon(navigationIcon = navigationIcon)
                         }
                     }
                 }
@@ -164,6 +166,7 @@ fun AppBar(
 @Composable
 fun AppBarTitle(
     title: String?,
+    modifier: Modifier = Modifier,
     subtitle: String? = null,
     count: Int = 0,
 ) {
@@ -184,7 +187,7 @@ fun AppBarTitle(
             )
         }
     } else {
-        Column {
+        Column(modifier = modifier) {
             title?.let {
                 Text(
                     text = it,
@@ -283,11 +286,12 @@ fun AppBarActions(
  */
 @Composable
 fun SearchToolbar(
+    searchQuery: String?,
+    onChangeSearchQuery: (String?) -> Unit,
+    modifier: Modifier = Modifier,
     titleContent: @Composable () -> Unit = {},
     navigateUp: (() -> Unit)? = null,
     searchEnabled: Boolean = true,
-    searchQuery: String?,
-    onChangeSearchQuery: (String?) -> Unit,
     placeholderText: String? = null,
     onSearch: (String) -> Unit = {},
     onClickCloseSearch: () -> Unit = { onChangeSearchQuery(null) },
@@ -301,6 +305,7 @@ fun SearchToolbar(
     val focusRequester = remember { FocusRequester() }
 
     AppBar(
+        modifier = modifier,
         titleContent = {
             if (searchQuery == null) return@AppBar titleContent()
 
@@ -422,12 +427,16 @@ fun SearchToolbar(
 }
 
 @Composable
-fun UpIcon(navigationIcon: ImageVector? = null) {
+fun UpIcon(
+    modifier: Modifier = Modifier,
+    navigationIcon: ImageVector? = null,
+) {
     val icon = navigationIcon
         ?: Icons.AutoMirrored.Outlined.ArrowBack
     Icon(
         imageVector = icon,
         contentDescription = stringResource(R.string.abc_action_bar_up_description),
+        modifier = modifier,
     )
 }
 

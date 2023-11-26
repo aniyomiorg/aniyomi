@@ -21,7 +21,7 @@ android {
 
         applicationId = "xyz.luft.tachiyomi.mi"
 
-        versionCode = 109
+        versionCode = 110
         versionName = "0.2.2"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -173,7 +173,6 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.permissions)
-    implementation(compose.accompanist.themeadapter)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
 

@@ -87,7 +87,7 @@ fun MangaUpdateScreen(
                             isRefreshing = false
                         }
                     },
-                    enabled = !state.selectionMode,
+                    enabled = { !state.selectionMode },
                     indicatorPadding = contentPadding,
                 ) {
                     FastScrollLazyColumn(

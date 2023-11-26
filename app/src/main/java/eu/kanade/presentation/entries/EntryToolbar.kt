@@ -34,10 +34,8 @@ import tachiyomi.presentation.core.theme.active
 
 @Composable
 fun EntryToolbar(
-    modifier: Modifier = Modifier,
     title: String,
     titleAlphaProvider: () -> Float,
-    backgroundAlphaProvider: () -> Float = titleAlphaProvider,
     hasFilters: Boolean,
     onBackClicked: () -> Unit,
     onClickFilter: () -> Unit,
@@ -57,6 +55,8 @@ fun EntryToolbar(
     onSelectAll: () -> Unit,
     onInvertSelection: () -> Unit,
     isManga: Boolean,
+    modifier: Modifier = Modifier,
+    backgroundAlphaProvider: () -> Float = titleAlphaProvider,
 ) {
     Column(
         modifier = modifier,
@@ -73,7 +73,7 @@ fun EntryToolbar(
             },
             navigationIcon = {
                 IconButton(onClick = onBackClicked) {
-                    UpIcon(Icons.Outlined.Close.takeIf { isActionMode })
+                    UpIcon(navigationIcon = Icons.Outlined.Close.takeIf { isActionMode })
                 }
             },
             actions = {
