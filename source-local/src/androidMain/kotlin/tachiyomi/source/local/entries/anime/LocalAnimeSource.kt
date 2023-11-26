@@ -218,7 +218,7 @@ actual class LocalAnimeSource(
 
     // SY -->
     fun updateAnimeInfo(anime: SAnime) {
-        val directory = fileSystem.getFilesInBaseDirectories().map { File(it, anime.url) }.find {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it, anime.url) }.find {
             it.exists()
         } ?: return
         val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name

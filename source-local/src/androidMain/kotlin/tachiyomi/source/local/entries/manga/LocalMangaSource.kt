@@ -155,7 +155,7 @@ actual class LocalMangaSource(
 
     // SY -->
     fun updateMangaInfo(manga: SManga) {
-        val directory = fileSystem.getFilesInBaseDirectories().map { File(it, manga.url) }.find {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it, manga.url) }.find {
             it.exists()
         } ?: return
         val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
