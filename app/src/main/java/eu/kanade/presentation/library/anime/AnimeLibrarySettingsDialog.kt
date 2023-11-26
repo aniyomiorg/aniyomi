@@ -149,6 +149,13 @@ private fun ColumnScope.SortPage(
     val sortingMode = category.sort.type
     val sortDescending = !category.sort.isAscending
 
+    val trackerSortOption =
+        if (screenModel.trackers.isEmpty()) {
+            emptyList()
+        } else {
+            listOf(R.string.action_sort_tracker_score to AnimeLibrarySort.Type.TrackerMean)
+        }
+
     listOf(
         R.string.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
         R.string.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
@@ -159,7 +166,7 @@ private fun ColumnScope.SortPage(
         R.string.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
         R.string.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
         R.string.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
-    ).map { (titleRes, mode) ->
+    ).plus(trackerSortOption).map { (titleRes, mode) ->
         SortItem(
             label = stringResource(titleRes),
             sortDescending = sortDescending.takeIf { sortingMode == mode },
