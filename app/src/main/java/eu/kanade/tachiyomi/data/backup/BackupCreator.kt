@@ -53,7 +53,6 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
-import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
@@ -63,7 +62,6 @@ import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
@@ -79,8 +77,6 @@ class BackupCreator(
     private val animeHandler: AnimeDatabaseHandler = Injekt.get()
     private val mangaSourceManager: MangaSourceManager = Injekt.get()
     private val animeSourceManager: AnimeSourceManager = Injekt.get()
-    private val backupPreferences: BackupPreferences = Injekt.get()
-    private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val getMangaCategories: GetMangaCategories = Injekt.get()
     private val getAnimeCategories: GetAnimeCategories = Injekt.get()
     private val getMangaFavorites: GetMangaFavorites = Injekt.get()
@@ -125,15 +121,14 @@ class BackupCreator(
             file = (
                 if (isAutoBackup) {
                     // Get dir of file and create
-                    var dir = UniFile.fromUri(context, uri)
-                    dir = dir.createDirectory("automatic")
+                    val dir = UniFile.fromUri(context, uri)
+                        .createDirectory("automatic")
 
                     // Delete older backups
-                    val numberOfBackups = backupPreferences.numberOfBackups().get()
                     dir.listFiles { _, filename -> Backup.filenameRegex.matches(filename) }
                         .orEmpty()
                         .sortedByDescending { it.name }
-                        .drop(numberOfBackups - 1)
+                        .drop(MAX_AUTO_BACKUPS - 1)
                         .forEach { it.delete() }
 
                     // Create new file to place backup
@@ -456,3 +451,5 @@ class BackupCreator(
         return backupPreferences.filter { !Preference.isPrivate(it.key) && !Preference.isAppState(it.key) }
     }
 }
+
+private val MAX_AUTO_BACKUPS: Int = 4

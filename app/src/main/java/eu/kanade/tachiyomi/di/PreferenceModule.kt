@@ -12,20 +12,20 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.provider.AndroidBackupFolderProvider
-import tachiyomi.core.provider.AndroidDownloadFolderProvider
+import tachiyomi.core.provider.AndroidStorageFolderProvider
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.storage.service.StoragePreferences
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 
-class PreferenceModule(val application: Application) : InjektModule {
+class PreferenceModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<PreferenceStore> {
-            AndroidPreferenceStore(application)
+            AndroidPreferenceStore(app)
         }
         addSingletonFactory {
             NetworkPreferences(
@@ -52,20 +52,14 @@ class PreferenceModule(val application: Application) : InjektModule {
             TrackPreferences(get())
         }
         addSingletonFactory {
-            AndroidDownloadFolderProvider(application)
+            DownloadPreferences(get())
         }
         addSingletonFactory {
-            DownloadPreferences(
-                folderProvider = get<AndroidDownloadFolderProvider>(),
-                preferenceStore = get(),
-            )
+            BackupPreferences(get())
         }
         addSingletonFactory {
-            AndroidBackupFolderProvider(application)
-        }
-        addSingletonFactory {
-            BackupPreferences(
-                folderProvider = get<AndroidBackupFolderProvider>(),
+            StoragePreferences(
+                folderProvider = get<AndroidStorageFolderProvider>(),
                 preferenceStore = get(),
             )
         }
@@ -73,7 +67,7 @@ class PreferenceModule(val application: Application) : InjektModule {
             UiPreferences(get())
         }
         addSingletonFactory {
-            BasePreferences(application, get())
+            BasePreferences(app, get())
         }
     }
 }

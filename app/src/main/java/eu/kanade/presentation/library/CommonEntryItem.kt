@@ -51,7 +51,7 @@ object CommonEntryItemDefaults {
     const val BrowseFavoriteCoverAlpha = 0.34f
 }
 
-private val ContinueViewingButtonSize = 32.dp
+private val ContinueViewingButtonSize = 28.dp
 private val ContinueViewingButtonGridPadding = 6.dp
 private val ContinueViewingButtonListSpacing = 8.dp
 

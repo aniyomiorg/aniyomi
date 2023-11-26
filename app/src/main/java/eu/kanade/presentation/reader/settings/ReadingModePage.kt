@@ -188,6 +188,19 @@ private fun ColumnScope.WebtoonViewerSettings(screenModel: ReaderSettingsScreenM
         )
     }
 
+    val dualPageRotateToFitWebtoon by screenModel.preferences.dualPageRotateToFitWebtoon().collectAsState()
+    CheckboxItem(
+        label = stringResource(R.string.pref_page_rotate),
+        pref = screenModel.preferences.dualPageRotateToFitWebtoon(),
+    )
+
+    if (dualPageRotateToFitWebtoon) {
+        CheckboxItem(
+            label = stringResource(R.string.pref_page_rotate_invert),
+            pref = screenModel.preferences.dualPageRotateToFitInvertWebtoon(),
+        )
+    }
+
     CheckboxItem(
         label = stringResource(R.string.pref_double_tap_zoom),
         pref = screenModel.preferences.webtoonDoubleTapZoomEnabled(),

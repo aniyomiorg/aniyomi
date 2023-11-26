@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ import tachiyomi.presentation.core.components.material.TabText
 fun TabbedScreen(
     @StringRes titleRes: Int?,
     tabs: ImmutableList<TabContent>,
+    modifier: Modifier = Modifier,
     startIndex: Int? = null,
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
@@ -42,6 +44,7 @@ fun TabbedScreen(
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
+
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -69,7 +72,14 @@ fun TabbedScreen(
                 }
 
                 SearchToolbar(
-                    titleContent = { AppBarTitle(stringResource(titleRes), null, tab.numberTitle) },
+                    titleContent = {
+                        AppBarTitle(
+                            stringResource(titleRes),
+                            modifier = modifier,
+                            null,
+                            tab.numberTitle,
+                        )
+                    },
                     searchEnabled = searchEnabled,
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,
@@ -143,12 +153,14 @@ private fun FlexibleTabRow(
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
             edgePadding = 13.dp,
+            modifier = Modifier.zIndex(1f),
         ) {
             block()
         }
     } else {
         PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
+            modifier = Modifier.zIndex(1f),
         ) {
             block()
         }

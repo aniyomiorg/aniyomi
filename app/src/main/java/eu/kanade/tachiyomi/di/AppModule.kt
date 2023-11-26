@@ -37,6 +37,7 @@ import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
+import tachiyomi.core.provider.AndroidStorageFolderProvider
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
 import tachiyomi.data.StringListColumnAdapter
@@ -187,11 +188,11 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { AnimeExtensionManager(app) }
 
         addSingletonFactory { MangaDownloadProvider(app) }
-        addSingletonFactory { MangaDownloadManager(app) }
+        addSingletonFactory { MangaDownloadManager(app, get<AndroidStorageFolderProvider>()) }
         addSingletonFactory { MangaDownloadCache(app) }
 
         addSingletonFactory { AnimeDownloadProvider(app) }
-        addSingletonFactory { AnimeDownloadManager(app) }
+        addSingletonFactory { AnimeDownloadManager(app, get<AndroidStorageFolderProvider>()) }
         addSingletonFactory { AnimeDownloadCache(app) }
 
         addSingletonFactory { TrackerManager(app) }
@@ -200,10 +201,12 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { ImageSaver(app) }
 
-        addSingletonFactory { LocalMangaSourceFileSystem(app) }
+        addSingletonFactory { AndroidStorageFolderProvider(app) }
+
+        addSingletonFactory { LocalMangaSourceFileSystem(get<AndroidStorageFolderProvider>()) }
         addSingletonFactory { LocalMangaCoverManager(app, get()) }
 
-        addSingletonFactory { LocalAnimeSourceFileSystem(app) }
+        addSingletonFactory { LocalAnimeSourceFileSystem(get<AndroidStorageFolderProvider>()) }
         addSingletonFactory { LocalAnimeCoverManager(app, get()) }
 
         addSingletonFactory { ExternalIntents() }

@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 109
+        versionCode = 110
         versionName = "0.14.7"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -172,7 +172,6 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.permissions)
-    implementation(compose.accompanist.themeadapter)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
 

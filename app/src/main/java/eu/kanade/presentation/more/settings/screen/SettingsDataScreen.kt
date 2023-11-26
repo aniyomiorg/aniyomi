@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -28,13 +29,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.hippo.unifile.UniFile
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.data.CreateBackupScreen
 import eu.kanade.presentation.more.settings.widget.BasePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.PrefsHorizontalPadding
 import eu.kanade.presentation.permissions.PermissionRequestHelper
+import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
@@ -58,6 +62,7 @@ import tachiyomi.domain.backup.service.FLAG_HISTORY
 import tachiyomi.domain.backup.service.FLAG_SETTINGS
 import tachiyomi.domain.backup.service.FLAG_TRACK
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -72,20 +77,59 @@ object SettingsDataScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val backupPreferences = Injekt.get<BackupPreferences>()
+        val storagePreferences = Injekt.get<StoragePreferences>()
 
         PermissionRequestHelper.requestStoragePermission()
 
         return listOf(
+            getStorageLocationPref(storagePreferences = storagePreferences),
+            Preference.PreferenceItem.InfoPreference(stringResource(R.string.pref_storage_location_info)),
+
             getBackupAndRestoreGroup(backupPreferences = backupPreferences),
             getDataGroup(backupPreferences = backupPreferences),
         )
     }
 
     @Composable
+    private fun getStorageLocationPref(
+        storagePreferences: StoragePreferences,
+    ): Preference.PreferenceItem.TextPreference {
+        val context = LocalContext.current
+        val storageDirPref = storagePreferences.baseStorageDirectory()
+        val storageDir by storageDirPref.collectAsState()
+        val pickStorageLocation = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.OpenDocumentTree(),
+        ) { uri ->
+            if (uri != null) {
+                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+
+                context.contentResolver.takePersistableUriPermission(uri, flags)
+
+                val file = UniFile.fromUri(context, uri)
+                storageDirPref.set(file.uri.toString())
+            }
+        }
+
+        return Preference.PreferenceItem.TextPreference(
+            title = stringResource(R.string.pref_storage_location),
+            subtitle = remember(storageDir) {
+                (UniFile.fromUri(context, storageDir.toUri())?.filePath)
+            } ?: stringResource(R.string.invalid_location, storageDir),
+            onClick = {
+                try {
+                    pickStorageLocation.launch(null)
+                } catch (e: ActivityNotFoundException) {
+                    context.toast(R.string.file_picker_error)
+                }
+            },
+        )
+    }
+
+    @Composable
     private fun getBackupAndRestoreGroup(backupPreferences: BackupPreferences): Preference.PreferenceGroup {
         val context = LocalContext.current
-        val backupIntervalPref = backupPreferences.backupInterval()
-        val backupInterval by backupIntervalPref.collectAsState()
+        val lastAutoBackup by backupPreferences.lastAutoBackupTimestamp().collectAsState()
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_backup),
@@ -96,7 +140,7 @@ object SettingsDataScreen : SearchableSettings {
 
                 // Automatic backups
                 Preference.PreferenceItem.ListPreference(
-                    pref = backupIntervalPref,
+                    pref = backupPreferences.backupInterval(),
                     title = stringResource(R.string.pref_backup_interval),
                     entries = mapOf(
                         0 to stringResource(R.string.off),
@@ -111,13 +155,10 @@ object SettingsDataScreen : SearchableSettings {
                         true
                     },
                 ),
-                Preference.PreferenceItem.ListPreference(
-                    pref = backupPreferences.numberOfBackups(),
-                    enabled = backupInterval != 0,
-                    title = stringResource(R.string.pref_backup_slots),
-                    entries = listOf(2, 3, 4, 5).associateWith { it.toString() },
+                Preference.PreferenceItem.InfoPreference(
+                    stringResource(R.string.backup_info) + "\n\n" +
+                        stringResource(R.string.last_auto_backup_info, relativeTimeSpanString(lastAutoBackup)),
                 ),
-                Preference.PreferenceItem.InfoPreference(stringResource(R.string.backup_info)),
             ),
         )
     }

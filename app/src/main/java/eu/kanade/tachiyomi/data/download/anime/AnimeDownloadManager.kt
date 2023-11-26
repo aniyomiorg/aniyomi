@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import rx.Observable
+import tachiyomi.core.provider.FolderProvider
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -38,6 +39,7 @@ import uy.kohesive.injekt.api.get
  */
 class AnimeDownloadManager(
     private val context: Context,
+    private val folderProvider: FolderProvider,
     private val provider: AnimeDownloadProvider = Injekt.get(),
     private val cache: AnimeDownloadCache = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
@@ -225,7 +227,7 @@ class AnimeDownloadManager(
      */
     fun getDownloadCount(anime: Anime): Int {
         return if (anime.source == LocalAnimeSource.ID) {
-            LocalAnimeSourceFileSystem(context).getFilesInAnimeDirectory(anime.url)
+            LocalAnimeSourceFileSystem(folderProvider).getFilesInAnimeDirectory(anime.url)
                 .filter { ArchiveAnime.isSupported(it) }
                 .count()
         } else {
@@ -247,7 +249,7 @@ class AnimeDownloadManager(
      */
     fun getDownloadSize(anime: Anime): Long {
         return if (anime.source == LocalAnimeSource.ID) {
-            LocalAnimeSourceFileSystem(context).getAnimeDirectory(anime.url)
+            LocalAnimeSourceFileSystem(folderProvider).getAnimeDirectory(anime.url)
                 .let { UniFile.fromFile(it) }?.size() ?: 0L
         } else {
             cache.getDownloadSize(anime)

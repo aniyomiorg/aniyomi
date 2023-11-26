@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.provider.FolderProvider
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
@@ -37,6 +38,7 @@ import uy.kohesive.injekt.api.get
  */
 class MangaDownloadManager(
     private val context: Context,
+    private val folderProvider: FolderProvider,
     private val provider: MangaDownloadProvider = Injekt.get(),
     private val cache: MangaDownloadCache = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
@@ -215,7 +217,7 @@ class MangaDownloadManager(
      */
     fun getDownloadCount(manga: Manga): Int {
         return if (manga.source == LocalMangaSource.ID) {
-            LocalMangaSourceFileSystem(context).getFilesInMangaDirectory(manga.url)
+            LocalMangaSourceFileSystem(folderProvider).getFilesInMangaDirectory(manga.url)
                 .filter { it.isDirectory || ArchiveManga.isSupported(it) }
                 .count()
         } else {
@@ -237,7 +239,7 @@ class MangaDownloadManager(
      */
     fun getDownloadSize(manga: Manga): Long {
         return if (manga.source == LocalMangaSource.ID) {
-            LocalMangaSourceFileSystem(context).getMangaDirectory(manga.url)
+            LocalMangaSourceFileSystem(folderProvider).getMangaDirectory(manga.url)
                 .let { UniFile.fromFile(it) }?.size() ?: 0L
         } else {
             cache.getDownloadSize(manga)

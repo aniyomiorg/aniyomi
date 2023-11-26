@@ -75,11 +75,11 @@ actual class LocalMangaSource(
     override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LATEST_FILTERS)
 
     override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage {
-        val baseDirsFiles = fileSystem.getFilesInBaseDirectories()
+        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
         val lastModifiedLimit by
             lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
 
-        var mangaDirs = baseDirsFiles
+        var mangaDirs = baseDirFiles
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.startsWith('.') }
             .distinctBy { it.name }
@@ -341,9 +341,8 @@ actual class LocalMangaSource(
 
     fun getFormat(chapter: SChapter): Format {
         try {
-            return fileSystem.getBaseDirectories()
-                .map { dir -> File(dir, chapter.url) }
-                .find { it.exists() }
+            return File(fileSystem.getBaseDirectory(), chapter.url)
+                .takeIf { it.exists() }
                 ?.let(Format.Companion::valueOf)
                 ?: throw Exception(context.getString(R.string.chapter_not_found))
         } catch (e: Format.UnknownFormatException) {
