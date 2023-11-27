@@ -16,18 +16,19 @@ import kotlinx.serialization.json.JsonElement
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
-private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
+private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
-private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
+//private val RICH_PRESENCE_BUTTONS = listOf("Descargar")
 
 // Constant for metadata list
-private val RICH_PRESENCE_METADATA = Activity.Metadata(
+/*private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/dark25/animetailv2",
-        "https://discord.gg/s82Vu589Ya",
+        "https://github.com/dark25/animetailv2"
     ),
 )
+
+ */
 
 @Serializable
 data class Activity(
@@ -39,8 +40,11 @@ data class Activity(
     val type: Int? = null,
     val timestamps: Timestamps? = null,
     val assets: Assets? = null,
-    val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
+  /*
+  val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
+
     val metadata: Metadata? = RICH_PRESENCE_METADATA,
+ */
 ) {
     @Serializable
     data class Assets(
