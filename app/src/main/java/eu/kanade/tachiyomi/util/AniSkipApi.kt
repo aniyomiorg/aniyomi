@@ -26,7 +26,7 @@ class AniSkipApi {
     private val client = OkHttpClient()
     private val json: Json by injectLazy()
 
-    // credits: https://github.com/saikou-app/saikou/blob/main/app/src/main/java/ani/saikou/others/AniSkip.kt
+    // credits: Saikou
     fun getResult(malId: Int, episodeNumber: Int, episodeLength: Long): List<Stamp>? {
         val url =
             "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed" +
@@ -81,11 +81,12 @@ class AniSkipApi {
                     skipButtonString,
                 )
             }
+            activity.viewModel.updateSkipIntroText(activity.getString(skipButtonString))
         }
 
         // this is used when netflixStyle is enabled
         @SuppressLint("SetTextI18n")
-        suspend fun showSkipButton(skipType: SkipType, waitingTime: Int) {
+        fun showSkipButton(skipType: SkipType, waitingTime: Int) {
             val skipTime = when (skipType) {
                 SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
                 SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
@@ -94,12 +95,7 @@ class AniSkipApi {
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
-                    withUIContext {
-                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
-                            MR.strings.player_aniskip_dontskip,
-                        )
-                    }
+                    activity.viewModel.updateSkipIntroText(activity.getString(R.string.player_aniskip_dontskip))
                 } else {
                     seekTo(skipTime.endTime)
                     skipAnimation(skipType)

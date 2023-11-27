@@ -22,6 +22,7 @@ fun PlayerControls(
     activity: PlayerActivity,
 ) {
     TopPlayerControls(activity)
+    BottomPlayerControls(activity)
 }
 
 @Composable

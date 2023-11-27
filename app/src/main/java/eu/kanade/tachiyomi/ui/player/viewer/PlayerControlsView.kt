@@ -88,27 +88,13 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     override fun onViewAdded(child: View?) {
 
         // Lock and Unlock controls
-        binding.lockBtn.setOnClickListener { lockControls(true) }
         binding.unlockBtn.setOnClickListener { lockControls(false) }
 
         // Long click controls
-        binding.cycleSpeedBtn.setOnLongClickListener {
-            activity.viewModel.showSpeedPicker()
-            true
-        }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
         binding.nextBtn.setOnClickListener { switchEpisode(previous = false) }
-
-        binding.pipBtn.setOnClickListener { activity.pip.start() }
-
-        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
-
-        binding.controlsSkipIntroBtn.setOnLongClickListener {
-            activity.viewModel.showSkipIntroLength()
-            true
-        }
 
         binding.playbackPositionBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
@@ -131,25 +117,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 updatePlaybackDuration(player.duration!!)
             }
         }
-
-        binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
     }
 
     private fun switchEpisode(previous: Boolean) {
         return activity.changeEpisode(activity.viewModel.getAdjacentEpisodeId(previous = previous))
-    }
-
-    internal suspend fun updateEpisodeText() {
-        val viewModel = activity.viewModel
-        val skipIntroText = activity.getString(
-            R.string.player_controls_skip_intro_text,
-            viewModel.getAnimeSkipIntroLength(),
-        )
-        withUIContext {
-            //binding.titleMainTxt.text = viewModel.currentAnime?.title
-            //binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
-            binding.controlsSkipIntroBtn.text = skipIntroText
-        }
     }
 
     internal suspend fun updatePlaylistButtons() {
@@ -169,13 +140,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                     ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
                 this.isClickable = plPos != plCount - 1
             }
-        }
-    }
-
-    internal suspend fun updateSpeedButton() {
-        withUIContext {
-            binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, player.playbackSpeed)
-            player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
         }
     }
 
@@ -345,12 +309,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.topControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_exit_top),
             )
-            binding.bottomRightControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_exit_right),
-            )
-            binding.bottomLeftControlsGroup.startAnimation(
-                AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
-            )
             binding.middleControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_fade_out),
             )
@@ -373,12 +331,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.topControlsGroup.startAnimation(
             AnimationUtils.loadAnimation(context, R.anim.player_enter_top),
         )
-        binding.bottomRightControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_right),
-        )
-        binding.bottomLeftControlsGroup.startAnimation(
-            AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
-        )
         binding.middleControlsGroup.startAnimation(
             AnimationUtils.loadAnimation(context, R.anim.player_fade_in),
         )
@@ -400,7 +352,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun cycleViewMode() {
+    internal fun cycleViewMode() {
         AspectState.mode = when (AspectState.mode) {
             AspectState.FIT -> AspectState.CROP
             AspectState.CROP -> AspectState.STRETCH

@@ -2,9 +2,8 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -718,6 +717,10 @@ class PlayerViewModel @JvmOverloads constructor(
         mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
+    fun updateSkipIntroText(text: String) {
+        mutableState.update { it.copy(skipIntroText = text) }
+    }
+
     @Immutable
     data class State(
         val episodeList: List<Episode> = emptyList(),
@@ -729,6 +732,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val dialog: Dialog? = null,
         val sheet: Sheet? = null,
         val videoChapters: List<MPVView.Chapter> = emptyList(),
+        val skipIntroText: String = "",
     )
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
