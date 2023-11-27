@@ -728,10 +728,8 @@ class PlayerViewModel @JvmOverloads constructor(
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
         val sheet: Sheet? = null,
-    ) {
-        var videoChapters: MutableState<List<MPVView.Chapter>> = mutableStateOf(emptyList())
-            private set
-    }
+        val videoChapters: List<MPVView.Chapter> = emptyList(),
+    )
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())

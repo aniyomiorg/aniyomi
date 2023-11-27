@@ -26,8 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -99,7 +97,7 @@ fun TopPlayerControls(
                     onClick = activity.playerControls::toggleAutoplay,
                 )
 
-                if (activity.videoChapters.isNotEmpty()) {
+                if (state.videoChapters.isNotEmpty()) {
                     PlayerIcon(Icons.Outlined.AutoStories) {
                         viewModel.showVideoChapters()
                     }
