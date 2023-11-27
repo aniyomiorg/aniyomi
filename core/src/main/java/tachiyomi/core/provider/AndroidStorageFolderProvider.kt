@@ -14,7 +14,6 @@ class AndroidStorageFolderProvider(
         return File(
             Environment.getExternalStorageDirectory().absolutePath + File.separator +
                 context.getString(R.string.app_name),
-            "downloads",
         )
     }
 
