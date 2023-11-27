@@ -19,20 +19,24 @@ import java.util.Calendar
 class AniChartApi {
     private val client = OkHttpClient()
 
-    internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean): Pair<Int, Long> {
+    internal suspend fun loadAiringTime(
+        anime: Anime,
+        trackItems: List<AnimeTrackItem>,
+        manualFetch: Boolean,
+    ): Pair<Int, Long> {
         var airingEpisodeData = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
         if (anime.status == SAnime.COMPLETED.toLong() && !manualFetch) return airingEpisodeData
 
         return withIOContext {
             val matchingTrackItem = trackItems.firstOrNull {
-                (it.service is Anilist && it.track != null) ||
-                    (it.service is MyAnimeList && it.track != null) ||
-                    (it.service is Simkl && it.track != null)
+                (it.tracker is Anilist && it.track != null) ||
+                    (it.tracker is MyAnimeList && it.track != null) ||
+                    (it.tracker is Simkl && it.track != null)
             } ?: return@withIOContext Pair(1, 0L)
 
             matchingTrackItem.let { item ->
                 item.track!!.let {
-                    airingEpisodeData = when (item.service) {
+                    airingEpisodeData = when (item.tracker) {
                         is Anilist -> getAnilistAiringEpisodeData(it.remoteId)
                         is MyAnimeList -> getAnilistAiringEpisodeData(getAlIdFromMal(it.remoteId))
                         is Simkl -> getSimklAiringEpisodeData(it.remoteId)
@@ -118,13 +122,23 @@ class AniChartApi {
 
                 val data = removeAiredSimkl(body)
 
-                val malId = data.substringAfter("\"simkl_id\":$id,", "").substringAfter("\"mal\":\"").substringBefore("\"").toLongOrNull() ?: 0L
-                if (malId != 0L) return@withIOContext getAnilistAiringEpisodeData(getAlIdFromMal(malId))
+                val malId = data.substringAfter("\"simkl_id\":$id,", "").substringAfter(
+                    "\"mal\":\"",
+                ).substringBefore("\"").toLongOrNull() ?: 0L
+                if (malId != 0L) {
+                    return@withIOContext getAnilistAiringEpisodeData(
+                        getAlIdFromMal(malId),
+                    )
+                }
 
-                val epNum = data.substringAfter("\"simkl_id\":$id,", "").substringBefore("\"}}").substringAfterLast("\"episode\":")
+                val epNum = data.substringAfter("\"simkl_id\":$id,", "").substringBefore("\"}}").substringAfterLast(
+                    "\"episode\":",
+                )
                 episodeNumber = epNum.substringBefore(",").toIntOrNull() ?: episodeNumber
 
-                val date = data.substringBefore("\"simkl_id\":$id,", "").substringAfterLast("\"date\":\"").substringBefore("\"")
+                val date = data.substringBefore("\"simkl_id\":$id,", "").substringAfterLast(
+                    "\"date\":\"",
+                ).substringBefore("\"")
                 airingAt = if (date.isNotBlank()) toUnixTimestamp(date) else airingAt
 
                 if (airingAt != 0L) return@withIOContext Pair(episodeNumber, airingAt)

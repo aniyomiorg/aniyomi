@@ -28,6 +28,7 @@ data class BackupAnimeTracking(
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
+    @Suppress("DEPRECATION")
     fun getTrackingImpl(): AnimeTrack {
         return AnimeTrack(
             id = -1,
@@ -42,7 +43,7 @@ data class BackupAnimeTracking(
             title = this@BackupAnimeTracking.title,
             lastEpisodeSeen = this@BackupAnimeTracking.lastEpisodeSeen.toDouble(),
             totalEpisodes = this@BackupAnimeTracking.totalEpisodes.toLong(),
-            score = this@BackupAnimeTracking.score,
+            score = this@BackupAnimeTracking.score.toDouble(),
             status = this@BackupAnimeTracking.status.toLong(),
             startDate = this@BackupAnimeTracking.startedWatchingDate,
             finishDate = this@BackupAnimeTracking.finishedWatchingDate,
@@ -61,7 +62,7 @@ data class BackupAnimeTracking(
                 // convert to float for 1.x
                 lastEpisodeSeen = track.lastEpisodeSeen.toFloat(),
                 totalEpisodes = track.totalEpisodes.toInt(),
-                score = track.score,
+                score = track.score.toFloat(),
                 status = track.status.toInt(),
                 startedWatchingDate = track.startDate,
                 finishedWatchingDate = track.finishDate,
@@ -71,7 +72,22 @@ data class BackupAnimeTracking(
     }
 }
 
-val backupAnimeTrackMapper = { _id: Long, anime_id: Long, syncId: Long, mediaId: Long, libraryId: Long?, title: String, lastEpisodeSeen: Double, totalEpisodes: Long, status: Long, score: Float, remoteUrl: String, startDate: Long, finishDate: Long ->
+val backupAnimeTrackMapper = {
+        _id: Long,
+        anime_id:
+        Long,
+        syncId: Long,
+        mediaId: Long,
+        libraryId: Long?,
+        title: String,
+        lastEpisodeSeen: Double,
+        totalEpisodes: Long,
+        status: Long,
+        score: Double,
+        remoteUrl: String,
+        startDate: Long,
+        finishDate: Long,
+    ->
     BackupAnimeTracking(
         syncId = syncId.toInt(),
         mediaId = mediaId,
@@ -80,7 +96,7 @@ val backupAnimeTrackMapper = { _id: Long, anime_id: Long, syncId: Long, mediaId:
         title = title,
         lastEpisodeSeen = lastEpisodeSeen.toFloat(),
         totalEpisodes = totalEpisodes.toInt(),
-        score = score,
+        score = score.toFloat(),
         status = status.toInt(),
         startedWatchingDate = startDate,
         finishedWatchingDate = finishDate,

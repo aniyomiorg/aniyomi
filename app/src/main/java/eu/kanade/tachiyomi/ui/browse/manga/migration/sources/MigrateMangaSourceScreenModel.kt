@@ -1,10 +1,14 @@
 package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 
+import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -19,17 +23,17 @@ import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class MigrateSourceScreenModel(
+class MigrateMangaSourceScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val getSourcesWithFavoriteCount: GetMangaSourcesWithFavoriteCount = Injekt.get(),
     private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
-) : StateScreenModel<MigrateMangaSourceState>(MigrateMangaSourceState()) {
+) : StateScreenModel<MigrateMangaSourceScreenModel.State>(State()) {
 
     private val _channel = Channel<Event>(Int.MAX_VALUE)
     val channel = _channel.receiveAsFlow()
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getSourcesWithFavoriteCount.subscribe()
                 .catch {
                     logcat(LogPriority.ERROR, it)
@@ -39,7 +43,7 @@ class MigrateSourceScreenModel(
                     mutableState.update {
                         it.copy(
                             isLoading = false,
-                            items = sources,
+                            items = sources.toImmutableList(),
                         )
                     }
                 }
@@ -47,11 +51,11 @@ class MigrateSourceScreenModel(
 
         preferences.migrationSortingDirection().changes()
             .onEach { mutableState.update { state -> state.copy(sortingDirection = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
 
         preferences.migrationSortingMode().changes()
             .onEach { mutableState.update { state -> state.copy(sortingMode = it) } }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
     }
 
     fun toggleSortingMode() {
@@ -76,16 +80,17 @@ class MigrateSourceScreenModel(
         }
     }
 
-    sealed class Event {
-        object FailedFetchingSourcesWithCount : Event()
+    @Immutable
+    data class State(
+        val isLoading: Boolean = true,
+        val items: ImmutableList<Pair<Source, Long>> = persistentListOf(),
+        val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
+        val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
+    ) {
+        val isEmpty = items.isEmpty()
     }
-}
 
-data class MigrateMangaSourceState(
-    val isLoading: Boolean = true,
-    val items: List<Pair<Source, Long>> = emptyList(),
-    val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
-    val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
-) {
-    val isEmpty = items.isEmpty()
+    sealed interface Event {
+        data object FailedFetchingSourcesWithCount : Event
+    }
 }

@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.history.manga
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.manga.MangaHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -37,7 +37,7 @@ class MangaHistoryScreenModel(
     private val getHistory: GetMangaHistory = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
     private val removeHistory: RemoveMangaHistory = Injekt.get(),
-) : StateScreenModel<HistoryState>(HistoryState()) {
+) : StateScreenModel<MangaHistoryScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Channel.UNLIMITED)
     val events: Flow<Event> = _events.receiveAsFlow()
@@ -46,7 +46,7 @@ class MangaHistoryScreenModel(
     val query: StateFlow<String?> = _query.asStateFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _query.collectLatest { query ->
                 getHistory.subscribe(query ?: "")
                     .distinctUntilChanged()
@@ -62,7 +62,7 @@ class MangaHistoryScreenModel(
     }
 
     fun search(query: String?) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             _query.emit(query)
         }
     }
@@ -73,7 +73,9 @@ class MangaHistoryScreenModel(
                 val beforeDate = before?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(afterDate)
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(
+                        afterDate,
+                    )
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
@@ -85,7 +87,7 @@ class MangaHistoryScreenModel(
     }
 
     fun getNextChapterForManga(mangaId: Long, chapterId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             sendNextChapterEvent(getNextChapters.await(mangaId, chapterId, onlyUnread = false))
         }
     }
@@ -96,19 +98,19 @@ class MangaHistoryScreenModel(
     }
 
     fun removeFromHistory(history: MangaHistoryWithRelations) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(history)
         }
     }
 
     fun removeAllFromHistory(mangaId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(mangaId)
         }
     }
 
     fun removeAllHistory() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val result = removeHistory.awaitAll()
             if (!result) return@launchIO
             _events.send(Event.HistoryCleared)
@@ -119,20 +121,21 @@ class MangaHistoryScreenModel(
         mutableState.update { it.copy(dialog = dialog) }
     }
 
-    sealed class Dialog {
-        object DeleteAll : Dialog()
-        data class Delete(val history: MangaHistoryWithRelations) : Dialog()
+    @Immutable
+    data class State(
+        val searchQuery: String? = null,
+        val list: List<MangaHistoryUiModel>? = null,
+        val dialog: Dialog? = null,
+    )
+
+    sealed interface Dialog {
+        data object DeleteAll : Dialog
+        data class Delete(val history: MangaHistoryWithRelations) : Dialog
     }
 
-    sealed class Event {
-        data class OpenChapter(val chapter: Chapter?) : Event()
-        object InternalError : Event()
-        object HistoryCleared : Event()
+    sealed interface Event {
+        data class OpenChapter(val chapter: Chapter?) : Event
+        data object InternalError : Event
+        data object HistoryCleared : Event
     }
 }
-
-@Immutable
-data class HistoryState(
-    val list: List<MangaHistoryUiModel>? = null,
-    val dialog: MangaHistoryScreenModel.Dialog? = null,
-)

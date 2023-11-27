@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.history.anime
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -37,7 +37,7 @@ class AnimeHistoryScreenModel(
     private val getHistory: GetAnimeHistory = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val removeHistory: RemoveAnimeHistory = Injekt.get(),
-) : StateScreenModel<AnimeHistoryState>(AnimeHistoryState()) {
+) : StateScreenModel<AnimeHistoryScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Channel.UNLIMITED)
     val events: Flow<Event> = _events.receiveAsFlow()
@@ -46,7 +46,7 @@ class AnimeHistoryScreenModel(
     val query: StateFlow<String?> = _query.asStateFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _query.collectLatest { query ->
                 getHistory.subscribe(query ?: "")
                     .distinctUntilChanged()
@@ -62,7 +62,7 @@ class AnimeHistoryScreenModel(
     }
 
     fun search(query: String?) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             _query.emit(query)
         }
     }
@@ -73,7 +73,9 @@ class AnimeHistoryScreenModel(
                 val beforeDate = before?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(afterDate)
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(
+                        afterDate,
+                    )
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
@@ -85,7 +87,7 @@ class AnimeHistoryScreenModel(
     }
 
     fun getNextEpisodeForAnime(animeId: Long, episodeId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             sendNextEpisodeEvent(getNextEpisodes.await(animeId, episodeId, onlyUnseen = false))
         }
     }
@@ -96,19 +98,19 @@ class AnimeHistoryScreenModel(
     }
 
     fun removeFromHistory(history: AnimeHistoryWithRelations) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(history)
         }
     }
 
     fun removeAllFromHistory(animeId: Long) {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             removeHistory.await(animeId)
         }
     }
 
     fun removeAllHistory() {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             val result = removeHistory.awaitAll()
             if (!result) return@launchIO
             _events.send(Event.HistoryCleared)
@@ -119,20 +121,21 @@ class AnimeHistoryScreenModel(
         mutableState.update { it.copy(dialog = dialog) }
     }
 
-    sealed class Dialog {
-        object DeleteAll : Dialog()
-        data class Delete(val history: AnimeHistoryWithRelations) : Dialog()
+    @Immutable
+    data class State(
+        val searchQuery: String? = null,
+        val list: List<AnimeHistoryUiModel>? = null,
+        val dialog: Dialog? = null,
+    )
+
+    sealed interface Dialog {
+        data object DeleteAll : Dialog
+        data class Delete(val history: AnimeHistoryWithRelations) : Dialog
     }
 
-    sealed class Event {
-        data class OpenEpisode(val episode: Episode?) : Event()
-        object InternalError : Event()
-        object HistoryCleared : Event()
+    sealed interface Event {
+        data class OpenEpisode(val episode: Episode?) : Event
+        data object InternalError : Event
+        data object HistoryCleared : Event
     }
 }
-
-@Immutable
-data class AnimeHistoryState(
-    val list: List<AnimeHistoryUiModel>? = null,
-    val dialog: AnimeHistoryScreenModel.Dialog? = null,
-)

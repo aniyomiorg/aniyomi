@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.Application
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -11,7 +10,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Looper
 import android.webkit.WebView
-import androidx.core.content.getSystemService
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -37,9 +36,12 @@ import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.di.AppModule
+import eu.kanade.tachiyomi.di.PreferenceModule
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
+import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.cancelNotification
@@ -58,8 +60,8 @@ import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.util.system.logcat
-import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
-import tachiyomi.presentation.widget.entries.manga.TachiyomiMangaWidgetManager
+import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
+import tachiyomi.presentation.widget.entries.manga.MangaWidgetManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -90,8 +92,8 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             if (packageName != process) WebView.setDataDirectorySuffix(process)
         }
 
-        Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
+        Injekt.importModule(AppModule(this))
         Injekt.importModule(DomainModule())
         // SY -->
         Injekt.importModule(SYDomainModule())
@@ -133,11 +135,11 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        with(TachiyomiMangaWidgetManager(Injekt.get())) {
+        with(MangaWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
-        with(TachiyomiAnimeWidgetManager(Injekt.get())) {
+        with(AnimeWidgetManager(Injekt.get(), Injekt.get())) {
             init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
@@ -170,7 +172,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             diskCache(diskCacheInit)
             diskCache(diskCacheInit)
             crossfade((300 * this@App.animatorDurationScale).toInt())
-            allowRgb565(getSystemService<ActivityManager>()!!.isLowRamDevice)
+            allowRgb565(DeviceUtil.isLowRamDevice(this@App))
             if (networkPreferences.verboseLogging().get()) logger(DebugLogger())
 
             // Coil spawns a new thread for every image load by default
@@ -203,7 +205,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                 if (chromiumElement?.methodName.equals("getAll", ignoreCase = true)) {
                     return WebViewUtil.SPOOF_PACKAGE_NAME
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
         return super.getPackageName()
@@ -213,7 +215,11 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         if (BuildConfig.ACRA_URI.isNotEmpty() && isPreviewBuildType || isReleaseBuildType) {
             initAcra {
                 buildConfigClass = BuildConfig::class.java
-                excludeMatchingSharedPreferencesKeys = listOf(".*username.*", ".*password.*", ".*token.*")
+                excludeMatchingSharedPreferencesKeys = listOf(
+                    ".*username.*",
+                    ".*password.*",
+                    ".*token.*",
+                )
 
                 reportFormat = StringFormat.JSON
                 httpSender {
@@ -243,7 +249,12 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
         fun register() {
             if (!registered) {
-                registerReceiver(this, IntentFilter(ACTION_DISABLE_INCOGNITO_MODE))
+                ContextCompat.registerReceiver(
+                    this@App,
+                    this,
+                    IntentFilter(ACTION_DISABLE_INCOGNITO_MODE),
+                    ContextCompat.RECEIVER_NOT_EXPORTED,
+                )
                 registered = true
             }
         }
@@ -262,7 +273,7 @@ private const val ACTION_DISABLE_INCOGNITO_MODE = "tachi.action.DISABLE_INCOGNIT
 /**
  * Direct copy of Coil's internal SingletonDiskCache so that [MangaCoverFetcher] can access it.
  */
-internal object CoilDiskCache {
+private object CoilDiskCache {
 
     private const val FOLDER_NAME = "image_cache"
     private var instance: DiskCache? = null

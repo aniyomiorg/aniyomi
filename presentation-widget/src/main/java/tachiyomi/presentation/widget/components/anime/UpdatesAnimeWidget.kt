@@ -3,6 +3,7 @@ package tachiyomi.presentation.widget.components.anime
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.LocalContext
@@ -14,59 +15,79 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
+import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import eu.kanade.tachiyomi.core.Constants
+import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.presentation.widget.R
-import tachiyomi.presentation.widget.entries.anime.ContainerModifier
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import tachiyomi.presentation.widget.util.stringResource
 
 @Composable
-fun UpdatesAnimeWidget(data: List<Pair<Long, Bitmap?>>?) {
-    val (rowCount, columnCount) = LocalSize.current.calculateRowAndColumnCount()
-    Column(
-        modifier = ContainerModifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalAlignment = Alignment.CenterHorizontally,
+fun UpdatesAnimeWidget(
+    data: ImmutableList<Pair<Long, Bitmap?>>?,
+    contentColor: ColorProvider,
+    topPadding: Dp,
+    bottomPadding: Dp,
+    modifier: GlanceModifier = GlanceModifier,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier,
     ) {
         if (data == null) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = contentColor)
         } else if (data.isEmpty()) {
-            Text(text = stringResource(R.string.information_no_recent))
+            Text(
+                text = stringResource(R.string.information_no_recent),
+                style = TextStyle(color = contentColor),
+            )
         } else {
-            (0 until rowCount).forEach { i ->
-                val coverRow = (0 until columnCount).mapNotNull { j ->
-                    data.getOrNull(j + (i * columnCount))
-                }
-                if (coverRow.isNotEmpty()) {
-                    Row(
-                        modifier = GlanceModifier
-                            .padding(vertical = 4.dp)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        coverRow.forEach { (animeId, cover) ->
-                            Box(
-                                modifier = GlanceModifier
-                                    .padding(horizontal = 3.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                val intent = Intent(LocalContext.current, Class.forName(Constants.MAIN_ACTIVITY)).apply {
-                                    action = Constants.SHORTCUT_ANIME
-                                    putExtra(Constants.ANIME_EXTRA, animeId)
-                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val (rowCount, columnCount) = LocalSize.current.calculateRowAndColumnCount(topPadding, bottomPadding)
+            Column(
+                modifier = GlanceModifier.fillMaxHeight(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                (0..<rowCount).forEach { i ->
+                    val coverRow = (0..<columnCount).mapNotNull { j ->
+                        data.getOrNull(j + (i * columnCount))
+                    }
+                    if (coverRow.isNotEmpty()) {
+                        Row(
+                            modifier = GlanceModifier
+                                .padding(vertical = 4.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            coverRow.forEach { (animeId, cover) ->
+                                Box(
+                                    modifier = GlanceModifier
+                                        .padding(horizontal = 3.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    val intent = Intent(
+                                        LocalContext.current,
+                                        Class.forName(Constants.MAIN_ACTIVITY),
+                                    ).apply {
+                                        action = Constants.SHORTCUT_ANIME
+                                        putExtra(Constants.ANIME_EXTRA, animeId)
+                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-                                    // https://issuetracker.google.com/issues/238793260
-                                    addCategory(animeId.toString())
+                                        // https://issuetracker.google.com/issues/238793260
+                                        addCategory(animeId.toString())
+                                    }
+                                    UpdatesAnimeCover(
+                                        cover = cover,
+                                        modifier = GlanceModifier.clickable(actionStartActivity(intent)),
+                                    )
                                 }
-                                UpdatesAnimeCover(
-                                    modifier = GlanceModifier.clickable(actionStartActivity(intent)),
-                                    cover = cover,
-                                )
                             }
                         }
                     }

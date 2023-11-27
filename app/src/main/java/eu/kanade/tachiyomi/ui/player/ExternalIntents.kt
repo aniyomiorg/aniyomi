@@ -20,8 +20,8 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -31,7 +31,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
@@ -42,7 +41,7 @@ import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
@@ -73,10 +72,15 @@ class ExternalIntents {
      * @param animeId the id of the anime.
      * @param episodeId the id of the episode.
      */
-    suspend fun getExternalIntent(context: Context, animeId: Long?, episodeId: Long?, chosenVideo: Video?): Intent? {
+    suspend fun getExternalIntent(
+        context: Context,
+        animeId: Long?,
+        episodeId: Long?,
+        chosenVideo: Video?,
+    ): Intent? {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
-        episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
+        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
         val video = chosenVideo
             ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first().firstOrNull()
@@ -299,7 +303,10 @@ class ExternalIntents {
     private fun getComponent(packageName: String): ComponentName? {
         return when (packageName) {
             MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
-            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(packageName, "$packageName.ActivityScreen")
+            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(
+                packageName,
+                "$packageName.ActivityScreen",
+            )
             VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
             MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
@@ -366,7 +373,12 @@ class ExternalIntents {
         // Update the episode's progress and history
         launchIO {
             if (cause == "playback_completion" || (currentPosition == duration && duration == 0L)) {
-                saveEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.totalSeconds, currentExtEpisode.totalSeconds)
+                saveEpisodeProgress(
+                    currentExtEpisode,
+                    anime,
+                    currentExtEpisode.totalSeconds,
+                    currentExtEpisode.totalSeconds,
+                )
             } else {
                 saveEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
@@ -379,7 +391,7 @@ class ExternalIntents {
     private val updateEpisode: UpdateEpisode = Injekt.get()
     private val getAnime: GetAnime = Injekt.get()
     private val sourceManager: AnimeSourceManager = Injekt.get()
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get()
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val downloadManager: AnimeDownloadManager by injectLazy()
@@ -410,7 +422,12 @@ class ExternalIntents {
      * @param lastSecondSeen the position of the episode.
      * @param totalSeconds the duration of the episode.
      */
-    private suspend fun saveEpisodeProgress(currentEpisode: Episode?, anime: Anime, lastSecondSeen: Long, totalSeconds: Long) {
+    private suspend fun saveEpisodeProgress(
+        currentEpisode: Episode?,
+        anime: Anime,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+    ) {
         if (basePreferences.incognitoMode().get()) return
         val currEp = currentEpisode ?: return
 
@@ -451,7 +468,7 @@ class ExternalIntents {
             else -> throw NotImplementedError("Unknown sorting method")
         }
 
-        val episodes = getEpisodeByAnimeId.await(anime.id)
+        val episodes = getEpisodesByAnimeId.await(anime.id)
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
         val currentEpisodePosition = episodes.indexOf(episode)
@@ -474,15 +491,15 @@ class ExternalIntents {
     private suspend fun updateTrackEpisodeSeen(episodeNumber: Double, anime: Anime) {
         if (!trackPreferences.autoUpdateTrack().get()) return
 
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         val context = Injekt.get<Application>()
 
         withIOContext {
             getTracks.await(anime.id)
                 .mapNotNull { track ->
-                    val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLogged &&
-                        service is AnimeTrackService && episodeNumber > track.lastEpisodeSeen
+                    val tracker = trackerManager.get(track.syncId)
+                    if (tracker != null && tracker.isLoggedIn &&
+                        tracker is AnimeTracker && episodeNumber > track.lastEpisodeSeen
                     ) {
                         val updatedTrack = track.copy(lastEpisodeSeen = episodeNumber)
 
@@ -491,10 +508,10 @@ class ExternalIntents {
                         async {
                             runCatching {
                                 if (context.isOnline()) {
-                                    service.animeService.update(updatedTrack.toDbTrack(), true)
+                                    tracker.animeService.update(updatedTrack.toDbTrack(), true)
                                     insertTrack.await(updatedTrack)
                                 } else {
-                                    delayedTrackingStore.addAnimeItem(updatedTrack)
+                                    delayedTrackingStore.addAnime(track.animeId, lastEpisodeSeen = episodeNumber)
                                     DelayedAnimeTrackingUpdateJob.setupTask(context)
                                 }
                             }
@@ -516,7 +533,14 @@ class ExternalIntents {
      * @param anime the anime of the episode.
      */
     private suspend fun enqueueDeleteSeenEpisodes(episode: Episode, anime: Anime) {
-        if (episode.seen) withIOContext { downloadManager.enqueueEpisodesToDelete(listOf(episode), anime) }
+        if (episode.seen) {
+            withIOContext {
+                downloadManager.enqueueEpisodesToDelete(
+                    listOf(episode),
+                    anime,
+                )
+            }
+        }
     }
 
     companion object {

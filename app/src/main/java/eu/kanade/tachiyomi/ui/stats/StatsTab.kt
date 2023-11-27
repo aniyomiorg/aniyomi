@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.stats.anime.animeStatsTab
 import eu.kanade.tachiyomi.ui.stats.manga.mangaStatsTab
+import kotlinx.collections.immutable.persistentListOf
 
 data class StatsTab(
     private val isManga: Boolean = false,
@@ -38,7 +39,7 @@ data class StatsTab(
 
         TabbedScreen(
             titleRes = R.string.label_stats,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeStatsTab(),
                 mangaStatsTab(),
             ),

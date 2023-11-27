@@ -1,15 +1,11 @@
 package eu.kanade.presentation.entries.anime
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -18,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,20 +21,22 @@ import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
-import tachiyomi.domain.entries.TriStateFilter
+import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
+import tachiyomi.presentation.core.components.TriStateItem
 
 @Composable
 fun EpisodeSettingsDialog(
     onDismissRequest: () -> Unit,
     anime: Anime? = null,
-    onDownloadFilterChanged: (TriStateFilter) -> Unit,
-    onUnseenFilterChanged: (TriStateFilter) -> Unit,
-    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
+    onDownloadFilterChanged: (TriState) -> Unit,
+    onUnseenFilterChanged: (TriState) -> Unit,
+    onBookmarkedFilterChanged: (TriState) -> Unit,
     onSortModeChanged: (Long) -> Unit,
     onDisplayModeChanged: (Long) -> Unit,
     onSetAsDefault: (applyToExistingAnime: Boolean) -> Unit,
@@ -54,7 +51,7 @@ fun EpisodeSettingsDialog(
 
     TabbedDialog(
         onDismissRequest = onDismissRequest,
-        tabTitles = listOf(
+        tabTitles = persistentListOf(
             stringResource(R.string.action_filter),
             stringResource(R.string.action_sort),
             stringResource(R.string.action_display),
@@ -68,21 +65,21 @@ fun EpisodeSettingsDialog(
                 },
             )
         },
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical)
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
                 0 -> {
                     FilterPage(
-                        downloadFilter = anime?.downloadedFilter ?: TriStateFilter.DISABLED,
-                        onDownloadFilterChanged = onDownloadFilterChanged.takeUnless { anime?.forceDownloaded() == true },
-                        unseenFilter = anime?.unseenFilter ?: TriStateFilter.DISABLED,
+                        downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
+                        onDownloadFilterChanged = onDownloadFilterChanged
+                            .takeUnless { anime?.forceDownloaded() == true },
+                        unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
-                        bookmarkedFilter = anime?.bookmarkedFilter ?: TriStateFilter.DISABLED,
+                        bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,
                         onBookmarkedFilterChanged = onBookmarkedFilterChanged,
                     )
                 }
@@ -106,12 +103,12 @@ fun EpisodeSettingsDialog(
 
 @Composable
 private fun FilterPage(
-    downloadFilter: TriStateFilter,
-    onDownloadFilterChanged: ((TriStateFilter) -> Unit)?,
-    unseenFilter: TriStateFilter,
-    onUnseenFilterChanged: (TriStateFilter) -> Unit,
-    bookmarkedFilter: TriStateFilter,
-    onBookmarkedFilterChanged: (TriStateFilter) -> Unit,
+    downloadFilter: TriState,
+    onDownloadFilterChanged: ((TriState) -> Unit)?,
+    unseenFilter: TriState,
+    onUnseenFilterChanged: (TriState) -> Unit,
+    bookmarkedFilter: TriState,
+    onBookmarkedFilterChanged: (TriState) -> Unit,
 ) {
     TriStateItem(
         label = stringResource(R.string.label_downloaded),
@@ -151,6 +148,11 @@ private fun SortPage(
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_UPLOAD_DATE },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_UPLOAD_DATE) },
     )
+    SortItem(
+        label = stringResource(R.string.action_sort_alpha),
+        sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_ALPHABET },
+        onClick = { onItemSelected(Anime.EPISODE_SORTING_ALPHABET) },
+    )
 }
 
 @Composable
@@ -185,25 +187,16 @@ private fun SetAsDefaultDialog(
             ) {
                 Text(text = stringResource(R.string.confirm_set_chapter_settings))
 
-                Row(
-                    modifier = Modifier
-                        .clickable { optionalChecked = !optionalChecked }
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(
-                        checked = optionalChecked,
-                        onCheckedChange = null,
-                    )
-                    Text(text = stringResource(R.string.also_set_episode_settings_for_library))
-                }
+                LabeledCheckbox(
+                    label = stringResource(R.string.also_set_episode_settings_for_library),
+                    checked = optionalChecked,
+                    onCheckedChange = { optionalChecked = it },
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(R.string.action_cancel))
             }
         },
         confirmButton = {
@@ -213,7 +206,7 @@ private fun SetAsDefaultDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(R.string.action_ok))
             }
         },
     )

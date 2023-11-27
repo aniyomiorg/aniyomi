@@ -1,32 +1,26 @@
 package eu.kanade.tachiyomi.ui.browse.anime.migration.search
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.hasCustomCover
@@ -36,10 +30,10 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.ui.browse.anime.migration.AnimeMigrationFlags
-import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
@@ -49,12 +43,13 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -69,19 +64,11 @@ internal fun MigrateAnimeDialog(
     onClickTitle: () -> Unit,
     onPopScreen: () -> Unit,
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val state by screenModel.state.collectAsState()
 
-    val activeFlags = remember { AnimeMigrationFlags.getEnabledFlagsPositions(screenModel.migrateFlags.get()) }
-    val items = remember {
-        AnimeMigrationFlags.titles(oldAnime)
-            .map { context.getString(it) }
-            .toList()
-    }
-    val selected = remember {
-        mutableStateListOf(*List(items.size) { i -> activeFlags.contains(i) }.toTypedArray())
-    }
+    val flags = remember { AnimeMigrationFlags.getFlags(oldAnime, screenModel.migrateFlags.get()) }
+    val selectedFlags = remember { flags.map { it.isDefaultSelected }.toMutableStateList() }
 
     if (state.isMigrating) {
         LoadingScreen(
@@ -98,19 +85,12 @@ internal fun MigrateAnimeDialog(
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
-                    items.forEachIndexed { index, title ->
-                        val onChange: () -> Unit = {
-                            selected[index] = !selected[index]
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(onClick = onChange),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Checkbox(checked = selected[index], onCheckedChange = { onChange() })
-                            Text(text = title)
-                        }
+                    flags.forEachIndexed { index, flag ->
+                        LabeledCheckbox(
+                            label = stringResource(flag.titleId),
+                            checked = selectedFlags[index],
+                            onCheckedChange = { selectedFlags[index] = it },
+                        )
                     }
                 }
             },
@@ -120,8 +100,8 @@ internal fun MigrateAnimeDialog(
                 ) {
                     TextButton(
                         onClick = {
-                            onClickTitle()
                             onDismissRequest()
+                            onClickTitle()
                         },
                     ) {
                         Text(text = stringResource(R.string.action_show_anime))
@@ -132,7 +112,12 @@ internal fun MigrateAnimeDialog(
                     TextButton(
                         onClick = {
                             scope.launchIO {
-                                screenModel.migrateAnime(oldAnime, newAnime, false)
+                                screenModel.migrateAnime(
+                                    oldAnime,
+                                    newAnime,
+                                    false,
+                                    AnimeMigrationFlags.getSelectedFlagsBitMap(selectedFlags, flags),
+                                )
                                 withUIContext { onPopScreen() }
                             }
                         },
@@ -142,12 +127,13 @@ internal fun MigrateAnimeDialog(
                     TextButton(
                         onClick = {
                             scope.launchIO {
-                                val selectedIndices = mutableListOf<Int>()
-                                selected.fastForEachIndexed { i, b -> if (b) selectedIndices.add(i) }
-                                val newValue =
-                                    MangaMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
-                                screenModel.migrateFlags.set(newValue)
-                                screenModel.migrateAnime(oldAnime, newAnime, true)
+                                screenModel.migrateAnime(
+                                    oldAnime,
+                                    newAnime,
+                                    true,
+                                    AnimeMigrationFlags.getSelectedFlagsBitMap(selectedFlags, flags),
+                                )
+
                                 withUIContext { onPopScreen() }
                             }
                         },
@@ -162,8 +148,9 @@ internal fun MigrateAnimeDialog(
 
 internal class MigrateAnimeDialogScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
@@ -179,10 +166,16 @@ internal class MigrateAnimeDialogScreenModel(
     }
 
     private val enhancedServices by lazy {
-        Injekt.get<TrackManager>().services.filterIsInstance<EnhancedAnimeTrackService>()
+        Injekt.get<TrackerManager>().trackers.filterIsInstance<EnhancedAnimeTracker>()
     }
 
-    suspend fun migrateAnime(oldAnime: Anime, newAnime: Anime, replace: Boolean) {
+    suspend fun migrateAnime(
+        oldAnime: Anime,
+        newAnime: Anime,
+        replace: Boolean,
+        flags: Int,
+    ) {
+        migrateFlags.set(flags)
         val source = sourceManager.get(newAnime.source) ?: return
         val prevSource = sourceManager.get(oldAnime.source)
 
@@ -198,6 +191,7 @@ internal class MigrateAnimeDialogScreenModel(
                 newAnime = newAnime,
                 sourceEpisodes = episodes,
                 replace = replace,
+                flags = flags,
             )
         } catch (_: Throwable) {
             // Explicitly stop if an error occurred; the dialog normally gets popped at the end
@@ -213,13 +207,12 @@ internal class MigrateAnimeDialogScreenModel(
         newAnime: Anime,
         sourceEpisodes: List<SEpisode>,
         replace: Boolean,
+        flags: Int,
     ) {
-        val flags = migrateFlags.get()
-
         val migrateEpisodes = AnimeMigrationFlags.hasEpisodes(flags)
         val migrateCategories = AnimeMigrationFlags.hasCategories(flags)
-        val migrateTracks = AnimeMigrationFlags.hasTracks(flags)
         val migrateCustomCover = AnimeMigrationFlags.hasCustomCover(flags)
+        val deleteDownloaded = AnimeMigrationFlags.hasDeleteDownloaded(flags)
 
         try {
             syncEpisodesWithSource.await(sourceEpisodes, newAnime, newSource)
@@ -229,8 +222,8 @@ internal class MigrateAnimeDialogScreenModel(
 
         // Update chapters read, bookmark and dateFetch
         if (migrateEpisodes) {
-            val prevAnimeEpisodes = getEpisodeByAnimeId.await(oldAnime.id)
-            val animeEpisodes = getEpisodeByAnimeId.await(newAnime.id)
+            val prevAnimeEpisodes = getEpisodesByAnimeId.await(oldAnime.id)
+            val animeEpisodes = getEpisodesByAnimeId.await(newAnime.id)
 
             val maxEpisodeSeen = prevAnimeEpisodes
                 .filter { it.seen }
@@ -268,20 +261,26 @@ internal class MigrateAnimeDialogScreenModel(
         }
 
         // Update track
-        if (migrateTracks) {
-            val tracks = getTracks.await(oldAnime.id).mapNotNull { track ->
-                val updatedTrack = track.copy(animeId = newAnime.id)
+        getTracks.await(oldAnime.id).mapNotNull { track ->
+            val updatedTrack = track.copy(animeId = newAnime.id)
 
-                val service = enhancedServices
-                    .firstOrNull { it.isTrackFrom(updatedTrack, oldAnime, oldSource) }
+            val service = enhancedServices
+                .firstOrNull { it.isTrackFrom(updatedTrack, oldAnime, oldSource) }
 
-                if (service != null) {
-                    service.migrateTrack(updatedTrack, newAnime, newSource)
-                } else {
-                    updatedTrack
-                }
+            if (service != null) {
+                service.migrateTrack(updatedTrack, newAnime, newSource)
+            } else {
+                updatedTrack
             }
-            insertTrack.awaitAll(tracks)
+        }
+            .takeIf { it.isNotEmpty() }
+            ?.let { insertTrack.awaitAll(it) }
+
+        // Delete downloaded
+        if (deleteDownloaded) {
+            if (oldSource != null) {
+                downloadManager.deleteAnime(oldAnime, oldSource)
+            }
         }
 
         if (replace) {
@@ -290,8 +289,10 @@ internal class MigrateAnimeDialogScreenModel(
 
         // Update custom cover (recheck if custom cover exists)
         if (migrateCustomCover && oldAnime.hasCustomCover()) {
-            @Suppress("BlockingMethodInNonBlockingContext")
-            coverCache.setCustomCoverToCache(newAnime, coverCache.getCustomCoverFile(oldAnime.id).inputStream())
+            coverCache.setCustomCoverToCache(
+                newAnime,
+                coverCache.getCustomCoverFile(oldAnime.id).inputStream(),
+            )
         }
 
         updateAnime.await(
@@ -305,6 +306,7 @@ internal class MigrateAnimeDialogScreenModel(
         )
     }
 
+    @Immutable
     data class State(
         val isMigrating: Boolean = false,
     )

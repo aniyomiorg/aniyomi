@@ -63,12 +63,20 @@ class AndroidPreferenceStore(
             deserializer = deserializer,
         )
     }
+
+    override fun getAll(): Map<String, *> {
+        return sharedPreferences.all ?: emptyMap<String, Any>()
+    }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 private val SharedPreferences.keyFlow
     get() = callbackFlow {
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? -> trySend(key) }
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
+            trySend(
+                key,
+            )
+        }
         registerOnSharedPreferenceChangeListener(listener)
         awaitClose {
             unregisterOnSharedPreferenceChangeListener(listener)

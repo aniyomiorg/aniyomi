@@ -5,17 +5,29 @@ import tachiyomi.domain.history.anime.model.AnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import java.util.Date
 
-val animeHistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, seenAt ->
-    AnimeHistory(
+object AnimeHistoryMapper {
+    fun mapAnimeHistory(
+        id: Long,
+        episodeId: Long,
+        seenAt: Date?,
+    ): AnimeHistory = AnimeHistory(
         id = id,
         episodeId = episodeId,
         seenAt = seenAt,
     )
-}
 
-val animeHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?) -> AnimeHistoryWithRelations = {
-        historyId, animeId, episodeId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, episodeNumber, seenAt ->
-    AnimeHistoryWithRelations(
+    fun mapAnimeHistoryWithRelations(
+        historyId: Long,
+        animeId: Long,
+        episodeId: Long,
+        title: String,
+        thumbnailUrl: String?,
+        sourceId: Long,
+        isFavorite: Boolean,
+        coverLastModified: Long,
+        episodeNumber: Double,
+        seenAt: Date?,
+    ): AnimeHistoryWithRelations = AnimeHistoryWithRelations(
         id = historyId,
         episodeId = episodeId,
         animeId = animeId,

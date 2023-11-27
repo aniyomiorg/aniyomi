@@ -17,8 +17,8 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun BaseAnimeSourceItem(
-    modifier: Modifier = Modifier,
     source: AnimeSource,
+    modifier: Modifier = Modifier,
     showLanguageInContent: Boolean = true,
     onClickItem: () -> Unit = {},
     onLongClickItem: () -> Unit = {},
@@ -26,7 +26,9 @@ fun BaseAnimeSourceItem(
     action: @Composable RowScope.(AnimeSource) -> Unit = {},
     content: @Composable RowScope.(AnimeSource, String?) -> Unit = defaultContent,
 ) {
-    val sourceLangString = LocaleHelper.getSourceDisplayName(source.lang, LocalContext.current).takeIf { showLanguageInContent }
+    val sourceLangString = LocaleHelper.getSourceDisplayName(source.lang, LocalContext.current).takeIf {
+        showLanguageInContent
+    }
     BaseBrowseItem(
         modifier = modifier,
         onClickItem = onClickItem,

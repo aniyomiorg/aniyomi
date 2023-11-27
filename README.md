@@ -31,7 +31,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/aniyomiorg/aniyomi/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://aniyomi.org/changelogs/).**
 2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
 
 </details>
@@ -40,7 +40,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 * Include version (More → About → Version)
  * If not latest, try updating, it may have already been solved
- * Preview version is equal to the number of commits as seen in the main page
+ * Preview version is equal to the number of commits as seen on the main page
 * Include steps to reproduce (if not obvious from description)
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)

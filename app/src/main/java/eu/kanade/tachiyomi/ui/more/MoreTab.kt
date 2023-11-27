@@ -10,8 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -19,6 +19,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -80,7 +81,7 @@ object MoreTab : Tab() {
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
             onClickStorage = { navigator.push(StorageTab()) },
-            onClickBackupAndRestore = { navigator.push(SettingsScreen.toBackupScreen()) },
+            onClickDataAndStorage = { navigator.push(SettingsScreen.toDataAndStorageScreen()) },
             onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
             onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
         )
@@ -89,8 +90,10 @@ object MoreTab : Tab() {
 
 private val libraryPreferences: LibraryPreferences by injectLazy()
 
+private val uiPreferences: UiPreferences by injectLazy()
+
 private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true)
+    0 -> HistoriesTab(true, uiPreferences)
     1 -> UpdatesTab(fromMore = true, inMiddle = false)
     else -> MangaLibraryTab
 }
@@ -101,15 +104,17 @@ private class MoreScreenModel(
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
 
-    var downloadedOnly by preferences.downloadedOnly().asState(coroutineScope)
-    var incognitoMode by preferences.incognitoMode().asState(coroutineScope)
+    var downloadedOnly by preferences.downloadedOnly().asState(screenModelScope)
+    var incognitoMode by preferences.incognitoMode().asState(screenModelScope)
 
-    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(DownloadQueueState.Stopped)
+    private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
+        DownloadQueueState.Stopped,
+    )
     val downloadQueueState: StateFlow<DownloadQueueState> = _state.asStateFlow()
 
     init {
         // Handle running/paused status change and queue progress updating
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             combine(
                 downloadManager.isDownloaderRunning,
                 downloadManager.queueState,
@@ -118,7 +123,12 @@ private class MoreScreenModel(
                     combine(
                         animeDownloadManager.isDownloaderRunning,
                         animeDownloadManager.queueState,
-                    ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
+                    ) { isRunningAnime, animeDownloadQueue ->
+                        Pair(
+                            isRunningAnime,
+                            animeDownloadQueue.size,
+                        )
+                    }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
                             val isDownloading = isDownloadingAnime || isDownloadingManga
                             val downloadQueueSize = mangaDownloadQueueSize + animeDownloadQueueSize
@@ -134,8 +144,8 @@ private class MoreScreenModel(
     }
 }
 
-sealed class DownloadQueueState {
-    object Stopped : DownloadQueueState()
-    data class Paused(val pending: Int) : DownloadQueueState()
-    data class Downloading(val pending: Int) : DownloadQueueState()
+sealed interface DownloadQueueState {
+    data object Stopped : DownloadQueueState
+    data class Paused(val pending: Int) : DownloadQueueState
+    data class Downloading(val pending: Int) : DownloadQueueState
 }

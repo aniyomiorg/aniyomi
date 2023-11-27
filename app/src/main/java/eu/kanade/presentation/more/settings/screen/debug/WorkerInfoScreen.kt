@@ -4,20 +4,18 @@ import android.content.Context
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -28,20 +26,25 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.ioCoroutineScope
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.workManager
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.util.plus
 
-object WorkerInfoScreen : Screen() {
+class WorkerInfoScreen : Screen() {
 
-    const val title = "Worker info"
+    companion object {
+        const val title = "Worker info"
+    }
 
     @Composable
     override fun Content() {
@@ -55,21 +58,24 @@ object WorkerInfoScreen : Screen() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(text = title) },
-                    navigationIcon = {
-                        IconButton(onClick = navigator::pop) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-                        }
-                    },
+                AppBar(
+                    title = title,
+                    navigateUp = navigator::pop,
                     actions = {
-                        IconButton(
-                            onClick = {
-                                context.copyToClipboard(title, enqueued + finished + running)
-                            },
-                        ) {
-                            Icon(imageVector = Icons.Default.ContentCopy, contentDescription = null)
-                        }
+                        AppBarActions(
+                            persistentListOf(
+                                AppBar.Action(
+                                    title = stringResource(R.string.action_copy_to_clipboard),
+                                    icon = Icons.Default.ContentCopy,
+                                    onClick = {
+                                        context.copyToClipboard(
+                                            title,
+                                            enqueued + finished + running,
+                                        )
+                                    },
+                                ),
+                            ),
+                        )
                     },
                     scrollBehavior = it,
                 )
@@ -113,7 +119,13 @@ object WorkerInfoScreen : Screen() {
         private val workManager = context.workManager
 
         val finished = workManager
-            .getWorkInfosLiveData(WorkQuery.fromStates(WorkInfo.State.SUCCEEDED, WorkInfo.State.FAILED, WorkInfo.State.CANCELLED))
+            .getWorkInfosLiveData(
+                WorkQuery.fromStates(
+                    WorkInfo.State.SUCCEEDED,
+                    WorkInfo.State.FAILED,
+                    WorkInfo.State.CANCELLED,
+                ),
+            )
             .asFlow()
             .map(::constructString)
             .stateIn(ioCoroutineScope, SharingStarted.WhileSubscribed(), "")

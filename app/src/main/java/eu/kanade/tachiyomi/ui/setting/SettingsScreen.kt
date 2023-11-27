@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.more.settings.screen.AboutScreen
-import eu.kanade.presentation.more.settings.screen.SettingsBackupScreen
-import eu.kanade.presentation.more.settings.screen.SettingsGeneralScreen
+import eu.kanade.presentation.more.settings.screen.SettingsAppearanceScreen
+import eu.kanade.presentation.more.settings.screen.SettingsDataScreen
 import eu.kanade.presentation.more.settings.screen.SettingsMainScreen
+import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
@@ -23,7 +23,7 @@ import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.presentation.core.components.TwoPanelBox
 
 class SettingsScreen private constructor(
-    val toBackup: Boolean,
+    val toDataAndStorage: Boolean,
     val toAbout: Boolean,
 ) : Screen() {
 
@@ -32,8 +32,8 @@ class SettingsScreen private constructor(
         val parentNavigator = LocalNavigator.currentOrThrow
         if (!isTabletUi()) {
             Navigator(
-                screen = if (toBackup) {
-                    SettingsBackupScreen
+                screen = if (toDataAndStorage) {
+                    SettingsDataScreen
                 } else if (toAbout) {
                     AboutScreen
                 } else {
@@ -54,12 +54,12 @@ class SettingsScreen private constructor(
             )
         } else {
             Navigator(
-                screen = if (toBackup) {
-                    SettingsBackupScreen
+                screen = if (toDataAndStorage) {
+                    SettingsDataScreen
                 } else if (toAbout) {
                     AboutScreen
                 } else {
-                    SettingsGeneralScreen
+                    SettingsAppearanceScreen
                 },
             ) {
                 val insets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)
@@ -79,10 +79,10 @@ class SettingsScreen private constructor(
     }
 
     companion object {
-        fun toMainScreen() = SettingsScreen(toBackup = false, toAbout = false)
+        fun toMainScreen() = SettingsScreen(toDataAndStorage = false, toAbout = false)
 
-        fun toBackupScreen() = SettingsScreen(toBackup = true, toAbout = false)
+        fun toDataAndStorageScreen() = SettingsScreen(toDataAndStorage = true, toAbout = false)
 
-        fun toAboutScreen() = SettingsScreen(toBackup = false, toAbout = true)
+        fun toAboutScreen() = SettingsScreen(toDataAndStorage = false, toAbout = true)
     }
 }

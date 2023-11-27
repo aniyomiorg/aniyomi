@@ -19,6 +19,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -30,7 +31,7 @@ fun Screen.animeSourcesTab(): TabContent {
 
     return TabContent(
         titleRes = R.string.label_anime_sources,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.action_global_search),
                 icon = Icons.Outlined.TravelExplore,
@@ -47,7 +48,6 @@ fun Screen.animeSourcesTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source, listing ->
-                    screenModel.onOpenSource(source)
                     navigator.push(BrowseAnimeSourceScreen(source.id, listing.query))
                 },
                 onClickPin = screenModel::togglePin,

@@ -1,48 +1,50 @@
 package tachiyomi.data.source.anime
 
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
-import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.source.anime.model.AnimeSource as DomainSource
 
 class AnimeSourceRepositoryImpl(
     private val sourceManager: AnimeSourceManager,
     private val handler: AnimeDatabaseHandler,
 ) : AnimeSourceRepository {
 
-    override fun getAnimeSources(): Flow<List<AnimeSource>> {
+    override fun getAnimeSources(): Flow<List<DomainSource>> {
         return sourceManager.catalogueSources.map { sources ->
             sources.map {
-                animeSourceMapper(it).copy(
+                mapSourceToDomainSource(it).copy(
                     supportsLatest = it.supportsLatest,
                 )
             }
         }
     }
 
-    override fun getOnlineAnimeSources(): Flow<List<AnimeSource>> {
+    override fun getOnlineAnimeSources(): Flow<List<DomainSource>> {
         return sourceManager.catalogueSources.map { sources ->
             sources
                 .filterIsInstance<AnimeHttpSource>()
-                .map(animeSourceMapper)
+                .map(::mapSourceToDomainSource)
         }
     }
 
-    override fun getAnimeSourcesWithFavoriteCount(): Flow<List<Pair<AnimeSource, Long>>> {
-        val sourceIdWithFavoriteCount = handler.subscribeToList { animesQueries.getAnimeSourceIdWithFavoriteCount() }
+    override fun getAnimeSourcesWithFavoriteCount(): Flow<List<Pair<DomainSource, Long>>> {
+        val sourceIdWithFavoriteCount =
+            handler.subscribeToList { animesQueries.getAnimeSourceIdWithFavoriteCount() }
         return sourceIdWithFavoriteCount.map { sourceIdsWithCount ->
             sourceIdsWithCount
                 .map { (sourceId, count) ->
                     val source = sourceManager.getOrStub(sourceId)
-                    val domainSource = animeSourceMapper(source).copy(
+                    val domainSource = mapSourceToDomainSource(source).copy(
                         isStub = source is StubAnimeSource,
                     )
                     domainSource to count
@@ -51,11 +53,12 @@ class AnimeSourceRepositoryImpl(
     }
 
     override fun getSourcesWithNonLibraryAnime(): Flow<List<AnimeSourceWithCount>> {
-        val sourceIdWithNonLibraryAnime = handler.subscribeToList { animesQueries.getSourceIdsWithNonLibraryAnime() }
+        val sourceIdWithNonLibraryAnime =
+            handler.subscribeToList { animesQueries.getSourceIdsWithNonLibraryAnime() }
         return sourceIdWithNonLibraryAnime.map { sourceId ->
             sourceId.map { (sourceId, count) ->
                 val source = sourceManager.getOrStub(sourceId)
-                val domainSource = animeSourceMapper(source).copy(
+                val domainSource = mapSourceToDomainSource(source).copy(
                     isStub = source is StubAnimeSource,
                 )
                 AnimeSourceWithCount(domainSource, count)
@@ -81,4 +84,12 @@ class AnimeSourceRepositoryImpl(
         val source = sourceManager.get(sourceId) as AnimeCatalogueSource
         return AnimeSourceLatestPagingSource(source)
     }
+
+    private fun mapSourceToDomainSource(source: AnimeSource): DomainSource = DomainSource(
+        id = source.id,
+        lang = source.lang,
+        name = source.name,
+        supportsLatest = false,
+        isStub = false,
+    )
 }

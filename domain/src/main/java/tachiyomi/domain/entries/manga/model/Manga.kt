@@ -1,7 +1,7 @@
 package tachiyomi.domain.entries.manga.model
 
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import tachiyomi.domain.entries.TriStateFilter
+import eu.kanade.tachiyomi.model.UpdateStrategy
+import tachiyomi.core.preference.TriState
 import java.io.Serializable
 
 data class Manga(
@@ -10,7 +10,7 @@ data class Manga(
     val favorite: Boolean,
     val lastUpdate: Long,
     val nextUpdate: Long,
-    val calculateInterval: Int,
+    val fetchInterval: Int,
     val dateAdded: Long,
     val viewerFlags: Long,
     val chapterFlags: Long,
@@ -25,6 +25,8 @@ data class Manga(
     val thumbnailUrl: String?,
     val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
+    val lastModifiedAt: Long,
+    val favoriteModifiedAt: Long?,
 ) : Serializable {
 
     val sorting: Long
@@ -42,18 +44,18 @@ data class Manga(
     val bookmarkedFilterRaw: Long
         get() = chapterFlags and CHAPTER_BOOKMARKED_MASK
 
-    val unreadFilter: TriStateFilter
+    val unreadFilter: TriState
         get() = when (unreadFilterRaw) {
-            CHAPTER_SHOW_UNREAD -> TriStateFilter.ENABLED_IS
-            CHAPTER_SHOW_READ -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            CHAPTER_SHOW_UNREAD -> TriState.ENABLED_IS
+            CHAPTER_SHOW_READ -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
-    val bookmarkedFilter: TriStateFilter
+    val bookmarkedFilter: TriState
         get() = when (bookmarkedFilterRaw) {
-            CHAPTER_SHOW_BOOKMARKED -> TriStateFilter.ENABLED_IS
-            CHAPTER_SHOW_NOT_BOOKMARKED -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            CHAPTER_SHOW_BOOKMARKED -> TriState.ENABLED_IS
+            CHAPTER_SHOW_NOT_BOOKMARKED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
     fun sortDescending(): Boolean {
@@ -83,6 +85,7 @@ data class Manga(
         const val CHAPTER_SORTING_SOURCE = 0x00000000L
         const val CHAPTER_SORTING_NUMBER = 0x00000100L
         const val CHAPTER_SORTING_UPLOAD_DATE = 0x00000200L
+        const val CHAPTER_SORTING_ALPHABET = 0x00000300L
         const val CHAPTER_SORTING_MASK = 0x00000300L
 
         const val CHAPTER_DISPLAY_NAME = 0x00000000L
@@ -97,7 +100,7 @@ data class Manga(
             favorite = false,
             lastUpdate = 0L,
             nextUpdate = 0L,
-            calculateInterval = 0,
+            fetchInterval = 0,
             dateAdded = 0L,
             viewerFlags = 0L,
             chapterFlags = 0L,
@@ -110,6 +113,8 @@ data class Manga(
             thumbnailUrl = null,
             updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
+            lastModifiedAt = 0L,
+            favoriteModifiedAt = null,
         )
     }
 }

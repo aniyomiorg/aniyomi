@@ -10,38 +10,51 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSearchScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 
-class MigrateSearchScreen(private val mangaId: Long) : Screen() {
+class MigrateMangaSearchScreen(private val mangaId: Long) : Screen() {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val screenModel = rememberScreenModel { MigrateSearchScreenModel(mangaId = mangaId) }
+        val screenModel = rememberScreenModel { MigrateMangaSearchScreenModel(mangaId = mangaId) }
         val state by screenModel.state.collectAsState()
 
+        val dialogScreenModel = rememberScreenModel {
+            MangaMigrateSearchScreenDialogScreenModel(
+                mangaId = mangaId,
+            )
+        }
+        val dialogState by dialogScreenModel.state.collectAsState()
+
         MigrateMangaSearchScreen(
-            navigateUp = navigator::pop,
             state = state,
-            getManga = { screenModel.getManga(it) },
+            fromSourceId = dialogState.manga?.source,
+            navigateUp = navigator::pop,
             onChangeSearchQuery = screenModel::updateSearchQuery,
-            onSearch = screenModel::search,
+            onSearch = { screenModel.search() },
+            getManga = { screenModel.getManga(it) },
+            onChangeSearchFilter = screenModel::setSourceFilter,
+            onToggleResults = screenModel::toggleFilterResults,
             onClickSource = {
-                if (!screenModel.incognitoMode.get()) {
-                    screenModel.lastUsedSourceId.set(it.id)
-                }
-                navigator.push(MangaSourceSearchScreen(state.manga!!, it.id, state.searchQuery))
+                navigator.push(
+                    MangaSourceSearchScreen(dialogState.manga!!, it.id, state.searchQuery),
+                )
             },
-            onClickItem = { screenModel.setDialog(MigrateMangaSearchDialog.Migrate(it)) },
+            onClickItem = {
+                dialogScreenModel.setDialog(
+                    MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate(it),
+                )
+            },
             onLongClickItem = { navigator.push(MangaScreen(it.id, true)) },
         )
 
-        when (val dialog = state.dialog) {
-            is MigrateMangaSearchDialog.Migrate -> {
+        when (val dialog = dialogState.dialog) {
+            is MangaMigrateSearchScreenDialogScreenModel.Dialog.Migrate -> {
                 MigrateMangaDialog(
-                    oldManga = state.manga!!,
+                    oldManga = dialogState.manga!!,
                     newManga = dialog.manga,
                     screenModel = rememberScreenModel { MigrateMangaDialogScreenModel() },
-                    onDismissRequest = { screenModel.setDialog(null) },
+                    onDismissRequest = { dialogScreenModel.setDialog(null) },
                     onClickTitle = {
                         navigator.push(MangaScreen(dialog.manga.id, true))
                     },

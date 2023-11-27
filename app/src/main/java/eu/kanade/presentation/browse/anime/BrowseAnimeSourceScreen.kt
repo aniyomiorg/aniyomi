@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
@@ -24,6 +25,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -61,12 +63,12 @@ fun BrowseAnimeSourceContent(
         if (animeList.itemCount > 0 && errorState != null && errorState is LoadState.Error) {
             val result = snackbarHostState.showSnackbar(
                 message = getErrorMessage(errorState),
-                actionLabel = context.getString(R.string.action_webview_refresh),
+                actionLabel = context.getString(R.string.action_retry),
                 duration = SnackbarDuration.Indefinite,
             )
             when (result) {
                 SnackbarResult.Dismissed -> snackbarHostState.currentSnackbarData?.dismiss()
-                SnackbarResult.ActionPerformed -> animeList.refresh()
+                SnackbarResult.ActionPerformed -> animeList.retry()
             }
         }
     }
@@ -76,15 +78,15 @@ fun BrowseAnimeSourceContent(
             modifier = Modifier.padding(contentPadding),
             message = getErrorMessage(errorState),
             actions = if (source is LocalAnimeSource) {
-                listOf(
+                persistentListOf(
                     EmptyScreenAction(
                         stringResId = R.string.local_source_help_guide,
-                        icon = Icons.Outlined.HelpOutline,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onLocalAnimeSourceHelpClick,
                     ),
                 )
             } else {
-                listOf(
+                persistentListOf(
                     EmptyScreenAction(
                         stringResId = R.string.action_retry,
                         icon = Icons.Outlined.Refresh,
@@ -97,7 +99,7 @@ fun BrowseAnimeSourceContent(
                     ),
                     EmptyScreenAction(
                         stringResId = R.string.label_help,
-                        icon = Icons.Outlined.HelpOutline,
+                        icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onHelpClick,
                     ),
                 )
@@ -145,7 +147,7 @@ fun BrowseAnimeSourceContent(
 }
 
 @Composable
-fun MissingSourceScreen(
+internal fun MissingSourceScreen(
     source: StubAnimeSource,
     navigateUp: () -> Unit,
 ) {

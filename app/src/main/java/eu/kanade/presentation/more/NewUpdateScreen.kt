@@ -5,8 +5,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.NewReleases
+import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.material3.Material3RichText
@@ -23,7 +25,6 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.InfoScreen
-import tachiyomi.presentation.core.util.ThemePreviews
 
 @Composable
 fun NewUpdateScreen(
@@ -60,13 +61,13 @@ fun NewUpdateScreen(
             ) {
                 Text(text = stringResource(R.string.update_check_open))
                 Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
-                Icon(imageVector = Icons.Default.OpenInNew, contentDescription = null)
+                Icon(imageVector = Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
             }
         }
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun NewUpdateScreenPreview() {
     TachiyomiTheme {

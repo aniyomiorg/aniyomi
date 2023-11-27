@@ -21,12 +21,13 @@ data class BackupEpisode(
     // episodeNumber is called number is 1.x
     @ProtoNumber(9) var episodeNumber: Float = 0F,
     @ProtoNumber(10) var sourceOrder: Long = 0,
+    @ProtoNumber(11) var lastModifiedAt: Long = 0,
 ) {
     fun toEpisodeImpl(): Episode {
         return Episode.create().copy(
             url = this@BackupEpisode.url,
             name = this@BackupEpisode.name,
-            episodeNumber = this@BackupEpisode.episodeNumber,
+            episodeNumber = this@BackupEpisode.episodeNumber.toDouble(),
             scanlator = this@BackupEpisode.scanlator,
             seen = this@BackupEpisode.seen,
             bookmark = this@BackupEpisode.bookmark,
@@ -35,15 +36,31 @@ data class BackupEpisode(
             dateFetch = this@BackupEpisode.dateFetch,
             dateUpload = this@BackupEpisode.dateUpload,
             sourceOrder = this@BackupEpisode.sourceOrder,
+            lastModifiedAt = this@BackupEpisode.lastModifiedAt,
         )
     }
 }
 
-val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean, bookmark: Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Float, source_order: Long, dateFetch: Long, dateUpload: Long ->
+val backupEpisodeMapper = {
+        _: Long,
+        _: Long,
+        url: String,
+        name: String,
+        scanlator: String?,
+        seen: Boolean,
+        bookmark: Boolean,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+        episodeNumber: Double,
+        source_order: Long,
+        dateFetch: Long,
+        dateUpload: Long,
+        lastModifiedAt: Long,
+    ->
     BackupEpisode(
         url = url,
         name = name,
-        episodeNumber = episodeNumber,
+        episodeNumber = episodeNumber.toFloat(),
         scanlator = scanlator,
         seen = seen,
         bookmark = bookmark,
@@ -52,5 +69,6 @@ val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlat
         dateFetch = dateFetch,
         dateUpload = dateUpload,
         sourceOrder = source_order,
+        lastModifiedAt = lastModifiedAt,
     )
 }

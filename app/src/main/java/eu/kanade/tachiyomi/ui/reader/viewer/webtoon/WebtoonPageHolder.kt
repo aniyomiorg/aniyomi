@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.reader.viewer.webtoon
 
 import android.content.res.Resources
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -14,7 +13,6 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import eu.kanade.tachiyomi.databinding.ReaderErrorBinding
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import eu.kanade.tachiyomi.ui.reader.model.StencilPage
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
@@ -117,7 +115,7 @@ class WebtoonPageHolder(
 
         removeErrorLayout()
         frame.recycle()
-        progressIndicator.setProgress(0, animated = false)
+        progressIndicator.setProgress(0)
     }
 
     /**
@@ -183,7 +181,6 @@ class WebtoonPageHolder(
      */
     private suspend fun setImage() {
         progressIndicator.setProgress(0)
-        removeErrorLayout()
 
         val streamFn = page?.stream ?: return
 
@@ -204,6 +201,7 @@ class WebtoonPageHolder(
                     cropBorders = viewer.config.imageCropBorders,
                 ),
             )
+            removeErrorLayout()
         }
         // Suspend the coroutine to close the input stream only when the WebtoonPageHolder is recycled
         suspendCancellableCoroutine<Nothing> { continuation ->
@@ -212,6 +210,10 @@ class WebtoonPageHolder(
     }
 
     private fun process(imageStream: BufferedInputStream): InputStream {
+        if (viewer.config.dualPageRotateToFit) {
+            return rotateDualPage(imageStream)
+        }
+
         if (viewer.config.dualPageSplit) {
             val isDoublePage = ImageUtil.isWideImage(imageStream)
             if (isDoublePage) {
@@ -220,33 +222,17 @@ class WebtoonPageHolder(
             }
         }
 
-        if (viewer.config.longStripSplit) {
-            if (page is StencilPage) {
-                return imageStream
-            }
-            val isStripSplitNeeded = ImageUtil.isStripSplitNeeded(imageStream)
-            if (isStripSplitNeeded) {
-                return onStripSplit(imageStream)
-            }
-        }
-
         return imageStream
     }
 
-    private fun onStripSplit(imageStream: BufferedInputStream): InputStream {
-        // If we have reached this point [page] and its stream shouldn't be null
-        val page = page!!
-        val stream = page.stream!!
-        val splitData = ImageUtil.getSplitDataForStream(imageStream).toMutableList()
-        val currentSplitData = splitData.removeFirst()
-        val newPages = splitData.map {
-            StencilPage(page) { ImageUtil.splitStrip(it, stream) }
+    private fun rotateDualPage(imageStream: BufferedInputStream): InputStream {
+        val isDoublePage = ImageUtil.isWideImage(imageStream)
+        return if (isDoublePage) {
+            val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
+            ImageUtil.rotateImage(imageStream, rotation)
+        } else {
+            imageStream
         }
-        return ImageUtil.splitStrip(currentSplitData) { imageStream }
-            .also {
-                // Running [onLongStripSplit] first results in issues with splitting
-                viewer.onLongStripSplit(page, newPages)
-            }
     }
 
     /**
@@ -262,6 +248,7 @@ class WebtoonPageHolder(
      */
     private fun onImageDecoded() {
         progressContainer.isVisible = false
+        removeErrorLayout()
     }
 
     /**
@@ -281,7 +268,6 @@ class WebtoonPageHolder(
 
         val progress = ReaderProgressIndicator(context).apply {
             updateLayoutParams<FrameLayout.LayoutParams> {
-                gravity = Gravity.CENTER_HORIZONTAL
                 updateMargins(top = parentHeight / 4)
             }
         }
@@ -295,7 +281,10 @@ class WebtoonPageHolder(
     private fun initErrorLayout(withOpenInWebView: Boolean): ReaderErrorBinding {
         if (errorLayout == null) {
             errorLayout = ReaderErrorBinding.inflate(LayoutInflater.from(context), frame, true)
-            errorLayout?.root?.layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, (parentHeight * 0.8).toInt())
+            errorLayout?.root?.layoutParams = FrameLayout.LayoutParams(
+                MATCH_PARENT,
+                (parentHeight * 0.8).toInt(),
+            )
             errorLayout?.actionRetry?.setOnClickListener {
                 page?.let { it.chapter.pageLoader?.retryPage(it) }
             }

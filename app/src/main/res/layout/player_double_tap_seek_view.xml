@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="4dp"
-        android:textColor="@android:color/white"
+        android:textColor="#FFF"
         android:textSize="12sp"
         tools:text="10 seconds" />
 

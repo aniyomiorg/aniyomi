@@ -1,8 +1,9 @@
 package tachiyomi.domain.library.service
 
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.getEnum
-import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
@@ -20,50 +21,48 @@ class LibraryPreferences(
     fun isDefaultHomeTabLibraryManga() =
         preferenceStore.getBoolean("default_home_tab_library", false)
 
-    fun libraryDisplayMode() = preferenceStore.getObject(
+    fun displayMode() = preferenceStore.getObject(
         "pref_display_mode_library",
         LibraryDisplayMode.default,
         LibraryDisplayMode.Serializer::serialize,
         LibraryDisplayMode.Serializer::deserialize,
     )
 
-    fun libraryMangaSortingMode() = preferenceStore.getObject(
+    fun mangaSortingMode() = preferenceStore.getObject(
         "library_sorting_mode",
         MangaLibrarySort.default,
         MangaLibrarySort.Serializer::serialize,
         MangaLibrarySort.Serializer::deserialize,
     )
 
-    fun libraryAnimeSortingMode() = preferenceStore.getObject(
+    fun animeSortingMode() = preferenceStore.getObject(
         "animelib_sorting_mode",
         AnimeLibrarySort.default,
         AnimeLibrarySort.Serializer::serialize,
         AnimeLibrarySort.Serializer::deserialize,
     )
 
-    fun libraryUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 0)
+    fun lastUpdatedTimestamp() = preferenceStore.getLong(Preference.appStateKey("library_update_last_timestamp"), 0L)
+    fun autoUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 0)
 
-    fun libraryUpdateLastTimestamp() = preferenceStore.getLong("library_update_last_timestamp", 0L)
-
-    fun libraryUpdateDeviceRestriction() = preferenceStore.getStringSet(
+    fun autoUpdateDeviceRestrictions() = preferenceStore.getStringSet(
         "library_update_restriction",
         setOf(
             DEVICE_ONLY_ON_WIFI,
         ),
     )
 
-    fun libraryUpdateItemRestriction() = preferenceStore.getStringSet(
+    fun autoUpdateItemRestrictions() = preferenceStore.getStringSet(
         "library_update_manga_restriction",
         setOf(
             ENTRY_HAS_UNVIEWED,
             ENTRY_NON_COMPLETED,
             ENTRY_NON_VIEWED,
+            ENTRY_OUTSIDE_RELEASE_PERIOD,
         ),
     )
 
     fun autoUpdateMetadata() = preferenceStore.getBoolean("auto_update_metadata", false)
-
-    fun autoUpdateTrackers() = preferenceStore.getBoolean("auto_update_trackers", false)
 
     fun showContinueViewingButton() =
         preferenceStore.getBoolean("display_continue_reading_button", false)
@@ -103,40 +102,90 @@ class LibraryPreferences(
     // Mixture Filter
 
     fun filterDownloadedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_downloaded_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_downloaded_v2", TriState.DISABLED)
 
     fun filterDownloadedManga() =
-        preferenceStore.getEnum("pref_filter_library_downloaded_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_downloaded_v2", TriState.DISABLED)
 
     fun filterUnseen() =
-        preferenceStore.getEnum("pref_filter_animelib_unread_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_unread_v2", TriState.DISABLED)
 
     fun filterUnread() =
-        preferenceStore.getEnum("pref_filter_library_unread_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_unread_v2", TriState.DISABLED)
 
     fun filterStartedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_started_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_started_v2", TriState.DISABLED)
 
     fun filterStartedManga() =
-        preferenceStore.getEnum("pref_filter_library_started_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_started_v2", TriState.DISABLED)
 
     fun filterBookmarkedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_bookmarked_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_bookmarked_v2", TriState.DISABLED)
 
     fun filterBookmarkedManga() =
-        preferenceStore.getEnum("pref_filter_library_bookmarked_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_bookmarked_v2", TriState.DISABLED)
 
     fun filterCompletedAnime() =
-        preferenceStore.getEnum("pref_filter_animelib_completed_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_completed_v2", TriState.DISABLED)
 
     fun filterCompletedManga() =
-        preferenceStore.getEnum("pref_filter_library_completed_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_completed_v2", TriState.DISABLED)
+
+    fun filterIntervalCustomAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_custom",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalCustomManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_custom",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalLongAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_long",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalLongManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_long",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalLateAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_late",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalLateManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_late",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalDroppedAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_dropped",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalDroppedManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_dropped",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalPassedAnime() = preferenceStore.getEnum(
+        "pref_filter_anime_library_interval_passed",
+        TriState.DISABLED,
+    )
+
+    fun filterIntervalPassedManga() = preferenceStore.getEnum(
+        "pref_filter_manga_library_interval_passed",
+        TriState.DISABLED,
+    )
 
     fun filterTrackedAnime(id: Int) =
-        preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_animelib_tracked_${id}_v2", TriState.DISABLED)
 
     fun filterTrackedManga(id: Int) =
-        preferenceStore.getEnum("pref_filter_library_tracked_${id}_v2", TriStateFilter.DISABLED)
+        preferenceStore.getEnum("pref_filter_library_tracked_${id}_v2", TriState.DISABLED)
 
     // Mixture Update Count
 
@@ -148,19 +197,19 @@ class LibraryPreferences(
     fun defaultAnimeCategory() = preferenceStore.getInt("default_anime_category", -1)
     fun defaultMangaCategory() = preferenceStore.getInt("default_category", -1)
 
-    fun lastUsedAnimeCategory() = preferenceStore.getInt("last_used_anime_category", 0)
-    fun lastUsedMangaCategory() = preferenceStore.getInt("last_used_category", 0)
+    fun lastUsedAnimeCategory() = preferenceStore.getInt(Preference.appStateKey("last_used_anime_category"), 0)
+    fun lastUsedMangaCategory() = preferenceStore.getInt(Preference.appStateKey("last_used_category"), 0)
 
-    fun animeLibraryUpdateCategories() =
+    fun animeUpdateCategories() =
         preferenceStore.getStringSet("animelib_update_categories", emptySet())
 
-    fun mangaLibraryUpdateCategories() =
+    fun mangaUpdateCategories() =
         preferenceStore.getStringSet("library_update_categories", emptySet())
 
-    fun animeLibraryUpdateCategoriesExclude() =
+    fun animeUpdateCategoriesExclude() =
         preferenceStore.getStringSet("animelib_update_categories_exclude", emptySet())
 
-    fun mangaLibraryUpdateCategoriesExclude() =
+    fun mangaUpdateCategoriesExclude() =
         preferenceStore.getStringSet("library_update_categories_exclude", emptySet())
 
     // Mixture Item
@@ -220,7 +269,9 @@ class LibraryPreferences(
         filterEpisodeByBookmarked().set(anime.bookmarkedFilterRaw)
         sortEpisodeBySourceOrNumber().set(anime.sorting)
         displayEpisodeByNameOrNumber().set(anime.displayMode)
-        sortEpisodeByAscendingOrDescending().set(if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC)
+        sortEpisodeByAscendingOrDescending().set(
+            if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC,
+        )
     }
 
     fun setChapterSettingsDefault(manga: Manga) {
@@ -229,26 +280,28 @@ class LibraryPreferences(
         filterChapterByBookmarked().set(manga.bookmarkedFilterRaw)
         sortChapterBySourceOrNumber().set(manga.sorting)
         displayChapterByNameOrNumber().set(manga.displayMode)
-        sortChapterByAscendingOrDescending().set(if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC)
+        sortChapterByAscendingOrDescending().set(
+            if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC,
+        )
     }
 
     // region Swipe Actions
+
+    fun swipeEpisodeStartAction() =
+        preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleSeen)
 
     fun swipeEpisodeEndAction() = preferenceStore.getEnum(
         "pref_episode_swipe_start_action",
         EpisodeSwipeAction.ToggleBookmark,
     )
 
-    fun swipeEpisodeStartAction() =
-        preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleSeen)
+    fun swipeChapterStartAction() =
+        preferenceStore.getEnum("pref_chapter_swipe_end_action", ChapterSwipeAction.ToggleRead)
 
     fun swipeChapterEndAction() = preferenceStore.getEnum(
         "pref_chapter_swipe_start_action",
         ChapterSwipeAction.ToggleBookmark,
     )
-
-    fun swipeChapterStartAction() =
-        preferenceStore.getEnum("pref_chapter_swipe_end_action", ChapterSwipeAction.ToggleRead)
 
     // endregion
 
@@ -270,10 +323,10 @@ class LibraryPreferences(
         const val DEVICE_ONLY_ON_WIFI = "wifi"
         const val DEVICE_NETWORK_NOT_METERED = "network_not_metered"
         const val DEVICE_CHARGING = "ac"
-        const val DEVICE_BATTERY_NOT_LOW = "battery_not_low"
 
         const val ENTRY_NON_COMPLETED = "manga_ongoing"
         const val ENTRY_HAS_UNVIEWED = "manga_fully_read"
         const val ENTRY_NON_VIEWED = "manga_started"
+        const val ENTRY_OUTSIDE_RELEASE_PERIOD = "manga_outside_release_period"
     }
 }

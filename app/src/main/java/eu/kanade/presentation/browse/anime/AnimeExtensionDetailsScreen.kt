@@ -10,24 +10,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,11 +53,10 @@ import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsState
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.DIVIDER_ALPHA
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -64,7 +64,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 @Composable
 fun AnimeExtensionDetailsScreen(
     navigateUp: () -> Unit,
-    state: AnimeExtensionDetailsState,
+    state: AnimeExtensionDetailsScreenModel.State,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickWhatsNew: () -> Unit,
     onClickReadme: () -> Unit,
@@ -81,40 +81,42 @@ fun AnimeExtensionDetailsScreen(
                 navigateUp = navigateUp,
                 actions = {
                     AppBarActions(
-                        actions = buildList {
-                            if (state.extension?.isUnofficial == false) {
-                                add(
-                                    AppBar.Action(
-                                        title = stringResource(R.string.whats_new),
-                                        icon = Icons.Outlined.History,
-                                        onClick = onClickWhatsNew,
-                                    ),
-                                )
-                                add(
-                                    AppBar.Action(
-                                        title = stringResource(R.string.action_faq_and_guides),
-                                        icon = Icons.Outlined.HelpOutline,
-                                        onClick = onClickReadme,
+                        actions = persistentListOf<AppBar.AppBarAction>().builder()
+                            .apply {
+                                if (state.extension?.isUnofficial == false) {
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(R.string.whats_new),
+                                            icon = Icons.Outlined.History,
+                                            onClick = onClickWhatsNew,
+                                        ),
+                                    )
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(R.string.action_faq_and_guides),
+                                            icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                                            onClick = onClickReadme,
+                                        ),
+                                    )
+                                }
+                                addAll(
+                                    listOf(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_enable_all),
+                                            onClick = onClickEnableAll,
+                                        ),
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.action_disable_all),
+                                            onClick = onClickDisableAll,
+                                        ),
+                                        AppBar.OverflowAction(
+                                            title = stringResource(R.string.pref_clear_cookies),
+                                            onClick = onClickClearCookies,
+                                        ),
                                     ),
                                 )
                             }
-                            addAll(
-                                listOf(
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_enable_all),
-                                        onClick = onClickEnableAll,
-                                    ),
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_disable_all),
-                                        onClick = onClickDisableAll,
-                                    ),
-                                    AppBar.OverflowAction(
-                                        title = stringResource(R.string.pref_clear_cookies),
-                                        onClick = onClickClearCookies,
-                                    ),
-                                ),
-                            )
-                        },
+                            .build(),
                     )
                 },
                 scrollBehavior = scrollBehavior,
@@ -175,7 +177,8 @@ private fun AnimeExtensionDetails(
                         data = Uri.fromParts("package", extension.pkgName, null)
                         context.startActivity(this)
                     }
-                },
+                    Unit
+                }.takeIf { extension.isShared },
                 onClickAgeRating = {
                     showNsfwWarning = true
                 },
@@ -187,7 +190,6 @@ private fun AnimeExtensionDetails(
             key = { it.source.id },
         ) { source ->
             SourceSwitchPreference(
-                modifier = Modifier.animateItemPlacement(),
                 source = source,
                 onClickSourcePreferences = onClickSourcePreferences,
                 onClickSource = onClickSource,
@@ -208,7 +210,7 @@ private fun DetailsHeader(
     extension: AnimeExtension,
     onClickAgeRating: () -> Unit,
     onClickUninstall: () -> Unit,
-    onClickAppInfo: () -> Unit,
+    onClickAppInfo: (() -> Unit)?,
 ) {
     val context = LocalContext.current
 
@@ -237,7 +239,9 @@ private fun DetailsHeader(
                 textAlign = TextAlign.Center,
             )
 
-            val strippedPkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
+            val strippedPkgName = extension.pkgName.substringAfter(
+                "eu.kanade.tachiyomi.animeextension.",
+            )
 
             Text(
                 text = strippedPkgName,
@@ -292,6 +296,7 @@ private fun DetailsHeader(
                 top = MaterialTheme.padding.small,
                 bottom = MaterialTheme.padding.medium,
             ),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             OutlinedButton(
                 modifier = Modifier.weight(1f),
@@ -300,29 +305,29 @@ private fun DetailsHeader(
                 Text(stringResource(R.string.ext_uninstall))
             }
 
-            Spacer(Modifier.width(16.dp))
-
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = onClickAppInfo,
-            ) {
-                Text(
-                    text = stringResource(R.string.ext_app_info),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
+            if (onClickAppInfo != null) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = onClickAppInfo,
+                ) {
+                    Text(
+                        text = stringResource(R.string.ext_app_info),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
             }
         }
 
-        Divider()
+        HorizontalDivider()
     }
 }
 
 @Composable
 private fun InfoText(
-    modifier: Modifier,
     primaryText: String,
-    primaryTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     secondaryText: String,
+    modifier: Modifier = Modifier,
+    primaryTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     onClick: (() -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -355,20 +360,17 @@ private fun InfoText(
 
 @Composable
 private fun InfoDivider() {
-    Divider(
-        modifier = Modifier
-            .height(20.dp)
-            .width(1.dp),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = DIVIDER_ALPHA),
+    VerticalDivider(
+        modifier = Modifier.height(20.dp),
     )
 }
 
 @Composable
 private fun SourceSwitchPreference(
-    modifier: Modifier = Modifier,
     source: AnimeExtensionSourceItem,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 

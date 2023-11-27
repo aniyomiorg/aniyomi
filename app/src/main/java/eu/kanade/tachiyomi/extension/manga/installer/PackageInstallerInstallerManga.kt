@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.os.Build
+import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
@@ -50,9 +51,13 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
         super.processEntry(entry)
         activeSession = null
         try {
-            val installParams = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+            val installParams = PackageInstaller.SessionParams(
+                PackageInstaller.SessionParams.MODE_FULL_INSTALL,
+            )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                installParams.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
+                installParams.setRequireUserAction(
+                    PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED,
+                )
             }
             activeSession = entry to packageInstaller.createSession(installParams)
             val fileSize = service.getUriSize(entry.uri) ?: throw IllegalStateException()
@@ -100,7 +105,12 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
     }
 
     init {
-        service.registerReceiver(packageActionReceiver, IntentFilter(INSTALL_ACTION))
+        ContextCompat.registerReceiver(
+            service,
+            packageActionReceiver,
+            IntentFilter(INSTALL_ACTION),
+            ContextCompat.RECEIVER_EXPORTED,
+        )
     }
 }
 

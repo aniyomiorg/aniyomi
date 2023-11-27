@@ -58,7 +58,7 @@
     <string name="pref_category_downloads">Pobieranie</string>
     <string name="pref_category_advanced">Zaawansowane</string>
     <string name="pref_category_about">O aplikacji</string>
-    <string name="pref_library_columns">Ilość okładek w rzędzie</string>
+    <string name="pref_library_columns">Rozmiar siatki</string>
     <string name="remove_from_library">Usuń z biblioteki</string>
     <string name="display_mode_chapter">Rozdział %1$s</string>
     <string name="manga_download">Pobierz</string>
@@ -470,7 +470,7 @@
     <string name="chapter_settings_updated">Zaktualizowano domyślne ustawienia rozdziałów</string>
     <string name="migration_help_guide">Instrukcja przenoszenia źródeł</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Jeden brakujący rozdział</item>
+        <item quantity="one">%d brakujący rozdział</item>
         <item quantity="few">%d brakujące rozdziały</item>
         <item quantity="many">%d brakujących rozdziałów</item>
         <item quantity="other">%d brakujących rozdziałów</item>
@@ -503,7 +503,7 @@
     <string name="track_finished_reading_date">Data zakończenia</string>
     <string name="track_started_reading_date">Data rozpoczęcia</string>
     <string name="pref_dump_crash_logs_summary">Zapisuje logi błędów do pliku do udostępnienia programistom</string>
-    <string name="pref_dump_crash_logs">Zapisz logi crasha</string>
+    <string name="pref_dump_crash_logs">Udostępnij logi crasha</string>
     <string name="pref_viewer_nav">Strefy kliknięcia</string>
     <string name="edge_nav">Przy krawędzi</string>
     <string name="kindlish_nav">Podobnie jak w czytniku Kindle</string>
@@ -573,7 +573,7 @@
     <string name="theme_monet">Dynamiczny</string>
     <string name="pref_app_theme">Motyw aplikacji</string>
     <string name="restore_miui_warning">Funkcje kopii zapasowej mogą nie działać, jeśli optymalizacja nakładki MIUI jest wyłączona.</string>
-    <string name="theme_yotsuba">Yotsuba</string>
+    <string name="theme_yotsuba">Yotsuba •</string>
     <string name="theme_yinyang">Yin i Yang</string>
     <string name="pref_dark_theme_pure_black">Czysty czarny motyw</string>
     <string name="theme_strawberrydaiquiri">Truskawkowe daiquiri</string>
@@ -640,7 +640,7 @@
     <string name="pref_update_only_started">Brak przeczytanych rozdziałów</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="pref_landscape_zoom">Przybliżaj poziome obrazy</string>
-    <string name="pref_navigate_pan">Dotknij aby przesunąć</string>
+    <string name="pref_navigate_pan">Przesuń szeroki obraz</string>
     <string name="action_display_cover_only_grid">Siatka z samych okładek</string>
     <string name="skipped_reason_not_started">Pominięto - brak przeczytanych rozdziałów</string>
     <string name="skipped_reason_completed">Pominięto ponieważ seria została ukończona</string>
@@ -723,7 +723,6 @@
 \nCzy nadal chcesz kontynuować\?</string>
     <string name="pref_skip_dupe_chapters">Pomiń zduplikowane rozdziały</string>
     <string name="enhanced_services_not_installed">Dostępne, ale źródło nie jest zainstalowane: %s</string>
-    <string name="pref_worker_info">Informacje o procesach</string>
     <string name="track_error">Błąd %1$s: %2$s</string>
     <string name="information_required_plain">*wymagane</string>
     <string name="pref_hide_in_library_items">Ukryj pozycje znajdujące się już w bibliotece</string>
@@ -734,4 +733,20 @@
         <item quantity="many">Następne %d rozdziałów</item>
         <item quantity="other">Następne %d rozdziałów</item>
     </plurals>
+    <string name="action_update_category">Aktualizuj kategorię</string>
+    <string name="split_tall_images">Dziel długie obrazy</string>
+    <string name="overlay_header">Nakładka</string>
+    <string name="pref_page_rotate">Dopasuj szerokie strony</string>
+    <string name="pref_page_rotate_invert">Zmień orientację obróconych obrazów</string>
+    <string name="pref_debug_info">Informacje debugowania</string>
+    <plurals name="missing_chapters">
+        <item quantity="one">Brakujący %1$s rozdział</item>
+        <item quantity="few">Brakujące %1$s rozdziały</item>
+        <item quantity="many">Brakuje %1$s rozdziałów</item>
+        <item quantity="other">Brakuje %1$s rozdziałów</item>
+    </plurals>
+    <string name="pref_library_columns_per_row">%d na rząd</string>
+    <string name="pref_double_tap_zoom">Dotknij dwukrotnie, aby powiększyć</string>
+    <string name="pref_chapter_swipe_end">Przesuń palcem w prawo</string>
+    <string name="pref_chapter_swipe_start">Przesuń palcem w lewo</string>
     </resources>

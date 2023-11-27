@@ -5,18 +5,29 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.BaseTracker
+import eu.kanade.tachiyomi.data.track.DeletableAnimeTracker
+import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import kotlinx.serialization.decodeFromString
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 
-class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
+class Kitsu(id: Long) :
+    BaseTracker(
+        id,
+        "Kitsu",
+    ),
+    AnimeTracker,
+    MangaTracker,
+    DeletableMangaTracker,
+    DeletableAnimeTracker {
 
     companion object {
         const val READING = 1
@@ -27,9 +38,6 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
         const val PLAN_TO_READ = 5
         const val PLAN_TO_WATCH = 15
     }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_kitsu
 
     override val supportsReadingDates: Boolean = true
 
@@ -73,9 +81,9 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> {
+    override fun getScoreList(): ImmutableList<String> {
         val df = DecimalFormat("0.#")
-        return listOf("0") + IntRange(2, 20).map { df.format(it / 2f) }
+        return (listOf("0") + IntRange(2, 20).map { df.format(it / 2f) }).toImmutableList()
     }
 
     override fun indexToScore(index: Int): Float {
@@ -136,6 +144,14 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
         return api.updateLibAnime(track)
     }
 
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        return api.removeLibManga(track)
+    }
+
+    override suspend fun delete(track: AnimeTrack): AnimeTrack {
+        return api.removeLibAnime(track)
+    }
+
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findLibManga(track, getUserId())
         return if (remoteTrack != null) {
@@ -154,19 +170,19 @@ class Kitsu(id: Long) : TrackService(id), AnimeTrackService, MangaTrackService {
         }
     }
 
-    override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack, hasWatchedEpisodes: Boolean): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUserId())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
             track.media_id = remoteTrack.media_id
 
             if (track.status != COMPLETED) {
-                track.status = if (hasReadChapters) WATCHING else track.status
+                track.status = if (hasWatchedEpisodes) WATCHING else track.status
             }
 
             update(track)
         } else {
-            track.status = if (hasReadChapters) WATCHING else PLAN_TO_WATCH
+            track.status = if (hasWatchedEpisodes) WATCHING else PLAN_TO_WATCH
             track.score = 0F
             add(track)
         }

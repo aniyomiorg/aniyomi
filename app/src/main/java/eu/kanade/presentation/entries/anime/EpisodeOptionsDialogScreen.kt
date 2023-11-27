@@ -47,11 +47,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import cafe.adriel.voyager.core.screen.Screen
 import eu.kanade.core.util.asFlow
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -81,7 +81,7 @@ class EpisodeOptionsDialogScreen(
     private val episodeId: Long,
     private val animeId: Long,
     private val sourceId: Long,
-) : Screen() {
+) : Screen {
 
     @Composable
     override fun Content() {
@@ -116,7 +116,7 @@ class EpisodeOptionsDialogScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             // To show loading state
             mutableState.update { it.copy(episode = null, anime = null, resultList = null) }
 
@@ -231,7 +231,13 @@ private fun VideoList(
                 )
 
                 val downloadEpisode: (Boolean) -> Unit = {
-                    downloadManager.downloadEpisodes(anime, listOf(episode), true, it, selectedVideo)
+                    downloadManager.downloadEpisodes(
+                        anime,
+                        listOf(episode),
+                        true,
+                        it,
+                        selectedVideo,
+                    )
                 }
 
                 QualityOptions(
@@ -243,7 +249,13 @@ private fun VideoList(
                     },
                     onExtPlayerClicked = {
                         scope.launch {
-                            MainActivity.startPlayerActivity(context, anime.id, episode.id, true, selectedVideo)
+                            MainActivity.startPlayerActivity(
+                                context,
+                                anime.id,
+                                episode.id,
+                                true,
+                                selectedVideo,
+                            )
                         }
                     },
                 )
@@ -262,7 +274,10 @@ private fun VideoList(
                     ClickableRow(
                         text = video.quality,
                         icon = null,
-                        onClick = { selectedVideo = video; showAllQualities = false },
+                        onClick = {
+                            selectedVideo = video
+                            showAllQualities = false
+                        },
                     )
                 }
             }
@@ -289,19 +304,28 @@ private fun QualityOptions(
         ClickableRow(
             text = stringResource(R.string.action_start_download_internally),
             icon = Icons.Outlined.Download,
-            onClick = { onDownloadClicked(); closeMenu() },
+            onClick = {
+                onDownloadClicked()
+                closeMenu()
+            },
         )
 
         ClickableRow(
             text = stringResource(R.string.action_start_download_externally),
             icon = Icons.Outlined.SystemUpdateAlt,
-            onClick = { onExtDownloadClicked(); closeMenu() },
+            onClick = {
+                onExtDownloadClicked()
+                closeMenu()
+            },
         )
 
         ClickableRow(
             text = stringResource(R.string.action_play_externally),
             icon = Icons.Outlined.OpenInNew,
-            onClick = { onExtPlayerClicked(); closeMenu() },
+            onClick = {
+                onExtPlayerClicked()
+                closeMenu()
+            },
         )
     }
 }

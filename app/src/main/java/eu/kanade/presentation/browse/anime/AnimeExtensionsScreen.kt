@@ -43,7 +43,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsState
+import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
@@ -56,7 +56,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun AnimeExtensionScreen(
-    state: AnimeExtensionsState,
+    state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
@@ -72,10 +72,10 @@ fun AnimeExtensionScreen(
     PullRefresh(
         refreshing = state.isRefreshing,
         onRefresh = onRefresh,
-        enabled = !state.isLoading,
+        enabled = { !state.isLoading },
     ) {
         when {
-            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.isEmpty -> {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
                     R.string.no_results_found
@@ -107,7 +107,7 @@ fun AnimeExtensionScreen(
 
 @Composable
 private fun AnimeExtensionContent(
-    state: AnimeExtensionsState,
+    state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
@@ -147,14 +147,13 @@ private fun AnimeExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-                            modifier = Modifier.animateItemPlacement(),
                             action = action,
                         )
                     }
                     is AnimeExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-                            modifier = Modifier.animateItemPlacement(),
+
                         )
                     }
                 }
@@ -166,7 +165,7 @@ private fun AnimeExtensionContent(
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
                 AnimeExtensionItem(
-                    modifier = Modifier.animateItemPlacement(),
+
                     item = item,
                     onClickItem = {
                         when (it) {
@@ -216,12 +215,12 @@ private fun AnimeExtensionContent(
 
 @Composable
 private fun AnimeExtensionItem(
-    modifier: Modifier = Modifier,
     item: AnimeExtensionUiModel.Item,
     onClickItem: (AnimeExtension) -> Unit,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onClickItemAction: (AnimeExtension) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val (extension, installStep) = item
     BaseBrowseItem(
@@ -246,7 +245,10 @@ private fun AnimeExtensionItem(
                     )
                 }
 
-                val padding by animateDpAsState(targetValue = if (idle) 0.dp else 8.dp)
+                val padding by animateDpAsState(
+                    targetValue = if (idle) 0.dp else 8.dp,
+                    label = "iconPadding",
+                )
                 AnimeExtensionIcon(
                     extension = extension,
                     modifier = Modifier
@@ -295,7 +297,10 @@ private fun AnimeExtensionItemContent(
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is AnimeExtension.Installed && extension.lang.isNotEmpty()) {
                     Text(
-                        text = LocaleHelper.getSourceDisplayName(extension.lang, LocalContext.current),
+                        text = LocaleHelper.getSourceDisplayName(
+                            extension.lang,
+                            LocalContext.current,
+                        ),
                     )
                 }
 

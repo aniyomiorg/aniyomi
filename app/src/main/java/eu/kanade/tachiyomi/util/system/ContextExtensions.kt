@@ -7,21 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import android.util.TypedValue
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
-import androidx.core.graphics.alpha
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.ui.UiPreferences
@@ -36,7 +28,6 @@ import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.roundToInt
 
 /**
  * Copies a string to clipboard
@@ -68,39 +59,10 @@ fun Context.copyToClipboard(label: String, content: String) {
  * @param permission the permission to check.
  * @return true if it has permissions.
  */
-fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED
-
-/**
- * Returns the color for the given attribute.
- *
- * @param resource the attribute.
- * @param alphaFactor the alpha number [0,1].
- */
-@ColorInt fun Context.getResourceColor(@AttrRes resource: Int, alphaFactor: Float = 1f): Int {
-    val typedArray = obtainStyledAttributes(intArrayOf(resource))
-    val color = typedArray.getColor(0, 0)
-    typedArray.recycle()
-
-    if (alphaFactor < 1f) {
-        val alpha = (color.alpha * alphaFactor).roundToInt()
-        return Color.argb(alpha, color.red, color.green, color.blue)
-    }
-
-    return color
-}
-
-@ColorInt fun Context.getThemeColor(attr: Int): Int {
-    val tv = TypedValue()
-    return if (this.theme.resolveAttribute(attr, tv, true)) {
-        if (tv.resourceId != 0) {
-            getColor(tv.resourceId)
-        } else {
-            tv.data
-        }
-    } else {
-        0
-    }
-}
+fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(
+    this,
+    permission,
+) == PermissionChecker.PERMISSION_GRANTED
 
 val Context.powerManager: PowerManager
     get() = getSystemService()!!
@@ -146,9 +108,11 @@ fun Context.openInBrowser(uri: Uri, forceDefaultBrowser: Boolean = false) {
 private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        packageManager.resolveActivity(browserIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()))
+        packageManager.resolveActivity(
+            browserIntent,
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()),
+        )
     } else {
-        @Suppress("DEPRECATION")
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
     }
     return resolveInfo
@@ -187,7 +151,10 @@ fun Context.createReaderThemeContext(): Context {
 
         val wrappedContext = ContextThemeWrapper(this, R.style.Theme_Tachiyomi)
         wrappedContext.applyOverrideConfiguration(overrideConf)
-        ThemingDelegate.getThemeResIds(preferences.appTheme().get(), preferences.themeDarkAmoled().get())
+        ThemingDelegate.getThemeResIds(
+            preferences.appTheme().get(),
+            preferences.themeDarkAmoled().get(),
+        )
             .forEach { wrappedContext.theme.applyStyle(it, true) }
         return wrappedContext
     }

@@ -11,14 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.tachiyomi.data.track.Tracker
 import tachiyomi.presentation.core.util.clickableNoIndication
 
 @Composable
 fun TrackLogoIcon(
-    service: TrackService,
+    tracker: Tracker,
     onClick: (() -> Unit)? = null,
 ) {
     val modifier = if (onClick != null) {
@@ -30,13 +32,27 @@ fun TrackLogoIcon(
     Box(
         modifier = modifier
             .size(48.dp)
-            .background(color = Color(service.getLogoColor()), shape = MaterialTheme.shapes.medium)
+            .background(color = Color(tracker.getLogoColor()), shape = MaterialTheme.shapes.medium)
             .padding(4.dp),
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = painterResource(service.getLogo()),
-            contentDescription = stringResource(service.nameRes()),
+            painter = painterResource(tracker.getLogo()),
+            contentDescription = tracker.name,
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun TrackLogoIconPreviews(
+    @PreviewParameter(TrackLogoIconPreviewProvider::class)
+    tracker: Tracker,
+) {
+    TachiyomiTheme {
+        TrackLogoIcon(
+            tracker = tracker,
+            onClick = null,
         )
     }
 }

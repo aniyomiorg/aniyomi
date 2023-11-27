@@ -14,6 +14,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreen
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun animeExtensionsTab(
@@ -26,11 +27,15 @@ fun animeExtensionsTab(
         titleRes = R.string.label_anime_extensions,
         badgeNumber = state.updates.takeIf { it > 0 },
         searchEnabled = true,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.action_filter),
                 icon = Icons.Outlined.Translate,
-                onClick = { navigator.push(eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterScreen()) },
+                onClick = {
+                    navigator.push(
+                        eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterScreen(),
+                    )
+                },
             ),
         ),
         content = { contentPadding, _ ->
@@ -40,8 +45,10 @@ fun animeExtensionsTab(
                 searchQuery = state.searchQuery,
                 onLongClickItem = { extension ->
                     when (extension) {
-                        is AnimeExtension.Available -> extensionsScreenModel.installExtension(extension)
-                        else -> extensionsScreenModel.uninstallExtension(extension.pkgName)
+                        is AnimeExtension.Available -> extensionsScreenModel.installExtension(
+                            extension,
+                        )
+                        else -> extensionsScreenModel.uninstallExtension(extension)
                     }
                 },
                 onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
@@ -49,7 +56,7 @@ fun animeExtensionsTab(
                 onInstallExtension = extensionsScreenModel::installExtension,
                 onOpenExtension = { navigator.push(AnimeExtensionDetailsScreen(it.pkgName)) },
                 onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
-                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it.pkgName) },
+                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it) },
                 onUpdateExtension = extensionsScreenModel::updateExtension,
                 onRefresh = extensionsScreenModel::findAvailableExtensions,
             )

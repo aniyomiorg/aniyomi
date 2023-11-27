@@ -3,9 +3,10 @@ package eu.kanade.presentation.library.anime
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,18 +17,16 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.PagerState
 
 @Composable
 fun AnimeLibraryPager(
     state: PagerState,
     contentPadding: PaddingValues,
-    pageCount: Int,
     hasActiveFilters: Boolean,
     selectedAnime: List<LibraryAnime>,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<AnimeLibraryItem>,
     onClickAnime: (LibraryAnime) -> Unit,
@@ -35,7 +34,6 @@ fun AnimeLibraryPager(
     onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
     HorizontalPager(
-        count = pageCount,
         modifier = Modifier.fillMaxSize(),
         state = state,
         verticalAlignment = Alignment.Top,
@@ -56,14 +54,14 @@ fun AnimeLibraryPager(
             return@HorizontalPager
         }
 
-        val displayMode = getDisplayModeForPage(page)
+        val displayMode by getDisplayMode(page)
         val columns by if (displayMode != LibraryDisplayMode.List) {
             val configuration = LocalConfiguration.current
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
             remember(isLandscape) { getColumnsForOrientation(isLandscape) }
         } else {
-            remember { mutableStateOf(0) }
+            remember { mutableIntStateOf(0) }
         }
 
         when (displayMode) {

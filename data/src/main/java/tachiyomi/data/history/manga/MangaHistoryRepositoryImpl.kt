@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.domain.history.manga.model.MangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.domain.history.manga.repository.MangaHistoryRepository
@@ -14,18 +15,22 @@ class MangaHistoryRepositoryImpl(
 
     override fun getMangaHistory(query: String): Flow<List<MangaHistoryWithRelations>> {
         return handler.subscribeToList {
-            historyViewQueries.history(query, mangaHistoryWithRelationsMapper)
+            historyViewQueries.history(query, MangaHistoryMapper::mapMangaHistoryWithRelations)
         }
     }
 
     override suspend fun getLastMangaHistory(): MangaHistoryWithRelations? {
         return handler.awaitOneOrNull {
-            historyViewQueries.getLatestHistory(mangaHistoryWithRelationsMapper)
+            historyViewQueries.getLatestHistory(MangaHistoryMapper::mapMangaHistoryWithRelations)
         }
     }
 
     override suspend fun getTotalReadDuration(): Long {
         return handler.awaitOne { historyQueries.getReadDuration() }
+    }
+
+    override suspend fun getHistoryByMangaId(mangaId: Long): List<MangaHistory> {
+        return handler.awaitList { historyQueries.getHistoryByMangaId(mangaId, MangaHistoryMapper::mapMangaHistory) }
     }
 
     override suspend fun resetMangaHistory(historyId: Long) {

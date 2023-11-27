@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastSumBy
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -121,7 +122,8 @@ private fun Modifier.drawScrollbar(
         items
             .fastFirstOrNull { (it.key as? String)?.startsWith(STICKY_HEADER_KEY_PREFIX)?.not() ?: true }!!
             .run {
-                val startPadding = if (reverseDirection) layoutInfo.afterContentPadding else layoutInfo.beforeContentPadding
+                val startPadding =
+                    if (reverseDirection) layoutInfo.afterContentPadding else layoutInfo.beforeContentPadding
                 startPadding + ((estimatedItemSize * index - offset) / totalSize * viewportSize)
             }
     }
@@ -174,6 +176,7 @@ private fun ContentDrawScope.onDrawScrollbar(
     }
 }
 
+@OptIn(FlowPreview::class)
 private fun Modifier.drawScrollbar(
     orientation: Orientation,
     reverseScrolling: Boolean,

@@ -15,9 +15,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import tachiyomi.domain.source.anime.model.AnimeSourceData
 import tachiyomi.domain.source.anime.model.StubAnimeSource
-import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
+import tachiyomi.domain.source.anime.repository.AnimeStubSourceRepository
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
@@ -28,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap
 class AndroidAnimeSourceManager(
     private val context: Context,
     private val extensionManager: AnimeExtensionManager,
-    private val sourceRepository: AnimeSourceDataRepository,
+    private val sourceRepository: AnimeStubSourceRepository,
 ) : AnimeSourceManager {
     private val downloadManager: AnimeDownloadManager by injectLazy()
 
@@ -38,7 +37,9 @@ class AndroidAnimeSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
-    override val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+    override val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map {
+        it.values.filterIsInstance<AnimeCatalogueSource>()
+    }
 
     init {
         scope.launch {
@@ -56,7 +57,7 @@ class AndroidAnimeSourceManager(
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it
-                            registerStubSource(it.toSourceData())
+                            registerStubSource(StubAnimeSource.from(it))
                         }
                     }
                     sourcesMapFlow.value = mutableMap
@@ -68,7 +69,7 @@ class AndroidAnimeSourceManager(
                 .collectLatest { sources ->
                     val mutableMap = stubSourcesMap.toMutableMap()
                     sources.forEach {
-                        mutableMap[it.id] = StubAnimeSource(it)
+                        mutableMap[it.id] = it
                     }
                 }
         }
@@ -93,25 +94,25 @@ class AndroidAnimeSourceManager(
         return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
     }
 
-    private fun registerStubSource(sourceData: AnimeSourceData) {
+    private fun registerStubSource(source: StubAnimeSource) {
         scope.launch {
-            val (id, lang, name) = sourceData
-            val dbSourceData = sourceRepository.getAnimeSourceData(id)
-            if (dbSourceData == sourceData) return@launch
-            sourceRepository.upsertAnimeSourceData(id, lang, name)
-            if (dbSourceData != null) {
-                downloadManager.renameSource(
-                    StubAnimeSource(dbSourceData),
-                    StubAnimeSource(sourceData),
-                )
+            val dbSource = sourceRepository.getStubAnimeSource(source.id)
+            if (dbSource == source) return@launch
+            sourceRepository.upsertStubAnimeSource(source.id, source.lang, source.name)
+            if (dbSource != null) {
+                downloadManager.renameSource(dbSource, source)
             }
         }
     }
 
     private suspend fun createStubSource(id: Long): StubAnimeSource {
-        sourceRepository.getAnimeSourceData(id)?.let {
-            return StubAnimeSource(it)
+        sourceRepository.getStubAnimeSource(id)?.let {
+            return it
         }
-        return StubAnimeSource(AnimeSourceData(id, "", ""))
+        extensionManager.getSourceData(id)?.let {
+            registerStubSource(it)
+            return it
+        }
+        return StubAnimeSource(id = id, lang = "", name = "")
     }
 }

@@ -1,11 +1,10 @@
 package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.compose.material3.SnackbarHostState
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
@@ -16,6 +15,7 @@ import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.system.getBitmapOrNull
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,14 +40,14 @@ class AnimeCoverScreenModel(
 ) : StateScreenModel<Anime?>(null) {
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getAnime.subscribe(animeId)
                 .collect { newAnime -> mutableState.update { newAnime } }
         }
     }
 
     fun saveCover(context: Context) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             try {
                 saveCoverInternal(context, temp = false)
                 snackbarHostState.showSnackbar(
@@ -65,7 +65,7 @@ class AnimeCoverScreenModel(
     }
 
     fun shareCover(context: Context) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             try {
                 val uri = saveCoverInternal(context, temp = true) ?: return@launch
                 withUIContext {
@@ -98,12 +98,12 @@ class AnimeCoverScreenModel(
             val result = context.imageLoader.execute(req).drawable
 
             // TODO: Handle animated cover
-            val bitmap = (result as? BitmapDrawable)?.bitmap ?: return@withIOContext null
+            val bitmap = result?.getBitmapOrNull() ?: return@withIOContext null
             imageSaver.save(
                 Image.Cover(
                     bitmap = bitmap,
-                    name = anime.title,
-                    location = if (temp) Location.Cache else Location.Pictures.create(),
+                    name = "cover",
+                    location = if (temp) Location.Cache else Location.Pictures(anime.title),
                 ),
             )
         }
@@ -117,8 +117,7 @@ class AnimeCoverScreenModel(
      */
     fun editCover(context: Context, data: Uri) {
         val anime = state.value ?: return
-        coroutineScope.launchIO {
-            @Suppress("BlockingMethodInNonBlockingContext")
+        screenModelScope.launchIO {
             context.contentResolver.openInputStream(data)?.use {
                 try {
                     anime.editCover(Injekt.get(), it, updateAnime, coverCache)
@@ -132,7 +131,7 @@ class AnimeCoverScreenModel(
 
     fun deleteCustomCover(context: Context) {
         val animeId = state.value?.id ?: return
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             try {
                 coverCache.deleteCustomCover(animeId)
                 updateAnime.awaitUpdateCoverLastModified(animeId)
@@ -144,7 +143,7 @@ class AnimeCoverScreenModel(
     }
 
     private fun notifyCoverUpdated(context: Context) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             snackbarHostState.showSnackbar(
                 context.getString(R.string.cover_updated),
                 withDismissAction = true,
@@ -153,7 +152,7 @@ class AnimeCoverScreenModel(
     }
 
     private fun notifyFailedCoverUpdate(context: Context, e: Throwable) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             snackbarHostState.showSnackbar(
                 context.getString(R.string.notification_cover_update_failed),
                 withDismissAction = true,

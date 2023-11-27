@@ -4,19 +4,19 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.BaseTracker
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
-    val api by lazy { TachideskApi() }
+class Suwayomi(id: Long) : BaseTracker(id, "Suwayomi"), EnhancedMangaTracker, MangaTracker {
 
-    @StringRes
-    override fun nameRes() = R.string.tracker_suwayomi
+    val api by lazy { SuwayomiApi(id) }
 
     override fun getLogo() = R.drawable.ic_tracker_suwayomi
 
@@ -44,7 +44,7 @@ class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTra
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> = emptyList()
+    override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
     override fun displayScore(track: MangaTrack): String = ""
 
@@ -85,7 +85,9 @@ class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTra
         saveCredentials("user", "pass")
     }
 
-    override fun getAcceptedSources(): List<String> = listOf("eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk")
+    override fun getAcceptedSources(): List<String> = listOf(
+        "eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk",
+    )
 
     override suspend fun match(manga: DomainManga): MangaTrackSearch? =
         try {
@@ -94,7 +96,11 @@ class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTra
             null
         }
 
-    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let { accept(it) } == true
+    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let {
+        accept(
+            it,
+        )
+    } == true
 
     override fun migrateTrack(track: DomainTrack, manga: DomainManga, newSource: MangaSource): DomainTrack? =
         if (accept(newSource)) {

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.manga.model.Manga
@@ -39,6 +39,8 @@ data class BackupManga(
     @ProtoNumber(103) var viewer_flags: Int? = null,
     @ProtoNumber(104) var history: List<BackupHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
+    @ProtoNumber(106) var lastModifiedAt: Long = 0,
+    @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
 ) {
     fun getMangaImpl(): Manga {
         return Manga.create().copy(
@@ -56,6 +58,8 @@ data class BackupManga(
             viewerFlags = (this@BackupManga.viewer_flags ?: this@BackupManga.viewer).toLong(),
             chapterFlags = this@BackupManga.chapterFlags.toLong(),
             updateStrategy = this@BackupManga.updateStrategy,
+            lastModifiedAt = this@BackupManga.lastModifiedAt,
+            favoriteModifiedAt = this@BackupManga.favoriteModifiedAt,
         )
     }
 
@@ -85,10 +89,12 @@ data class BackupManga(
                 favorite = manga.favorite,
                 source = manga.source,
                 dateAdded = manga.dateAdded,
-                viewer = (manga.viewerFlags.toInt() and ReadingModeType.MASK),
+                viewer = (manga.viewerFlags.toInt() and ReadingMode.MASK),
                 viewer_flags = manga.viewerFlags.toInt(),
                 chapterFlags = manga.chapterFlags.toInt(),
                 updateStrategy = manga.updateStrategy,
+                lastModifiedAt = manga.lastModifiedAt,
+                favoriteModifiedAt = manga.favoriteModifiedAt,
             )
         }
     }

@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.anime.extension.details
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.anime.interactor.AnimeExtensionSourceItem
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
@@ -12,6 +12,9 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -38,13 +41,13 @@ class AnimeExtensionDetailsScreenModel(
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
     private val getExtensionSources: GetAnimeExtensionSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
-) : StateScreenModel<AnimeExtensionDetailsState>(AnimeExtensionDetailsState()) {
+) : StateScreenModel<AnimeExtensionDetailsScreenModel.State>(State()) {
 
     private val _events: Channel<AnimeExtensionDetailsEvent> = Channel()
     val events: Flow<AnimeExtensionDetailsEvent> = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             launch {
                 extensionManager.installedExtensionsFlow
                     .map { it.firstOrNull { extension -> extension.pkgName == pkgName } }
@@ -68,17 +71,20 @@ class AnimeExtensionDetailsScreenModel(
                                     { !it.enabled },
                                     { item ->
                                         item.source.name.takeIf { item.labelAsName }
-                                            ?: LocaleHelper.getSourceDisplayName(item.source.lang, context).lowercase()
+                                            ?: LocaleHelper.getSourceDisplayName(
+                                                item.source.lang,
+                                                context,
+                                            ).lowercase()
                                     },
                                 ),
                             )
                         }
                         .catch { throwable ->
                             logcat(LogPriority.ERROR, throwable)
-                            mutableState.update { it.copy(_sources = emptyList()) }
+                            mutableState.update { it.copy(_sources = persistentListOf()) }
                         }
                         .collectLatest { sources ->
-                            mutableState.update { it.copy(_sources = sources) }
+                            mutableState.update { it.copy(_sources = sources.toImmutableList()) }
                         }
                 }
             }
@@ -102,7 +108,7 @@ class AnimeExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://aniyomi.org/help/faq/#extensions"
+            return "https://aniyomi.org/docs/faq/browse/extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
@@ -132,7 +138,7 @@ class AnimeExtensionDetailsScreenModel(
 
     fun uninstallExtension() {
         val extension = state.value.extension ?: return
-        extensionManager.uninstallExtension(extension.pkgName)
+        extensionManager.uninstallExtension(extension)
     }
 
     fun toggleSource(sourceId: Long) {
@@ -160,21 +166,21 @@ class AnimeExtensionDetailsScreenModel(
             url + "/src/" + pkgName.replace(".", "/") + path
         }
     }
+
+    @Immutable
+    data class State(
+        val extension: AnimeExtension.Installed? = null,
+        private val _sources: ImmutableList<AnimeExtensionSourceItem>? = null,
+    ) {
+
+        val sources: ImmutableList<AnimeExtensionSourceItem>
+            get() = _sources ?: persistentListOf()
+
+        val isLoading: Boolean
+            get() = extension == null || _sources == null
+    }
 }
 
-sealed class AnimeExtensionDetailsEvent {
-    object Uninstalled : AnimeExtensionDetailsEvent()
-}
-
-@Immutable
-data class AnimeExtensionDetailsState(
-    val extension: AnimeExtension.Installed? = null,
-    private val _sources: List<AnimeExtensionSourceItem>? = null,
-) {
-
-    val sources: List<AnimeExtensionSourceItem>
-        get() = _sources.orEmpty()
-
-    val isLoading: Boolean
-        get() = extension == null || _sources == null
+sealed interface AnimeExtensionDetailsEvent {
+    data object Uninstalled : AnimeExtensionDetailsEvent
 }

@@ -1,21 +1,22 @@
 package eu.kanade.tachiyomi.data.track.komga
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.BaseTracker
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Komga(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
+class Komga(id: Long) : BaseTracker(id, "Komga"), EnhancedMangaTracker, MangaTracker {
 
     companion object {
         const val UNREAD = 1
@@ -28,10 +29,7 @@ class Komga(private val context: Context, id: Long) : TrackService(id), Enhanced
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
 
-    val api by lazy { KomgaApi(client) }
-
-    @StringRes
-    override fun nameRes() = R.string.tracker_komga
+    val api by lazy { KomgaApi(id, client) }
 
     override fun getLogo() = R.drawable.ic_tracker_komga
 
@@ -55,7 +53,7 @@ class Komga(private val context: Context, id: Long) : TrackService(id), Enhanced
 
     override fun getCompletionStatus(): Int = COMPLETED
 
-    override fun getScoreList(): List<String> = emptyList()
+    override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {
@@ -75,7 +73,9 @@ class Komga(private val context: Context, id: Long) : TrackService(id), Enhanced
         return track
     }
 
-    override suspend fun searchManga(query: String): List<MangaTrackSearch> = throw Exception("Not used")
+    override suspend fun searchManga(query: String): List<MangaTrackSearch> = throw Exception(
+        "Not used",
+    )
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {
         val remoteTrack = api.getTrackSearch(track.tracking_url)
@@ -88,7 +88,7 @@ class Komga(private val context: Context, id: Long) : TrackService(id), Enhanced
         saveCredentials("user", "pass")
     }
 
-    // TrackService.isLogged works by checking that credentials are saved.
+    // [Tracker].isLogged works by checking that credentials are saved.
     // By saving dummy, unused credentials, we can activate the tracker simply by login/logout
     override fun loginNoop() {
         saveCredentials("user", "pass")

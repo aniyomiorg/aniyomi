@@ -29,7 +29,8 @@ class AniSkipApi {
     // credits: https://github.com/saikou-app/saikou/blob/main/app/src/main/java/ani/saikou/others/AniSkip.kt
     fun getResult(malId: Int, episodeNumber: Int, episodeLength: Long): List<Stamp>? {
         val url =
-            "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
+            "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed" +
+                "&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
         return try {
             val a = client.newCall(GET(url)).execute().body.string()
             val res = json.decodeFromString<AniSkipResponse>(a)
@@ -76,7 +77,9 @@ class AniSkipApi {
             }
             withUIContext {
                 playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
+                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
+                    skipButtonString,
+                )
             }
         }
 
@@ -93,7 +96,9 @@ class AniSkipApi {
                 if (waitingTime > 0) {
                     withUIContext {
                         playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
+                            R.string.player_aniskip_dontskip,
+                        )
                     }
                 } else {
                     seekTo(skipTime.endTime)
@@ -106,7 +111,10 @@ class AniSkipApi {
         }
 
         fun skipAnimation(skipType: SkipType) {
-            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(R.string.player_aniskip_skip, skipType.getString())
+            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(
+                R.string.player_aniskip_skip,
+                skipType.getString(),
+            )
 
             binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 rightToRight = ConstraintLayout.LayoutParams.PARENT_ID

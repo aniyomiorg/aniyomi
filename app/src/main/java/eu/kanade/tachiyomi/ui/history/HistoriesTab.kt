@@ -13,8 +13,9 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.TabbedScreen
-import eu.kanade.presentation.extensions.RequestStoragePermission
+import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
@@ -23,10 +24,11 @@ import eu.kanade.tachiyomi.ui.history.anime.resumeLastEpisodeSeenEvent
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.manga.mangaHistoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.util.storage.DiskUtil
+import kotlinx.collections.immutable.persistentListOf
 
 data class HistoriesTab(
     private val fromMore: Boolean,
+    private val preferences: UiPreferences,
 ) : Tab() {
 
     override val options: TabOptions
@@ -58,9 +60,9 @@ data class HistoriesTab(
 
         TabbedScreen(
             titleRes = R.string.label_recent_manga,
-            tabs = listOf(
-                animeHistoryTab(context, fromMore),
-                mangaHistoryTab(context, fromMore),
+            tabs = persistentListOf(
+                animeHistoryTab(context, fromMore, preferences),
+                mangaHistoryTab(context, fromMore, preferences),
             ),
             mangaSearchQuery = mangaSearchQuery,
             onChangeMangaSearchQuery = mangaHistoryScreenModel::search,
@@ -73,7 +75,7 @@ data class HistoriesTab(
         }
 
         // For local source
-        DiskUtil.RequestStoragePermission()
+        PermissionRequestHelper.requestStoragePermission()
     }
 }
 

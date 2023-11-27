@@ -15,10 +15,9 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import eu.kanade.tachiyomi.ui.reader.model.StencilPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
+import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -30,9 +29,9 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Implementation of a [BaseViewer] to display pages with a [RecyclerView].
+ * Implementation of a [Viewer] to display pages with a [RecyclerView].
  */
-class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = true) : BaseViewer {
+class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = true) : Viewer {
 
     val downloadManager: MangaDownloadManager by injectLazy()
 
@@ -91,7 +90,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     onScrolled()
 
-                    if ((dy > threshold || dy < -threshold) && activity.menuVisible) {
+                    if ((dy > threshold || dy < -threshold) && activity.viewModel.state.value.menuVisible) {
                         activity.hideMenu()
                     }
 
@@ -112,7 +111,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
             },
         )
         recycler.tapListener = { event ->
-            val pos = PointF(event.rawX / recycler.width, event.rawY / recycler.height)
+            val pos = PointF(event.y / recycler.width, event.y / recycler.height)
             when (config.navigator.getAction(pos)) {
                 NavigationRegion.MENU -> activity.toggleMenu()
                 NavigationRegion.NEXT, NavigationRegion.RIGHT -> scrollDown()
@@ -120,7 +119,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
             }
         }
         recycler.longTapListener = f@{ event ->
-            if (activity.menuVisible || config.longTapEnabled) {
+            if (activity.viewModel.state.value.menuVisible || config.longTapEnabled) {
                 val child = recycler.findChildViewUnder(event.x, event.y)
                 if (child != null) {
                     val position = recycler.getChildAdapterPosition(child)
@@ -149,12 +148,6 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
         config.navigationModeChangedListener = {
             val showOnStart = config.navigationOverlayOnStart || config.forceNavigationOverlay
             activity.binding.navigationOverlay.setNavigation(config.navigator, showOnStart)
-        }
-
-        config.longStripSplitChangedListener = { enabled ->
-            if (!enabled) {
-                cleanupSplitStrips()
-            }
         }
 
         frame.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -204,11 +197,6 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
         val pages = page.chapter.pages ?: return
         logcat { "onPageSelected: ${page.number}/${pages.size}" }
         activity.onPageSelected(page)
-
-        // Skip preload on StencilPage
-        if (page is StencilPage) {
-            return
-        }
 
         // Preload next chapter once we're within the last 5 pages of the current chapter
         val inPreloadRange = pages.size - page.number < 5
@@ -310,14 +298,14 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
 
         when (event.keyCode) {
             KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                if (!config.volumeKeysEnabled || activity.menuVisible) {
+                if (!config.volumeKeysEnabled || activity.viewModel.state.value.menuVisible) {
                     return false
                 } else if (isUp) {
                     if (!config.volumeKeysInverted) scrollDown() else scrollUp()
                 }
             }
             KeyEvent.KEYCODE_VOLUME_UP -> {
-                if (!config.volumeKeysEnabled || activity.menuVisible) {
+                if (!config.volumeKeysEnabled || activity.viewModel.state.value.menuVisible) {
                     return false
                 } else if (isUp) {
                     if (!config.volumeKeysInverted) scrollUp() else scrollDown()
@@ -358,16 +346,5 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
             max(0, position - 3),
             min(position + 3, adapter.itemCount - 1),
         )
-    }
-
-    fun onLongStripSplit(currentStrip: Any?, newStrips: List<StencilPage>) {
-        activity.runOnUiThread {
-            // Need to insert on UI thread else images will go blank
-            adapter.onLongStripSplit(currentStrip, newStrips)
-        }
-    }
-
-    private fun cleanupSplitStrips() {
-        adapter.cleanupSplitStrips()
     }
 }

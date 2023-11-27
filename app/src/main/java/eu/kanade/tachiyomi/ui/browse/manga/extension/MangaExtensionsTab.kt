@@ -14,6 +14,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaExtensionDetailsScreen
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun mangaExtensionsTab(
@@ -26,7 +27,7 @@ fun mangaExtensionsTab(
         titleRes = R.string.label_manga_extensions,
         badgeNumber = state.updates.takeIf { it > 0 },
         searchEnabled = true,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.action_filter),
                 icon = Icons.Outlined.Translate,
@@ -40,8 +41,10 @@ fun mangaExtensionsTab(
                 searchQuery = state.searchQuery,
                 onLongClickItem = { extension ->
                     when (extension) {
-                        is MangaExtension.Available -> extensionsScreenModel.installExtension(extension)
-                        else -> extensionsScreenModel.uninstallExtension(extension.pkgName)
+                        is MangaExtension.Available -> extensionsScreenModel.installExtension(
+                            extension,
+                        )
+                        else -> extensionsScreenModel.uninstallExtension(extension)
                     }
                 },
                 onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
@@ -49,7 +52,7 @@ fun mangaExtensionsTab(
                 onInstallExtension = extensionsScreenModel::installExtension,
                 onOpenExtension = { navigator.push(MangaExtensionDetailsScreen(it.pkgName)) },
                 onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
-                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it.pkgName) },
+                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it) },
                 onUpdateExtension = extensionsScreenModel::updateExtension,
                 onRefresh = extensionsScreenModel::findAvailableExtensions,
             )

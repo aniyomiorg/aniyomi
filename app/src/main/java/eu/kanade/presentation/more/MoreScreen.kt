@@ -9,17 +9,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SettingsBackupRestore
 import androidx.compose.material.icons.outlined.Storage
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,7 +36,6 @@ import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.injectLazy
 
@@ -52,7 +52,7 @@ fun MoreScreen(
     onClickCategories: () -> Unit,
     onClickStats: () -> Unit,
     onClickStorage: () -> Unit,
-    onClickBackupAndRestore: () -> Unit,
+    onClickDataAndStorage: () -> Unit,
     onClickSettings: () -> Unit,
     onClickAbout: () -> Unit,
 ) {
@@ -62,14 +62,18 @@ fun MoreScreen(
         topBar = {
             Column(
                 modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
+                    WindowInsets.systemBars.only(
+                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal,
+                    ),
                 ),
             ) {
                 if (isFDroid) {
                     WarningBanner(
                         textRes = R.string.fdroid_warning,
                         modifier = Modifier.clickable {
-                            uriHandler.openUri("https://aniyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version")
+                            uriHandler.openUri(
+                                "https://aniyomi.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds",
+                            )
                         },
                     )
                 }
@@ -101,7 +105,7 @@ fun MoreScreen(
                 )
             }
 
-            item { Divider() }
+            item { HorizontalDivider() }
 
             val libraryPreferences: LibraryPreferences by injectLazy()
 
@@ -136,17 +140,21 @@ fun MoreScreen(
                                 stringResource(R.string.paused)
                             } else {
                                 "${stringResource(R.string.paused)} • ${
-                                pluralStringResource(
-                                    id = R.plurals.download_queue_summary,
-                                    count = pending,
-                                    pending,
-                                )
+                                    pluralStringResource(
+                                        id = R.plurals.download_queue_summary,
+                                        count = pending,
+                                        pending,
+                                    )
                                 }"
                             }
                         }
                         is DownloadQueueState.Downloading -> {
                             val pending = downloadQueueState.pending
-                            pluralStringResource(id = R.plurals.download_queue_summary, count = pending, pending)
+                            pluralStringResource(
+                                id = R.plurals.download_queue_summary,
+                                count = pending,
+                                pending,
+                            )
                         }
                     },
                     icon = Icons.Outlined.GetApp,
@@ -156,7 +164,7 @@ fun MoreScreen(
             item {
                 TextPreferenceWidget(
                     title = stringResource(R.string.general_categories),
-                    icon = Icons.Outlined.Label,
+                    icon = Icons.AutoMirrored.Outlined.Label,
                     onPreferenceClick = onClickCategories,
                 )
             }
@@ -176,13 +184,13 @@ fun MoreScreen(
             }
             item {
                 TextPreferenceWidget(
-                    title = stringResource(R.string.label_backup),
-                    icon = Icons.Outlined.SettingsBackupRestore,
-                    onPreferenceClick = onClickBackupAndRestore,
+                    title = stringResource(R.string.label_data_storage),
+                    icon = Icons.Outlined.Storage,
+                    onPreferenceClick = onClickDataAndStorage,
                 )
             }
 
-            item { Divider() }
+            item { HorizontalDivider() }
 
             item {
                 TextPreferenceWidget(
@@ -201,7 +209,7 @@ fun MoreScreen(
             item {
                 TextPreferenceWidget(
                     title = stringResource(R.string.label_help),
-                    icon = Icons.Outlined.HelpOutline,
+                    icon = Icons.AutoMirrored.Outlined.HelpOutline,
                     onPreferenceClick = { uriHandler.openUri(Constants.URL_HELP) },
                 )
             }

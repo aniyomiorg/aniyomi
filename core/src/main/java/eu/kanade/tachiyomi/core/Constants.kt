@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.core
 
 object Constants {
-    const val URL_HELP = "https://aniyomi.org/help/"
+    const val URL_HELP = "https://aniyomi.org/docs/guides/troubleshooting/"
 
     const val MANGA_EXTRA = "manga"
 

@@ -12,7 +12,7 @@ import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesFilterState
+import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesFilterScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
@@ -22,7 +22,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 @Composable
 fun AnimeSourcesFilterScreen(
     navigateUp: () -> Unit,
-    state: AnimeSourcesFilterState.Success,
+    state: AnimeSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (AnimeSource) -> Unit,
 ) {
@@ -54,7 +54,7 @@ fun AnimeSourcesFilterScreen(
 @Composable
 private fun AnimeSourcesFilterContent(
     contentPadding: PaddingValues,
-    state: AnimeSourcesFilterState.Success,
+    state: AnimeSourcesFilterScreenModel.State.Success,
     onClickLanguage: (String) -> Unit,
     onClickSource: (AnimeSource) -> Unit,
 ) {
@@ -64,28 +64,29 @@ private fun AnimeSourcesFilterContent(
         state.items.forEach { (language, sources) ->
             val enabled = language in state.enabledLanguages
             item(
-                key = language.hashCode(),
+                key = language,
                 contentType = "source-filter-header",
             ) {
                 AnimeSourcesFilterHeader(
-                    modifier = Modifier.animateItemPlacement(),
+
                     language = language,
                     enabled = enabled,
                     onClickItem = onClickLanguage,
                 )
             }
-            if (!enabled) return@forEach
-            items(
-                items = sources,
-                key = { "source-filter-${it.key()}" },
-                contentType = { "source-filter-item" },
-            ) { source ->
-                AnimeSourcesFilterItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    source = source,
-                    isEnabled = "${source.id}" !in state.disabledSources,
-                    onClickItem = onClickSource,
-                )
+            if (enabled) {
+                items(
+                    items = sources,
+                    key = { "source-filter-${it.key()}" },
+                    contentType = { "source-filter-item" },
+                ) { source ->
+                    AnimeSourcesFilterItem(
+
+                        source = source,
+                        isEnabled = "${source.id}" !in state.disabledSources,
+                        onClickItem = onClickSource,
+                    )
+                }
             }
         }
     }
@@ -93,10 +94,10 @@ private fun AnimeSourcesFilterContent(
 
 @Composable
 fun AnimeSourcesFilterHeader(
-    modifier: Modifier,
     language: String,
     enabled: Boolean,
     onClickItem: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SwitchPreferenceWidget(
         modifier = modifier,
@@ -108,10 +109,10 @@ fun AnimeSourcesFilterHeader(
 
 @Composable
 private fun AnimeSourcesFilterItem(
-    modifier: Modifier,
     source: AnimeSource,
     isEnabled: Boolean,
     onClickItem: (AnimeSource) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseAnimeSourceItem(
         modifier = modifier,

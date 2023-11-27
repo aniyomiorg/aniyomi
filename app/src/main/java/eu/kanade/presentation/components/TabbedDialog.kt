@@ -4,17 +4,18 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,11 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
-import tachiyomi.presentation.core.components.material.Divider
-import tachiyomi.presentation.core.components.material.TabIndicator
-import tachiyomi.presentation.core.components.rememberPagerState
+import tachiyomi.presentation.core.components.material.TabText
 
 object TabbedDialogPaddings {
     val Horizontal = 24.dp
@@ -42,58 +42,49 @@ object TabbedDialogPaddings {
 @Composable
 fun TabbedDialog(
     onDismissRequest: () -> Unit,
-    tabTitles: List<String>,
+    tabTitles: ImmutableList<String>,
+    modifier: Modifier = Modifier,
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
     onOverflowMenuClicked: (() -> Unit)? = null,
     overflowIcon: ImageVector? = null,
     hideSystemBars: Boolean = false,
-    content: @Composable (PaddingValues, Int) -> Unit,
+    pagerState: PagerState = rememberPagerState { tabTitles.size },
+    content: @Composable (Int) -> Unit,
 ) {
     AdaptiveSheet(
         hideSystemBars = hideSystemBars,
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
-    ) { contentPadding ->
+    ) {
         val scope = rememberCoroutineScope()
-        val pagerState = rememberPagerState()
 
         Column {
             Row {
-                TabRow(
+                PrimaryTabRow(
                     modifier = Modifier.weight(1f),
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = { TabIndicator(it[pagerState.currentPage], pagerState.currentPageOffsetFraction) },
                     divider = {},
                 ) {
-                    tabTitles.fastForEachIndexed { i, tab ->
-                        val selected = pagerState.currentPage == i
+                    tabTitles.fastForEachIndexed { index, tab ->
                         Tab(
-                            selected = selected,
-                            onClick = { scope.launch { pagerState.animateScrollToPage(i) } },
-                            text = {
-                                Text(
-                                    text = tab,
-                                    color = if (selected) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    },
-                                )
-                            },
+                            selected = pagerState.currentPage == index,
+                            onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                            text = { TabText(text = tab) },
+                            unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
 
                 MoreMenu(onOverflowMenuClicked, tabOverflowMenuContent, overflowIcon)
             }
-            Divider()
+            HorizontalDivider()
 
             HorizontalPager(
                 modifier = Modifier.animateContentSize(),
-                count = tabTitles.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
             ) { page ->
-                content(contentPadding, page)
+                content(page)
             }
         }
     }

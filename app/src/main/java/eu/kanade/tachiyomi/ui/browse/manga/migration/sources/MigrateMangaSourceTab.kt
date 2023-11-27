@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,21 +16,22 @@ import eu.kanade.presentation.browse.manga.MigrateMangaSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrationMangaScreen
+import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreen
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun Screen.migrateMangaSourceTab(): TabContent {
     val uriHandler = LocalUriHandler.current
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = rememberScreenModel { MigrateSourceScreenModel() }
+    val screenModel = rememberScreenModel { MigrateMangaSourceScreenModel() }
     val state by screenModel.state.collectAsState()
 
     return TabContent(
         titleRes = R.string.label_migration,
-        actions = listOf(
+        actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(R.string.migration_help_guide),
-                icon = Icons.Outlined.HelpOutline,
+                icon = Icons.AutoMirrored.Outlined.HelpOutline,
                 onClick = {
                     uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")
                 },
@@ -40,7 +42,7 @@ fun Screen.migrateMangaSourceTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source ->
-                    navigator.push(MigrationMangaScreen(source.id))
+                    navigator.push(MigrateMangaScreen(source.id))
                 },
                 onToggleSortingDirection = screenModel::toggleSortingDirection,
                 onToggleSortingMode = screenModel::toggleSortingMode,

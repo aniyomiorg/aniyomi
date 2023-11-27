@@ -5,6 +5,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -213,6 +214,38 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
+    suspend fun removeLibManga(track: MangaTrack): MangaTrack {
+        return withIOContext {
+            authClient.newCall(
+                DELETE(
+                    "${baseUrl}library-entries/${track.media_id}",
+                    headers = headersOf(
+                        "Content-Type",
+                        "application/vnd.api+json",
+                    ),
+                ),
+            )
+                .awaitSuccess()
+            track
+        }
+    }
+
+    suspend fun removeLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            authClient.newCall(
+                DELETE(
+                    "${baseUrl}library-entries/${track.media_id}",
+                    headers = headersOf(
+                        "Content-Type",
+                        "application/vnd.api+json",
+                    ),
+                ),
+            )
+                .awaitSuccess()
+            track
+        }
+    }
+
     suspend fun search(query: String): List<MangaTrackSearch> {
         return withIOContext {
             with(json) {
@@ -244,7 +277,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearch(key: String, query: String): List<MangaTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter")
+                put(
+                    "params",
+                    "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter",
+                )
             }
 
             with(json) {
@@ -275,7 +311,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearchAnime(key: String, query: String): List<AnimeTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilterAnime")
+                put(
+                    "params",
+                    "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilterAnime",
+                )
             }
 
             with(json) {
@@ -444,9 +483,13 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             "https://AWQO5J657S-dsn.algolia.net/1/indexes/production_media/query/"
         private const val algoliaAppId = "AWQO5J657S"
         private const val algoliaFilter =
-            "&facetFilters=%5B%22kind%3Amanga%22%5D&attributesToRetrieve=%5B%22synopsis%22%2C%22canonicalTitle%22%2C%22chapterCount%22%2C%22posterImage%22%2C%22startDate%22%2C%22subtype%22%2C%22endDate%22%2C%20%22id%22%5D"
+            "&facetFilters=%5B%22kind%3Amanga%22%5D&attributesToRetrieve=%5B%22synopsis%22%2C%22canonicalTitle%22%2C" +
+                "%22chapterCount%22%2C%22posterImage%22%2C%22" +
+                "startDate%22%2C%22subtype%22%2C%22endDate%22%2C%20%22id%22%5D"
         private const val algoliaFilterAnime =
-            "&facetFilters=%5B%22kind%3Aanime%22%5D&attributesToRetrieve=%5B%22synopsis%22%2C%22canonicalTitle%22%2C%22episodeCount%22%2C%22posterImage%22%2C%22startDate%22%2C%22subtype%22%2C%22endDate%22%2C%20%22id%22%5D"
+            "&facetFilters=%5B%22kind%3Aanime%22%5D&attributesToRetrieve=%5B%22synopsis%22%2C%22canonicalTitle%22%2C" +
+                "%22episodeCount%22%2C%22posterImage%22%2C%22" +
+                "startDate%22%2C%22subtype%22%2C%22endDate%22%2C%20%22id%22%5D"
 
         fun mangaUrl(remoteId: Long): String {
             return baseMangaUrl + remoteId

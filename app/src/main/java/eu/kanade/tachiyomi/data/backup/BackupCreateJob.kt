@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.data.backup
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
@@ -19,9 +21,13 @@ import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.backup.service.BackupPreferences
+import tachiyomi.domain.storage.service.StoragePreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 class BackupCreateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -29,12 +35,15 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
     private val notifier = BackupNotifier(context)
 
     override suspend fun doWork(): Result {
-        val backupPreferences = Injekt.get<BackupPreferences>()
-        val uri = inputData.getString(LOCATION_URI_KEY)?.toUri()
-            ?: backupPreferences.backupsDirectory().get().toUri()
-        val flags = inputData.getInt(BACKUP_FLAGS_KEY, BackupConst.BACKUP_ALL)
         val isAutoBackup = inputData.getBoolean(IS_AUTO_BACKUP_KEY, true)
 
+        if (isAutoBackup && BackupRestoreJob.isRunning(context)) return Result.retry()
+
+        val backupPreferences = Injekt.get<BackupPreferences>()
+
+        val uri = inputData.getString(LOCATION_URI_KEY)?.toUri()
+            ?: getAutomaticBackupLocation()
+        val flags = inputData.getInt(BACKUP_FLAGS_KEY, BackupCreateFlags.AutomaticDefaults)
         try {
             setForeground(getForegroundInfo())
         } catch (e: IllegalStateException) {
@@ -42,8 +51,12 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
         }
 
         return try {
-            val location = BackupManager(context).createBackup(uri, flags, isAutoBackup)
-            if (!isAutoBackup) notifier.showBackupComplete(UniFile.fromUri(context, location.toUri()))
+            val location = BackupCreator(context).createBackup(uri, flags, isAutoBackup)
+            if (isAutoBackup) {
+                backupPreferences.lastAutoBackupTimestamp().set(Date().time)
+            } else {
+                notifier.showBackupComplete(UniFile.fromUri(context, location.toUri()))
+            }
             Result.success()
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
@@ -61,6 +74,15 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
         )
     }
 
+    private fun getAutomaticBackupLocation(): Uri {
+        val storagePreferences = Injekt.get<StoragePreferences>()
+        return storagePreferences.baseStorageDirectory().get().let {
+            val dir = UniFile.fromUri(context, it.toUri())
+                .createDirectory(StoragePreferences.BACKUP_DIR)
+            dir.uri
+        }
+    }
+
     companion object {
         fun isManualJobRunning(context: Context): Boolean {
             return context.workManager.isRunning(TAG_MANUAL)
@@ -73,13 +95,19 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                 s.toInt(16)
             }
             if (interval > 0) {
+                val constraints = Constraints(
+                    requiresBatteryNotLow = true,
+                )
+
                 val request = PeriodicWorkRequestBuilder<BackupCreateJob>(
                     interval.toLong(),
                     TimeUnit.HOURS,
                     10,
                     TimeUnit.MINUTES,
                 )
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10.minutes.toJavaDuration())
                     .addTag(TAG_AUTO)
+                    .setConstraints(constraints)
                     .setInputData(
                         workDataOf(
                             IS_AUTO_BACKUP_KEY to true,
@@ -88,7 +116,11 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                     )
                     .build()
 
-                context.workManager.enqueueUniquePeriodicWork(TAG_AUTO, ExistingPeriodicWorkPolicy.UPDATE, request)
+                context.workManager.enqueueUniquePeriodicWork(
+                    TAG_AUTO,
+                    ExistingPeriodicWorkPolicy.UPDATE,
+                    request,
+                )
             } else {
                 context.workManager.cancelUniqueWork(TAG_AUTO)
             }

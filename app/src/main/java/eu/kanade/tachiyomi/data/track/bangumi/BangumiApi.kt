@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
@@ -29,7 +28,11 @@ import uy.kohesive.injekt.injectLazy
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class BangumiApi(private val client: OkHttpClient, interceptor: BangumiInterceptor) {
+class BangumiApi(
+    private val trackId: Long,
+    private val client: OkHttpClient,
+    interceptor: BangumiInterceptor,
+) {
 
     private val json: Json by injectLazy()
 
@@ -111,7 +114,10 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
+            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+                search,
+                StandardCharsets.UTF_8.name(),
+            )}"
                 .toUri()
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")
@@ -135,7 +141,10 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
+            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+                search,
+                StandardCharsets.UTF_8.name(),
+            )}"
                 .toUri()
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")
@@ -169,7 +178,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         } else {
             0
         }
-        return MangaTrackSearch.create(TrackManager.BANGUMI).apply {
+        return MangaTrackSearch.create(trackId).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
             cover_url = coverUrl
@@ -191,7 +200,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         } else {
             0
         }
-        return AnimeTrackSearch.create(TrackManager.BANGUMI).apply {
+        return AnimeTrackSearch.create(trackId).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
             cover_url = coverUrl

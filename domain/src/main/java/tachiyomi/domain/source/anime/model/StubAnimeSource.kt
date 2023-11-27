@@ -6,28 +6,30 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 
 @Suppress("OverridingDeprecatedMember")
-class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
+class StubAnimeSource(
+    override val id: Long,
+    override val lang: String,
+    override val name: String,
+) : AnimeSource {
 
-    override val id: Long = sourceData.id
+    private val isInvalid: Boolean = name.isBlank() || lang.isBlank()
 
-    override val name: String = sourceData.name.ifBlank { id.toString() }
-
-    override val lang: String = sourceData.lang
-
-    override suspend fun getAnimeDetails(anime: SAnime): SAnime {
+    override suspend fun getAnimeDetails(anime: SAnime): SAnime =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
+    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override suspend fun getVideoList(episode: SEpisode): List<Video> {
+    override suspend fun getVideoList(episode: SEpisode): List<Video> =
         throw AnimeSourceNotInstalledException()
-    }
 
-    override fun toString(): String {
-        return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
+    override fun toString(): String =
+        if (isInvalid.not()) "$name (${lang.uppercase()})" else id.toString()
+
+    companion object {
+        fun from(source: AnimeSource): StubAnimeSource {
+            return StubAnimeSource(id = source.id, lang = source.lang, name = source.name)
+        }
     }
 }
 class AnimeSourceNotInstalledException : Exception()

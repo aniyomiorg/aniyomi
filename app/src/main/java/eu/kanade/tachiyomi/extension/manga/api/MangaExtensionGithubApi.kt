@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.extension.manga.api
 import android.content.Context
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
@@ -73,7 +72,10 @@ internal class MangaExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<MangaExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false,
+    ): List<MangaExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
@@ -125,22 +127,11 @@ internal class MangaExtensionGithubApi {
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
                     hasChangelog = it.hasChangelog == 1,
-                    sources = it.sources?.toExtensionSources().orEmpty(),
+                    sources = it.sources?.map(extensionSourceMapper).orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
+                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
                 )
             }
-    }
-
-    private fun List<ExtensionSourceJsonObject>.toExtensionSources(): List<AvailableMangaSources> {
-        return this.map {
-            AvailableMangaSources(
-                id = it.id,
-                lang = it.lang,
-                name = it.name,
-                baseUrl = it.baseUrl,
-            )
-        }
     }
 
     fun getApkUrl(extension: MangaExtension.Available): String {
@@ -184,3 +175,12 @@ private data class ExtensionSourceJsonObject(
     val name: String,
     val baseUrl: String,
 )
+
+private val extensionSourceMapper: (ExtensionSourceJsonObject) -> MangaExtension.Available.MangaSource = {
+    MangaExtension.Available.MangaSource(
+        id = it.id,
+        lang = it.lang,
+        name = it.name,
+        baseUrl = it.baseUrl,
+    )
+}

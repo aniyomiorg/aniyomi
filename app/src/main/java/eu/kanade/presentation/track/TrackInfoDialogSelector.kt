@@ -17,8 +17,11 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -29,13 +32,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.WheelNumberPicker
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.components.material.AlertDialogContent
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
@@ -80,8 +86,16 @@ fun TrackStatusSelector(
                     }
                 }
             }
-            if (!state.isScrolledToStart()) Divider(modifier = Modifier.align(Alignment.TopCenter))
-            if (!state.isScrolledToEnd()) Divider(modifier = Modifier.align(Alignment.BottomCenter))
+            if (!state.isScrolledToStart()) {
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
+            }
+            if (!state.isScrolledToEnd()) {
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                )
+            }
         },
         onConfirm = onConfirm,
         onDismissRequest = onDismissRequest,
@@ -102,9 +116,9 @@ fun TrackItemSelector(
         title = stringResource(titleText),
         content = {
             WheelNumberPicker(
+                items = range.toImmutableList(),
                 modifier = Modifier.align(Alignment.Center),
                 startIndex = selection,
-                items = range.toList(),
                 onSelectionChanged = { onSelectionChange(it) },
             )
         },
@@ -117,7 +131,7 @@ fun TrackItemSelector(
 fun TrackScoreSelector(
     selection: String,
     onSelectionChange: (String) -> Unit,
-    selections: List<String>,
+    selections: ImmutableList<String>,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -125,9 +139,9 @@ fun TrackScoreSelector(
         title = stringResource(R.string.score),
         content = {
             WheelTextPicker(
-                modifier = Modifier.align(Alignment.Center),
-                startIndex = selections.indexOf(selection).coerceAtLeast(0),
                 items = selections,
+                modifier = Modifier.align(Alignment.Center),
+                startIndex = selections.indexOf(selection).takeIf { it > 0 } ?: (selections.size / 2),
                 onSelectionChanged = { onSelectionChange(selections[it]) },
             )
         },
@@ -140,13 +154,14 @@ fun TrackScoreSelector(
 fun TrackDateSelector(
     title: String,
     initialSelectedDateMillis: Long,
-    dateValidator: (Long) -> Boolean,
+    selectableDates: SelectableDates,
     onConfirm: (Long) -> Unit,
     onRemove: (() -> Unit)?,
     onDismissRequest: () -> Unit,
 ) {
     val pickerState = rememberDatePickerState(
         initialSelectedDateMillis = initialSelectedDateMillis,
+        selectableDates = selectableDates,
     )
     AlertDialogContent(
         modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
@@ -155,7 +170,6 @@ fun TrackDateSelector(
             Column {
                 DatePicker(
                     state = pickerState,
-                    dateValidator = dateValidator,
                     title = null,
                     headline = null,
                     showModeToggle = false,
@@ -164,7 +178,10 @@ fun TrackDateSelector(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small, Alignment.End),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        MaterialTheme.padding.small,
+                        Alignment.End,
+                    ),
                 ) {
                     if (onRemove != null) {
                         TextButton(onClick = onRemove) {
@@ -173,10 +190,10 @@ fun TrackDateSelector(
                         Spacer(modifier = Modifier.weight(1f))
                     }
                     TextButton(onClick = onDismissRequest) {
-                        Text(text = stringResource(android.R.string.cancel))
+                        Text(text = stringResource(R.string.action_cancel))
                     }
                     TextButton(onClick = { onConfirm(pickerState.selectedDateMillis!!) }) {
-                        Text(text = stringResource(android.R.string.ok))
+                        Text(text = stringResource(R.string.action_ok))
                     }
                 }
             }
@@ -188,9 +205,9 @@ fun TrackDateSelector(
 fun BaseSelector(
     title: String,
     content: @Composable BoxScope.() -> Unit,
-    thirdButton: @Composable (RowScope.() -> Unit)? = null,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
+    thirdButton: @Composable (RowScope.() -> Unit)? = null,
 ) {
     AlertDialogContent(
         modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
@@ -204,19 +221,48 @@ fun BaseSelector(
         buttons = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small, Alignment.End),
+                horizontalArrangement = Arrangement.spacedBy(
+                    MaterialTheme.padding.small,
+                    Alignment.End,
+                ),
             ) {
                 if (thirdButton != null) {
                     thirdButton()
                     Spacer(modifier = Modifier.weight(1f))
                 }
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(android.R.string.cancel))
+                    Text(text = stringResource(R.string.action_cancel))
                 }
                 TextButton(onClick = onConfirm) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(R.string.action_ok))
                 }
             }
         },
     )
+}
+
+@PreviewLightDark
+@Composable
+private fun TrackStatusSelectorPreviews() {
+    TachiyomiTheme {
+        Surface {
+            TrackStatusSelector(
+                selection = 1,
+                onSelectionChange = {},
+                selections = mapOf(
+                    // Anilist values
+                    1 to R.string.reading,
+                    2 to R.string.plan_to_read,
+                    3 to R.string.completed,
+                    4 to R.string.on_hold,
+                    5 to R.string.dropped,
+                    6 to R.string.repeating,
+                    7 to R.string.watching,
+                    8 to R.string.plan_to_watch,
+                ),
+                onConfirm = {},
+                onDismissRequest = {},
+            )
+        }
+    }
 }

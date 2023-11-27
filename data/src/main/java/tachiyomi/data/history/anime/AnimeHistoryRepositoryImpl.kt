@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.domain.history.anime.model.AnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.domain.history.anime.repository.AnimeHistoryRepository
@@ -14,13 +15,22 @@ class AnimeHistoryRepositoryImpl(
 
     override fun getAnimeHistory(query: String): Flow<List<AnimeHistoryWithRelations>> {
         return handler.subscribeToList {
-            animehistoryViewQueries.animehistory(query, animeHistoryWithRelationsMapper)
+            animehistoryViewQueries.animehistory(query, AnimeHistoryMapper::mapAnimeHistoryWithRelations)
         }
     }
 
     override suspend fun getLastAnimeHistory(): AnimeHistoryWithRelations? {
         return handler.awaitOneOrNull {
-            animehistoryViewQueries.getLatestAnimeHistory(animeHistoryWithRelationsMapper)
+            animehistoryViewQueries.getLatestAnimeHistory(AnimeHistoryMapper::mapAnimeHistoryWithRelations)
+        }
+    }
+
+    override suspend fun getHistoryByAnimeId(animeId: Long): List<AnimeHistory> {
+        return handler.awaitList {
+            animehistoryQueries.getHistoryByAnimeId(
+                animeId,
+                AnimeHistoryMapper::mapAnimeHistory,
+            )
         }
     }
 

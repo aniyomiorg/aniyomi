@@ -24,7 +24,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
@@ -37,7 +36,9 @@ import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.WheelTextPicker
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -77,7 +78,10 @@ object SettingsPlayerScreen : SearchableSettings {
             getOrientationGroup(playerPreferences = playerPreferences),
             getSeekingGroup(playerPreferences = playerPreferences),
             if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
-            getExternalPlayerGroup(playerPreferences = playerPreferences, basePreferences = basePreferences),
+            getExternalPlayerGroup(
+                playerPreferences = playerPreferences,
+                basePreferences = basePreferences,
+            ),
         )
     }
 
@@ -147,13 +151,27 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = defaultPlayerOrientationType,
                     title = stringResource(R.string.pref_default_player_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(R.string.rotation_free),
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(R.string.rotation_portrait),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(R.string.rotation_reverse_portrait),
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(R.string.rotation_landscape),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(R.string.rotation_reverse_landscape),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(R.string.rotation_sensor_portrait),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(R.string.rotation_sensor_landscape),
+                        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(
+                            R.string.rotation_free,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
+                            R.string.rotation_portrait,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
+                            R.string.rotation_reverse_portrait,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
+                            R.string.rotation_landscape,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
+                            R.string.rotation_reverse_landscape,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
+                            R.string.rotation_sensor_portrait,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
+                            R.string.rotation_sensor_landscape,
+                        ),
                     ),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
@@ -164,18 +182,30 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = defaultPlayerOrientationPortrait,
                     title = stringResource(R.string.pref_default_portrait_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(R.string.rotation_portrait),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(R.string.rotation_reverse_portrait),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(R.string.rotation_sensor_portrait),
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
+                            R.string.rotation_portrait,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
+                            R.string.rotation_reverse_portrait,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
+                            R.string.rotation_sensor_portrait,
+                        ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationLandscape,
                     title = stringResource(R.string.pref_default_landscape_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(R.string.rotation_landscape),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(R.string.rotation_reverse_landscape),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(R.string.rotation_sensor_landscape),
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
+                            R.string.rotation_landscape,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
+                            R.string.rotation_reverse_landscape,
+                        ),
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
+                            R.string.rotation_sensor_landscape,
+                        ),
                     ),
                 ),
             ),
@@ -309,7 +339,10 @@ object SettingsPlayerScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getExternalPlayerGroup(playerPreferences: PlayerPreferences, basePreferences: BasePreferences): Preference.PreferenceGroup {
+    private fun getExternalPlayerGroup(
+        playerPreferences: PlayerPreferences,
+        basePreferences: BasePreferences,
+    ): Preference.PreferenceGroup {
         val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer()
         val externalPlayerPreference = playerPreferences.externalPlayerPreference()
 
@@ -363,7 +396,7 @@ object SettingsPlayerScreen : SearchableSettings {
                                     R.string.seconds_short,
                                     it,
                                 )
-                            },
+                            }.toImmutableList(),
                             onSelectionChanged = {
                                 newLength = it
                             },
@@ -379,7 +412,7 @@ object SettingsPlayerScreen : SearchableSettings {
             },
             confirmButton = {
                 TextButton(onClick = { onValueChanged(newLength) }) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(R.string.action_ok))
                 }
             },
         )

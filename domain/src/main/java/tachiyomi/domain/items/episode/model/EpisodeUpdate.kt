@@ -12,10 +12,24 @@ data class EpisodeUpdate(
     val url: String? = null,
     val name: String? = null,
     val dateUpload: Long? = null,
-    val episodeNumber: Float? = null,
+    val episodeNumber: Double? = null,
     val scanlator: String? = null,
 )
 
 fun Episode.toEpisodeUpdate(): EpisodeUpdate {
-    return EpisodeUpdate(id, animeId, seen, bookmark, lastSecondSeen, totalSeconds, dateFetch, sourceOrder, url, name, dateUpload, episodeNumber, scanlator)
+    return EpisodeUpdate(
+        id,
+        animeId,
+        seen,
+        bookmark,
+        lastSecondSeen,
+        totalSeconds,
+        dateFetch,
+        sourceOrder,
+        url,
+        name,
+        dateUpload,
+        episodeNumber,
+        scanlator,
+    )
 }

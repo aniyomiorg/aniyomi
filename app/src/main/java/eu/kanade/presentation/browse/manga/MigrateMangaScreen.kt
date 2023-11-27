@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.entries.manga.components.BaseMangaListItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaState
+import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreenModel
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -18,7 +18,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 fun MigrateMangaScreen(
     navigateUp: () -> Unit,
     title: String?,
-    state: MigrateMangaState,
+    state: MigrateMangaScreenModel.State,
     onClickItem: (Manga) -> Unit,
     onClickCover: (Manga) -> Unit,
 ) {
@@ -51,7 +51,7 @@ fun MigrateMangaScreen(
 @Composable
 private fun MigrateMangaContent(
     contentPadding: PaddingValues,
-    state: MigrateMangaState,
+    state: MigrateMangaScreenModel.State,
     onClickItem: (Manga) -> Unit,
     onClickCover: (Manga) -> Unit,
 ) {
@@ -70,10 +70,10 @@ private fun MigrateMangaContent(
 
 @Composable
 private fun MigrateMangaItem(
-    modifier: Modifier = Modifier,
     manga: Manga,
     onClickItem: (Manga) -> Unit,
     onClickCover: (Manga) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseMangaListItem(
         modifier = modifier,

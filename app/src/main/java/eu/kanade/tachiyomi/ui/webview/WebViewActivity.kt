@@ -111,7 +111,13 @@ class WebViewActivity : BaseActivity() {
         private const val TITLE_KEY = "title_key"
         private const val ANIME_KEY = "anime_key"
 
-        fun newIntent(context: Context, url: String, sourceId: Long? = null, title: String? = null, isAnime: Boolean = false): Intent {
+        fun newIntent(
+            context: Context,
+            url: String,
+            sourceId: Long? = null,
+            title: String? = null,
+            isAnime: Boolean = false,
+        ): Intent {
             return Intent(context, WebViewActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(URL_KEY, url)

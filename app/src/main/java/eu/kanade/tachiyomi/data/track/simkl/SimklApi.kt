@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.track.simkl
 import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -167,12 +167,14 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     }
 
     private fun jsonToAnimeSearch(obj: JsonObject, type: String): AnimeTrackSearch {
-        return AnimeTrackSearch.create(TrackManager.SIMKL).apply {
+        return AnimeTrackSearch.create(TrackerManager.SIMKL).apply {
             media_id = obj["ids"]!!.jsonObject["simkl_id"]!!.jsonPrimitive.long
             title = obj["title_romaji"]?.jsonPrimitive?.content ?: obj["title"]!!.jsonPrimitive.content
             total_episodes = obj["ep_count"]?.jsonPrimitive?.intOrNull ?: 1
             cover_url = "https://simkl.in/posters/" + obj["poster"]!!.jsonPrimitive.content + "_m.webp"
-            summary = obj["all_titles"]?.jsonArray?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
+            summary = obj["all_titles"]?.jsonArray
+                ?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
+
             tracking_url = obj["url"]!!.jsonPrimitive.content
             publishing_status = obj["status"]?.jsonPrimitive?.content ?: "ended"
             publishing_type = obj["type"]?.jsonPrimitive?.content ?: type
@@ -180,8 +182,13 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         }
     }
 
-    private fun jsonToAnimeTrack(obj: JsonObject, typeName: String, type: String, statusString: String): AnimeTrack {
-        return AnimeTrack.create(TrackManager.SIMKL).apply {
+    private fun jsonToAnimeTrack(
+        obj: JsonObject,
+        typeName: String,
+        type: String,
+        statusString: String,
+    ): AnimeTrack {
+        return AnimeTrack.create(TrackerManager.SIMKL).apply {
             title = obj[typeName]!!.jsonObject["title"]!!.jsonPrimitive.content
             val id = obj[typeName]!!.jsonObject["ids"]!!.jsonObject["simkl"]!!.jsonPrimitive.long
             media_id = id

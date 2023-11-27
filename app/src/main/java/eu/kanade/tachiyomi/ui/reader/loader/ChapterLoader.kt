@@ -78,9 +78,21 @@ class ChapterLoader(
      */
     private fun getPageLoader(chapter: ReaderChapter): PageLoader {
         val dbChapter = chapter.chapter
-        val isDownloaded = downloadManager.isChapterDownloaded(dbChapter.name, dbChapter.scanlator, manga.title, manga.source, skipCache = true)
+        val isDownloaded = downloadManager.isChapterDownloaded(
+            dbChapter.name,
+            dbChapter.scanlator,
+            manga.title,
+            manga.source,
+            skipCache = true,
+        )
         return when {
-            isDownloaded -> DownloadPageLoader(chapter, manga, source, downloadManager, downloadProvider)
+            isDownloaded -> DownloadPageLoader(
+                chapter,
+                manga,
+                source,
+                downloadManager,
+                downloadProvider,
+            )
             source is LocalMangaSource -> source.getFormat(chapter.chapter).let { format ->
                 when (format) {
                     is Format.Directory -> DirectoryPageLoader(format.file)
@@ -94,7 +106,9 @@ class ChapterLoader(
                 }
             }
             source is HttpSource -> HttpPageLoader(chapter, source)
-            source is StubMangaSource -> error(context.getString(R.string.source_not_installed, source.toString()))
+            source is StubMangaSource -> error(
+                context.getString(R.string.source_not_installed, source.toString()),
+            )
             else -> error(context.getString(R.string.loader_not_implemented_error))
         }
     }

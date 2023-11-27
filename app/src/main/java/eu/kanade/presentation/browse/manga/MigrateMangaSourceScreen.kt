@@ -26,7 +26,7 @@ import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceState
+import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceScreenModel
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.presentation.core.components.Badge
@@ -43,7 +43,7 @@ import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MigrateMangaSourceScreen(
-    state: MigrateMangaSourceState,
+    state: MigrateMangaSourceScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (Source) -> Unit,
     onToggleSortingDirection: () -> Unit,
@@ -51,7 +51,7 @@ fun MigrateMangaSourceScreen(
 ) {
     val context = LocalContext.current
     when {
-        state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+        state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
             textResource = R.string.information_empty_library,
             modifier = Modifier.padding(contentPadding),
@@ -102,14 +102,26 @@ private fun MigrateSourceList(
 
                 IconButton(onClick = onToggleSortingMode) {
                     when (sortingMode) {
-                        SetMigrateSorting.Mode.ALPHABETICAL -> Icon(Icons.Outlined.SortByAlpha, contentDescription = stringResource(R.string.action_sort_alpha))
-                        SetMigrateSorting.Mode.TOTAL -> Icon(Icons.Outlined.Numbers, contentDescription = stringResource(R.string.action_sort_count))
+                        SetMigrateSorting.Mode.ALPHABETICAL -> Icon(
+                            Icons.Outlined.SortByAlpha,
+                            contentDescription = stringResource(R.string.action_sort_alpha),
+                        )
+                        SetMigrateSorting.Mode.TOTAL -> Icon(
+                            Icons.Outlined.Numbers,
+                            contentDescription = stringResource(R.string.action_sort_count),
+                        )
                     }
                 }
                 IconButton(onClick = onToggleSortingDirection) {
                     when (sortingDirection) {
-                        SetMigrateSorting.Direction.ASCENDING -> Icon(Icons.Outlined.ArrowUpward, contentDescription = stringResource(R.string.action_asc))
-                        SetMigrateSorting.Direction.DESCENDING -> Icon(Icons.Outlined.ArrowDownward, contentDescription = stringResource(R.string.action_desc))
+                        SetMigrateSorting.Direction.ASCENDING -> Icon(
+                            Icons.Outlined.ArrowUpward,
+                            contentDescription = stringResource(R.string.action_asc),
+                        )
+                        SetMigrateSorting.Direction.DESCENDING -> Icon(
+                            Icons.Outlined.ArrowDownward,
+                            contentDescription = stringResource(R.string.action_desc),
+                        )
                     }
                 }
             }
@@ -120,7 +132,7 @@ private fun MigrateSourceList(
             key = { (source, _) -> "migrate-${source.id}" },
         ) { (source, count) ->
             MigrateSourceItem(
-                modifier = Modifier.animateItemPlacement(),
+
                 source = source,
                 count = count,
                 onClickItem = { onClickItem(source) },
@@ -132,11 +144,11 @@ private fun MigrateSourceList(
 
 @Composable
 private fun MigrateSourceItem(
-    modifier: Modifier = Modifier,
     source: Source,
     count: Long,
     onClickItem: () -> Unit,
     onLongClickItem: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseMangaSourceItem(
         modifier = modifier,

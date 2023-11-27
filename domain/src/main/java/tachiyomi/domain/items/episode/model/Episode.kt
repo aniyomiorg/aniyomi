@@ -12,11 +12,22 @@ data class Episode(
     val url: String,
     val name: String,
     val dateUpload: Long,
-    val episodeNumber: Float,
+    val episodeNumber: Double,
     val scanlator: String?,
+    val lastModifiedAt: Long,
 ) {
     val isRecognizedNumber: Boolean
         get() = episodeNumber >= 0f
+
+    fun copyFrom(other: Episode): Episode {
+        return copy(
+            name = other.name,
+            url = other.url,
+            dateUpload = other.dateUpload,
+            episodeNumber = other.episodeNumber,
+            scanlator = other.scanlator?.ifBlank { null },
+        )
+    }
 
     companion object {
         fun create() = Episode(
@@ -31,8 +42,9 @@ data class Episode(
             url = "",
             name = "",
             dateUpload = -1,
-            episodeNumber = -1f,
+            episodeNumber = -1.0,
             scanlator = null,
+            lastModifiedAt = 0,
         )
     }
 }

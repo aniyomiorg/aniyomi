@@ -65,7 +65,7 @@ fun ChangeCategoryDialog(
                 TextButton(onClick = {
                     onDismissRequest()
                     onEditCategories()
-                },) {
+                }) {
                     Text(text = stringResource(R.string.action_edit))
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -76,12 +76,18 @@ fun ChangeCategoryDialog(
                     onClick = {
                         onDismissRequest()
                         onConfirm(
-                            selection.filter { it is CheckboxState.State.Checked || it is CheckboxState.TriState.Include }.map { it.value.id },
-                            selection.filter { it is CheckboxState.State.None || it is CheckboxState.TriState.None }.map { it.value.id },
+                            selection.filter {
+                                it is CheckboxState.State.Checked ||
+                                    it is CheckboxState.TriState.Include
+                            }.map { it.value.id },
+                            selection.filter {
+                                it is CheckboxState.State.None ||
+                                    it is CheckboxState.TriState.None
+                            }.map { it.value.id },
                         )
                     },
                 ) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(R.string.action_ok))
                 }
             }
         },

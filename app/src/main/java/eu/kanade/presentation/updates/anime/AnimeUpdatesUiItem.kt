@@ -1,6 +1,5 @@
 package eu.kanade.presentation.updates.anime
 
-import android.text.format.DateUtils
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -23,12 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -40,6 +38,7 @@ import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
+import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
@@ -48,35 +47,23 @@ import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.selectedBackground
-import java.util.Date
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
     item(key = "animeUpdates-lastUpdated") {
-        val time = remember(lastUpdated) {
-            val now = Date().time
-            if (now - lastUpdated < 1.minutes.inWholeMilliseconds) {
-                null
-            } else {
-                DateUtils.getRelativeTimeSpanString(lastUpdated, now, DateUtils.MINUTE_IN_MILLIS)
-            }
-        }
-
         Box(
             modifier = Modifier
                 .animateItemPlacement()
-                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+                .padding(
+                    horizontal = MaterialTheme.padding.medium,
+                    vertical = MaterialTheme.padding.small,
+                ),
         ) {
             Text(
-                text = if (time.isNullOrEmpty()) {
-                    stringResource(R.string.updates_last_update_info, stringResource(R.string.updates_last_update_info_just_now))
-                } else {
-                    stringResource(R.string.updates_last_update_info, time)
-                },
+                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }
@@ -110,14 +97,14 @@ fun LazyListScope.animeUpdatesUiItems(
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
                 ListGroupHeader(
-                    modifier = Modifier.animateItemPlacement(),
+
                     text = item.date,
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 AnimeUpdatesUiItem(
-                    modifier = Modifier.animateItemPlacement(),
+
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     watchProgress = updatesItem.update.lastSecondSeen
@@ -134,7 +121,12 @@ fun LazyListScope.animeUpdatesUiItems(
                     },
                     onClick = {
                         when {
-                            selectionMode -> onUpdateSelected(updatesItem, !updatesItem.selected, true, false)
+                            selectionMode -> onUpdateSelected(
+                                updatesItem,
+                                !updatesItem.selected,
+                                true,
+                                false,
+                            )
                             else -> onClickUpdate(updatesItem, false)
                         }
                     },
@@ -153,7 +145,6 @@ fun LazyListScope.animeUpdatesUiItems(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimeUpdatesUiItem(
-    modifier: Modifier,
     update: AnimeUpdatesWithRelations,
     selected: Boolean,
     watchProgress: String?,
@@ -164,6 +155,7 @@ fun AnimeUpdatesUiItem(
     // Download Indicator
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
+    modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
     val textAlpha = if (update.seen) ReadItemAlpha else 1f
@@ -203,7 +195,7 @@ fun AnimeUpdatesUiItem(
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                var textHeight by remember { mutableStateOf(0) }
+                var textHeight by remember { mutableIntStateOf(0) }
                 if (!update.seen) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
@@ -219,7 +211,9 @@ fun AnimeUpdatesUiItem(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
                         modifier = Modifier
-                            .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                            .sizeIn(
+                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
+                            ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(2.dp))

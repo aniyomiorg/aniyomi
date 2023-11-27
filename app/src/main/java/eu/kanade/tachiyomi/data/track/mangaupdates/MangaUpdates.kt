@@ -4,13 +4,16 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
-import eu.kanade.tachiyomi.data.track.MangaTrackService
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.BaseTracker
+import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
+import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
-class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
+class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, DeletableMangaTracker {
 
     companion object {
         const val READING_LIST = 0
@@ -18,14 +21,17 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
         const val COMPLETE_LIST = 2
         const val UNFINISHED_LIST = 3
         const val ON_HOLD_LIST = 4
+
+        private val SCORE_LIST = (
+            (0..9)
+                .flatMap { i -> (0..9).map { j -> "$i.$j" } } + listOf("10.0")
+            )
+            .toImmutableList()
     }
 
     private val interceptor by lazy { MangaUpdatesInterceptor(this) }
 
     private val api by lazy { MangaUpdatesApi(interceptor, client) }
-
-    @StringRes
-    override fun nameRes(): Int = R.string.tracker_manga_updates
 
     override fun getLogo(): Int = R.drawable.ic_manga_updates
 
@@ -51,11 +57,9 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
 
     override fun getCompletionStatus(): Int = COMPLETE_LIST
 
-    private val _scoreList = (0..9).flatMap { i -> (0..9).map { j -> "$i.$j" } } + listOf("10.0")
+    override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
-    override fun getScoreList(): List<String> = _scoreList
-
-    override fun indexToScore(index: Int): Float = _scoreList[index].toFloat()
+    override fun indexToScore(index: Int): Float = SCORE_LIST[index].toFloat()
 
     override fun displayScore(track: MangaTrack): String = track.score.toString()
 
@@ -64,6 +68,11 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
             track.status = READING_LIST
         }
         api.updateSeriesListItem(track)
+        return track
+    }
+
+    override suspend fun delete(track: MangaTrack): MangaTrack {
+        api.deleteSeriesFromList(track)
         return track
     }
 
@@ -92,7 +101,9 @@ class MangaUpdates(id: Long) : TrackService(id), MangaTrackService {
     }
 
     override suspend fun login(username: String, password: String) {
-        val authenticated = api.authenticate(username, password) ?: throw Throwable("Unable to login")
+        val authenticated = api.authenticate(username, password) ?: throw Throwable(
+            "Unable to login",
+        )
         saveCredentials(authenticated.uid.toString(), authenticated.sessionToken)
         interceptor.newAuth(authenticated.sessionToken)
     }

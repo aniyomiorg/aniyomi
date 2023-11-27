@@ -5,18 +5,32 @@ import tachiyomi.domain.history.manga.model.MangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import java.util.Date
 
-val mangaHistoryMapper: (Long, Long, Date?, Long) -> MangaHistory = { id, chapterId, readAt, readDuration ->
-    MangaHistory(
+object MangaHistoryMapper {
+    fun mapMangaHistory(
+        id: Long,
+        chapterId: Long,
+        readAt: Date?,
+        readDuration: Long,
+    ): MangaHistory = MangaHistory(
         id = id,
         chapterId = chapterId,
         readAt = readAt,
         readDuration = readDuration,
     )
-}
 
-val mangaHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?, Long) -> MangaHistoryWithRelations = {
-        historyId, mangaId, chapterId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, chapterNumber, readAt, readDuration ->
-    MangaHistoryWithRelations(
+    fun mapMangaHistoryWithRelations(
+        historyId: Long,
+        mangaId: Long,
+        chapterId: Long,
+        title: String,
+        thumbnailUrl: String?,
+        sourceId: Long,
+        isFavorite: Boolean,
+        coverLastModified: Long,
+        chapterNumber: Double,
+        readAt: Date?,
+        readDuration: Long,
+    ): MangaHistoryWithRelations = MangaHistoryWithRelations(
         id = historyId,
         chapterId = chapterId,
         mangaId = mangaId,

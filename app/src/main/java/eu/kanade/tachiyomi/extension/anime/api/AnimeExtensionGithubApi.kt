@@ -5,7 +5,6 @@ import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
-import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -30,7 +29,7 @@ internal class AnimeExtensionGithubApi {
     private val json: Json by injectLazy()
 
     private val lastExtCheck: Preference<Long> by lazy {
-        preferenceStore.getLong("last_ext_check", 0)
+        preferenceStore.getLong(Preference.appStateKey("last_ext_check"), 0)
     }
 
     private var requiresFallbackSource = false
@@ -73,7 +72,10 @@ internal class AnimeExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<AnimeExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false,
+    ): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
@@ -126,22 +128,11 @@ internal class AnimeExtensionGithubApi {
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
                     hasChangelog = it.hasChangelog == 1,
-                    sources = it.sources?.toAnimeExtensionSources().orEmpty(),
+                    sources = it.sources?.map(extensionAnimeSourceMapper).orEmpty(),
                     apkName = it.apk,
                     iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
                 )
             }
-    }
-
-    private fun List<AnimeExtensionSourceJsonObject>.toAnimeExtensionSources(): List<AvailableAnimeSources> {
-        return this.map {
-            AvailableAnimeSources(
-                id = it.id,
-                lang = it.lang,
-                name = it.name,
-                baseUrl = it.baseUrl,
-            )
-        }
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
@@ -185,3 +176,12 @@ private data class AnimeExtensionSourceJsonObject(
     val name: String,
     val baseUrl: String,
 )
+
+private val extensionAnimeSourceMapper: (AnimeExtensionSourceJsonObject) -> AnimeExtension.Available.AnimeSource = {
+    AnimeExtension.Available.AnimeSource(
+        id = it.id,
+        lang = it.lang,
+        name = it.name,
+        baseUrl = it.baseUrl,
+    )
+}

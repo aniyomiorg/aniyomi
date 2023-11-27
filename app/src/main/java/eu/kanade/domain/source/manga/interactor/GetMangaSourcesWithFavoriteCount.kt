@@ -4,12 +4,11 @@ import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import tachiyomi.core.util.lang.compareToWithCollator
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
 import tachiyomi.source.local.entries.manga.LocalMangaSource
-import java.text.Collator
 import java.util.Collections
-import java.util.Locale
 
 class GetMangaSourcesWithFavoriteCount(
     private val repository: MangaSourceRepository,
@@ -32,17 +31,13 @@ class GetMangaSourcesWithFavoriteCount(
         direction: SetMigrateSorting.Direction,
         sorting: SetMigrateSorting.Mode,
     ): java.util.Comparator<Pair<Source, Long>> {
-        val locale = Locale.getDefault()
-        val collator = Collator.getInstance(locale).apply {
-            strength = Collator.PRIMARY
-        }
         val sortFn: (Pair<Source, Long>, Pair<Source, Long>) -> Int = { a, b ->
             when (sorting) {
                 SetMigrateSorting.Mode.ALPHABETICAL -> {
                     when {
                         a.first.isStub && b.first.isStub.not() -> -1
                         b.first.isStub && a.first.isStub.not() -> 1
-                        else -> collator.compare(a.first.name.lowercase(locale), b.first.name.lowercase(locale))
+                        else -> a.first.name.lowercase().compareToWithCollator(b.first.name.lowercase())
                     }
                 }
                 SetMigrateSorting.Mode.TOTAL -> {

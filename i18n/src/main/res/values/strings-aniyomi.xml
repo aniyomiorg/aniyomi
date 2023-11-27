@@ -26,7 +26,7 @@
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
-    <string name="unlock_app">Unlock Aniyomi</string>
+    <string name="unlock_app_title">Unlock Aniyomi</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_global_manga_search">Global Manga Search</string>
     <string name="action_global_anime_search">Global Anime Search</string>
@@ -77,12 +77,12 @@
     <string name="default_anime_category">Default anime category</string>
     <string name="pref_manga_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="pref_anime_library_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
-    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any login credentials stored in Aniyomi or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
-    <string name="unofficial_extension_message_aniyomi">This extension is not from the official Aniyomi extensions list.</string>
+    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any stored login credentials or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
+    <string name="unofficial_extension_message_aniyomi">This extension is not from the official list.</string>
     <string name="rotation_reverse_landscape">Reverse landscape</string>
     <string name="rotation_sensor_portrait">Sensor portrait</string>
     <string name="rotation_sensor_landscape">Sensor landscape</string>
-    <string name="unofficial_anime_extension_message">This extension is not from the official Aniyomi extensions list.</string>
+    <string name="unofficial_anime_extension_message">This extension is not from the official list.</string>
     <!-- Player section -->
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
@@ -158,14 +158,15 @@
     <string name="pref_show_next_episode_airing_time">Show next episode\'s airing time </string>
     <string name="pref_backup_flags_summary">What information to include in the backup file</string>
     <string name="pref_clear_chapter_cache">Clear chapter and episode cache</string>
+    <string name="pref_anime_storage_usage">Anime Storage usage</string>
+    <string name="pref_manga_storage_usage">Manga Storage usage</string>
     <string name="used_cache_both">Used by anime: %1$s, used by manga: %2$s</string>
-    <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app close</string>
+    <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app launch</string>
     <string name="pref_clear_manga_database">Clear Manga database</string>
     <string name="pref_clear_anime_database">Clear Anime database</string>
     <string name="pref_clear_manga_database_summary">Delete history for manga that are not saved in your library</string>
     <string name="pref_clear_anime_database_summary">Delete history for anime that are not saved in your library</string>
     <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
-    <string name="pref_refresh_library_tracking_summary">Updates status, score and progress from the tracking services</string>
     <string name="pref_incognito_mode_summary">Pauses your history</string>
     <string name="manga_from_library">Manga from library</string>
     <string name="anime_from_library">Anime from library</string>
@@ -241,7 +242,7 @@
     </plurals>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <!-- Do not translate "WebView" -->
-    <string name="information_webview_required">WebView is required for Aniyomi</string>
+    <string name="information_webview_required">WebView is required for the app to function</string>
     <string name="episode_settings_updated">Updated default episode settings</string>
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
@@ -252,6 +253,7 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <string name="licensed_manga_chapters_error">Licensed - No items to show</string>
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>
@@ -326,6 +328,7 @@
 
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
 
+    <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
 
     <!-- Subtitle settings -->
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
@@ -371,4 +374,5 @@
     <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
     <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
     <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
+    <string name="unseen">Unseen</string>
 </resources>

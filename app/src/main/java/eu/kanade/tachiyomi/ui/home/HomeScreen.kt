@@ -5,7 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -35,6 +35,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
@@ -72,6 +73,8 @@ object HomeScreen : Screen() {
 
     private val libraryPreferences: LibraryPreferences by injectLazy()
 
+    private val uiPreferences: UiPreferences by injectLazy()
+
     val tabsNoHistory = listOf(
         AnimeLibraryTab,
         MangaLibraryTab,
@@ -83,7 +86,7 @@ object HomeScreen : Screen() {
     val tabsNoUpdates = listOf(
         AnimeLibraryTab,
         MangaLibraryTab,
-        HistoriesTab(false),
+        HistoriesTab(false, uiPreferences),
         BrowseTab(),
         MoreTab,
     )
@@ -91,7 +94,7 @@ object HomeScreen : Screen() {
     val tabsNoManga = listOf(
         AnimeLibraryTab,
         UpdatesTab(fromMore = false, inMiddle = false),
-        HistoriesTab(false),
+        HistoriesTab(false, uiPreferences),
         BrowseTab(),
         MoreTab,
     )
@@ -155,7 +158,10 @@ object HomeScreen : Screen() {
                         AnimatedContent(
                             targetState = tabNavigator.current,
                             transitionSpec = {
-                                materialFadeThroughIn(initialScale = 1f, durationMillis = TabFadeDuration) with
+                                materialFadeThroughIn(
+                                    initialScale = 1f,
+                                    durationMillis = TabFadeDuration,
+                                ) togetherWith
                                     materialFadeThroughOut(durationMillis = TabFadeDuration)
                             },
                             content = {
@@ -190,7 +196,7 @@ object HomeScreen : Screen() {
                                 libraryPreferences.bottomNavStyle().get() == 1,
                                 libraryPreferences.bottomNavStyle().get() == 0,
                             )
-                            is Tab.History -> HistoriesTab(false)
+                            is Tab.History -> HistoriesTab(false, uiPreferences)
                             is Tab.Browse -> BrowseTab(it.toExtensions)
                             is Tab.More -> MoreTab
                         }
@@ -336,12 +342,12 @@ object HomeScreen : Screen() {
         showBottomNavEvent.send(show)
     }
 
-    sealed class Tab {
-        data class Animelib(val animeIdToOpen: Long? = null) : Tab()
-        data class Library(val mangaIdToOpen: Long? = null) : Tab()
-        object Updates : Tab()
-        object History : Tab()
-        data class Browse(val toExtensions: Boolean = false) : Tab()
-        data class More(val toDownloads: Boolean) : Tab()
+    sealed interface Tab {
+        data class Animelib(val animeIdToOpen: Long? = null) : Tab
+        data class Library(val mangaIdToOpen: Long? = null) : Tab
+        data object Updates : Tab
+        data object History : Tab
+        data class Browse(val toExtensions: Boolean = false) : Tab
+        data class More(val toDownloads: Boolean) : Tab
     }
 }

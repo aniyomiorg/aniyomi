@@ -10,24 +10,24 @@ class AnimeTrackRepositoryImpl(
 ) : AnimeTrackRepository {
 
     override suspend fun getTrackByAnimeId(id: Long): AnimeTrack? {
-        return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, animeTrackMapper) }
+        return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, ::mapTrack) }
     }
 
     override suspend fun getTracksByAnimeId(animeId: Long): List<AnimeTrack> {
         return handler.awaitList {
-            anime_syncQueries.getTracksByAnimeId(animeId, animeTrackMapper)
+            anime_syncQueries.getTracksByAnimeId(animeId, ::mapTrack)
         }
     }
 
     override fun getAnimeTracksAsFlow(): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
-            anime_syncQueries.getAnimeTracks(animeTrackMapper)
+            anime_syncQueries.getAnimeTracks(::mapTrack)
         }
     }
 
     override fun getTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
-            anime_syncQueries.getTracksByAnimeId(animeId, animeTrackMapper)
+            anime_syncQueries.getTracksByAnimeId(animeId, ::mapTrack)
         }
     }
 
@@ -68,4 +68,34 @@ class AnimeTrackRepositoryImpl(
             }
         }
     }
+
+    private fun mapTrack(
+        id: Long,
+        animeId: Long,
+        syncId: Long,
+        remoteId: Long,
+        libraryId: Long?,
+        title: String,
+        lastEpisodeSeen: Double,
+        totalEpisodes: Long,
+        status: Long,
+        score: Double,
+        remoteUrl: String,
+        startDate: Long,
+        finishDate: Long,
+    ): AnimeTrack = AnimeTrack(
+        id = id,
+        animeId = animeId,
+        syncId = syncId,
+        remoteId = remoteId,
+        libraryId = libraryId,
+        title = title,
+        lastEpisodeSeen = lastEpisodeSeen,
+        totalEpisodes = totalEpisodes,
+        status = status,
+        score = score,
+        remoteUrl = remoteUrl,
+        startDate = startDate,
+        finishDate = finishDate,
+    )
 }

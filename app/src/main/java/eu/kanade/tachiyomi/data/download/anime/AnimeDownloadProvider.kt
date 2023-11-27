@@ -6,14 +6,15 @@ import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.storage.service.StoragePreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -25,24 +26,26 @@ import uy.kohesive.injekt.api.get
  */
 class AnimeDownloadProvider(
     private val context: Context,
-    downloadPreferences: DownloadPreferences = Injekt.get(),
+    storagePreferences: StoragePreferences = Injekt.get(),
 ) {
 
-    private val scope = MainScope()
+    private val scope = CoroutineScope(Dispatchers.IO)
 
-    /**
-     * The root directory for downloads.
-     */
-    private var downloadsDir = downloadPreferences.downloadsDirectory().get().let {
-        val dir = UniFile.fromUri(context, it.toUri())
-        DiskUtil.createNoMediaFile(dir, context)
-        dir
-    }
+    private var _downloadsDir: UniFile? =
+        storagePreferences.baseStorageDirectory().get().let(::getDownloadsLocation)
+    val downloadsDir: UniFile?
+        get() = _downloadsDir
 
     init {
-        downloadPreferences.downloadsDirectory().changes()
-            .onEach { downloadsDir = UniFile.fromUri(context, it.toUri()) }
+        storagePreferences.baseStorageDirectory().changes()
+            .onEach { _downloadsDir = getDownloadsLocation(it) }
             .launchIn(scope)
+    }
+
+    private fun getDownloadsLocation(dir: String): UniFile? {
+        return UniFile.fromUri(context, dir.toUri())
+            ?.createDirectory(StoragePreferences.DOWNLOADS_DIR)
+            ?.also { DiskUtil.createNoMediaFile(it, context) }
     }
 
     /**
@@ -53,7 +56,7 @@ class AnimeDownloadProvider(
      */
     internal fun getAnimeDir(animeTitle: String, source: AnimeSource): UniFile {
         try {
-            return downloadsDir
+            return downloadsDir!!
                 .createDirectory(getSourceDirName(source))
                 .createDirectory(getAnimeDirName(animeTitle))
         } catch (e: Throwable) {
@@ -68,7 +71,7 @@ class AnimeDownloadProvider(
      * @param source the source to query.
      */
     fun findSourceDir(source: AnimeSource): UniFile? {
-        return downloadsDir.findFile(getSourceDirName(source), true)
+        return downloadsDir?.findFile(getSourceDirName(source), true)
     }
 
     /**
@@ -90,7 +93,12 @@ class AnimeDownloadProvider(
      * @param animeTitle the title of the anime to query.
      * @param source the source of the episode.
      */
-    fun findEpisodeDir(episodeName: String, episodeScanlator: String?, animeTitle: String, source: AnimeSource): UniFile? {
+    fun findEpisodeDir(
+        episodeName: String,
+        episodeScanlator: String?,
+        animeTitle: String,
+        source: AnimeSource,
+    ): UniFile? {
         val animeDir = findAnimeDir(animeTitle, source)
         return getValidEpisodeDirNames(episodeName, episodeScanlator).asSequence()
             .mapNotNull { animeDir?.findFile(it, true) }

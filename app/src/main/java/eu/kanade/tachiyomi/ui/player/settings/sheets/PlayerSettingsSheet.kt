@@ -17,22 +17,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
 fun PlayerSettingsSheet(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
-    val verticalGesture by remember { mutableStateOf(screenModel.preferences.gestureVolumeBrightness()) }
-    val horizontalGesture by remember { mutableStateOf(screenModel.preferences.gestureHorizontalSeek()) }
-    var statisticsPage by remember { mutableStateOf(screenModel.preferences.playerStatisticsPage().get()) }
+    val verticalGesture by remember {
+        mutableStateOf(
+            screenModel.preferences.gestureVolumeBrightness(),
+        )
+    }
+    val horizontalGesture by remember {
+        mutableStateOf(
+            screenModel.preferences.gestureHorizontalSeek(),
+        )
+    }
+    var statisticsPage by remember {
+        mutableStateOf(
+            screenModel.preferences.playerStatisticsPage().get(),
+        )
+    }
     var decoder by remember { mutableStateOf(screenModel.preferences.hwDec().get()) }
 
     // TODO: Shift to MPV-Lib
@@ -84,7 +96,9 @@ fun PlayerSettingsSheet(
             //  from 'SettingsItems.kt'
 
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
+                modifier = Modifier.fillMaxWidth().padding(
+                    horizontal = MaterialTheme.padding.medium,
+                ),
             ) {
                 Text(
                     text = stringResource(id = R.string.player_hwdec_mode),
@@ -95,7 +109,7 @@ fun PlayerSettingsSheet(
                     modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
-                    HwDecState.values().forEach {
+                    HwDecState.entries.forEach {
                         if (!HwDecState.isHwSupported && it.title == "HW+") return@forEach
                         FilterChip(
                             selected = decoder == it.mpvValue,
@@ -107,7 +121,9 @@ fun PlayerSettingsSheet(
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.padding.medium),
+                modifier = Modifier.fillMaxWidth().padding(
+                    horizontal = MaterialTheme.padding.medium,
+                ),
             ) {
                 Text(
                     text = stringResource(id = R.string.toggle_player_statistics_page),

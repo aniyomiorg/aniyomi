@@ -13,7 +13,9 @@ fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
     )
 }
 
-fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(syncId).also {
+fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(
+    syncId,
+).also {
     it.id = id
     it.manga_id = mangaId
     it.media_id = remoteId
@@ -22,7 +24,7 @@ fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.mod
     it.last_chapter_read = lastChapterRead.toFloat()
     it.total_chapters = totalChapters.toInt()
     it.status = status.toInt()
-    it.score = score
+    it.score = score.toFloat()
     it.tracking_url = remoteUrl
     it.started_reading_date = startDate
     it.finished_reading_date = finishDate
@@ -40,7 +42,7 @@ fun DbMangaTrack.toDomainTrack(idRequired: Boolean = true): MangaTrack? {
         lastChapterRead = last_chapter_read.toDouble(),
         totalChapters = total_chapters.toLong(),
         status = status.toLong(),
-        score = score,
+        score = score.toDouble(),
         remoteUrl = tracking_url,
         startDate = started_reading_date,
         finishDate = finished_reading_date,

@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesState
+import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Pin
@@ -40,14 +40,14 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 @Composable
 fun MangaSourcesScreen(
-    state: MangaSourcesState,
+    state: MangaSourcesScreenModel.State,
     contentPadding: PaddingValues,
     onClickItem: (Source, Listing) -> Unit,
     onClickPin: (Source) -> Unit,
     onLongClickItem: (Source) -> Unit,
 ) {
     when {
-        state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+        state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
             textResource = R.string.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
@@ -74,12 +74,12 @@ fun MangaSourcesScreen(
                     when (model) {
                         is MangaSourceUiModel.Header -> {
                             SourceHeader(
-                                modifier = Modifier.animateItemPlacement(),
+
                                 language = model.language,
                             )
                         }
                         is MangaSourceUiModel.Item -> SourceItem(
-                            modifier = Modifier.animateItemPlacement(),
+
                             source = model.source,
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,
@@ -94,25 +94,28 @@ fun MangaSourcesScreen(
 
 @Composable
 private fun SourceHeader(
-    modifier: Modifier = Modifier,
     language: String,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Text(
         text = LocaleHelper.getSourceDisplayName(language, context),
         modifier = modifier
-            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
+            .padding(
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
+            ),
         style = MaterialTheme.typography.header,
     )
 }
 
 @Composable
 private fun SourceItem(
-    modifier: Modifier = Modifier,
     source: Source,
     onClickItem: (Source, Listing) -> Unit,
     onLongClickItem: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BaseMangaSourceItem(
         modifier = modifier,
@@ -144,7 +147,13 @@ private fun SourcePinButton(
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
-    val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground.copy(alpha = SecondaryItemAlpha)
+    val tint = if (isPinned) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onBackground.copy(
+            alpha = SecondaryItemAlpha,
+        )
+    }
     val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(
@@ -210,7 +219,7 @@ fun MangaSourceOptionsDialog(
     )
 }
 
-sealed class MangaSourceUiModel {
-    data class Item(val source: Source) : MangaSourceUiModel()
-    data class Header(val language: String) : MangaSourceUiModel()
+sealed interface MangaSourceUiModel {
+    data class Item(val source: Source) : MangaSourceUiModel
+    data class Header(val language: String) : MangaSourceUiModel
 }

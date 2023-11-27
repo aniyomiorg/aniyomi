@@ -24,7 +24,10 @@ class AnimeDownloadPendingDeleter(
     /**
      * Preferences used to store the list of episodes to delete.
      */
-    private val preferences = context.getSharedPreferences("episodes_to_delete", Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences(
+        "episodes_to_delete",
+        Context.MODE_PRIVATE,
+    )
 
     /**
      * Last added episode, used to avoid decoding from the preference too often.

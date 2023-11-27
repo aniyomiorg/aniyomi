@@ -33,11 +33,13 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.tachiyomi.R
 import tachiyomi.domain.entries.EntryCover
 import tachiyomi.presentation.core.components.BadgeGroup
 import tachiyomi.presentation.core.util.selectedBackground
@@ -49,7 +51,7 @@ object CommonEntryItemDefaults {
     const val BrowseFavoriteCoverAlpha = 0.34f
 }
 
-private val ContinueViewingButtonSize = 32.dp
+private val ContinueViewingButtonSize = 28.dp
 private val ContinueViewingButtonGridPadding = 6.dp
 private val ContinueViewingButtonListSpacing = 8.dp
 
@@ -164,6 +166,7 @@ private fun BoxScope.CoverTextOverlay(
 fun EntryComfortableGridItem(
     isSelected: Boolean = false,
     title: String,
+    titleMaxLines: Int = 2,
     coverData: EntryCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
@@ -205,6 +208,7 @@ fun EntryComfortableGridItem(
                 title = title,
                 style = MaterialTheme.typography.titleSmall,
                 minLines = 2,
+                maxLines = titleMaxLines,
             )
         }
     }
@@ -254,6 +258,7 @@ private fun GridItemTitle(
     title: String,
     style: TextStyle,
     minLines: Int,
+    maxLines: Int = 2,
 ) {
     Text(
         modifier = modifier,
@@ -261,7 +266,7 @@ private fun GridItemTitle(
         fontSize = 12.sp,
         lineHeight = 18.sp,
         minLines = minLines,
-        maxLines = 2,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         style = style,
     )
@@ -374,7 +379,7 @@ private fun ContinueViewingButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.PlayArrow,
-                contentDescription = "",
+                contentDescription = stringResource(R.string.action_resume),
                 modifier = Modifier.size(16.dp),
             )
         }

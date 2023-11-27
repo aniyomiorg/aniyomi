@@ -3,9 +3,7 @@ package eu.kanade.tachiyomi.util.storage
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Environment
 import android.os.StatFs
-import androidx.core.content.ContextCompat
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.util.lang.Hash
 import java.io.File
@@ -29,6 +27,30 @@ object DiskUtil {
     }
 
     /**
+     * Gets the total space for the disk that a file path points to, in bytes.
+     */
+    fun getTotalStorageSpace(file: File): Long {
+        return try {
+            val stat = StatFs(file.absolutePath)
+            stat.blockCountLong * stat.blockSizeLong
+        } catch (_: Exception) {
+            -1L
+        }
+    }
+
+    /**
+     * Gets the available space for the disk that a file path points to, in bytes.
+     */
+    fun getAvailableStorageSpace(file: File): Long {
+        return try {
+            val stat = StatFs(file.absolutePath)
+            stat.availableBlocksLong * stat.blockSizeLong
+        } catch (_: Exception) {
+            -1L
+        }
+    }
+
+    /**
      * Gets the available space for the disk that a file path points to, in bytes.
      */
     fun getAvailableStorageSpace(f: UniFile): Long {
@@ -38,23 +60,6 @@ object DiskUtil {
         } catch (_: Exception) {
             -1L
         }
-    }
-
-    /**
-     * Returns the root folders of all the available external storages.
-     */
-    fun getExternalStorages(context: Context): List<File> {
-        return ContextCompat.getExternalFilesDirs(context, null)
-            .filterNotNull()
-            .mapNotNull {
-                val file = File(it.absolutePath.substringBefore("/Android/"))
-                val state = Environment.getExternalStorageState(file)
-                if (state == Environment.MEDIA_MOUNTED || state == Environment.MEDIA_MOUNTED_READ_ONLY) {
-                    file
-                } else {
-                    null
-                }
-            }
     }
 
     /**
@@ -114,4 +119,7 @@ object DiskUtil {
     }
 
     const val NOMEDIA_FILE = ".nomedia"
+
+    // Safe theoretical max filename size is 255 bytes and 1 char = 2-4 bytes (UTF-8)
+    const val MAX_FILE_NAME_BYTES = 250
 }

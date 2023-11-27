@@ -36,6 +36,7 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
+import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.material.padding
 import java.io.File
 
@@ -50,7 +51,7 @@ fun StreamsCatalogSheet(
     onSettingsClicked: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val tabTitles = mutableListOf(
+    val tabTitles = persistentListOf(
         stringResource(id = R.string.subtitle_dialog_header),
         stringResource(id = R.string.audio_dialog_header),
     )
@@ -64,10 +65,9 @@ fun StreamsCatalogSheet(
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
         hideSystemBars = true,
-    ) { contentPadding, page ->
+    ) { page ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
                 .padding(vertical = TabbedDialogPaddings.Vertical),
         ) {
             @Composable
@@ -125,9 +125,15 @@ private fun StreamsPageBuilder(
                 override fun createIntent(context: Context, input: String): Intent {
                     val intent = super.createIntent(context, input)
                     return if (externalTrackCode == "audio") {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_audio_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_audio_intent),
+                        )
                     } else {
-                        Intent.createChooser(intent, context.getString(R.string.player_add_external_subtitles_intent))
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.player_add_external_subtitles_intent),
+                        )
                     }
                 }
             },
@@ -148,7 +154,13 @@ private fun StreamsPageBuilder(
             }
         }
 
-        val addTrackRes = if (externalTrackCode == "sub") R.string.player_add_external_subtitles else R.string.player_add_external_audio
+        val addTrackRes =
+            if (externalTrackCode == "sub") {
+                R.string.player_add_external_subtitles
+            } else {
+                R.string.player_add_external_audio
+            }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

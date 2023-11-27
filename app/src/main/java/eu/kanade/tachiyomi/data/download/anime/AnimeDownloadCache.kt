@@ -1,9 +1,7 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.size
@@ -18,23 +16,30 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.storage.service.StoragePreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
@@ -50,7 +55,7 @@ class AnimeDownloadCache(
     private val provider: AnimeDownloadProvider = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
-    private val downloadPreferences: DownloadPreferences = Injekt.get(),
+    storagePreferences: StoragePreferences = Injekt.get(),
 ) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -77,12 +82,32 @@ class AnimeDownloadCache(
         .debounce(1000L) // Don't notify if it finishes quickly enough
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
-    private var rootDownloadsDir = RootDirectory(getDirectoryFromPreference())
+    private val diskCacheFile: File
+        get() = File(context.cacheDir, "dl_index_cache")
+
+    private val rootDownloadsDirLock = Mutex()
+    private var rootDownloadsDir = RootDirectory(provider.downloadsDir)
 
     init {
-        downloadPreferences.downloadsDirectory().changes()
+        // Attempt to read cache file
+        scope.launch {
+            rootDownloadsDirLock.withLock {
+                try {
+                    val diskCache = diskCacheFile.inputStream().use {
+                        ProtoBuf.decodeFromByteArray<RootDirectory>(it.readBytes())
+                    }
+                    rootDownloadsDir = diskCache
+                    lastRenew = System.currentTimeMillis()
+                } catch (e: Throwable) {
+                    diskCacheFile.delete()
+                }
+            }
+        }
+
+        storagePreferences.baseStorageDirectory().changes()
+            .drop(1)
             .onEach {
-                rootDownloadsDir = RootDirectory(getDirectoryFromPreference())
+                rootDownloadsDir = RootDirectory(provider.downloadsDir)
                 invalidateCache()
             }
             .launchIn(scope)
@@ -114,7 +139,10 @@ class AnimeDownloadCache(
         if (sourceDir != null) {
             val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(animeTitle)]
             if (animeDir != null) {
-                return provider.getValidEpisodeDirNames(episodeName, episodeScanlator).any { it in animeDir.episodeDirs }
+                return provider.getValidEpisodeDirNames(
+                    episodeName,
+                    episodeScanlator,
+                ).any { it in animeDir.episodeDirs }
             }
         }
         return false
@@ -158,7 +186,7 @@ class AnimeDownloadCache(
         renewCache()
 
         return rootDownloadsDir.sourceDirs.values.sumOf { sourceDir ->
-            sourceDir.dir.size()
+            sourceDir.dir?.size() ?: 0L
         }
     }
 
@@ -274,14 +302,6 @@ class AnimeDownloadCache(
     }
 
     /**
-     * Returns the downloads directory from the user's preferences.
-     */
-    private fun getDirectoryFromPreference(): UniFile {
-        val dir = downloadPreferences.downloadsDirectory().get()
-        return UniFile.fromUri(context, dir.toUri())
-    }
-
-    /**
      * Renews the downloads cache.
      */
     private fun renewCache() {
@@ -309,27 +329,32 @@ class AnimeDownloadCache(
                 }
             }
 
-            val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
-                .associate { it.name to SourceDirectory(it) }
-                .mapNotNullKeys { entry ->
-                    sources.find {
-                        provider.getSourceDirName(it).equals(entry.key, ignoreCase = true)
-                    }?.id
+            val sourceMap = sources.associate {
+                provider.getSourceDirName(it).lowercase() to it.id
+            }
+
+            val sourceDirs = rootDownloadsDir.dir?.listFiles().orEmpty()
+                .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                .mapNotNull { dir ->
+                    val sourceId = sourceMap[dir.name!!.lowercase()]
+                    sourceId?.let { it to SourceDirectory(dir) }
                 }
+                .toMap()
+                .let { ConcurrentHashMap(it) }
 
             rootDownloadsDir.sourceDirs = sourceDirs
 
             sourceDirs.values
                 .map { sourceDir ->
                     async {
-                        val animeDirs = sourceDir.dir.listFiles().orEmpty()
-                            .filterNot { it.name.isNullOrBlank() }
+                        val animeDirs = sourceDir.dir?.listFiles().orEmpty()
+                            .filter { it.isDirectory && !it.name.isNullOrBlank() }
                             .associate { it.name!! to AnimeDirectory(it) }
 
                         sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
 
                         animeDirs.values.forEach { animeDir ->
-                            val episodeDirs = animeDir.dir.listFiles().orEmpty()
+                            val episodeDirs = animeDir.dir?.listFiles().orEmpty()
                                 .mapNotNull {
                                     when {
                                         // Ignore incomplete downloads
@@ -337,9 +362,13 @@ class AnimeDownloadCache(
                                         // Folder of images
                                         it.isDirectory -> it.name
                                         // MP4 files
-                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(".mp4")
+                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(
+                                            ".mp4",
+                                        )
                                         // MKV files
-                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(".mkv")
+                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(
+                                            ".mkv",
+                                        )
                                         // Anything else is irrelevant
                                         else -> null
                                     }
@@ -383,7 +412,7 @@ class AnimeDownloadCache(
  * Class to store the files under the root downloads directory.
  */
 private class RootDirectory(
-    val dir: UniFile,
+    val dir: UniFile?,
     var sourceDirs: ConcurrentHashMap<Long, SourceDirectory> = ConcurrentHashMap(),
 )
 
@@ -391,7 +420,7 @@ private class RootDirectory(
  * Class to store the files under a source directory.
  */
 private class SourceDirectory(
-    val dir: UniFile,
+    val dir: UniFile?,
     var animeDirs: ConcurrentHashMap<String, AnimeDirectory> = ConcurrentHashMap(),
 )
 
@@ -399,6 +428,6 @@ private class SourceDirectory(
  * Class to store the files under a manga directory.
  */
 private class AnimeDirectory(
-    val dir: UniFile,
+    val dir: UniFile?,
     var episodeDirs: MutableSet<String> = mutableSetOf(),
 )

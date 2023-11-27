@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.track.kavita
 
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.Serializable
 
@@ -22,7 +22,7 @@ data class SeriesDto(
     val libraryId: Int,
     val libraryName: String? = "",
 ) {
-    fun toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackManager.KAVITA).also {
+    fun toTrack(): MangaTrackSearch = MangaTrackSearch.create(TrackerManager.KAVITA).also {
         it.title = name
         it.summary = ""
     }

@@ -2,6 +2,7 @@ package eu.kanade.presentation.browse.manga
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,7 +13,6 @@ import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionFilterState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 
@@ -53,12 +53,12 @@ private fun ExtensionFilterContent(
     onClickLang: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    FastScrollLazyColumn(
+    LazyColumn(
         contentPadding = contentPadding,
     ) {
         items(state.languages) { language ->
             SwitchPreferenceWidget(
-                modifier = Modifier.animateItemPlacement(),
+
                 title = LocaleHelper.getSourceDisplayName(language, context),
                 checked = language in state.enabledLanguages,
                 onCheckedChanged = { onClickLang(language) },

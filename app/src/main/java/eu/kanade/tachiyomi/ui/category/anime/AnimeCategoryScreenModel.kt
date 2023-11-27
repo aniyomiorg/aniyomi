@@ -3,8 +3,10 @@ package eu.kanade.tachiyomi.ui.category.anime
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -37,7 +39,7 @@ class AnimeCategoryScreenModel(
     val events = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val allCategories = if (libraryPreferences.hideHiddenCategoriesSettings().get()) {
                 getVisibleCategories.subscribe()
             } else {
@@ -47,7 +49,9 @@ class AnimeCategoryScreenModel(
             allCategories.collectLatest { categories ->
                 mutableState.update {
                     AnimeCategoryScreenState.Success(
-                        categories = categories.filterNot(Category::isSystemCategory),
+                        categories = categories
+                            .filterNot(Category::isSystemCategory)
+                            .toImmutableList(),
                     )
                 }
             }
@@ -55,7 +59,7 @@ class AnimeCategoryScreenModel(
     }
 
     fun createCategory(name: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
@@ -67,45 +71,64 @@ class AnimeCategoryScreenModel(
     }
 
     fun hideCategory(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (hideCategory.await(category)) {
-                is HideAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is HideAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
     }
 
     fun deleteCategory(categoryId: Long) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
-                is DeleteAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is DeleteAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
+                else -> {}
+            }
+        }
+    }
+
+    fun sortAlphabetically() {
+        screenModelScope.launch {
+            when (reorderCategory.sortAlphabetically()) {
+                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
                 else -> {}
             }
         }
     }
 
     fun moveUp(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (reorderCategory.moveUp(category)) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is ReorderAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
     }
 
     fun moveDown(category: Category) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (reorderCategory.moveDown(category)) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is ReorderAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
     }
 
     fun renameCategory(category: Category, name: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             when (renameCategory.await(category, name)) {
-                is RenameAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
+                is RenameAnimeCategory.Result.InternalError -> _events.send(
+                    AnimeCategoryEvent.InternalError,
+                )
                 else -> {}
             }
         }
@@ -130,27 +153,28 @@ class AnimeCategoryScreenModel(
     }
 }
 
-sealed class AnimeCategoryDialog {
-    object Create : AnimeCategoryDialog()
-    data class Rename(val category: Category) : AnimeCategoryDialog()
-    data class Delete(val category: Category) : AnimeCategoryDialog()
+sealed interface AnimeCategoryDialog {
+    data object Create : AnimeCategoryDialog
+    data object SortAlphabetically : AnimeCategoryDialog
+    data class Rename(val category: Category) : AnimeCategoryDialog
+    data class Delete(val category: Category) : AnimeCategoryDialog
 }
 
-sealed class AnimeCategoryEvent {
-    sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
-    object InternalError : LocalizedMessage(R.string.internal_error)
+sealed interface AnimeCategoryEvent {
+    sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent
+    data object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
-sealed class AnimeCategoryScreenState {
+sealed interface AnimeCategoryScreenState {
 
     @Immutable
-    object Loading : AnimeCategoryScreenState()
+    data object Loading : AnimeCategoryScreenState
 
     @Immutable
     data class Success(
-        val categories: List<Category>,
+        val categories: ImmutableList<Category>,
         val dialog: AnimeCategoryDialog? = null,
-    ) : AnimeCategoryScreenState() {
+    ) : AnimeCategoryScreenState {
 
         val isEmpty: Boolean
             get() = categories.isEmpty()

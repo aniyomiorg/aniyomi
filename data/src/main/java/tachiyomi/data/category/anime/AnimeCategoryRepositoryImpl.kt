@@ -1,7 +1,6 @@
 package tachiyomi.data.category.anime
 
 import kotlinx.coroutines.flow.Flow
-import tachiyomi.data.category.categoryMapper
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.Category
@@ -13,46 +12,46 @@ class AnimeCategoryRepositoryImpl(
 ) : AnimeCategoryRepository {
 
     override suspend fun getAnimeCategory(id: Long): Category? {
-        return handler.awaitOneOrNull { categoriesQueries.getCategory(id, categoryMapper) }
+        return handler.awaitOneOrNull { categoriesQueries.getCategory(id, ::mapCategory) }
     }
 
     override suspend fun getAllAnimeCategories(): List<Category> {
-        return handler.awaitList { categoriesQueries.getCategories(categoryMapper) }
+        return handler.awaitList { categoriesQueries.getCategories(::mapCategory) }
     }
 
     override suspend fun getAllVisibleAnimeCategories(): List<Category> {
-        return handler.awaitList { categoriesQueries.getVisibleCategories(categoryMapper) }
+        return handler.awaitList { categoriesQueries.getVisibleCategories(::mapCategory) }
     }
 
     override fun getAllAnimeCategoriesAsFlow(): Flow<List<Category>> {
-        return handler.subscribeToList { categoriesQueries.getCategories(categoryMapper) }
+        return handler.subscribeToList { categoriesQueries.getCategories(::mapCategory) }
     }
 
     override fun getAllVisibleAnimeCategoriesAsFlow(): Flow<List<Category>> {
-        return handler.subscribeToList { categoriesQueries.getVisibleCategories(categoryMapper) }
+        return handler.subscribeToList { categoriesQueries.getVisibleCategories(::mapCategory) }
     }
 
     override suspend fun getCategoriesByAnimeId(animeId: Long): List<Category> {
         return handler.awaitList {
-            categoriesQueries.getCategoriesByAnimeId(animeId, categoryMapper)
+            categoriesQueries.getCategoriesByAnimeId(animeId, ::mapCategory)
         }
     }
 
     override suspend fun getVisibleCategoriesByAnimeId(animeId: Long): List<Category> {
         return handler.awaitList {
-            categoriesQueries.getVisibleCategoriesByAnimeId(animeId, categoryMapper)
+            categoriesQueries.getVisibleCategoriesByAnimeId(animeId, ::mapCategory)
         }
     }
 
     override fun getCategoriesByAnimeIdAsFlow(animeId: Long): Flow<List<Category>> {
         return handler.subscribeToList {
-            categoriesQueries.getCategoriesByAnimeId(animeId, categoryMapper)
+            categoriesQueries.getCategoriesByAnimeId(animeId, ::mapCategory)
         }
     }
 
     override fun getVisibleCategoriesByAnimeIdAsFlow(animeId: Long): Flow<List<Category>> {
         return handler.subscribeToList {
-            categoriesQueries.getVisibleCategoriesByAnimeId(animeId, categoryMapper)
+            categoriesQueries.getVisibleCategoriesByAnimeId(animeId, ::mapCategory)
         }
     }
 
@@ -102,5 +101,21 @@ class AnimeCategoryRepositoryImpl(
                 categoryId = categoryId,
             )
         }
+    }
+
+    private fun mapCategory(
+        id: Long,
+        name: String,
+        order: Long,
+        flags: Long,
+        hidden: Long,
+    ): Category {
+        return Category(
+            id = id,
+            name = name,
+            order = order,
+            flags = flags,
+            hidden = hidden == 1L,
+        )
     }
 }

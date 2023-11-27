@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.source
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
 import eu.kanade.domain.source.manga.interactor.ToggleExcludeFromMangaDataSaver
@@ -13,6 +13,9 @@ import eu.kanade.domain.source.service.SourcePreferences.DataSaver
 import eu.kanade.presentation.browse.manga.MangaSourceUiModel
 import eu.kanade.tachiyomi.util.system.LAST_USED_KEY
 import eu.kanade.tachiyomi.util.system.PINNED_KEY
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -38,13 +41,13 @@ class MangaSourcesScreenModel(
     // SY -->
     private val toggleExcludeFromMangaDataSaver: ToggleExcludeFromMangaDataSaver = Injekt.get(),
     // SY <--
-) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
+) : StateScreenModel<MangaSourcesScreenModel.State>(State()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()
 
     init {
-        coroutineScope.launchIO {
+        screenModelScope.launchIO {
             getEnabledSources.subscribe()
                 .catch {
                     logcat(LogPriority.ERROR, it)
@@ -61,7 +64,7 @@ class MangaSourcesScreenModel(
                     )
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(screenModelScope)
         // SY <--
     }
 
@@ -89,21 +92,17 @@ class MangaSourcesScreenModel(
 
             state.copy(
                 isLoading = false,
-                items = byLang.flatMap {
-                    listOf(
-                        MangaSourceUiModel.Header(it.key),
-                        *it.value.map { source ->
-                            MangaSourceUiModel.Item(source)
-                        }.toTypedArray(),
-                    )
-                },
+                items = byLang
+                    .flatMap {
+                        listOf(
+                            MangaSourceUiModel.Header(it.key),
+                            *it.value.map { source ->
+                                MangaSourceUiModel.Item(source)
+                            }.toTypedArray(),
+                        )
+                    }
+                    .toImmutableList(),
             )
-        }
-    }
-
-    fun onOpenSource(source: Source) {
-        if (!preferences.incognitoMode().get()) {
-            sourcePreferences.lastUsedMangaSource().set(source.id)
         }
     }
 
@@ -129,21 +128,21 @@ class MangaSourcesScreenModel(
         mutableState.update { it.copy(dialog = null) }
     }
 
-    sealed class Event {
-        object FailedFetchingSources : Event()
+    sealed interface Event {
+        data object FailedFetchingSources : Event
     }
 
     data class Dialog(val source: Source)
-}
 
-@Immutable
-data class MangaSourcesState(
-    val dialog: MangaSourcesScreenModel.Dialog? = null,
-    val isLoading: Boolean = true,
-    val items: List<MangaSourceUiModel> = emptyList(),
-    // SY -->
-    val dataSaverEnabled: Boolean = false,
-    // SY <--
-) {
-    val isEmpty = items.isEmpty()
+    @Immutable
+    data class State(
+        val dialog: Dialog? = null,
+        val isLoading: Boolean = true,
+        val items: ImmutableList<MangaSourceUiModel> = persistentListOf(),
+        // SY -->
+        val dataSaverEnabled: Boolean = false,
+        // SY <--
+    ) {
+        val isEmpty = items.isEmpty()
+    }
 }

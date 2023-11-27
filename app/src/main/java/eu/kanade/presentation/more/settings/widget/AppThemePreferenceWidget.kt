@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.presentation.entries.ItemCover
@@ -44,9 +46,7 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isDynamicColorAvailable
-import tachiyomi.presentation.core.components.material.DIVIDER_ALPHA
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.util.ThemePreviews
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
@@ -75,7 +75,7 @@ private fun AppThemesList(
     onItemClick: (AppTheme) -> Unit,
 ) {
     val appThemes = remember {
-        AppTheme.values()
+        AppTheme.entries
             .filterNot { it.titleResId == null || (it == AppTheme.MONET && !DeviceUtil.isDynamicColorAvailable) }
     }
     LazyRow(
@@ -123,7 +123,6 @@ fun AppThemePreviewItem(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = DIVIDER_ALPHA)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,7 +132,7 @@ fun AppThemePreviewItem(
                 color = if (selected) {
                     MaterialTheme.colorScheme.primary
                 } else {
-                    dividerColor
+                    DividerDefaults.color
                 },
                 shape = RoundedCornerShape(17.dp),
             )
@@ -180,7 +179,7 @@ fun AppThemePreviewItem(
             modifier = Modifier
                 .padding(start = 8.dp, top = 2.dp)
                 .background(
-                    color = dividerColor,
+                    color = DividerDefaults.color,
                     shape = MaterialTheme.shapes.small,
                 )
                 .fillMaxWidth(0.5f)
@@ -250,15 +249,17 @@ fun AppThemePreviewItem(
     }
 }
 
-@ThemePreviews
+@PreviewLightDark
 @Composable
 private fun AppThemesListPreview() {
     var appTheme by remember { mutableStateOf(AppTheme.DEFAULT) }
     TachiyomiTheme {
-        AppThemesList(
-            currentTheme = appTheme,
-            amoled = false,
-            onItemClick = { appTheme = it },
-        )
+        Surface {
+            AppThemesList(
+                currentTheme = appTheme,
+                amoled = false,
+                onItemClick = { appTheme = it },
+            )
+        }
     }
 }

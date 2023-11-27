@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.download.anime
 
 import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -78,13 +78,17 @@ class AnimeDownloadQueueScreenModel(
                         }
                         reorder(newAnimeDownloads)
                     }
-                    R.id.move_to_top_series -> {
+                    R.id.move_to_top_series, R.id.move_to_bottom_series -> {
                         val (selectedSeries, otherSeries) = adapter?.currentItems
                             ?.filterIsInstance<AnimeDownloadItem>()
                             ?.map(AnimeDownloadItem::download)
                             ?.partition { item.download.anime.id == it.anime.id }
                             ?: Pair(emptyList(), emptyList())
-                        reorder(selectedSeries + otherSeries)
+                        if (menuItem.itemId == R.id.move_to_top_series) {
+                            reorder(selectedSeries + otherSeries)
+                        } else {
+                            reorder(otherSeries + selectedSeries)
+                        }
                     }
                     R.id.cancel_download -> {
                         cancel(listOf(item.download))
@@ -104,7 +108,7 @@ class AnimeDownloadQueueScreenModel(
     }
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             downloadManager.queueState
                 .map { downloads ->
                     downloads
@@ -153,7 +157,10 @@ class AnimeDownloadQueueScreenModel(
         downloadManager.cancelQueuedDownloads(downloads)
     }
 
-    fun <R : Comparable<R>> reorderQueue(selector: (AnimeDownloadItem) -> R, reverse: Boolean = false) {
+    fun <R : Comparable<R>> reorderQueue(
+        selector: (AnimeDownloadItem) -> R,
+        reverse: Boolean = false,
+    ) {
         val adapter = adapter ?: return
         val newAnimeDownloads = mutableListOf<AnimeDownload>()
         adapter.headerItems.forEach { headerItem ->
@@ -228,6 +235,6 @@ class AnimeDownloadQueueScreenModel(
      * @return the holder of the download or null if it's not bound.
      */
     private fun getHolder(download: AnimeDownload): AnimeDownloadHolder? {
-        return controllerBinding.recycler.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
+        return controllerBinding.root.findViewHolderForItemId(download.episode.id) as? AnimeDownloadHolder
     }
 }

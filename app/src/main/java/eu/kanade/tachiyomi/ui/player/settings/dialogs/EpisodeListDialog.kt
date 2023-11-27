@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -33,12 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.DotSeparatorText
+import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
-import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
@@ -50,7 +50,7 @@ fun EpisodeListDialog(
     displayMode: Long,
     currentEpisodeIndex: Int,
     episodeList: List<Episode>,
-    relativeTime: Int,
+    dateRelativeTime: Boolean,
     dateFormat: DateFormat,
     onBookmarkClicked: (Long?, Boolean) -> Unit,
     onEpisodeClicked: (Long?) -> Unit,
@@ -83,7 +83,7 @@ fun EpisodeListDialog(
                     val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
                             R.string.display_mode_episode,
-                            episodeDecimalFormat.format(episode.episode_number.toDouble()),
+                            formatEpisodeNumber(episode.episode_number.toDouble()),
                         )
                     } else {
                         episode.name
@@ -92,11 +92,7 @@ fun EpisodeListDialog(
                     val date = episode.date_upload
                         .takeIf { it > 0L }
                         ?.let {
-                            Date(it).toRelativeString(
-                                context,
-                                relativeTime,
-                                dateFormat,
-                            )
+                            Date(it).toRelativeString(context, dateRelativeTime, dateFormat)
                         } ?: ""
 
                     EpisodeListItem(

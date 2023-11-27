@@ -7,6 +7,7 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
@@ -45,6 +46,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -54,7 +56,6 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
-import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -78,7 +79,9 @@ object AnimeLibraryTab : Tab() {
                 R.string.label_anime_library
             }
             val isSelected = LocalTabNavigator.current.current.key == key
-            val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_animelibrary_leave)
+            val image = AnimatedImageVector.animatedVectorResource(
+                R.drawable.anim_animelibrary_leave,
+            )
             return TabOptions(
                 index = 0u,
                 title = stringResource(title),
@@ -119,7 +122,13 @@ object AnimeLibraryTab : Tab() {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
-        val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_anime_library)
+        val defaultTitle = if (fromMore) {
+            stringResource(R.string.label_library)
+        } else {
+            stringResource(
+                R.string.label_anime_library,
+            )
+        }
 
         Scaffold(
             topBar = { scrollBehavior ->
@@ -135,9 +144,17 @@ object AnimeLibraryTab : Tab() {
                     title = title,
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
-                    onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
+                    onClickInvertSelection = {
+                        screenModel.invertSelection(
+                            screenModel.activeCategoryIndex,
+                        )
+                    },
                     onClickFilter = screenModel::showSettingsDialog,
-                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickRefresh = {
+                        onClickRefresh(
+                            state.categories[screenModel.activeCategoryIndex],
+                        )
+                    },
                     onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
@@ -145,7 +162,9 @@ object AnimeLibraryTab : Tab() {
                             if (randomItem != null) {
                                 navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
-                                snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
+                                snackbarHostState.showSnackbar(
+                                    context.getString(R.string.information_no_entries_found),
+                                )
                             }
                         }
                     },
@@ -169,17 +188,21 @@ object AnimeLibraryTab : Tab() {
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         ) { contentPadding ->
             when {
-                state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+                state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
                 state.searchQuery.isNullOrEmpty() && !state.hasActiveFilters && state.isLibraryEmpty -> {
                     val handler = LocalUriHandler.current
                     EmptyScreen(
                         textResource = R.string.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
-                        actions = listOf(
+                        actions = persistentListOf(
                             EmptyScreenAction(
                                 stringResId = R.string.getting_started_guide,
-                                icon = Icons.Outlined.HelpOutline,
-                                onClick = { handler.openUri("https://aniyomi.org/help/guides/getting-started") },
+                                icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                                onClick = {
+                                    handler.openUri(
+                                        "https://aniyomi.org/docs/guides/getting-started",
+                                    )
+                                },
                             ),
                         ),
                     )
@@ -209,11 +232,17 @@ object AnimeLibraryTab : Tab() {
                         },
                         onRefresh = onClickRefresh,
                         onGlobalSearchClicked = {
-                            navigator.push(GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""))
+                            navigator.push(
+                                GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""),
+                            )
                         },
                         getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
-                        getDisplayModeForPage = { state.categories[it].display },
-                        getColumnsForOrientation = { screenModel.getColumnsPreferenceForCurrentOrientation(it) },
+                        getDisplayMode = { screenModel.getDisplayMode() },
+                        getColumnsForOrientation = {
+                            screenModel.getColumnsPreferenceForCurrentOrientation(
+                                it,
+                            )
+                        },
                     ) { state.getAnimelibItemsByPage(it) }
                 }
             }

@@ -1,34 +1,30 @@
 package eu.kanade.presentation.browse.anime
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
 import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
-import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.anime.components.GlobalAnimeSearchCardRow
-import eu.kanade.tachiyomi.R
+import eu.kanade.presentation.browse.anime.components.GlobalAnimeSearchToolbar
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
-import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchState
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchScreenModel
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSourceFilter
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun GlobalAnimeSearchScreen(
-    state: GlobalAnimeSearchState,
+    state: AnimeSearchScreenModel.State,
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
+    onChangeSearchFilter: (AnimeSourceFilter) -> Unit,
+    onToggleResults: () -> Unit,
     getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
@@ -36,19 +32,23 @@ fun GlobalAnimeSearchScreen(
 ) {
     Scaffold(
         topBar = { scrollBehavior ->
-            GlobalSearchToolbar(
+            GlobalAnimeSearchToolbar(
                 searchQuery = state.searchQuery,
                 progress = state.progress,
                 total = state.total,
                 navigateUp = navigateUp,
                 onChangeSearchQuery = onChangeSearchQuery,
                 onSearch = onSearch,
+                sourceFilter = state.sourceFilter,
+                onChangeSearchFilter = onChangeSearchFilter,
+                onlyShowHasResults = state.onlyShowHasResults,
+                onToggleResults = onToggleResults,
                 scrollBehavior = scrollBehavior,
             )
         },
     ) { paddingValues ->
-        GlobalAnimeSearchContent(
-            items = state.items,
+        GlobalSearchContent(
+            items = state.filteredItems,
             contentPadding = paddingValues,
             getAnime = getAnime,
             onClickSource = onClickSource,
@@ -59,13 +59,14 @@ fun GlobalAnimeSearchScreen(
 }
 
 @Composable
-private fun GlobalAnimeSearchContent(
+internal fun GlobalSearchContent(
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
     getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
+    fromSourceId: Long? = null,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -73,7 +74,8 @@ private fun GlobalAnimeSearchContent(
         items.forEach { (source, result) ->
             item(key = source.id) {
                 GlobalSearchResultItem(
-                    title = source.name,
+                    title = fromSourceId
+                        ?.let { "▶ ${source.name}".takeIf { source.id == fromSourceId } } ?: source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
@@ -82,18 +84,6 @@ private fun GlobalAnimeSearchContent(
                             GlobalSearchLoadingResultItem()
                         }
                         is AnimeSearchItemResult.Success -> {
-                            if (result.isEmpty) {
-                                Text(
-                                    text = stringResource(R.string.no_results_found),
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = MaterialTheme.padding.medium,
-                                            vertical = MaterialTheme.padding.small,
-                                        ),
-                                )
-                                return@GlobalSearchResultItem
-                            }
-
                             GlobalAnimeSearchCardRow(
                                 titles = result.result,
                                 getAnime = getAnime,

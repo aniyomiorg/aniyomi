@@ -41,7 +41,7 @@
     <string name="pref_category_library_update">Globalno aktualiziranje</string>
     <string name="landscape">Ležeći format</string>
     <string name="portrait">Uspravni format</string>
-    <string name="pref_library_columns">Broj elemenata po retku</string>
+    <string name="pref_library_columns">Veličina mreže</string>
     <string name="pref_category_display">Prikaz</string>
     <string name="hide_notification_content">Sakrij sadržaj obavijesti</string>
     <string name="secure_screen_summary">Siguran ekran skriva sadržaj programa prilikom prebacivanja između programa i blokira snimke ekrana</string>
@@ -106,7 +106,7 @@
     <string name="action_pin">Označi</string>
     <string name="action_display_download_badge">Preuzeta poglavlja</string>
     <string name="action_display_list">Popis</string>
-    <string name="action_display_grid">Zbijeno popločeno</string>
+    <string name="action_display_grid">Kompaktno</string>
     <string name="action_display">Prikaz</string>
     <string name="action_display_mode">Modus prikaza</string>
     <string name="action_open_in_web_view">Otvori u WebView</string>
@@ -203,13 +203,13 @@
     <string name="scale_type_fit_width">Prilagodi širinu</string>
     <string name="scale_type_stretch">Rastegni</string>
     <string name="scale_type_fit_screen">Prilagodi ekranu</string>
-    <string name="pref_image_scale_type">Skaliranje</string>
-    <string name="pager_viewer">Pregled stranica</string>
-    <string name="vertical_plus_viewer">Kontinuirano okomito</string>
-    <string name="webtoon_viewer">Digitalni strip</string>
-    <string name="vertical_viewer">Okomito</string>
-    <string name="right_to_left_viewer">S desna na lijevo</string>
-    <string name="left_to_right_viewer">S lijeva na desno</string>
+    <string name="pref_image_scale_type">Vrsta skaliranja</string>
+    <string name="pager_viewer">Stranice</string>
+    <string name="vertical_plus_viewer">Duga traka s razmacima</string>
+    <string name="webtoon_viewer">Duga traka</string>
+    <string name="vertical_viewer">Stranica (okomito)</string>
+    <string name="right_to_left_viewer">Stranica (s desna na lijevo)</string>
+    <string name="left_to_right_viewer">Stranica (s lijeva na desno)</string>
     <string name="pref_viewer_type">Standardni modus čitanja</string>
     <string name="black_background">Crna</string>
     <string name="gray_background">Siva</string>
@@ -427,7 +427,7 @@
     <string name="pref_show_reading_mode_summary">Nakratko prikaži trenutačni modus kad se čitač otvori</string>
     <string name="pref_show_reading_mode">Prikaži modus čitanja</string>
     <string name="action_display_show_tabs">Prikaži kartice kategorija</string>
-    <string name="action_display_comfortable_grid">Popločeno</string>
+    <string name="action_display_comfortable_grid">Mreža</string>
     <string name="action_start">Pokreni</string>
     <string name="action_disable">Deaktiviraj</string>
     <string name="loader_not_implemented_error">Izvor nije pronađen</string>
@@ -627,8 +627,8 @@
     <string name="action_faq_and_guides">ČPP i vodiči</string>
     <string name="action_display_cover_only_grid">Samo naslovnice</string>
     <string name="webtoon_side_padding_5">5 %</string>
-    <string name="pref_navigate_pan">Navigiraj pomicanjem slike</string>
-    <string name="pref_landscape_zoom">Promijeni uvećanje slike u ležećem formatu</string>
+    <string name="pref_navigate_pan">Panoramski prikaz širokih slika</string>
+    <string name="pref_landscape_zoom">Zumiraj slike u ležećem formatu</string>
     <string name="action_filter_started">Započeto</string>
     <string name="pref_update_only_started">Koja još nisu pokrenuta</string>
     <string name="skipped_reason_completed">Preskočeno, jer je serija kompletna</string>
@@ -700,7 +700,12 @@
         <item quantity="few">Nedostaju %1$s poglavlja</item>
         <item quantity="other">Nedostaje %1$s poglavlja</item>
     </plurals>
-    <string name="missing_items_unknown">Možda nedostaje poglavlje</string>
     <string name="pref_page_rotate">Prilagodi prikaz širokih stranica okretanjem</string>
     <string name="pref_page_rotate_invert">Preokreni položaj širokih stranica</string>
+    <string name="pref_debug_info">Informacije otklanjanja grešaka</string>
+    <string name="pref_library_columns_per_row">%d po retku</string>
+    <string name="pref_chapter_swipe_start">Povuci prstom ulijevo</string>
+    <string name="pref_double_tap_zoom">Dodirni dvaput za zumiranje</string>
+    <string name="pref_chapter_swipe">Listanje u poglavljima</string>
+    <string name="pref_chapter_swipe_end">Povuci prstom udesno</string>
     </resources>

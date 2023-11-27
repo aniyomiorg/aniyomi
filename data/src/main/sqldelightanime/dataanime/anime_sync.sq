@@ -8,10 +8,10 @@ CREATE TABLE anime_sync(
     last_episode_seen REAL NOT NULL,
     total_episodes INTEGER NOT NULL,
     status INTEGER NOT NULL,
-    score REAL AS Float NOT NULL,
+    score REAL NOT NULL,
     remote_url TEXT NOT NULL,
-    start_date INTEGER AS Long NOT NULL,
-    finish_date INTEGER AS Long NOT NULL,
+    start_date INTEGER NOT NULL,
+    finish_date INTEGER NOT NULL,
     UNIQUE (anime_id, sync_id) ON CONFLICT REPLACE,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE

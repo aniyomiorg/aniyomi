@@ -73,7 +73,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setSmallIcon(android.R.drawable.stat_sys_download)
                 clearActions()
                 // Open download manager when clicked
-                setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
+                setContentIntent(
+                    NotificationHandler.openAnimeDownloadManagerPendingActivity(context),
+                )
                 isDownloading = true
                 // Pause action
                 addAction(
@@ -95,7 +97,10 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             } else {
                 val title = download.anime.title.chop(15)
                 val quotedTitle = Pattern.quote(title)
-                val episode = download.episode.name.replaceFirst("$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE), "")
+                val episode = download.episode.name.replaceFirst(
+                    "$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE),
+                    "",
+                )
                 setContentTitle("$title - $episode".chop(30))
                 setContentText(downloadingProgressText)
             }
@@ -188,7 +193,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
-                animeTitle?.plus(": $episode") ?: context.getString(R.string.download_notifier_downloader_title),
+                animeTitle?.plus(": $episode") ?: context.getString(
+                    R.string.download_notifier_downloader_title,
+                ),
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)

@@ -3,36 +3,36 @@ package eu.kanade.domain.entries.manga.model
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
+import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.ComicInfoPublishingStatus
-import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 // TODO: move these into the domain model
-val Manga.readingModeType: Long
-    get() = viewerFlags and ReadingModeType.MASK.toLong()
+val Manga.readingMode: Long
+    get() = viewerFlags and ReadingMode.MASK.toLong()
 
-val Manga.orientationType: Long
-    get() = viewerFlags and OrientationType.MASK.toLong()
+val Manga.readerOrientation: Long
+    get() = viewerFlags and ReaderOrientation.MASK.toLong()
 
-val Manga.downloadedFilter: TriStateFilter
+val Manga.downloadedFilter: TriState
     get() {
-        if (forceDownloaded()) return TriStateFilter.ENABLED_IS
+        if (forceDownloaded()) return TriState.ENABLED_IS
         return when (downloadedFilterRaw) {
-            Manga.CHAPTER_SHOW_DOWNLOADED -> TriStateFilter.ENABLED_IS
-            Manga.CHAPTER_SHOW_NOT_DOWNLOADED -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            Manga.CHAPTER_SHOW_DOWNLOADED -> TriState.ENABLED_IS
+            Manga.CHAPTER_SHOW_NOT_DOWNLOADED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
     }
 fun Manga.chaptersFiltered(): Boolean {
-    return unreadFilter != TriStateFilter.DISABLED ||
-        downloadedFilter != TriStateFilter.DISABLED ||
-        bookmarkedFilter != TriStateFilter.DISABLED
+    return unreadFilter != TriState.DISABLED ||
+        downloadedFilter != TriState.DISABLED ||
+        bookmarkedFilter != TriState.DISABLED
 }
 fun Manga.forceDownloaded(): Boolean {
     return favorite && Injekt.get<BasePreferences>().downloadedOnly().get()
@@ -95,9 +95,16 @@ fun Manga.hasCustomCover(coverCache: MangaCoverCache = Injekt.get()): Boolean {
 /**
  * Creates a ComicInfo instance based on the manga and chapter metadata.
  */
-fun getComicInfo(manga: Manga, chapter: Chapter, chapterUrl: String) = ComicInfo(
+fun getComicInfo(manga: Manga, chapter: Chapter, chapterUrl: String, categories: List<String>?) = ComicInfo(
     title = ComicInfo.Title(chapter.name),
     series = ComicInfo.Series(manga.title),
+    number = chapter.chapterNumber.takeIf { it >= 0 }?.let {
+        if ((it.rem(1) == 0.0)) {
+            ComicInfo.Number(it.toInt().toString())
+        } else {
+            ComicInfo.Number(it.toString())
+        }
+    },
     web = ComicInfo.Web(chapterUrl),
     summary = manga.description?.let { ComicInfo.Summary(it) },
     writer = manga.author?.let { ComicInfo.Writer(it) },
@@ -107,6 +114,7 @@ fun getComicInfo(manga: Manga, chapter: Chapter, chapterUrl: String) = ComicInfo
     publishingStatus = ComicInfo.PublishingStatusTachiyomi(
         ComicInfoPublishingStatus.toComicInfoValue(manga.status),
     ),
+    categories = categories?.let { ComicInfo.CategoriesTachiyomi(it.joinToString()) },
     inker = null,
     colorist = null,
     letterer = null,

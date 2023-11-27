@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.lang.toLong
 import tachiyomi.core.util.system.logcat
+import tachiyomi.data.StringListColumnAdapter
+import tachiyomi.data.UpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
-import tachiyomi.data.listOfStringsAdapter
-import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
@@ -17,40 +17,52 @@ class AnimeRepositoryImpl(
 ) : AnimeRepository {
 
     override suspend fun getAnimeById(id: Long): Anime {
-        return handler.awaitOne { animesQueries.getAnimeById(id, animeMapper) }
+        return handler.awaitOne { animesQueries.getAnimeById(id, AnimeMapper::mapAnime) }
     }
 
     override suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime> {
-        return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
+        return handler.subscribeToOne { animesQueries.getAnimeById(id, AnimeMapper::mapAnime) }
     }
 
     override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
-        return handler.awaitOneOrNull(inTransaction = true) { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
+        return handler.awaitOneOrNull(inTransaction = true) {
+            animesQueries.getAnimeByUrlAndSource(
+                url,
+                sourceId,
+                AnimeMapper::mapAnime,
+            )
+        }
     }
 
     override fun getAnimeByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Anime?> {
-        return handler.subscribeToOneOrNull { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
+        return handler.subscribeToOneOrNull {
+            animesQueries.getAnimeByUrlAndSource(
+                url,
+                sourceId,
+                AnimeMapper::mapAnime,
+            )
+        }
     }
 
     override suspend fun getAnimeFavorites(): List<Anime> {
-        return handler.awaitList { animesQueries.getFavorites(animeMapper) }
+        return handler.awaitList { animesQueries.getFavorites(AnimeMapper::mapAnime) }
     }
 
     override suspend fun getLibraryAnime(): List<LibraryAnime> {
-        return handler.awaitList { animelibViewQueries.animelib(libraryAnime) }
+        return handler.awaitList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }
 
     override fun getLibraryAnimeAsFlow(): Flow<List<LibraryAnime>> {
-        return handler.subscribeToList { animelibViewQueries.animelib(libraryAnime) }
+        return handler.subscribeToList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }
 
     override fun getAnimeFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
-        return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
+        return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, AnimeMapper::mapAnime) }
     }
 
-    override suspend fun getDuplicateLibraryAnime(title: String): Anime? {
-        return handler.awaitOneOrNull {
-            animesQueries.getDuplicateLibraryAnime(title, animeMapper)
+    override suspend fun getDuplicateLibraryAnime(id: Long, title: String): List<Anime> {
+        return handler.awaitList {
+            animesQueries.getDuplicateLibraryAnime(title, id, AnimeMapper::mapAnime)
         }
     }
 
@@ -74,7 +86,7 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun insertAnime(anime: Anime): Long? {
-        return handler.awaitOneOrNull(inTransaction = true) {
+        return handler.awaitOneOrNullExecutable(inTransaction = true) {
             animesQueries.insert(
                 source = anime.source,
                 url = anime.url,
@@ -88,7 +100,7 @@ class AnimeRepositoryImpl(
                 favorite = anime.favorite,
                 lastUpdate = anime.lastUpdate,
                 nextUpdate = anime.nextUpdate,
-                calculateInterval = anime.calculateInterval.toLong(),
+                calculateInterval = anime.fetchInterval.toLong(),
                 initialized = anime.initialized,
                 viewerFlags = anime.viewerFlags,
                 episodeFlags = anime.episodeFlags,
@@ -129,21 +141,21 @@ class AnimeRepositoryImpl(
                     artist = value.artist,
                     author = value.author,
                     description = value.description,
-                    genre = value.genre?.let(listOfStringsAdapter::encode),
+                    genre = value.genre?.let(StringListColumnAdapter::encode),
                     title = value.title,
                     status = value.status,
                     thumbnailUrl = value.thumbnailUrl,
-                    favorite = value.favorite?.toLong(),
+                    favorite = value.favorite,
                     lastUpdate = value.lastUpdate,
                     nextUpdate = value.nextUpdate,
-                    calculateInterval = value.calculateInterval?.toLong(),
-                    initialized = value.initialized?.toLong(),
+                    calculateInterval = value.fetchInterval?.toLong(),
+                    initialized = value.initialized,
                     viewer = value.viewerFlags,
                     episodeFlags = value.episodeFlags,
                     coverLastModified = value.coverLastModified,
                     dateAdded = value.dateAdded,
                     animeId = value.id,
-                    updateStrategy = value.updateStrategy?.let(updateStrategyAdapter::encode),
+                    updateStrategy = value.updateStrategy?.let(UpdateStrategyColumnAdapter::encode),
                 )
             }
         }

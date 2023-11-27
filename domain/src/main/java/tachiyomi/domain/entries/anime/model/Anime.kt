@@ -1,7 +1,7 @@
 package tachiyomi.domain.entries.anime.model
 
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import tachiyomi.domain.entries.TriStateFilter
+import eu.kanade.tachiyomi.model.UpdateStrategy
+import tachiyomi.core.preference.TriState
 import java.io.Serializable
 import kotlin.math.pow
 
@@ -11,7 +11,7 @@ data class Anime(
     val favorite: Boolean,
     val lastUpdate: Long,
     val nextUpdate: Long,
-    val calculateInterval: Int,
+    val fetchInterval: Int,
     val dateAdded: Long,
     val viewerFlags: Long,
     val episodeFlags: Long,
@@ -26,6 +26,8 @@ data class Anime(
     val thumbnailUrl: String?,
     val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
+    val lastModifiedAt: Long,
+    val favoriteModifiedAt: Long?,
 ) : Serializable {
 
     val sorting: Long
@@ -52,18 +54,18 @@ data class Anime(
     val nextEpisodeAiringAt: Long
         get() = (viewerFlags and ANIME_AIRING_TIME_MASK).removeHexZeros(zeros = 6)
 
-    val unseenFilter: TriStateFilter
+    val unseenFilter: TriState
         get() = when (unseenFilterRaw) {
-            EPISODE_SHOW_UNSEEN -> TriStateFilter.ENABLED_IS
-            EPISODE_SHOW_SEEN -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            EPISODE_SHOW_UNSEEN -> TriState.ENABLED_IS
+            EPISODE_SHOW_SEEN -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
-    val bookmarkedFilter: TriStateFilter
+    val bookmarkedFilter: TriState
         get() = when (bookmarkedFilterRaw) {
-            EPISODE_SHOW_BOOKMARKED -> TriStateFilter.ENABLED_IS
-            EPISODE_SHOW_NOT_BOOKMARKED -> TriStateFilter.ENABLED_NOT
-            else -> TriStateFilter.DISABLED
+            EPISODE_SHOW_BOOKMARKED -> TriState.ENABLED_IS
+            EPISODE_SHOW_NOT_BOOKMARKED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
         }
 
     fun sortDescending(): Boolean {
@@ -98,6 +100,7 @@ data class Anime(
         const val EPISODE_SORTING_SOURCE = 0x00000000L
         const val EPISODE_SORTING_NUMBER = 0x00000100L
         const val EPISODE_SORTING_UPLOAD_DATE = 0x00000200L
+        const val EPISODE_SORTING_ALPHABET = 0x00000300L
         const val EPISODE_SORTING_MASK = 0x00000300L
 
         const val EPISODE_DISPLAY_NAME = 0x00000000L
@@ -116,7 +119,7 @@ data class Anime(
             favorite = false,
             lastUpdate = 0L,
             nextUpdate = 0L,
-            calculateInterval = 0,
+            fetchInterval = 0,
             dateAdded = 0L,
             viewerFlags = 0L,
             episodeFlags = 0L,
@@ -129,6 +132,8 @@ data class Anime(
             thumbnailUrl = null,
             updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
+            lastModifiedAt = 0L,
+            favoriteModifiedAt = null,
         )
     }
 }

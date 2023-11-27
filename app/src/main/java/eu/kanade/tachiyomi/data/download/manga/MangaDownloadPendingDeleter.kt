@@ -24,7 +24,10 @@ class MangaDownloadPendingDeleter(
     /**
      * Preferences used to store the list of chapters to delete.
      */
-    private val preferences = context.getSharedPreferences("chapters_to_delete", Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences(
+        "chapters_to_delete",
+        Context.MODE_PRIVATE,
+    )
 
     /**
      * Last added chapter, used to avoid decoding from the preference too often.

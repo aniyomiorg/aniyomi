@@ -21,6 +21,7 @@ import eu.kanade.tachiyomi.ui.category.manga.MangaCategoryScreenModel
 import eu.kanade.tachiyomi.ui.category.manga.mangaCategoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 
 data class CategoriesTab(
@@ -48,7 +49,7 @@ data class CategoriesTab(
 
         TabbedScreen(
             titleRes = R.string.general_categories,
-            tabs = listOf(
+            tabs = persistentListOf(
                 animeCategoryTab(),
                 mangaCategoryTab(),
             ),

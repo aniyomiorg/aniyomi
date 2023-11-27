@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,7 +24,6 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.material.PullRefresh
-import tachiyomi.presentation.core.components.rememberPagerState
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -43,7 +43,7 @@ fun MangaLibraryContent(
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
     getNumberOfMangaForCategory: (Category) -> Int?,
-    getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
+    getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<MangaLibraryItem>,
 ) {
@@ -55,14 +55,16 @@ fun MangaLibraryContent(
         ),
     ) {
         val coercedCurrentPage = remember { currentPage().coerceAtMost(categories.lastIndex) }
-        val pagerState = rememberPagerState(coercedCurrentPage)
+        val pagerState = rememberPagerState(coercedCurrentPage) { categories.size }
 
         val scope = rememberCoroutineScope()
         var isRefreshing by remember(pagerState.currentPage) { mutableStateOf(false) }
 
         if (showPageTabs && categories.size > 1) {
-            if (categories.size <= pagerState.currentPage) {
-                pagerState.currentPage = categories.size - 1
+            LaunchedEffect(categories) {
+                if (categories.size <= pagerState.currentPage) {
+                    pagerState.scrollToPage(categories.size - 1)
+                }
             }
             LibraryTabs(
                 categories = categories,
@@ -92,17 +94,16 @@ fun MangaLibraryContent(
                     isRefreshing = false
                 }
             },
-            enabled = notSelectionMode,
+            enabled = { notSelectionMode },
         ) {
             MangaLibraryPager(
                 state = pagerState,
                 contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                pageCount = categories.size,
                 hasActiveFilters = hasActiveFilters,
                 selectedManga = selection,
                 searchQuery = searchQuery,
                 onGlobalSearchClicked = onGlobalSearchClicked,
-                getDisplayModeForPage = getDisplayModeForPage,
+                getDisplayMode = getDisplayMode,
                 getColumnsForOrientation = getColumnsForOrientation,
                 getLibraryForPage = getLibraryForPage,
                 onClickManga = onClickManga,

@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
-import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
+import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -26,10 +26,10 @@ import uy.kohesive.injekt.injectLazy
 import kotlin.math.min
 
 /**
- * Implementation of a [BaseViewer] to display pages with a [ViewPager].
+ * Implementation of a [Viewer] to display pages with a [ViewPager].
  */
 @Suppress("LeakingThis")
-abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
+abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
 
     val downloadManager: MangaDownloadManager by injectLazy()
 
@@ -102,7 +102,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
             },
         )
         pager.tapListener = { event ->
-            val pos = PointF(event.rawX / pager.width, event.rawY / pager.height)
+            val pos = PointF(event.x / pager.width, event.y / pager.height)
             when (config.navigator.getAction(pos)) {
                 NavigationRegion.MENU -> activity.toggleMenu()
                 NavigationRegion.NEXT -> moveToNext()
@@ -112,7 +112,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
             }
         }
         pager.longTapListener = f@{
-            if (activity.menuVisible || config.longTapEnabled) {
+            if (activity.viewModel.state.value.menuVisible || config.longTapEnabled) {
                 val item = adapter.items.getOrNull(pager.currentItem)
                 if (item is ReaderPage) {
                     activity.onPageLongTap(item)
@@ -268,7 +268,9 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
      * Sets the active [chapters] on this pager.
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
-        val forceTransition = config.alwaysShowChapterTransition || adapter.items.getOrNull(pager.currentItem) is ChapterTransition
+        val forceTransition = config.alwaysShowChapterTransition || adapter.items.getOrNull(
+            pager.currentItem,
+        ) is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set
@@ -374,14 +376,14 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
 
         when (event.keyCode) {
             KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                if (!config.volumeKeysEnabled || activity.menuVisible) {
+                if (!config.volumeKeysEnabled || activity.viewModel.state.value.menuVisible) {
                     return false
                 } else if (isUp) {
                     if (!config.volumeKeysInverted) moveDown() else moveUp()
                 }
             }
             KeyEvent.KEYCODE_VOLUME_UP -> {
-                if (!config.volumeKeysEnabled || activity.menuVisible) {
+                if (!config.volumeKeysEnabled || activity.viewModel.state.value.menuVisible) {
                     return false
                 } else if (isUp) {
                     if (!config.volumeKeysInverted) moveUp() else moveDown()

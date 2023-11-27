@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -57,7 +58,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.source.manga.model.StubMangaSource
-import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.source.local.entries.manga.LocalMangaSource
@@ -79,7 +79,9 @@ data class BrowseMangaSourceScreen(
         val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
-                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
+                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
+                    null,
+                )
                 else -> navigator.pop()
             }
         }
@@ -144,7 +146,7 @@ data class BrowseMangaSourceScreen(
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Outlined.Favorite,
-                                    contentDescription = "",
+                                    contentDescription = null,
                                     modifier = Modifier
                                         .size(FilterChipDefaults.IconSize),
                                 )
@@ -163,7 +165,7 @@ data class BrowseMangaSourceScreen(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Outlined.NewReleases,
-                                        contentDescription = "",
+                                        contentDescription = null,
                                         modifier = Modifier
                                             .size(FilterChipDefaults.IconSize),
                                     )
@@ -180,7 +182,7 @@ data class BrowseMangaSourceScreen(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Outlined.FilterList,
-                                        contentDescription = "",
+                                        contentDescription = null,
                                         modifier = Modifier
                                             .size(FilterChipDefaults.IconSize),
                                     )
@@ -192,7 +194,7 @@ data class BrowseMangaSourceScreen(
                         }
                     }
 
-                    Divider()
+                    HorizontalDivider()
                 }
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -214,7 +216,9 @@ data class BrowseMangaSourceScreen(
                     scope.launchIO {
                         val duplicateManga = screenModel.getDuplicateLibraryManga(manga)
                         when {
-                            manga.favorite -> screenModel.setDialog(BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga))
+                            manga.favorite -> screenModel.setDialog(
+                                BrowseMangaSourceScreenModel.Dialog.RemoveManga(manga),
+                            )
                             duplicateManga != null -> screenModel.setDialog(
                                 BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga(
                                     manga,

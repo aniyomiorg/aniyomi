@@ -5,7 +5,7 @@ plugins {
 }
 
 kotlin {
-    android()
+    androidTarget()
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -33,5 +33,14 @@ android {
 
     defaultConfig {
         consumerProguardFile("consumer-proguard.pro")
+    }
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-Xexpect-actual-classes",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        )
     }
 }

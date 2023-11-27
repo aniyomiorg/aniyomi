@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,9 +41,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.material.padding
@@ -52,9 +54,9 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun WheelNumberPicker(
+    items: ImmutableList<Number>,
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
-    items: List<Number>,
     size: DpSize = DpSize(128.dp, 128.dp),
     onSelectionChanged: (index: Int) -> Unit = {},
     backgroundContent: (@Composable (size: DpSize) -> Unit)? = {
@@ -76,9 +78,9 @@ fun WheelNumberPicker(
 
 @Composable
 fun WheelTextPicker(
+    items: ImmutableList<String>,
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
-    items: List<String>,
     size: DpSize = DpSize(128.dp, 128.dp),
     onSelectionChanged: (index: Int) -> Unit = {},
     backgroundContent: (@Composable (size: DpSize) -> Unit)? = {
@@ -99,9 +101,9 @@ fun WheelTextPicker(
 
 @Composable
 private fun <T> WheelPicker(
+    items: ImmutableList<T>,
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
-    items: List<T>,
     size: DpSize = DpSize(128.dp, 128.dp),
     onSelectionChanged: (index: Int) -> Unit = {},
     manualInputType: KeyboardType? = null,
@@ -113,7 +115,7 @@ private fun <T> WheelPicker(
     val haptic = LocalHapticFeedback.current
     val lazyListState = rememberLazyListState(startIndex)
 
-    var internalIndex by remember { mutableStateOf(startIndex) }
+    var internalIndex by remember { mutableIntStateOf(startIndex) }
     val internalOnSelectionChanged: (Int) -> Unit = {
         internalIndex = it
         onSelectionChanged(it)
@@ -123,7 +125,6 @@ private fun <T> WheelPicker(
         snapshotFlow { lazyListState.firstVisibleItemScrollOffset }
             .map { calculateSnappedItemIndex(lazyListState) }
             .distinctUntilChanged()
-            .drop(1)
             .collectLatest {
                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 internalOnSelectionChanged(it)
@@ -142,7 +143,12 @@ private fun <T> WheelPicker(
         if (showManualInput) {
             var value by remember {
                 val currentString = items[internalIndex].toString()
-                mutableStateOf(TextFieldValue(text = currentString, selection = TextRange(currentString.length)))
+                mutableStateOf(
+                    TextFieldValue(
+                        text = currentString,
+                        selection = TextRange(currentString.length),
+                    ),
+                )
             }
 
             val scope = rememberCoroutineScope()
@@ -188,7 +194,9 @@ private fun <T> WheelPicker(
                         }
                     },
                 state = lazyListState,
-                contentPadding = PaddingValues(vertical = size.height / RowCount * ((RowCount - 1) / 2)),
+                contentPadding = PaddingValues(
+                    vertical = size.height / RowCount * ((RowCount - 1) / 2),
+                ),
                 flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
             ) {
                 itemsIndexed(items) { index, item ->

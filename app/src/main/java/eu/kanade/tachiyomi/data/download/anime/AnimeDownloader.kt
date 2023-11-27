@@ -12,33 +12,40 @@ import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
-import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import okio.Buffer
 import rx.subjects.PublishSubject
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
@@ -51,13 +58,13 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.Locale
-import java.util.concurrent.TimeUnit
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * This class is the one in charge of downloading episodes.
  *
  * Its queue contains the list of episodes to download. In order to download them, the downloader
- * subscription must be running and the list of episodes must be sent to them by [downloadsRelay].
+ * subscription must be running and the list of episodes must be sent to them by [downloaderJob].
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
@@ -68,7 +75,6 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val episodeCache: EpisodeCache = Injekt.get(),
-    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
 
     /**
@@ -87,15 +93,8 @@ class AnimeDownloader(
      */
     private val notifier by lazy { AnimeDownloadNotifier(context) }
 
-    /**
-     * AnimeDownloader subscription.
-     */
-    private var subscription: Subscription? = null
-
-    /**
-     * Relay to send a list of downloads to the downloader.
-     */
-    private val downloadsRelay = PublishRelay.create<List<AnimeDownload>>()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var downloaderJob: Job? = null
 
     /**
      * Preference for user's choice of external downloader
@@ -106,7 +105,7 @@ class AnimeDownloader(
      * Whether the downloader is running.
      */
     val isRunning: Boolean
-        get() = subscription != null
+        get() = downloaderJob?.isActive ?: false
 
     /**
      * Whether the downloader is paused
@@ -121,7 +120,7 @@ class AnimeDownloader(
     var isFFmpegRunning: Boolean = false
 
     init {
-        launchNow {
+        scope.launch {
             val episodes = async { store.restore() }
             addAllToQueue(episodes.await())
         }
@@ -134,18 +133,17 @@ class AnimeDownloader(
      * @return true if the downloader is started, false otherwise.
      */
     fun start(): Boolean {
-        if (subscription != null || queueState.value.isEmpty()) {
+        if (isRunning || queueState.value.isEmpty()) {
             return false
         }
-
-        initializeSubscription()
 
         val pending = queueState.value.filter { it.status != AnimeDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != AnimeDownload.State.QUEUE) it.status = AnimeDownload.State.QUEUE }
 
         isPaused = false
 
-        downloadsRelay.call(pending)
+        launchDownloaderJob()
+
         return pending.isNotEmpty()
     }
 
@@ -153,7 +151,7 @@ class AnimeDownloader(
      * Stops the downloader.
      */
     fun stop(reason: String? = null) {
-        destroySubscription()
+        cancelDownloaderJob()
         queueState.value
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.ERROR }
@@ -181,7 +179,7 @@ class AnimeDownloader(
      * Pauses the downloader
      */
     fun pause() {
-        destroySubscription()
+        cancelDownloaderJob()
         queueState.value
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.QUEUE }
@@ -192,55 +190,89 @@ class AnimeDownloader(
      * Removes everything from the queue.
      */
     fun clearQueue() {
-        destroySubscription()
+        cancelDownloaderJob()
 
         _clearQueue()
         notifier.dismissProgress()
     }
 
     /**
-     * Prepares the subscriptions to start downloading.
+     * Prepares the jobs to start downloading.
      */
-    private fun initializeSubscription() {
-        // Unsubscribe the previous subscription if it exists
-        destroySubscription()
+    private fun launchDownloaderJob() {
+        if (isRunning) return
 
-        subscription = downloadsRelay.flatMapIterable { it }
-            // Concurrently download from 3 different sources
-            .groupBy { it.source }
-            .flatMap(
-                { bySource ->
-                    bySource.flatMap(
-                        { download ->
-                            downloadEpisode(download)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                        },
-                        if (sourceManager.get(bySource.key.id) is UnmeteredSource) {
-                            downloadPreferences.numberOfDownloads().get()
-                        } else {
-                            1
-                        },
-                    )
-                },
-                5,
-            )
-            .subscribe(
-                { completedDownload ->
-                    completeAnimeDownload(completedDownload)
-                },
-                { error ->
-                    logcat(LogPriority.ERROR, error)
-                    notifier.onError(error.message)
-                    stop()
-                },
-            )
+        downloaderJob = scope.launch {
+            val activeDownloadsFlow = queueState.transformLatest { queue ->
+                while (true) {
+                    val activeDownloads = queue.asSequence()
+                        .filter {
+                            it.status.value <= AnimeDownload.State.DOWNLOADING.value
+                        } // Ignore completed downloads, leave them in the queue
+                        .groupBy { it.source }
+                        .toList().take(3) // Concurrently download from 5 different sources
+                        .map { (_, downloads) -> downloads.first() }
+                    emit(activeDownloads)
+
+                    if (activeDownloads.isEmpty()) break
+
+                    // Suspend until a download enters the ERROR state
+                    val activeDownloadsErroredFlow =
+                        combine(activeDownloads.map(AnimeDownload::statusFlow)) { states ->
+                            states.contains(AnimeDownload.State.ERROR)
+                        }.filter { it }
+                    activeDownloadsErroredFlow.first()
+                }
+            }.distinctUntilChanged()
+
+            // Use supervisorScope to cancel child jobs when the downloader job is cancelled
+            supervisorScope {
+                val downloadJobs = mutableMapOf<AnimeDownload, Job>()
+
+                activeDownloadsFlow.collectLatest { activeDownloads ->
+                    val downloadJobsToStop = downloadJobs.filter { it.key !in activeDownloads }
+                    downloadJobsToStop.forEach { (download, job) ->
+                        job.cancel()
+                        downloadJobs.remove(download)
+                    }
+
+                    val downloadsToStart = activeDownloads.filter { it !in downloadJobs }
+                    downloadsToStart.forEach { download ->
+                        downloadJobs[download] = launchDownloadJob(download)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun CoroutineScope.launchDownloadJob(download: AnimeDownload) = launchIO {
+        try {
+            downloadEpisode(download)
+
+            // Remove successful download from queue
+            if (download.status == AnimeDownload.State.DOWNLOADED) {
+                removeFromQueue(download)
+            }
+
+            if (download.status == AnimeDownload.State.QUEUE) {
+                pause()
+            }
+
+            if (areAllAnimeDownloadsFinished()) {
+                stop()
+            }
+        } catch (e: Throwable) {
+            if (e is CancellationException) throw e
+            logcat(LogPriority.ERROR, e)
+            notifier.onError(e.message)
+            stop()
+        }
     }
 
     /**
      * Destroys the downloader subscriptions.
      */
-    private fun destroySubscription() {
+    private fun cancelDownloaderJob() {
         isFFmpegRunning = false
         FFmpegKitConfig.getSessions().filter {
             it.isFFmpeg && (it.state == SessionState.CREATED || it.state == SessionState.RUNNING)
@@ -248,8 +280,8 @@ class AnimeDownloader(
             it.cancel()
         }
 
-        subscription?.unsubscribe()
-        subscription = null
+        downloaderJob?.cancel()
+        downloaderJob = null
     }
 
     /**
@@ -259,7 +291,13 @@ class AnimeDownloader(
      * @param episodes the list of episodes to download.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false, video: Video? = null) = launchIO {
+    fun queueEpisodes(
+        anime: Anime,
+        episodes: List<Episode>,
+        autoStart: Boolean,
+        changeDownloader: Boolean = false,
+        video: Video? = null,
+    ) = launchIO {
         if (episodes.isEmpty()) {
             return@launchIO
         }
@@ -267,16 +305,15 @@ class AnimeDownloader(
         val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
         val wasEmpty = queueState.value.isEmpty()
         // Called in background thread, the operation can be slow with SAF.
-        val episodesWithoutDir = async {
+        val episodesWithoutDir =
             episodes
                 // Filter out those already downloaded.
                 .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
                 // Add episodes to queue from the start.
                 .sortedByDescending { it.sourceOrder }
-        }
 
         // Runs in main thread (synchronization needed).
-        val episodesToQueue = episodesWithoutDir.await()
+        val episodesToQueue = episodesWithoutDir
             // Filter out those already enqueued.
             .filter { episode -> queueState.value.none { it.episode.id == episode.id } }
             // Create a download for each one.
@@ -285,14 +322,10 @@ class AnimeDownloader(
         if (episodesToQueue.isNotEmpty()) {
             addAllToQueue(episodesToQueue)
 
-            if (isRunning) {
-                // Send the list of downloads to the downloader.
-                downloadsRelay.call(episodesToQueue)
-            }
-
             // Start downloader if needed
             if (autoStart && wasEmpty) {
-                val queuedDownloads = queueState.value.count { it: AnimeDownload -> it.source !is UnmeteredSource }
+                val queuedDownloads =
+                    queueState.value.count { it: AnimeDownload -> it.source !is UnmeteredSource }
                 val maxDownloadsFromSource = queueState.value
                     .groupBy { it.source }
                     .filterKeys { it !is UnmeteredSource }
@@ -307,7 +340,10 @@ class AnimeDownloader(
                         notifier.onWarning(
                             context.getString(R.string.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
-                            NotificationHandler.openUrl(context, AnimeLibraryUpdateNotifier.HELP_WARNING_URL),
+                            NotificationHandler.openUrl(
+                                context,
+                                AnimeLibraryUpdateNotifier.HELP_WARNING_URL,
+                            ),
                         )
                     }
                 }
@@ -321,85 +357,81 @@ class AnimeDownloader(
      *
      * @param download the episode to be downloaded.
      */
-    private fun downloadEpisode(download: AnimeDownload): Observable<AnimeDownload> = Observable.defer {
+    private suspend fun downloadEpisode(download: AnimeDownload) {
         val animeDir = provider.getAnimeDir(download.anime.title, download.source)
 
         val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
-            notifier.onError(context.getString(R.string.download_insufficient_space), download.episode.name, download.anime.title)
-            return@defer Observable.just(download)
+            notifier.onError(
+                context.getString(R.string.download_insufficient_space),
+                download.episode.name,
+                download.anime.title,
+            )
+            return
         }
 
-        val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
+        val episodeDirname = provider.getEpisodeDirName(
+            download.episode.name,
+            download.episode.scanlator,
+        )
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
         notifier.onProgressChange(download)
 
-        val videoObservable = if (download.video == null) {
+        val video = if (download.video == null) {
             // Pull video from network and add them to download object
-            download.source.fetchVideoList(download.episode.toSEpisode()).map { it.first() }
-                .doOnNext { video ->
-                    if (video == null) {
-                        throw Exception(context.getString(R.string.video_list_empty_error))
-                    }
-                    download.video = video
-                }
+            try {
+                val fetchedVideo = download.source.getVideoList(download.episode.toSEpisode()).first()
+                download.video = fetchedVideo
+                fetchedVideo
+            } catch (e: Exception) {
+                throw Exception(context.getString(R.string.video_list_empty_error))
+            }
         } else {
-            // Or if the video already exists, start from the file
-            Observable.just(download.video!!)
+            // Or if the video already exists, return it
+            download.video!!
         }
 
-        videoObservable
-            .doOnNext { _ ->
-                if (download.video?.bytesDownloaded == 0L) {
-                    // Delete all temporary (unfinished) files
-                    tmpDir.listFiles()
-                        ?.filter { it.name!!.endsWith(".tmp") }
-                        ?.forEach { it.delete() }
-                }
+        if (download.video!!.bytesDownloaded == 0L) {
+            // Delete all temporary (unfinished) files
+            tmpDir.listFiles()
+                ?.filter { it.name!!.endsWith(".tmp") }
+                ?.forEach { it.delete() }
+        }
 
-                download.downloadedImages = 0
-                download.status = AnimeDownload.State.DOWNLOADING
+        download.downloadedImages = 0
+        download.status = AnimeDownload.State.DOWNLOADING
+
+        val progressJob = scope.launch {
+            while (download.status == AnimeDownload.State.DOWNLOADING) {
+                delay(50)
+                val progress = download.video!!.progress
+                if (download.totalProgress != progress) {
+                    download.totalProgress = progress
+                    notifier.onProgressChange(download)
+                }
             }
-            // Get all the URLs to the source images, fetch pages if necessary
-            .flatMap { download.source.fetchUrlFromVideo(it) }
-            .doOnNext {
-                Observable.interval(50, TimeUnit.MILLISECONDS)
-                    // Get the sum of percentages for all the pages.
-                    .flatMap {
-                        Observable.just(download.video)
-                            .flatMap { Observable.just(it!!.progress) }
-                    }
-                    .takeUntil { download.status != AnimeDownload.State.DOWNLOADING }
-                    // Keep only the latest emission to avoid backpressure.
-                    .onBackpressureLatest()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { progress ->
-                        // Update the view only if the progress has changed.
-                        if (download.totalProgress != progress) {
-                            download.totalProgress = progress
-                            notifier.onProgressChange(download)
-                        }
-                    }
+        }
+
+        try {
+            // Replace this with your actual download logic
+            getOrAnimeDownloadVideo(video, download, tmpDir)
+        } catch (e: Exception) {
+            download.status = AnimeDownload.State.ERROR
+            notifier.onError(e.message, download.episode.name, download.anime.title)
+        } finally {
+            progressJob.cancel()
+        }
+
+        try {
+            ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
+            if (download.status == AnimeDownload.State.DOWNLOADED) {
+                notifier.dismissProgress()
             }
-            // Start downloading videos, consider we can have downloaded images already
-            // Concurrently do 5 videos at a time (a fossil of the manga downloads)
-            .flatMap({ video -> getOrAnimeDownloadVideo(video, download, tmpDir) }, 5)
-            .onBackpressureLatest()
-            // Do when video is downloaded.
-            .toList()
-            .map { download }
-            // Do after download completes
-            .doOnNext {
-                ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
-                if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress()
-            }
-            // If the video list threw, it will resume here
-            .onErrorReturn { error ->
-                download.status = AnimeDownload.State.ERROR
-                notifier.onError(error.message, download.episode.name, download.anime.title)
-                download
-            }
+        } catch (e: Exception) {
+            download.status = AnimeDownload.State.ERROR
+            notifier.onError(e.message, download.episode.name, download.anime.title)
+        }
     }
 
     /**
@@ -410,10 +442,14 @@ class AnimeDownloader(
      * @param download the download of the video.
      * @param tmpDir the temporary directory of the download.
      */
-    private fun getOrAnimeDownloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile): Observable<Video> {
+    private suspend fun getOrAnimeDownloadVideo(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+    ): Video {
         // If the video URL is empty, do nothing
         if (video.videoUrl == null) {
-            return Observable.just(video)
+            return video
         }
 
         val filename = DiskUtil.buildValidFilename(download.episode.name)
@@ -425,39 +461,41 @@ class AnimeDownloader(
             tmpFile?.delete()
         }
 
-        // Try to find the video file
         val videoFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
-        val pageObservable = when {
-            videoFile != null -> Observable.just(videoFile)
-            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
+        val file = when {
+            videoFile != null -> videoFile
+            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(
+                episodeCache.getVideoFile(video.videoUrl!!),
+                tmpDir,
+                filename,
+            )
             else -> {
                 if (preferences.useExternalDownloader().get() == download.changeDownloader) {
                     downloadVideo(video, download, tmpDir, filename)
                 } else {
-                    val betterFileName = DiskUtil.buildValidFilename("${download.anime.title} - ${download.episode.name}")
+                    val betterFileName = DiskUtil.buildValidFilename(
+                        "${download.anime.title} - ${download.episode.name}",
+                    )
                     downloadVideoExternal(video, download.source, tmpDir, betterFileName)
                 }
             }
         }
 
-        return pageObservable
-            // When the video is ready, set image path, progress (just in case) and status
-            .doOnNext { file ->
-                video.videoUrl = file.uri.path
-                video.progress = 100
-                download.downloadedImages++
-                video.status = Video.State.READY
-            }
-            .map { video }
-            // Mark this video as error and allow to download the remaining
-            .onErrorReturn {
-                video.progress = 0
-                video.status = Video.State.ERROR
-                notifier.onError(it.message, download.episode.name, download.anime.title)
-                video
-            }
+        // When the video is ready, set image path, progress (just in case) and status
+        try {
+            video.videoUrl = file.uri.path
+            video.progress = 100
+            download.downloadedImages++
+            video.status = Video.State.READY
+        } catch (e: Exception) {
+            video.progress = 0
+            video.status = Video.State.ERROR
+            notifier.onError(e.message, download.episode.name, download.anime.title)
+        }
+
+        return video
     }
 
     /**
@@ -468,20 +506,29 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private suspend fun downloadVideo(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         var tries = 0
-        return newObservable(video, download, tmpDir, filename)
-            // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
-            .onErrorResumeNext {
-                if (tries >= 2) {
-                    return@onErrorResumeNext Observable.error(it)
-                }
+
+        // Define a suspend function to encapsulate the retry logic
+        suspend fun attemptDownload(): UniFile {
+            return try {
+                newDownload(video, download, tmpDir, filename)
+            } catch (e: Exception) {
+                if (tries >= 2) throw e
                 tries++
-                return@onErrorResumeNext Observable.timer((2 shl tries - 1) * 1000L, TimeUnit.MILLISECONDS)
-                    .flatMap { newObservable(video, download, tmpDir, filename) }
+                delay((2 shl (tries - 1)) * 1000L)
+                attemptDownload()
             }
+        }
+
+        return attemptDownload()
     }
 
     private fun isMpd(video: Video): Boolean {
@@ -492,24 +539,34 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    private fun ffmpegObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private suspend fun ffmpegDownload(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile = coroutineScope {
         isFFmpegRunning = true
         val headers = video.headers ?: download.source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") {
             "${it.first}: ${it.second}\r\n"
         }
-        val videoFile = tmpDir.findFile("$filename.tmp")
-            ?: tmpDir.createFile("$filename.tmp")!!
+        val videoFile = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
         val ffmpegFilename = { videoFile.uri.toFFmpegString(context) }
 
         val ffmpegOptions = getFFmpegOptions(video, headerOptions, ffmpegFilename())
-
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
-            FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
+            FFmpegKitConfig.parseArguments(
+                "${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries " +
+                    "format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"",
+            )
         }
-
         var duration = 0L
+        var nextLineIsDuration = false
         val logCallback = LogCallback { log ->
+            if (nextLineIsDuration) {
+                parseDuration(log.message)?.let { duration = it }
+                nextLineIsDuration = false
+            }
             if (log.level <= Level.AV_LOG_WARNING) log.message?.let { logcat { it } }
             if (duration != 0L && log.message.startsWith("frame=")) {
                 val outTime = log.message
@@ -520,7 +577,6 @@ class AnimeDownloader(
             }
         }
         val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, {})
-
         val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
         duration = inputDuration.toLong()
         FFmpegKitConfig.ffmpegExecute(session)
@@ -533,12 +589,11 @@ class AnimeDownloader(
             logcat(LogPriority.ERROR) { trace }
             throw Exception("Error in ffmpeg!")
         }
-        return Observable.just(session)
-            .map {
-                val file = tmpDir.findFile("$filename.tmp")
-                file?.renameTo("$filename.mkv")
-                file ?: throw Exception("Downloaded file not found")
-            }
+
+        val file = tmpDir.findFile("$filename.tmp")?.apply {
+            renameTo("$filename.mkv")
+        }
+        file ?: throw Exception("Downloaded file not found")
     }
 
     private fun parseTimeStringToSeconds(timeString: String): Long? {
@@ -608,26 +663,53 @@ class AnimeDownloader(
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
-    private fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return if (isHls(video) || isMpd(video)) {
-            ffmpegObservable(video, download, tmpDir, filename)
+    private suspend fun newDownload(
+        video: Video,
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
+        // Check if the download is paused before starting
+        while (isPaused) {
+            delay(1000) // This is a pause check delay, adjust the timing as needed.
+        }
+
+        if (isHls(video) || isMpd(video)) {
+            return ffmpegDownload(video, download, tmpDir, filename)
         } else {
-            download.source.fetchVideo(video)
-                .map { response ->
-                    val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
-                    try {
-                        response.body.source().saveTo(file.openOutputStream(true))
-                        // val extension = getImageExtension(response, file)
-                        // TODO: support other file formats!!
-                        file.renameTo("$filename.mp4")
-                    } catch (e: Exception) {
-                        response.close()
-                        if (!queueState.value.equals(download)) file.delete()
-                        // file.delete()
-                        throw e
+            val response = download.source.getVideo(video)
+            val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
+
+            // Write to file with pause/resume capability
+            try {
+                response.body.source().use { source ->
+                    file.openOutputStream(true).use { output ->
+                        val buffer = Buffer()
+                        var totalBytesRead = 0L
+                        var bytesRead: Int
+                        val bufferSize = 4 * 1024
+                        while (source.read(buffer, bufferSize.toLong()).also { bytesRead = it.toInt() } != -1L) {
+                            // Check if the download is paused, if so, wait
+                            while (isPaused) {
+                                delay(1000) // Wait for 1 second before checking again
+                            }
+
+                            // Write the bytes to the file
+                            output.write(bytesRead)
+                            totalBytesRead += bytesRead
+                            video.progress = (totalBytesRead * 100 / response.body.contentLength()).toInt()
+                            // Update progress here if needed
+                        }
                     }
-                    file
                 }
+                // After download is complete, rename the file to its final name
+                file.renameTo("$filename.mp4")
+                return file
+            } catch (e: Exception) {
+                response.close()
+                if (!queueState.value.equals(download)) file.delete()
+                throw e
+            }
         }
     }
 
@@ -639,63 +721,91 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun downloadVideoExternal(
+        video: Video,
+        source: AnimeHttpSource,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
-        return Observable.just(tmpDir.createFile("$filename.mp4")).map {
-            try {
-                // TODO: support other file formats!!
-                // start download with intent
-                val pm = context.packageManager
-                val pkgName = preferences.externalDownloaderSelection().get()
-                val intent: Intent
-                if (!pkgName.isNullOrEmpty()) {
-                    intent = pm.getLaunchIntentForPackage(pkgName)!!
-                    when {
-                        // 1DM
-                        pkgName.startsWith("idm.internet.download.manager") -> {
-                            intent.apply {
-                                component = ComponentName(pkgName, "idm.internet.download.manager.Downloader")
-                                action = Intent.ACTION_VIEW
-                                data = Uri.parse(video.videoUrl)
-                                putExtra("extra_filename", filename)
-                            }
-                        }
-                        // ADM
-                        pkgName.startsWith("com.dv.adm") -> {
-                            val headers = (video.headers ?: source.headers).toList()
-                            val bundle = Bundle()
-                            headers.forEach { a -> bundle.putString(a.first, a.second.replace("http", "h_ttp")) }
 
-                            intent.apply {
-                                component = ComponentName(pkgName, "$pkgName.AEditor")
-                                action = Intent.ACTION_VIEW
-                                putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
-                                putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
-                                putExtra("android.media.intent.extra.HTTP_HEADERS", bundle)
-                            }
-                            it.delete()
-                            tmpDir.delete()
-                            queueState.value.find { Anime -> Anime.video == video }?.let { Anime ->
-                                Anime.status = AnimeDownload.State.DOWNLOADED
-                                completeAnimeDownload(Anime)
-                            }
+        try {
+            val file = tmpDir.createFile("$filename.mp4")
+
+            // TODO: support other file formats!!
+            // start download with intent
+            val pm = context.packageManager
+            val pkgName = preferences.externalDownloaderSelection().get()
+            val intent: Intent
+            if (!pkgName.isNullOrEmpty()) {
+                intent = pm.getLaunchIntentForPackage(pkgName) ?: throw Exception(
+                    "Launch intent not found",
+                )
+                when {
+                    // 1DM
+                    pkgName.startsWith("idm.internet.download.manager") -> {
+                        intent.apply {
+                            component = ComponentName(
+                                pkgName,
+                                "idm.internet.download.manager.Downloader",
+                            )
+                            action = Intent.ACTION_VIEW
+                            data = Uri.parse(video.videoUrl)
+                            putExtra("extra_filename", filename)
                         }
                     }
-                } else {
-                    intent = Intent(Intent.ACTION_VIEW)
-                    intent.apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        setDataAndType(Uri.parse(video.videoUrl), "video/*")
-                        putExtra("extra_filename", filename)
+                    // ADM
+                    pkgName.startsWith("com.dv.adm") -> {
+                        val headers = (video.headers ?: source.headers).toList()
+                        val bundle = Bundle()
+                        headers.forEach { a ->
+                            bundle.putString(
+                                a.first,
+                                a.second.replace("http", "h_ttp"),
+                            )
+                        }
+
+                        intent.apply {
+                            component = ComponentName(pkgName, "$pkgName.AEditor")
+                            action = Intent.ACTION_VIEW
+                            putExtra(
+                                "com.dv.get.ACTION_LIST_ADD",
+                                "${Uri.parse(video.videoUrl)}<info>$filename.mp4",
+                            )
+                            putExtra(
+                                "com.dv.get.ACTION_LIST_PATH",
+                                tmpDir.filePath!!.substringBeforeLast("_"),
+                            )
+                            putExtra("android.media.intent.extra.HTTP_HEADERS", bundle)
+                        }
+                        file.delete()
+                        tmpDir.delete()
+                        queueState.value.find { Anime -> Anime.video == video }?.let { download ->
+                            download.status = AnimeDownload.State.DOWNLOADED
+                            // Delete successful downloads from queue
+                            if (download.status == AnimeDownload.State.DOWNLOADED) {
+                                // Remove downloaded episode from queue
+                                removeFromQueue(download)
+                            }
+                            if (areAllAnimeDownloadsFinished()) {
+                                stop()
+                            }
+                        }
                     }
                 }
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                it.delete()
-                throw e
+            } else {
+                intent = Intent(Intent.ACTION_VIEW).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    setDataAndType(Uri.parse(video.videoUrl), "video/*")
+                    putExtra("extra_filename", filename)
+                }
             }
-            it
+            context.startActivity(intent)
+            return file
+        } catch (e: Exception) {
+            tmpDir.findFile("$filename.mp4")?.delete()
+            throw e
         }
     }
 
@@ -706,19 +816,19 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return Observable.just(cacheFile).map {
-            val tmpFile = tmpDir.createFile("$filename.tmp")
-            cacheFile.inputStream().use { input ->
-                tmpFile.openOutputStream().use { output ->
-                    input.copyTo(output)
-                }
+    private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): UniFile {
+        val tmpFile = tmpDir.createFile("$filename.tmp")
+        cacheFile.inputStream().use { input ->
+            tmpFile.openOutputStream().use { output ->
+                input.copyTo(output)
             }
-            val extension = ImageUtil.findImageType(cacheFile.inputStream()) ?: return@map tmpFile
-            tmpFile.renameTo("$filename.${extension.extension}")
-            cacheFile.delete()
-            tmpFile
         }
+        val extension = ImageUtil.findImageType(cacheFile.inputStream())
+        if (extension != null) {
+            tmpFile.renameTo("$filename.${extension.extension}")
+        }
+        cacheFile.delete()
+        return tmpFile
     }
 
     /**
@@ -747,20 +857,6 @@ class AnimeDownloader(
             AnimeDownload.State.DOWNLOADED
         } else {
             AnimeDownload.State.ERROR
-        }
-    }
-
-    /**
-     * Completes a download. This method is called in the main thread.
-     */
-    private fun completeAnimeDownload(download: AnimeDownload) {
-        // Delete successful downloads from queue
-        if (download.status == AnimeDownload.State.DOWNLOADED) {
-            // Remove downloaded episode from queue
-            removeFromQueue(download)
-        }
-        if (areAllAnimeDownloadsFinished()) {
-            stop()
         }
     }
 
@@ -807,14 +903,28 @@ class AnimeDownloader(
         }
     }
 
-    fun removeFromQueue(episodes: List<Episode>) {
-        episodes.forEach { episode ->
-            queueState.value.find { it.episode.id == episode.id }?.let { removeFromQueue(it) }
+    private inline fun removeFromQueueIf(predicate: (AnimeDownload) -> Boolean) {
+        _queueState.update { queue ->
+            val downloads = queue.filter { predicate(it) }
+            store.removeAll(downloads)
+            downloads.forEach { download ->
+                if (download.status == AnimeDownload.State.DOWNLOADING ||
+                    download.status == AnimeDownload.State.QUEUE
+                ) {
+                    download.status = AnimeDownload.State.NOT_DOWNLOADED
+                }
+            }
+            queue - downloads.toSet()
         }
     }
 
+    fun removeFromQueue(episodes: List<Episode>) {
+        val episodeIds = episodes.map { it.id }
+        removeFromQueueIf { it.episode.id in episodeIds }
+    }
+
     fun removeFromQueue(anime: Anime) {
-        queueState.value.filter { it.anime.id == anime.id }.forEach { removeFromQueue(it) }
+        removeFromQueueIf { it.anime.id == anime.id }
     }
 
     private fun _clearQueue() {
@@ -822,7 +932,9 @@ class AnimeDownloader(
             it.forEach { download ->
                 download.progressSubject = null
                 download.progressCallback = null
-                if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                if (download.status == AnimeDownload.State.DOWNLOADING ||
+                    download.status == AnimeDownload.State.QUEUE
+                ) {
                     download.status = AnimeDownload.State.NOT_DOWNLOADED
                 }
             }

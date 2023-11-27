@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.net.Uri
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +10,7 @@ import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
-import eu.kanade.domain.track.anime.model.toDbTrack
-import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
-import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -25,7 +24,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
-import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -36,14 +35,12 @@ import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
-import eu.kanade.tachiyomi.util.system.isOnline
 import `is`.xyz.mpv.Utils
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -62,13 +59,12 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
-import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
-import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -82,18 +78,17 @@ class PlayerViewModel @JvmOverloads constructor(
     private val imageSaver: ImageSaver = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
+    private val trackEpisode: TrackEpisode = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
-    private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
-    basePreferences: BasePreferences = Injekt.get(),
+    private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -104,6 +99,7 @@ class PlayerViewModel @JvmOverloads constructor(
     val eventFlow = eventChannel.receiveAsFlow()
 
     private val incognitoMode = basePreferences.incognitoMode().get()
+    private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
@@ -171,8 +167,18 @@ class PlayerViewModel @JvmOverloads constructor(
         val episodesForPlayer = episodes.filterNot {
             anime.unseenFilterRaw == Anime.EPISODE_SHOW_SEEN && !it.seen ||
                 anime.unseenFilterRaw == Anime.EPISODE_SHOW_UNSEEN && it.seen ||
-                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_DOWNLOADED && !downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
-                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_NOT_DOWNLOADED && downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
+                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_DOWNLOADED && !downloadManager.isEpisodeDownloaded(
+                    it.name,
+                    it.scanlator,
+                    anime.title,
+                    anime.source,
+                ) ||
+                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_NOT_DOWNLOADED && downloadManager.isEpisodeDownloaded(
+                    it.name,
+                    it.scanlator,
+                    anime.title,
+                    anime.source,
+                ) ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED && !it.bookmark ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED && it.bookmark
         }.toMutableList()
@@ -278,15 +284,21 @@ class PlayerViewModel @JvmOverloads constructor(
     )
 
     private fun initEpisodeList(anime: Anime): List<Episode> {
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
+        val episodes = runBlocking { getEpisodesByAnimeId.await(anime.id) }
 
         return episodes
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
+            .run {
+                if (basePreferences.downloadedOnly().get()) {
+                    filterDownloadedEpisodes(anime)
+                } else {
+                    this
+                }
+            }
             .map { it.toDbEpisode() }
     }
 
     private var hasTrackers: Boolean = false
-
     private val checkTrackers: (Anime) -> Unit = { anime ->
         val tracks = runBlocking { getTracks.await(anime.id) }
         hasTrackers = tracks.isNotEmpty()
@@ -295,7 +307,10 @@ class PlayerViewModel @JvmOverloads constructor(
     fun isEpisodeOnline(): Boolean? {
         val anime = currentAnime ?: return null
         val episode = currentEpisode ?: return null
-        return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode.toDomainEpisode()!!, anime)
+        return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(
+            episode.toDomainEpisode()!!,
+            anime,
+        )
     }
 
     suspend fun loadEpisode(episodeId: Long?): Pair<List<Video>?, String>? {
@@ -309,7 +324,11 @@ class PlayerViewModel @JvmOverloads constructor(
         return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
+                currentVideoList = EpisodeLoader.getLinks(
+                    currentEpisode.toDomainEpisode()!!,
+                    anime,
+                    source,
+                ).asFlow().first()
                 this@PlayerViewModel.episodeId = currentEpisode.id!!
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
@@ -353,9 +372,9 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private fun downloadNextEpisodes() {
+        if (downloadAheadAmount == 0) return
         val anime = currentAnime ?: return
-        val amount = downloadPreferences.autoDownloadWhileWatching().get()
-        if (amount == 0 || !anime.favorite) return
+
         // Only download ahead if current + next episode is already downloaded too to avoid jank
         if (getCurrentEpisodeIndex() == this.currentPlaylist.lastIndex) return
         val currentEpisode = currentEpisode ?: return
@@ -370,7 +389,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 return@launchIO
             }
             val episodesToDownload = getNextEpisodes.await(anime.id, nextEpisode.id!!)
-                .take(amount)
+                .take(downloadAheadAmount)
             downloadManager.downloadEpisodes(anime, episodesToDownload)
         }
     }
@@ -384,7 +403,9 @@ class PlayerViewModel @JvmOverloads constructor(
         // Determine which episode should be deleted and enqueue
         val currentEpisodePosition = this.currentPlaylist.indexOf(chosenEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
-        val episodeToDelete = this.currentPlaylist.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
+        val episodeToDelete = this.currentPlaylist.getOrNull(
+            currentEpisodePosition - removeAfterSeenSlots,
+        )
         // If episode is completely seen no need to download it
         episodeToDownload = null
 
@@ -477,7 +498,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     image = Image.Page(
                         inputStream = imageStream,
                         name = filename,
-                        location = Location.Pictures.create(relativePath),
+                        location = Location.Pictures(relativePath),
                     ),
                 )
                 notifier.onComplete(uri)
@@ -552,41 +573,14 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode) {
+        if (basePreferences.incognitoMode().get() || !hasTrackers) return
         if (!trackPreferences.autoUpdateTrack().get()) return
+
         val anime = currentAnime ?: return
-
-        val episodeSeen = episode.episode_number.toDouble()
-
-        val trackManager = Injekt.get<TrackManager>()
         val context = Injekt.get<Application>()
 
         viewModelScope.launchNonCancellable {
-            getTracks.await(anime.id)
-                .mapNotNull { track ->
-                    val service = trackManager.getService(track.syncId)
-                    if (service != null && service.isLogged && episodeSeen > track.lastEpisodeSeen) {
-                        val updatedTrack = track.copy(lastEpisodeSeen = episodeSeen)
-
-                        // We want these to execute even if the presenter is destroyed and leaks
-                        // for a while. The view can still be garbage collected.
-                        async {
-                            runCatching {
-                                if (context.isOnline()) {
-                                    service.animeService.update(updatedTrack.toDbTrack(), true)
-                                    insertTrack.await(updatedTrack)
-                                } else {
-                                    delayedTrackingStore.addAnimeItem(updatedTrack)
-                                    DelayedAnimeTrackingUpdateJob.setupTask(context)
-                                }
-                            }
-                        }
-                    } else {
-                        null
-                    }
-                }
-                .awaitAll()
-                .mapNotNull { it.exceptionOrNull() }
-                .forEach { logcat(LogPriority.INFO, it) }
+            trackEpisode.await(context, anime.id, episode.episode_number.toDouble())
         }
     }
 
@@ -652,7 +646,9 @@ class PlayerViewModel @JvmOverloads constructor(
         val episode = currentEpisode ?: return null
         val filenameSuffix = " - $timePos"
         return DiskUtil.buildValidFilename(
-            "${anime.title} - ${episode.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
+            "${anime.title} - ${episode.name}".takeBytes(
+                DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize(),
+            ),
         ) + filenameSuffix
     }
 
@@ -662,7 +658,7 @@ class PlayerViewModel @JvmOverloads constructor(
      */
     suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
         val animeId = currentAnime?.id ?: return null
-        val trackManager = Injekt.get<TrackManager>()
+        val trackerManager = Injekt.get<TrackerManager>()
         var malId: Long?
         val episodeNumber = currentEpisode?.episode_number?.toInt() ?: return null
         if (getTracks.await(animeId).isEmpty()) {
@@ -671,8 +667,8 @@ class PlayerViewModel @JvmOverloads constructor(
         }
 
         getTracks.await(animeId).map { track ->
-            val service = trackManager.getService(track.syncId)
-            malId = when (service) {
+            val tracker = trackerManager.get(track.syncId)
+            malId = when (tracker) {
                 is MyAnimeList -> track.remoteId
                 is Anilist -> AniSkipApi().getMalIdFromAL(track.remoteId)
                 else -> null
@@ -721,6 +717,7 @@ class PlayerViewModel @JvmOverloads constructor(
         mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
+    @Immutable
     data class State(
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
@@ -758,5 +755,3 @@ class PlayerViewModel @JvmOverloads constructor(
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }
 }
-
-private const val MAX_FILE_NAME_BYTES = 250

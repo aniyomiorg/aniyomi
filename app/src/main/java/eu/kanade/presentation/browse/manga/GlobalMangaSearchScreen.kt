@@ -1,34 +1,30 @@
 package eu.kanade.presentation.browse.manga
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
 import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
-import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
-import eu.kanade.tachiyomi.R
+import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchToolbar
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
+import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchScreenModel
+import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSourceFilter
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun GlobalMangaSearchScreen(
-    state: GlobalMangaSearchState,
+    state: MangaSearchScreenModel.State,
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
+    onChangeSearchFilter: (MangaSourceFilter) -> Unit,
+    onToggleResults: () -> Unit,
     getManga: @Composable (Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
@@ -36,19 +32,23 @@ fun GlobalMangaSearchScreen(
 ) {
     Scaffold(
         topBar = { scrollBehavior ->
-            GlobalSearchToolbar(
+            GlobalMangaSearchToolbar(
                 searchQuery = state.searchQuery,
                 progress = state.progress,
                 total = state.total,
                 navigateUp = navigateUp,
                 onChangeSearchQuery = onChangeSearchQuery,
                 onSearch = onSearch,
+                sourceFilter = state.sourceFilter,
+                onChangeSearchFilter = onChangeSearchFilter,
+                onlyShowHasResults = state.onlyShowHasResults,
+                onToggleResults = onToggleResults,
                 scrollBehavior = scrollBehavior,
             )
         },
     ) { paddingValues ->
         GlobalSearchContent(
-            items = state.items,
+            items = state.filteredItems,
             contentPadding = paddingValues,
             getManga = getManga,
             onClickSource = onClickSource,
@@ -59,13 +59,14 @@ fun GlobalMangaSearchScreen(
 }
 
 @Composable
-private fun GlobalSearchContent(
+internal fun GlobalSearchContent(
     items: Map<CatalogueSource, MangaSearchItemResult>,
     contentPadding: PaddingValues,
     getManga: @Composable (Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
+    fromSourceId: Long? = null,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
@@ -73,7 +74,8 @@ private fun GlobalSearchContent(
         items.forEach { (source, result) ->
             item(key = source.id) {
                 GlobalSearchResultItem(
-                    title = source.name,
+                    title = fromSourceId
+                        ?.let { "▶ ${source.name}".takeIf { source.id == fromSourceId } } ?: source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
@@ -82,18 +84,6 @@ private fun GlobalSearchContent(
                             GlobalSearchLoadingResultItem()
                         }
                         is MangaSearchItemResult.Success -> {
-                            if (result.isEmpty) {
-                                Text(
-                                    text = stringResource(R.string.no_results_found),
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = MaterialTheme.padding.medium,
-                                            vertical = MaterialTheme.padding.small,
-                                        ),
-                                )
-                                return@GlobalSearchResultItem
-                            }
-
                             GlobalMangaSearchCardRow(
                                 titles = result.result,
                                 getManga = getManga,
