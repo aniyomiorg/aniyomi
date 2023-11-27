@@ -99,10 +99,7 @@ fun TopPlayerControls(
                     onClick = activity.playerControls::toggleAutoplay,
                 )
 
-                // TODO: video chapters icon not showing up
-                val videoChapters = remember { mutableStateOf(activity.videoChapters) }
-
-                if (videoChapters.value.isNotEmpty()) {
+                if (activity.videoChapters.isNotEmpty()) {
                     PlayerIcon(Icons.Outlined.AutoStories) {
                         viewModel.showVideoChapters()
                     }

@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.ui.player
 import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,6 +41,7 @@ import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
+import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -725,7 +728,10 @@ class PlayerViewModel @JvmOverloads constructor(
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
         val sheet: Sheet? = null,
-    )
+    ) {
+        var videoChapters: MutableState<List<MPVView.Chapter>> = mutableStateOf(emptyList())
+            private set
+    }
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())
@@ -733,17 +739,17 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     sealed class Dialog {
-        object EpisodeList : Dialog()
-        object SpeedPicker : Dialog()
-        object SkipIntroLength : Dialog()
+        data object EpisodeList : Dialog()
+        data object SpeedPicker : Dialog()
+        data object SkipIntroLength : Dialog()
     }
 
     sealed class Sheet {
-        object SubtitleSettings : Sheet()
-        object ScreenshotOptions : Sheet()
-        object PlayerSettings : Sheet()
-        object VideoChapters : Sheet()
-        object StreamsCatalog : Sheet()
+        data object SubtitleSettings : Sheet()
+        data object ScreenshotOptions : Sheet()
+        data object PlayerSettings : Sheet()
+        data object VideoChapters : Sheet()
+        data object StreamsCatalog : Sheet()
     }
 
     sealed class Event {

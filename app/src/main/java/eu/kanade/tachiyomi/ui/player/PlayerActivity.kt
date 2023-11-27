@@ -282,9 +282,10 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
-    internal var videoChapters: List<VideoChapter> = emptyList()
+    internal var videoChapters
+        get() = viewModel.state.value.videoChapters.value
         set(value) {
-            field = value
+            viewModel.state.value.videoChapters.value = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
             }
@@ -521,6 +522,8 @@ class PlayerActivity : BaseActivity() {
         }
 
         binding.controlsRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+            state.videoChapters.value
             PlayerControls(
                 activity = this,
             )
@@ -1022,9 +1025,8 @@ class PlayerActivity : BaseActivity() {
         showLoadingIndicator(position >= cachePosition && seeking)
     }
 
-    @Suppress("UNUSED_PARAMETER")
     @SuppressLint("SourceLockedOrientationActivity")
-    fun rotatePlayer(view: View) {
+    fun rotatePlayer() {
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             this.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
         } else {
@@ -1323,14 +1325,12 @@ class PlayerActivity : BaseActivity() {
         )
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun cycleSpeed(view: View) {
+    fun cycleSpeed() {
         player.cycleSpeed()
         refreshUi()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun skipIntro(view: View) {
+    fun skipIntro() {
         if (skipType != null) {
             // this stops the counter
             if (waitingAniSkip > 0 && netflixStyle) {
@@ -1347,7 +1347,7 @@ class PlayerActivity : BaseActivity() {
                 )
             }
             AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
-        } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
+        } else {
             doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
             playerControls.resetControlsFade()
         }
@@ -1362,9 +1362,8 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
-            playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
-            playerControls.updateSpeedButton()
+            player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
             withIOContext { player.loadTracks() }
         }
     }
