@@ -50,7 +50,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
-import eu.kanade.core.util.asFlow
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video

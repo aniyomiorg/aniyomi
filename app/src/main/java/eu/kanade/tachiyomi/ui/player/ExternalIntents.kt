@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob

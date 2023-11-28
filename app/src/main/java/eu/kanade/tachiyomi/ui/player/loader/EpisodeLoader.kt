@@ -6,7 +6,6 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import rx.Observable
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -79,7 +78,7 @@ class EpisodeLoader {
 
                 try {
                     video.videoUrl = source.getVideoUrl(video)
-                } catch(e: Throwable){
+                } catch (e: Throwable) {
                     video.status = Video.State.ERROR
                 }
             }

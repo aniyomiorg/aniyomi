@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import rx.Observable
 import tachiyomi.core.provider.FolderProvider
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
