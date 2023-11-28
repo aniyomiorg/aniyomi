@@ -1,7 +1,7 @@
-import eu.kanade.tachiyomi.model.UpdateStrategy;
-import kotlin.collections.List;
+import eu.kanade.tachiyomi.source.model.UpdateStrategy;
 import kotlin.Boolean;
 import kotlin.String;
+import kotlin.collections.List;
 
 CREATE TABLE mangas(
     _id INTEGER NOT NULL PRIMARY KEY,

@@ -1,6 +1,6 @@
 package tachiyomi.domain.entries.anime.model
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
@@ -28,7 +28,7 @@ data class Anime(
     val ogStatus: Long,
     // SY <--
     val thumbnailUrl: String?,
-    val updateStrategy: UpdateStrategy,
+    val updateStrategy: AnimeUpdateStrategy,
     val initialized: Boolean,
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
@@ -158,7 +158,7 @@ data class Anime(
             ogStatus = 0L,
             // SY <--
             thumbnailUrl = null,
-            updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
+            updateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
