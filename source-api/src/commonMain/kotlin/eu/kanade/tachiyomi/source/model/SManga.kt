@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.source.model
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
 import java.io.Serializable
 
 interface SManga : Serializable {

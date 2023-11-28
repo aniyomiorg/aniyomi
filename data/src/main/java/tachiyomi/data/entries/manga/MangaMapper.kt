@@ -1,6 +1,6 @@
 package tachiyomi.data.entries.manga
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
 
