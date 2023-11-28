@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">კატეგორიები</string>
-    <string name="unlock_app">Aniyomi-ს განბლოკვა</string>
+    <string name="unlock_app">Animetail-ს განბლოკვა</string>
     <string name="default_manga_category">ნაგულისხმევი კატეგორია</string>
     <string name="untrusted_extension_message">ეს დამატება ხელმოწერილია უცნობი სერთიფიკატის მიერ და არ არის აქტივირებული.
 \n

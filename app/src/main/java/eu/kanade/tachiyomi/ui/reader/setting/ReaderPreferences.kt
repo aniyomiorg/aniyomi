@@ -165,6 +165,8 @@ class ReaderPreferences(
         false,
     )
 
+    fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
+
     // endregion
 
     enum class TappingInvertMode(
@@ -192,6 +194,9 @@ class ReaderPreferences(
     companion object {
         const val WEBTOON_PADDING_MIN = 0
         const val WEBTOON_PADDING_MAX = 25
+
+        const val PRELOAD_SIZE_MIN = 4
+        const val PRELOAD_SIZE_MAX = 20
 
         val TapZones = listOf(
             R.string.label_default,

@@ -13,6 +13,20 @@ class MangaTrackRepositoryImpl(
         return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, ::mapTrack) }
     }
 
+    // SY -->
+    override suspend fun getMangaTracks(): List<MangaTrack> {
+        return handler.awaitList {
+            manga_syncQueries.getTracks(::mapTrack)
+        }
+    }
+
+    override suspend fun getTracksByMangaIds(mangaIds: List<Long>): List<MangaTrack> {
+        return handler.awaitList {
+            manga_syncQueries.getTracksByMangaIds(mangaIds, ::mapTrack)
+        }
+    }
+    // SY <--
+
     override suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack> {
         return handler.awaitList {
             manga_syncQueries.getTracksByMangaId(mangaId, ::mapTrack)

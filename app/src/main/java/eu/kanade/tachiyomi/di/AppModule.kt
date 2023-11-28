@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
@@ -211,6 +212,10 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { LocalAnimeCoverManager(app, get()) }
 
         addSingletonFactory { ExternalIntents() }
+
+        // AM (CONNECTIONS) -->
+        addSingletonFactory { ConnectionsManager() }
+        // <-- AM (CONNECTIONS)
 
         // Asynchronously init expensive components for a faster cold start
         ContextCompat.getMainExecutor(app).execute {

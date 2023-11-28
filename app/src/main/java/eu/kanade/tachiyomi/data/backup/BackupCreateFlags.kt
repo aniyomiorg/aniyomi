@@ -8,6 +8,7 @@ internal object BackupCreateFlags {
     const val BACKUP_PREFS = 0x10
     const val BACKUP_EXT_PREFS = 0x20
     const val BACKUP_EXTENSIONS = 0x40
+    const val BACKUP_CUSTOM_INFO = 0x80
 
     const val AutomaticDefaults = BACKUP_CATEGORY or
         BACKUP_CHAPTER or

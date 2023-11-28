@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">将历史记录移至“更多”选项</string>
     <string name="pref_bottom_nav_no_updates">将更新移至“更多”选项</string>
     <string name="pref_bottom_nav_no_manga">将漫画移至“更多”选项</string>
-    <string name="unlock_app">解锁 Aniyomi</string>
+    <string name="unlock_app">解锁 Animetail</string>
     <string name="action_filter_unseen">未观看</string>
     <string name="action_sort_total_episodes">所有选集</string>
     <string name="action_sort_last_seen">上次观看</string>

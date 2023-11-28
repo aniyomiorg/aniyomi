@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">漫画のカテゴリー</string>
-    <string name="unlock_app">Aniyomiのロックを解除する</string>
+    <string name="unlock_app">Animetail</string>
     <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_show_manga">項目を表示</string>
     <string name="action_display_local_badge_manga">ローカル ソース</string>

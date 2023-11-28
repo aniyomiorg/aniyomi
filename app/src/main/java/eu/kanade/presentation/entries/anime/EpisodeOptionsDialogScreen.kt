@@ -253,6 +253,7 @@ private fun VideoList(
                                 context,
                                 anime.id,
                                 episode.id,
+                                selectedVideo.videoUrl,
                                 true,
                                 selectedVideo,
                             )

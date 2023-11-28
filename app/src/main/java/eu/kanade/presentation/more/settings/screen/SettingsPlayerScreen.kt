@@ -25,6 +25,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.AMNIS
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
@@ -430,4 +431,5 @@ val externalPlayers = listOf(
     NEXT_PLAYER,
     X_PLAYER,
     WEB_VIDEO_CASTER,
+    AMNIS,
 )
