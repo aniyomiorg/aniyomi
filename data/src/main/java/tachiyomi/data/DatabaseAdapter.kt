@@ -1,7 +1,7 @@
 package tachiyomi.data
 
 import app.cash.sqldelight.ColumnAdapter
-import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import eu.kanade.tachiyomi.model.UpdateStrategy
 import java.util.Date
 
 object DateColumnAdapter : ColumnAdapter<Date, Long> {

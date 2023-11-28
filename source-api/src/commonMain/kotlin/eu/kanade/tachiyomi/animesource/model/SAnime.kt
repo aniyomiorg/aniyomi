@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.animesource.model
 
+import eu.kanade.tachiyomi.model.UpdateStrategy
 import java.io.Serializable
 
 interface SAnime : Serializable {
