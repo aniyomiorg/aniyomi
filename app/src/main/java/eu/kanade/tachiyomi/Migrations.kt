@@ -447,95 +447,95 @@ object Migrations {
                             }
                         }
                     }
-                    if (oldVersion < 96) {
-                        MangaLibraryUpdateJob.cancelAllWorks(context)
-                        AnimeLibraryUpdateJob.cancelAllWorks(context)
-                        MangaLibraryUpdateJob.setupTask(context)
-                        AnimeLibraryUpdateJob.setupTask(context)
-                    }
-                    if (oldVersion < 97) {
-                        // Removed background jobs
-                        context.workManager.cancelAllWorkByTag("UpdateChecker")
-                        context.workManager.cancelAllWorkByTag("ExtensionUpdate")
-                        prefs.edit {
-                            remove("automatic_ext_updates")
-                        }
-                    }
-                    if (oldVersion < 99) {
-                        val prefKeys = listOf(
-                            "pref_filter_library_downloaded",
-                            "pref_filter_library_unread",
-                            "pref_filter_library_unseen",
-                            "pref_filter_library_started",
-                            "pref_filter_library_bookmarked",
-                            "pref_filter_library_completed",
-                        ) + trackerManager.trackers.map { "pref_filter_library_tracked_${it.id}" }
-
-                        prefKeys.forEach { key ->
-                            val pref = preferenceStore.getInt(key, 0)
-                            prefs.edit {
-                                remove(key)
-
-                                val newValue = when (pref.get()) {
-                                    1 -> TriState.ENABLED_IS
-                                    2 -> TriState.ENABLED_NOT
-                                    else -> TriState.DISABLED
-                                }
-
-                                preferenceStore.getEnum("${key}_v2", TriState.DISABLED).set(
-                                    newValue,
-                                )
-                            }
-                        }
-                    }
-                    if (oldVersion < 100) {
-                        BackupCreateJob.setupTask(context)
-                    }
-                    if (oldVersion < 105) {
-                        val pref = libraryPreferences.autoUpdateDeviceRestrictions()
-                        if (pref.isSet() && "battery_not_low" in pref.get()) {
-                            pref.getAndSet { it - "battery_not_low" }
-                        }
-                    }
-                    if (oldVersion < 106) {
-                        val pref = preferenceStore.getInt("relative_time", 7)
-                        if (pref.get() == 0) {
-                            uiPreferences.relativeTime().set(false)
-                        }
-                    }
-                    if (oldVersion < 107) {
-                        replacePreferences(
-                            preferenceStore = preferenceStore,
-                            filterPredicate = {
-                                it.key.startsWith("pref_mangasync_") ||
-                                    it.key.startsWith("track_token_")
-                            },
-                            newKey = { Preference.privateKey(it) },
-                        )
-                    }
-                    if (oldVersion < 110) {
-                        val prefsToReplace = listOf(
-                            "pref_download_only",
-                            "incognito_mode",
-                            "last_catalogue_source",
-                            "trusted_signatures",
-                            "last_app_closed",
-                            "library_update_last_timestamp",
-                            "library_unseen_updates_count",
-                            "last_used_category",
-                            "last_app_check",
-                            "last_ext_check",
-                            "last_version_code",
-                        )
-                        replacePreferences(
-                            preferenceStore = preferenceStore,
-                            filterPredicate = { it.key in prefsToReplace },
-                            newKey = { Preference.appStateKey(it) },
-                        )
-                    }
-                    return true
                 }
             }
+            if (oldVersion < 96) {
+                MangaLibraryUpdateJob.cancelAllWorks(context)
+                AnimeLibraryUpdateJob.cancelAllWorks(context)
+                MangaLibraryUpdateJob.setupTask(context)
+                AnimeLibraryUpdateJob.setupTask(context)
+            }
+            if (oldVersion < 97) {
+                // Removed background jobs
+                context.workManager.cancelAllWorkByTag("UpdateChecker")
+                context.workManager.cancelAllWorkByTag("ExtensionUpdate")
+                prefs.edit {
+                    remove("automatic_ext_updates")
+                }
+            }
+            if (oldVersion < 99) {
+                val prefKeys = listOf(
+                    "pref_filter_library_downloaded",
+                    "pref_filter_library_unread",
+                    "pref_filter_library_unseen",
+                    "pref_filter_library_started",
+                    "pref_filter_library_bookmarked",
+                    "pref_filter_library_completed",
+                ) + trackerManager.trackers.map { "pref_filter_library_tracked_${it.id}" }
+
+                prefKeys.forEach { key ->
+                    val pref = preferenceStore.getInt(key, 0)
+                    prefs.edit {
+                        remove(key)
+
+                        val newValue = when (pref.get()) {
+                            1 -> TriState.ENABLED_IS
+                            2 -> TriState.ENABLED_NOT
+                            else -> TriState.DISABLED
+                        }
+
+                        preferenceStore.getEnum("${key}_v2", TriState.DISABLED).set(
+                            newValue,
+                        )
+                    }
+                }
+            }
+            if (oldVersion < 100) {
+                BackupCreateJob.setupTask(context)
+            }
+            if (oldVersion < 105) {
+                val pref = libraryPreferences.autoUpdateDeviceRestrictions()
+                if (pref.isSet() && "battery_not_low" in pref.get()) {
+                    pref.getAndSet { it - "battery_not_low" }
+                }
+            }
+            if (oldVersion < 106) {
+                val pref = preferenceStore.getInt("relative_time", 7)
+                if (pref.get() == 0) {
+                    uiPreferences.relativeTime().set(false)
+                }
+            }
+            if (oldVersion < 107) {
+                replacePreferences(
+                    preferenceStore = preferenceStore,
+                    filterPredicate = {
+                        it.key.startsWith("pref_mangasync_") ||
+                            it.key.startsWith("track_token_")
+                    },
+                    newKey = { Preference.privateKey(it) },
+                )
+            }
+            if (oldVersion < 110) {
+                val prefsToReplace = listOf(
+                    "pref_download_only",
+                    "incognito_mode",
+                    "last_catalogue_source",
+                    "trusted_signatures",
+                    "last_app_closed",
+                    "library_update_last_timestamp",
+                    "library_unseen_updates_count",
+                    "last_used_category",
+                    "last_app_check",
+                    "last_ext_check",
+                    "last_version_code",
+                )
+                replacePreferences(
+                    preferenceStore = preferenceStore,
+                    filterPredicate = { it.key in prefsToReplace },
+                    newKey = { Preference.appStateKey(it) },
+                )
+            }
+            return true
         }
         return false
     }
