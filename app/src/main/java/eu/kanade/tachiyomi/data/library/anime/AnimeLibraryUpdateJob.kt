@@ -21,12 +21,12 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
+import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.track.TrackStatus
-import eu.kanade.tachiyomi.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -253,7 +253,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             // SY <--
             .filter {
                 when {
-                    it.anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
+                    it.anime.updateStrategy != AnimeUpdateStrategy.ALWAYS_UPDATE -> {
                         skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_always_update))
                         false
                     }
