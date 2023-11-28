@@ -38,7 +38,8 @@ import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import tachiyomi.core.util.system.logcat
-import tachiyomi.data.UpdateStrategyColumnAdapter
+import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
+import tachiyomi.data.MangaUpdateStrategyColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -396,7 +397,7 @@ class BackupRestorer(
                 coverLastModified = manga.coverLastModified,
                 dateAdded = manga.dateAdded,
                 mangaId = manga.id!!,
-                updateStrategy = manga.updateStrategy.let(UpdateStrategyColumnAdapter::encode),
+                updateStrategy = manga.updateStrategy.let(MangaUpdateStrategyColumnAdapter::encode),
             )
         }
         return manga.id
@@ -850,7 +851,7 @@ class BackupRestorer(
                 coverLastModified = anime.coverLastModified,
                 dateAdded = anime.dateAdded,
                 animeId = anime.id!!,
-                updateStrategy = anime.updateStrategy.let(UpdateStrategyColumnAdapter::encode),
+                updateStrategy = anime.updateStrategy.let(AnimeUpdateStrategyColumnAdapter::encode),
             )
         }
         return anime.id

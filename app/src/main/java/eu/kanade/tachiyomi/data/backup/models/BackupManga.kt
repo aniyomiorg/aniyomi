@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber

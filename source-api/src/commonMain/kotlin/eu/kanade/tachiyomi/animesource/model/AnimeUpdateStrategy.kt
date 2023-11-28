@@ -1,12 +1,12 @@
-package eu.kanade.tachiyomi.model
+package eu.kanade.tachiyomi.animesource.model
 
 /**
- * Define the update strategy for a single SManga or SAnime.
+ * Define the update strategy for a single SAnime.
  * The strategy used will only take effect on the library update.
  *
  * @since extensions-lib 1.4
  */
-enum class UpdateStrategy {
+enum class AnimeUpdateStrategy {
     /**
      * Series marked as always update will be included in the library
      * update if they aren't excluded by additional restrictions.
