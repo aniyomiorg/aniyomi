@@ -50,7 +50,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
-import eu.kanade.core.util.asFlow
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -126,7 +125,7 @@ class EpisodeOptionsDialogScreenModel(
 
             val result = withIOContext {
                 try {
-                    val results = EpisodeLoader.getLinks(episode, anime, source).asFlow().first()
+                    val results = EpisodeLoader.getLinks(episode, anime, source)
                     Result.success(results)
                 } catch (e: Throwable) {
                     Result.failure(e)

@@ -5,7 +5,6 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
@@ -16,22 +15,19 @@ class AnimeSourceSearchPagingSource(
     val filters: AnimeFilterList,
 ) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        // Replace with getSearchAnime
-        return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
+        return source.getSearchAnime(currentPage, query, filters)
     }
 }
 
 class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        // Replace with getPopularAnime
-        return source.fetchPopularAnime(currentPage).awaitSingle()
+        return source.getPopularAnime(currentPage)
     }
 }
 
 class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        // Replace with getLatestUpdates
-        return source.fetchLatestUpdates(currentPage).awaitSingle()
+        return source.getLatestUpdates(currentPage)
     }
 }
 

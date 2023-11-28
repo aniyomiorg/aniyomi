@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
@@ -83,7 +82,7 @@ class ExternalIntents {
         episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
         val video = chosenVideo
-            ?: EpisodeLoader.getLinks(episode, anime, source).asFlow().first().firstOrNull()
+            ?: EpisodeLoader.getLinks(episode, anime, source).firstOrNull()
             ?: throw Exception("Video list is empty")
 
         val videoUrl = getVideoUrl(context, video) ?: return null
