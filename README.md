@@ -3,14 +3,14 @@
 | [![CI](https://github.com/dark25/animetailv2/actions/workflows/build_push.yml/badge.svg)](https://github.com/dark25/animetailv2/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/dark25/animetailv2-preview.svg?maxAge=3600&label=download)](https://github.com/dark25/animetailv2-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/dark25/animetailv2/badge)](https://www.codefactor.io/repository/github/dark25/animetailv2) | [![stable release](https://img.shields.io/github/v/release/dark25/animetailv2.svg?maxAge=3600&label=download)](https://github.com/dark25/animetailv2/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya) |
 
 
-# ![app icon](.github/readme-images/app-icon.png)Animetail
+Animetail
 Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
 This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
 
 ## Features
 
 Features include:
-* Animetail:
+* Kuukiyomi:
   * resmush.it(Data Saver Provider)
   * Group by tags in library
   * Discord Rich Presence for Manga
