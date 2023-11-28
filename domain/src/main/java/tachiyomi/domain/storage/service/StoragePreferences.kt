@@ -12,7 +12,7 @@ class StoragePreferences(
 
     companion object {
         const val BACKUP_DIR = "backup"
-        const val DOWNLOADS_DIR = "manga_downloads"
+        const val DOWNLOADS_MANGA_DIR = "manga_downloads"
         const val DOWNLOADS_ANIME_DIR = "anime_downloads"
     }
 }
