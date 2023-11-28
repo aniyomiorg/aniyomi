@@ -1,7 +1,7 @@
-import eu.kanade.tachiyomi.model.UpdateStrategy;
-import kotlin.collections.List;
+import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy;
 import kotlin.Boolean;
 import kotlin.String;
+import kotlin.collections.List;
 
 CREATE TABLE animes(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -22,7 +22,7 @@ CREATE TABLE animes(
     episode_flags INTEGER NOT NULL,
     cover_last_modified INTEGER NOT NULL,
     date_added INTEGER NOT NULL,
-    update_strategy INTEGER AS UpdateStrategy NOT NULL DEFAULT 0,
+    update_strategy INTEGER AS AnimeUpdateStrategy NOT NULL DEFAULT 0,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
     last_modified_at INTEGER NOT NULL DEFAULT 0,
     favorite_modified_at INTEGER
