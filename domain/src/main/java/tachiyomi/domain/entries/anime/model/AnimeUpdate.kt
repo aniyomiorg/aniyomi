@@ -1,6 +1,6 @@
 package tachiyomi.domain.entries.anime.model
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 
 data class AnimeUpdate(
     val id: Long,

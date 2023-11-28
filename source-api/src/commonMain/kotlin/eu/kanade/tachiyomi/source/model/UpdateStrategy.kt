@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.model
+package eu.kanade.tachiyomi.source.model
 
 /**
  * Define the update strategy for a single SManga or SAnime.

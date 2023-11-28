@@ -1,6 +1,6 @@
 package tachiyomi.domain.entries.manga.model
 
-import eu.kanade.tachiyomi.model.UpdateStrategy
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.core.preference.TriState
 import java.io.Serializable
 
