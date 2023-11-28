@@ -254,7 +254,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 val currentEp = currentEpisode ?: throw Exception("No episode loaded.")
 
-                EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source).asFlow().first()
+                EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source)
                     .takeIf { it.isNotEmpty() }
                     ?.also { currentVideoList = it }
                     ?: run {
@@ -328,7 +328,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     currentEpisode.toDomainEpisode()!!,
                     anime,
                     source,
-                ).asFlow().first()
+                )
                 this@PlayerViewModel.episodeId = currentEpisode.id!!
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
