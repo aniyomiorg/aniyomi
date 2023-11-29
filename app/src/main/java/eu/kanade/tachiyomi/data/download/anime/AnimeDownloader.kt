@@ -171,10 +171,7 @@ class AnimeDownloader(
 
         isPaused = false
 
-        // Prevent recursion when DownloadService.onDestroy() calls downloader.stop()
-        if (AnimeDownloadService.isRunning.value) {
-            AnimeDownloadService.stop(context)
-        }
+        AnimeDownloadJob.stop(context)
     }
 
     /**
@@ -349,7 +346,7 @@ class AnimeDownloader(
                         )
                     }
                 }
-                AnimeDownloadService.start(context)
+                AnimeDownloadJob.start(context)
             }
         }
     }

@@ -171,10 +171,7 @@ class MangaDownloader(
 
         isPaused = false
 
-        // Prevent recursion when DownloadService.onDestroy() calls downloader.stop()
-        if (MangaDownloadService.isRunning.value) {
-            MangaDownloadService.stop(context)
-        }
+        MangaDownloadJob.stop(context)
     }
 
     /**
@@ -325,7 +322,7 @@ class MangaDownloader(
                         )
                     }
                 }
-                MangaDownloadService.start(context)
+                MangaDownloadJob.start(context)
             }
         }
     }

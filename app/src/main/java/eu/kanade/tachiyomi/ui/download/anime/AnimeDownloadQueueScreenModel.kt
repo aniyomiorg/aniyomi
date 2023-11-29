@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.ui.download.anime
 
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.SharingStarted
 import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -131,8 +133,8 @@ class AnimeDownloadQueueScreenModel(
         adapter = null
     }
 
-    val isDownloaderRunning
-        get() = downloadManager.isDownloaderRunning
+    val isDownloaderRunning = downloadManager.isDownloaderRunning
+        .stateIn(screenModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     fun getDownloadStatusFlow() = downloadManager.statusFlow()
     fun getDownloadProgressFlow() = downloadManager.progressFlow()

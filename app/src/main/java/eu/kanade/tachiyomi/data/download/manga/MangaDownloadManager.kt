@@ -52,6 +52,9 @@ class MangaDownloadManager(
      */
     private val downloader = MangaDownloader(context, provider, cache)
 
+    val isRunning: Boolean
+        get() = downloader.isRunning
+
     /**
      * Queue to delay the deletion of a list of chapters until triggered.
      */
@@ -65,13 +68,13 @@ class MangaDownloadManager(
     fun downloaderStop(reason: String? = null) = downloader.stop(reason)
 
     val isDownloaderRunning
-        get() = MangaDownloadService.isRunning
+        get() = MangaDownloadJob.isRunningFlow(context)
 
     /**
      * Tells the downloader to begin downloads.
      */
     fun startDownloads() {
-        MangaDownloadService.start(context)
+        MangaDownloadJob.start(context)
     }
 
     /**
@@ -110,10 +113,10 @@ class MangaDownloadManager(
         queue.add(0, toAdd)
         reorderQueue(queue)
         if (!downloader.isRunning) {
-            if (MangaDownloadService.isRunning(context)) {
+            if (MangaDownloadJob.isRunning(context)) {
                 downloader.start()
             } else {
-                MangaDownloadService.start(context)
+                MangaDownloadJob.start(context)
             }
         }
     }
@@ -149,7 +152,7 @@ class MangaDownloadManager(
             addAll(0, downloads)
             reorderQueue(this)
         }
-        if (!MangaDownloadService.isRunning(context)) MangaDownloadService.start(context)
+        if (!MangaDownloadJob.isRunning(context)) MangaDownloadJob.start(context)
     }
 
     /**

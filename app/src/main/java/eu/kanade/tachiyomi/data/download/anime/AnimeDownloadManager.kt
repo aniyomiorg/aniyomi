@@ -51,6 +51,8 @@ class AnimeDownloadManager(
      */
     private val downloader = AnimeDownloader(context, provider, cache, sourceManager)
 
+    val isRunning: Boolean
+        get() = downloader.isRunning
     /**
      * Queue to delay the deletion of a list of episodes until triggered.
      */
@@ -64,13 +66,13 @@ class AnimeDownloadManager(
     fun downloaderStop(reason: String? = null) = downloader.stop(reason)
 
     val isDownloaderRunning
-        get() = AnimeDownloadService.isRunning
+        get() = AnimeDownloadJob.isRunningFlow(context)
 
     /**
      * Tells the downloader to begin downloads.
      */
     fun startDownloads() {
-        AnimeDownloadService.start(context)
+        AnimeDownloadJob.start(context)
     }
 
     /**
@@ -109,10 +111,10 @@ class AnimeDownloadManager(
         queue.add(0, toAdd)
         reorderQueue(queue)
         if (!downloader.isRunning) {
-            if (AnimeDownloadService.isRunning(context)) {
+            if (AnimeDownloadJob.isRunning(context)) {
                 downloader.start()
             } else {
-                AnimeDownloadService.start(context)
+                AnimeDownloadJob.start(context)
             }
         }
     }
@@ -155,7 +157,7 @@ class AnimeDownloadManager(
             addAll(0, downloads)
             reorderQueue(this)
         }
-        if (!AnimeDownloadService.isRunning(context)) AnimeDownloadService.start(context)
+        if (!AnimeDownloadJob.isRunning(context)) AnimeDownloadJob.start(context)
     }
 
     /**
