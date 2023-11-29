@@ -9,7 +9,7 @@ import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.source.online.ResolvableMangaSource
+import eu.kanade.tachiyomi.source.online.ResolvableSource
 import eu.kanade.tachiyomi.source.online.UriType
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
@@ -34,7 +34,7 @@ class DeepLinkMangaScreenModel(
     init {
         screenModelScope.launchIO {
             val source = sourceManager.getCatalogueSources()
-                .filterIsInstance<ResolvableMangaSource>()
+                .filterIsInstance<ResolvableSource>()
                 .firstOrNull { it.getUriType(query) != UriType.Unknown }
 
             val manga = source?.getManga(query)?.let {

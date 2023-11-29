@@ -5,9 +5,7 @@ import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import rx.Observable
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -32,7 +30,7 @@ class EpisodeLoader {
          * @param anime the anime of the episode.
          * @param source the source of the anime.
          */
-        fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): Observable<List<Video>> {
+        suspend fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): List<Video> {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(
                 episode.name,
@@ -67,17 +65,25 @@ class EpisodeLoader {
         }
 
         /**
-         * Returns an observable list of videos when the [episode] is online.
+         * Returns an list of videos when the [episode] is online.
          *
          * @param episode the episode being parsed.
          * @param source the online source of the episode.
          */
-        private fun isHttp(episode: Episode, source: AnimeHttpSource): Observable<List<Video>> {
-            return source.fetchVideoList(episode.toSEpisode())
-                .flatMapIterable { it }
-                .flatMap {
-                    source.fetchUrlFromVideo(it)
-                }.toList()
+        private suspend fun isHttp(episode: Episode, source: AnimeHttpSource): List<Video> {
+            val videos = source.getVideoList(episode.toSEpisode())
+
+            videos.filter { it.videoUrl.isNullOrEmpty() }.forEach { video ->
+                video.status = Video.State.LOAD_VIDEO
+
+                try {
+                    video.videoUrl = source.getVideoUrl(video)
+                } catch (e: Throwable) {
+                    video.status = Video.State.ERROR
+                }
+            }
+
+            return videos
         }
 
         /**
@@ -93,26 +99,23 @@ class EpisodeLoader {
             anime: Anime,
             source: AnimeSource,
             downloadManager: AnimeDownloadManager,
-        ): Observable<List<Video>> {
-            return downloadManager.buildVideo(source, anime, episode)
-                .onErrorReturn { null }
-                .map {
-                    if (it == null) {
-                        emptyList()
-                    } else {
-                        listOf(it)
-                    }
-                }
+        ): List<Video> {
+            return try {
+                val video = downloadManager.buildVideo(source, anime, episode)
+                listOf(video)
+            } catch (e: Throwable) {
+                emptyList()
+            }
         }
 
         /**
-         * Returns an observable list of videos when the [episode] is from local source.
+         * Returns an list of videos when the [episode] is from local source.
          *
          * @param episode the episode being parsed.
          */
-        private fun isLocal(
+        private suspend fun isLocal(
             episode: Episode,
-        ): Observable<List<Video>> {
+        ): List<Video> {
             return try {
                 logcat { episode.url }
                 val video = Video(
@@ -121,10 +124,10 @@ class EpisodeLoader {
                     episode.url,
                     Uri.parse(episode.url),
                 )
-                Observable.just(listOf(video))
+                listOf(video)
             } catch (e: Exception) {
                 errorMessage = e.message ?: "Error getting links"
-                Observable.just(emptyList())
+                emptyList()
             }
         }
     }
