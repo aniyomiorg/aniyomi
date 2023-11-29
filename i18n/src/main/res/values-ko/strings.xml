@@ -447,7 +447,6 @@
     <string name="channel_skipped">건너뜀</string>
     <string name="include">포함: %s</string>
     <string name="label_background_activity">백그라운드 활동</string>
-    <string name="pref_update_only_completely_read">안 읽은 회차가 있을 때만</string>
     <string name="categorized_display_settings">카테고리 별 정렬 설정</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Shizuku를 확장기능 인스톨러로 사용하려면 Shizuku를 먼저 설치해 주세요.</string>
     <string name="ext_update_all">전부 업데이트</string>

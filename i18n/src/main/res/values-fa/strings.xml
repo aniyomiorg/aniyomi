@@ -617,7 +617,6 @@
     <string name="pref_downloads_summary">دانلود خودکار، دانلود از قبل</string>
     <string name="pref_browse_summary">منابع، برنامه های افزودنی، جستجوی سراسری</string>
     <string name="pref_backup_summary">پشتیبان گیری دستی و خودکار</string>
-    <string name="pref_library_update_show_tab_badge">نمایش تعداد خوانده نشده در نماد به‌روزرسانی‌ها</string>
     <string name="label_stats">آمار</string>
     <string name="label_started">من شروع کردم</string>
     <string name="label_local">شیرین شده</string>

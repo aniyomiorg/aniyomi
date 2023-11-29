@@ -639,7 +639,6 @@
     <string name="pref_update_only_started">Brak przeczytanych rozdziałów</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="pref_landscape_zoom">Przybliżaj poziome obrazy</string>
-    <string name="action_show_manga">Pokaż</string>
     <string name="pref_navigate_pan">Przesuń szeroki obraz</string>
     <string name="action_display_cover_only_grid">Siatka z samych okładek</string>
     <string name="skipped_reason_not_started">Pominięto, ponieważ brak przeczytanych rozdziałów</string>
@@ -722,7 +721,6 @@
     <string name="crash_screen_description">%s napotkał nieoczekiwany błąd. Sugerujemy podzielenie się logami crasha, a następnie udostępnienie ich na naszym kanale wsparcia na Discordzie.</string>
     <string name="pref_reader_summary">Tryb czytania, wyświetl, nawigacja</string>
     <string name="invalid_location">Nieprawidłowa lokalizacja: %s</string>
-    <string name="action_display_show_continue_reading_button">Przycisk wznów czytanie</string>
     <string name="pref_tracking_summary">Jednokierunkowa synchronizacja postępu, ulepszona synchronizacja</string>
     <string name="pref_browse_summary">Źródła, rozszerzenia, globalne wyszukiwanie</string>
     <string name="pref_security_summary">Blokada aplikacji, bezpieczny ekran</string>

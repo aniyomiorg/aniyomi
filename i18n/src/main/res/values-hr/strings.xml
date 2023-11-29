@@ -685,7 +685,6 @@
     <string name="pref_backup_summary">Ručne i automatske sigurnosne kopije</string>
     <string name="label_stats">Statistike</string>
     <string name="label_downloaded">Preuzeto</string>
-    <string name="action_display_show_continue_reading_button">Gumb za nastavljanje čitanja</string>
     <string name="pref_appearance_summary">Tema, format datuma i vremena</string>
     <string name="pref_browse_summary">Izvori, ekstenzije, globalno pretraživanje</string>
     <string name="pref_reader_summary">Način čitanja, zaslon, navigacija</string>
@@ -695,7 +694,6 @@
     <string name="action_open_random_manga">Otvori nasumični unos</string>
     <string name="pref_reset_user_agent_string">Vraćanje zadanog niza korisničkog agenta na izvorno</string>
     <string name="error_user_agent_string_invalid">Nevažeći niz korisničkog agenta</string>
-    <string name="pref_invalidate_download_cache_summary">Prisili aplikaciju da ponovno provjeri preuzeta poglavlja</string>
     <string name="pref_user_agent_string">Zadani niz korisničkog agenta</string>
     <string name="error_user_agent_string_blank">Niz korisničkog agenta ne može biti prazan</string>
     <string name="pref_invalidate_download_cache">Poništi indeks preuzimanja</string>
@@ -750,7 +748,6 @@
     <string name="information_no_entries_found">Nije pronađen nijedan unos u ovoj kategoriji</string>
     <string name="download_notifier_split_page_path_not_found">Nije moguće pronaći put datoteke stranice %d</string>
     <string name="action_not_now">Ne sada</string>
-    <string name="pref_library_update_show_tab_badge">Prikaži broj nepročitanih na ikoni aktualiziranja</string>
     <string name="information_no_manga_category">Kategorija je prazna</string>
     <string name="copied_to_clipboard_plain">Kopirano u međuspremnik</string>
     <string name="enhanced_services_not_installed">Dostupne, ali izvor nije instaliran: %s</string>

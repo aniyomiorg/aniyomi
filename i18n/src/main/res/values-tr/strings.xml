@@ -84,7 +84,6 @@
     <string name="pref_library_update_restriction">Otomatik güncellemeler aygıt kısıtlamaları</string>
     <string name="charging">Şarj olurken</string>
     <string name="pref_update_only_non_completed">\"Bitirilmiş\" durumda olan</string>
-    <string name="pref_auto_update_manga_sync">Okuyunca ilerlemeyi güncelle</string>
     <string name="default_category">Varsayılan kategori</string>
     <string name="default_category_summary">Her zaman sor</string>
     <string name="ext_update">Güncelle</string>
@@ -716,12 +715,10 @@
     <string name="information_no_entries_found">Bu kategoride girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
-    <string name="action_display_show_continue_reading_button">Okumayı sürdür düğmesi</string>
     <string name="track_remove_date_conf_title">Tarih kaldırılsın mı\?</string>
     <string name="track_remove_start_date_conf_text">Bu, daha önce seçtiğiniz %s başlangıç tarihini kaldıracak</string>
     <string name="track_remove_finish_date_conf_text">Bu, daha önce seçtiğiniz %s bitiş tarihini kaldıracak</string>
     <string name="pref_invalidate_download_cache">İndirmeler dizinini geçersiz kıl</string>
-    <string name="pref_invalidate_download_cache_summary">Uygulamayı indirilen bölümleri yeniden denetlemeye zorla</string>
     <string name="label_stats">İstatistikler</string>
     <string name="label_started">Başladı</string>
     <string name="label_downloaded">İndirilen</string>
@@ -744,7 +741,6 @@
     <string name="seconds_short">%dsn</string>
     <string name="action_not_now">Şimdi değil</string>
     <string name="information_no_manga_category">Kategori boş</string>
-    <string name="pref_library_update_show_tab_badge">Güncellemeler simgesinde okunmayan sayısını göster</string>
     <string name="copied_to_clipboard_plain">Panoya kopyalandı</string>
     <string name="enhanced_services_not_installed">Kullanılabilir ancak kaynak kurulu değil: %s</string>
     <string name="pref_skip_dupe_chapters">Yinelenen bölümleri atla</string>
