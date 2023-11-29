@@ -44,7 +44,7 @@ class AnimeDownloadProvider(
 
     private fun getDownloadsLocation(dir: String): UniFile? {
         return UniFile.fromUri(context, dir.toUri())
-            ?.createDirectory(StoragePreferences.DOWNLOADS_ANIME_DIR)
+            ?.createDirectory(StoragePreferences.DOWNLOADS_DIR)
             ?.also { DiskUtil.createNoMediaFile(it, context) }
     }
 
