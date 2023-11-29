@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nome</string>
-    <string name="manga">Mangás</string>
+    <string name="categories">Categorias</string>
+    <string name="manga">Itens da biblioteca</string>
     <string name="chapters">Capítulos</string>
     <string name="track">Monitoramento</string>
     <string name="history">Histórico</string>
     <string name="label_settings">Configurações</string>
+    <string name="label_download_queue">Fila de downloads</string>
     <string name="label_library">Biblioteca</string>
     <string name="label_recent_manga">Histórico</string>
     <string name="label_recent_updates">Atualizações</string>
     <string name="label_backup">Backup e restauração</string>
     <string name="action_settings">Configurações</string>
     <string name="action_filter">Filtrar</string>
-    <string name="action_filter_downloaded">Disponível offline</string>
     <string name="action_filter_bookmarked">Favorito</string>
     <string name="action_filter_unread">Não lido</string>
     <string name="action_filter_empty">Remover filtros</string>
@@ -64,7 +65,7 @@
     <string name="pref_category_tracking">Monitoramento</string>
     <string name="pref_category_advanced">Avançado</string>
     <string name="pref_category_about">Sobre</string>
-    <string name="pref_library_columns">Itens por linha</string>
+    <string name="pref_library_columns">Tamanho da grade</string>
     <string name="portrait">Retrato</string>
     <string name="landscape">Paisagem</string>
     <string name="pref_library_update_interval">Atualizações automáticas</string>
@@ -78,6 +79,7 @@
     <string name="pref_library_update_restriction">Restrições do dispositivo para atualizações automáticas</string>
     <string name="charging">Quando carregando</string>
     <string name="pref_update_only_non_completed">Com o estado \"Completo\"</string>
+    <string name="default_category">Categoria padrão</string>
     <string name="default_category_summary">Sempre perguntar</string>
     <string name="pref_fullscreen">Tela cheia</string>
     <string name="pref_page_transitions">Animar as transições de página</string>
@@ -93,10 +95,10 @@
     <string name="white_background">Branco</string>
     <string name="black_background">Preto</string>
     <string name="pref_viewer_type">Modo de leitura padrão</string>
-    <string name="left_to_right_viewer">Esquerda para direita</string>
-    <string name="right_to_left_viewer">Direita para esquerda</string>
-    <string name="vertical_viewer">Vertical</string>
-    <string name="webtoon_viewer">Webtoon</string>
+    <string name="left_to_right_viewer">Paginado (esquerda para direita)</string>
+    <string name="right_to_left_viewer">Paginado (direita para esquerda)</string>
+    <string name="vertical_viewer">Paginado (vertical)</string>
+    <string name="webtoon_viewer">Tira longa</string>
     <string name="pref_image_scale_type">Tipo de escala</string>
     <string name="scale_type_fit_screen">Ajustar à tela</string>
     <string name="scale_type_stretch">Estender</string>
@@ -145,6 +147,8 @@
     <string name="cache_delete_error">Ocorreu um erro ao limpar</string>
     <string name="pref_clear_cookies">Limpar os cookies</string>
     <string name="cookies_cleared">Cookies limpos</string>
+    <string name="pref_clear_database">Limpar o banco de dados</string>
+    <string name="pref_clear_database_summary">Exclui o histórico de itens que não estão salvos em sua biblioteca</string>
     <string name="clear_database_completed">Entradas excluídas</string>
     <string name="pref_refresh_library_tracking">Atualizar o monitoramento</string>
     <string name="version">Versão</string>
@@ -166,6 +170,8 @@
     <string name="delete_downloads_for_manga">Excluir os capítulos disponíveis offline\?</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="chapter_downloading_progress">Fazendo download (%1$d/%2$d)</string>
+    <string name="chapter_error">Erro</string>
+    <string name="chapter_paused">Pausado</string>
     <string name="show_title">Título da fonte</string>
     <string name="show_chapter_number">Número do capítulo</string>
     <string name="sort_by_source">Pela fonte</string>
@@ -185,6 +191,7 @@
     <string name="error_category_exists">Já existe uma categoria com este nome!</string>
     <string name="snack_categories_deleted">Categorias excluídas</string>
     <string name="dialog_with_checkbox_remove_description">Isso irá remover a data de leitura deste capítulo. Você tem certeza\?</string>
+    <string name="snack_add_to_library">Adicionar à biblioteca\?</string>
     <string name="picture_saved">Imagem salva</string>
     <string name="custom_filter">Filtro personalizado</string>
     <string name="set_as_cover">Usar como capa</string>
@@ -214,6 +221,7 @@
     <string name="download_notifier_unknown_error">Não foi possível realizar o download do capítulo devido a um erro inesperado</string>
     <string name="download_notifier_text_only_wifi">Conexão Wi-Fi indisponível</string>
     <string name="download_notifier_no_network">Conexão à rede indisponível</string>
+    <string name="download_notifier_download_paused">Downloads pausados</string>
     <string name="action_global_search">Pesquisa global</string>
     <string name="other_source">Outras</string>
     <string name="action_global_search_hint">Pesquisa global…</string>
@@ -221,7 +229,6 @@
     <string name="browse">Navegar</string>
     <string name="channel_common">Comum</string>
     <string name="action_display_download_badge">Capítulos disponíveis offline</string>
-    <string name="local_source_badge">Local</string>
     <string name="information_empty_category">Você ainda não tem nenhuma categoria. Toque no botão Adicionar para criar uma e organizar a sua biblioteca.</string>
     <string name="label_migration">Migrar</string>
     <string name="label_extensions">Extensões</string>
@@ -251,7 +258,6 @@
     <string name="repeating">Relendo</string>
     <string name="pager_viewer">Paginação</string>
     <string name="track_status">Estado</string>
-    <string name="track_start_date">Começado</string>
     <string name="track_type">Tipo</string>
     <string name="transition_finished">Concluído:</string>
     <string name="transition_current">Atual:</string>
@@ -310,6 +316,7 @@
     <string name="pref_cutout_short">Mostrar conteúdo na área de recorte da tela</string>
     <string name="information_cloudflare_bypass_failure">Falha ao contornar o Cloudflare</string>
     <string name="information_webview_outdated">Por favor, atualize o aplicativo de WebView para uma melhor compatibilidade</string>
+    <string name="channel_new_chapters">Atualizações de capítulos</string>
     <string name="secure_screen_summary">A tela segura oculta os conteúdos do aplicativo durante a troca de aplicativos e impede capturas de tela</string>
     <string name="pref_category_display">Visualização</string>
     <plurals name="notification_chapters_generic">
@@ -448,7 +455,6 @@
         <item quantity="other">%d monitoradores</item>
     </plurals>
     <string name="no_pinned_sources">Você não tem fontes fixadas</string>
-    <string name="download_notifier_download_finish">Download concluído</string>
     <string name="channel_progress">Andamento</string>
     <string name="channel_complete">Concluído</string>
     <string name="channel_errors">Erros</string>
@@ -512,6 +518,7 @@
     <string name="exclude">Excluir: %s</string>
     <string name="include">Incluir: %s</string>
     <string name="action_sort_chapter_fetch_date">Data de busca do capítulo</string>
+    <string name="pref_library_update_categories_details">Os itens nas categorias excluídas não serão atualizados mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="pref_download_new_categories_details">Os itens nas categorias excluídas não serão disponibilizados offline mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="pref_category_auto_download">Download automático</string>
     <string name="action_show_errors">Toque para ver os detalhes</string>
@@ -537,6 +544,7 @@
     <string name="pref_library_update_refresh_trackers_summary">Atualizar os monitoradores durante a atualização da biblioteca</string>
     <string name="pref_library_update_refresh_trackers">Atualizar os monitoradores automaticamente</string>
     <string name="restrictions">Restrições: %s</string>
+    <string name="action_display_local_badge">Fonte local</string>
     <string name="off">Desligado</string>
     <string name="on">Ligado</string>
     <string name="error_sharing_cover">Erro ao compartilhar a capa</string>
@@ -560,7 +568,6 @@
     <string name="pref_app_theme">Tema do aplicativo</string>
     <string name="enhanced_tracking_info">Serviços que oferecem recursos aprimorados para fontes específicas. Os itens são automaticamente monitorados quando adicionados em sua biblioteca.</string>
     <string name="enhanced_services">Serviços aprimorados</string>
-    <string name="tracker_komga_warning">Este serviço de monitoramento só é compatível com a fonte Komga.</string>
     <string name="theme_monet">Dinâmico</string>
     <string name="label_background_activity">Atividade em segundo plano</string>
     <string name="pref_lowest">Mais baixa</string>
@@ -582,6 +589,7 @@
     <string name="action_track">Monitorar</string>
     <string name="getting_started_guide">Guia de introdução</string>
     <string name="pref_tablet_ui_mode">Interface de tablet</string>
+    <string name="pref_remove_exclude_categories">Categorias ignoradas</string>
     <string name="help_translate">Ajudar a traduzir</string>
     <string name="ext_app_info">Informações</string>
     <string name="ext_installer_shizuku_stopped">O Shizuku não está em execução</string>
@@ -591,7 +599,7 @@
     <string name="ext_installer_shizuku_unavailable_dialog">Instale e inicie o Shizuku para utilizá-lo como o instalador de extensões.</string>
     <string name="action_sort_count">Total de itens</string>
     <string name="pref_verbose_logging_summary">Imprime registros detalhados no registro de eventos do sistema (reduz o desempenho do aplicativo)</string>
-    <string name="pref_verbose_logging">Registro de eventos verboso</string>
+    <string name="pref_verbose_logging">Registro de eventos detalhado</string>
     <string name="action_display_language_badge">Idioma</string>
     <string name="notification_size_warning">Atualizações com muitos itens prejudicam as fontes e podem deixar as atualizações lentas e aumentar o uso da bateria. Toque para saber mais.</string>
     <string name="label_warning">Aviso</string>
@@ -614,7 +622,6 @@
     <string name="pref_navigate_pan">Navegar imagens longas</string>
     <string name="pref_landscape_zoom">Dar zoom automaticamente em imagens largas</string>
     <string name="action_display_cover_only_grid">Grade somente com capas</string>
-    <string name="action_filter_started">Iniciado</string>
     <string name="pref_update_only_started">Que não tiveram a leitura iniciada</string>
     <string name="skipped_reason_completed">Pulado porque a série está finalizada</string>
     <string name="skipped_reason_not_caught_up">Pulado porque há capítulos não lidos</string>
@@ -633,8 +640,6 @@
     <string name="pref_clear_webview_data">Limpar os dados da WebView</string>
     <string name="webview_data_deleted">Dados da WebView limpos</string>
     <string name="action_close">Fechar</string>
-    <string name="pref_duplicate_pinned_sources">Mostrar fontes fixadas duplicadas</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repete as fontes fixadas em seus respectivos grupos de idioma</string>
     <string name="battery_not_low">Quando a bateria não está fraca</string>
     <string name="source_filter_empty_screen">Nenhuma fonte instalada foi encontrada</string>
     <string name="source_empty_screen">Nenhuma fonte encontrada</string>
@@ -683,7 +688,7 @@
         <item quantity="other">Próximos %d capítulos não lidos</item>
     </plurals>
     <string name="are_you_sure">Você tem certeza\?</string>
-    <string name="multi_lang">Múltiplas</string>
+    <string name="multi_lang">Múltiplos</string>
     <string name="pref_long_strip_split">Dividir imagens compridas (BETA)</string>
     <string name="updates_last_update_info">Última atualização da biblioteca: %s</string>
     <string name="remove_manga">Você está prestes a remover \"%s\" de sua biblioteca</string>
@@ -692,7 +697,7 @@
     <string name="skipped_reason_not_always_update">Pulado porque a série não requer atualizações</string>
     <string name="action_search_hint">Pesquisar…</string>
     <string name="pref_appearance_summary">Tema, formato de data e hora</string>
-    <string name="pref_library_summary">Categorias, atualização global</string>
+    <string name="pref_library_summary">Categorias, atualização global, ações do capítulo</string>
     <string name="pref_reader_summary">Modo de leitura, exibição, navegação</string>
     <string name="pref_downloads_summary">Download automático, download a frente</string>
     <string name="pref_tracking_summary">Sincronização de progresso unidirecional, sincronização aprimorada</string>
@@ -700,19 +705,45 @@
     <string name="pref_backup_summary">Backups manuais e automáticos</string>
     <string name="pref_security_summary">Bloqueio do aplicativo, tela segura</string>
     <string name="pref_advanced_summary">Exportar registros de travamento, otimizações de bateria</string>
-    <string name="crash_screen_title">Ocorreu um erro inesperado</string>
+    <string name="crash_screen_title">Ooops!</string>
     <string name="crash_screen_restart_application">Reiniciar o aplicativo</string>
     <string name="crash_screen_description">%s teve um erro inesperado. Nós sugerimos que você compartilhe os registros de travamento em nosso canal de suporte no Discord.</string>
     <string name="unknown_title">Título desconhecido</string>
     <string name="invalid_location">Local inválido: %s</string>
     <string name="error_user_agent_string_invalid">Valor de user agent inválido</string>
     <string name="updates_last_update_info_just_now">Agora</string>
-    <string name="download_notifier_cache_renewal">Indexando os downloads</string>
+    <string name="download_notifier_cache_renewal">Verificando os downloads</string>
     <string name="action_open_random_manga">Abrir um item aleatório</string>
     <string name="information_no_entries_found">Nenhum item encontrado nesta categoria</string>
     <string name="fdroid_warning">Compilações do F-Droid não são suportadas oficialmente.
 \nToque para saber mais.</string>
-    <string name="label_download_queue">Fila de downloads</string>
+    <string name="track_remove_date_conf_title">Remover data\?</string>
+    <string name="track_remove_start_date_conf_text">Isto irá remover sua data de início selecionada anteriormente no %s</string>
+    <string name="track_remove_finish_date_conf_text">Isto irá remover sua data de término selecionada anteriormente no %s</string>
+    <string name="pref_invalidate_download_cache">Invalidar o índice de downloads</string>
+    <string name="label_local">Local</string>
+    <string name="label_downloaded">Disponíveis offline</string>
+    <string name="label_overview_section">Visão geral</string>
+    <string name="label_completed_titles">Itens completos</string>
+    <string name="label_read_duration">Duração de leitura</string>
+    <string name="label_titles_section">Itens</string>
+    <string name="label_titles_in_global_update">Na atualização global</string>
+    <string name="label_tracker_section">Monitoradores</string>
+    <string name="label_used">Usados</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%dh</string>
+    <string name="minute_short">%dm</string>
+    <string name="label_read_chapters">Lidos</string>
+    <string name="label_tracked_titles">Itens monitorados</string>
+    <string name="label_stats">Estatísticas</string>
+    <string name="label_started">Iniciados</string>
+    <string name="label_total_chapters">Total</string>
+    <string name="label_mean_score">Avaliação média</string>
+    <string name="not_applicable">N/A</string>
+    <string name="seconds_short">%ds</string>
+    <string name="action_not_now">Agora não</string>
+    <string name="information_no_manga_category">A categoria está vazia</string>
+    <string name="copied_to_clipboard_plain">Copiado para a área de transferência</string>
     <string name="enhanced_services_not_installed">Disponíveis, mas a fonte não está instalada: %s</string>
     <string name="pref_skip_dupe_chapters">Pular capítulos duplicados</string>
     <string name="confirm_add_duplicate_manga">Você possui um item na sua biblioteca com o mesmo nome.
@@ -732,8 +763,7 @@
     <string name="overlay_header">Sobreposição</string>
     <string name="pref_page_rotate">Rotacionar páginas largas para caber</string>
     <string name="pref_page_rotate_invert">Inverter a orientação das páginas largas rotacionadas</string>
-    <string name="missing_items_unknown">Pode ter capítulos faltando</string>
-    <plurals name="missing_items">
+    <plurals name="missing_chapters">
         <item quantity="one">Faltando %1$s capítulo</item>
         <item quantity="many">Faltando %1$s capítulos</item>
         <item quantity="other">Faltando %1$s capítulos</item>
@@ -752,9 +782,6 @@
     <string name="action_filter_interval_long">Requisitar mensalmente (28 dias)</string>
     <string name="action_filter_interval_dropped">Abandonado\? Últimos 20+ e 2 meses</string>
     <string name="action_filter_interval_passed">Intervalo de verificação aprovado</string>
-    <string name="pref_update_release_grace_period">Intervalo de lançamento com carência</string>
-    <string name="pref_update_release_leading_days">Verificar %s dia(s) antes</string>
-    <string name="pref_update_release_following_days">Verificar %s dia(s) depois</string>
     <string name="manga_modify_calculated_interval_title">Personalizar intervalo</string>
     <plurals name="day">
         <item quantity="one">%d dia(s)</item>
@@ -764,31 +791,16 @@
     <string name="skipped_reason_not_in_release_period">Pulado porque nenhum lançamento era esperado hoje</string>
     <string name="intervals_header">Intervalos</string>
     <string name="manga_display_modified_interval_title">Definido para atualizar todo</string>
-    <string name="pref_update_release_grace_period_info">Um intervalo com uma carência pequena é recomendado para minimizar o estresse nas fontes. Quanto mais verificações para um item forem perdidas, maior será o intervalo entre as verificações, com um máximo de 28 dias.</string>
     <string name="manga_display_interval_title">Estimar todo</string>
     <string name="action_ok">OK</string>
     <string name="track_delete_title">Remover o monitoramento do %s\?</string>
     <string name="track_delete_text">Isso irá remover o monitoramento localmente.</string>
     <string name="track_delete_remote_text">Também remover do %s</string>
     <string name="delete_downloaded">Deletar os disponíveis offline</string>
-    <plurals name="pref_update_release_leading_days">
-        <item quantity="one">%d dia(s) antes</item>
-        <item quantity="many">%d dias antes</item>
-        <item quantity="other">%d dias antes</item>
-    </plurals>
-    <plurals name="pref_update_release_following_days">
-        <item quantity="one">%d dia(s) depois</item>
-        <item quantity="many">%d dias depois</item>
-        <item quantity="other">%d dias depois</item>
-    </plurals>
     <string name="has_results">Há resultados</string>
     <string name="syncing_library">Sincronizando a biblioteca</string>
     <string name="library_sync_complete">Sincronização da biblioteca finalizada</string>
-    <plurals name="range_interval_day">
-        <item quantity="one">%1$d -%2$d dia(s)</item>
-        <item quantity="many">%1$d -%2$d dias</item>
-        <item quantity="other">%1$d -%2$d dias</item>
-    </plurals>
     <string name="information_cloudflare_help">Toque aqui para obter ajuda com o Cloudflare</string>
     <string name="download_cache_invalidated">Índice de downloads invalidado</string>
+    <string name="track_activity_name">Login do monitoramento</string>
 </resources>
