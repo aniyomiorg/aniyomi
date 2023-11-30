@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">기록을 더 보기 탭으로 이동</string>
     <string name="pref_bottom_nav_no_updates">업데이트를 더 보기 탭으로 이동</string>
     <string name="pref_bottom_nav_no_manga">만화를 더 보기 탭으로 이동</string>
-    <string name="unlock_app">Aniyomi 해제하기</string>
+    <string name="unlock_app">Animetail 해제하기</string>
     <string name="action_filter_unseen">보기 전</string>
     <string name="action_sort_total_episodes">전체 에피소드</string>
     <string name="action_sort_last_seen">마지막으로 봄</string>

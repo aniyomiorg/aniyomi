@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -39,6 +40,8 @@ import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.library.anime.AnimeLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -56,6 +59,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -108,7 +112,21 @@ object AnimeLibraryTab : Tab() {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = { category ->
-            val started = AnimeLibraryUpdateJob.startNow(context, category)
+            // SY -->
+            val started = AnimeLibraryUpdateJob.startNow(
+                context = context,
+                category = if (state.groupType == AnimeLibraryGroup.BY_DEFAULT) category else null,
+                group = state.groupType,
+                groupExtra = when (state.groupType) {
+                    AnimeLibraryGroup.BY_DEFAULT -> null
+                    AnimeLibraryGroup.BY_SOURCE, AnimeLibraryGroup.BY_TRACK_STATUS,
+                    AnimeLibraryGroup.BY_TAG,
+                    -> category?.id?.toString()
+                    AnimeLibraryGroup.BY_STATUS -> category?.id?.minus(1)?.toString()
+                    else -> null
+                },
+            )
+            // SY <--
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
@@ -119,7 +137,13 @@ object AnimeLibraryTab : Tab() {
         suspend fun openEpisode(episode: Episode) {
             val playerPreferences: PlayerPreferences by injectLazy()
             val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
-            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                episode.url,
+                extPlayer,
+            )
         }
 
         val defaultTitle = if (fromMore) {
@@ -260,6 +284,9 @@ object AnimeLibraryTab : Tab() {
                     onDismissRequest = onDismissRequest,
                     screenModel = settingsScreenModel,
                     category = category,
+                    // SY -->
+                    hasCategories = state.categories.fastAny { !it.isSystemCategory },
+                    // SY <--
                 )
             }
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {
@@ -304,6 +331,9 @@ object AnimeLibraryTab : Tab() {
         LaunchedEffect(state.isLoading) {
             if (!state.isLoading) {
                 (context as? MainActivity)?.ready = true
+                // AM (DISCORD) -->
+                DiscordRPCService.setAnimeScreen(context, DiscordScreen.LIBRARY)
+                // <-- AM (DISCORD)
             }
         }
 

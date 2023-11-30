@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorijas</string>
-    <string name="unlock_app">Atslēgt Anijomi</string>
+    <string name="unlock_app">Atslēgt Kuukijomi</string>
     <string name="action_sort_last_manga_update">Pēdējā atjauninājuma pārbaude</string>
     <string name="action_show_manga">Rādīt ierakstu</string>
     <string name="action_display_local_badge_manga">Lokālais avots</string>

@@ -6,6 +6,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import aniyomi.util.nullIfEmpty
+import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
@@ -66,7 +68,10 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
+import tachiyomi.domain.entries.anime.interactor.SetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
+import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
@@ -79,6 +84,7 @@ import tachiyomi.domain.items.service.calculateEpisodeGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -98,6 +104,10 @@ class AnimeScreenModel(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
+    // SY -->
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val setCustomAnimeInfo: SetCustomAnimeInfo = Injekt.get(),
+    // SY <--
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
@@ -258,6 +268,73 @@ class AnimeScreenModel(
             }
         }
     }
+
+    // SY -->
+    fun updateAnimeInfo(
+        title: String?,
+        author: String?,
+        artist: String?,
+        description: String?,
+        tags: List<String>?,
+        status: Long?,
+    ) {
+        val state = successState ?: return
+        var anime = state.anime
+        if (state.anime.isLocal()) {
+            val newTitle = if (title.isNullOrBlank()) anime.url else title.trim()
+            val newAuthor = author?.trimOrNull()
+            val newArtist = artist?.trimOrNull()
+            val newDesc = description?.trimOrNull()
+            anime = anime.copy(
+                ogTitle = newTitle,
+                ogAuthor = author?.trimOrNull(),
+                ogArtist = artist?.trimOrNull(),
+                ogDescription = description?.trimOrNull(),
+                ogGenre = tags?.nullIfEmpty(),
+                ogStatus = status ?: 0,
+                lastUpdate = anime.lastUpdate + 1,
+            )
+            (sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource).updateAnimeInfo(
+                anime.toSAnime(),
+            )
+            screenModelScope.launchNonCancellable {
+                updateAnime.await(
+                    AnimeUpdate(
+                        anime.id,
+                        title = newTitle,
+                        author = newAuthor,
+                        artist = newArtist,
+                        description = newDesc,
+                        genre = tags,
+                        status = status,
+                    ),
+                )
+            }
+        } else {
+            val genre = if (!tags.isNullOrEmpty() && tags != state.anime.ogGenre) {
+                tags
+            } else {
+                null
+            }
+            setCustomAnimeInfo.set(
+                CustomAnimeInfo(
+                    state.anime.id,
+                    title?.trimOrNull(),
+                    author?.trimOrNull(),
+                    artist?.trimOrNull(),
+                    description?.trimOrNull(),
+                    genre,
+                    status.takeUnless { it == state.anime.ogStatus },
+                ),
+            )
+            anime = anime.copy(lastUpdate = anime.lastUpdate + 1)
+        }
+
+        updateSuccessState { successState ->
+            successState.copy(anime = anime)
+        }
+    }
+    // SY <--
 
     fun toggleFavorite() {
         toggleFavorite(
@@ -1021,6 +1098,11 @@ class AnimeScreenModel(
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
         data class SetAnimeFetchInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
+
+        // SY -->
+        data class EditAnimeInfo(val anime: Anime) : Dialog
+        // SY <--
+
         data object ChangeAnimeSkipIntro : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
@@ -1046,6 +1128,19 @@ class AnimeScreenModel(
     fun showCoverDialog() {
         updateSuccessState { it.copy(dialog = Dialog.FullCover) }
     }
+
+    // SY -->
+    fun showEditAnimeInfoDialog() {
+        mutableState.update { state ->
+            when (state) {
+                State.Loading -> state
+                is State.Success -> {
+                    state.copy(dialog = Dialog.EditAnimeInfo(state.anime))
+                }
+            }
+        }
+    }
+    // SY <--
 
     fun showAnimeSkipIntroDialog() {
         updateSuccessState { it.copy(dialog = Dialog.ChangeAnimeSkipIntro) }

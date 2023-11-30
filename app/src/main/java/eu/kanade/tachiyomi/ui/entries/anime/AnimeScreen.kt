@@ -160,6 +160,9 @@ class AnimeScreen(
             }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
+            // SY <--
             onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
                 screenModel.isUpdateIntervalEnabled && successState.anime.favorite
             },
@@ -260,6 +263,15 @@ class AnimeScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is AnimeScreenModel.Dialog.EditAnimeInfo -> {
+                EditAnimeDialog(
+                    anime = dialog.anime,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateAnimeInfo,
+                )
+            }
+            // SY <--
             is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
                     interval = dialog.anime.fetchInterval,
@@ -315,12 +327,23 @@ class AnimeScreen(
 
     private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
         withIOContext {
-            MainActivity.startPlayerActivity(
-                context,
-                episode.animeId,
-                episode.id,
-                useExternalPlayer,
-            )
+            if (episode.url.startsWith("magnet:")) {
+                MainActivity.startPlayerActivity(
+                    context,
+                    episode.animeId,
+                    episode.id,
+                    episode.url,
+                    true,
+                )
+            } else {
+                MainActivity.startPlayerActivity(
+                    context,
+                    episode.animeId,
+                    episode.id,
+                    episode.url,
+                    useExternalPlayer,
+                )
+            }
         }
     }
 

@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
-    <string name="unlock_app">Desbloquear Aniyomi</string>
+    <string name="unlock_app">Desbloquear Animetail</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
     <string name="action_sort_last_seen">Ultimo visto</string>
@@ -325,4 +325,26 @@
     <string name="label_recent_anime_updates">Actualizaciones del anime</string>
     <string name="theme_cottoncandy">Algodón de azúcar</string>
     <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
+    <string name="player_add_external_audio">Agregar audio externo</string>
+    <string name="player_add_external_audio_intent">Seleccione un archivo de audio.</string>
+    <string name="player_add_external_subtitles">Agregar subtítulos externos</string>
+    <string name="player_add_external_subtitles_intent">Seleccione un archivo de subtítulos.</string>
+    <string name="special_services">Servicios Especiales</string>
+    <string name="pref_category_connections">Conexiones</string>
+    <string name="pref_connections_summary">Discord, ¡más por venir!</string>
+    <string name="connections_info">Servicios especiales únicos para Kuukiyomi que mejoran la forma en que utilizas la aplicación</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">Este servicio de Discord funciona mediante el registro de token. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Animetail no lo comparte en ningún otro lugar.</string>
+    <string name="pref_discord_rpc">Presencia Rica de Discord</string>
+    <string name="pref_enable_discord_rpc">Habilitar Presencia Rica de Discord</string>
+    <string name="pref_discord_status">Estado de Discord</string>
+    <string name="pref_discord_dnd">⛔ No molestar</string>
+    <string name="pref_discord_idle">🌙 Inactivo</string>
+    <string name="pref_discord_online">🟢 En línea</string>
+    <string name="pref_category_discord_incognito">RPC Incógnito</string>
+    <string name="pref_discord_incognito">Modo Incógnito de Discord</string>
+    <string name="pref_discord_incognito_summary">Anulado cuando el Modo Incógnito está habilitado</string>
+    <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+
+
 </resources>
