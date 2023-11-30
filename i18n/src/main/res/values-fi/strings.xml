@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nimi</string>
+    <string name="categories">Kategoriat</string>
     <string name="manga">Manga</string>
     <string name="track">Seuranta</string>
     <string name="history">Historia</string>
     <string name="label_settings">Asetukset</string>
+    <string name="label_download_queue">Latausjono</string>
     <string name="label_library">Kirjasto</string>
     <string name="label_recent_manga">Historia</string>
     <string name="action_settings">Asetukset</string>
@@ -49,7 +51,6 @@
     <string name="file_select_backup">Valitse varmuuskopio-tiedosto</string>
     <string name="update_check_confirm">Lataa</string>
     <string name="update_check_no_new_updates">Ei päivityksiä saatavilla</string>
-    <string name="update_check_look_for_updates">Etsitään päivityksiä…</string>
     <string name="update_check_notification_download_in_progress">Ladataan…</string>
     <string name="update_check_notification_download_complete">Lataus valmis</string>
     <string name="update_check_notification_download_error">Latausvirhe</string>
@@ -64,13 +65,13 @@
     <string name="download_notifier_unknown_error">Lukua ei voitu ladata odottamattoman virheen vuoksi</string>
     <string name="download_notifier_text_only_wifi">Ei Wi-Fi yhteyttä saatavilla</string>
     <string name="download_notifier_no_network">Ei verkkoyhteyttä</string>
+    <string name="download_notifier_download_paused">Lataus pysäytetty</string>
     <string name="channel_common">Tavallinen</string>
     <string name="label_backup">Varmuuskopiointi ja palautus</string>
     <string name="label_migration">Siirrä</string>
     <string name="label_extensions">Laajennukset</string>
     <string name="label_extension_info">Laajennuksen tiedot</string>
     <string name="action_filter">Suodatus</string>
-    <string name="action_filter_downloaded">Ladattu</string>
     <string name="action_filter_bookmarked">Kirjanmerkki</string>
     <string name="action_filter_unread">Lukemattomat</string>
     <string name="action_filter_empty">Poista suodattimet</string>
@@ -127,6 +128,7 @@
     <string name="pref_library_update_restriction">Automaattisen päivityksen laitteistorajoitukset</string>
     <string name="charging">Latauksessa</string>
     <string name="pref_update_only_non_completed">Sarja on päättynyt</string>
+        <string name="default_category">Oletus kategoria</string>
     <string name="default_category_summary">Kysy aina</string>
     <string name="ext_update">Päivitä</string>
     <string name="ext_install">Asenna</string>
@@ -138,7 +140,7 @@
     <string name="ext_untrusted">Luottamaton</string>
     <string name="ext_uninstall">Poista asennus</string>
     <string name="untrusted_extension">Luottamattomat laajennokset</string>
-    <string name="pref_fullscreen">Koko näyttö</string>
+        <string name="pref_fullscreen">Koko näyttö</string>
     <string name="pref_page_transitions">Animoi sivusiirtymät</string>
     <string name="pref_double_tap_anim_speed">Tuplanäpäytyksen animaation nopeus</string>
     <string name="pref_show_page_number">Näytä sivunumero</string>
@@ -185,7 +187,7 @@
     <string name="color_filter_b_value">Sininen</string>
     <string name="color_filter_a_value">Alpha</string>
     <string name="pref_download_directory">Lataus kansio</string>
-    <string name="custom_dir">Mukautettu kansio</string>
+            <string name="custom_dir">Mukautettu kansio</string>
     <string name="disabled">Pois käytöstä</string>
     <string name="last_read_chapter">Viimeksi luettu luku</string>
     <string name="second_to_last">Toiseksi viimeinen luku</string>
@@ -196,7 +198,6 @@
     <string name="services">Palvelut</string>
     <string name="pref_create_backup_summ">Voidaan käyttää nykyisen kirjaston palauttamiseen</string>
     <string name="pref_restore_backup_summ">Palauta kirjasto varmuuskopiointi-tiedostosta</string>
-    <string name="pref_backup_service_category">Automaattiset varmuuskopiot</string>
     <string name="pref_backup_interval">Varmuuskopioinnin tiheys</string>
     <string name="pref_backup_slots">Varmuuskopioiden enimmäismäärä</string>
     <string name="backup_created">Varmuuskopio luotu</string>
@@ -204,13 +205,14 @@
     <string name="backup_choice">Mitä haluat varmuuskopioida\?</string>
     <string name="restoring_backup">Palautetaan varmuuskopiota</string>
     <string name="creating_backup">Luodaan varmuuskopiota</string>
-    <string name="used_cache">Käytössä: %1$s</string>
+        <string name="used_cache">Käytössä: %1$s</string>
     <string name="cache_deleted">Välimuisti tyhjennetty. %1$d tiedostoa poistettu</string>
     <string name="cache_delete_error">Virhe tapahtui välimuistia tyhjentäessä</string>
     <string name="pref_clear_cookies">Tyhjennä keksit</string>
     <string name="cookies_cleared">Keksit tyhjennetty</string>
-    <string name="clear_database_completed">Tiedot poistettu</string>
-    <string name="pref_refresh_library_tracking">Päivitä seuranta</string>
+    <string name="pref_clear_database">Tyhjennä tietokanta</string>
+    <string name="pref_clear_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
+        <string name="clear_database_completed">Tiedot poistettu</string>
     <string name="version">Versio</string>
     <string name="pref_enable_acra">Lähetä kaatumisilmoituksia</string>
     <string name="pref_acra_summary">Auttaa korjaamaan bugeja. Arkaluonteista tietoa ei lähetetä</string>
@@ -221,7 +223,6 @@
     <string name="login_success">Kirjauduttu sisään</string>
     <string name="unknown_error">Tuntematon virhe</string>
     <string name="updating_category">Päivitetään kategoriaa</string>
-    <string name="local_source_badge">Paikallinen</string>
     <string name="no_more_results">Ei enempää tuloksia</string>
     <string name="action_global_search_hint">Globaali haku…</string>
     <string name="delete_downloads_for_manga">Poista ladatut luvut\?</string>
@@ -230,6 +231,8 @@
     <string name="source_not_installed">Lähdettä ei ole asennettu: %1$s</string>
     <string name="display_mode_chapter">Luku %1$s</string>
     <string name="chapter_downloading_progress">Ladataan (%1$d/%2$d)</string>
+    <string name="chapter_error">Virhe</string>
+    <string name="chapter_paused">Pysäytetty</string>
     <string name="show_title">Nimike</string>
     <string name="show_chapter_number">Luvun numero</string>
     <string name="sort_by_source">Lähteen mukaan</string>
@@ -242,7 +245,6 @@
     <string name="title">Nimike</string>
     <string name="status">Tila</string>
     <string name="track_status">Tila</string>
-    <string name="track_start_date">Aloitettu</string>
     <string name="track_type">Tyyppi</string>
     <string name="error_category_exists">Tämän niminen kategoria on jo olemassa!</string>
     <string name="snack_categories_deleted">Kategoriat poistettu</string>
@@ -265,6 +267,7 @@
     <string name="plan_to_read">Aikomus lukea</string>
     <string name="repeating">Uudelleenluettava</string>
     <string name="dialog_with_checkbox_remove_description">Tämä poistaa luvun lukupäivän. Haluatko jatkaa\?</string>
+        <string name="snack_add_to_library">Lisää sarja kirjastoon\?</string>
     <string name="picture_saved">Kuva tallennetu</string>
     <string name="pref_color_filter_mode">Värisuodattimen sekoitus tyyppi</string>
     <string name="filter_mode_overlay">Päällys</string>
@@ -305,6 +308,7 @@
         <item quantity="other">%1$s minuutin jälkeen</item>
     </plurals>
     <string name="information_cloudflare_bypass_failure">Cloudflaren ohittaminen epäonnistui</string>
+    <string name="channel_new_chapters">Lukujen päivitykset</string>
     <string name="pref_category_display">Näyttö</string>
     <string name="ext_updates_pending">Päivitettävät</string>
     <string name="information_webview_outdated">Päivitä WebView-sovellus yhteensopivuuden parantamiseksi</string>
@@ -335,7 +339,6 @@
         <item quantity="other">%d sarjalle</item>
     </plurals>
     <string name="action_menu">Valikko</string>
-    <string name="action_reorganize_by">Uudelleenjärjestä</string>
     <string name="action_newest">Uusin</string>
     <string name="action_oldest">Vanhin</string>
     <string name="action_move_to_top">Siirrä alkuun</string>
@@ -348,12 +351,7 @@
     <string name="restoring_backup_canceled">Palautus peruttu</string>
     <string name="restoring_backup_error">Varmuuskopion palautus epäonnistui</string>
     <string name="creating_backup_error">Varmuuskopiointi epäonnistui</string>
-    <string name="webtoon_side_padding_25">25%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_10">10%</string>
     <string name="pref_skip_filtered_chapters">Ohita suodatetut luvut</string>
-    <string name="confirm_exit">Paina takaisin uudestaan poistuaksesi</string>
     <string name="label_downloaded_only">Ladatut</string>
     <string name="label_sources">Lähteet</string>
     <string name="updating_library">Päivittää kirjastoa</string>
@@ -364,9 +362,8 @@
     <string name="action_unpin">Poista kiinnitys</string>
     <string name="action_pin">Kiinnitä</string>
     <string name="action_select_inverse">Valitse käänteinen</string>
-    <string name="pref_confirm_exit">Vahvista poistuminen</string>
     <string name="vertical_plus_viewer">Jatkuva pystysuora</string>
-    <string name="restore_in_progress">Palautus on jo käynnissä</string>
+        <string name="restore_in_progress">Palautus on jo käynnissä</string>
     <string name="backup_in_progress">Varmuuskopiointi on jo käynnissä</string>
     <string name="pref_webtoon_side_padding">Sivuntäyttö</string>
     <string name="licenses">Avoimen lähdekoodin lisenssit</string>
@@ -374,8 +371,6 @@
     <string name="manga_info_collapse">Vähemmän</string>
     <string name="manga_info_expand">Enemmän</string>
     <string name="pinned_sources">Kiinnitetyt</string>
-    <string name="http_error_hint">Katso sivu WebViewissä</string>
-    <string name="webtoon_side_padding_0">Ei yhtään</string>
     <string name="pref_category_reading">Luettavana</string>
     <string name="check_for_updates">Tarkista päivitykset</string>
     <string name="last_used_source">Viimeksi käytetty</string>
@@ -386,7 +381,6 @@
         <item quantity="one">1 jäljellä</item>
         <item quantity="other">%1$s jäljellä</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Sisällytä vain kiinnitetyt lähteet</string>
     <string name="gray_background">Harmaa</string>
     <string name="pref_category_for_this_series">Tälle sarjalle</string>
     <plurals name="num_categories">
@@ -438,7 +432,7 @@
     <string name="unknown_author">Tuntematon tekijä</string>
     <string name="updated_version">Päivitetty versioon v%1$s</string>
     <string name="whats_new">Mitä uutta</string>
-    <string name="action_global_search_query">Etsi \"%1$s\" globaalisesti</string>
+        <string name="action_global_search_query">Etsi \"%1$s\" globaalisesti</string>
     <string name="pref_category_reading_mode">Lukutila</string>
     <string name="pref_category_theme">Teema</string>
     <string name="action_sort_date_added">Lisäyspäivämäärä</string>
@@ -449,10 +443,9 @@
     <string name="no_pinned_sources">Sinulla ei ole kiinnitettyjä lähteitä</string>
     <string name="channel_complete">Valmis</string>
     <string name="channel_progress">Edistyminen</string>
-    <string name="download_notifier_download_finish">Lataus valmis</string>
     <string name="channel_errors">Virheet</string>
     <string name="backup_restore_missing_trackers">Seurantapalvelimet joihin et ole kirjautunut sisään:</string>
-    <string name="ext_nsfw_warning">Voi sisältää NSFW (18+) -sisältöä</string>
+            <string name="ext_nsfw_warning">Voi sisältää NSFW (18+) -sisältöä</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Tämä ei estä epävirallisia tai mahdollisesti väärin merkittyjä laajennuksia näyttämästä NSFW 18+ sisältöä sovelluksessa.</string>
     <plurals name="missing_chapters_warning">
@@ -462,12 +455,12 @@
     <string name="no_chapters_error">Lukuja ei löytynyt</string>
     <string name="chapter_settings_updated">Päivitetyt luvun oletusasetukset</string>
     <string name="set_chapter_settings_as_default">Aseta oletukseksi</string>
-    <string name="confirm_set_chapter_settings">Haluatko varmasti tallentaa nämä asetukset oletuksena\?</string>
+        <string name="confirm_set_chapter_settings">Haluatko varmasti tallentaa nämä asetukset oletuksena\?</string>
     <string name="chapter_settings">Luvun asetukset</string>
     <string name="share_page_info">%1$s: %2$s, sivu %3$d</string>
     <string name="action_search_settings">Hakuasetukset</string>
     <string name="downloaded_chapters">Ladatut luvut</string>
-    <string name="pref_incognito_mode">Incognito-tila</string>
+            <string name="pref_incognito_mode">Incognito-tila</string>
     <string name="pref_clear_history">Tyhjennä historia</string>
     <string name="clear_history_confirmation">Oletko varma\? Koko historia menetetään.</string>
     <string name="clear_history_completed">Historia poistettu</string>
@@ -512,13 +505,12 @@
     <string name="action_sort_chapter_fetch_date">Haettu päivämäärä</string>
     <string name="pref_download_new_categories_details">Poissuljettuihin kategorioihin kuuluvia mangoja ei ladata, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="pref_category_auto_download">Automaattinen lataus</string>
+    <string name="pref_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="action_show_errors">Näytä lisätiedot</string>
     <string name="update_check_eol">Tätä Android-versiota ei enää tueta</string>
     <string name="clipboard_copy_error">Kopiointi leikepöydälle epäonnistui</string>
     <string name="rotation_landscape">Vaakatasossa</string>
     <string name="rotation_portrait">Pystysuunnassa</string>
-    <string name="pref_create_folder_per_manga_summary">Luo kansioita manga-otsikon mukaan</string>
-    <string name="pref_create_folder_per_manga">Tallenna sivut erillisiin kansioihin</string>
     <string name="pref_reader_actions">Toiminnot</string>
     <string name="rotation_type">Kierron tyyppi</string>
     <string name="pref_grayscale">Harmaasävy</string>
@@ -535,18 +527,15 @@
     <string name="off">Pois päältä</string>
     <string name="on">Päällä</string>
     <string name="getting_started_guide">Aloitusopas</string>
-    <string name="pref_library_update_refresh_trackers_summary">Päivitä seurantapalvelimet kirjaston päivityksen yhteydessä</string>
-    <plurals name="relative_time">
+        <plurals name="relative_time">
         <item quantity="one">Eilen</item>
         <item quantity="other">%1$d päivää sitten</item>
     </plurals>
-    <string name="action_display_cover_only_grid">Kansikuva ruudukko</string>
+        <string name="action_display_cover_only_grid">Kansikuva ruudukko</string>
     <string name="theme_monet">Dynaaminen</string>
     <string name="theme_greenapple">Vihreä omena</string>
-    <string name="recently">Viimeaikoina</string>
     <string name="label_default">Oletus</string>
-    <string name="action_filter_started">Aloitettu</string>
-    <string name="pref_library_update_refresh_trackers">Päivitä seurantapalvelimet automaattisesti</string>
+    <string name="action_display_local_badge">Laitteelle tallennettu manga</string>
     <string name="action_sort_count">Yhteenlaskettu manga</string>
     <string name="action_start_downloading_now">Aloita lataaminen nyt</string>
     <string name="theme_yinyang">Ying ja Yang</string>
@@ -557,15 +546,11 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="pref_dark_theme_pure_black">Täysin musta pimeätila</string>
     <string name="pref_update_only_started">Ei lukemattomia lukuja</string>
-    <string name="pref_relative_format">Suhteelliset aikamerkit</string>
-    <string name="pref_relative_time_short">Lyhyt (tänään, eilen)</string>
-    <string name="pref_relative_time_long">Pitkä (lyhyt+, N päivää sitten)</string>
     <string name="relative_time_today">Tänään</string>
-    <string name="pref_app_theme">Sovelluksen teema</string>
+        <string name="pref_app_theme">Sovelluksen teema</string>
     <string name="label_warning">Varoitus</string>
     <string name="confirm_lock_change">Tunnistaudu vahvistaaksesi muutokset</string>
     <string name="action_display_language_badge">Kieli</string>
-    <string name="pref_category_timestamps">Aikaleimat</string>
     <string name="action_faq_and_guides">Usein kysytyt kysymykset ja oppaat</string>
     <string name="pref_library_update_manga_restriction">Ohita päivitys</string>
     <string name="action_move_to_top_all_for_series">Siirrä sarja päällimmäiseksi</string>
@@ -573,7 +558,6 @@
     <string name="update_72hour">Joka 3. Päivä</string>
     <string name="connected_to_wifi">Ainoastaan WiFillä</string>
     <string name="pref_inverted_colors">Käänteisväri</string>
-    <string name="webtoon_side_padding_5">5%</string>
     <string name="ext_app_info">Sovelluksen tiedot</string>
     <string name="ext_installer_legacy">Perinteinen</string>
     <string name="rotation_reverse_portrait">Käänteinen kuva</string>
@@ -586,7 +570,7 @@
     <string name="ext_install_service_notif">Asennetaan laajennusta…</string>
     <string name="ext_installer_pref">Asentaja</string>
     <string name="action_remove_everything">Poista kaikki</string>
-    <string name="action_sort_unread_count">Lukemattomien määrä</string>
+        <string name="action_sort_unread_count">Lukemattomien määrä</string>
     <string name="delete_category">Poista kategoria</string>
     <string name="action_track">Jäljitä</string>
     <plurals name="next_unread_chapters">
@@ -594,17 +578,16 @@
         <item quantity="other">Seuraavat %d lukematonta lukua</item>
     </plurals>
     <string name="pref_low">Alhainen</string>
+    <string name="pref_remove_exclude_categories">Poissuljetut kategoriat</string>
     <string name="pref_lowest">Alhaisin</string>
     <string name="empty_backup_error">Ei varmuuskopioitavia sarjoja kirjastossa</string>
     <string name="multi_lang">Useampi</string>
-    <string name="pref_long_strip_split">Jaa korkeat kuvat (BETA)</string>
     <string name="pref_navigate_pan">Panoroi leveitä kuvia napauttamalla</string>
     <string name="save_chapter_as_cbz">Tallenna CBZ-arkistona</string>
     <string name="pref_landscape_zoom">Zoomaa vaakasuuntaisiin kuviin</string>
     <string name="pref_highest">Korkein</string>
     <string name="ext_info_language">Kieli</string>
     <string name="action_search_hint">Haku…</string>
-    <string name="battery_not_low">Kun akku ei ole vähissä</string>
     <string name="theme_lavender">Laventeli</string>
     <string name="pref_app_language">Sovelluksen kieli</string>
     <string name="ext_info_version">Versio</string>
@@ -654,7 +637,6 @@
     <string name="local_filter_order_by">Järjestä</string>
     <string name="manga_cover">Kansikuva</string>
     <string name="error_sharing_cover">Virhe jakaessa kansikuvaa</string>
-    <string name="notification_updating">Päivitetään kirjastoa… (%1$d/%2$d)</string>
     <string name="learn_more">Napauta saadaksesi lisätietoja</string>
     <string name="ext_info_age_rating">Ikäluokitus</string>
     <string name="tracking_guide">Seurantaopas</string>
@@ -663,7 +645,6 @@
     <string name="cover_saved">Kansikuva tallennettu</string>
     <string name="error_saving_cover">Virhe tallentaessa kansikuvaa</string>
     <string name="notification_update_skipped">%1$d päivitys(tä) ohitettu</string>
-    <string name="tracker_komga_warning">Tämä seurantapalvelu on yhteensopiva vain Komga-lähteen kanssa.</string>
     <string name="loader_rar5_error">RARv5-muoto ei ole tuettu</string>
     <string name="skipped_reason_not_caught_up">Ohitettu, koska sarjassa on luettomia lukuja</string>
     <string name="skipped_reason_not_always_update">Ohitettu, koska sarja ei vaadi päivityksiä</string>
@@ -674,5 +655,4 @@
     <string name="backup_info">Varmuuskopioita kannattaa säilyttää myös muissa paikoissa.</string>
     <string name="wish_list">Toivelista</string>
     <string name="cant_open_last_read_chapter">Viimeksi luettua lukua ei voitu avata</string>
-<string name="label_download_queue">Latausjono</string>
-    </resources>
+</resources>

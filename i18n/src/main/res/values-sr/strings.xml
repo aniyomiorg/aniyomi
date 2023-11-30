@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="name">Име</string>
     <string name="categories">Категорије</string>
     <string name="manga">Наслови колекције</string>
@@ -7,6 +7,7 @@
     <string name="track">Праћење</string>
     <string name="history">Историја</string>
     <string name="label_settings">Подешавања</string>
+    <string name="label_download_queue">Редослед преузимања</string>
     <string name="label_library">Колекција</string>
     <string name="label_recent_manga">Историја</string>
     <string name="label_recent_updates">Ново</string>
@@ -83,7 +84,7 @@
     <string name="pref_library_update_restriction">Ограничења уређаја за аутоматска ажурирања</string>
     <string name="charging">Пуњење</string>
     <string name="pref_update_only_non_completed">Са статусом \"Завршено\"</string>
-    <string name="default_category">Подразумевана категорија</string>
+        <string name="default_category">Подразумевана категорија</string>
     <string name="default_category_summary">Увек питај</string>
     <string name="ext_update">Ажурирај</string>
     <string name="ext_install">Инсталирај</string>
@@ -95,7 +96,7 @@
     <string name="ext_untrusted">Неповерљиво</string>
     <string name="ext_uninstall">Обриши</string>
     <string name="untrusted_extension">Неповерљив додатак</string>
-    <string name="pref_fullscreen">Цео екран</string>
+        <string name="pref_fullscreen">Цео екран</string>
     <string name="pref_page_transitions">Анимације при промени странице</string>
     <string name="pref_double_tap_anim_speed">Брзина анимације двоклика</string>
     <string name="pref_show_page_number">Прикажи број странице</string>
@@ -139,7 +140,7 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Локација преузимања</string>
-    <string name="custom_dir">Друга локација</string>
+            <string name="custom_dir">Друга локација</string>
     <string name="disabled">Онемогућено</string>
     <string name="last_read_chapter">Последње прочитано поглавље</string>
     <string name="second_to_last">Претпоследње прочитано поглавље</string>
@@ -153,7 +154,6 @@
     <string name="pref_restore_backup">Врати се на резервну копију</string>
     <string name="pref_restore_backup_summ">Врати се на колекцију из резервне копије</string>
     <string name="pref_backup_directory">Локација резервних копија</string>
-    <string name="pref_backup_service_category">Аутоматско прављење резервних копија</string>
     <string name="pref_backup_interval">Учесталост прављења резервних копија</string>
     <string name="pref_backup_slots">Максималан број резервних копија</string>
     <string name="backup_created">Направљена је резервна копија</string>
@@ -161,15 +161,14 @@
     <string name="backup_choice">Шта све желите да буде у резервној копији\?</string>
     <string name="restoring_backup">Враћа се на резервну копију</string>
     <string name="creating_backup">Прави се резервна копија</string>
-    <string name="used_cache">Искоришћено: %1$s</string>
+        <string name="used_cache">Искоришћено: %1$s</string>
     <string name="cache_deleted">Кеш је испражњен. Уклоњених фајлова: %1$d</string>
     <string name="cache_delete_error">Дошло је до грешке приликом брисања</string>
     <string name="pref_clear_cookies">Избриши колачиће</string>
     <string name="cookies_cleared">Колачићи су избрисани</string>
     <string name="pref_clear_database">Избриши базу података</string>
     <string name="pref_clear_database_summary">Обриши историју за наслове који нису сачувани у твојој колекцији</string>
-    <string name="clear_database_completed">Уноси избрисани</string>
-    <string name="pref_refresh_library_tracking">Освежи праћење</string>
+        <string name="clear_database_completed">Уноси избрисани</string>
     <string name="version">Верзија</string>
     <string name="pref_enable_acra">Пошаљи извештаје грешака</string>
     <string name="pref_acra_summary">Помози у поправљању кварова. Ниједан осетљив податак неће бити послат</string>
@@ -202,7 +201,7 @@
     <string name="chapter_paused">Паузирано</string>
     <string name="show_title">Наслов извора</string>
     <string name="show_chapter_number">Број поглавља</string>
-    <string name="pref_read_with_long_tap">Прикажи при дугом додиру</string>
+    <string name="pref_read_with_long_tap">Прикажи радње при дугом додиру</string>
     <string name="sort_by_source">Према извору</string>
     <string name="sort_by_number">Према броју поглавља</string>
     <string name="manga_download">Преузми</string>
@@ -258,17 +257,14 @@
     <string name="ext_obsolete">Застарело</string>
     <string name="secure_screen_summary">Сакриј приказ апликације приликом пребацивања између апликација и онемогући снимке екрана</string>
     <string name="lock_with_biometrics">Захтевај закључавање</string>
-    <string name="pref_confirm_exit">Потврди затварање програма</string>
     <string name="action_move_to_bottom">Премести на дно</string>
     <string name="action_move_to_top">Премести на врх</string>
     <string name="action_oldest">Најстарије</string>
     <string name="action_newest">Најновије</string>
-    <string name="action_reorganize_by">Преуреди</string>
     <string name="action_unpin">Откачи</string>
     <string name="action_pin">Закачи</string>
     <string name="action_select_inverse">Изабери обрнуто</string>
     <string name="action_menu">Мени</string>
-    <string name="confirm_exit">Притисните поново назад да бисте изашли</string>
     <string name="label_downloaded_only">Само преузето</string>
     <string name="information_empty_category">Немате категорија. Додирните дугме плус да бисте направили нову категорију за организовање колекције.</string>
     <string name="notification_chapters_multiple">Поглавља %1$s</string>
@@ -302,16 +298,15 @@
     <string name="transition_current">Тренутно:</string>
     <string name="transition_finished">Завршено:</string>
     <string name="confirm_set_image_as_cover">Користи ову слику као омот\?</string>
-    <string name="decode_image_error">Није било могуће учитати слику</string>
+    <string name="decode_image_error">Није могуће учитати слику</string>
     <string name="no_next_chapter">Следеће поглавље није пронађено</string>
     <string name="chapter_progress">Страница: %1$d</string>
     <string name="custom_filter">Подесиви филтер</string>
     <string name="picture_saved">Слика је сачувана</string>
-    <string name="dialog_with_checkbox_remove_description">Ово ће уклонити датум читања овог поглавља. Да ли сте сигурни да то желите\?</string>
+        <string name="dialog_with_checkbox_remove_description">Ово ће уклонити датум читања овог поглавља. Да ли сте сигурни да то желите\?</string>
     <string name="snack_categories_deleted">Категорије обрисане</string>
     <string name="error_category_exists">Категорија са овим именом већ постоји!</string>
     <string name="track_type">Врста</string>
-    <string name="track_start_date">Започето</string>
     <string name="track_status">Статус</string>
     <string name="status">Статус</string>
     <string name="title">Наслов</string>
@@ -333,21 +328,15 @@
     <string name="local_source_help_guide">Водич за локалне изворе</string>
     <string name="pinned_sources">Закачено</string>
     <string name="last_used_source">Последње коришћено</string>
-    <string name="http_error_hint">Провери вебсајт у WebView</string>
     <string name="downloaded_only_summary">Филтрира све наслове у колекцији</string>
     <string name="check_for_updates">Провери ажурирања</string>
-    <string name="website">Сајт</string>
+    <string name="website">Sajt</string>
     <string name="restoring_backup_canceled">Враћање је отказано</string>
     <string name="restoring_backup_error">Враћање на резервну копију није успело</string>
     <string name="restore_in_progress">Враћање је већ у току</string>
     <string name="creating_backup_error">Прављење резервне копије није успело</string>
     <string name="backup_in_progress">Прављење резервне копије је већ у току</string>
     <string name="restore_duration">%02d мин, %02d сек</string>
-    <string name="webtoon_side_padding_25">25%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="webtoon_side_padding_0">Ништа</string>
     <string name="pref_webtoon_side_padding">Растојање од ивице</string>
     <string name="pref_category_reading">Читање</string>
     <string name="pref_always_show_chapter_transition">Увек прикажи транзицију поглавља</string>
@@ -359,7 +348,7 @@
     <string name="download_notifier_title_error">Грешка</string>
     <string name="download_notifier_downloader_title">Преузимања</string>
     <string name="information_webview_outdated">Ажурирајте WebView за бољу компатибилност</string>
-    <string name="information_cloudflare_bypass_failure">Неуспешно заобилажење Cloudflare-а</string>
+        <string name="information_cloudflare_bypass_failure">Неуспешно заобилажење Cloudflare-а</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Доступно је %d ново ажурирање додатака</item>
         <item quantity="few">Доступна су %d нова ажурирања додатака</item>
@@ -369,7 +358,6 @@
     <string name="update_check_notification_download_error">Грешка током преузимања</string>
     <string name="update_check_notification_download_complete">Додирните за инсталирање ажурирања</string>
     <string name="update_check_notification_download_in_progress">Преузимање…</string>
-    <string name="update_check_look_for_updates">Тражење ажурирања…</string>
     <string name="update_check_no_new_updates">Нема нових ажурирања</string>
     <string name="update_check_confirm">Преузми</string>
     <string name="file_select_backup">Изаберите датотеку резервне копије</string>
@@ -389,7 +377,7 @@
     <string name="pref_show_reading_mode">Прикажи начин читања</string>
     <string name="ext_nsfw_warning">Може садржати садржај за одрасле (18+)</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Овај додатак није из званичне листе Таchiyomi додатака.</string>
+    <string name="unofficial_extension_message">Овај додатак није из званичне листе.</string>
     <string name="ext_unofficial">Незванично</string>
     <plurals name="num_categories">
         <item quantity="one">%d категорија</item>
@@ -400,9 +388,6 @@
     <string name="pref_library_update_refresh_metadata">Аутоматски освежи метаподатке</string>
     <string name="parental_controls_info">Ово не спречава незваничне или потенцијално погрешно означене додатке да прикажу садржај за одрасле (18+) унутар апликације.</string>
     <string name="action_filter_tracked">Запраћено</string>
-    <string name="pref_category_timestamps">Ознаке за време</string>
-    <string name="pref_relative_format">Релативне ознаке за време</string>
-    <string name="pref_relative_time_short">Кратко (Данас, Јуче)</string>
     <string name="label_warning">Упозорење</string>
     <string name="confirm_lock_change">Оверите да бисте потврдили промене</string>
     <string name="action_sort_count">Укупно наслова</string>
@@ -417,7 +402,6 @@
     <string name="action_asc">Растуће</string>
     <string name="label_default">Подразумевано</string>
     <string name="action_start_downloading_now">Покрени преузимање одмах</string>
-    <string name="pref_relative_time_long">Дуго (Кратко+, пре n дана)</string>
     <string name="action_display_show_number_of_items">Прикажи број ставки</string>
     <string name="cancel_all_for_series">Откажи све за овај наслов</string>
     <string name="action_desc">Опадајуће</string>
@@ -438,7 +422,7 @@
         <item quantity="other">Pre %1$d dana</item>
     </plurals>
     <string name="pref_category_reading_mode">Начин читања</string>
-    <string name="ext_installer_pref">Instaler</string>
+    <string name="ext_installer_pref">Инсталер</string>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Прескаче се %d поглавље, или не постоји у извору или је филтером издвојено</item>
         <item quantity="few">Прескаче се %d поглавља, или не постоји у извору или је филтером издвојено</item>
@@ -468,7 +452,7 @@
     <string name="nav_zone_right">Десно</string>
     <string name="nav_zone_next">След.</string>
     <string name="pref_verbose_logging">Детаљно извештавање</string>
-    <string name="tabs_header">Картице</string>
+        <string name="tabs_header">Картице</string>
     <string name="unknown_status">Непознат статус</string>
     <string name="local_filter_order_by">Поређај по</string>
     <plurals name="num_trackers">
@@ -493,7 +477,7 @@
     <string name="pref_refresh_library_covers">Освежи омоте у колекцији</string>
     <string name="whats_new">Шта је ново</string>
     <string name="notification_incognito_text">Деактивирај инкогнито мод</string>
-    <string name="downloaded_chapters">Преузета поглавља</string>
+        <string name="downloaded_chapters">Преузета поглавља</string>
     <string name="action_global_search_query">Претражи „%1$s” глобално</string>
     <string name="no_pinned_sources">Немате закачених извора</string>
     <string name="chapter_not_found">Поглавље није пронађено</string>
@@ -511,21 +495,22 @@
     <string name="error_sharing_cover">Грешка при дељењу омота</string>
     <string name="set_chapter_settings_as_default">Постави као подразумевано</string>
     <string name="confirm_set_chapter_settings">Да ли сте сигурни да желите да сачувате ова подешавања као подразумевана\?</string>
-    <string name="no_chapters_error">Није пронађено ни једно поглавље</string>
+        <string name="no_chapters_error">Није пронађено ни једно поглавље</string>
     <string name="track_started_reading_date">Датум почетка</string>
     <string name="myanimelist_relogin">Морате поново да се пријавите на MAL</string>
     <string name="source_unsupported">Извор није подржан</string>
     <string name="unread">Непрочитано</string>
     <string name="channel_progress">Напредак</string>
     <string name="channel_complete">Завршено</string>
-    <string name="getting_started_guide">Почетни водич</string>
+    <string name="channel_new_chapters">Ажурирања поглавља</string>
+        <string name="getting_started_guide">Почетни водич</string>
     <string name="update_check_eol">Ова Android верзија више није подржана</string>
     <string name="chapter_settings_updated">Ажурирана су подразумевана подешаваља поглавља</string>
     <string name="download_notifier_unknown_error">Није могуће преузети поглавље због неочекиване грешке</string>
     <string name="download_notifier_text_only_wifi">Нема доступне Wi-Fi везе</string>
     <string name="channel_common">Опште</string>
     <string name="download_notifier_no_network">Нема доступне интернет везе</string>
-    <string name="download_notifier_download_finish">Преузимање је завршено</string>
+    <string name="download_notifier_download_paused">Преузимања су заустављена</string>
     <string name="channel_ext_updates">Ажурирања додатака</string>
     <string name="spen_previous_page">Претходна страница</string>
     <string name="spen_next_page">Следећа страница</string>
@@ -540,8 +525,6 @@
         <item quantity="few">Поглавља %1$s и још %2$d</item>
         <item quantity="other">Поглавља %1$s и још %2$d</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Претражи само означене изворе у глобалној претрази</string>
-    <string name="tracker_komga_warning">Овај пратилац је компатибилан само са извором Komga.</string>
     <string name="pref_show_navigation_mode">Прикажи начин навигације</string>
     <string name="track_finished_reading_date">Датум завршетка</string>
     <string name="automatic_background">Аутоматски</string>
@@ -551,8 +534,6 @@
     <string name="pref_dual_page_split">Раздели широке странице</string>
     <string name="none">Ништа</string>
     <string name="pref_true_color_summary">Смањује оштре прелазе међу нијансама, али утиче на перформансе</string>
-    <string name="pref_library_update_refresh_trackers">Аутоматски освежи пратиоце</string>
-    <string name="pref_library_update_refresh_trackers_summary">Ажурирај пратиоце при ажурирању колекције</string>
     <string name="date">Датум</string>
     <string name="pref_viewer_nav">Начин навигације</string>
     <string name="unknown_author">Непознат аутор</string>
@@ -564,7 +545,6 @@
     </plurals>
     <string name="channel_errors">Грешке</string>
     <string name="chapter_settings">Подешавања поглавља</string>
-    <string name="recently">Скоро</string>
     <string name="relative_time_today">Данас</string>
     <string name="nav_zone_left">Лево</string>
     <string name="information_empty_category_dialog">Још немате категорија.</string>
@@ -572,7 +552,7 @@
     <string name="update_72hour">Свака 3 дана</string>
     <string name="connected_to_wifi">Само преко Wi-Fi-а</string>
     <string name="restrictions">Ограничења: %s</string>
-    <string name="categorized_display_settings">Поставке за приказ и сортирање одвојено за сваку категорију</string>
+    <string name="categorized_display_settings">Поставке за сортирање одвојено за сваку категорију</string>
     <string name="pref_library_update_categories_details">Наслови у искљученим категоријама се неће ажурирати иако су такође у укљученим категоријама.</string>
     <string name="include">Укључи: %s</string>
     <string name="exclude">Искључи: %s</string>
@@ -593,8 +573,6 @@
     <string name="tapping_inverted_vertical">Вертикално</string>
     <string name="tapping_inverted_both">Оба</string>
     <string name="pref_reader_actions">Радње</string>
-    <string name="pref_create_folder_per_manga">Сачувај странице у засебне фолдере</string>
-    <string name="pref_create_folder_per_manga_summary">Прави датотеке по имену наслова</string>
     <string name="l_nav">У облику слова L</string>
     <string name="rotation_type">Оријентација</string>
     <string name="rotation_portrait">Усправно</string>
@@ -603,6 +581,7 @@
     <string name="pref_high">Висока</string>
     <string name="pref_low">Ниска</string>
     <string name="pref_lowest">Најнижа</string>
+            <string name="pref_remove_exclude_categories">Искључене категорије</string>
     <string name="pref_download_new_categories_details">Наслови у искљученим категоријама неће се преузимати иако су такође у укљученим категоријама.</string>
     <string name="tracking_info">Једносмерна синхронизација за ажурирање броја прочитаних поглавља у трекерима. За појединачно праћење наслова додирни дугме за њихово праћење.</string>
     <string name="label_data">Подаци</string>
@@ -617,20 +596,18 @@
     <string name="clear_history_completed">Историја је избрисана</string>
     <string name="clear_history_confirmation">Да ли сте сигурни\? Цела историја ће бити изгубљена.</string>
     <string name="migration_help_guide">Водич за миграцију извора</string>
-    <string name="notification_updating">Ажурирање колекције... (%1$d/%2$d)</string>
-    <string name="notification_size_warning">Велика ажурирања штете изворима и могу довести до споријег ажурирања и повећања потрошње батерије. Кликни да сазнаш више.</string>
+        <string name="notification_size_warning">Велика ажурирања штете изворима и могу довести до споријег ажурирања и повећања потрошње батерије. Кликни да сазнаш више.</string>
     <string name="ext_update_all">Ажурирај све</string>
     <string name="channel_app_updates">Ажурирања апликације</string>
     <string name="clear_database_source_item_count">Број наслова у бази података које нису у колекцији: %1$d</string>
     <string name="extension_api_error">Преузимање листе додатака није успело</string>
-    <string name="database_clean">Нема ништа за чишћење</string>
+        <string name="database_clean">Нема ништа за чишћење</string>
     <string name="pref_library_update_manga_restriction">Прескочи ажурирање наслова</string>
-    <string name="privacy_policy">Политика приватности</string>
+        <string name="privacy_policy">Политика приватности</string>
     <string name="cancelled">Отказано</string>
     <string name="on_hiatus">На паузи</string>
     <string name="pref_update_only_started">То није започето</string>
-    <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_move_to_top_all_for_series">Помакни наслов на врх</string>
+        <string name="action_move_to_top_all_for_series">Помакни наслов на врх</string>
     <string name="notification_update_error">%1$d ажурирање није успело</string>
     <string name="learn_more">Додирните да сазнате више</string>
     <string name="library_errors_help">За помоћ о томе како да поправите грешке у ажурирању колекције, погледајте %1$s</string>
@@ -638,7 +615,7 @@
     <string name="channel_skipped">Прескочено</string>
     <string name="action_display_cover_only_grid">Мрежа насловница</string>
     <string name="pref_navigate_pan">Померај широке слике</string>
-    <string name="pref_landscape_zoom">Зумирај пејзажну слику</string>
+    <string name="pref_landscape_zoom">Аутоматски зумирај слике у пејзажном облику</string>
     <string name="action_faq_and_guides">Питања и водичи</string>
     <string name="save_chapter_as_cbz">Sačuvaj kao CBZ arhivu</string>
     <string name="rotation_reverse_portrait">Обрнути портрет</string>
@@ -652,7 +629,6 @@
     <string name="update_check_open">Отвори на GitHub-у</string>
     <string name="error_saving_picture">Грешка при чувању слике</string>
     <string name="action_close">Затвори</string>
-    <string name="battery_not_low">Батерија није празна</string>
     <string name="pref_clear_webview_data">Обриши податке WebView-a</string>
     <string name="webview_data_deleted">Подаци WebView-a су обрисани</string>
     <string name="pref_library_summary">Категорије, глобално ажурирање, листање поглавља</string>
@@ -664,11 +640,10 @@
     <string name="auto_download_while_reading">Преузми аутоматски током читања</string>
     <string name="copied_to_clipboard_plain">Копирано</string>
     <string name="pref_reset_viewer_flags_success">Сва подешавања читача су ресетована</string>
-    <string name="pref_invalidate_download_cache_summary">Присили апликацију да поново провери преузета поглавља</string>
-    <string name="not_installed">Није инсталирано</string>
+        <string name="not_installed">Није инсталирано</string>
     <string name="crash_screen_description">%s је наишао на неочекивану грешку. Предлажемо да поделите запис о прекиду програма на нашем каналу за подршку на Discord-у.</string>
     <string name="appwidget_unavailable_locked">Widget није доступан када је омогућено закључавање апликације</string>
-    <string name="wish_list">Листа жеља</string>
+        <string name="wish_list">Листа жеља</string>
     <string name="enhanced_services_not_installed">Доступно, али извор није преузет: %s</string>
     <string name="fdroid_warning">F-Droid верзије нису званично подржане.
 \nДодирните да сазнате више.</string>
@@ -709,8 +684,7 @@
     <string name="minute_short">%d минута</string>
     <string name="seconds_short">%d секунди</string>
     <string name="description_placeholder">Нема описа</string>
-    <string name="action_display_show_continue_reading_button">Дугме за наставак читања</string>
-    <string name="internal_error">InternalError: Провери записнике о прекиду програма за даље информације</string>
+        <string name="internal_error">InternalError: Провери записнике о прекиду програма за даље информације</string>
     <string name="pref_skip_dupe_chapters">Прескочи дупликатска поглавља</string>
     <string name="multi_lang">Више језика</string>
     <string name="ext_info_language">Језик</string>
@@ -720,7 +694,6 @@
     <string name="label_completed_titles">Завршени наслови</string>
     <string name="split_tall_images_summary">Побољшава перформансе читача</string>
     <string name="network_not_metered">Само на мрежи без ограничења</string>
-    <string name="pref_long_strip_split">Раздели високе слике (БЕТА)</string>
     <string name="missing_storage_permission">Дозвола за меморијски простор није одобрена</string>
     <string name="error_user_agent_string_invalid">Неважећи низ корисничког агента</string>
     <string name="pref_reset_viewer_flags_error">Није могуће ресетовати подешавања читача</string>
@@ -728,8 +701,7 @@
     <string name="appwidget_updates_description">Погледај твоје недавно ажуриране наслове у колекцији</string>
     <string name="pref_invalidate_download_cache">Неважећи индекс преузимања</string>
     <string name="action_sort_unread_count">Број непрочитаних</string>
-    <string name="action_sort_last_manga_update">Последња провера ажурирања</string>
-    <string name="delete_category">Обриши категорију</string>
+        <string name="delete_category">Обриши категорију</string>
     <string name="delete_category_confirmation">Желиш ли обрисати категорију \"%s\"\?</string>
     <string name="action_remove_everything">Уклони све</string>
     <string name="crash_screen_title">Упс!</string>
@@ -743,17 +715,16 @@
     <string name="download_notifier_split_page_not_found">Страница %d није пронађена током раздвајања</string>
     <string name="download_notifier_cache_renewal">Провера преузимања</string>
     <plurals name="next_unread_chapters">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Следеће непрочитано поглавље</item>
+        <item quantity="one">Следеће непрочитано поглавље</item>
         <item quantity="few">Следећа %d непрочитана поглавља</item>
         <item quantity="other">Следећих %d непрочитаних поглавља</item>
     </plurals>
     <string name="action_not_now">Не сада</string>
-    <string name="pref_general_summary">Језик апликације, обавештења</string>
     <string name="pref_appearance_summary">Формат теме, датума и времена</string>
     <string name="pref_security_summary">Закључавање апликације, сигуран екран</string>
     <string name="pref_advanced_summary">Записници гашења апликације, оптимизације батерије</string>
     <string name="action_open_random_manga">Отвори насумични наслов</string>
-    <string name="download_ahead_info">Ради само на уносима у колекцији и ако су последње плус следеће поглавље већ преузети</string>
+    <string name="download_ahead_info">Ради само ако је тренутно и следеће поглавље већ преузето.</string>
     <string name="information_no_entries_found">Нема наслова у овој категорији</string>
     <string name="information_no_manga_category">Категорија је празна</string>
     <string name="error_user_agent_string_blank">Низ корисничког агента не може бити празан</string>
@@ -792,4 +763,39 @@
         <item quantity="few">Недостају %1$s поглавља</item>
         <item quantity="other">Недостаје %1$s поглавља</item>
     </plurals>
-    </resources>
+    <string name="create_backup_file_error">Није могуће створити датотеку резервне копије</string>
+    <string name="licensed_manga_chapters_error">Лиценцирано - Нема поглавља за приказ</string>
+    <string name="has_results">Има резултата</string>
+    <string name="skipped_reason_not_in_release_period">Прескочено јер данас није очекивано издање</string>
+    <string name="pref_update_only_in_release_period">Изван очекиваног периода изласка</string>
+    <string name="action_set_interval">Постави интервалу</string>
+    <string name="action_filter_interval_dropped">Испуштено\? Задњих 20+ и 2 месеца</string>
+    <plurals name="day">
+        <item quantity="one">1 дан</item>
+        <item quantity="few">%d дана</item>
+        <item quantity="other">%d дана</item>
+    </plurals>
+    <string name="intervals_header">Интервали</string>
+    <string name="manga_modify_calculated_interval_title">Подеси интервал</string>
+    <string name="track_delete_remote_text">Такође уклони из %s</string>
+    <string name="track_activity_name">Запис праћења</string>
+    <string name="manga_display_interval_title">Процени сваки</string>
+    <string name="information_cloudflare_help">Додирни овде за помоћ са Cloudflare-ом</string>
+    <string name="download_cache_invalidated">Индекс преузимања поништен</string>
+    <string name="delete_downloaded">Обриши преузет садржај</string>
+    <string name="action_filter_interval_custom">Прилагођен интервал преузимања</string>
+    <string name="action_filter_interval_passed">Прошло прегледни рок</string>
+    <string name="action_ok">У реду</string>
+    <string name="library_sync_complete">Синхронизовање колекције завршено</string>
+    <string name="manga_display_modified_interval_title">Постави да ажурира сваки</string>
+    <string name="track_delete_title">Уклони праћење %s\?</string>
+    <string name="track_delete_text">Ово ће уклонити локално праћење.</string>
+    <string name="action_filter_interval_late">Провера задњих 10+</string>
+    <string name="action_sort_next_updated">Следеће очекивано ажурирање</string>
+    <string name="syncing_library">Синхронизовање колекције</string>
+    <string name="action_filter_interval_long">Месечно преузимање (28 дана)</string>
+    <string name="unlock_app_title">Откључај %s</string>
+    <string name="exception_offline">Нема везе са интернетом</string>
+    <string name="exception_http">HTTP %d, погледај веб сајт у WebView</string>
+    <string name="exception_unknown_host">%s је недоступан</string>
+</resources>

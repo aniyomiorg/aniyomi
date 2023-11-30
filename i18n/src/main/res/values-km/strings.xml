@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="label_download_queue">កំពុងទាញយក</string>
     <string name="action_search_settings">ស្វែងរកក្នុងការកំណត់</string>
     <string name="chapters">ភាគ</string>
     <string name="label_warning">បំរាម</string>
@@ -11,6 +12,7 @@
     <string name="label_recent_manga">ប្រវត្តិ</string>
     <string name="action_sort_alpha">តម្រៀបតាមអក្ខរក្រម</string>
     <string name="name">ឈ្មោះ</string>
+    <string name="categories">ការតម្រៀបថ្នាក់</string>
     <string name="history">ប្រវត្តិ</string>
     <string name="label_more">ច្រើនទៀត</string>
     <string name="label_settings">ការកំណត់</string>
@@ -49,6 +51,7 @@
     <string name="action_display_list">បញ្ជី</string>
     <string name="action_display_cover_only_grid">ជ្រុងដែលមានតែគម្រប</string>
     <string name="action_display_download_badge">ភាគដែលបានទាញយក</string>
+    <string name="action_display_local_badge">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
     <string name="action_display_language_badge">ភាសា</string>
     <string name="action_display_show_tabs">បង្ហាញtabនៃថ្នាក់</string>
     <string name="action_disable">បិទ</string>
@@ -58,7 +61,6 @@
     <string name="action_cancel_all">ឈប់ធ្វើទាំងអស់</string>
     <string name="cancel_all_for_series">Cancelទាំងអស់ចំពោះម៊េងហ្គាមួយនេះ</string>
     <string name="action_sort">តម្រៀប</string>
-    <string name="action_reorganize_by">តម្រៀប</string>
     <string name="action_order_by_upload_date">តម្រៀបតាមកាលបរិច្ឆេទ</string>
     <string name="action_order_by_chapter_number">តម្រៀបតាមភាគ</string>
     <string name="action_newest">ថ្មីបំផុត</string>
@@ -73,7 +75,6 @@
     <string name="information_empty_category">អ្នកពុំមានការទម្រៀបម៊េងហ្គាឡើយ។ ចុចប៊ូតុងសញ្ញាបូកដើម្បីទម្រៀបម៊េងហ្គាសម្រាប់បណ្ណាល័យរបស់អ្នក។</string>
     <string name="manga">ម៊េងហ្គា</string>
     <string name="confirm_lock_change">Authenticateដើម្បីបញ្ចាក់ពីការកែប្រែ</string>
-    <string name="confirm_exit">ចុចថយម្ដងទៀតដើម្បីចេញ</string>
     <string name="action_settings">ការកំណត់</string>
     <string name="action_menu">កន្លែងកំណត់</string>
     <string name="action_mark_previous_as_read">បញ្ចាក់ភាគមុនថាបានអាន</string>
@@ -92,7 +93,7 @@
     <string name="action_edit_categories">កែប្រែថ្នាក់</string>
     <string name="action_next_chapter">ភាគបន្ទាប់</string>
     <string name="action_open_in_browser">បើកនៅក្នុងកម្មវិធីរុករក</string>
-    <string name="action_open_in_web_view">បើកនៅក្នុងWebView</string>
+        <string name="action_open_in_web_view">បើកនៅក្នុងWebView</string>
     <string name="action_migrate">ប្ដូរ</string>
     <string name="action_display_show_number_of_items">បង្ហាញចំនួនលេខនៃធាតុ</string>
     <string name="action_move_to_top">យកទៅខាងលើ</string>
@@ -130,10 +131,7 @@
     <string name="theme_tealturquoise">បៃតងខ្ចី</string>
     <string name="theme_yinyang">យីងនិងយ៉ាង</string>
     <string name="pref_dark_theme_pure_black">ខ្មៅដិត</string>
-    <string name="pref_category_timestamps">timestamps</string>
-    <string name="pref_relative_format">relative timestamps</string>
     <string name="pref_date_format">ទម្រង់ថ្ងៃខែ</string>
-    <string name="pref_confirm_exit">បញ្ចាក់ការចាកចេញ</string>
     <string name="pref_manage_notifications">កំណត់ការជូនដំណឹង</string>
     <string name="pref_category_security">សន្តិសុខនិងឯកជនភាព</string>
     <string name="lock_with_biometrics">ត្រូវការការបើកសោ</string>
@@ -142,11 +140,6 @@
     <string name="secure_screen">ការពារអេក្រង់</string>
     <string name="pref_category_nsfw_content">ប្រភពមិនល្អ(១៨+)</string>
     <string name="pref_show_nsfw_source">បង្ហាញនៅក្នុងបញ្ចីប្រភព</string>
-    <string name="recently">ថ្មីៗ</string>
-    <string name="relative_time_today">ថ្ងៃនេះ</string>
-    <plurals name="relative_time">
-        <item quantity="other">%1$d ថ្ងៃមុន</item>
-    </plurals>
     <string name="pref_category_display">ការបង្ហាញ</string>
     <string name="pref_library_columns">ធាតុក្នុងមួយជួ</string>
     <string name="portrait">បញ្ឈរ</string>
@@ -174,6 +167,7 @@
     <string name="title">ចំណងជើង</string>
     <string name="completed">បានបញ្ចប់ការចេញផ្សាយ</string>
     <string name="ongoing">កំពុងតែចេញផ្សាយ</string>
+    <string name="default_category">ថ្នាក់ធម្មតា</string>
     <string name="on_hiatus">ត្រូវបានផ្អាកការចេញផ្សាយ</string>
     <string name="unknown">មិនច្បាស់</string>
     <string name="local_invalid_format">ទម្រង់ភាគមិនត្រឹមត្រួវ</string>
@@ -184,7 +178,6 @@
     <string name="updating_library">កំពុងតែធ្វើបច្ចុប្បន្នភាពបណ្ណាល័យ</string>
     <string name="licensed">មានឡាយសិន</string>
     <string name="loader_rar5_error">ទម្រង់RARv5មិនត្រូវបានទទួលយកទេ</string>
-    <string name="label_download_queue">កំពុងទាញយក</string>
     <string name="getting_started_guide">ម​គ្គុ​ទេស​ក៍​</string>
     <string name="browse">ស្វែងរក</string>
     <string name="all">ទាំងអស់</string>
@@ -197,4 +190,4 @@
     <string name="information_cloudflare_bypass_failure">បរាជ័យក្នុងការឆ្លងកាត់Cloudflare</string>
     <string name="action_search_hint">ស្វែងរក…</string>
     <string name="notification_new_chapters">មានភាគថ្មី</string>
-    </resources>
+</resources>

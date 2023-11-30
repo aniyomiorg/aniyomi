@@ -84,7 +84,6 @@
     <string name="information_no_recent">Ingen nylege oppdateringar</string>
     <string name="label_library">Bibliotek</string>
     <string name="label_sources">Kjelder</string>
-    <string name="confirm_exit">Trykk tilbake igjen for å avslutta</string>
     <string name="action_settings">Innstillingar</string>
     <string name="action_menu">Meny</string>
     <string name="action_move_category">Sett kategoriar</string>
@@ -95,12 +94,7 @@
     <string name="action_webview_forward">Fram</string>
     <string name="action_display_list">Liste</string>
     <string name="pref_app_theme">App tema</string>
-    <string name="pref_category_timestamps">Tidsstemplar</string>
-    <string name="pref_relative_format">Relative tidsstemplar</string>
-    <string name="pref_relative_time_short">Stutt (i dag, i går)</string>
-    <string name="pref_relative_time_long">Lang (Stutt+, n dagar sidan)</string>
     <string name="pref_date_format">Datoformat</string>
-    <string name="pref_confirm_exit">Stadfest avslutning</string>
     <string name="pref_manage_notifications">Handter varslingar</string>
     <string name="pref_category_security">Sikkerheit</string>
     <string name="lock_always">Alltid</string>
@@ -110,11 +104,6 @@
         <item quantity="other">Etter %1$s minuttar</item>
     </plurals>
     <string name="pref_category_nsfw_content">NSFW (18+) kjeder</string>
-    <string name="relative_time_today">I dag</string>
-    <plurals name="relative_time">
-        <item quantity="one">I går</item>
-        <item quantity="other">%1$d dagar sidan</item>
-    </plurals>
     <string name="pref_category_display">Skjerm</string>
     <string name="pref_library_columns">Element per rad</string>
     <string name="pref_library_update_interval">Automatisk oppdateringar</string>
@@ -192,11 +181,6 @@
     <string name="color_filter_g_value">G</string>
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
-    <string name="webtoon_side_padding_0">Ingen</string>
-    <string name="webtoon_side_padding_5">5%</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_20">20%</string>
     <string name="pref_highest">Høgaste</string>
     <string name="pref_high">Høg</string>
     <string name="pref_low">Låg</string>
@@ -255,7 +239,6 @@
     <string name="manga_tracking_tab">Sporing</string>
     <string name="download_notifier_unknown_error">Kunne ikkje lasta ned kapittel grunna uventa feil</string>
     <string name="pref_category_library_update">Global oppdatering</string>
-    <string name="recently">Nyleg</string>
     <string name="landscape">Liggjande</string>
     <string name="update_never">Av</string>
     <string name="update_6hour">Kvar sjette time</string>
@@ -264,15 +247,12 @@
     <string name="ext_unofficial">Uoffisiell</string>
     <string name="obsolete_extension_message">Denne utvidinga er ikkje lengre tilgjengeleg.</string>
     <string name="ext_nsfw_warning">Kan innehalda NSFW (18+) innhald</string>
-    <string name="webtoon_side_padding_25">25%</string>
     <string name="pref_download_new_categories_details">Manga i utelatne kategoriar vil ikkje bli nedlasta sjølv om dei òg er i inkluderte kategoriar.</string>
-    <string name="pref_backup_service_category">Automatisk reservekopiar</string>
     <string name="pref_backup_interval">Reservekopifrekvens</string>
     <string name="restoring_backup_canceled">Avbroten gjenoppretting</string>
     <string name="backup_restore_missing_sources">Manglande kjelder:</string>
     <string name="backup_restore_missing_trackers">Sporingstenester ikkje logga inn i:</string>
     <string name="about_dont_kill_my_app">Nokre produsentar har ytterlegare appavgrensingar som drep bakgrunnstenester. Denne nettstaden har meir info om korleis det kan fiksast.</string>
-    <string name="http_error_hint">Sjekk nettstad i WebView</string>
     <string name="website">Nettstaden</string>
     <string name="local_filter_order_by">Sorter etter</string>
     <string name="date">Dato</string>
