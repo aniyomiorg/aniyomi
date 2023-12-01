@@ -181,22 +181,30 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .filter {
                 when {
                     it.anime.updateStrategy != AnimeUpdateStrategy.ALWAYS_UPDATE -> {
-                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_always_update))
+                        skippedUpdates.add(
+                            it.anime to context.stringResource(MR.strings.skipped_reason_not_always_update),
+                        )
                         false
                     }
 
                     ENTRY_NON_COMPLETED in restrictions && it.anime.status.toInt() == SAnime.COMPLETED -> {
-                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_completed))
+                        skippedUpdates.add(
+                            it.anime to context.stringResource(MR.strings.skipped_reason_completed),
+                        )
                         false
                     }
 
                     ENTRY_HAS_UNVIEWED in restrictions && it.unseenCount != 0L -> {
-                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_caught_up))
+                        skippedUpdates.add(
+                            it.anime to context.stringResource(MR.strings.skipped_reason_not_caught_up),
+                        )
                         false
                     }
 
                     ENTRY_NON_VIEWED in restrictions && it.totalEpisodes > 0L && !it.hasStarted -> {
-                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_started))
+                        skippedUpdates.add(
+                            it.anime to context.stringResource(MR.strings.skipped_reason_not_started),
+                        )
                         false
                     }
 
@@ -287,7 +295,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
-                                            is NoEpisodesException -> context.stringResource(MR.strings.no_chapters_error)
+                                            is NoEpisodesException -> context.stringResource(
+                                                MR.strings.no_chapters_error,
+                                            )
                                             // failedUpdates will already have the source, don't need to copy it into the message
                                             is AnimeSourceNotInstalledException -> context.stringResource(
                                                 MR.strings.loader_not_implemented_error,

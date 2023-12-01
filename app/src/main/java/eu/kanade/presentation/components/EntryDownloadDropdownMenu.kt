@@ -5,8 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import eu.kanade.presentation.entries.DownloadAction
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun EntryDownloadDropdownMenu(

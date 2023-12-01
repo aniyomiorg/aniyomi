@@ -388,7 +388,11 @@ private fun AnimeScreenSmallImpl(
                         val isWatching = remember(state.episodes) {
                             state.episodes.fastAny { it.episode.seen }
                         }
-                        Text(text = stringResource(if (isWatching) MR.strings.action_resume else MR.strings.action_start))
+                        Text(
+                            text = stringResource(
+                                if (isWatching) MR.strings.action_resume else MR.strings.action_start,
+                            ),
+                        )
                     },
                     icon = {
                         Icon(

@@ -41,8 +41,8 @@ import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import tachiyomi.domain.items.service.calculateChapterGap
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable

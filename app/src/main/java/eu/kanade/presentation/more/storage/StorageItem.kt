@@ -35,8 +35,8 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.util.toSize
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class StorageItem(
     val id: Long,

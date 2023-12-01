@@ -181,22 +181,30 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .filter {
                 when {
                     it.manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
-                        skippedUpdates.add(it.manga to context.stringResource(MR.strings.skipped_reason_not_always_update))
+                        skippedUpdates.add(
+                            it.manga to context.stringResource(MR.strings.skipped_reason_not_always_update),
+                        )
                         false
                     }
 
                     ENTRY_NON_COMPLETED in restrictions && it.manga.status.toInt() == SManga.COMPLETED -> {
-                        skippedUpdates.add(it.manga to context.stringResource(MR.strings.skipped_reason_completed))
+                        skippedUpdates.add(
+                            it.manga to context.stringResource(MR.strings.skipped_reason_completed),
+                        )
                         false
                     }
 
                     ENTRY_HAS_UNVIEWED in restrictions && it.unreadCount != 0L -> {
-                        skippedUpdates.add(it.manga to context.stringResource(MR.strings.skipped_reason_not_caught_up))
+                        skippedUpdates.add(
+                            it.manga to context.stringResource(MR.strings.skipped_reason_not_caught_up),
+                        )
                         false
                     }
 
                     ENTRY_NON_VIEWED in restrictions && it.totalChapters > 0L && !it.hasStarted -> {
-                        skippedUpdates.add(it.manga to context.stringResource(MR.strings.skipped_reason_not_started))
+                        skippedUpdates.add(
+                            it.manga to context.stringResource(MR.strings.skipped_reason_not_started),
+                        )
                         false
                     }
 
@@ -286,7 +294,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
-                                            is NoChaptersException -> context.stringResource(MR.strings.no_chapters_error)
+                                            is NoChaptersException -> context.stringResource(
+                                                MR.strings.no_chapters_error,
+                                            )
                                             // failedUpdates will already have the source, don't need to copy it into the message
                                             is SourceNotInstalledException -> context.stringResource(
                                                 MR.strings.loader_not_implemented_error,
