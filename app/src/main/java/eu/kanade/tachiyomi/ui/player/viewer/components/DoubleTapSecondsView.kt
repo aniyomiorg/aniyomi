@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerDoubleTapSeekViewBinding
-import tachiyomi.core.i18n.localizePlural
+import tachiyomi.core.i18n.pluralStringResource
 import tachiyomi.i18n.MR
 
 /**
@@ -35,7 +35,7 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
 
     var seconds: Int = 0
         set(value) {
-            binding.doubleTapSeconds.text = context.localizePlural(
+            binding.doubleTapSeconds.text = context.pluralStringResource(
                 MR.plurals.seconds,
                 value,
                 value,

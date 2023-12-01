@@ -33,7 +33,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class MangaSourceSearchScreen(
@@ -66,7 +66,7 @@ data class MangaSourceSearchScreen(
             floatingActionButton = {
                 AnimatedVisibility(visible = state.filters.isNotEmpty()) {
                     ExtendedFloatingActionButton(
-                        text = { Text(text = localize(MR.strings.action_filter)) },
+                        text = { Text(text = stringResource(MR.strings.action_filter)) },
                         icon = { Icon(Icons.Outlined.FilterList, contentDescription = "") },
                         onClick = screenModel::openFilterSheet,
                     )

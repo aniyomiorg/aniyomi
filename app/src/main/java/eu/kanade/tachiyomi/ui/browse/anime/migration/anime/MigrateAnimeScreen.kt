@@ -13,7 +13,7 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import kotlinx.coroutines.flow.collectLatest
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
@@ -46,7 +46,7 @@ data class MigrateAnimeScreen(
             screenModel.events.collectLatest { event ->
                 when (event) {
                     MigrationAnimeEvent.FailedFetchingFavorites -> {
-                        context.localize(MR.strings.internal_error)
+                        context.stringResource(MR.strings.internal_error)
                     }
                 }
             }

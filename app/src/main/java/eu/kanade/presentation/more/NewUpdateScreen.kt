@@ -22,7 +22,7 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import eu.kanade.presentation.theme.TachiyomiTheme
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.InfoScreen
 
 @Composable
@@ -35,11 +35,11 @@ fun NewUpdateScreen(
 ) {
     InfoScreen(
         icon = Icons.Outlined.NewReleases,
-        headingText = localize(MR.strings.update_check_notification_update_available),
+        headingText = stringResource(MR.strings.update_check_notification_update_available),
         subtitleText = versionName,
-        acceptText = localize(MR.strings.update_check_confirm),
+        acceptText = stringResource(MR.strings.update_check_confirm),
         onAcceptClick = onAcceptUpdate,
-        rejectText = localize(MR.strings.action_not_now),
+        rejectText = stringResource(MR.strings.action_not_now),
         onRejectClick = onRejectUpdate,
     ) {
         Material3RichText(
@@ -58,7 +58,7 @@ fun NewUpdateScreen(
                 onClick = onOpenInBrowser,
                 modifier = Modifier.padding(top = MaterialTheme.padding.small),
             ) {
-                Text(text = localize(MR.strings.update_check_open))
+                Text(text = stringResource(MR.strings.update_check_open))
                 Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
                 Icon(imageVector = Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
             }

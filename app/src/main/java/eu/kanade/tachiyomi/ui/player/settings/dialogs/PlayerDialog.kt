@@ -18,7 +18,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 // TODO: (Merge_Change) stringResource "MR.strings.action_ok" to be replaced with
 //  "MR.strings.action_ok"
@@ -61,7 +61,7 @@ fun PlayerDialog(
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = localize(titleRes),
+                    text = stringResource(titleRes),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -74,11 +74,11 @@ fun PlayerDialog(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         TextButton(onClick = onDismissRequest) {
-                            Text(localize(MR.strings.action_cancel))
+                            Text(stringResource(MR.strings.action_cancel))
                         }
 
                         TextButton(onClick = onConfirm) {
-                            Text(localize(MR.strings.action_ok))
+                            Text(stringResource(MR.strings.action_ok))
                         }
                     }
                 }

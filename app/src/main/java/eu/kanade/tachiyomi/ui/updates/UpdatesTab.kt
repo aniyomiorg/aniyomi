@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.ui.updates.anime.animeUpdatesTab
 import eu.kanade.tachiyomi.ui.updates.manga.mangaUpdatesTab
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class UpdatesTab(
     private val fromMore: Boolean,
@@ -33,7 +33,7 @@ data class UpdatesTab(
             val index: UShort = if (fromMore) 5u else if (inMiddle) 2u else 1u
             return TabOptions(
                 index = index,
-                title = localize(MR.strings.label_recent_updates),
+                title = stringResource(MR.strings.label_recent_updates),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

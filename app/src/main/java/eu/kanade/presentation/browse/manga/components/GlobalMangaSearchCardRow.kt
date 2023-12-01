@@ -22,7 +22,7 @@ import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.entries.manga.model.asMangaCover
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun GlobalMangaSearchCardRow(
@@ -79,7 +79,7 @@ private fun MangaItem(
 @Composable
 private fun EmptyResultItem() {
     Text(
-        text = localize(MR.strings.no_results_found),
+        text = stringResource(MR.strings.no_results_found),
         modifier = Modifier
             .padding(
                 horizontal = MaterialTheme.padding.medium,

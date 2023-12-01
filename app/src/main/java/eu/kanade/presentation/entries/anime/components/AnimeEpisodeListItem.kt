@@ -54,7 +54,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 import kotlin.math.absoluteValue
 
@@ -145,7 +145,7 @@ fun AnimeEpisodeListItem(
                         if (!seen) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
-                                contentDescription = localize(MR.strings.unread),
+                                contentDescription = stringResource(MR.strings.unread),
                                 modifier = Modifier
                                     .height(8.dp)
                                     .padding(end = 4.dp),
@@ -155,7 +155,7 @@ fun AnimeEpisodeListItem(
                         if (bookmark) {
                             Icon(
                                 imageVector = Icons.Filled.Bookmark,
-                                contentDescription = localize(
+                                contentDescription = stringResource(
                                     MR.strings.action_filter_bookmarked,
                                 ),
                                 modifier = Modifier

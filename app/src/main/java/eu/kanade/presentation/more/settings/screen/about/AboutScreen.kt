@@ -38,7 +38,7 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
@@ -47,7 +47,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LinkIcon
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.icons.CustomIcons
 import tachiyomi.presentation.core.icons.Discord
 import tachiyomi.presentation.core.icons.Github
@@ -73,7 +73,7 @@ object AboutScreen : Screen() {
         Scaffold(
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = localize(MR.strings.pref_category_about),
+                    title = stringResource(MR.strings.pref_category_about),
                     navigateUp = if (handleBack != null) handleBack::invoke else null,
                     scrollBehavior = scrollBehavior,
                 )
@@ -88,7 +88,7 @@ object AboutScreen : Screen() {
 
                 item {
                     TextPreferenceWidget(
-                        title = localize(MR.strings.version),
+                        title = stringResource(MR.strings.version),
                         subtitle = getVersionName(withBuildDate = true),
                         onPreferenceClick = {
                             val deviceInfo = CrashLogUtil(context).getDebugInfo()
@@ -100,7 +100,7 @@ object AboutScreen : Screen() {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     item {
                         TextPreferenceWidget(
-                            title = localize(MR.strings.check_for_updates),
+                            title = stringResource(MR.strings.check_for_updates),
                             widget = {
                                 AnimatedVisibility(visible = isCheckingUpdates) {
                                     CircularProgressIndicator(
@@ -139,7 +139,7 @@ object AboutScreen : Screen() {
                 if (!BuildConfig.DEBUG) {
                     item {
                         TextPreferenceWidget(
-                            title = localize(MR.strings.whats_new),
+                            title = stringResource(MR.strings.whats_new),
                             onPreferenceClick = { uriHandler.openUri(RELEASE_URL) },
                         )
                     }
@@ -147,7 +147,7 @@ object AboutScreen : Screen() {
 
                 item {
                     TextPreferenceWidget(
-                        title = localize(MR.strings.help_translate),
+                        title = stringResource(MR.strings.help_translate),
                         onPreferenceClick = {
                             uriHandler.openUri(
                                 "https://aniyomi.org/docs/contribute#translation",
@@ -158,14 +158,14 @@ object AboutScreen : Screen() {
 
                 item {
                     TextPreferenceWidget(
-                        title = localize(MR.strings.licenses),
+                        title = stringResource(MR.strings.licenses),
                         onPreferenceClick = { navigator.push(OpenSourceLicensesScreen()) },
                     )
                 }
 
                 item {
                     TextPreferenceWidget(
-                        title = localize(MR.strings.privacy_policy),
+                        title = stringResource(MR.strings.privacy_policy),
                         onPreferenceClick = { uriHandler.openUri("https://aniyomi.org/privacy/") },
                     )
                 }
@@ -178,7 +178,7 @@ object AboutScreen : Screen() {
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         LinkIcon(
-                            label = localize(MR.strings.website),
+                            label = stringResource(MR.strings.website),
                             icon = Icons.Outlined.Public,
                             url = "https://aniyomi.org",
                         )
@@ -226,10 +226,10 @@ object AboutScreen : Screen() {
                         onAvailableUpdate(result)
                     }
                     is GetApplicationRelease.Result.NoNewUpdate -> {
-                        context.localize(MR.strings.update_check_no_new_updates)
+                        context.stringResource(MR.strings.update_check_no_new_updates)
                     }
                     is GetApplicationRelease.Result.OsTooOld -> {
-                        context.localize(MR.strings.update_check_eol)
+                        context.stringResource(MR.strings.update_check_eol)
                     }
                     else -> {}
                 }

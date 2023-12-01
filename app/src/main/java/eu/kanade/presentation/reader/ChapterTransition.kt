@@ -41,8 +41,8 @@ import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import tachiyomi.domain.items.service.calculateChapterGap
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localizePlural
+import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
@@ -58,13 +58,13 @@ fun ChapterTransition(
         when (transition) {
             is ChapterTransition.Prev -> {
                 TransitionText(
-                    topLabel = localize(MR.strings.transition_previous),
+                    topLabel = stringResource(MR.strings.transition_previous),
                     topChapter = goingToChapter,
                     topChapterDownloaded = goingToChapterDownloaded,
-                    bottomLabel = localize(MR.strings.transition_current),
+                    bottomLabel = stringResource(MR.strings.transition_current),
                     bottomChapter = currChapter,
                     bottomChapterDownloaded = currChapterDownloaded,
-                    fallbackLabel = localize(MR.strings.transition_no_previous),
+                    fallbackLabel = stringResource(MR.strings.transition_no_previous),
                     chapterGap = calculateChapterGap(
                         currChapter.toDomainChapter(),
                         goingToChapter?.toDomainChapter(),
@@ -73,13 +73,13 @@ fun ChapterTransition(
             }
             is ChapterTransition.Next -> {
                 TransitionText(
-                    topLabel = localize(MR.strings.transition_finished),
+                    topLabel = stringResource(MR.strings.transition_finished),
                     topChapter = currChapter,
                     topChapterDownloaded = currChapterDownloaded,
-                    bottomLabel = localize(MR.strings.transition_next),
+                    bottomLabel = stringResource(MR.strings.transition_next),
                     bottomChapter = goingToChapter,
                     bottomChapterDownloaded = goingToChapterDownloaded,
-                    fallbackLabel = localize(MR.strings.transition_no_next),
+                    fallbackLabel = stringResource(MR.strings.transition_no_next),
                     chapterGap = calculateChapterGap(
                         goingToChapter?.toDomainChapter(),
                         currChapter.toDomainChapter(),
@@ -197,7 +197,7 @@ private fun ChapterGapWarning(
             )
 
             Text(
-                text = localizePlural(
+                text = pluralStringResource(
                     MR.plurals.missing_chapters_warning,
                     count = gapCount,
                     gapCount,
@@ -255,7 +255,7 @@ private fun ChapterText(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.CheckCircle,
-                        contentDescription = localize(MR.strings.label_downloaded),
+                        contentDescription = stringResource(MR.strings.label_downloaded),
                     )
                 },
             ),

@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 private val HISTORY_ITEM_HEIGHT = 96.dp
 
@@ -72,7 +72,7 @@ fun MangaHistoryItem(
             val readAt = remember { history.readAt?.toTimestampString() ?: "" }
             Text(
                 text = if (history.chapterNumber > -1) {
-                    localize(
+                    stringResource(
                         MR.strings.recent_manga_time,
                         formatChapterNumber(history.chapterNumber),
                         readAt,
@@ -88,7 +88,7 @@ fun MangaHistoryItem(
         IconButton(onClick = onClickDelete) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = localize(MR.strings.action_delete),
+                contentDescription = stringResource(MR.strings.action_delete),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }

@@ -39,7 +39,7 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import kotlin.math.roundToInt
 
@@ -97,7 +97,7 @@ fun AnimeDownloadQueueScreen(
                         } else {
                             MR.strings.action_resume
                         }
-                        Text(text = localize(id))
+                        Text(text = stringResource(id))
                     },
                     icon = {
                         val icon = if (isRunning) {

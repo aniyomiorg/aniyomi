@@ -25,10 +25,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.injectLazy
 
 val resumeLastEpisodeSeenEvent = Channel<Unit>()
@@ -52,7 +52,7 @@ fun Screen.animeHistoryTab(
         if (episode != null) {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         } else {
-            snackbarHostState.showSnackbar(context.localize(MR.strings.no_next_episode))
+            snackbarHostState.showSnackbar(context.stringResource(MR.strings.no_next_episode))
         }
     }
 
@@ -108,11 +108,11 @@ fun Screen.animeHistoryTab(
                     when (e) {
                         AnimeHistoryScreenModel.Event.InternalError ->
                             snackbarHostState.showSnackbar(
-                                context.localize(MR.strings.internal_error),
+                                context.stringResource(MR.strings.internal_error),
                             )
                         AnimeHistoryScreenModel.Event.HistoryCleared ->
                             snackbarHostState.showSnackbar(
-                                context.localize(MR.strings.clear_history_completed),
+                                context.stringResource(MR.strings.clear_history_completed),
                             )
                         is AnimeHistoryScreenModel.Event.OpenEpisode -> openEpisode(
                             context,
@@ -131,7 +131,7 @@ fun Screen.animeHistoryTab(
         actions =
         persistentListOf(
             AppBar.Action(
-                title = localize(MR.strings.pref_clear_history),
+                title = stringResource(MR.strings.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,
                 onClick = { screenModel.setDialog(AnimeHistoryScreenModel.Dialog.DeleteAll) },
             ),

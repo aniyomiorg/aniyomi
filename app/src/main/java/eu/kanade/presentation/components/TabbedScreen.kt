@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun TabbedScreen(
@@ -74,7 +74,7 @@ fun TabbedScreen(
                 SearchToolbar(
                     titleContent = {
                         AppBarTitle(
-                            localize(titleRes),
+                            stringResource(titleRes),
                             modifier = modifier,
                             null,
                             tab.numberTitle,
@@ -109,7 +109,7 @@ fun TabbedScreen(
                         onClick = { scope.launch { state.animateScrollToPage(index) } },
                         text = {
                             TabText(
-                                text = localize(tab.titleRes),
+                                text = stringResource(tab.titleRes),
                                 badgeCount = tab.badgeNumber,
                             )
                         },

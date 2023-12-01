@@ -102,7 +102,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
@@ -289,17 +289,17 @@ class MainActivity : BaseActivity() {
                     onDismissRequest = { showChangelog = false },
                     title = {
                         Text(
-                            text = localize(MR.strings.updated_version, BuildConfig.VERSION_NAME),
+                            text = stringResource(MR.strings.updated_version, BuildConfig.VERSION_NAME),
                         )
                     },
                     dismissButton = {
                         TextButton(onClick = { openInBrowser(RELEASE_URL) }) {
-                            Text(text = localize(MR.strings.whats_new))
+                            Text(text = stringResource(MR.strings.whats_new))
                         }
                     },
                     confirmButton = {
                         TextButton(onClick = { showChangelog = false }) {
-                            Text(text = localize(MR.strings.action_ok))
+                            Text(text = stringResource(MR.strings.action_ok))
                         }
                     },
                 )

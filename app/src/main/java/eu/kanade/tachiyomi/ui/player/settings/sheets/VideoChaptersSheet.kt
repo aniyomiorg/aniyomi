@@ -24,7 +24,7 @@ import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.Utils
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
@@ -47,7 +47,7 @@ fun VideoChaptersSheet(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = localize(MR.strings.chapter_dialog_header),
+                text = stringResource(MR.strings.chapter_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
             )

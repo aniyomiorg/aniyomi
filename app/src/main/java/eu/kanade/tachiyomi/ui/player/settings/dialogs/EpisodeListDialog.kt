@@ -41,7 +41,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import java.text.DateFormat
 import java.util.Date
 
@@ -81,7 +81,7 @@ fun EpisodeListDialog(
                     val isCurrentEpisode = episode.id == episodeList[currentEpisodeIndex].id
 
                     val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                        localize(
+                        stringResource(
                             MR.strings.display_mode_episode,
                             formatEpisodeNumber(episode.episode_number.toDouble()),
                         )

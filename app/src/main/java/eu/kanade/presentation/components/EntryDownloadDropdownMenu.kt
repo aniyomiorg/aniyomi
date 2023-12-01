@@ -5,8 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import eu.kanade.presentation.entries.DownloadAction
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localizePlural
+import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.i18n.pluralStringResource
 
 @Composable
 fun EntryDownloadDropdownMenu(
@@ -22,11 +22,11 @@ fun EntryDownloadDropdownMenu(
         val downloadAmount = if (isManga) MR.plurals.download_amount_manga else MR.plurals.download_amount_anime
         val downloadUnviewed = if (isManga) MR.strings.download_unread else MR.strings.download_unseen
         listOfNotNull(
-            DownloadAction.NEXT_1_ITEM to localizePlural(downloadAmount, 1, 1),
-            DownloadAction.NEXT_5_ITEMS to localizePlural(downloadAmount, 5, 5),
-            DownloadAction.NEXT_10_ITEMS to localizePlural(downloadAmount, 10, 10),
-            DownloadAction.NEXT_25_ITEMS to localizePlural(downloadAmount, 25, 25),
-            DownloadAction.UNVIEWED_ITEMS to localize(downloadUnviewed),
+            DownloadAction.NEXT_1_ITEM to pluralStringResource(downloadAmount, 1, 1),
+            DownloadAction.NEXT_5_ITEMS to pluralStringResource(downloadAmount, 5, 5),
+            DownloadAction.NEXT_10_ITEMS to pluralStringResource(downloadAmount, 10, 10),
+            DownloadAction.NEXT_25_ITEMS to pluralStringResource(downloadAmount, 25, 25),
+            DownloadAction.UNVIEWED_ITEMS to stringResource(downloadUnviewed),
         ).map { (downloadAction, string) ->
             DropdownMenuItem(
                 text = { Text(text = string) },

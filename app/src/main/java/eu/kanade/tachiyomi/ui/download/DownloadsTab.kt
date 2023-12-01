@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class DownloadsTab(
     private val isManga: Boolean = false,
@@ -30,7 +30,7 @@ data class DownloadsTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
             return TabOptions(
                 index = 6u,
-                title = localize(MR.strings.label_download_queue),
+                title = stringResource(MR.strings.label_download_queue),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

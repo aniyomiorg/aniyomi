@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.util.system
 
 import android.content.Context
 import androidx.core.os.LocaleListCompat
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import java.util.Locale
 
@@ -29,10 +29,10 @@ object LocaleHelper {
      */
     fun getSourceDisplayName(lang: String?, context: Context): String {
         return when (lang) {
-            LAST_USED_KEY -> context.localize(MR.strings.last_used_source)
-            PINNED_KEY -> context.localize(MR.strings.pinned_sources)
-            "other" -> context.localize(MR.strings.other_source)
-            "all" -> context.localize(MR.strings.multi_lang)
+            LAST_USED_KEY -> context.stringResource(MR.strings.last_used_source)
+            PINNED_KEY -> context.stringResource(MR.strings.pinned_sources)
+            "other" -> context.stringResource(MR.strings.other_source)
+            "all" -> context.stringResource(MR.strings.multi_lang)
             else -> getDisplayName(lang)
         }
     }

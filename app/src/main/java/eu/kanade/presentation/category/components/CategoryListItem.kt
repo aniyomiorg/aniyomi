@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun CategoryListItem(
@@ -76,7 +76,7 @@ fun CategoryListItem(
             IconButton(onClick = onRename) {
                 Icon(
                     imageVector = Icons.Outlined.Edit,
-                    contentDescription = localize(MR.strings.action_rename_category),
+                    contentDescription = stringResource(MR.strings.action_rename_category),
                 )
             }
             IconButton(
@@ -88,14 +88,14 @@ fun CategoryListItem(
                         } else {
                             Icons.Outlined.VisibilityOff
                         },
-                        contentDescription = localize(MR.strings.action_hide),
+                        contentDescription = stringResource(MR.strings.action_hide),
                     )
                 },
             )
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
-                    contentDescription = localize(MR.strings.action_delete),
+                    contentDescription = stringResource(MR.strings.action_delete),
                 )
             }
         }

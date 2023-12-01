@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -62,7 +62,7 @@ class AnimeDownloadProvider(
                 .createDirectory(getAnimeDirName(animeTitle))
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
-            throw Exception(context.localize(MR.strings.invalid_location, downloadsDir ?: ""))
+            throw Exception(context.stringResource(MR.strings.invalid_location, downloadsDir ?: ""))
         }
     }
 

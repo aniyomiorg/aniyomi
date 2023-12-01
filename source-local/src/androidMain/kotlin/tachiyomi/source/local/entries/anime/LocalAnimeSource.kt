@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import rx.Observable
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.core.util.lang.withIOContext
@@ -45,7 +45,7 @@ actual class LocalAnimeSource(
     private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular(context))
     private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest(context))
 
-    override val name = context.localize(MR.strings.local_anime_source)
+    override val name = context.stringResource(MR.strings.local_anime_source)
 
     override val id: Long = ID
 

@@ -41,7 +41,7 @@ import eu.kanade.presentation.entries.ItemCover
 import tachiyomi.domain.entries.EntryCover
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.BadgeGroup
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 
 object CommonEntryItemDefaults {
@@ -379,7 +379,7 @@ private fun ContinueViewingButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.PlayArrow,
-                contentDescription = localize(MR.strings.action_resume),
+                contentDescription = stringResource(MR.strings.action_resume),
                 modifier = Modifier.size(16.dp),
             )
         }

@@ -60,7 +60,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
@@ -119,7 +119,7 @@ fun EntryBottomActionMenu(
                 if (onBookmarkClicked != null) {
                     val bookmark = if (isManga) MR.strings.action_bookmark else MR.strings.action_bookmark_episode
                     Button(
-                        title = localize(bookmark),
+                        title = stringResource(bookmark),
                         icon = Icons.Outlined.BookmarkAdd,
                         toConfirm = confirm[0],
                         onLongClick = { onLongClickItem(0) },
@@ -133,7 +133,7 @@ fun EntryBottomActionMenu(
                         MR.strings.action_remove_bookmark_episode
                     }
                     Button(
-                        title = localize(removeBookmark),
+                        title = stringResource(removeBookmark),
                         icon = Icons.Outlined.BookmarkRemove,
                         toConfirm = confirm[1],
                         onLongClick = { onLongClickItem(1) },
@@ -143,7 +143,7 @@ fun EntryBottomActionMenu(
                 if (onMarkAsViewedClicked != null) {
                     val viewed = if (isManga) MR.strings.action_mark_as_read else MR.strings.action_mark_as_seen
                     Button(
-                        title = localize(viewed),
+                        title = stringResource(viewed),
                         icon = Icons.Outlined.DoneAll,
                         toConfirm = confirm[2],
                         onLongClick = { onLongClickItem(2) },
@@ -153,7 +153,7 @@ fun EntryBottomActionMenu(
                 if (onMarkAsUnviewedClicked != null) {
                     val unviewed = if (isManga) MR.strings.action_mark_as_unread else MR.strings.action_mark_as_unseen
                     Button(
-                        title = localize(unviewed),
+                        title = stringResource(unviewed),
                         icon = Icons.Outlined.RemoveDone,
                         toConfirm = confirm[3],
                         onLongClick = { onLongClickItem(3) },
@@ -167,7 +167,7 @@ fun EntryBottomActionMenu(
                         MR.strings.action_mark_previous_as_seen
                     }
                     Button(
-                        title = localize(previousUnviewed),
+                        title = stringResource(previousUnviewed),
                         icon = ImageVector.vectorResource(R.drawable.ic_done_prev_24dp),
                         toConfirm = confirm[4],
                         onLongClick = { onLongClickItem(4) },
@@ -176,7 +176,7 @@ fun EntryBottomActionMenu(
                 }
                 if (onDownloadClicked != null) {
                     Button(
-                        title = localize(MR.strings.action_download),
+                        title = stringResource(MR.strings.action_download),
                         icon = Icons.Outlined.Download,
                         toConfirm = confirm[5],
                         onLongClick = { onLongClickItem(5) },
@@ -185,7 +185,7 @@ fun EntryBottomActionMenu(
                 }
                 if (onDeleteClicked != null) {
                     Button(
-                        title = localize(MR.strings.action_delete),
+                        title = stringResource(MR.strings.action_delete),
                         icon = Icons.Outlined.Delete,
                         toConfirm = confirm[6],
                         onLongClick = { onLongClickItem(6) },
@@ -194,7 +194,7 @@ fun EntryBottomActionMenu(
                 }
                 if (!isManga && onExternalClicked != null && !playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
-                        title = localize(MR.strings.action_play_externally),
+                        title = stringResource(MR.strings.action_play_externally),
                         icon = Icons.Outlined.OpenInNew,
                         toConfirm = confirm[7],
                         onLongClick = { onLongClickItem(7) },
@@ -203,7 +203,7 @@ fun EntryBottomActionMenu(
                 }
                 if (!isManga && onInternalClicked != null && playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
-                        title = localize(MR.strings.action_play_internally),
+                        title = stringResource(MR.strings.action_play_internally),
                         icon = Icons.Outlined.Input,
                         toConfirm = confirm[8],
                         onLongClick = { onLongClickItem(8) },
@@ -304,7 +304,7 @@ fun LibraryBottomActionMenu(
                     .padding(horizontal = 8.dp, vertical = 12.dp),
             ) {
                 Button(
-                    title = localize(MR.strings.action_move_category),
+                    title = stringResource(MR.strings.action_move_category),
                     icon = Icons.AutoMirrored.Outlined.Label,
                     toConfirm = confirm[0],
                     onLongClick = { onLongClickItem(0) },
@@ -312,7 +312,7 @@ fun LibraryBottomActionMenu(
                 )
                 val viewed = if (isManga) MR.strings.action_mark_as_read else MR.strings.action_mark_as_seen
                 Button(
-                    title = localize(viewed),
+                    title = stringResource(viewed),
                     icon = Icons.Outlined.DoneAll,
                     toConfirm = confirm[1],
                     onLongClick = { onLongClickItem(1) },
@@ -320,7 +320,7 @@ fun LibraryBottomActionMenu(
                 )
                 val unviewed = if (isManga) MR.strings.action_mark_as_unread else MR.strings.action_mark_as_unseen
                 Button(
-                    title = localize(unviewed),
+                    title = stringResource(unviewed),
                     icon = Icons.Outlined.RemoveDone,
                     toConfirm = confirm[2],
                     onLongClick = { onLongClickItem(2) },
@@ -329,7 +329,7 @@ fun LibraryBottomActionMenu(
                 if (onDownloadClicked != null) {
                     var downloadExpanded by remember { mutableStateOf(false) }
                     Button(
-                        title = localize(MR.strings.action_download),
+                        title = stringResource(MR.strings.action_download),
                         icon = Icons.Outlined.Download,
                         toConfirm = confirm[3],
                         onLongClick = { onLongClickItem(3) },
@@ -345,7 +345,7 @@ fun LibraryBottomActionMenu(
                     }
                 }
                 Button(
-                    title = localize(MR.strings.action_delete),
+                    title = stringResource(MR.strings.action_delete),
                     icon = Icons.Outlined.Delete,
                     toConfirm = confirm[4],
                     onLongClick = { onLongClickItem(4) },

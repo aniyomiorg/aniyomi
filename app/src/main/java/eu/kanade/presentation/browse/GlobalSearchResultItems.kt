@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun GlobalSearchResultItem(
@@ -92,7 +92,7 @@ fun GlobalSearchErrorResultItem(message: String?) {
         Icon(imageVector = Icons.Outlined.Error, contentDescription = null)
         Spacer(Modifier.height(4.dp))
         Text(
-            text = message ?: localize(MR.strings.unknown_error),
+            text = message ?: stringResource(MR.strings.unknown_error),
             textAlign = TextAlign.Center,
         )
     }

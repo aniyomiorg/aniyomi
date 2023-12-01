@@ -35,8 +35,8 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.util.toSize
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localizePlural
+import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.i18n.pluralStringResource
 
 data class StorageItem(
     val id: Long,
@@ -99,7 +99,7 @@ fun StorageItem(
                                     .size(MaterialTheme.padding.small / 2),
                             )
                             Text(
-                                text = localizePlural(
+                                text = pluralStringResource(
                                     pluralCount,
                                     count = item.entriesCount,
                                     item.entriesCount,
@@ -117,7 +117,7 @@ fun StorageItem(
                 content = {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = localize(MR.strings.action_delete),
+                        contentDescription = stringResource(MR.strings.action_delete),
                     )
                 },
             )
@@ -152,7 +152,7 @@ private fun ItemDeleteDialog(
                     onDismissRequest()
                 },
                 content = {
-                    Text(text = localize(MR.strings.action_ok))
+                    Text(text = stringResource(MR.strings.action_ok))
                 },
             )
         },
@@ -160,20 +160,20 @@ private fun ItemDeleteDialog(
             TextButton(
                 onClick = onDismissRequest,
                 content = {
-                    Text(text = localize(MR.strings.action_cancel))
+                    Text(text = stringResource(MR.strings.action_cancel))
                 },
             )
         },
         title = {
             Text(
-                text = localize(
+                text = stringResource(
                     if (isManga) MR.strings.delete_downloads_for_manga else MR.strings.delete_downloads_for_anime,
                 ),
             )
         },
         text = {
             Text(
-                text = localize(MR.strings.delete_confirmation, title),
+                text = stringResource(MR.strings.delete_confirmation, title),
             )
         },
     )

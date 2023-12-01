@@ -54,7 +54,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
@@ -302,7 +302,7 @@ class MangaScreen(
                 context.startActivity(
                     Intent.createChooser(
                         intent,
-                        context.localize(MR.strings.action_share),
+                        context.stringResource(MR.strings.action_share),
                     ),
                 )
             }

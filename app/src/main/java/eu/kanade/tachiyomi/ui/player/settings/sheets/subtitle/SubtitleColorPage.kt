@@ -40,7 +40,7 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import kotlin.math.floor
 import kotlin.math.max
@@ -146,7 +146,7 @@ private fun SubtitleColorSelector(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = localize(label))
+        Text(text = stringResource(label))
 
         Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
 
@@ -189,7 +189,7 @@ private fun SubtitleColorSlider(
         Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
 
         Text(
-            text = localize(argb.label),
+            text = stringResource(argb.label),
             style = MaterialTheme.typography.bodyMedium,
         )
 

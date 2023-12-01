@@ -10,7 +10,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.manga.MangaSourcesFilterScreen
 import eu.kanade.presentation.util.Screen
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
@@ -30,7 +30,7 @@ class MangaSourcesFilterScreen : Screen() {
         if (state is MangaSourcesFilterScreenModel.State.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
-                context.localize(MR.strings.internal_error)
+                context.stringResource(MR.strings.internal_error)
                 navigator.pop()
             }
             return

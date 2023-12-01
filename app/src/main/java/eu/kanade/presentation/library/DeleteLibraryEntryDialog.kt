@@ -13,7 +13,7 @@ import dev.icerock.moko.resources.StringResource
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun DeleteLibraryEntryDialog(
@@ -38,7 +38,7 @@ fun DeleteLibraryEntryDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = localize(MR.strings.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -52,17 +52,17 @@ fun DeleteLibraryEntryDialog(
                     )
                 },
             ) {
-                Text(text = localize(MR.strings.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
         title = {
-            Text(text = localize(MR.strings.action_remove))
+            Text(text = stringResource(MR.strings.action_remove))
         },
         text = {
             Column {
                 list.forEach { state ->
                     LabeledCheckbox(
-                        label = localize(state.value),
+                        label = stringResource(state.value),
                         checked = state.isChecked,
                         onCheckedChange = {
                             val index = list.indexOf(state)

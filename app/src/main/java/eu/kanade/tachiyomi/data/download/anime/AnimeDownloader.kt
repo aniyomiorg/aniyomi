@@ -44,7 +44,7 @@ import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okio.Buffer
 import rx.subjects.PublishSubject
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
@@ -339,7 +339,7 @@ class AnimeDownloader(
                 ) {
                     withUIContext {
                         notifier.onWarning(
-                            context.localize(MR.strings.download_queue_size_warning),
+                            context.stringResource(MR.strings.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
@@ -365,7 +365,7 @@ class AnimeDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
             notifier.onError(
-                context.localize(MR.strings.download_insufficient_space),
+                context.stringResource(MR.strings.download_insufficient_space),
                 download.episode.name,
                 download.anime.title,
             )
@@ -386,7 +386,7 @@ class AnimeDownloader(
                 download.video = fetchedVideo
                 fetchedVideo
             } catch (e: Exception) {
-                throw Exception(context.localize(MR.strings.video_list_empty_error))
+                throw Exception(context.stringResource(MR.strings.video_list_empty_error))
             }
         } else {
             // Or if the video already exists, return it

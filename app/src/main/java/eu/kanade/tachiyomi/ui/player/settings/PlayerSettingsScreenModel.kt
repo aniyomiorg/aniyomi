@@ -32,7 +32,7 @@ import tachiyomi.core.preference.toggle
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -69,7 +69,7 @@ class PlayerSettingsScreenModel(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = localize(textRes),
+                text = stringResource(textRes),
                 color = if (coloredText) MaterialTheme.colorScheme.primary else Color.Unspecified,
                 style = MaterialTheme.typography.titleSmall,
             )
@@ -111,7 +111,7 @@ class PlayerSettingsScreenModel(
             )
 
             TextButton(onClick = { showDialog = true }) {
-                Text(localize(MR.strings.action_reset))
+                Text(stringResource(MR.strings.action_reset))
             }
         }
     }
@@ -160,7 +160,7 @@ class PlayerSettingsScreenModel(
                     modifier = Modifier.size(14.dp),
                 )
                 Text(
-                    text = localize(MR.strings.player_subtitle_empty_warning),
+                    text = stringResource(MR.strings.player_subtitle_empty_warning),
                     style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                 )

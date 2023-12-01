@@ -38,7 +38,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
@@ -181,28 +181,28 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .filter {
                 when {
                     it.anime.updateStrategy != AnimeUpdateStrategy.ALWAYS_UPDATE -> {
-                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_always_update))
+                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_always_update))
                         false
                     }
 
                     ENTRY_NON_COMPLETED in restrictions && it.anime.status.toInt() == SAnime.COMPLETED -> {
-                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_completed))
+                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_completed))
                         false
                     }
 
                     ENTRY_HAS_UNVIEWED in restrictions && it.unseenCount != 0L -> {
-                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_caught_up))
+                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_caught_up))
                         false
                     }
 
                     ENTRY_NON_VIEWED in restrictions && it.totalEpisodes > 0L && !it.hasStarted -> {
-                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_started))
+                        skippedUpdates.add(it.anime to context.stringResource(MR.strings.skipped_reason_not_started))
                         false
                     }
 
                     ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.anime.nextUpdate > fetchWindow.second -> {
                         skippedUpdates.add(
-                            it.anime to context.localize(MR.strings.skipped_reason_not_in_release_period),
+                            it.anime to context.stringResource(MR.strings.skipped_reason_not_in_release_period),
                         )
                         false
                     }
@@ -287,9 +287,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
-                                            is NoEpisodesException -> context.localize(MR.strings.no_chapters_error)
+                                            is NoEpisodesException -> context.stringResource(MR.strings.no_chapters_error)
                                             // failedUpdates will already have the source, don't need to copy it into the message
-                                            is AnimeSourceNotInstalledException -> context.localize(
+                                            is AnimeSourceNotInstalledException -> context.stringResource(
                                                 MR.strings.loader_not_implemented_error,
                                             )
                                             else -> e.message
@@ -389,7 +389,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val file = context.createFileInCacheDir("aniyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(
-                        context.localize(MR.strings.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
+                        context.stringResource(MR.strings.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
                     )
                     // Error file format:
                     // ! Error

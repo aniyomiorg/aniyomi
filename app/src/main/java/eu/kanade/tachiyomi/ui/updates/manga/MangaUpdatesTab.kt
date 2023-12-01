@@ -24,9 +24,9 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun Screen.mangaUpdatesTab(
@@ -81,7 +81,7 @@ fun Screen.mangaUpdatesTab(
                 screenModel.events.collectLatest { event ->
                     when (event) {
                         MangaUpdatesScreenModel.Event.InternalError -> screenModel.snackbarHostState.showSnackbar(
-                            context.localize(
+                            context.stringResource(
                                 MR.strings.internal_error,
                             ),
                         )
@@ -91,7 +91,7 @@ fun Screen.mangaUpdatesTab(
                             } else {
                                 MR.strings.update_already_running
                             }
-                            screenModel.snackbarHostState.showSnackbar(context.localize(msg))
+                            screenModel.snackbarHostState.showSnackbar(context.stringResource(msg))
                         }
                     }
                 }
@@ -118,12 +118,12 @@ fun Screen.mangaUpdatesTab(
         if (screenModel.state.collectAsState().value.selected.isNotEmpty()) {
             persistentListOf(
                 AppBar.Action(
-                    title = localize(MR.strings.action_select_all),
+                    title = stringResource(MR.strings.action_select_all),
                     icon = Icons.Outlined.SelectAll,
                     onClick = { screenModel.toggleAllSelection(true) },
                 ),
                 AppBar.Action(
-                    title = localize(MR.strings.action_select_inverse),
+                    title = stringResource(MR.strings.action_select_inverse),
                     icon = Icons.Outlined.FlipToBack,
                     onClick = { screenModel.invertSelection() },
                 ),
@@ -131,7 +131,7 @@ fun Screen.mangaUpdatesTab(
         } else {
             persistentListOf(
                 AppBar.Action(
-                    title = localize(MR.strings.action_update_library),
+                    title = stringResource(MR.strings.action_update_library),
                     icon = Icons.Outlined.Refresh,
                     onClick = { screenModel.updateLibrary() },
                 ),

@@ -38,10 +38,10 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import kotlinx.collections.immutable.persistentListOf
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import java.io.File
 
 @Composable
@@ -52,9 +52,9 @@ fun SubtitleSettingsSheet(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = persistentListOf(
-            localize(MR.strings.player_subtitle_settings_delay_tab),
-            localize(MR.strings.player_subtitle_settings_font_tab),
-            localize(MR.strings.player_subtitle_settings_color_tab),
+            stringResource(MR.strings.player_subtitle_settings_delay_tab),
+            stringResource(MR.strings.player_subtitle_settings_font_tab),
+            stringResource(MR.strings.player_subtitle_settings_color_tab),
         ),
         hideSystemBars = true,
     ) { page ->
@@ -155,7 +155,7 @@ fun SubtitlePreview(
 ) {
     val fontMap = File(
         Environment.getExternalStorageDirectory().absolutePath +
-            File.separator + LocalContext.current.localize(MR.strings.app_name) +
+            File.separator + LocalContext.current.stringResource(MR.strings.app_name) +
             File.separator,
         "fonts",
     ).listFiles { file ->
@@ -177,7 +177,7 @@ fun SubtitlePreview(
         Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 OutLineText(
-                    text = localize(MR.strings.player_subtitle_settings_example),
+                    text = stringResource(MR.strings.player_subtitle_settings_example),
                     font = fontFile,
                     outlineColor = borderColor,
                     textColor = textColor,
@@ -187,7 +187,7 @@ fun SubtitlePreview(
                 )
             } else {
                 Text(
-                    text = localize(MR.strings.player_subtitle_settings_example),
+                    text = stringResource(MR.strings.player_subtitle_settings_example),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,

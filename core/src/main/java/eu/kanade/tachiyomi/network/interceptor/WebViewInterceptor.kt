@@ -13,7 +13,7 @@ import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.i18n.MR
 import java.util.Locale
@@ -59,7 +59,7 @@ abstract class WebViewInterceptor(
 
         if (!WebViewUtil.supportsWebView(context)) {
             launchUI {
-                context.localize(MR.strings.information_webview_required, Toast.LENGTH_LONG)
+                context.stringResource(MR.strings.information_webview_required, Toast.LENGTH_LONG)
             }
             return response
         }

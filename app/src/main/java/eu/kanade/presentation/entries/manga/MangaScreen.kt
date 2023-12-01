@@ -80,7 +80,7 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
@@ -365,7 +365,7 @@ private fun MangaScreenSmallImpl(
                         val isReading = remember(state.chapters) {
                             state.chapters.fastAny { it.chapter.read }
                         }
-                        Text(text = localize(if (isReading) MR.strings.action_resume else MR.strings.action_start))
+                        Text(text = stringResource(if (isReading) MR.strings.action_resume else MR.strings.action_start))
                     },
                     icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
                     onClick = onContinueReading,
@@ -619,7 +619,7 @@ fun MangaScreenLargeImpl(
                             state.chapters.fastAny { it.chapter.read }
                         }
                         Text(
-                            text = localize(
+                            text = stringResource(
                                 if (isReading) MR.strings.action_resume else MR.strings.action_start,
                             ),
                         )
@@ -812,7 +812,7 @@ private fun LazyListScope.sharedChapterItems(
             is ChapterList.Item -> {
                 MangaChapterListItem(
                     title = if (manga.displayMode == Manga.CHAPTER_DISPLAY_NUMBER) {
-                        localize(
+                        stringResource(
                             MR.strings.display_mode_chapter,
                             formatChapterNumber(item.chapter.chapterNumber),
                         )
@@ -831,7 +831,7 @@ private fun LazyListScope.sharedChapterItems(
                     readProgress = item.chapter.lastPageRead
                         .takeIf { !item.chapter.read && it > 0L }
                         ?.let {
-                            localize(
+                            stringResource(
                                 MR.strings.chapter_progress,
                                 it + 1,
                             )

@@ -18,7 +18,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -33,7 +33,7 @@ fun Screen.mangaCategoryTab(): TabContent {
         searchEnabled = false,
         actions = persistentListOf(
             AppBar.Action(
-                title = localize(MR.strings.action_sort),
+                title = stringResource(MR.strings.action_sort),
                 icon = Icons.Outlined.SortByAlpha,
                 onClick = { screenModel.showDialog(MangaCategoryDialog.SortAlphabetically) },
             ),

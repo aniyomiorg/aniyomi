@@ -19,7 +19,7 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
@@ -53,7 +53,7 @@ fun StreamsDelayPage(
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             OutlinedNumericChooser(
-                label = localize(MR.strings.player_audio_delay),
+                label = stringResource(MR.strings.player_audio_delay),
                 placeholder = "0",
                 suffix = "ms",
                 value = currentAudioDelay,
@@ -80,7 +80,7 @@ fun StreamsDelayPage(
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             OutlinedNumericChooser(
-                label = localize(MR.strings.player_subtitle_delay),
+                label = stringResource(MR.strings.player_subtitle_delay),
                 placeholder = "0",
                 suffix = "ms",
                 value = currentSubDelay,

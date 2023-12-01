@@ -49,7 +49,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
@@ -58,7 +58,7 @@ import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -85,7 +85,7 @@ object AnimeLibraryTab : Tab() {
             )
             return TabOptions(
                 index = 0u,
-                title = localize(title),
+                title = stringResource(title),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -112,7 +112,7 @@ object AnimeLibraryTab : Tab() {
             val started = AnimeLibraryUpdateJob.startNow(context, category)
             scope.launch {
                 val msgRes = if (started) MR.strings.updating_category else MR.strings.update_already_running
-                snackbarHostState.showSnackbar(context.localize(msgRes))
+                snackbarHostState.showSnackbar(context.stringResource(msgRes))
             }
             started
         }
@@ -124,9 +124,9 @@ object AnimeLibraryTab : Tab() {
         }
 
         val defaultTitle = if (fromMore) {
-            localize(MR.strings.label_library)
+            stringResource(MR.strings.label_library)
         } else {
-            localize(
+            stringResource(
                 MR.strings.label_anime_library,
             )
         }
@@ -135,7 +135,7 @@ object AnimeLibraryTab : Tab() {
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
                     defaultTitle = defaultTitle,
-                    defaultCategoryTitle = localize(MR.strings.label_default),
+                    defaultCategoryTitle = stringResource(MR.strings.label_default),
                     page = screenModel.activeCategoryIndex,
                 )
                 val tabVisible = state.showCategoryTabs && state.categories.size > 1
@@ -164,7 +164,7 @@ object AnimeLibraryTab : Tab() {
                                 navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    context.localize(MR.strings.information_no_entries_found),
+                                    context.stringResource(MR.strings.information_no_entries_found),
                                 )
                             }
                         }

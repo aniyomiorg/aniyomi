@@ -16,7 +16,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun Screen.migrateMangaSourceTab(): TabContent {
@@ -29,7 +29,7 @@ fun Screen.migrateMangaSourceTab(): TabContent {
         titleRes = MR.strings.label_migration,
         actions = persistentListOf(
             AppBar.Action(
-                title = localize(MR.strings.migration_help_guide),
+                title = stringResource(MR.strings.migration_help_guide),
                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
                 onClick = {
                     uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")

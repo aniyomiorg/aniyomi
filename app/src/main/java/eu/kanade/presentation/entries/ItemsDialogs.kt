@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun DeleteItemsDialog(
@@ -30,7 +30,7 @@ fun DeleteItemsDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = localize(MR.strings.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -40,14 +40,14 @@ fun DeleteItemsDialog(
                     onConfirm()
                 },
             ) {
-                Text(text = localize(MR.strings.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
         title = {
-            Text(text = localize(MR.strings.are_you_sure))
+            Text(text = stringResource(MR.strings.are_you_sure))
         },
         text = {
-            Text(text = localize(subtitle))
+            Text(text = stringResource(subtitle))
         },
     )
 }
@@ -62,7 +62,7 @@ fun SetIntervalDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = localize(MR.strings.manga_modify_calculated_interval_title)) },
+        title = { Text(text = stringResource(MR.strings.manga_modify_calculated_interval_title)) },
         text = {
             BoxWithConstraints(
                 modifier = Modifier.fillMaxWidth(),
@@ -72,7 +72,7 @@ fun SetIntervalDialog(
                 val items = (0..28)
                     .map {
                         if (it == 0) {
-                            localize(MR.strings.label_default)
+                            stringResource(MR.strings.label_default)
                         } else {
                             it.toString()
                         }
@@ -88,7 +88,7 @@ fun SetIntervalDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = localize(MR.strings.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -96,7 +96,7 @@ fun SetIntervalDialog(
                 onValueChanged(selectedInterval)
                 onDismissRequest()
             }) {
-                Text(text = localize(MR.strings.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
     )

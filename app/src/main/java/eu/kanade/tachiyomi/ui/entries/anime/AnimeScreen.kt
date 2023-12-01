@@ -54,14 +54,14 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 class AnimeScreen(
@@ -285,7 +285,7 @@ class AnimeScreen(
             is AnimeScreenModel.Dialog.ShowQualities -> {
                 EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest
                 val episodeTitle = if (dialog.anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                    localize(
+                    stringResource(
                         MR.strings.display_mode_episode,
                         formatEpisodeNumber(dialog.episode.episodeNumber),
                     )
@@ -355,7 +355,7 @@ class AnimeScreen(
                 context.startActivity(
                     Intent.createChooser(
                         intent,
-                        context.localize(MR.strings.action_share),
+                        context.stringResource(MR.strings.action_share),
                     ),
                 )
             }

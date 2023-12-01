@@ -87,7 +87,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
@@ -613,7 +613,7 @@ class PlayerActivity : BaseActivity() {
                 "sub-fonts-dir",
                 File(
                     Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                        localize(MR.strings.app_name),
+                        stringResource(MR.strings.app_name),
                     "fonts",
                 ).path,
             )
@@ -688,7 +688,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     -1,
-                                    videoChapterText = localize(MR.strings.go_to_previous_chapter),
+                                    videoChapterText = stringResource(MR.strings.go_to_previous_chapter),
                                     chapterSeek = "-1",
                                 )
                             }
@@ -702,7 +702,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     1,
-                                    videoChapterText = localize(MR.strings.go_to_next_chapter),
+                                    videoChapterText = stringResource(MR.strings.go_to_next_chapter),
                                     chapterSeek = "1",
                                 )
                             } else {
@@ -1291,9 +1291,9 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = localize(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
+            message = stringResource(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
-        startActivity(Intent.createChooser(intent, localize(MR.strings.action_share)))
+        startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
 
     /**
@@ -1755,7 +1755,7 @@ class PlayerActivity : BaseActivity() {
                 // show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
                     toast(
-                        "AniSkip: ${localize(MR.strings.player_aniskip_dontskip_toast,waitingAniSkip)}",
+                        "AniSkip: ${stringResource(MR.strings.player_aniskip_dontskip_toast,waitingAniSkip)}",
                     )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)

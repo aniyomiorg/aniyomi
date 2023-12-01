@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.Pill
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.clearFocusOnSoftKeyboardHide
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
 import tachiyomi.presentation.core.util.secondaryItemAlpha
@@ -140,7 +140,7 @@ fun AppBar(
                     IconButton(onClick = onCancelActionMode) {
                         Icon(
                             imageVector = Icons.Outlined.Close,
-                            contentDescription = localize(MR.strings.action_cancel),
+                            contentDescription = stringResource(MR.strings.action_cancel),
                         )
                     }
                 } else {
@@ -245,7 +245,7 @@ fun AppBarActions(
             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
             tooltip = {
                 PlainTooltip {
-                    Text(localize(MR.strings.action_menu_overflow_description))
+                    Text(stringResource(MR.strings.action_menu_overflow_description))
                 }
             },
             state = rememberTooltipState(),
@@ -255,7 +255,7 @@ fun AppBarActions(
             ) {
                 Icon(
                     Icons.Outlined.MoreVert,
-                    contentDescription = localize(
+                    contentDescription = stringResource(
                         MR.strings.action_menu_overflow_description,
                     ),
                 )
@@ -351,7 +351,7 @@ fun SearchToolbar(
                             Text(
                                 modifier = Modifier.secondaryItemAlpha(),
                                 text = (
-                                    placeholderText ?: localize(
+                                    placeholderText ?: stringResource(
                                         MR.strings.action_search_hint,
                                     )
                                     ),
@@ -379,7 +379,7 @@ fun SearchToolbar(
                         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                         tooltip = {
                             PlainTooltip {
-                                Text(localize(MR.strings.action_search))
+                                Text(stringResource(MR.strings.action_search))
                             }
                         },
                         state = rememberTooltipState(),
@@ -389,7 +389,7 @@ fun SearchToolbar(
                         ) {
                             Icon(
                                 Icons.Outlined.Search,
-                                contentDescription = localize(MR.strings.action_search),
+                                contentDescription = stringResource(MR.strings.action_search),
                             )
                         }
                     }
@@ -398,7 +398,7 @@ fun SearchToolbar(
                         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                         tooltip = {
                             PlainTooltip {
-                                Text(localize(MR.strings.action_reset))
+                                Text(stringResource(MR.strings.action_reset))
                             }
                         },
                         state = rememberTooltipState(),
@@ -411,7 +411,7 @@ fun SearchToolbar(
                         ) {
                             Icon(
                                 Icons.Outlined.Close,
-                                contentDescription = localize(MR.strings.action_reset),
+                                contentDescription = stringResource(MR.strings.action_reset),
                             )
                         }
                     }
@@ -435,7 +435,7 @@ fun UpIcon(
         ?: Icons.AutoMirrored.Outlined.ArrowBack
     Icon(
         imageVector = icon,
-        contentDescription = localize(MR.strings.action_bar_up_description),
+        contentDescription = stringResource(MR.strings.action_bar_up_description),
         modifier = modifier,
     )
 }

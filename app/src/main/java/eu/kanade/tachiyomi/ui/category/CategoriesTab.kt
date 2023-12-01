@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class CategoriesTab(
     private val isManga: Boolean = false,
@@ -36,7 +36,7 @@ data class CategoriesTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 7u,
-                title = localize(MR.strings.general_categories),
+                title = stringResource(MR.strings.general_categories),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.ui.history.manga.mangaHistoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class HistoriesTab(
     private val fromMore: Boolean,
@@ -40,7 +40,7 @@ data class HistoriesTab(
             val index: UShort = if (fromMore) 5u else 2u
             return TabOptions(
                 index = index,
-                title = localize(MR.strings.history),
+                title = stringResource(MR.strings.history),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

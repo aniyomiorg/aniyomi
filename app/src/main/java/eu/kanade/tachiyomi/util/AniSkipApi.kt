@@ -17,7 +17,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
@@ -77,7 +77,7 @@ class AniSkipApi {
             }
             withUIContext {
                 playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.localize(
+                playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
                     skipButtonString,
                 )
             }
@@ -96,7 +96,7 @@ class AniSkipApi {
                 if (waitingTime > 0) {
                     withUIContext {
                         playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.localize(
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
                             MR.strings.player_aniskip_dontskip,
                         )
                     }
@@ -111,7 +111,7 @@ class AniSkipApi {
         }
 
         fun skipAnimation(skipType: SkipType) {
-            binding.secondsView.binding.doubleTapSeconds.text = activity.localize(
+            binding.secondsView.binding.doubleTapSeconds.text = activity.stringResource(
                 MR.strings.player_aniskip_skip,
                 skipType.getString(),
             )

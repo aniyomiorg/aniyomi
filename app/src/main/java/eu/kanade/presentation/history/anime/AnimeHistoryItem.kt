@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 private val HistoryItemHeight = 96.dp
 
@@ -72,7 +72,7 @@ fun AnimeHistoryItem(
             val seenAt = remember { history.seenAt?.toTimestampString() ?: "" }
             Text(
                 text = if (history.episodeNumber > -1) {
-                    localize(
+                    stringResource(
                         MR.strings.recent_anime_time,
                         formatEpisodeNumber(history.episodeNumber),
                         seenAt,
@@ -88,7 +88,7 @@ fun AnimeHistoryItem(
         IconButton(onClick = onClickDelete) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = localize(MR.strings.action_delete),
+                contentDescription = stringResource(MR.strings.action_delete),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }

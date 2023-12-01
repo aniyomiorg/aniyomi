@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.mapAsCheckboxState
@@ -291,8 +291,8 @@ class MangaScreenModel(
                 screenModelScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
-                        message = context.localize(MR.strings.delete_downloads_for_manga),
-                        actionLabel = context.localize(MR.strings.action_delete),
+                        message = context.stringResource(MR.strings.delete_downloads_for_manga),
+                        actionLabel = context.stringResource(MR.strings.action_delete),
                         withDismissAction = true,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
@@ -575,7 +575,7 @@ class MangaScreenModel(
             }
         } catch (e: Throwable) {
             val message = if (e is NoChaptersException) {
-                context.localize(MR.strings.no_chapters_error)
+                context.stringResource(MR.strings.no_chapters_error)
             } else {
                 logcat(LogPriority.ERROR, e)
                 with(context) { e.formattedMessage }
@@ -671,8 +671,8 @@ class MangaScreenModel(
             }
             screenModelScope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = context.localize(MR.strings.snack_add_to_manga_library),
-                    actionLabel = context.localize(MR.strings.action_add),
+                    message = context.stringResource(MR.strings.snack_add_to_manga_library),
+                    actionLabel = context.stringResource(MR.strings.action_add),
                     withDismissAction = true,
                 )
                 if (result == SnackbarResult.ActionPerformed && !isFavorited) {
@@ -895,7 +895,7 @@ class MangaScreenModel(
                 setMangaDefaultChapterFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.localize(MR.strings.chapter_settings_updated),
+                message = context.stringResource(MR.strings.chapter_settings_updated),
             )
         }
     }

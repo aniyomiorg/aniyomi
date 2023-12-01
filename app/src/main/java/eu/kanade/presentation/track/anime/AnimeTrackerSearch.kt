@@ -49,7 +49,7 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
@@ -105,7 +105,7 @@ fun AnimeTrackerSearch(
                             decorationBox = {
                                 if (query.text.isEmpty()) {
                                     Text(
-                                        text = localize(MR.strings.action_search_hint),
+                                        text = stringResource(MR.strings.action_search_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         style = MaterialTheme.typography.bodyLarge,
                                     )
@@ -148,7 +148,7 @@ fun AnimeTrackerSearch(
                         .fillMaxWidth(),
                     elevation = ButtonDefaults.elevatedButtonElevation(),
                 ) {
-                    Text(text = localize(MR.strings.action_track))
+                    Text(text = stringResource(MR.strings.action_track))
                 }
             }
         },
@@ -193,7 +193,7 @@ fun AnimeTrackerSearch(
                 EmptyScreen(
                     modifier = Modifier.padding(innerPadding),
                     message = queryResult.exceptionOrNull()?.message
-                        ?: localize(MR.strings.unknown_error),
+                        ?: stringResource(MR.strings.unknown_error),
                 )
             }
         }

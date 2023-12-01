@@ -21,7 +21,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun Screen.mangaSourcesTab(): TabContent {
@@ -33,12 +33,12 @@ fun Screen.mangaSourcesTab(): TabContent {
         titleRes = MR.strings.label_manga_sources,
         actions = persistentListOf(
             AppBar.Action(
-                title = localize(MR.strings.action_global_search),
+                title = stringResource(MR.strings.action_global_search),
                 icon = Icons.Outlined.TravelExplore,
                 onClick = { navigator.push(GlobalMangaSearchScreen()) },
             ),
             AppBar.Action(
-                title = localize(MR.strings.action_filter),
+                title = stringResource(MR.strings.action_filter),
                 icon = Icons.Outlined.FilterList,
                 onClick = { navigator.push(MangaSourcesFilterScreen()) },
             ),
@@ -74,7 +74,7 @@ fun Screen.mangaSourcesTab(): TabContent {
                 )
             }
 
-            val internalErrString = localize(MR.strings.internal_error)
+            val internalErrString = stringResource(MR.strings.internal_error)
             LaunchedEffect(Unit) {
                 screenModel.events.collectLatest { event ->
                     when (event) {

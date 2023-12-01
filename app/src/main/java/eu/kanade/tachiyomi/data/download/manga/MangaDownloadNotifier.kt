@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.util.regex.Pattern
@@ -80,12 +80,12 @@ internal class MangaDownloadNotifier(private val context: Context) {
                 // Pause action
                 addAction(
                     R.drawable.ic_pause_24dp,
-                    context.localize(MR.strings.action_pause),
+                    context.stringResource(MR.strings.action_pause),
                     NotificationReceiver.pauseDownloadsPendingBroadcast(context),
                 )
             }
 
-            val downloadingProgressText = context.localize(
+            val downloadingProgressText = context.stringResource(
                 MR.strings.chapter_downloading_progress,
                 download.downloadedImages,
                 download.pages!!.size,
@@ -117,8 +117,8 @@ internal class MangaDownloadNotifier(private val context: Context) {
      */
     fun onPaused() {
         with(progressNotificationBuilder) {
-            setContentTitle(context.localize(MR.strings.download_paused))
-            setContentText(context.localize(MR.strings.download_notifier_download_paused_chapters))
+            setContentTitle(context.stringResource(MR.strings.download_paused))
+            setContentText(context.stringResource(MR.strings.download_notifier_download_paused_chapters))
             setSmallIcon(R.drawable.ic_pause_24dp)
             setProgress(0, 0, false)
             setOngoing(false)
@@ -128,13 +128,13 @@ internal class MangaDownloadNotifier(private val context: Context) {
             // Resume action
             addAction(
                 R.drawable.ic_play_arrow_24dp,
-                context.localize(MR.strings.action_resume),
+                context.stringResource(MR.strings.action_resume),
                 NotificationReceiver.resumeDownloadsPendingBroadcast(context),
             )
             // Clear action
             addAction(
                 R.drawable.ic_close_24dp,
-                context.localize(MR.strings.action_cancel_all),
+                context.stringResource(MR.strings.action_cancel_all),
                 NotificationReceiver.clearDownloadsPendingBroadcast(context),
             )
 
@@ -164,7 +164,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
      */
     fun onWarning(reason: String, timeout: Long? = null, contentIntent: PendingIntent? = null) {
         with(errorNotificationBuilder) {
-            setContentTitle(context.localize(MR.strings.download_notifier_downloader_title))
+            setContentTitle(context.stringResource(MR.strings.download_notifier_downloader_title))
             setStyle(NotificationCompat.BigTextStyle().bigText(reason))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setAutoCancel(true)
@@ -192,11 +192,11 @@ internal class MangaDownloadNotifier(private val context: Context) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
-                mangaTitle?.plus(": $chapter") ?: context.localize(
+                mangaTitle?.plus(": $chapter") ?: context.stringResource(
                     MR.strings.download_notifier_downloader_title,
                 ),
             )
-            setContentText(error ?: context.localize(MR.strings.download_notifier_unknown_error))
+            setContentText(error ?: context.stringResource(MR.strings.download_notifier_unknown_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             clearActions()
             setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))

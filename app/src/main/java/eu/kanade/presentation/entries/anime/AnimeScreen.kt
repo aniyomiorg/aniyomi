@@ -87,7 +87,7 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
@@ -388,7 +388,7 @@ private fun AnimeScreenSmallImpl(
                         val isWatching = remember(state.episodes) {
                             state.episodes.fastAny { it.episode.seen }
                         }
-                        Text(text = localize(if (isWatching) MR.strings.action_resume else MR.strings.action_start))
+                        Text(text = stringResource(if (isWatching) MR.strings.action_resume else MR.strings.action_start))
                     },
                     icon = {
                         Icon(
@@ -508,7 +508,7 @@ private fun AnimeScreenSmallImpl(
                                 state.anime.status.toInt() != SAnime.COMPLETED
                             ) {
                                 NextEpisodeAiringListItem(
-                                    title = localize(
+                                    title = stringResource(
                                         MR.strings.display_mode_episode,
                                         formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
@@ -681,7 +681,7 @@ fun AnimeScreenLargeImpl(
                             state.episodes.fastAny { it.episode.seen }
                         }
                         Text(
-                            text = localize(
+                            text = stringResource(
                                 if (isWatching) MR.strings.action_resume else MR.strings.action_start,
                             ),
                         )
@@ -794,7 +794,7 @@ fun AnimeScreenLargeImpl(
                                         state.anime.status.toInt() != SAnime.COMPLETED
                                     ) {
                                         NextEpisodeAiringListItem(
-                                            title = localize(
+                                            title = stringResource(
                                                 MR.strings.display_mode_episode,
                                                 formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
@@ -909,7 +909,7 @@ private fun LazyListScope.sharedEpisodeItems(
             is EpisodeList.Item -> {
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                        localize(
+                        stringResource(
                             MR.strings.display_mode_episode,
                             formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
@@ -928,7 +928,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     watchProgress = episodeItem.episode.lastSecondSeen
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
-                            localize(
+                            stringResource(
                                 MR.strings.episode_progress,
                                 formatTime(it),
                                 formatTime(episodeItem.episode.totalSeconds),

@@ -12,7 +12,7 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -46,8 +46,8 @@ class PictureInPictureHandler(
     ): RemoteAction {
         return RemoteAction(
             Icon.createWithResource(activity, iconResId),
-            activity.localize(titleRes),
-            activity.localize(titleRes),
+            activity.stringResource(titleRes),
+            activity.stringResource(titleRes),
             PendingIntent.getBroadcast(
                 activity,
                 requestCode,

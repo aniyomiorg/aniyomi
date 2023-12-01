@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.ui.stats.anime.animeStatsTab
 import eu.kanade.tachiyomi.ui.stats.manga.mangaStatsTab
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class StatsTab(
     private val isManga: Boolean = false,
@@ -29,7 +29,7 @@ data class StatsTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 8u,
-                title = localize(MR.strings.label_stats),
+                title = stringResource(MR.strings.label_stats),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

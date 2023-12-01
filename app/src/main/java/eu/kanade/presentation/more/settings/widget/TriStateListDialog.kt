@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
 
@@ -104,7 +104,7 @@ fun <T> TriStateListDialog(
                                     } else {
                                         MaterialTheme.colorScheme.primary
                                     },
-                                    contentDescription = localize(
+                                    contentDescription = stringResource(
                                         when (state) {
                                             State.UNCHECKED -> MR.strings.disabled
                                             State.CHECKED -> MR.strings.disabled
@@ -132,7 +132,7 @@ fun <T> TriStateListDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = localize(MR.strings.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -147,7 +147,7 @@ fun <T> TriStateListDialog(
                     onValueChanged(included, excluded)
                 },
             ) {
-                Text(text = localize(MR.strings.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
     )

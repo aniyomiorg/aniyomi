@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import java.io.InputStream
 
@@ -56,13 +56,13 @@ fun ScreenshotOptionsSheet(
             ) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = localize(MR.strings.set_as_cover),
+                    title = stringResource(MR.strings.set_as_cover),
                     icon = Icons.Outlined.Photo,
                     onClick = { showSetCoverDialog = true },
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = localize(MR.strings.action_share),
+                    title = stringResource(MR.strings.action_share),
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShare { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! }
@@ -71,7 +71,7 @@ fun ScreenshotOptionsSheet(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = localize(MR.strings.action_save),
+                    title = stringResource(MR.strings.action_save),
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSave { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! }

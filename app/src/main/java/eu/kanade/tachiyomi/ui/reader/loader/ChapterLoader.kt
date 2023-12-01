@@ -8,7 +8,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
@@ -50,7 +50,7 @@ class ChapterLoader(
                 val pages = loader.getPages()
                     .onEach { it.chapter = chapter }
                 if (pages.isEmpty()) {
-                    throw Exception(context.localize(MR.strings.page_list_empty_error))
+                    throw Exception(context.stringResource(MR.strings.page_list_empty_error))
                 }
 
                 // If the chapter is partially read, set the starting page to the last the user read
@@ -101,16 +101,16 @@ class ChapterLoader(
                     is Format.Rar -> try {
                         RarPageLoader(format.file)
                     } catch (e: UnsupportedRarV5Exception) {
-                        error(context.localize(MR.strings.loader_rar5_error))
+                        error(context.stringResource(MR.strings.loader_rar5_error))
                     }
                     is Format.Epub -> EpubPageLoader(format.file)
                 }
             }
             source is HttpSource -> HttpPageLoader(chapter, source)
             source is StubMangaSource -> error(
-                context.localize(MR.strings.source_not_installed, source.toString()),
+                context.stringResource(MR.strings.source_not_installed, source.toString()),
             )
-            else -> error(context.localize(MR.strings.loader_not_implemented_error))
+            else -> error(context.stringResource(MR.strings.loader_not_implemented_error))
         }
     }
 }

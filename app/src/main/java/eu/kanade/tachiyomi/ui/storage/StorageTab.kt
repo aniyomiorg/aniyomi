@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class StorageTab(
     private val isManga: Boolean = false,
@@ -29,7 +29,7 @@ data class StorageTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 8u,
-                title = localize(MR.strings.label_storage),
+                title = stringResource(MR.strings.label_storage),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

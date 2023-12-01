@@ -38,12 +38,12 @@ import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.plus
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.update
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 class CreateBackupScreen : Screen() {
 
@@ -71,7 +71,7 @@ class CreateBackupScreen : Screen() {
         Scaffold(
             topBar = {
                 AppBar(
-                    title = localize(MR.strings.pref_create_backup),
+                    title = stringResource(MR.strings.pref_create_backup),
                     navigateUp = navigator::pop,
                     scrollBehavior = it,
                 )
@@ -89,7 +89,7 @@ class CreateBackupScreen : Screen() {
                 ) {
                     item {
                         LabeledCheckbox(
-                            label = localize(MR.strings.entries),
+                            label = stringResource(MR.strings.entries),
                             checked = true,
                             onCheckedChange = {},
                             enabled = false,
@@ -98,7 +98,7 @@ class CreateBackupScreen : Screen() {
                     BackupChoices.forEach { (k, v) ->
                         item {
                             LabeledCheckbox(
-                                label = localize(v),
+                                label = stringResource(v),
                                 checked = state.flags.contains(k),
                                 onCheckedChange = {
                                     model.toggleFlag(k)
@@ -117,20 +117,20 @@ class CreateBackupScreen : Screen() {
                     onClick = {
                         if (!BackupCreateJob.isManualJobRunning(context)) {
                             if (DeviceUtil.isMiui && DeviceUtil.isMiuiOptimizationDisabled()) {
-                                context.localize(MR.strings.restore_miui_warning, Toast.LENGTH_LONG)
+                                context.stringResource(MR.strings.restore_miui_warning, Toast.LENGTH_LONG)
                             }
                             try {
                                 chooseBackupDir.launch(Backup.getFilename())
                             } catch (e: ActivityNotFoundException) {
-                                context.localize(MR.strings.file_picker_error)
+                                context.stringResource(MR.strings.file_picker_error)
                             }
                         } else {
-                            context.localize(MR.strings.backup_in_progress)
+                            context.stringResource(MR.strings.backup_in_progress)
                         }
                     },
                 ) {
                     Text(
-                        text = localize(MR.strings.action_create),
+                        text = stringResource(MR.strings.action_create),
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }

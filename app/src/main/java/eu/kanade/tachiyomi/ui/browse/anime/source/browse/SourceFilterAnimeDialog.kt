@@ -28,7 +28,7 @@ import tachiyomi.presentation.core.components.SelectItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TextItem
 import tachiyomi.presentation.core.components.TriStateItem
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun SourceFilterAnimeDialog(
@@ -52,7 +52,7 @@ fun SourceFilterAnimeDialog(
                 ) {
                     TextButton(onClick = onReset) {
                         Text(
-                            text = localize(MR.strings.action_reset),
+                            text = stringResource(MR.strings.action_reset),
                             style = LocalTextStyle.current.copy(
                                 color = MaterialTheme.colorScheme.primary,
                             ),
@@ -65,7 +65,7 @@ fun SourceFilterAnimeDialog(
                         onFilter()
                         onDismissRequest()
                     }) {
-                        Text(localize(MR.strings.action_filter))
+                        Text(stringResource(MR.strings.action_filter))
                     }
                 }
                 HorizontalDivider()

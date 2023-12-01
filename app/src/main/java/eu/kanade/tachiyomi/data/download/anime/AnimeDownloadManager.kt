@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.provider.FolderProvider
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
@@ -174,7 +174,7 @@ class AnimeDownloadManager(
             .filter { "video" in it.type.orEmpty() }
 
         if (files.isEmpty()) {
-            throw Exception(context.localize(MR.strings.video_list_empty_error))
+            throw Exception(context.stringResource(MR.strings.video_list_empty_error))
         }
 
         val file = files[0]

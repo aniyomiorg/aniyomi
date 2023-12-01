@@ -28,7 +28,7 @@ import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun EpisodeSettingsDialog(
@@ -52,13 +52,13 @@ fun EpisodeSettingsDialog(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = persistentListOf(
-            localize(MR.strings.action_filter),
-            localize(MR.strings.action_sort),
-            localize(MR.strings.action_display),
+            stringResource(MR.strings.action_filter),
+            stringResource(MR.strings.action_sort),
+            stringResource(MR.strings.action_display),
         ),
         tabOverflowMenuContent = { closeMenu ->
             DropdownMenuItem(
-                text = { Text(localize(MR.strings.set_chapter_settings_as_default)) },
+                text = { Text(stringResource(MR.strings.set_chapter_settings_as_default)) },
                 onClick = {
                     showSetAsDefaultDialog = true
                     closeMenu()
@@ -111,17 +111,17 @@ private fun FilterPage(
     onBookmarkedFilterChanged: (TriState) -> Unit,
 ) {
     TriStateItem(
-        label = localize(MR.strings.label_downloaded),
+        label = stringResource(MR.strings.label_downloaded),
         state = downloadFilter,
         onClick = onDownloadFilterChanged,
     )
     TriStateItem(
-        label = localize(MR.strings.action_filter_unseen),
+        label = stringResource(MR.strings.action_filter_unseen),
         state = unseenFilter,
         onClick = onUnseenFilterChanged,
     )
     TriStateItem(
-        label = localize(MR.strings.action_filter_bookmarked),
+        label = stringResource(MR.strings.action_filter_bookmarked),
         state = bookmarkedFilter,
         onClick = onBookmarkedFilterChanged,
     )
@@ -134,22 +134,22 @@ private fun SortPage(
     onItemSelected: (Long) -> Unit,
 ) {
     SortItem(
-        label = localize(MR.strings.sort_by_source),
+        label = stringResource(MR.strings.sort_by_source),
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_SOURCE },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_SOURCE) },
     )
     SortItem(
-        label = localize(MR.strings.sort_by_number),
+        label = stringResource(MR.strings.sort_by_number),
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_NUMBER },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_NUMBER) },
     )
     SortItem(
-        label = localize(MR.strings.sort_by_upload_date),
+        label = stringResource(MR.strings.sort_by_upload_date),
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_UPLOAD_DATE },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_UPLOAD_DATE) },
     )
     SortItem(
-        label = localize(MR.strings.action_sort_alpha),
+        label = stringResource(MR.strings.action_sort_alpha),
         sortDescending = sortDescending.takeIf { sortingMode == Anime.EPISODE_SORTING_ALPHABET },
         onClick = { onItemSelected(Anime.EPISODE_SORTING_ALPHABET) },
     )
@@ -161,12 +161,12 @@ private fun DisplayPage(
     onItemSelected: (Long) -> Unit,
 ) {
     RadioItem(
-        label = localize(MR.strings.show_title),
+        label = stringResource(MR.strings.show_title),
         selected = displayMode == Anime.EPISODE_DISPLAY_NAME,
         onClick = { onItemSelected(Anime.EPISODE_DISPLAY_NAME) },
     )
     RadioItem(
-        label = localize(MR.strings.show_episode_number),
+        label = stringResource(MR.strings.show_episode_number),
         selected = displayMode == Anime.EPISODE_DISPLAY_NUMBER,
         onClick = { onItemSelected(Anime.EPISODE_DISPLAY_NUMBER) },
     )
@@ -180,15 +180,15 @@ private fun SetAsDefaultDialog(
     var optionalChecked by rememberSaveable { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = localize(MR.strings.episode_settings)) },
+        title = { Text(text = stringResource(MR.strings.episode_settings)) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Text(text = localize(MR.strings.confirm_set_chapter_settings))
+                Text(text = stringResource(MR.strings.confirm_set_chapter_settings))
 
                 LabeledCheckbox(
-                    label = localize(MR.strings.also_set_episode_settings_for_library),
+                    label = stringResource(MR.strings.also_set_episode_settings_for_library),
                     checked = optionalChecked,
                     onCheckedChange = { optionalChecked = it },
                 )
@@ -196,7 +196,7 @@ private fun SetAsDefaultDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = localize(MR.strings.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -206,7 +206,7 @@ private fun SetAsDefaultDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = localize(MR.strings.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
     )

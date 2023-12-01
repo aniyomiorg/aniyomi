@@ -25,10 +25,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
-import tachiyomi.core.i18n.localize
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 
 val resumeLastChapterReadEvent = Channel<Unit>()
 
@@ -50,7 +50,7 @@ fun Screen.mangaHistoryTab(
             val intent = ReaderActivity.newIntent(context, chapter.mangaId, chapter.id)
             context.startActivity(intent)
         } else {
-            snackbarHostState.showSnackbar(context.localize(MR.strings.no_next_chapter))
+            snackbarHostState.showSnackbar(context.stringResource(MR.strings.no_next_chapter))
         }
     }
 
@@ -106,11 +106,11 @@ fun Screen.mangaHistoryTab(
                     when (e) {
                         MangaHistoryScreenModel.Event.InternalError ->
                             snackbarHostState.showSnackbar(
-                                context.localize(MR.strings.internal_error),
+                                context.stringResource(MR.strings.internal_error),
                             )
                         MangaHistoryScreenModel.Event.HistoryCleared ->
                             snackbarHostState.showSnackbar(
-                                context.localize(MR.strings.clear_history_completed),
+                                context.stringResource(MR.strings.clear_history_completed),
                             )
                         is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(
                             context,
@@ -129,7 +129,7 @@ fun Screen.mangaHistoryTab(
         actions =
         persistentListOf(
             AppBar.Action(
-                title = localize(MR.strings.pref_clear_history),
+                title = stringResource(MR.strings.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,
                 onClick = { screenModel.setDialog(MangaHistoryScreenModel.Dialog.DeleteAll) },
             ),

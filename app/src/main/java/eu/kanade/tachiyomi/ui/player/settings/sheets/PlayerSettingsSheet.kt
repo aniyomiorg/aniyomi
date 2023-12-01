@@ -22,7 +22,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
@@ -75,7 +75,7 @@ fun PlayerSettingsSheet(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             Text(
-                text = localize(MR.strings.settings_dialog_header),
+                text = stringResource(MR.strings.settings_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
             )
@@ -101,7 +101,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = localize(MR.strings.player_hwdec_mode),
+                    text = stringResource(MR.strings.player_hwdec_mode),
                     style = MaterialTheme.typography.titleSmall,
                 )
 
@@ -126,7 +126,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = localize(MR.strings.toggle_player_statistics_page),
+                    text = stringResource(MR.strings.toggle_player_statistics_page),
                     style = MaterialTheme.typography.titleSmall,
                 )
 
@@ -138,7 +138,7 @@ fun PlayerSettingsSheet(
                         FilterChip(
                             selected = statisticsPage == it.page,
                             onClick = { togglePlayerStatsPage(it.page) },
-                            label = { Text(localize(it.textRes)) },
+                            label = { Text(stringResource(it.textRes)) },
                         )
                     }
                 }
