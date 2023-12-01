@@ -19,7 +19,6 @@ import eu.kanade.tachiyomi.core.Constants
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 
-
 @Composable
 fun LockedAnimeWidget(
     foreground: ColorProvider,
