@@ -13,7 +13,10 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.PreferenceScaffold
 import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.guava.await
@@ -24,7 +27,7 @@ class DebugInfoScreen : Screen() {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         PreferenceScaffold(
-            titleRes = R.string.pref_debug_info,
+            titleRes = MR.strings.pref_debug_info,
             onBackPressed = navigator::pop,
             itemsProvider = {
                 listOf(

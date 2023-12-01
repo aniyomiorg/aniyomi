@@ -37,6 +37,10 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.widget.R
 import tachiyomi.presentation.widget.components.anime.CoverHeight
 import tachiyomi.presentation.widget.components.anime.CoverWidth

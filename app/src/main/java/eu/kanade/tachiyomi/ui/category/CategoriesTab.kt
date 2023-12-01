@@ -13,6 +13,10 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryEvent
 import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryScreenModel
 import eu.kanade.tachiyomi.ui.category.anime.animeCategoryTab
@@ -35,7 +39,7 @@ data class CategoriesTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 7u,
-                title = stringResource(R.string.general_categories),
+                title = localize(MR.strings.general_categories),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -48,7 +52,7 @@ data class CategoriesTab(
         val mangaCategoryScreenModel = rememberScreenModel { MangaCategoryScreenModel() }
 
         TabbedScreen(
-            titleRes = R.string.general_categories,
+            titleRes = MR.strings.general_categories,
             tabs = persistentListOf(
                 animeCategoryTab(),
                 mangaCategoryTab(),

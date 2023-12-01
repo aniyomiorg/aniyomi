@@ -35,8 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.toSize
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.localizePlural
 
 data class StorageItem(
     val id: Long,
@@ -54,7 +59,7 @@ fun StorageItem(
     modifier: Modifier = Modifier,
     onDelete: (Long) -> Unit,
 ) {
-    val pluralCount = if (isManga) R.plurals.manga_num_chapters else R.plurals.anime_num_episodes
+    val pluralCount = if (isManga) MR.plurals.manga_num_chapters else MR.plurals.anime_num_episodes
     var showDeleteDialog by remember {
         mutableStateOf(false)
     }
@@ -99,8 +104,8 @@ fun StorageItem(
                                     .size(MaterialTheme.padding.small / 2),
                             )
                             Text(
-                                text = pluralStringResource(
-                                    id = pluralCount,
+                                text = localizePlural(
+                                    pluralCount,
                                     count = item.entriesCount,
                                     item.entriesCount,
                                 ),
@@ -117,7 +122,7 @@ fun StorageItem(
                 content = {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.action_delete),
+                        contentDescription = localize(MR.strings.action_delete),
                     )
                 },
             )
@@ -152,7 +157,7 @@ private fun ItemDeleteDialog(
                     onDismissRequest()
                 },
                 content = {
-                    Text(text = stringResource(R.string.action_ok))
+                    Text(text = localize(MR.strings.action_ok))
                 },
             )
         },
@@ -160,20 +165,20 @@ private fun ItemDeleteDialog(
             TextButton(
                 onClick = onDismissRequest,
                 content = {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = localize(MR.strings.action_cancel))
                 },
             )
         },
         title = {
             Text(
-                text = stringResource(
-                    if (isManga) R.string.delete_downloads_for_manga else R.string.delete_downloads_for_anime,
+                text = localize(
+                    if (isManga) MR.strings.delete_downloads_for_manga else MR.strings.delete_downloads_for_anime,
                 ),
             )
         },
         text = {
             Text(
-                text = stringResource(R.string.delete_confirmation, title),
+                text = localize(MR.strings.delete_confirmation, title),
             )
         },
     )

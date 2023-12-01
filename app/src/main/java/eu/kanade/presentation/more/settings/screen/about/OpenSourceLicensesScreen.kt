@@ -12,7 +12,10 @@ import com.mikepenz.aboutlibraries.ui.compose.LibraryDefaults
 import com.mikepenz.aboutlibraries.ui.compose.util.htmlReadyLicenseContent
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.core.components.material.Scaffold
 
 class OpenSourceLicensesScreen : Screen() {
@@ -22,7 +25,7 @@ class OpenSourceLicensesScreen : Screen() {
         Scaffold(
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = stringResource(R.string.licenses),
+                    title = localize(MR.strings.licenses),
                     navigateUp = navigator::pop,
                     scrollBehavior = scrollBehavior,
                 )

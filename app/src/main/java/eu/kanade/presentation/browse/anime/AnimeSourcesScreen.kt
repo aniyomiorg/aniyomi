@@ -22,7 +22,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -49,7 +52,7 @@ fun AnimeSourcesScreen(
     when {
         state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
-            textResource = R.string.source_empty_screen,
+            stringRes = MR.strings.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
         )
         else -> {
@@ -126,7 +129,7 @@ private fun AnimeSourceItem(
             if (source.supportsLatest) {
                 TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
-                        text = stringResource(id = R.string.latest),
+                        text = localize(MR.strings.latest),
                         style = LocalTextStyle.current.copy(
                             color = MaterialTheme.colorScheme.primary,
                         ),
@@ -154,12 +157,12 @@ private fun AnimeSourcePinButton(
             alpha = SecondaryItemAlpha,
         )
     }
-    val description = if (isPinned) R.string.action_unpin else R.string.action_pin
+    val description = if (isPinned) MR.strings.action_unpin else MR.strings.action_pin
     IconButton(onClick = onClick) {
         Icon(
             imageVector = icon,
             tint = tint,
-            contentDescription = stringResource(description),
+            contentDescription = localize(description),
         )
     }
 }
@@ -177,9 +180,9 @@ fun AnimeSourceOptionsDialog(
         },
         text = {
             Column {
-                val textId = if (Pin.Pinned in source.pin) R.string.action_unpin else R.string.action_pin
+                val textId = if (Pin.Pinned in source.pin) MR.strings.action_unpin else MR.strings.action_pin
                 Text(
-                    text = stringResource(textId),
+                    text = localize(textId),
                     modifier = Modifier
                         .clickable(onClick = onClickPin)
                         .fillMaxWidth()
@@ -187,7 +190,7 @@ fun AnimeSourceOptionsDialog(
                 )
                 if (source.id != LocalAnimeSource.ID) {
                     Text(
-                        text = stringResource(id = R.string.action_disable),
+                        text = localize(MR.strings.action_disable),
                         modifier = Modifier
                             .clickable(onClick = onClickDisable)
                             .fillMaxWidth()

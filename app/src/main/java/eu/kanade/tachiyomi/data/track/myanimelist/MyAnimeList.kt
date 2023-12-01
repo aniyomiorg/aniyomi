@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.myanimelist
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
@@ -67,17 +71,16 @@ class MyAnimeList(id: Long) :
         return listOf(WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH, REWATCHING)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        READING -> R.string.reading
-        WATCHING -> R.string.watching
-        COMPLETED -> R.string.completed
-        ON_HOLD -> R.string.on_hold
-        DROPPED -> R.string.dropped
-        PLAN_TO_READ -> R.string.plan_to_read
-        PLAN_TO_WATCH -> R.string.plan_to_watch
-        REREADING -> R.string.repeating
-        REWATCHING -> R.string.repeating_anime
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        READING -> MR.strings.reading
+        WATCHING -> MR.strings.watching
+        COMPLETED -> MR.strings.completed
+        ON_HOLD -> MR.strings.on_hold
+        DROPPED -> MR.strings.dropped
+        PLAN_TO_READ -> MR.strings.plan_to_read
+        PLAN_TO_WATCH -> MR.strings.plan_to_watch
+        REREADING -> MR.strings.repeating
+        REWATCHING -> MR.strings.repeating_anime
         else -> null
     }
 

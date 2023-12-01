@@ -7,7 +7,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
@@ -18,7 +21,7 @@ fun CategoryFloatingActionButton(
     onCreate: () -> Unit,
 ) {
     ExtendedFloatingActionButton(
-        text = { Text(text = stringResource(R.string.action_add)) },
+        text = { Text(text = localize(MR.strings.action_add)) },
         icon = { Icon(imageVector = Icons.Outlined.Add, contentDescription = "") },
         onClick = onCreate,
         expanded = lazyListState.isScrollingUp() || lazyListState.isScrolledToEnd(),

@@ -18,7 +18,10 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesScreenModel
@@ -68,7 +71,7 @@ fun MangaUpdateScreen(
         when {
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(
-                textResource = R.string.information_no_recent,
+                stringRes = MR.strings.information_no_recent,
                 modifier = Modifier.padding(contentPadding),
             )
             else -> {

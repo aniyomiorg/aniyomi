@@ -24,7 +24,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.reader.components.ChapterNavigator
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
@@ -103,11 +106,11 @@ fun ReaderAppBars(
                             .apply {
                                 add(
                                     AppBar.Action(
-                                        title = stringResource(
+                                        title = localize(
                                             if (bookmarked) {
-                                                R.string.action_remove_bookmark
+                                                MR.strings.action_remove_bookmark
                                             } else {
-                                                R.string.action_bookmark
+                                                MR.strings.action_bookmark
                                             },
                                         ),
                                         icon = if (bookmarked) {
@@ -121,7 +124,7 @@ fun ReaderAppBars(
                                 onOpenInWebView?.let {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_open_in_web_view),
+                                            title = localize(MR.strings.action_open_in_web_view),
                                             onClick = it,
                                         ),
                                     )
@@ -129,7 +132,7 @@ fun ReaderAppBars(
                                 onShare?.let {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_share),
+                                            title = localize(MR.strings.action_share),
                                             onClick = it,
                                         ),
                                     )

@@ -39,6 +39,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.ui.UiPreferences
@@ -49,7 +50,10 @@ import eu.kanade.presentation.track.TrackStatusSelector
 import eu.kanade.presentation.track.manga.MangaTrackInfoDialogHome
 import eu.kanade.presentation.track.manga.MangaTrackerSearch
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
@@ -221,7 +225,7 @@ data class MangaTrackInfoDialogHomeScreen(
                     val matchResult = item.tracker.match(manga) ?: throw Exception()
                     item.tracker.mangaService.register(matchResult, mangaId)
                 } catch (e: Exception) {
-                    withUIContext { Injekt.get<Application>().toast(R.string.error_no_match) }
+                    withUIContext { Injekt.get<Application>().toast(MR.strings.error_no_match) }
                 }
             }
         }
@@ -238,10 +242,10 @@ data class MangaTrackInfoDialogHomeScreen(
                     }
                     withUIContext {
                         context.toast(
-                            context.getString(
-                                R.string.track_error,
+                            context.localize(
+                                MR.strings.track_error,
                                 track!!.name,
-                                e.message,
+                                e.message ?: "",
                             ),
                         )
                     }
@@ -299,7 +303,7 @@ private data class TrackStatusSelectorScreen(
         private val tracker: Tracker,
     ) : StateScreenModel<Model.State>(State(track.status.toInt())) {
 
-        fun getSelections(): Map<Int, Int?> {
+        fun getSelections(): Map<Int, StringResource?> {
             return tracker.mangaService.getStatusListManga().associateWith { tracker.getStatus(it) }
         }
 
@@ -517,9 +521,9 @@ private data class TrackDateSelectorScreen(
         }
         TrackDateSelector(
             title = if (start) {
-                stringResource(R.string.track_started_reading_date)
+                localize(MR.strings.track_started_reading_date)
             } else {
-                stringResource(R.string.track_finished_reading_date)
+                localize(MR.strings.track_finished_reading_date)
             },
             initialSelectedDateMillis = screenModel.initialSelection,
             selectableDates = selectableDates,
@@ -594,7 +598,7 @@ private data class TrackDateRemoverScreen(
             },
             title = {
                 Text(
-                    text = stringResource(R.string.track_remove_date_conf_title),
+                    text = localize(MR.strings.track_remove_date_conf_title),
                     textAlign = TextAlign.Center,
                 )
             },
@@ -602,9 +606,9 @@ private data class TrackDateRemoverScreen(
                 val serviceName = screenModel.getName()
                 Text(
                     text = if (start) {
-                        stringResource(R.string.track_remove_start_date_conf_text, serviceName)
+                        localize(MR.strings.track_remove_start_date_conf_text, serviceName)
                     } else {
-                        stringResource(R.string.track_remove_finish_date_conf_text, serviceName)
+                        localize(MR.strings.track_remove_finish_date_conf_text, serviceName)
                     },
                 )
             },
@@ -617,7 +621,7 @@ private data class TrackDateRemoverScreen(
                     ),
                 ) {
                     TextButton(onClick = navigator::pop) {
-                        Text(text = stringResource(R.string.action_cancel))
+                        Text(text = localize(MR.strings.action_cancel))
                     }
                     FilledTonalButton(
                         onClick = {
@@ -629,7 +633,7 @@ private data class TrackDateRemoverScreen(
                             contentColor = MaterialTheme.colorScheme.onErrorContainer,
                         ),
                     ) {
-                        Text(text = stringResource(R.string.action_remove))
+                        Text(text = localize(MR.strings.action_remove))
                     }
                 }
             },
@@ -773,7 +777,7 @@ private data class TrackerMangaRemoveScreen(
             },
             title = {
                 Text(
-                    text = stringResource(R.string.track_delete_title, serviceName),
+                    text = localize(MR.strings.track_delete_title, serviceName),
                     textAlign = TextAlign.Center,
                 )
             },
@@ -782,11 +786,11 @@ private data class TrackerMangaRemoveScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text = stringResource(R.string.track_delete_text, serviceName),
+                        text = localize(MR.strings.track_delete_text, serviceName),
                     )
                     if (screenModel.isDeletable()) {
                         LabeledCheckbox(
-                            label = stringResource(R.string.track_delete_remote_text, serviceName),
+                            label = localize(MR.strings.track_delete_remote_text, serviceName),
                             checked = removeRemoteTrack,
                             onCheckedChange = { removeRemoteTrack = it },
                         )
@@ -802,7 +806,7 @@ private data class TrackerMangaRemoveScreen(
                     ),
                 ) {
                     TextButton(onClick = navigator::pop) {
-                        Text(text = stringResource(R.string.action_cancel))
+                        Text(text = localize(MR.strings.action_cancel))
                     }
                     FilledTonalButton(
                         onClick = {
@@ -815,7 +819,7 @@ private data class TrackerMangaRemoveScreen(
                             contentColor = MaterialTheme.colorScheme.onErrorContainer,
                         ),
                     ) {
-                        Text(text = stringResource(R.string.action_ok))
+                        Text(text = localize(MR.strings.action_ok))
                     }
                 }
             },

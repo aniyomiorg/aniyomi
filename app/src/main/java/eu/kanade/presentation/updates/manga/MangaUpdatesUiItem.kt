@@ -40,7 +40,10 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
@@ -63,7 +66,7 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
                 ),
         ) {
             Text(
-                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
+                text = localize(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }
@@ -110,8 +113,8 @@ fun LazyListScope.mangaUpdatesUiItems(
                     readProgress = updatesItem.update.lastPageRead
                         .takeIf { !updatesItem.update.read && it > 0L }
                         ?.let {
-                            stringResource(
-                                R.string.chapter_progress,
+                            localize(
+                                MR.strings.chapter_progress,
                                 it + 1,
                             )
                         },
@@ -197,7 +200,7 @@ fun MangaUpdatesUiItem(
                 if (!update.read) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(R.string.unread),
+                        contentDescription = localize(MR.strings.unread),
                         modifier = Modifier
                             .height(8.dp)
                             .padding(end = 4.dp),
@@ -207,7 +210,7 @@ fun MangaUpdatesUiItem(
                 if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(R.string.action_filter_bookmarked),
+                        contentDescription = localize(MR.strings.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },

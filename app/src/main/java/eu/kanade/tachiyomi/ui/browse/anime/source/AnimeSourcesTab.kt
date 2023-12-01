@@ -16,7 +16,10 @@ import eu.kanade.presentation.browse.anime.AnimeSourceOptionsDialog
 import eu.kanade.presentation.browse.anime.AnimeSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import kotlinx.collections.immutable.persistentListOf
@@ -30,15 +33,15 @@ fun Screen.animeSourcesTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = R.string.label_anime_sources,
+        titleRes = MR.strings.label_anime_sources,
         actions = persistentListOf(
             AppBar.Action(
-                title = stringResource(R.string.action_global_search),
+                title = localize(MR.strings.action_global_search),
                 icon = Icons.Outlined.TravelExplore,
                 onClick = { navigator.push(GlobalAnimeSearchScreen()) },
             ),
             AppBar.Action(
-                title = stringResource(R.string.action_filter),
+                title = localize(MR.strings.action_filter),
                 icon = Icons.Outlined.FilterList,
                 onClick = { navigator.push(AnimeSourcesFilterScreen()) },
             ),
@@ -70,7 +73,7 @@ fun Screen.animeSourcesTab(): TabContent {
                 )
             }
 
-            val internalErrString = stringResource(R.string.internal_error)
+            val internalErrString = localize(MR.strings.internal_error)
             LaunchedEffect(Unit) {
                 screenModel.events.collectLatest { event ->
                     when (event) {

@@ -8,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.category.components.CategoryContent
 import eu.kanade.presentation.category.components.CategoryFloatingActionButton
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryScreenState
 import tachiyomi.domain.category.model.Category
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -39,7 +42,7 @@ fun AnimeCategoryScreen(
     ) {
         if (state.isEmpty) {
             EmptyScreen(
-                textResource = R.string.information_empty_category,
+                stringRes = MR.strings.information_empty_category,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

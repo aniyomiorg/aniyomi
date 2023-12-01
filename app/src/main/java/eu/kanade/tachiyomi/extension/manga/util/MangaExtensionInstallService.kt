@@ -7,6 +7,10 @@ import android.net.Uri
 import android.os.IBinder
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
 import eu.kanade.tachiyomi.extension.manga.installer.PackageInstallerInstallerManga
@@ -27,7 +31,7 @@ class MangaExtensionInstallService : Service() {
             setAutoCancel(false)
             setOngoing(true)
             setShowWhen(false)
-            setContentTitle(getString(R.string.ext_install_service_notif))
+            setContentTitle(localize(MR.strings.ext_install_service_notif))
             setProgress(100, 100, true)
         }.build()
         startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)

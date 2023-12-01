@@ -5,6 +5,10 @@ import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -44,7 +48,7 @@ class BackupNotifier(private val context: Context) {
 
     fun showBackupProgress(): NotificationCompat.Builder {
         val builder = with(progressNotificationBuilder) {
-            setContentTitle(context.getString(R.string.creating_backup))
+            setContentTitle(context.localize(MR.strings.creating_backup))
 
             setProgress(0, 0, true)
         }
@@ -58,7 +62,7 @@ class BackupNotifier(private val context: Context) {
         context.cancelNotification(Notifications.ID_BACKUP_PROGRESS)
 
         with(completeNotificationBuilder) {
-            setContentTitle(context.getString(R.string.creating_backup_error))
+            setContentTitle(context.localize(MR.strings.creating_backup_error))
             setContentText(error)
 
             show(Notifications.ID_BACKUP_COMPLETE)
@@ -69,13 +73,13 @@ class BackupNotifier(private val context: Context) {
         context.cancelNotification(Notifications.ID_BACKUP_PROGRESS)
 
         with(completeNotificationBuilder) {
-            setContentTitle(context.getString(R.string.backup_created))
+            setContentTitle(context.localize(MR.strings.backup_created))
             setContentText(unifile.filePath ?: unifile.name)
 
             clearActions()
             addAction(
                 R.drawable.ic_share_24dp,
-                context.getString(R.string.action_share),
+                context.localize(MR.strings.action_share),
                 NotificationReceiver.shareBackupPendingBroadcast(
                     context,
                     unifile.uri,
@@ -89,7 +93,7 @@ class BackupNotifier(private val context: Context) {
 
     fun showRestoreProgress(
         content: String = "",
-        contentTitle: String = context.getString(R.string.restoring_backup),
+        contentTitle: String = context.localize(MR.strings.restoring_backup),
         progress: Int = 0,
         maxAmount: Int = 100,
     ): NotificationCompat.Builder {
@@ -106,7 +110,7 @@ class BackupNotifier(private val context: Context) {
             clearActions()
             addAction(
                 R.drawable.ic_close_24dp,
-                context.getString(R.string.action_cancel),
+                context.localize(MR.strings.action_cancel),
                 NotificationReceiver.cancelRestorePendingBroadcast(
                     context,
                     Notifications.ID_RESTORE_PROGRESS,
@@ -123,7 +127,7 @@ class BackupNotifier(private val context: Context) {
         context.cancelNotification(Notifications.ID_RESTORE_PROGRESS)
 
         with(completeNotificationBuilder) {
-            setContentTitle(context.getString(R.string.restoring_backup_error))
+            setContentTitle(context.localize(MR.strings.restoring_backup_error))
             setContentText(error)
 
             show(Notifications.ID_RESTORE_COMPLETE)
@@ -135,12 +139,12 @@ class BackupNotifier(private val context: Context) {
         errorCount: Int,
         path: String?,
         file: String?,
-        contentTitle: String = context.getString(R.string.restore_completed),
+        contentTitle: String = context.localize(MR.strings.restore_completed),
     ) {
         context.cancelNotification(Notifications.ID_RESTORE_PROGRESS)
 
-        val timeString = context.getString(
-            R.string.restore_duration,
+        val timeString = context.localize(
+            MR.strings.restore_duration,
             TimeUnit.MILLISECONDS.toMinutes(time),
             TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(
                 TimeUnit.MILLISECONDS.toMinutes(time),
@@ -167,7 +171,7 @@ class BackupNotifier(private val context: Context) {
                 setContentIntent(errorLogIntent)
                 addAction(
                     R.drawable.ic_folder_24dp,
-                    context.getString(R.string.action_show_errors),
+                    context.localize(MR.strings.action_show_errors),
                     errorLogIntent,
                 )
             }

@@ -6,9 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.core.content.ContextCompat
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
@@ -114,8 +117,8 @@ class AnimeDownloadService : Service() {
         return null
     }
 
-    private fun downloaderStop(@StringRes string: Int) {
-        downloadManager.downloaderStop(getString(string))
+    private fun downloaderStop(string: StringResource) {
+        downloadManager.downloaderStop(localize(string))
     }
 
     private fun listenNetworkChanges() {
@@ -125,20 +128,20 @@ class AnimeDownloadService : Service() {
                 withUIContext {
                     if (isOnline()) {
                         if (downloadPreferences.downloadOnlyOverWifi().get() && !isConnectedToWifi()) {
-                            downloaderStop(R.string.download_notifier_text_only_wifi)
+                            downloaderStop(MR.strings.download_notifier_text_only_wifi)
                         } else {
                             val started = downloadManager.downloaderStart()
                             if (!started) stopSelf()
                         }
                     } else {
-                        downloaderStop(R.string.download_notifier_no_network)
+                        downloaderStop(MR.strings.download_notifier_no_network)
                     }
                 }
             }
             .catch { error ->
                 withUIContext {
                     logcat(LogPriority.ERROR, error)
-                    toast(R.string.download_queue_error)
+                    toast(MR.strings.download_queue_error)
                     stopSelf()
                 }
             }
@@ -147,7 +150,7 @@ class AnimeDownloadService : Service() {
 
     private fun getPlaceholderNotification(): Notification {
         return notificationBuilder(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
-            setContentTitle(getString(R.string.download_notifier_downloader_title))
+            setContentTitle(localize(MR.strings.download_notifier_downloader_title))
         }.build()
     }
 }

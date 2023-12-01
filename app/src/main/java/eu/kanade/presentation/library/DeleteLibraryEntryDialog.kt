@@ -10,7 +10,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import dev.icerock.moko.resources.StringResource
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.presentation.core.components.LabeledCheckbox
 
@@ -23,11 +27,11 @@ fun DeleteLibraryEntryDialog(
 ) {
     var list by remember {
         mutableStateOf(
-            buildList<CheckboxState.State<Int>> {
-                val checkbox1 = if (isManga) R.string.manga_from_library else R.string.anime_from_library
+            buildList<CheckboxState.State<StringResource>> {
+                val checkbox1 = if (isManga) MR.strings.manga_from_library else MR.strings.anime_from_library
                 add(CheckboxState.State.None(checkbox1))
                 if (!containsLocalEntry) {
-                    val checkbox2 = if (isManga) R.string.downloaded_chapters else R.string.downloaded_episodes
+                    val checkbox2 = if (isManga) MR.strings.downloaded_chapters else MR.strings.downloaded_episodes
                     add(CheckboxState.State.None(checkbox2))
                 }
             },
@@ -37,7 +41,7 @@ fun DeleteLibraryEntryDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -51,23 +55,23 @@ fun DeleteLibraryEntryDialog(
                     )
                 },
             ) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         title = {
-            Text(text = stringResource(R.string.action_remove))
+            Text(text = localize(MR.strings.action_remove))
         },
         text = {
             Column {
                 list.forEach { state ->
                     LabeledCheckbox(
-                        label = stringResource(state.value),
+                        label = localize(state.value),
                         checked = state.isChecked,
                         onCheckedChange = {
                             val index = list.indexOf(state)
                             if (index != -1) {
                                 val mutableList = list.toMutableList()
-                                mutableList[index] = state.next() as CheckboxState.State<Int>
+                                mutableList[index] = state.next() as CheckboxState.State<StringResource>
                                 list = mutableList.toList()
                             }
                         },

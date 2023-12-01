@@ -39,6 +39,10 @@ import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.library.anime.AnimeLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -74,9 +78,9 @@ object AnimeLibraryTab : Tab() {
         @Composable
         get() {
             val title = if (fromMore) {
-                R.string.label_library
+                MR.strings.label_library
             } else {
-                R.string.label_anime_library
+                MR.strings.label_anime_library
             }
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(
@@ -84,7 +88,7 @@ object AnimeLibraryTab : Tab() {
             )
             return TabOptions(
                 index = 0u,
-                title = stringResource(title),
+                title = localize(title),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -110,8 +114,8 @@ object AnimeLibraryTab : Tab() {
         val onClickRefresh: (Category?) -> Boolean = { category ->
             val started = AnimeLibraryUpdateJob.startNow(context, category)
             scope.launch {
-                val msgRes = if (started) R.string.updating_category else R.string.update_already_running
-                snackbarHostState.showSnackbar(context.getString(msgRes))
+                val msgRes = if (started) MR.strings.updating_category else MR.strings.update_already_running
+                snackbarHostState.showSnackbar(context.localize(msgRes))
             }
             started
         }
@@ -123,10 +127,10 @@ object AnimeLibraryTab : Tab() {
         }
 
         val defaultTitle = if (fromMore) {
-            stringResource(R.string.label_library)
+            localize(MR.strings.label_library)
         } else {
-            stringResource(
-                R.string.label_anime_library,
+            localize(
+                MR.strings.label_anime_library,
             )
         }
 
@@ -134,7 +138,7 @@ object AnimeLibraryTab : Tab() {
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
                     defaultTitle = defaultTitle,
-                    defaultCategoryTitle = stringResource(R.string.label_default),
+                    defaultCategoryTitle = localize(MR.strings.label_default),
                     page = screenModel.activeCategoryIndex,
                 )
                 val tabVisible = state.showCategoryTabs && state.categories.size > 1
@@ -163,7 +167,7 @@ object AnimeLibraryTab : Tab() {
                                 navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    context.getString(R.string.information_no_entries_found),
+                                    context.localize(MR.strings.information_no_entries_found),
                                 )
                             }
                         }
@@ -192,11 +196,11 @@ object AnimeLibraryTab : Tab() {
                 state.searchQuery.isNullOrEmpty() && !state.hasActiveFilters && state.isLibraryEmpty -> {
                     val handler = LocalUriHandler.current
                     EmptyScreen(
-                        textResource = R.string.information_empty_library,
+                        stringRes = MR.strings.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
                         actions = persistentListOf(
                             EmptyScreenAction(
-                                stringResId = R.string.getting_started_guide,
+                                stringRes = MR.strings.getting_started_guide,
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(

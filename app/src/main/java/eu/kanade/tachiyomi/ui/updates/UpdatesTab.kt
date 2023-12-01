@@ -13,6 +13,10 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.updates.anime.animeUpdatesTab
@@ -32,7 +36,7 @@ data class UpdatesTab(
             val index: UShort = if (fromMore) 5u else if (inMiddle) 2u else 1u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.label_recent_updates),
+                title = localize(MR.strings.label_recent_updates),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -45,7 +49,7 @@ data class UpdatesTab(
         val context = LocalContext.current
 
         TabbedScreen(
-            titleRes = R.string.label_recent_updates,
+            titleRes = MR.strings.label_recent_updates,
             tabs = persistentListOf(
                 animeUpdatesTab(context, fromMore),
                 mangaUpdatesTab(context, fromMore),

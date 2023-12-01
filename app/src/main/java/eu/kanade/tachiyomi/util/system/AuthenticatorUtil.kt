@@ -10,7 +10,10 @@ import androidx.biometric.auth.AuthPromptCallback
 import androidx.biometric.auth.startClass2BiometricOrCredentialAuthentication
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -48,7 +51,7 @@ object AuthenticatorUtil {
 
     suspend fun FragmentActivity.authenticate(
         title: String,
-        subtitle: String? = getString(R.string.confirm_lock_change),
+        subtitle: String? = localize(MR.strings.confirm_lock_change),
     ): Boolean = suspendCancellableCoroutine { cont ->
         if (!isAuthenticationSupported()) {
             cont.resume(true)

@@ -7,7 +7,10 @@ import com.hippo.unifile.UniFile
 import eu.kanade.domain.entries.manga.model.getComicInfo
 import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateNotifier
@@ -314,7 +317,7 @@ class MangaDownloader(
                 ) {
                     withUIContext {
                         notifier.onWarning(
-                            context.getString(R.string.download_queue_size_warning),
+                            context.localize(MR.strings.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
@@ -340,7 +343,7 @@ class MangaDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = MangaDownload.State.ERROR
             notifier.onError(
-                context.getString(R.string.download_insufficient_space),
+                context.localize(MR.strings.download_insufficient_space),
                 download.chapter.name,
                 download.manga.title,
             )
@@ -360,7 +363,7 @@ class MangaDownloader(
                 val pages = download.source.getPageList(download.chapter.toSChapter())
 
                 if (pages.isEmpty()) {
-                    throw Exception(context.getString(R.string.page_list_empty_error))
+                    throw Exception(context.localize(MR.strings.page_list_empty_error))
                 }
                 // Don't trust index from source
                 val reIndexedPages = pages.mapIndexed { index, page ->
@@ -595,7 +598,7 @@ class MangaDownloader(
                 )
             }
                 ?: error(
-                    context.getString(R.string.download_notifier_split_page_not_found, page.number),
+                    context.localize(MR.strings.download_notifier_split_page_not_found, page.number),
                 )
 
             // If the original page was previously split, then skip

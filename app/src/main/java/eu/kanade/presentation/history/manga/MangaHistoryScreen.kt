@@ -10,7 +10,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import tachiyomi.core.preference.InMemoryPreferenceStore
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
@@ -40,12 +43,12 @@ fun MangaHistoryScreen(
                 LoadingScreen(Modifier.padding(contentPadding))
             } else if (it.isEmpty()) {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
-                    R.string.no_results_found
+                    MR.strings.no_results_found
                 } else {
-                    R.string.information_no_recent_manga
+                    MR.strings.information_no_recent_manga
                 }
                 EmptyScreen(
-                    textResource = msg,
+                    stringRes = msg,
                     modifier = Modifier.padding(contentPadding),
                 )
             } else {

@@ -28,7 +28,10 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.components.UpIcon
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.theme.active
 
@@ -78,12 +81,12 @@ fun EntryToolbar(
                     AppBarActions(
                         persistentListOf(
                             AppBar.Action(
-                                title = stringResource(R.string.action_select_all),
+                                title = localize(MR.strings.action_select_all),
                                 icon = Icons.Outlined.SelectAll,
                                 onClick = onSelectAll,
                             ),
                             AppBar.Action(
-                                title = stringResource(R.string.action_select_inverse),
+                                title = localize(MR.strings.action_select_inverse),
                                 icon = Icons.Outlined.FlipToBack,
                                 onClick = onInvertSelection,
                             ),
@@ -108,7 +111,7 @@ fun EntryToolbar(
                                 if (onClickDownload != null) {
                                     add(
                                         AppBar.Action(
-                                            title = stringResource(R.string.manga_download),
+                                            title = localize(MR.strings.manga_download),
                                             icon = Icons.Outlined.Download,
                                             onClick = { downloadExpanded = !downloadExpanded },
                                         ),
@@ -116,7 +119,7 @@ fun EntryToolbar(
                                 }
                                 add(
                                     AppBar.Action(
-                                        title = stringResource(R.string.action_filter),
+                                        title = localize(MR.strings.action_filter),
                                         icon = Icons.Outlined.FilterList,
                                         iconTint = filterTint,
                                         onClick = onClickFilter,
@@ -125,21 +128,21 @@ fun EntryToolbar(
                                 if (changeAnimeSkipIntro != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_change_intro_length),
+                                            title = localize(MR.strings.action_change_intro_length),
                                             onClick = changeAnimeSkipIntro,
                                         ),
                                     )
                                 }
                                 add(
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_webview_refresh),
+                                        title = localize(MR.strings.action_webview_refresh),
                                         onClick = onClickRefresh,
                                     ),
                                 )
                                 if (onClickEditCategory != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_edit_categories),
+                                            title = localize(MR.strings.action_edit_categories),
                                             onClick = onClickEditCategory,
                                         ),
                                     )
@@ -147,7 +150,7 @@ fun EntryToolbar(
                                 if (onClickMigrate != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_migrate),
+                                            title = localize(MR.strings.action_migrate),
                                             onClick = onClickMigrate,
                                         ),
                                     )
@@ -155,7 +158,7 @@ fun EntryToolbar(
                                 if (onClickShare != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_share),
+                                            title = localize(MR.strings.action_share),
                                             onClick = onClickShare,
                                         ),
                                     )

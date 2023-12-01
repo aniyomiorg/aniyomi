@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.formatEpisodeNumber
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
@@ -72,8 +75,8 @@ fun AnimeHistoryItem(
             val seenAt = remember { history.seenAt?.toTimestampString() ?: "" }
             Text(
                 text = if (history.episodeNumber > -1) {
-                    stringResource(
-                        R.string.recent_anime_time,
+                    localize(
+                        MR.strings.recent_anime_time,
                         formatEpisodeNumber(history.episodeNumber),
                         seenAt,
                     )
@@ -88,7 +91,7 @@ fun AnimeHistoryItem(
         IconButton(onClick = onClickDelete) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = stringResource(R.string.action_delete),
+                contentDescription = localize(MR.strings.action_delete),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }

@@ -23,7 +23,10 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.util.formattedMessage
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
@@ -265,8 +268,8 @@ class AnimeScreenModel(
                 screenModelScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
-                        message = context.getString(R.string.delete_downloads_for_anime),
-                        actionLabel = context.getString(R.string.action_delete),
+                        message = context.localize(MR.strings.delete_downloads_for_anime),
+                        actionLabel = context.localize(MR.strings.action_delete),
                         withDismissAction = true,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
@@ -548,7 +551,7 @@ class AnimeScreenModel(
             }
         } catch (e: Throwable) {
             val message = if (e is NoEpisodesException) {
-                context.getString(R.string.no_episodes_error)
+                context.localize(MR.strings.no_episodes_error)
             } else {
                 logcat(LogPriority.ERROR, e)
                 with(context) { e.formattedMessage }
@@ -646,8 +649,8 @@ class AnimeScreenModel(
             }
             screenModelScope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = context.getString(R.string.snack_add_to_anime_library),
-                    actionLabel = context.getString(R.string.action_add),
+                    message = context.localize(MR.strings.snack_add_to_anime_library),
+                    actionLabel = context.localize(MR.strings.action_add),
                     withDismissAction = true,
                 )
                 if (result == SnackbarResult.ActionPerformed && !isFavorited) {
@@ -878,7 +881,7 @@ class AnimeScreenModel(
                 setAnimeDefaultEpisodeFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.getString(R.string.episode_settings_updated),
+                message = context.localize(MR.strings.episode_settings_updated),
             )
         }
     }

@@ -5,7 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 
 @Composable
 fun RemoveEntryDialog(
@@ -17,7 +20,7 @@ fun RemoveEntryDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -27,14 +30,14 @@ fun RemoveEntryDialog(
                     onConfirm()
                 },
             ) {
-                Text(text = stringResource(R.string.action_remove))
+                Text(text = localize(MR.strings.action_remove))
             }
         },
         title = {
-            Text(text = stringResource(R.string.are_you_sure))
+            Text(text = localize(MR.strings.are_you_sure))
         },
         text = {
-            Text(text = stringResource(R.string.remove_manga, entryToRemove))
+            Text(text = localize(MR.strings.remove_manga, entryToRemove))
         },
     )
 }

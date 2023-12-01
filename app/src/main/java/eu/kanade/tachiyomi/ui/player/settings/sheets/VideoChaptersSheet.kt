@@ -21,7 +21,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.Utils
 import tachiyomi.presentation.core.components.material.padding
@@ -47,7 +50,7 @@ fun VideoChaptersSheet(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.chapter_dialog_header),
+                text = localize(MR.strings.chapter_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
             )

@@ -2,7 +2,10 @@ package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -173,7 +176,7 @@ class AnimeDownloadManager(
             .filter { "video" in it.type.orEmpty() }
 
         if (files.isEmpty()) {
-            throw Exception(context.getString(R.string.video_list_empty_error))
+            throw Exception(context.localize(MR.strings.video_list_empty_error))
         }
 
         val file = files[0]

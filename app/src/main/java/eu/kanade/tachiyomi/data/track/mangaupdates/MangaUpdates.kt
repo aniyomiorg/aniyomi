@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.mangaupdates
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
@@ -41,13 +45,12 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
         return listOf(READING_LIST, COMPLETE_LIST, ON_HOLD_LIST, UNFINISHED_LIST, WISH_LIST)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        READING_LIST -> R.string.reading_list
-        WISH_LIST -> R.string.wish_list
-        COMPLETE_LIST -> R.string.complete_list
-        ON_HOLD_LIST -> R.string.on_hold_list
-        UNFINISHED_LIST -> R.string.unfinished_list
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        READING_LIST -> MR.strings.reading_list
+        WISH_LIST -> MR.strings.wish_list
+        COMPLETE_LIST -> MR.strings.complete_list
+        ON_HOLD_LIST -> MR.strings.on_hold_list
+        UNFINISHED_LIST -> MR.strings.unfinished_list
         else -> null
     }
 

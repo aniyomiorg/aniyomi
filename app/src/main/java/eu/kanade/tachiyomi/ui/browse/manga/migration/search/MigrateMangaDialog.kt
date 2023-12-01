@@ -26,7 +26,10 @@ import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
@@ -79,7 +82,7 @@ internal fun MigrateMangaDialog(
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
-                Text(text = stringResource(R.string.migration_dialog_what_to_include))
+                Text(text = localize(MR.strings.migration_dialog_what_to_include))
             },
             text = {
                 Column(
@@ -87,7 +90,7 @@ internal fun MigrateMangaDialog(
                 ) {
                     flags.forEachIndexed { index, flag ->
                         LabeledCheckbox(
-                            label = stringResource(flag.titleId),
+                            label = localize(flag.titleId),
                             checked = selectedFlags[index],
                             onCheckedChange = { selectedFlags[index] = it },
                         )
@@ -104,7 +107,7 @@ internal fun MigrateMangaDialog(
                             onClickTitle()
                         },
                     ) {
-                        Text(text = stringResource(R.string.action_show_manga))
+                        Text(text = localize(MR.strings.action_show_manga))
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -122,7 +125,7 @@ internal fun MigrateMangaDialog(
                             }
                         },
                     ) {
-                        Text(text = stringResource(R.string.copy))
+                        Text(text = localize(MR.strings.copy))
                     }
                     TextButton(
                         onClick = {
@@ -138,7 +141,7 @@ internal fun MigrateMangaDialog(
                             }
                         },
                     ) {
-                        Text(text = stringResource(R.string.migrate))
+                        Text(text = localize(MR.strings.migrate))
                     }
                 }
             },

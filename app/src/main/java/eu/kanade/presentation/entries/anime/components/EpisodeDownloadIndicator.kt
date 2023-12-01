@@ -30,6 +30,10 @@ import eu.kanade.presentation.components.IndicatorSize
 import eu.kanade.presentation.components.IndicatorStrokeWidth
 import eu.kanade.presentation.components.commonClickable
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.util.secondaryItemAlpha
@@ -95,7 +99,7 @@ private fun NotDownloadedIndicator(
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_download_item_24dp),
-            contentDescription = stringResource(R.string.manga_download),
+            contentDescription = localize(MR.strings.manga_download),
             modifier = Modifier.size(IndicatorSize),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -153,14 +157,14 @@ private fun DownloadingIndicator(
         }
         DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_start_downloading_now)) },
+                text = { Text(text = localize(MR.strings.action_start_downloading_now)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.START_NOW)
                     isMenuExpanded = false
                 },
             )
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_cancel)) },
+                text = { Text(text = localize(MR.strings.action_cancel)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.CANCEL)
                     isMenuExpanded = false
@@ -201,7 +205,7 @@ private fun DownloadedIndicator(
         )
         DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_delete)) },
+                text = { Text(text = localize(MR.strings.action_delete)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.DELETE)
                     isMenuExpanded = false
@@ -229,7 +233,7 @@ private fun ErrorIndicator(
     ) {
         Icon(
             imageVector = Icons.Outlined.ErrorOutline,
-            contentDescription = stringResource(R.string.download_error),
+            contentDescription = localize(MR.strings.download_error),
             modifier = Modifier.size(IndicatorSize),
             tint = MaterialTheme.colorScheme.error,
         )

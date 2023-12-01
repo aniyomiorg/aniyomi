@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.suwayomi
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
@@ -30,11 +34,10 @@ class Suwayomi(id: Long) : BaseTracker(id, "Suwayomi"), EnhancedMangaTracker, Ma
 
     override fun getStatusListManga() = listOf(UNREAD, READING, COMPLETED)
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        UNREAD -> R.string.unread
-        READING -> R.string.reading
-        COMPLETED -> R.string.completed
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        UNREAD -> MR.strings.unread
+        READING -> MR.strings.reading
+        COMPLETED -> MR.strings.completed
         else -> null
     }
 

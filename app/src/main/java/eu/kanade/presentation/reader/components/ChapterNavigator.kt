@@ -34,7 +34,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.util.isTabletUi
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlin.math.roundToInt
 
 @Composable
@@ -77,8 +80,8 @@ fun ChapterNavigator(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.SkipPrevious,
-                    contentDescription = stringResource(
-                        if (isRtl) R.string.action_next_chapter else R.string.action_previous_chapter,
+                    contentDescription = localize(
+                        if (isRtl) MR.strings.action_next_chapter else MR.strings.action_previous_chapter,
                     ),
                 )
             }
@@ -130,8 +133,8 @@ fun ChapterNavigator(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.SkipNext,
-                    contentDescription = stringResource(
-                        if (isRtl) R.string.action_previous_chapter else R.string.action_next_chapter,
+                    contentDescription = localize(
+                        if (isRtl) MR.strings.action_previous_chapter else MR.strings.action_next_chapter,
                     ),
                 )
             }

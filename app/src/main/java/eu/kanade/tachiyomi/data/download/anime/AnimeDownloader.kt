@@ -13,7 +13,10 @@ import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.items.episode.model.toSEpisode
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -338,7 +341,7 @@ class AnimeDownloader(
                 ) {
                     withUIContext {
                         notifier.onWarning(
-                            context.getString(R.string.download_queue_size_warning),
+                            context.localize(MR.strings.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
@@ -364,7 +367,7 @@ class AnimeDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
             notifier.onError(
-                context.getString(R.string.download_insufficient_space),
+                context.localize(MR.strings.download_insufficient_space),
                 download.episode.name,
                 download.anime.title,
             )
@@ -385,7 +388,7 @@ class AnimeDownloader(
                 download.video = fetchedVideo
                 fetchedVideo
             } catch (e: Exception) {
-                throw Exception(context.getString(R.string.video_list_empty_error))
+                throw Exception(context.localize(MR.strings.video_list_empty_error))
             }
         } else {
             // Or if the video already exists, return it

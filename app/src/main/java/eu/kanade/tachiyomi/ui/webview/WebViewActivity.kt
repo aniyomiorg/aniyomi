@@ -8,6 +8,10 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import eu.kanade.presentation.webview.WebViewScreenContent
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -41,7 +45,7 @@ class WebViewActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (!WebViewUtil.supportsWebView(this)) {
-            toast(R.string.information_webview_required, Toast.LENGTH_LONG)
+            toast(MR.strings.information_webview_required, Toast.LENGTH_LONG)
             finish()
             return
         }

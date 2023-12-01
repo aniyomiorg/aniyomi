@@ -19,7 +19,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -125,9 +128,9 @@ fun LibraryPagerEmptyScreen(
     onGlobalSearchClicked: () -> Unit,
 ) {
     val msg = when {
-        !searchQuery.isNullOrEmpty() -> R.string.no_results_found
-        hasActiveFilters -> R.string.error_no_match
-        else -> R.string.information_no_manga_category
+        !searchQuery.isNullOrEmpty() -> MR.strings.no_results_found
+        hasActiveFilters -> MR.strings.error_no_match
+        else -> MR.strings.information_no_manga_category
     }
 
     Column(
@@ -147,7 +150,7 @@ fun LibraryPagerEmptyScreen(
         }
 
         EmptyScreen(
-            textResource = msg,
+            stringRes = msg,
             modifier = Modifier.weight(1f),
         )
     }

@@ -4,6 +4,10 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadItemBinding
 import eu.kanade.tachiyomi.util.view.popupMenu
@@ -73,9 +77,9 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
      */
     fun notifyDownloadedPages() {
         binding.downloadProgressText.text = if (download.totalProgress == 0) {
-            view.context.getString(R.string.update_check_notification_download_in_progress)
+            view.context.localize(MR.strings.update_check_notification_download_in_progress)
         } else {
-            view.context.getString(R.string.episode_download_progress, download.progress)
+            view.context.localize(MR.strings.episode_download_progress, download.progress)
         }
     }
 

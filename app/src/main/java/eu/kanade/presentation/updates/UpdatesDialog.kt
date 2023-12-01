@@ -5,7 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 
 @Composable
 fun UpdatesDeleteConfirmationDialog(
@@ -13,10 +16,10 @@ fun UpdatesDeleteConfirmationDialog(
     onConfirm: () -> Unit,
     isManga: Boolean,
 ) {
-    val title = if (isManga) R.string.confirm_delete_chapters else R.string.confirm_delete_episodes
+    val title = if (isManga) MR.strings.confirm_delete_chapters else MR.strings.confirm_delete_episodes
     AlertDialog(
         text = {
-            Text(text = stringResource(title))
+            Text(text = localize(title))
         },
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -24,12 +27,12 @@ fun UpdatesDeleteConfirmationDialog(
                 onConfirm()
                 onDismissRequest()
             }) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
     )

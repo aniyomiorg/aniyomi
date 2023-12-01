@@ -4,6 +4,10 @@ import android.app.Activity
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

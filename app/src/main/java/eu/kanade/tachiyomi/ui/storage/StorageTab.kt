@@ -12,6 +12,10 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
@@ -28,7 +32,7 @@ data class StorageTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 8u,
-                title = stringResource(R.string.label_storage),
+                title = localize(MR.strings.label_storage),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -38,7 +42,7 @@ data class StorageTab(
         val context = LocalContext.current
 
         TabbedScreen(
-            titleRes = R.string.label_storage,
+            titleRes = MR.strings.label_storage,
             tabs = persistentListOf(
                 animeStorageTab(),
                 mangaStorageTab(),

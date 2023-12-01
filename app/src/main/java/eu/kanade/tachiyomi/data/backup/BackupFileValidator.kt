@@ -2,7 +2,10 @@ package eu.kanade.tachiyomi.data.backup
 
 import android.content.Context
 import android.net.Uri
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.BackupUtil
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -31,7 +34,7 @@ class BackupFileValidator(
 
         if (backup.backupManga.isEmpty() && backup.backupAnime.isEmpty()) {
             throw IllegalStateException(
-                context.getString(R.string.invalid_backup_file_missing_manga),
+                context.localize(MR.strings.invalid_backup_file_missing_manga),
             )
         }
 

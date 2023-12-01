@@ -9,6 +9,10 @@ import android.widget.NumberPicker
 import androidx.core.view.descendants
 import androidx.core.view.doOnLayout
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 
 class MinMaxNumberPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     NumberPicker(context, attrs) {

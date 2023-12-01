@@ -14,6 +14,10 @@ import coil.compose.AsyncImage
 import eu.kanade.presentation.components.CoverPlaceholderColor
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 
 enum class ItemCover(val ratio: Float) {
     Square(1f / 1f),

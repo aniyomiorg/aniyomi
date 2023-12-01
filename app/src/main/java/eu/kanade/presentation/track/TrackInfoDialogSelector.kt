@@ -34,8 +34,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
@@ -50,12 +54,12 @@ import tachiyomi.presentation.core.util.isScrolledToStart
 fun TrackStatusSelector(
     selection: Int,
     onSelectionChange: (Int) -> Unit,
-    selections: Map<Int, Int?>,
+    selections: Map<Int, StringResource?>,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     BaseSelector(
-        title = stringResource(R.string.status),
+        title = localize(MR.strings.status),
         content = {
             val state = rememberLazyListState()
             ScrollbarLazyColumn(state = state) {
@@ -78,7 +82,7 @@ fun TrackStatusSelector(
                                 onClick = null,
                             )
                             Text(
-                                text = value?.let { stringResource(it) } ?: "",
+                                text = value?.let { localize(it) } ?: "",
                                 style = MaterialTheme.typography.bodyLarge.merge(),
                                 modifier = Modifier.padding(start = 24.dp),
                             )
@@ -111,9 +115,9 @@ fun TrackItemSelector(
     onDismissRequest: () -> Unit,
     isManga: Boolean,
 ) {
-    val titleText = if (isManga) R.string.chapters else R.string.episodes
+    val titleText = if (isManga) MR.strings.chapters else MR.strings.episodes
     BaseSelector(
-        title = stringResource(titleText),
+        title = localize(titleText),
         content = {
             WheelNumberPicker(
                 items = range.toImmutableList(),
@@ -136,7 +140,7 @@ fun TrackScoreSelector(
     onDismissRequest: () -> Unit,
 ) {
     BaseSelector(
-        title = stringResource(R.string.score),
+        title = localize(MR.strings.score),
         content = {
             WheelTextPicker(
                 items = selections,
@@ -185,15 +189,15 @@ fun TrackDateSelector(
                 ) {
                     if (onRemove != null) {
                         TextButton(onClick = onRemove) {
-                            Text(text = stringResource(R.string.action_remove))
+                            Text(text = localize(MR.strings.action_remove))
                         }
                         Spacer(modifier = Modifier.weight(1f))
                     }
                     TextButton(onClick = onDismissRequest) {
-                        Text(text = stringResource(R.string.action_cancel))
+                        Text(text = localize(MR.strings.action_cancel))
                     }
                     TextButton(onClick = { onConfirm(pickerState.selectedDateMillis!!) }) {
-                        Text(text = stringResource(R.string.action_ok))
+                        Text(text = localize(MR.strings.action_ok))
                     }
                 }
             }
@@ -231,10 +235,10 @@ fun BaseSelector(
                     Spacer(modifier = Modifier.weight(1f))
                 }
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = localize(MR.strings.action_cancel))
                 }
                 TextButton(onClick = onConfirm) {
-                    Text(text = stringResource(R.string.action_ok))
+                    Text(text = localize(MR.strings.action_ok))
                 }
             }
         },
@@ -251,14 +255,14 @@ private fun TrackStatusSelectorPreviews() {
                 onSelectionChange = {},
                 selections = mapOf(
                     // Anilist values
-                    1 to R.string.reading,
-                    2 to R.string.plan_to_read,
-                    3 to R.string.completed,
-                    4 to R.string.on_hold,
-                    5 to R.string.dropped,
-                    6 to R.string.repeating,
-                    7 to R.string.watching,
-                    8 to R.string.plan_to_watch,
+                    1 to MR.strings.reading,
+                    2 to MR.strings.plan_to_read,
+                    3 to MR.strings.completed,
+                    4 to MR.strings.on_hold,
+                    5 to MR.strings.dropped,
+                    6 to MR.strings.repeating,
+                    7 to MR.strings.watching,
+                    8 to MR.strings.plan_to_watch,
                 ),
                 onConfirm = {},
                 onDismissRequest = {},

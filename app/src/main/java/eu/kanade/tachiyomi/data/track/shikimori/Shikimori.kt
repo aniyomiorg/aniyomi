@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
@@ -184,14 +188,13 @@ class Shikimori(id: Long) :
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ, REREADING)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        READING -> R.string.reading
-        PLAN_TO_READ -> R.string.plan_to_read
-        COMPLETED -> R.string.completed
-        ON_HOLD -> R.string.on_hold
-        DROPPED -> R.string.dropped
-        REREADING -> R.string.repeating
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        READING -> MR.strings.reading
+        PLAN_TO_READ -> MR.strings.plan_to_read
+        COMPLETED -> MR.strings.completed
+        ON_HOLD -> MR.strings.on_hold
+        DROPPED -> MR.strings.dropped
+        REREADING -> MR.strings.repeating
         else -> null
     }
 

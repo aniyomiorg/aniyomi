@@ -11,7 +11,10 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -72,7 +75,7 @@ class ImageSaver(
         val imageLocation = (image.location as Location.Pictures).relativePath
         val relativePath = listOf(
             Environment.DIRECTORY_PICTURES,
-            context.getString(R.string.app_name),
+            context.localize(MR.strings.app_name),
             imageLocation,
         ).joinToString(File.separator)
 
@@ -87,7 +90,7 @@ class ImageSaver(
             context.contentResolver.insert(
                 pictureDir,
                 contentValues,
-            ) ?: throw IOException(context.getString(R.string.error_saving_picture))
+            ) ?: throw IOException(context.localize(MR.strings.error_saving_picture))
         }
 
         try {
@@ -98,7 +101,7 @@ class ImageSaver(
             }
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            throw IOException(context.getString(R.string.error_saving_picture))
+            throw IOException(context.localize(MR.strings.error_saving_picture))
         }
 
         DiskUtil.scanMedia(context, picture)
@@ -191,7 +194,7 @@ sealed interface Location {
             is Pictures -> {
                 val file = File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    context.getString(R.string.app_name),
+                    context.localize(MR.strings.app_name),
                 )
                 if (relativePath.isNotEmpty()) {
                     return File(

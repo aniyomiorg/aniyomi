@@ -20,7 +20,10 @@ import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.SearchToolbar
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.Pill
 import tachiyomi.presentation.core.theme.active
@@ -102,21 +105,21 @@ fun LibraryRegularToolbar(
             AppBarActions(
                 persistentListOf(
                     AppBar.Action(
-                        title = stringResource(R.string.action_filter),
+                        title = localize(MR.strings.action_filter),
                         icon = Icons.Outlined.FilterList,
                         iconTint = filterTint,
                         onClick = onClickFilter,
                     ),
                     AppBar.OverflowAction(
-                        title = stringResource(R.string.action_update_library),
+                        title = localize(MR.strings.action_update_library),
                         onClick = onClickGlobalUpdate,
                     ),
                     AppBar.OverflowAction(
-                        title = stringResource(R.string.action_update_category),
+                        title = localize(MR.strings.action_update_category),
                         onClick = onClickRefresh,
                     ),
                     AppBar.OverflowAction(
-                        title = stringResource(R.string.action_open_random_manga),
+                        title = localize(MR.strings.action_open_random_manga),
                         onClick = onClickOpenRandomEntry,
                     ),
                 ),
@@ -141,12 +144,12 @@ fun LibrarySelectionToolbar(
             AppBarActions(
                 persistentListOf(
                     AppBar.Action(
-                        title = stringResource(R.string.action_select_all),
+                        title = localize(MR.strings.action_select_all),
                         icon = Icons.Outlined.SelectAll,
                         onClick = onClickSelectAll,
                     ),
                     AppBar.Action(
-                        title = stringResource(R.string.action_select_inverse),
+                        title = localize(MR.strings.action_select_inverse),
                         icon = Icons.Outlined.FlipToBack,
                         onClick = onClickInvertSelection,
                     ),

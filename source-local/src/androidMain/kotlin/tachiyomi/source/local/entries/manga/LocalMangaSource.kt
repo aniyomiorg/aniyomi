@@ -16,6 +16,7 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.copyFromComicInfo
@@ -46,6 +47,9 @@ import java.util.concurrent.TimeUnit
 import java.util.zip.ZipFile
 import kotlin.math.abs
 import com.github.junrar.Archive as JunrarArchive
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+
 
 actual class LocalMangaSource(
     private val context: Context,
@@ -59,7 +63,7 @@ actual class LocalMangaSource(
     private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular(context))
     private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest(context))
 
-    override val name: String = context.getString(R.string.local_manga_source)
+    override val name: String = context.localize(MR.strings.local_manga_source)
 
     override val id: Long = ID
 
@@ -344,9 +348,9 @@ actual class LocalMangaSource(
             return File(fileSystem.getBaseDirectory(), chapter.url)
                 .takeIf { it.exists() }
                 ?.let(Format.Companion::valueOf)
-                ?: throw Exception(context.getString(R.string.chapter_not_found))
+                ?: throw Exception(context.localize(MR.strings.chapter_not_found))
         } catch (e: Format.UnknownFormatException) {
-            throw Exception(context.getString(R.string.local_invalid_format))
+            throw Exception(context.localize(MR.strings.local_invalid_format))
         } catch (e: Exception) {
             throw e
         }

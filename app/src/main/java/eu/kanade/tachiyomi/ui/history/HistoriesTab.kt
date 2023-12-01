@@ -18,6 +18,10 @@ import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.animeHistoryTab
 import eu.kanade.tachiyomi.ui.history.anime.resumeLastEpisodeSeenEvent
@@ -39,7 +43,7 @@ data class HistoriesTab(
             val index: UShort = if (fromMore) 5u else 2u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.history),
+                title = localize(MR.strings.history),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -59,7 +63,7 @@ data class HistoriesTab(
         val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
 
         TabbedScreen(
-            titleRes = R.string.label_recent_manga,
+            titleRes = MR.strings.label_recent_manga,
             tabs = persistentListOf(
                 animeHistoryTab(context, fromMore, preferences),
                 mangaHistoryTab(context, fromMore, preferences),

@@ -1,7 +1,7 @@
 package tachiyomi.presentation.core.components
 
 import android.view.MotionEvent
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -60,6 +60,7 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.toggle
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.theme.header
 import tachiyomi.presentation.core.util.collectAsState
 
@@ -70,9 +71,9 @@ object SettingsItemsPaddings {
 
 @Composable
 fun HeadingItem(
-    @StringRes labelRes: Int,
+    labelRes: StringResource,
 ) {
-    HeadingItem(stringResource(labelRes))
+    HeadingItem(localize(labelRes))
 }
 
 @Composable
@@ -506,7 +507,7 @@ fun TextItem(
 
 @Composable
 fun SettingsChipRow(
-    @StringRes labelRes: Int,
+    labelRes: StringResource,
     content: @Composable FlowRowScope.() -> Unit,
 ) {
     Column {
@@ -525,7 +526,7 @@ fun SettingsChipRow(
 }
 
 @Composable
-fun SettingsIconGrid(@StringRes labelRes: Int, content: LazyGridScope.() -> Unit) {
+fun SettingsIconGrid(labelRes: StringResource, content: LazyGridScope.() -> Unit) {
     Column {
         HeadingItem(labelRes)
         LazyVerticalGrid(

@@ -30,7 +30,10 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.ioCoroutineScope
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.workManager
 import kotlinx.collections.immutable.persistentListOf
@@ -65,7 +68,7 @@ class WorkerInfoScreen : Screen() {
                         AppBarActions(
                             persistentListOf(
                                 AppBar.Action(
-                                    title = stringResource(R.string.action_copy_to_clipboard),
+                                    title = localize(MR.strings.action_copy_to_clipboard),
                                     icon = Icons.Default.ContentCopy,
                                     onClick = {
                                         context.copyToClipboard(

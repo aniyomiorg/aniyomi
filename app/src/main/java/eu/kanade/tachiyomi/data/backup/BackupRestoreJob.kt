@@ -9,7 +9,10 @@ import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.isRunning
@@ -40,7 +43,7 @@ class BackupRestoreJob(private val context: Context, workerParams: WorkerParamet
             Result.success()
         } catch (e: Exception) {
             if (e is CancellationException) {
-                notifier.showRestoreError(context.getString(R.string.restoring_backup_canceled))
+                notifier.showRestoreError(context.localize(MR.strings.restoring_backup_canceled))
                 Result.success()
             } else {
                 logcat(LogPriority.ERROR, e)

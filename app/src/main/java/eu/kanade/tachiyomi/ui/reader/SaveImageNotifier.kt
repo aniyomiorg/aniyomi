@@ -8,6 +8,10 @@ import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -56,8 +60,8 @@ class SaveImageNotifier(private val context: Context) {
     fun onError(error: String?) {
         // Create notification
         with(notificationBuilder) {
-            setContentTitle(context.getString(R.string.download_notifier_title_error))
-            setContentText(error ?: context.getString(R.string.unknown_error))
+            setContentTitle(context.localize(MR.strings.download_notifier_title_error))
+            setContentText(error ?: context.localize(MR.strings.unknown_error))
             setSmallIcon(android.R.drawable.ic_menu_report_image)
         }
         updateNotification()
@@ -65,7 +69,7 @@ class SaveImageNotifier(private val context: Context) {
 
     private fun showCompleteNotification(uri: Uri, image: Bitmap?) {
         with(notificationBuilder) {
-            setContentTitle(context.getString(R.string.picture_saved))
+            setContentTitle(context.localize(MR.strings.picture_saved))
             setSmallIcon(R.drawable.ic_photo_24dp)
             image?.let { setStyle(NotificationCompat.BigPictureStyle().bigPicture(it)) }
             setLargeIcon(image)
@@ -78,13 +82,13 @@ class SaveImageNotifier(private val context: Context) {
             // Share action
             addAction(
                 R.drawable.ic_share_24dp,
-                context.getString(R.string.action_share),
+                context.localize(MR.strings.action_share),
                 NotificationReceiver.shareImagePendingBroadcast(context, uri.path!!, notificationId),
             )
             // Delete action
             addAction(
                 R.drawable.ic_delete_24dp,
-                context.getString(R.string.action_delete),
+                context.localize(MR.strings.action_delete),
                 NotificationReceiver.deleteImagePendingBroadcast(
                     context,
                     uri.path!!,

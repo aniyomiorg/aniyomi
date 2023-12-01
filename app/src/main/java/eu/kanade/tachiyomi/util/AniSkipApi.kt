@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -70,14 +73,14 @@ class AniSkipApi {
 
         internal suspend fun showSkipButton(skipType: SkipType) {
             val skipButtonString = when (skipType) {
-                SkipType.ED -> R.string.player_aniskip_ed
-                SkipType.OP -> R.string.player_aniskip_op
-                SkipType.RECAP -> R.string.player_aniskip_recap
-                SkipType.MIXED_OP -> R.string.player_aniskip_mixedOp
+                SkipType.ED -> MR.strings.player_aniskip_ed
+                SkipType.OP -> MR.strings.player_aniskip_op
+                SkipType.RECAP -> MR.strings.player_aniskip_recap
+                SkipType.MIXED_OP -> MR.strings.player_aniskip_mixedOp
             }
             withUIContext {
                 playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
+                playerControls.binding.controlsSkipIntroBtn.text = activity.localize(
                     skipButtonString,
                 )
             }
@@ -96,8 +99,8 @@ class AniSkipApi {
                 if (waitingTime > 0) {
                     withUIContext {
                         playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(
-                            R.string.player_aniskip_dontskip,
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.localize(
+                            MR.strings.player_aniskip_dontskip,
                         )
                     }
                 } else {
@@ -111,8 +114,8 @@ class AniSkipApi {
         }
 
         fun skipAnimation(skipType: SkipType) {
-            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(
-                R.string.player_aniskip_skip,
+            binding.secondsView.binding.doubleTapSeconds.text = activity.localize(
+                MR.strings.player_aniskip_skip,
                 skipType.getString(),
             )
 

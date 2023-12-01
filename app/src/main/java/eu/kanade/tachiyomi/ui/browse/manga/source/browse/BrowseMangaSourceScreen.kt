@@ -44,7 +44,10 @@ import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -152,7 +155,7 @@ data class BrowseMangaSourceScreen(
                                 )
                             },
                             label = {
-                                Text(text = stringResource(R.string.popular))
+                                Text(text = localize(MR.strings.popular))
                             },
                         )
                         if ((screenModel.source as CatalogueSource).supportsLatest) {
@@ -171,7 +174,7 @@ data class BrowseMangaSourceScreen(
                                     )
                                 },
                                 label = {
-                                    Text(text = stringResource(R.string.latest))
+                                    Text(text = localize(MR.strings.latest))
                                 },
                             )
                         }
@@ -188,7 +191,7 @@ data class BrowseMangaSourceScreen(
                                     )
                                 },
                                 label = {
-                                    Text(text = stringResource(R.string.action_filter))
+                                    Text(text = localize(MR.strings.action_filter))
                                 },
                             )
                         }

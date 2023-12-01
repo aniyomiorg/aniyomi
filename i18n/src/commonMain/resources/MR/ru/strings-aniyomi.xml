@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Категории</string>
+    <string name="unlock_app">Разблокировать Aniyomi</string>
+    <string name="action_sort_last_manga_update">Последняя проверка обновления</string>
+    <string name="action_show_manga">Показать запись</string>
+    <string name="action_display_local_badge_manga">Персональный источник</string>
+    <string name="pref_update_only_completely_read">Есть непрочитанные главы</string>
+    <string name="pref_library_update_show_tab_badge">Непрочитанные главы на иконке «Обновления»</string>
+    <string name="default_manga_category">Основная категория</string>
+    <string name="pref_manga_library_update_categories_details">Записи в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
+    <string name="untrusted_extension_message">Это расширение было подписано ненадёжным сертификатом и не было активировано.
+\n
+\nВредоносное расширение может считывать любые учетные данные для входа, хранящиеся в Tachiyomi, или выполнять произвольный код.
+\n
+\nДоверяя этому сертификату, вы принимаете эти риски.</string>
+    <string name="pref_category_delete_chapters">Удаление глав</string>
+    <string name="pref_remove_after_marked_as_read">Удалять помеченое как «Прочитано»</string>
+    <string name="pref_remove_after_read">Удалять после прочтения</string>
+    <string name="pref_remove_bookmarked_chapters">Удалять главы с закладками</string>
+    <string name="pref_remove_exclude_categories_manga">Исключённые категории</string>
+    <string name="pref_auto_update_manga_sync">Обновлять прогресс после прочтения</string>
+    <string name="pref_clear_chapter_cache">Очистить кэш глав</string>
+    <string name="pref_auto_clear_chapter_cache">Очищать кэш глав при закрытии приложения</string>
+    <string name="pref_clear_manga_database">Очистить базу данных</string>
+    <string name="pref_clear_manga_database_summary">Удалить историю для записей, которые не находятся в библиотеке</string>
+    <string name="clear_database_confirmation">Вы уверены\? Прочитанные главы и прогресс не библиотечных записей будет потерян</string>
+    <string name="pref_refresh_library_tracking_summary">Обновляет статус, оценку и последнюю прочитанную главу для сервисов отслеживания</string>
+    <string name="pref_incognito_mode_summary">Приостанавливает историю чтения</string>
+    <string name="manga_from_library">Из библиотеки</string>
+    <string name="snack_add_to_manga_library">Добавить в библиотеку\?</string>
+    <string name="download_error">Ошибка</string>
+    <string name="download_paused">Пауза</string>
+    <string name="also_set_chapter_settings_for_library">Также применить ко всем записям в моей библиотеке</string>
+    <string name="dialog_with_checkbox_reset">Сбросить все главы для этой записи</string>
+    <string name="download_insufficient_space">Не удалось загрузить главы из-за малого объема хранилища</string>
+    <string name="download_queue_size_warning">Предупреждение: Большое количество загрузок может привести к замедлению работы источников и/или блокировке Tachiyomi. Нажмите для подробностей.</string>
+    <string name="information_webview_required">Для Tachiyomi необходим WebView</string>
+    <string name="download_notifier_download_paused_chapters">Загрузка приостановлена</string>
+    <string name="channel_new_chapters_episodes">Обновления глав</string>
+    <string name="pref_library_manga_columns">Манги в строке</string>
+    <string name="pref_library_anime_columns">Аниме в строке</string>
+    <string name="pref_bottom_nav_no_manga">Переместите Мангу на вкладку Дополнительно</string>
+    <string name="action_sort_total_episodes">Всего эпизодов</string>
+    <string name="label_manga">Манга</string>
+    <string name="label_manga_sources">Источники манги</string>
+    <string name="backup_settings_warning">Предупреждение: При резервном копировании настроек также будут сохранены ваши пароли от треков, не предоставляйте общий доступ к этому файлу резервной копии!</string>
+    <string name="pref_bottom_nav_no_updates">Переместить Обновления на вкладку Дополнительно</string>
+    <string name="general_categories">Категории</string>
+    <string name="anime_categories">Категории аниме</string>
+    <string name="chapters_episodes">Главы и эпизоды</string>
+    <string name="episodes">Эпизоды</string>
+    <string name="entries">Записи в библиотеке</string>
+    <string name="label_anime_sources">Источники аниме</string>
+    <string name="label_watched_episodes">Просмотрено</string>
+    <string name="label_anime">Аниме</string>
+    <string name="pref_bottom_nav_no_history">Переместить историю на вкладку Дополнительно</string>
+    <string name="label_anime_library">Аниме</string>
+    <string name="label_manga_library">Манга</string>
+</resources>

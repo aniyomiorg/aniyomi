@@ -39,7 +39,10 @@ import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.ExtensionHeader
 import eu.kanade.presentation.browse.manga.ExtensionTrustDialog
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
@@ -49,6 +52,7 @@ import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
@@ -78,12 +82,12 @@ fun AnimeExtensionScreen(
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.isEmpty -> {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
-                    R.string.no_results_found
+                    MR.strings.no_results_found
                 } else {
-                    R.string.empty_screen
+                    MR.strings.empty_screen
                 }
                 EmptyScreen(
-                    textResource = msg,
+                    stringRes = msg,
                     modifier = Modifier.padding(contentPadding),
                 )
             }
@@ -131,11 +135,11 @@ private fun AnimeExtensionContent(
                 when (header) {
                     is AnimeExtensionUiModel.Header.Resource -> {
                         val action: @Composable RowScope.() -> Unit =
-                            if (header.textRes == R.string.ext_updates_pending) {
+                            if (header.textRes == MR.strings.ext_updates_pending) {
                                 {
                                     Button(onClick = { onClickUpdateAll() }) {
                                         Text(
-                                            text = stringResource(R.string.ext_update_all),
+                                            text = localize(MR.strings.ext_update_all),
                                             style = LocalTextStyle.current.copy(
                                                 color = MaterialTheme.colorScheme.onPrimary,
                                             ),
@@ -311,15 +315,15 @@ private fun AnimeExtensionItemContent(
                 }
 
                 val warning = when {
-                    extension is AnimeExtension.Untrusted -> R.string.ext_untrusted
-                    extension is AnimeExtension.Installed && extension.isUnofficial -> R.string.ext_unofficial
-                    extension is AnimeExtension.Installed && extension.isObsolete -> R.string.ext_obsolete
-                    extension.isNsfw -> R.string.ext_nsfw_short
+                    extension is AnimeExtension.Untrusted -> MR.strings.ext_untrusted
+                    extension is AnimeExtension.Installed && extension.isUnofficial -> MR.strings.ext_unofficial
+                    extension is AnimeExtension.Installed && extension.isObsolete -> MR.strings.ext_obsolete
+                    extension.isNsfw -> MR.strings.ext_nsfw_short
                     else -> null
                 }
                 if (warning != null) {
                     Text(
-                        text = stringResource(warning).uppercase(),
+                        text = localize(warning).uppercase(),
                         color = MaterialTheme.colorScheme.error,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -330,9 +334,9 @@ private fun AnimeExtensionItemContent(
                     DotSeparatorNoSpaceText()
                     Text(
                         text = when (installStep) {
-                            InstallStep.Pending -> stringResource(R.string.ext_pending)
-                            InstallStep.Downloading -> stringResource(R.string.ext_downloading)
-                            InstallStep.Installing -> stringResource(R.string.ext_installing)
+                            InstallStep.Pending -> localize(MR.strings.ext_pending)
+                            InstallStep.Downloading -> localize(MR.strings.ext_downloading)
+                            InstallStep.Installing -> localize(MR.strings.ext_installing)
                             else -> error("Must not show non-install process text")
                         },
                     )
@@ -358,19 +362,19 @@ private fun AnimeExtensionItemActions(
             ) {
                 Text(
                     text = when (installStep) {
-                        InstallStep.Installed -> stringResource(R.string.ext_installed)
-                        InstallStep.Error -> stringResource(R.string.action_retry)
+                        InstallStep.Installed -> localize(MR.strings.ext_installed)
+                        InstallStep.Error -> localize(MR.strings.action_retry)
                         InstallStep.Idle -> {
                             when (extension) {
                                 is AnimeExtension.Installed -> {
                                     if (extension.hasUpdate) {
-                                        stringResource(R.string.ext_update)
+                                        localize(MR.strings.ext_update)
                                     } else {
-                                        stringResource(R.string.action_settings)
+                                        localize(MR.strings.action_settings)
                                     }
                                 }
-                                is AnimeExtension.Untrusted -> stringResource(R.string.ext_trust)
-                                is AnimeExtension.Available -> stringResource(R.string.ext_install)
+                                is AnimeExtension.Untrusted -> localize(MR.strings.ext_trust)
+                                is AnimeExtension.Available -> localize(MR.strings.ext_install)
                             }
                         }
                         else -> error("Must not show install process text")
@@ -381,7 +385,7 @@ private fun AnimeExtensionItemActions(
             IconButton(onClick = { onClickItemCancel(extension) }) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(R.string.action_cancel),
+                    contentDescription = localize(MR.strings.action_cancel),
                 )
             }
         }

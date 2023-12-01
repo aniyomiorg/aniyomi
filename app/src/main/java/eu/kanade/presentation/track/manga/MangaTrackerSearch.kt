@@ -62,7 +62,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -123,7 +126,7 @@ fun MangaTrackerSearch(
                             decorationBox = {
                                 if (query.text.isEmpty()) {
                                     Text(
-                                        text = stringResource(R.string.action_search_hint),
+                                        text = localize(MR.strings.action_search_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         style = MaterialTheme.typography.bodyLarge,
                                     )
@@ -166,7 +169,7 @@ fun MangaTrackerSearch(
                         .fillMaxWidth(),
                     elevation = ButtonDefaults.elevatedButtonElevation(),
                 ) {
-                    Text(text = stringResource(R.string.action_track))
+                    Text(text = localize(MR.strings.action_track))
                 }
             }
         },
@@ -179,7 +182,7 @@ fun MangaTrackerSearch(
                 if (availableTracks.isEmpty()) {
                     EmptyScreen(
                         modifier = Modifier.padding(innerPadding),
-                        textResource = R.string.no_results_found,
+                        stringRes = MR.strings.no_results_found,
                     )
                 } else {
                     ScrollbarLazyColumn(
@@ -211,7 +214,7 @@ fun MangaTrackerSearch(
                 EmptyScreen(
                     modifier = Modifier.padding(innerPadding),
                     message = queryResult.exceptionOrNull()?.message
-                        ?: stringResource(R.string.unknown_error),
+                        ?: localize(MR.strings.unknown_error),
                 )
             }
         }
@@ -270,19 +273,19 @@ fun SearchResultItem(
                     )
                     if (type.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.track_type),
+                            title = localize(MR.strings.track_type),
                             text = type,
                         )
                     }
                     if (startDate.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.label_started),
+                            title = localize(MR.strings.label_started),
                             text = startDate,
                         )
                     }
                     if (status.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.track_status),
+                            title = localize(MR.strings.track_status),
                             text = status,
                         )
                     }

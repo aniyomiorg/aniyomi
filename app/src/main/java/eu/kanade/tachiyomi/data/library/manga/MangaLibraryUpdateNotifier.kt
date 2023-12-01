@@ -14,6 +14,10 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloader
@@ -60,14 +64,14 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
      */
     val progressNotificationBuilder by lazy {
         context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
-            setContentTitle(context.getString(R.string.app_name))
+            setContentTitle(context.localize(MR.strings.app_name))
             setSmallIcon(R.drawable.ic_refresh_24dp)
             setLargeIcon(notificationBitmap)
             setOngoing(true)
             setOnlyAlertOnce(true)
             addAction(
                 R.drawable.ic_close_24dp,
-                context.getString(R.string.action_cancel),
+                context.localize(MR.strings.action_cancel),
                 cancelIntent,
             )
         }
@@ -83,8 +87,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     fun showProgressNotification(manga: List<Manga>, current: Int, total: Int) {
         progressNotificationBuilder
             .setContentTitle(
-                context.getString(
-                    R.string.notification_updating_progress,
+                context.localize(
+                    MR.strings.notification_updating_progress,
                     percentFormatter.format(current.toFloat() / total),
                 ),
             )
@@ -107,10 +111,10 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.ID_LIBRARY_SIZE_WARNING,
             Notifications.CHANNEL_LIBRARY_PROGRESS,
         ) {
-            setContentTitle(context.getString(R.string.label_warning))
+            setContentTitle(context.localize(MR.strings.label_warning))
             setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(context.getString(R.string.notification_size_warning)),
+                    .bigText(context.localize(MR.strings.notification_size_warning)),
             )
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setTimeoutAfter(MangaDownloader.WARNING_NOTIF_TIMEOUT_MS)
@@ -133,8 +137,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.ID_LIBRARY_ERROR,
             Notifications.CHANNEL_LIBRARY_ERROR,
         ) {
-            setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
-            setContentText(context.getString(R.string.action_show_errors))
+            setContentTitle(context.localize(MR.strings.notification_update_error, failed))
+            setContentText(context.localize(MR.strings.action_show_errors))
             setSmallIcon(R.drawable.ic_ani)
 
             setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
@@ -156,9 +160,9 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_LIBRARY_SKIPPED,
         ) {
             setContentTitle(
-                context.resources.getString(R.string.notification_update_skipped, skipped),
+                context.localize(MR.strings.notification_update_skipped, skipped),
             )
-            setContentText(context.getString(R.string.learn_more))
+            setContentText(context.localize(MR.strings.learn_more))
             setSmallIcon(R.drawable.ic_ani)
             setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_MANGA_URL))
         }
@@ -175,7 +179,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.ID_NEW_CHAPTERS,
             Notifications.CHANNEL_NEW_CHAPTERS_EPISODES,
         ) {
-            setContentTitle(context.getString(R.string.notification_new_chapters))
+            setContentTitle(context.localize(MR.strings.notification_new_chapters))
             if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
                 setContentText(updates.first().first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN))
             } else {
@@ -257,7 +261,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             // Mark chapters as read action
             addAction(
                 R.drawable.ic_glasses_24dp,
-                context.getString(R.string.action_mark_as_read),
+                context.localize(MR.strings.action_mark_as_read),
                 NotificationReceiver.markAsViewedPendingBroadcast(
                     context,
                     manga,
@@ -268,7 +272,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             // View chapters action
             addAction(
                 R.drawable.ic_book_24dp,
-                context.getString(R.string.action_view_chapters),
+                context.localize(MR.strings.action_view_chapters),
                 NotificationReceiver.openChapterPendingActivity(
                     context,
                     manga,
@@ -280,7 +284,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             if (chapters.size <= MangaDownloader.CHAPTERS_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
                 addAction(
                     android.R.drawable.stat_sys_download_done,
-                    context.getString(R.string.action_download),
+                    context.localize(MR.strings.action_download),
                     NotificationReceiver.downloadChaptersPendingBroadcast(
                         context,
                         manga,
@@ -331,14 +335,14 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 val remaining = chapters.size - displayableChapterNumbers.size
                 if (remaining == 0) {
                     // "Chapter 2.5"
-                    context.resources.getString(
-                        R.string.notification_chapters_single,
+                    context.localize(
+                        MR.strings.notification_chapters_single,
                         displayableChapterNumbers.first(),
                     )
                 } else {
                     // "Chapter 2.5 and 10 more"
-                    context.resources.getString(
-                        R.string.notification_chapters_single_and_more,
+                    context.localize(
+                        MR.strings.notification_chapters_single_and_more,
                         displayableChapterNumbers.first(),
                         remaining,
                     )
@@ -361,8 +365,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     )
                 } else {
                     // "Chapters 1, 2.5, 3"
-                    context.resources.getString(
-                        R.string.notification_chapters_multiple,
+                    context.localize(
+                        MR.strings.notification_chapters_multiple,
                         displayableChapterNumbers.joinToString(", "),
                     )
                 }

@@ -47,11 +47,15 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.EditCoverAction
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.util.clickableNoIndication
 
 @Composable
@@ -85,7 +89,7 @@ fun AnimeCoverDialog(
                         IconButton(onClick = onDismissRequest) {
                             Icon(
                                 imageVector = Icons.Outlined.Close,
-                                contentDescription = stringResource(R.string.action_close),
+                                contentDescription = localize(MR.strings.action_close),
                             )
                         }
                     }
@@ -94,12 +98,12 @@ fun AnimeCoverDialog(
                         AppBarActions(
                             actions = persistentListOf(
                                 AppBar.Action(
-                                    title = stringResource(R.string.action_share),
+                                    title = localize(MR.strings.action_share),
                                     icon = Icons.Outlined.Share,
                                     onClick = onShareClick,
                                 ),
                                 AppBar.Action(
-                                    title = stringResource(R.string.action_save),
+                                    title = localize(MR.strings.action_save),
                                     icon = Icons.Outlined.Save,
                                     onClick = onSaveClick,
                                 ),
@@ -119,8 +123,8 @@ fun AnimeCoverDialog(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Outlined.Edit,
-                                        contentDescription = stringResource(
-                                            R.string.action_edit_cover,
+                                        contentDescription = localize(
+                                            MR.strings.action_edit_cover,
                                         ),
                                     )
                                 }
@@ -130,14 +134,14 @@ fun AnimeCoverDialog(
                                     offset = DpOffset(8.dp, 0.dp),
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text(text = stringResource(R.string.action_edit)) },
+                                        text = { Text(text = localize(MR.strings.action_edit)) },
                                         onClick = {
                                             onEditClick(EditCoverAction.EDIT)
                                             expanded = false
                                         },
                                     )
                                     DropdownMenuItem(
-                                        text = { Text(text = stringResource(R.string.action_delete)) },
+                                        text = { Text(text = localize(MR.strings.action_delete)) },
                                         onClick = {
                                             onEditClick(EditCoverAction.DELETE)
                                             expanded = false

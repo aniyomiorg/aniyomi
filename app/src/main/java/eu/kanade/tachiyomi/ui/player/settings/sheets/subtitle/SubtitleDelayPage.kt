@@ -15,7 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
@@ -42,7 +45,7 @@ fun StreamsDelayPage(
             )
         }
         screenModel.ToggleableRow(
-            textRes = R.string.player_audio_remember_delay,
+            textRes = MR.strings.player_audio_remember_delay,
             isChecked = audioDelay.collectAsState().value,
             onClick = { screenModel.togglePreference { audioDelay } },
         )
@@ -53,7 +56,7 @@ fun StreamsDelayPage(
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             OutlinedNumericChooser(
-                label = stringResource(id = R.string.player_audio_delay),
+                label = localize(MR.strings.player_audio_delay),
                 placeholder = "0",
                 suffix = "ms",
                 value = currentAudioDelay,
@@ -69,7 +72,7 @@ fun StreamsDelayPage(
         screenModel.NoSubtitlesWarning()
 
         screenModel.ToggleableRow(
-            textRes = R.string.player_subtitle_remember_delay,
+            textRes = MR.strings.player_subtitle_remember_delay,
             isChecked = subDelay.collectAsState().value,
             onClick = { screenModel.togglePreference { subDelay } },
         )
@@ -80,7 +83,7 @@ fun StreamsDelayPage(
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             OutlinedNumericChooser(
-                label = stringResource(id = R.string.player_subtitle_delay),
+                label = localize(MR.strings.player_subtitle_delay),
                 placeholder = "0",
                 suffix = "ms",
                 value = currentSubDelay,

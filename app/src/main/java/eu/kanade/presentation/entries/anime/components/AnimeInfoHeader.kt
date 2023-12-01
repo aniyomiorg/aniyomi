@@ -80,11 +80,16 @@ import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.localizePlural
 import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 import kotlin.math.absoluteValue
@@ -181,9 +186,9 @@ fun AnimeActionRow(
     Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
         AnimeActionButton(
             title = if (favorite) {
-                stringResource(R.string.in_library)
+                localize(MR.strings.in_library)
             } else {
-                stringResource(R.string.add_to_library)
+                localize(MR.strings.add_to_library)
             },
             icon = if (favorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
             color = if (favorite) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
@@ -192,8 +197,8 @@ fun AnimeActionRow(
         )
         if (onEditIntervalClicked != null && fetchInterval != null) {
             AnimeActionButton(
-                title = pluralStringResource(
-                    id = R.plurals.day,
+                title = localizePlural(
+                    MR.plurals.day,
                     count = fetchInterval.absoluteValue,
                     fetchInterval.absoluteValue,
                 ),
@@ -205,10 +210,10 @@ fun AnimeActionRow(
         if (onTrackingClicked != null) {
             AnimeActionButton(
                 title = if (trackingCount == 0) {
-                    stringResource(R.string.manga_tracking_tab)
+                    localize(MR.strings.manga_tracking_tab)
                 } else {
-                    pluralStringResource(
-                        id = R.plurals.num_trackers,
+                    localizePlural(
+                        MR.plurals.num_trackers,
                         count = trackingCount,
                         trackingCount,
                     )
@@ -220,7 +225,7 @@ fun AnimeActionRow(
         }
         if (onWebViewClicked != null) {
             AnimeActionButton(
-                title = stringResource(R.string.action_web_view),
+                title = localize(MR.strings.action_web_view),
                 icon = Icons.Outlined.Public,
                 color = defaultActionButtonColor,
                 onClick = onWebViewClicked,
@@ -244,8 +249,8 @@ fun ExpandableAnimeDescription(
             mutableStateOf(defaultExpandState)
         }
         val desc =
-            description.takeIf { !it.isNullOrBlank() } ?: stringResource(
-                R.string.description_placeholder,
+            description.takeIf { !it.isNullOrBlank() } ?: localize(
+                MR.strings.description_placeholder,
             )
         val trimmedDescription = remember(desc) {
             desc
@@ -276,14 +281,14 @@ fun ExpandableAnimeDescription(
                     onDismissRequest = { showMenu = false },
                 ) {
                     DropdownMenuItem(
-                        text = { Text(text = stringResource(R.string.action_search)) },
+                        text = { Text(text = localize(MR.strings.action_search)) },
                         onClick = {
                             onTagSearch(tagSelected)
                             showMenu = false
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text(text = stringResource(R.string.action_copy_to_clipboard)) },
+                        text = { Text(text = localize(MR.strings.action_copy_to_clipboard)) },
                         onClick = {
                             onCopyTagToClipboard(tagSelected)
                             showMenu = false
@@ -350,7 +355,7 @@ private fun AnimeAndSourceTitlesLarge(
         ItemCover.Book(
             modifier = Modifier.fillMaxWidth(0.65f),
             data = coverDataProvider(),
-            contentDescription = stringResource(R.string.manga_cover),
+            contentDescription = localize(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -392,7 +397,7 @@ private fun AnimeAndSourceTitlesSmall(
                 .sizeIn(maxWidth = 100.dp)
                 .align(Alignment.Top),
             data = coverDataProvider(),
-            contentDescription = stringResource(R.string.manga_cover),
+            contentDescription = localize(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
         Column(
@@ -424,7 +429,7 @@ private fun AnimeContentInfo(
 ) {
     val context = LocalContext.current
     Text(
-        text = title.ifBlank { stringResource(R.string.unknown_title) },
+        text = title.ifBlank { localize(MR.strings.unknown_title) },
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.clickableNoIndication(
             onLongClick = {
@@ -454,7 +459,7 @@ private fun AnimeContentInfo(
         )
         Text(
             text = author?.takeIf { it.isNotBlank() }
-                ?: stringResource(R.string.unknown_author),
+                ?: localize(MR.strings.unknown_author),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier
                 .clickableNoIndication(
@@ -520,13 +525,13 @@ private fun AnimeContentInfo(
         ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
             Text(
                 text = when (status) {
-                    SAnime.ONGOING.toLong() -> stringResource(R.string.ongoing)
-                    SAnime.COMPLETED.toLong() -> stringResource(R.string.completed)
-                    SAnime.LICENSED.toLong() -> stringResource(R.string.licensed)
-                    SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(R.string.publishing_finished)
-                    SAnime.CANCELLED.toLong() -> stringResource(R.string.cancelled)
-                    SAnime.ON_HIATUS.toLong() -> stringResource(R.string.on_hiatus)
-                    else -> stringResource(R.string.unknown)
+                    SAnime.ONGOING.toLong() -> localize(MR.strings.ongoing)
+                    SAnime.COMPLETED.toLong() -> localize(MR.strings.completed)
+                    SAnime.LICENSED.toLong() -> localize(MR.strings.licensed)
+                    SAnime.PUBLISHING_FINISHED.toLong() -> localize(MR.strings.publishing_finished)
+                    SAnime.CANCELLED.toLong() -> localize(MR.strings.cancelled)
+                    SAnime.ON_HIATUS.toLong() -> localize(MR.strings.on_hiatus)
+                    else -> localize(MR.strings.unknown)
                 },
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
@@ -600,8 +605,8 @@ private fun AnimeSummary(
                     val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_caret_down)
                     Icon(
                         painter = rememberAnimatedVectorPainter(image, !expanded),
-                        contentDescription = stringResource(
-                            if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand,
+                        contentDescription = localize(
+                            if (expanded) MR.strings.manga_info_collapse else MR.strings.manga_info_expand,
                         ),
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.background(Brush.radialGradient(colors = colors.asReversed())),

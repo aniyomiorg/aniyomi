@@ -13,6 +13,10 @@ import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.download.anime.animeDownloadTab
 import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -29,7 +33,7 @@ data class DownloadsTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
             return TabOptions(
                 index = 6u,
-                title = stringResource(R.string.label_download_queue),
+                title = localize(MR.strings.label_download_queue),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -39,7 +43,7 @@ data class DownloadsTab(
         val context = LocalContext.current
 
         TabbedScreen(
-            titleRes = R.string.label_download_queue,
+            titleRes = MR.strings.label_download_queue,
             tabs = persistentListOf(
                 animeDownloadTab(),
                 mangaDownloadTab(),

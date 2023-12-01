@@ -22,7 +22,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel
@@ -66,7 +69,7 @@ data class MangaSourceSearchScreen(
             floatingActionButton = {
                 AnimatedVisibility(visible = state.filters.isNotEmpty()) {
                     ExtendedFloatingActionButton(
-                        text = { Text(text = stringResource(R.string.action_filter)) },
+                        text = { Text(text = localize(MR.strings.action_filter)) },
                         icon = { Icon(Icons.Outlined.FilterList, contentDescription = "") },
                         onClick = screenModel::openFilterSheet,
                     )

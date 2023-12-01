@@ -1,14 +1,17 @@
 package eu.kanade.tachiyomi.ui.browse.manga.extension
 
 import android.app.Application
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -98,7 +101,7 @@ class MangaExtensionsScreenModel(
                     extensionMapper(downloads),
                 )
                 if (updates.isNotEmpty()) {
-                    itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
+                    itemsGroups[MangaExtensionUiModel.Header.Resource(MR.strings.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(
@@ -108,7 +111,7 @@ class MangaExtensionsScreenModel(
                     extensionMapper(downloads),
                 )
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
+                    itemsGroups[MangaExtensionUiModel.Header.Resource(MR.strings.ext_installed)] = installed + untrusted
                 }
 
                 val languagesWithExtensions = _available
@@ -227,7 +230,7 @@ typealias ItemGroups = MutableMap<MangaExtensionUiModel.Header, List<MangaExtens
 
 object MangaExtensionUiModel {
     sealed interface Header {
-        data class Resource(@StringRes val textRes: Int) : Header
+        data class Resource(val textRes: StringResource) : Header
         data class Text(val text: String) : Header
     }
 

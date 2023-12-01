@@ -18,7 +18,10 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -41,6 +44,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
@@ -114,22 +118,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             logcat(LogPriority.ERROR, e) { "Not allowed to set foreground job" }
         }
 
-        val target = inputData.getString(KEY_TARGET)?.let { Target.valueOf(it) } ?: Target.EPISODES
-
-        // If this is a chapter update, set the last update time to now
-        if (target == Target.EPISODES) {
-            libraryPreferences.lastUpdatedTimestamp().set(Date().time)
-        }
+        libraryPreferences.lastUpdatedTimestamp().set(Date().time)
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
         addAnimeToQueue(categoryId)
 
         return withIOContext {
             try {
-                when (target) {
-                    Target.EPISODES -> updateEpisodeList()
-                    Target.COVERS -> updateCovers()
-                }
+                updateEpisodeList()
                 Result.success()
             } catch (e: Exception) {
                 if (e is CancellationException) {
@@ -191,27 +187,29 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .filter {
                 when {
                     it.anime.updateStrategy != AnimeUpdateStrategy.ALWAYS_UPDATE -> {
-                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_always_update))
+                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_always_update))
                         false
                     }
 
                     ENTRY_NON_COMPLETED in restrictions && it.anime.status.toInt() == SAnime.COMPLETED -> {
-                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_completed))
+                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_completed))
                         false
                     }
 
                     ENTRY_HAS_UNVIEWED in restrictions && it.unseenCount != 0L -> {
-                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_caught_up))
+                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_caught_up))
                         false
                     }
 
                     ENTRY_NON_VIEWED in restrictions && it.totalEpisodes > 0L && !it.hasStarted -> {
-                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_started))
+                        skippedUpdates.add(it.anime to context.localize(MR.strings.skipped_reason_not_started))
                         false
                     }
 
                     ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.anime.nextUpdate > fetchWindow.second -> {
-                        skippedUpdates.add(it.anime to context.getString(R.string.skipped_reason_not_in_release_period))
+                        skippedUpdates.add(
+                            it.anime to context.localize(MR.strings.skipped_reason_not_in_release_period),
+                        )
                         false
                     }
                     else -> true
@@ -295,10 +293,10 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
-                                            is NoEpisodesException -> context.getString(R.string.no_chapters_error)
+                                            is NoEpisodesException -> context.localize(MR.strings.no_chapters_error)
                                             // failedUpdates will already have the source, don't need to copy it into the message
-                                            is AnimeSourceNotInstalledException -> context.getString(
-                                                R.string.loader_not_implemented_error,
+                                            is AnimeSourceNotInstalledException -> context.localize(
+                                                MR.strings.loader_not_implemented_error,
                                             )
                                             else -> e.message
                                         }
@@ -360,55 +358,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         return syncEpisodesWithSource.await(episodes, dbAnime, source, false, fetchWindow)
     }
 
-    private suspend fun updateCovers() {
-        val semaphore = Semaphore(5)
-        val progressCount = AtomicInteger(0)
-        val currentlyUpdatingAnime = CopyOnWriteArrayList<Anime>()
-
-        coroutineScope {
-            animeToUpdate.groupBy { it.anime.source }
-                .values
-                .map { animeInSource ->
-                    async {
-                        semaphore.withPermit {
-                            animeInSource.forEach { libraryAnime ->
-                                val anime = libraryAnime.anime
-                                ensureActive()
-
-                                withUpdateNotification(
-                                    currentlyUpdatingAnime,
-                                    progressCount,
-                                    anime,
-                                ) {
-                                    val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
-                                    try {
-                                        val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime.prepUpdateCover(
-                                            coverCache,
-                                            networkAnime,
-                                            true,
-                                        )
-                                            .copyFrom(networkAnime)
-                                        try {
-                                            updateAnime.await(updatedAnime.toAnimeUpdate())
-                                        } catch (e: Exception) {
-                                            logcat(LogPriority.ERROR) { "Anime doesn't exist anymore" }
-                                        }
-                                    } catch (e: Throwable) {
-                                        // Ignore errors and continue
-                                        logcat(LogPriority.ERROR, e)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .awaitAll()
-        }
-
-        notifier.cancelProgressNotification()
-    }
-
     private suspend fun withUpdateNotification(
         updatingAnime: CopyOnWriteArrayList<Anime>,
         completed: AtomicInteger,
@@ -446,7 +395,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val file = context.createFileInCacheDir("aniyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(
-                        context.getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
+                        context.localize(MR.strings.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",
                     )
                     // Error file format:
                     // ! Error
@@ -469,14 +418,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         return File("")
     }
 
-    /**
-     * Defines what should be updated within a service execution.
-     */
-    enum class Target {
-        EPISODES, // Anime episodes
-        COVERS, // Anime covers
-    }
-
     companion object {
         private const val TAG = "AnimeLibraryUpdate"
         private const val WORK_NAME_AUTO = "AnimeLibraryUpdate-auto"
@@ -490,11 +431,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          * Key for category to update.
          */
         private const val KEY_CATEGORY = "animeCategory"
-
-        /**
-         * Key that defines what should be updated.
-         */
-        private const val KEY_TARGET = "animeTarget"
 
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)
@@ -540,7 +476,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         fun startNow(
             context: Context,
             category: Category? = null,
-            target: Target = Target.EPISODES,
         ): Boolean {
             val wm = context.workManager
             if (wm.isRunning(TAG)) {
@@ -550,7 +485,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             val inputData = workDataOf(
                 KEY_CATEGORY to category?.id,
-                KEY_TARGET to target.name,
             )
             val request = OneTimeWorkRequestBuilder<AnimeLibraryUpdateJob>()
                 .addTag(TAG)

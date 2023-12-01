@@ -9,7 +9,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderTransitionView
@@ -106,7 +109,7 @@ class WebtoonTransitionHolder(
 
         val textView = AppCompatTextView(context).apply {
             wrapContent()
-            setText(R.string.transition_pages_loading)
+            text = context.localize(MR.strings.transition_pages_loading)
         }
 
         pagesContainer.addView(progress)
@@ -119,12 +122,12 @@ class WebtoonTransitionHolder(
     private fun setError(error: Throwable, transition: ChapterTransition) {
         val textView = AppCompatTextView(context).apply {
             wrapContent()
-            text = context.getString(R.string.transition_pages_error, error.message)
+            text = context.localize(MR.strings.transition_pages_error, error.message ?: "")
         }
 
         val retryBtn = AppCompatButton(context).apply {
             wrapContent()
-            setText(R.string.action_retry)
+            text = context.localize(MR.strings.action_retry)
             setOnClickListener {
                 val toChapter = transition.to
                 if (toChapter != null) {

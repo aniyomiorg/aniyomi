@@ -51,7 +51,10 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -173,7 +176,7 @@ fun EpisodeOptionsDialog(
         )
 
         Text(
-            text = stringResource(R.string.choose_video_quality),
+            text = localize(MR.strings.choose_video_quality),
             modifier = Modifier.padding(horizontal = TabbedDialogPaddings.Horizontal),
             fontStyle = FontStyle.Italic,
             style = MaterialTheme.typography.bodyMedium,
@@ -210,7 +213,7 @@ private fun VideoList(
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val copiedString = stringResource(R.string.copied_video_link_to_clipboard)
+    val copiedString = localize(MR.strings.copied_video_link_to_clipboard)
 
     var showAllQualities by remember { mutableStateOf(false) }
     var selectedVideo by remember { mutableStateOf(videoList.first()) }
@@ -295,13 +298,13 @@ private fun QualityOptions(
 
     Column {
         ClickableRow(
-            text = stringResource(R.string.copy),
+            text = localize(MR.strings.copy),
             icon = Icons.Outlined.ContentCopy,
             onClick = { onCopyClicked() },
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_start_download_internally),
+            text = localize(MR.strings.action_start_download_internally),
             icon = Icons.Outlined.Download,
             onClick = {
                 onDownloadClicked()
@@ -310,7 +313,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_start_download_externally),
+            text = localize(MR.strings.action_start_download_externally),
             icon = Icons.Outlined.SystemUpdateAlt,
             onClick = {
                 onExtDownloadClicked()
@@ -319,7 +322,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_play_externally),
+            text = localize(MR.strings.action_play_externally),
             icon = Icons.Outlined.OpenInNew,
             onClick = {
                 onExtPlayerClicked()

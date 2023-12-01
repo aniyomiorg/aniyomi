@@ -17,6 +17,10 @@ import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
@@ -40,7 +44,7 @@ data class BrowseTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
             return TabOptions(
                 index = 3u,
-                title = stringResource(R.string.browse),
+                title = localize(MR.strings.browse),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -62,7 +66,7 @@ data class BrowseTab(
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
         TabbedScreen(
-            titleRes = R.string.browse,
+            titleRes = MR.strings.browse,
             tabs = persistentListOf(
                 animeSourcesTab(),
                 mangaSourcesTab(),

@@ -5,7 +5,10 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.category.visualName
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.domain.category.model.Category
 
 /**
@@ -39,15 +42,15 @@ fun getCategoriesLabel(
                 )
             }
         // All explicitly selected
-        includedCategories.size == allCategories.size -> stringResource(R.string.all)
-        allExcluded -> stringResource(R.string.none)
-        else -> stringResource(R.string.all)
+        includedCategories.size == allCategories.size -> localize(MR.strings.all)
+        allExcluded -> localize(MR.strings.none)
+        else -> localize(MR.strings.all)
     }
     val excludedItemsText = when {
-        excludedCategories.isEmpty() -> stringResource(R.string.none)
-        allExcluded -> stringResource(R.string.all)
+        excludedCategories.isEmpty() -> localize(MR.strings.none)
+        allExcluded -> localize(MR.strings.all)
         else -> excludedCategories.joinToString { it.visualName(context) }
     }
-    return stringResource(R.string.include, includedItemsText) + "\n" +
-        stringResource(R.string.exclude, excludedItemsText)
+    return localize(MR.strings.include, includedItemsText) + "\n" +
+        localize(MR.strings.exclude, excludedItemsText)
 }

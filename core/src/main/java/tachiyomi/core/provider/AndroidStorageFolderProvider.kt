@@ -3,7 +3,10 @@ package tachiyomi.core.provider
 import android.content.Context
 import android.os.Environment
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.core.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+
+import tachiyomi.core.i18n.localize
 import java.io.File
 
 class AndroidStorageFolderProvider(
@@ -13,7 +16,7 @@ class AndroidStorageFolderProvider(
     override fun directory(): File {
         return File(
             Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                context.getString(R.string.app_name),
+                context.localize(MR.strings.app_name),
         )
     }
 

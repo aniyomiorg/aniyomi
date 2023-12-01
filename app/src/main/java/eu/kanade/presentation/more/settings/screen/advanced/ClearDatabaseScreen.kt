@@ -39,7 +39,10 @@ import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
@@ -81,20 +84,20 @@ class ClearDatabaseScreen : Screen() {
                                         model.removeMangaBySourceId()
                                         model.clearSelection()
                                         model.hideConfirmation()
-                                        context.toast(R.string.clear_database_completed)
+                                        context.localize(MR.strings.clear_database_completed)
                                     }
                                 },
                             ) {
-                                Text(text = stringResource(R.string.action_ok))
+                                Text(text = localize(MR.strings.action_ok))
                             }
                         },
                         dismissButton = {
                             TextButton(onClick = model::hideConfirmation) {
-                                Text(text = stringResource(R.string.action_cancel))
+                                Text(text = localize(MR.strings.action_cancel))
                             }
                         },
                         text = {
-                            Text(text = stringResource(R.string.clear_database_confirmation))
+                            Text(text = localize(MR.strings.clear_database_confirmation))
                         },
                     )
                 }
@@ -102,19 +105,19 @@ class ClearDatabaseScreen : Screen() {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(R.string.pref_clear_manga_database),
+                            title = localize(MR.strings.pref_clear_manga_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {
                                     AppBarActions(
                                         actions = persistentListOf(
                                             AppBar.Action(
-                                                title = stringResource(R.string.action_select_all),
+                                                title = localize(MR.strings.action_select_all),
                                                 icon = Icons.Outlined.SelectAll,
                                                 onClick = model::selectAll,
                                             ),
                                             AppBar.Action(
-                                                title = stringResource(R.string.action_select_all),
+                                                title = localize(MR.strings.action_select_all),
                                                 icon = Icons.Outlined.FlipToBack,
                                                 onClick = model::invertSelection,
                                             ),
@@ -128,7 +131,7 @@ class ClearDatabaseScreen : Screen() {
                 ) { contentPadding ->
                     if (s.items.isEmpty()) {
                         EmptyScreen(
-                            message = stringResource(R.string.database_clean),
+                            message = localize(MR.strings.database_clean),
                             modifier = Modifier.padding(contentPadding),
                         )
                     } else {
@@ -164,7 +167,7 @@ class ClearDatabaseScreen : Screen() {
                                 enabled = s.selection.isNotEmpty(),
                             ) {
                                 Text(
-                                    text = stringResource(R.string.action_delete),
+                                    text = localize(MR.strings.action_delete),
                                     color = MaterialTheme.colorScheme.onPrimary,
                                 )
                             }
@@ -200,7 +203,7 @@ class ClearDatabaseScreen : Screen() {
                     text = source.visualName,
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                Text(text = stringResource(R.string.clear_database_source_item_count, count))
+                Text(text = localize(MR.strings.clear_database_source_item_count, count))
             }
             Checkbox(
                 checked = isSelected,

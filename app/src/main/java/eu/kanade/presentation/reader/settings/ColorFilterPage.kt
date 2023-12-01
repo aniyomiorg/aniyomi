@@ -11,7 +11,10 @@ import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.presentation.core.components.CheckboxItem
@@ -24,25 +27,25 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
     val colorFilterModes = buildList {
         addAll(
             listOf(
-                R.string.label_default,
-                R.string.filter_mode_multiply,
-                R.string.filter_mode_screen,
+                MR.strings.label_default,
+                MR.strings.filter_mode_multiply,
+                MR.strings.filter_mode_screen,
             ),
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             addAll(
                 listOf(
-                    R.string.filter_mode_overlay,
-                    R.string.filter_mode_lighten,
-                    R.string.filter_mode_darken,
+                    MR.strings.filter_mode_overlay,
+                    MR.strings.filter_mode_lighten,
+                    MR.strings.filter_mode_darken,
                 ),
             )
         }
-    }.map { stringResource(it) }
+    }.map { localize(it) }
 
     val customBrightness by screenModel.preferences.customBrightness().collectAsState()
     CheckboxItem(
-        label = stringResource(R.string.pref_custom_brightness),
+        label = localize(MR.strings.pref_custom_brightness),
         pref = screenModel.preferences.customBrightness(),
     )
 
@@ -55,7 +58,7 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
     if (customBrightness) {
         val customBrightnessValue by screenModel.preferences.customBrightnessValue().collectAsState()
         SliderItem(
-            label = stringResource(R.string.pref_custom_brightness),
+            label = localize(MR.strings.pref_custom_brightness),
             min = -75,
             max = 100,
             value = customBrightnessValue,
@@ -66,13 +69,13 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
 
     val colorFilter by screenModel.preferences.colorFilter().collectAsState()
     CheckboxItem(
-        label = stringResource(R.string.pref_custom_color_filter),
+        label = localize(MR.strings.pref_custom_color_filter),
         pref = screenModel.preferences.colorFilter(),
     )
     if (colorFilter) {
         val colorFilterValue by screenModel.preferences.colorFilterValue().collectAsState()
         SliderItem(
-            label = stringResource(R.string.color_filter_r_value),
+            label = localize(MR.strings.color_filter_r_value),
             max = 255,
             value = colorFilterValue.red,
             valueText = colorFilterValue.red.toString(),
@@ -83,7 +86,7 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
             },
         )
         SliderItem(
-            label = stringResource(R.string.color_filter_g_value),
+            label = localize(MR.strings.color_filter_g_value),
             max = 255,
             value = colorFilterValue.green,
             valueText = colorFilterValue.green.toString(),
@@ -94,7 +97,7 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
             },
         )
         SliderItem(
-            label = stringResource(R.string.color_filter_b_value),
+            label = localize(MR.strings.color_filter_b_value),
             max = 255,
             value = colorFilterValue.blue,
             valueText = colorFilterValue.blue.toString(),
@@ -105,7 +108,7 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
             },
         )
         SliderItem(
-            label = stringResource(R.string.color_filter_a_value),
+            label = localize(MR.strings.color_filter_a_value),
             max = 255,
             value = colorFilterValue.alpha,
             valueText = colorFilterValue.alpha.toString(),
@@ -117,7 +120,7 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
         )
 
         val colorFilterMode by screenModel.preferences.colorFilterMode().collectAsState()
-        SettingsChipRow(R.string.pref_color_filter_mode) {
+        SettingsChipRow(MR.strings.pref_color_filter_mode) {
             colorFilterModes.mapIndexed { index, it ->
                 FilterChip(
                     selected = colorFilterMode == index,
@@ -129,11 +132,11 @@ internal fun ColumnScope.ColorFilterPage(screenModel: ReaderSettingsScreenModel)
     }
 
     CheckboxItem(
-        label = stringResource(R.string.pref_grayscale),
+        label = localize(MR.strings.pref_grayscale),
         pref = screenModel.preferences.grayscale(),
     )
     CheckboxItem(
-        label = stringResource(R.string.pref_inverted_colors),
+        label = localize(MR.strings.pref_inverted_colors),
         pref = screenModel.preferences.invertedColors(),
     )
 }

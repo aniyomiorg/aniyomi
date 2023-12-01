@@ -34,7 +34,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
@@ -93,11 +96,11 @@ fun DownloadQueueScreen(
                 ExtendedFloatingActionButton(
                     text = {
                         val id = if (isRunning) {
-                            R.string.action_pause
+                            MR.strings.action_pause
                         } else {
-                            R.string.action_resume
+                            MR.strings.action_resume
                         }
-                        Text(text = stringResource(id))
+                        Text(text = localize(id))
                     },
                     icon = {
                         val icon = if (isRunning) {
@@ -121,7 +124,7 @@ fun DownloadQueueScreen(
     ) {
         if (downloadList.isEmpty()) {
             EmptyScreen(
-                textResource = R.string.information_no_downloads,
+                stringRes = MR.strings.information_no_downloads,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

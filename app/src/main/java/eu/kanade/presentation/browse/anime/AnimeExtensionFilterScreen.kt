@@ -10,7 +10,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -25,7 +28,7 @@ fun AnimeExtensionFilterScreen(
     Scaffold(
         topBar = { scrollBehavior ->
             AppBar(
-                title = stringResource(R.string.label_extensions),
+                title = localize(MR.strings.label_extensions),
                 navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior,
             )
@@ -33,7 +36,7 @@ fun AnimeExtensionFilterScreen(
     ) { contentPadding ->
         if (state.isEmpty) {
             EmptyScreen(
-                textResource = R.string.empty_screen,
+                stringRes = MR.strings.empty_screen,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

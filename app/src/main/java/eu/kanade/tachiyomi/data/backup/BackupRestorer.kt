@@ -11,7 +11,10 @@ import dataanime.Anime_sync
 import dataanime.Animes
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
@@ -120,7 +123,7 @@ class BackupRestorer(
                 errors.size,
                 logFile.parent,
                 logFile.name,
-                contentTitle = context.getString(R.string.library_sync_complete),
+                contentTitle = context.localize(MR.strings.library_sync_complete),
             )
         } else {
             notifier.showRestoreComplete(time, errors.size, logFile.parent, logFile.name)
@@ -256,8 +259,8 @@ class BackupRestorer(
         showRestoreProgress(
             restoreProgress,
             restoreAmount,
-            context.getString(R.string.manga_categories),
-            context.getString(R.string.restoring_backup),
+            context.localize(MR.strings.manga_categories),
+            context.localize(MR.strings.restoring_backup),
         )
     }
 
@@ -299,8 +302,8 @@ class BackupRestorer(
         showRestoreProgress(
             restoreProgress,
             restoreAmount,
-            context.getString(R.string.anime_categories),
-            context.getString(R.string.restoring_backup),
+            context.localize(MR.strings.anime_categories),
+            context.localize(MR.strings.restoring_backup),
         )
     }
 
@@ -347,14 +350,14 @@ class BackupRestorer(
                 restoreProgress,
                 restoreAmount,
                 manga.title,
-                context.getString(R.string.syncing_library),
+                context.localize(MR.strings.syncing_library),
             )
         } else {
             showRestoreProgress(
                 restoreProgress,
                 restoreAmount,
                 manga.title,
-                context.getString(R.string.restoring_backup),
+                context.localize(MR.strings.restoring_backup),
             )
         }
     }
@@ -801,14 +804,14 @@ class BackupRestorer(
                 restoreProgress,
                 restoreAmount,
                 anime.title,
-                context.getString(R.string.syncing_library),
+                context.localize(MR.strings.syncing_library),
             )
         } else {
             showRestoreProgress(
                 restoreProgress,
                 restoreAmount,
                 anime.title,
-                context.getString(R.string.restoring_backup),
+                context.localize(MR.strings.restoring_backup),
             )
         }
     }
@@ -1268,8 +1271,8 @@ class BackupRestorer(
         showRestoreProgress(
             restoreProgress,
             restoreAmount,
-            context.getString(R.string.extension_settings),
-            context.getString(R.string.restoring_backup),
+            context.localize(MR.strings.extension_settings),
+            context.localize(MR.strings.restoring_backup),
         )
     }
 

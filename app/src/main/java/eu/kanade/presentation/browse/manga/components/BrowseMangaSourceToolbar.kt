@@ -18,7 +18,10 @@ import eu.kanade.presentation.components.AppBarTitle
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.RadioMenuItem
 import eu.kanade.presentation.components.SearchToolbar
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.MangaSource
 import kotlinx.collections.immutable.persistentListOf
@@ -59,7 +62,7 @@ fun BrowseMangaSourceToolbar(
                     .apply {
                         add(
                             AppBar.Action(
-                                title = stringResource(R.string.action_display_mode),
+                                title = localize(MR.strings.action_display_mode),
                                 icon = if (displayMode == LibraryDisplayMode.List) {
                                     Icons.AutoMirrored.Filled.ViewList
                                 } else {
@@ -71,14 +74,14 @@ fun BrowseMangaSourceToolbar(
                         if (isLocalSource) {
                             add(
                                 AppBar.OverflowAction(
-                                    title = stringResource(R.string.label_help),
+                                    title = localize(MR.strings.label_help),
                                     onClick = onHelpClick,
                                 ),
                             )
                         } else {
                             add(
                                 AppBar.OverflowAction(
-                                    title = stringResource(R.string.action_open_in_web_view),
+                                    title = localize(MR.strings.action_open_in_web_view),
                                     onClick = onWebViewClick,
                                 ),
                             )
@@ -86,7 +89,7 @@ fun BrowseMangaSourceToolbar(
                         if (isConfigurableSource) {
                             add(
                                 AppBar.OverflowAction(
-                                    title = stringResource(R.string.action_settings),
+                                    title = localize(MR.strings.action_settings),
                                     onClick = onSettingsClick,
                                 ),
                             )
@@ -100,21 +103,21 @@ fun BrowseMangaSourceToolbar(
                 onDismissRequest = { selectingDisplayMode = false },
             ) {
                 RadioMenuItem(
-                    text = { Text(text = stringResource(R.string.action_display_comfortable_grid)) },
+                    text = { Text(text = localize(MR.strings.action_display_comfortable_grid)) },
                     isChecked = displayMode == LibraryDisplayMode.ComfortableGrid,
                 ) {
                     selectingDisplayMode = false
                     onDisplayModeChange(LibraryDisplayMode.ComfortableGrid)
                 }
                 RadioMenuItem(
-                    text = { Text(text = stringResource(R.string.action_display_grid)) },
+                    text = { Text(text = localize(MR.strings.action_display_grid)) },
                     isChecked = displayMode == LibraryDisplayMode.CompactGrid,
                 ) {
                     selectingDisplayMode = false
                     onDisplayModeChange(LibraryDisplayMode.CompactGrid)
                 }
                 RadioMenuItem(
-                    text = { Text(text = stringResource(R.string.action_display_list)) },
+                    text = { Text(text = localize(MR.strings.action_display_list)) },
                     isChecked = displayMode == LibraryDisplayMode.List,
                 ) {
                     selectingDisplayMode = false

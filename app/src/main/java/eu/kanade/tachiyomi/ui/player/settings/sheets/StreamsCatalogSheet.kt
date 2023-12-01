@@ -31,7 +31,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
@@ -52,11 +55,11 @@ fun StreamsCatalogSheet(
     onDismissRequest: () -> Unit,
 ) {
     val tabTitles = persistentListOf(
-        stringResource(id = R.string.subtitle_dialog_header),
-        stringResource(id = R.string.audio_dialog_header),
+        localize(MR.strings.subtitle_dialog_header),
+        localize(MR.strings.audio_dialog_header),
     )
     if (isEpisodeOnline == true) {
-        tabTitles.add(0, stringResource(id = R.string.quality_dialog_header))
+        tabTitles.add(0, localize(MR.strings.quality_dialog_header))
     }
 
     TabbedDialog(
@@ -127,12 +130,12 @@ private fun StreamsPageBuilder(
                     return if (externalTrackCode == "audio") {
                         Intent.createChooser(
                             intent,
-                            context.getString(R.string.player_add_external_audio_intent),
+                            context.localize(MR.strings.player_add_external_audio_intent),
                         )
                     } else {
                         Intent.createChooser(
                             intent,
-                            context.getString(R.string.player_add_external_subtitles_intent),
+                            context.localize(MR.strings.player_add_external_subtitles_intent),
                         )
                     }
                 }
@@ -156,9 +159,9 @@ private fun StreamsPageBuilder(
 
         val addTrackRes =
             if (externalTrackCode == "sub") {
-                R.string.player_add_external_subtitles
+                MR.strings.player_add_external_subtitles
             } else {
-                R.string.player_add_external_audio
+                MR.strings.player_add_external_audio
             }
 
         Row(
@@ -171,11 +174,11 @@ private fun StreamsPageBuilder(
             Icon(
                 modifier = Modifier.padding(end = MaterialTheme.padding.tiny),
                 imageVector = Icons.Default.Add,
-                contentDescription = stringResource(id = addTrackRes),
+                contentDescription = localize(addTrackRes),
             )
 
             Text(
-                text = stringResource(id = addTrackRes),
+                text = localize(addTrackRes),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

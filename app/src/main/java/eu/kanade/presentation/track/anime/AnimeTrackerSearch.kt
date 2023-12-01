@@ -47,7 +47,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.manga.SearchResultItem
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -106,7 +109,7 @@ fun AnimeTrackerSearch(
                             decorationBox = {
                                 if (query.text.isEmpty()) {
                                     Text(
-                                        text = stringResource(R.string.action_search_hint),
+                                        text = localize(MR.strings.action_search_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         style = MaterialTheme.typography.bodyLarge,
                                     )
@@ -149,7 +152,7 @@ fun AnimeTrackerSearch(
                         .fillMaxWidth(),
                     elevation = ButtonDefaults.elevatedButtonElevation(),
                 ) {
-                    Text(text = stringResource(R.string.action_track))
+                    Text(text = localize(MR.strings.action_track))
                 }
             }
         },
@@ -162,7 +165,7 @@ fun AnimeTrackerSearch(
                 if (availableTracks.isEmpty()) {
                     EmptyScreen(
                         modifier = Modifier.padding(innerPadding),
-                        textResource = R.string.no_results_found,
+                        stringRes = MR.strings.no_results_found,
                     )
                 } else {
                     ScrollbarLazyColumn(
@@ -194,7 +197,7 @@ fun AnimeTrackerSearch(
                 EmptyScreen(
                     modifier = Modifier.padding(innerPadding),
                     message = queryResult.exceptionOrNull()?.message
-                        ?: stringResource(R.string.unknown_error),
+                        ?: localize(MR.strings.unknown_error),
                 )
             }
         }

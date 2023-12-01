@@ -6,7 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 
 @Composable
 fun GlobalSearchItem(
@@ -19,7 +22,7 @@ fun GlobalSearchItem(
         onClick = onClick,
     ) {
         Text(
-            text = stringResource(R.string.action_global_search_query, searchQuery),
+            text = localize(MR.strings.action_global_search_query, searchQuery),
             modifier = Modifier.zIndex(99f),
         )
     }

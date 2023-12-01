@@ -28,7 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.SearchToolbar
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSourceFilter
 import tachiyomi.presentation.core.components.material.padding
 
@@ -85,7 +88,7 @@ fun GlobalAnimeSearchToolbar(
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = R.string.pinned_sources))
+                    Text(text = localize(MR.strings.pinned_sources))
                 },
             )
             FilterChip(
@@ -100,7 +103,7 @@ fun GlobalAnimeSearchToolbar(
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = R.string.all))
+                    Text(text = localize(MR.strings.all))
                 },
             )
 
@@ -118,7 +121,7 @@ fun GlobalAnimeSearchToolbar(
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = R.string.has_results))
+                    Text(text = localize(MR.strings.has_results))
                 },
             )
         }

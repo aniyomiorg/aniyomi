@@ -9,7 +9,10 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
@@ -20,6 +23,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
@@ -51,13 +55,13 @@ class AnimeCoverScreenModel(
             try {
                 saveCoverInternal(context, temp = false)
                 snackbarHostState.showSnackbar(
-                    context.getString(R.string.cover_saved),
+                    context.localize(MR.strings.cover_saved),
                     withDismissAction = true,
                 )
             } catch (e: Throwable) {
                 logcat(LogPriority.ERROR, e)
                 snackbarHostState.showSnackbar(
-                    context.getString(R.string.error_saving_cover),
+                    context.localize(MR.strings.error_saving_cover),
                     withDismissAction = true,
                 )
             }
@@ -74,7 +78,7 @@ class AnimeCoverScreenModel(
             } catch (e: Throwable) {
                 logcat(LogPriority.ERROR, e)
                 snackbarHostState.showSnackbar(
-                    context.getString(R.string.error_sharing_cover),
+                    context.localize(MR.strings.error_sharing_cover),
                     withDismissAction = true,
                 )
             }
@@ -145,7 +149,7 @@ class AnimeCoverScreenModel(
     private fun notifyCoverUpdated(context: Context) {
         screenModelScope.launch {
             snackbarHostState.showSnackbar(
-                context.getString(R.string.cover_updated),
+                context.localize(MR.strings.cover_updated),
                 withDismissAction = true,
             )
         }
@@ -154,7 +158,7 @@ class AnimeCoverScreenModel(
     private fun notifyFailedCoverUpdate(context: Context, e: Throwable) {
         screenModelScope.launch {
             snackbarHostState.showSnackbar(
-                context.getString(R.string.notification_cover_update_failed),
+                context.localize(MR.strings.notification_cover_update_failed),
                 withDismissAction = true,
             )
             logcat(LogPriority.ERROR, e)

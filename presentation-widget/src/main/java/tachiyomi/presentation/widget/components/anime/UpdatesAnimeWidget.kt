@@ -23,9 +23,12 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import eu.kanade.tachiyomi.core.Constants
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.presentation.widget.R
+import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
-import tachiyomi.presentation.widget.util.stringResource
 
 @Composable
 fun UpdatesAnimeWidget(
@@ -43,7 +46,7 @@ fun UpdatesAnimeWidget(
             CircularProgressIndicator(color = contentColor)
         } else if (data.isEmpty()) {
             Text(
-                text = stringResource(R.string.information_no_recent),
+                text = localize(MR.strings.information_no_recent),
                 style = TextStyle(color = contentColor),
             )
         } else {

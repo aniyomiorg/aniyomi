@@ -7,6 +7,11 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localizePlural
+
 
 @Composable
 fun EntryDownloadDropdownMenu(
@@ -19,14 +24,14 @@ fun EntryDownloadDropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
     ) {
-        val downloadAmount = if (isManga) R.plurals.download_amount_manga else R.plurals.download_amount_anime
-        val downloadUnviewed = if (isManga) R.string.download_unread else R.string.download_unseen
+        val downloadAmount = if (isManga) MR.plurals.download_amount_manga else MR.plurals.download_amount_anime
+        val downloadUnviewed = if (isManga) MR.strings.download_unread else MR.strings.download_unseen
         listOfNotNull(
-            DownloadAction.NEXT_1_ITEM to pluralStringResource(downloadAmount, 1, 1),
-            DownloadAction.NEXT_5_ITEMS to pluralStringResource(downloadAmount, 5, 5),
-            DownloadAction.NEXT_10_ITEMS to pluralStringResource(downloadAmount, 10, 10),
-            DownloadAction.NEXT_25_ITEMS to pluralStringResource(downloadAmount, 25, 25),
-            DownloadAction.UNVIEWED_ITEMS to stringResource(downloadUnviewed),
+            DownloadAction.NEXT_1_ITEM to localizePlural(downloadAmount, 1, 1),
+            DownloadAction.NEXT_5_ITEMS to localizePlural(downloadAmount, 5, 5),
+            DownloadAction.NEXT_10_ITEMS to localizePlural(downloadAmount, 10, 10),
+            DownloadAction.NEXT_25_ITEMS to localizePlural(downloadAmount, 25, 25),
+            DownloadAction.UNVIEWED_ITEMS to localize(downloadUnviewed),
         ).map { (downloadAction, string) ->
             DropdownMenuItem(
                 text = { Text(text = string) },

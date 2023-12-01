@@ -39,7 +39,10 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
@@ -63,7 +66,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
                 ),
         ) {
             Text(
-                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
+                text = localize(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }
@@ -110,8 +113,8 @@ fun LazyListScope.animeUpdatesUiItems(
                     watchProgress = updatesItem.update.lastSecondSeen
                         .takeIf { !updatesItem.update.seen && it > 0L }
                         ?.let {
-                            stringResource(
-                                R.string.episode_progress,
+                            localize(
+                                MR.strings.episode_progress,
                                 formatProgress(it),
                                 formatProgress(updatesItem.update.totalSeconds),
                             )
@@ -199,7 +202,7 @@ fun AnimeUpdatesUiItem(
                 if (!update.seen) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(R.string.unread),
+                        contentDescription = localize(MR.strings.unread),
                         modifier = Modifier
                             .height(8.dp)
                             .padding(end = 4.dp),
@@ -209,7 +212,7 @@ fun AnimeUpdatesUiItem(
                 if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(R.string.action_filter_bookmarked),
+                        contentDescription = localize(MR.strings.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },

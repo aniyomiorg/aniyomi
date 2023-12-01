@@ -28,7 +28,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
@@ -105,7 +108,7 @@ private fun MoreMenu(
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = overflowIcon ?: Icons.Default.MoreVert,
-                contentDescription = stringResource(R.string.label_more),
+                contentDescription = localize(MR.strings.label_more),
             )
         }
         if (onClickIcon == null) {

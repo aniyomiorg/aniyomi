@@ -38,7 +38,10 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -59,6 +62,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.presentation.core.components.material.NavigationBar
 import tachiyomi.presentation.core.components.material.NavigationRail
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.localizePlural
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -288,8 +292,8 @@ object HomeScreen : Screen() {
                         }
                         if (count > 0) {
                             Badge {
-                                val desc = pluralStringResource(
-                                    id = R.plurals.notification_chapters_generic,
+                                val desc = localizePlural(
+                                    MR.plurals.notification_chapters_generic,
                                     count = count,
                                     count,
                                 )
@@ -311,8 +315,8 @@ object HomeScreen : Screen() {
                         }
                         if (count > 0) {
                             Badge {
-                                val desc = pluralStringResource(
-                                    id = R.plurals.update_check_notification_ext_updates,
+                                val desc = localizePlural(
+                                    MR.plurals.update_check_notification_ext_updates,
                                     count = count,
                                     count,
                                 )

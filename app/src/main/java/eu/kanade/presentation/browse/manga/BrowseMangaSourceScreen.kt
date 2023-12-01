@@ -23,7 +23,10 @@ import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceCompactGr
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceList
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.formattedMessage
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.source.MangaSource
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.StateFlow
@@ -63,7 +66,7 @@ fun BrowseSourceContent(
         if (mangaList.itemCount > 0 && errorState != null && errorState is LoadState.Error) {
             val result = snackbarHostState.showSnackbar(
                 message = getErrorMessage(errorState),
-                actionLabel = context.getString(R.string.action_retry),
+                actionLabel = context.localize(MR.strings.action_retry),
                 duration = SnackbarDuration.Indefinite,
             )
             when (result) {
@@ -80,7 +83,7 @@ fun BrowseSourceContent(
             actions = if (source is LocalMangaSource) {
                 persistentListOf(
                     EmptyScreenAction(
-                        stringResId = R.string.local_source_help_guide,
+                        stringRes = MR.strings.local_source_help_guide,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onLocalSourceHelpClick,
                     ),
@@ -88,17 +91,17 @@ fun BrowseSourceContent(
             } else {
                 persistentListOf(
                     EmptyScreenAction(
-                        stringResId = R.string.action_retry,
+                        stringRes = MR.strings.action_retry,
                         icon = Icons.Outlined.Refresh,
                         onClick = mangaList::refresh,
                     ),
                     EmptyScreenAction(
-                        stringResId = R.string.action_open_in_web_view,
+                        stringRes = MR.strings.action_open_in_web_view,
                         icon = Icons.Outlined.Public,
                         onClick = onWebViewClick,
                     ),
                     EmptyScreenAction(
-                        stringResId = R.string.label_help,
+                        stringRes = MR.strings.label_help,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onHelpClick,
                     ),
@@ -161,7 +164,7 @@ internal fun MissingSourceScreen(
         },
     ) { paddingValues ->
         EmptyScreen(
-            message = stringResource(R.string.source_not_installed, source.toString()),
+            message = localize(MR.strings.source_not_installed, source.toString()),
             modifier = Modifier.padding(paddingValues),
         )
     }

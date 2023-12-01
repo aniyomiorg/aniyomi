@@ -15,7 +15,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.MigrateAnimeSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreen
 import kotlinx.collections.immutable.persistentListOf
 
@@ -27,10 +30,10 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = R.string.label_migration_anime,
+        titleRes = MR.strings.label_migration_anime,
         actions = persistentListOf(
             AppBar.Action(
-                title = stringResource(R.string.migration_help_guide),
+                title = localize(MR.strings.migration_help_guide),
                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
                 onClick = {
                     uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")

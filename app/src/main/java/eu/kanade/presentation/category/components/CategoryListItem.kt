@@ -23,7 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.domain.category.model.Category
 import tachiyomi.presentation.core.components.material.padding
 
@@ -77,7 +80,7 @@ fun CategoryListItem(
             IconButton(onClick = onRename) {
                 Icon(
                     imageVector = Icons.Outlined.Edit,
-                    contentDescription = stringResource(R.string.action_rename_category),
+                    contentDescription = localize(MR.strings.action_rename_category),
                 )
             }
             IconButton(
@@ -89,14 +92,14 @@ fun CategoryListItem(
                         } else {
                             Icons.Outlined.VisibilityOff
                         },
-                        contentDescription = stringResource(R.string.action_hide),
+                        contentDescription = localize(MR.strings.action_hide),
                     )
                 },
             )
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
-                    contentDescription = stringResource(R.string.action_delete),
+                    contentDescription = localize(MR.strings.action_delete),
                 )
             }
         }

@@ -29,6 +29,10 @@ import coil.compose.AsyncImage
 import eu.kanade.domain.source.manga.model.icon
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
 import tachiyomi.core.util.lang.withIOContext

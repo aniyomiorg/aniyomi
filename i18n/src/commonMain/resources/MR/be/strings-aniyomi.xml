@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Катэгорыі</string>
+    <string name="unlock_app">Разблакіраваць Aniyomi</string>
+    <string name="action_sort_last_manga_update">Апошняе абнаўленне мангі</string>
+    <string name="action_show_manga">Паказаць мангу</string>
+    <string name="action_display_local_badge_manga">Значкі лакальных</string>
+    <string name="pref_update_only_completely_read">Ёсць непрачытаныя главы</string>
+    <string name="pref_library_update_show_tab_badge">Паказваць непрачытаныя главы ў укладцы \"Абнаўленні\"</string>
+    <string name="default_manga_category">Катэгорыя па змаўчанні</string>
+    <string name="pref_manga_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
+    <string name="untrusted_extension_message">Гэта пашырэнне было падпісана ненадзейным сертыфікатам і не было актывавана.
+\n
+\nШкоднаснае пашырэнне можа счытваць любыя ўліковыя дадзеныя для ўваходу, якія захоўваюцца ў Tachiyomi, або выконваць адвольны код.
+\n
+\nДавяраючы гэтаму сертыфікату, вы прымаеце на сябе гэтыя рызыкі.</string>
+    <string name="pref_category_delete_chapters">Выдаліць часткі</string>
+    <string name="pref_remove_after_marked_as_read">Пасля таго, як пазначана як \"Прачытанае\"</string>
+    <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
+    <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
+    <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
+</resources>

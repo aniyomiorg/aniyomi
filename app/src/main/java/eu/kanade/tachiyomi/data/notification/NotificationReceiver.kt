@@ -7,7 +7,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -245,7 +248,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             context.startActivity(intent)
         } else {
-            context.toast(context.getString(R.string.download_error))
+            context.toast(context.localize(MR.strings.download_error))
         }
     }
 
@@ -265,7 +268,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             context.startActivity(intent)
         } else {
-            context.toast(context.getString(R.string.download_error))
+            context.toast(context.localize(MR.strings.download_error))
         }
     }
 

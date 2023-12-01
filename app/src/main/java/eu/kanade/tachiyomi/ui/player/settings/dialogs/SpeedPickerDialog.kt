@@ -16,7 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -33,7 +36,7 @@ fun SpeedPickerDialog(
     var speed by remember { mutableStateOf(currentSpeed.toHundredths()) }
 
     PlayerDialog(
-        titleRes = R.string.title_speed_dialog,
+        titleRes = MR.strings.playback_speed_dialog_title,
         modifier = Modifier.fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {

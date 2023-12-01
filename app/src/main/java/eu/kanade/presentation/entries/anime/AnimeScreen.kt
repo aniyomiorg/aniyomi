@@ -67,7 +67,10 @@ import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescriptio
 import eu.kanade.presentation.entries.anime.components.MissingEpisodeCountListItem
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.presentation.util.formatEpisodeNumber
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -389,7 +392,7 @@ private fun AnimeScreenSmallImpl(
                         val isWatching = remember(state.episodes) {
                             state.episodes.fastAny { it.episode.seen }
                         }
-                        Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
+                        Text(text = localize(if (isWatching) MR.strings.action_resume else MR.strings.action_start))
                     },
                     icon = {
                         Icon(
@@ -509,8 +512,8 @@ private fun AnimeScreenSmallImpl(
                                 state.anime.status.toInt() != SAnime.COMPLETED
                             ) {
                                 NextEpisodeAiringListItem(
-                                    title = stringResource(
-                                        R.string.display_mode_episode,
+                                    title = localize(
+                                        MR.strings.display_mode_episode,
                                         formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
@@ -682,8 +685,8 @@ fun AnimeScreenLargeImpl(
                             state.episodes.fastAny { it.episode.seen }
                         }
                         Text(
-                            text = stringResource(
-                                if (isWatching) R.string.action_resume else R.string.action_start,
+                            text = localize(
+                                if (isWatching) MR.strings.action_resume else MR.strings.action_start,
                             ),
                         )
                     },
@@ -795,8 +798,8 @@ fun AnimeScreenLargeImpl(
                                         state.anime.status.toInt() != SAnime.COMPLETED
                                     ) {
                                         NextEpisodeAiringListItem(
-                                            title = stringResource(
-                                                R.string.display_mode_episode,
+                                            title = localize(
+                                                MR.strings.display_mode_episode,
                                                 formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
@@ -910,8 +913,8 @@ private fun LazyListScope.sharedEpisodeItems(
             is EpisodeList.Item -> {
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                        stringResource(
-                            R.string.display_mode_episode,
+                        localize(
+                            MR.strings.display_mode_episode,
                             formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
                     } else {
@@ -929,8 +932,8 @@ private fun LazyListScope.sharedEpisodeItems(
                     watchProgress = episodeItem.episode.lastSecondSeen
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
-                            stringResource(
-                                R.string.episode_progress,
+                            localize(
+                                MR.strings.episode_progress,
                                 formatTime(it),
                                 formatTime(episodeItem.episode.totalSeconds),
                             )

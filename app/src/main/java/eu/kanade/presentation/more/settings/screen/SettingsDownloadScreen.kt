@@ -1,6 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
@@ -16,12 +16,16 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.presentation.core.i18n.localizePlural
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -30,8 +34,7 @@ object SettingsDownloadScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    @StringRes
-    override fun getTitleRes() = R.string.pref_category_downloads
+    override fun getTitleRes() = MR.strings.pref_category_downloads
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -50,23 +53,23 @@ object SettingsDownloadScreen : SearchableSettings {
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
-                title = stringResource(R.string.connected_to_wifi),
+                title = localize(MR.strings.connected_to_wifi),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
-                title = stringResource(R.string.save_chapter_as_cbz),
+                title = localize(MR.strings.save_chapter_as_cbz),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.splitTallImages(),
-                title = stringResource(R.string.split_tall_images),
-                subtitle = stringResource(R.string.split_tall_images_summary),
+                title = localize(MR.strings.split_tall_images),
+                subtitle = localize(MR.strings.split_tall_images_summary),
             ),
             Preference.PreferenceItem.ListPreference(
                 pref = downloadPreferences.numberOfDownloads(),
-                title = stringResource(R.string.pref_download_slots),
+                title = localize(MR.strings.pref_download_slots),
                 entries = (1..5).associateWith { it.toString() },
             ),
-            Preference.PreferenceItem.InfoPreference(stringResource(R.string.download_slots_info)),
+            Preference.PreferenceItem.InfoPreference(localize(MR.strings.download_slots_info)),
             getDeleteChaptersGroup(
                 downloadPreferences = downloadPreferences,
                 categories = allCategories,
@@ -90,27 +93,27 @@ object SettingsDownloadScreen : SearchableSettings {
         categories: List<Category>,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_delete_chapters),
+            title = localize(MR.strings.pref_category_delete_chapters),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadPreferences.removeAfterMarkedAsRead(),
-                    title = stringResource(R.string.pref_remove_after_marked_as_read),
+                    title = localize(MR.strings.pref_remove_after_marked_as_read),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = downloadPreferences.removeAfterReadSlots(),
-                    title = stringResource(R.string.pref_remove_after_read),
+                    title = localize(MR.strings.pref_remove_after_read),
                     entries = mapOf(
-                        -1 to stringResource(R.string.disabled),
-                        0 to stringResource(R.string.last_read_chapter),
-                        1 to stringResource(R.string.second_to_last),
-                        2 to stringResource(R.string.third_to_last),
-                        3 to stringResource(R.string.fourth_to_last),
-                        4 to stringResource(R.string.fifth_to_last),
+                        -1 to localize(MR.strings.disabled),
+                        0 to localize(MR.strings.last_read_chapter),
+                        1 to localize(MR.strings.second_to_last),
+                        2 to localize(MR.strings.third_to_last),
+                        3 to localize(MR.strings.fourth_to_last),
+                        4 to localize(MR.strings.fifth_to_last),
                     ),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadPreferences.removeBookmarkedChapters(),
-                    title = stringResource(R.string.pref_remove_bookmarked_chapters),
+                    title = localize(MR.strings.pref_remove_bookmarked_chapters),
                 ),
                 getExcludedCategoriesPreference(
                     downloadPreferences = downloadPreferences,
@@ -127,7 +130,7 @@ object SettingsDownloadScreen : SearchableSettings {
     ): Preference.PreferenceItem.MultiSelectListPreference {
         return Preference.PreferenceItem.MultiSelectListPreference(
             pref = downloadPreferences.removeExcludeCategories(),
-            title = stringResource(R.string.pref_remove_exclude_categories_manga),
+            title = localize(MR.strings.pref_remove_exclude_categories_manga),
             entries = categories().associate { it.id.toString() to it.visualName },
         )
     }
@@ -149,8 +152,8 @@ object SettingsDownloadScreen : SearchableSettings {
         var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
         if (showAnimeDialog) {
             TriStateListDialog(
-                title = stringResource(R.string.anime_categories),
-                message = stringResource(R.string.pref_download_new_categories_details),
+                title = localize(MR.strings.anime_categories),
+                message = localize(MR.strings.pref_download_new_categories_details),
                 items = allAnimeCategories,
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
@@ -179,8 +182,8 @@ object SettingsDownloadScreen : SearchableSettings {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
             TriStateListDialog(
-                title = stringResource(R.string.manga_categories),
-                message = stringResource(R.string.pref_download_new_categories_details),
+                title = localize(MR.strings.manga_categories),
+                message = localize(MR.strings.pref_download_new_categories_details),
                 items = allCategories,
                 initialChecked = included.mapNotNull { id -> allCategories.find { it.id.toString() == id } },
                 initialInversed = excluded.mapNotNull { id -> allCategories.find { it.id.toString() == id } },
@@ -199,14 +202,14 @@ object SettingsDownloadScreen : SearchableSettings {
         }
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_auto_download),
+            title = localize(MR.strings.pref_category_auto_download),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadNewEpisodesPref,
-                    title = stringResource(R.string.pref_download_new_episodes),
+                    title = localize(MR.strings.pref_download_new_episodes),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.anime_categories),
+                    title = localize(MR.strings.anime_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allAnimeCategories,
                         included = includedAnime,
@@ -217,10 +220,10 @@ object SettingsDownloadScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadNewChaptersPref,
-                    title = stringResource(R.string.pref_download_new),
+                    title = localize(MR.strings.pref_download_new),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.manga_categories),
+                    title = localize(MR.strings.manga_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allCategories,
                         included = included,
@@ -238,17 +241,17 @@ object SettingsDownloadScreen : SearchableSettings {
         downloadPreferences: DownloadPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.download_ahead),
+            title = localize(MR.strings.download_ahead),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = downloadPreferences.autoDownloadWhileReading(),
-                    title = stringResource(R.string.auto_download_while_reading),
+                    title = localize(MR.strings.auto_download_while_reading),
                     entries = listOf(0, 2, 3, 5, 10).associateWith {
                         if (it == 0) {
-                            stringResource(R.string.disabled)
+                            localize(MR.strings.disabled)
                         } else {
-                            pluralStringResource(
-                                id = R.plurals.next_unread_chapters,
+                            localizePlural(
+                                MR.plurals.next_unread_chapters,
                                 count = it,
                                 it,
                             )
@@ -257,13 +260,13 @@ object SettingsDownloadScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = downloadPreferences.autoDownloadWhileWatching(),
-                    title = stringResource(R.string.auto_download_while_watching),
+                    title = localize(MR.strings.auto_download_while_watching),
                     entries = listOf(0, 2, 3, 5, 10).associateWith {
                         if (it == 0) {
-                            stringResource(R.string.disabled)
+                            localize(MR.strings.disabled)
                         } else {
-                            pluralStringResource(
-                                id = R.plurals.next_unseen_episodes,
+                            localizePlural(
+                                MR.plurals.next_unseen_episodes,
                                 count = it,
                                 it,
                             )
@@ -271,7 +274,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.InfoPreference(
-                    stringResource(R.string.download_ahead_info),
+                    localize(MR.strings.download_ahead_info),
                 ),
             ),
         )
@@ -305,15 +308,15 @@ object SettingsDownloadScreen : SearchableSettings {
                 .toMap()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_external_downloader),
+            title = localize(MR.strings.pref_category_external_downloader),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = useExternalDownloader,
-                    title = stringResource(R.string.pref_use_external_downloader),
+                    title = localize(MR.strings.pref_use_external_downloader),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = externalDownloaderPreference,
-                    title = stringResource(R.string.pref_external_downloader_selection),
+                    title = localize(MR.strings.pref_external_downloader_selection),
                     entries = mapOf("" to "None") + packageNamesMap,
                 ),
             ),

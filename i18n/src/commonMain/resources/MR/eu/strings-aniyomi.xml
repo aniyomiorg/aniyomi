@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Kategoriak</string>
+    <string name="unlock_app">Desblokeatu Tachiyomi</string>
+    <string name="action_show_manga">Manga erakutsi</string>
+    <string name="action_display_local_badge_manga">Manga lokala</string>
+    <string name="pref_update_only_completely_read">Irakurri gabeko kapituluak ditu</string>
+    <string name="pref_library_update_show_tab_badge">Erakutsi irakurri gabekoen kopurua Eguneraketak ikonoan</string>
+    <string name="default_manga_category">Kategoria lehentsia</string>
+    <string name="pref_manga_library_update_categories_details">Baztertutako kategorietako mangak ez dira eguneratuko, sarturiko kategorietan egon arren.</string>
+    <string name="untrusted_extension_message">Luzapen hau fidagarria ez den ziurtagiri batekin sinatu zen eta ez zen aktibatu.
+\n
+\nLuzapen maltzur batek Tachiyomi-n gordetako saio-hasierako kredentzialak irakur ditzake edo kode arbitrarioa exekutatu.
+\n
+\nZiurtagiri honetaz fidatzean, arrisku hauek onartzen dituzu.</string>
+    <string name="pref_category_delete_chapters">Ezabatu kapituluak</string>
+    <string name="pref_remove_after_marked_as_read">Irakurria bezala eskuz markatu ondoren</string>
+    <string name="pref_remove_after_read">Irakurri ondoren automatikoki ezabatu</string>
+    <string name="pref_remove_bookmarked_chapters">Baimendu laster-markadun kapituluak ezabatzea</string>
+    <string name="pref_remove_exclude_categories_manga">Baztertutako kategoriak</string>
+    <string name="pref_auto_update_manga_sync">Eguneratu aurrerapena irakurri ondoren</string>
+    <string name="pref_clear_chapter_cache">Garbitu kapituluen cachea</string>
+    <string name="pref_auto_clear_chapter_cache">Garbitu kapituluen cachea aplikazioa ixtean</string>
+    <string name="pref_clear_manga_database">Garbitu datu-basea</string>
+    <string name="pref_clear_manga_database_summary">Ezabatu zure liburutegian gordeta ez dauden mangen historia</string>
+    <string name="clear_database_confirmation">Ziur zaude\? Kapitulu iraurriak eta liburutegikoak ez diren manga-en aurrerapenak galduko dira</string>
+    <string name="pref_refresh_library_tracking_summary">Egoera, puntuaketa eta azken kapitulu irakurria eguneratzen ditu jarraipen-zerbitzuetatik</string>
+    <string name="pref_incognito_mode_summary">Irakurketa historia gelditu egiten du</string>
+    <string name="manga_from_library">Liburutegiko manga</string>
+    <string name="snack_add_to_manga_library">Manga liburutegira gehitu\?</string>
+    <string name="download_error">Errorea</string>
+    <string name="download_paused">Gelditurik</string>
+    <string name="also_set_chapter_settings_for_library">Nire liburutegiko manga guztietan ere aplikatu</string>
+    <string name="dialog_with_checkbox_reset">Berrezarri manga honen kapitulu guztiak</string>
+    <string name="download_insufficient_space">Ezin izan dira kapituluak deskargatu memorian leku gutxi dagoelako</string>
+    <string name="download_queue_size_warning">Abisua: deskarga handiek iturriak motelagoak izatea eta/edo Tachiyomi blokeatzea ekar dezakete</string>
+    <string name="information_webview_required">WebView beharrezkoa da Tachiyomi-rentzat</string>
+    <string name="download_notifier_download_paused_chapters">Deskarga pausatu da</string>
+    <string name="channel_new_chapters_episodes">Kapituluaren eguneraketak</string>
+</resources>

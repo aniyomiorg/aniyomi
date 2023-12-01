@@ -19,6 +19,10 @@ import com.hippo.unifile.UniFile
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.lang.truncateCenter
@@ -45,11 +49,11 @@ fun Context.copyToClipboard(label: String, content: String) {
         // Android 13 and higher shows a visual confirmation of copied contents
         // https://developer.android.com/about/versions/13/features/copy-paste
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            toast(getString(R.string.copied_to_clipboard, content.truncateCenter(50)))
+            toast(localize(MR.strings.copied_to_clipboard, content.truncateCenter(50)))
         }
     } catch (e: Throwable) {
         logcat(LogPriority.ERROR, e)
-        toast(R.string.clipboard_copy_error)
+        toast(MR.strings.clipboard_copy_error)
     }
 }
 

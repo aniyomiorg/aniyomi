@@ -4,7 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.track.Tracker
 import tachiyomi.core.preference.Preference as PreferenceData
 
@@ -111,7 +114,7 @@ sealed class Preference {
                     v.map { e[it] }
                         .takeIf { it.isNotEmpty() }
                         ?.joinToString()
-                } ?: stringResource(R.string.none)
+                } ?: localize(MR.strings.none)
                 subtitle?.format(combined)
             },
             override val icon: ImageVector? = null,

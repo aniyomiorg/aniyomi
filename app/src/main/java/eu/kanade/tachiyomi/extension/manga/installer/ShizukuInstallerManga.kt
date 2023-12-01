@@ -3,7 +3,10 @@ package eu.kanade.tachiyomi.extension.manga.installer
 import android.app.Service
 import android.content.pm.PackageManager
 import android.os.Build
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.system.getUriSize
 import eu.kanade.tachiyomi.util.system.toast
@@ -116,7 +119,7 @@ class ShizukuInstallerManga(private val service: Service) : InstallerManga(servi
             }
         } else {
             logcat(LogPriority.ERROR) { "Shizuku is not ready to use" }
-            service.toast(R.string.ext_installer_shizuku_stopped)
+            service.toast(MR.strings.ext_installer_shizuku_stopped)
             service.stopSelf()
             false
         }

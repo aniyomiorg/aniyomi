@@ -11,7 +11,10 @@ import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesFilterScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Source
@@ -29,7 +32,7 @@ fun MangaSourcesFilterScreen(
     Scaffold(
         topBar = { scrollBehavior ->
             AppBar(
-                title = stringResource(R.string.label_sources),
+                title = localize(MR.strings.label_sources),
                 navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior,
             )
@@ -37,7 +40,7 @@ fun MangaSourcesFilterScreen(
     ) { contentPadding ->
         if (state.isEmpty) {
             EmptyScreen(
-                textResource = R.string.source_filter_empty_screen,
+                stringRes = MR.strings.source_filter_empty_screen,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

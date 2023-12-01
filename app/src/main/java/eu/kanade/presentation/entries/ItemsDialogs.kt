@@ -15,7 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.presentation.core.components.WheelTextPicker
 
@@ -25,12 +28,12 @@ fun DeleteItemsDialog(
     onConfirm: () -> Unit,
     isManga: Boolean,
 ) {
-    val subtitle = if (isManga) R.string.confirm_delete_chapters else R.string.confirm_delete_episodes
+    val subtitle = if (isManga) MR.strings.confirm_delete_chapters else MR.strings.confirm_delete_episodes
     AlertDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -40,14 +43,14 @@ fun DeleteItemsDialog(
                     onConfirm()
                 },
             ) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         title = {
-            Text(text = stringResource(R.string.are_you_sure))
+            Text(text = localize(MR.strings.are_you_sure))
         },
         text = {
-            Text(text = stringResource(subtitle))
+            Text(text = localize(subtitle))
         },
     )
 }
@@ -62,7 +65,7 @@ fun SetIntervalDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = stringResource(R.string.manga_modify_calculated_interval_title)) },
+        title = { Text(text = localize(MR.strings.manga_modify_calculated_interval_title)) },
         text = {
             BoxWithConstraints(
                 modifier = Modifier.fillMaxWidth(),
@@ -72,7 +75,7 @@ fun SetIntervalDialog(
                 val items = (0..28)
                     .map {
                         if (it == 0) {
-                            stringResource(R.string.label_default)
+                            localize(MR.strings.label_default)
                         } else {
                             it.toString()
                         }
@@ -88,7 +91,7 @@ fun SetIntervalDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -96,7 +99,7 @@ fun SetIntervalDialog(
                 onValueChanged(selectedInterval)
                 onDismissRequest()
             }) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
     )

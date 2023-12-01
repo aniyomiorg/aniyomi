@@ -2,7 +2,10 @@ package eu.kanade.tachiyomi.ui.reader.loader
 
 import android.content.Context
 import com.github.junrar.exception.UnsupportedRarV5Exception
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.source.MangaSource
@@ -49,7 +52,7 @@ class ChapterLoader(
                 val pages = loader.getPages()
                     .onEach { it.chapter = chapter }
                 if (pages.isEmpty()) {
-                    throw Exception(context.getString(R.string.page_list_empty_error))
+                    throw Exception(context.localize(MR.strings.page_list_empty_error))
                 }
 
                 // If the chapter is partially read, set the starting page to the last the user read
@@ -100,16 +103,16 @@ class ChapterLoader(
                     is Format.Rar -> try {
                         RarPageLoader(format.file)
                     } catch (e: UnsupportedRarV5Exception) {
-                        error(context.getString(R.string.loader_rar5_error))
+                        error(context.localize(MR.strings.loader_rar5_error))
                     }
                     is Format.Epub -> EpubPageLoader(format.file)
                 }
             }
             source is HttpSource -> HttpPageLoader(chapter, source)
             source is StubMangaSource -> error(
-                context.getString(R.string.source_not_installed, source.toString()),
+                context.localize(MR.strings.source_not_installed, source.toString()),
             )
-            else -> error(context.getString(R.string.loader_not_implemented_error))
+            else -> error(context.localize(MR.strings.loader_not_implemented_error))
         }
     }
 }

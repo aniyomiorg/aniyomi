@@ -2,7 +2,10 @@ package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
@@ -170,7 +173,7 @@ class MangaDownloadManager(
             .filter { "image" in it.type.orEmpty() }
 
         if (files.isEmpty()) {
-            throw Exception(context.getString(R.string.page_list_empty_error))
+            throw Exception(context.localize(MR.strings.page_list_empty_error))
         }
         return files.sortedBy { it.name }
             .mapIndexed { i, file ->

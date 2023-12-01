@@ -3,6 +3,10 @@ package tachiyomi.presentation.widget.entries.anime
 import androidx.compose.ui.unit.dp
 import androidx.glance.ImageProvider
 import androidx.glance.unit.ColorProvider
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.widget.R
 import uy.kohesive.injekt.api.get
 

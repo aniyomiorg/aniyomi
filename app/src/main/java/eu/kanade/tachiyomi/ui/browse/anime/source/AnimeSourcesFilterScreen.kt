@@ -10,7 +10,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.AnimeSourcesFilterScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.system.toast
 import tachiyomi.presentation.core.screens.LoadingScreen
 
@@ -30,7 +33,7 @@ class AnimeSourcesFilterScreen : Screen() {
         if (state is AnimeSourcesFilterScreenModel.State.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
-                context.toast(R.string.internal_error)
+                context.localize(MR.strings.internal_error)
                 navigator.pop()
             }
             return

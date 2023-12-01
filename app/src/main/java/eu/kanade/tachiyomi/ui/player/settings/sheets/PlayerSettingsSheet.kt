@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
@@ -75,19 +78,19 @@ fun PlayerSettingsSheet(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             Text(
-                text = stringResource(id = R.string.settings_dialog_header),
+                text = localize(MR.strings.settings_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
             )
 
             screenModel.ToggleableRow(
-                textRes = R.string.enable_volume_brightness_gestures,
+                textRes = MR.strings.enable_volume_brightness_gestures,
                 isChecked = verticalGesture.collectAsState().value,
                 onClick = { screenModel.togglePreference { verticalGesture } },
             )
 
             screenModel.ToggleableRow(
-                textRes = R.string.enable_horizontal_seek_gesture,
+                textRes = MR.strings.enable_horizontal_seek_gesture,
                 isChecked = horizontalGesture.collectAsState().value,
                 onClick = { screenModel.togglePreference { horizontalGesture } },
             )
@@ -101,7 +104,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = stringResource(id = R.string.player_hwdec_mode),
+                    text = localize(MR.strings.player_hwdec_mode),
                     style = MaterialTheme.typography.titleSmall,
                 )
 
@@ -126,7 +129,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = stringResource(id = R.string.toggle_player_statistics_page),
+                    text = localize(MR.strings.toggle_player_statistics_page),
                     style = MaterialTheme.typography.titleSmall,
                 )
 
@@ -138,7 +141,7 @@ fun PlayerSettingsSheet(
                         FilterChip(
                             selected = statisticsPage == it.page,
                             onClick = { togglePlayerStatsPage(it.page) },
-                            label = { Text(stringResource(it.textRes)) },
+                            label = { Text(localize(it.textRes)) },
                         )
                     }
                 }

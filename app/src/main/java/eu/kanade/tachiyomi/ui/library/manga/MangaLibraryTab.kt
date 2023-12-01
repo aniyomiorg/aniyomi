@@ -39,6 +39,10 @@ import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.library.manga.MangaLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -73,16 +77,16 @@ object MangaLibraryTab : Tab() {
         @Composable
         get() {
             val title = if (fromMore) {
-                R.string.label_library
+                MR.strings.label_library
             } else {
-                R.string.label_manga_library
+                MR.strings.label_manga_library
             }
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
             val index: UShort = if (fromMore) 5u else 1u
             return TabOptions(
                 index = index,
-                title = stringResource(title),
+                title = localize(title),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -108,8 +112,8 @@ object MangaLibraryTab : Tab() {
         val onClickRefresh: (Category?) -> Boolean = { category ->
             val started = MangaLibraryUpdateJob.startNow(context, category)
             scope.launch {
-                val msgRes = if (started) R.string.updating_category else R.string.update_already_running
-                snackbarHostState.showSnackbar(context.getString(msgRes))
+                val msgRes = if (started) MR.strings.updating_category else MR.strings.update_already_running
+                snackbarHostState.showSnackbar(context.localize(msgRes))
             }
             started
         }
@@ -117,10 +121,10 @@ object MangaLibraryTab : Tab() {
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
         val defaultTitle = if (fromMore) {
-            stringResource(R.string.label_library)
+            localize(MR.strings.label_library)
         } else {
-            stringResource(
-                R.string.label_manga_library,
+            localize(
+                MR.strings.label_manga_library,
             )
         }
 
@@ -128,7 +132,7 @@ object MangaLibraryTab : Tab() {
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
                     defaultTitle = defaultTitle,
-                    defaultCategoryTitle = stringResource(R.string.label_default),
+                    defaultCategoryTitle = localize(MR.strings.label_default),
                     page = screenModel.activeCategoryIndex,
                 )
                 val tabVisible = state.showCategoryTabs && state.categories.size > 1
@@ -157,7 +161,7 @@ object MangaLibraryTab : Tab() {
                                 navigator.push(MangaScreen(randomItem.libraryManga.manga.id))
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    context.getString(R.string.information_no_entries_found),
+                                    context.localize(MR.strings.information_no_entries_found),
                                 )
                             }
                         }
@@ -187,11 +191,11 @@ object MangaLibraryTab : Tab() {
                 state.searchQuery.isNullOrEmpty() && !state.hasActiveFilters && state.isLibraryEmpty -> {
                     val handler = LocalUriHandler.current
                     EmptyScreen(
-                        textResource = R.string.information_empty_library,
+                        stringRes = MR.strings.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
                         actions = persistentListOf(
                             EmptyScreenAction(
-                                stringResId = R.string.getting_started_guide,
+                                stringRes = MR.strings.getting_started_guide,
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(
@@ -226,7 +230,7 @@ object MangaLibraryTab : Tab() {
                                     )
                                 } else {
                                     snackbarHostState.showSnackbar(
-                                        context.getString(R.string.no_next_chapter),
+                                        context.localize(MR.strings.no_next_chapter),
                                     )
                                 }
                             }

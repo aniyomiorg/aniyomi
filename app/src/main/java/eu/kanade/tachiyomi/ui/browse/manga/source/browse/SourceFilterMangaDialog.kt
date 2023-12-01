@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.source.model.Filter
 import eu.kanade.tachiyomi.source.model.FilterList
 import tachiyomi.core.preference.TriState
@@ -52,7 +55,7 @@ fun SourceFilterMangaDialog(
                 ) {
                     TextButton(onClick = onReset) {
                         Text(
-                            text = stringResource(R.string.action_reset),
+                            text = localize(MR.strings.action_reset),
                             style = LocalTextStyle.current.copy(
                                 color = MaterialTheme.colorScheme.primary,
                             ),
@@ -65,7 +68,7 @@ fun SourceFilterMangaDialog(
                         onFilter()
                         onDismissRequest()
                     }) {
-                        Text(stringResource(R.string.action_filter))
+                        Text(localize(MR.strings.action_filter))
                     }
                 }
                 HorizontalDivider()

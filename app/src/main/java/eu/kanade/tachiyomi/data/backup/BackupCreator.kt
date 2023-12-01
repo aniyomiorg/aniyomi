@@ -7,7 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXTENSIONS
@@ -94,7 +97,7 @@ class BackupCreator(
      */
     suspend fun createBackup(uri: Uri, flags: Int, isAutoBackup: Boolean): String {
         if (!context.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            throw IllegalStateException(context.getString(R.string.missing_storage_permission))
+            throw IllegalStateException(context.localize(MR.strings.missing_storage_permission))
         }
 
         val databaseAnime = getAnimeFavorites.await()
@@ -137,7 +140,7 @@ class BackupCreator(
                     UniFile.fromUri(context, uri)
                 }
                 )
-                ?: throw Exception(context.getString(R.string.create_backup_file_error))
+                ?: throw Exception(context.localize(MR.strings.create_backup_file_error))
 
             if (!file.isFile) {
                 throw IllegalStateException("Failed to get handle on a backup file")
@@ -145,7 +148,7 @@ class BackupCreator(
 
             val byteArray = parser.encodeToByteArray(BackupSerializer, backup)
             if (byteArray.isEmpty()) {
-                throw IllegalStateException(context.getString(R.string.empty_backup_error))
+                throw IllegalStateException(context.localize(MR.strings.empty_backup_error))
             }
 
             file.openOutputStream().also {

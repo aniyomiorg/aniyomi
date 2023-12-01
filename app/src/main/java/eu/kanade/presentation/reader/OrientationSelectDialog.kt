@@ -15,11 +15,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.entries.manga.model.readerOrientation
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.presentation.reader.components.ModeSelectionDialog
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import tachiyomi.presentation.core.components.SettingsIconGrid
@@ -31,7 +35,7 @@ private val ReaderOrientationsWithoutDefault = ReaderOrientation.entries - Reade
 fun OrientationSelectDialog(
     onDismissRequest: () -> Unit,
     screenModel: ReaderSettingsScreenModel,
-    onChange: (Int) -> Unit,
+    onChange: (StringResource) -> Unit,
 ) {
     val manga by screenModel.mangaFlow.collectAsState()
     val orientation = remember(manga) {
@@ -67,7 +71,7 @@ private fun DialogContent(
         }.takeIf { orientation != ReaderOrientation.DEFAULT },
         onApply = { onChangeOrientation(selected) },
     ) {
-        SettingsIconGrid(R.string.rotation_type) {
+        SettingsIconGrid(MR.strings.rotation_type) {
             items(ReaderOrientationsWithoutDefault) { mode ->
                 IconToggleButton(
                     checked = mode == selected,
@@ -76,7 +80,7 @@ private fun DialogContent(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     imageVector = ImageVector.vectorResource(mode.iconRes),
-                    title = stringResource(mode.stringRes),
+                    title = localize(mode.stringRes),
                 )
             }
         }

@@ -1,6 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -13,8 +13,7 @@ interface SearchableSettings : Screen {
 
     @Composable
     @ReadOnlyComposable
-    @StringRes
-    fun getTitleRes(): Int
+    fun getTitleRes(): StringResource
 
     @Composable
     fun getPreferences(): List<Preference>

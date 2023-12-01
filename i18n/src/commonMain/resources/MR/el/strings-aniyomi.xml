@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Κατηγορίες</string>
+    <string name="unlock_app">Ξεκλειδώστε το Aniyomi</string>
+    <string name="action_sort_last_manga_update">Τελευταίος έλεγχος ενημέρωσης</string>
+    <string name="action_show_manga">Εμφάνιση καταχώρισης</string>
+    <string name="action_display_local_badge_manga">Τοπική πηγή</string>
+    <string name="pref_update_only_completely_read">Με αδιάβαστο(α) κεφάλαιο(α)</string>
+    <string name="pref_library_update_show_tab_badge">Εμφάνιση του αριθμού των μη αναγνωσμένων στο εικονίδιο Ενημερώσεις</string>
+    <string name="default_manga_category">Προεπιλεγμένη κατηγορία</string>
+    <string name="pref_manga_library_update_categories_details">Οι καταχωρίσεις σε εξαιρούμενες κατηγορίες δε θα ενημερώνονται ακόμη και αν περιλαμβάνονται επίσης σε κατηγορίες που περιλαμβάνονται.</string>
+    <string name="untrusted_extension_message">Αυτή η επέκταση υπογράφηκε με μη αξιόπιστο πιστοποιητικό και δεν ενεργοποιήθηκε.
+\n
+\nΜια κακόβουλη επέκταση θα μπορούσε να διαβάσει τα διαπιστευτήρια σύνδεσης που είναι αποθηκευμένα στο Tachiyomi ή να εκτελέσει αυθαίρετο κώδικα.
+\n
+\nΕμπιστεύοντας αυτό το πιστοποιητικό αποδέχεστε αυτούς τους κινδύνους.</string>
+    <string name="pref_category_delete_chapters">Διαγραφή κεφαλαίων</string>
+    <string name="pref_remove_after_marked_as_read">Αφού επισημανθεί χειροκίνητα ως αναγνωσμένο</string>
+    <string name="pref_remove_after_read">Αυτόματη διαγραφή μετά την ανάγνωση</string>
+    <string name="pref_remove_bookmarked_chapters">Να επιτρέπεται η διαγραφή κεφαλαίων με σελιδοδείκτη</string>
+    <string name="pref_remove_exclude_categories_manga">Εξαιρούμενες κατηγορίες</string>
+    <string name="pref_auto_update_manga_sync">Ενημέρωση προόδου μετά την ανάγνωση</string>
+    <string name="pref_clear_chapter_cache">Καθάρισμα προσωρινής μνήμης κεφαλαίου</string>
+    <string name="pref_auto_clear_chapter_cache">Εκκαθάριση της προσωρινής μνήμης κεφαλαίων στο κλείσιμο της εφαρμογής</string>
+    <string name="pref_clear_manga_database">Καθαρισμός βάσης δεδομένων</string>
+    <string name="pref_clear_manga_database_summary">Διαγραφή ιστορικού για καταχωρήσεις που δεν έχουν αποθηκευτεί στη βιβλιοθήκη σας</string>
+    <string name="clear_database_confirmation">Είστε σίγουροι; Τα διαβασμένα κεφάλαια και η πρόοδος των καταχωρήσεων εκτός βιβλιοθήκης θα χαθούν</string>
+    <string name="pref_refresh_library_tracking_summary">Ενημερώνει κατάσταση, βαθμολογία και τελευταίο αναγνωσμένο κεφάλαιο από τις υπηρεσίες παρακολούθησης</string>
+    <string name="pref_incognito_mode_summary">Παύει το ιστορικό ανάγνωσης</string>
+    <string name="manga_from_library">Από βιβλιοθήκη</string>
+    <string name="snack_add_to_manga_library">Προσθήκη στη βιβλιοθήκη;</string>
+    <string name="download_error">Σφάλμα</string>
+    <string name="download_paused">Παύση</string>
+    <string name="also_set_chapter_settings_for_library">Εφαρμογή επίσης για όλες τις καταχωρήσεις στη βιβλιοθήκη μου</string>
+    <string name="dialog_with_checkbox_reset">Επαναφορά όλων των κεφαλαίων για αυτήν την καταχώρηση</string>
+    <string name="download_insufficient_space">Δεν ήταν δυνατή η λήψη κεφαλαίων λόγω χαμηλού αποθηκευτικού χώρου</string>
+    <string name="download_queue_size_warning">Προειδοποίηση: οι μαζικές λήψεις ενδέχεται να οδηγήσουν σε επιβράδυνση των πηγών ή/και αποκλεισμό του Tachiyomi. Πατήστε για να μάθετε περισσότερα.</string>
+    <string name="information_webview_required">Το WebView απαιτείται για το Tachiyomi</string>
+    <string name="download_notifier_download_paused_chapters">Λήψη σε παύση</string>
+    <string name="channel_new_chapters_episodes">Ενημερώσεις κεφαλαίων</string>
+</resources>

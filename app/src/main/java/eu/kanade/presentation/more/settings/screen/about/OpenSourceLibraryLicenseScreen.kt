@@ -19,7 +19,10 @@ import com.google.android.material.textview.MaterialTextView
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.material.Scaffold
 
@@ -44,7 +47,7 @@ class OpenSourceLibraryLicenseScreen(
                             AppBarActions(
                                 persistentListOf(
                                     AppBar.Action(
-                                        title = stringResource(R.string.website),
+                                        title = localize(MR.strings.website),
                                         icon = Icons.Default.Public,
                                         onClick = { uriHandler.openUri(website) },
                                     ),

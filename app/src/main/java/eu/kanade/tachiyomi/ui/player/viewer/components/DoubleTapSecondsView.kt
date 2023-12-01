@@ -8,7 +8,12 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.databinding.PlayerDoubleTapSeekViewBinding
+import tachiyomi.core.i18n.localizePlural
 
 /**
  * View that shows the arrows animation when double tapping to seek
@@ -33,8 +38,8 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
 
     var seconds: Int = 0
         set(value) {
-            binding.doubleTapSeconds.text = context.resources.getQuantityString(
-                R.plurals.seconds,
+            binding.doubleTapSeconds.text = context.localizePlural(
+                MR.plurals.seconds,
                 value,
                 value,
             )

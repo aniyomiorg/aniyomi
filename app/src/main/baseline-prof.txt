@@ -15654,8 +15654,8 @@ HSPLandroidx/core/math/MathUtils;->setObject-DKhxnng(Landroidx/compose/runtime/c
 HPLandroidx/core/math/MathUtils;->setObject-DKhxnng(Landroidx/compose/runtime/changelist/Operations;ILjava/lang/Object;)V
 HSPLandroidx/core/math/MathUtils;->setPlaceholders(Landroid/text/Spannable;Ljava/util/List;Landroidx/compose/ui/unit/Density;)V
 HPLandroidx/core/math/MathUtils;->setPlaceholders(Landroid/text/Spannable;Ljava/util/List;Landroidx/compose/ui/unit/Density;)V
-HSPLandroidx/core/math/MathUtils;->stringResource(ILandroidx/compose/runtime/Composer;)Ljava/lang/String;
-HPLandroidx/core/math/MathUtils;->stringResource(ILandroidx/compose/runtime/Composer;)Ljava/lang/String;
+HSPLandroidx/core/math/MathUtils;->localize(ILandroidx/compose/runtime/Composer;)Ljava/lang/String;
+HPLandroidx/core/math/MathUtils;->localize(ILandroidx/compose/runtime/Composer;)Ljava/lang/String;
 HSPLandroidx/core/math/MathUtils;->toRect-uvyYCjk(J)Landroidx/compose/ui/geometry/Rect;
 PLandroidx/core/math/MathUtils;->toRect-uvyYCjk(J)Landroidx/compose/ui/geometry/Rect;
 HSPLandroidx/core/math/MathUtils;->vectorResource(ILandroidx/compose/runtime/Composer;)Landroidx/compose/ui/graphics/vector/ImageVector;

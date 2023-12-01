@@ -3,7 +3,10 @@ package eu.kanade.tachiyomi.extension.anime
 import android.content.Context
 import android.graphics.drawable.Drawable
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
@@ -129,7 +132,7 @@ class AnimeExtensionManager(
             api.findExtensions()
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            withUIContext { context.toast(R.string.extension_api_error) }
+            withUIContext { context.localize(MR.strings.extension_api_error) }
             emptyList()
         }
 

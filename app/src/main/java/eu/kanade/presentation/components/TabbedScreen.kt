@@ -1,6 +1,6 @@
 package eu.kanade.presentation.components
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -31,10 +31,11 @@ import kotlinx.coroutines.launch
 import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
+import tachiyomi.presentation.core.i18n.localize
 
 @Composable
 fun TabbedScreen(
-    @StringRes titleRes: Int?,
+    titleRes: StringResource?,
     tabs: ImmutableList<TabContent>,
     modifier: Modifier = Modifier,
     startIndex: Int? = null,
@@ -74,7 +75,7 @@ fun TabbedScreen(
                 SearchToolbar(
                     titleContent = {
                         AppBarTitle(
-                            stringResource(titleRes),
+                            localize(titleRes),
                             modifier = modifier,
                             null,
                             tab.numberTitle,
@@ -109,7 +110,7 @@ fun TabbedScreen(
                         onClick = { scope.launch { state.animateScrollToPage(index) } },
                         text = {
                             TabText(
-                                text = stringResource(tab.titleRes),
+                                text = localize(tab.titleRes),
                                 badgeCount = tab.badgeNumber,
                             )
                         },
@@ -133,7 +134,7 @@ fun TabbedScreen(
 }
 
 data class TabContent(
-    @StringRes val titleRes: Int,
+    val titleRes: StringResource,
     val badgeNumber: Int? = null,
     val searchEnabled: Boolean = false,
     val actions: ImmutableList<AppBar.Action> = persistentListOf(),

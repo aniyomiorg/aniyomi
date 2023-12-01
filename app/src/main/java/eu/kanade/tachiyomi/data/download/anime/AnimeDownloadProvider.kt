@@ -3,7 +3,10 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +64,7 @@ class AnimeDownloadProvider(
                 .createDirectory(getAnimeDirName(animeTitle))
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
-            throw Exception(context.getString(R.string.invalid_location, downloadsDir))
+            throw Exception(context.localize(MR.strings.invalid_location, downloadsDir ?: ""))
         }
     }
 

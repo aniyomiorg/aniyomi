@@ -50,6 +50,10 @@ import eu.kanade.presentation.reader.ReadingModeSelectDialog
 import eu.kanade.presentation.reader.appbars.ReaderAppBars
 import eu.kanade.presentation.reader.settings.ReaderSettingsDialog
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -90,7 +94,7 @@ import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.presentation.core.util.collectAsState
-import tachiyomi.presentation.widget.util.stringResource
+
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -379,7 +383,7 @@ class ReaderActivity : BaseActivity() {
                 onClickCropBorder = {
                     val enabled = viewModel.toggleCropBorders()
                     menuToggleToast?.cancel()
-                    menuToggleToast = toast(if (enabled) R.string.on else R.string.off)
+                    menuToggleToast = toast(if (enabled) MR.strings.on else MR.strings.off)
                 },
                 onClickSettings = viewModel::openSettingsDialog,
             )
@@ -406,7 +410,7 @@ class ReaderActivity : BaseActivity() {
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 CircularProgressIndicator()
-                                Text(stringResource(R.string.loading))
+                                Text(localize(MR.strings.loading))
                             }
                         },
                     )
@@ -543,7 +547,7 @@ class ReaderActivity : BaseActivity() {
     private fun shareChapter() {
         assistUrl?.let {
             val intent = it.toUri().toShareIntent(this, type = "text/plain")
-            startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+            startActivity(Intent.createChooser(intent, localize(MR.strings.action_share)))
         }
     }
 
@@ -690,9 +694,9 @@ class ReaderActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = getString(R.string.share_page_info, manga.title, chapter.name, page.number),
+            message = localize(MR.strings.share_page_info, manga.title, chapter.name, page.number),
         )
-        startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+        startActivity(Intent.createChooser(intent, localize(MR.strings.action_share)))
     }
 
     /**
@@ -702,7 +706,7 @@ class ReaderActivity : BaseActivity() {
     private fun onSaveImageResult(result: ReaderViewModel.SaveImageResult) {
         when (result) {
             is ReaderViewModel.SaveImageResult.Success -> {
-                toast(R.string.picture_saved)
+                toast(MR.strings.picture_saved)
             }
             is ReaderViewModel.SaveImageResult.Error -> {
                 logcat(LogPriority.ERROR, result.error)
@@ -717,9 +721,9 @@ class ReaderActivity : BaseActivity() {
     private fun onSetAsCoverResult(result: ReaderViewModel.SetAsCoverResult) {
         toast(
             when (result) {
-                Success -> R.string.cover_updated
-                AddToLibraryFirst -> R.string.notification_first_add_to_library
-                Error -> R.string.notification_cover_update_failed
+                Success -> MR.strings.cover_updated
+                AddToLibraryFirst -> MR.strings.notification_first_add_to_library
+                Error -> MR.strings.notification_cover_update_failed
             },
         )
     }

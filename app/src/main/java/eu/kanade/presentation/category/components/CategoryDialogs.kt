@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.coroutines.delay
 import tachiyomi.domain.category.model.Category
 import kotlin.time.Duration.Companion.seconds
@@ -31,19 +34,19 @@ fun CategorySortAlphabeticallyDialog(
                 onSort()
                 onDismissRequest()
             }) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         title = {
-            Text(text = stringResource(R.string.action_sort_category))
+            Text(text = localize(MR.strings.action_sort_category))
         },
         text = {
-            Text(text = stringResource(R.string.sort_category_confirmation))
+            Text(text = localize(MR.strings.sort_category_confirmation))
         },
     )
 }
@@ -69,30 +72,30 @@ fun CategoryCreateDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = stringResource(R.string.action_add))
+                Text(text = localize(MR.strings.action_add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         title = {
-            Text(text = stringResource(R.string.action_add_category))
+            Text(text = localize(MR.strings.action_add_category))
         },
         text = {
             OutlinedTextField(
                 modifier = Modifier.focusRequester(focusRequester),
                 value = name,
                 onValueChange = { name = it },
-                label = { Text(text = stringResource(R.string.name)) },
+                label = { Text(text = localize(MR.strings.name)) },
                 supportingText = {
                     val msgRes = if (name.isNotEmpty() && nameAlreadyExists) {
-                        R.string.error_category_exists
+                        MR.strings.error_category_exists
                     } else {
-                        R.string.information_required_plain
+                        MR.strings.information_required_plain
                     }
-                    Text(text = stringResource(msgRes))
+                    Text(text = localize(msgRes))
                 },
                 isError = name.isNotEmpty() && nameAlreadyExists,
                 singleLine = true,
@@ -130,16 +133,16 @@ fun CategoryRenameDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         title = {
-            Text(text = stringResource(R.string.action_rename_category))
+            Text(text = localize(MR.strings.action_rename_category))
         },
         text = {
             OutlinedTextField(
@@ -149,14 +152,14 @@ fun CategoryRenameDialog(
                     valueHasChanged = name != it
                     name = it
                 },
-                label = { Text(text = stringResource(R.string.name)) },
+                label = { Text(text = localize(MR.strings.name)) },
                 supportingText = {
                     val msgRes = if (valueHasChanged && nameAlreadyExists) {
-                        R.string.error_category_exists
+                        MR.strings.error_category_exists
                     } else {
-                        R.string.information_required_plain
+                        MR.strings.information_required_plain
                     }
-                    Text(text = stringResource(msgRes))
+                    Text(text = localize(msgRes))
                 },
                 isError = valueHasChanged && nameAlreadyExists,
                 singleLine = true,
@@ -184,19 +187,19 @@ fun CategoryDeleteDialog(
                 onDelete()
                 onDismissRequest()
             }) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = localize(MR.strings.action_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = localize(MR.strings.action_cancel))
             }
         },
         title = {
-            Text(text = stringResource(R.string.delete_category))
+            Text(text = localize(MR.strings.delete_category))
         },
         text = {
-            Text(text = stringResource(R.string.delete_category_confirmation, category.name))
+            Text(text = localize(MR.strings.delete_category_confirmation, category.name))
         },
     )
 }

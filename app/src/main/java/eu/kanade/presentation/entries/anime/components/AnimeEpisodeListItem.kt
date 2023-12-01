@@ -49,7 +49,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import me.saket.swipe.SwipeableActionsBox
 import me.saket.swipe.rememberSwipeableActionsState
@@ -146,7 +149,7 @@ fun AnimeEpisodeListItem(
                         if (!seen) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
-                                contentDescription = stringResource(R.string.unread),
+                                contentDescription = localize(MR.strings.unread),
                                 modifier = Modifier
                                     .height(8.dp)
                                     .padding(end = 4.dp),
@@ -156,8 +159,8 @@ fun AnimeEpisodeListItem(
                         if (bookmark) {
                             Icon(
                                 imageVector = Icons.Filled.Bookmark,
-                                contentDescription = stringResource(
-                                    R.string.action_filter_bookmarked,
+                                contentDescription = localize(
+                                    MR.strings.action_filter_bookmarked,
                                 ),
                                 modifier = Modifier
                                     .sizeIn(

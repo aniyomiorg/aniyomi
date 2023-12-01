@@ -20,7 +20,10 @@ import eu.kanade.presentation.components.preferences
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.manga.MangaHistoryScreen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -50,14 +53,14 @@ fun Screen.mangaHistoryTab(
             val intent = ReaderActivity.newIntent(context, chapter.mangaId, chapter.id)
             context.startActivity(intent)
         } else {
-            snackbarHostState.showSnackbar(context.getString(R.string.no_next_chapter))
+            snackbarHostState.showSnackbar(context.localize(MR.strings.no_next_chapter))
         }
     }
 
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
     return TabContent(
-        titleRes = R.string.label_history,
+        titleRes = MR.strings.label_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             MangaHistoryScreen(
@@ -106,11 +109,11 @@ fun Screen.mangaHistoryTab(
                     when (e) {
                         MangaHistoryScreenModel.Event.InternalError ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.internal_error),
+                                context.localize(MR.strings.internal_error),
                             )
                         MangaHistoryScreenModel.Event.HistoryCleared ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.clear_history_completed),
+                                context.localize(MR.strings.clear_history_completed),
                             )
                         is MangaHistoryScreenModel.Event.OpenChapter -> openChapter(
                             context,
@@ -129,7 +132,7 @@ fun Screen.mangaHistoryTab(
         actions =
         persistentListOf(
             AppBar.Action(
-                title = stringResource(R.string.pref_clear_history),
+                title = localize(MR.strings.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,
                 onClick = { screenModel.setDialog(MangaHistoryScreenModel.Dialog.DeleteAll) },
             ),

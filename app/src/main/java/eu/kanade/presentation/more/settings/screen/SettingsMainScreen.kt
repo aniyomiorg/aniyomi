@@ -1,6 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
@@ -47,7 +47,10 @@ import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.material.Scaffold
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
@@ -85,13 +88,13 @@ object SettingsMainScreen : Screen() {
             topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState),
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = stringResource(R.string.label_settings),
+                    title = localize(MR.strings.label_settings),
                     navigateUp = backPress::invoke,
                     actions = {
                         AppBarActions(
                             persistentListOf(
                                 AppBar.Action(
-                                    title = stringResource(R.string.action_search),
+                                    title = localize(MR.strings.action_search),
                                     icon = Icons.Outlined.Search,
                                     onClick = { navigator.navigate(SettingsSearchScreen(), twoPane) },
                                 ),
@@ -150,7 +153,7 @@ object SettingsMainScreen : Screen() {
                         CompositionLocalProvider(LocalContentColor provides contentColor) {
                             TextPreferenceWidget(
                                 modifier = modifier,
-                                title = stringResource(item.titleRes),
+                                title = localize(item.titleRes),
                                 subtitle = item.formatSubtitle(),
                                 icon = item.icon,
                                 onPreferenceClick = { navigator.navigate(item.screen, twoPane) },
@@ -167,79 +170,77 @@ object SettingsMainScreen : Screen() {
     }
 
     private data class Item(
-        @StringRes val titleRes: Int,
-        @StringRes val subtitleRes: Int,
-        val formatSubtitle: @Composable () -> String = { stringResource(subtitleRes) },
-        val icon: ImageVector,
+        val titleRes: StringResource,
+        val subtitleRes: StringResource? = null,
+        val formatSubtitle: @Composable () -> String? = { subtitleRes?.let { localize(it) } },        val icon: ImageVector,
         val screen: VoyagerScreen,
     )
 
     private val items = listOf(
         Item(
-            titleRes = R.string.pref_category_appearance,
-            subtitleRes = R.string.pref_appearance_summary,
+            titleRes = MR.strings.pref_category_appearance,
+            subtitleRes = MR.strings.pref_appearance_summary,
             icon = Icons.Outlined.Palette,
             screen = SettingsAppearanceScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_library,
-            subtitleRes = R.string.pref_library_summary,
+            titleRes = MR.strings.pref_category_library,
+            subtitleRes = MR.strings.pref_library_summary,
             icon = Icons.Outlined.CollectionsBookmark,
             screen = SettingsLibraryScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_reader,
-            subtitleRes = R.string.pref_reader_summary,
+            titleRes = MR.strings.pref_category_reader,
+            subtitleRes = MR.strings.pref_reader_summary,
             icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
             screen = SettingsReaderScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_player,
-            subtitleRes = R.string.pref_player_summary,
+            titleRes = MR.strings.pref_category_player,
+            subtitleRes = MR.strings.pref_player_summary,
             icon = Icons.Outlined.PlayCircleOutline,
             screen = SettingsPlayerScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_downloads,
-            subtitleRes = R.string.pref_downloads_summary,
+            titleRes = MR.strings.pref_category_downloads,
+            subtitleRes = MR.strings.pref_downloads_summary,
             icon = Icons.Outlined.GetApp,
             screen = SettingsDownloadScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_tracking,
-            subtitleRes = R.string.pref_tracking_summary,
+            titleRes = MR.strings.pref_category_tracking,
+            subtitleRes = MR.strings.pref_tracking_summary,
             icon = Icons.Outlined.Sync,
             screen = SettingsTrackingScreen,
         ),
         Item(
-            titleRes = R.string.browse,
-            subtitleRes = R.string.pref_browse_summary,
+            titleRes = MR.strings.browse,
+            subtitleRes = MR.strings.pref_browse_summary,
             icon = Icons.Outlined.Explore,
             screen = SettingsBrowseScreen,
         ),
         Item(
-            titleRes = R.string.label_data_storage,
-            subtitleRes = R.string.pref_backup_summary,
+            titleRes = MR.strings.label_data_storage,
+            subtitleRes = MR.strings.pref_backup_summary,
             icon = Icons.Outlined.Storage,
             screen = SettingsDataScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_security,
-            subtitleRes = R.string.pref_security_summary,
+            titleRes = MR.strings.pref_category_security,
+            subtitleRes = MR.strings.pref_security_summary,
             icon = Icons.Outlined.Security,
             screen = SettingsSecurityScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_advanced,
-            subtitleRes = R.string.pref_advanced_summary,
+            titleRes = MR.strings.pref_category_advanced,
+            subtitleRes = MR.strings.pref_advanced_summary,
             icon = Icons.Outlined.Code,
             screen = SettingsAdvancedScreen,
         ),
         Item(
-            titleRes = R.string.pref_category_about,
-            subtitleRes = 0,
+            titleRes = MR.strings.pref_category_about,
             formatSubtitle = {
-                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(
+                "${localize(MR.strings.app_name)} ${AboutScreen.getVersionName(
                     withBuildDate = false,
                 )}"
             },

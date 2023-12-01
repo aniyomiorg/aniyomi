@@ -39,7 +39,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.ItemCover
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.domain.entries.EntryCover
 import tachiyomi.presentation.core.components.BadgeGroup
 import tachiyomi.presentation.core.util.selectedBackground
@@ -379,7 +382,7 @@ private fun ContinueViewingButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.PlayArrow,
-                contentDescription = stringResource(R.string.action_resume),
+                contentDescription = localize(MR.strings.action_resume),
                 modifier = Modifier.size(16.dp),
             )
         }

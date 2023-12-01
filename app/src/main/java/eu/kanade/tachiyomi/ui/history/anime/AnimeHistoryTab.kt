@@ -19,7 +19,10 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.anime.AnimeHistoryScreen
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -51,14 +54,14 @@ fun Screen.animeHistoryTab(
         if (episode != null) {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         } else {
-            snackbarHostState.showSnackbar(context.getString(R.string.no_next_episode))
+            snackbarHostState.showSnackbar(context.localize(MR.strings.no_next_episode))
         }
     }
 
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
     return TabContent(
-        titleRes = R.string.label_anime_history,
+        titleRes = MR.strings.label_anime_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             AnimeHistoryScreen(
@@ -107,11 +110,11 @@ fun Screen.animeHistoryTab(
                     when (e) {
                         AnimeHistoryScreenModel.Event.InternalError ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.internal_error),
+                                context.localize(MR.strings.internal_error),
                             )
                         AnimeHistoryScreenModel.Event.HistoryCleared ->
                             snackbarHostState.showSnackbar(
-                                context.getString(R.string.clear_history_completed),
+                                context.localize(MR.strings.clear_history_completed),
                             )
                         is AnimeHistoryScreenModel.Event.OpenEpisode -> openEpisode(
                             context,
@@ -130,7 +133,7 @@ fun Screen.animeHistoryTab(
         actions =
         persistentListOf(
             AppBar.Action(
-                title = stringResource(R.string.pref_clear_history),
+                title = localize(MR.strings.pref_clear_history),
                 icon = Icons.Outlined.DeleteSweep,
                 onClick = { screenModel.setDialog(AnimeHistoryScreenModel.Dialog.DeleteAll) },
             ),

@@ -1,6 +1,6 @@
 package eu.kanade.presentation.more.stats.components
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,15 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.localize
 
 @Composable
 fun StatsSection(
-    @StringRes titleRes: Int,
+    titleRes: StringResource,
     content: @Composable () -> Unit,
 ) {
     Text(
         modifier = Modifier.padding(horizontal = MaterialTheme.padding.extraLarge),
-        text = stringResource(titleRes),
+        text = localize(titleRes),
         style = MaterialTheme.typography.titleSmall,
     )
     ElevatedCard(

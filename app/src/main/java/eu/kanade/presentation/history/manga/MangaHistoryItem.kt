@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.formatChapterNumber
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.material.padding
@@ -72,8 +75,8 @@ fun MangaHistoryItem(
             val readAt = remember { history.readAt?.toTimestampString() ?: "" }
             Text(
                 text = if (history.chapterNumber > -1) {
-                    stringResource(
-                        R.string.recent_manga_time,
+                    localize(
+                        MR.strings.recent_manga_time,
                         formatChapterNumber(history.chapterNumber),
                         readAt,
                     )
@@ -88,7 +91,7 @@ fun MangaHistoryItem(
         IconButton(onClick = onClickDelete) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = stringResource(R.string.action_delete),
+                contentDescription = localize(MR.strings.action_delete),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }

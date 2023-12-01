@@ -38,7 +38,10 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.util.system.getHtml
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import kotlinx.collections.immutable.persistentListOf
@@ -119,7 +122,7 @@ fun WebViewScreenContent(
                             AppBarActions(
                                 persistentListOf(
                                     AppBar.Action(
-                                        title = stringResource(R.string.action_webview_back),
+                                        title = localize(MR.strings.action_webview_back),
                                         icon = Icons.Outlined.ArrowBack,
                                         onClick = {
                                             if (navigator.canGoBack) {
@@ -129,7 +132,7 @@ fun WebViewScreenContent(
                                         enabled = navigator.canGoBack,
                                     ),
                                     AppBar.Action(
-                                        title = stringResource(R.string.action_webview_forward),
+                                        title = localize(MR.strings.action_webview_forward),
                                         icon = Icons.Outlined.ArrowForward,
                                         onClick = {
                                             if (navigator.canGoForward) {
@@ -139,19 +142,19 @@ fun WebViewScreenContent(
                                         enabled = navigator.canGoForward,
                                     ),
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_webview_refresh),
+                                        title = localize(MR.strings.action_webview_refresh),
                                         onClick = { navigator.reload() },
                                     ),
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_share),
+                                        title = localize(MR.strings.action_share),
                                         onClick = { onShare(currentUrl) },
                                     ),
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.action_open_in_browser),
+                                        title = localize(MR.strings.action_open_in_browser),
                                         onClick = { onOpenInBrowser(currentUrl) },
                                     ),
                                     AppBar.OverflowAction(
-                                        title = stringResource(R.string.pref_clear_cookies),
+                                        title = localize(MR.strings.pref_clear_cookies),
                                         onClick = { onClearCookies(currentUrl) },
                                     ),
                                 ),
@@ -164,7 +167,7 @@ fun WebViewScreenContent(
                             modifier = Modifier.padding(8.dp),
                         ) {
                             WarningBanner(
-                                textRes = R.string.information_cloudflare_help,
+                                textRes = MR.strings.information_cloudflare_help,
                                 modifier = Modifier
                                     .clip(MaterialTheme.shapes.small)
                                     .clickable {

@@ -17,6 +17,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 
@@ -42,28 +46,28 @@ fun BottomReaderBar(
         IconButton(onClick = onClickReadingMode) {
             Icon(
                 painter = painterResource(readingMode.iconRes),
-                contentDescription = stringResource(R.string.viewer),
+                contentDescription = localize(MR.strings.viewer),
             )
         }
 
         IconButton(onClick = onClickOrientation) {
             Icon(
                 painter = painterResource(orientation.iconRes),
-                contentDescription = stringResource(R.string.rotation_type),
+                contentDescription = localize(MR.strings.rotation_type),
             )
         }
 
         IconButton(onClick = onClickCropBorder) {
             Icon(
                 painter = painterResource(if (cropEnabled) R.drawable.ic_crop_24dp else R.drawable.ic_crop_off_24dp),
-                contentDescription = stringResource(R.string.pref_crop_borders),
+                contentDescription = localize(MR.strings.pref_crop_borders),
             )
         }
 
         IconButton(onClick = onClickSettings) {
             Icon(
                 imageVector = Icons.Outlined.Settings,
-                contentDescription = stringResource(R.string.action_settings),
+                contentDescription = localize(MR.strings.action_settings),
             )
         }
     }

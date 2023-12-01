@@ -1,6 +1,6 @@
 package tachiyomi.presentation.core.screens
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,23 +26,24 @@ import androidx.compose.ui.util.fastForEach
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.presentation.core.components.ActionButton
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 import kotlin.random.Random
 
 data class EmptyScreenAction(
-    @StringRes val stringResId: Int,
+    val stringRes: StringResource,
     val icon: ImageVector,
     val onClick: () -> Unit,
 )
 
 @Composable
 fun EmptyScreen(
-    @StringRes textResource: Int,
+    stringRes: StringResource,
     modifier: Modifier = Modifier,
     actions: ImmutableList<EmptyScreenAction>? = null,
 ) {
     EmptyScreen(
-        message = stringResource(textResource),
+        message = localize(stringRes),
         modifier = modifier,
         actions = actions,
     )
@@ -89,7 +90,7 @@ fun EmptyScreen(
                 actions.fastForEach {
                     ActionButton(
                         modifier = Modifier.weight(1f),
-                        title = stringResource(it.stringResId),
+                        title = localize(it.stringRes),
                         icon = it.icon,
                         onClick = it.onClick,
                     )

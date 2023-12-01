@@ -17,8 +17,12 @@ import eu.kanade.presentation.category.components.CategoryRenameDialog
 import eu.kanade.presentation.category.components.CategorySortAlphabeticallyDialog
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -29,12 +33,12 @@ fun Screen.animeCategoryTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = R.string.label_anime,
+        titleRes = MR.strings.label_anime,
         searchEnabled = false,
         actions =
         persistentListOf(
             AppBar.Action(
-                title = stringResource(R.string.action_sort),
+                title = localize(MR.strings.action_sort),
                 icon = Icons.Outlined.SortByAlpha,
                 onClick = { screenModel.showDialog(AnimeCategoryDialog.SortAlphabetically) },
             ),

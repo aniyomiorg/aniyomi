@@ -2,7 +2,7 @@ package eu.kanade.presentation.more.settings.screen
 
 import android.content.pm.ActivityInfo
 import android.os.Build
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
@@ -24,7 +24,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
@@ -46,8 +49,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    @StringRes
-    override fun getTitleRes() = R.string.pref_category_player
+    override fun getTitleRes() = MR.strings.pref_category_player
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -58,20 +60,20 @@ object SettingsPlayerScreen : SearchableSettings {
         return listOfNotNull(
             Preference.PreferenceItem.ListPreference(
                 pref = playerPreferences.progressPreference(),
-                title = stringResource(R.string.pref_progress_mark_as_seen),
+                title = localize(MR.strings.pref_progress_mark_as_seen),
                 entries = mapOf(
-                    1.00F to stringResource(R.string.pref_progress_100),
-                    0.95F to stringResource(R.string.pref_progress_95),
-                    0.90F to stringResource(R.string.pref_progress_90),
-                    0.85F to stringResource(R.string.pref_progress_85),
-                    0.80F to stringResource(R.string.pref_progress_80),
-                    0.75F to stringResource(R.string.pref_progress_75),
-                    0.70F to stringResource(R.string.pref_progress_70),
+                    1.00F to localize(MR.strings.pref_progress_100),
+                    0.95F to localize(MR.strings.pref_progress_95),
+                    0.90F to localize(MR.strings.pref_progress_90),
+                    0.85F to localize(MR.strings.pref_progress_85),
+                    0.80F to localize(MR.strings.pref_progress_80),
+                    0.75F to localize(MR.strings.pref_progress_75),
+                    0.70F to localize(MR.strings.pref_progress_70),
                 ),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = playerPreferences.preserveWatchingPosition(),
-                title = stringResource(R.string.pref_preserve_watching_position),
+                title = localize(MR.strings.pref_preserve_watching_position),
             ),
             getInternalPlayerGroup(playerPreferences = playerPreferences),
             getVolumeAndBrightnessGroup(playerPreferences = playerPreferences),
@@ -92,20 +94,20 @@ object SettingsPlayerScreen : SearchableSettings {
         val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_internal_player),
+            title = localize(MR.strings.pref_category_internal_player),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerFullscreen,
-                    title = stringResource(R.string.pref_player_fullscreen),
+                    title = localize(MR.strings.pref_player_fullscreen),
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerHideControls,
-                    title = stringResource(R.string.pref_player_hide_controls),
+                    title = localize(MR.strings.pref_player_hide_controls),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_category_player_advanced),
-                    subtitle = stringResource(R.string.pref_category_player_advanced_subtitle),
+                    title = localize(MR.strings.pref_category_player_advanced),
+                    subtitle = localize(MR.strings.pref_category_player_advanced_subtitle),
                     onClick = { navigator.push(AdvancedPlayerSettingsScreen) },
                 ),
             ),
@@ -119,19 +121,19 @@ object SettingsPlayerScreen : SearchableSettings {
         val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_volume_brightness),
+            title = localize(MR.strings.pref_category_volume_brightness),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableVolumeBrightnessGestures,
-                    title = stringResource(R.string.enable_volume_brightness_gestures),
+                    title = localize(MR.strings.enable_volume_brightness_gestures),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = rememberPlayerBrightness,
-                    title = stringResource(R.string.pref_remember_brightness),
+                    title = localize(MR.strings.pref_remember_brightness),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = rememberPlayerVolume,
-                    title = stringResource(R.string.pref_remember_volume),
+                    title = localize(MR.strings.pref_remember_volume),
                 ),
             ),
         )
@@ -145,66 +147,66 @@ object SettingsPlayerScreen : SearchableSettings {
         val defaultPlayerOrientationLandscape = playerPreferences.defaultPlayerOrientationLandscape()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_player_orientation),
+            title = localize(MR.strings.pref_category_player_orientation),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationType,
-                    title = stringResource(R.string.pref_default_player_orientation),
+                    title = localize(MR.strings.pref_default_player_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(
-                            R.string.rotation_free,
+                        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to localize(
+                            MR.strings.rotation_free,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            R.string.rotation_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to localize(
+                            MR.strings.rotation_portrait,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            R.string.rotation_reverse_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to localize(
+                            MR.strings.rotation_reverse_portrait,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            R.string.rotation_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to localize(
+                            MR.strings.rotation_landscape,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            R.string.rotation_reverse_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to localize(
+                            MR.strings.rotation_reverse_landscape,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            R.string.rotation_sensor_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to localize(
+                            MR.strings.rotation_sensor_portrait,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            R.string.rotation_sensor_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to localize(
+                            MR.strings.rotation_sensor_landscape,
                         ),
                     ),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = adjustOrientationVideoDimensions,
-                    title = stringResource(R.string.pref_adjust_orientation_video_dimensions),
+                    title = localize(MR.strings.pref_adjust_orientation_video_dimensions),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationPortrait,
-                    title = stringResource(R.string.pref_default_portrait_orientation),
+                    title = localize(MR.strings.pref_default_portrait_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            R.string.rotation_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to localize(
+                            MR.strings.rotation_portrait,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            R.string.rotation_reverse_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to localize(
+                            MR.strings.rotation_reverse_portrait,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            R.string.rotation_sensor_portrait,
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to localize(
+                            MR.strings.rotation_sensor_portrait,
                         ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationLandscape,
-                    title = stringResource(R.string.pref_default_landscape_orientation),
+                    title = localize(MR.strings.pref_default_landscape_orientation),
                     entries = mapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            R.string.rotation_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to localize(
+                            MR.strings.rotation_landscape,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            R.string.rotation_reverse_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to localize(
+                            MR.strings.rotation_reverse_landscape,
                         ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            R.string.rotation_sensor_landscape,
+                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to localize(
+                            MR.strings.rotation_sensor_landscape,
                         ),
                     ),
                 ),
@@ -242,66 +244,66 @@ object SettingsPlayerScreen : SearchableSettings {
         val isAniSkipEnabled by enableAniSkip.collectAsState()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_player_seeking),
+            title = localize(MR.strings.pref_category_player_seeking),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableHorizontalSeekGesture,
-                    title = stringResource(R.string.enable_horizontal_seek_gesture),
+                    title = localize(MR.strings.enable_horizontal_seek_gesture),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_default_intro_length),
+                    title = localize(MR.strings.pref_default_intro_length),
                     subtitle = "${defaultSkipIntroLength}s",
                     onClick = { showDialog = true },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = skipLengthPreference,
-                    title = stringResource(R.string.pref_skip_length),
+                    title = localize(MR.strings.pref_skip_length),
                     entries = mapOf(
-                        30 to stringResource(R.string.pref_skip_30),
-                        20 to stringResource(R.string.pref_skip_20),
-                        10 to stringResource(R.string.pref_skip_10),
-                        5 to stringResource(R.string.pref_skip_5),
-                        3 to stringResource(R.string.pref_skip_3),
-                        0 to stringResource(R.string.pref_skip_disable),
+                        30 to localize(MR.strings.pref_skip_30),
+                        20 to localize(MR.strings.pref_skip_20),
+                        10 to localize(MR.strings.pref_skip_10),
+                        5 to localize(MR.strings.pref_skip_5),
+                        3 to localize(MR.strings.pref_skip_3),
+                        0 to localize(MR.strings.pref_skip_disable),
                     ),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerSmoothSeek,
-                    title = stringResource(R.string.pref_player_smooth_seek),
-                    subtitle = stringResource(R.string.pref_player_smooth_seek_summary),
+                    title = localize(MR.strings.pref_player_smooth_seek),
+                    subtitle = localize(MR.strings.pref_player_smooth_seek_summary),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = mediaChapterSeek,
-                    title = stringResource(R.string.pref_media_control_chapter_seeking),
-                    subtitle = stringResource(R.string.pref_media_control_chapter_seeking_summary),
+                    title = localize(MR.strings.pref_media_control_chapter_seeking),
+                    subtitle = localize(MR.strings.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
-                    title = stringResource(R.string.pref_category_player_aniskip_info),
+                    title = localize(MR.strings.pref_category_player_aniskip_info),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableAniSkip,
-                    title = stringResource(R.string.pref_enable_aniskip),
+                    title = localize(MR.strings.pref_enable_aniskip),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableAutoAniSkip,
-                    title = stringResource(R.string.pref_enable_auto_skip_ani_skip),
+                    title = localize(MR.strings.pref_enable_auto_skip_ani_skip),
                     enabled = isAniSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableNetflixAniSkip,
-                    title = stringResource(R.string.pref_enable_netflix_style_aniskip),
+                    title = localize(MR.strings.pref_enable_netflix_style_aniskip),
                     enabled = isAniSkipEnabled,
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = waitingTimeAniSkip,
-                    title = stringResource(R.string.pref_waiting_time_aniskip),
+                    title = localize(MR.strings.pref_waiting_time_aniskip),
                     entries = mapOf(
-                        5 to stringResource(R.string.pref_waiting_time_aniskip_5),
-                        6 to stringResource(R.string.pref_waiting_time_aniskip_6),
-                        7 to stringResource(R.string.pref_waiting_time_aniskip_7),
-                        8 to stringResource(R.string.pref_waiting_time_aniskip_8),
-                        9 to stringResource(R.string.pref_waiting_time_aniskip_9),
-                        10 to stringResource(R.string.pref_waiting_time_aniskip_10),
+                        5 to localize(MR.strings.pref_waiting_time_aniskip_5),
+                        6 to localize(MR.strings.pref_waiting_time_aniskip_6),
+                        7 to localize(MR.strings.pref_waiting_time_aniskip_7),
+                        8 to localize(MR.strings.pref_waiting_time_aniskip_8),
+                        9 to localize(MR.strings.pref_waiting_time_aniskip_9),
+                        10 to localize(MR.strings.pref_waiting_time_aniskip_10),
                     ),
                     enabled = isAniSkipEnabled,
                 ),
@@ -318,20 +320,20 @@ object SettingsPlayerScreen : SearchableSettings {
         val isPipEnabled by enablePip.collectAsState()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_pip),
+            title = localize(MR.strings.pref_category_pip),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enablePip,
-                    title = stringResource(R.string.pref_enable_pip),
+                    title = localize(MR.strings.pref_enable_pip),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = pipEpisodeToasts,
-                    title = stringResource(R.string.pref_pip_episode_toasts),
+                    title = localize(MR.strings.pref_pip_episode_toasts),
                     enabled = isPipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = pipOnExit,
-                    title = stringResource(R.string.pref_pip_on_exit),
+                    title = localize(MR.strings.pref_pip_on_exit),
                     enabled = isPipEnabled,
                 ),
             ),
@@ -359,15 +361,15 @@ object SettingsPlayerScreen : SearchableSettings {
                 .toMap()
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_external_player),
+            title = localize(MR.strings.pref_category_external_player),
             preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = alwaysUseExternalPlayer,
-                    title = stringResource(R.string.pref_always_use_external_player),
+                    title = localize(MR.strings.pref_always_use_external_player),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = externalPlayerPreference,
-                    title = stringResource(R.string.pref_external_player_preference),
+                    title = localize(MR.strings.pref_external_player_preference),
                     entries = mapOf("" to "None") + packageNamesMap,
                 ),
             ),
@@ -384,7 +386,7 @@ object SettingsPlayerScreen : SearchableSettings {
         var newLength = 0
         AlertDialog(
             onDismissRequest = onDismissRequest,
-            title = { Text(text = stringResource(R.string.pref_intro_length)) },
+            title = { Text(text = localize(MR.strings.pref_intro_length)) },
             text = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -392,8 +394,8 @@ object SettingsPlayerScreen : SearchableSettings {
                         WheelTextPicker(
                             modifier = Modifier.align(Alignment.Center),
                             items = remember { 1..255 }.map {
-                                stringResource(
-                                    R.string.seconds_short,
+                                localize(
+                                    MR.strings.seconds_short,
                                     it,
                                 )
                             }.toImmutableList(),
@@ -407,12 +409,12 @@ object SettingsPlayerScreen : SearchableSettings {
             },
             dismissButton = {
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = localize(MR.strings.action_cancel))
                 }
             },
             confirmButton = {
                 TextButton(onClick = { onValueChanged(newLength) }) {
-                    Text(text = stringResource(R.string.action_ok))
+                    Text(text = localize(MR.strings.action_ok))
                 }
             },
         )

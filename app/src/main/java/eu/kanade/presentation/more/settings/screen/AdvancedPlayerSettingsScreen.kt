@@ -6,14 +6,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import tachiyomi.core.i18n.localize
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 object AdvancedPlayerSettingsScreen : SearchableSettings {
     @Composable
-    override fun getTitleRes() = R.string.pref_category_player_advanced
+    override fun getTitleRes() = MR.strings.pref_category_player_advanced
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -26,7 +30,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
         return listOf(
             Preference.PreferenceItem.MultiLineEditTextPreference(
                 pref = mpvConf,
-                title = context.getString(R.string.pref_mpv_conf),
+                title = context.localize(MR.strings.pref_mpv_conf),
                 subtitle = mpvConf.asState(scope).value
                     .lines().take(2)
                     .joinToString(
@@ -37,7 +41,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
             ),
             Preference.PreferenceItem.MultiLineEditTextPreference(
                 pref = mpvInput,
-                title = context.getString(R.string.pref_mpv_input),
+                title = context.localize(MR.strings.pref_mpv_input),
                 subtitle = mpvInput.asState(scope).value
                     .lines().take(2)
                     .joinToString(
@@ -46,12 +50,12 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                     ),
             ),
             Preference.PreferenceItem.ListPreference(
-                title = context.getString(R.string.pref_debanding_title),
+                title = context.localize(MR.strings.pref_debanding_title),
                 pref = playerPreferences.deband(),
                 entries = mapOf(
-                    0 to context.getString(R.string.pref_debanding_disabled),
-                    1 to context.getString(R.string.pref_debanding_cpu),
-                    2 to context.getString(R.string.pref_debanding_gpu),
+                    0 to context.localize(MR.strings.pref_debanding_disabled),
+                    1 to context.localize(MR.strings.pref_debanding_cpu),
+                    2 to context.localize(MR.strings.pref_debanding_gpu),
                     3 to "YUV420P",
                 ),
             ),

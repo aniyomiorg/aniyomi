@@ -14,7 +14,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.i18n.localizePlural
 
 @Composable
 fun ItemHeader(
@@ -36,11 +41,11 @@ fun ItemHeader(
     ) {
         Text(
             text = if (itemCount == null) {
-                val count = if (isManga) R.string.chapters else R.string.episodes
-                stringResource(count)
+                val count = if (isManga) MR.strings.chapters else MR.strings.episodes
+                localize(count)
             } else {
-                val pluralCount = if (isManga) R.plurals.manga_num_chapters else R.plurals.anime_num_episodes
-                pluralStringResource(id = pluralCount, count = itemCount, itemCount)
+                val pluralCount = if (isManga) MR.plurals.manga_num_chapters else MR.plurals.anime_num_episodes
+                localizePlural(pluralCount, count = itemCount, itemCount)
             },
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
@@ -57,7 +62,7 @@ private fun MissingItemsWarning(count: Int) {
     }
 
     Text(
-        text = pluralStringResource(id = R.plurals.missing_items, count = count, count),
+        text = localizePlural(MR.plurals.missing_items, count = count, count),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         style = MaterialTheme.typography.bodySmall,

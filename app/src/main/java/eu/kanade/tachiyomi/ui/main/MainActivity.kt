@@ -66,7 +66,10 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -289,17 +292,17 @@ class MainActivity : BaseActivity() {
                     onDismissRequest = { showChangelog = false },
                     title = {
                         Text(
-                            text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME),
+                            text = localize(MR.strings.updated_version, BuildConfig.VERSION_NAME),
                         )
                     },
                     dismissButton = {
                         TextButton(onClick = { openInBrowser(RELEASE_URL) }) {
-                            Text(text = stringResource(R.string.whats_new))
+                            Text(text = localize(MR.strings.whats_new))
                         }
                     },
                     confirmButton = {
                         TextButton(onClick = { showChangelog = false }) {
-                            Text(text = stringResource(R.string.action_ok))
+                            Text(text = localize(MR.strings.action_ok))
                         }
                     },
                 )

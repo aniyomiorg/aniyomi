@@ -13,7 +13,10 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.presentation.core.components.LabeledCheckbox
 
 @Composable
@@ -70,12 +73,12 @@ fun MultiSelectListPreferenceWidget(
                         isDialogShown = false
                     },
                 ) {
-                    Text(text = stringResource(R.string.action_ok))
+                    Text(text = localize(MR.strings.action_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { isDialogShown = false }) {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = localize(MR.strings.action_cancel))
                 }
             },
         )

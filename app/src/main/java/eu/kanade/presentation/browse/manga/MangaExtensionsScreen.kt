@@ -1,6 +1,6 @@
 package eu.kanade.presentation.browse.manga
 
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
@@ -79,12 +82,12 @@ fun MangaExtensionScreen(
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.isEmpty -> {
                 val msg = if (!searchQuery.isNullOrEmpty()) {
-                    R.string.no_results_found
+                    MR.strings.no_results_found
                 } else {
-                    R.string.empty_screen
+                    MR.strings.empty_screen
                 }
                 EmptyScreen(
-                    textResource = msg,
+                    stringRes = msg,
                     modifier = Modifier.padding(contentPadding),
                 )
             }
@@ -132,11 +135,11 @@ private fun ExtensionContent(
                 when (header) {
                     is MangaExtensionUiModel.Header.Resource -> {
                         val action: @Composable RowScope.() -> Unit =
-                            if (header.textRes == R.string.ext_updates_pending) {
+                            if (header.textRes == MR.strings.ext_updates_pending) {
                                 {
                                     Button(onClick = { onClickUpdateAll() }) {
                                         Text(
-                                            text = stringResource(R.string.ext_update_all),
+                                            text = localize(MR.strings.ext_update_all),
                                             style = LocalTextStyle.current.copy(
                                                 color = MaterialTheme.colorScheme.onPrimary,
                                             ),
@@ -313,15 +316,15 @@ private fun ExtensionItemContent(
                 }
 
                 val warning = when {
-                    extension is MangaExtension.Untrusted -> R.string.ext_untrusted
-                    extension is MangaExtension.Installed && extension.isUnofficial -> R.string.ext_unofficial
-                    extension is MangaExtension.Installed && extension.isObsolete -> R.string.ext_obsolete
-                    extension.isNsfw -> R.string.ext_nsfw_short
+                    extension is MangaExtension.Untrusted -> MR.strings.ext_untrusted
+                    extension is MangaExtension.Installed && extension.isUnofficial -> MR.strings.ext_unofficial
+                    extension is MangaExtension.Installed && extension.isObsolete -> MR.strings.ext_obsolete
+                    extension.isNsfw -> MR.strings.ext_nsfw_short
                     else -> null
                 }
                 if (warning != null) {
                     Text(
-                        text = stringResource(warning).uppercase(),
+                        text = localize(warning).uppercase(),
                         color = MaterialTheme.colorScheme.error,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -332,9 +335,9 @@ private fun ExtensionItemContent(
                     DotSeparatorNoSpaceText()
                     Text(
                         text = when (installStep) {
-                            InstallStep.Pending -> stringResource(R.string.ext_pending)
-                            InstallStep.Downloading -> stringResource(R.string.ext_downloading)
-                            InstallStep.Installing -> stringResource(R.string.ext_installing)
+                            InstallStep.Pending -> localize(MR.strings.ext_pending)
+                            InstallStep.Downloading -> localize(MR.strings.ext_downloading)
+                            InstallStep.Installing -> localize(MR.strings.ext_installing)
                             else -> error("Must not show non-install process text")
                         },
                     )
@@ -360,19 +363,19 @@ private fun ExtensionItemActions(
             ) {
                 Text(
                     text = when (installStep) {
-                        InstallStep.Installed -> stringResource(R.string.ext_installed)
-                        InstallStep.Error -> stringResource(R.string.action_retry)
+                        InstallStep.Installed -> localize(MR.strings.ext_installed)
+                        InstallStep.Error -> localize(MR.strings.action_retry)
                         InstallStep.Idle -> {
                             when (extension) {
                                 is MangaExtension.Installed -> {
                                     if (extension.hasUpdate) {
-                                        stringResource(R.string.ext_update)
+                                        localize(MR.strings.ext_update)
                                     } else {
-                                        stringResource(R.string.action_settings)
+                                        localize(MR.strings.action_settings)
                                     }
                                 }
-                                is MangaExtension.Untrusted -> stringResource(R.string.ext_trust)
-                                is MangaExtension.Available -> stringResource(R.string.ext_install)
+                                is MangaExtension.Untrusted -> localize(MR.strings.ext_trust)
+                                is MangaExtension.Available -> localize(MR.strings.ext_install)
                             }
                         }
                         else -> error("Must not show install process text")
@@ -383,7 +386,7 @@ private fun ExtensionItemActions(
             IconButton(onClick = { onClickItemCancel(extension) }) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(R.string.action_cancel),
+                    contentDescription = localize(MR.strings.action_cancel),
                 )
             }
         }
@@ -392,12 +395,12 @@ private fun ExtensionItemActions(
 
 @Composable
 fun ExtensionHeader(
-    @StringRes textRes: Int,
+   textRes: StringResource,
     modifier: Modifier = Modifier,
     action: @Composable RowScope.() -> Unit = {},
 ) {
     ExtensionHeader(
-        text = stringResource(textRes),
+        text = localize(textRes),
         modifier = modifier,
         action = action,
     )
@@ -432,19 +435,19 @@ fun ExtensionTrustDialog(
 ) {
     AlertDialog(
         title = {
-            Text(text = stringResource(R.string.untrusted_extension))
+            Text(text = localize(MR.strings.untrusted_extension))
         },
         text = {
-            Text(text = stringResource(R.string.untrusted_extension_message))
+            Text(text = localize(MR.strings.untrusted_extension_message))
         },
         confirmButton = {
             TextButton(onClick = onClickConfirm) {
-                Text(text = stringResource(R.string.ext_trust))
+                Text(text = localize(MR.strings.ext_trust))
             }
         },
         dismissButton = {
             TextButton(onClick = onClickDismiss) {
-                Text(text = stringResource(R.string.ext_uninstall))
+                Text(text = localize(MR.strings.ext_uninstall))
             }
         },
         onDismissRequest = onDismissRequest,

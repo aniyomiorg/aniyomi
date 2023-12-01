@@ -18,7 +18,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.library.CommonEntryItemDefaults
 import eu.kanade.presentation.library.EntryComfortableGridItem
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.entries.anime.model.asAnimeCover
@@ -79,7 +82,7 @@ private fun AnimeItem(
 @Composable
 private fun EmptyResultItem() {
     Text(
-        text = stringResource(R.string.no_results_found),
+        text = localize(MR.strings.no_results_found),
         modifier = Modifier
             .padding(
                 horizontal = MaterialTheme.padding.medium,

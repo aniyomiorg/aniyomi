@@ -37,7 +37,10 @@ import eu.kanade.presentation.entries.manga.components.ScanlatorFilterDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.isLocalOrStub
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -301,7 +304,7 @@ class MangaScreen(
                 context.startActivity(
                     Intent.createChooser(
                         intent,
-                        context.getString(R.string.action_share),
+                        context.localize(MR.strings.action_share),
                     ),
                 )
             }

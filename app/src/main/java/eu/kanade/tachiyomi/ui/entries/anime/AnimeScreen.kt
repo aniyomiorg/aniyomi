@@ -37,7 +37,10 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.presentation.util.isTabletUi
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
@@ -284,8 +287,8 @@ class AnimeScreen(
             is AnimeScreenModel.Dialog.ShowQualities -> {
                 EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest
                 val episodeTitle = if (dialog.anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                    stringResource(
-                        R.string.display_mode_episode,
+                    localize(
+                        MR.strings.display_mode_episode,
                         formatEpisodeNumber(dialog.episode.episodeNumber),
                     )
                 } else {
@@ -354,7 +357,7 @@ class AnimeScreen(
                 context.startActivity(
                     Intent.createChooser(
                         intent,
-                        context.getString(R.string.action_share),
+                        context.localize(MR.strings.action_share),
                     ),
                 )
             }

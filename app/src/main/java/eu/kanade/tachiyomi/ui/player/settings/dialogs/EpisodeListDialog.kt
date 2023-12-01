@@ -35,7 +35,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.util.formatEpisodeNumber
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
@@ -61,7 +64,7 @@ fun EpisodeListDialog(
     val episodeListState = rememberLazyListState(initialFirstVisibleItemIndex = itemScrollIndex)
 
     PlayerDialog(
-        titleRes = R.string.episodes,
+        titleRes = MR.strings.episodes,
         modifier = Modifier.fillMaxHeight(fraction = 0.8F).fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {
@@ -81,8 +84,8 @@ fun EpisodeListDialog(
                     val isCurrentEpisode = episode.id == episodeList[currentEpisodeIndex].id
 
                     val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                        stringResource(
-                            R.string.display_mode_episode,
+                        localize(
+                            MR.strings.display_mode_episode,
                             formatEpisodeNumber(episode.episode_number.toDouble()),
                         )
                     } else {

@@ -25,7 +25,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceScreenModel
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.source.manga.model.Source
@@ -53,7 +56,7 @@ fun MigrateMangaSourceScreen(
     when {
         state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
-            textResource = R.string.information_empty_library,
+            stringRes = MR.strings.information_empty_library,
             modifier = Modifier.padding(contentPadding),
         )
         else ->
@@ -95,7 +98,7 @@ private fun MigrateSourceList(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = stringResource(R.string.migration_selection_prompt),
+                    text = localize(MR.strings.migration_selection_prompt),
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.header,
                 )
@@ -104,11 +107,11 @@ private fun MigrateSourceList(
                     when (sortingMode) {
                         SetMigrateSorting.Mode.ALPHABETICAL -> Icon(
                             Icons.Outlined.SortByAlpha,
-                            contentDescription = stringResource(R.string.action_sort_alpha),
+                            contentDescription = localize(MR.strings.action_sort_alpha),
                         )
                         SetMigrateSorting.Mode.TOTAL -> Icon(
                             Icons.Outlined.Numbers,
-                            contentDescription = stringResource(R.string.action_sort_count),
+                            contentDescription = localize(MR.strings.action_sort_count),
                         )
                     }
                 }
@@ -116,11 +119,11 @@ private fun MigrateSourceList(
                     when (sortingDirection) {
                         SetMigrateSorting.Direction.ASCENDING -> Icon(
                             Icons.Outlined.ArrowUpward,
-                            contentDescription = stringResource(R.string.action_asc),
+                            contentDescription = localize(MR.strings.action_asc),
                         )
                         SetMigrateSorting.Direction.DESCENDING -> Icon(
                             Icons.Outlined.ArrowDownward,
-                            contentDescription = stringResource(R.string.action_desc),
+                            contentDescription = localize(MR.strings.action_desc),
                         )
                     }
                 }
@@ -190,7 +193,7 @@ private fun MigrateSourceItem(
                     if (source.isStub) {
                         Text(
                             modifier = Modifier.secondaryItemAlpha(),
-                            text = stringResource(R.string.not_installed),
+                            text = localize(MR.strings.not_installed),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodySmall,

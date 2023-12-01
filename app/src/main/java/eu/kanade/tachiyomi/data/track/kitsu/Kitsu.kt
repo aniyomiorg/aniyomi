@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.kitsu
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
@@ -59,15 +63,14 @@ class Kitsu(id: Long) :
         return listOf(WATCHING, PLAN_TO_WATCH, COMPLETED, ON_HOLD, DROPPED)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        READING -> R.string.currently_reading
-        WATCHING -> R.string.currently_watching
-        PLAN_TO_READ -> R.string.want_to_read
-        PLAN_TO_WATCH -> R.string.want_to_watch
-        COMPLETED -> R.string.completed
-        ON_HOLD -> R.string.on_hold
-        DROPPED -> R.string.dropped
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        READING -> MR.strings.currently_reading
+        WATCHING -> MR.strings.currently_watching
+        PLAN_TO_READ -> MR.strings.want_to_read
+        PLAN_TO_WATCH -> MR.strings.want_to_watch
+        COMPLETED -> MR.strings.completed
+        ON_HOLD -> MR.strings.on_hold
+        DROPPED -> MR.strings.dropped
         else -> null
     }
 

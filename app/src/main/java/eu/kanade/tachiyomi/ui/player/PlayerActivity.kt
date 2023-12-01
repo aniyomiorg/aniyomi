@@ -41,6 +41,10 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -611,7 +615,7 @@ class PlayerActivity : BaseActivity() {
                 "sub-fonts-dir",
                 File(
                     Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                        getString(R.string.app_name),
+                        localize(MR.strings.app_name),
                     "fonts",
                 ).path,
             )
@@ -686,7 +690,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     -1,
-                                    videoChapterText = getString(R.string.go_to_previous_chapter),
+                                    videoChapterText = localize(MR.strings.go_to_previous_chapter),
                                     chapterSeek = "-1",
                                 )
                             }
@@ -700,7 +704,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     1,
-                                    videoChapterText = getString(R.string.go_to_next_chapter),
+                                    videoChapterText = localize(MR.strings.go_to_next_chapter),
                                     chapterSeek = "1",
                                 )
                             } else {
@@ -984,7 +988,7 @@ class PlayerActivity : BaseActivity() {
             when (val switchMethod = viewModel.loadEpisode(episodeId)) {
                 null -> {
                     if (viewModel.currentAnime != null && !autoPlay) {
-                        launchUI { toast(R.string.no_next_episode) }
+                        launchUI { toast(MR.strings.no_next_episode) }
                     }
                     showLoadingIndicator(false)
                 }
@@ -1289,9 +1293,9 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = getString(R.string.share_screenshot_info, anime.title, episode.name, seconds),
+            message = localize(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
-        startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+        startActivity(Intent.createChooser(intent, localize(MR.strings.action_share)))
     }
 
     /**
@@ -1301,7 +1305,7 @@ class PlayerActivity : BaseActivity() {
     private fun onSaveImageResult(result: PlayerViewModel.SaveImageResult) {
         when (result) {
             is PlayerViewModel.SaveImageResult.Success -> {
-                toast(R.string.picture_saved)
+                toast(MR.strings.picture_saved)
             }
             is PlayerViewModel.SaveImageResult.Error -> {
                 logcat(LogPriority.ERROR, result.error)
@@ -1316,9 +1320,9 @@ class PlayerActivity : BaseActivity() {
     private fun onSetAsCoverResult(result: SetAsCover) {
         toast(
             when (result) {
-                SetAsCover.Success -> R.string.cover_updated
-                SetAsCover.AddToLibraryFirst -> R.string.notification_first_add_to_library
-                SetAsCover.Error -> R.string.notification_cover_update_failed
+                SetAsCover.Success -> MR.strings.cover_updated
+                SetAsCover.AddToLibraryFirst -> MR.strings.notification_first_add_to_library
+                SetAsCover.Error -> MR.strings.notification_cover_update_failed
             },
         )
     }
@@ -1753,7 +1757,7 @@ class PlayerActivity : BaseActivity() {
                 // show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
                     toast(
-                        "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
+                        "AniSkip: ${localize(MR.strings.player_aniskip_dontskip_toast,waitingAniSkip)}",
                     )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)

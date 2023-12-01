@@ -1,8 +1,12 @@
 package eu.kanade.tachiyomi.data.track.simkl
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.BaseTracker
@@ -99,13 +103,12 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
         return listOf(WATCHING, COMPLETED, ON_HOLD, NOT_INTERESTING, PLAN_TO_WATCH)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        WATCHING -> R.string.watching
-        PLAN_TO_WATCH -> R.string.plan_to_watch
-        COMPLETED -> R.string.completed
-        ON_HOLD -> R.string.on_hold
-        NOT_INTERESTING -> R.string.not_interesting
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        WATCHING -> MR.strings.watching
+        PLAN_TO_WATCH -> MR.strings.plan_to_watch
+        COMPLETED -> MR.strings.completed
+        ON_HOLD -> MR.strings.on_hold
+        NOT_INTERESTING -> MR.strings.not_interesting
         else -> null
     }
 

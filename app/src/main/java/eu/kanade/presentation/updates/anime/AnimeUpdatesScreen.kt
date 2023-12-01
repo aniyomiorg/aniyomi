@@ -18,7 +18,10 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.core.i18n.localize
+import tachiyomi.presentation.core.i18n.localize
+
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
@@ -72,7 +75,7 @@ fun AnimeUpdateScreen(
         when {
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(
-                textResource = R.string.information_no_recent,
+                stringRes = MR.strings.information_no_recent,
                 modifier = Modifier.padding(contentPadding),
             )
             else -> {
