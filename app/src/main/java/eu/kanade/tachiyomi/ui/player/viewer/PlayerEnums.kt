@@ -4,7 +4,6 @@ import android.os.Build
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
 
-
 /**
  * Results of the set as cover feature.
  */

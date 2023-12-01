@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 
-
 inline fun ComponentActivity.setComposeContent(
     parent: CompositionContext? = null,
     crossinline content: @Composable () -> Unit,

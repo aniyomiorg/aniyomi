@@ -11,7 +11,6 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.storage.StorageScreenContent
 import tachiyomi.i18n.MR
 
-
 @Composable
 fun Screen.mangaStorageTab(): TabContent {
     val navigator = LocalNavigator.currentOrThrow

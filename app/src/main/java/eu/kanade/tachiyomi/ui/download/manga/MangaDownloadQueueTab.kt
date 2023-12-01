@@ -13,7 +13,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
 import tachiyomi.i18n.MR
 
-
 @Composable
 fun Screen.mangaDownloadTab(): TabContent {
     val navigator = LocalNavigator.currentOrThrow

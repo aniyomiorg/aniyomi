@@ -5,7 +5,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import tachiyomi.core.i18n.localize
 import tachiyomi.i18n.MR
 
-
 sealed class AnimeOrderBy(context: Context, selection: Selection) : AnimeFilter.Sort(
     context.localize(MR.strings.local_filter_order_by),
     arrayOf(context.localize(MR.strings.title), context.localize(MR.strings.date)),

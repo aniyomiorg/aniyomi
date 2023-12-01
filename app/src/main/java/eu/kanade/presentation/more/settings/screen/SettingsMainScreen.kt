@@ -168,7 +168,8 @@ object SettingsMainScreen : Screen() {
     private data class Item(
         val titleRes: StringResource,
         val subtitleRes: StringResource? = null,
-        val formatSubtitle: @Composable () -> String? = { subtitleRes?.let { localize(it) } },        val icon: ImageVector,
+        val formatSubtitle: @Composable () -> String? = { subtitleRes?.let { localize(it) } },
+        val icon: ImageVector,
         val screen: VoyagerScreen,
     )
 

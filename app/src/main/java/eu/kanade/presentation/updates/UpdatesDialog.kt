@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 
-
 @Composable
 fun UpdatesDeleteConfirmationDialog(
     onDismissRequest: () -> Unit,

@@ -48,7 +48,6 @@ import java.util.zip.ZipFile
 import kotlin.math.abs
 import com.github.junrar.Archive as JunrarArchive
 
-
 actual class LocalMangaSource(
     private val context: Context,
     private val fileSystem: LocalMangaSourceFileSystem,

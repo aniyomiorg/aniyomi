@@ -54,7 +54,7 @@ class PlayerSettingsScreenModel(
 
     @Composable
     fun ToggleableRow(
-       textRes: StringResource,
+        textRes: StringResource,
         paddingValues: PaddingValues = sheetDialogPadding,
         isChecked: Boolean,
         onClick: () -> Unit,

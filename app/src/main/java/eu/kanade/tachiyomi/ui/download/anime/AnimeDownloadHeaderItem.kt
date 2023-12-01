@@ -7,7 +7,6 @@ import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 
-
 data class AnimeDownloadHeaderItem(
     val id: Long,
     val name: String,

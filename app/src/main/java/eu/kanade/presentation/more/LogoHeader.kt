@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
 
-
 @Composable
 fun LogoHeader() {
     Column(

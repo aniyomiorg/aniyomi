@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 
-
 @Composable
 fun DuplicateAnimeDialog(
     onDismissRequest: () -> Unit,

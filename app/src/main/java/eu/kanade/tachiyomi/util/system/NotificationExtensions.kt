@@ -14,7 +14,6 @@ import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 import eu.kanade.tachiyomi.R
 
-
 val Context.notificationManager: NotificationManager
     get() = getSystemService()!!
 

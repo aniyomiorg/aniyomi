@@ -34,7 +34,6 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-
 actual class LocalAnimeSource(
     private val context: Context,
     private val fileSystem: LocalAnimeSourceFileSystem,

@@ -8,7 +8,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localizePlural
 
-
 @Composable
 fun EntryDownloadDropdownMenu(
     expanded: Boolean,

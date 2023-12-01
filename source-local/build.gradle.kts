@@ -20,7 +20,6 @@ kotlin {
                 implementation(project(":core"))
                 implementation(project(":core-metadata"))
 
-
                 // Move ChapterRecognition to separate module?
                 implementation(project(":domain"))
 

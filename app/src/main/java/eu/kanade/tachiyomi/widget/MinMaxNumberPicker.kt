@@ -10,7 +10,6 @@ import androidx.core.view.descendants
 import androidx.core.view.doOnLayout
 import eu.kanade.tachiyomi.R
 
-
 class MinMaxNumberPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     NumberPicker(context, attrs) {
 

@@ -8,7 +8,6 @@ import androidx.compose.ui.zIndex
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 
-
 @Composable
 fun GlobalSearchItem(
     searchQuery: String,

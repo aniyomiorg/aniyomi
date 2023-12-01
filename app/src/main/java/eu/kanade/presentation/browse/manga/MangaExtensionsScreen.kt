@@ -392,7 +392,7 @@ private fun ExtensionItemActions(
 
 @Composable
 fun ExtensionHeader(
-   textRes: StringResource,
+    textRes: StringResource,
     modifier: Modifier = Modifier,
     action: @Composable RowScope.() -> Unit = {},
 ) {

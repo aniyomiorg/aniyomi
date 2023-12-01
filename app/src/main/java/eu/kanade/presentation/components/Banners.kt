@@ -34,7 +34,6 @@ import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
 
-
 val DownloadedOnlyBannerBackgroundColor
     @Composable get() = MaterialTheme.colorScheme.tertiary
 val IncognitoModeBannerBackgroundColor
@@ -44,7 +43,7 @@ val IndexingBannerBackgroundColor
 
 @Composable
 fun WarningBanner(
-   textRes: StringResource,
+    textRes: StringResource,
     modifier: Modifier = Modifier,
 ) {
     Text(

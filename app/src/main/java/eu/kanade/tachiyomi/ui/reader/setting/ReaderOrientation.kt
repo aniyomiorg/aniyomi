@@ -6,7 +6,6 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import tachiyomi.i18n.MR
 
-
 enum class ReaderOrientation(
     val flag: Int,
     val stringRes: StringResource,
