@@ -17,9 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import java.math.BigDecimal
 import java.math.RoundingMode
 

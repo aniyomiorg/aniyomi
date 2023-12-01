@@ -10,13 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import eu.kanade.presentation.theme.TachiyomiTheme
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.localizePlural
 import tachiyomi.presentation.core.util.secondaryItemAlpha

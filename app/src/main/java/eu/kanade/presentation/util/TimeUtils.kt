@@ -4,11 +4,9 @@ import android.content.Context
 import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.res.stringResource
-import tachiyomi.i18n.MR
 import tachiyomi.core.i18n.localize
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.localize
-
 import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes

@@ -13,9 +13,6 @@ import androidx.core.app.NotificationManagerCompat.NotificationWithIdAndTag
 import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
 
 
 val Context.notificationManager: NotificationManager

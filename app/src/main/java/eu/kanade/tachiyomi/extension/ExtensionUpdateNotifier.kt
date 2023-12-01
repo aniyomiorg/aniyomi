@@ -3,10 +3,6 @@ package eu.kanade.tachiyomi.extension
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.cancelNotification

@@ -2,14 +2,10 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration
 
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.entries.anime.model.hasCustomCover
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import tachiyomi.domain.entries.anime.model.Anime
-import uy.kohesive.injekt.api.get
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
 data class AnimeMigrationFlag(

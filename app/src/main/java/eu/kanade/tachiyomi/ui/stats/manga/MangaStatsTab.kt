@@ -11,9 +11,6 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.stats.MangaStatsScreenContent
 import eu.kanade.presentation.more.stats.StatsScreenState
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable

@@ -6,12 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
-import dev.icerock.moko.resources.StringResource
 import androidx.core.content.ContextCompat
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
@@ -30,9 +26,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
 /**

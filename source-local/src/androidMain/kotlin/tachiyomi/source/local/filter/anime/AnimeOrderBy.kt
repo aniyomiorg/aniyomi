@@ -4,7 +4,6 @@ import android.content.Context
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import tachiyomi.core.i18n.localize
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 
 
 sealed class AnimeOrderBy(context: Context, selection: Selection) : AnimeFilter.Sort(

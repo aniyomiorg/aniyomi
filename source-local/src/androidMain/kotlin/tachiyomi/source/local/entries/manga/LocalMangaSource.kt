@@ -28,7 +28,7 @@ import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
-import tachiyomi.source.local.R
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.filter.manga.MangaOrderBy
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.ArchiveManga
@@ -47,8 +47,6 @@ import java.util.concurrent.TimeUnit
 import java.util.zip.ZipFile
 import kotlin.math.abs
 import com.github.junrar.Archive as JunrarArchive
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 
 
 actual class LocalMangaSource(

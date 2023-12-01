@@ -3,10 +3,6 @@ package eu.kanade.presentation.track.components
 import android.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.test.DummyTracker
 

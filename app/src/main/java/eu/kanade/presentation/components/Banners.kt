@@ -1,6 +1,5 @@
 package eu.kanade.presentation.components
 
-import dev.icerock.moko.resources.StringResource
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -26,14 +25,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMaxBy
+import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localize
 
 

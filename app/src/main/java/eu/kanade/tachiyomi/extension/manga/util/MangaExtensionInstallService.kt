@@ -7,10 +7,6 @@ import android.net.Uri
 import android.os.IBinder
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
 import eu.kanade.tachiyomi.extension.manga.installer.PackageInstallerInstallerManga
@@ -19,7 +15,9 @@ import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller.Companio
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 
 class MangaExtensionInstallService : Service() {
 

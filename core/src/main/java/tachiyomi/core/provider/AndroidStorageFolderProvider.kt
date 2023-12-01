@@ -3,10 +3,8 @@ package tachiyomi.core.provider
 import android.content.Context
 import android.os.Environment
 import androidx.core.net.toUri
+import tachiyomi.core.i18n.localize
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-
-import tachiyomi.core.i18n.localize
 import java.io.File
 
 class AndroidStorageFolderProvider(

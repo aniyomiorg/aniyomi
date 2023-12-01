@@ -3,16 +3,14 @@ package eu.kanade.tachiyomi.ui.security
 import android.os.Bundle
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.startAuthentication
 import logcat.LogPriority
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 
 /**
  * Blank activity with a BiometricPrompt.

@@ -2,10 +2,8 @@ package eu.kanade.tachiyomi.util.lang
 
 import android.content.Context
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
 import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
+import tachiyomi.i18n.MR
 import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDateTime

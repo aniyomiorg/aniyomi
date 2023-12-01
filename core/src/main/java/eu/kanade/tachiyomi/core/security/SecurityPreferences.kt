@@ -1,12 +1,10 @@
 package eu.kanade.tachiyomi.core.security
 
 import dev.icerock.moko.resources.StringResource
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
+import tachiyomi.i18n.MR
 
 class SecurityPreferences(
     private val preferenceStore: PreferenceStore,

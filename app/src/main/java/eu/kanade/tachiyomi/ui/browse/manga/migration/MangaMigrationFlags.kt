@@ -2,14 +2,10 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration
 
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.entries.manga.model.hasCustomCover
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import tachiyomi.domain.entries.manga.model.Manga
-import uy.kohesive.injekt.api.get
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
 data class MangaMigrationFlag(

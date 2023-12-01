@@ -1,21 +1,17 @@
 package eu.kanade.presentation.more.settings.screen
 
 import android.os.Build
-import dev.icerock.moko.resources.StringResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.more.settings.Preference
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

@@ -8,16 +8,14 @@ import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
+import tachiyomi.core.i18n.localize
 import tachiyomi.domain.release.model.Release
+import tachiyomi.i18n.MR
 
 internal class AppUpdateNotifier(private val context: Context) {
 

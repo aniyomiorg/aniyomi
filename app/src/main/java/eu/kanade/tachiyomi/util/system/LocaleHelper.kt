@@ -2,10 +2,8 @@ package eu.kanade.tachiyomi.util.system
 
 import android.content.Context
 import androidx.core.os.LocaleListCompat
-import tachiyomi.i18n.MR
 import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
+import tachiyomi.i18n.MR
 import java.util.Locale
 
 /**

@@ -1,16 +1,9 @@
 package tachiyomi.presentation.widget.util
 
-import dev.icerock.moko.resources.StringResource
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.glance.GlanceModifier
-import androidx.glance.LocalContext
 import androidx.glance.appwidget.cornerRadius
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.widget.R
 
 fun GlanceModifier.appWidgetBackgroundRadius(): GlanceModifier {

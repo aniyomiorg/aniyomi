@@ -3,10 +3,6 @@ package eu.kanade.tachiyomi.extension.manga.installer
 import android.app.Service
 import android.content.pm.PackageManager
 import android.os.Build
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.system.getUriSize
 import eu.kanade.tachiyomi.util.system.toast
@@ -18,6 +14,7 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import rikka.shizuku.Shizuku
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 import java.io.BufferedReader
 import java.io.InputStream
 

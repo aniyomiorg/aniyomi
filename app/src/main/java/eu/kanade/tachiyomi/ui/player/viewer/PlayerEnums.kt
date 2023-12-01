@@ -3,8 +3,6 @@ package eu.kanade.tachiyomi.ui.player.viewer
 import android.os.Build
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
 
 
 /**

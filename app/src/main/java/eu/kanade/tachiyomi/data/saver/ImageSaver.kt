@@ -11,17 +11,15 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import logcat.LogPriority
 import okio.IOException
+import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File

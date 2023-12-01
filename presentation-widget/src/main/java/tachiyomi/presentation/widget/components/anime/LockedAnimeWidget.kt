@@ -16,9 +16,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import eu.kanade.tachiyomi.core.Constants
-import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localize
 
 

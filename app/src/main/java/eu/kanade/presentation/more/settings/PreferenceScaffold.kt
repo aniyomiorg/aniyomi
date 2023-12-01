@@ -1,9 +1,8 @@
 package eu.kanade.presentation.more.settings
 
-import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.components.AppBar
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.localize

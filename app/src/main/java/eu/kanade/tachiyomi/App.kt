@@ -61,13 +61,13 @@ import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
 import tachiyomi.presentation.widget.entries.manga.MangaWidgetManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.security.Security
-import tachiyomi.i18n.MR
 
 class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 

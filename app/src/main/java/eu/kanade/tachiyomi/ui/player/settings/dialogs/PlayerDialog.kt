@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
-import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,16 +11,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.core.components.material.TextButton
+import tachiyomi.presentation.core.i18n.localize
 
 // TODO: (Merge_Change) stringResource "MR.strings.action_ok" to be replaced with
 //  "MR.strings.action_ok"

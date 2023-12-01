@@ -23,11 +23,8 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import eu.kanade.tachiyomi.core.Constants
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 
 @Composable

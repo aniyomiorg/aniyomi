@@ -3,10 +3,6 @@ package eu.kanade.tachiyomi.data.track.komga
 import android.graphics.Color
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
@@ -18,6 +14,7 @@ import kotlinx.collections.immutable.persistentListOf
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.i18n.MR
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Komga(id: Long) : BaseTracker(id, "Komga"), EnhancedMangaTracker, MangaTracker {

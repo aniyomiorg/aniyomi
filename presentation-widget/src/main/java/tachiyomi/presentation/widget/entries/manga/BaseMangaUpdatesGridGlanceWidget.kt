@@ -37,10 +37,6 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.presentation.widget.R
 import tachiyomi.presentation.widget.components.manga.CoverHeight
 import tachiyomi.presentation.widget.components.manga.CoverWidth

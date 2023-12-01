@@ -4,14 +4,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import dev.icerock.moko.resources.StringResource
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.i18n.MR
 
 class BasePreferences(
     val context: Context,

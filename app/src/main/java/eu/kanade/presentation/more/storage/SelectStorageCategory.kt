@@ -3,13 +3,10 @@ package eu.kanade.presentation.more.storage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.domain.category.model.Category
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.SelectItem
+import tachiyomi.presentation.core.i18n.localize
 
 @Composable
 fun SelectStorageCategory(

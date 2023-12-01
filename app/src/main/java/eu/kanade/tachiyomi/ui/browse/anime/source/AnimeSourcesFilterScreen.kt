@@ -10,11 +10,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.AnimeSourcesFilterScreen
 import eu.kanade.presentation.util.Screen
-import tachiyomi.i18n.MR
 import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
-import eu.kanade.tachiyomi.util.system.toast
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 class AnimeSourcesFilterScreen : Screen() {

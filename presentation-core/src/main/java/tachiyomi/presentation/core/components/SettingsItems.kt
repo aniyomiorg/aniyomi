@@ -1,7 +1,6 @@
 package tachiyomi.presentation.core.components
 
 import android.view.MotionEvent
-import dev.icerock.moko.resources.StringResource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -52,9 +51,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.delay
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.TriState

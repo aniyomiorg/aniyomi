@@ -22,7 +22,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
-import tachiyomi.source.local.R
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.io.ArchiveAnime
@@ -33,8 +33,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 
 
 actual class LocalAnimeSource(

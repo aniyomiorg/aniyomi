@@ -3,13 +3,10 @@ package eu.kanade.presentation.more.settings.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.category.visualName
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import tachiyomi.domain.category.model.Category
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.localize
 
 /**
  * Returns a string of categories name for settings subtitle

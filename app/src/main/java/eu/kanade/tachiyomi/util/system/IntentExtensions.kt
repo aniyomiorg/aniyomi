@@ -6,10 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.IntentCompat
-import tachiyomi.i18n.MR
 import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
+import tachiyomi.i18n.MR
 import java.io.Serializable
 
 fun Uri.toShareIntent(context: Context, type: String = "image/*", message: String? = null): Intent {

@@ -5,13 +5,9 @@ import android.os.Build
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.Toast
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.Headers
 import okhttp3.Interceptor
@@ -19,6 +15,7 @@ import okhttp3.Request
 import okhttp3.Response
 import tachiyomi.core.i18n.localize
 import tachiyomi.core.util.lang.launchUI
+import tachiyomi.i18n.MR
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch
 
 import eu.kanade.tachiyomi.source.CatalogueSource
-import uy.kohesive.injekt.api.get
 
 class GlobalMangaSearchScreenModel(
     initialQuery: String = "",

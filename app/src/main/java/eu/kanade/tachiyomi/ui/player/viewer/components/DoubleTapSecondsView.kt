@@ -8,12 +8,9 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.databinding.PlayerDoubleTapSeekViewBinding
 import tachiyomi.core.i18n.localizePlural
+import tachiyomi.i18n.MR
 
 /**
  * View that shows the arrows animation when double tapping to seek

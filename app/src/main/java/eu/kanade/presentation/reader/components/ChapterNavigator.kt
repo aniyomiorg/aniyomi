@@ -30,14 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localize
-
 import kotlin.math.roundToInt
 
 @Composable

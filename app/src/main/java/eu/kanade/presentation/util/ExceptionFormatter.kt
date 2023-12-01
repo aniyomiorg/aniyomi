@@ -1,17 +1,15 @@
 package eu.kanade.presentation.util
 
 import android.content.Context
-import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
-import tachiyomi.presentation.core.i18n.localize
-
 import eu.kanade.tachiyomi.animesource.online.LicensedEntryItemsException
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.util.system.isOnline
+import tachiyomi.core.i18n.localize
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.manga.model.SourceNotInstalledException
+import tachiyomi.i18n.MR
 import java.net.UnknownHostException
 
 context(Context)

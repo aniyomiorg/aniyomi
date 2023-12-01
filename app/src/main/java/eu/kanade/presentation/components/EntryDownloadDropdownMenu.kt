@@ -3,12 +3,8 @@ package eu.kanade.presentation.components
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.entries.DownloadAction
-import eu.kanade.tachiyomi.R
 import tachiyomi.i18n.MR
-import tachiyomi.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localize
 import tachiyomi.presentation.core.i18n.localizePlural
 
