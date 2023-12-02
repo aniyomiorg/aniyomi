@@ -30,6 +30,8 @@ class StorageManager(
         return file.takeIf { it?.exists() == true }?.also { parent ->
             parent.createDirectory(AUTOMATIC_BACKUPS_PATH)
             parent.createDirectory(LOCAL_SOURCE_PATH)
+            parent.createDirectory(LOCAL_ANIMESOURCE_PATH)
+            parent.createDirectory(FONTS_PATH)
             parent.createDirectory(DOWNLOADS_PATH).also {
                 DiskUtil.createNoMediaFile(it, context)
             }

@@ -26,6 +26,9 @@
     <string name="author_hint">Author: %1$s</string>
     <string name="artist_hint">Artist: %1$s</string>
     <string name="custom_entry_info">Custom entry info</string>
+    <!-- Preferences -->
+    <!-- Subsections -->
+    <string name="pref_category_fork">Fork Settings</string>
 
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>
@@ -60,5 +63,32 @@
 
     <!-- Prefs -->
     <string name="pref_page_preload_amount">Page preload amount</string>
+
+    <!-- Reader -->
+    <!-- Reader Settings -->
+    <string name="preserve_reading_position">Preserve reading position on read entries</string>
+    <string name="reader_bottom_buttons">Reader Bottom Buttons</string>
+    <string name="reader_bottom_buttons_summary">Customize what buttons appear at the bottom of the reader</string>
+
+    <!-- Reader Actions -->
+    <string name="action_set_first_page_cover">Set first page as cover</string>
+    <string name="action_set_second_page_cover">Set second page as cover</string>
+    <string name="action_save_first_page">Save first page</string>
+    <string name="action_save_second_page">Save second page</string>
+    <string name="action_share_first_page">Share first page</string>
+    <string name="action_share_second_page">Share second page</string>
+    <string name="action_save_combined_page">Save combined page</string>
+    <string name="action_share_combined_page">Share combined page</string>
+
+    <!-- Reader Sharing -->
+    <string name="share_pages_info">%1$s: %2$s, pages %3$s</string>
+
+    <!-- Double page spread -->
+    <string name="page_layout">Page layout</string>
+    <string name="shift_double_pages">Shift one page over</string>
+    <string name="double_pages">Double pages</string>
+    <string name="single_page">Single page</string>
+    <string name="automatic_orientation">Automatic (based on orientation)</string>
+    <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
 
 </resources>
