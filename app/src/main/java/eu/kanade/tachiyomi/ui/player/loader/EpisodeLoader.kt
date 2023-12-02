@@ -6,10 +6,10 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
+import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -116,12 +116,18 @@ class EpisodeLoader {
             episode: Episode,
         ): List<Video> {
             return try {
-                logcat { episode.url }
+                val (animeDirName, episodeName) = episode.url.split('/', limit = 2)
+                val fileSystem: LocalAnimeSourceFileSystem = Injekt.get()
+                val videoFile = fileSystem.getBaseDirectory()
+                    ?.findFile(animeDirName, true)
+                    ?.findFile(episodeName, true)
+                val videoUri = videoFile!!.uri
+
                 val video = Video(
-                    episode.url,
+                    videoUri.toString(),
                     "Local source: ${episode.url}",
-                    episode.url,
-                    Uri.parse(episode.url),
+                    videoUri.toString(),
+                    videoUri,
                 )
                 listOf(video)
             } catch (e: Exception) {

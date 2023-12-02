@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.provider.FolderProvider
+import tachiyomi.core.storage.extension
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
@@ -25,6 +25,7 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.io.ArchiveManga
@@ -39,7 +40,7 @@ import uy.kohesive.injekt.api.get
  */
 class MangaDownloadManager(
     private val context: Context,
-    private val folderProvider: FolderProvider,
+    private val storageManager: StorageManager = Injekt.get(),
     private val provider: MangaDownloadProvider = Injekt.get(),
     private val cache: MangaDownloadCache = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
@@ -218,9 +219,8 @@ class MangaDownloadManager(
      */
     fun getDownloadCount(manga: Manga): Int {
         return if (manga.source == LocalMangaSource.ID) {
-            LocalMangaSourceFileSystem(folderProvider).getFilesInMangaDirectory(manga.url)
-                .filter { it.isDirectory || ArchiveManga.isSupported(it) }
-                .count()
+            LocalMangaSourceFileSystem(storageManager).getFilesInMangaDirectory(manga.url)
+                .count { it.isDirectory || ArchiveManga.isSupported(it) }
         } else {
             cache.getDownloadCount(manga)
         }
@@ -240,8 +240,8 @@ class MangaDownloadManager(
      */
     fun getDownloadSize(manga: Manga): Long {
         return if (manga.source == LocalMangaSource.ID) {
-            LocalMangaSourceFileSystem(folderProvider).getMangaDirectory(manga.url)
-                .let { UniFile.fromFile(it) }?.size() ?: 0L
+            LocalMangaSourceFileSystem(storageManager).getMangaDirectory(manga.url)
+                ?.size() ?: 0L
         } else {
             cache.getDownloadSize(manga)
         }
@@ -389,7 +389,7 @@ class MangaDownloadManager(
             .firstOrNull() ?: return
 
         var newName = provider.getChapterDirName(newChapter.name, newChapter.scanlator)
-        if (oldDownload.isFile && oldDownload.name?.endsWith(".cbz") == true) {
+        if (oldDownload.isFile && oldDownload.extension == "cbz") {
             newName += ".cbz"
         }
 

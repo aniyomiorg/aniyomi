@@ -35,12 +35,13 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.data.CreateBackupScreen
 import eu.kanade.presentation.more.settings.widget.BasePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.PrefsHorizontalPadding
-import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.backup.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
 import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.DeviceUtil
@@ -78,8 +79,6 @@ object SettingsDataScreen : SearchableSettings {
         val backupPreferences = Injekt.get<BackupPreferences>()
         val storagePreferences = Injekt.get<StoragePreferences>()
 
-        PermissionRequestHelper.requestStoragePermission()
-
         return listOf(
             getStorageLocationPref(storagePreferences = storagePreferences),
             Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.pref_storage_location_info)),
@@ -105,8 +104,11 @@ object SettingsDataScreen : SearchableSettings {
 
                 context.contentResolver.takePersistableUriPermission(uri, flags)
 
-                val file = UniFile.fromUri(context, uri)
-                storageDirPref.set(file.uri.toString())
+                UniFile.fromUri(context, uri)?.let {
+                    storageDirPref.set(it.uri.toString())
+                }
+                Injekt.get<AnimeDownloadCache>().invalidateCache()
+                Injekt.get<MangaDownloadCache>().invalidateCache()
             }
         }
 

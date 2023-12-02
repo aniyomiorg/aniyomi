@@ -37,7 +37,7 @@ import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
-import tachiyomi.core.provider.AndroidStorageFolderProvider
+import tachiyomi.core.storage.AndroidStorageFolderProvider
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
@@ -54,6 +54,7 @@ import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
+import tachiyomi.domain.storage.service.StorageManager
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
@@ -189,11 +190,11 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { AnimeExtensionManager(app) }
 
         addSingletonFactory { MangaDownloadProvider(app) }
-        addSingletonFactory { MangaDownloadManager(app, get<AndroidStorageFolderProvider>()) }
+        addSingletonFactory { MangaDownloadManager(app) }
         addSingletonFactory { MangaDownloadCache(app) }
 
         addSingletonFactory { AnimeDownloadProvider(app) }
-        addSingletonFactory { AnimeDownloadManager(app, get<AndroidStorageFolderProvider>()) }
+        addSingletonFactory { AnimeDownloadManager(app) }
         addSingletonFactory { AnimeDownloadCache(app) }
 
         addSingletonFactory { TrackerManager(app) }
@@ -204,11 +205,13 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { AndroidStorageFolderProvider(app) }
 
-        addSingletonFactory { LocalMangaSourceFileSystem(get<AndroidStorageFolderProvider>()) }
+        addSingletonFactory { LocalMangaSourceFileSystem(get()) }
         addSingletonFactory { LocalMangaCoverManager(app, get()) }
 
-        addSingletonFactory { LocalAnimeSourceFileSystem(get<AndroidStorageFolderProvider>()) }
+        addSingletonFactory { LocalAnimeSourceFileSystem(get()) }
         addSingletonFactory { LocalAnimeCoverManager(app, get()) }
+
+        addSingletonFactory { StorageManager(app, get()) }
 
         addSingletonFactory { ExternalIntents() }
 
