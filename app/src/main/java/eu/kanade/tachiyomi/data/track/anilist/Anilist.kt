@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
 import android.graphics.Color
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -15,9 +15,9 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
@@ -82,17 +82,16 @@ class Anilist(id: Long) :
         return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
     }
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        WATCHING -> R.string.watching
-        READING -> R.string.reading
-        PLANNING -> R.string.plan_to_read
-        PLANNING_ANIME -> R.string.plan_to_watch
-        COMPLETED -> R.string.completed
-        REPEATING -> R.string.repeating
-        REPEATING_ANIME -> R.string.repeating_anime
-        PAUSED -> R.string.paused
-        DROPPED -> R.string.dropped
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        WATCHING -> MR.strings.watching
+        READING -> MR.strings.reading
+        PLANNING -> MR.strings.plan_to_read
+        PLANNING_ANIME -> MR.strings.plan_to_watch
+        COMPLETED -> MR.strings.completed
+        REPEATING -> MR.strings.repeating
+        REPEATING_ANIME -> MR.strings.repeating_anime
+        PAUSED -> MR.strings.paused
+        DROPPED -> MR.strings.dropped
         else -> null
     }
 

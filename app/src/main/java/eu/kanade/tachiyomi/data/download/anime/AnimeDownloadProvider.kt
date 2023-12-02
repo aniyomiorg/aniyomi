@@ -1,20 +1,16 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.storage.service.StoragePreferences
+import tachiyomi.domain.storage.service.StorageManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -26,27 +22,11 @@ import uy.kohesive.injekt.api.get
  */
 class AnimeDownloadProvider(
     private val context: Context,
-    storagePreferences: StoragePreferences = Injekt.get(),
+    private val storageManager: StorageManager = Injekt.get(),
 ) {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
-    private var _downloadsDir: UniFile? =
-        storagePreferences.baseStorageDirectory().get().let(::getDownloadsLocation)
     val downloadsDir: UniFile?
-        get() = _downloadsDir
-
-    init {
-        storagePreferences.baseStorageDirectory().changes()
-            .onEach { _downloadsDir = getDownloadsLocation(it) }
-            .launchIn(scope)
-    }
-
-    private fun getDownloadsLocation(dir: String): UniFile? {
-        return UniFile.fromUri(context, dir.toUri())
-            ?.createDirectory(StoragePreferences.DOWNLOADS_DIR)
-            ?.also { DiskUtil.createNoMediaFile(it, context) }
-    }
+        get() = storageManager.getDownloadsDirectory()
 
     /**
      * Returns the download directory for an anime. For internal use only.
@@ -57,11 +37,11 @@ class AnimeDownloadProvider(
     internal fun getAnimeDir(animeTitle: String, source: AnimeSource): UniFile {
         try {
             return downloadsDir!!
-                .createDirectory(getSourceDirName(source))
-                .createDirectory(getAnimeDirName(animeTitle))
+                .createDirectory(getSourceDirName(source))!!
+                .createDirectory(getAnimeDirName(animeTitle))!!
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
-            throw Exception(context.getString(R.string.invalid_location, downloadsDir))
+            throw Exception(context.stringResource(MR.strings.invalid_location, downloadsDir ?: ""))
         }
     }
 
@@ -116,7 +96,7 @@ class AnimeDownloadProvider(
         val animeDir = findAnimeDir(anime.title, source) ?: return null to emptyList()
         return animeDir to episodes.mapNotNull { episode ->
             getValidEpisodeDirNames(episode.name, episode.scanlator).asSequence()
-                .mapNotNull { animeDir.findFile(it) }
+                .mapNotNull { animeDir.findFile(it, true) }
                 .firstOrNull()
         }
     }

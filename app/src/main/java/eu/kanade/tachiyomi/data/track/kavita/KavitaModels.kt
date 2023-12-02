@@ -10,7 +10,7 @@ data class SeriesDto(
     val name: String,
     val originalName: String = "",
     val thumbnail_url: String? = "",
-    val localizedName: String? = "",
+    val stringResourcedName: String? = "",
     val sortName: String? = "",
     val pages: Int,
     val coverImageLocked: Boolean = true,

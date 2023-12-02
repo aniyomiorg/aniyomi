@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">ವರ್ಗಗಳು</string>
+    <string name="unlock_app">ತಚಿಯೋಮಿಯನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿ</string>
+    <string name="action_display_local_badge_manga">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
+    <string name="default_manga_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>
+    <string name="pref_manga_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="untrusted_extension_message">ಈ ವಿಸ್ತರಣೆಯನ್ನು ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲದ ಪ್ರಮಾಣಪತ್ರದೊಂದಿಗೆ ಸಹಿ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿಲ್ಲ.
+\n
+\nದುರುದ್ದೇಶಪೂರಿತ ವಿಸ್ತರಣೆಯು ತಚಿಯೋಮಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗಿರುವ ಯಾವುದೇ ಲಾಗಿನ್ ರುಜುವಾತುಗಳನ್ನು ಓದಬಹುದು ಅಥವಾ ಅನಿಯಂತ್ರಿತ ಕೋಡ್ ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಬಹುದು.
+\n
+\nಈ ಪ್ರಮಾಣಪತ್ರವನ್ನು ನಂಬುವ ಮೂಲಕ ನೀವು ಈ ಅಪಾಯಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತೀರಿ.</string>
+    <string name="pref_category_delete_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="pref_remove_after_marked_as_read">ಓದಿದಂತೆ ಗುರುತಿಸಿದಾಗ ತೆಗೆದುಹಾಕಿ</string>
+    <string name="pref_remove_after_read">ಓದಿದ ನಂತರ</string>
+    <string name="pref_remove_bookmarked_chapters">ಬುಕ್ ಮಾರ್ಕ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="pref_auto_update_manga_sync">ಓದಿದ ನಂತರ ಅಧ್ಯಾಯದ ಪ್ರಗತಿಯನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="pref_clear_chapter_cache">ಅಧ್ಯಾಯ ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="pref_clear_manga_database">ಡೇಟಾಬೇಸ್ ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="pref_clear_manga_database_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದಲ್ಲಿ ಇಲ್ಲದ ಮಾಂಗಾದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
+    <string name="clear_database_confirmation">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ\? ಅಧ್ಯಾಯಗಳು ಗ್ರಂಥಾಲಯೇತರ ಮಾಂಗಾದ ಓದು ಮತ್ತು ಪ್ರಗತಿ ಕಳೆದುಹೋಗುತ್ತದೆ</string>
+    <string name="pref_refresh_library_tracking_summary">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇವೆಗಳಿಂದ ಓದಿದ ಸ್ಥಿತಿ, ಸ್ಕೋರ್ ಮತ್ತು ಕೊನೆಯ ಅಧ್ಯಾಯವನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="pref_incognito_mode_summary">ಓದುವ ಇತಿಹಾಸವನ್ನು ವಿರಾಮಗೊಳಿಸುತ್ತದೆ</string>
+    <string name="manga_from_library">ಗ್ರಂಥಾಲಯದಿಂದ ಮಾಂಗಾ</string>
+    <string name="snack_add_to_manga_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ\?</string>
+    <string name="download_error">ದೋಷ</string>
+    <string name="download_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="also_set_chapter_settings_for_library">ನನ್ನ ಗ್ರಂಥಾಲಯದಲ್ಲಿರುವ ಎಲ್ಲಾ ಮಾಂಗಾಗಳಿಗೂ ಅನ್ವಯಿಸಿ</string>
+    <string name="dialog_with_checkbox_reset">ಈ ಮಾಂಗಾದ ಎಲ್ಲಾ ಅಧ್ಯಾಯಗಳನ್ನು ಮರುಹೊಂದಿಸಿ</string>
+    <string name="download_insufficient_space">ಕಡಿಮೆ ಶೇಖರಣಾ ಸ್ಥಳದ ಕಾರಣ ಅಧ್ಯಾಯಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
+    <string name="information_webview_required">ತಚಿಯೋಮಿಗೆ ವೆಬ್‌ವೀಕ್ಷಣೆ ಅಗತ್ಯವಿದೆ</string>
+    <string name="download_notifier_download_paused_chapters">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="channel_new_chapters_episodes">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
+</resources>

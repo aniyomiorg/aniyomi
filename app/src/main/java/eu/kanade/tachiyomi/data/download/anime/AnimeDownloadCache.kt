@@ -30,6 +30,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
+import tachiyomi.core.storage.extension
+import tachiyomi.core.storage.nameWithoutExtension
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.system.logcat
@@ -359,16 +361,10 @@ class AnimeDownloadCache(
                                     when {
                                         // Ignore incomplete downloads
                                         it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
-                                        // Folder of images
-                                        it.isDirectory -> it.name
                                         // MP4 files
-                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(
-                                            ".mp4",
-                                        )
+                                        it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
                                         // MKV files
-                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(
-                                            ".mkv",
-                                        )
+                                        it.isFile && it.extension == "mkv" -> it.nameWithoutExtension
                                         // Anything else is irrelevant
                                         else -> null
                                     }

@@ -1,10 +1,9 @@
 package eu.kanade.tachiyomi.ui.category.manga
 
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.tachiyomi.R
+import dev.icerock.moko.resources.StringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -21,6 +20,7 @@ import tachiyomi.domain.category.manga.interactor.RenameMangaCategory
 import tachiyomi.domain.category.manga.interactor.ReorderMangaCategory
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -161,8 +161,8 @@ sealed interface MangaCategoryDialog {
 }
 
 sealed interface MangaCategoryEvent {
-    sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent
-    data object InternalError : LocalizedMessage(R.string.internal_error)
+    sealed class LocalizedMessage(val stringRes: StringResource) : MangaCategoryEvent
+    data object InternalError : LocalizedMessage(MR.strings.internal_error)
 }
 
 sealed interface MangaCategoryScreenState {

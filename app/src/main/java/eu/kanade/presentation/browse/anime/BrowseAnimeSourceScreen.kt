@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.SnackbarDuration
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortableGrid
@@ -23,14 +21,16 @@ import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceCompactGr
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.formattedMessage
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.StateFlow
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.source.anime.model.StubAnimeSource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -63,7 +63,7 @@ fun BrowseAnimeSourceContent(
         if (animeList.itemCount > 0 && errorState != null && errorState is LoadState.Error) {
             val result = snackbarHostState.showSnackbar(
                 message = getErrorMessage(errorState),
-                actionLabel = context.getString(R.string.action_retry),
+                actionLabel = context.stringResource(MR.strings.action_retry),
                 duration = SnackbarDuration.Indefinite,
             )
             when (result) {
@@ -80,7 +80,7 @@ fun BrowseAnimeSourceContent(
             actions = if (source is LocalAnimeSource) {
                 persistentListOf(
                     EmptyScreenAction(
-                        stringResId = R.string.local_source_help_guide,
+                        stringRes = MR.strings.local_source_help_guide,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onLocalAnimeSourceHelpClick,
                     ),
@@ -88,17 +88,17 @@ fun BrowseAnimeSourceContent(
             } else {
                 persistentListOf(
                     EmptyScreenAction(
-                        stringResId = R.string.action_retry,
+                        stringRes = MR.strings.action_retry,
                         icon = Icons.Outlined.Refresh,
                         onClick = animeList::refresh,
                     ),
                     EmptyScreenAction(
-                        stringResId = R.string.action_open_in_web_view,
+                        stringRes = MR.strings.action_open_in_web_view,
                         icon = Icons.Outlined.Public,
                         onClick = onWebViewClick,
                     ),
                     EmptyScreenAction(
-                        stringResId = R.string.label_help,
+                        stringRes = MR.strings.label_help,
                         icon = Icons.AutoMirrored.Outlined.HelpOutline,
                         onClick = onHelpClick,
                     ),
@@ -161,7 +161,7 @@ internal fun MissingSourceScreen(
         },
     ) { paddingValues ->
         EmptyScreen(
-            message = stringResource(R.string.source_not_installed, source.toString()),
+            message = stringResource(MR.strings.source_not_installed, source.toString()),
             modifier = Modifier.padding(paddingValues),
         )
     }

@@ -29,7 +29,6 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.util.formattedMessage
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
@@ -55,6 +54,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.TriState
 import tachiyomi.core.preference.mapAsCheckboxState
@@ -86,6 +86,7 @@ import tachiyomi.domain.items.service.calculateChapterGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
@@ -367,8 +368,8 @@ class MangaScreenModel(
                 screenModelScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
-                        message = context.getString(R.string.delete_downloads_for_manga),
-                        actionLabel = context.getString(R.string.action_delete),
+                        message = context.stringResource(MR.strings.delete_downloads_for_manga),
+                        actionLabel = context.stringResource(MR.strings.action_delete),
                         withDismissAction = true,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
@@ -651,7 +652,7 @@ class MangaScreenModel(
             }
         } catch (e: Throwable) {
             val message = if (e is NoChaptersException) {
-                context.getString(R.string.no_chapters_error)
+                context.stringResource(MR.strings.no_chapters_error)
             } else {
                 logcat(LogPriority.ERROR, e)
                 with(context) { e.formattedMessage }
@@ -752,8 +753,8 @@ class MangaScreenModel(
             }
             screenModelScope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = context.getString(R.string.snack_add_to_manga_library),
-                    actionLabel = context.getString(R.string.action_add),
+                    message = context.stringResource(MR.strings.snack_add_to_manga_library),
+                    actionLabel = context.stringResource(MR.strings.action_add),
                     withDismissAction = true,
                 )
                 if (result == SnackbarResult.ActionPerformed && !isFavorited) {
@@ -979,7 +980,7 @@ class MangaScreenModel(
                 setMangaDefaultChapterFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.getString(R.string.chapter_settings_updated),
+                message = context.stringResource(MR.strings.chapter_settings_updated),
             )
         }
     }

@@ -7,6 +7,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadItemBinding
 import eu.kanade.tachiyomi.util.view.popupMenu
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 
 /**
  * Class used to hold the data of a download.
@@ -73,9 +75,9 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
      */
     fun notifyDownloadedPages() {
         binding.downloadProgressText.text = if (download.totalProgress == 0) {
-            view.context.getString(R.string.update_check_notification_download_in_progress)
+            view.context.stringResource(MR.strings.update_check_notification_download_in_progress)
         } else {
-            view.context.getString(R.string.episode_download_progress, download.progress)
+            view.context.stringResource(MR.strings.episode_download_progress, download.progress)
         }
     }
 

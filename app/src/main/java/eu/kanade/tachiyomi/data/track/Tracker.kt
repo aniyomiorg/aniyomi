@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.track
 import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+import dev.icerock.moko.resources.StringResource
 import kotlinx.collections.immutable.ImmutableList
 import okhttp3.OkHttpClient
 
@@ -24,8 +24,7 @@ interface Tracker {
     @ColorInt
     fun getLogoColor(): Int
 
-    @StringRes
-    fun getStatus(status: Int): Int?
+    fun getStatus(status: Int): StringResource?
 
     fun getCompletionStatus(): Int
 

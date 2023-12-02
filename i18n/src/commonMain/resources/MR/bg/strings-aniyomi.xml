@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Категории</string>
+    <string name="unlock_app">Отключете Тачийоми</string>
+    <string name="action_sort_last_manga_update">Последно обновяване</string>
+    <string name="action_show_manga">Покажи манга</string>
+    <string name="action_display_local_badge_manga">Локална манга</string>
+    <string name="pref_update_only_completely_read">С непрочетени глави</string>
+    <string name="pref_library_update_show_tab_badge">Покажи броя на непрочетените в иконата за ъпдейти</string>
+    <string name="default_manga_category">Категория по подразбиране</string>
+    <string name="pref_manga_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
+    <string name="untrusted_extension_message">Следното разширение имаше непотвърден сертификат и не беше активирано.
+\n
+\nЗлонамереното разширение може да види всичката информация за вход в системата на Tachiyomi или да компилира неблагонадежден код.
+\n
+\nПотвърждавайки този сертификат, вие приемате тези рискове.</string>
+    <string name="pref_category_delete_chapters">Изтрий глави</string>
+    <string name="pref_remove_after_marked_as_read">След маркиране като прочетено</string>
+    <string name="pref_remove_after_read">След прочитане автоматично изтрийте</string>
+    <string name="pref_remove_bookmarked_chapters">Позволи изтриване на отметнати глави</string>
+    <string name="pref_remove_exclude_categories_manga">Изключени категории</string>
+    <string name="pref_auto_update_manga_sync">Обнови прогреса след прочитане</string>
+    <string name="pref_clear_chapter_cache">Изчисти кеша на главите</string>
+    <string name="pref_auto_clear_chapter_cache">Изчистване на кеша на главата при затваряне на приложението</string>
+    <string name="pref_clear_manga_database">Изчисти базата данни</string>
+    <string name="pref_clear_manga_database_summary">Изтрий историята на манги, които не са запазени в библиотеката</string>
+    <string name="clear_database_confirmation">Сигурни ли сте\? Прочетените глави и напредъкът на манги, които не са в библиотеката Ви, ще бъдат изгубени</string>
+    <string name="pref_refresh_library_tracking_summary">Обновява статус, оценка и последно прочетена глава от услугите за проследяване</string>
+    <string name="pref_incognito_mode_summary">Не записва история, докато трае режимът</string>
+    <string name="manga_from_library">Манга от библиотеката</string>
+    <string name="snack_add_to_manga_library">Добавяне на мангата към библиотеката\?</string>
+    <string name="download_error">Грешка</string>
+    <string name="download_paused">На пауза</string>
+    <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>
+    <string name="dialog_with_checkbox_reset">Изчисти всички дати за тази манга</string>
+    <string name="download_insufficient_space">Главите не можаха да бъдат изтеглени поради недостатъчно място</string>
+    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Tachiyomi. Натиснете тук, за да научите повече.</string>
+    <string name="information_webview_required">WebView е необходим за Tachiyomi</string>
+    <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
+    <string name="channel_new_chapters_episodes">Нови глави</string>
+</resources>

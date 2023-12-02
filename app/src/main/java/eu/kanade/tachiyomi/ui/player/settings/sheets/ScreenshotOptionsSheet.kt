@@ -22,14 +22,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import java.io.InputStream
 
@@ -56,13 +56,13 @@ fun ScreenshotOptionsSheet(
             ) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.set_as_cover),
+                    title = stringResource(MR.strings.set_as_cover),
                     icon = Icons.Outlined.Photo,
                     onClick = { showSetCoverDialog = true },
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.action_share),
+                    title = stringResource(MR.strings.action_share),
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShare { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! }
@@ -71,7 +71,7 @@ fun ScreenshotOptionsSheet(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.action_save),
+                    title = stringResource(MR.strings.action_save),
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSave { screenModel.takeScreenshot(cachePath, showSubtitles.get())!! }
@@ -81,7 +81,7 @@ fun ScreenshotOptionsSheet(
             }
 
             screenModel.ToggleableRow(
-                textRes = R.string.screenshot_show_subs,
+                textRes = MR.strings.screenshot_show_subs,
                 paddingValues = PaddingValues(MaterialTheme.padding.medium),
                 isChecked = showSubtitles.collectAsState().value,
                 onClick = { screenModel.togglePreference { showSubtitles } },
@@ -92,7 +92,7 @@ fun ScreenshotOptionsSheet(
 
     if (showSetCoverDialog) {
         PlayerDialog(
-            titleRes = R.string.confirm_set_image_as_cover,
+            titleRes = MR.strings.confirm_set_image_as_cover,
             modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.padding.medium),
             onConfirmRequest = {
                 onSetAsCover {

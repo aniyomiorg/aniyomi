@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.CardColors
@@ -28,8 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,15 +33,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.common.io.Files.append
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import tachiyomi.domain.items.service.calculateChapterGap
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
@@ -61,13 +58,13 @@ fun ChapterTransition(
         when (transition) {
             is ChapterTransition.Prev -> {
                 TransitionText(
-                    topLabel = stringResource(R.string.transition_previous),
+                    topLabel = stringResource(MR.strings.transition_previous),
                     topChapter = goingToChapter,
                     topChapterDownloaded = goingToChapterDownloaded,
-                    bottomLabel = stringResource(R.string.transition_current),
+                    bottomLabel = stringResource(MR.strings.transition_current),
                     bottomChapter = currChapter,
                     bottomChapterDownloaded = currChapterDownloaded,
-                    fallbackLabel = stringResource(R.string.transition_no_previous),
+                    fallbackLabel = stringResource(MR.strings.transition_no_previous),
                     chapterGap = calculateChapterGap(
                         currChapter.toDomainChapter(),
                         goingToChapter?.toDomainChapter(),
@@ -76,13 +73,13 @@ fun ChapterTransition(
             }
             is ChapterTransition.Next -> {
                 TransitionText(
-                    topLabel = stringResource(R.string.transition_finished),
+                    topLabel = stringResource(MR.strings.transition_finished),
                     topChapter = currChapter,
                     topChapterDownloaded = currChapterDownloaded,
-                    bottomLabel = stringResource(R.string.transition_next),
+                    bottomLabel = stringResource(MR.strings.transition_next),
                     bottomChapter = goingToChapter,
                     bottomChapterDownloaded = goingToChapterDownloaded,
-                    fallbackLabel = stringResource(R.string.transition_no_next),
+                    fallbackLabel = stringResource(MR.strings.transition_no_next),
                     chapterGap = calculateChapterGap(
                         goingToChapter?.toDomainChapter(),
                         currChapter.toDomainChapter(),
@@ -201,7 +198,7 @@ private fun ChapterGapWarning(
 
             Text(
                 text = pluralStringResource(
-                    R.plurals.missing_chapters_warning,
+                    MR.plurals.missing_chapters_warning,
                     count = gapCount,
                     gapCount,
                 ),
@@ -258,7 +255,7 @@ private fun ChapterText(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.CheckCircle,
-                        contentDescription = stringResource(R.string.label_downloaded),
+                        contentDescription = stringResource(MR.strings.label_downloaded),
                     )
                 },
             ),

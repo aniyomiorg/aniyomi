@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch
 
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import uy.kohesive.injekt.api.get
 
 class GlobalAnimeSearchScreenModel(
     initialQuery: String = "",

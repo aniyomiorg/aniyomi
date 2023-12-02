@@ -1,14 +1,14 @@
 package tachiyomi.source.local.io.anime
 
-import java.io.File
+import com.hippo.unifile.UniFile
 
 expect class LocalAnimeSourceFileSystem {
 
-    fun getBaseDirectory(): File
+    fun getBaseDirectory(): UniFile?
 
-    fun getFilesInBaseDirectory(): List<File>
+    fun getFilesInBaseDirectory(): List<UniFile>
 
-    fun getAnimeDirectory(name: String): File?
+    fun getAnimeDirectory(name: String): UniFile?
 
-    fun getFilesInAnimeDirectory(name: String): List<File>
+    fun getFilesInAnimeDirectory(name: String): List<UniFile>
 }

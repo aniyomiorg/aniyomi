@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="lock_after_mins">
+        <item quantity="other">Sawise %1$s menit</item>
+    </plurals>
+    <plurals name="num_categories">
+        <item quantity="other">%d kategori</item>
+    </plurals>
+</resources>

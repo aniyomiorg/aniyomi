@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.coil
 
+import android.net.Uri
 import coil.ImageLoader
 import coil.decode.DataSource
 import coil.decode.ImageSource
@@ -10,6 +11,7 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.network.await
@@ -24,6 +26,7 @@ import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
 import okio.sink
+import okio.source
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaCover
@@ -71,8 +74,19 @@ class MangaCoverFetcher(
         return when (getResourceType(url)) {
             Type.URL -> httpLoader()
             Type.File -> fileLoader(File(url.substringAfter("file://")))
+            Type.URI -> uniFileLoader(url)
             null -> error("Invalid image")
         }
+    }
+
+    private fun uniFileLoader(urlString: String): FetchResult {
+        val uniFile = UniFile.fromUri(options.context, Uri.parse(urlString))!!
+        val tempFile = uniFile.openInputStream().source().buffer()
+        return SourceResult(
+            source = ImageSource(source = tempFile, context = options.context),
+            mimeType = "image/*",
+            dataSource = DataSource.DISK,
+        )
     }
 
     private fun fileLoader(file: File): FetchResult {
@@ -256,12 +270,13 @@ class MangaCoverFetcher(
             cover.isNullOrEmpty() -> null
             cover.startsWith("http", true) || cover.startsWith("Custom-", true) -> Type.URL
             cover.startsWith("/") || cover.startsWith("file://") -> Type.File
+            cover.startsWith("content") -> Type.URI
             else -> null
         }
     }
 
     private enum class Type {
-        File, URL
+        File, URL, URI
     }
 
     class MangaFactory(

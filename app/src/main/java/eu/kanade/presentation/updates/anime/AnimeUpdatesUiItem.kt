@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,13 +38,14 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 import java.util.concurrent.TimeUnit
 
@@ -63,7 +63,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
                 ),
         ) {
             Text(
-                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
+                text = stringResource(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }
@@ -111,7 +111,7 @@ fun LazyListScope.animeUpdatesUiItems(
                         .takeIf { !updatesItem.update.seen && it > 0L }
                         ?.let {
                             stringResource(
-                                R.string.episode_progress,
+                                MR.strings.episode_progress,
                                 formatProgress(it),
                                 formatProgress(updatesItem.update.totalSeconds),
                             )
@@ -199,7 +199,7 @@ fun AnimeUpdatesUiItem(
                 if (!update.seen) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(R.string.unread),
+                        contentDescription = stringResource(MR.strings.unread),
                         modifier = Modifier
                             .height(8.dp)
                             .padding(end = 4.dp),
@@ -209,7 +209,7 @@ fun AnimeUpdatesUiItem(
                 if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(R.string.action_filter_bookmarked),
+                        contentDescription = stringResource(MR.strings.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },

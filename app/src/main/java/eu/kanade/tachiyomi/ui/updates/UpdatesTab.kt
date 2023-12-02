@@ -6,7 +6,6 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -18,6 +17,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.updates.anime.animeUpdatesTab
 import eu.kanade.tachiyomi.ui.updates.manga.mangaUpdatesTab
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class UpdatesTab(
     private val fromMore: Boolean,
@@ -32,7 +33,7 @@ data class UpdatesTab(
             val index: UShort = if (fromMore) 5u else if (inMiddle) 2u else 1u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.label_recent_updates),
+                title = stringResource(MR.strings.label_recent_updates),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -45,7 +46,7 @@ data class UpdatesTab(
         val context = LocalContext.current
 
         TabbedScreen(
-            titleRes = R.string.label_recent_updates,
+            titleRes = MR.strings.label_recent_updates,
             tabs = persistentListOf(
                 animeUpdatesTab(context, fromMore),
                 mangaUpdatesTab(context, fromMore),

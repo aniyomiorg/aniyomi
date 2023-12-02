@@ -27,11 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,13 +38,14 @@ import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,7 +62,7 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
                 ),
         ) {
             Text(
-                text = stringResource(R.string.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
+                text = stringResource(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
                 fontStyle = FontStyle.Italic,
             )
         }
@@ -111,7 +110,7 @@ fun LazyListScope.mangaUpdatesUiItems(
                         .takeIf { !updatesItem.update.read && it > 0L }
                         ?.let {
                             stringResource(
-                                R.string.chapter_progress,
+                                MR.strings.chapter_progress,
                                 it + 1,
                             )
                         },
@@ -197,7 +196,7 @@ fun MangaUpdatesUiItem(
                 if (!update.read) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(R.string.unread),
+                        contentDescription = stringResource(MR.strings.unread),
                         modifier = Modifier
                             .height(8.dp)
                             .padding(end = 4.dp),
@@ -207,7 +206,7 @@ fun MangaUpdatesUiItem(
                 if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(R.string.action_filter_bookmarked),
+                        contentDescription = stringResource(MR.strings.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },

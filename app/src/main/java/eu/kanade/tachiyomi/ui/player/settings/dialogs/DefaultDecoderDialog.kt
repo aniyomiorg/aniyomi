@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.RadioItem
 
 @Composable
@@ -38,7 +38,7 @@ fun DefaultDecoderDialog(
     }
 
     PlayerDialog(
-        titleRes = R.string.player_hwdec_mode,
+        titleRes = MR.strings.player_hwdec_mode,
         modifier = Modifier.fillMaxWidth(fraction = 0.8F),
         onDismissRequest = onDismissRequest,
     ) {

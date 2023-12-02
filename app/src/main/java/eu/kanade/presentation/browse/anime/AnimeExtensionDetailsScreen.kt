@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
@@ -37,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,15 +48,16 @@ import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 
 @Composable
@@ -77,7 +76,7 @@ fun AnimeExtensionDetailsScreen(
     Scaffold(
         topBar = { scrollBehavior ->
             AppBar(
-                title = stringResource(R.string.label_extension_info),
+                title = stringResource(MR.strings.label_extension_info),
                 navigateUp = navigateUp,
                 actions = {
                     AppBarActions(
@@ -86,14 +85,14 @@ fun AnimeExtensionDetailsScreen(
                                 if (state.extension?.isUnofficial == false) {
                                     add(
                                         AppBar.Action(
-                                            title = stringResource(R.string.whats_new),
+                                            title = stringResource(MR.strings.whats_new),
                                             icon = Icons.Outlined.History,
                                             onClick = onClickWhatsNew,
                                         ),
                                     )
                                     add(
                                         AppBar.Action(
-                                            title = stringResource(R.string.action_faq_and_guides),
+                                            title = stringResource(MR.strings.action_faq_and_guides),
                                             icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                             onClick = onClickReadme,
                                         ),
@@ -102,15 +101,15 @@ fun AnimeExtensionDetailsScreen(
                                 addAll(
                                     listOf(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_enable_all),
+                                            title = stringResource(MR.strings.action_enable_all),
                                             onClick = onClickEnableAll,
                                         ),
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_disable_all),
+                                            title = stringResource(MR.strings.action_disable_all),
                                             onClick = onClickDisableAll,
                                         ),
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.pref_clear_cookies),
+                                            title = stringResource(MR.strings.pref_clear_cookies),
                                             onClick = onClickClearCookies,
                                         ),
                                     ),
@@ -125,7 +124,7 @@ fun AnimeExtensionDetailsScreen(
     ) { paddingValues ->
         if (state.extension == null) {
             EmptyScreen(
-                textResource = R.string.empty_screen,
+                stringRes = MR.strings.empty_screen,
                 modifier = Modifier.padding(paddingValues),
             )
             return@Scaffold
@@ -160,11 +159,11 @@ private fun AnimeExtensionDetails(
         when {
             extension.isUnofficial ->
                 item {
-                    WarningBanner(R.string.unofficial_anime_extension_message)
+                    WarningBanner(MR.strings.unofficial_anime_extension_message)
                 }
             extension.isObsolete ->
                 item {
-                    WarningBanner(R.string.obsolete_extension_message)
+                    WarningBanner(MR.strings.obsolete_extension_message)
                 }
         }
 
@@ -262,7 +261,7 @@ private fun DetailsHeader(
             InfoText(
                 modifier = Modifier.weight(1f),
                 primaryText = extension.versionName,
-                secondaryText = stringResource(R.string.ext_info_version),
+                secondaryText = stringResource(MR.strings.ext_info_version),
             )
 
             InfoDivider()
@@ -270,7 +269,7 @@ private fun DetailsHeader(
             InfoText(
                 modifier = Modifier.weight(if (extension.isNsfw) 1.5f else 1f),
                 primaryText = LocaleHelper.getSourceDisplayName(extension.lang, context),
-                secondaryText = stringResource(R.string.ext_info_language),
+                secondaryText = stringResource(MR.strings.ext_info_language),
             )
 
             if (extension.isNsfw) {
@@ -278,12 +277,12 @@ private fun DetailsHeader(
 
                 InfoText(
                     modifier = Modifier.weight(1f),
-                    primaryText = stringResource(R.string.ext_nsfw_short),
+                    primaryText = stringResource(MR.strings.ext_nsfw_short),
                     primaryTextStyle = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Medium,
                     ),
-                    secondaryText = stringResource(R.string.ext_info_age_rating),
+                    secondaryText = stringResource(MR.strings.ext_info_age_rating),
                     onClick = onClickAgeRating,
                 )
             }
@@ -302,7 +301,7 @@ private fun DetailsHeader(
                 modifier = Modifier.weight(1f),
                 onClick = onClickUninstall,
             ) {
-                Text(stringResource(R.string.ext_uninstall))
+                Text(stringResource(MR.strings.ext_uninstall))
             }
 
             if (onClickAppInfo != null) {
@@ -311,7 +310,7 @@ private fun DetailsHeader(
                     onClick = onClickAppInfo,
                 ) {
                     Text(
-                        text = stringResource(R.string.ext_app_info),
+                        text = stringResource(MR.strings.ext_app_info),
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
@@ -389,7 +388,7 @@ private fun SourceSwitchPreference(
                     IconButton(onClick = { onClickSourcePreferences(source.source.id) }) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
-                            contentDescription = stringResource(R.string.label_settings),
+                            contentDescription = stringResource(MR.strings.label_settings),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }

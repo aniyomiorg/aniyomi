@@ -1,31 +1,30 @@
 package tachiyomi.source.local.io.anime
 
-import tachiyomi.core.provider.FolderProvider
-import java.io.File
+import com.hippo.unifile.UniFile
+import tachiyomi.domain.storage.service.StorageManager
 
 actual class LocalAnimeSourceFileSystem(
-    private val folderProvider: FolderProvider,
+    private val storageManager: StorageManager,
 ) {
 
-    actual fun getBaseDirectory(): File {
-        return File(folderProvider.directory(), "localanime")
+    actual fun getBaseDirectory(): UniFile? {
+        return storageManager.getLocalAnimeSourceDirectory()
     }
 
-    actual fun getFilesInBaseDirectory(): List<File> {
-        return getBaseDirectory().listFiles().orEmpty().toList()
+    actual fun getFilesInBaseDirectory(): List<UniFile> {
+        return getBaseDirectory()?.listFiles().orEmpty().toList()
     }
 
-    actual fun getAnimeDirectory(name: String): File? {
-        return getFilesInBaseDirectory()
-            // Get the first animeDir or null
-            .firstOrNull { it.isDirectory && it.name == name }
+    actual fun getAnimeDirectory(name: String): UniFile? {
+        return getBaseDirectory()
+            ?.findFile(name, true)
+            ?.takeIf { it.isDirectory }
     }
 
-    actual fun getFilesInAnimeDirectory(name: String): List<File> {
-        return getFilesInBaseDirectory()
-            // Filter out ones that are not related to the anime and is not a directory
-            .filter { it.isDirectory && it.name == name }
-            // Get all the files inside the filtered folders
-            .flatMap { it.listFiles().orEmpty().toList() }
+    actual fun getFilesInAnimeDirectory(name: String): List<UniFile> {
+        return getBaseDirectory()
+            ?.findFile(name, true)
+            ?.takeIf { it.isDirectory }
+            ?.listFiles().orEmpty().toList()
     }
 }
