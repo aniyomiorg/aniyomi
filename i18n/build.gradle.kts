@@ -23,7 +23,7 @@ android {
 
     sourceSets {
         named("main") {
-            res.srcDirs("src/commonMain/resources", "src/aniyomiMain/resources")
+            res.srcDir("src/commonMain/resources")
         }
     }
 
@@ -38,17 +38,10 @@ multiplatformResources {
 
 tasks {
     val localesConfigTask = registerLocalesConfigTask(project)
-
-    // Duplicating Hebrew string assets due to some locale code issues on different devices
-    val copyHebrewStrings by registering(Copy::class) {
-        from("./src/main/res/values-he")
-        into("./src/main/res/values-iw")
-        include("**/*")
-    }
-
     preBuild {
         dependsOn(localesConfigTask)
     }
+
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.freeCompilerArgs += listOf(
             "-Xexpect-actual-classes",
