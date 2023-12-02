@@ -124,7 +124,7 @@ actual class LocalAnimeSource(
 
                         // Try to find the cover
                         coverManager.find(animeDir.name.orEmpty())?.let {
-                            thumbnail_url = it.filePath
+                            thumbnail_url = it.uri.toString()
                         }
                     }
                 }
@@ -154,7 +154,7 @@ actual class LocalAnimeSource(
     // Anime details related
     override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {
         coverManager.find(anime.url)?.let {
-            anime.thumbnail_url = it.filePath
+            anime.thumbnail_url = it.uri.toString()
         }
 
         val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url)
