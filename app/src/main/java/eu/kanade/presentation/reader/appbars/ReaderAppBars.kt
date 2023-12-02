@@ -196,7 +196,7 @@ fun ReaderAppBars(
                     onClickWebView = onOpenInWebView,
                     onClickShare = onShare,
                     onClickPageLayout = onClickPageLayout,
-                    onClickShiftPage = onClickShiftPage
+                    onClickShiftPage = onClickShiftPage,
                 )
             }
         }

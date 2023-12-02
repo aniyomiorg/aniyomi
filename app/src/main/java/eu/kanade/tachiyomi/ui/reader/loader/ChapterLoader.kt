@@ -36,7 +36,7 @@ class ChapterLoader(
      * Assigns the chapter's page loader and loads the its pages. Returns immediately if the chapter
      * is already loaded.
      */
-    suspend fun loadChapter(chapter: ReaderChapter /* SY --> */, page: Int? = null/* SY <-- */) {
+    suspend fun loadChapter(chapter: ReaderChapter, page: Int? = null) {
         if (chapterIsReady(chapter)) {
             return
         }

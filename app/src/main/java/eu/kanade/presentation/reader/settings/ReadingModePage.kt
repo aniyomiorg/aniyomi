@@ -103,7 +103,7 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
 
     // SY -->
     val pageLayout by screenModel.preferences.pageLayout().collectAsState()
-    SettingsChipRow(R.string.page_layout) {
+    SettingsChipRow(MR.strings.page_layout) {
         ReaderPreferences.PageLayouts.mapIndexed { index, it ->
             FilterChip(
                 selected = pageLayout == index,
