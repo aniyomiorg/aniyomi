@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader.setting
 
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
 
@@ -165,7 +166,17 @@ class ReaderPreferences(
         false,
     )
 
+    // J2K -->
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
+    // J2K <--
+
+    // SY -->
+    fun readerBottomButtons() = preferenceStore.getStringSet(
+        "reader_bottom_buttons",
+        ReaderBottomButton.BUTTONS_DEFAULTS,
+    )
+    fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
+    // SY <--
 
     // endregion
 
@@ -222,5 +233,13 @@ class ReaderPreferences(
             R.string.zoom_start_right,
             R.string.zoom_start_center,
         )
+
+        // SY -->
+        val PageLayouts = listOf(
+            R.string.single_page,
+            R.string.double_pages,
+            R.string.automatic_orientation,
+        )
+        // SY <--
     }
 }

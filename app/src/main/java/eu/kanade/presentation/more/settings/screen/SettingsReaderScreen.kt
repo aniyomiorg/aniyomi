@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
@@ -75,6 +76,9 @@ object SettingsReaderScreen : SearchableSettings {
             getWebtoonGroup(readerPreferences = readerPref),
             getNavigationGroup(readerPreferences = readerPref),
             getActionsGroup(readerPreferences = readerPref),
+            // SY -->
+            getForkSettingsGroup(readerPreferences = readerPref),
+            // SY <--
         )
     }
 
@@ -412,4 +416,30 @@ object SettingsReaderScreen : SearchableSettings {
             ),
         )
     }
+
+    // SY -->
+    @Composable
+    private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_fork),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    pref = readerPreferences.readerBottomButtons(),
+                    title = stringResource(R.string.reader_bottom_buttons),
+                    subtitle = stringResource(R.string.reader_bottom_buttons_summary),
+                    entries = ReaderBottomButton.entries
+                        .associate { it.value to stringResource(it.stringRes) },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = readerPreferences.pageLayout(),
+                    title = stringResource(R.string.page_layout),
+                    subtitle = stringResource(R.string.automatic_can_still_switch),
+                    entries = ReaderPreferences.PageLayouts
+                        .mapIndexed { index, it -> index + 1 to stringResource(it) }
+                        .toMap(),
+                ),
+            ),
+        )
+    }
+    // SY <--
 }
