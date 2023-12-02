@@ -15,6 +15,11 @@ shortcutHelper.setFilePath("./shortcuts.xml")
 val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("/home/joel/.android/debug.keystore")
+        }
+    }
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
@@ -171,7 +176,6 @@ dependencies {
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
-    implementation(compose.accompanist.permissions)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
 

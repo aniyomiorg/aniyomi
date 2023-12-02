@@ -4,6 +4,7 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import tachiyomi.core.storage.nameWithoutExtension
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import java.io.File
@@ -16,40 +17,32 @@ actual class LocalAnimeCoverManager(
     private val fileSystem: LocalAnimeSourceFileSystem,
 ) {
 
-    actual fun find(animeUrl: String): File? {
+    actual fun find(animeUrl: String): UniFile? {
         return fileSystem.getFilesInAnimeDirectory(animeUrl)
             // Get all file whose names start with 'cover'
             .filter { it.isFile && it.nameWithoutExtension.equals("cover", ignoreCase = true) }
             // Get the first actual image
-            .firstOrNull {
-                ImageUtil.isImage(it.name) { it.inputStream() }
-            }
+            .firstOrNull { ImageUtil.isImage(it.name) { it.openInputStream() } }
     }
 
-    actual fun update(anime: SAnime, inputStream: InputStream): File? {
+    actual fun update(anime: SAnime, inputStream: InputStream): UniFile? {
         val directory = fileSystem.getAnimeDirectory(anime.url)
         if (directory == null) {
             inputStream.close()
             return null
         }
 
-        var targetFile = find(anime.url)
-        if (targetFile == null) {
-            targetFile = File(directory.absolutePath, DEFAULT_COVER_NAME)
-            targetFile.createNewFile()
-        }
+        val targetFile = find(anime.url) ?: directory.createFile(DEFAULT_COVER_NAME)!!
 
-        // It might not exist at this point
-        targetFile.parentFile?.mkdirs()
         inputStream.use { input ->
-            targetFile.outputStream().use { output ->
+            targetFile.openOutputStream().use { output ->
                 input.copyTo(output)
             }
         }
 
-        DiskUtil.createNoMediaFile(UniFile.fromFile(directory), context)
+        DiskUtil.createNoMediaFile(directory, context)
 
-        anime.thumbnail_url = targetFile.absolutePath
+        anime.thumbnail_url = targetFile.uri.toString()
         return targetFile
     }
 }

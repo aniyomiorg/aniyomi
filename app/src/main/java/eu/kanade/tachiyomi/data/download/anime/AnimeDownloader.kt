@@ -45,6 +45,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okio.Buffer
 import rx.subjects.PublishSubject
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.extension
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
@@ -372,11 +373,8 @@ class AnimeDownloader(
             return
         }
 
-        val episodeDirname = provider.getEpisodeDirName(
-            download.episode.name,
-            download.episode.scanlator,
-        )
-        val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
+        val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
+        val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)!!
         notifier.onProgressChange(download)
 
         val video = if (download.video == null) {
@@ -396,7 +394,7 @@ class AnimeDownloader(
         if (download.video!!.bytesDownloaded == 0L) {
             // Delete all temporary (unfinished) files
             tmpDir.listFiles()
-                ?.filter { it.name!!.endsWith(".tmp") }
+                ?.filter { it.extension == ".tmp" }
                 ?.forEach { it.delete() }
         }
 
@@ -679,7 +677,7 @@ class AnimeDownloader(
             return ffmpegDownload(video, download, tmpDir, filename)
         } else {
             val response = download.source.getVideo(video)
-            val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
+            val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
 
             // Write to file with pause/resume capability
             try {
@@ -732,14 +730,14 @@ class AnimeDownloader(
         video.progress = 0
 
         try {
-            val file = tmpDir.createFile("$filename.mp4")
+            val file = tmpDir.createFile("$filename.mp4")!!
 
             // TODO: support other file formats!!
             // start download with intent
             val pm = context.packageManager
             val pkgName = preferences.externalDownloaderSelection().get()
             val intent: Intent
-            if (!pkgName.isNullOrEmpty()) {
+            if (pkgName.isNotEmpty()) {
                 intent = pm.getLaunchIntentForPackage(pkgName) ?: throw Exception(
                     "Launch intent not found",
                 )
@@ -782,7 +780,7 @@ class AnimeDownloader(
                         }
                         file.delete()
                         tmpDir.delete()
-                        queueState.value.find { Anime -> Anime.video == video }?.let { download ->
+                        queueState.value.find { anime -> anime.video == video }?.let { download ->
                             download.status = AnimeDownload.State.DOWNLOADED
                             // Delete successful downloads from queue
                             if (download.status == AnimeDownload.State.DOWNLOADED) {
@@ -818,7 +816,7 @@ class AnimeDownloader(
      * @param filename the filename of the video.
      */
     private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): UniFile {
-        val tmpFile = tmpDir.createFile("$filename.tmp")
+        val tmpFile = tmpDir.createFile("$filename.tmp")!!
         cacheFile.inputStream().use { input ->
             tmpFile.openOutputStream().use { output ->
                 input.copyTo(output)
@@ -847,7 +845,7 @@ class AnimeDownloader(
         dirname: String,
     ) {
         // Ensure that the episode folder has the full video
-        val downloadedVideo = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
+        val downloadedVideo = tmpDir.listFiles().orEmpty().filterNot { it.extension == ".tmp" }
 
         download.status = if (downloadedVideo.size == 1) {
             // Only rename the directory if it's downloaded

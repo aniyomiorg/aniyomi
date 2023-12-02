@@ -12,7 +12,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.provider.AndroidStorageFolderProvider
+import tachiyomi.core.storage.AndroidStorageFolderProvider
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.library.service.LibraryPreferences

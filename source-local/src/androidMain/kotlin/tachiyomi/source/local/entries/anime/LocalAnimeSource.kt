@@ -1,6 +1,7 @@
 package tachiyomi.source.local.entries.anime
 
 import android.content.Context
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
@@ -9,7 +10,10 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
+import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -18,6 +22,8 @@ import rx.Observable
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
+import tachiyomi.core.storage.extension
+import tachiyomi.core.storage.nameWithoutExtension
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
@@ -60,18 +66,22 @@ actual class LocalAnimeSource(
 
     override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
 
-    override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage {
-        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
-        val lastModifiedLimit by
-            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
+    override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage = withIOContext {
+        val lastModifiedLimit = if (filters === LATEST_FILTERS) {
+            System.currentTimeMillis() - LATEST_THRESHOLD
+        } else {
+            0L
+        }
 
-        var animeDirs = baseDirFiles
+        var animeDirs = fileSystem.getFilesInBaseDirectory()
             // Filter out files that are hidden and is not a folder
-            .filter { it.isDirectory && !it.name.startsWith('.') }
+            .filter { it.isDirectory && !it.name.orEmpty().startsWith('.') }
             .distinctBy { it.name }
-            .filter { // Filter by query or last modified
-                if (lastModifiedLimit == 0L) {
-                    it.name.contains(query, ignoreCase = true)
+            .filter {
+                if (lastModifiedLimit == 0L && query.isBlank()) {
+                    true
+                } else if (lastModifiedLimit == 0L) {
+                    it.name.orEmpty().contains(query, ignoreCase = true)
                 } else {
                     it.lastModified() >= lastModifiedLimit
                 }
@@ -81,21 +91,20 @@ actual class LocalAnimeSource(
             when (filter) {
                 is AnimeOrderBy.Popular -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() })
                     } else {
                         animeDirs.sortedWith(
-                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() },
                         )
                     }
                 }
                 is AnimeOrderBy.Latest -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedBy(File::lastModified)
+                        animeDirs.sortedBy(UniFile::lastModified)
                     } else {
-                        animeDirs.sortedByDescending(File::lastModified)
+                        animeDirs.sortedByDescending(UniFile::lastModified)
                     }
                 }
-
                 else -> {
                     /* Do nothing */
                 }
@@ -103,37 +112,23 @@ actual class LocalAnimeSource(
         }
 
         // Transform animeDirs to list of SAnime
-        val animes = animeDirs.map { animeDir ->
-            SAnime.create().apply {
-                title = animeDir.name
-                url = animeDir.name
+        val animes = animeDirs
+            .map { animeDir ->
+                async {
+                    SAnime.create().apply {
+                        title = animeDir.name.orEmpty()
+                        url = animeDir.name.orEmpty()
 
-                // Try to find the cover
-                coverManager.find(animeDir.name)
-                    ?.takeIf(File::exists)
-                    ?.let { thumbnail_url = it.absolutePath }
-            }
-        }
-
-        // Fetch episodes of all the anime
-        animes.forEach { anime ->
-            runBlocking {
-                val episodes = getEpisodeList(anime)
-                if (episodes.isNotEmpty()) {
-                    val episode = episodes.last()
-                    // Copy the cover from the first episode found if not available
-                    if (anime.thumbnail_url == null) {
-                        try {
-                            updateCoverFromVideo(episode, anime)
-                        } catch (e: Exception) {
-                            logcat(LogPriority.ERROR) { "Couldn't extract thumbnail from video." }
+                        // Try to find the cover
+                        coverManager.find(animeDir.name.orEmpty())?.let {
+                            thumbnail_url = it.filePath
                         }
                     }
                 }
             }
-        }
+            .awaitAll()
 
-        return AnimesPage(animes.toList(), false)
+        AnimesPage(animes.toList(), false)
     }
 
     // Old fetch functions
@@ -148,86 +143,23 @@ actual class LocalAnimeSource(
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
-        val baseDirFiles = fileSystem.getFilesInBaseDirectory()
-        val lastModifiedLimit by
-            lazy { if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L }
-        var animeDirs = baseDirFiles
-            // Filter out files that are hidden and is not a folder
-            .filter { it.isDirectory && !it.name.startsWith('.') }
-            .distinctBy { it.name }
-            .filter { // Filter by query or last modified
-                if (lastModifiedLimit == 0L) {
-                    it.name.contains(query, ignoreCase = true)
-                } else {
-                    it.lastModified() >= lastModifiedLimit
-                }
-            }
-        filters.forEach { filter ->
-            when (filter) {
-                is AnimeOrderBy.Popular -> {
-                    animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
-                    } else {
-                        animeDirs.sortedWith(
-                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
-                        )
-                    }
-                }
-                is AnimeOrderBy.Latest -> {
-                    animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedBy(File::lastModified)
-                    } else {
-                        animeDirs.sortedByDescending(File::lastModified)
-                    }
-                }
-                else -> {
-                    /* Do nothing */
-                }
-            }
+        return runBlocking {
+            Observable.just(getSearchAnime(page, query, filters))
         }
-        // Transform animeDirs to list of SAnime
-        val animes = animeDirs.map { animeDir ->
-            SAnime.create().apply {
-                title = animeDir.name
-                url = animeDir.name
-                // Try to find the cover
-                coverManager.find(animeDir.name)
-                    ?.takeIf(File::exists)
-                    ?.let { thumbnail_url = it.absolutePath }
-            }
-        }
-        // Fetch episodes of all the anime
-        animes.forEach { anime ->
-            runBlocking {
-                val episodes = getEpisodeList(anime)
-                if (episodes.isNotEmpty()) {
-                    val episode = episodes.last()
-                    // Copy the cover from the first episode found if not available
-                    if (anime.thumbnail_url == null) {
-                        try {
-                            updateCoverFromVideo(episode, anime)
-                        } catch (e: Exception) {
-                            logcat(LogPriority.ERROR) { "Couldn't extract thumbnail from video." }
-                        }
-                    }
-                }
-            }
-        }
-        return Observable.just(AnimesPage(animes.toList(), false))
     }
 
     // Anime details related
     override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {
         coverManager.find(anime.url)?.let {
-            anime.thumbnail_url = it.absolutePath
+            anime.thumbnail_url = it.filePath
         }
 
-        val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url).toList()
+        val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url)
 
         animeDirFiles
             .firstOrNull { it.extension == "json" && it.nameWithoutExtension == "details" }
             ?.let { file ->
-                json.decodeFromStream<AnimeDetails>(file.inputStream()).run {
+                json.decodeFromStream<AnimeDetails>(file.openInputStream()).run {
                     title?.let { anime.title = it }
                     author?.let { anime.author = it }
                     artist?.let { anime.artist = it }
@@ -241,27 +173,23 @@ actual class LocalAnimeSource(
     }
 
     // Episodes
-    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
+    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> = withIOContext {
         val episodesData = fileSystem.getFilesInAnimeDirectory(anime.url)
             .firstOrNull {
                 it.extension == "json" && it.nameWithoutExtension == "episodes"
             }?.let { file ->
                 runCatching {
-                    json.decodeFromStream<List<EpisodeDetails>>(file.inputStream())
+                    json.decodeFromStream<List<EpisodeDetails>>(file.openInputStream())
                 }.getOrNull()
             }
 
-        return fileSystem.getFilesInAnimeDirectory(anime.url)
+        val episodes = fileSystem.getFilesInAnimeDirectory(anime.url)
             // Only keep supported formats
-            .filter { it.isDirectory || ArchiveAnime.isSupported(it) }
+            .filter { ArchiveAnime.isSupported(it) }
             .map { episodeFile ->
                 SEpisode.create().apply {
-                    url = episodeFile.absolutePath
-                    name = if (episodeFile.isDirectory) {
-                        episodeFile.name
-                    } else {
-                        episodeFile.nameWithoutExtension
-                    }
+                    url = "${anime.url}/${episodeFile.name}"
+                    name = episodeFile.nameWithoutExtension.orEmpty()
                     date_upload = episodeFile.lastModified()
 
                     val episodeNumber = EpisodeRecognition.parseEpisodeNumber(
@@ -285,7 +213,19 @@ actual class LocalAnimeSource(
                 val e = e2.episode_number.compareTo(e1.episode_number)
                 if (e == 0) e2.name.compareToCaseInsensitiveNaturalOrder(e1.name) else e
             }
-            .toList()
+
+        // Generate the cover from the first episode found if not available
+        if (anime.thumbnail_url == null) {
+            try {
+                episodes.lastOrNull()?.let { episode ->
+                    updateCoverFromVideo(episode, anime)
+                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Couldn't extract thumbnail from video: $e" }
+            }
+        }
+
+        episodes
     }
 
     private fun parseDate(isoDate: String): Long {
@@ -305,11 +245,17 @@ actual class LocalAnimeSource(
     )
 
     private fun updateCoverFromVideo(episode: SEpisode, anime: SAnime) {
-        val baseDirFiles = getBaseDirectoryFiles()
-        val animeDir = getAnimeDir(anime.url, baseDirFiles) ?: return
-        val coverPath = "${animeDir.absolutePath}/$DEFAULT_COVER_NAME"
+        val tempFile = File.createTempFile(
+            "tmp_",
+            anime.title + DEFAULT_COVER_NAME,
+        )
+        val outFile = tempFile.path
 
-        val episodeFilename = { episode.url.toFFmpegString(context) }
+        val episodeName = episode.url.split('/', limit = 2).last()
+        val animeDir = fileSystem.getAnimeDirectory(anime.url)!!
+        val episodeFile = animeDir.findFile(episodeName)!!
+        val episodeFilename = { episodeFile.toFFmpegString(context) }
+
         val ffProbe = com.arthenica.ffmpegkit.FFprobeKit.execute(
             "-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"${episodeFilename()}\"",
         )
@@ -317,31 +263,12 @@ actual class LocalAnimeSource(
         val second = duration.toInt() / 2
 
         com.arthenica.ffmpegkit.FFmpegKit.execute(
-            "-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$coverPath\" -y",
+            "-ss $second -i \"${episodeFilename()}\" -frames:v 1 -update true \"$outFile\" -y",
         )
 
-        if (File(coverPath).exists()) {
-            anime.thumbnail_url = coverPath
+        if (tempFile.length() > 0L) {
+            coverManager.update(anime, tempFile.inputStream())
         }
-    }
-
-    private fun getBaseDirectoryFiles(): List<File> {
-        val baseDir = fileSystem.getBaseDirectory()
-
-        fun getAllFiles(dir: File, accumulator: MutableList<File>) {
-            dir.listFiles()?.forEach { file ->
-                if (file.isDirectory) {
-                    getAllFiles(file, accumulator)
-                } else {
-                    accumulator.add(file)
-                }
-            }
-        }
-
-        val allFiles = mutableListOf<File>()
-        getAllFiles(baseDir, allFiles)
-
-        return allFiles
     }
 
     companion object {
@@ -350,12 +277,6 @@ actual class LocalAnimeSource(
 
         private const val DEFAULT_COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
-
-        private fun getAnimeDir(animeUrl: String, baseDirsFile: List<File>): File? {
-            return baseDirsFile
-                // Get the first animeDir or null
-                .firstOrNull { it.isDirectory && it.name == animeUrl }
-        }
     }
 }
 

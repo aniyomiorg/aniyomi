@@ -14,7 +14,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.TabbedScreen
-import eu.kanade.presentation.permissions.PermissionRequestHelper
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
@@ -74,9 +73,6 @@ data class HistoriesTab(
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true
         }
-
-        // For local source
-        PermissionRequestHelper.requestStoragePermission()
     }
 }
 
