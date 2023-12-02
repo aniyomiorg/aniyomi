@@ -40,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -51,13 +50,11 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
@@ -69,7 +66,9 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -173,7 +172,7 @@ fun EpisodeOptionsDialog(
         )
 
         Text(
-            text = stringResource(R.string.choose_video_quality),
+            text = stringResource(MR.strings.choose_video_quality),
             modifier = Modifier.padding(horizontal = TabbedDialogPaddings.Horizontal),
             fontStyle = FontStyle.Italic,
             style = MaterialTheme.typography.bodyMedium,
@@ -210,7 +209,7 @@ private fun VideoList(
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val copiedString = stringResource(R.string.copied_video_link_to_clipboard)
+    val copiedString = stringResource(MR.strings.copied_video_link_to_clipboard)
 
     var showAllQualities by remember { mutableStateOf(false) }
     var selectedVideo by remember { mutableStateOf(videoList.first()) }
@@ -295,13 +294,13 @@ private fun QualityOptions(
 
     Column {
         ClickableRow(
-            text = stringResource(R.string.copy),
+            text = stringResource(MR.strings.copy),
             icon = Icons.Outlined.ContentCopy,
             onClick = { onCopyClicked() },
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_start_download_internally),
+            text = stringResource(MR.strings.action_start_download_internally),
             icon = Icons.Outlined.Download,
             onClick = {
                 onDownloadClicked()
@@ -310,7 +309,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_start_download_externally),
+            text = stringResource(MR.strings.action_start_download_externally),
             icon = Icons.Outlined.SystemUpdateAlt,
             onClick = {
                 onExtDownloadClicked()
@@ -319,7 +318,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(R.string.action_play_externally),
+            text = stringResource(MR.strings.action_play_externally),
             icon = Icons.Outlined.OpenInNew,
             onClick = {
                 onExtPlayerClicked()

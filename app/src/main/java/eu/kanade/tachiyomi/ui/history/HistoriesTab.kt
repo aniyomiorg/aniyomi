@@ -8,7 +8,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -25,6 +24,8 @@ import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.manga.mangaHistoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class HistoriesTab(
     private val fromMore: Boolean,
@@ -39,7 +40,7 @@ data class HistoriesTab(
             val index: UShort = if (fromMore) 5u else 2u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.history),
+                title = stringResource(MR.strings.history),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -59,7 +60,7 @@ data class HistoriesTab(
         val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
 
         TabbedScreen(
-            titleRes = R.string.label_recent_manga,
+            titleRes = MR.strings.label_recent_manga,
             tabs = persistentListOf(
                 animeHistoryTab(context, fromMore, preferences),
                 mangaHistoryTab(context, fromMore, preferences),

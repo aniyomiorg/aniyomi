@@ -8,7 +8,6 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -23,7 +22,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -51,13 +49,16 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -74,9 +75,9 @@ object AnimeLibraryTab : Tab() {
         @Composable
         get() {
             val title = if (fromMore) {
-                R.string.label_library
+                MR.strings.label_library
             } else {
-                R.string.label_anime_library
+                MR.strings.label_anime_library
             }
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(
@@ -110,8 +111,8 @@ object AnimeLibraryTab : Tab() {
         val onClickRefresh: (Category?) -> Boolean = { category ->
             val started = AnimeLibraryUpdateJob.startNow(context, category)
             scope.launch {
-                val msgRes = if (started) R.string.updating_category else R.string.update_already_running
-                snackbarHostState.showSnackbar(context.getString(msgRes))
+                val msgRes = if (started) MR.strings.updating_category else MR.strings.update_already_running
+                snackbarHostState.showSnackbar(context.stringResource(msgRes))
             }
             started
         }
@@ -123,10 +124,10 @@ object AnimeLibraryTab : Tab() {
         }
 
         val defaultTitle = if (fromMore) {
-            stringResource(R.string.label_library)
+            stringResource(MR.strings.label_library)
         } else {
             stringResource(
-                R.string.label_anime_library,
+                MR.strings.label_anime_library,
             )
         }
 
@@ -134,7 +135,7 @@ object AnimeLibraryTab : Tab() {
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
                     defaultTitle = defaultTitle,
-                    defaultCategoryTitle = stringResource(R.string.label_default),
+                    defaultCategoryTitle = stringResource(MR.strings.label_default),
                     page = screenModel.activeCategoryIndex,
                 )
                 val tabVisible = state.showCategoryTabs && state.categories.size > 1
@@ -163,7 +164,7 @@ object AnimeLibraryTab : Tab() {
                                 navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
                                 snackbarHostState.showSnackbar(
-                                    context.getString(R.string.information_no_entries_found),
+                                    context.stringResource(MR.strings.information_no_entries_found),
                                 )
                             }
                         }
@@ -192,11 +193,11 @@ object AnimeLibraryTab : Tab() {
                 state.searchQuery.isNullOrEmpty() && !state.hasActiveFilters && state.isLibraryEmpty -> {
                     val handler = LocalUriHandler.current
                     EmptyScreen(
-                        textResource = R.string.information_empty_library,
+                        stringRes = MR.strings.information_empty_library,
                         modifier = Modifier.padding(contentPadding),
                         actions = persistentListOf(
                             EmptyScreenAction(
-                                stringResId = R.string.getting_started_guide,
+                                stringRes = MR.strings.getting_started_guide,
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
                                 onClick = {
                                     handler.openUri(

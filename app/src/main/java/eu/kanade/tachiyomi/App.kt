@@ -59,7 +59,9 @@ import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
 import tachiyomi.presentation.widget.entries.manga.MangaWidgetManager
 import uy.kohesive.injekt.Injekt
@@ -112,8 +114,8 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                         Notifications.ID_INCOGNITO_MODE,
                         Notifications.CHANNEL_INCOGNITO_MODE,
                     ) {
-                        setContentTitle(getString(R.string.pref_incognito_mode))
-                        setContentText(getString(R.string.notification_incognito_text))
+                        setContentTitle(stringResource(MR.strings.pref_incognito_mode))
+                        setContentText(stringResource(MR.strings.notification_incognito_text))
                         setSmallIcon(R.drawable.ic_glasses_24dp)
                         setOngoing(true)
 

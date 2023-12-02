@@ -14,15 +14,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.AdaptiveSheet
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PlayerStatsPage
 import `is`.xyz.mpv.MPVLib
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
@@ -75,19 +75,19 @@ fun PlayerSettingsSheet(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             Text(
-                text = stringResource(id = R.string.settings_dialog_header),
+                text = stringResource(MR.strings.settings_dialog_header),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
             )
 
             screenModel.ToggleableRow(
-                textRes = R.string.enable_volume_brightness_gestures,
+                textRes = MR.strings.enable_volume_brightness_gestures,
                 isChecked = verticalGesture.collectAsState().value,
                 onClick = { screenModel.togglePreference { verticalGesture } },
             )
 
             screenModel.ToggleableRow(
-                textRes = R.string.enable_horizontal_seek_gesture,
+                textRes = MR.strings.enable_horizontal_seek_gesture,
                 isChecked = horizontalGesture.collectAsState().value,
                 onClick = { screenModel.togglePreference { horizontalGesture } },
             )
@@ -101,7 +101,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = stringResource(id = R.string.player_hwdec_mode),
+                    text = stringResource(MR.strings.player_hwdec_mode),
                     style = MaterialTheme.typography.titleSmall,
                 )
 
@@ -126,7 +126,7 @@ fun PlayerSettingsSheet(
                 ),
             ) {
                 Text(
-                    text = stringResource(id = R.string.toggle_player_statistics_page),
+                    text = stringResource(MR.strings.toggle_player_statistics_page),
                     style = MaterialTheme.typography.titleSmall,
                 )
 

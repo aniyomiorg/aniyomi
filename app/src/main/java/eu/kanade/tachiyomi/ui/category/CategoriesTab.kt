@@ -6,7 +6,6 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -23,6 +22,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class CategoriesTab(
     private val isManga: Boolean = false,
@@ -35,7 +36,7 @@ data class CategoriesTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 7u,
-                title = stringResource(R.string.general_categories),
+                title = stringResource(MR.strings.general_categories),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -48,7 +49,7 @@ data class CategoriesTab(
         val mangaCategoryScreenModel = rememberScreenModel { MangaCategoryScreenModel() }
 
         TabbedScreen(
-            titleRes = R.string.general_categories,
+            titleRes = MR.strings.general_categories,
             tabs = persistentListOf(
                 animeCategoryTab(),
                 mangaCategoryTab(),

@@ -26,18 +26,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import java.io.File
 
 @Composable
@@ -52,11 +53,11 @@ fun StreamsCatalogSheet(
     onDismissRequest: () -> Unit,
 ) {
     val tabTitles = persistentListOf(
-        stringResource(id = R.string.subtitle_dialog_header),
-        stringResource(id = R.string.audio_dialog_header),
+        stringResource(MR.strings.subtitle_dialog_header),
+        stringResource(MR.strings.audio_dialog_header),
     )
     if (isEpisodeOnline == true) {
-        tabTitles.add(0, stringResource(id = R.string.quality_dialog_header))
+        tabTitles.add(0, stringResource(MR.strings.quality_dialog_header))
     }
 
     TabbedDialog(
@@ -127,12 +128,12 @@ private fun StreamsPageBuilder(
                     return if (externalTrackCode == "audio") {
                         Intent.createChooser(
                             intent,
-                            context.getString(R.string.player_add_external_audio_intent),
+                            context.stringResource(MR.strings.player_add_external_audio_intent),
                         )
                     } else {
                         Intent.createChooser(
                             intent,
-                            context.getString(R.string.player_add_external_subtitles_intent),
+                            context.stringResource(MR.strings.player_add_external_subtitles_intent),
                         )
                     }
                 }
@@ -156,9 +157,9 @@ private fun StreamsPageBuilder(
 
         val addTrackRes =
             if (externalTrackCode == "sub") {
-                R.string.player_add_external_subtitles
+                MR.strings.player_add_external_subtitles
             } else {
-                R.string.player_add_external_audio
+                MR.strings.player_add_external_audio
             }
 
         Row(
@@ -171,11 +172,11 @@ private fun StreamsPageBuilder(
             Icon(
                 modifier = Modifier.padding(end = MaterialTheme.padding.tiny),
                 imageVector = Icons.Default.Add,
-                contentDescription = stringResource(id = addTrackRes),
+                contentDescription = stringResource(addTrackRes),
             )
 
             Text(
-                text = stringResource(id = addTrackRes),
+                text = stringResource(addTrackRes),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

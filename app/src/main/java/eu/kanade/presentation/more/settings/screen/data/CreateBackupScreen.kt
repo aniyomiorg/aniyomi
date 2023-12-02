@@ -22,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -30,20 +29,21 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags
 import eu.kanade.tachiyomi.data.backup.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.util.system.DeviceUtil
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.plus
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 
 class CreateBackupScreen : Screen() {
 
@@ -71,7 +71,7 @@ class CreateBackupScreen : Screen() {
         Scaffold(
             topBar = {
                 AppBar(
-                    title = stringResource(R.string.pref_create_backup),
+                    title = stringResource(MR.strings.pref_create_backup),
                     navigateUp = navigator::pop,
                     scrollBehavior = it,
                 )
@@ -89,7 +89,7 @@ class CreateBackupScreen : Screen() {
                 ) {
                     item {
                         LabeledCheckbox(
-                            label = stringResource(R.string.entries),
+                            label = stringResource(MR.strings.entries),
                             checked = true,
                             onCheckedChange = {},
                             enabled = false,
@@ -117,20 +117,20 @@ class CreateBackupScreen : Screen() {
                     onClick = {
                         if (!BackupCreateJob.isManualJobRunning(context)) {
                             if (DeviceUtil.isMiui && DeviceUtil.isMiuiOptimizationDisabled()) {
-                                context.toast(R.string.restore_miui_warning, Toast.LENGTH_LONG)
+                                context.stringResource(MR.strings.restore_miui_warning, Toast.LENGTH_LONG)
                             }
                             try {
                                 chooseBackupDir.launch(Backup.getFilename())
                             } catch (e: ActivityNotFoundException) {
-                                context.toast(R.string.file_picker_error)
+                                context.stringResource(MR.strings.file_picker_error)
                             }
                         } else {
-                            context.toast(R.string.backup_in_progress)
+                            context.stringResource(MR.strings.backup_in_progress)
                         }
                     },
                 ) {
                     Text(
-                        text = stringResource(R.string.action_create),
+                        text = stringResource(MR.strings.action_create),
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
@@ -163,11 +163,11 @@ private class CreateBackupScreenModel : StateScreenModel<CreateBackupScreenModel
 }
 
 private val BackupChoices = mapOf(
-    BackupCreateFlags.BACKUP_CATEGORY to R.string.general_categories,
-    BackupCreateFlags.BACKUP_CHAPTER to R.string.chapters_episodes,
-    BackupCreateFlags.BACKUP_TRACK to R.string.track,
-    BackupCreateFlags.BACKUP_HISTORY to R.string.history,
-    BackupCreateFlags.BACKUP_PREFS to R.string.settings,
-    BackupCreateFlags.BACKUP_EXT_PREFS to R.string.extension_settings,
-    BackupCreateFlags.BACKUP_EXTENSIONS to R.string.label_extensions,
+    BackupCreateFlags.BACKUP_CATEGORY to MR.strings.general_categories,
+    BackupCreateFlags.BACKUP_CHAPTER to MR.strings.chapters_episodes,
+    BackupCreateFlags.BACKUP_TRACK to MR.strings.track,
+    BackupCreateFlags.BACKUP_HISTORY to MR.strings.history,
+    BackupCreateFlags.BACKUP_PREFS to MR.strings.settings,
+    BackupCreateFlags.BACKUP_EXT_PREFS to MR.strings.extension_settings,
+    BackupCreateFlags.BACKUP_EXTENSIONS to MR.strings.label_extensions,
 )

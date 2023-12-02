@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Categorii</string>
+    <string name="unlock_app">Deblochează Aniyomi</string>
+    <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
+    <string name="action_show_manga">Afișați manga</string>
+    <string name="action_display_local_badge_manga">Manga local</string>
+    <string name="pref_update_only_completely_read">Cu capitol(e) necitit(e)</string>
+    <string name="pref_library_update_show_tab_badge">Afișați numărul de necitite pe pictograma Actualizări</string>
+    <string name="default_manga_category">Categorie implicită</string>
+    <string name="pref_manga_library_update_categories_details">Manga din categoriile excluse nu vor fi actualizate, chiar dacă se află și în categoriile incluse.</string>
+    <string name="untrusted_extension_message">Extensia a fost semnată cu un certificat nesigur și nu a fost activată.
+\n
+\nO extensie periculoasă ar putea citi orice date de logare stocate în Tachiyomi sau executa cod periculos.
+\n
+\nPrin acordarea încrederii acestui certificat acceptați riscurile menționate.</string>
+    <string name="pref_category_delete_chapters">Ștergeți capitole</string>
+    <string name="pref_remove_after_marked_as_read">După ce a fost marcat manual ca citit</string>
+    <string name="pref_remove_after_read">După citire ștergeți automat</string>
+    <string name="pref_remove_bookmarked_chapters">Permite ștergerea capitolelor marcate</string>
+    <string name="pref_remove_exclude_categories_manga">Categorii excluse</string>
+    <string name="pref_auto_update_manga_sync">Actualizarea progresului după citire</string>
+    <string name="pref_clear_chapter_cache">Curățare capitole depozitate</string>
+    <string name="pref_auto_clear_chapter_cache">Șterge memoria cache a capitolului la închiderea aplicației</string>
+    <string name="pref_clear_manga_database">Curățați baza de date</string>
+    <string name="pref_clear_manga_database_summary">Ștergeți istoricul pentru manga care nu sunt salvate în bibliotecă</string>
+    <string name="clear_database_confirmation">Ești sigur\? Capitolele citite și progresul oricărei manga ce nu este în bibliotecă vor fi pierdute</string>
+    <string name="pref_refresh_library_tracking_summary">Actualizează starea, scorul și ultimul capitol citit de la serviciile de urmărire</string>
+    <string name="pref_incognito_mode_summary">Întrerupe citirea istoricului</string>
+    <string name="manga_from_library">Manga din bibliotecă</string>
+    <string name="snack_add_to_manga_library">Adaugă manga în bibliotecă\?</string>
+    <string name="download_error">Eroare</string>
+    <string name="download_paused">Întrerupt</string>
+    <string name="also_set_chapter_settings_for_library">De asemenea, se aplică la toate manga în biblioteca mea</string>
+    <string name="dialog_with_checkbox_reset">Resetează toate capitolele pentru acest manga</string>
+    <string name="download_insufficient_space">Nu s-au putut descărca capitole din cauza spațiului de stocare redus</string>
+    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Tachiyomi. Apasa pentru mai multe informatii.</string>
+    <string name="information_webview_required">WebView este necesar pentru Tachiyomi</string>
+    <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
+    <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
+</resources>

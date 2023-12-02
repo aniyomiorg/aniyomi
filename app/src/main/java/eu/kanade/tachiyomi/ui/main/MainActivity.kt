@@ -39,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
@@ -66,7 +65,6 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -104,11 +102,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.release.interactor.GetApplicationRelease
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -289,17 +289,17 @@ class MainActivity : BaseActivity() {
                     onDismissRequest = { showChangelog = false },
                     title = {
                         Text(
-                            text = stringResource(R.string.updated_version, BuildConfig.VERSION_NAME),
+                            text = stringResource(MR.strings.updated_version, BuildConfig.VERSION_NAME),
                         )
                     },
                     dismissButton = {
                         TextButton(onClick = { openInBrowser(RELEASE_URL) }) {
-                            Text(text = stringResource(R.string.whats_new))
+                            Text(text = stringResource(MR.strings.whats_new))
                         }
                     },
                     confirmButton = {
                         TextButton(onClick = { showChangelog = false }) {
-                            Text(text = stringResource(R.string.action_ok))
+                            Text(text = stringResource(MR.strings.action_ok))
                         }
                     },
                 )

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Categorias</string>
+    <string name="unlock_app">Isbloca Aniyomi</string>
+    <string name="action_sort_last_manga_update">Ùrtimu agiornamentu</string>
+    <string name="action_show_manga">Ammustra s\'elementu</string>
+    <string name="action_display_local_badge_manga">Fontes locales</string>
+    <string name="pref_update_only_completely_read">Cun capìtulos non lèghidos</string>
+    <string name="pref_library_update_show_tab_badge">Ammustra su nùmeru de capìtulos non lèghidos in s\'icona de sos agiornamentos</string>
+    <string name="default_manga_category">Categoria predefinida</string>
+    <string name="pref_manga_library_update_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a agiornare nemmancu si sunt fintzas in categorias inclùdidas.</string>
+    <string name="untrusted_extension_message">Custa estensione est istada firmada cun unu tzertificadu chi no est afidàbile e no est istada ativada.
+\n
+\nUn\'estensione mala diat pòdere lèghere totu sas informatziones de atzessu sarvadas in Tachiyomi o fàghere eseguire còdighe arbitràriu.
+\n
+\nPonende fidùtzia in custu tzertificadu atzetas custos arriscos.</string>
+    <string name="pref_category_delete_chapters">Iscantzella capìtulos</string>
+    <string name="pref_remove_after_marked_as_read">A pustis de l\'àere marcadu manualmente comente lèghidu</string>
+    <string name="pref_remove_after_read">Iscantzella in automàticu a pustis de sa leghidura</string>
+    <string name="pref_remove_bookmarked_chapters">Permite s\'iscantzelladura de sos capìtulos cun sinnalibros</string>
+    <string name="pref_remove_exclude_categories_manga">Categorias esclùdidas</string>
+    <string name="pref_auto_update_manga_sync">Agiorna su progressu a pustis de sa leghidura</string>
+    <string name="pref_clear_chapter_cache">Isbòida sa memòria temporànea de sos capìtulos</string>
+    <string name="pref_auto_clear_chapter_cache">Isbòida sa memòria temporànea de sos capìtulos cando serras s\'aplicatzione</string>
+    <string name="pref_clear_manga_database">Isbòida sa base de datos</string>
+    <string name="pref_clear_manga_database_summary">Iscantzella sa cronologia pro sos elementos chi non sunt sarvados in sa biblioteca tua</string>
+    <string name="clear_database_confirmation">Seguru ses\? Sos capìtulos lèghidos e su progressu de sos elementos chi non sunt in sa biblioteca s\'ant a pèrdere</string>
+    <string name="pref_refresh_library_tracking_summary">Agiornat s\'istadu, su votu e s\'ùrtimu capìtulu lèghidu dae sos servìtzios de arrastamentu</string>
+    <string name="pref_incognito_mode_summary">Ponet in pàusa sa registratzione de sa cronologia de leghidura</string>
+    <string name="manga_from_library">Dae sa biblioteca</string>
+    <string name="snack_add_to_manga_library">Annànghere a sa biblioteca\?</string>
+    <string name="download_error">Errore</string>
+    <string name="download_paused">In pàusa</string>
+    <string name="also_set_chapter_settings_for_library">Àplica fintzas a totu sos elementos in sa biblioteca mea</string>
+    <string name="dialog_with_checkbox_reset">Reseta totu sos capìtulos pro custu elementu</string>
+    <string name="download_insufficient_space">Iscarrigamentu de sos capìtulos fallidu pro neghe de su pagu ispàtziu lìberu in su discu</string>
+    <string name="download_queue_size_warning">Dae cara: sos iscarrigamentos de massa mannos diant pòdere rallentare sas fontes e/o blocare Tachiyomi. Toca pro nde ischire de prus.</string>
+    <string name="information_webview_required">Pro Tachiyomi b\'at bisòngiu de WebView</string>
+    <string name="download_notifier_download_paused_chapters">Iscarrigamentu in pàusa</string>
+    <string name="channel_new_chapters_episodes">Agiornamentos de sos capìtulos</string>
+</resources>

@@ -13,7 +13,6 @@ import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.items.episode.model.toSEpisode
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -45,6 +44,7 @@ import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okio.Buffer
 import rx.subjects.PublishSubject
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
@@ -53,6 +53,7 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -338,7 +339,7 @@ class AnimeDownloader(
                 ) {
                     withUIContext {
                         notifier.onWarning(
-                            context.getString(R.string.download_queue_size_warning),
+                            context.stringResource(MR.strings.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
@@ -364,7 +365,7 @@ class AnimeDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
             notifier.onError(
-                context.getString(R.string.download_insufficient_space),
+                context.stringResource(MR.strings.download_insufficient_space),
                 download.episode.name,
                 download.anime.title,
             )
@@ -385,7 +386,7 @@ class AnimeDownloader(
                 download.video = fetchedVideo
                 fetchedVideo
             } catch (e: Exception) {
-                throw Exception(context.getString(R.string.video_list_empty_error))
+                throw Exception(context.stringResource(MR.strings.video_list_empty_error))
             }
         } else {
             // Or if the video already exists, return it

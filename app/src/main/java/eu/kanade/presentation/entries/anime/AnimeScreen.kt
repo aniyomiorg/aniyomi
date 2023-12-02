@@ -47,7 +47,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
@@ -67,7 +66,6 @@ import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescriptio
 import eu.kanade.presentation.entries.anime.components.MissingEpisodeCountListItem
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.presentation.util.formatEpisodeNumber
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -83,17 +81,18 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.service.missingItemsCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.TwoPanelBox
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
 import java.text.DateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun AnimeScreen(
@@ -389,7 +388,11 @@ private fun AnimeScreenSmallImpl(
                         val isWatching = remember(state.episodes) {
                             state.episodes.fastAny { it.episode.seen }
                         }
-                        Text(text = stringResource(if (isWatching) R.string.action_resume else R.string.action_start))
+                        Text(
+                            text = stringResource(
+                                if (isWatching) MR.strings.action_resume else MR.strings.action_start,
+                            ),
+                        )
                     },
                     icon = {
                         Icon(
@@ -510,7 +513,7 @@ private fun AnimeScreenSmallImpl(
                             ) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
-                                        R.string.display_mode_episode,
+                                        MR.strings.display_mode_episode,
                                         formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
@@ -683,7 +686,7 @@ fun AnimeScreenLargeImpl(
                         }
                         Text(
                             text = stringResource(
-                                if (isWatching) R.string.action_resume else R.string.action_start,
+                                if (isWatching) MR.strings.action_resume else MR.strings.action_start,
                             ),
                         )
                     },
@@ -796,7 +799,7 @@ fun AnimeScreenLargeImpl(
                                     ) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
-                                                R.string.display_mode_episode,
+                                                MR.strings.display_mode_episode,
                                                 formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
@@ -911,7 +914,7 @@ private fun LazyListScope.sharedEpisodeItems(
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
-                            R.string.display_mode_episode,
+                            MR.strings.display_mode_episode,
                             formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
                     } else {
@@ -930,7 +933,7 @@ private fun LazyListScope.sharedEpisodeItems(
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
                             stringResource(
-                                R.string.episode_progress,
+                                MR.strings.episode_progress,
                                 formatTime(it),
                                 formatTime(episodeItem.episode.totalSeconds),
                             )

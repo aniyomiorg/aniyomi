@@ -7,7 +7,6 @@ import com.hippo.unifile.UniFile
 import eu.kanade.domain.entries.manga.model.getComicInfo
 import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateNotifier
@@ -44,6 +43,7 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.util.lang.launchIO
@@ -57,6 +57,7 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.BufferedOutputStream
@@ -314,7 +315,7 @@ class MangaDownloader(
                 ) {
                     withUIContext {
                         notifier.onWarning(
-                            context.getString(R.string.download_queue_size_warning),
+                            context.stringResource(MR.strings.download_queue_size_warning),
                             WARNING_NOTIF_TIMEOUT_MS,
                             NotificationHandler.openUrl(
                                 context,
@@ -340,7 +341,7 @@ class MangaDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = MangaDownload.State.ERROR
             notifier.onError(
-                context.getString(R.string.download_insufficient_space),
+                context.stringResource(MR.strings.download_insufficient_space),
                 download.chapter.name,
                 download.manga.title,
             )
@@ -360,7 +361,7 @@ class MangaDownloader(
                 val pages = download.source.getPageList(download.chapter.toSChapter())
 
                 if (pages.isEmpty()) {
-                    throw Exception(context.getString(R.string.page_list_empty_error))
+                    throw Exception(context.stringResource(MR.strings.page_list_empty_error))
                 }
                 // Don't trust index from source
                 val reIndexedPages = pages.mapIndexed { index, page ->
@@ -595,7 +596,7 @@ class MangaDownloader(
                 )
             }
                 ?: error(
-                    context.getString(R.string.download_notifier_split_page_not_found, page.number),
+                    context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number),
                 )
 
             // If the original page was previously split, then skip

@@ -10,7 +10,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -19,13 +18,15 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.updates.manga.MangaUpdateScreen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun Screen.mangaUpdatesTab(
@@ -39,7 +40,7 @@ fun Screen.mangaUpdatesTab(
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
     return TabContent(
-        titleRes = R.string.label_updates,
+        titleRes = MR.strings.label_updates,
         searchEnabled = false,
         content = { contentPadding, _ ->
             MangaUpdateScreen(
@@ -80,17 +81,17 @@ fun Screen.mangaUpdatesTab(
                 screenModel.events.collectLatest { event ->
                     when (event) {
                         MangaUpdatesScreenModel.Event.InternalError -> screenModel.snackbarHostState.showSnackbar(
-                            context.getString(
-                                R.string.internal_error,
+                            context.stringResource(
+                                MR.strings.internal_error,
                             ),
                         )
                         is MangaUpdatesScreenModel.Event.LibraryUpdateTriggered -> {
                             val msg = if (event.started) {
-                                R.string.updating_library
+                                MR.strings.updating_library
                             } else {
-                                R.string.update_already_running
+                                MR.strings.update_already_running
                             }
-                            screenModel.snackbarHostState.showSnackbar(context.getString(msg))
+                            screenModel.snackbarHostState.showSnackbar(context.stringResource(msg))
                         }
                     }
                 }
@@ -117,12 +118,12 @@ fun Screen.mangaUpdatesTab(
         if (screenModel.state.collectAsState().value.selected.isNotEmpty()) {
             persistentListOf(
                 AppBar.Action(
-                    title = stringResource(R.string.action_select_all),
+                    title = stringResource(MR.strings.action_select_all),
                     icon = Icons.Outlined.SelectAll,
                     onClick = { screenModel.toggleAllSelection(true) },
                 ),
                 AppBar.Action(
-                    title = stringResource(R.string.action_select_inverse),
+                    title = stringResource(MR.strings.action_select_inverse),
                     icon = Icons.Outlined.FlipToBack,
                     onClick = { screenModel.invertSelection() },
                 ),
@@ -130,7 +131,7 @@ fun Screen.mangaUpdatesTab(
         } else {
             persistentListOf(
                 AppBar.Action(
-                    title = stringResource(R.string.action_update_library),
+                    title = stringResource(MR.strings.action_update_library),
                     icon = Icons.Outlined.Refresh,
                     onClick = { screenModel.updateLibrary() },
                 ),

@@ -19,19 +19,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.Pin
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.theme.header
@@ -49,7 +49,7 @@ fun AnimeSourcesScreen(
     when {
         state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
-            textResource = R.string.source_empty_screen,
+            stringRes = MR.strings.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
         )
         else -> {
@@ -126,7 +126,7 @@ private fun AnimeSourceItem(
             if (source.supportsLatest) {
                 TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
-                        text = stringResource(id = R.string.latest),
+                        text = stringResource(MR.strings.latest),
                         style = LocalTextStyle.current.copy(
                             color = MaterialTheme.colorScheme.primary,
                         ),
@@ -154,7 +154,7 @@ private fun AnimeSourcePinButton(
             alpha = SecondaryItemAlpha,
         )
     }
-    val description = if (isPinned) R.string.action_unpin else R.string.action_pin
+    val description = if (isPinned) MR.strings.action_unpin else MR.strings.action_pin
     IconButton(onClick = onClick) {
         Icon(
             imageVector = icon,
@@ -177,7 +177,7 @@ fun AnimeSourceOptionsDialog(
         },
         text = {
             Column {
-                val textId = if (Pin.Pinned in source.pin) R.string.action_unpin else R.string.action_pin
+                val textId = if (Pin.Pinned in source.pin) MR.strings.action_unpin else MR.strings.action_pin
                 Text(
                     text = stringResource(textId),
                     modifier = Modifier
@@ -187,7 +187,7 @@ fun AnimeSourceOptionsDialog(
                 )
                 if (source.id != LocalAnimeSource.ID) {
                     Text(
-                        text = stringResource(id = R.string.action_disable),
+                        text = stringResource(MR.strings.action_disable),
                         modifier = Modifier
                             .clickable(onClick = onClickDisable)
                             .fillMaxWidth()

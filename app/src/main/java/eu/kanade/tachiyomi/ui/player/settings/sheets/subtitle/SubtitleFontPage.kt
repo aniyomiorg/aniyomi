@@ -28,17 +28,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import java.io.File
 
@@ -88,7 +89,7 @@ private fun SubtitleFont(
         derivedStateOf {
             val customFonts = File(
                 Environment.getExternalStorageDirectory().absolutePath +
-                    File.separator + context.getString(R.string.app_name) +
+                    File.separator + context.stringResource(MR.strings.app_name) +
                     File.separator,
                 "fonts",
             ).listFiles { file ->
@@ -120,7 +121,7 @@ private fun SubtitleFont(
             }
 
             OutlinedNumericChooser(
-                label = stringResource(id = R.string.player_font_size_text_field),
+                label = stringResource(MR.strings.player_font_size_text_field),
                 placeholder = "55",
                 suffix = "",
                 value = subtitleFontSize,

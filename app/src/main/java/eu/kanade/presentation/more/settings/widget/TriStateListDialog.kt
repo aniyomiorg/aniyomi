@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.settings.widget
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,9 +28,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
 
@@ -37,6 +38,7 @@ private enum class State {
     CHECKED, INVERSED, UNCHECKED
 }
 
+@SuppressLint("ComposeParameterOrder")
 @Composable
 fun <T> TriStateListDialog(
     title: String,
@@ -104,9 +106,9 @@ fun <T> TriStateListDialog(
                                     },
                                     contentDescription = stringResource(
                                         when (state) {
-                                            State.UNCHECKED -> R.string.not_selected
-                                            State.CHECKED -> R.string.selected
-                                            State.INVERSED -> R.string.disabled
+                                            State.UNCHECKED -> MR.strings.disabled
+                                            State.CHECKED -> MR.strings.disabled
+                                            State.INVERSED -> MR.strings.disabled
                                         },
                                     ),
                                 )
@@ -130,7 +132,7 @@ fun <T> TriStateListDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -145,7 +147,7 @@ fun <T> TriStateListDialog(
                     onValueChanged(included, excluded)
                 },
             ) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
     )

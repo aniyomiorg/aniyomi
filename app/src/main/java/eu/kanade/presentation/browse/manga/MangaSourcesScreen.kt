@@ -19,19 +19,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Pin
 import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.theme.header
@@ -49,7 +49,7 @@ fun MangaSourcesScreen(
     when {
         state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
         state.isEmpty -> EmptyScreen(
-            textResource = R.string.source_empty_screen,
+            stringRes = MR.strings.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
         )
         else -> {
@@ -126,7 +126,7 @@ private fun SourceItem(
             if (source.supportsLatest) {
                 TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
-                        text = stringResource(R.string.latest),
+                        text = stringResource(MR.strings.latest),
                         style = LocalTextStyle.current.copy(
                             color = MaterialTheme.colorScheme.primary,
                         ),
@@ -154,7 +154,7 @@ private fun SourcePinButton(
             alpha = SecondaryItemAlpha,
         )
     }
-    val description = if (isPinned) R.string.action_unpin else R.string.action_pin
+    val description = if (isPinned) MR.strings.action_unpin else MR.strings.action_pin
     IconButton(onClick = onClick) {
         Icon(
             imageVector = icon,
@@ -180,7 +180,7 @@ fun MangaSourceOptionsDialog(
         },
         text = {
             Column {
-                val textId = if (Pin.Pinned in source.pin) R.string.action_unpin else R.string.action_pin
+                val textId = if (Pin.Pinned in source.pin) MR.strings.action_unpin else MR.strings.action_pin
                 Text(
                     text = stringResource(textId),
                     modifier = Modifier
@@ -190,7 +190,7 @@ fun MangaSourceOptionsDialog(
                 )
                 if (source.id != LocalMangaSource.ID) {
                     Text(
-                        text = stringResource(R.string.action_disable),
+                        text = stringResource(MR.strings.action_disable),
                         modifier = Modifier
                             .clickable(onClick = onClickDisable)
                             .fillMaxWidth()
@@ -201,9 +201,9 @@ fun MangaSourceOptionsDialog(
                 if (onClickToggleDataSaver != null) {
                     Text(
                         text = if (source.isExcludedFromDataSaver) {
-                            stringResource(id = R.string.data_saver_stop_exclude)
+                            stringResource(MR.strings.data_saver_stop_exclude)
                         } else {
-                            stringResource(id = R.string.data_saver_exclude)
+                            stringResource(MR.strings.data_saver_exclude)
                         },
                         modifier = Modifier
                             .clickable(onClick = onClickToggleDataSaver)

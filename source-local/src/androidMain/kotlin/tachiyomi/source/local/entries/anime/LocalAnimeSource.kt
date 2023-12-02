@@ -15,13 +15,14 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import rx.Observable
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
-import tachiyomi.source.local.R
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.io.ArchiveAnime
@@ -44,7 +45,7 @@ actual class LocalAnimeSource(
     private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular(context))
     private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest(context))
 
-    override val name = context.getString(R.string.local_anime_source)
+    override val name = context.stringResource(MR.strings.local_anime_source)
 
     override val id: Long = ID
 

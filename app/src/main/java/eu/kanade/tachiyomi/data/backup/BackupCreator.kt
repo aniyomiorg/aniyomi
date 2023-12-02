@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupCreateFlags.BACKUP_EXTENSIONS
@@ -49,6 +48,7 @@ import logcat.LogPriority
 import okio.buffer
 import okio.gzip
 import okio.sink
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
@@ -64,6 +64,7 @@ import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -94,7 +95,7 @@ class BackupCreator(
      */
     suspend fun createBackup(uri: Uri, flags: Int, isAutoBackup: Boolean): String {
         if (!context.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            throw IllegalStateException(context.getString(R.string.missing_storage_permission))
+            throw IllegalStateException(context.stringResource(MR.strings.missing_storage_permission))
         }
 
         val databaseAnime = getAnimeFavorites.await()
@@ -137,7 +138,7 @@ class BackupCreator(
                     UniFile.fromUri(context, uri)
                 }
                 )
-                ?: throw Exception(context.getString(R.string.create_backup_file_error))
+                ?: throw Exception(context.stringResource(MR.strings.create_backup_file_error))
 
             if (!file.isFile) {
                 throw IllegalStateException("Failed to get handle on a backup file")
@@ -145,7 +146,7 @@ class BackupCreator(
 
             val byteArray = parser.encodeToByteArray(BackupSerializer, backup)
             if (byteArray.isEmpty()) {
-                throw IllegalStateException(context.getString(R.string.empty_backup_error))
+                throw IllegalStateException(context.stringResource(MR.strings.empty_backup_error))
             }
 
             file.openOutputStream().also {

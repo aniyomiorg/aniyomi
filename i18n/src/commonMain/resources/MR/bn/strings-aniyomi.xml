@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">বিভাগসমূহ</string>
+    <string name="unlock_app">তাচিওমি খুলুন</string>
+    <string name="action_sort_last_manga_update">সর্বশেষ হালনাগাদ চেক</string>
+    <string name="action_show_manga">মাঙ্গা দেখান</string>
+    <string name="action_display_local_badge_manga">স্থানীয় মাঙ্গা</string>
+    <string name="pref_update_only_completely_read">অপঠিত অধ্যায়সহ</string>
+    <string name="pref_library_update_show_tab_badge">অপঠিত গণনা আপডেট আইকন এ দেখাও</string>
+    <string name="default_manga_category">সাধারণ বিভাগ</string>
+    <string name="pref_manga_library_update_categories_details">বাদ দেওয়া ক্যাটাগরিতে মঙ্গা আপডেট করা হবে না যদিও সেগুলি অন্তর্ভুক্ত ক্যাটাগরিতেও থাকে।</string>
+    <string name="untrusted_extension_message">এই এক্সটেনশনটি একটি অবিশ্বস্ত সার্টিফিকেট দিয়ে স্বাক্ষরিত হয়েছিল এবং সক্রিয় করা হয়নি।
+\n
+\nএকটি দূষিত এক্সটেনশন টাচিওমিতে সংরক্ষিত যেকোন লগইন শংসাপত্র পড়তে পারে বা নির্বিচারে কোড চালাতে পারে।
+\n
+\nএই শংসাপত্রটি বিশ্বাস করে আপনি এই ঝুঁকিগুলি গ্রহণ করেন।</string>
+    <string name="pref_category_delete_chapters">অধ্যায় মুছুন</string>
+    <string name="pref_remove_after_marked_as_read">পঠিত হিসেবে চিহ্নিত করার পর</string>
+    <string name="pref_remove_after_read">পড়ার পর স্বয়ংক্রিয়ভাবে</string>
+    <string name="pref_remove_bookmarked_chapters">বুকমার্ক করা অধ্যায়গুলি মুছে ফেলার অনুমতি দিন</string>
+    <string name="pref_remove_exclude_categories_manga">বর্জিত বিভাগ গুলি</string>
+    <string name="pref_auto_update_manga_sync">পড়ার পরে অগ্রগতি আপডেট করুন</string>
+    <string name="pref_clear_chapter_cache">অধ্যায়ের ক্যাচি পরিষ্কার করুন</string>
+    <string name="pref_auto_clear_chapter_cache">অ্যাপ বন্দ্ধ করার সময় অধ্যায়ের ক্যাশে পরিষ্কার করুন</string>
+    <string name="pref_clear_manga_database">ডাটাবেজ পরিষ্কার করুন</string>
+    <string name="pref_clear_manga_database_summary">আপনার সংগ্রহশালাতে যেসব মাংগা সংরক্ষিত নেই সেগুলোর ইতিহাস মুছে ফেলুন</string>
+    <string name="clear_database_confirmation">আপনি কি নিশ্চিত\? পঠিত অধ্যায় এবং সংগ্রহশালাতে অনুপস্থিত মাংগার অগ্রগতি মুছে যাবে</string>
+    <string name="pref_refresh_library_tracking_summary">ট্র্যাকিং পরিষেবাগুলি অবস্থা, স্কোর এবং শেষ পড়া অধ্যায় হালনাগাদ করে</string>
+    <string name="pref_incognito_mode_summary">পড়ার ইতিহাসে বিরতি দেয়</string>
+    <string name="manga_from_library">লাইব্রেরীর মাঙ্গা</string>
+    <string name="snack_add_to_manga_library">সংগ্রহশালায় মাঙ্গা যোগ করবেন\?</string>
+    <string name="download_error">ত্রুটি</string>
+    <string name="download_paused">থেমে আছে</string>
+    <string name="also_set_chapter_settings_for_library">এছাড়াও আমার সংগ্রহশালার মাঙ্গাতে প্রয়োগ করুন</string>
+    <string name="dialog_with_checkbox_reset">এই মাংগার জন্য সব অধ্যায় পুনঃবিন্যাস করুন</string>
+    <string name="download_insufficient_space">কম সঞ্চয়স্থানের কারণে অধ্যায়গুলি ডাউনলোড করা যায়নি</string>
+    <string name="download_queue_size_warning">সতর্কতা: বড় আকারের ডাউনলোডের ফলে উৎসগুলি মন্থর হয়ে যেতে পারে এবং/অথবা তাচিওমি ব্লক হয়ে যেতে পারে। আরও জানতে এখানে ট্যাপ করুন।</string>
+    <string name="information_webview_required">টাচিয়ামির জন্য ওয়েবভিউ প্রয়োজন</string>
+    <string name="download_notifier_download_paused_chapters">ডাউনলোড বিরতি</string>
+    <string name="channel_new_chapters_episodes">অধ্যায়ের হালনাগাদগুলো</string>
+    <string name="pref_library_manga_columns">সারি প্রতি Manga আইটেম</string>
+    <string name="pref_library_anime_columns">প্রতি সারি এনিমে আইটেম</string>
+    <string name="general_categories">ক্যাটাগরি</string>
+    <string name="anime_categories">এনিমে বিভাগ</string>
+    <string name="entries">লাইব্রেরি এন্ট্রি</string>
+    <string name="chapters_episodes">অধ্যায় এবং পর্ব</string>
+    <string name="episodes">পর্বগুলি</string>
+    <string name="backup_settings_warning">সতর্কতা: ব্যাক আপ সেটিংস আপনার ট্র্যাক পাসওয়ার্ডগুলিও সংরক্ষণ করবে, এই ব্যাকআপ ফাইলটি শেয়ার করবেন না!</string>
+    <string name="label_manga_library">মাঙ্গা</string>
+    <string name="pref_bottom_nav_no_manga">মাঙ্গাকে আরও ট্যাবে সরান</string>
+    <string name="action_sort_last_anime_update">শেষ অ্যানিমে আপডেট</string>
+    <string name="pref_bottom_nav_no_history">আরও ট্যাবে ইতিহাস সরান</string>
+    <string name="label_watched_episodes">দেখেছে</string>
+    <string name="label_anime">এনিমে</string>
+    <string name="label_manga_sources">মাঙ্গা সূত্র</string>
+    <string name="label_anime_sources">Anime Sources</string>
+    <string name="action_filter_unseen">অদেখা</string>
+    <string name="label_anime_library">এনিমে</string>
+    <string name="label_manga">মাঙ্গা</string>
+    <string name="action_sort_last_seen">শেষ দেখা</string>
+    <string name="label_watched_duration">দেখার সময়কাল</string>
+    <string name="pref_bottom_nav_no_updates">আরও ট্যাবে আপডেটগুলি সরান</string>
+    <string name="action_sort_total_episodes">মোট পর্ব</string>
+    <string name="action_sort_last_checked">শেষ চেক করা হয়েছে</string>
+    <string name="action_sort_latest_episode">সর্বশেষ পর্ব</string>
+    <string name="action_download_unseen">অদেখা পর্ব ডাউনলোড করুন</string>
+    <string name="action_bookmark_episode">বুকমার্ক পর্ব</string>
+    <string name="action_play_externally">বাহ্যিকভাবে খেলুন</string>
+    <string name="action_mark_previous_as_seen">আগের দেখা হিসাবে চিহ্নিত করুন</string>
+    <string name="action_sort_unseen_count">অদেখা গণনা</string>
+    <string name="action_play_internally">অভ্যন্তরীণভাবে খেলুন</string>
+    <string name="action_sort_episode_fetch_date">পর্ব আনার তারিখ</string>
+    <string name="action_mark_as_seen">দেখা হয়েছে হিসাবে চিহ্নিত করুন</string>
+    <string name="action_mark_as_unseen">অদেখা হিসেবে চিহ্নিত করুন</string>
+    <string name="action_download_unread">অপঠিত অধ্যায় ডাউনলোড করুন</string>
+    <string name="action_global_manga_search">গ্লোবাল মাঙ্গা অনুসন্ধান</string>
+    <string name="action_global_anime_search">গ্লোবাল অ্যানিমে অনুসন্ধান</string>
+    <string name="action_remove_bookmark_episode">আনবুকমার্ক পর্ব</string>
+</resources>

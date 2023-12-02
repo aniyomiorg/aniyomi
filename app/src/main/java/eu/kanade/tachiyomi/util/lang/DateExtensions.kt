@@ -2,6 +2,8 @@ package eu.kanade.tachiyomi.util.lang
 
 import android.content.Context
 import eu.kanade.tachiyomi.R
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -61,7 +63,7 @@ fun Date.toRelativeString(
     val days = difference.floorDiv(MILLISECONDS_IN_DAY).toInt()
     return when {
         difference < 0 -> dateFormat.format(this)
-        difference < MILLISECONDS_IN_DAY -> context.getString(R.string.relative_time_today)
+        difference < MILLISECONDS_IN_DAY -> context.stringResource(MR.strings.relative_time_today)
         difference < MILLISECONDS_IN_DAY.times(7) -> context.resources.getQuantityString(
             R.plurals.relative_time,
             days,

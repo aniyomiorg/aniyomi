@@ -8,9 +8,12 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
 import androidx.annotation.RequiresApi
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -37,14 +40,14 @@ class PictureInPictureHandler(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createRemoteAction(
         iconResId: Int,
-        titleResId: Int,
+        titleRes: StringResource,
         requestCode: Int,
         controlType: Int,
     ): RemoteAction {
         return RemoteAction(
             Icon.createWithResource(activity, iconResId),
-            activity.getString(titleResId),
-            activity.getString(titleResId),
+            activity.stringResource(titleRes),
+            activity.stringResource(titleRes),
             PendingIntent.getBroadcast(
                 activity,
                 requestCode,
@@ -76,28 +79,28 @@ class PictureInPictureHandler(
                 arrayListOf(
                     createRemoteAction(
                         R.drawable.ic_skip_previous_24dp,
-                        R.string.action_previous_episode,
+                        MR.strings.action_previous_episode,
                         CONTROL_TYPE_PREVIOUS,
                         REQUEST_PREVIOUS,
                     ),
                     if (playing) {
                         createRemoteAction(
                             R.drawable.ic_pause_24dp,
-                            R.string.action_pause,
+                            MR.strings.action_pause,
                             CONTROL_TYPE_PAUSE,
                             REQUEST_PAUSE,
                         )
                     } else {
                         createRemoteAction(
                             R.drawable.ic_play_arrow_24dp,
-                            R.string.action_play,
+                            MR.strings.action_play,
                             CONTROL_TYPE_PLAY,
                             REQUEST_PLAY,
                         )
                     },
                     createRemoteAction(
                         R.drawable.ic_skip_next_24dp,
-                        R.string.action_next_episode,
+                        MR.strings.action_next_episode,
                         CONTROL_TYPE_NEXT,
                         REQUEST_NEXT,
                     ),

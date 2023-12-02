@@ -1,6 +1,7 @@
 package eu.kanade.test
 
 import android.graphics.Color
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -8,6 +9,7 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import okhttp3.OkHttpClient
+import tachiyomi.i18n.MR
 
 data class DummyTracker(
     override val id: Long,
@@ -31,15 +33,15 @@ data class DummyTracker(
 
     override fun getLogo(): Int = valLogo
 
-    override fun getStatus(status: Int): Int? = when (status) {
-        1 -> R.string.reading
-        2 -> R.string.plan_to_read
-        3 -> R.string.completed
-        4 -> R.string.on_hold
-        5 -> R.string.dropped
-        6 -> R.string.repeating
-        7 -> R.string.watching
-        8 -> R.string.plan_to_watch
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        1 -> MR.strings.reading
+        2 -> MR.strings.plan_to_read
+        3 -> MR.strings.completed
+        4 -> MR.strings.on_hold
+        5 -> MR.strings.dropped
+        6 -> MR.strings.repeating
+        7 -> MR.strings.watching
+        8 -> MR.strings.plan_to_watch
         else -> null
     }
 

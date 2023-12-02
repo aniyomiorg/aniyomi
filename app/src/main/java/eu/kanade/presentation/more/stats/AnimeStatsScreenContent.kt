@@ -13,14 +13,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.more.stats.components.StatsItem
 import eu.kanade.presentation.more.stats.components.StatsOverviewItem
 import eu.kanade.presentation.more.stats.components.StatsSection
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.presentation.util.toDurationString
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import java.util.Locale
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -55,28 +55,28 @@ fun AnimeStatsScreenContent(
 private fun OverviewSection(
     data: StatsData.AnimeOverview,
 ) {
-    val none = stringResource(R.string.none)
+    val none = stringResource(MR.strings.none)
     val context = LocalContext.current
     val readDurationString = remember(data.totalSeenDuration) {
         data.totalSeenDuration
             .toDuration(DurationUnit.MILLISECONDS)
             .toDurationString(context, fallback = none)
     }
-    StatsSection(R.string.label_overview_section) {
+    StatsSection(MR.strings.label_overview_section) {
         Row {
             StatsOverviewItem(
                 title = data.libraryAnimeCount.toString(),
-                subtitle = stringResource(R.string.in_library),
+                subtitle = stringResource(MR.strings.in_library),
                 icon = Icons.Outlined.CollectionsBookmark,
             )
             StatsOverviewItem(
                 title = data.completedAnimeCount.toString(),
-                subtitle = stringResource(R.string.label_completed_titles),
+                subtitle = stringResource(MR.strings.label_completed_titles),
                 icon = Icons.Outlined.LocalLibrary,
             )
             StatsOverviewItem(
                 title = readDurationString,
-                subtitle = stringResource(R.string.label_watched_duration),
+                subtitle = stringResource(MR.strings.label_watched_duration),
                 icon = Icons.Outlined.Schedule,
             )
         }
@@ -87,19 +87,19 @@ private fun OverviewSection(
 private fun TitlesStats(
     data: StatsData.AnimeTitles,
 ) {
-    StatsSection(R.string.label_titles_section) {
+    StatsSection(MR.strings.label_titles_section) {
         Row {
             StatsItem(
                 data.globalUpdateItemCount.toString(),
-                stringResource(R.string.label_titles_in_global_update),
+                stringResource(MR.strings.label_titles_in_global_update),
             )
             StatsItem(
                 data.startedAnimeCount.toString(),
-                stringResource(R.string.label_started),
+                stringResource(MR.strings.label_started),
             )
             StatsItem(
                 data.localAnimeCount.toString(),
-                stringResource(R.string.label_local),
+                stringResource(MR.strings.label_local),
             )
         }
     }
@@ -109,19 +109,19 @@ private fun TitlesStats(
 private fun EpisodeStats(
     data: StatsData.Episodes,
 ) {
-    StatsSection(R.string.episodes) {
+    StatsSection(MR.strings.episodes) {
         Row {
             StatsItem(
                 data.totalEpisodeCount.toString(),
-                stringResource(R.string.label_total_chapters),
+                stringResource(MR.strings.label_total_chapters),
             )
             StatsItem(
                 data.readEpisodeCount.toString(),
-                stringResource(R.string.label_watched_episodes),
+                stringResource(MR.strings.label_watched_episodes),
             )
             StatsItem(
                 data.downloadCount.toString(),
-                stringResource(R.string.label_downloaded),
+                stringResource(MR.strings.label_downloaded),
             )
         }
     }
@@ -131,28 +131,28 @@ private fun EpisodeStats(
 private fun TrackerStats(
     data: StatsData.Trackers,
 ) {
-    val notApplicable = stringResource(R.string.not_applicable)
+    val notApplicable = stringResource(MR.strings.not_applicable)
     val meanScoreStr = remember(data.trackedTitleCount, data.meanScore) {
         if (data.trackedTitleCount > 0 && !data.meanScore.isNaN()) {
-            // All other numbers are localized in English
+            // All other numbers are stringResourced in English
             String.format(Locale.ENGLISH, "%.2f ★", data.meanScore)
         } else {
             notApplicable
         }
     }
-    StatsSection(R.string.label_tracker_section) {
+    StatsSection(MR.strings.label_tracker_section) {
         Row {
             StatsItem(
                 data.trackedTitleCount.toString(),
-                stringResource(R.string.label_tracked_titles),
+                stringResource(MR.strings.label_tracked_titles),
             )
             StatsItem(
                 meanScoreStr,
-                stringResource(R.string.label_mean_score),
+                stringResource(MR.strings.label_mean_score),
             )
             StatsItem(
                 data.trackerCount.toString(),
-                stringResource(R.string.label_used),
+                stringResource(MR.strings.label_used),
             )
         }
     }

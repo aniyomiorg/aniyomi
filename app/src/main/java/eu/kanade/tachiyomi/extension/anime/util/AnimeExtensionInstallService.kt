@@ -15,7 +15,9 @@ import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companio
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 
 class AnimeExtensionInstallService : Service() {
 
@@ -27,7 +29,7 @@ class AnimeExtensionInstallService : Service() {
             setAutoCancel(false)
             setOngoing(true)
             setShowWhen(false)
-            setContentTitle(getString(R.string.ext_install_service_notif))
+            setContentTitle(stringResource(MR.strings.ext_install_service_notif))
             setProgress(100, 100, true)
         }.build()
         startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)

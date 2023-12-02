@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,16 +22,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
-import eu.kanade.tachiyomi.R
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.toggle
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -54,7 +54,7 @@ class PlayerSettingsScreenModel(
 
     @Composable
     fun ToggleableRow(
-        @StringRes textRes: Int,
+        textRes: StringResource,
         paddingValues: PaddingValues = sheetDialogPadding,
         isChecked: Boolean,
         onClick: () -> Unit,
@@ -69,7 +69,7 @@ class PlayerSettingsScreenModel(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(id = textRes),
+                text = stringResource(textRes),
                 color = if (coloredText) MaterialTheme.colorScheme.primary else Color.Unspecified,
                 style = MaterialTheme.typography.titleSmall,
             )
@@ -105,13 +105,13 @@ class PlayerSettingsScreenModel(
             content()
 
             ToggleableRow(
-                textRes = R.string.player_override_ass_subtitles,
+                textRes = MR.strings.player_override_ass_subtitles,
                 isChecked = overrideSubsASS,
                 onClick = updateOverrideASS,
             )
 
             TextButton(onClick = { showDialog = true }) {
-                Text(stringResource(id = R.string.action_reset))
+                Text(stringResource(MR.strings.action_reset))
             }
         }
     }
@@ -135,7 +135,7 @@ class PlayerSettingsScreenModel(
         }
 
         PlayerDialog(
-            titleRes = R.string.player_reset_subtitles,
+            titleRes = MR.strings.player_reset_subtitles,
             hideSystemBars = true,
             modifier = Modifier
                 .fillMaxWidth(fraction = 0.6F)
@@ -160,7 +160,7 @@ class PlayerSettingsScreenModel(
                     modifier = Modifier.size(14.dp),
                 )
                 Text(
-                    text = stringResource(id = R.string.player_subtitle_empty_warning),
+                    text = stringResource(MR.strings.player_subtitle_empty_warning),
                     style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                 )
