@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.setting
 
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
 import tachiyomi.i18n.MR
@@ -165,7 +166,17 @@ class ReaderPreferences(
         false,
     )
 
+    // J2K -->
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
+    // J2K <--
+
+    // SY -->
+    fun readerBottomButtons() = preferenceStore.getStringSet(
+        "reader_bottom_buttons",
+        ReaderBottomButton.BUTTONS_DEFAULTS,
+    )
+    fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
+    // SY <--
 
     // endregion
 
@@ -222,5 +233,13 @@ class ReaderPreferences(
             MR.strings.zoom_start_right,
             MR.strings.zoom_start_center,
         )
+
+        // SY -->
+        val PageLayouts = listOf(
+            MR.strings.single_page,
+            MR.strings.double_pages,
+            MR.strings.automatic_orientation,
+        )
+        // SY <--
     }
 }

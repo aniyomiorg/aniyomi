@@ -101,6 +101,19 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
         }
     }
 
+    // SY -->
+    val pageLayout by screenModel.preferences.pageLayout().collectAsState()
+    SettingsChipRow(R.string.page_layout) {
+        ReaderPreferences.PageLayouts.mapIndexed { index, it ->
+            FilterChip(
+                selected = pageLayout == index,
+                onClick = { screenModel.preferences.pageLayout().set(index) },
+                label = { Text(stringResource(it)) },
+            )
+        }
+    }
+    // SY <--
+
     CheckboxItem(
         label = stringResource(MR.strings.pref_crop_borders),
         pref = screenModel.preferences.cropBorders(),
