@@ -5,6 +5,7 @@ on:
       - '**.md'
       - 'i18n/src/main/res/**/strings.xml'
       - 'i18n/src/main/res/**/strings-aniyomi.xml'
+      - 'i18n/src/main/res/**/strings-animetail.xml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
