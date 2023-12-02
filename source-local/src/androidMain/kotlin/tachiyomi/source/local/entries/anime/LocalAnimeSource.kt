@@ -125,7 +125,7 @@ actual class LocalAnimeSource(
 
                         // Try to find the cover
                         coverManager.find(animeDir.name.orEmpty())?.let {
-                            thumbnail_url = it.uri.toString()
+                            thumbnail_url = it.filePath
                         }
                     }
                 }
@@ -154,7 +154,7 @@ actual class LocalAnimeSource(
 
     // SY -->
     fun updateAnimeInfo(anime: SAnime) {
-        val directory = fileSystem.getFilesInBaseDirectory().map { File(it, anime.url) }.find {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it.filePath, anime.url) }.find {
             it.exists()
         } ?: return
         val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
@@ -172,7 +172,7 @@ actual class LocalAnimeSource(
     // Anime details related
     override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {
         coverManager.find(anime.url)?.let {
-            anime.thumbnail_url = it.uri.toString()
+            anime.thumbnail_url = it.filePath
         }
 
         val animeDirFiles = fileSystem.getFilesInAnimeDirectory(anime.url)

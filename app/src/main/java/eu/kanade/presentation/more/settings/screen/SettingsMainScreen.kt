@@ -213,8 +213,8 @@ object SettingsMainScreen : Screen() {
         ),
         // AM (CONNECTIONS) -->
         Item(
-            titleRes = R.string.pref_category_connections,
-            subtitleRes = R.string.pref_connections_summary,
+            titleRes = MR.strings.pref_category_connections,
+            subtitleRes = MR.strings.pref_connections_summary,
             icon = Icons.Outlined.Link,
             screen = SettingsConnectionsScreen,
         ),

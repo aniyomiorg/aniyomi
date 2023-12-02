@@ -282,31 +282,31 @@ object SettingsLibraryScreen : SearchableSettings {
                 // SY -->
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.groupAnimeLibraryUpdateType(),
-                    title = stringResource(R.string.anime_library_group_updates),
+                    title = stringResource(MR.strings.anime_library_group_updates),
                     entries = mapOf(
                         AnimeGroupLibraryMode.GLOBAL to stringResource(
-                            R.string.library_group_updates_global,
+                            MR.strings.library_group_updates_global,
                         ),
                         AnimeGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
-                            R.string.library_group_updates_all_but_ungrouped,
+                            MR.strings.library_group_updates_all_but_ungrouped,
                         ),
                         AnimeGroupLibraryMode.ALL to stringResource(
-                            R.string.library_group_updates_all,
+                            MR.strings.library_group_updates_all,
                         ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.groupMangaLibraryUpdateType(),
-                    title = stringResource(R.string.manga_library_group_updates),
+                    title = stringResource(MR.strings.manga_library_group_updates),
                     entries = mapOf(
                         MangaGroupLibraryMode.GLOBAL to stringResource(
-                            R.string.library_group_updates_global,
+                            MR.strings.library_group_updates_global,
                         ),
                         MangaGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
-                            R.string.library_group_updates_all_but_ungrouped,
+                            MR.strings.library_group_updates_all_but_ungrouped,
                         ),
                         MangaGroupLibraryMode.ALL to stringResource(
-                            R.string.library_group_updates_all,
+                            MR.strings.library_group_updates_all,
                         ),
                     ),
                 ),

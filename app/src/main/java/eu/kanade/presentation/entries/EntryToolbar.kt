@@ -129,7 +129,7 @@ fun EntryToolbar(
                                 if (onClickEditInfo != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(R.string.action_edit_info),
+                                            title = stringResource(MR.strings.action_edit_info),
                                             onClick = onClickEditInfo,
                                         ),
                                     )

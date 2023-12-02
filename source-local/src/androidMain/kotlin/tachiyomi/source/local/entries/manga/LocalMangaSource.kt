@@ -131,7 +131,7 @@ actual class LocalMangaSource(
 
                         // Try to find the cover
                         coverManager.find(mangaDir.name.orEmpty())?.let {
-                            thumbnail_url = it.uri.toString()
+                            thumbnail_url = it.filePath
                         }
                     }
                 }
@@ -143,7 +143,7 @@ actual class LocalMangaSource(
 
     // SY -->
     fun updateMangaInfo(manga: SManga) {
-        val directory = fileSystem.getFilesInBaseDirectory().map { File(it, manga.url) }.find {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it.filePath, manga.url) }.find {
             it.exists()
         } ?: return
         val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
@@ -161,7 +161,7 @@ actual class LocalMangaSource(
     // Manga details related
     override suspend fun getMangaDetails(manga: SManga): SManga = withIOContext {
         coverManager.find(manga.url)?.let {
-            manga.thumbnail_url = it.uri.toString()
+            manga.thumbnail_url = it.filePath
         }
 
         // Augment manga details based on metadata files

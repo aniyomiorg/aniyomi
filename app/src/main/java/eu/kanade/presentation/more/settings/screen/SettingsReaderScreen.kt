@@ -153,7 +153,7 @@ object SettingsReaderScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SliderPreference(
                     value = preloadSize,
-                    title = stringResource(R.string.pref_page_preload_amount),
+                    title = stringResource(MR.strings.pref_page_preload_amount),
                     min = ReaderPreferences.PRELOAD_SIZE_MIN,
                     max = ReaderPreferences.PRELOAD_SIZE_MAX,
                     onValueChanged = {
