@@ -154,7 +154,7 @@ internal class AppUpdateNotifier(private val context: Context) {
         with(notificationBuilder) {
             setContentTitle(context.stringResource(MR.strings.update_check_notification_update_available))
             setContentText(context.stringResource(MR.strings.update_check_fdroid_migration_info))
-            setSmallIcon(R.drawable.ic_ani)
+            setSmallIcon(R.drawable.ic_sua)
             setContentIntent(
                 NotificationHandler.openUrl(
                     context,

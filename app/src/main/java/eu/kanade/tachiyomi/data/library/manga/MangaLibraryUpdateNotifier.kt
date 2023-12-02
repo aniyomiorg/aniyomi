@@ -137,7 +137,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
         ) {
             setContentTitle(context.stringResource(MR.strings.notification_update_error, failed))
             setContentText(context.stringResource(MR.strings.action_show_errors))
-            setSmallIcon(R.drawable.ic_ani)
+            setSmallIcon(R.drawable.ic_sua)
 
             setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
         }
@@ -161,7 +161,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 context.stringResource(MR.strings.notification_update_skipped, skipped),
             )
             setContentText(context.stringResource(MR.strings.learn_more))
-            setSmallIcon(R.drawable.ic_ani)
+            setSmallIcon(R.drawable.ic_sua)
             setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_MANGA_URL))
         }
     }
@@ -200,7 +200,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 }
             }
 
-            setSmallIcon(R.drawable.ic_ani)
+            setSmallIcon(R.drawable.ic_sua)
             setLargeIcon(notificationBitmap)
 
             setGroup(Notifications.GROUP_NEW_CHAPTERS)
@@ -236,7 +236,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             setContentText(description)
             setStyle(NotificationCompat.BigTextStyle().bigText(description))
 
-            setSmallIcon(R.drawable.ic_ani)
+            setSmallIcon(R.drawable.ic_sua)
 
             if (icon != null) {
                 setLargeIcon(icon)
