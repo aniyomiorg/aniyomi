@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.source.model.SManga
  *
  * @since extensions-lib 1.5
  */
-interface ResolvableMangaSource : MangaSource {
+interface ResolvableSource : MangaSource {
 
     /**
      * Returns what the given URI may open.

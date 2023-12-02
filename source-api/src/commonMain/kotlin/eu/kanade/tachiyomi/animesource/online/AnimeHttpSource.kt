@@ -108,6 +108,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param page the page number to retrieve.
      */
+    @Deprecated(
+        "Use the non-RxJava API instead",
+        ReplaceWith("getPopularAnime"),
+    )
     override fun fetchPopularAnime(page: Int): Observable<AnimesPage> {
         return client.newCall(popularAnimeRequest(page))
             .asObservableSuccess()
@@ -138,6 +142,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param query the search query.
      * @param filters the list of filters to apply.
      */
+    @Deprecated(
+        "Use the non-RxJava API instead",
+        ReplaceWith("getSearchAnime"),
+    )
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
         return Observable.defer {
             try {
@@ -174,6 +182,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param page the page number to retrieve.
      */
+    @Deprecated(
+        "Use the non-RxJava API instead",
+        ReplaceWith("getLatestUpdates"),
+    )
     override fun fetchLatestUpdates(page: Int): Observable<AnimesPage> {
         return client.newCall(latestUpdatesRequest(page))
             .asObservableSuccess()
@@ -242,14 +254,14 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @return the chapters for the manga.
      * @throws LicensedEntryItemsException if a anime is licensed and therefore no episodes are available.
      */
-    /*@Suppress("DEPRECATION")
+    @Suppress("DEPRECATION")
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
         if (anime.status == SAnime.LICENSED) {
             throw LicensedEntryItemsException()
         }
 
         return fetchEpisodeList(anime).awaitSingle()
-    }*/
+    }
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getEpisodeList"))
     override fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> {
@@ -295,10 +307,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param episode the episode.
      * @return the videos for the episode.
      */
-    /*@Suppress("DEPRECATION")
+    @Suppress("DEPRECATION")
     override suspend fun getVideoList(episode: SEpisode): List<Video> {
         return fetchVideoList(episode).awaitSingle()
-    }*/
+    }
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getVideoList"))
     override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
@@ -340,10 +352,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @since extensions-lib 1.5
      * @param video the video whose source image has to be fetched.
      */
-    /*@Suppress("DEPRECATION")
+    @Suppress("DEPRECATION")
     open suspend fun getVideoUrl(video: Video): String {
         return fetchVideoUrl(video).awaitSingle()
-    }*/
+    }
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getVideoUrl"))
     open fun fetchVideoUrl(video: Video): Observable<String> {

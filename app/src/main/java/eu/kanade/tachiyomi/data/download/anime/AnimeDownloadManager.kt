@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import rx.Observable
 import tachiyomi.core.provider.FolderProvider
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
@@ -167,25 +166,24 @@ class AnimeDownloadManager(
      * @param episode the downloaded episode.
      * @return an observable containing the list of pages from the episode.
      */
-    fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Observable<Video> {
+    fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Video {
         val episodeDir =
             provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source)
-        return Observable.fromCallable {
-            val files = episodeDir?.listFiles().orEmpty()
-                .filter { "video" in it.type.orEmpty() }
+        val files = episodeDir?.listFiles().orEmpty()
+            .filter { "video" in it.type.orEmpty() }
 
-            if (files.isEmpty()) {
-                throw Exception(context.getString(R.string.video_list_empty_error))
-            }
-
-            val file = files[0]
-            Video(
-                file.uri.toString(),
-                "download: " + file.uri.toString(),
-                file.uri.toString(),
-                file.uri,
-            ).apply { status = Video.State.READY }
+        if (files.isEmpty()) {
+            throw Exception(context.getString(R.string.video_list_empty_error))
         }
+
+        val file = files[0]
+
+        return Video(
+            file.uri.toString(),
+            "download: " + file.uri.toString(),
+            file.uri.toString(),
+            file.uri,
+        ).apply { status = Video.State.READY }
     }
 
     /**
