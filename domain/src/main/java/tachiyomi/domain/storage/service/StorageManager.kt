@@ -51,9 +51,14 @@ class StorageManager(
     fun getLocalAnimeSourceDirectory(): UniFile? {
         return baseDir?.createDirectory(LOCAL_ANIMESOURCE_PATH)
     }
+
+    fun getFontsDirectory(): UniFile? {
+        return baseDir?.createDirectory(FONTS_PATH)
+    }
 }
 
 private const val AUTOMATIC_BACKUPS_PATH = "autobackup"
 private const val DOWNLOADS_PATH = "downloads"
 private const val LOCAL_SOURCE_PATH = "local"
 private const val LOCAL_ANIMESOURCE_PATH = "localanime"
+private const val FONTS_PATH = "fonts"

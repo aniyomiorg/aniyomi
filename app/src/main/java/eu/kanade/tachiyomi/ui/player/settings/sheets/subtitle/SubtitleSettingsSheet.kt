@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
-import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -39,10 +38,14 @@ import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.extension
+import tachiyomi.core.storage.toTempFile
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
-import java.io.File
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun SubtitleSettingsSheet(
@@ -153,21 +156,17 @@ fun SubtitlePreview(
     borderColor: Color,
     backgroundColor: Color,
 ) {
-    val fontMap = File(
-        Environment.getExternalStorageDirectory().absolutePath +
-            File.separator + LocalContext.current.stringResource(MR.strings.app_name) +
-            File.separator,
-        "fonts",
-    ).listFiles { file ->
-        file.extension.equals("ttf", true) ||
-            file.extension.equals("otf", true)
-    }?.associateBy(
-        { TTFFile.open(it).families.values.toTypedArray()[0] },
-        { it.absolutePath },
-    ) ?: emptyMap()
+    val storageManager: StorageManager = Injekt.get()
+    val fontsDir = storageManager.getFontsDirectory()
+    val fontMap = fontsDir?.listFiles()?.filter { file ->
+        file.extension!!.equals("ttf", true) ||
+            file.extension!!.equals("otf", true)
+    }?.associate {
+        TTFFile.open(it.openInputStream()).families.values.toTypedArray()[0] to it
+    } ?: emptyMap()
 
     val fontFile = fontMap.keys.firstOrNull { it.contains(font, true) }
-        ?.let { Typeface.createFromFile(fontMap[it]?.let(::File)) } ?: Typeface.SANS_SERIF
+        ?.let { Typeface.createFromFile(fontMap[it]?.toTempFile(LocalContext.current)) } ?: Typeface.SANS_SERIF
 
     Box(
         modifier = Modifier
