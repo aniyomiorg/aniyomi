@@ -13,7 +13,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -40,6 +39,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -94,6 +94,7 @@ import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -611,13 +612,18 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
+            // TODO: I think this is a bad hack.
+            //  We need to find a way to let MPV access our fonts directory.
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
+                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                outFile?.let {
+                    font.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
             MPVLib.setPropertyString(
                 "sub-fonts-dir",
-                File(
-                    Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                        stringResource(MR.strings.app_name),
-                    "fonts",
-                ).path,
+                applicationContext.filesDir.path,
             )
 
             if (playerPreferences.subtitleFont().get().trim() != "") {

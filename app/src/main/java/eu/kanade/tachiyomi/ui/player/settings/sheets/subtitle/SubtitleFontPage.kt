@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
-import android.os.Environment
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,21 +26,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.extension
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
-import java.io.File
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {
@@ -84,19 +84,15 @@ private fun SubtitleFont(
         screenModel.preferences.subtitleFont().set(it)
     }
 
-    val context = LocalContext.current
     val fontList by remember {
         derivedStateOf {
-            val customFonts = File(
-                Environment.getExternalStorageDirectory().absolutePath +
-                    File.separator + context.stringResource(MR.strings.app_name) +
-                    File.separator,
-                "fonts",
-            ).listFiles { file ->
-                file.extension.equals("ttf", true) ||
-                    file.extension.equals("otf", true)
+            val storageManager: StorageManager = Injekt.get()
+            val fontsDir = storageManager.getFontsDirectory()
+            val customFonts = fontsDir?.listFiles()?.filter { file ->
+                file.extension!!.equals("ttf", true) ||
+                    file.extension!!.equals("otf", true)
             }?.associate {
-                TTFFile.open(it).families.values.toTypedArray()[0] to it.absolutePath
+                TTFFile.open(it.openInputStream()).families.values.toTypedArray()[0] to it.uri
             } ?: emptyMap()
             mapOf("Sans Serif" to ("" to null)) + customFonts
         }
