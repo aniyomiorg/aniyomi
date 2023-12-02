@@ -98,6 +98,7 @@ private fun MangaHistoryContent(
             when (item) {
                 is MangaHistoryUiModel.Header -> {
                     RelativeDateHeader(
+                        modifier = Modifier.animateItemPlacement(),
                         date = item.date,
                         relativeTime = relativeTime,
                         dateFormat = dateFormat,
@@ -106,6 +107,7 @@ private fun MangaHistoryContent(
                 is MangaHistoryUiModel.Item -> {
                     val value = item.item
                     MangaHistoryItem(
+                        modifier = Modifier.animateItemPlacement(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

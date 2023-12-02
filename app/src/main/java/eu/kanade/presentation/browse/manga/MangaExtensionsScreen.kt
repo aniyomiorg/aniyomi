@@ -148,14 +148,14 @@ private fun ExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-
+                            modifier = Modifier.animateItemPlacement(),
                             action = action,
                         )
                     }
                     is MangaExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-
+                            modifier = Modifier.animateItemPlacement(),
                         )
                     }
                 }
@@ -167,7 +167,7 @@ private fun ExtensionContent(
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
                 ExtensionItem(
-
+                    modifier = Modifier.animateItemPlacement(),
                     item = item,
                     onClickItem = {
                         when (it) {

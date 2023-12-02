@@ -147,13 +147,14 @@ private fun AnimeExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
+                            modifier = Modifier.animateItemPlacement(),
                             action = action,
                         )
                     }
                     is AnimeExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-
+                            modifier = Modifier.animateItemPlacement(),
                         )
                     }
                 }
@@ -165,8 +166,8 @@ private fun AnimeExtensionContent(
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
                 AnimeExtensionItem(
-
                     item = item,
+                    modifier = Modifier.animateItemPlacement(),
                     onClickItem = {
                         when (it) {
                             is AnimeExtension.Available -> onInstallExtension(it)

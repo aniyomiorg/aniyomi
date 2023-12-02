@@ -53,10 +53,8 @@ internal fun LazyListScope.mangaUpdatesLastUpdatedItem(
     item(key = "mangaUpdates-lastUpdated") {
         Box(
             modifier = Modifier
-                .padding(
-                    horizontal = MaterialTheme.padding.medium,
-                    vertical = MaterialTheme.padding.small,
-                ),
+                .animateItemPlacement()
+                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         ) {
             Text(
                 text = stringResource(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
@@ -92,12 +90,14 @@ internal fun LazyListScope.mangaUpdatesUiItems(
         when (item) {
             is MangaUpdatesUiModel.Header -> {
                 ListGroupHeader(
+                    modifier = Modifier.animateItemPlacement(),
                     text = item.date,
                 )
             }
             is MangaUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 MangaUpdatesUiItem(
+                    modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     readProgress = updatesItem.update.lastPageRead
