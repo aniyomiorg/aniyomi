@@ -51,3 +51,33 @@ fun getCategoriesLabel(
     return stringResource(MR.strings.include, includedItemsText) + "\n" +
         stringResource(MR.strings.exclude, excludedItemsText)
 }
+
+// AM (DISCORD) -->
+@ReadOnlyComposable
+@Composable
+fun getCategoriesLabel(
+    allCategories: List<Category>,
+    included: Set<String>,
+): String {
+    val context = LocalContext.current
+
+    val includedCategories = included
+        .mapNotNull { id -> allCategories.find { it.id == id.toLong() } }
+        .sortedBy { it.order }
+
+    val includedItemsText = when {
+        // Some selected, but not all
+        includedCategories.isNotEmpty() && includedCategories.size != allCategories.size ->
+            includedCategories.joinToString {
+                it.visualName(
+                    context,
+                )
+            }
+        // All explicitly selected
+        includedCategories.size == allCategories.size -> stringResource(R.string.all)
+        includedCategories.isEmpty() -> stringResource(R.string.none)
+        else -> stringResource(R.string.all)
+    }
+    return stringResource(R.string.include, includedItemsText)
+}
+// <-- AM (DISCORD)

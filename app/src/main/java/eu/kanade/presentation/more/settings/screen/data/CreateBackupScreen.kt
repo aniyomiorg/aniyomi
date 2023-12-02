@@ -170,4 +170,7 @@ private val BackupChoices = mapOf(
     BackupCreateFlags.BACKUP_PREFS to MR.strings.settings,
     BackupCreateFlags.BACKUP_EXT_PREFS to MR.strings.extension_settings,
     BackupCreateFlags.BACKUP_EXTENSIONS to MR.strings.label_extensions,
+    // SY -->
+    BackupCreateFlags.BACKUP_CUSTOM_INFO to MR.strings.custom_entry_info,
+    // SY <--
 )

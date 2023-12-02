@@ -124,6 +124,10 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getReadingGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val preloadSizePref = readerPreferences.preloadSize()
+
+        val preloadSize by preloadSizePref.collectAsState()
+
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_reading),
             preferenceItems = listOf(
@@ -146,6 +150,16 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.preserveReadingPosition(),
                     title = stringResource(MR.strings.pref_preserve_reading_position),
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(R.string.pref_page_preload_amount),
+                    min = ReaderPreferences.PRELOAD_SIZE_MIN,
+                    max = ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
                 ),
             ),
         )
