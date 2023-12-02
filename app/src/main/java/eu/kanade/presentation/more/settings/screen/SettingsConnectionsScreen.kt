@@ -49,6 +49,7 @@ import eu.kanade.tachiyomi.util.system.openDiscordLoginActivity
 import eu.kanade.tachiyomi.util.system.toast
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -57,7 +58,7 @@ object SettingsConnectionsScreen : SearchableSettings {
     @ReadOnlyComposable
     @Composable
     @StringRes
-    override fun getTitleRes() = R.string.pref_category_connections
+    override fun getTitleRes() = MR.strings.pref_category_connections
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -216,7 +217,7 @@ object SettingsConnectionsScreen : SearchableSettings {
     ): Boolean {
         return try {
             service.login(username, password)
-            withUIContext { context.toast(R.string.login_success) }
+            withUIContext { context.toast(MR.strings.login_success) }
             true
         } catch (e: Throwable) {
             service.logout()
@@ -255,7 +256,7 @@ internal fun ConnectionsLogoutDialog(
                     onClick = {
                         service.logout()
                         onDismissRequest()
-                        context.toast(R.string.logout_success)
+                        context.toast(MR.strings.logout_success)
                         navigator.pop()
                     },
                     colors = ButtonDefaults.buttonColors(

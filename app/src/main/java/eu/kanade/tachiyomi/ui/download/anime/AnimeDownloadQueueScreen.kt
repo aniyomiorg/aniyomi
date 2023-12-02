@@ -28,18 +28,18 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import kotlin.math.roundToInt
 
@@ -93,9 +93,9 @@ fun AnimeDownloadQueueScreen(
                 ExtendedFloatingActionButton(
                     text = {
                         val id = if (isRunning) {
-                            R.string.action_pause
+                            MR.strings.action_pause
                         } else {
-                            R.string.action_resume
+                            MR.strings.action_resume
                         }
                         Text(text = stringResource(id))
                     },
@@ -121,7 +121,7 @@ fun AnimeDownloadQueueScreen(
     ) {
         if (downloadList.isEmpty()) {
             EmptyScreen(
-                textResource = R.string.information_no_downloads,
+                stringRes = MR.strings.information_no_downloads,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

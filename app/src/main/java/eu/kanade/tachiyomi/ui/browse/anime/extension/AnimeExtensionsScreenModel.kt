@@ -1,14 +1,13 @@
 package eu.kanade.tachiyomi.ui.browse.anime.extension
 
 import android.app.Application
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -28,6 +27,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
@@ -98,7 +98,7 @@ class AnimeExtensionsScreenModel(
                     extensionMapper(downloads),
                 )
                 if (updates.isNotEmpty()) {
-                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(MR.strings.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(
@@ -108,7 +108,7 @@ class AnimeExtensionsScreenModel(
                     extensionMapper(downloads),
                 )
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(MR.strings.ext_installed)] = installed + untrusted
                 }
 
                 val languagesWithExtensions = _available
@@ -225,7 +225,7 @@ typealias ItemGroups = MutableMap<AnimeExtensionUiModel.Header, List<AnimeExtens
 
 object AnimeExtensionUiModel {
     sealed interface Header {
-        data class Resource(@StringRes val textRes: Int) : Header
+        data class Resource(val textRes: StringResource) : Header
         data class Text(val text: String) : Header
     }
     data class Item(

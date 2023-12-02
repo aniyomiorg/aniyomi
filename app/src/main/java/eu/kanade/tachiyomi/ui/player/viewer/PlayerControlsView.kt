@@ -19,6 +19,7 @@ import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.withUIContext
 import kotlin.math.abs
 
@@ -429,7 +430,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun setViewMode(showText: Boolean) {
-        binding.playerInformation.text = activity.getString(AspectState.mode.stringRes)
+        binding.playerInformation.text = activity.stringResource(AspectState.mode.stringRes)
         var aspect = "-1"
         var pan = "1.0"
         when (AspectState.mode) {

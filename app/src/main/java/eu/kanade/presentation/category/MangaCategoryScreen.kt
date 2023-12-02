@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.category.components.CategoryContent
 import eu.kanade.presentation.category.components.CategoryFloatingActionButton
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.category.manga.MangaCategoryScreenState
 import tachiyomi.domain.category.model.Category
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
@@ -39,7 +39,7 @@ fun MangaCategoryScreen(
     ) {
         if (state.isEmpty) {
             EmptyScreen(
-                textResource = R.string.information_empty_category,
+                stringRes = MR.strings.information_empty_category,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

@@ -1,8 +1,6 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -17,7 +15,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.provider.FolderProvider
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -25,6 +23,8 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.storage.service.StorageManager
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.io.ArchiveAnime
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
@@ -38,7 +38,7 @@ import uy.kohesive.injekt.api.get
  */
 class AnimeDownloadManager(
     private val context: Context,
-    private val folderProvider: FolderProvider,
+    private val storageManager: StorageManager = Injekt.get(),
     private val provider: AnimeDownloadProvider = Injekt.get(),
     private val cache: AnimeDownloadCache = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
@@ -173,7 +173,7 @@ class AnimeDownloadManager(
             .filter { "video" in it.type.orEmpty() }
 
         if (files.isEmpty()) {
-            throw Exception(context.getString(R.string.video_list_empty_error))
+            throw Exception(context.stringResource(MR.strings.video_list_empty_error))
         }
 
         val file = files[0]
@@ -225,9 +225,8 @@ class AnimeDownloadManager(
      */
     fun getDownloadCount(anime: Anime): Int {
         return if (anime.source == LocalAnimeSource.ID) {
-            LocalAnimeSourceFileSystem(folderProvider).getFilesInAnimeDirectory(anime.url)
-                .filter { ArchiveAnime.isSupported(it) }
-                .count()
+            LocalAnimeSourceFileSystem(storageManager).getFilesInAnimeDirectory(anime.url)
+                .count { ArchiveAnime.isSupported(it) }
         } else {
             cache.getDownloadCount(anime)
         }
@@ -247,8 +246,8 @@ class AnimeDownloadManager(
      */
     fun getDownloadSize(anime: Anime): Long {
         return if (anime.source == LocalAnimeSource.ID) {
-            LocalAnimeSourceFileSystem(folderProvider).getAnimeDirectory(anime.url)
-                .let { UniFile.fromFile(it) }?.size() ?: 0L
+            LocalAnimeSourceFileSystem(storageManager).getAnimeDirectory(anime.url)
+                ?.size() ?: 0L
         } else {
             cache.getDownloadSize(anime)
         }

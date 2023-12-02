@@ -11,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -22,7 +21,6 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.updates.anime.AnimeUpdateScreen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -31,8 +29,11 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -66,7 +67,7 @@ fun Screen.animeUpdatesTab(
     }
 
     return TabContent(
-        titleRes = R.string.label_anime_updates,
+        titleRes = MR.strings.label_anime_updates,
         searchEnabled = false,
         content = { contentPadding, _ ->
             AnimeUpdateScreen(
@@ -124,17 +125,17 @@ fun Screen.animeUpdatesTab(
                 screenModel.events.collectLatest { event ->
                     when (event) {
                         AnimeUpdatesScreenModel.Event.InternalError -> screenModel.snackbarHostState.showSnackbar(
-                            context.getString(
-                                R.string.internal_error,
+                            context.stringResource(
+                                MR.strings.internal_error,
                             ),
                         )
                         is AnimeUpdatesScreenModel.Event.LibraryUpdateTriggered -> {
                             val msg = if (event.started) {
-                                R.string.updating_library
+                                MR.strings.updating_library
                             } else {
-                                R.string.update_already_running
+                                MR.strings.update_already_running
                             }
-                            screenModel.snackbarHostState.showSnackbar(context.getString(msg))
+                            screenModel.snackbarHostState.showSnackbar(context.stringResource(msg))
                         }
                     }
                 }
@@ -161,12 +162,12 @@ fun Screen.animeUpdatesTab(
         if (screenModel.state.collectAsState().value.selected.isNotEmpty()) {
             persistentListOf(
                 AppBar.Action(
-                    title = stringResource(R.string.action_select_all),
+                    title = stringResource(MR.strings.action_select_all),
                     icon = Icons.Outlined.SelectAll,
                     onClick = { screenModel.toggleAllSelection(true) },
                 ),
                 AppBar.Action(
-                    title = stringResource(R.string.action_select_inverse),
+                    title = stringResource(MR.strings.action_select_inverse),
                     icon = Icons.Outlined.FlipToBack,
                     onClick = { screenModel.invertSelection() },
                 ),
@@ -174,7 +175,7 @@ fun Screen.animeUpdatesTab(
         } else {
             persistentListOf(
                 AppBar.Action(
-                    title = stringResource(R.string.action_update_library),
+                    title = stringResource(MR.strings.action_update_library),
                     icon = Icons.Outlined.Refresh,
                     onClick = { screenModel.updateLibrary() },
                 ),

@@ -11,7 +11,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
 
 @Composable
 fun Screen.mangaDownloadTab(): TabContent {
@@ -24,7 +24,7 @@ fun Screen.mangaDownloadTab(): TabContent {
     }
 
     return TabContent(
-        titleRes = R.string.label_manga,
+        titleRes = MR.strings.label_manga,
         searchEnabled = false,
         content = { contentPadding, _ ->
             DownloadQueueScreen(

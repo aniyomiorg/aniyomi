@@ -3,7 +3,6 @@ package eu.kanade.presentation.more.settings.screen
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import eu.kanade.domain.ui.UiPreferences
@@ -25,12 +23,14 @@ import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.merge
 import org.xmlpull.v1.XmlPullParser
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -40,8 +40,7 @@ object SettingsAppearanceScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    @StringRes
-    override fun getTitleRes() = R.string.pref_category_appearance
+    override fun getTitleRes() = MR.strings.pref_category_appearance
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -78,26 +77,26 @@ object SettingsAppearanceScreen : SearchableSettings {
         }
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_theme),
+            title = stringResource(MR.strings.pref_category_theme),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = themeModePref,
-                    title = stringResource(R.string.pref_theme_mode),
+                    title = stringResource(MR.strings.pref_theme_mode),
                     entries = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         mapOf(
-                            ThemeMode.SYSTEM to stringResource(R.string.theme_system),
-                            ThemeMode.LIGHT to stringResource(R.string.theme_light),
-                            ThemeMode.DARK to stringResource(R.string.theme_dark),
+                            ThemeMode.SYSTEM to stringResource(MR.strings.theme_system),
+                            ThemeMode.LIGHT to stringResource(MR.strings.theme_light),
+                            ThemeMode.DARK to stringResource(MR.strings.theme_dark),
                         )
                     } else {
                         mapOf(
-                            ThemeMode.LIGHT to stringResource(R.string.theme_light),
-                            ThemeMode.DARK to stringResource(R.string.theme_dark),
+                            ThemeMode.LIGHT to stringResource(MR.strings.theme_light),
+                            ThemeMode.DARK to stringResource(MR.strings.theme_dark),
                         )
                     },
                 ),
                 Preference.PreferenceItem.CustomPreference(
-                    title = stringResource(R.string.pref_app_theme),
+                    title = stringResource(MR.strings.pref_app_theme),
                 ) { item ->
                     val value by appThemePref.collectAsState()
                     AppThemePreferenceWidget(
@@ -109,7 +108,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                 },
                 Preference.PreferenceItem.SwitchPreference(
                     pref = amoledPref,
-                    title = stringResource(R.string.pref_dark_theme_pure_black),
+                    title = stringResource(MR.strings.pref_dark_theme_pure_black),
                     enabled = themeMode != ThemeMode.LIGHT,
                 ),
             ),
@@ -161,25 +160,25 @@ object SettingsAppearanceScreen : SearchableSettings {
         }
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_display),
+            title = stringResource(MR.strings.pref_category_display),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPrefs.bottomNavStyle(),
-                    title = stringResource(R.string.pref_bottom_nav_style),
+                    title = stringResource(MR.strings.pref_bottom_nav_style),
                     entries = mapOf(
-                        0 to stringResource(R.string.pref_bottom_nav_no_history),
-                        1 to stringResource(R.string.pref_bottom_nav_no_updates),
-                        2 to stringResource(R.string.pref_bottom_nav_no_manga),
+                        0 to stringResource(MR.strings.pref_bottom_nav_no_history),
+                        1 to stringResource(MR.strings.pref_bottom_nav_no_updates),
+                        2 to stringResource(MR.strings.pref_bottom_nav_no_manga),
                     ),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPrefs.isDefaultHomeTabLibraryManga(),
-                    title = stringResource(R.string.pref_default_home_tab_library),
+                    title = stringResource(MR.strings.pref_default_home_tab_library),
                     enabled = libraryPrefs.bottomNavStyle().get() != 2,
                 ),
                 Preference.PreferenceItem.BasicListPreference(
                     value = currentLanguage,
-                    title = stringResource(R.string.pref_app_language),
+                    title = stringResource(MR.strings.pref_app_language),
                     entries = langs,
                     onValueChanged = { newValue ->
                         currentLanguage = newValue
@@ -188,28 +187,28 @@ object SettingsAppearanceScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = uiPreferences.tabletUiMode(),
-                    title = stringResource(R.string.pref_tablet_ui_mode),
-                    entries = TabletUiMode.entries.associateWith { stringResource(it.titleResId) },
+                    title = stringResource(MR.strings.pref_tablet_ui_mode),
+                    entries = TabletUiMode.entries.associateWith { stringResource(it.titleRes) },
                     onValueChanged = {
-                        context.toast(R.string.requires_app_restart)
+                        context.stringResource(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = uiPreferences.dateFormat(),
-                    title = stringResource(R.string.pref_date_format),
+                    title = stringResource(MR.strings.pref_date_format),
                     entries = DateFormats
                         .associateWith {
                             val formattedDate = UiPreferences.dateFormat(it).format(now)
-                            "${it.ifEmpty { stringResource(R.string.label_default) }} ($formattedDate)"
+                            "${it.ifEmpty { stringResource(MR.strings.label_default) }} ($formattedDate)"
                         },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = uiPreferences.relativeTime(),
-                    title = stringResource(R.string.pref_relative_format),
+                    title = stringResource(MR.strings.pref_relative_format),
                     subtitle = stringResource(
-                        R.string.pref_relative_format_summary,
-                        stringResource(R.string.relative_time_today),
+                        MR.strings.pref_relative_format_summary,
+                        stringResource(MR.strings.relative_time_today),
                         formattedNow,
                     ),
                 ),
@@ -236,7 +235,7 @@ object SettingsAppearanceScreen : SearchableSettings {
         }
 
         langs.sortBy { it.second }
-        langs.add(0, Pair("", context.getString(R.string.label_default)))
+        langs.add(0, Pair("", context.stringResource(MR.strings.label_default)))
 
         return langs.toMap()
     }

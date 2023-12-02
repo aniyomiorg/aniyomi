@@ -14,6 +14,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.toast
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 
@@ -63,7 +64,7 @@ class DiscordLoginActivity : BaseActivity() {
             "Discord",
             "Logged In",
         )
-        toast(R.string.login_success)
+        toast(MR.strings.login_success)
         applicationInfo.dataDir.let { File("$it/app_webview/").deleteRecursively() }
         finish()
     }

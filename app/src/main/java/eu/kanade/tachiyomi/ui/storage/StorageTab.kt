@@ -6,7 +6,6 @@ import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
@@ -16,6 +15,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 data class StorageTab(
     private val isManga: Boolean = false,
@@ -28,7 +29,7 @@ data class StorageTab(
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 8u,
-                title = stringResource(R.string.label_storage),
+                title = stringResource(MR.strings.label_storage),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -38,7 +39,7 @@ data class StorageTab(
         val context = LocalContext.current
 
         TabbedScreen(
-            titleRes = R.string.label_storage,
+            titleRes = MR.strings.label_storage,
             tabs = persistentListOf(
                 animeStorageTab(),
                 mangaStorageTab(),

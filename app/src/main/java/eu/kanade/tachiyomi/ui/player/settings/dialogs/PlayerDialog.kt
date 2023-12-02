@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,20 +11,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import eu.kanade.tachiyomi.R
+import dev.icerock.moko.resources.StringResource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
+import tachiyomi.presentation.core.i18n.stringResource
 
-// TODO: (Merge_Change) stringResource "R.string.action_ok" to be replaced with
-//  "R.string.action_ok"
+// TODO: (Merge_Change) stringResource "MR.strings.action_ok" to be replaced with
+//  "MR.strings.action_ok"
 
 @Composable
 fun PlayerDialog(
-    @StringRes titleRes: Int,
+    titleRes: StringResource,
     modifier: Modifier = Modifier,
     hideSystemBars: Boolean = true,
     onConfirmRequest: (() -> Unit)? = null,
@@ -74,11 +74,11 @@ fun PlayerDialog(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         TextButton(onClick = onDismissRequest) {
-                            Text(stringResource(R.string.action_cancel))
+                            Text(stringResource(MR.strings.action_cancel))
                         }
 
                         TextButton(onClick = onConfirm) {
-                            Text(stringResource(R.string.action_ok))
+                            Text(stringResource(MR.strings.action_ok))
                         }
                     }
                 }

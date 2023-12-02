@@ -27,7 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
@@ -39,19 +38,20 @@ import eu.kanade.presentation.browse.anime.components.AnimeSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
+import tachiyomi.i18n.MR
 import tachiyomi.mi.data.AnimeDatabase
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.selectedBackground
@@ -81,20 +81,20 @@ class ClearAnimeDatabaseScreen : Screen() {
                                         model.removeAnimeBySourceId()
                                         model.clearSelection()
                                         model.hideConfirmation()
-                                        context.toast(R.string.clear_database_completed)
+                                        context.stringResource(MR.strings.clear_database_completed)
                                     }
                                 },
                             ) {
-                                Text(text = stringResource(R.string.action_ok))
+                                Text(text = stringResource(MR.strings.action_ok))
                             }
                         },
                         dismissButton = {
                             TextButton(onClick = model::hideConfirmation) {
-                                Text(text = stringResource(R.string.action_cancel))
+                                Text(text = stringResource(MR.strings.action_cancel))
                             }
                         },
                         text = {
-                            Text(text = stringResource(R.string.clear_database_confirmation))
+                            Text(text = stringResource(MR.strings.clear_database_confirmation))
                         },
                     )
                 }
@@ -102,19 +102,19 @@ class ClearAnimeDatabaseScreen : Screen() {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(R.string.pref_clear_anime_database),
+                            title = stringResource(MR.strings.pref_clear_anime_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {
                                     AppBarActions(
                                         actions = persistentListOf(
                                             AppBar.Action(
-                                                title = stringResource(R.string.action_select_all),
+                                                title = stringResource(MR.strings.action_select_all),
                                                 icon = Icons.Outlined.SelectAll,
                                                 onClick = model::selectAll,
                                             ),
                                             AppBar.Action(
-                                                title = stringResource(R.string.action_select_all),
+                                                title = stringResource(MR.strings.action_select_all),
                                                 icon = Icons.Outlined.FlipToBack,
                                                 onClick = model::invertSelection,
                                             ),
@@ -128,7 +128,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                 ) { contentPadding ->
                     if (s.items.isEmpty()) {
                         EmptyScreen(
-                            message = stringResource(R.string.database_clean),
+                            message = stringResource(MR.strings.database_clean),
                             modifier = Modifier.padding(contentPadding),
                         )
                     } else {
@@ -164,7 +164,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                                 enabled = s.selection.isNotEmpty(),
                             ) {
                                 Text(
-                                    text = stringResource(R.string.action_delete),
+                                    text = stringResource(MR.strings.action_delete),
                                     color = MaterialTheme.colorScheme.onPrimary,
                                 )
                             }
@@ -200,7 +200,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                     text = source.visualName,
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                Text(text = stringResource(R.string.clear_database_source_item_count, count))
+                Text(text = stringResource(MR.strings.clear_database_source_item_count, count))
             }
             Checkbox(
                 checked = isSelected,

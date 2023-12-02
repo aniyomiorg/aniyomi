@@ -10,11 +10,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.MigrateAnimeScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 data class MigrateAnimeScreen(
@@ -46,7 +46,7 @@ data class MigrateAnimeScreen(
             screenModel.events.collectLatest { event ->
                 when (event) {
                     MigrationAnimeEvent.FailedFetchingFavorites -> {
-                        context.toast(R.string.internal_error)
+                        context.stringResource(MR.strings.internal_error)
                     }
                 }
             }

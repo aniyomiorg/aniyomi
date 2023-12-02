@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -35,7 +36,7 @@ object SettingsDiscordScreen : SearchableSettings {
     @ReadOnlyComposable
     @Composable
     @StringRes
-    override fun getTitleRes() = R.string.pref_category_connections
+    override fun getTitleRes() = MR.strings.pref_category_connections
 
     @Composable
     override fun RowScope.AppBarAction() {

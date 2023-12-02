@@ -1,20 +1,20 @@
 package eu.kanade.tachiyomi.ui.browse.manga.migration
 
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.entries.manga.model.hasCustomCover
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import tachiyomi.domain.entries.manga.model.Manga
-import uy.kohesive.injekt.api.get
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
 data class MangaMigrationFlag(
     val flag: Int,
     val isDefaultSelected: Boolean,
-    val titleId: Int,
+    val titleId: StringResource,
 ) {
     companion object {
-        fun create(flag: Int, defaultSelectionMap: Int, titleId: Int): MangaMigrationFlag {
+        fun create(flag: Int, defaultSelectionMap: Int, titleId: StringResource): MangaMigrationFlag {
             return MangaMigrationFlag(
                 flag = flag,
                 isDefaultSelected = defaultSelectionMap and flag != 0,
@@ -53,22 +53,22 @@ object MangaMigrationFlags {
     /** Returns information about applicable flags with default selections. */
     fun getFlags(manga: Manga?, defaultSelectedBitMap: Int): List<MangaMigrationFlag> {
         val flags = mutableListOf<MangaMigrationFlag>()
-        flags += MangaMigrationFlag.create(CHAPTERS, defaultSelectedBitMap, R.string.chapters)
-        flags += MangaMigrationFlag.create(CATEGORIES, defaultSelectedBitMap, R.string.categories)
+        flags += MangaMigrationFlag.create(CHAPTERS, defaultSelectedBitMap, MR.strings.chapters)
+        flags += MangaMigrationFlag.create(CATEGORIES, defaultSelectedBitMap, MR.strings.categories)
 
         if (manga != null) {
             if (manga.hasCustomCover(coverCache)) {
                 flags += MangaMigrationFlag.create(
                     CUSTOM_COVER,
                     defaultSelectedBitMap,
-                    R.string.custom_cover,
+                    MR.strings.custom_cover,
                 )
             }
             if (downloadCache.getDownloadCount(manga) > 0) {
                 flags += MangaMigrationFlag.create(
                     DELETE_DOWNLOADED,
                     defaultSelectedBitMap,
-                    R.string.delete_downloaded,
+                    MR.strings.delete_downloaded,
                 )
             }
         }
