@@ -49,12 +49,12 @@ import tachiyomi.data.handlers.manga.AndroidMangaDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.mi.data.AnimeDatabase
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
-import tachiyomi.domain.storage.service.StorageManager
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton

@@ -1,14 +1,9 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat

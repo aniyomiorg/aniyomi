@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.loader
 
-import android.net.Uri
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video

@@ -7,7 +7,6 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import tachiyomi.core.storage.nameWithoutExtension
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
-import java.io.File
 import java.io.InputStream
 
 private const val DEFAULT_COVER_NAME = "cover.jpg"

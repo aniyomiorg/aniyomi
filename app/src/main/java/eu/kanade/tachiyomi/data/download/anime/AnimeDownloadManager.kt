@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload

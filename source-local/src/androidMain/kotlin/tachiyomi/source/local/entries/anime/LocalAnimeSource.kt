@@ -10,7 +10,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
-import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -66,7 +65,11 @@ actual class LocalAnimeSource(
 
     override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
 
-    override suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage = withIOContext {
+    override suspend fun getSearchAnime(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList,
+    ): AnimesPage = withIOContext {
         val lastModifiedLimit = if (filters === LATEST_FILTERS) {
             System.currentTimeMillis() - LATEST_THRESHOLD
         } else {

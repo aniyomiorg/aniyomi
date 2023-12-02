@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
-import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
