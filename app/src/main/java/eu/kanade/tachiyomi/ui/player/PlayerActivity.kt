@@ -39,8 +39,8 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import eu.kanade.domain.connections.service.ConnectionsPreferences
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
