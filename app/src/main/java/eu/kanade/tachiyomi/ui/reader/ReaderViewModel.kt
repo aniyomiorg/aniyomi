@@ -679,12 +679,10 @@ class ReaderViewModel @JvmOverloads constructor(
     fun getMangaReadingMode(resolveDefault: Boolean = true): Int {
         val default = readerPreferences.defaultReadingMode().get()
         val readingMode = ReadingMode.fromPreference(manga?.readingMode?.toInt())
-        // SY -->
         return when {
             resolveDefault && readingMode == ReadingMode.DEFAULT -> default
-            else -> manga?.readingMode?.toInt()!!
+            else -> manga?.readingMode?.toInt() ?: default
         }
-        // SY <--
     }
 
     /**

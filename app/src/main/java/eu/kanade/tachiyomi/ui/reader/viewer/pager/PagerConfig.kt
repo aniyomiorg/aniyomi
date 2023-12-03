@@ -132,6 +132,7 @@ class PagerConfig(
                 { imagePropertyChangedListener?.invoke() },
             )
 
+        // SY -->
         readerPreferences.pageLayout()
             .register(
                 {
@@ -148,6 +149,7 @@ class PagerConfig(
                     reloadChapterListener?.invoke(doublePages)
                 },
             )
+        // SY <--
     }
 
     private fun zoomTypeFromPreference(value: Int) {

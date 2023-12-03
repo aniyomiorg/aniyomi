@@ -85,6 +85,8 @@ class PagerPageHolder(
         super.onDetachedFromWindow()
         loadJob?.cancel()
         loadJob = null
+        extraLoadJob?.cancel()
+        extraLoadJob = null
     }
 
     /**

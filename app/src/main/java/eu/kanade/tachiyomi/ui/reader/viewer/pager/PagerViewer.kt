@@ -71,7 +71,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
             field = value
             if (value) {
                 awaitingIdleViewerChapters?.let { viewerChapters ->
-                    setChaptersInternal(viewerChapters)
+                    setChaptersDoubleShift(viewerChapters)
                     awaitingIdleViewerChapters = null
                     if (viewerChapters.currChapter.pages?.size == 1) {
                         adapter.nextTransition?.to?.let(activity::requestPreloadChapter)
@@ -104,18 +104,9 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
         pager.id = R.id.reader_pager
         pager.adapter = adapter
         pager.addOnPageChangeListener(
-            object : ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    if (activity.isScrollingThroughPages.not()) {
-                        activity.hideMenu()
-                    }
-                    onPageChange(position)
-                }
-
-                override fun onPageScrollStateChanged(state: Int) {
-                    isIdle = state == ViewPager.SCROLL_STATE_IDLE
-                }
-            },
+            // SY -->
+            pagerListener,
+            // SY <--
         )
         pager.tapListener = { event ->
             val pos = PointF(event.x / pager.width, event.y / pager.height)
@@ -182,8 +173,8 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     private fun getPageHolder(page: ReaderPage): PagerPageHolder? =
         pager.children
-            .filterIsInstance(PagerPageHolder::class.java)
-            .firstOrNull { it.item == page }
+            .filterIsInstance<PagerPageHolder>()
+            .firstOrNull { it.item.first == page || it.item.second == page }
 
     /**
      * Called when a new page (either a [ReaderPage] or [ChapterTransition]) is marked as active
@@ -291,9 +282,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      * Sets the active [chapters] on this pager.
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
-        val forceTransition = config.alwaysShowChapterTransition || adapter.joinedItems.getOrNull(
-            pager.currentItem,
-        ) is ChapterTransition
+        val forceTransition = config.alwaysShowChapterTransition || adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set
