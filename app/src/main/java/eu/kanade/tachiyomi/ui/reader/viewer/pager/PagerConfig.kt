@@ -52,7 +52,7 @@ class PagerConfig(
     var landscapeZoom = false
         private set
 
-    // SY -->
+  
     var shiftDoublePage = false
 
     var doublePages = readerPreferences.pageLayout().get() == PageLayout.DOUBLE_PAGES &&
@@ -71,7 +71,7 @@ class PagerConfig(
 
     var centerMarginType = CenterMarginType.NONE
 
-    // SY <--
+
 
     init {
         readerPreferences.readerTheme()

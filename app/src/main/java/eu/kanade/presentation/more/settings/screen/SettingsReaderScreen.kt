@@ -433,7 +433,7 @@ object SettingsReaderScreen : SearchableSettings {
                     title = stringResource(MR.strings.page_layout),
                     subtitle = stringResource(MR.strings.automatic_can_still_switch),
                     entries = ReaderPreferences.PageLayouts
-                        .mapIndexed { index, it -> index + 1 to stringResource(it) }
+                        .mapIndexed { index, it -> index to stringResource(it) }
                         .toMap(),
                 ),
             ),

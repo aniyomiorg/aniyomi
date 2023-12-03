@@ -9,7 +9,7 @@ enum class ReaderBottomButton(val value: String, val stringRes: StringResource) 
     Share("sh", MR.strings.action_share),
     ReadingMode("rm", MR.strings.viewer),
     Rotation("rot", MR.strings.rotation_type),
-    Crop("crop", MR.strings.pref_crop_borders),
+    Crop("cro", MR.strings.pref_crop_borders),
     PageLayout("pl", MR.strings.page_layout),
     ;
 
@@ -17,7 +17,6 @@ enum class ReaderBottomButton(val value: String, val stringRes: StringResource) 
 
     companion object {
         val BUTTONS_DEFAULTS = setOf(
-            ViewChapters,
             ReadingMode,
             Rotation,
             Crop,
