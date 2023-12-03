@@ -35,6 +35,8 @@ import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
@@ -52,7 +54,7 @@ fun StreamsCatalogSheet(
     onSettingsClicked: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val tabTitles = persistentListOf(
+    val tabTitles = mutableListOf(
         stringResource(MR.strings.subtitle_dialog_header),
         stringResource(MR.strings.audio_dialog_header),
     )
@@ -62,7 +64,7 @@ fun StreamsCatalogSheet(
 
     TabbedDialog(
         onDismissRequest = onDismissRequest,
-        tabTitles = tabTitles,
+        tabTitles = tabTitles.toPersistentList(),
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
         hideSystemBars = true,
