@@ -105,7 +105,7 @@ fun BottomReaderBar(
         if (
             !dualPageSplitEnabled &&
             ReaderBottomButton.PageLayout.isIn(enabledButtons)
-            //&& ReadingMode.isPagerType(readingMode.flagValue) Leave it for now
+            // && ReadingMode.isPagerType(readingMode.flagValue) Leave it for now
         ) {
             IconButton(onClick = onClickPageLayout) {
                 Icon(
