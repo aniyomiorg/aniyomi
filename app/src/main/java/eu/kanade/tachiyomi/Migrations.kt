@@ -542,6 +542,11 @@ object Migrations {
                     playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
                 }
             }
+            if (oldVersion < 111) {
+                File(context.cacheDir, "dl_index_cache")
+                    .takeIf { it.exists() }
+                    ?.delete()
+            }
             return true
         }
         return false
