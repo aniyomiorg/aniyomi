@@ -19,14 +19,40 @@ enum class ReadingMode(
     val type: ViewerType? = null,
 ) {
     DEFAULT(MR.strings.label_default, R.drawable.ic_reader_default_24dp, 0x00000000),
-    LEFT_TO_RIGHT(MR.strings.left_to_right_viewer, R.drawable.ic_reader_ltr_24dp, 0x00000001),
-    RIGHT_TO_LEFT(MR.strings.right_to_left_viewer, R.drawable.ic_reader_rtl_24dp, 0x00000002),
-    VERTICAL(MR.strings.vertical_viewer, R.drawable.ic_reader_vertical_24dp, 0x00000003),
-    WEBTOON(MR.strings.webtoon_viewer, R.drawable.ic_reader_webtoon_24dp, 0x00000004),
+    LEFT_TO_RIGHT(
+        MR.strings.left_to_right_viewer,
+        R.drawable.ic_reader_ltr_24dp,
+        0x00000001,
+        Direction.Horizontal,
+        ViewerType.Pager,
+    ),
+    RIGHT_TO_LEFT(
+        MR.strings.right_to_left_viewer,
+        R.drawable.ic_reader_rtl_24dp,
+        0x00000002,
+        Direction.Horizontal,
+        ViewerType.Pager,
+    ),
+    VERTICAL(
+        MR.strings.vertical_viewer,
+        R.drawable.ic_reader_vertical_24dp,
+        0x00000003,
+        Direction.Vertical,
+        ViewerType.Pager,
+    ),
+    WEBTOON(
+        MR.strings.webtoon_viewer,
+        R.drawable.ic_reader_webtoon_24dp,
+        0x00000004,
+        Direction.Vertical,
+        ViewerType.Webtoon,
+    ),
     CONTINUOUS_VERTICAL(
         MR.strings.vertical_plus_viewer,
         R.drawable.ic_reader_continuous_vertical_24dp,
         0x00000005,
+        Direction.Vertical,
+        ViewerType.Webtoon,
     ),
     ;
 
