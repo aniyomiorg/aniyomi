@@ -810,11 +810,11 @@ class ReaderActivity : BaseActivity() {
                 .launchIn(lifecycleScope)
 
             readerPreferences.customBrightness().changes()
-                .onEach { setCustomBrightness(it) }
+                .onEach(::setCustomBrightness)
                 .launchIn(lifecycleScope)
 
             readerPreferences.colorFilter().changes()
-                .onEach(::setCustomBrightness)
+                .onEach(::setColorFilter)
                 .launchIn(lifecycleScope)
 
             readerPreferences.colorFilterMode().changes()
