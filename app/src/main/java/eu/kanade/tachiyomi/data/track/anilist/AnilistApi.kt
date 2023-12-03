@@ -250,6 +250,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             |month
                             |day
                         |}
+                        |averageScore
                     |}
                 |}
             |}
@@ -303,6 +304,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             |month
                             |day
                         |}
+                        |averageScore
                     |}
                 |}
             |}
@@ -533,6 +535,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
             struct["chapters"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }
 
@@ -546,6 +549,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
             struct["episodes"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }
 
