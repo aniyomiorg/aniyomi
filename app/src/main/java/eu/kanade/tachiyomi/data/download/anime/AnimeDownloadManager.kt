@@ -72,7 +72,13 @@ class AnimeDownloadManager(
      * Tells the downloader to begin downloads.
      */
     fun startDownloads() {
-        AnimeDownloadJob.start(context)
+        if (downloader.isRunning) return
+
+        if (AnimeDownloadJob.isRunning(context)) {
+            downloader.start()
+        } else {
+            AnimeDownloadJob.start(context)
+        }
     }
 
     /**
@@ -101,22 +107,16 @@ class AnimeDownloadManager(
         return queueState.value.find { it.episode.id == episodeId }
     }
 
-    fun startDownloadNow(episodeId: Long?) {
-        if (episodeId == null) return
-        val download = getQueuedDownloadOrNull(episodeId)
+    fun startDownloadNow(episodeId: Long) {
+        val existingDownload = getQueuedDownloadOrNull(episodeId)
         // If not in queue try to start a new download
-        val toAdd = download ?: runBlocking { AnimeDownload.fromEpisodeId(episodeId) } ?: return
-        val queue = queueState.value.toMutableList()
-        download?.let { queue.remove(it) }
-        queue.add(0, toAdd)
-        reorderQueue(queue)
-        if (!downloader.isRunning) {
-            if (AnimeDownloadJob.isRunning(context)) {
-                downloader.start()
-            } else {
-                AnimeDownloadJob.start(context)
-            }
+        val toAdd = existingDownload ?: runBlocking { AnimeDownload.fromEpisodeId(episodeId) } ?: return
+        queueState.value.toMutableList().apply {
+            existingDownload?.let { remove(it) }
+            add(0, toAdd)
+            reorderQueue(this)
         }
+        startDownloads()
     }
 
     /**
@@ -157,7 +157,7 @@ class AnimeDownloadManager(
             addAll(0, downloads)
             reorderQueue(this)
         }
-        if (!AnimeDownloadJob.isRunning(context)) AnimeDownloadJob.start(context)
+        if (!AnimeDownloadJob.isRunning(context)) startDownloads()
     }
 
     /**
