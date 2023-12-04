@@ -58,8 +58,8 @@ fun PlayerTextButton(
     text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
 ){
     Box(
         contentAlignment = Alignment.Center,

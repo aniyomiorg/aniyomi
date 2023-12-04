@@ -34,32 +34,44 @@ fun BottomPlayerControls(
     ) {
         Column {
             PlayerRow {
-                PlayerRow {
-                    PlayerIcon(Icons.Outlined.Lock) { activity.playerControls.lockControls(true) }
-                    PlayerIcon(Icons.Outlined.ScreenRotation) { activity.rotatePlayer() }
-                    PlayerTextButton(
-                        text = stringResource(
-                            id = R.string.ui_speed,
-                            activity.playerPreferences.playerSpeed().collectAsState().value,
-                        ),
-                        onClick = activity::cycleSpeed,
-                        onLongClick = activity.viewModel::showSpeedPicker,
-                    )
-                }
-
-                PlayerRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    PlayerTextButton(
-                        text = state.skipIntroText,
-                        onClick = activity::skipIntro,
-                        onLongClick = activity.viewModel::showSkipIntroLength,
-                    )
-
-                    PlayerIcon(Icons.Outlined.Fullscreen) { activity.playerControls.cycleViewMode() }
-
-                    if (!activity.playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled)
-                        PlayerIcon(Icons.Outlined.PictureInPictureAlt) { activity.pip.start() }
-                }
+                PlayerIcon(Icons.Outlined.Lock) { activity.playerControls.lockControls(true) }
+                PlayerIcon(Icons.Outlined.ScreenRotation) { activity.rotatePlayer() }
+                PlayerTextButton(
+                    text = stringResource(
+                        id = R.string.ui_speed,
+                        activity.playerPreferences.playerSpeed().collectAsState().value,
+                    ),
+                    onClick = activity::cycleSpeed,
+                    onLongClick = activity.viewModel::showSpeedPicker,
+                )
             }
+
+            PlayerRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                PlayerTextButton(
+                    text = state.skipIntroText,
+                    onClick = activity::skipIntro,
+                    onLongClick = activity.viewModel::showSkipIntroLength,
+                )
+
+                PlayerIcon(Icons.Outlined.Fullscreen) { activity.playerControls.cycleViewMode() }
+
+                if (!activity.playerPreferences.pipOnExit()
+                        .get() && activity.pip.supportedAndEnabled
+                )
+                    PlayerIcon(Icons.Outlined.PictureInPictureAlt) { activity.pip.start() }
+            }
+        }
+
+        PlayerRow(modifier = Modifier.fillMaxWidth()) {
+            PlayerTextButton(
+                text = state.skipIntroText,
+                onClick = activity::skipIntro,
+            )
+
+            PlayerTextButton(
+                text = state.skipIntroText,
+                onClick = activity::skipIntro,
+            )
         }
     }
 }

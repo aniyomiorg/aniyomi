@@ -1735,7 +1735,7 @@ class PlayerActivity : BaseActivity() {
 
     private var skipType: SkipType? = null
 
-    private suspend fun aniSkipStuff(position: Long) {
+    private fun aniSkipStuff(position: Long) {
         if (!aniSkipEnable) return
         // if it doesn't find any interval it will show the +85 button
         if (aniSkipInterval == null) return
