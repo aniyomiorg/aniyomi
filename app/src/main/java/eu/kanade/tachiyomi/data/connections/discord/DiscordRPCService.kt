@@ -285,8 +285,10 @@ class DiscordRPCService : Service() {
             val chapterNumber = readerData.chapterNumber?.let {
                 when {
                     discordIncognito -> null
-                    connectionsPreferences.useChapterTitles().get() -> "$it (${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
-                    ceil(it.toDouble()) == floor(it.toDouble()) -> "Chapter ${it.toInt()} (${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
+                    connectionsPreferences.useChapterTitles().get() ->
+                        "$it (${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
+                    ceil(it.toDouble()) == floor(it.toDouble()) -> "Chapter ${it.toInt()}" + " " +
+                        "(${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
                     else -> "Chapter $it (${readerData.chapterProgress.first}/${readerData.chapterProgress.second}"
                 }
             }
