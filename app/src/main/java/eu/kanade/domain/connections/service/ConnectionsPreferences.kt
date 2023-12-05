@@ -38,6 +38,8 @@ class ConnectionsPreferences(
         emptySet(),
     )
 
+    fun useChapterTitles() = preferenceStore.getBoolean("pref_discord_rpc_use_chapter_titles", false)
+
     companion object {
 
         fun connectionsUsername(syncId: Long) = "pref_anime_connections_username_$syncId"

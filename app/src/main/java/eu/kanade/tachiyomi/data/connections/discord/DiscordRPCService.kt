@@ -218,10 +218,11 @@ class DiscordRPCService : Service() {
 
             val animeTitle = playerData.animeTitle.takeUnless { discordIncognito }
 
-            val episodeNumber = playerData.episodeNumber?.toFloatOrNull()?.let {
+            val episodeNumber = playerData.episodeNumber?.let {
                 when {
                     discordIncognito -> null
-                    ceil(it) == floor(it) -> "Episode ${it.toInt()}"
+                    connectionsPreferences.useChapterTitles().get() -> it
+                    ceil(it.toDouble()) == floor(it.toDouble()) -> "Episode ${it.toInt()}"
                     else -> "Episode $it"
                 }
             }
@@ -281,11 +282,12 @@ class DiscordRPCService : Service() {
 
             val mangaTitle = readerData.mangaTitle.takeUnless { discordIncognito }
 
-            val chapterNumber = readerData.chapterNumber?.toFloatOrNull()?.let {
+            val chapterNumber = readerData.chapterNumber?.let {
                 when {
                     discordIncognito -> null
-                    ceil(it) == floor(it) -> "Chapter ${it.toInt()}"
-                    else -> "Chapter $it"
+                    connectionsPreferences.useChapterTitles().get() -> "$it (${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
+                    ceil(it.toDouble()) == floor(it.toDouble()) -> "Chapter ${it.toInt()} (${readerData.chapterProgress.first}/${readerData.chapterProgress.second})"
+                    else -> "Chapter $it (${readerData.chapterProgress.first}/${readerData.chapterProgress.second}"
                 }
             }
 
