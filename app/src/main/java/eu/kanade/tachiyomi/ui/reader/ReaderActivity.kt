@@ -1155,9 +1155,11 @@ class ReaderActivity : BaseActivity() {
                             thumbnailUrl = viewModel.manga?.thumbnailUrl,
                             chapterProgress = Pair(viewModel.state.value.currentPage, viewModel.state.value.totalPages),
                             chapterNumber =
-                            if(connectionsPreferences.useChapterTitles().get())
+                            if (connectionsPreferences.useChapterTitles().get()) {
                                 viewModel.state.value.currentChapter?.chapter?.name
-                            else viewModel.state.value.currentChapter?.chapter?.chapter_number.toString(),
+                            } else {
+                                viewModel.state.value.currentChapter?.chapter?.chapter_number.toString()
+                            },
                         ),
                     )
                 } else {
