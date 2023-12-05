@@ -44,6 +44,8 @@
     <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Kuukiyomi does not share it anywhere else</string>
     <string name="pref_discord_rpc">Discord Rich Presence</string>
     <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
+    <string name="show_chapters_titles_title">Show Episodes/Chapters Titles</string>
+    <string name="show_chapters_titles_subtitle">Show the title of the episode/chapter you are reading</string>
     <string name="pref_discord_status">Discord Status</string>
     <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
     <string name="pref_discord_idle">🌙 Idle</string>
