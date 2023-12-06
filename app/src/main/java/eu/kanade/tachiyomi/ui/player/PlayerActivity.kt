@@ -86,6 +86,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -621,19 +623,7 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
-            // TODO: I think this is a bad hack.
-            //  We need to find a way to let MPV access our fonts directory.
-            val storageManager: StorageManager = Injekt.get()
-            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
-                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
-                outFile?.let {
-                    font.openInputStream().copyTo(it.openOutputStream())
-                }
-            }
-            MPVLib.setPropertyString(
-                "sub-fonts-dir",
-                applicationContext.filesDir.path,
-            )
+            copyFontsDirectory()
 
             if (playerPreferences.subtitleFont().get().trim() != "") {
                 MPVLib.setPropertyString("sub-font", playerPreferences.subtitleFont().get())
@@ -650,6 +640,25 @@ class PlayerActivity : BaseActivity() {
                 "sub-back-color",
                 backgroundColorSubtitles().get().toHexString(),
             )
+        }
+    }
+
+    private fun copyFontsDirectory() {
+        // TODO: I think this is a bad hack.
+        //  We need to find a way to let MPV directly access our fonts directory.
+        CoroutineScope(Dispatchers.IO).launchIO {
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
+                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                outFile?.let {
+                    font.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            MPVLib.setPropertyString(
+                "sub-fonts-dir",
+                applicationContext.filesDir.path,
+            )
+            logcat { "FINISHED FONTS" }
         }
     }
 
@@ -980,12 +989,8 @@ class PlayerActivity : BaseActivity() {
         val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
-            try { // TODO: https://issuetracker.google.com/issues/238920463 is fixed in API 34, but for now this will do
-                gestures.onTouch(v, event)
-                mDetector.onTouchEvent(event)
-            } catch (_: NullPointerException) {
-                false
-            }
+            gestures.onTouch(v, event)
+            mDetector.onTouchEvent(event)
         }
     }
 
