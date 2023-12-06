@@ -25,7 +25,7 @@ enum class ReadingMode(
         0x00000001,
         Direction.Horizontal,
         ViewerType.Pager,
-        ),
+    ),
     RIGHT_TO_LEFT(
         MR.strings.right_to_left_viewer,
         R.drawable.ic_reader_rtl_24dp,
