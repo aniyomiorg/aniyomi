@@ -361,6 +361,8 @@ class AnimeDownloadCache(
                                     when {
                                         // Ignore incomplete downloads
                                         it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
+                                        // Folder of videos
+                                        it.isDirectory -> it.name
                                         // MP4 files
                                         it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
                                         // MKV files
