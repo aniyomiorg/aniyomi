@@ -54,9 +54,11 @@ object SettingsDiscordScreen : SearchableSettings {
         val connectionsPreferences = remember { Injekt.get<ConnectionsPreferences>() }
         val connectionsManager = remember { Injekt.get<ConnectionsManager>() }
         val enableDRPCPref = connectionsPreferences.enableDiscordRPC()
+        val useChapterTitlesPref = connectionsPreferences.useChapterTitles()
         val discordRPCStatus = connectionsPreferences.discordRPCStatus()
 
         val enableDRPC by enableDRPCPref.collectAsState()
+        val useChapterTitles by useChapterTitlesPref.collectAsState()
 
         var dialog by remember { mutableStateOf<Any?>(null) }
         dialog?.run {
@@ -80,6 +82,12 @@ object SettingsDiscordScreen : SearchableSettings {
                     Preference.PreferenceItem.SwitchPreference(
                         pref = enableDRPCPref,
                         title = stringResource(R.string.pref_enable_discord_rpc),
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = useChapterTitlesPref,
+                        enabled = enableDRPC,
+                        title = stringResource(id = R.string.show_chapters_titles_title),
+                        subtitle = stringResource(id = R.string.show_chapters_titles_subtitle),
                     ),
                     Preference.PreferenceItem.ListPreference(
                         pref = discordRPCStatus,

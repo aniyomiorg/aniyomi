@@ -302,6 +302,8 @@
     <string name="connections_discord_info">Este servicio de Discord funciona mediante el registro de token. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Animetail no lo comparte en ningún otro lugar.</string>
     <string name="pref_discord_rpc">Presencia Rica de Discord</string>
     <string name="pref_enable_discord_rpc">Habilitar Presencia Rica de Discord</string>
+    <string name="show_chapters_titles_title">Mostrar Títulos de Episodios/Capítulos que estas viendo</string>
+    <string name="show_chapters_titles_subtitle">Muestra el título del episodio/capítulo que estás leyendo</string>
     <string name="pref_discord_status">Estado de Discord</string>
     <string name="pref_discord_dnd">⛔ No molestar</string>
     <string name="pref_discord_idle">🌙 Inactivo</string>

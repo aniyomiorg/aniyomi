@@ -1874,8 +1874,11 @@ class PlayerActivity : BaseActivity() {
                             animeId = viewModel.currentAnime?.id,
                             // AM (CU)>
                             animeTitle = viewModel.currentAnime?.ogTitle,
-                            episodeNumber = viewModel.currentEpisode?.episode_number?.toString(),
                             thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                            episodeNumber =
+                            if(connectionsPreferences.useChapterTitles().get())
+                                viewModel.currentEpisode?.name.toString()
+                            else viewModel.state.value.episode?.episode_number.toString(),
                         ),
                     )
                 } else {
