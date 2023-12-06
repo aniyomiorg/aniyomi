@@ -82,6 +82,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -89,6 +91,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
@@ -612,19 +615,7 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
-            // TODO: I think this is a bad hack.
-            //  We need to find a way to let MPV access our fonts directory.
-            val storageManager: StorageManager = Injekt.get()
-            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
-                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
-                outFile?.let {
-                    font.openInputStream().copyTo(it.openOutputStream())
-                }
-            }
-            MPVLib.setPropertyString(
-                "sub-fonts-dir",
-                applicationContext.filesDir.path,
-            )
+            copyFontsDirectory()
 
             if (playerPreferences.subtitleFont().get().trim() != "") {
                 MPVLib.setPropertyString("sub-font", playerPreferences.subtitleFont().get())
@@ -641,6 +632,25 @@ class PlayerActivity : BaseActivity() {
                 "sub-back-color",
                 backgroundColorSubtitles().get().toHexString(),
             )
+        }
+    }
+
+    private fun copyFontsDirectory() {
+        // TODO: I think this is a bad hack.
+        //  We need to find a way to let MPV directly access our fonts directory.
+        CoroutineScope(Dispatchers.IO).launchIO {
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
+                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                outFile?.let {
+                    font.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            MPVLib.setPropertyString(
+                "sub-fonts-dir",
+                applicationContext.filesDir.path,
+            )
+            logcat { "FINISHED FONTS" }
         }
     }
 
