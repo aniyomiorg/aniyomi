@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_manga">Déplacer le Manga vers l\'onglet Plus</string>
-    <string name="unlock_app">Déverrouiller Aniyomi</string>
+    <string name="unlock_app">Déverrouiller Animetail</string>
     <string name="action_filter_unseen">Non vus</string>
     <string name="action_sort_total_episodes">Nombre d\'épisodes</string>
     <string name="action_sort_last_seen">Dernier vu</string>

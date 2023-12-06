@@ -34,12 +34,12 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.settings.sheetDialogPadding
 import `is`.xyz.mpv.MPVLib
+import kotlinx.collections.immutable.toPersistentList
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import java.io.File
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun StreamsCatalogSheet(
@@ -62,7 +62,7 @@ fun StreamsCatalogSheet(
 
     TabbedDialog(
         onDismissRequest = onDismissRequest,
-        tabTitles = tabTitles.toImmutableList(),
+        tabTitles = tabTitles.toPersistentList(),
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
         hideSystemBars = true,
