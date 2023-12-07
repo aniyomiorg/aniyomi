@@ -29,16 +29,9 @@ class EpisodeLoader {
          * @param source the source of the anime.
          */
         suspend fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): List<Video> {
-            val downloadManager: AnimeDownloadManager = Injekt.get()
-            val isDownloaded = downloadManager.isEpisodeDownloaded(
-                episode.name,
-                episode.scanlator,
-                anime.title,
-                anime.source,
-                skipCache = true,
-            )
+            val isDownloaded = isDownload(episode, anime)
             return when {
-                isDownloaded -> isDownloaded(episode, anime, source, downloadManager)
+                isDownloaded -> isDownload(episode, anime, source)
                 source is AnimeHttpSource -> isHttp(episode, source)
                 source is LocalAnimeSource -> isLocal(episode)
                 else -> error("source not supported")
@@ -51,7 +44,7 @@ class EpisodeLoader {
          * @param episode the episode being parsed.
          * @param anime the anime of the episode.
          */
-        fun isDownloaded(episode: Episode, anime: Anime): Boolean {
+        fun isDownload(episode: Episode, anime: Anime): Boolean {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             return downloadManager.isEpisodeDownloaded(
                 episode.name,
@@ -90,14 +83,13 @@ class EpisodeLoader {
          * @param episode the episode being parsed.
          * @param anime the anime of the episode.
          * @param source the source of the anime.
-         * @param downloadManager the AnimeDownloadManager instance to use.
          */
-        private fun isDownloaded(
+        private fun isDownload(
             episode: Episode,
             anime: Anime,
             source: AnimeSource,
-            downloadManager: AnimeDownloadManager,
         ): List<Video> {
+            val downloadManager: AnimeDownloadManager = Injekt.get()
             return try {
                 val video = downloadManager.buildVideo(source, anime, episode)
                 listOf(video)
@@ -111,7 +103,7 @@ class EpisodeLoader {
          *
          * @param episode the episode being parsed.
          */
-        private suspend fun isLocal(
+        private fun isLocal(
             episode: Episode,
         ): List<Video> {
             return try {

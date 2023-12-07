@@ -305,7 +305,7 @@ class PlayerViewModel @JvmOverloads constructor(
     fun isEpisodeOnline(): Boolean? {
         val anime = currentAnime ?: return null
         val episode = currentEpisode ?: return null
-        return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(
+        return currentSource is AnimeHttpSource && !EpisodeLoader.isDownload(
             episode.toDomainEpisode()!!,
             anime,
         )
@@ -379,8 +379,8 @@ class PlayerViewModel @JvmOverloads constructor(
 
         val nextEpisode = this.currentPlaylist[getCurrentEpisodeIndex() + 1]
         val episodesAreDownloaded =
-            EpisodeLoader.isDownloaded(currentEpisode.toDomainEpisode()!!, anime) &&
-                EpisodeLoader.isDownloaded(nextEpisode.toDomainEpisode()!!, anime)
+            EpisodeLoader.isDownload(currentEpisode.toDomainEpisode()!!, anime) &&
+                EpisodeLoader.isDownload(nextEpisode.toDomainEpisode()!!, anime)
 
         viewModelScope.launchIO {
             if (!episodesAreDownloaded) {

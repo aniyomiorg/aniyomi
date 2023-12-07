@@ -87,7 +87,7 @@ class PictureInPictureHandler(
                             MR.strings.action_previous_episode,
                             PIP_PREVIOUS,
                             PIP_PREVIOUS,
-                            plPos != 0
+                            plPos != 0,
                         )
                     } else {
                         createRemoteAction(
@@ -117,7 +117,7 @@ class PictureInPictureHandler(
                         MR.strings.action_next_episode,
                         PIP_NEXT,
                         PIP_NEXT,
-                        plPos != plCount - 1
+                        plPos != plCount - 1,
                     ),
                 ),
             )
