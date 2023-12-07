@@ -134,7 +134,7 @@ fun PlayerSettingsSheet(
                     modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
-                    PlayerStatsPage.values().forEach {
+                    PlayerStatsPage.entries.forEach {
                         FilterChip(
                             selected = statisticsPage == it.page,
                             onClick = { togglePlayerStatsPage(it.page) },
