@@ -391,7 +391,10 @@ class PlayerActivity : BaseActivity() {
             when (state.sheet) {
                 is PlayerViewModel.Sheet.ScreenshotOptions -> {
                     ScreenshotOptionsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        screenModel = PlayerSettingsScreenModel(
+                            preferences = viewModel.playerPreferences,
+                            hasSubTracks = streams.subtitle.tracks.size > 1,
+                        ),
                         cachePath = cacheDir.path,
                         onSetAsCover = viewModel::setAsCover,
                         onShare = { viewModel.shareImage(it, player.timePos) },
@@ -505,8 +508,8 @@ class PlayerActivity : BaseActivity() {
                 is PlayerViewModel.Sheet.SubtitleSettings -> {
                     SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(
-                            viewModel.playerPreferences,
-                            streams.subtitle.tracks.size > 1,
+                            preferences = viewModel.playerPreferences,
+                            hasSubTracks = streams.subtitle.tracks.size > 1,
                         ),
                         onDismissRequest = pauseForDialogSheet(fadeControls = true),
                     )

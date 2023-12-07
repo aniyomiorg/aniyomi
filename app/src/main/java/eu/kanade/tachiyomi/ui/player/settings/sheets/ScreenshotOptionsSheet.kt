@@ -10,24 +10,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.ActionButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -80,13 +74,15 @@ fun ScreenshotOptionsSheet(
                 )
             }
 
-            screenModel.ToggleableRow(
-                textRes = MR.strings.screenshot_show_subs,
-                paddingValues = PaddingValues(MaterialTheme.padding.medium),
-                isChecked = showSubtitles.collectAsState().value,
-                onClick = { screenModel.togglePreference { showSubtitles } },
-                coloredText = true,
-            )
+            if (screenModel.hasSubTracks) {
+                screenModel.ToggleableRow(
+                    textRes = MR.strings.screenshot_show_subs,
+                    paddingValues = PaddingValues(MaterialTheme.padding.medium),
+                    isChecked = showSubtitles.collectAsState().value,
+                    onClick = { screenModel.togglePreference { showSubtitles } },
+                    coloredText = true,
+                )
+            }
         }
     }
 
@@ -104,35 +100,5 @@ fun ScreenshotOptionsSheet(
             },
             onDismissRequest = { showSetCoverDialog = false },
         )
-    }
-}
-
-// TODO: (Merge_Change) function is to be removed once added in merge
-//  "package tachiyomi.presentation.core.components"
-
-@Composable
-private fun ActionButton(
-    modifier: Modifier = Modifier,
-    title: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-) {
-    TextButton(
-        modifier = modifier,
-        onClick = onClick,
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-            )
-            Text(
-                text = title,
-                textAlign = TextAlign.Center,
-            )
-        }
     }
 }
