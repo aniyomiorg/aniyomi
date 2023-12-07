@@ -61,12 +61,13 @@ import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSh
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_NEXT
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PAUSE
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PLAY
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PREVIOUS
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_SKIP
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -838,11 +839,7 @@ class PlayerActivity : BaseActivity() {
         super.onResume()
         refreshUi()
         if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let {
-                pip.update(
-                    !it,
-                )
-            }
+            player.paused?.let { pip.update(!it) }
         }
     }
 
@@ -1441,17 +1438,20 @@ class PlayerActivity : BaseActivity() {
                         return
                     }
                     when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
-                        CONTROL_TYPE_PLAY -> {
+                        PIP_PLAY -> {
                             player.paused = false
                         }
-                        CONTROL_TYPE_PAUSE -> {
+                        PIP_PAUSE -> {
                             player.paused = true
                         }
-                        CONTROL_TYPE_PREVIOUS -> {
+                        PIP_PREVIOUS -> {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
                         }
-                        CONTROL_TYPE_NEXT -> {
+                        PIP_NEXT -> {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                        }
+                        PIP_SKIP -> {
+                            doubleTapSeek(time = 10)
                         }
                     }
                 }
