@@ -62,7 +62,13 @@ enum class HwDecState(val title: String, val mpvValue: String) {
     companion object {
         internal val isHwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
-        internal val defaultHwDec = if (isHwSupported) HW_PLUS else HW
+        private val isWSA = Build.MODEL == "Subsystem for Android(TM)"
+
+        internal val defaultHwDec = when {
+            isHwSupported -> HW_PLUS
+            isWSA -> SW
+            else -> HW
+        }
     }
 }
 

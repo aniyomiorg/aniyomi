@@ -46,7 +46,7 @@ val sheetDialogPadding = PaddingValues(
 
 class PlayerSettingsScreenModel(
     val preferences: PlayerPreferences = Injekt.get(),
-    private val hasSubTracks: Boolean = true,
+    val hasSubTracks: Boolean = true,
 ) : ScreenModel {
 
     fun togglePreference(preference: (PlayerPreferences) -> Preference<Boolean>) =
