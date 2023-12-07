@@ -312,6 +312,7 @@ object SettingsPlayerScreen : SearchableSettings {
         val enablePip = playerPreferences.enablePip()
         val pipEpisodeToasts = playerPreferences.pipEpisodeToasts()
         val pipOnExit = playerPreferences.pipOnExit()
+        val pipReplaceWithPrevious = playerPreferences.pipReplaceWithPrevious()
 
         val isPipEnabled by enablePip.collectAsState()
 
@@ -330,6 +331,11 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = pipOnExit,
                     title = stringResource(MR.strings.pref_pip_on_exit),
+                    enabled = isPipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = pipReplaceWithPrevious,
+                    title = stringResource(MR.strings.pref_pip_replace_with_previous),
                     enabled = isPipEnabled,
                 ),
             ),

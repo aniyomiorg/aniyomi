@@ -43,19 +43,21 @@ class PictureInPictureHandler(
         titleRes: StringResource,
         requestCode: Int,
         controlType: Int,
+        isEnabled: Boolean = true,
     ): RemoteAction {
-        return RemoteAction(
+        val action = RemoteAction(
             Icon.createWithResource(activity, iconResId),
             activity.stringResource(titleRes),
             activity.stringResource(titleRes),
             PendingIntent.getBroadcast(
                 activity,
                 requestCode,
-                Intent(ACTION_MEDIA_CONTROL)
-                    .putExtra(EXTRA_CONTROL_TYPE, controlType),
+                Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
                 PendingIntent.FLAG_IMMUTABLE,
             ),
         )
+        action.isEnabled = isEnabled
+        return action
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -72,37 +74,50 @@ class PictureInPictureHandler(
                 activity.player.videoAspect!!.times(10000).toInt()
             }
         }
+        val plCount = activity.viewModel.currentPlaylist.size
+        val plPos = activity.viewModel.getCurrentEpisodeIndex()
         val mPictureInPictureParams = PictureInPictureParams.Builder()
             // Set action items for the picture-in-picture mode. These are the only custom controls
             // available during the picture-in-picture mode.
             .setActions(
                 arrayListOf(
-                    createRemoteAction(
-                        R.drawable.ic_skip_previous_24dp,
-                        MR.strings.action_previous_episode,
-                        CONTROL_TYPE_PREVIOUS,
-                        REQUEST_PREVIOUS,
-                    ),
+                    if (activity.playerPreferences.pipReplaceWithPrevious().get()) {
+                        createRemoteAction(
+                            R.drawable.ic_skip_previous_24dp,
+                            MR.strings.action_previous_episode,
+                            PIP_PREVIOUS,
+                            PIP_PREVIOUS,
+                            plPos != 0
+                        )
+                    } else {
+                        createRemoteAction(
+                            R.drawable.ic_forward_10_24dp,
+                            MR.strings.pref_skip_10,
+                            PIP_SKIP,
+                            PIP_SKIP,
+                        )
+                    },
                     if (playing) {
                         createRemoteAction(
                             R.drawable.ic_pause_24dp,
                             MR.strings.action_pause,
-                            CONTROL_TYPE_PAUSE,
-                            REQUEST_PAUSE,
+                            PIP_PAUSE,
+                            PIP_PAUSE,
                         )
                     } else {
                         createRemoteAction(
                             R.drawable.ic_play_arrow_24dp,
                             MR.strings.action_play,
-                            CONTROL_TYPE_PLAY,
-                            REQUEST_PLAY,
+                            PIP_PLAY,
+                            PIP_PLAY,
                         )
                     },
                     createRemoteAction(
                         R.drawable.ic_skip_next_24dp,
                         MR.strings.action_next_episode,
-                        CONTROL_TYPE_NEXT,
-                        REQUEST_NEXT,
+                        PIP_NEXT,
+                        PIP_NEXT,
+                        plPos != plCount - 1
                     ),
                 ),
             )
@@ -113,15 +128,11 @@ class PictureInPictureHandler(
     }
 }
 
-private const val REQUEST_PLAY = 1
-private const val REQUEST_PAUSE = 2
-private const val REQUEST_PREVIOUS = 3
-private const val REQUEST_NEXT = 4
-
-internal const val CONTROL_TYPE_PLAY = 1
-internal const val CONTROL_TYPE_PAUSE = 2
-internal const val CONTROL_TYPE_PREVIOUS = 3
-internal const val CONTROL_TYPE_NEXT = 4
+internal const val PIP_PLAY = 1
+internal const val PIP_PAUSE = 2
+internal const val PIP_PREVIOUS = 3
+internal const val PIP_NEXT = 4
+internal const val PIP_SKIP = 5
 
 internal const val ACTION_MEDIA_CONTROL = "media_control"
 internal const val EXTRA_CONTROL_TYPE = "control_type"
