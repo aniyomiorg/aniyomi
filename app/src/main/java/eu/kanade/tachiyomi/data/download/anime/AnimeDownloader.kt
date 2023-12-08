@@ -296,27 +296,22 @@ class AnimeDownloader(
         autoStart: Boolean,
         changeDownloader: Boolean = false,
         video: Video? = null,
-    ) = launchIO {
-        if (episodes.isEmpty()) {
-            return@launchIO
-        }
+    ) {
+        if (episodes.isEmpty()) return
 
-        val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
+        val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return
         val wasEmpty = queueState.value.isEmpty()
-        // Called in background thread, the operation can be slow with SAF.
-        val episodesWithoutDir =
-            episodes
-                // Filter out those already downloaded.
-                .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
-                // Add episodes to queue from the start.
-                .sortedByDescending { it.sourceOrder }
 
-        // Runs in main thread (synchronization needed).
-        val episodesToQueue = episodesWithoutDir
+        val episodesToQueue = episodes.asSequence()
+            // Filter out those already downloaded.
+            .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
+            // Add episodes to queue from the start.
+            .sortedByDescending { it.sourceOrder }
             // Filter out those already enqueued.
             .filter { episode -> queueState.value.none { it.episode.id == episode.id } }
             // Create a download for each one.
             .map { AnimeDownload(source, anime, it, changeDownloader, video) }
+            .toList()
 
         if (episodesToQueue.isNotEmpty()) {
             addAllToQueue(episodesToQueue)
@@ -335,16 +330,14 @@ class AnimeDownloader(
                     queuedDownloads > DOWNLOADS_QUEUED_WARNING_THRESHOLD ||
                     maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD
                 ) {
-                    withUIContext {
-                        notifier.onWarning(
-                            context.stringResource(MR.strings.download_queue_size_warning),
-                            WARNING_NOTIF_TIMEOUT_MS,
-                            NotificationHandler.openUrl(
-                                context,
-                                AnimeLibraryUpdateNotifier.HELP_WARNING_URL,
-                            ),
-                        )
-                    }
+                    notifier.onWarning(
+                        context.stringResource(MR.strings.download_queue_size_warning),
+                        WARNING_NOTIF_TIMEOUT_MS,
+                        NotificationHandler.openUrl(
+                            context,
+                            AnimeLibraryUpdateNotifier.HELP_WARNING_URL,
+                        ),
+                    )
                 }
                 AnimeDownloadJob.start(context)
             }
