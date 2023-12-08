@@ -122,6 +122,7 @@
     <string name="pref_enable_pip">Enable the use of PiP mode</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
     <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
+    <string name="pref_pip_replace_with_previous">Replaces the "Skip 10 seconds" option with "Previous episode"</string>
     <string name="pref_remember_brightness">Remember and switch to the last used brightness</string>
     <string name="pref_remember_volume">Remember and switch to the last used volume</string>
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
