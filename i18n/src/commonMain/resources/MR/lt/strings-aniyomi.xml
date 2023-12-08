@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorijos</string>
-    <string name="unlock_app">Atrakinkite Anijomi</string>
+    <string name="unlock_app">Atrakinkite Kuukijomi</string>
     <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
     <string name="action_show_manga">Rodyti įrašą</string>
     <string name="action_display_local_badge_manga">Vietinis šaltinis</string>

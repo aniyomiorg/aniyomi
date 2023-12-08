@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">فئات المانغا</string>
-    <string name="unlock_app">افتح Aniyomi</string>
+    <string name="unlock_app">افتح Animetail</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="action_show_manga">عرض المانجا</string>
     <string name="action_display_local_badge_manga">المانجا المحلية</string>
