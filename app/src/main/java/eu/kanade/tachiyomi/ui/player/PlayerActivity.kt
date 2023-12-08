@@ -13,7 +13,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -40,6 +39,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -79,6 +79,7 @@ import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.overridePendingTransitionCompat
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
@@ -91,12 +92,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.storage.service.StorageManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -301,6 +305,7 @@ class PlayerActivity : BaseActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
+        overridePendingTransitionCompat(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
         Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
@@ -616,13 +621,18 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
+            // TODO: I think this is a bad hack.
+            //  We need to find a way to let MPV access our fonts directory.
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
+                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                outFile?.let {
+                    font.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
             MPVLib.setPropertyString(
                 "sub-fonts-dir",
-                File(
-                    Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                        getString(R.string.app_name),
-                    "fonts",
-                ).path,
+                applicationContext.filesDir.path,
             )
 
             if (playerPreferences.subtitleFont().get().trim() != "") {
@@ -695,7 +705,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     -1,
-                                    videoChapterText = getString(R.string.go_to_previous_chapter),
+                                    videoChapterText = stringResource(MR.strings.go_to_previous_chapter),
                                     chapterSeek = "-1",
                                 )
                             }
@@ -709,7 +719,7 @@ class PlayerActivity : BaseActivity() {
                             if (player.loadChapters().isNotEmpty()) {
                                 doubleTapSeek(
                                     1,
-                                    videoChapterText = getString(R.string.go_to_next_chapter),
+                                    videoChapterText = stringResource(MR.strings.go_to_next_chapter),
                                     chapterSeek = "1",
                                 )
                             } else {
@@ -854,6 +864,11 @@ class PlayerActivity : BaseActivity() {
         super.finishAndRemoveTask()
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransitionCompat(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
+    }
+
     override fun onDestroy() {
         mediaSession.isActive = false
         mediaSession.release()
@@ -996,7 +1011,7 @@ class PlayerActivity : BaseActivity() {
             when (val switchMethod = viewModel.loadEpisode(episodeId)) {
                 null -> {
                     if (viewModel.currentAnime != null && !autoPlay) {
-                        launchUI { toast(R.string.no_next_episode) }
+                        launchUI { toast(MR.strings.no_next_episode) }
                     }
                     showLoadingIndicator(false)
                 }
@@ -1301,9 +1316,9 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = getString(R.string.share_screenshot_info, anime.title, episode.name, seconds),
+            message = stringResource(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
-        startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+        startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
 
     /**
@@ -1313,7 +1328,7 @@ class PlayerActivity : BaseActivity() {
     private fun onSaveImageResult(result: PlayerViewModel.SaveImageResult) {
         when (result) {
             is PlayerViewModel.SaveImageResult.Success -> {
-                toast(R.string.picture_saved)
+                toast(MR.strings.picture_saved)
             }
             is PlayerViewModel.SaveImageResult.Error -> {
                 logcat(LogPriority.ERROR, result.error)
@@ -1328,9 +1343,9 @@ class PlayerActivity : BaseActivity() {
     private fun onSetAsCoverResult(result: SetAsCover) {
         toast(
             when (result) {
-                SetAsCover.Success -> R.string.cover_updated
-                SetAsCover.AddToLibraryFirst -> R.string.notification_first_add_to_library
-                SetAsCover.Error -> R.string.notification_cover_update_failed
+                SetAsCover.Success -> MR.strings.cover_updated
+                SetAsCover.AddToLibraryFirst -> MR.strings.notification_first_add_to_library
+                SetAsCover.Error -> MR.strings.notification_cover_update_failed
             },
         )
     }
@@ -1768,7 +1783,7 @@ class PlayerActivity : BaseActivity() {
                 // show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
                     toast(
-                        "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
+                        "AniSkip: ${stringResource(MR.strings.player_aniskip_dontskip_toast,waitingAniSkip)}",
                     )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
@@ -1859,8 +1874,11 @@ class PlayerActivity : BaseActivity() {
                             animeId = viewModel.currentAnime?.id,
                             // AM (CU)>
                             animeTitle = viewModel.currentAnime?.ogTitle,
-                            episodeNumber = viewModel.currentEpisode?.episode_number?.toString(),
                             thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                            episodeNumber =
+                            if(connectionsPreferences.useChapterTitles().get())
+                                viewModel.currentEpisode?.name.toString()
+                            else viewModel.state.value.episode?.episode_number.toString(),
                         ),
                     )
                 } else {

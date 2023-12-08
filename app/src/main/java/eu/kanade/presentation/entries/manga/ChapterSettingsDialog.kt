@@ -24,20 +24,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.active
 
 @Composable
@@ -65,20 +65,20 @@ fun ChapterSettingsDialog(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = persistentListOf(
-            stringResource(R.string.action_filter),
-            stringResource(R.string.action_sort),
-            stringResource(R.string.action_display),
+            stringResource(MR.strings.action_filter),
+            stringResource(MR.strings.action_sort),
+            stringResource(MR.strings.action_display),
         ),
         tabOverflowMenuContent = { closeMenu ->
             DropdownMenuItem(
-                text = { Text(stringResource(R.string.set_chapter_settings_as_default)) },
+                text = { Text(stringResource(MR.strings.set_chapter_settings_as_default)) },
                 onClick = {
                     showSetAsDefaultDialog = true
                     closeMenu()
                 },
             )
             DropdownMenuItem(
-                text = { Text(stringResource(R.string.action_reset)) },
+                text = { Text(stringResource(MR.strings.action_reset)) },
                 onClick = {
                     onResetToDefault()
                     closeMenu()
@@ -135,17 +135,17 @@ private fun FilterPage(
     onScanlatorFilterClicked: (() -> Unit),
 ) {
     TriStateItem(
-        label = stringResource(R.string.label_downloaded),
+        label = stringResource(MR.strings.label_downloaded),
         state = downloadFilter,
         onClick = onDownloadFilterChanged,
     )
     TriStateItem(
-        label = stringResource(R.string.action_filter_unread),
+        label = stringResource(MR.strings.action_filter_unread),
         state = unreadFilter,
         onClick = onUnreadFilterChanged,
     )
     TriStateItem(
-        label = stringResource(R.string.action_filter_bookmarked),
+        label = stringResource(MR.strings.action_filter_bookmarked),
         state = bookmarkedFilter,
         onClick = onBookmarkedFilterChanged,
     )
@@ -178,7 +178,7 @@ fun ScanlatorFilterItem(
             },
         )
         Text(
-            text = stringResource(R.string.scanlator),
+            text = stringResource(MR.strings.scanlator),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -191,22 +191,22 @@ private fun SortPage(
     onItemSelected: (Long) -> Unit,
 ) {
     SortItem(
-        label = stringResource(R.string.sort_by_source),
+        label = stringResource(MR.strings.sort_by_source),
         sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_SOURCE },
         onClick = { onItemSelected(Manga.CHAPTER_SORTING_SOURCE) },
     )
     SortItem(
-        label = stringResource(R.string.sort_by_number),
+        label = stringResource(MR.strings.sort_by_number),
         sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_NUMBER },
         onClick = { onItemSelected(Manga.CHAPTER_SORTING_NUMBER) },
     )
     SortItem(
-        label = stringResource(R.string.sort_by_upload_date),
+        label = stringResource(MR.strings.sort_by_upload_date),
         sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_UPLOAD_DATE },
         onClick = { onItemSelected(Manga.CHAPTER_SORTING_UPLOAD_DATE) },
     )
     SortItem(
-        label = stringResource(R.string.action_sort_alpha),
+        label = stringResource(MR.strings.action_sort_alpha),
         sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_ALPHABET },
         onClick = { onItemSelected(Manga.CHAPTER_SORTING_ALPHABET) },
     )
@@ -218,12 +218,12 @@ private fun DisplayPage(
     onItemSelected: (Long) -> Unit,
 ) {
     RadioItem(
-        label = stringResource(R.string.show_title),
+        label = stringResource(MR.strings.show_title),
         selected = displayMode == Manga.CHAPTER_DISPLAY_NAME,
         onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NAME) },
     )
     RadioItem(
-        label = stringResource(R.string.show_chapter_number),
+        label = stringResource(MR.strings.show_chapter_number),
         selected = displayMode == Manga.CHAPTER_DISPLAY_NUMBER,
         onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NUMBER) },
     )
@@ -237,15 +237,15 @@ private fun SetAsDefaultDialog(
     var optionalChecked by rememberSaveable { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = stringResource(R.string.chapter_settings)) },
+        title = { Text(text = stringResource(MR.strings.chapter_settings)) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Text(text = stringResource(R.string.confirm_set_chapter_settings))
+                Text(text = stringResource(MR.strings.confirm_set_chapter_settings))
 
                 LabeledCheckbox(
-                    label = stringResource(R.string.also_set_chapter_settings_for_library),
+                    label = stringResource(MR.strings.also_set_chapter_settings_for_library),
                     checked = optionalChecked,
                     onCheckedChange = { optionalChecked = it },
                 )
@@ -253,7 +253,7 @@ private fun SetAsDefaultDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         confirmButton = {
@@ -263,7 +263,7 @@ private fun SetAsDefaultDialog(
                     onDismissRequest()
                 },
             ) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
     )

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="anime_num_episodes">
+        <item quantity="other">%1$s个剧集</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="other">有%1$d个新的剧集</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d秒</item>
+    </plurals>
+</resources>

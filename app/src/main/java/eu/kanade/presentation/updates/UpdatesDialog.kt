@@ -4,8 +4,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun UpdatesDeleteConfirmationDialog(
@@ -13,7 +13,7 @@ fun UpdatesDeleteConfirmationDialog(
     onConfirm: () -> Unit,
     isManga: Boolean,
 ) {
-    val title = if (isManga) R.string.confirm_delete_chapters else R.string.confirm_delete_episodes
+    val title = if (isManga) MR.strings.confirm_delete_chapters else MR.strings.confirm_delete_episodes
     AlertDialog(
         text = {
             Text(text = stringResource(title))
@@ -24,12 +24,12 @@ fun UpdatesDeleteConfirmationDialog(
                 onConfirm()
                 onDismissRequest()
             }) {
-                Text(text = stringResource(R.string.action_ok))
+                Text(text = stringResource(MR.strings.action_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.action_cancel))
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
     )

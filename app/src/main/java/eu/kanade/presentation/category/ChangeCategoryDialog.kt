@@ -20,13 +20,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import eu.kanade.core.preference.asToggleableState
-import eu.kanade.tachiyomi.R
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.domain.category.model.Category
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun ChangeCategoryDialog(
@@ -45,14 +45,14 @@ fun ChangeCategoryDialog(
                         onEditCategories()
                     },
                 ) {
-                    Text(text = stringResource(R.string.action_edit_categories))
+                    Text(text = stringResource(MR.strings.action_edit_categories))
                 }
             },
             title = {
-                Text(text = stringResource(R.string.action_move_category))
+                Text(text = stringResource(MR.strings.action_move_category))
             },
             text = {
-                Text(text = stringResource(R.string.information_empty_category_dialog))
+                Text(text = stringResource(MR.strings.information_empty_category_dialog))
             },
         )
         return
@@ -66,11 +66,11 @@ fun ChangeCategoryDialog(
                     onDismissRequest()
                     onEditCategories()
                 }) {
-                    Text(text = stringResource(R.string.action_edit))
+                    Text(text = stringResource(MR.strings.action_edit))
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = stringResource(MR.strings.action_cancel))
                 }
                 TextButton(
                     onClick = {
@@ -87,12 +87,12 @@ fun ChangeCategoryDialog(
                         )
                     },
                 ) {
-                    Text(text = stringResource(R.string.action_ok))
+                    Text(text = stringResource(MR.strings.action_ok))
                 }
             }
         },
         title = {
-            Text(text = stringResource(R.string.action_move_category))
+            Text(text = stringResource(MR.strings.action_move_category))
         },
         text = {
             Column(

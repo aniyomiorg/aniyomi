@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.entries.anime.components.BaseAnimeListItem
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreenModel
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -33,7 +33,7 @@ fun MigrateAnimeScreen(
     ) { contentPadding ->
         if (state.isEmpty) {
             EmptyScreen(
-                textResource = R.string.empty_screen,
+                stringRes = MR.strings.empty_screen,
                 modifier = Modifier.padding(contentPadding),
             )
             return@Scaffold

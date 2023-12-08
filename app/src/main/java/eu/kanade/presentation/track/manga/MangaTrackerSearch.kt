@@ -50,7 +50,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -62,11 +61,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
@@ -123,7 +123,7 @@ fun MangaTrackerSearch(
                             decorationBox = {
                                 if (query.text.isEmpty()) {
                                     Text(
-                                        text = stringResource(R.string.action_search_hint),
+                                        text = stringResource(MR.strings.action_search_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         style = MaterialTheme.typography.bodyLarge,
                                     )
@@ -166,7 +166,7 @@ fun MangaTrackerSearch(
                         .fillMaxWidth(),
                     elevation = ButtonDefaults.elevatedButtonElevation(),
                 ) {
-                    Text(text = stringResource(R.string.action_track))
+                    Text(text = stringResource(MR.strings.action_track))
                 }
             }
         },
@@ -179,7 +179,7 @@ fun MangaTrackerSearch(
                 if (availableTracks.isEmpty()) {
                     EmptyScreen(
                         modifier = Modifier.padding(innerPadding),
-                        textResource = R.string.no_results_found,
+                        stringRes = MR.strings.no_results_found,
                     )
                 } else {
                     ScrollbarLazyColumn(
@@ -211,7 +211,7 @@ fun MangaTrackerSearch(
                 EmptyScreen(
                     modifier = Modifier.padding(innerPadding),
                     message = queryResult.exceptionOrNull()?.message
-                        ?: stringResource(R.string.unknown_error),
+                        ?: stringResource(MR.strings.unknown_error),
                 )
             }
         }
@@ -270,19 +270,19 @@ fun SearchResultItem(
                     )
                     if (type.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.track_type),
+                            title = stringResource(MR.strings.track_type),
                             text = type,
                         )
                     }
                     if (startDate.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.label_started),
+                            title = stringResource(MR.strings.label_started),
                             text = startDate,
                         )
                     }
                     if (status.isNotBlank()) {
                         SearchResultItemDetails(
-                            title = stringResource(R.string.track_status),
+                            title = stringResource(MR.strings.track_status),
                             text = status,
                         )
                     }

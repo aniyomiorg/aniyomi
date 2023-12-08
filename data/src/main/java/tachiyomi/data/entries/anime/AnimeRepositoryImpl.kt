@@ -24,7 +24,7 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
-        return handler.awaitOneOrNull(inTransaction = true) {
+        return handler.awaitOneOrNull {
             animesQueries.getAnimeByUrlAndSource(
                 url,
                 sourceId,

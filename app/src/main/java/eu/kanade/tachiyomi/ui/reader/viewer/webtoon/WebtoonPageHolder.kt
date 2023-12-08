@@ -210,12 +210,14 @@ class WebtoonPageHolder(
     }
 
     private fun process(imageStream: BufferedInputStream): InputStream {
-        if (viewer.config.dualPageRotateToFit) {
-            return rotateDualPage(imageStream)
-        }
-
         if (viewer.config.dualPageSplit) {
-            val isDoublePage = ImageUtil.isWideImage(imageStream)
+            val isDoublePage = ImageUtil.isWideImage(
+                imageStream,
+                // SY -->
+                page?.zip4jFile,
+                page?.zip4jEntry,
+                // SY <--
+            )
             if (isDoublePage) {
                 val upperSide = if (viewer.config.dualPageInvert) ImageUtil.Side.LEFT else ImageUtil.Side.RIGHT
                 return ImageUtil.splitAndMerge(imageStream, upperSide)
@@ -223,16 +225,6 @@ class WebtoonPageHolder(
         }
 
         return imageStream
-    }
-
-    private fun rotateDualPage(imageStream: BufferedInputStream): InputStream {
-        val isDoublePage = ImageUtil.isWideImage(imageStream)
-        return if (isDoublePage) {
-            val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
-            ImageUtil.rotateImage(imageStream, rotation)
-        } else {
-            imageStream
-        }
     }
 
     /**

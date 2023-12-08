@@ -1,8 +1,7 @@
 package eu.kanade.tachiyomi.data.track.kavita
 
 import android.graphics.Color
-import androidx.annotation.StringRes
-import com.google.common.base.Strings.isNullOrEmpty
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.BaseTracker
@@ -16,6 +15,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.security.MessageDigest
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
@@ -41,11 +41,10 @@ class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaT
 
     override fun getStatusListManga() = listOf(UNREAD, READING, COMPLETED)
 
-    @StringRes
-    override fun getStatus(status: Int): Int? = when (status) {
-        UNREAD -> R.string.unread
-        READING -> R.string.reading
-        COMPLETED -> R.string.completed
+    override fun getStatus(status: Int): StringResource? = when (status) {
+        UNREAD -> MR.strings.unread
+        READING -> MR.strings.reading
+        COMPLETED -> MR.strings.completed
         else -> null
     }
 

@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -35,7 +36,7 @@ object SettingsDiscordScreen : SearchableSettings {
     @ReadOnlyComposable
     @Composable
     @StringRes
-    override fun getTitleRes() = R.string.pref_category_connections
+    override fun getTitleRes() = MR.strings.pref_category_connections
 
     @Composable
     override fun RowScope.AppBarAction() {
@@ -53,9 +54,11 @@ object SettingsDiscordScreen : SearchableSettings {
         val connectionsPreferences = remember { Injekt.get<ConnectionsPreferences>() }
         val connectionsManager = remember { Injekt.get<ConnectionsManager>() }
         val enableDRPCPref = connectionsPreferences.enableDiscordRPC()
+        val useChapterTitlesPref = connectionsPreferences.useChapterTitles()
         val discordRPCStatus = connectionsPreferences.discordRPCStatus()
 
         val enableDRPC by enableDRPCPref.collectAsState()
+        val useChapterTitles by useChapterTitlesPref.collectAsState()
 
         var dialog by remember { mutableStateOf<Any?>(null) }
         dialog?.run {
@@ -79,6 +82,12 @@ object SettingsDiscordScreen : SearchableSettings {
                     Preference.PreferenceItem.SwitchPreference(
                         pref = enableDRPCPref,
                         title = stringResource(R.string.pref_enable_discord_rpc),
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = useChapterTitlesPref,
+                        enabled = enableDRPC,
+                        title = stringResource(id = R.string.show_chapters_titles_title),
+                        subtitle = stringResource(id = R.string.show_chapters_titles_subtitle),
                     ),
                     Preference.PreferenceItem.ListPreference(
                         pref = discordRPCStatus,

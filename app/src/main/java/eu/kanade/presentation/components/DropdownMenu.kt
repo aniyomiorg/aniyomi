@@ -9,14 +9,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import androidx.compose.material3.DropdownMenu as ComposeDropdownMenu
 
 @Composable
@@ -51,13 +49,13 @@ fun RadioMenuItem(
             if (isChecked) {
                 Icon(
                     imageVector = Icons.Outlined.RadioButtonChecked,
-                    contentDescription = stringResource(R.string.selected),
+                    contentDescription = stringResource(MR.strings.selected),
                     tint = MaterialTheme.colorScheme.primary,
                 )
             } else {
                 Icon(
                     imageVector = Icons.Outlined.RadioButtonUnchecked,
-                    contentDescription = stringResource(R.string.not_selected),
+                    contentDescription = stringResource(MR.strings.not_selected),
                 )
             }
         },

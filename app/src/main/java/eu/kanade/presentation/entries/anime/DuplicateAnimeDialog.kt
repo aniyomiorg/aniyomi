@@ -8,9 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun DuplicateAnimeDialog(
@@ -21,10 +21,10 @@ fun DuplicateAnimeDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            Text(text = stringResource(R.string.are_you_sure))
+            Text(text = stringResource(MR.strings.are_you_sure))
         },
         text = {
-            Text(text = stringResource(R.string.confirm_add_duplicate_manga))
+            Text(text = stringResource(MR.strings.confirm_add_duplicate_manga))
         },
         confirmButton = {
             FlowRow(
@@ -36,13 +36,13 @@ fun DuplicateAnimeDialog(
                         onOpenAnime()
                     },
                 ) {
-                    Text(text = stringResource(R.string.action_show_anime))
+                    Text(text = stringResource(MR.strings.action_show_anime))
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(R.string.action_cancel))
+                    Text(text = stringResource(MR.strings.action_cancel))
                 }
                 TextButton(
                     onClick = {
@@ -50,7 +50,7 @@ fun DuplicateAnimeDialog(
                         onConfirm()
                     },
                 ) {
-                    Text(text = stringResource(R.string.action_add))
+                    Text(text = stringResource(MR.strings.action_add))
                 }
             }
         },

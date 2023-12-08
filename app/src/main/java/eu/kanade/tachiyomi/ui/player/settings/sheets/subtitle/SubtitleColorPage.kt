@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,15 +31,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.R
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import kotlin.math.floor
 import kotlin.math.max
@@ -70,19 +70,19 @@ private fun SubtitleColors(
 
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         SubtitleColorSelector(
-            label = R.string.player_subtitle_text_color,
+            label = MR.strings.player_subtitle_text_color,
             onClick = { updateType(SubsColor.TEXT) },
             selected = subsColor == SubsColor.TEXT,
             preference = textColorPref,
         )
         SubtitleColorSelector(
-            label = R.string.player_subtitle_border_color,
+            label = MR.strings.player_subtitle_border_color,
             onClick = { updateType(SubsColor.BORDER) },
             selected = subsColor == SubsColor.BORDER,
             preference = borderColorPref,
         )
         SubtitleColorSelector(
-            label = R.string.player_subtitle_background_color,
+            label = MR.strings.player_subtitle_background_color,
             onClick = { updateType(SubsColor.BACKGROUND) },
             selected = subsColor == SubsColor.BACKGROUND,
             preference = backgroundColorPref,
@@ -131,7 +131,7 @@ private fun SubtitleColors(
 
 @Composable
 private fun SubtitleColorSelector(
-    @StringRes label: Int,
+    label: StringResource,
     selected: Boolean,
     onClick: () -> Unit,
     preference: Preference<Int>,
@@ -241,17 +241,17 @@ private enum class SubsColor(
 }
 
 private enum class ARGBValue(
-    @StringRes val label: Int,
+    val label: StringResource,
     val mask: Long,
     val bitShift: Int,
     val toValue: (Int) -> Int,
     val asColor: (Int) -> Color,
 ) {
 
-    ALPHA(R.string.color_filter_a_value, 0xFF000000L, 24, ::toAlpha, ::asAlpha),
-    RED(R.string.color_filter_r_value, 0x00FF0000L, 16, ::toRed, ::asRed),
-    GREEN(R.string.color_filter_g_value, 0x0000FF00L, 8, ::toGreen, ::asGreen),
-    BLUE(R.string.color_filter_b_value, 0x000000FFL, 0, ::toBlue, ::asBlue),
+    ALPHA(MR.strings.color_filter_a_value, 0xFF000000L, 24, ::toAlpha, ::asAlpha),
+    RED(MR.strings.color_filter_r_value, 0x00FF0000L, 16, ::toRed, ::asRed),
+    GREEN(MR.strings.color_filter_g_value, 0x0000FF00L, 8, ::toGreen, ::asGreen),
+    BLUE(MR.strings.color_filter_b_value, 0x000000FFL, 0, ::toBlue, ::asBlue),
 }
 
 private fun toAlpha(color: Int) = (color ushr 24) and 0xFF

@@ -13,7 +13,9 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.release.model.Release
+import tachiyomi.i18n.MR
 
 internal class AppUpdateNotifier(private val context: Context) {
 
@@ -51,7 +53,7 @@ internal class AppUpdateNotifier(private val context: Context) {
         }
 
         with(notificationBuilder) {
-            setContentTitle(context.getString(R.string.update_check_notification_update_available))
+            setContentTitle(context.stringResource(MR.strings.update_check_notification_update_available))
             setContentText(release.version)
             setSmallIcon(android.R.drawable.stat_sys_download_done)
             setContentIntent(updateIntent)
@@ -59,12 +61,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             clearActions()
             addAction(
                 android.R.drawable.stat_sys_download_done,
-                context.getString(R.string.action_download),
+                context.stringResource(MR.strings.action_download),
                 updateIntent,
             )
             addAction(
                 R.drawable.ic_info_24dp,
-                context.getString(R.string.whats_new),
+                context.stringResource(MR.strings.whats_new),
                 releaseIntent,
             )
         }
@@ -80,7 +82,7 @@ internal class AppUpdateNotifier(private val context: Context) {
         with(notificationBuilder) {
             title?.let { setContentTitle(title) }
             setContentText(
-                context.getString(R.string.update_check_notification_download_in_progress),
+                context.stringResource(MR.strings.update_check_notification_download_in_progress),
             )
             setSmallIcon(android.R.drawable.stat_sys_download)
             setOngoing(true)
@@ -88,7 +90,7 @@ internal class AppUpdateNotifier(private val context: Context) {
             clearActions()
             addAction(
                 R.drawable.ic_close_24dp,
-                context.getString(R.string.action_cancel),
+                context.stringResource(MR.strings.action_cancel),
                 NotificationReceiver.cancelDownloadAppUpdatePendingBroadcast(context),
             )
         }
@@ -117,7 +119,7 @@ internal class AppUpdateNotifier(private val context: Context) {
     fun promptInstall(uri: Uri) {
         val installIntent = NotificationHandler.installApkPendingActivity(context, uri)
         with(notificationBuilder) {
-            setContentText(context.getString(R.string.update_check_notification_download_complete))
+            setContentText(context.stringResource(MR.strings.update_check_notification_download_complete))
             setSmallIcon(android.R.drawable.stat_sys_download_done)
             setOnlyAlertOnce(false)
             setProgress(0, 0, false)
@@ -127,12 +129,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             clearActions()
             addAction(
                 R.drawable.ic_system_update_alt_white_24dp,
-                context.getString(R.string.action_install),
+                context.stringResource(MR.strings.action_install),
                 installIntent,
             )
             addAction(
                 R.drawable.ic_close_24dp,
-                context.getString(R.string.action_cancel),
+                context.stringResource(MR.strings.action_cancel),
                 NotificationReceiver.dismissNotificationPendingBroadcast(
                     context,
                     Notifications.ID_APP_UPDATE_PROMPT,
@@ -150,8 +152,8 @@ internal class AppUpdateNotifier(private val context: Context) {
      */
     fun promptFdroidUpdate() {
         with(notificationBuilder) {
-            setContentTitle(context.getString(R.string.update_check_notification_update_available))
-            setContentText(context.getString(R.string.update_check_fdroid_migration_info))
+            setContentTitle(context.stringResource(MR.strings.update_check_notification_update_available))
+            setContentText(context.stringResource(MR.strings.update_check_fdroid_migration_info))
             setSmallIcon(R.drawable.ic_ani)
             setContentIntent(
                 NotificationHandler.openUrl(
@@ -170,7 +172,7 @@ internal class AppUpdateNotifier(private val context: Context) {
      */
     fun onDownloadError(url: String) {
         with(notificationBuilder) {
-            setContentText(context.getString(R.string.update_check_notification_download_error))
+            setContentText(context.stringResource(MR.strings.update_check_notification_download_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setOnlyAlertOnce(false)
             setProgress(0, 0, false)
@@ -178,12 +180,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             clearActions()
             addAction(
                 R.drawable.ic_refresh_24dp,
-                context.getString(R.string.action_retry),
+                context.stringResource(MR.strings.action_retry),
                 NotificationReceiver.downloadAppUpdatePendingBroadcast(context, url),
             )
             addAction(
                 R.drawable.ic_close_24dp,
-                context.getString(R.string.action_cancel),
+                context.stringResource(MR.strings.action_cancel),
                 NotificationReceiver.dismissNotificationPendingBroadcast(
                     context,
                     Notifications.ID_APP_UPDATER,

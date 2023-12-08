@@ -22,7 +22,7 @@ android {
         applicationId = "com.dark.animetailv2"
 
         versionCode = 110
-        versionName = "0.14.21"
+        versionName = "0.14.30"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -172,7 +172,6 @@ dependencies {
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
-    implementation(compose.accompanist.permissions)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
 
@@ -229,6 +228,9 @@ dependencies {
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))

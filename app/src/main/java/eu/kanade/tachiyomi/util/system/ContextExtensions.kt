@@ -25,7 +25,9 @@ import eu.kanade.tachiyomi.ui.setting.connections.DiscordLoginActivity
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import logcat.LogPriority
 import rikka.sui.Sui
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -46,11 +48,11 @@ fun Context.copyToClipboard(label: String, content: String) {
         // Android 13 and higher shows a visual confirmation of copied contents
         // https://developer.android.com/about/versions/13/features/copy-paste
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            toast(getString(R.string.copied_to_clipboard, content.truncateCenter(50)))
+            toast(stringResource(MR.strings.copied_to_clipboard, content.truncateCenter(50)))
         }
     } catch (e: Throwable) {
         logcat(LogPriority.ERROR, e)
-        toast(R.string.clipboard_copy_error)
+        toast(MR.strings.clipboard_copy_error)
     }
 }
 
@@ -179,7 +181,7 @@ fun Context.createReaderThemeContext(): Context {
  * @return document size of [uri] or null if size can't be obtained
  */
 fun Context.getUriSize(uri: Uri): Long? {
-    return UniFile.fromUri(this, uri).length().takeIf { it >= 0 }
+    return UniFile.fromUri(this, uri)?.length()?.takeIf { it >= 0 }
 }
 
 /**

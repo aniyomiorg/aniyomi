@@ -31,7 +31,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -44,7 +43,6 @@ import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -58,8 +56,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.source.manga.model.StubMangaSource
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class BrowseMangaSourceScreen(
@@ -152,7 +152,7 @@ data class BrowseMangaSourceScreen(
                                 )
                             },
                             label = {
-                                Text(text = stringResource(R.string.popular))
+                                Text(text = stringResource(MR.strings.popular))
                             },
                         )
                         if ((screenModel.source as CatalogueSource).supportsLatest) {
@@ -171,7 +171,7 @@ data class BrowseMangaSourceScreen(
                                     )
                                 },
                                 label = {
-                                    Text(text = stringResource(R.string.latest))
+                                    Text(text = stringResource(MR.strings.latest))
                                 },
                             )
                         }
@@ -188,7 +188,7 @@ data class BrowseMangaSourceScreen(
                                     )
                                 },
                                 label = {
-                                    Text(text = stringResource(R.string.action_filter))
+                                    Text(text = stringResource(MR.strings.action_filter))
                                 },
                             )
                         }

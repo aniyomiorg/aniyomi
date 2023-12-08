@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
+import tachiyomi.i18n.MR
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.toast
@@ -63,7 +64,7 @@ class DiscordLoginActivity : BaseActivity() {
             "Discord",
             "Logged In",
         )
-        toast(R.string.login_success)
+        toast(MR.strings.login_success)
         applicationInfo.dataDir.let { File("$it/app_webview/").deleteRecursively() }
         finish()
     }

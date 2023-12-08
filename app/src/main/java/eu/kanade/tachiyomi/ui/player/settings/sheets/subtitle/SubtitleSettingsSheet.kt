@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Build
-import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -27,7 +26,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -37,11 +35,17 @@ import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import kotlinx.collections.immutable.persistentListOf
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.extension
+import tachiyomi.core.storage.toTempFile
+import tachiyomi.domain.storage.service.StorageManager
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
-import java.io.File
+import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun SubtitleSettingsSheet(
@@ -51,9 +55,9 @@ fun SubtitleSettingsSheet(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = persistentListOf(
-            stringResource(id = R.string.player_subtitle_settings_delay_tab),
-            stringResource(id = R.string.player_subtitle_settings_font_tab),
-            stringResource(id = R.string.player_subtitle_settings_color_tab),
+            stringResource(MR.strings.player_subtitle_settings_delay_tab),
+            stringResource(MR.strings.player_subtitle_settings_font_tab),
+            stringResource(MR.strings.player_subtitle_settings_color_tab),
         ),
         hideSystemBars = true,
     ) { page ->
@@ -152,21 +156,17 @@ fun SubtitlePreview(
     borderColor: Color,
     backgroundColor: Color,
 ) {
-    val fontMap = File(
-        Environment.getExternalStorageDirectory().absolutePath +
-            File.separator + LocalContext.current.getString(R.string.app_name) +
-            File.separator,
-        "fonts",
-    ).listFiles { file ->
-        file.extension.equals("ttf", true) ||
-            file.extension.equals("otf", true)
-    }?.associateBy(
-        { TTFFile.open(it).families.values.toTypedArray()[0] },
-        { it.absolutePath },
-    ) ?: emptyMap()
+    val storageManager: StorageManager = Injekt.get()
+    val fontsDir = storageManager.getFontsDirectory()
+    val fontMap = fontsDir?.listFiles()?.filter { file ->
+        file.extension!!.equals("ttf", true) ||
+            file.extension!!.equals("otf", true)
+    }?.associate {
+        TTFFile.open(it.openInputStream()).families.values.toTypedArray()[0] to it
+    } ?: emptyMap()
 
     val fontFile = fontMap.keys.firstOrNull { it.contains(font, true) }
-        ?.let { Typeface.createFromFile(fontMap[it]?.let(::File)) } ?: Typeface.SANS_SERIF
+        ?.let { Typeface.createFromFile(fontMap[it]?.toTempFile(LocalContext.current)) } ?: Typeface.SANS_SERIF
 
     Box(
         modifier = Modifier
@@ -176,7 +176,7 @@ fun SubtitlePreview(
         Column(modifier = Modifier.fillMaxWidth(0.8f).background(color = backgroundColor)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 OutLineText(
-                    text = stringResource(R.string.player_subtitle_settings_example),
+                    text = stringResource(MR.strings.player_subtitle_settings_example),
                     font = fontFile,
                     outlineColor = borderColor,
                     textColor = textColor,
@@ -186,7 +186,7 @@ fun SubtitlePreview(
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.player_subtitle_settings_example),
+                    text = stringResource(MR.strings.player_subtitle_settings_example),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,

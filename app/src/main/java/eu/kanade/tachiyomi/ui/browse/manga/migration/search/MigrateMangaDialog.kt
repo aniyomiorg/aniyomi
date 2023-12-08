@@ -19,14 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
@@ -49,7 +47,9 @@ import tachiyomi.domain.items.chapter.model.toChapterUpdate
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -79,7 +79,7 @@ internal fun MigrateMangaDialog(
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
-                Text(text = stringResource(R.string.migration_dialog_what_to_include))
+                Text(text = stringResource(MR.strings.migration_dialog_what_to_include))
             },
             text = {
                 Column(
@@ -104,7 +104,7 @@ internal fun MigrateMangaDialog(
                             onClickTitle()
                         },
                     ) {
-                        Text(text = stringResource(R.string.action_show_manga))
+                        Text(text = stringResource(MR.strings.action_show_manga))
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -122,7 +122,7 @@ internal fun MigrateMangaDialog(
                             }
                         },
                     ) {
-                        Text(text = stringResource(R.string.copy))
+                        Text(text = stringResource(MR.strings.copy))
                     }
                     TextButton(
                         onClick = {
@@ -138,7 +138,7 @@ internal fun MigrateMangaDialog(
                             }
                         },
                     ) {
-                        Text(text = stringResource(R.string.migrate))
+                        Text(text = stringResource(MR.strings.migrate))
                     }
                 }
             },

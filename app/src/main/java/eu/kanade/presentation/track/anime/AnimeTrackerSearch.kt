@@ -20,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -36,7 +35,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -47,10 +45,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.manga.SearchResultItem
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
@@ -106,7 +105,7 @@ fun AnimeTrackerSearch(
                             decorationBox = {
                                 if (query.text.isEmpty()) {
                                     Text(
-                                        text = stringResource(R.string.action_search_hint),
+                                        text = stringResource(MR.strings.action_search_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         style = MaterialTheme.typography.bodyLarge,
                                     )
@@ -149,7 +148,7 @@ fun AnimeTrackerSearch(
                         .fillMaxWidth(),
                     elevation = ButtonDefaults.elevatedButtonElevation(),
                 ) {
-                    Text(text = stringResource(R.string.action_track))
+                    Text(text = stringResource(MR.strings.action_track))
                 }
             }
         },
@@ -162,7 +161,7 @@ fun AnimeTrackerSearch(
                 if (availableTracks.isEmpty()) {
                     EmptyScreen(
                         modifier = Modifier.padding(innerPadding),
-                        textResource = R.string.no_results_found,
+                        stringRes = MR.strings.no_results_found,
                     )
                 } else {
                     ScrollbarLazyColumn(
@@ -194,7 +193,7 @@ fun AnimeTrackerSearch(
                 EmptyScreen(
                     modifier = Modifier.padding(innerPadding),
                     message = queryResult.exceptionOrNull()?.message
-                        ?: stringResource(R.string.unknown_error),
+                        ?: stringResource(MR.strings.unknown_error),
                 )
             }
         }

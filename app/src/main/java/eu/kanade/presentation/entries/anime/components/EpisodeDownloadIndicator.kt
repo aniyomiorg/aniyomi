@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.ArrowModifier
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.IndicatorModifier
@@ -31,7 +30,9 @@ import eu.kanade.presentation.components.IndicatorStrokeWidth
 import eu.kanade.presentation.components.commonClickable
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.IconButtonTokens
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 enum class EpisodeDownloadAction {
@@ -95,7 +96,7 @@ private fun NotDownloadedIndicator(
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_download_item_24dp),
-            contentDescription = stringResource(R.string.manga_download),
+            contentDescription = stringResource(MR.strings.manga_download),
             modifier = Modifier.size(IndicatorSize),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -153,14 +154,14 @@ private fun DownloadingIndicator(
         }
         DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_start_downloading_now)) },
+                text = { Text(text = stringResource(MR.strings.action_start_downloading_now)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.START_NOW)
                     isMenuExpanded = false
                 },
             )
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_cancel)) },
+                text = { Text(text = stringResource(MR.strings.action_cancel)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.CANCEL)
                     isMenuExpanded = false
@@ -201,7 +202,7 @@ private fun DownloadedIndicator(
         )
         DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
             DropdownMenuItem(
-                text = { Text(text = stringResource(R.string.action_delete)) },
+                text = { Text(text = stringResource(MR.strings.action_delete)) },
                 onClick = {
                     onClick(EpisodeDownloadAction.DELETE)
                     isMenuExpanded = false
@@ -229,7 +230,7 @@ private fun ErrorIndicator(
     ) {
         Icon(
             imageVector = Icons.Outlined.ErrorOutline,
-            contentDescription = stringResource(R.string.download_error),
+            contentDescription = stringResource(MR.strings.download_error),
             modifier = Modifier.size(IndicatorSize),
             tint = MaterialTheme.colorScheme.error,
         )

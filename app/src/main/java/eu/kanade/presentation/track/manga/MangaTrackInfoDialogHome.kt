@@ -1,6 +1,5 @@
 package eu.kanade.presentation.track.manga
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,20 +40,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.components.TrackLogoIcon
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import java.text.DateFormat
 
 private const val UnsetStatusTextAlpha = 0.5F
@@ -134,7 +134,7 @@ fun MangaTrackInfoDialogHome(
 private fun TrackInfoItem(
     title: String,
     tracker: Tracker,
-    @StringRes status: Int?,
+    status: StringResource?,
     onStatusClick: () -> Unit,
     chapters: String,
     onChaptersClick: () -> Unit,
@@ -212,7 +212,7 @@ private fun TrackInfoItem(
                             modifier = Modifier
                                 .weight(1f)
                                 .alpha(if (score == null) UnsetStatusTextAlpha else 1f),
-                            text = score ?: stringResource(R.string.score),
+                            text = score ?: stringResource(MR.strings.score),
                             onClick = onScoreClick,
                         )
                     }
@@ -224,14 +224,14 @@ private fun TrackInfoItem(
                         TrackDetailsItem(
                             modifier = Modifier.weight(1F),
                             text = startDate,
-                            placeholder = stringResource(R.string.track_started_reading_date),
+                            placeholder = stringResource(MR.strings.track_started_reading_date),
                             onClick = onStartDateClick,
                         )
                         VerticalDivider()
                         TrackDetailsItem(
                             modifier = Modifier.weight(1F),
                             text = endDate,
-                            placeholder = stringResource(R.string.track_finished_reading_date),
+                            placeholder = stringResource(MR.strings.track_finished_reading_date),
                             onClick = onEndDateClick,
                         )
                     }
@@ -282,7 +282,7 @@ private fun TrackInfoItemEmpty(
                 .padding(start = 16.dp)
                 .weight(1f),
         ) {
-            Text(text = stringResource(R.string.add_tracking))
+            Text(text = stringResource(MR.strings.add_tracking))
         }
     }
 }
@@ -297,7 +297,7 @@ fun TrackInfoItemMenu(
         IconButton(onClick = { expanded = true }) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
-                contentDescription = stringResource(R.string.label_more),
+                contentDescription = stringResource(MR.strings.label_more),
             )
         }
         DropdownMenu(
@@ -305,14 +305,14 @@ fun TrackInfoItemMenu(
             onDismissRequest = { expanded = false },
         ) {
             DropdownMenuItem(
-                text = { Text(stringResource(R.string.action_open_in_browser)) },
+                text = { Text(stringResource(MR.strings.action_open_in_browser)) },
                 onClick = {
                     onOpenInBrowser()
                     expanded = false
                 },
             )
             DropdownMenuItem(
-                text = { Text(stringResource(R.string.action_remove)) },
+                text = { Text(stringResource(MR.strings.action_remove)) },
                 onClick = {
                     onRemoved()
                     expanded = false

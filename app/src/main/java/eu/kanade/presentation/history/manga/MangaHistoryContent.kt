@@ -8,7 +8,6 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.RelativeDateHeader
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
-import uy.kohesive.injekt.api.get
 
 @Composable
 fun MangaHistoryContent(

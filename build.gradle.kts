@@ -9,6 +9,7 @@ buildscript {
         classpath(libs.android.shortcut.gradle)
         classpath(libs.aboutLibraries.gradle)
         classpath(libs.sqldelight.gradle)
+        classpath(libs.moko.gradle)
     }
 }
 
