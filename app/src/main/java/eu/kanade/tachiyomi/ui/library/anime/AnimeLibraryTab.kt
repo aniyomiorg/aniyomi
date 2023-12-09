@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.util.fastAll
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import eu.kanade.presentation.more.onboarding.GETTING_STARTED_URL
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -199,11 +200,7 @@ object AnimeLibraryTab : Tab() {
                             EmptyScreenAction(
                                 stringRes = MR.strings.getting_started_guide,
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
-                                onClick = {
-                                    handler.openUri(
-                                        "https://aniyomi.org/docs/guides/getting-started",
-                                    )
-                                },
+                                onClick = { handler.openUri(GETTING_STARTED_URL) },
                             ),
                         ),
                     )
