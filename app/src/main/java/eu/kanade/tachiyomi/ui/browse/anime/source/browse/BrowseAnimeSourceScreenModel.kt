@@ -50,7 +50,7 @@ import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
+import java.time.Instant
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter as AnimeSourceModelFilter
 
 class BrowseAnimeSourceScreenModel(
@@ -224,7 +224,7 @@ class BrowseAnimeSourceScreenModel(
                 favorite = !anime.favorite,
                 dateAdded = when (anime.favorite) {
                     true -> 0
-                    false -> Date().time
+                    false -> Instant.now().toEpochMilli()
                 },
             )
 

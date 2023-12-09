@@ -11,7 +11,7 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.ZonedDateTime
-import java.util.Date
+import java.time.Instant
 
 class UpdateAnime(
     private val animeRepository: AnimeRepository,
@@ -46,14 +46,14 @@ class UpdateAnime(
                 // Never refresh covers if the url is empty to avoid "losing" existing covers
                 remoteAnime.thumbnail_url.isNullOrEmpty() -> null
                 !manualFetch && localAnime.thumbnailUrl == remoteAnime.thumbnail_url -> null
-                localAnime.isLocal() -> Date().time
+                localAnime.isLocal() -> Instant.now().toEpochMilli()
                 localAnime.hasCustomCover(coverCache) -> {
                     coverCache.deleteFromCache(localAnime, false)
                     null
                 }
                 else -> {
                     coverCache.deleteFromCache(localAnime, false)
-                    Date().time
+                    Instant.now().toEpochMilli()
                 }
             }
 
@@ -87,18 +87,18 @@ class UpdateAnime(
     }
 
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {
-        return animeRepository.updateAnime(AnimeUpdate(id = animeId, lastUpdate = Date().time))
+        return animeRepository.updateAnime(AnimeUpdate(id = animeId, lastUpdate = Instant.now().toEpochMilli()))
     }
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
         return animeRepository.updateAnime(
-            AnimeUpdate(id = mangaId, coverLastModified = Date().time),
+            AnimeUpdate(id = mangaId, coverLastModified = Instant.now().toEpochMilli()),
         )
     }
 
     suspend fun awaitUpdateFavorite(animeId: Long, favorite: Boolean): Boolean {
         val dateAdded = when (favorite) {
-            true -> Date().time
+            true -> Instant.now().toEpochMilli()
             false -> 0
         }
         return animeRepository.updateAnime(
