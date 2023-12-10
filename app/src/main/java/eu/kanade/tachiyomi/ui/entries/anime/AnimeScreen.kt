@@ -47,6 +47,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -140,7 +141,13 @@ class AnimeScreen(
                     screenModel.source,
                 )
             }.takeIf { isAnimeHttpSource },
-            onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
+            onTrackingClicked = {
+                if (successState.trackingCount == 0) {
+                    navigator.push(SettingsScreen(SettingsScreen.Destination.Tracking))
+                } else {
+                    screenModel.showTrackDialog()
+                }
+            },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
             onFilterButtonClicked = screenModel::showSettingsDialog,
             onRefresh = screenModel::fetchAllFromSource,

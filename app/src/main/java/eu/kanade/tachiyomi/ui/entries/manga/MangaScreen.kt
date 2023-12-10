@@ -48,6 +48,7 @@ import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -131,7 +132,13 @@ class MangaScreen(
                     screenModel.source,
                 )
             }.takeIf { isHttpSource },
-            onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
+            onTrackingClicked = {
+                if (successState.trackingCount == 0) {
+                    navigator.push(SettingsScreen(SettingsScreen.Destination.Tracking))
+                } else {
+                    screenModel.showTrackDialog()
+                }
+            },
             onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
             onFilterButtonClicked = screenModel::showSettingsDialog,
             onRefresh = screenModel::fetchAllFromSource,
