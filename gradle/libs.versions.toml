@@ -1,21 +1,13 @@
 [versions]
 aboutlib_version = "10.9.2"
+leakcanary = "2.12"
 moko = "0.23.0"
 okhttp_version = "5.0.0-alpha.11"
-shizuku_version = "12.2.0"
-sqlite = "2.4.0"
-sqldelight = "2.0.0"
-leakcanary = "2.12"
-voyager = "1.0.0-rc10"
 richtext = "0.17.0"
-agp = "8.1.4"
-kotlin = "1.9.0"
-core-ktx = "1.12.0"
-junit = "4.13.2"
-androidx-test-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
-appcompat = "1.6.1"
-material = "1.10.0"
+shizuku_version = "12.2.0"
+sqldelight = "2.0.0"
+sqlite = "2.4.0"
+voyager = "1.0.0"
 
 [libraries]
 desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
@@ -97,6 +89,7 @@ kotest-assertions = "io.kotest:kotest-assertions-core:5.8.0"
 mockk = "io.mockk:mockk:1.13.8"
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
@@ -109,12 +102,6 @@ arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.1.1"
 seeker = "io.github.2307vivek:seeker:1.1.1"
 
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-junit-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-com-google-android-material-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]
@@ -123,9 +110,6 @@ sqlite = ["sqlite-framework", "sqlite-ktx", "sqlite-android"]
 coil = ["coil-core", "coil-gif", "coil-compose"]
 shizuku = ["shizuku-api", "shizuku-provider"]
 sqldelight = ["sqldelight-android-driver", "sqldelight-coroutines", "sqldelight-android-paging"]
-voyager = ["voyager-navigator", "voyager-tab-navigator", "voyager-transitions"]
+voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-tab-navigator", "voyager-transitions"]
 richtext = ["richtext-commonmark", "richtext-m3"]
 test = ["junit", "kotest-assertions", "mockk"]
-[plugins]
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
