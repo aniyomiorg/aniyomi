@@ -14,6 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.GetApp
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -61,6 +66,7 @@ fun AnimeExtensionScreen(
     searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
+    onClickItemWebView: (AnimeExtension.Available) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,
     onUninstallExtension: (AnimeExtension) -> Unit,
     onUpdateExtension: (AnimeExtension.Installed) -> Unit,
@@ -93,6 +99,7 @@ fun AnimeExtensionScreen(
                     contentPadding = contentPadding,
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
+                    onClickItemWebView = onClickItemWebView,
                     onInstallExtension = onInstallExtension,
                     onUninstallExtension = onUninstallExtension,
                     onUpdateExtension = onUpdateExtension,
@@ -110,6 +117,7 @@ private fun AnimeExtensionContent(
     state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (AnimeExtension) -> Unit,
+    onClickItemWebView: (AnimeExtension.Available) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,
     onUninstallExtension: (AnimeExtension) -> Unit,
@@ -177,6 +185,7 @@ private fun AnimeExtensionContent(
                     },
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
+                    onClickItemWebView = onClickItemWebView,
                     onClickItemAction = {
                         when (it) {
                             is AnimeExtension.Available -> onInstallExtension(it)
@@ -219,6 +228,7 @@ private fun AnimeExtensionItem(
     item: AnimeExtensionUiModel.Item,
     onClickItem: (AnimeExtension) -> Unit,
     onLongClickItem: (AnimeExtension) -> Unit,
+    onClickItemWebView: (AnimeExtension.Available) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onClickItemAction: (AnimeExtension) -> Unit,
     modifier: Modifier = Modifier,
@@ -262,6 +272,7 @@ private fun AnimeExtensionItem(
             AnimeExtensionItemActions(
                 extension = extension,
                 installStep = installStep,
+                onClickItemWebView = onClickItemWebView,
                 onClickItemCancel = onClickItemCancel,
                 onClickItemAction = onClickItemAction,
             )
@@ -348,43 +359,82 @@ private fun AnimeExtensionItemActions(
     extension: AnimeExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
+    onClickItemWebView: (AnimeExtension.Available) -> Unit = {},
     onClickItemCancel: (AnimeExtension) -> Unit = {},
     onClickItemAction: (AnimeExtension) -> Unit = {},
 ) {
     val isIdle = installStep.isCompleted()
-    Row(modifier = modifier) {
-        if (isIdle) {
-            TextButton(
-                onClick = { onClickItemAction(extension) },
-            ) {
-                Text(
-                    text = when (installStep) {
-                        InstallStep.Installed -> stringResource(MR.strings.ext_installed)
-                        InstallStep.Error -> stringResource(MR.strings.action_retry)
-                        InstallStep.Idle -> {
-                            when (extension) {
-                                is AnimeExtension.Installed -> {
-                                    if (extension.hasUpdate) {
-                                        stringResource(MR.strings.ext_update)
-                                    } else {
-                                        stringResource(MR.strings.action_settings)
-                                    }
-                                }
-                                is AnimeExtension.Untrusted -> stringResource(MR.strings.ext_trust)
-                                is AnimeExtension.Available -> stringResource(MR.strings.ext_install)
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        when {
+            !isIdle -> {
+                IconButton(onClick = { onClickItemCancel(extension) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = stringResource(MR.strings.action_cancel),
+                    )
+                }
+            }
+            installStep == InstallStep.Error -> {
+                IconButton(onClick = { onClickItemAction(extension) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = stringResource(MR.strings.action_retry),
+                    )
+                }
+            }
+            installStep == InstallStep.Idle -> {
+                when (extension) {
+                    is AnimeExtension.Installed -> {
+                        if (extension.hasUpdate) {
+                            IconButton(onClick = { onClickItemAction(extension) }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.GetApp,
+                                    contentDescription = stringResource(MR.strings.ext_update),
+                                )
                             }
                         }
-                        else -> error("Must not show install process text")
-                    },
-                )
-            }
-        } else {
-            IconButton(onClick = { onClickItemCancel(extension) }) {
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(MR.strings.action_cancel),
-                )
+
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(MR.strings.action_settings),
+                            )
+                        }
+                    }
+                    is AnimeExtension.Untrusted -> {
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.VerifiedUser,
+                                contentDescription = stringResource(MR.strings.ext_trust),
+                            )
+                        }
+                    }
+                    is AnimeExtension.Available -> {
+                        if (extension.sources.isNotEmpty()) {
+                            IconButton(
+                                onClick = { onClickItemWebView(extension) },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Public,
+                                    contentDescription = stringResource(MR.strings.action_open_in_web_view),
+                                )
+                            }
+                        }
+
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.GetApp,
+                                contentDescription = stringResource(MR.strings.ext_install),
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
+

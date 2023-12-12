@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.anime.extension
 
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.runtime.Composable
@@ -53,6 +54,17 @@ fun animeExtensionsTab(
                 },
                 onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
                 onClickUpdateAll = extensionsScreenModel::updateAllExtensions,
+                onClickItemWebView = { extension ->
+                    extension.sources.getOrNull(0)?.let {
+                        navigator.push(
+                            WebViewScreen(
+                                url = it.baseUrl,
+                                initialTitle = it.name,
+                                sourceId = it.id,
+                            ),
+                        )
+                    }
+                },
                 onInstallExtension = extensionsScreenModel::installExtension,
                 onOpenExtension = { navigator.push(AnimeExtensionDetailsScreen(it.pkgName)) },
                 onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
