@@ -66,7 +66,7 @@ fun EntryToolbar(
                     text = if (isActionMode) actionModeCounter.toString() else title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.alpha(if (isActionMode) 1f else titleAlphaProvider()),
+                    color = LocalContentColor.current.copy(alpha = if (isActionMode) 1f else titleAlphaProvider()),
                 )
             },
             navigationIcon = {

@@ -126,7 +126,7 @@ fun AnimeInfoBox(
                     )
                 }
                 .blur(4.dp)
-                .alpha(.2f),
+                .alpha(0.2f),
         )
 
         // Anime & source info
