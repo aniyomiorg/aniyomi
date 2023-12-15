@@ -118,7 +118,7 @@ class AnimeScreenModel(
     private val successState: State.Success?
         get() = state.value as? State.Success
 
-    private val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is AnimeTracker } }
+    val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is AnimeTracker } }
 
     val anime: Anime?
         get() = successState?.anime
