@@ -47,23 +47,11 @@ fun PullRefresh(
     content: @Composable () -> Unit,
 ) {
     val state = rememberPullToRefreshState(
-        initialRefreshing = refreshing,
+        isRefreshing = refreshing,
         extraVerticalOffset = indicatorPadding.calculateTopPadding(),
         enabled = enabled,
+        onRefresh = onRefresh,
     )
-
-    if (state.isRefreshing) {
-        LaunchedEffect(true) {
-            onRefresh()
-        }
-    }
-    LaunchedEffect(refreshing) {
-        if (refreshing && !state.isRefreshing) {
-            state.startRefreshAnimated()
-        } else if (!refreshing && state.isRefreshing) {
-            state.endRefreshAnimated()
-        }
-    }
 
     Box(modifier.nestedScroll(state.nestedScrollConnection)) {
         content()
@@ -95,10 +83,11 @@ fun PullRefresh(
 
 @Composable
 private fun rememberPullToRefreshState(
-    initialRefreshing: Boolean,
+    isRefreshing: Boolean,
     extraVerticalOffset: Dp,
     positionalThreshold: Dp = 64.dp,
     enabled: () -> Boolean = { true },
+    onRefresh: () -> Unit,
 ): PullToRefreshStateImpl {
     val density = LocalDensity.current
     val extraVerticalOffsetPx = with(density) { extraVerticalOffset.toPx() }
@@ -111,14 +100,24 @@ private fun rememberPullToRefreshState(
             extraVerticalOffset = extraVerticalOffsetPx,
             positionalThreshold = positionalThresholdPx,
             enabled = enabled,
+            onRefresh,
         ),
     ) {
         PullToRefreshStateImpl(
-            initialRefreshing = initialRefreshing,
+            initialRefreshing = isRefreshing,
             extraVerticalOffset = extraVerticalOffsetPx,
             positionalThreshold = positionalThresholdPx,
             enabled = enabled,
+            onRefresh = onRefresh,
         )
+    }.also {
+        LaunchedEffect(isRefreshing) {
+            if (isRefreshing && !it.isRefreshing) {
+                it.startRefreshAnimated()
+            } else if (!isRefreshing && it.isRefreshing) {
+                it.endRefreshAnimated()
+            }
+        }
     }
 }
 
@@ -129,6 +128,7 @@ private fun rememberPullToRefreshState(
  * @param extraVerticalOffset Extra vertical offset, in pixels, for the "refreshing" state
  * @param initialRefreshing The initial refreshing value of [PullToRefreshState]
  * @param enabled a callback used to determine whether scroll events are to be handled by this
+ * @param onRefresh a callback to run when pull-to-refresh action is triggered by user
  * [PullToRefreshState]
  */
 private class PullToRefreshStateImpl(
@@ -136,6 +136,7 @@ private class PullToRefreshStateImpl(
     private val extraVerticalOffset: Float,
     override val positionalThreshold: Float,
     enabled: () -> Boolean,
+    private val onRefresh: () -> Unit,
 ) : PullToRefreshState {
 
     override val progress get() = adjustedDistancePulled / positionalThreshold
@@ -216,6 +217,7 @@ private class PullToRefreshStateImpl(
         if (isRefreshing) return 0f // Already refreshing, do nothing
         // Trigger refresh
         if (adjustedDistancePulled > positionalThreshold) {
+            onRefresh()
             startRefreshAnimated()
         } else {
             animateTo(0f)
@@ -264,6 +266,7 @@ private class PullToRefreshStateImpl(
             extraVerticalOffset: Float,
             positionalThreshold: Float,
             enabled: () -> Boolean,
+            onRefresh: () -> Unit,
         ) = Saver<PullToRefreshStateImpl, Boolean>(
             save = { it.isRefreshing },
             restore = { isRefreshing ->
@@ -272,6 +275,7 @@ private class PullToRefreshStateImpl(
                     extraVerticalOffset = extraVerticalOffset,
                     positionalThreshold = positionalThreshold,
                     enabled = enabled,
+                    onRefresh = onRefresh,
                 )
             },
         )
