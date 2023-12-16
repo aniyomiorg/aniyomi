@@ -29,10 +29,10 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.presentation.category.ChangeCategoryDialog
-import eu.kanade.presentation.entries.LibraryBottomActionMenu
+import eu.kanade.presentation.category.components.ChangeCategoryDialog
+import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
-import eu.kanade.presentation.library.LibraryToolbar
+import eu.kanade.presentation.library.components.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.library.manga.MangaLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
@@ -166,7 +166,6 @@ object MangaLibraryTab : Tab() {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
-                    navigateUp = navigateUp,
                 )
             },
             bottomBar = {

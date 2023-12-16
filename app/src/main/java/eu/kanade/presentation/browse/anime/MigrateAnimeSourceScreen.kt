@@ -75,14 +75,14 @@ fun MigrateAnimeSourceScreen(
 
 @Composable
 private fun MigrateAnimeSourceList(
-        list: List<Pair<AnimeSource, Long>>,
-        contentPadding: PaddingValues,
-        onClickItem: (AnimeSource) -> Unit,
-        onLongClickItem: (AnimeSource) -> Unit,
-        sortingMode: SetMigrateSorting.Mode,
-        onToggleSortingMode: () -> Unit,
-        sortingDirection: SetMigrateSorting.Direction,
-        onToggleSortingDirection: () -> Unit,
+    list: List<Pair<AnimeSource, Long>>,
+    contentPadding: PaddingValues,
+    onClickItem: (AnimeSource) -> Unit,
+    onLongClickItem: (AnimeSource) -> Unit,
+    sortingMode: SetMigrateSorting.Mode,
+    onToggleSortingMode: () -> Unit,
+    sortingDirection: SetMigrateSorting.Direction,
+    onToggleSortingDirection: () -> Unit,
 ) {
     ScrollbarLazyColumn(
         contentPadding = contentPadding + topSmallPaddingValues,

@@ -46,6 +46,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
             ?: return Result.failure()
 
         val flags = inputData.getInt(BACKUP_FLAGS_KEY, BackupCreateFlags.AutomaticDefaults)
+
         try {
             setForeground(getForegroundInfo())
         } catch (e: IllegalStateException) {

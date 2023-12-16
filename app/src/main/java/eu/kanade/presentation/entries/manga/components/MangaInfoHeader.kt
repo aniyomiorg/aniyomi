@@ -74,8 +74,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.system.copyToClipboard

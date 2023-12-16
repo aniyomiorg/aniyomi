@@ -54,17 +54,17 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
 import eu.kanade.presentation.entries.DownloadAction
-import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.EntryScreenItem
-import eu.kanade.presentation.entries.EntryToolbar
-import eu.kanade.presentation.entries.ItemHeader
 import eu.kanade.presentation.entries.anime.components.AnimeActionRow
 import eu.kanade.presentation.entries.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
-import eu.kanade.presentation.entries.anime.components.MissingEpisodeCountListItem
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
+import eu.kanade.presentation.entries.components.EntryBottomActionMenu
+import eu.kanade.presentation.entries.components.EntryToolbar
+import eu.kanade.presentation.entries.components.ItemHeader
+import eu.kanade.presentation.entries.components.MissingItemCountListItem
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -78,7 +78,7 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.items.service.missingItemsCount
+import tachiyomi.domain.items.episode.service.missingEpisodesCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
@@ -483,13 +483,13 @@ private fun AnimeScreenSmallImpl(
                         key = EntryScreenItem.ITEM_HEADER,
                         contentType = EntryScreenItem.ITEM_HEADER,
                     ) {
-                        val missingItemsCount = remember(episodes) {
-                            episodes.map { it.episode.episodeNumber }.missingItemsCount()
+                        val missingEpisodesCount = remember(episodes) {
+                            episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
                         }
                         ItemHeader(
                             enabled = !isAnySelected,
                             itemCount = episodes.size,
-                            missingItemsCount = missingItemsCount,
+                            missingItemsCount = missingEpisodesCount,
                             onClick = onFilterClicked,
                             isManga = false,
                         )
@@ -769,13 +769,13 @@ fun AnimeScreenLargeImpl(
                                 key = EntryScreenItem.ITEM_HEADER,
                                 contentType = EntryScreenItem.ITEM_HEADER,
                             ) {
-                                val missingItemsCount = remember(episodes) {
-                                    episodes.map { it.episode.episodeNumber }.missingItemsCount()
+                                val missingEpisodesCount = remember(episodes) {
+                                    episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
                                 }
                                 ItemHeader(
                                     enabled = !isAnySelected,
                                     itemCount = episodes.size,
-                                    missingItemsCount = missingItemsCount,
+                                    missingItemsCount = missingEpisodesCount,
                                     onClick = onFilterButtonClicked,
                                     isManga = false,
                                 )
@@ -908,7 +908,7 @@ private fun LazyListScope.sharedEpisodeItems(
 
         when (episodeItem) {
             is EpisodeList.MissingCount -> {
-                MissingEpisodeCountListItem(count = episodeItem.count)
+                MissingItemCountListItem(count = episodeItem.count)
             }
             is EpisodeList.Item -> {
                 AnimeEpisodeListItem(

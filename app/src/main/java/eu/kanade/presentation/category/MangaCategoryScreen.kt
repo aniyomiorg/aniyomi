@@ -63,36 +63,36 @@ fun MangaCategoryScreen(
     }
 }
 
-    @Composable
-    private fun CategoryContent(
-        categories: List<Category>,
-        lazyListState: LazyListState,
-        paddingValues: PaddingValues,
-        onClickRename: (Category) -> Unit,
-        onClickHide: (Category) -> Unit,
-        onClickDelete: (Category) -> Unit,
-        onMoveUp: (Category) -> Unit,
-        onMoveDown: (Category) -> Unit,
+@Composable
+private fun CategoryContent(
+    categories: List<Category>,
+    lazyListState: LazyListState,
+    paddingValues: PaddingValues,
+    onClickRename: (Category) -> Unit,
+    onClickHide: (Category) -> Unit,
+    onClickDelete: (Category) -> Unit,
+    onMoveUp: (Category) -> Unit,
+    onMoveDown: (Category) -> Unit,
+) {
+    LazyColumn(
+        state = lazyListState,
+        contentPadding = paddingValues,
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
-        LazyColumn(
-            state = lazyListState,
-            contentPadding = paddingValues,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
-        ) {
-            itemsIndexed(
-                items = categories,
-                key = { _, category -> "category-${category.id}" },
-            ) { index, category ->
-                CategoryListItem(
-                    category = category,
-                    canMoveUp = index != 0,
-                    canMoveDown = index != categories.lastIndex,
-                    onMoveUp = onMoveUp,
-                    onMoveDown = onMoveDown,
-                    onRename = { onClickRename(category) },
-                    onHide = { onClickHide(category) },
-                    onDelete = { onClickDelete(category) },
-                )
-            }
+        itemsIndexed(
+            items = categories,
+            key = { _, category -> "category-${category.id}" },
+        ) { index, category ->
+            CategoryListItem(
+                category = category,
+                canMoveUp = index != 0,
+                canMoveDown = index != categories.lastIndex,
+                onMoveUp = onMoveUp,
+                onMoveDown = onMoveDown,
+                onRename = { onClickRename(category) },
+                onHide = { onClickHide(category) },
+                onDelete = { onClickDelete(category) },
+            )
         }
     }
+}

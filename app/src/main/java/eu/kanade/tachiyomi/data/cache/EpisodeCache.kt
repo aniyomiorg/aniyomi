@@ -72,7 +72,7 @@ class EpisodeCache(private val context: Context) {
      * @param file name of file "md5.0".
      * @return status of deletion for the file.
      */
-    fun removeFileFromCache(file: String): Boolean {
+    private fun removeFileFromCache(file: String): Boolean {
         // Make sure we don't delete the journal file (keeps track of cache)
         if (file == "journal" || file.startsWith("journal.")) {
             return false

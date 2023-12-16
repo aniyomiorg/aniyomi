@@ -74,8 +74,8 @@ import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 import tachiyomi.domain.items.episode.service.getEpisodeSort
-import tachiyomi.domain.items.service.calculateEpisodeGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks

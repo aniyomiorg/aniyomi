@@ -59,7 +59,7 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import tachiyomi.i18n.MR

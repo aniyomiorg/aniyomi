@@ -18,7 +18,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -91,10 +90,8 @@ object MoreTab : Tab() {
 
 private val libraryPreferences: LibraryPreferences by injectLazy()
 
-private val uiPreferences: UiPreferences by injectLazy()
-
 private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true, uiPreferences)
+    0 -> HistoriesTab(true)
     1 -> UpdatesTab(fromMore = true, inMiddle = false)
     else -> MangaLibraryTab
 }

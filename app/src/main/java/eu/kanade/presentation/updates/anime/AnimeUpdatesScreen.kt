@@ -1,7 +1,6 @@
 package eu.kanade.presentation.updates.anime
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
@@ -16,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
-import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
+import eu.kanade.presentation.entries.components.EntryBottomActionMenu
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
@@ -39,7 +38,6 @@ fun AnimeUpdateScreen(
     state: AnimeUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
     relativeTime: Boolean,
-    contentPadding: PaddingValues,
     lastUpdated: Long,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
@@ -68,7 +66,7 @@ fun AnimeUpdateScreen(
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) {
+    ) { contentPadding ->
         when {
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(

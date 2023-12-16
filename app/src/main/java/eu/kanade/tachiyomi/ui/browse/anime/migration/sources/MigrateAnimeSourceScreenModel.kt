@@ -24,9 +24,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MigrateAnimeSourceScreenModel(
-        preferences: SourcePreferences = Injekt.get(),
-        private val getSourcesWithFavoriteCount: GetAnimeSourcesWithFavoriteCount = Injekt.get(),
-        private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
+    preferences: SourcePreferences = Injekt.get(),
+    private val getSourcesWithFavoriteCount: GetAnimeSourcesWithFavoriteCount = Injekt.get(),
+    private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
 ) : StateScreenModel<MigrateAnimeSourceScreenModel.State>(State()) {
 
     private val _channel = Channel<Event>(Int.MAX_VALUE)
@@ -82,10 +82,10 @@ class MigrateAnimeSourceScreenModel(
 
     @Immutable
     data class State(
-            val isLoading: Boolean = true,
-            val items: ImmutableList<Pair<AnimeSource, Long>> = persistentListOf(),
-            val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
-            val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
+        val isLoading: Boolean = true,
+        val items: ImmutableList<Pair<AnimeSource, Long>> = persistentListOf(),
+        val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
+        val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
     ) {
         val isEmpty = items.isEmpty()
     }

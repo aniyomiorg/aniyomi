@@ -9,9 +9,7 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.system.isOnline
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import logcat.LogPriority
-import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks

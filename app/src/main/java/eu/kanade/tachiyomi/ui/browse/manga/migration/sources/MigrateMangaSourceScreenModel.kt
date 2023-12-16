@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.interactor.SetMigrateSorting
+import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -24,9 +24,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MigrateMangaSourceScreenModel(
-        preferences: SourcePreferences = Injekt.get(),
-        private val getSourcesWithFavoriteCount: GetMangaSourcesWithFavoriteCount = Injekt.get(),
-        private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
+    preferences: SourcePreferences = Injekt.get(),
+    private val getSourcesWithFavoriteCount: GetMangaSourcesWithFavoriteCount = Injekt.get(),
+    private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
 ) : StateScreenModel<MigrateMangaSourceScreenModel.State>(State()) {
 
     private val _channel = Channel<Event>(Int.MAX_VALUE)
@@ -82,10 +82,10 @@ class MigrateMangaSourceScreenModel(
 
     @Immutable
     data class State(
-            val isLoading: Boolean = true,
-            val items: ImmutableList<Pair<Source, Long>> = persistentListOf(),
-            val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
-            val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
+        val isLoading: Boolean = true,
+        val items: ImmutableList<Pair<Source, Long>> = persistentListOf(),
+        val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,
+        val sortingDirection: SetMigrateSorting.Direction = SetMigrateSorting.Direction.ASCENDING,
     ) {
         val isEmpty = items.isEmpty()
     }

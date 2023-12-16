@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.library.CommonEntryItemDefaults
-import eu.kanade.presentation.library.EntryComfortableGridItem
+import eu.kanade.presentation.library.components.CommonEntryItemDefaults
+import eu.kanade.presentation.library.components.EntryComfortableGridItem
 import tachiyomi.domain.entries.EntryCover
 
 @Composable
