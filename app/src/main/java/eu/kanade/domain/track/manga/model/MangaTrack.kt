@@ -13,9 +13,7 @@ fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
     )
 }
 
-fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(
-    syncId,
-).also {
+fun MangaTrack.toDbTrack(): DbMangaTrack = DbMangaTrack.create(syncId).also {
     it.id = id
     it.manga_id = mangaId
     it.media_id = remoteId

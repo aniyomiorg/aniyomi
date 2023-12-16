@@ -8,6 +8,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
+// TODO: move these into the domain model
 val Anime.downloadedFilter: TriState
     get() {
         if (forceDownloaded()) return TriState.ENABLED_IS

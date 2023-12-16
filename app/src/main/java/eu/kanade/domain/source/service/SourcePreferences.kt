@@ -1,5 +1,6 @@
 package eu.kanade.domain.source.service
 
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore

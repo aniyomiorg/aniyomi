@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.saver
 
-import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
@@ -30,7 +29,6 @@ class ImageSaver(
     val context: Context,
 ) {
 
-    @SuppressLint("InlinedApi")
     fun save(image: Image): Uri {
         val data = image.data
 

@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.presentation.animelib.components.DownloadsBadge
-import eu.kanade.presentation.animelib.components.GlobalSearchItem
-import eu.kanade.presentation.animelib.components.LanguageBadge
-import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.library.EntryListItem
+import eu.kanade.presentation.library.components.DownloadsBadge
+import eu.kanade.presentation.library.components.EntryListItem
+import eu.kanade.presentation.library.components.GlobalSearchItem
+import eu.kanade.presentation.library.components.LanguageBadge
+import eu.kanade.presentation.library.components.UnviewedBadge
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.library.anime.LibraryAnime
@@ -20,7 +20,7 @@ import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.util.plus
 
 @Composable
-fun AnimeLibraryList(
+internal fun AnimeLibraryList(
     items: List<AnimeLibraryItem>,
     contentPadding: PaddingValues,
     selection: List<LibraryAnime>,

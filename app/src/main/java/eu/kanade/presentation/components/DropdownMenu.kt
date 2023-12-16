@@ -3,12 +3,17 @@ package eu.kanade.presentation.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.RadioButtonChecked
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -60,4 +65,31 @@ fun RadioMenuItem(
             }
         },
     )
+}
+
+@Composable
+fun NestedMenuItem(
+    text: @Composable () -> Unit,
+    children: @Composable ColumnScope.(() -> Unit) -> Unit,
+) {
+    var nestedExpanded by remember { mutableStateOf(false) }
+    val closeMenu = { nestedExpanded = false }
+
+    DropdownMenuItem(
+        text = text,
+        onClick = { nestedExpanded = true },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.ArrowRight,
+                contentDescription = null,
+            )
+        },
+    )
+
+    DropdownMenu(
+        expanded = nestedExpanded,
+        onDismissRequest = closeMenu,
+    ) {
+        children(closeMenu)
+    }
 }

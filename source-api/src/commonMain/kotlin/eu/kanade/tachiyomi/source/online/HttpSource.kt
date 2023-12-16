@@ -260,7 +260,7 @@ abstract class HttpSource : CatalogueSource {
                     chapterListParse(response)
                 }
         } else {
-            Observable.error(Exception(LicensedEntryItemsException()))
+            Observable.error(LicensedEntryItemsException())
         }
     }
 
