@@ -4,7 +4,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
-import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.episode.model.Episode
 
 @Execution(ExecutionMode.CONCURRENT)
