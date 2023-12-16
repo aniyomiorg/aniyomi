@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
-import eu.kanade.domain.source.service.SetMigrateSorting
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.presentation.browse.anime.components.AnimeSourceIcon
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.MigrateAnimeSourceScreenModel
@@ -75,14 +75,14 @@ fun MigrateAnimeSourceScreen(
 
 @Composable
 private fun MigrateAnimeSourceList(
-    list: List<Pair<AnimeSource, Long>>,
-    contentPadding: PaddingValues,
-    onClickItem: (AnimeSource) -> Unit,
-    onLongClickItem: (AnimeSource) -> Unit,
-    sortingMode: SetMigrateSorting.Mode,
-    onToggleSortingMode: () -> Unit,
-    sortingDirection: SetMigrateSorting.Direction,
-    onToggleSortingDirection: () -> Unit,
+        list: List<Pair<AnimeSource, Long>>,
+        contentPadding: PaddingValues,
+        onClickItem: (AnimeSource) -> Unit,
+        onLongClickItem: (AnimeSource) -> Unit,
+        sortingMode: SetMigrateSorting.Mode,
+        onToggleSortingMode: () -> Unit,
+        sortingDirection: SetMigrateSorting.Direction,
+        onToggleSortingDirection: () -> Unit,
 ) {
     ScrollbarLazyColumn(
         contentPadding = contentPadding + topSmallPaddingValues,

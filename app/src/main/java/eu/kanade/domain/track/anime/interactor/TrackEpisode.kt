@@ -12,6 +12,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
@@ -23,11 +24,10 @@ class TrackEpisode(
     private val delayedTrackingStore: DelayedAnimeTrackingStore,
 ) {
 
-    suspend fun await(context: Context, animeId: Long, episodeNumber: Double) = coroutineScope {
-        launchNonCancellable {
+    suspend fun await(context: Context, animeId: Long, episodeNumber: Double) {
+        withNonCancellableContext {
             val tracks = getTracks.await(animeId)
-
-            if (tracks.isEmpty()) return@launchNonCancellable
+            if (tracks.isEmpty()) return@withNonCancellableContext
 
             tracks.mapNotNull { track ->
                 val service = trackerManager.get(track.syncId)

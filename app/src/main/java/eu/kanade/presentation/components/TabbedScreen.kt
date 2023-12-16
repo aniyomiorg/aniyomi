@@ -40,13 +40,13 @@ fun TabbedScreen(
     startIndex: Int? = null,
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
-    state: PagerState = rememberPagerState { tabs.size },
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
 
 ) {
     val scope = rememberCoroutineScope()
+    val state = rememberPagerState { tabs.size }
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(startIndex) {
@@ -84,8 +84,6 @@ fun TabbedScreen(
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,
                     actions = { AppBarActions(tab.actions) },
-                    cancelAction = tab.cancelAction,
-                    actionMode = tab.numberTitle != 0,
                     navigateUp = tab.navigateUp,
                 )
             }

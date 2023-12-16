@@ -1,4 +1,6 @@
-package eu.kanade.domain.source.service
+package eu.kanade.domain.source.interactor
+
+import eu.kanade.domain.source.service.SourcePreferences
 
 class SetMigrateSorting(
     private val preferences: SourcePreferences,

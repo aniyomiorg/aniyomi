@@ -299,8 +299,6 @@ fun SearchToolbar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    cancelAction: () -> Unit = {},
-    actionMode: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -422,7 +420,6 @@ fun SearchToolbar(
         },
         isActionMode = false,
         scrollBehavior = scrollBehavior,
-        onCancelActionMode = cancelAction,
     )
 }
 
