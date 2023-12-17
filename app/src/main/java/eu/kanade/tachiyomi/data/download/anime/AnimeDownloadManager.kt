@@ -53,6 +53,7 @@ class AnimeDownloadManager(
 
     val isRunning: Boolean
         get() = downloader.isRunning
+
     /**
      * Queue to delay the deletion of a list of episodes until triggered.
      */

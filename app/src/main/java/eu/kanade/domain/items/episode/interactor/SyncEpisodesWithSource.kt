@@ -21,8 +21,8 @@ import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
 import java.lang.Long.max
-import java.time.ZonedDateTime
 import java.time.Instant
+import java.time.ZonedDateTime
 import java.util.TreeSet
 
 class SyncEpisodesWithSource(

@@ -47,7 +47,6 @@ import rx.subjects.PublishSubject
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.storage.extension
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences

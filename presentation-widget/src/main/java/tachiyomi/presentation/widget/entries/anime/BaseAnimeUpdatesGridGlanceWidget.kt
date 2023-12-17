@@ -46,8 +46,8 @@ import tachiyomi.presentation.widget.util.appWidgetBackgroundRadius
 import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.ZonedDateTime
 import java.time.Instant
+import java.time.ZonedDateTime
 
 abstract class BaseAnimeUpdatesGridGlanceWidget(
     private val context: Context = Injekt.get<Application>(),

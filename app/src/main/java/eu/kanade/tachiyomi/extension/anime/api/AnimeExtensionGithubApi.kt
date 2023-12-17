@@ -77,7 +77,9 @@ internal class AnimeExtensionGithubApi {
         fromAvailableExtensionList: Boolean = false,
     ): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
-        if (fromAvailableExtensionList && Instant.now().toEpochMilli() < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
+        if (fromAvailableExtensionList &&
+            Instant.now().toEpochMilli() < lastExtCheck.get() + 1.days.inWholeMilliseconds
+        ) {
             return null
         }
 

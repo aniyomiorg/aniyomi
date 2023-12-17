@@ -202,7 +202,7 @@ class BangumiApi(
         } else {
             0
         }
-        
+
         val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.floatOrNull ?: -1f
         return AnimeTrackSearch.create(trackId).apply {
             media_id = obj["id"]!!.jsonPrimitive.long

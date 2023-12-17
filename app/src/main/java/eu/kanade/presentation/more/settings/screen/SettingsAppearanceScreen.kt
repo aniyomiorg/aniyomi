@@ -24,13 +24,12 @@ import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 import org.xmlpull.v1.XmlPullParser
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt

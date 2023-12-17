@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.browse.anime.extension
 
-import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.runtime.Composable
@@ -13,6 +12,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreen
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource

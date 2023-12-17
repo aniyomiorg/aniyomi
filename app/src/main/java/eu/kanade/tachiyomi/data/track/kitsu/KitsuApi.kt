@@ -491,7 +491,6 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 "%5B%22synopsis%22%2C%22averageRating%22%2C%22canonicalTitle%22%2C%22episodeCount%22%2C%22" +
                 "posterImage%22%2C%22startDate%22%2C%22subtype%22%2C%22endDate%22%2C%20%22id%22%5D"
 
-
         fun mangaUrl(remoteId: Long): String {
             return baseMangaUrl + remoteId
         }
