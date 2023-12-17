@@ -20,10 +20,7 @@ class AnimeWidgetManager(
 
     fun Context.init(scope: LifecycleCoroutineScope) {
         combine(
-            getUpdates.subscribe(
-                seen = false,
-                after = BaseAnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis,
-            ),
+            getUpdates.subscribe(seen = false, after = BaseAnimeUpdatesGridGlanceWidget.DateLimit.toEpochMilli()),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },
         )

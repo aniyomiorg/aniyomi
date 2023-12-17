@@ -21,8 +21,8 @@ import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
 import java.lang.Long.max
+import java.time.Instant
 import java.time.ZonedDateTime
-import java.util.Date
 import java.util.TreeSet
 
 class SyncEpisodesWithSource(
@@ -81,7 +81,7 @@ class SyncEpisodesWithSource(
             }
         }
 
-        val rightNow = Date().time
+        val rightNow = Instant.now().toEpochMilli()
 
         // Used to not set upload date of older episodes
         // to a higher value than newer episodes

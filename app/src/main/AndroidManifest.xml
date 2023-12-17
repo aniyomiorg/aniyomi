@@ -23,8 +23,9 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES" />
+    
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <application
         android:name=".App"
@@ -201,11 +202,7 @@
             android:exported="false" />
 
         <service
-            android:name=".data.download.manga.MangaDownloadService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.download.anime.AnimeDownloadService"
+            android:name=".extension.util.ExtensionInstallService"
             android:exported="false" />
 
         <service
@@ -223,6 +220,11 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

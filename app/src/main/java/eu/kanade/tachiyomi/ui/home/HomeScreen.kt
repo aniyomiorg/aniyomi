@@ -69,6 +69,7 @@ object HomeScreen : Screen() {
     private val showBottomNavEvent = Channel<Boolean>()
 
     private const val TabFadeDuration = 200
+    private const val TabNavigatorKey = "HomeTabs"
 
     private val libraryPreferences: LibraryPreferences by injectLazy()
 
@@ -114,6 +115,7 @@ object HomeScreen : Screen() {
         }
         TabNavigator(
             tab = defaultTab,
+            key = TabNavigatorKey,
         ) { tabNavigator ->
             // Provide usable navigator to content screen
             CompositionLocalProvider(LocalNavigator provides navigator) {
@@ -161,12 +163,12 @@ object HomeScreen : Screen() {
                                 ) togetherWith
                                     materialFadeThroughOut(durationMillis = TabFadeDuration)
                             },
-                            content = {
-                                tabNavigator.saveableState(key = "currentTab", it) {
-                                    it.Content()
-                                }
-                            },
-                        )
+                            label = "tabContent",
+                        ) {
+                            tabNavigator.saveableState(key = "currentTab", it) {
+                                it.Content()
+                            }
+                        }
                     }
                 }
             }

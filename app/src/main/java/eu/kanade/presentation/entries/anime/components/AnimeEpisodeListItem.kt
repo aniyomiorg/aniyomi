@@ -195,7 +195,7 @@ fun AnimeEpisodeListItem(
                                     text = watchProgress,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.alpha(ReadItemAlpha),
+                                    color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
                                 )
                                 if (scanlator != null) DotSeparatorText()
                             }

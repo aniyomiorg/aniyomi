@@ -98,6 +98,7 @@ private fun AnimeHistoryContent(
             when (item) {
                 is AnimeHistoryUiModel.Header -> {
                     RelativeDateHeader(
+                        modifier = Modifier.animateItemPlacement(),
                         date = item.date,
                         relativeTime = relativeTime,
                         dateFormat = dateFormat,
@@ -106,6 +107,7 @@ private fun AnimeHistoryContent(
                 is AnimeHistoryUiModel.Item -> {
                     val value = item.item
                     AnimeHistoryItem(
+                        modifier = Modifier.animateItemPlacement(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

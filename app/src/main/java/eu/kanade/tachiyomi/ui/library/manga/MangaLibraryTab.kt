@@ -35,6 +35,7 @@ import eu.kanade.presentation.library.DeleteLibraryEntryDialog
 import eu.kanade.presentation.library.components.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.library.manga.MangaLibrarySettingsDialog
+import eu.kanade.presentation.more.onboarding.GETTING_STARTED_URL
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
@@ -193,11 +194,7 @@ object MangaLibraryTab : Tab() {
                             EmptyScreenAction(
                                 stringRes = MR.strings.getting_started_guide,
                                 icon = Icons.AutoMirrored.Outlined.HelpOutline,
-                                onClick = {
-                                    handler.openUri(
-                                        "https://aniyomi.org/docs/guides/getting-started",
-                                    )
-                                },
+                                onClick = { handler.openUri(GETTING_STARTED_URL) },
                             ),
                         ),
                     )

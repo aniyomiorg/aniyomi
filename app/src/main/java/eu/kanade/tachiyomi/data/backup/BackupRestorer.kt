@@ -35,7 +35,7 @@ import eu.kanade.tachiyomi.util.BackupUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.ensureActive
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
@@ -101,14 +101,12 @@ class BackupRestorer(
 
     private val errors = mutableListOf<Pair<Date, String>>()
 
-    suspend fun syncFromBackup(uri: Uri, sync: Boolean): Boolean {
+    suspend fun syncFromBackup(uri: Uri, sync: Boolean) {
         val startTime = System.currentTimeMillis()
         restoreProgress = 0
         errors.clear()
 
-        if (!performRestore(uri, sync)) {
-            return false
-        }
+        performRestore(uri, sync)
 
         val endTime = System.currentTimeMillis()
         val time = endTime - startTime
@@ -126,7 +124,6 @@ class BackupRestorer(
         } else {
             notifier.showRestoreComplete(time, errors.size, logFile.parent, logFile.name)
         }
-        return true
     }
 
     private fun writeErrorLog(): File {
@@ -149,21 +146,12 @@ class BackupRestorer(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun performRestore(uri: Uri, sync: Boolean): Boolean {
+    private suspend fun performRestore(uri: Uri, sync: Boolean) {
         val backup = BackupUtil.decodeBackup(context, uri)
 
         restoreAmount =
             backup.backupManga.size +
             backup.backupAnime.size + 3 // +3 for categories, app prefs, source prefs
-
-        // Restore categories
-        if (backup.backupCategories.isNotEmpty()) {
-            restoreCategories(backup.backupCategories)
-        }
-
-        if (backup.backupAnimeCategories.isNotEmpty()) {
-            restoreAnimeCategories(backup.backupAnimeCategories)
-        }
 
         // Store source mapping for error messages
         val backupMaps = backup.backupBrokenSources.map { BackupSource(it.name, it.sourceId) } + backup.backupSources
@@ -181,77 +169,61 @@ class BackupRestorer(
         currentMangaFetchWindow = mangaFetchInterval.getWindow(now)
         currentAnimeFetchWindow = animeFetchInterval.getWindow(now)
 
-        return coroutineScope {
+        coroutineScope {
+            ensureActive()
+            restoreCategories(backup.backupCategories)
+
+            ensureActive()
+            restoreAnimeCategories(backup.backupAnimeCategories)
+
+            ensureActive()
+            restorePreferences(
+                backup.backupPreferences,
+                PreferenceManager.getDefaultSharedPreferences(context),
+            )
+
+            ensureActive()
+            restoreExtensionPreferences(backup.backupExtensionPreferences)
+
             // Restore individual manga
             backup.backupManga.forEach {
-                if (!isActive) {
-                    return@coroutineScope false
-                }
-
+                ensureActive()
                 restoreManga(it, backup.backupCategories, sync)
             }
 
             backup.backupAnime.forEach {
-                if (!isActive) {
-                    return@coroutineScope false
-                }
-
+                ensureActive()
                 restoreAnime(it, backup.backupAnimeCategories, sync)
             }
 
-            if (backup.backupPreferences.isNotEmpty()) {
-                restorePreferences(
-                    backup.backupPreferences,
-                    PreferenceManager.getDefaultSharedPreferences(context),
-                )
-            }
-
-            if (backup.backupExtensionPreferences.isNotEmpty()) {
-                restoreExtensionPreferences(backup.backupExtensionPreferences)
-            }
-
             if (backup.backupExtensions.isNotEmpty()) {
+                ensureActive()
                 restoreExtensions(backup.backupExtensions)
             }
 
             // TODO: optionally trigger online library + tracker update
-            true
         }
     }
 
     private suspend fun restoreCategories(backupCategories: List<BackupCategory>) {
-        // Get categories from file and from db
-        val dbCategories = getMangaCategories.await()
+        if (backupCategories.isNotEmpty()) {
+            val dbCategories = getMangaCategories.await()
+            val dbCategoriesByName = dbCategories.associateBy { it.name }
 
-        val categories = backupCategories.map {
-            var category = it.getCategory()
-            var found = false
-            for (dbCategory in dbCategories) {
-                // If the category is already in the db, assign the id to the file's category
-                // and do nothing
-                if (category.name == dbCategory.name) {
-                    category = category.copy(id = dbCategory.id)
-                    found = true
-                    break
-                }
-            }
-            if (!found) {
-                // Let the db assign the id
-                val id = mangaHandler.awaitOneExecutable {
-                    categoriesQueries.insert(category.name, category.order, category.flags)
-                    categoriesQueries.selectLastInsertedRowId()
-                }
-                category = category.copy(id = id)
+            val categories = backupCategories.map {
+                dbCategoriesByName[it.name]
+                    ?: mangaHandler.awaitOneExecutable {
+                        categoriesQueries.insert(it.name, it.order, it.flags)
+                        categoriesQueries.selectLastInsertedRowId()
+                    }.let { id -> it.toCategory(id) }
             }
 
-            category
+            libraryPreferences.categorizedDisplaySettings().set(
+                (dbCategories + categories)
+                    .distinctBy { it.flags }
+                    .size > 1,
+            )
         }
-
-        libraryPreferences.categorizedDisplaySettings().set(
-            (dbCategories + categories)
-                .distinctBy { it.flags }
-                .size > 1,
-        )
 
         restoreProgress += 1
         showRestoreProgress(
@@ -263,38 +235,24 @@ class BackupRestorer(
     }
 
     private suspend fun restoreAnimeCategories(backupCategories: List<BackupCategory>) {
-        // Get categories from file and from db
-        val dbCategories = getAnimeCategories.await()
+        if (backupCategories.isNotEmpty()) {
+            val dbCategories = getAnimeCategories.await()
+            val dbCategoriesByName = dbCategories.associateBy { it.name }
 
-        val categories = backupCategories.map {
-            var category = it.getCategory()
-            var found = false
-            for (dbCategory in dbCategories) {
-                // If the category is already in the db, assign the id to the file's category
-                // and do nothing
-                if (category.name == dbCategory.name) {
-                    category = category.copy(id = dbCategory.id)
-                    found = true
-                    break
-                }
-            }
-            if (!found) {
-                // Let the db assign the id
-                val id = animeHandler.awaitOneExecutable {
-                    categoriesQueries.insert(category.name, category.order, category.flags)
-                    categoriesQueries.selectLastInsertedRowId()
-                }
-                category = category.copy(id = id)
+            val categories = backupCategories.map {
+                dbCategoriesByName[it.name]
+                    ?: animeHandler.awaitOneExecutable {
+                        categoriesQueries.insert(it.name, it.order, it.flags)
+                        categoriesQueries.selectLastInsertedRowId()
+                    }.let { id -> it.toCategory(id) }
             }
 
-            category
+            libraryPreferences.categorizedDisplaySettings().set(
+                (dbCategories + categories)
+                    .distinctBy { it.flags }
+                    .size > 1,
+            )
         }
-
-        libraryPreferences.categorizedDisplaySettings().set(
-            (dbCategories + categories)
-                .distinctBy { it.flags }
-                .size > 1,
-        )
 
         restoreProgress += 1
         showRestoreProgress(

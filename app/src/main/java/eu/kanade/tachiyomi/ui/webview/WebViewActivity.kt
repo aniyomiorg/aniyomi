@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.openInBrowser
-import eu.kanade.tachiyomi.util.system.overridePendingTransitionCompat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
@@ -39,7 +38,7 @@ class WebViewActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransitionCompat(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
+        overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
         super.onCreate(savedInstanceState)
 
         if (!WebViewUtil.supportsWebView(this)) {
@@ -87,7 +86,7 @@ class WebViewActivity : BaseActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransitionCompat(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
+        overridePendingTransition(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
     }
 
     private fun shareWebpage(url: String) {

@@ -30,6 +30,7 @@ class KitsuSearchManga(obj: JsonObject) {
         null
     }
     private val synopsis = obj["synopsis"]?.jsonPrimitive?.contentOrNull
+    private val rating = obj["averageRating"]?.jsonPrimitive?.contentOrNull?.toFloatOrNull()
     private var startDate = obj["startDate"]?.jsonPrimitive?.contentOrNull?.let {
         val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         outputDf.format(Date(it.toLong() * 1000))
@@ -44,6 +45,7 @@ class KitsuSearchManga(obj: JsonObject) {
         cover_url = original ?: ""
         summary = synopsis ?: ""
         tracking_url = KitsuApi.mangaUrl(media_id)
+        score = rating ?: -1f
         publishing_status = if (endDate == null) {
             "Publishing"
         } else {
@@ -66,6 +68,7 @@ class KitsuSearchAnime(obj: JsonObject) {
         null
     }
     private val synopsis = obj["synopsis"]?.jsonPrimitive?.contentOrNull
+    private val rating = obj["averageRating"]?.jsonPrimitive?.contentOrNull?.toFloatOrNull()
     private var startDate = obj["startDate"]?.jsonPrimitive?.contentOrNull?.let {
         val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         outputDf.format(Date(it.toLong() * 1000))
@@ -80,6 +83,7 @@ class KitsuSearchAnime(obj: JsonObject) {
         cover_url = original ?: ""
         summary = synopsis ?: ""
         tracking_url = KitsuApi.animeUrl(media_id)
+        score = rating ?: -1f
         publishing_status = if (endDate == null) {
             "Publishing"
         } else {

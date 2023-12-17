@@ -24,10 +24,8 @@ import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.storage.service.StorageManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
+import java.time.Instant
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toJavaDuration
 
 class BackupCreateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -56,7 +54,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
         return try {
             val location = BackupCreator(context).createBackup(uri, flags, isAutoBackup)
             if (isAutoBackup) {
-                backupPreferences.lastAutoBackupTimestamp().set(Date().time)
+                backupPreferences.lastAutoBackupTimestamp().set(Instant.now().toEpochMilli())
             } else {
                 notifier.showBackupComplete(UniFile.fromUri(context, location.toUri())!!)
             }
@@ -104,7 +102,7 @@ class BackupCreateJob(private val context: Context, workerParams: WorkerParamete
                     10,
                     TimeUnit.MINUTES,
                 )
-                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10.minutes.toJavaDuration())
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10, TimeUnit.MINUTES)
                     .addTag(TAG_AUTO)
                     .setConstraints(constraints)
                     .setInputData(
