@@ -17,8 +17,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toJavaDuration
+import java.util.concurrent.TimeUnit
 
 class DelayedMangaTrackingUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
@@ -63,7 +62,7 @@ class DelayedMangaTrackingUpdateJob(private val context: Context, workerParams: 
 
             val request = OneTimeWorkRequestBuilder<DelayedMangaTrackingUpdateJob>()
                 .setConstraints(constraints)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 5.minutes.toJavaDuration())
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 5, TimeUnit.MINUTES)
                 .addTag(TAG)
                 .build()
 

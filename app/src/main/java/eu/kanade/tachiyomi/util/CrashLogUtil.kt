@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.util
 
 import android.content.Context
 import android.os.Build
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -39,6 +40,7 @@ class CrashLogUtil(
 
     fun getDebugInfo(): String {
         return """
+            App version: ${BuildConfig.VERSION_NAME} (${BuildConfig.FLAVOR}, ${BuildConfig.COMMIT_SHA}, ${BuildConfig.VERSION_CODE}, ${BuildConfig.BUILD_TIME})
             Android version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}; build ${Build.DISPLAY})
             Android build ID: ${Build.DISPLAY}
             Device brand: ${Build.BRAND}

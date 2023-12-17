@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.saver
 
-import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,13 +23,12 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
-import java.util.Date
+import java.time.Instant
 
 class ImageSaver(
     val context: Context,
 ) {
 
-    @SuppressLint("InlinedApi")
     fun save(image: Image): Uri {
         val data = image.data
 
@@ -81,7 +79,7 @@ class ImageSaver(
             MediaStore.Images.Media.RELATIVE_PATH to relativePath,
             MediaStore.Images.Media.DISPLAY_NAME to image.name,
             MediaStore.Images.Media.MIME_TYPE to type.mime,
-            MediaStore.Images.Media.DATE_MODIFIED to Date().time * 1000,
+            MediaStore.Images.Media.DATE_MODIFIED to Instant.now().toEpochMilli(),
         )
 
         val picture = findUriOrDefault(relativePath, filename) {

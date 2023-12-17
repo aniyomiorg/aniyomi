@@ -12,7 +12,6 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
@@ -37,7 +36,6 @@ val resumeLastEpisodeSeenEvent = Channel<Unit>()
 fun Screen.animeHistoryTab(
     context: Context,
     fromMore: Boolean,
-    preferences: UiPreferences,
 ): TabContent {
     val snackbarHostState = SnackbarHostState()
 
@@ -64,13 +62,11 @@ fun Screen.animeHistoryTab(
         content = { contentPadding, _ ->
             AnimeHistoryScreen(
                 state = state,
-                contentPadding = contentPadding,
                 searchQuery = searchQuery,
                 snackbarHostState = snackbarHostState,
                 onClickCover = { navigator.push(AnimeScreen(it)) },
                 onClickResume = screenModel::getNextEpisodeForAnime,
                 onDialogChange = screenModel::setDialog,
-                preferences = preferences,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }

@@ -11,7 +11,6 @@ fun Anime.copyFrom(other: Animes): Anime {
     other.genre?.let { anime = anime.copy(genre = it) }
     other.thumbnail_url?.let { anime = anime.copy(thumbnailUrl = it) }
     anime = anime.copy(status = other.status)
-
     if (!initialized) {
         anime = anime.copy(initialized = other.initialized)
     }

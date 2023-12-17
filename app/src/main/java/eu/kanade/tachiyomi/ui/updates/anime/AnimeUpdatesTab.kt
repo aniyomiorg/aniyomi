@@ -59,7 +59,6 @@ fun Screen.animeUpdatesTab(
             AnimeUpdateScreen(
                 state = state,
                 snackbarHostState = screenModel.snackbarHostState,
-                contentPadding = contentPadding,
                 lastUpdated = screenModel.lastUpdated,
                 relativeTime = screenModel.relativeTime,
                 onClickCover = { item -> navigator.push(AnimeScreen(item.update.animeId)) },

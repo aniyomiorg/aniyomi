@@ -3,6 +3,7 @@ package eu.kanade.presentation.entries.manga
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -124,7 +125,7 @@ fun ChapterSettingsDialog(
 }
 
 @Composable
-private fun FilterPage(
+private fun ColumnScope.FilterPage(
     downloadFilter: TriState,
     onDownloadFilterChanged: ((TriState) -> Unit)?,
     unreadFilter: TriState,
@@ -185,48 +186,40 @@ fun ScanlatorFilterItem(
 }
 
 @Composable
-private fun SortPage(
+private fun ColumnScope.SortPage(
     sortingMode: Long,
     sortDescending: Boolean,
     onItemSelected: (Long) -> Unit,
 ) {
-    SortItem(
-        label = stringResource(MR.strings.sort_by_source),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_SOURCE },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_SOURCE) },
-    )
-    SortItem(
-        label = stringResource(MR.strings.sort_by_number),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_NUMBER },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_NUMBER) },
-    )
-    SortItem(
-        label = stringResource(MR.strings.sort_by_upload_date),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_UPLOAD_DATE },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_UPLOAD_DATE) },
-    )
-    SortItem(
-        label = stringResource(MR.strings.action_sort_alpha),
-        sortDescending = sortDescending.takeIf { sortingMode == Manga.CHAPTER_SORTING_ALPHABET },
-        onClick = { onItemSelected(Manga.CHAPTER_SORTING_ALPHABET) },
-    )
+    listOf(
+        MR.strings.sort_by_source to Manga.CHAPTER_SORTING_SOURCE,
+        MR.strings.sort_by_number to Manga.CHAPTER_SORTING_NUMBER,
+        MR.strings.sort_by_upload_date to Manga.CHAPTER_SORTING_UPLOAD_DATE,
+        MR.strings.action_sort_alpha to Manga.CHAPTER_SORTING_ALPHABET,
+    ).map { (titleRes, mode) ->
+        SortItem(
+            label = stringResource(titleRes),
+            sortDescending = sortDescending.takeIf { sortingMode == mode },
+            onClick = { onItemSelected(mode) },
+        )
+    }
 }
 
 @Composable
-private fun DisplayPage(
+private fun ColumnScope.DisplayPage(
     displayMode: Long,
     onItemSelected: (Long) -> Unit,
 ) {
-    RadioItem(
-        label = stringResource(MR.strings.show_title),
-        selected = displayMode == Manga.CHAPTER_DISPLAY_NAME,
-        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NAME) },
-    )
-    RadioItem(
-        label = stringResource(MR.strings.show_chapter_number),
-        selected = displayMode == Manga.CHAPTER_DISPLAY_NUMBER,
-        onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NUMBER) },
-    )
+    listOf(
+        MR.strings.show_title to Manga.CHAPTER_DISPLAY_NAME,
+        MR.strings.show_chapter_number to Manga.CHAPTER_DISPLAY_NUMBER,
+    ).map { (titleRes, mode) ->
+        RadioItem(
+            label = stringResource(titleRes),
+            selected = displayMode == mode,
+            onClick = { onItemSelected(mode) },
+        )
+    }
 }
 
 @Composable

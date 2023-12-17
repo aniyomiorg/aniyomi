@@ -18,7 +18,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -61,7 +60,7 @@ object MoreTab : Tab() {
         }
 
     override suspend fun onReselect(navigator: Navigator) {
-        navigator.push(SettingsScreen.toMainScreen())
+        navigator.push(SettingsScreen())
     }
 
     @Composable
@@ -82,19 +81,17 @@ object MoreTab : Tab() {
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
             onClickStorage = { navigator.push(StorageTab()) },
-            onClickDataAndStorage = { navigator.push(SettingsScreen.toDataAndStorageScreen()) },
-            onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
-            onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
+            onClickDataAndStorage = { navigator.push(SettingsScreen(SettingsScreen.Destination.DataAndStorage)) },
+            onClickSettings = { navigator.push(SettingsScreen()) },
+            onClickAbout = { navigator.push(SettingsScreen(SettingsScreen.Destination.About)) },
         )
     }
 }
 
 private val libraryPreferences: LibraryPreferences by injectLazy()
 
-private val uiPreferences: UiPreferences by injectLazy()
-
 private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true, uiPreferences)
+    0 -> HistoriesTab(true)
     1 -> UpdatesTab(fromMore = true, inMiddle = false)
     else -> MangaLibraryTab
 }

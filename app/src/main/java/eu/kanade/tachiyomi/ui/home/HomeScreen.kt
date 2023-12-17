@@ -34,7 +34,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -70,10 +69,9 @@ object HomeScreen : Screen() {
     private val showBottomNavEvent = Channel<Boolean>()
 
     private const val TabFadeDuration = 200
+    private const val TabNavigatorKey = "HomeTabs"
 
     private val libraryPreferences: LibraryPreferences by injectLazy()
-
-    private val uiPreferences: UiPreferences by injectLazy()
 
     val tabsNoHistory = listOf(
         AnimeLibraryTab,
@@ -86,7 +84,7 @@ object HomeScreen : Screen() {
     val tabsNoUpdates = listOf(
         AnimeLibraryTab,
         MangaLibraryTab,
-        HistoriesTab(false, uiPreferences),
+        HistoriesTab(false),
         BrowseTab(),
         MoreTab,
     )
@@ -94,7 +92,7 @@ object HomeScreen : Screen() {
     val tabsNoManga = listOf(
         AnimeLibraryTab,
         UpdatesTab(fromMore = false, inMiddle = false),
-        HistoriesTab(false, uiPreferences),
+        HistoriesTab(false),
         BrowseTab(),
         MoreTab,
     )
@@ -117,6 +115,7 @@ object HomeScreen : Screen() {
         }
         TabNavigator(
             tab = defaultTab,
+            key = TabNavigatorKey,
         ) { tabNavigator ->
             // Provide usable navigator to content screen
             CompositionLocalProvider(LocalNavigator provides navigator) {
@@ -164,12 +163,12 @@ object HomeScreen : Screen() {
                                 ) togetherWith
                                     materialFadeThroughOut(durationMillis = TabFadeDuration)
                             },
-                            content = {
-                                tabNavigator.saveableState(key = "currentTab", it) {
-                                    it.Content()
-                                }
-                            },
-                        )
+                            label = "tabContent",
+                        ) {
+                            tabNavigator.saveableState(key = "currentTab", it) {
+                                it.Content()
+                            }
+                        }
                     }
                 }
             }
@@ -196,7 +195,7 @@ object HomeScreen : Screen() {
                                 libraryPreferences.bottomNavStyle().get() == 1,
                                 libraryPreferences.bottomNavStyle().get() == 0,
                             )
-                            is Tab.History -> HistoriesTab(false, uiPreferences)
+                            is Tab.History -> HistoriesTab(false)
                             is Tab.Browse -> BrowseTab(it.toExtensions)
                             is Tab.More -> MoreTab
                         }

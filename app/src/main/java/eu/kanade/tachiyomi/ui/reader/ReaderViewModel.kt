@@ -74,6 +74,7 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.Instant
 import java.util.Date
 
 /**
@@ -551,7 +552,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     fun restartReadTimer() {
-        chapterReadStartTime = Date().time
+        chapterReadStartTime = Instant.now().toEpochMilli()
     }
 
     fun flushReadTimer() {

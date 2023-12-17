@@ -5,29 +5,32 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.service.calculateChapterGap
+import tachiyomi.domain.items.chapter.service.missingChaptersCount
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 
 @Execution(ExecutionMode.CONCURRENT)
 class MissingItemsTest {
 
     @Test
-    fun `missingItemsCount returns 0 when empty list`() {
-        emptyList<Double>().missingItemsCount() shouldBe 0
+    fun `missingChaptersCount returns 0 when empty list`() {
+        emptyList<Double>().missingChaptersCount() shouldBe 0
     }
 
     @Test
-    fun `missingItemsCount returns 0 when all unknown item numbers`() {
-        listOf(-1.0, -1.0, -1.0).missingItemsCount() shouldBe 0
+    fun `missingChaptersCount returns 0 when all unknown item numbers`() {
+        listOf(-1.0, -1.0, -1.0).missingChaptersCount() shouldBe 0
     }
 
     @Test
-    fun `missingItemsCount handles repeated base item numbers`() {
-        listOf(1.0, 1.0, 1.1, 1.5, 1.6, 1.99).missingItemsCount() shouldBe 0
+    fun `missingChaptersCount handles repeated base item numbers`() {
+        listOf(1.0, 1.0, 1.1, 1.5, 1.6, 1.99).missingChaptersCount() shouldBe 0
     }
 
     @Test
-    fun `missingItemsCount returns number of missing items`() {
-        listOf(-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 10.0).missingItemsCount() shouldBe 5
+    fun `missingChaptersCount returns number of missing items`() {
+        listOf(-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 10.0).missingChaptersCount() shouldBe 5
     }
 
     @Test

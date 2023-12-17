@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
-import eu.kanade.domain.source.service.SetMigrateSorting
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceScreenModel
@@ -132,7 +132,7 @@ private fun MigrateSourceList(
             key = { (source, _) -> "migrate-${source.id}" },
         ) { (source, count) ->
             MigrateSourceItem(
-
+                modifier = Modifier.animateItemPlacement(),
                 source = source,
                 count = count,
                 onClickItem = { onClickItem(source) },

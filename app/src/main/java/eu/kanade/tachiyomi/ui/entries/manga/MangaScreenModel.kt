@@ -76,8 +76,8 @@ import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.model.NoChaptersException
+import tachiyomi.domain.items.chapter.service.calculateChapterGap
 import tachiyomi.domain.items.chapter.service.getChapterSort
-import tachiyomi.domain.items.service.calculateChapterGap
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
@@ -121,7 +121,7 @@ class MangaScreenModel(
     private val successState: State.Success?
         get() = state.value as? State.Success
 
-    private val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker } }
+    val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker } }
 
     val manga: Manga?
         get() = successState?.manga

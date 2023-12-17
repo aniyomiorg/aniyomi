@@ -6,18 +6,18 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
-import eu.kanade.presentation.animelib.components.DownloadsBadge
-import eu.kanade.presentation.animelib.components.LanguageBadge
-import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.library.EntryComfortableGridItem
-import eu.kanade.presentation.library.LazyLibraryGrid
-import eu.kanade.presentation.library.globalSearchItem
+import eu.kanade.presentation.library.components.DownloadsBadge
+import eu.kanade.presentation.library.components.EntryComfortableGridItem
+import eu.kanade.presentation.library.components.LanguageBadge
+import eu.kanade.presentation.library.components.LazyLibraryGrid
+import eu.kanade.presentation.library.components.UnviewedBadge
+import eu.kanade.presentation.library.components.globalSearchItem
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.library.anime.LibraryAnime
 
 @Composable
-fun AnimeLibraryComfortableGrid(
+internal fun AnimeLibraryComfortableGrid(
     items: List<AnimeLibraryItem>,
     columns: Int,
     contentPadding: PaddingValues,

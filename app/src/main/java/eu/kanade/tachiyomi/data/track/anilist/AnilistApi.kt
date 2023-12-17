@@ -28,7 +28,10 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
-import java.util.Calendar
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import kotlin.time.Duration.Companion.minutes
 
 class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
@@ -250,6 +253,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             |month
                             |day
                         |}
+                        |averageScore
                     |}
                 |}
             |}
@@ -303,6 +307,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             |month
                             |day
                         |}
+                        |averageScore
                     |}
                 |}
             |}
@@ -533,6 +538,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
             struct["chapters"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }
 
@@ -546,6 +552,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
             struct["episodes"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }
 
@@ -575,13 +582,15 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private fun parseDate(struct: JsonObject, dateKey: String): Long {
         return try {
-            val date = Calendar.getInstance()
-            date.set(
-                struct[dateKey]!!.jsonObject["year"]!!.jsonPrimitive.int,
-                struct[dateKey]!!.jsonObject["month"]!!.jsonPrimitive.int - 1,
-                struct[dateKey]!!.jsonObject["day"]!!.jsonPrimitive.int,
-            )
-            date.timeInMillis
+            return LocalDate
+                .of(
+                    struct[dateKey]!!.jsonObject["year"]!!.jsonPrimitive.int,
+                    struct[dateKey]!!.jsonObject["month"]!!.jsonPrimitive.int,
+                    struct[dateKey]!!.jsonObject["day"]!!.jsonPrimitive.int,
+                )
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli()
         } catch (_: Exception) {
             0L
         }
@@ -596,12 +605,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             }
         }
 
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = dateValue
+        val dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(dateValue), ZoneId.systemDefault())
         return buildJsonObject {
-            put("year", calendar.get(Calendar.YEAR))
-            put("month", calendar.get(Calendar.MONTH) + 1)
-            put("day", calendar.get(Calendar.DAY_OF_MONTH))
+            put("year", dateTime.year)
+            put("month", dateTime.monthValue)
+            put("day", dateTime.dayOfMonth)
         }
     }
 

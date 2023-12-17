@@ -50,16 +50,16 @@ import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.entries.DownloadAction
-import eu.kanade.presentation.entries.EntryBottomActionMenu
 import eu.kanade.presentation.entries.EntryScreenItem
-import eu.kanade.presentation.entries.EntryToolbar
-import eu.kanade.presentation.entries.ItemHeader
+import eu.kanade.presentation.entries.components.EntryBottomActionMenu
+import eu.kanade.presentation.entries.components.EntryToolbar
+import eu.kanade.presentation.entries.components.ItemHeader
+import eu.kanade.presentation.entries.components.MissingItemCountListItem
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.manga.components.ExpandableMangaDescription
 import eu.kanade.presentation.entries.manga.components.MangaActionRow
 import eu.kanade.presentation.entries.manga.components.MangaChapterListItem
 import eu.kanade.presentation.entries.manga.components.MangaInfoBox
-import eu.kanade.presentation.entries.manga.components.MissingChapterCountListItem
 import eu.kanade.presentation.util.formatChapterNumber
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -71,7 +71,7 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
-import tachiyomi.domain.items.service.missingItemsCount
+import tachiyomi.domain.items.chapter.service.missingChaptersCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.i18n.MR
@@ -102,7 +102,7 @@ fun MangaScreen(
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
+    onTrackingClicked: () -> Unit,
 
     // For tags menu
     onTagSearch: (String) -> Unit,
@@ -242,7 +242,7 @@ private fun MangaScreenSmallImpl(
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
+    onTrackingClicked: () -> Unit,
 
     // For tags menu
     onTagSearch: (String) -> Unit,
@@ -453,13 +453,13 @@ private fun MangaScreenSmallImpl(
                         key = EntryScreenItem.ITEM_HEADER,
                         contentType = EntryScreenItem.ITEM_HEADER,
                     ) {
-                        val missingItemsCount = remember(chapters) {
-                            chapters.map { it.chapter.chapterNumber }.missingItemsCount()
+                        val missingChaptersCount = remember(chapters) {
+                            chapters.map { it.chapter.chapterNumber }.missingChaptersCount()
                         }
                         ItemHeader(
                             enabled = !isAnySelected,
                             itemCount = chapters.size,
-                            missingItemsCount = missingItemsCount,
+                            missingItemsCount = missingChaptersCount,
                             onClick = onFilterClicked,
                             isManga = true,
                         )
@@ -499,7 +499,7 @@ fun MangaScreenLargeImpl(
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
+    onTrackingClicked: () -> Unit,
 
     // For tags menu
     onTagSearch: (String) -> Unit,
@@ -705,13 +705,13 @@ fun MangaScreenLargeImpl(
                                 key = EntryScreenItem.ITEM_HEADER,
                                 contentType = EntryScreenItem.ITEM_HEADER,
                             ) {
-                                val missingItemsCount = remember(chapters) {
-                                    chapters.map { it.chapter.chapterNumber }.missingItemsCount()
+                                val missingChaptersCount = remember(chapters) {
+                                    chapters.map { it.chapter.chapterNumber }.missingChaptersCount()
                                 }
                                 ItemHeader(
                                     enabled = !isAnySelected,
                                     itemCount = chapters.size,
-                                    missingItemsCount = missingItemsCount,
+                                    missingItemsCount = missingChaptersCount,
                                     onClick = onFilterButtonClicked,
                                     isManga = true,
                                 )
@@ -809,7 +809,7 @@ private fun LazyListScope.sharedChapterItems(
 
         when (item) {
             is ChapterList.MissingCount -> {
-                MissingChapterCountListItem(count = item.count)
+                MissingItemCountListItem(count = item.count)
             }
             is ChapterList.Item -> {
                 MangaChapterListItem(
