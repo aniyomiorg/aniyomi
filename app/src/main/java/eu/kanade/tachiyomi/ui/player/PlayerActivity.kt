@@ -65,12 +65,13 @@ import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSh
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
-import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_NEXT
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PAUSE
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PLAY
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_PREVIOUS
+import eu.kanade.tachiyomi.ui.player.viewer.PIP_SKIP
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -86,6 +87,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -397,7 +400,10 @@ class PlayerActivity : BaseActivity() {
             when (state.sheet) {
                 is PlayerViewModel.Sheet.ScreenshotOptions -> {
                     ScreenshotOptionsSheet(
-                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        screenModel = PlayerSettingsScreenModel(
+                            preferences = viewModel.playerPreferences,
+                            hasSubTracks = streams.subtitle.tracks.size > 1,
+                        ),
                         cachePath = cacheDir.path,
                         onSetAsCover = viewModel::setAsCover,
                         onShare = { viewModel.shareImage(it, player.timePos) },
@@ -511,8 +517,8 @@ class PlayerActivity : BaseActivity() {
                 is PlayerViewModel.Sheet.SubtitleSettings -> {
                     SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(
-                            viewModel.playerPreferences,
-                            streams.subtitle.tracks.size > 1,
+                            preferences = viewModel.playerPreferences,
+                            hasSubTracks = streams.subtitle.tracks.size > 1,
                         ),
                         onDismissRequest = pauseForDialogSheet(fadeControls = true),
                     )
@@ -621,19 +627,7 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.setPropertyDouble("sub-delay", subtitlesDelay().get() / 1000.0)
             }
 
-            // TODO: I think this is a bad hack.
-            //  We need to find a way to let MPV access our fonts directory.
-            val storageManager: StorageManager = Injekt.get()
-            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
-                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
-                outFile?.let {
-                    font.openInputStream().copyTo(it.openOutputStream())
-                }
-            }
-            MPVLib.setPropertyString(
-                "sub-fonts-dir",
-                applicationContext.filesDir.path,
-            )
+            copyFontsDirectory()
 
             if (playerPreferences.subtitleFont().get().trim() != "") {
                 MPVLib.setPropertyString("sub-font", playerPreferences.subtitleFont().get())
@@ -650,6 +644,25 @@ class PlayerActivity : BaseActivity() {
                 "sub-back-color",
                 backgroundColorSubtitles().get().toHexString(),
             )
+        }
+    }
+
+    private fun copyFontsDirectory() {
+        // TODO: I think this is a bad hack.
+        //  We need to find a way to let MPV directly access our fonts directory.
+        CoroutineScope(Dispatchers.IO).launchIO {
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
+                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                outFile?.let {
+                    font.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            MPVLib.setPropertyString(
+                "sub-fonts-dir",
+                applicationContext.filesDir.path,
+            )
+            logcat { "FINISHED FONTS" }
         }
     }
 
@@ -834,11 +847,7 @@ class PlayerActivity : BaseActivity() {
         super.onResume()
         refreshUi()
         if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let {
-                pip.update(
-                    !it,
-                )
-            }
+            player.paused?.let { pip.update(!it) }
         }
     }
 
@@ -980,12 +989,8 @@ class PlayerActivity : BaseActivity() {
         val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
-            try { // TODO: https://issuetracker.google.com/issues/238920463 is fixed in API 34, but for now this will do
-                gestures.onTouch(v, event)
-                mDetector.onTouchEvent(event)
-            } catch (_: NullPointerException) {
-                false
-            }
+            gestures.onTouch(v, event)
+            mDetector.onTouchEvent(event)
         }
     }
 
@@ -1447,17 +1452,20 @@ class PlayerActivity : BaseActivity() {
                         return
                     }
                     when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
-                        CONTROL_TYPE_PLAY -> {
+                        PIP_PLAY -> {
                             player.paused = false
                         }
-                        CONTROL_TYPE_PAUSE -> {
+                        PIP_PAUSE -> {
                             player.paused = true
                         }
-                        CONTROL_TYPE_PREVIOUS -> {
+                        PIP_PREVIOUS -> {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
                         }
-                        CONTROL_TYPE_NEXT -> {
+                        PIP_NEXT -> {
                             changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                        }
+                        PIP_SKIP -> {
+                            doubleTapSeek(time = 10)
                         }
                     }
                 }

@@ -15,6 +15,7 @@ class PlayerPreferences(
     fun enablePip() = preferenceStore.getBoolean("pref_enable_pip", true)
     fun pipEpisodeToasts() = preferenceStore.getBoolean("pref_pip_episode_toasts", true)
     fun pipOnExit() = preferenceStore.getBoolean("pref_pip_on_exit", false)
+    fun pipReplaceWithPrevious() = preferenceStore.getBoolean("pip_replace_with_previous", false)
 
     fun rememberPlayerBrightness() = preferenceStore.getBoolean("pref_remember_brightness", false)
     fun playerBrightnessValue() = preferenceStore.getFloat("player_brightness_value", -1.0F)
