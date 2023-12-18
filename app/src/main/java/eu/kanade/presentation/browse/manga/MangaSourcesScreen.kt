@@ -74,12 +74,12 @@ fun MangaSourcesScreen(
                     when (model) {
                         is MangaSourceUiModel.Header -> {
                             SourceHeader(
-
+                                modifier = Modifier.animateItemPlacement(),
                                 language = model.language,
                             )
                         }
                         is MangaSourceUiModel.Item -> SourceItem(
-
+                            modifier = Modifier.animateItemPlacement(),
                             source = model.source,
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,

@@ -182,6 +182,7 @@ fun AnimeTrackerSearch(
                                 status = it.publishing_status.toLowerCase(Locale.current).capitalize(
                                     Locale.current,
                                 ),
+                                score = it.score,
                                 description = it.summary.trim(),
                                 selected = it == selected,
                                 onClick = { onSelectedChange(it) },

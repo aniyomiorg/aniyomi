@@ -1,6 +1,5 @@
 package eu.kanade.presentation.updates.anime
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,10 +32,10 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
+import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
@@ -49,8 +48,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.animeUpdatesLastUpdatedItem(
+internal fun LazyListScope.animeUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
     item(key = "animeUpdates-lastUpdated") {
@@ -70,8 +68,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.animeUpdatesUiItems(
+internal fun LazyListScope.animeUpdatesUiItems(
     uiModels: List<AnimeUpdatesUiModel>,
     selectionMode: Boolean,
     onUpdateSelected: (AnimeUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
@@ -97,14 +94,14 @@ fun LazyListScope.animeUpdatesUiItems(
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
                 ListGroupHeader(
-
+                    modifier = Modifier.animateItemPlacement(),
                     text = item.date,
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 AnimeUpdatesUiItem(
-
+                    modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     watchProgress = updatesItem.update.lastSecondSeen
@@ -142,9 +139,8 @@ fun LazyListScope.animeUpdatesUiItems(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AnimeUpdatesUiItem(
+private fun AnimeUpdatesUiItem(
     update: AnimeUpdatesWithRelations,
     selected: Boolean,
     watchProgress: String?,

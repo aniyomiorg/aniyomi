@@ -44,7 +44,7 @@ fun BottomReaderBar(
     onClickShare: (() -> Unit)?,
     onClickPageLayout: () -> Unit,
     onClickShiftPage: () -> Unit,
-    // SY <--,
+    // SY <--
 ) {
     Row(
         modifier = Modifier
@@ -55,7 +55,7 @@ fun BottomReaderBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // SY -->
-      if (ReaderBottomButton.WebView.isIn(enabledButtons) && onClickWebView != null) {
+        if (ReaderBottomButton.WebView.isIn(enabledButtons) && onClickWebView != null) {
             IconButton(onClick = onClickWebView) {
                 Icon(
                     imageVector = Icons.Outlined.Public,
@@ -64,11 +64,11 @@ fun BottomReaderBar(
             }
         }
 
-      if (ReaderBottomButton.Share.isIn(enabledButtons) && onClickShare != null) {
-            IconButton(onClick = onClickShare) {
+        if (ReaderBottomButton.Share.isIn(enabledButtons) && onClickShare != null) {
+            IconButton(onClick = onClickOrientation) {
                 Icon(
-                    imageVector = Icons.Outlined.Share,
-                    contentDescription = stringResource(MR.strings.action_share),
+                    imageVector = orientation.icon,
+                    contentDescription = stringResource(MR.strings.rotation_type),
                 )
             }
         }
@@ -96,7 +96,7 @@ fun BottomReaderBar(
         if (ReaderBottomButton.Rotation.isIn(enabledButtons)) {
             IconButton(onClick = onClickOrientation) {
                 Icon(
-                    painter = painterResource(orientation.iconRes),
+                    imageVector = orientation.icon,
                     contentDescription = stringResource(MR.strings.pref_rotation_type),
                 )
             }
@@ -105,7 +105,7 @@ fun BottomReaderBar(
         if (
             !dualPageSplitEnabled &&
             ReaderBottomButton.PageLayout.isIn(enabledButtons)
-            //&& ReadingMode.isPagerType(readingMode.flagValue) Leave it for now
+            // && ReadingMode.isPagerType(readingMode.flagValue) Leave it for now
         ) {
             IconButton(onClick = onClickPageLayout) {
                 Icon(

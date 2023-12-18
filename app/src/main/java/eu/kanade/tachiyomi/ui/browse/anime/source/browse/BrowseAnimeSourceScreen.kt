@@ -39,7 +39,7 @@ import eu.kanade.presentation.browse.anime.BrowseAnimeSourceContent
 import eu.kanade.presentation.browse.anime.MissingSourceScreen
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceToolbar
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
-import eu.kanade.presentation.category.ChangeCategoryDialog
+import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen

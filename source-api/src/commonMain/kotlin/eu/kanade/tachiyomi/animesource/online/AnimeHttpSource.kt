@@ -272,7 +272,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
                     episodeListParse(response)
                 }
         } else {
-            Observable.error(Exception(LicensedEntryItemsException()))
+            Observable.error(LicensedEntryItemsException())
         }
     }
 

@@ -36,7 +36,6 @@ import androidx.core.transition.doOnEnd
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -45,10 +44,10 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.presentation.reader.BrightnessOverlay
 import eu.kanade.presentation.reader.DisplayRefreshHost
 import eu.kanade.presentation.reader.OrientationSelectDialog
 import eu.kanade.presentation.reader.PageIndicatorText
+import eu.kanade.presentation.reader.ReaderContentOverlay
 import eu.kanade.presentation.reader.ReaderPageActionsDialog
 import eu.kanade.presentation.reader.ReadingModeSelectDialog
 import eu.kanade.presentation.reader.appbars.ReaderAppBars
@@ -80,7 +79,6 @@ import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
-import eu.kanade.tachiyomi.util.system.overridePendingTransitionCompat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
@@ -100,7 +98,6 @@ import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -109,7 +106,7 @@ import uy.kohesive.injekt.api.get
 class ReaderActivity : BaseActivity() {
 
     companion object {
-          fun newIntent(
+        fun newIntent(
             context: Context,
             mangaId: Long?,
             chapterId: Long?,
@@ -161,7 +158,7 @@ class ReaderActivity : BaseActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
-        overridePendingTransitionCompat(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
+        overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
 
         super.onCreate(savedInstanceState)
 
@@ -216,7 +213,7 @@ class ReaderActivity : BaseActivity() {
             .map { it.manga }
             .distinctUntilChanged()
             .filterNotNull()
-            .onEach(::setManga)
+            .onEach { updateViewer() }
             .launchIn(lifecycleScope)
 
         viewModel.state
@@ -309,7 +306,7 @@ class ReaderActivity : BaseActivity() {
     override fun finish() {
         viewModel.onActivityFinish()
         super.finish()
-        overridePendingTransitionCompat(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
+        overridePendingTransition(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -373,6 +370,13 @@ class ReaderActivity : BaseActivity() {
             val isFullscreen by readerPreferences.fullscreen().collectAsState()
             val flashOnPageChange by readerPreferences.flashOnPageChange().collectAsState()
 
+            val colorOverlayEnabled by readerPreferences.colorFilter().collectAsState()
+            val colorOverlay by readerPreferences.colorFilterValue().collectAsState()
+            val colorOverlayMode by readerPreferences.colorFilterMode().collectAsState()
+            val colorOverlayBlendMode = remember(colorOverlayMode) {
+                ReaderPreferences.ColorFilterMode.getOrNull(colorOverlayMode)?.second
+            }
+
             val cropBorderPaged by readerPreferences.cropBorders().collectAsState()
             val cropBorderWebtoon by readerPreferences.cropBordersWebtoon().collectAsState()
             val isPagerType = ReadingMode.isPagerType(viewModel.getMangaReadingMode())
@@ -381,6 +385,13 @@ class ReaderActivity : BaseActivity() {
             val readerBottomButtons by readerPreferences.readerBottomButtons().collectAsState()
             val dualPageSplitPaged by readerPreferences.dualPageSplitPaged().collectAsState()
             // SY <--
+
+            ReaderContentOverlay(
+                brightness = state.brightnessOverlayValue,
+                color = colorOverlay.takeIf { colorOverlayEnabled },
+                colorBlendMode = colorOverlayBlendMode,
+            )
+
             ReaderAppBars(
                 visible = state.menuVisible,
                 fullscreen = isFullscreen,
@@ -439,10 +450,6 @@ class ReaderActivity : BaseActivity() {
                 },
                 onClickShiftPage = ::shiftDoublePages,
                 // SY <--
-            )
-
-            BrightnessOverlay(
-                value = state.brightnessOverlayValue,
             )
 
             if (flashOnPageChange) {
@@ -542,6 +549,7 @@ class ReaderActivity : BaseActivity() {
             }
         }
     }
+
     // SY -->
 
     fun reloadChapters(doublePages: Boolean, force: Boolean = false) {
@@ -587,10 +595,9 @@ class ReaderActivity : BaseActivity() {
     // SY <--
 
     /**
-     * Called from the presenter when a manga is ready. Used to instantiate the appropriate viewer
-     * and the toolbar title.
+     * Called from the presenter when a manga is ready. Used to instantiate the appropriate viewer.
      */
-    private fun setManga(manga: Manga) {
+    private fun updateViewer() {
         val prevViewer = viewModel.state.value.viewer
         val newViewer = ReadingMode.toViewer(viewModel.getMangaReadingMode(), this)
 
@@ -611,6 +618,7 @@ class ReaderActivity : BaseActivity() {
         viewModel.onViewerLoaded(newViewer)
         updateViewerInset(readerPreferences.fullscreen().get())
         binding.viewerContainer.addView(newViewer.getView())
+
         // SY -->
         if (newViewer is PagerViewer) {
             if (readerPreferences.pageLayout().get() == PagerConfig.PageLayout.AUTOMATIC) {
@@ -618,6 +626,7 @@ class ReaderActivity : BaseActivity() {
             }
             viewModel.state.value.lastShiftDoubleState?.let { newViewer.config.shiftDoublePage = it }
         }
+
         if (readerPreferences.showReadingMode().get()) {
             // SY <--
             showReadingModeToast(viewModel.getMangaReadingMode())
@@ -625,7 +634,6 @@ class ReaderActivity : BaseActivity() {
 
         loadingIndicator = ReaderProgressIndicator(this)
         binding.readerContainer.addView(loadingIndicator)
-
 
         startPostponedEnterTransition()
     }
@@ -696,6 +704,7 @@ class ReaderActivity : BaseActivity() {
                 ) % 2 != 0
         }
         // SY <--
+
         viewModel.state.value.viewer?.setChapters(viewerChapters)
 
         lifecycleScope.launchIO {
@@ -969,24 +978,8 @@ class ReaderActivity : BaseActivity() {
                 .onEach(::setCustomBrightness)
                 .launchIn(lifecycleScope)
 
-            readerPreferences.colorFilter().changes()
-                .onEach(::setColorFilter)
-                .launchIn(lifecycleScope)
-
-            readerPreferences.colorFilterMode().changes()
-                .onEach { setColorFilter(readerPreferences.colorFilter().get()) }
-                .launchIn(lifecycleScope)
-
-            merge(
-                readerPreferences.grayscale().changes(),
-                readerPreferences.invertedColors().changes(),
-            )
-                .onEach {
-                    setLayerPaint(
-                        readerPreferences.grayscale().get(),
-                        readerPreferences.invertedColors().get(),
-                    )
-                }
+            merge(readerPreferences.grayscale().changes(), readerPreferences.invertedColors().changes())
+                .onEach { setLayerPaint(readerPreferences.grayscale().get(), readerPreferences.invertedColors().get()) }
                 .launchIn(lifecycleScope)
 
             readerPreferences.fullscreen().changes()
@@ -995,6 +988,7 @@ class ReaderActivity : BaseActivity() {
                     updateViewerInset(it)
                 }
                 .launchIn(lifecycleScope)
+
             // SY -->
             readerPreferences.pageLayout().changes()
                 .drop(1)
@@ -1086,20 +1080,6 @@ class ReaderActivity : BaseActivity() {
         }
 
         /**
-         * Sets the color filter overlay according to [enabled].
-         */
-        private fun setColorFilter(enabled: Boolean) {
-            if (enabled) {
-                readerPreferences.colorFilterValue().changes()
-                    .sample(100)
-                    .onEach(::setColorFilterValue)
-                    .launchIn(lifecycleScope)
-            } else {
-                binding.colorOverlay.isVisible = false
-            }
-        }
-
-        /**
          * Sets the brightness of the screen. Range is [-75, 100].
          * From -75 to -1 a semi-transparent black view is overlaid with the minimum brightness.
          * From 1 to 100 it sets that value as brightness.
@@ -1120,15 +1100,6 @@ class ReaderActivity : BaseActivity() {
 
             viewModel.setBrightnessOverlayValue(value)
         }
-
-        /**
-         * Sets the color filter [value].
-         */
-        private fun setColorFilterValue(value: Int) {
-            binding.colorOverlay.isVisible = true
-            binding.colorOverlay.setFilterColor(value, readerPreferences.colorFilterMode().get())
-        }
-
         private fun setLayerPaint(grayscale: Boolean, invertedColors: Boolean) {
             val paint = if (grayscale || invertedColors) getCombinedPaint(grayscale, invertedColors) else null
             binding.viewerContainer.setLayerType(LAYER_TYPE_HARDWARE, paint)
@@ -1150,9 +1121,11 @@ class ReaderActivity : BaseActivity() {
                             thumbnailUrl = viewModel.manga?.thumbnailUrl,
                             chapterProgress = Pair(viewModel.state.value.currentPage, viewModel.state.value.totalPages),
                             chapterNumber =
-                            if(connectionsPreferences.useChapterTitles().get())
+                            if (connectionsPreferences.useChapterTitles().get()) {
                                 viewModel.state.value.currentChapter?.chapter?.name
-                            else viewModel.state.value.currentChapter?.chapter?.chapter_number.toString(),
+                            } else {
+                                viewModel.state.value.currentChapter?.chapter?.chapter_number.toString()
+                            },
                         ),
                     )
                 } else {

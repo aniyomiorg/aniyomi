@@ -5,8 +5,8 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
+import eu.kanade.domain.source.interactor.ToggleLanguage
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.source.service.ToggleLanguage
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine

@@ -49,7 +49,7 @@ import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Calendar
+import java.time.ZonedDateTime
 import java.util.Date
 
 class MangaUpdatesScreenModel(
@@ -79,13 +79,10 @@ class MangaUpdatesScreenModel(
     init {
         screenModelScope.launchIO {
             // Set date limit for recent chapters
-            val calendar = Calendar.getInstance().apply {
-                time = Date()
-                add(Calendar.MONTH, -3)
-            }
+            val limit = ZonedDateTime.now().minusMonths(3).toInstant()
 
             combine(
-                getUpdates.subscribe(calendar).distinctUntilChanged(),
+                getUpdates.subscribe(limit).distinctUntilChanged(),
                 downloadCache.changes,
                 downloadManager.queueState,
             ) { updates, _, _ -> updates }

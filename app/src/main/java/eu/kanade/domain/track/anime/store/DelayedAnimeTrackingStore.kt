@@ -13,8 +13,8 @@ class DelayedAnimeTrackingStore(context: Context) {
     private val preferences = context.getSharedPreferences("tracking_queue", Context.MODE_PRIVATE)
 
     fun addAnime(trackId: Long, lastEpisodeSeen: Double) {
-        val previousLastChapterRead = preferences.getFloat(trackId.toString(), 0f)
-        if (lastEpisodeSeen > previousLastChapterRead) {
+        val previousLastEpisodeSeen = preferences.getFloat(trackId.toString(), 0f)
+        if (lastEpisodeSeen > previousLastEpisodeSeen) {
             logcat(LogPriority.DEBUG) { "Queuing track item: $trackId, last episode seen: $lastEpisodeSeen" }
             preferences.edit {
                 putFloat(trackId.toString(), lastEpisodeSeen.toFloat())

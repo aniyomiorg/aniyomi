@@ -2,38 +2,43 @@ package eu.kanade.presentation.history.manga
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.presentation.components.RelativeDateHeader
+import eu.kanade.presentation.history.manga.components.MangaHistoryItem
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import tachiyomi.core.preference.InMemoryPreferenceStore
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
-import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Date
 
 @Composable
 fun MangaHistoryScreen(
     state: MangaHistoryScreenModel.State,
-    contentPadding: PaddingValues,
-    searchQuery: String? = null,
     snackbarHostState: SnackbarHostState,
     onClickCover: (mangaId: Long) -> Unit,
     onClickResume: (mangaId: Long, chapterId: Long) -> Unit,
     onDialogChange: (MangaHistoryScreenModel.Dialog?) -> Unit,
-    preferences: UiPreferences,
+    preferences: UiPreferences = Injekt.get(),
+    searchQuery: String? = null,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) { _ ->
+    ) { contentPadding ->
         state.list.let {
             if (it == null) {
                 LoadingScreen(Modifier.padding(contentPadding))
@@ -65,6 +70,55 @@ fun MangaHistoryScreen(
     }
 }
 
+@Composable
+private fun MangaHistoryContent(
+    history: List<MangaHistoryUiModel>,
+    contentPadding: PaddingValues,
+    onClickCover: (MangaHistoryWithRelations) -> Unit,
+    onClickResume: (MangaHistoryWithRelations) -> Unit,
+    onClickDelete: (MangaHistoryWithRelations) -> Unit,
+    preferences: UiPreferences,
+) {
+    val relativeTime = remember { preferences.relativeTime().get() }
+    val dateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }
+
+    FastScrollLazyColumn(
+        contentPadding = contentPadding,
+    ) {
+        items(
+            items = history,
+            key = { "history-${it.hashCode()}" },
+            contentType = {
+                when (it) {
+                    is MangaHistoryUiModel.Header -> "header"
+                    is MangaHistoryUiModel.Item -> "item"
+                }
+            },
+        ) { item ->
+            when (item) {
+                is MangaHistoryUiModel.Header -> {
+                    RelativeDateHeader(
+                        modifier = Modifier.animateItemPlacement(),
+                        date = item.date,
+                        relativeTime = relativeTime,
+                        dateFormat = dateFormat,
+                    )
+                }
+                is MangaHistoryUiModel.Item -> {
+                    val value = item.item
+                    MangaHistoryItem(
+                        modifier = Modifier.animateItemPlacement(),
+                        history = value,
+                        onClickCover = { onClickCover(value) },
+                        onClickResume = { onClickResume(value) },
+                        onClickDelete = { onClickDelete(value) },
+                    )
+                }
+            }
+        }
+    }
+}
+
 sealed interface MangaHistoryUiModel {
     data class Header(val date: Date) : MangaHistoryUiModel
     data class Item(val item: MangaHistoryWithRelations) : MangaHistoryUiModel
@@ -79,7 +133,6 @@ internal fun HistoryScreenPreviews(
     TachiyomiTheme {
         MangaHistoryScreen(
             state = historyState,
-            contentPadding = topSmallPaddingValues,
             snackbarHostState = SnackbarHostState(),
             searchQuery = null,
             onClickCover = {},

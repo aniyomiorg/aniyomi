@@ -52,6 +52,9 @@ class MangaDownloadManager(
      */
     private val downloader = MangaDownloader(context, provider, cache)
 
+    val isRunning: Boolean
+        get() = downloader.isRunning
+
     /**
      * Queue to delay the deletion of a list of chapters until triggered.
      */
@@ -65,13 +68,19 @@ class MangaDownloadManager(
     fun downloaderStop(reason: String? = null) = downloader.stop(reason)
 
     val isDownloaderRunning
-        get() = MangaDownloadService.isRunning
+        get() = MangaDownloadJob.isRunningFlow(context)
 
     /**
      * Tells the downloader to begin downloads.
      */
     fun startDownloads() {
-        MangaDownloadService.start(context)
+        if (downloader.isRunning) return
+
+        if (MangaDownloadJob.isRunning(context)) {
+            downloader.start()
+        } else {
+            MangaDownloadJob.start(context)
+        }
     }
 
     /**
@@ -100,22 +109,16 @@ class MangaDownloadManager(
         return queueState.value.find { it.chapter.id == chapterId }
     }
 
-    fun startDownloadNow(chapterId: Long?) {
-        if (chapterId == null) return
-        val download = getQueuedDownloadOrNull(chapterId)
+    fun startDownloadNow(chapterId: Long) {
+        val existingDownload = getQueuedDownloadOrNull(chapterId)
         // If not in queue try to start a new download
-        val toAdd = download ?: runBlocking { MangaDownload.fromChapterId(chapterId) } ?: return
-        val queue = queueState.value.toMutableList()
-        download?.let { queue.remove(it) }
-        queue.add(0, toAdd)
-        reorderQueue(queue)
-        if (!downloader.isRunning) {
-            if (MangaDownloadService.isRunning(context)) {
-                downloader.start()
-            } else {
-                MangaDownloadService.start(context)
-            }
+        val toAdd = existingDownload ?: runBlocking { MangaDownload.fromChapterId(chapterId) } ?: return
+        queueState.value.toMutableList().apply {
+            existingDownload?.let { remove(it) }
+            add(0, toAdd)
+            reorderQueue(this)
         }
+        startDownloads()
     }
 
     /**
@@ -149,7 +152,7 @@ class MangaDownloadManager(
             addAll(0, downloads)
             reorderQueue(this)
         }
-        if (!MangaDownloadService.isRunning(context)) MangaDownloadService.start(context)
+        if (!MangaDownloadJob.isRunning(context)) startDownloads()
     }
 
     /**

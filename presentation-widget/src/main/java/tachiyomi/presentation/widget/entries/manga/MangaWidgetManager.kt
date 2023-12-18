@@ -22,7 +22,7 @@ class MangaWidgetManager(
         combine(
             getUpdates.subscribe(
                 read = false,
-                after = BaseMangaUpdatesGridGlanceWidget.DateLimit.timeInMillis,
+                after = BaseMangaUpdatesGridGlanceWidget.DateLimit.toEpochMilli(),
             ),
             securityPreferences.useAuthenticator().changes(),
             transform = { a, _ -> a },

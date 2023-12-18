@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.setting
 
+import android.os.Build
+import androidx.compose.ui.graphics.BlendMode
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.preference.PreferenceStore
@@ -165,9 +167,9 @@ class ReaderPreferences(
         "reader_navigation_overlay_on_start",
         false,
     )
+
     // J2K -->
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
-
     // J2K <--
 
     // SY -->
@@ -233,6 +235,7 @@ class ReaderPreferences(
             MR.strings.zoom_start_right,
             MR.strings.zoom_start_center,
         )
+
         // SY -->
         val PageLayouts = listOf(
             MR.strings.single_page,
@@ -240,5 +243,24 @@ class ReaderPreferences(
             MR.strings.automatic_orientation,
         )
         // SY <--
+
+        val ColorFilterMode = buildList {
+            addAll(
+                listOf(
+                    MR.strings.label_default to BlendMode.SrcOver,
+                    MR.strings.filter_mode_multiply to BlendMode.Modulate,
+                    MR.strings.filter_mode_screen to BlendMode.Screen,
+                ),
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                addAll(
+                    listOf(
+                        MR.strings.filter_mode_overlay to BlendMode.Overlay,
+                        MR.strings.filter_mode_lighten to BlendMode.Lighten,
+                        MR.strings.filter_mode_darken to BlendMode.Darken,
+                    ),
+                )
+            }
+        }
     }
 }

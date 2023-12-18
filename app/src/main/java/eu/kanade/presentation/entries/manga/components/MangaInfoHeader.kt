@@ -74,8 +74,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -94,7 +94,6 @@ private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTIL
 
 @Composable
 fun MangaInfoBox(
-    modifier: Modifier = Modifier,
     isTabletUi: Boolean,
     appBarPadding: Dp,
     title: String,
@@ -106,6 +105,7 @@ fun MangaInfoBox(
     status: Long,
     onCoverClick: () -> Unit,
     doSearch: (query: String, global: Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         // Backdrop
@@ -126,7 +126,7 @@ fun MangaInfoBox(
                     )
                 }
                 .blur(4.dp)
-                .alpha(.2f),
+                .alpha(0.2f),
         )
 
         // Manga & source info
@@ -164,7 +164,6 @@ fun MangaInfoBox(
 
 @Composable
 fun MangaActionRow(
-    modifier: Modifier = Modifier,
     favorite: Boolean,
     trackingCount: Int,
     fetchInterval: Int?,
@@ -172,9 +171,10 @@ fun MangaActionRow(
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
+    onTrackingClicked: () -> Unit,
     onEditIntervalClicked: (() -> Unit)?,
     onEditCategory: (() -> Unit)?,
+    modifier: Modifier = Modifier,
 ) {
     val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
 
@@ -202,22 +202,16 @@ fun MangaActionRow(
                 onClick = onEditIntervalClicked,
             )
         }
-        if (onTrackingClicked != null) {
-            MangaActionButton(
-                title = if (trackingCount == 0) {
-                    stringResource(MR.strings.manga_tracking_tab)
-                } else {
-                    pluralStringResource(
-                        MR.plurals.num_trackers,
-                        count = trackingCount,
-                        trackingCount,
-                    )
-                },
-                icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
-                color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
-                onClick = onTrackingClicked,
-            )
-        }
+        MangaActionButton(
+            title = if (trackingCount == 0) {
+                stringResource(MR.strings.manga_tracking_tab)
+            } else {
+                pluralStringResource(MR.plurals.num_trackers, count = trackingCount, trackingCount)
+            },
+            icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
+            color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
+            onClick = onTrackingClicked,
+        )
         if (onWebViewClicked != null) {
             MangaActionButton(
                 title = stringResource(MR.strings.action_web_view),
@@ -232,12 +226,12 @@ fun MangaActionRow(
 
 @Composable
 fun ExpandableMangaDescription(
-    modifier: Modifier = Modifier,
     defaultExpandState: Boolean,
     description: String?,
     tagsProvider: () -> List<String>?,
     onTagSearch: (String) -> Unit,
     onCopyTagToClipboard: (tag: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         val (expanded, onExpanded) = rememberSaveable {
@@ -414,13 +408,13 @@ private fun MangaAndSourceTitlesSmall(
 @Composable
 private fun MangaContentInfo(
     title: String,
-    textAlign: TextAlign? = LocalTextStyle.current.textAlign,
     doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
     artist: String?,
     status: Long,
     sourceName: String,
     isStubSource: Boolean,
+    textAlign: TextAlign? = LocalTextStyle.current.textAlign,
 ) {
     val context = LocalContext.current
     Text(
@@ -564,7 +558,10 @@ private fun MangaSummary(
     expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val animProgress by animateFloatAsState(if (expanded) 1f else 0f)
+    val animProgress by animateFloatAsState(
+        targetValue = if (expanded) 1f else 0f,
+        label = "summary",
+    )
     Layout(
         modifier = modifier.clipToBounds(),
         contents = listOf(

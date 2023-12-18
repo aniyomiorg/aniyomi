@@ -113,7 +113,6 @@
     <string name="pref_category_tracking">Pagsubay</string>
     <string name="pref_category_advanced">Abante</string>
     <string name="pref_category_theme">Tema</string>
-    <string name="pref_theme_mode">Dark mode</string>
     <string name="theme_dark">Sa</string>
     <string name="pref_app_theme">Tema sa app</string>
     <string name="theme_monet">Dinamiko</string>
@@ -287,9 +286,11 @@
     <string name="pref_category_reading">Pagbasa</string>
     <string name="pref_high">Taas</string>
     <string name="pref_low">Ubos</string>
-    <string name="pref_download_directory">Lokasyon sa pag-download</string>
+    <string name="pref_category_delete_chapters">Pagtangtang sa mga kapitulo</string>
+    <string name="pref_remove_after_marked_as_read">Human gimarkahan sa mano-mano ingon nabasa na</string>
+    <string name="pref_remove_after_read">Human sa pagbasa awtomatikong tangtangon</string>
+    <string name="pref_remove_bookmarked_chapters">Tugoti ang pagtangtang sa gimarkahan nga mga kapitulo</string>
     <string name="pref_remove_exclude_categories">Wala iapil nga mga kategorya</string>
-    <string name="custom_dir">Pasadya nga lokasyon</string>
     <string name="disabled">Nabaldado</string>
     <string name="fifth_to_last">Ikalima hangtod sa kataposang pagbasa sa kapitulo</string>
     <string name="pref_category_auto_download">Awtomatikong pag-download</string>
@@ -335,8 +336,6 @@
     <string name="pref_image_scale_type">Uri sa sukdanan sa hulagway</string>
     <string name="pref_restore_backup">Ibalik ang backup</string>
     <string name="pref_restore_backup_summ">Ibalik ang librarya gikan sa backup file</string>
-    <string name="pref_backup_directory">Backup nga lokasyon</string>
-    <string name="pref_backup_slots">Maximum nga pag-backup</string>
     <string name="backup_created">Gihimo ang backup</string>
     <string name="pref_backup_interval">Kadaghanon sa pag-backup</string>
     <string name="invalid_backup_file">Dili balido nga backup file</string>

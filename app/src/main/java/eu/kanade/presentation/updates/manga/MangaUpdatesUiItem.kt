@@ -1,6 +1,5 @@
 package eu.kanade.presentation.updates.manga
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,8 +32,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.presentation.util.relativeTimeSpanString
@@ -48,18 +47,14 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.mangaUpdatesLastUpdatedItem(
+internal fun LazyListScope.mangaUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
     item(key = "mangaUpdates-lastUpdated") {
         Box(
             modifier = Modifier
                 .animateItemPlacement()
-                .padding(
-                    horizontal = MaterialTheme.padding.medium,
-                    vertical = MaterialTheme.padding.small,
-                ),
+                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         ) {
             Text(
                 text = stringResource(MR.strings.updates_last_update_info, relativeTimeSpanString(lastUpdated)),
@@ -69,8 +64,7 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.mangaUpdatesUiItems(
+internal fun LazyListScope.mangaUpdatesUiItems(
     uiModels: List<MangaUpdatesUiModel>,
     selectionMode: Boolean,
     onUpdateSelected: (MangaUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
@@ -96,14 +90,14 @@ fun LazyListScope.mangaUpdatesUiItems(
         when (item) {
             is MangaUpdatesUiModel.Header -> {
                 ListGroupHeader(
-
+                    modifier = Modifier.animateItemPlacement(),
                     text = item.date,
                 )
             }
             is MangaUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 MangaUpdatesUiItem(
-
+                    modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     readProgress = updatesItem.update.lastPageRead
@@ -140,9 +134,8 @@ fun LazyListScope.mangaUpdatesUiItems(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MangaUpdatesUiItem(
+private fun MangaUpdatesUiItem(
     update: MangaUpdatesWithRelations,
     selected: Boolean,
     readProgress: String?,
