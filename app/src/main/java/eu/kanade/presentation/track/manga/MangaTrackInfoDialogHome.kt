@@ -251,7 +251,6 @@ fun TrackDetailsItem(
     Box(
         modifier = modifier
             .clickable(onClick = onClick)
-            .alpha(if (text == null) UnsetStatusTextAlpha else 1f)
             .fillMaxHeight()
             .padding(12.dp),
         contentAlignment = Alignment.Center,
@@ -262,7 +261,7 @@ fun TrackDetailsItem(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (text == null) UnsetStatusTextAlpha else 1f),
         )
     }
 }

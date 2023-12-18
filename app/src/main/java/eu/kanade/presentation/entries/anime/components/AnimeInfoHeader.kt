@@ -126,7 +126,7 @@ fun AnimeInfoBox(
                     )
                 }
                 .blur(4.dp)
-                .alpha(.2f),
+                .alpha(0.2f),
         )
 
         // Anime & source info
@@ -172,7 +172,7 @@ fun AnimeActionRow(
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
+    onTrackingClicked: () -> Unit,
     onEditIntervalClicked: (() -> Unit)?,
     onEditCategory: (() -> Unit)?,
 ) {
@@ -202,22 +202,17 @@ fun AnimeActionRow(
                 onClick = onEditIntervalClicked,
             )
         }
-        if (onTrackingClicked != null) {
-            AnimeActionButton(
-                title = if (trackingCount == 0) {
-                    stringResource(MR.strings.manga_tracking_tab)
-                } else {
-                    pluralStringResource(
-                        MR.plurals.num_trackers,
-                        count = trackingCount,
-                        trackingCount,
-                    )
-                },
-                icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
-                color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
-                onClick = onTrackingClicked,
-            )
-        }
+        AnimeActionButton(
+            title = if (trackingCount == 0) {
+                stringResource(MR.strings.manga_tracking_tab)
+            } else {
+                pluralStringResource(MR.plurals.num_trackers, count = trackingCount, trackingCount)
+            },
+            icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
+            color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
+            onClick = onTrackingClicked,
+        )
+
         if (onWebViewClicked != null) {
             AnimeActionButton(
                 title = stringResource(MR.strings.action_web_view),

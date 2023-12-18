@@ -15,17 +15,17 @@ class MissingChaptersTest {
     }
 
     @Test
-    fun `missingItemsCount returns 0 when all unknown item numbers`() {
+    fun `missingChaptersCount returns 0 when all unknown item numbers`() {
         listOf(-1.0, -1.0, -1.0).missingChaptersCount() shouldBe 0
     }
 
     @Test
-    fun `missingItemsCount handles repeated base item numbers`() {
+    fun `missingChaptersCount handles repeated base item numbers`() {
         listOf(1.0, 1.0, 1.1, 1.5, 1.6, 1.99).missingChaptersCount() shouldBe 0
     }
 
     @Test
-    fun `missingItemsCount returns number of missing items`() {
+    fun `missingChaptersCount returns number of missing items`() {
         listOf(-1.0, 1.0, 2.0, 2.2, 4.0, 6.0, 10.0, 10.0).missingChaptersCount() shouldBe 5
     }
 

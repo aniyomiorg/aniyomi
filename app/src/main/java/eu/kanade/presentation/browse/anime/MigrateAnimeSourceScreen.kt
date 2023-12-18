@@ -132,7 +132,7 @@ private fun MigrateAnimeSourceList(
             key = { (source, _) -> "migrate-${source.id}" },
         ) { (source, count) ->
             MigrateAnimeSourceItem(
-
+                modifier = Modifier.animateItemPlacement(),
                 source = source,
                 count = count,
                 onClickItem = { onClickItem(source) },

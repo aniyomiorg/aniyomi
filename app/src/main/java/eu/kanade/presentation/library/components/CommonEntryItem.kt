@@ -63,15 +63,15 @@ private const val GridSelectedCoverAlpha = 0.76f
  */
 @Composable
 fun EntryCompactGridItem(
+    coverData: EntryCover,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     isSelected: Boolean = false,
     title: String? = null,
-    coverData: EntryCover,
+    onClickContinueViewing: (() -> Unit)? = null,
     coverAlpha: Float = 1f,
     coverBadgeStart: @Composable (RowScope.() -> Unit)? = null,
     coverBadgeEnd: @Composable (RowScope.() -> Unit)? = null,
-    onLongClick: () -> Unit,
-    onClick: () -> Unit,
-    onClickContinueViewing: (() -> Unit)? = null,
 ) {
     GridItemSelectable(
         isSelected = isSelected,
@@ -166,13 +166,13 @@ private fun BoxScope.CoverTextOverlay(
 fun EntryComfortableGridItem(
     isSelected: Boolean = false,
     title: String,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     titleMaxLines: Int = 2,
     coverData: EntryCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
     coverBadgeEnd: (@Composable RowScope.() -> Unit)? = null,
-    onLongClick: () -> Unit,
-    onClick: () -> Unit,
     onClickContinueViewing: (() -> Unit)? = null,
 ) {
     GridItemSelectable(
@@ -254,10 +254,10 @@ private fun EntryGridCover(
 
 @Composable
 private fun GridItemTitle(
-    modifier: Modifier,
     title: String,
     style: TextStyle,
     minLines: Int,
+    modifier: Modifier = Modifier,
     maxLines: Int = 2,
 ) {
     Text(
@@ -277,10 +277,10 @@ private fun GridItemTitle(
  */
 @Composable
 private fun GridItemSelectable(
-    modifier: Modifier = Modifier,
     isSelected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Box(
@@ -321,9 +321,9 @@ fun EntryListItem(
     title: String,
     coverData: EntryCover,
     coverAlpha: Float = 1f,
-    badge: @Composable (RowScope.() -> Unit),
     onLongClick: () -> Unit,
     onClick: () -> Unit,
+    badge: @Composable (RowScope.() -> Unit),
     onClickContinueViewing: (() -> Unit)? = null,
 ) {
     Row(

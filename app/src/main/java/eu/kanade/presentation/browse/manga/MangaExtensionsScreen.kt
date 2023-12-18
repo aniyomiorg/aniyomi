@@ -14,6 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.GetApp
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -62,6 +67,7 @@ fun MangaExtensionScreen(
     searchQuery: String?,
     onLongClickItem: (MangaExtension) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
+    onClickItemWebView: (MangaExtension.Available) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,
     onUninstallExtension: (MangaExtension) -> Unit,
     onUpdateExtension: (MangaExtension.Installed) -> Unit,
@@ -94,6 +100,7 @@ fun MangaExtensionScreen(
                     contentPadding = contentPadding,
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
+                    onClickItemWebView = onClickItemWebView,
                     onInstallExtension = onInstallExtension,
                     onUninstallExtension = onUninstallExtension,
                     onUpdateExtension = onUpdateExtension,
@@ -111,6 +118,7 @@ private fun ExtensionContent(
     state: MangaExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (MangaExtension) -> Unit,
+    onClickItemWebView: (MangaExtension.Available) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,
     onUninstallExtension: (MangaExtension) -> Unit,
@@ -148,14 +156,14 @@ private fun ExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-
+                            modifier = Modifier.animateItemPlacement(),
                             action = action,
                         )
                     }
                     is MangaExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-
+                            modifier = Modifier.animateItemPlacement(),
                         )
                     }
                 }
@@ -167,7 +175,7 @@ private fun ExtensionContent(
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
                 ExtensionItem(
-
+                    modifier = Modifier.animateItemPlacement(),
                     item = item,
                     onClickItem = {
                         when (it) {
@@ -177,6 +185,7 @@ private fun ExtensionContent(
                         }
                     },
                     onLongClickItem = onLongClickItem,
+                    onClickItemWebView = onClickItemWebView,
                     onClickItemCancel = onClickItemCancel,
                     onClickItemAction = {
                         when (it) {
@@ -220,6 +229,7 @@ private fun ExtensionItem(
     item: MangaExtensionUiModel.Item,
     onClickItem: (MangaExtension) -> Unit,
     onLongClickItem: (MangaExtension) -> Unit,
+    onClickItemWebView: (MangaExtension.Available) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onClickItemAction: (MangaExtension) -> Unit,
     modifier: Modifier = Modifier,
@@ -263,6 +273,7 @@ private fun ExtensionItem(
             ExtensionItemActions(
                 extension = extension,
                 installStep = installStep,
+                onClickItemWebView = onClickItemWebView,
                 onClickItemCancel = onClickItemCancel,
                 onClickItemAction = onClickItemAction,
             )
@@ -349,42 +360,80 @@ private fun ExtensionItemActions(
     extension: MangaExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
+    onClickItemWebView: (MangaExtension.Available) -> Unit = {},
     onClickItemCancel: (MangaExtension) -> Unit = {},
     onClickItemAction: (MangaExtension) -> Unit = {},
 ) {
     val isIdle = installStep.isCompleted()
-    Row(modifier = modifier) {
-        if (isIdle) {
-            TextButton(
-                onClick = { onClickItemAction(extension) },
-            ) {
-                Text(
-                    text = when (installStep) {
-                        InstallStep.Installed -> stringResource(MR.strings.ext_installed)
-                        InstallStep.Error -> stringResource(MR.strings.action_retry)
-                        InstallStep.Idle -> {
-                            when (extension) {
-                                is MangaExtension.Installed -> {
-                                    if (extension.hasUpdate) {
-                                        stringResource(MR.strings.ext_update)
-                                    } else {
-                                        stringResource(MR.strings.action_settings)
-                                    }
-                                }
-                                is MangaExtension.Untrusted -> stringResource(MR.strings.ext_trust)
-                                is MangaExtension.Available -> stringResource(MR.strings.ext_install)
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        when {
+            !isIdle -> {
+                IconButton(onClick = { onClickItemCancel(extension) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = stringResource(MR.strings.action_cancel),
+                    )
+                }
+            }
+            installStep == InstallStep.Error -> {
+                IconButton(onClick = { onClickItemAction(extension) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = stringResource(MR.strings.action_retry),
+                    )
+                }
+            }
+            installStep == InstallStep.Idle -> {
+                when (extension) {
+                    is MangaExtension.Installed -> {
+                        if (extension.hasUpdate) {
+                            IconButton(onClick = { onClickItemAction(extension) }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.GetApp,
+                                    contentDescription = stringResource(MR.strings.ext_update),
+                                )
                             }
                         }
-                        else -> error("Must not show install process text")
-                    },
-                )
-            }
-        } else {
-            IconButton(onClick = { onClickItemCancel(extension) }) {
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(MR.strings.action_cancel),
-                )
+
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(MR.strings.action_settings),
+                            )
+                        }
+                    }
+                    is MangaExtension.Untrusted -> {
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.VerifiedUser,
+                                contentDescription = stringResource(MR.strings.ext_trust),
+                            )
+                        }
+                    }
+                    is MangaExtension.Available -> {
+                        if (extension.sources.isNotEmpty()) {
+                            IconButton(
+                                onClick = { onClickItemWebView(extension) },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Public,
+                                    contentDescription = stringResource(MR.strings.action_open_in_web_view),
+                                )
+                            }
+                        }
+
+                        IconButton(onClick = { onClickItemAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.GetApp,
+                                contentDescription = stringResource(MR.strings.ext_install),
+                            )
+                        }
+                    }
+                }
             }
         }
     }

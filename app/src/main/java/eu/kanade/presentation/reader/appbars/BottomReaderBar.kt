@@ -65,10 +65,10 @@ fun BottomReaderBar(
         }
 
         if (ReaderBottomButton.Share.isIn(enabledButtons) && onClickShare != null) {
-            IconButton(onClick = onClickShare) {
+            IconButton(onClick = onClickOrientation) {
                 Icon(
-                    imageVector = Icons.Outlined.Share,
-                    contentDescription = stringResource(MR.strings.action_share),
+                    imageVector = orientation.icon,
+                    contentDescription = stringResource(MR.strings.rotation_type),
                 )
             }
         }

@@ -64,7 +64,7 @@ object MoreTab : Tab() {
         }
 
     override suspend fun onReselect(navigator: Navigator) {
-        navigator.push(SettingsScreen.toMainScreen())
+        navigator.push(SettingsScreen())
     }
 
     @Composable
@@ -85,9 +85,9 @@ object MoreTab : Tab() {
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
             onClickStorage = { navigator.push(StorageTab()) },
-            onClickDataAndStorage = { navigator.push(SettingsScreen.toDataAndStorageScreen()) },
-            onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
-            onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
+            onClickDataAndStorage = { navigator.push(SettingsScreen(SettingsScreen.Destination.DataAndStorage)) },
+            onClickSettings = { navigator.push(SettingsScreen()) },
+            onClickAbout = { navigator.push(SettingsScreen(SettingsScreen.Destination.About)) },
         )
 
         LaunchedEffect(Unit) {

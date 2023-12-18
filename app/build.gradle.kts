@@ -21,7 +21,7 @@ android {
 
         applicationId = "xyz.luft.tachiyomi.mi"
 
-        versionCode = 110
+        versionCode = 112
         versionName = "0.2.2"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -205,7 +205,6 @@ dependencies {
 
     // RxJava
     implementation(libs.rxjava)
-    implementation(libs.flowreactivenetwork)
 
     // Networking
     implementation(libs.bundles.okhttp)
