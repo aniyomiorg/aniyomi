@@ -15,7 +15,7 @@
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_updates">Verschiebe Neues in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_manga">Verschiebe Manga in den Mehr-Tab</string>
-    <string name="unlock_app">Aniyomi entsperren</string>
+    <string name="unlock_app">Animetail entsperren</string>
     <string name="action_filter_unseen">Ungesehen</string>
     <string name="action_sort_total_episodes">Folgenanzahl</string>
     <string name="action_sort_last_seen">Zuletzt gesehen</string>

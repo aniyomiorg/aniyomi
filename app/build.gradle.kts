@@ -18,10 +18,11 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 112
-        versionName = "0.14.7"
+        applicationId = "com.dark.animetailv2"
+
+        versionCode = 110
+        versionName = "0.14.30"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -226,6 +227,9 @@ dependencies {
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))

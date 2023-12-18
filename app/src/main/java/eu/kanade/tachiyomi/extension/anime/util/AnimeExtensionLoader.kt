@@ -51,7 +51,7 @@ internal object AnimeExtensionLoader {
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else 0)
 
     // jmir1's key
-    private const val officialSignature = "50ab1d1e3a20d204d0ad6d334c7691c632e41b98dfa132bf385695fdfa63839c"
+    private const val officialSignature = "145e350c873d4ec438790ee24272db148a65057941c25391515ac8194f7d29c9"
 
     /**
      * List of the trusted signatures.
