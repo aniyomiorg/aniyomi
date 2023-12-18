@@ -96,7 +96,7 @@ fun BottomReaderBar(
         if (ReaderBottomButton.Rotation.isIn(enabledButtons)) {
             IconButton(onClick = onClickOrientation) {
                 Icon(
-                    painter = painterResource(orientation.iconRes),
+                    imageVector = orientation.icon,
                     contentDescription = stringResource(MR.strings.pref_rotation_type),
                 )
             }
