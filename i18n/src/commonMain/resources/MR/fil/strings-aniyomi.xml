@@ -23,10 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">Linisin ang cache ng kabanata pagkasara</string>
     <string name="pref_clear_manga_database">Linisin ang database</string>
     <string name="pref_clear_manga_database_summary">Burahin ang nakaraan para sa mga entry na hindi naka-save sa iyong library</string>
-    <string name="clear_database_confirmation">Sigurado ka ba\? Mga basa na chapters at mga progress sa mga entry ng non-library ay mawawala</string>
+    <string name="clear_database_confirmation">Sigurado ka ba? Mga basa na chapters at mga progress sa mga entry ng non-library ay mawawala</string>
     <string name="pref_incognito_mode_summary">Hinihinto ang pagtala sa nakaraan</string>
     <string name="manga_from_library">Galing sa library</string>
-    <string name="snack_add_to_manga_library">Idagdag sa library\?</string>
+    <string name="snack_add_to_manga_library">Idagdag sa library?</string>
     <string name="download_error">Nagka-error</string>
     <string name="download_paused">Nakahinto</string>
     <string name="also_set_chapter_settings_for_library">Gawin din sa lahat ng mga entry sa aking library</string>
@@ -287,4 +287,43 @@
     <string name="pref_category_player_advanced">Mga setting sa Advanced player</string>
     <string name="go_to_previous_chapter">Nakaraang kabanata</string>
     <string name="theme_cottoncandy">Koton Kendi</string>
+    <string name="player_add_external_audio_intent"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="player_reset_subtitles"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="player_subtitle_settings_color_tab"></string>
+    <string name="player_subtitle_empty_warning"></string>
+    <string name="player_subtitle_settings_example"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="player_subtitle_background_color"></string>
+    <string name="player_add_external_subtitles_intent"></string>
+    <string name="player_override_ass_subtitles"></string>
+    <string name="player_track_delay_text_field"></string>
+    <string name="player_subtitle_font_text_field"></string>
+    <string name="player_subtitle_remember_delay"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="player_audio_remember_delay"></string>
+    <string name="delete_confirmation"></string>
+    <string name="pref_skip_3" translatable="false"></string>
+    <string name="player_audio_delay"></string>
+    <string name="player_add_external_audio"></string>
+    <string name="download_slots_info"></string>
+    <string name="player_subtitle_settings_delay_tab"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="player_subtitle_settings"></string>
+    <string name="player_add_external_subtitles"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="player_subtitle_text_color"></string>
+    <string name="settings_dialog_header"></string>
+    <string name="player_subtitle_delay"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="label_storage"></string>
+    <string name="player_font_size_text_field"></string>
+    <string name="player_subtitle_border_color"></string>
+    <string name="player_subtitle_settings_font_tab"></string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="video_custom_screen"></string>
 </resources>
