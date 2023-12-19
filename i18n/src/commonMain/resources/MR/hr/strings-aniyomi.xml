@@ -288,20 +288,4 @@
     <string name="label_recent_anime_updates">Anime aktualiziranja</string>
     <string name="download_slots_info">Istodobno će se preuzimati samo iz izvora koji se sami hostiraju ili bez mjerenja</string>
     <string name="theme_cottoncandy">Cotton Candy</string>
-    <string name="player_add_external_audio_intent"></string>
-    <string name="pref_progress_80" translatable="false"></string>
-    <string name="pref_skip_20" translatable="false"></string>
-    <string name="pref_progress_75" translatable="false"></string>
-    <string name="pref_progress_95" translatable="false"></string>
-    <string name="player_add_external_subtitles_intent"></string>
-    <string name="pref_skip_10" translatable="false"></string>
-    <string name="pref_skip_3" translatable="false"></string>
-    <string name="player_add_external_audio"></string>
-    <string name="pref_progress_90" translatable="false"></string>
-    <string name="player_add_external_subtitles"></string>
-    <string name="pref_progress_100" translatable="false"></string>
-    <string name="pref_skip_30" translatable="false"></string>
-    <string name="pref_progress_70" translatable="false"></string>
-    <string name="pref_progress_85" translatable="false"></string>
-    <string name="pref_skip_5" translatable="false"></string>
 </resources>
