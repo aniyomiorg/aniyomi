@@ -126,8 +126,8 @@
     <string name="local_invalid_episode_format">Formato de episodio no válido</string>
     <string name="unknown_studio">Estudio desconocido</string>
     <string name="delete_downloads_for_anime">¿Borrar episodios descargados?</string>
-    <string name="snack_add_to_manga_library">¿Añadir manga a la biblioteca\?</string>
-    <string name="snack_add_to_anime_library">¿Agregar anime a la biblioteca\?</string>
+    <string name="snack_add_to_manga_library">¿Añadir manga a la biblioteca?</string>
+    <string name="snack_add_to_anime_library">¿Agregar anime a la biblioteca?</string>
     <string name="display_mode_episode">Episodio %1$s</string>
     <string name="episode_downloading_progress">Descargando (%d%%)</string>
     <string name="download_error">Error</string>
@@ -288,4 +288,16 @@
     <string name="label_recent_anime_updates">Actualizaciones del anime</string>
     <string name="theme_cottoncandy">Algodón de azúcar</string>
     <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="pref_skip_3" translatable="false"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="pref_skip_5" translatable="false"></string>
 </resources>
