@@ -27,7 +27,7 @@
     <string name="clear_database_confirmation">Ви впевнені? Прочитані розділи і прогрес не бібліотечної манґи будуть втрачені</string>
     <string name="pref_incognito_mode_summary">Призупиняє історію читання</string>
     <string name="manga_from_library">Манґа з бібліотеки</string>
-    <string name="snack_add_to_manga_library">Додати манґу до бібліотеки\?</string>
+    <string name="snack_add_to_manga_library">Додати манґу до бібліотеки?</string>
     <string name="download_error">Помилка</string>
     <string name="download_paused">Пауза</string>
     <string name="also_set_chapter_settings_for_library">Також застосувати для усієї манґи в моїй бібліотеці</string>
@@ -288,4 +288,45 @@
     <string name="label_recent_anime_updates">Оновлення аніме</string>
     <string name="theme_cottoncandy">Бавовняні цукерки</string>
     <string name="download_slots_info">Буде завантажувати тільки з власному хості або не лімітованих джерел</string>
+    <string name="player_add_external_audio_intent"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="player_reset_subtitles"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="player_subtitle_settings_color_tab"></string>
+    <string name="player_subtitle_empty_warning"></string>
+    <string name="label_all"></string>
+    <string name="player_subtitle_settings_example"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_reset_mpv_conf"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="player_subtitle_background_color"></string>
+    <string name="player_add_external_subtitles_intent"></string>
+    <string name="player_override_ass_subtitles"></string>
+    <string name="player_track_delay_text_field"></string>
+    <string name="player_subtitle_font_text_field"></string>
+    <string name="player_subtitle_remember_delay"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="player_audio_remember_delay"></string>
+    <string name="delete_confirmation"></string>
+    <string name="pref_skip_3" translatable="false"></string>
+    <string name="player_audio_delay"></string>
+    <string name="player_add_external_audio"></string>
+    <string name="player_subtitle_settings_delay_tab"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="player_subtitle_settings"></string>
+    <string name="player_add_external_subtitles"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="player_subtitle_text_color"></string>
+    <string name="settings_dialog_header"></string>
+    <string name="player_subtitle_delay"></string>
+    <string name="pref_mpv_input"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="label_storage"></string>
+    <string name="player_font_size_text_field"></string>
+    <string name="player_subtitle_border_color"></string>
+    <string name="player_subtitle_settings_font_tab"></string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="video_custom_screen"></string>
 </resources>
