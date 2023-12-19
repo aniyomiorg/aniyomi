@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categories Manga</string>
-    <string name="unlock_app">Desbloca el Aniyomi</string>
     <string name="action_sort_last_manga_update">Darrera actualització de Manga</string>
     <string name="action_show_manga">Mostra Manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">Buida la memòria cau de capítols en tancar l\'aplicació</string>
     <string name="pref_clear_manga_database">Buida la base de dades</string>
     <string name="pref_clear_manga_database_summary">Suprimeix l\'historial dels elements que no siguin a la biblioteca</string>
-    <string name="clear_database_confirmation">N\'esteu segur\? Es perdrà el progrés i els capítols llegits dels elements que no siguin a la biblioteca</string>
-    <string name="pref_refresh_library_tracking_summary">Actualitza l\'estat, la puntuació i el darrer capítol llegit dels serveis de seguiment</string>
+    <string name="clear_database_confirmation">N\'esteu segur? Es perdrà el progrés i els capítols llegits dels elements que no siguin a la biblioteca</string>
     <string name="pref_incognito_mode_summary">Pausa l\'historial de lectura</string>
     <string name="manga_from_library">De la biblioteca</string>
-    <string name="snack_add_to_manga_library">Voleu afegir-lo a la biblioteca\?</string>
+    <string name="snack_add_to_manga_library">Voleu afegir-lo a la biblioteca?</string>
     <string name="download_error">Error</string>
     <string name="download_paused">Pausat</string>
     <string name="also_set_chapter_settings_for_library">Aplica-ho també a tots els elements de la biblioteca</string>
@@ -101,9 +99,9 @@
     <string name="download_ahead_info_anime">Només funciona per entrades de la biblioteca, i si l\'episodi actual i el següent ja han estat descarregats</string>
     <string name="pref_backup_flags_summary">Informació inclosa al fitxer de còpia de seguretat</string>
     <string name="pref_clear_anime_database">Neteja la base de dades de l\'anime</string>
-    <string name="snack_add_to_anime_library">Afegir l\'anime a la llibreria\?</string>
+    <string name="snack_add_to_anime_library">Afegir l\'anime a la llibreria?</string>
     <string name="display_mode_episode">Episodi %1$s</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Això eliminarà la data de visualització del capítol. Estàs segur\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Això eliminarà la data de visualització del capítol. Estàs segur?</string>
     <string name="enable_volume_brightness_gestures">Activa els gestos per controlar el volum i la lluentor</string>
     <string name="enable_horizontal_seek_gesture">Activa la búsqueda horitzontal per gestos</string>
     <string name="pref_invalidate_download_cache_summary">Forçar la comprovació de capítols i episodis descarregats</string>
@@ -228,9 +226,9 @@
     <string name="pref_enable_pip">Activa l\'ús del mode d\'imatge a imatge</string>
     <string name="pref_use_external_downloader">Utilitza sempre un gestor de descàrregues extern per l\'anime</string>
     <string name="downloaded_episodes">Episodis descarregats</string>
-    <string name="delete_downloads_for_anime">Eliminar els episodis descarregats\?</string>
+    <string name="delete_downloads_for_anime">Eliminar els episodis descarregats?</string>
     <string name="episode_downloading_progress">Descarregant (%d%%)</string>
-    <string name="confirm_delete_episodes">Vols eliminar els episodis sel·leccionats\?</string>
+    <string name="confirm_delete_episodes">Vols eliminar els episodis sel·leccionats?</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progrés: %1$s/%2$s</string>
     <string name="notification_new_episodes">Nou episodi trobat</string>

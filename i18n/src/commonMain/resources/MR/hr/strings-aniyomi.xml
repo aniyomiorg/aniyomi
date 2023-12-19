@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Manga kategorije</string>
-    <string name="unlock_app">Otključaj Aniyomi</string>
     <string name="action_sort_last_manga_update">Zadnje aktualiziranje mange</string>
     <string name="action_show_manga">Prikaži manga</string>
     <string name="action_display_local_badge_manga">Lokalna manga</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">Izbriši predmemoriju poglavlja tijekom zatvaranja aplikacije</string>
     <string name="pref_clear_manga_database">Isprazni manga bazu podataka</string>
     <string name="pref_clear_manga_database_summary">Izbriši povijest za manga koji nisu spremljeni u tvojoj biblioteci</string>
-    <string name="clear_database_confirmation">Sigurno\? Izgubit ćeš pročitana poglavlja i napredak manga koji nisu u biblioteci</string>
-    <string name="pref_refresh_library_tracking_summary">Aktualizira stanje, ocjenu i zadnje pročitano poglavlje iz usluga za praćenje</string>
+    <string name="clear_database_confirmation">Sigurno? Izgubit ćeš pročitana poglavlja i napredak manga koji nisu u biblioteci</string>
     <string name="pref_incognito_mode_summary">Zaustavlja čitanje povijesti</string>
     <string name="manga_from_library">Manga iz biblioteke</string>
-    <string name="snack_add_to_manga_library">Dodati manga u biblioteku\?</string>
+    <string name="snack_add_to_manga_library">Dodati manga u biblioteku?</string>
     <string name="download_error">Greška</string>
     <string name="download_paused">Zaustavljeno</string>
     <string name="also_set_chapter_settings_for_library">Također primijeni na sve mange u mojoj biblioteci</string>
@@ -99,7 +97,7 @@
     <string name="unknown_studio">Nepoznat studio</string>
     <string name="display_mode_episode">Epizoda %1$s</string>
     <string name="download_unseen">Nepogledano</string>
-    <string name="confirm_delete_episodes">Stvarno želiš izbrisati odabrane epizode\?</string>
+    <string name="confirm_delete_episodes">Stvarno želiš izbrisati odabrane epizode?</string>
     <string name="also_set_episode_settings_for_library">Također primijeni na sve anime u mojoj biblioteci</string>
     <string name="no_episodes_error">Nijedna epizoda nije pronađena</string>
     <string name="watching">Gledam</string>
@@ -107,7 +105,7 @@
     <string name="currently_watching">Trenutačno gledam</string>
     <string name="want_to_watch">Želim gledati</string>
     <string name="repeating_anime">Ponovno gledanje</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Ovo će ukloniti datum gledanja ove epizode. Stvarno to želiš\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Ovo će ukloniti datum gledanja ove epizode. Stvarno to želiš?</string>
     <string name="pref_backup_flags_summary">Koje podatke uključiti u datoteku sigurnosne kopije</string>
     <string name="action_save_screenshot">Spremi snimku ekrana</string>
     <string name="label_history">Manga</string>
@@ -123,7 +121,7 @@
     <string name="pref_skip_disable">Deaktiviraj</string>
     <string name="pref_default_intro_length">Standardno vrijeme preskakanja uvoda</string>
     <string name="episode_settings_updated">Potavke standardnih epizoda su aktualizirane</string>
-    <string name="snack_add_to_anime_library">Dodati anime u biblioteku\?</string>
+    <string name="snack_add_to_anime_library">Dodati anime u biblioteku?</string>
     <string name="dialog_with_checkbox_reset_anime">Obnovi sve epizode za ovaj anime</string>
     <string name="episode_progress">Napredak: %1$s/%2$s</string>
     <string name="auto_download_while_watching">Automatski preuzmi tijekom gledanja</string>
@@ -200,7 +198,7 @@
     <string name="pref_clear_anime_database_summary">Izbriši povijest za anime koji nisu spremljeni u tvojoj biblioteci</string>
     <string name="local_manga_source">Izvor lokalnog manga</string>
     <string name="local_anime_source">Izvor lokalnog animea</string>
-    <string name="delete_downloads_for_anime">Izbrisati preuzete epizode\?</string>
+    <string name="delete_downloads_for_anime">Izbrisati preuzete epizode?</string>
     <string name="episode_downloading_progress">Preuzimanje (%d%%)</string>
     <string name="show_episode_number">Broj epizode</string>
     <string name="plan_to_watch">Planiram gledati</string>

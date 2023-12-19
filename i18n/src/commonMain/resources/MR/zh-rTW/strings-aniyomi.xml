@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">類別</string>
-    <string name="unlock_app">解除鎖定 Aniyomi</string>
     <string name="action_sort_last_manga_update">上次檢查更新日期</string>
     <string name="action_show_manga">顯示作品</string>
     <string name="action_display_local_badge_manga">本機來源</string>
@@ -25,7 +24,6 @@
     <string name="pref_clear_manga_database">清除資料庫</string>
     <string name="pref_clear_manga_database_summary">將未收藏於書櫃的作品記錄刪除</string>
     <string name="clear_database_confirmation">不在書櫃中的作品閱讀進度將被清除，你確定嗎？</string>
-    <string name="pref_refresh_library_tracking_summary">與歷程平台同步處理閱讀狀態、評分以及進度</string>
     <string name="pref_incognito_mode_summary">暫停閱讀記錄</string>
     <string name="manga_from_library">書櫃上的作品</string>
     <string name="snack_add_to_manga_library">將作品收藏至書櫃？</string>

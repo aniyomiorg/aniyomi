@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">فئات المانغا</string>
-    <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="action_show_manga">عرض المانجا</string>
     <string name="action_display_local_badge_manga">المانجا المحلية</string>
@@ -25,7 +24,6 @@
     <string name="pref_clear_manga_database">تنظيف قاعدة البيانات</string>
     <string name="pref_clear_manga_database_summary">حذف سجل المانجا التي لم يتم حفظها في مكتبتك</string>
     <string name="clear_database_confirmation">هل أنت متأكد؟ الفصول المقروءة ومستوى التقدم للمانجا الغير الموجودة في مكتبتك سيتم فقده</string>
-    <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
     <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
     <string name="manga_from_library">مانغا من المكتبة</string>
     <string name="snack_add_to_manga_library">إضافة المانجا إلى المكتبة؟</string>

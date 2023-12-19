@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
-    <string name="unlock_app">Desbloquear Aniyomi</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
     <string name="action_sort_last_seen">Ultimo visto</string>
@@ -116,8 +115,7 @@
     <string name="pref_clear_anime_database">Borrar la base de datos de anime</string>
     <string name="pref_clear_manga_database_summary">Borrar el historial del manga que no esté guardado en tu biblioteca</string>
     <string name="pref_clear_anime_database_summary">Borrar el historial del anime que no esté guardado en tu biblioteca</string>
-    <string name="clear_database_confirmation">¿Estás seguro\? Se perderán los episodios y capítulos completados, así como el progreso de las entradas que no están en la biblioteca</string>
-    <string name="pref_refresh_library_tracking_summary">Actualiza estados, puntuaciones y últimos capítulos leídos desde tus servicios de seguimiento</string>
+    <string name="clear_database_confirmation">¿Estás seguro? Se perderán los episodios y capítulos completados, así como el progreso de las entradas que no están en la biblioteca</string>
     <string name="pref_incognito_mode_summary">Pausa el historial</string>
     <string name="manga_from_library">Manga en la biblioteca</string>
     <string name="anime_from_library">Anime en la biblioteca</string>
@@ -127,9 +125,9 @@
     <string name="episode_not_found">Episodio no encontrado</string>
     <string name="local_invalid_episode_format">Formato de episodio no válido</string>
     <string name="unknown_studio">Estudio desconocido</string>
-    <string name="delete_downloads_for_anime">¿Borrar episodios descargados\?</string>
-    <string name="snack_add_to_manga_library">¿Añadir manga a la biblioteca\?</string>
-    <string name="snack_add_to_anime_library">¿Agregar anime a la biblioteca\?</string>
+    <string name="delete_downloads_for_anime">¿Borrar episodios descargados?</string>
+    <string name="snack_add_to_manga_library">¿Añadir manga a la biblioteca?</string>
+    <string name="snack_add_to_anime_library">¿Agregar anime a la biblioteca?</string>
     <string name="display_mode_episode">Episodio %1$s</string>
     <string name="episode_downloading_progress">Descargando (%d%%)</string>
     <string name="download_error">Error</string>
@@ -137,7 +135,7 @@
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
     <string name="download_unseen">Sin ver</string>
-    <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
+    <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
     <string name="also_set_episode_settings_for_library">Aplicar también a todo el anime en mi biblioteca</string>
     <string name="no_episodes_error">No se han encontrado episodios</string>
@@ -149,7 +147,7 @@
     <string name="want_to_read">Quiero leer</string>
     <string name="want_to_watch">Quiero ver</string>
     <string name="repeating_anime">Volver a mirar</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro?</string>
     <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
     <string name="dialog_with_checkbox_reset">Reiniciar todos los capítulos de este manga</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>

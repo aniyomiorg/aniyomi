@@ -14,7 +14,6 @@
     <string name="pref_bottom_nav_no_history">Mover Histórico para a guia Mais</string>
     <string name="pref_bottom_nav_no_updates">Mover Atualizações para a guia Mais</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para a guia Mais</string>
-    <string name="unlock_app">Desbloquear o Aniyomi</string>
     <string name="action_sort_total_episodes">Total de episódios</string>
     <string name="action_sort_last_seen">Visto da última vez</string>
     <string name="action_sort_last_checked">Última verificação</string>
@@ -87,8 +86,7 @@
     <string name="pref_clear_anime_database">Limpar banco de dados de anime</string>
     <string name="pref_clear_manga_database_summary">Excluir histórico de mangás que não estão salvos em sua biblioteca</string>
     <string name="pref_clear_anime_database_summary">Excluir histórico de animes que não estão salvos em sua biblioteca</string>
-    <string name="clear_database_confirmation">Tem certeza\? Os episódios e capítulos concluídos e o progresso dos itens que não estão na sua biblioteca serão perdidos</string>
-    <string name="pref_refresh_library_tracking_summary">Atualiza os estados, as avaliações e os últimos capítulos lidos dos serviços de monitoramento</string>
+    <string name="clear_database_confirmation">Tem certeza? Os episódios e capítulos concluídos e o progresso dos itens que não estão na sua biblioteca serão perdidos</string>
     <string name="pref_incognito_mode_summary">Pausar seu histórico</string>
     <string name="manga_from_library">Mangá da biblioteca</string>
     <string name="anime_from_library">Anime da biblioteca</string>
@@ -98,16 +96,16 @@
     <string name="episode_not_found">Episódio não encontrado</string>
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="unknown_studio">Estúdio desconhecido</string>
-    <string name="delete_downloads_for_anime">Excluir episódios baixados\?</string>
-    <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca\?</string>
-    <string name="snack_add_to_anime_library">Adicionar anime à biblioteca\?</string>
+    <string name="delete_downloads_for_anime">Excluir episódios baixados?</string>
+    <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca?</string>
+    <string name="snack_add_to_anime_library">Adicionar anime à biblioteca?</string>
     <string name="display_mode_episode">Episódio %1$s</string>
     <string name="episode_downloading_progress">Baixando (%d%%)</string>
     <string name="download_error">Erro</string>
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número do episódio</string>
     <string name="sort_by_episode_number">Por número de episódios</string>
-    <string name="confirm_delete_episodes">Tem certeza de que deseja excluir os episódios selecionados\?</string>
+    <string name="confirm_delete_episodes">Tem certeza de que deseja excluir os episódios selecionados?</string>
     <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
     <string name="also_set_episode_settings_for_library">Também se aplica a todos os animes da minha biblioteca</string>
     <string name="no_episodes_error">Nenhum episódio encontrado</string>
@@ -118,7 +116,7 @@
     <string name="want_to_read">Quero ler</string>
     <string name="want_to_watch">Quero assistir</string>
     <string name="repeating_anime">Reassistir</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Isso removerá a data de exibição deste episódio. Você tem certeza\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Isso removerá a data de exibição deste episódio. Você tem certeza?</string>
     <string name="dialog_with_checkbox_reset_anime">Redefinir todos os episódios deste anime</string>
     <string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste mangá</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>

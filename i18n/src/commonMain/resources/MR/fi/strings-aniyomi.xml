@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategoriat</string>
-    <string name="unlock_app">Avaa Aniyomi</string>
     <string name="action_sort_last_manga_update">Viimeisin manga päivitys</string>
     <string name="action_show_manga">Näytä manga</string>
     <string name="action_display_local_badge_manga">Laitteelle tallennettu manga</string>
@@ -23,11 +22,10 @@
     <string name="pref_clear_chapter_cache">Tyhjennä lukujen välimuisti</string>
     <string name="pref_clear_manga_database">Tyhjennä tietokanta</string>
     <string name="pref_clear_manga_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
-    <string name="clear_database_confirmation">Oletko varma\? Luetut luvut ja eteneminen poistetaan muista kun kirjastossa olevista sarjoista</string>
-    <string name="pref_refresh_library_tracking_summary">Päivittää tilan, arvosanan ja viimeksi luetun luvun seurantapalveluista</string>
+    <string name="clear_database_confirmation">Oletko varma? Luetut luvut ja eteneminen poistetaan muista kun kirjastossa olevista sarjoista</string>
     <string name="pref_incognito_mode_summary">Keskeyttää lukuhistorian</string>
     <string name="manga_from_library">Manga kirjastosta</string>
-    <string name="snack_add_to_manga_library">Lisää sarja kirjastoon\?</string>
+    <string name="snack_add_to_manga_library">Lisää sarja kirjastoon?</string>
     <string name="download_error">Virhe</string>
     <string name="download_paused">Pysäytetty</string>
     <string name="also_set_chapter_settings_for_library">Koskee myös kaikkia kirjastoni mangoja</string>
@@ -47,7 +45,7 @@
     <string name="pref_remember_volume">Muista viimeksi käytetty äänenvoimakkuus ja käytä sitä</string>
     <string name="pref_category_external_player">Ulkoinen toisto-ohjelma</string>
     <string name="local_manga_source">Paikallinen mangalähde</string>
-    <string name="delete_downloads_for_anime">Poistetaanko ladatut jaksot\?</string>
+    <string name="delete_downloads_for_anime">Poistetaanko ladatut jaksot?</string>
     <string name="playback_options_title">Toistoasetukset</string>
     <string name="pref_category_progress">Edistyminen</string>
     <string name="pref_remember_brightness">Muista viimeksi käytetty kirkkaus ja käytä sitä</string>
@@ -83,7 +81,7 @@
     <string name="pref_always_use_external_player">Käytä aina ulkoista toisto-ohjelmaa</string>
     <string name="pref_download_new_episodes">Lataa uudet jaksot</string>
     <string name="toggle_player_statistics_page">Tilastosivu</string>
-    <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon\?</string>
+    <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon?</string>
     <string name="screenshot_header">Ota näyttökuva</string>
     <string name="display_mode_episode">Jakso %1$s</string>
     <string name="label_history">Manga</string>
@@ -126,10 +124,10 @@
     <string name="not_interesting">Ei kiinnostava</string>
     <string name="want_to_watch">Haluan katsoa</string>
     <string name="download_unseen">Katsomatta</string>
-    <string name="confirm_delete_episodes">Haluatko varmasti poistaa valitut jaksot\?</string>
+    <string name="confirm_delete_episodes">Haluatko varmasti poistaa valitut jaksot?</string>
     <string name="also_set_episode_settings_for_library">Käytä myös kaikkiin kirjastossani oleviin animeihin</string>
     <string name="no_episodes_error">Jaksoja ei löytynyt</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Tämä poistaa jakson katselupäivän. Oletko varma\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Tämä poistaa jakson katselupäivän. Oletko varma?</string>
     <string name="dialog_with_checkbox_reset_anime">Nollaa kaikki tämän animen jaksot</string>
     <string name="episode_settings_updated">Jaksojen oletusasetukset on päivitetty</string>
     <string name="no_next_episode">Seuraavaa jaksoa ei löytynyt!</string>

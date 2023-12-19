@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categorías</string>
-    <string name="unlock_app">Desbloquea Aniyomi</string>
     <string name="default_manga_category">Categoría por defecto</string>
     <string name="untrusted_extension_message">Esta extensión foi firmada non un certificado non confiable e non foi activada
 \n

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">漫画のカテゴリー</string>
-    <string name="unlock_app">Aniyomiのロックを解除する</string>
     <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_show_manga">項目を表示</string>
     <string name="action_display_local_badge_manga">ローカル ソース</string>
@@ -25,7 +24,6 @@
     <string name="pref_clear_manga_database">データベースをクリア</string>
     <string name="pref_clear_manga_database_summary">ライブラリにない項目の履歴を削除</string>
     <string name="clear_database_confirmation">データベースをクリアしてもよろしいですか？ライブラリにない項目の読んだ章と読書進捗はすべて失われます</string>
-    <string name="pref_refresh_library_tracking_summary">同期サービスでステータス、評価と最後に読んだ章を更新</string>
     <string name="pref_incognito_mode_summary">閲覧履歴の記録を一時停止します</string>
     <string name="manga_from_library">ライブラリ内から</string>
     <string name="snack_add_to_manga_library">ライブラリに追加しますか？</string>

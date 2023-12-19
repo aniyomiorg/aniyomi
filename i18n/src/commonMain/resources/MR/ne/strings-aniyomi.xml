@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">वर्गहरू</string>
-    <string name="unlock_app">ताचियोमी अनलक गर्नुहोस्</string>
     <string name="action_sort_last_manga_update">पछिल्लो अपडेट चेक</string>
     <string name="action_show_manga">इन्ट्री देखाउनुहोस्</string>
     <string name="action_display_local_badge_manga">लोकल माङ्गा</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">एप बन्दमा अध्याय क्यास खाली गर्नुहोस्</string>
     <string name="pref_clear_manga_database">डाटाबेस खाली गर्नुहोस्</string>
     <string name="pref_clear_manga_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
-    <string name="clear_database_confirmation">के तपाईँ निश्चित हुनुहुन्छ\? तपाईंले पढ्नुभएको अध्यायहरू र गैर-पुस्तकालय इन्ट्रीहरूको प्रगति हराउनेछ</string>
-    <string name="pref_refresh_library_tracking_summary">ट्र्याकिङ सेवाहरूबाट स्थिति, स्कोर र अन्तिम पढिएको अध्याय अपडेट गर्दछ</string>
+    <string name="clear_database_confirmation">के तपाईँ निश्चित हुनुहुन्छ? तपाईंले पढ्नुभएको अध्यायहरू र गैर-पुस्तकालय इन्ट्रीहरूको प्रगति हराउनेछ</string>
     <string name="pref_incognito_mode_summary">पढिएको इतिहास रोक्नु</string>
     <string name="manga_from_library">पुस्तकालयबाट</string>
-    <string name="snack_add_to_manga_library">माङ्गा पुस्तकालयमा राख्ने\?</string>
+    <string name="snack_add_to_manga_library">माङ्गा पुस्तकालयमा राख्ने?</string>
     <string name="download_error">त्रुटि</string>
     <string name="download_paused">रोकिएको</string>
     <string name="also_set_chapter_settings_for_library">मेरो पुस्तकालयका सबै इन्ट्रीहरूमा पनि लागू गर्नुहोस्</string>

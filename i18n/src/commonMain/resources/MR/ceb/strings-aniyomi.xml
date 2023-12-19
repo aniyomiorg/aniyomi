@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Mga Kategoriya</string>
-    <string name="unlock_app">I-unlock ang Tachiyomi</string>
     <string name="action_sort_last_manga_update">Katapusan nga update sa manga</string>
     <string name="action_show_manga">Ipakita ang pagsulod</string>
     <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>
@@ -23,7 +22,6 @@
     <string name="pref_auto_clear_chapter_cache">Hawani ang cache sa kapitulo sa pagsira sa app</string>
     <string name="pref_clear_manga_database">Klaro nga database</string>
     <string name="pref_clear_manga_database_summary">I-delete ang history para sa manga nga wala ma-save sa imong library</string>
-    <string name="clear_database_confirmation">Sigurado ka\? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
-    <string name="pref_refresh_library_tracking_summary">Mga update sa status, score ug katapusang kapitulo nga gibasa gikan sa mga serbisyo sa pagsubay</string>
+    <string name="clear_database_confirmation">Sigurado ka? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
     <string name="pref_incognito_mode_summary">Paghunong sa pagbasa sa kasaysayan</string>
 </resources>

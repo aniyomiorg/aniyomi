@@ -12,7 +12,6 @@
     <string name="label_manga_sources">Fonti Manga</string>
     <string name="label_anime_sources">Fonti Anime</string>
     <string name="pref_bottom_nav_no_history">Sposta Cronologia nella scheda Altro</string>
-    <string name="unlock_app">Sblocca Aniyomi</string>
     <string name="action_sort_last_manga_update">Ultimo aggiornamento manga</string>
     <string name="action_show_manga">Mostra manga</string>
     <string name="action_display_local_badge_manga">Manga locali</string>
@@ -35,11 +34,10 @@
     <string name="pref_auto_clear_chapter_cache">Cancella la cache capitoli/episodi alla chiusura dell\'app</string>
     <string name="pref_clear_manga_database">Pulisci database manga</string>
     <string name="pref_clear_manga_database_summary">Elimina la cronologia dei manga che non sono presenti nella libreria</string>
-    <string name="clear_database_confirmation">Sei sicuro\? I progressi di lettura/visione dei contenuti fuori dalla libreria verranno persi</string>
-    <string name="pref_refresh_library_tracking_summary">Aggiorna stato, voto e progressione dal servizio di tracking</string>
+    <string name="clear_database_confirmation">Sei sicuro? I progressi di lettura/visione dei contenuti fuori dalla libreria verranno persi</string>
     <string name="pref_incognito_mode_summary">Sospendi cronologia</string>
     <string name="manga_from_library">Manga dalla libreria</string>
-    <string name="snack_add_to_manga_library">Aggiungere manga alla libreria\?</string>
+    <string name="snack_add_to_manga_library">Aggiungere manga alla libreria?</string>
     <string name="download_error">Errore</string>
     <string name="download_paused">In pausa</string>
     <string name="also_set_chapter_settings_for_library">Applica anche a tutti i manga nella mia libreria</string>
@@ -98,7 +96,7 @@
     <string name="pref_backup_flags_summary">Quali informazioni sono contenute nel file di backup</string>
     <string name="local_invalid_episode_format">Formato episodio non valido</string>
     <string name="settings">Impostazioni</string>
-    <string name="confirm_delete_episodes">Sei sicuro di voler eliminare gli episodi selezionati\?</string>
+    <string name="confirm_delete_episodes">Sei sicuro di voler eliminare gli episodi selezionati?</string>
     <string name="display_mode_episode">Episodio %1$s</string>
     <string name="label_migration_manga">Migra Manga</string>
     <string name="also_set_episode_settings_for_library">Applica anche a tutti gli anime nella mia libreria</string>
@@ -130,7 +128,7 @@
     <string name="label_history">Manga</string>
     <string name="action_display_download_badge_anime">Episodi scaricati</string>
     <string name="download_unseen">Non visto</string>
-    <string name="delete_downloads_for_anime">Eliminare gli episodi scaricati\?</string>
+    <string name="delete_downloads_for_anime">Eliminare gli episodi scaricati?</string>
     <string name="want_to_read">Da leggere</string>
     <string name="action_play">Play</string>
     <string name="action_player_pip">Modalità PiP</string>
@@ -178,12 +176,12 @@
     <string name="local_manga_source">Manga locali</string>
     <string name="local_anime_source">Anime locali</string>
     <string name="episode_not_found">Episodio non trovato</string>
-    <string name="snack_add_to_anime_library">Aggiungere anime alla libreria\?</string>
+    <string name="snack_add_to_anime_library">Aggiungere anime alla libreria?</string>
     <string name="watching">Guardando</string>
     <string name="plan_to_watch">Da guardare</string>
     <string name="want_to_watch">Da guardare</string>
     <string name="repeating_anime">Da riguardare</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Vuoi proseguire\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Questa operazione rimuoverà la data di visione di questo episodio. Vuoi proseguire?</string>
     <string name="dialog_with_checkbox_reset_anime">Reimposta tutti gli episodi di questo anime</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
@@ -242,7 +240,6 @@
     <string name="pref_enable_pip">Abilita l\'uso della modalità PiP</string>
     <string name="pref_category_volume_brightness">Volume e Luminosità</string>
     <string name="pref_category_pip">Picture in Picture (PiP)</string>
-    <string name="stats_header">Mostra statistiche</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_hide_in_manga_library_items">Nascondi manga già in libreria</string>
     <string name="chapter_dialog_header">Ricerca il capitolo</string>

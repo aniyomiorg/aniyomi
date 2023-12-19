@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categorii</string>
-    <string name="unlock_app">Deblochează Aniyomi</string>
     <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
     <string name="action_show_manga">Afișați manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">Șterge memoria cache a capitolului la închiderea aplicației</string>
     <string name="pref_clear_manga_database">Curățați baza de date</string>
     <string name="pref_clear_manga_database_summary">Ștergeți istoricul pentru manga care nu sunt salvate în bibliotecă</string>
-    <string name="clear_database_confirmation">Ești sigur\? Capitolele citite și progresul oricărei manga ce nu este în bibliotecă vor fi pierdute</string>
-    <string name="pref_refresh_library_tracking_summary">Actualizează starea, scorul și ultimul capitol citit de la serviciile de urmărire</string>
+    <string name="clear_database_confirmation">Ești sigur? Capitolele citite și progresul oricărei manga ce nu este în bibliotecă vor fi pierdute</string>
     <string name="pref_incognito_mode_summary">Întrerupe citirea istoricului</string>
     <string name="manga_from_library">Manga din bibliotecă</string>
-    <string name="snack_add_to_manga_library">Adaugă manga în bibliotecă\?</string>
+    <string name="snack_add_to_manga_library">Adaugă manga în bibliotecă?</string>
     <string name="download_error">Eroare</string>
     <string name="download_paused">Întrerupt</string>
     <string name="also_set_chapter_settings_for_library">De asemenea, se aplică la toate manga în biblioteca mea</string>

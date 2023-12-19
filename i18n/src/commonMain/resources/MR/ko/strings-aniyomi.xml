@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">기록을 더 보기 탭으로 이동</string>
     <string name="pref_bottom_nav_no_updates">업데이트를 더 보기 탭으로 이동</string>
     <string name="pref_bottom_nav_no_manga">만화를 더 보기 탭으로 이동</string>
-    <string name="unlock_app">Aniyomi 해제하기</string>
     <string name="action_filter_unseen">보기 전</string>
     <string name="action_sort_total_episodes">전체 에피소드</string>
     <string name="action_sort_last_seen">마지막으로 봄</string>
@@ -116,8 +115,7 @@
     <string name="pref_clear_anime_database">애니메이션 데이터베이스 삭제</string>
     <string name="pref_clear_manga_database_summary">서재에 추가되지 않은 항목의 기록을 삭제합니다</string>
     <string name="pref_clear_anime_database_summary">서재에 추가되지 않은 애니메이션의 기록을 삭제합니다</string>
-    <string name="clear_database_confirmation">확실합니까\? 서재에 없는 에피소드의 모든 기록이 삭제됩니다</string>
-    <string name="pref_refresh_library_tracking_summary">상태 및 평점, 마지막으로 읽은 회차를 동기화 서비스로부터 업데이트합니다</string>
+    <string name="clear_database_confirmation">확실합니까? 서재에 없는 에피소드의 모든 기록이 삭제됩니다</string>
     <string name="pref_incognito_mode_summary">읽은 내역의 기록을 일시 정지합니다</string>
     <string name="manga_from_library">서재에서</string>
     <string name="anime_from_library">서재의 애니메이션</string>
@@ -127,9 +125,9 @@
     <string name="episode_not_found">에피소드를 찾을 수 없음</string>
     <string name="local_invalid_episode_format">잘못된 에피소드 형식</string>
     <string name="unknown_studio">알 수없는 스튜디오</string>
-    <string name="delete_downloads_for_anime">다운로드한 에피소드를 삭제하시겠습니까\?</string>
-    <string name="snack_add_to_manga_library">서재에 추가합니까\?</string>
-    <string name="snack_add_to_anime_library">서재에 애니메이션을 추가하시겠습니까\?</string>
+    <string name="delete_downloads_for_anime">다운로드한 에피소드를 삭제하시겠습니까?</string>
+    <string name="snack_add_to_manga_library">서재에 추가합니까?</string>
+    <string name="snack_add_to_anime_library">서재에 애니메이션을 추가하시겠습니까?</string>
     <string name="display_mode_episode">에피소드 %1$s</string>
     <string name="episode_downloading_progress">다운로드 중 (%d%%)</string>
     <string name="download_error">오류</string>
@@ -137,7 +135,7 @@
     <string name="show_episode_number">에피소드 번호</string>
     <string name="sort_by_episode_number">에피소드 번호 순</string>
     <string name="download_unseen">안봄</string>
-    <string name="confirm_delete_episodes">선택된 에피소드를 삭제하시겠습니까\?</string>
+    <string name="confirm_delete_episodes">선택된 에피소드를 삭제하시겠습니까?</string>
     <string name="also_set_chapter_settings_for_library">서재의 모든 항목에 적용</string>
     <string name="also_set_episode_settings_for_library">서재의 모든 애니메이션에 적용</string>
     <string name="no_episodes_error">에피소드 없음</string>
@@ -149,7 +147,7 @@
     <string name="want_to_read">읽고 싶음</string>
     <string name="want_to_watch">보고 싶음</string>
     <string name="repeating_anime">다시보기</string>
-    <string name="dialog_with_checkbox_remove_description_anime">이 에피소드의 시청 날짜가 삭제됩니다. 확실합니까\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">이 에피소드의 시청 날짜가 삭제됩니다. 확실합니까?</string>
     <string name="dialog_with_checkbox_reset_anime">이 애니메이션의 모든 에피소드 초기화</string>
     <string name="dialog_with_checkbox_reset">모든 회차 기록 삭제</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>

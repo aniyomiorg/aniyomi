@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Категорії манґи</string>
-    <string name="unlock_app">Розблокувати Aniyomi</string>
     <string name="action_sort_last_manga_update">Останні оновлення манґи</string>
     <string name="action_show_manga">Показати серію</string>
     <string name="action_display_local_badge_manga">Локальна манґа</string>
@@ -25,11 +24,10 @@
     <string name="pref_auto_clear_chapter_cache">Очищати кеш розділів при закритті застосунку</string>
     <string name="pref_clear_manga_database">Очистити базу даних</string>
     <string name="pref_clear_manga_database_summary">Видалити історію для манґи, котра не знаходиться в вашій бібліотеці</string>
-    <string name="clear_database_confirmation">Ви впевнені\? Прочитані розділи і прогрес не бібліотечної манґи будуть втрачені</string>
-    <string name="pref_refresh_library_tracking_summary">Оновлює статус, оцінку та прогрес із служб відстеження</string>
+    <string name="clear_database_confirmation">Ви впевнені? Прочитані розділи і прогрес не бібліотечної манґи будуть втрачені</string>
     <string name="pref_incognito_mode_summary">Призупиняє історію читання</string>
     <string name="manga_from_library">Манґа з бібліотеки</string>
-    <string name="snack_add_to_manga_library">Додати манґу до бібліотеки\?</string>
+    <string name="snack_add_to_manga_library">Додати манґу до бібліотеки?</string>
     <string name="download_error">Помилка</string>
     <string name="download_paused">Пауза</string>
     <string name="also_set_chapter_settings_for_library">Також застосувати для усієї манґи в моїй бібліотеці</string>
@@ -139,7 +137,7 @@
     <string name="want_to_read">Хочу прочитати</string>
     <string name="want_to_watch">Хочу подивитися</string>
     <string name="repeating_anime">Повторний перегляд</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Це призведе до видалення дати перегляду цього епізоду. Ви впевнені\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Це призведе до видалення дати перегляду цього епізоду. Ви впевнені?</string>
     <string name="dialog_with_checkbox_reset_anime">Скинути всі епізоди для цього аніме</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Прогрес: %1$s/%2$s</string>
@@ -163,7 +161,7 @@
     <string name="rotation_sensor_landscape">Горизонтальне зображення</string>
     <string name="pref_clear_anime_database_summary">Видалення історії для аніме, які не зберігаються у вашій бібліотеці</string>
     <string name="episode_not_found">Епізод не знайдено</string>
-    <string name="snack_add_to_anime_library">Додати аніме до бібліотеки\?</string>
+    <string name="snack_add_to_anime_library">Додати аніме до бібліотеки?</string>
     <string name="unknown_studio">Невідома студія</string>
     <string name="download_unseen">Не переглянуто</string>
     <string name="watching">Переглядаю</string>
@@ -197,7 +195,7 @@
     <string name="local_invalid_episode_format">Неправильний формат епізоду</string>
     <string name="show_episode_number">Номер епізоду</string>
     <string name="sort_by_episode_number">За номером епізоду</string>
-    <string name="confirm_delete_episodes">Ви впевнені, що хочете видалити вибрані епізоди\?</string>
+    <string name="confirm_delete_episodes">Ви впевнені, що хочете видалити вибрані епізоди?</string>
     <string name="screenshot_header">Зробити знімок екрану</string>
     <string name="action_global_anime_search">Глобальний пошук аніме</string>
     <string name="unofficial_anime_extension_message">Це розширення не входить до офіційного списку розширень Aniyomi.</string>
@@ -221,7 +219,7 @@
     <string name="pref_mpv_conf">Редагувати файл конфігурації MPV для подальших налаштувань плеєра</string>
     <string name="pref_remember_volume">Запам\'ятати та переключитися на останню використану гучність</string>
     <string name="used_cache_both">Використовується в аніме: %1$s, використовується в манзі: %2$s</string>
-    <string name="delete_downloads_for_anime">Видалити завантажені епізоди\?</string>
+    <string name="delete_downloads_for_anime">Видалити завантажені епізоди?</string>
     <string name="display_mode_episode">Епізод %1$s</string>
     <string name="episode_downloading_progress">Завантаження (%d%%)</string>
     <string name="currently_reading">Зараз читається</string>

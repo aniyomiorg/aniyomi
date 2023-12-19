@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Κατηγορίες</string>
-    <string name="unlock_app">Ξεκλειδώστε το Aniyomi</string>
     <string name="action_sort_last_manga_update">Τελευταίος έλεγχος ενημέρωσης</string>
     <string name="action_show_manga">Εμφάνιση καταχώρισης</string>
     <string name="action_display_local_badge_manga">Τοπική πηγή</string>
@@ -25,7 +24,6 @@
     <string name="pref_clear_manga_database">Καθαρισμός βάσης δεδομένων</string>
     <string name="pref_clear_manga_database_summary">Διαγραφή ιστορικού για καταχωρήσεις που δεν έχουν αποθηκευτεί στη βιβλιοθήκη σας</string>
     <string name="clear_database_confirmation">Είστε σίγουροι; Τα διαβασμένα κεφάλαια και η πρόοδος των καταχωρήσεων εκτός βιβλιοθήκης θα χαθούν</string>
-    <string name="pref_refresh_library_tracking_summary">Ενημερώνει κατάσταση, βαθμολογία και τελευταίο αναγνωσμένο κεφάλαιο από τις υπηρεσίες παρακολούθησης</string>
     <string name="pref_incognito_mode_summary">Παύει το ιστορικό ανάγνωσης</string>
     <string name="manga_from_library">Από βιβλιοθήκη</string>
     <string name="snack_add_to_manga_library">Προσθήκη στη βιβλιοθήκη;</string>

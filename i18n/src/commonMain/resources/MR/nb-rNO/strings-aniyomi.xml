@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Kategorier</string>
-    <string name="unlock_app">Lås opp Aniyomi</string>
     <string name="action_sort_last_manga_update">Siste oppdateringssjekk</string>
     <string name="action_show_manga">Vis oppføring</string>
     <string name="action_display_local_badge_manga">Lokal kilde</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">Tøm kapittel hurtigbufferen ved lukking av appen</string>
     <string name="pref_clear_manga_database">Tøm database</string>
     <string name="pref_clear_manga_database_summary">Slett historikk for oppføringer som ikke er lagret i biblioteket ditt</string>
-    <string name="clear_database_confirmation">Er du sikker\? Leste kapitler og framdrift for oppføringer som ikke er i biblioteket vil gå tapt</string>
-    <string name="pref_refresh_library_tracking_summary">Oppdaterer status, poengsum og sist leste kapittel fra sporingstjenestene</string>
+    <string name="clear_database_confirmation">Er du sikker? Leste kapitler og framdrift for oppføringer som ikke er i biblioteket vil gå tapt</string>
     <string name="pref_incognito_mode_summary">Setter lesehistorikken på pause</string>
     <string name="manga_from_library">Fra biblioteket</string>
-    <string name="snack_add_to_manga_library">Legg til i bibliotek\?</string>
+    <string name="snack_add_to_manga_library">Legg til i bibliotek?</string>
     <string name="download_error">Feil</string>
     <string name="download_paused">Pauset</string>
     <string name="also_set_chapter_settings_for_library">Anvend også for allle oppføringer i biblioteket</string>

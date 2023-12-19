@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">将历史记录移至“更多”选项</string>
     <string name="pref_bottom_nav_no_updates">将更新移至“更多”选项</string>
     <string name="pref_bottom_nav_no_manga">将漫画移至“更多”选项</string>
-    <string name="unlock_app">解锁 Aniyomi</string>
     <string name="action_filter_unseen">未观看</string>
     <string name="action_sort_total_episodes">所有选集</string>
     <string name="action_sort_last_seen">上次观看</string>
@@ -117,7 +116,6 @@
     <string name="pref_clear_manga_database_summary">删除未添加到书架的漫画记录</string>
     <string name="pref_clear_anime_database_summary">将未保存在内容库中的动画历史记录清除</string>
     <string name="clear_database_confirmation">你确定吗？不在书架中的漫画的已读章节和进度将会丢失</string>
-    <string name="pref_refresh_library_tracking_summary">从记录平台更新阅读状态、评分和进度</string>
     <string name="pref_incognito_mode_summary">暂停记录阅读历史</string>
     <string name="manga_from_library">书架里的漫画</string>
     <string name="anime_from_library">内容库中的动画</string>

@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Pindahkan Riwayat ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_updates">Pindahkan Update ke tab Lainnya</string>
     <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke tab Lainnya</string>
-    <string name="unlock_app">Buka Aniyomi</string>
     <string name="action_filter_unseen">Belum dilihat</string>
     <string name="action_sort_total_episodes">total episode</string>
     <string name="action_sort_last_seen">Terakhir dilihat</string>
@@ -116,8 +115,7 @@
     <string name="pref_clear_anime_database">Bersihkan database Anime</string>
     <string name="pref_clear_manga_database_summary">Hapus riwayat manga yang tidak disimpan di pustaka Anda</string>
     <string name="pref_clear_anime_database_summary">Hapus riwayat anime yang tidak disimpan di pustaka Anda</string>
-    <string name="clear_database_confirmation">Yakin\? Semua catatan untuk entri di luar pustaka mengenai episode dan bab yang sudah diselesaikan beserta kemajuannya akan hilang</string>
-    <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan proses terakhir yang dibaca dari layanan sinkronisasi</string>
+    <string name="clear_database_confirmation">Yakin? Semua catatan untuk entri di luar pustaka mengenai episode dan bab yang sudah diselesaikan beserta kemajuannya akan hilang</string>
     <string name="pref_incognito_mode_summary">Jeda riwayat membaca</string>
     <string name="manga_from_library">Manga dari pustaka</string>
     <string name="anime_from_library">Anime dari pustaka</string>
@@ -127,9 +125,9 @@
     <string name="episode_not_found">episode tidak ditemukan</string>
     <string name="local_invalid_episode_format">format episode tidak ditemukan</string>
     <string name="unknown_studio">Studio tidak diketahui</string>
-    <string name="delete_downloads_for_anime">Hapus episode yang sudah diunduh\?</string>
-    <string name="snack_add_to_manga_library">Tambahkan manga ke pustaka\?</string>
-    <string name="snack_add_to_anime_library">Tambahkan anime ke pustaka\?</string>
+    <string name="delete_downloads_for_anime">Hapus episode yang sudah diunduh?</string>
+    <string name="snack_add_to_manga_library">Tambahkan manga ke pustaka?</string>
+    <string name="snack_add_to_anime_library">Tambahkan anime ke pustaka?</string>
     <string name="display_mode_episode">Episode %1$s</string>
     <string name="episode_downloading_progress">Sedang mengunduh (%d%%)</string>
     <string name="download_error">Kesalahan</string>
@@ -137,7 +135,7 @@
     <string name="show_episode_number">Nomor episode</string>
     <string name="sort_by_episode_number">Berdasarkan jumlah episode</string>
     <string name="download_unseen">Belum dilihat</string>
-    <string name="confirm_delete_episodes">Apa kamu yakin akan menghapus episode yang dipilih\?</string>
+    <string name="confirm_delete_episodes">Apa kamu yakin akan menghapus episode yang dipilih?</string>
     <string name="also_set_chapter_settings_for_library">Juga terapkan untuk semua manga di pustaka saya</string>
     <string name="also_set_episode_settings_for_library">Terapkan juga ke semua anime di pustaka saya</string>
     <string name="no_episodes_error">Tidak ada episode yang ditemukan</string>
@@ -149,7 +147,7 @@
     <string name="want_to_read">Ingin membaca</string>
     <string name="want_to_watch">Ingin menonton</string>
     <string name="repeating_anime">Menonton ulang</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Aksi ini akan menghapus tanggal menonton episode ini. Anda yakin\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Aksi ini akan menghapus tanggal menonton episode ini. Anda yakin?</string>
     <string name="dialog_with_checkbox_reset_anime">Reset semua episode anime ini</string>
     <string name="dialog_with_checkbox_reset">Setel ulang semua chapter untuk manga ini</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>

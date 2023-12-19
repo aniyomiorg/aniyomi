@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_manga">Déplacer le Manga vers l\'onglet Plus</string>
-    <string name="unlock_app">Déverrouiller Aniyomi</string>
     <string name="action_filter_unseen">Non vus</string>
     <string name="action_sort_total_episodes">Nombre d\'épisodes</string>
     <string name="action_sort_last_seen">Dernier vu</string>
@@ -102,8 +101,7 @@
     <string name="pref_clear_anime_database">Effacer la base de données des animés</string>
     <string name="pref_clear_manga_database_summary">Supprimer l\'historique des entrées qui ne sont pas enregistrées dans votre bibliothèque</string>
     <string name="pref_clear_anime_database_summary">Supprimer l\'historique des animés qui ne sont pas sauvegardés dans votre bibliothèque</string>
-    <string name="clear_database_confirmation">Êtes-vous sûr(e) \? Les chapitres lus et la progression des entrées non présentes dans la bibliothèque seront perdues</string>
-    <string name="pref_refresh_library_tracking_summary">Actualise le statut, la note et le dernier chapitre lu depuis les services de suivi</string>
+    <string name="clear_database_confirmation">Êtes-vous sûr(e) ? Les chapitres lus et la progression des entrées non présentes dans la bibliothèque seront perdues</string>
     <string name="pref_incognito_mode_summary">Suspend l\'historique de lecture</string>
     <string name="manga_from_library">De la bibliothèque</string>
     <string name="anime_from_library">Animés de la bibliothèque</string>
@@ -113,9 +111,9 @@
     <string name="episode_not_found">Épisode non trouvé</string>
     <string name="local_invalid_episode_format">Format d\'épisode invalide</string>
     <string name="unknown_studio">Studio inconnu</string>
-    <string name="delete_downloads_for_anime">Supprimer les épisodes téléchargés \?</string>
-    <string name="snack_add_to_manga_library">Ajouter à la bibliothèque \?</string>
-    <string name="snack_add_to_anime_library">Ajouter un animé à la bibliothèque \?</string>
+    <string name="delete_downloads_for_anime">Supprimer les épisodes téléchargés ?</string>
+    <string name="snack_add_to_manga_library">Ajouter à la bibliothèque ?</string>
+    <string name="snack_add_to_anime_library">Ajouter un animé à la bibliothèque ?</string>
     <string name="display_mode_episode">Épisode %1$s</string>
     <string name="episode_downloading_progress">Téléchargement (%d%%)</string>
     <string name="download_error">Erreur</string>
@@ -123,7 +121,7 @@
     <string name="show_episode_number">Numéro de l\'épisode</string>
     <string name="sort_by_episode_number">Par numéro d\'épisode</string>
     <string name="download_unseen">Non vus</string>
-    <string name="confirm_delete_episodes">Êtes-vous sûr·e de vouloir supprimer les épisodes sélectionnés \?</string>
+    <string name="confirm_delete_episodes">Êtes-vous sûr·e de vouloir supprimer les épisodes sélectionnés ?</string>
     <string name="also_set_chapter_settings_for_library">S\'applique également à toutes les entrées de ma bibliothèque</string>
     <string name="also_set_episode_settings_for_library">S\'applique également à tous les animés de ma bibliothèque</string>
     <string name="no_episodes_error">Aucun épisode trouvé</string>
@@ -135,7 +133,7 @@
     <string name="want_to_read">Envie de le lire</string>
     <string name="want_to_watch">Envie de le regarder</string>
     <string name="repeating_anime">Revisionnage</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Ceci supprimera la date de visionnage de cet épisode. Êtes-vous sûr·e \?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Ceci supprimera la date de visionnage de cet épisode. Êtes-vous sûr·e ?</string>
     <string name="dialog_with_checkbox_reset_anime">Réinitialiser tous les épisodes de cet animé</string>
     <string name="dialog_with_checkbox_reset">Réinitialiser tous les chapitres de ce titre</string>
     <string name="share_screenshot_info">%1$s : %2$s, %3$s</string>

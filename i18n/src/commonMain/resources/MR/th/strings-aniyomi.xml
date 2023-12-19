@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">หมวดหมู่</string>
-    <string name="unlock_app">ปลดล็อก Tachiyomi</string>
     <string name="action_sort_last_manga_update">มังงะที่อัปเดตล่าสุด</string>
     <string name="action_show_manga">แสดงมังงะ</string>
     <string name="action_display_local_badge_manga">มังงะในเครื่อง</string>
@@ -24,11 +23,10 @@
     <string name="pref_auto_clear_chapter_cache">ล้างแคชตอนในเมื่อปิดแอพ</string>
     <string name="pref_clear_manga_database">ล้างฐานข้อมูล</string>
     <string name="pref_clear_manga_database_summary">ลบประวัติมังงะที่ไม่ได้บันทึกไว้ในคลัง</string>
-    <string name="clear_database_confirmation">แน่ใจไหม\? ข้อมูลการอ่านของมังงะที่ไม่ได้อยู่ในคลังจะหายไป</string>
-    <string name="pref_refresh_library_tracking_summary">อัปเดตสถานะคะแนนและตอนสุดท้ายที่อ่านจากบริการติดตาม</string>
+    <string name="clear_database_confirmation">แน่ใจไหม? ข้อมูลการอ่านของมังงะที่ไม่ได้อยู่ในคลังจะหายไป</string>
     <string name="pref_incognito_mode_summary">หยุดประวัติการอ่านชั่วคราว</string>
     <string name="manga_from_library">มังงะจากคลัง</string>
-    <string name="snack_add_to_manga_library">เพิ่มมังงะไปยังคลัง\?</string>
+    <string name="snack_add_to_manga_library">เพิ่มมังงะไปยังคลัง?</string>
     <string name="download_error">เกิดข้อผิดพลาด</string>
     <string name="download_paused">หยุดชั่วคราว</string>
     <string name="also_set_chapter_settings_for_library">นําไปใช้กับมังงะทั้งหมดในคลังด้วย</string>

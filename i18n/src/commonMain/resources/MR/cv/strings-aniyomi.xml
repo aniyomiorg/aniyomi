@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Пухмӑшсем</string>
-    <string name="unlock_app">Aniyomi уҫ</string>
     <string name="action_sort_last_manga_update">Юлашки ҫӗнетӗве тӗрӗслени</string>
     <string name="action_show_manga">Ҫырава кӑтарт</string>
     <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫран</string>
@@ -19,11 +18,10 @@
     <string name="pref_clear_chapter_cache">Сыпӑксен кешне тасат</string>
     <string name="pref_clear_manga_database">Пӗлӗмсен кӗлете тасат</string>
     <string name="pref_clear_manga_database_summary">Санӑн вулавӑшра упранман манкӑн вуланӑ кун-ҫулне катерт</string>
-    <string name="clear_database_confirmation">Чӑнах катертесшӗн-и\? Вулавӑшри мар манкӑн вуланӑ сыпӑкӗсем тата вулав ӳсӗмӗ ҫухалӗ</string>
-    <string name="pref_refresh_library_tracking_summary">Сӑнану сервиссенчен халне, шутне тата юлашки вуланӑ сыпӑка илсе ҫӗнет</string>
+    <string name="clear_database_confirmation">Чӑнах катертесшӗн-и? Вулавӑшри мар манкӑн вуланӑ сыпӑкӗсем тата вулав ӳсӗмӗ ҫухалӗ</string>
     <string name="pref_incognito_mode_summary">Вулани кун-ҫула чарса лартать</string>
     <string name="manga_from_library">Вулавӑшран манкӑ</string>
-    <string name="snack_add_to_manga_library">Манкка вулавăша хушмалла-и\?</string>
+    <string name="snack_add_to_manga_library">Манкка вулавăша хушмалла-и?</string>
     <string name="download_error">Йӑнӑш</string>
     <string name="download_paused">Вӑхӑтлӑха чарнӑ</string>
     <string name="also_set_chapter_settings_for_library">Тата манӑн вулавăшри пур манкӑ валли усӑ кур</string>
