@@ -97,8 +97,8 @@
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="unknown_studio">Estúdio desconhecido</string>
     <string name="delete_downloads_for_anime">Excluir episódios baixados?</string>
-    <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca\?</string>
-    <string name="snack_add_to_anime_library">Adicionar anime à biblioteca\?</string>
+    <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca?</string>
+    <string name="snack_add_to_anime_library">Adicionar anime à biblioteca?</string>
     <string name="display_mode_episode">Episódio %1$s</string>
     <string name="episode_downloading_progress">Baixando (%d%%)</string>
     <string name="download_error">Erro</string>
@@ -263,4 +263,71 @@
 \nAtualmente compacta para Jpeg</string>
     <string name="data_saver_image_format_summary_off">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente compacta para Webp</string>
+    <string name="wsrv"></string>
+    <string name="pref_debanding_cpu"></string>
+    <string name="player_add_external_audio_intent"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="bandwidth_data_saver_server"></string>
+    <string name="data_saver_server_summary"></string>
+    <string name="player_reset_subtitles"></string>
+    <string name="pref_media_control_chapter_seeking_summary"></string>
+    <string name="pref_media_control_chapter_seeking"></string>
+    <string name="pref_debanding_title"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="player_subtitle_settings_color_tab"></string>
+    <string name="data_saver_exclude"></string>
+    <string name="pref_show_next_episode_airing_time"></string>
+    <string name="player_subtitle_empty_warning"></string>
+    <string name="pref_debanding_gpu"></string>
+    <string name="label_all"></string>
+    <string name="player_subtitle_settings_example"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_episode_swipe_start"></string>
+    <string name="pref_reset_mpv_conf"></string>
+    <string name="data_saver_downloader"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="player_subtitle_background_color"></string>
+    <string name="player_add_external_subtitles_intent"></string>
+    <string name="player_override_ass_subtitles"></string>
+    <string name="player_track_delay_text_field"></string>
+    <string name="pref_episode_swipe"></string>
+    <string name="player_subtitle_font_text_field"></string>
+    <string name="player_subtitle_remember_delay"></string>
+    <string name="pref_category_player_advanced_subtitle"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="resmush"></string>
+    <string name="data_saver_stop_exclude"></string>
+    <string name="theme_mocha"></string>
+    <string name="player_audio_remember_delay"></string>
+    <string name="action_hide"></string>
+    <string name="label_recent_anime_updates"></string>
+    <string name="delete_confirmation"></string>
+    <string name="pref_skip_3" translatable="false"></string>
+    <string name="player_audio_delay"></string>
+    <string name="player_add_external_audio"></string>
+    <string name="download_slots_info"></string>
+    <string name="player_subtitle_settings_delay_tab"></string>
+    <string name="pref_episode_swipe_end"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="player_subtitle_settings"></string>
+    <string name="player_add_external_subtitles"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="pref_debanding_disabled"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="player_subtitle_text_color"></string>
+    <string name="settings_dialog_header"></string>
+    <string name="player_subtitle_delay"></string>
+    <string name="pref_mpv_input"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_category_hide_hidden"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="pref_category_player_advanced"></string>
+    <string name="label_category"></string>
+    <string name="label_storage"></string>
+    <string name="player_font_size_text_field"></string>
+    <string name="player_subtitle_border_color"></string>
+    <string name="player_subtitle_settings_font_tab"></string>
+    <string name="theme_cottoncandy"></string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="video_custom_screen"></string>
 </resources>
