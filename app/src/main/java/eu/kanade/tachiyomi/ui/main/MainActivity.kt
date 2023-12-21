@@ -81,6 +81,8 @@ import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
+import eu.kanade.tachiyomi.ui.deeplink.DeepLinkScreenType
+import eu.kanade.tachiyomi.ui.deeplink.anime.DeepLinkAnimeScreen
 import eu.kanade.tachiyomi.ui.deeplink.manga.DeepLinkMangaScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -482,17 +484,30 @@ class MainActivity : BaseActivity() {
                 // or the Google-specific search intent (triggered by saying or typing "search *query* on *Tachiyomi*" in Google Search/Google Assistant)
 
                 // Get the search query provided in extras, and if not null, perform a global search with it.
-                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(
-                    Intent.EXTRA_TEXT,
-                )
+                val query = intent.getStringExtra(SearchManager.QUERY)
+                    ?: intent.getStringExtra(Intent.EXTRA_TEXT)
+
                 if (!query.isNullOrEmpty()) {
                     navigator.popUntilRoot()
-                    navigator.push(GlobalMangaSearchScreen(query))
-                    navigator.push(DeepLinkMangaScreen(query))
+
+                    val screenType = intent.getStringExtra(INTENT_SEARCH_TYPE).orEmpty()
+                        .ifBlank { "ANIME" }
+                        .let(DeepLinkScreenType::valueOf)
+
+                    when (screenType) {
+                        DeepLinkScreenType.MANGA -> {
+                            navigator.push(GlobalMangaSearchScreen(query))
+                            navigator.push(DeepLinkMangaScreen(query))
+                        }
+                        DeepLinkScreenType.ANIME -> {
+                            navigator.push(GlobalAnimeSearchScreen(query))
+                            navigator.push(DeepLinkAnimeScreen(query))
+                        }
+                    }
                 }
                 null
             }
-            INTENT_SEARCH -> {
+            INTENT_SEARCH -> { // Used by extensions (url intent handlers)
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
@@ -501,7 +516,7 @@ class MainActivity : BaseActivity() {
                 }
                 null
             }
-            INTENT_ANIMESEARCH -> {
+            INTENT_ANIMESEARCH -> { // Same as above
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
@@ -526,6 +541,7 @@ class MainActivity : BaseActivity() {
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
+        const val INTENT_SEARCH_TYPE = "type"
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
