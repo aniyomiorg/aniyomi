@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">የማንጋ ምድቦች</string>
-    <string name="unlock_app">ታቺዮሚን ይክፈቱ</string>
     <string name="default_manga_category">ነባሪ ምድብ</string>
     <string name="untrusted_extension_message">ይህ ቅጥያ ባልታመነ የእውቅና ማረጋገጫ ተፈርሟል እና አልነቃም።
         \n
@@ -18,8 +17,7 @@
     <string name="channel_new_chapters_episodes">የምዕራፍ ዝመናዎች</string>
     <string name="label_manga_sources">የማንጋ ምንጮች</string>
     <string name="label_anime_sources">የአኒሜ ምንጮች</string>
-    <string name="backup_settings_warning">ማስጠንቀቂያ፡ ቅንብሮችን በምትኬ ላይ ማስቀመጥ የትራኪንግ የይለፍ ቃሎችዎንም ያከማቻል፣
-        ይህን የምትኬ ፋይል ለሌላ አያጋሩ!</string>
+    <string name="backup_settings_warning">ማስጠንቀቂያ፡ ቅንብሮችን በምትኬ ላይ ማስቀመጥ የትራኪንግ የይለፍ ቃሎችዎንም ያከማቻል፣ ይህን የምትኬ ፋይል ለሌላ አያጋሩ!</string>
     <string name="chapters_episodes">ምዕራፎች እና ክፍሎች</string>
     <string name="episodes">ክፍሎች</string>
     <string name="anime_categories">የአኒሜ ምድቦች</string>

@@ -68,7 +68,7 @@
             android:name=".ui.deeplink.anime.DeepLinkAnimeActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoDisplay"
-            android:label="@string/action_search"
+            android:label="@string/action_global_anime_search"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -95,7 +95,7 @@
             android:name=".ui.deeplink.manga.DeepLinkMangaActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoDisplay"
-            android:label="@string/action_search"
+            android:label="@string/action_global_manga_search"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
