@@ -1778,10 +1778,12 @@ class PlayerActivity : BaseActivity() {
             "time-pos" -> {
                 viewModel.updatePlayerTime(position = value)
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
+                updatePlaybackState()
             }
             "duration" -> {
                 viewModel.updatePlayerTime(duration = value)
                 mediaSession.isActive = true
+                updatePlaybackState()
             }
         }
     }

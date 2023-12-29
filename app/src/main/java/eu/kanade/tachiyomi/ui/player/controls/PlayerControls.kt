@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.controls
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -26,17 +25,21 @@ fun PlayerControls(
     BottomPlayerControls(activity)
 }
 
+val iconSize = 20.dp
+val buttonSize = 50.dp
+val textButtonWidth = 80.dp
+
 @Composable
 fun PlayerIcon(
     icon: ImageVector,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    IconButton(onClick = onClick, modifier = modifier.size(50.dp)){
+    IconButton(onClick = onClick, modifier = modifier.size(buttonSize)){
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(iconSize)
         )
     }
 }
@@ -65,7 +68,7 @@ fun PlayerTextButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(width = 80.dp, height = 50.dp)
+            .size(width = textButtonWidth, height = buttonSize)
             .commonClickable(
                 enabled = enabled,
                 onClick = onClick,

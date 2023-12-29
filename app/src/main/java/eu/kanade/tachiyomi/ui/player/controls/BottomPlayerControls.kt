@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.controls
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +28,7 @@ import tachiyomi.presentation.core.util.collectAsState
 @Composable
 fun BottomPlayerControls(
     activity: PlayerActivity,
+    modifier: Modifier = Modifier,
 ) {
     val viewModel = activity.viewModel
     val state by viewModel.state.collectAsState()
@@ -72,7 +72,7 @@ fun BottomPlayerControls(
 
     BoxWithConstraints(
         contentAlignment = Alignment.BottomStart,
-        modifier = Modifier.padding(all = 10.dp)
+        modifier = modifier.padding(all = 10.dp)
     ) {
         Column(verticalArrangement = Arrangement.Bottom) {
             PlayerRow(modifier = Modifier.fillMaxWidth()) {
@@ -115,7 +115,7 @@ fun BottomPlayerControls(
                     state.videoChapters,
                     ::onValueChange,
                     ::onValueChangeFinished,
-                    Modifier.widthIn(max = this@BoxWithConstraints.maxWidth - 160.dp)
+                    Modifier.widthIn(max = this@BoxWithConstraints.maxWidth - (textButtonWidth * 2))
                 )
 
                 PlayerRow{
