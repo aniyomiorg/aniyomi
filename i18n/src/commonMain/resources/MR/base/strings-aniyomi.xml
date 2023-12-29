@@ -211,6 +211,7 @@
     <string name="pref_debanding_disabled">Disabled</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>

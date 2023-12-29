@@ -8,7 +8,14 @@ import tachiyomi.i18n.MR
  * Results of the set as cover feature.
  */
 enum class SetAsCover {
-    Success, AddToLibraryFirst, Error
+    Success, AddToLibraryFirst, Error;
+}
+
+/**
+ * Player's inverted playback text handler
+ */
+enum class InvertedPlayback {
+    NONE, POSITION, DURATION;
 }
 
 /**
@@ -36,17 +43,15 @@ enum class SeekState {
 /**
  * Player's Video Aspect state handler
  */
-enum class AspectState(val index: Int, val stringRes: StringResource) {
-    CROP(index = 0, stringRes = MR.strings.video_crop_screen),
-    FIT(index = 1, stringRes = MR.strings.video_fit_screen),
-    STRETCH(index = 2, stringRes = MR.strings.video_stretch_screen),
-    CUSTOM(index = 3, stringRes = MR.strings.video_custom_screen),
+enum class AspectState(val stringRes: StringResource) {
+    CROP(stringRes = MR.strings.video_crop_screen),
+    FIT(stringRes = MR.strings.video_fit_screen),
+    STRETCH(stringRes = MR.strings.video_stretch_screen),
+    CUSTOM(stringRes = MR.strings.video_custom_screen),
     ;
 
     companion object {
         internal var mode: AspectState = FIT
-
-        internal fun get(index: Int) = entries.find { index == it.index } ?: FIT
     }
 }
 
@@ -76,9 +81,21 @@ enum class HwDecState(val title: String, val mpvValue: String) {
  * Player's Statistics Page handler
  */
 @Suppress("unused")
-enum class PlayerStatsPage(val page: Int, val textRes: StringResource) {
-    OFF(0, MR.strings.off),
-    PAGE1(1, MR.strings.player_statistics_page_1),
-    PAGE2(2, MR.strings.player_statistics_page_2),
-    PAGE3(3, MR.strings.player_statistics_page_3),
+enum class PlayerStatsPage(val stringRes: StringResource) {
+    OFF(stringRes = MR.strings.off),
+    PAGE1(stringRes = MR.strings.player_statistics_page_1),
+    PAGE2(stringRes = MR.strings.player_statistics_page_2),
+    PAGE3(stringRes = MR.strings.player_statistics_page_3),
+    ;
+}
+
+/**
+ * Player's debanding handler
+ */
+enum class VideoDebanding(val stringRes: StringResource) {
+    DISABLED(stringRes = MR.strings.pref_debanding_disabled),
+    CPU(stringRes = MR.strings.pref_debanding_cpu),
+    GPU(stringRes = MR.strings.pref_debanding_gpu),
+    YUV420P(stringRes = MR.strings.pref_debanding_yuv420p),
+    ;
 }

@@ -20,9 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.Utils
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
@@ -36,7 +38,7 @@ fun BottomPlayerControls(
 
     val includePip = !preferences.pipOnExit().get() && activity.pip.supportedAndEnabled
 
-    fun onValueChange(value: Float, wasSeeking: Boolean) {
+    fun onPositionChange(value: Float, wasSeeking: Boolean) {
         if (!wasSeeking) {
             SeekState.mode = SeekState.SEEKBAR
             activity.initSeek()
@@ -54,7 +56,7 @@ fun BottomPlayerControls(
         activity.playerControls.showSeekText(value.toInt(), difference)
     }
 
-    fun onValueChangeFinished(value: Float) {
+    fun onPositionChangeFinished(value: Float) {
         if (SeekState.mode == SeekState.SEEKBAR) {
             if (preferences.playerSmoothSeek().get()) {
                 activity.player.timePos = value.toInt()
@@ -106,22 +108,48 @@ fun BottomPlayerControls(
             }
 
             PlayerRow(modifier = Modifier.fillMaxWidth()) {
-                PlayerTextButton(text = state.timeData.position.toString())
+                fun getTimeText(time: Long) = Utils.prettyTime(time.toInt(), true).replace("+", "")
+                val invertedPlayback = preferences.invertedPlayback().collectAsState().value
 
-                Seekbar(
-                    state.timeData.position.toFloat(),
-                    state.timeData.duration.toFloat(),
-                    state.timeData.readAhead.toFloat(),
-                    state.videoChapters,
-                    ::onValueChange,
-                    ::onValueChangeFinished,
-                    Modifier.widthIn(max = this@BoxWithConstraints.maxWidth - (textButtonWidth * 2))
-                )
-
-                PlayerRow{
-                    PlayerTextButton(text = state.timeData.duration.toString())
+                val position = when (invertedPlayback) {
+                    InvertedPlayback.NONE, InvertedPlayback.DURATION -> state.timeData.position
+                    InvertedPlayback.POSITION -> state.timeData.position - state.timeData.duration
+                }
+                val onPositionCLicked = {
+                    preferences.invertedPlayback().set(
+                        when (invertedPlayback) {
+                            InvertedPlayback.NONE, InvertedPlayback.DURATION -> InvertedPlayback.POSITION
+                            InvertedPlayback.POSITION -> InvertedPlayback.NONE
+                        },
+                    )
                 }
 
+                val duration = when (invertedPlayback) {
+                    InvertedPlayback.NONE, InvertedPlayback.POSITION -> state.timeData.duration
+                    InvertedPlayback.DURATION -> state.timeData.position - state.timeData.duration
+                }
+                val onDurationCLicked = {
+                    preferences.invertedPlayback().set(
+                        when (invertedPlayback) {
+                            InvertedPlayback.NONE, InvertedPlayback.POSITION -> InvertedPlayback.DURATION
+                            InvertedPlayback.DURATION -> InvertedPlayback.NONE
+                        }
+                    )
+                }
+
+                PlayerTextButton(text = getTimeText(position), onClick = onPositionCLicked)
+
+                Seekbar(
+                    position = state.timeData.position.toFloat(),
+                    duration = state.timeData.duration.toFloat(),
+                    readAhead = state.timeData.readAhead.toFloat(),
+                    chapters = state.videoChapters,
+                    onPositionChange = ::onPositionChange,
+                    onPositionChangeFinished = ::onPositionChangeFinished,
+                    modifier = Modifier.widthIn(max = this@BoxWithConstraints.maxWidth - (textButtonWidth * 2))
+                )
+
+                PlayerTextButton(text = getTimeText(duration), onClick = onDurationCLicked)
             }
         }
     }

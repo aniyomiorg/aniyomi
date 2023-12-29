@@ -56,10 +56,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackPositionBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
-                playerPreferences.invertedDurationTxt().set(false)
-                playerPreferences.invertedPlaybackTxt().set(
-                    !playerPreferences.invertedPlaybackTxt().get(),
-                )
                 updatePlaybackPos(player.timePos!!)
                 updatePlaybackDuration(player.duration!!)
             }
@@ -67,10 +63,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackDurationBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
-                playerPreferences.invertedPlaybackTxt().set(false)
-                playerPreferences.invertedDurationTxt().set(
-                    !playerPreferences.invertedDurationTxt().get(),
-                )
                 updatePlaybackPos(player.timePos!!)
                 updatePlaybackDuration(player.duration!!)
             }
@@ -200,25 +192,16 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
         val duration = player.duration
-        val invertedPlayback = playerPreferences.invertedPlaybackTxt().get()
-        val invertedDuration = playerPreferences.invertedDurationTxt().get()
 
         if (duration != null) {
-            if (invertedPlayback) {
-                binding.playbackPositionBtn.text = "-${Utils.prettyTime(duration - position)}"
-            } else if (invertedDuration) {
-                binding.playbackPositionBtn.text = Utils.prettyTime(position)
-                binding.playbackDurationBtn.text = "-${Utils.prettyTime(duration - position)}"
-            } else {
-                binding.playbackPositionBtn.text = Utils.prettyTime(position)
-            }
+            binding.playbackPositionBtn.text = Utils.prettyTime(position)
             activity.viewModel.onSecondReached(position, duration)
         }
     }
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
-        if (!playerPreferences.invertedDurationTxt().get() && player.duration != null) {
+        if (player.duration != null) {
             binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
     }
@@ -327,7 +310,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         mpvUpdateAspect(aspect = aspect, pan = pan)
-        playerPreferences.playerViewMode().set(AspectState.mode.index)
+        playerPreferences.aspectState().set(AspectState.mode)
 
         if (showText) {
             animationHandler.removeCallbacks(playerInformationRunnable)

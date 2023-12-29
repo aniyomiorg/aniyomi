@@ -22,15 +22,15 @@ import `is`.xyz.mpv.MPVView.Chapter
 fun Seekbar(
     position: Float,
     duration: Float,
-    readAheadValue: Float,
+    readAhead: Float,
     chapters: List<Chapter>,
-    onValueChange: (Float, Boolean) -> Unit,
-    onValueChangeFinished: (Float) -> Unit,
+    onPositionChange: (Float, Boolean) -> Unit,
+    onPositionChangeFinished: (Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val range = 0F..duration
     val validSegments = chapters.toSegments().filter { it.start in range }
-    var mutableValue by remember { mutableFloatStateOf(position) }
+    var mutablePosition by remember { mutableFloatStateOf(position) }
     val interactionSource = remember { MutableInteractionSource() }
     val isDragging by interactionSource.collectIsDraggedAsState()
     val gap by animateDpAsState(if (isDragging) 5.dp else 2.dp, label = "gap")
@@ -43,22 +43,22 @@ fun Seekbar(
 
     return Seeker(
         value = position,
-        readAheadValue = readAheadValue,
+        readAheadValue = readAhead,
         range = range,
         onValueChangeFinished = {
             if (isSeeked) {
-                onValueChangeFinished(mutableValue)
+                onPositionChangeFinished(mutablePosition)
                 isSeeked = false
             }
         },
         onValueChange = {
-            mutableValue = it
+            mutablePosition = it
             if (isDragging) {
                 val wasDragging = isSeeked
                 isSeeked = true
-                onValueChange(mutableValue, wasDragging)
+                onPositionChange(mutablePosition, wasDragging)
             } else {
-                onValueChangeFinished(mutableValue)
+                onPositionChangeFinished(mutablePosition)
             }
         },
         segments = validSegments,

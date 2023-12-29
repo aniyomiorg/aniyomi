@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi
 
 import android.content.Context
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.domain.base.BasePreferences
@@ -15,7 +14,10 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
+import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
@@ -543,9 +545,34 @@ object Migrations {
                     filterPredicate = { it.key in prefsToReplace },
                     newKey = { Preference.appStateKey(it) },
                 )
+            }
+            if (oldVersion < 113) {
+                val invertedPosition = preferenceStore.getBoolean("pref_invert_playback_txt", false)
+                val invertedDuration = preferenceStore.getBoolean("pref_invert_duration_txt", false)
+                val hwDec = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+                val deband = preferenceStore.getInt("pref_deband", 0)
+                val playerViewMode = preferenceStore.getInt("pref_player_view_mode", 1)
 
-                if (Build.MODEL == "Subsystem for Android(TM)") {
-                    playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
+                prefs.edit {
+                    remove("pref_invert_playback_txt")
+                    remove("pref_invert_duration_txt")
+                    remove("pref_hwdec")
+                    remove("pref_deband")
+                    remove("pref_player_view_mode")
+
+                    val invertedPlayback = when {
+                        invertedPosition.get() -> InvertedPlayback.POSITION
+                        invertedDuration.get() -> InvertedPlayback.DURATION
+                        else -> InvertedPlayback.NONE
+                    }
+                    val hardwareDecoding = HwDecState.entries.first { it.mpvValue == hwDec.get() }
+                    val videoDebanding = VideoDebanding.entries.first { it.ordinal == deband.get() }
+                    val aspectState = AspectState.entries.first { it.ordinal == playerViewMode.get() }
+
+                    preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE).set(invertedPlayback)
+                    preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec).set(hardwareDecoding)
+                    preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
+                    preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
                 }
             }
             return true
