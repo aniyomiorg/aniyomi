@@ -18,7 +18,6 @@ import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
@@ -65,23 +64,16 @@ class AniSkipApi {
         private val binding: PlayerActivityBinding,
         private val aniSkipResponse: List<Stamp>,
     ) {
-        private val playerControls get() = binding.playerControls
         private val activity: PlayerActivity get() = binding.root.context as PlayerActivity
 
-        internal suspend fun showSkipButton(skipType: SkipType) {
+        internal fun showSkipButton(skipType: SkipType) {
             val skipButtonString = when (skipType) {
                 SkipType.ED -> MR.strings.player_aniskip_ed
                 SkipType.OP -> MR.strings.player_aniskip_op
                 SkipType.RECAP -> MR.strings.player_aniskip_recap
                 SkipType.MIXED_OP -> MR.strings.player_aniskip_mixedOp
             }
-            withUIContext {
-                playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
-                    skipButtonString,
-                )
-            }
-            activity.viewModel.updateSkipIntroText(activity.getString(skipButtonString))
+            activity.viewModel.updateSkipIntroText(activity.stringResource(skipButtonString))
         }
 
         // this is used when netflixStyle is enabled
@@ -95,7 +87,7 @@ class AniSkipApi {
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
-                    activity.viewModel.updateSkipIntroText(activity.getString(R.string.player_aniskip_dontskip))
+                    activity.viewModel.updateSkipIntroText(activity.stringResource(MR.strings.player_aniskip_dontskip))
                 } else {
                     seekTo(skipTime.endTime)
                     skipAnimation(skipType)

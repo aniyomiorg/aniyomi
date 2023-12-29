@@ -282,12 +282,7 @@ class PlayerActivity : BaseActivity() {
 
     private var videoChapters
         get() = viewModel.state.value.videoChapters
-        set(value) {
-            viewModel.mutableState.update { it.copy(videoChapters = value) }
-            runOnUiThread {
-                playerControls.seekbar.updateSeekbar(chapters = value)
-            }
-        }
+        set(value) { viewModel.mutableState.update { it.copy(videoChapters = value) } }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         playerControls.resetControlsFade()
@@ -520,9 +515,7 @@ class PlayerActivity : BaseActivity() {
         }
 
         binding.controlsRoot.setComposeContent {
-            PlayerControls(
-                activity = this,
-            )
+            PlayerControls(activity = this)
         }
 
         playerIsDestroyed = false
@@ -1781,16 +1774,14 @@ class PlayerActivity : BaseActivity() {
 
     internal fun eventPropertyUi(property: String, value: Long) {
         when (property) {
-            "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
+            "demuxer-cache-time" -> viewModel.updatePlayerTime(readAhead = value)
             "time-pos" -> {
-                playerControls.updatePlaybackPos(value.toInt())
+                viewModel.updatePlayerTime(position = value)
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
-                updatePlaybackState()
             }
             "duration" -> {
-                playerControls.updatePlaybackDuration(value.toInt())
+                viewModel.updatePlayerTime(duration = value)
                 mediaSession.isActive = true
-                updatePlaybackState()
             }
         }
     }

@@ -46,7 +46,7 @@ enum class AspectState(val index: Int, val stringRes: StringResource) {
     companion object {
         internal var mode: AspectState = FIT
 
-        internal fun get(index: Int) = values().find { index == it.index } ?: FIT
+        internal fun get(index: Int) = entries.find { index == it.index } ?: FIT
     }
 }
 
@@ -75,6 +75,7 @@ enum class HwDecState(val title: String, val mpvValue: String) {
 /**
  * Player's Statistics Page handler
  */
+@Suppress("unused")
 enum class PlayerStatsPage(val page: Int, val textRes: StringResource) {
     OFF(0, MR.strings.off),
     PAGE1(1, MR.strings.player_statistics_page_1),

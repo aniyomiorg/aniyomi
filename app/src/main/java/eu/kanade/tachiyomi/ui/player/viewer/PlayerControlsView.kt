@@ -16,7 +16,6 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
 import tachiyomi.core.i18n.stringResource
@@ -38,48 +37,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val player get() = activity.player
 
-    val seekbar: Seekbar = Seekbar(
-        view = binding.playbackSeekbar,
-        onValueChange = ::onValueChange,
-        onValueChangeFinished = ::onValueChangeFinished,
-    )
 
-    private fun onValueChange(value: Float, wasSeeking: Boolean) {
-        if (!wasSeeking) {
-            SeekState.mode = SeekState.SEEKBAR
-            activity.initSeek()
-        }
-
-        MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
-
-        val duration = player.duration ?: 0
-        if (duration == 0 || activity.initialSeek < 0) {
-            return
-        }
-
-        val difference = value.toInt() - activity.initialSeek
-
-        showSeekText(value.toInt(), difference)
-    }
-
-    private fun onValueChangeFinished(value: Float) {
-        if (SeekState.mode == SeekState.SEEKBAR) {
-            if (playerPreferences.playerSmoothSeek().get()) {
-                player.timePos = value.toInt()
-            } else {
-                MPVLib.command(
-                    arrayOf("seek", value.toInt().toString(), "absolute+keyframes"),
-                )
-            }
-            SeekState.mode = SeekState.NONE
-            animationHandler.removeCallbacks(hideUiForSeekRunnable)
-            animationHandler.removeCallbacks(fadeOutControlsRunnable)
-            animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
-            animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
-        } else {
-            MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
-        }
-    }
 
     init {
         addView(binding.root)
@@ -149,7 +107,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val nonSeekViewRunnable = Runnable {
         binding.topControlsGroup.visibility = View.VISIBLE
         binding.middleControlsGroup.visibility = View.VISIBLE
-        binding.bottomControlsGroup.visibility = View.VISIBLE
     }
 
     private val hideUiForSeekRunnable = Runnable {
@@ -162,9 +119,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
                 binding.middleControlsGroup.startAnimation(fadeAnimation)
                 binding.middleControlsGroup.visibility = View.VISIBLE
-
-                binding.bottomControlsGroup.startAnimation(fadeAnimation)
-                binding.bottomControlsGroup.visibility = View.VISIBLE
             }
             showControls = false
         } else {
@@ -186,15 +140,13 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         if (!(
                 binding.topControlsGroup.visibility == View.INVISIBLE &&
-                    binding.middleControlsGroup.visibility == INVISIBLE &&
-                    binding.bottomControlsGroup.visibility == INVISIBLE
+                    binding.middleControlsGroup.visibility == INVISIBLE
                 )
         ) {
             wasPausedBeforeSeeking = player.paused!!
             showControls = binding.unlockedView.isVisible
             binding.topControlsGroup.visibility = View.INVISIBLE
             binding.middleControlsGroup.visibility = View.INVISIBLE
-            binding.bottomControlsGroup.visibility = View.INVISIBLE
             player.paused = true
             animationHandler.removeCallbacks(volumeViewRunnable)
             animationHandler.removeCallbacks(brightnessViewRunnable)
@@ -262,7 +214,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
             activity.viewModel.onSecondReached(position, duration)
         }
-        seekbar.updateSeekbar(value = position.toFloat())
     }
 
     @SuppressLint("SetTextI18n")
@@ -270,12 +221,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (!playerPreferences.invertedDurationTxt().get() && player.duration != null) {
             binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
-
-        seekbar.updateSeekbar(duration = duration.toFloat())
-    }
-
-    internal fun updateBufferPosition(bufferPosition: Int) {
-        seekbar.updateSeekbar(readAheadValue = bufferPosition.toFloat())
     }
 
     internal fun showAndFadeControls() {

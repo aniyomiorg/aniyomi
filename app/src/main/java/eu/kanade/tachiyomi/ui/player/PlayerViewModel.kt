@@ -721,8 +721,16 @@ class PlayerViewModel @JvmOverloads constructor(
         mutableState.update { it.copy(skipIntroText = text) }
     }
 
+    fun updatePlayerTime(position: Long? = null, duration: Long? = null, readAhead: Long? = null) {
+        val pos = position ?: state.value.timeData.position
+        val dur = duration ?: state.value.timeData.duration
+        val rea = readAhead ?: state.value.timeData.readAhead
+        mutableState.update { it.copy(timeData = TimeData(pos, dur, rea)) }
+    }
+
     @Immutable
     data class State(
+        val timeData: TimeData = TimeData(0L, 0L, 0L),
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
         val anime: Anime? = null,
@@ -734,6 +742,8 @@ class PlayerViewModel @JvmOverloads constructor(
         val videoChapters: List<MPVView.Chapter> = emptyList(),
         val skipIntroText: String = "",
     )
+
+    class TimeData(val position: Long, val duration: Long, val readAhead: Long)
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())
