@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
@@ -72,6 +73,41 @@ fun BottomPlayerControls(
     }
 
 
+
+    fun setViewMode() {
+        viewModel.updatePlayerInformation(AspectState.mode.stringRes)
+        var aspect = "-1"
+        var pan = "1.0"
+        when (AspectState.mode) {
+            AspectState.CROP -> {
+                pan = "1.0"
+            }
+            AspectState.FIT -> {
+                pan = "0.0"
+            }
+            AspectState.STRETCH -> {
+                aspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+                pan = "0.0"
+            }
+            AspectState.CUSTOM -> {
+                aspect = MPVLib.getPropertyString("video-aspect-override")
+            }
+        }
+
+        MPVLib.setPropertyString("video-aspect-override", aspect)
+        MPVLib.setPropertyString("panscan", pan)
+        preferences.aspectState().set(AspectState.mode)
+    }
+
+    fun cycleViewMode() {
+        AspectState.mode = when (AspectState.mode) {
+            AspectState.FIT -> AspectState.CROP
+            AspectState.CROP -> AspectState.STRETCH
+            else -> AspectState.FIT
+        }
+        setViewMode()
+    }
+
     BoxWithConstraints(
         contentAlignment = Alignment.BottomStart,
         modifier = modifier.padding(all = 10.dp)
@@ -81,8 +117,8 @@ fun BottomPlayerControls(
 
                 // Bottom - Left Controls
                 PlayerRow {
-                    PlayerIcon(Icons.Outlined.Lock) { activity.playerControls.lockControls(true) }
-                    PlayerIcon(Icons.Outlined.ScreenRotation) { activity.rotatePlayer() }
+                    PlayerIcon(icon = Icons.Outlined.Lock) { viewModel.updateSeekState(SeekState.LOCKED) }
+                    PlayerIcon(icon = Icons.Outlined.ScreenRotation) { activity.rotatePlayer() }
                     PlayerTextButton(
                         text = stringResource(
                             id = R.string.ui_speed,
@@ -101,9 +137,9 @@ fun BottomPlayerControls(
                         onLongClick = activity.viewModel::showSkipIntroLength,
                     )
 
-                    PlayerIcon(Icons.Outlined.Fullscreen) { activity.playerControls.cycleViewMode() }
+                    PlayerIcon(icon = Icons.Outlined.Fullscreen) { cycleViewMode() }
 
-                    if (includePip) PlayerIcon(Icons.Outlined.PictureInPictureAlt) { activity.pip.start() }
+                    if (includePip) PlayerIcon(icon = Icons.Outlined.PictureInPictureAlt) { activity.pip.start() }
                 }
             }
 

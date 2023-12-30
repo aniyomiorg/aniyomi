@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.net.Uri
-import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
@@ -30,6 +30,7 @@ import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
@@ -70,6 +71,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
 import java.util.Date
+import tachiyomi.i18n.MR
 
 class PlayerViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
@@ -342,7 +344,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Called every time a second is reached in the player. Used to mark the flag of episode being
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
-    fun onSecondReached(position: Int, duration: Int) {
+    fun onSecondReached(position: Long, duration: Long) {
         if (state.value.isLoadingEpisode) return
         val currentEp = currentEpisode ?: return
         if (episodeId == -1L) return
@@ -721,16 +723,27 @@ class PlayerViewModel @JvmOverloads constructor(
         mutableState.update { it.copy(skipIntroText = text) }
     }
 
-    fun updatePlayerTime(position: Long? = null, duration: Long? = null, readAhead: Long? = null) {
-        val pos = position ?: state.value.timeData.position
-        val dur = duration ?: state.value.timeData.duration
-        val rea = readAhead ?: state.value.timeData.readAhead
-        mutableState.update { it.copy(timeData = TimeData(pos, dur, rea)) }
+    fun updatePlayerInformation(stringResource: StringResource) {
+        mutableState.update { it.copy(playerInformation = stringResource) }
+    }
+
+    fun updateSeekState(seekState: SeekState) {
+        mutableState.update { it.copy(seekState = seekState) }
+    }
+
+    fun updatePlayerTime(paused: Boolean? = null, position: Long? = null, duration: Long? = null, readAhead: Long? = null) {
+        with(state.value.timeData) {
+            val pause = paused ?: this.paused
+            val pos = position ?: this.position
+            val dur = duration ?: this.duration
+            val rea = readAhead ?: this.readAhead
+            mutableState.update { it.copy(timeData = TimeData(pause, pos, dur, rea)) }
+        }
     }
 
     @Immutable
     data class State(
-        val timeData: TimeData = TimeData(0L, 0L, 0L),
+        val timeData: TimeData = TimeData(),
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
         val anime: Anime? = null,
@@ -741,9 +754,13 @@ class PlayerViewModel @JvmOverloads constructor(
         val sheet: Sheet? = null,
         val videoChapters: List<MPVView.Chapter> = emptyList(),
         val skipIntroText: String = "",
+        val playerInformation: StringResource = MR.strings.enable_auto_play,
+        val seekState: SeekState = SeekState.NONE,
     )
 
-    class TimeData(val position: Long, val duration: Long, val readAhead: Long)
+    class TimeData(val paused: Boolean, val position: Long, val duration: Long, val readAhead: Long) {
+        constructor() : this(false,0L, 0L, 0L)
+    }
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())

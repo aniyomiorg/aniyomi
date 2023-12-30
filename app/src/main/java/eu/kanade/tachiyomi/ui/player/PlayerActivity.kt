@@ -516,6 +516,8 @@ class PlayerActivity : BaseActivity() {
         }
 
         binding.controlsRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+            viewModel.onSecondReached(state.timeData.position, state.timeData.duration)
             PlayerControls(activity = this)
         }
 
@@ -543,7 +545,6 @@ class PlayerActivity : BaseActivity() {
         } else {
             playerControls.showAndFadeControls()
         }
-        playerControls.toggleAutoplay(playerPreferences.autoplayEnabled().get())
     }
 
     private fun setupPlayerMPV() {
@@ -805,8 +806,6 @@ class PlayerActivity : BaseActivity() {
         } else {
             playerPreferences.aspectState().get()
         }
-
-        playerControls.setViewMode(showText = false)
     }
 
     private fun pauseForDialogSheet(fadeControls: Boolean = false): () -> Unit {
@@ -1006,7 +1005,6 @@ class PlayerActivity : BaseActivity() {
     internal fun showLoadingIndicator(visible: Boolean) {
         viewModel.viewModelScope.launchUI {
             binding.loadingIndicator.isVisible = visible
-            playerControls.binding.playBtn.isVisible = !visible
         }
     }
 
@@ -1035,27 +1033,6 @@ class PlayerActivity : BaseActivity() {
     internal fun doubleTapPlayPause() {
         animationHandler.removeCallbacks(doubleTapPlayPauseRunnable)
         playerControls.playPause()
-
-        if (!playerControls.binding.unlockedView.isVisible) {
-            when {
-                player.paused!! -> {
-                    binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp)
-                }
-
-                !player.paused!! -> {
-                    binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp)
-                }
-            }
-
-            AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
-                binding.playPauseView.startAnimation(fadeAnimation)
-                binding.playPauseView.visibility = View.VISIBLE
-            }
-
-            animationHandler.postDelayed(doubleTapPlayPauseRunnable, 500L)
-        } else {
-            binding.playPauseView.visibility = View.GONE
-        }
     }
 
     private lateinit var doubleTapBg: ImageView
@@ -1350,10 +1327,7 @@ class PlayerActivity : BaseActivity() {
     internal fun refreshUi() {
         viewModel.viewModelScope.launchUI {
             setVisibilities()
-            player.timePos?.let { playerControls.updatePlaybackPos(it) }
-            player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
-            playerControls.updatePlaylistButtons()
             player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
             viewModel.updateSkipIntroText(
                 getString(
@@ -1384,8 +1358,6 @@ class PlayerActivity : BaseActivity() {
 
     private fun updatePlaybackStatus(paused: Boolean) {
         if (pip.supportedAndEnabled && PipState.mode == PipState.ON) pip.update(!paused)
-        val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
-        playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -1472,7 +1444,6 @@ class PlayerActivity : BaseActivity() {
                             episode.last_second_seen
                         }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
-                    playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
             } else {
                 player.timePos?.let {
@@ -1802,6 +1773,7 @@ class PlayerActivity : BaseActivity() {
                     setAudioFocus(value)
                     updatePlaybackStatus(value)
                     updatePlaybackState(pause = true)
+                    viewModel.updatePlayerTime(paused = value)
                 }
             }
             "eof-reached" -> endFile(value)

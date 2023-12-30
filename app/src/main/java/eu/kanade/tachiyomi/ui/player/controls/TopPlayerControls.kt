@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.MoreVert
@@ -37,27 +37,37 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
 fun TopPlayerControls(
     activity: PlayerActivity,
+    modifier: Modifier = Modifier,
 ) {
     val viewModel = activity.viewModel
     val state by viewModel.state.collectAsState()
 
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
 
+    fun toggleAutoplay(autoplay: Boolean) {
+        with(activity.playerPreferences.autoplayEnabled()){
+            this.set(autoplay)
+            val playerInformation = if (this.get()) MR.strings.enable_auto_play else MR.strings.disable_auto_play
+            viewModel.updatePlayerInformation(playerInformation)
+        }
+
+    }
+
     Box(
         contentAlignment = Alignment.TopStart,
-        modifier = Modifier.padding(all = 10.dp)
+        modifier = modifier.padding(all = 10.dp)
     ) {
         SecondaryTopControlsLayout(isPortrait) {
 
             PlayerRow {
-                @Suppress("DEPRECATION")
-                PlayerIcon(Icons.Outlined.ArrowBack) { activity.onBackPressed() }
+                PlayerIcon(icon = Icons.AutoMirrored.Outlined.ArrowBack, onClick = activity::onBackPressed)
 
                 PlayerRow(modifier = Modifier.clickable { viewModel.showEpisodeList() }) {
                     Column(Modifier.padding(horizontal = 10.dp)) {
@@ -94,17 +104,17 @@ fun TopPlayerControls(
             ) {
                 AutoplaySwitch(
                     checked = activity.playerPreferences.autoplayEnabled().collectAsState(),
-                    onClick = activity.playerControls::toggleAutoplay,
+                    onClick = ::toggleAutoplay,
                 )
 
                 if (state.videoChapters.isNotEmpty()) {
-                    PlayerIcon(Icons.Outlined.AutoStories) {
+                    PlayerIcon(icon = Icons.Outlined.AutoStories) {
                         viewModel.showVideoChapters()
                     }
                 }
 
-                PlayerIcon(Icons.Outlined.VideoSettings) { viewModel.showStreamsCatalog() }
-                PlayerIcon(Icons.Outlined.MoreVert) { viewModel.showPlayerSettings() }
+                PlayerIcon(icon = Icons.Outlined.VideoSettings) { viewModel.showStreamsCatalog() }
+                PlayerIcon(icon = Icons.Outlined.MoreVert) { viewModel.showPlayerSettings() }
 
             }
         }
@@ -116,7 +126,6 @@ private fun SecondaryTopControlsLayout(
     isPortrait: Boolean,
     content: @Composable () -> Unit
 ) {
-
     if (isPortrait) {
         Column { content() }
     } else {
