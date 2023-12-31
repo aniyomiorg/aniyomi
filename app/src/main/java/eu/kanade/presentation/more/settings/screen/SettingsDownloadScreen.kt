@@ -44,11 +44,30 @@ object SettingsDownloadScreen : SearchableSettings {
 
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+/*
+ <string name="multi_thread_download">Multi-threads download</string>
+    <string name="multi_thread_download_summary">Enable downloading using multiple threads</string>
+    <!--    multi_thread_download_threads_number-->
+    <string name="multi_thread_download_threads_number">Threads count</string>
+    <string name="multi_thread_download_threads_number_summary">Number of threads to use for downloading, might get your ip blocked if too high, usually 4 is a good number to avoid heavy load on source server</string>
 
+ */
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(MR.strings.connected_to_wifi),
+            ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = downloadPreferences.multithreadingDownload(),
+                title = stringResource(MR.strings.multi_thread_download),
+                subtitle = stringResource(MR.strings.multi_thread_download_summary),
+            ),
+
+            Preference.PreferenceItem.ListPreference(
+                pref = downloadPreferences.numberOfThreads(),
+                title = stringResource(MR.strings.multi_thread_download_threads_number),
+                    subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
+                entries = (1..32).associateWith { it.toString() },
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
