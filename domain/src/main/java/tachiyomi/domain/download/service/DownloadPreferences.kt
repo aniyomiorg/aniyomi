@@ -65,7 +65,7 @@ class DownloadPreferences(
     )
 
     fun numberOfDownloads() = preferenceStore.getInt("download_slots", 1)
-    fun multithreadingDownload() = preferenceStore.getBoolean("multi_part_download", true)
+    fun multithreadingDownload() = preferenceStore.getBoolean("multi_part_download", false)
 
-    fun numberOfThreads() = preferenceStore.getInt("download_threads", 32)
+    fun numberOfThreads() = preferenceStore.getInt("download_threads", 4)
 }
