@@ -398,37 +398,37 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     suspend fun getVideoChunk(video: Video, start: Long, end: Long, listener: ProgressListener): Response {
         val animeDownloadClient = client.newBuilder()
             .callTimeout(30, TimeUnit.MINUTES)
-            .build()
+            .build();
 
         return animeDownloadClient.newCachelessCallWithProgress(chunkRequest(video, start, end), listener)
-            .awaitSuccess()
+            .awaitSuccess();
     }
 
     private fun chunkRequest(video: Video, start: Long, end: Long): Request {
-        val headers = video.headers ?: headers
+        val headers = video.headers ?: headers;
         val newHeaders = if (end - start > 0L) {
-            Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build()
+            Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build();
         } else {
 //            logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
-            null
+            null;
         }
-        return GET(video.videoUrl!!, newHeaders ?: headers)
+        return GET(video.videoUrl!!, newHeaders ?: headers);
     }
 
-    fun getVideoSize(video: Video, tries: Int): Long {
+   suspend fun getVideoSize(video: Video, tries: Int): Long {
         val animeDownloadClient = client.newBuilder()
             .callTimeout(30, TimeUnit.MINUTES)
-            .build()
-        val headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build()
-        val request = GET(video.videoUrl!!, headers)
-        val response = animeDownloadClient.newCall(request).execute()
+            .build();
+        val headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build();
+        val request = GET(video.videoUrl!!, headers);
+        val response = animeDownloadClient.newCall(request).awaitSuccess();
         // parse the response headers to get the size of the video, in particular the content-range header
-        val contentRange = response.header("Content-Range")
+        val contentRange = response.header("Content-Range");
         if (contentRange != null) {
-            return contentRange.split("/")[1].toLong()
+            return contentRange.split("/")[1].toLong();
         }
         if (tries > 0) {
-            return getVideoSize(video, tries - 1)
+            return getVideoSize(video, tries - 1);
         }
 //        logcat(LogPriority.ERROR) { "Error: Content-Range header not found and exhausted tries" }
 //        logcat { "Response headers: ${response.headers}" }
