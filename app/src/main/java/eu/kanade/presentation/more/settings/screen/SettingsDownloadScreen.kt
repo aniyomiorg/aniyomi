@@ -57,6 +57,19 @@ object SettingsDownloadScreen : SearchableSettings {
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(MR.strings.connected_to_wifi),
             ),
+            //I'm oblivious to how translations resources work, so I'm just gonna leave this here for now
+            Preference.PreferenceItem.SwitchPreference(
+                pref = downloadPreferences.multithreadingDownload(),
+                title = "Multi-threads download",
+                subtitle = "Enable downloading using multiple threads"
+            ),
+
+            Preference.PreferenceItem.ListPreference(
+                pref = downloadPreferences.numberOfThreads(),
+                title = "Threads count",
+                    subtitle = "Number of threads to use for downloading, might get your ip blocked if too high, usually 4 is a good number to avoid heavy load on source servers",
+                entries = (1..32).associateWith { it.toString() },
+            ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.multithreadingDownload(),
                 title = stringResource(MR.strings.multi_thread_download),
