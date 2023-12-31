@@ -409,19 +409,18 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         val newHeaders = if (end - start > 0L) {
             Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build()
         } else {
-//            logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
             null
         }
         return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 
-    fun getVideoSize(video: Video, tries: Int): Long {
+    suspend fun getVideoSize(video: Video, tries: Int): Long {
         val animeDownloadClient = client.newBuilder()
             .callTimeout(30, TimeUnit.MINUTES)
             .build()
         val headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build()
         val request = GET(video.videoUrl!!, headers)
-        val response = animeDownloadClient.newCall(request).execute()
+        val response = animeDownloadClient.newCall(request).awaitSuccess()
         // parse the response headers to get the size of the video, in particular the content-range header
         val contentRange = response.header("Content-Range")
         if (contentRange != null) {
@@ -430,12 +429,8 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         if (tries > 0) {
             return getVideoSize(video, tries - 1)
         }
-//        logcat(LogPriority.ERROR) { "Error: Content-Range header not found and exhausted tries" }
-//        logcat { "Response headers: ${response.headers}" }
-//        logcat { "Request headers: ${request.headers}" }
         return -1L
     }
-
 
     /**
      * Returns the request for getting the source image. Override only if it's needed to override
