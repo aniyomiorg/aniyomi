@@ -409,18 +409,19 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         val newHeaders = if (end - start > 0L) {
             Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build()
         } else {
+//            logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
             null
         }
         return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 
-    suspend fun getVideoSize(video: Video, tries: Int): Long {
+    fun getVideoSize(video: Video, tries: Int): Long {
         val animeDownloadClient = client.newBuilder()
             .callTimeout(30, TimeUnit.MINUTES)
             .build()
         val headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build()
         val request = GET(video.videoUrl!!, headers)
-        val response = animeDownloadClient.newCall(request).awaitSuccess()
+        val response = animeDownloadClient.newCall(request).execute()
         // parse the response headers to get the size of the video, in particular the content-range header
         val contentRange = response.header("Content-Range")
         if (contentRange != null) {
