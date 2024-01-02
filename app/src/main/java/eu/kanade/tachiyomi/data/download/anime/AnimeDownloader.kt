@@ -509,14 +509,15 @@ class AnimeDownloader(
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         var tries = 0
-        var forceSequential = false;
+        var forceSequential = false
+
         // Define a suspend function to encapsulate the retry logic
         suspend fun attemptDownload(): UniFile {
             return try {
                 newDownload(video, download, tmpDir, filename, forceSequential)
             } catch (e: Exception) {
                 // If the download failed, try again in sequential mode
-                forceSequential = true;
+                forceSequential = true
                 if (tries >= 2) throw e
                 tries++
                 delay((2 shl (tries - 1)) * 1000L)
@@ -661,15 +662,15 @@ class AnimeDownloader(
 
     private suspend fun multiPartDownload(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): UniFile {
         //first we fetch the size of the video
-        val size: Long = download.source.getVideoSize(video, 3);
+        val size: Long = download.source.getVideoSize(video, 3)
         if (size == -1L) {
             throw Exception("Could not get video size")
         }
-        var nParts = preferences.numberOfThreads().get();
-        var partSize = size.div(nParts);
+        var nParts = preferences.numberOfThreads().get()
+        var partSize = size.div(nParts)
         if (partSize < 1024) {
-            nParts = size.div(1024).toInt();
-            partSize = size.div(nParts);
+            nParts = size.div(1024).toInt()
+            partSize = size.div(nParts)
         }
         if (partSize < 1024) {
             logcat(LogPriority.WARN) {
@@ -696,7 +697,7 @@ class AnimeDownloader(
 
         //clear the tmp dir
         tmpDir.listFiles()?.forEach { it.delete() }
-        var failed = false;
+        var failed = false
         val totalProgresses = mutableListOf<Int>()
         totalProgresses.addAll(List(nParts) { 0 })
 
@@ -730,7 +731,7 @@ class AnimeDownloader(
                         }
 
                     } catch (e: Exception) {
-                        failed = true;
+                        failed = true
                         throw e
                     }
                 },
@@ -748,7 +749,7 @@ class AnimeDownloader(
                 job.join()
             }
         }
-        var partFiles = (0 until nParts).toMutableList().map { i ->
+        val partFiles = (0 until nParts).toMutableList().map { i ->
             tmpDir.findFile("$filename.part$i.tmp")
                 ?: tmpDir.createFile("$filename.part$i.tmp")!!
         }.toMutableList()
@@ -756,25 +757,24 @@ class AnimeDownloader(
         val mergeSize = 10 / (nParts-1).toFloat()
         try {
             while (partFiles.size > 1) {
-                val jobs = mutableListOf<Job>();
-                val newPartFiles = mutableListOf<UniFile>();
-                val toDelete = mutableListOf<UniFile>();
+                val jobs = mutableListOf<Job>()
+                val toDelete = mutableListOf<UniFile>()
                 for (i in partFiles.indices step 2) {
-                    val partFile1 = partFiles[i];
-                    val partFile2 = partFiles.getOrNull(i + 1);
+                    val partFile1 = partFiles[i]
+                    val partFile2 = partFiles.getOrNull(i + 1)
 
                     jobs.add(
                         launchIO {
                             if (partFile2 != null) {
                                 partFile2.openInputStream().use { input2 ->
                                     partFile1.openOutputStream(true).use { output ->
-                                        input2.copyTo(output);
+                                        input2.copyTo(output)
                                     }
                                 }
-                                toDelete.add(partFile2);
-                                partFile2.delete();
-                                mergeProgress += mergeSize;
-                                video.progress = 90 + mergeProgress.toInt();
+                                toDelete.add(partFile2)
+                                partFile2.delete()
+                                mergeProgress += mergeSize
+                                video.progress = 90 + mergeProgress.toInt()
 
                             }
                         },
@@ -782,15 +782,15 @@ class AnimeDownloader(
                 }
 
 
-                jobs.joinAll();
-                partFiles.removeAll(toDelete);
+                jobs.joinAll()
+                partFiles.removeAll(toDelete)
             }
 
             val finalPartFile = partFiles.first()
             finalPartFile.renameTo("$filename.mp4")
         } catch (e: Exception) {
             logcat (LogPriority.ERROR) { e.message?: "Unknown error" }
-            failed = true;
+            failed = true
         }
 
 
@@ -804,7 +804,7 @@ class AnimeDownloader(
             }
             throw Exception("Download failed")
         }
-        val file = tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed");
+        val file = tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed")
         return file
 
 
