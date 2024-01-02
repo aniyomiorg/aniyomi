@@ -1,0 +1,40 @@
+name: PR build check
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'i18n/src/main/res/**/strings.xml'
+      - 'i18n/src/main/res/**/strings-aniyomi.xml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: adopt
+
+      - name: Build app and run unit tests
+        uses: gradle/gradle-command-action@v2
+        with:
+          arguments: ktlintCheck assembleStandardRelease testReleaseUnitTest
