@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">漫画のカテゴリー</string>
+    <string name="manga_categories">漫画のカテゴリ</string>
     <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_show_manga">項目を表示</string>
     <string name="action_display_local_badge_manga">ローカル ソース</string>
@@ -44,8 +44,8 @@
     <string name="label_anime_extensions">アニメの拡張機能</string>
     <string name="label_migration_anime">アニメを移行</string>
     <string name="pref_waiting_time_aniskip_9">9秒</string>
-    <string name="general_categories">カテゴリー</string>
-    <string name="anime_categories">アニメのカテゴリー</string>
+    <string name="general_categories">カテゴリ</string>
+    <string name="anime_categories">アニメのカテゴリ</string>
     <string name="episodes">話</string>
     <string name="label_manga_library">漫画</string>
     <string name="label_manga">漫画</string>
@@ -62,4 +62,22 @@
     <string name="pref_waiting_time_aniskip_7">7秒</string>
     <string name="chapters_episodes">章と話</string>
     <string name="label_watched_episodes">見た</string>
+    <string name="action_sort_last_seen">最終閲覧</string>
+    <string name="action_edit_anime_categories">アニメカテゴリの編集</string>
+    <string name="action_download_unread">未読の章をダウンロード</string>
+    <string name="pref_player_summary">再生操作、内部プレーヤー、外部プレーヤー</string>
+    <string name="action_display_local_badge_anime">ローカルアニメ</string>
+    <string name="pref_default_home_tab_library">スタート画面をマンガタブに設定</string>
+    <string name="label_all">すべて</string>
+    <string name="label_watched_duration">視聴時間</string>
+    <string name="action_play_internally">内部再生</string>
+    <string name="action_player_pip">ピクチャー イン ピクチャー</string>
+    <string name="default_anime_category">デフォルトのアニメカテゴリ</string>
+    <string name="pref_bottom_nav_style">下部ナビゲーションのスタイル</string>
+    <string name="action_edit_manga_categories">マンガカテゴリの編集</string>
+    <string name="action_display_show_continue_reading_button">視聴／閲覧を続けるボタン</string>
+    <string name="action_next_episode">次の章</string>
+    <string name="action_show_anime">アニメを見る</string>
+    <string name="label_category">カテゴリ</string>
+    <string name="action_start_download_externally">外部ダウンローダーを使用</string>
 </resources>
