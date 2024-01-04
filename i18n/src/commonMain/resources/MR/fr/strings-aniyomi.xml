@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">Catégories Manga</string>
-    <string name="general_categories">Catégories</string>
-    <string name="anime_categories">Catégories animés</string>
-    <string name="entries">Entrées de la bibliothèque</string>
+    <string name="manga_categories">Catégories de Manga</string>
+    <string name="general_categories">Catégories Générales</string>
+    <string name="anime_categories">Catégories d\'animés</string>
+    <string name="entries">Entrées de bibliothèque</string>
     <string name="chapters_episodes">Chapitres et épisodes</string>
     <string name="episodes">Épisodes</string>
-    <string name="backup_settings_warning">Avertissement : La sauvegarde des paramètres stocke également les mots de passe de vos pistes, ne partagez pas ce fichier de sauvegarde !</string>
+    <string name="backup_settings_warning">Avertissement : La sauvegarde des paramètres sauvegarde également les mots de passe, ne partagez pas ce fichier de sauvegarde !</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Animé</string>
     <string name="label_manga">Manga</string>
@@ -29,7 +29,7 @@
     <string name="action_mark_previous_as_seen">Marquer les précédents comme vus</string>
     <string name="action_play_internally">Lire avec le lecteur interne</string>
     <string name="action_download_unread">Télécharger les chapitres non lus</string>
-    <string name="action_download_unseen">Télécharger les épisodes inédits</string>
+    <string name="action_download_unseen">Télécharger les épisodes non-vus</string>
     <string name="action_bookmark_episode">Ajouter un marque-page</string>
     <string name="action_remove_bookmark_episode">Enlever le marque-page</string>
     <string name="action_edit_anime_categories">Modifier les catégories d\'animé</string>
@@ -49,9 +49,9 @@
     <string name="action_order_by_episode_number">Par numéro d\'épisode</string>
     <string name="action_start_download_externally">Utiliser un téléchargeur externe</string>
     <string name="action_start_download_internally">Utiliser un téléchargeur interne</string>
-    <string name="pref_player_summary">Contrôle de la progression, acteur interne, acteur externe</string>
+    <string name="pref_player_summary">Contrôle de la progression, lecteur interne, lecteur externe</string>
     <string name="pref_bottom_nav_style">Style de navigation en bas de page</string>
-    <string name="pref_update_only_completely_read">Avec des chapitres non lus</string>
+    <string name="pref_update_only_completely_read">Avec les épisode(s)/chapitre(s) non lus</string>
     <string name="pref_library_update_show_tab_badge">Afficher le nombre de messages non lus sur l\'icône des mises à jour</string>
     <string name="default_manga_category">Catégorie par défaut</string>
     <string name="default_anime_category">Catégorie d\'animé par défaut</string>
@@ -186,9 +186,9 @@
     <string name="player_aniskip_dontskip">Ne pas passer</string>
     <string name="player_aniskip_dontskip_toast">Passer dans %d secondes</string>
     <string name="player_aniskip_skip">%s passer</string>
-    <string name="pref_pip_on_exit">Passer automatiquement en mode PiP en quittant le lecteur</string>
-    <string name="pref_library_manga_columns">Nombre de mangas par lignes</string>
-    <string name="pref_library_anime_columns">Nombre d\'animés par lignes</string>
+    <string name="pref_pip_on_exit">Passer automatiquement en mode PiP (Incrustation Vidéo) en quittant le lecteur</string>
+    <string name="pref_library_manga_columns">Nombre de mangas par rangées</string>
+    <string name="pref_library_anime_columns">Nombre d\'animés par rangées</string>
     <string name="pref_backup_flags_summary">Quelle information inclure dans le fichier de sauvegarde</string>
     <string name="pref_waiting_time_aniskip_8">8 secondes</string>
     <string name="pref_enable_aniskip">Activer AniSkip</string>
@@ -207,7 +207,7 @@
     <string name="label_manga_extensions">Extensions des mangas</string>
     <string name="label_migration_anime">Migrer les animés</string>
     <string name="action_play_externally">Lire avec le lecteur externe</string>
-    <string name="pref_player_hide_controls">Cacher les contrôles à l\'ouverture du lecteur</string>
+    <string name="pref_player_hide_controls">Cacher les contrôles d\'utilisateur à l\'ouverture du lecteur</string>
     <string name="pref_waiting_time_aniskip_5">5 secondes</string>
     <string name="pref_waiting_time_aniskip_6">6 secondes</string>
     <string name="pref_backup_flags">Options de sauvegarde</string>
@@ -228,16 +228,27 @@
     <string name="pref_intro_length">Durée des intros à sauter</string>
     <string name="pref_skip_length">Durée de saut par double tap</string>
     <string name="pref_remember_brightness">Appliquer la dernière luminosité utilisée</string>
-    <string name="pref_pip_episode_toasts">Afficher les toasts d’épisode lors du passage d\'un épisode à l\'autre en mode PiP</string>
-    <string name="pref_player_fullscreen">Ignorer les entailles en plein écran</string>
+    <string name="pref_pip_episode_toasts">Afficher les toasts d’épisode lors du passage d\'un épisode à l\'autre en mode incrustation Vidéo.</string>
+    <string name="pref_player_fullscreen">Montrer le contenu en découpe d\'affichage</string>
     <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
     <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
     <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
-    <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
-    <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
+    <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions d\'Aniyomi.</string>
+    <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP (Incrustation Vidéo)</string>
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
     <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>
     <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
+    <string name="pref_hide_in_manga_library_items">Cacher les entrées de manga déjà incluses dans la bibliothèque</string>
+    <string name="unlock_app_title">Débloquer Aniyomi</string>
+    <string name="pref_media_control_chapter_seeking_summary">Si auqun chapitre n\'est trouvé, quand activé, l\'utilisation du \"suivant\" activera le bouton \"sauter l\'intro\".</string>
+    <string name="pref_media_control_chapter_seeking">Rechercher les chapitres avec des contrôles média</string>
+    <string name="label_all">tout</string>
+    <string name="pref_pip_replace_with_previous">Remplace l\'option \"Passer 10 secondes\" avec l\'épisode précédent.</string>
+    <string name="label_recent_anime_updates">Mise à jour d\'animé</string>
+    <string name="go_to_after_opening">A sauté l\'ouverture</string>
+    <string name="go_to_next_chapter">Prochain chapitre</string>
+    <string name="go_to_previous_chapter">Chapitre précédent</string>
+    <string name="label_category">Catégorie</string>
 </resources>
