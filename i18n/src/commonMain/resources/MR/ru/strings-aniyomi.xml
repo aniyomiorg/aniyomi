@@ -324,4 +324,5 @@
     <string name="enable_volume_brightness_gestures">Включить Жесты Громкости и Яркости</string>
     <string name="video_custom_screen">Пользовательское соотношение сторон</string>
     <string name="plan_to_watch">Запланировано</string>
+    <string name="label_watched_duration">Длительность просмотра</string>
 </resources>
