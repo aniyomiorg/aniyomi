@@ -37,8 +37,8 @@
     <string name="download_notifier_download_paused_chapters">Baixada pausada</string>
     <string name="channel_new_chapters_episodes">Novetats de capítols</string>
     <string name="pref_remove_exclude_categories_anime">Categories d\'anime excloses</string>
-    <string name="action_global_manga_search">Cerca de Manga Global</string>
-    <string name="action_global_anime_search">Cerca de Anime Global</string>
+    <string name="action_global_manga_search">Cerca global de Manga</string>
+    <string name="action_global_anime_search">Cerca global d\'Anime</string>
     <string name="action_edit_manga_categories">Editar categories de Manga</string>
     <string name="pref_search_pinned_manga_sources_only">Inclou només fonts de manga anclades a la recerca global</string>
     <string name="pref_search_pinned_anime_sources_only">Incloure només fonts d\'anime anclades a la recerca global</string>
@@ -58,9 +58,9 @@
     <string name="episodes">Episodis</string>
     <string name="action_sort_last_anime_update">Darrera actualització d\'Anime</string>
     <string name="action_mark_previous_as_seen">Marcar previ com llegit</string>
-    <string name="action_download_unseen">Descarregar episodis no visibles</string>
+    <string name="action_download_unseen">Descarregar episodis no vistos</string>
     <string name="action_edit_anime_categories">Editar categories d\'anime</string>
-    <string name="action_play_internally">Jugar internament</string>
+    <string name="action_play_internally">Reproducció interna</string>
     <string name="action_start_download_externally">Utilitza descarregador extern</string>
     <string name="action_next_episode">Episodi següent</string>
     <string name="action_play">Inici</string>
@@ -69,19 +69,19 @@
     <string name="chapters_episodes">Capítols i episodis</string>
     <string name="label_watched_duration">Duració de reproducció</string>
     <string name="action_sort_episode_fetch_date">Data d\'obtenció de l\'episodi</string>
-    <string name="action_mark_as_unseen">Marcar com no mirat</string>
+    <string name="action_mark_as_unseen">Marcar com no vist</string>
     <string name="action_display_download_badge_anime">Episodis descarregats</string>
     <string name="pref_player_summary">Control de progrés, reproductor intern, reproductor extern</string>
     <string name="action_filter_unseen">No llegit</string>
     <string name="action_sort_unseen_count">Conta no llegida</string>
-    <string name="action_view_episodes">Mirar episodis</string>
+    <string name="action_view_episodes">Veure episodis</string>
     <string name="action_player_pip">Mode PiP</string>
     <string name="action_sort_last_seen">Últim vist</string>
     <string name="action_sort_latest_episode">Últim episodi</string>
-    <string name="action_play_externally">Jugar externament</string>
+    <string name="action_play_externally">Reproducció externa</string>
     <string name="action_start_download_internally">Utilitza descarregador intern</string>
     <string name="label_anime">Anime</string>
-    <string name="label_watched_episodes">Reproduït</string>
+    <string name="label_watched_episodes">Visualitzat</string>
     <string name="action_sort_total_episodes">Total d\'episodis</string>
     <string name="action_mark_as_seen">Marcar com llegit</string>
     <string name="action_bookmark_episode">Marca de llibre de l\'episodi</string>
@@ -242,4 +242,8 @@
     <string name="local_manga_source">Manga en font local</string>
     <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
     <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
+    <string name="label_category">Categoria</string>
+    <string name="label_all">Tot</string>
+    <string name="unlock_app_title">Desbloqueja Aniyomi</string>
+    <string name="action_hide">Amagar</string>
 </resources>
