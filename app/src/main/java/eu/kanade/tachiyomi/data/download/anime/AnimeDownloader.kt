@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
@@ -743,11 +742,10 @@ class AnimeDownloader(
                     }
                 }
 
-            // create a job for each part
-
             partJobList.add(
-                launchIO {
+                scope.launchIO {
                     try {
+                        if (failed) throw Exception("Download failed")
                         val response = download.source.getVideoChunk(video, range[0], range[1], listener)
                         val file =
                             tmpDir.findFile("$filename.part${rangeList.indexOf(range)}.tmp")
@@ -768,59 +766,40 @@ class AnimeDownloader(
             )
         }
 
-        // wait for all parts to be downloaded
         for (job in partJobList) {
-            if (failed) {
-                job.cancel()
-            } else {
-                job.join()
-            }
+            job.join()
         }
         val partFiles =
             (0 until nParts).toMutableList().map { i ->
                 tmpDir.findFile("$filename.part$i.tmp")
                     ?: tmpDir.createFile("$filename.part$i.tmp")!!
             }.toMutableList()
-        var mergeProgress = 0f
         val mergeSize = 10 / (nParts - 1).toFloat()
         try {
-            while (partFiles.size > 1) {
-                val jobs = mutableListOf<Job>()
-                val toDelete = mutableListOf<UniFile>()
-                for (i in partFiles.indices step 2) {
-                    val partFile1 = partFiles[i]
-                    val partFile2 = partFiles.getOrNull(i + 1)
-
-                    jobs.add(
-                        launchIO {
-                            if (partFile2 != null) {
-                                partFile2.openInputStream().use { input2 ->
-                                    partFile1.openOutputStream(true).use { output ->
-                                        input2.copyTo(output)
-                                    }
-                                }
-                                toDelete.add(partFile2)
-                                partFile2.delete()
-                                mergeProgress += mergeSize
-                                video.progress = 90 + mergeProgress.toInt()
-                            }
-                        },
-                    )
-                }
-
-                jobs.joinAll()
-                partFiles.removeAll(toDelete)
-            }
-
             val finalPartFile = partFiles.first()
+            finalPartFile.openOutputStream().use { output ->
+                for (i in 1 until nParts) {
+                    val partFile = partFiles[i]
+                    partFile.openInputStream().use { input ->
+                        output.write(input.readBytes())
+                    }
+                    video.progress = 90 + (mergeSize * (i)).toInt()
+                }
+            }
             finalPartFile.renameTo("$filename.mp4")
         } catch (e: Exception) {
             logcat(LogPriority.ERROR) { e.message ?: "Unknown error" }
             failed = true
         }
 
+        for (i in 0 until nParts) {
+            val part =
+                tmpDir.findFile("$filename.part$i.tmp")
+                    ?: continue
+            part.delete()
+        }
+
         if (failed) {
-            // delete all parts
             for (i in 0 until nParts) {
                 val part =
                     tmpDir.findFile("$filename.part$i.tmp")
@@ -829,8 +808,7 @@ class AnimeDownloader(
             }
             throw Exception("Download failed")
         }
-        val file = tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed")
-        return file
+        return tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed")
     }
 
     private suspend fun newDownload(
@@ -845,15 +823,18 @@ class AnimeDownloader(
             delay(1000) // This is a pause check delay, adjust the timing as needed.
         }
 
-        if (isHls(video) || isMpd(video)) {
-            return ffmpegDownload(video, download, tmpDir, filename)
-        } else {
-            if (preferences.multithreadingDownload().get() && !forceSequential) {
+        when {
+            isHls(video) || isMpd(video) -> {
+                return ffmpegDownload(video, download, tmpDir, filename)
+            }
+
+            preferences.multithreadingDownload().get() && !forceSequential -> {
                 return multiPartDownload(video, download, tmpDir, filename)
-            } else {
+            }
+
+            else -> {
                 val response = download.source.getVideo(video)
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
-
                 // Write to file with pause/resume capability
                 try {
                     response.body.source().use { source ->
@@ -867,7 +848,6 @@ class AnimeDownloader(
                                 while (isPaused) {
                                     delay(1000) // Wait for 1 second before checking again
                                 }
-
                                 // Write the bytes to the file
                                 output.write(bytesRead)
                                 totalBytesRead += bytesRead
@@ -876,7 +856,6 @@ class AnimeDownloader(
                             }
                         }
                     }
-
                     // After download is complete, rename the file to its final name
                     file.renameTo("$filename.mp4")
                     return file
