@@ -37,7 +37,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.sourcePreferences
-import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesFragment
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -66,7 +65,7 @@ class MangaSourcePreferencesScreen(val sourceId: Long) : Screen() {
                     .fillMaxSize()
                     .padding(contentPadding),
             ) {
-                add(it, SourcePreferencesFragment.getInstance(sourceId), null)
+                add(it, MangaSourcePreferencesFragment.getInstance(sourceId), null)
             }
         }
     }
