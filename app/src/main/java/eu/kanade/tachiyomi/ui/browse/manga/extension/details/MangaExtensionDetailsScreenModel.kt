@@ -30,7 +30,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 private const val URL_EXTENSION_COMMITS =
-    "https://github.com/tachiyomiorg/tachiyomi-extensions/commits/master"
+    "https://github.com/tachiyomiorg/extensions/commits/master"
 
 class MangaExtensionDetailsScreenModel(
     pkgName: String,

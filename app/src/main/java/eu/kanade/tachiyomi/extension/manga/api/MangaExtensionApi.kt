@@ -44,7 +44,7 @@ internal class MangaExtensionApi {
 
             // Sanity check - a small number of extensions probably means something broke
             // with the repo generator
-            if (extensions.size < 50) {
+            if (extensions.isEmpty()) {
                 throw Exception()
             }
 
