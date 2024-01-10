@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.controls
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -7,39 +9,61 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.commonClickable
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
+import kotlinx.coroutines.delay
 
 @Composable
 fun PlayerControls(
     activity: PlayerActivity,
+    modifier: Modifier = Modifier,
 ) {
+
+    var timer by remember { mutableLongStateOf(3500L) }
     val state by activity.viewModel.state.collectAsState()
-    if(state.seekState == SeekState.LOCKED) {
-        LockedPlayerControls { activity.viewModel.updateSeekState(SeekState.NONE) }
-    } else {
-        TopPlayerControls(activity)
-        MiddlePlayerControls(activity)
-        BottomPlayerControls(activity)
+
+    val onPlayerPressed = { timer = if (timer > 0L) 0L else 3500L }
+    val playerModifier = Modifier.pointerInput(Unit) { detectTapGestures(onPress = { onPlayerPressed() }) }
+
+    Surface(modifier = playerModifier, color = Color.Transparent) {
+        if (state.seekState == SeekState.LOCKED) {
+            LockedPlayerControls { activity.viewModel.updateSeekState(SeekState.NONE) }
+        } else {
+            if (timer > 0L) UnlockedPlayerControls(activity, playerModifier)
+        }
+    }
+
+
+    LaunchedEffect(key1 = timer, key2 = state.timeData.paused) {
+        if(timer > 0L && !state.timeData.paused) {
+            delay(500L)
+            timer -= 500L
+        }
     }
 }
 
 @Composable
-fun LockedPlayerControls(
+private fun LockedPlayerControls(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -48,6 +72,19 @@ fun LockedPlayerControls(
         modifier = modifier.padding(all = 10.dp)
     ) {
         PlayerIcon(icon = Icons.Outlined.LockOpen, onClick = onClick)
+    }
+}
+
+@SuppressLint("ComposeModifierReused")
+@Composable
+private fun UnlockedPlayerControls(
+    activity: PlayerActivity,
+    modifier: Modifier = Modifier,
+) {
+    Surface(color = Color(color = 0x70000000)) {
+        TopPlayerControls(activity)
+        MiddlePlayerControls(activity)
+        BottomPlayerControls(activity)
     }
 }
 
