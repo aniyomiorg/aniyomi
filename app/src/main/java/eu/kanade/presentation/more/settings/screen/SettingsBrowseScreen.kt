@@ -51,14 +51,22 @@ object SettingsBrowseScreen : SearchableSettings {
                     ),
                     Preference.PreferenceItem.TextPreference(
                         title = stringResource(MR.strings.label_anime_extension_repos),
-                        subtitle = pluralStringResource(MR.plurals.num_repos, animeReposCount.size, animeReposCount.size),
+                        subtitle = pluralStringResource(
+                            MR.plurals.num_repos,
+                            animeReposCount.size,
+                            animeReposCount.size,
+                        ),
                         onClick = {
                             navigator.push(AnimeExtensionReposScreen())
                         },
                     ),
                     Preference.PreferenceItem.TextPreference(
                         title = stringResource(MR.strings.label_manga_extension_repos),
-                        subtitle = pluralStringResource(MR.plurals.num_repos, mangaReposCount.size, mangaReposCount.size),
+                        subtitle = pluralStringResource(
+                            MR.plurals.num_repos,
+                            mangaReposCount.size,
+                            mangaReposCount.size,
+                        ),
                         onClick = {
                             navigator.push(MangaExtensionReposScreen())
                         },

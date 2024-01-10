@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.LocalContext
 import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlinx.collections.immutable.immutableMapOf
 import kotlinx.collections.immutable.persistentMapOf
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR

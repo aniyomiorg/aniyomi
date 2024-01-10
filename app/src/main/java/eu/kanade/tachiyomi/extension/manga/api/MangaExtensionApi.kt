@@ -1,13 +1,13 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
+import eu.kanade.domain.source.manga.interactor.OFFICIAL_REPO_BASE_URL
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
-import eu.kanade.domain.source.manga.interactor.OFFICIAL_REPO_BASE_URL
-import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess

@@ -118,7 +118,11 @@ fun SetIntervalDialog(
                         contentAlignment = Alignment.Center,
                     ) {
                         val size = DpSize(width = maxWidth / 2, height = 128.dp)
-                        val maxInterval = if (isManga) MangaFetchInterval.MAX_INTERVAL else AnimeFetchInterval.MAX_INTERVAL
+                        val maxInterval = if (isManga) {
+                            MangaFetchInterval.MAX_INTERVAL
+                        } else {
+                            AnimeFetchInterval.MAX_INTERVAL
+                        }
                         val items = (0..maxInterval)
                             .map {
                                 if (it == 0) {

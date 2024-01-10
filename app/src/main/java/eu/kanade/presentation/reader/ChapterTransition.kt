@@ -37,9 +37,9 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
-import tachiyomi.domain.items.chapter.service.calculateChapterGap
 import kotlinx.collections.immutable.persistentMapOf
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.service.calculateChapterGap
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource

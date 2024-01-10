@@ -326,14 +326,14 @@ object SettingsLibraryScreen : SearchableSettings {
                     pref = libraryPreferences.swipeChapterEndAction(),
                     title = stringResource(MR.strings.pref_chapter_swipe_end),
                     entries = persistentMapOf(
-                    LibraryPreferences.ChapterSwipeAction.Disabled to
-                        stringResource(MR.strings.disabled),
-                    LibraryPreferences.ChapterSwipeAction.ToggleBookmark to
-                        stringResource(MR.strings.action_bookmark),
-                    LibraryPreferences.ChapterSwipeAction.ToggleRead to
-                        stringResource(MR.strings.action_mark_as_read),
-                    LibraryPreferences.ChapterSwipeAction.Download to
-                        stringResource(MR.strings.action_download),
+                        LibraryPreferences.ChapterSwipeAction.Disabled to
+                            stringResource(MR.strings.disabled),
+                        LibraryPreferences.ChapterSwipeAction.ToggleBookmark to
+                            stringResource(MR.strings.action_bookmark),
+                        LibraryPreferences.ChapterSwipeAction.ToggleRead to
+                            stringResource(MR.strings.action_mark_as_read),
+                        LibraryPreferences.ChapterSwipeAction.Download to
+                            stringResource(MR.strings.action_download),
                     ),
                 ),
             ),

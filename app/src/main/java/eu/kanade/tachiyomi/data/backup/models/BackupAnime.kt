@@ -4,8 +4,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.track.anime.model.AnimeTrack
 
 @Suppress("DEPRECATION")
 @Serializable

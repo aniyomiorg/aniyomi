@@ -37,7 +37,6 @@ class SourcesBackupCreator(
     }
 }
 
-
 private fun AnimeSource.toBackupSource() =
     BackupAnimeSource(
         name = this.name,

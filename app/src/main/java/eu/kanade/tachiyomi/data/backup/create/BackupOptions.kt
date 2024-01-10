@@ -87,7 +87,7 @@ data class BackupOptions(
                 label = MR.strings.label_extensions,
                 getter = BackupOptions::extensions,
                 setter = { options, enabled -> options.copy(extensions = enabled) },
-            )
+            ),
         )
 
         fun fromBooleanArray(array: BooleanArray) = BackupOptions(
@@ -99,7 +99,7 @@ data class BackupOptions(
             appSettings = array[5],
             sourceSettings = array[6],
             privateSettings = array[7],
-            extensions = array[8]
+            extensions = array[8],
         )
     }
 

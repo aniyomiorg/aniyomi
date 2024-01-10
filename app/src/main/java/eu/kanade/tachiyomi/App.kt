@@ -56,8 +56,8 @@ import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
 import org.acra.config.httpSender
-import org.acra.data.StringFormat
 import org.acra.config.scheduler
+import org.acra.data.StringFormat
 import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
