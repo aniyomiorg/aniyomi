@@ -119,7 +119,7 @@ class AnimeStatsScreenModel(
         val loggedInTrackerIds = loggedInTrackers.map { it.id }.toHashSet()
         return libraryAnime.associate { anime ->
             val tracks = getTracks.await(anime.id)
-                .fastFilter { it.syncId in loggedInTrackerIds }
+                .fastFilter { it.trackerId in loggedInTrackerIds }
 
             anime.id to tracks
         }
@@ -160,7 +160,7 @@ class AnimeStatsScreenModel(
     }
 
     private fun get10PointScore(track: AnimeTrack): Double {
-        val tracker = trackerManager.get(track.syncId)!!
-        return tracker.animeService.get10PointScore(track)
+        val service = trackerManager.get(track.trackerId)!!
+        return service.animeService.get10PointScore(track)
     }
 }

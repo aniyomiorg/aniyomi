@@ -28,9 +28,11 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -219,7 +221,7 @@ class MangaLibraryScreenModel(
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
             val mangaTracks = trackMap
-                .mapValues { entry -> entry.value.map { it.syncId } }[item.libraryManga.id]
+                .mapValues { entry -> entry.value.map { it.trackerId } }[item.libraryManga.id]
                 .orEmpty()
 
             val isExcluded = excludedTracks.isNotEmpty() && mangaTracks.fastAny { it in excludedTracks }
@@ -259,7 +261,7 @@ class MangaLibraryScreenModel(
                     entry.value.isEmpty() -> null
                     else ->
                         entry.value
-                            .mapNotNull { trackerMap[it.syncId]?.mangaService?.get10PointScore(it) }
+                            .mapNotNull { trackerMap[it.trackerId]?.mangaService?.get10PointScore(it) }
                             .average()
                 }
             }
@@ -674,13 +676,15 @@ class MangaLibraryScreenModel(
             val common = getCommonCategories(mangaList)
             // Get indexes of the mix categories to preselect.
             val mix = getMixCategories(mangaList)
-            val preselected = categories.map {
-                when (it) {
-                    in common -> CheckboxState.State.Checked(it)
-                    in mix -> CheckboxState.TriState.Exclude(it)
-                    else -> CheckboxState.State.None(it)
+            val preselected = categories
+                .map {
+                    when (it) {
+                        in common -> CheckboxState.State.Checked(it)
+                        in mix -> CheckboxState.TriState.Exclude(it)
+                        else -> CheckboxState.State.None(it)
+                    }
                 }
-            }
+                .toImmutableList()
             mutableState.update { it.copy(dialog = Dialog.ChangeCategory(mangaList, preselected)) }
         }
     }
@@ -698,7 +702,7 @@ class MangaLibraryScreenModel(
         data object SettingsSheet : Dialog
         data class ChangeCategory(
             val manga: List<Manga>,
-            val initialSelection: List<CheckboxState<Category>>,
+            val initialSelection: ImmutableList<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteManga(val manga: List<Manga>) : Dialog
     }

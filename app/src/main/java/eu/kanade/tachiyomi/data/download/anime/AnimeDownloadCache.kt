@@ -38,6 +38,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.domain.storage.service.StoragePreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -57,7 +58,7 @@ class AnimeDownloadCache(
     private val provider: AnimeDownloadProvider = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
-    storagePreferences: StoragePreferences = Injekt.get(),
+    private val storageManager: StorageManager = Injekt.get(),
 ) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -65,7 +66,7 @@ class AnimeDownloadCache(
     private val _changes: Channel<Unit> = Channel(Channel.UNLIMITED)
     val changes = _changes.receiveAsFlow()
         .onStart { emit(Unit) }
-        .shareIn(scope, SharingStarted.Eagerly, 1)
+        .shareIn(scope, SharingStarted.Lazily, 1)
 
     /**
      * The interval after which this cache should be invalidated. 1 hour shouldn't cause major
@@ -85,10 +86,10 @@ class AnimeDownloadCache(
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
     private val diskCacheFile: File
-        get() = File(context.cacheDir, "dl_index_cache_v2")
+        get() = File(context.cacheDir, "dl_index_cache_v3")
 
     private val rootDownloadsDirLock = Mutex()
-    private var rootDownloadsDir = RootDirectory(provider.downloadsDir)
+    private var rootDownloadsDir = RootDirectory(storageManager.getDownloadsDirectory())
 
     init {
         // Attempt to read cache file
@@ -106,12 +107,8 @@ class AnimeDownloadCache(
             }
         }
 
-        storagePreferences.baseStorageDirectory().changes()
-            .drop(1)
-            .onEach {
-                rootDownloadsDir = RootDirectory(provider.downloadsDir)
-                invalidateCache()
-            }
+        storageManager.changes
+            .onEach { invalidateCache() }
             .launchIn(scope)
     }
 
@@ -301,6 +298,8 @@ class AnimeDownloadCache(
     fun invalidateCache() {
         lastRenew = 0L
         renewalJob?.cancel()
+        diskCacheFile.delete()
+        renewCache()
     }
 
     /**
@@ -317,17 +316,18 @@ class AnimeDownloadCache(
                 _isInitializing.emit(true)
             }
 
-            var sources = getSources()
-
             // Try to wait until extensions and sources have loaded
-            withTimeoutOrNull(30.seconds) {
-                while (!extensionManager.isInitialized) {
-                    delay(2.seconds)
-                }
+            var sources = getSources()
+            if (sources.isEmpty()) {
+                withTimeoutOrNull(30.seconds) {
+                    while (!extensionManager.isInitialized) {
+                        delay(2.seconds)
+                    }
 
-                while (sources.isEmpty()) {
-                    delay(2.seconds)
-                    sources = getSources()
+                    while (extensionManager.availableExtensionsFlow.value.isNotEmpty() && sources.isEmpty()) {
+                        delay(2.seconds)
+                        sources = getSources()
+                    }
                 }
             }
 
@@ -335,49 +335,53 @@ class AnimeDownloadCache(
                 provider.getSourceDirName(it).lowercase() to it.id
             }
 
-            val sourceDirs = rootDownloadsDir.dir?.listFiles().orEmpty()
-                .filter { it.isDirectory && !it.name.isNullOrBlank() }
-                .mapNotNull { dir ->
-                    val sourceId = sourceMap[dir.name!!.lowercase()]
-                    sourceId?.let { it to SourceDirectory(dir) }
-                }
-                .toMap()
-                .let { ConcurrentHashMap(it) }
+            rootDownloadsDirLock.withLock {
+                rootDownloadsDir = RootDirectory(storageManager.getDownloadsDirectory())
 
-            rootDownloadsDir.sourceDirs = sourceDirs
+                val sourceDirs = rootDownloadsDir.dir?.listFiles().orEmpty()
+                    .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                    .mapNotNull { dir ->
+                        val sourceId = sourceMap[dir.name!!.lowercase()]
+                        sourceId?.let { it to SourceDirectory(dir) }
+                    }
+                    .toMap()
+                    .let { ConcurrentHashMap(it) }
 
-            sourceDirs.values
-                .map { sourceDir ->
-                    async {
-                        val animeDirs = sourceDir.dir?.listFiles().orEmpty()
-                            .filter { it.isDirectory && !it.name.isNullOrBlank() }
-                            .associate { it.name!! to AnimeDirectory(it) }
+                rootDownloadsDir.sourceDirs = sourceDirs
 
-                        sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
+                sourceDirs.values
+                    .map { sourceDir ->
+                        async {
+                            val animeDirs = sourceDir.dir?.listFiles().orEmpty()
+                                .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                                .associate { it.name!! to AnimeDirectory(it) }
 
-                        animeDirs.values.forEach { animeDir ->
-                            val episodeDirs = animeDir.dir?.listFiles().orEmpty()
-                                .mapNotNull {
-                                    when {
-                                        // Ignore incomplete downloads
-                                        it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
-                                        // Folder of videos
-                                        it.isDirectory -> it.name
-                                        // MP4 files
-                                        it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
-                                        // MKV files
-                                        it.isFile && it.extension == "mkv" -> it.nameWithoutExtension
-                                        // Anything else is irrelevant
-                                        else -> null
+                            sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
+
+                            animeDirs.values.forEach { animeDir ->
+                                val episodeDirs = animeDir.dir?.listFiles().orEmpty()
+                                    .mapNotNull {
+                                        when {
+                                            // Ignore incomplete downloads
+                                            it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
+                                            // Folder of videos
+                                            it.isDirectory -> it.name
+                                            // MP4 files
+                                            it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
+                                            // MKV files
+                                            it.isFile && it.extension == "mkv" -> it.nameWithoutExtension
+                                            // Anything else is irrelevant
+                                            else -> null
+                                        }
                                     }
-                                }
-                                .toMutableSet()
+                                    .toMutableSet()
 
-                            animeDir.episodeDirs = episodeDirs
+                                animeDir.episodeDirs = episodeDirs
+                            }
                         }
                     }
-                }
-                .awaitAll()
+                    .awaitAll()
+            }
 
             _isInitializing.emit(false)
         }.also {

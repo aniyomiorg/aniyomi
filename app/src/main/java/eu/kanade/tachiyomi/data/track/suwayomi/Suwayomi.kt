@@ -46,7 +46,7 @@ class Suwayomi(id: Long) : BaseTracker(id, "Suwayomi"), EnhancedMangaTracker, Ma
 
     override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
-    override fun displayScore(track: MangaTrack): String = ""
+    override fun displayScore(track: DomainTrack): String = ""
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {

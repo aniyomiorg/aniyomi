@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -23,16 +24,17 @@ fun ItemHeader(
     missingItemsCount: Int,
     onClick: () -> Unit,
     isManga: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(
                 enabled = enabled,
                 onClick = onClick,
             )
             .padding(horizontal = 16.dp, vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {
         Text(
             text = if (itemCount == null) {

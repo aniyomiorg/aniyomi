@@ -13,6 +13,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
@@ -36,7 +37,7 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
     override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
-    override fun displayScore(track: AnimeTrack): String {
+    override fun displayScore(track: DomainAnimeTrack): String {
         return track.score.toInt().toString()
     }
 

@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.sourcePreferences
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesFragment
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -65,8 +66,7 @@ class MangaSourcePreferencesScreen(val sourceId: Long) : Screen() {
                     .fillMaxSize()
                     .padding(contentPadding),
             ) {
-                val fragment = MangaSourcePreferencesFragment.getInstance(sourceId)
-                add(it, fragment, null)
+                add(it, SourcePreferencesFragment.getInstance(sourceId), null)
             }
         }
     }
@@ -127,26 +127,28 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun populateScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
-        val source = Injekt.get<MangaSourceManager>().get(sourceId)!! as ConfigurableSource
-
-        val dataStore = SharedPreferencesDataStore(source.sourcePreferences())
-        preferenceManager.preferenceDataStore = dataStore
-
+        val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
         val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
-        source.setupPreferenceScreen(sourceScreen)
-        sourceScreen.forEach { pref ->
-            pref.isIconSpaceReserved = false
-            pref.isSingleLineTitle = false
-            if (pref is DialogPreference && pref.dialogTitle.isNullOrEmpty()) {
-                pref.dialogTitle = pref.title
-            }
 
-            // Apply incognito IME for EditTextPreference
-            if (pref is EditTextPreference) {
-                val setListener = pref.getOnBindEditTextListener()
-                pref.setOnBindEditTextListener {
-                    setListener?.onBindEditText(it)
-                    it.setIncognito(lifecycleScope)
+        if (source is ConfigurableSource) {
+            val dataStore = SharedPreferencesDataStore(source.sourcePreferences())
+            preferenceManager.preferenceDataStore = dataStore
+
+            source.setupPreferenceScreen(sourceScreen)
+            sourceScreen.forEach { pref ->
+                pref.isIconSpaceReserved = false
+                pref.isSingleLineTitle = false
+                if (pref is DialogPreference && pref.dialogTitle.isNullOrEmpty()) {
+                    pref.dialogTitle = pref.title
+                }
+
+                // Apply incognito IME for EditTextPreference
+                if (pref is EditTextPreference) {
+                    val setListener = pref.getOnBindEditTextListener()
+                    pref.setOnBindEditTextListener {
+                        setListener?.onBindEditText(it)
+                        it.setIncognito(lifecycleScope)
+                    }
                 }
             }
         }

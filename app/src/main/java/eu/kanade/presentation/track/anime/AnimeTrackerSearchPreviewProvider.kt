@@ -62,8 +62,8 @@ internal class AnimeTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
     private fun randTrackSearch() = AnimeTrackSearch().let {
         it.id = Random.nextLong()
         it.anime_id = Random.nextLong()
-        it.sync_id = Random.nextInt()
-        it.media_id = Random.nextLong()
+        it.tracker_id = Random.nextInt()
+        it.remote_id = Random.nextLong()
         it.library_id = Random.nextLong()
         it.title = lorem((1..10).random()).joinToString()
         it.last_episode_seen = (0..100).random().toFloat()

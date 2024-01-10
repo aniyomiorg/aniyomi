@@ -16,7 +16,6 @@ import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
@@ -75,7 +74,6 @@ class AnimeDownloader(
     private val provider: AnimeDownloadProvider,
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-    private val episodeCache: EpisodeCache = Injekt.get(),
 ) {
 
     /**
@@ -454,11 +452,6 @@ class AnimeDownloader(
         // If the video is already downloaded, do nothing. Otherwise download from network
         val file = when {
             videoFile != null -> videoFile
-            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(
-                episodeCache.getVideoFile(video.videoUrl!!),
-                tmpDir,
-                filename,
-            )
             else -> {
                 if (preferences.useExternalDownloader().get() == download.changeDownloader) {
                     downloadVideo(video, download, tmpDir, filename)
@@ -795,28 +788,6 @@ class AnimeDownloader(
             tmpDir.findFile("$filename.mp4")?.delete()
             throw e
         }
-    }
-
-    /**
-     * Return the observable which copies the video from cache.
-     *
-     * @param cacheFile the file from cache.
-     * @param tmpDir the temporary directory of the download.
-     * @param filename the filename of the video.
-     */
-    private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): UniFile {
-        val tmpFile = tmpDir.createFile("$filename.tmp")!!
-        cacheFile.inputStream().use { input ->
-            tmpFile.openOutputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        val extension = ImageUtil.findImageType(cacheFile.inputStream())
-        if (extension != null) {
-            tmpFile.renameTo("$filename.${extension.extension}")
-        }
-        cacheFile.delete()
-        return tmpFile
     }
 
     /**

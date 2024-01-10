@@ -21,6 +21,7 @@ import rx.Observable
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
+import tachiyomi.core.storage.UniFileTempFileManager
 import tachiyomi.core.storage.extension
 import tachiyomi.core.storage.nameWithoutExtension
 import tachiyomi.core.util.lang.withIOContext

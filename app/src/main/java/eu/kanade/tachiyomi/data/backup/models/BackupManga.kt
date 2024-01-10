@@ -1,12 +1,9 @@
 package eu.kanade.tachiyomi.data.backup.models
 
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.items.chapter.model.Chapter
-import tachiyomi.domain.track.manga.model.MangaTrack
 
 @Suppress("DEPRECATION")
 @Serializable
@@ -61,41 +58,5 @@ data class BackupManga(
             lastModifiedAt = this@BackupManga.lastModifiedAt,
             favoriteModifiedAt = this@BackupManga.favoriteModifiedAt,
         )
-    }
-
-    fun getChaptersImpl(): List<Chapter> {
-        return chapters.map {
-            it.toChapterImpl()
-        }
-    }
-
-    fun getTrackingImpl(): List<MangaTrack> {
-        return tracking.map {
-            it.getTrackingImpl()
-        }
-    }
-
-    companion object {
-        fun copyFrom(manga: Manga): BackupManga {
-            return BackupManga(
-                url = manga.url,
-                title = manga.title,
-                artist = manga.artist,
-                author = manga.author,
-                description = manga.description,
-                genre = manga.genre.orEmpty(),
-                status = manga.status.toInt(),
-                thumbnailUrl = manga.thumbnailUrl,
-                favorite = manga.favorite,
-                source = manga.source,
-                dateAdded = manga.dateAdded,
-                viewer = (manga.viewerFlags.toInt() and ReadingMode.MASK),
-                viewer_flags = manga.viewerFlags.toInt(),
-                chapterFlags = manga.chapterFlags.toInt(),
-                updateStrategy = manga.updateStrategy,
-                lastModifiedAt = manga.lastModifiedAt,
-                favoriteModifiedAt = manga.favoriteModifiedAt,
-            )
-        }
     }
 }

@@ -152,7 +152,6 @@
     <string name="action_webview_forward">Forward</string>
     <string name="action_webview_refresh">Refresh</string>
     <string name="action_start_downloading_now">Start downloading now</string>
-    <string name="action_faq_and_guides">FAQ and Guides</string>
     <string name="action_not_now">Not now</string>
     <string name="loading">Loading…</string>
     <string name="internal_error">InternalError: Check crash logs for further information</string>
@@ -168,8 +167,15 @@
     <string name="onboarding_storage_info">Select a folder where %1$s will store chapter downloads, backups, and more.\n\nA dedicated folder is recommended.\n\nSelected folder: %2$s</string>
     <string name="onboarding_storage_action_select">Select a folder</string>
     <string name="onboarding_storage_selection_required">A folder must be selected</string>
+    <string name="onboarding_permission_install_apps">Install apps permission</string>
+    <string name="onboarding_permission_install_apps_description">To install source extensions.</string>
+    <string name="onboarding_permission_notifications">Notification permission</string>
+    <string name="onboarding_permission_notifications_description">Get notified for library updates and more.</string>
+    <string name="onboarding_permission_ignore_battery_opts">Background battery usage</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Avoid interruptions to long-running library updates, downloads, and backup restores.</string>
+    <string name="onboarding_permission_action_grant">Grant</string>
     <string name="onboarding_guides_new_user">New to %s? We recommend checking out the getting started guide.</string>
-    <string name="onboarding_guides_returning_user">Already used %s before?</string>
+    <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
 
     <!-- Preferences -->
       <!-- Subsections -->
@@ -247,10 +253,10 @@
     <string name="network_not_metered">Only on unmetered network</string>
     <string name="charging">When charging</string>
     <string name="restrictions">Restrictions: %s</string>
-    <string name="pref_library_update_manga_restriction">Skip updating entries</string>
-    <string name="pref_update_only_non_completed">With \"Completed\" status</string>
-    <string name="pref_update_only_started">That haven\'t been started</string>
-    <string name="pref_update_only_in_release_period">Outside expected release period</string>
+    <string name="pref_library_update_smart_update">Smart update</string>
+    <string name="pref_update_only_non_completed">Skip entries with \"Completed\" status</string>
+    <string name="pref_update_only_started">Skip unstarted entries</string>
+    <string name="pref_update_only_in_release_period">Predict next release time</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="default_category">Default category</string>
@@ -279,6 +285,7 @@
     <string name="ext_uninstall">Uninstall</string>
     <string name="ext_app_info">App info</string>
     <string name="untrusted_extension">Untrusted extension</string>
+    <string name="untrusted_extension_message">This extension was signed by any unknown author and wasn\'t loaded.\n\nMalicious extensions can read any stored login credentials or execute arbitrary code.\n\nBy trusting this extension\'s certificate, you accept these risks.</string>
     <string name="obsolete_extension_message">This extension is no longer available. It may not function properly and can cause issues with the app. Uninstalling it is recommended.</string>
     <string name="unofficial_extension_message">This extension is not from the official Tachiyomi extensions list.</string>
     <string name="extension_api_error">Failed to get extensions list</string>
@@ -287,6 +294,7 @@
     <string name="ext_info_age_rating">Age rating</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="ext_nsfw_warning">Sources from this extension may contain NSFW (18+) content</string>
+    <string name="ext_permission_install_apps_warning">Permissions are needed to install extensions. Tap here to grant.</string>
     <string name="ext_install_service_notif">Installing extension…</string>
     <string name="ext_installer_pref">Installer</string>
     <string name="ext_installer_legacy">Legacy</string>
@@ -295,6 +303,20 @@
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_private" translatable="false">Private</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
+
+    <!-- Extension repos -->
+    <string name="label_extension_repos">Extension repos</string>
+    <string name="information_empty_repos">You have no repos set.</string>
+    <string name="action_add_repo">Add repo</string>
+    <string name="label_add_repo_input">Repo URL</string>
+    <string name="action_add_repo_message">Add additional repos to Tachiyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="error_repo_exists">This repo already exists!</string>
+    <string name="action_delete_repo">Delete repo</string>
+    <string name="invalid_repo_name">Invalid repo URL</string>
+    <string name="delete_repo_confirmation">Do you wish to delete the repo \"%s\"?</string>
+    <string name="repo_extension_message">This extension is from an external repo. Tap to view the repo.</string>
+
+      <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
     <string name="pref_show_navigation_mode">Show tap zones overlay</string>
     <string name="pref_show_navigation_mode_summary">Briefly show when reader is opened</string>
@@ -306,7 +328,7 @@
     <string name="pref_double_tap_zoom">Double tap to zoom</string>
     <string name="pref_cutout_short">Show content in cutout area</string>
     <string name="pref_page_transitions">Animate page transitions</string>
-    <string name="pref_flash_page">Flash white on page change</string>
+    <string name="pref_flash_page">Flash on page change</string>
     <string name="pref_flash_page_summ">Reduces ghosting on e-ink displays</string>
     <string name="pref_double_tap_anim_speed">Double tap animation speed</string>
     <string name="pref_show_page_number">Show page number</string>
@@ -439,15 +461,19 @@
     <string name="pref_backup_interval">Automatic backup frequency</string>
     <string name="action_create">Create</string>
     <string name="backup_created">Backup created</string>
-    <string name="invalid_backup_file">Invalid backup file</string>
+    <string name="invalid_backup_file">Invalid backup file:</string>
+    <string name="invalid_backup_file_error">Full error:</string>
     <string name="invalid_backup_file_missing_manga">Backup does not contain any library entries.</string>
     <string name="backup_restore_missing_sources">Missing sources:</string>
     <string name="backup_restore_missing_trackers">Trackers not logged into:</string>
-    <string name="backup_restore_content_full">Data from the backup file will be restored.\n\nYou will need to install any missing extensions and log in to tracking services afterwards to use them.</string>
+    <string name="backup_restore_content_full">You may need to install any missing extensions and log in to tracking services afterwards to use them.</string>
     <string name="restore_completed">Restore completed</string>
     <string name="restore_duration">%02d min, %02d sec</string>
     <string name="backup_in_progress">Backup is already in progress</string>
     <string name="backup_choice">What do you want to backup?</string>
+    <string name="app_settings">App settings</string>
+    <string name="source_settings">Source settings</string>
+    <string name="private_settings">Include sensitive settings (e.g., tracker login tokens)</string>
     <string name="creating_backup">Creating backup</string>
     <string name="creating_backup_error">Backup failed</string>
     <string name="missing_storage_permission">Storage permissions not granted</string>
@@ -461,8 +487,11 @@
     <string name="backup_info">You should keep copies of backups in other places as well.</string>
     <string name="last_auto_backup_info">Last automatically backed up: %s</string>
     <string name="label_data">Data</string>
+    <string name="pref_storage_usage">Storage usage</string>
+    <string name="available_disk_space_info">Available: %1$s / Total: %2$s</string>
+    <string name="pref_clear_chapter_cache">Clear chapter cache</string>
     <string name="used_cache">Used: %1$s</string>
-    <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
+    <string name="cache_deleted">Cache cleared, %1$d files deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
     <string name="syncing_library">Syncing library</string>
     <string name="library_sync_complete">Library sync complete</string>
@@ -576,7 +605,10 @@
     <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="manga_display_interval_title">Estimate every</string>
     <string name="manga_display_modified_interval_title">Set to update every</string>
-    <string name="manga_modify_calculated_interval_title">Customize interval</string>
+    <string name="manga_interval_header">Next update</string>
+    <!-- "... around 2 days" -->
+    <string name="manga_interval_expected_update">Next update expected in around %1$s, checking around every %2$s</string>
+    <string name="manga_interval_custom_amount">Custom update frequency:</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="show_title">Source title</string>
     <string name="show_chapter_number">Chapter number</string>
@@ -702,7 +734,6 @@
     <string name="notification_chapters_single_and_more">Chapter %1$s and %2$d more</string>
     <string name="notification_chapters_multiple">Chapters %1$s</string>
     <string name="notification_update_error">%1$d update(s) failed</string>
-    <string name="notification_update_skipped">%1$d update(s) skipped</string>
     <string name="learn_more">Tap to learn more</string>
     <string name="notification_cover_update_failed">Failed to update cover</string>
     <string name="notification_first_add_to_library">Please add the entry to your library before doing this</string>
@@ -753,7 +784,7 @@
     <string name="channel_progress">Progress</string>
     <string name="channel_complete">Complete</string>
     <string name="channel_errors">Errors</string>
-    <string name="channel_skipped">Skipped</string>
+    <string name="channel_new_chapters">Chapter updates</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
     <string name="spen_previous_page">Previous page</string>

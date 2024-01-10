@@ -8,7 +8,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.data.backup.BackupCreateJob
+import eu.kanade.tachiyomi.data.backup.create.BackupCreateJob
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -72,11 +72,6 @@ object Migrations {
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-            if (oldVersion < 14) {
-                // Restore jobs after upgrading to Evernote's job scheduler.
-                MangaLibraryUpdateJob.setupTask(context)
-                AnimeLibraryUpdateJob.setupTask(context)
-            }
             if (oldVersion < 15) {
                 // Delete internal chapter cache dir.
                 File(context.cacheDir, "chapter_disk_cache").deleteRecursively()
@@ -102,12 +97,6 @@ object Migrations {
                         chapterCache.deleteRecursively()
                     }
                 }
-            }
-            if (oldVersion < 43) {
-                // Restore jobs after migrating from Evernote's job scheduler to WorkManager.
-                MangaLibraryUpdateJob.setupTask(context)
-                AnimeLibraryUpdateJob.setupTask(context)
-                BackupCreateJob.setupTask(context)
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
@@ -315,9 +304,6 @@ object Migrations {
                     )
                 }
             }
-            if (oldVersion < 76) {
-                BackupCreateJob.setupTask(context)
-            }
             if (oldVersion < 77) {
                 val oldReaderTap = prefs.getBoolean("reader_tap", false)
                 if (!oldReaderTap) {
@@ -493,9 +479,6 @@ object Migrations {
                     }
                 }
             }
-            if (oldVersion < 100) {
-                BackupCreateJob.setupTask(context)
-            }
             if (oldVersion < 105) {
                 val pref = libraryPreferences.autoUpdateDeviceRestrictions()
                 if (pref.isSet() && "battery_not_low" in pref.get()) {
@@ -518,12 +501,7 @@ object Migrations {
                     newKey = { Preference.privateKey(it) },
                 )
             }
-            if (oldVersion < 111) {
-                File(context.cacheDir, "dl_index_cache")
-                    .takeIf { it.exists() }
-                    ?.delete()
-            }
-            if (oldVersion < 112) {
+            if (oldVersion < 113) {
                 val prefsToReplace = listOf(
                     "pref_download_only",
                     "incognito_mode",
@@ -546,6 +524,13 @@ object Migrations {
 
                 if (Build.MODEL == "Subsystem for Android(TM)") {
                     playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
+                }
+                // Deleting old download cache index files, but might as well clear it all out
+                context.cacheDir.deleteRecursively()
+            }
+            if (oldVersion < 114) {
+                sourcePreferences.mangaExtensionRepos().getAndSet {
+                    it.map { "https://raw.githubusercontent.com/$it/repo" }.toSet()
                 }
             }
             return true

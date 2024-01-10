@@ -665,7 +665,7 @@ class PlayerViewModel @JvmOverloads constructor(
         }
 
         getTracks.await(animeId).map { track ->
-            val tracker = trackerManager.get(track.syncId)
+            val tracker = trackerManager.get(track.trackerId)
             malId = when (tracker) {
                 is MyAnimeList -> track.remoteId
                 is Anilist -> AniSkipApi().getMalIdFromAL(track.remoteId)

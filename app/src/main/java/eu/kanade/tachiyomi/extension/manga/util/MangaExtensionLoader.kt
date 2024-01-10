@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
+import eu.kanade.tachiyomi.util.system.isDevFlavor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -63,11 +64,6 @@ internal object MangaExtensionLoader {
 
     // inorichi's key
     private const val officialSignature = "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
-
-    /**
-     * List of the trusted signatures.
-     */
-    var trustedSignatures = mutableSetOf(officialSignature) + preferences.trustedSignatures().get()
 
     private const val PRIVATE_EXTENSION_EXTENSION = "ext"
 
@@ -134,6 +130,12 @@ internal object MangaExtensionLoader {
      * @param context The application context.
      */
     fun loadMangaExtensions(context: Context): List<MangaLoadResult> {
+        // Always make users trust unknown extensions on cold starts in non-dev builds
+        // due to inherent security risks
+        if (!isDevFlavor) {
+            preferences.trustedSignatures().delete()
+        }
+
         val pkgManager = context.packageManager
 
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -154,6 +156,11 @@ internal object MangaExtensionLoader {
             ?.asSequence()
             ?.filter { it.isFile && it.extension == PRIVATE_EXTENSION_EXTENSION }
             ?.mapNotNull {
+                // Just in case, since Android 14+ requires them to be read-only
+                if (it.canWrite()) {
+                    it.setReadOnly()
+                }
+
                 val path = it.absolutePath
                 pkgManager.getPackageArchiveInfo(path, PACKAGE_FLAGS)
                     ?.apply { applicationInfo.fixBasePaths(path) }
@@ -298,7 +305,12 @@ internal object MangaExtensionLoader {
         val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
         val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
 
-        val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        val classLoader = try {
+            PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($pkgName)" }
+            return MangaLoadResult.Error
+        }
 
         val sources = appInfo.metaData.getString(METADATA_SOURCE_CLASS)!!
             .split(";")
@@ -315,7 +327,7 @@ internal object MangaExtensionLoader {
                     when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
                         is MangaSource -> listOf(obj)
                         is SourceFactory -> obj.createSources()
-                        else -> throw Exception("Unknown source class type! ${obj.javaClass}")
+                        else -> throw Exception("Unknown source class type: ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
                     logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
@@ -340,8 +352,6 @@ internal object MangaExtensionLoader {
             libVersion = libVersion,
             lang = lang,
             isNsfw = isNsfw,
-            hasReadme = hasReadme,
-            hasChangelog = hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
             isUnofficial = !isOfficiallySigned(signatures),
@@ -405,6 +415,11 @@ internal object MangaExtensionLoader {
     }
 
     private fun hasTrustedSignature(signatures: List<String>): Boolean {
+        if (officialSignature in signatures) {
+            return true
+        }
+
+        val trustedSignatures = preferences.trustedSignatures().get()
         return trustedSignatures.any { signatures.contains(it) }
     }
 

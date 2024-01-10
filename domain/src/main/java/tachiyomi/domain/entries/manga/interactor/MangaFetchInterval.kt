@@ -19,16 +19,15 @@ class MangaFetchInterval(
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
     ): MangaUpdate? {
+        val interval = manga.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
+            chapters = getChaptersByMangaId.await(manga.id, applyScanlatorFilter = true),
+            zone = dateTime.zone,
+        )
         val currentWindow = if (window.first == 0L && window.second == 0L) {
             getWindow(ZonedDateTime.now())
         } else {
             window
         }
-        val chapters = getChaptersByMangaId.await(manga.id, applyScanlatorFilter = true)
-        val interval = manga.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
-            chapters,
-            dateTime.zone,
-        )
         val nextUpdate = calculateNextUpdate(manga, interval, dateTime, currentWindow)
 
         return if (manga.nextUpdate == nextUpdate && manga.fetchInterval == interval) {
@@ -46,6 +45,8 @@ class MangaFetchInterval(
     }
 
     internal fun calculateInterval(chapters: List<Chapter>, zone: ZoneId): Int {
+        val chapterWindow = if (chapters.size <= 8) 3 else 10
+
         val uploadDates = chapters.asSequence()
             .filter { it.dateUpload > 0L }
             .sortedByDescending { it.dateUpload }
@@ -55,7 +56,7 @@ class MangaFetchInterval(
                     .atStartOfDay()
             }
             .distinct()
-            .take(10)
+            .take(chapterWindow)
             .toList()
 
         val fetchDates = chapters.asSequence()
@@ -66,7 +67,7 @@ class MangaFetchInterval(
                     .atStartOfDay()
             }
             .distinct()
-            .take(10)
+            .take(chapterWindow)
             .toList()
 
         val interval = when {
@@ -100,7 +101,7 @@ class MangaFetchInterval(
             manga.fetchInterval == 0
         ) {
             val latestDate = ZonedDateTime.ofInstant(
-                Instant.ofEpochMilli(manga.lastUpdate),
+                if (manga.lastUpdate > 0) Instant.ofEpochMilli(manga.lastUpdate) else Instant.now(),
                 dateTime.zone,
             )
                 .toLocalDate()

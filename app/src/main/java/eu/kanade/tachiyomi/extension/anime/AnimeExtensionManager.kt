@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
+import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionApi
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallReceiver
@@ -49,7 +49,7 @@ class AnimeExtensionManager(
     /**
      * API where all the available anime extensions can be found.
      */
-    private val api = AnimeExtensionGithubApi()
+    private val api = AnimeExtensionApi()
 
     /**
      * The installer which installs, updates and uninstalls the anime extensions.
@@ -268,7 +268,6 @@ class AnimeExtensionManager(
         val untrustedSignatures = _untrustedAnimeExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
 
-        AnimeExtensionLoader.trustedSignatures += signature
         preferences.trustedSignatures() += signature
 
         val nowTrustedAnimeExtensions = _untrustedAnimeExtensionsFlow.value.filter { it.signatureHash == signature }

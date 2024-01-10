@@ -13,10 +13,10 @@ fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
     )
 }
 
-fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(syncId).also {
+fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(trackerId).also {
     it.id = id
     it.anime_id = animeId
-    it.media_id = remoteId
+    it.remote_id = remoteId
     it.library_id = libraryId
     it.title = title
     it.last_episode_seen = lastEpisodeSeen.toFloat()
@@ -33,8 +33,8 @@ fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
     return AnimeTrack(
         id = trackId,
         animeId = anime_id,
-        syncId = sync_id.toLong(),
-        remoteId = media_id,
+        trackerId = tracker_id.toLong(),
+        remoteId = remote_id,
         libraryId = library_id,
         title = title,
         lastEpisodeSeen = last_episode_seen.toDouble(),

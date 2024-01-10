@@ -19,16 +19,15 @@ class AnimeFetchInterval(
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
     ): AnimeUpdate? {
+        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
+            episodes = getEpisodesByAnimeId.await(anime.id),
+            zone = dateTime.zone,
+        )
         val currentWindow = if (window.first == 0L && window.second == 0L) {
             getWindow(ZonedDateTime.now())
         } else {
             window
         }
-        val episodes = getEpisodesByAnimeId.await(anime.id)
-        val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
-            episodes,
-            dateTime.zone,
-        )
         val nextUpdate = calculateNextUpdate(anime, interval, dateTime, currentWindow)
 
         return if (anime.nextUpdate == nextUpdate && anime.fetchInterval == interval) {
@@ -46,6 +45,8 @@ class AnimeFetchInterval(
     }
 
     internal fun calculateInterval(episodes: List<Episode>, zone: ZoneId): Int {
+        val episodeWindow = if (episodes.size <= 8) 3 else 10
+
         val uploadDates = episodes.asSequence()
             .filter { it.dateUpload > 0L }
             .sortedByDescending { it.dateUpload }
@@ -55,7 +56,7 @@ class AnimeFetchInterval(
                     .atStartOfDay()
             }
             .distinct()
-            .take(10)
+            .take(episodeWindow)
             .toList()
 
         val fetchDates = episodes.asSequence()
@@ -66,7 +67,7 @@ class AnimeFetchInterval(
                     .atStartOfDay()
             }
             .distinct()
-            .take(10)
+            .take(episodeWindow)
             .toList()
 
         val interval = when {
@@ -100,7 +101,7 @@ class AnimeFetchInterval(
             anime.fetchInterval == 0
         ) {
             val latestDate = ZonedDateTime.ofInstant(
-                Instant.ofEpochMilli(anime.lastUpdate),
+                if (anime.lastUpdate > 0) Instant.ofEpochMilli(anime.lastUpdate) else Instant.now(),
                 dateTime.zone,
             )
                 .toLocalDate()

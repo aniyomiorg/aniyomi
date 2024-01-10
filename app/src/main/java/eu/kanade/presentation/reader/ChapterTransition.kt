@@ -34,12 +34,12 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.data.database.models.manga.Chapter
-import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import tachiyomi.domain.items.chapter.service.calculateChapterGap
+import kotlinx.collections.immutable.persistentMapOf
+import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
@@ -51,8 +51,8 @@ fun ChapterTransition(
     currChapterDownloaded: Boolean,
     goingToChapterDownloaded: Boolean,
 ) {
-    val currChapter = transition.from.chapter
-    val goingToChapter = transition.to?.chapter
+    val currChapter = transition.from.chapter.toDomainChapter()
+    val goingToChapter = transition.to?.chapter?.toDomainChapter()
 
     ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
         when (transition) {
@@ -65,10 +65,7 @@ fun ChapterTransition(
                     bottomChapter = currChapter,
                     bottomChapterDownloaded = currChapterDownloaded,
                     fallbackLabel = stringResource(MR.strings.transition_no_previous),
-                    chapterGap = calculateChapterGap(
-                        currChapter.toDomainChapter(),
-                        goingToChapter?.toDomainChapter(),
-                    ),
+                    chapterGap = calculateChapterGap(currChapter, goingToChapter),
                 )
             }
             is ChapterTransition.Next -> {
@@ -80,10 +77,7 @@ fun ChapterTransition(
                     bottomChapter = goingToChapter,
                     bottomChapterDownloaded = goingToChapterDownloaded,
                     fallbackLabel = stringResource(MR.strings.transition_no_next),
-                    chapterGap = calculateChapterGap(
-                        goingToChapter?.toDomainChapter(),
-                        currChapter.toDomainChapter(),
-                    ),
+                    chapterGap = calculateChapterGap(goingToChapter, currChapter),
                 )
             }
         }
@@ -245,7 +239,7 @@ private fun ChapterText(
             maxLines = 5,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleLarge,
-            inlineContent = mapOf(
+            inlineContent = persistentMapOf(
                 DownloadedIconContentId to InlineTextContent(
                     Placeholder(
                         width = 22.sp,
@@ -285,24 +279,23 @@ private val CardColor: CardColors
 private val VerticalSpacerSize = 24.dp
 private const val DownloadedIconContentId = "downloaded"
 
-private fun previewChapter(name: String, scanlator: String, chapterNumber: Float) = ChapterImpl().apply {
-    this.name = name
-    this.scanlator = scanlator
-    this.chapter_number = chapterNumber
-
-    this.id = 0
-    this.manga_id = 0
-    this.url = ""
-}
+private fun previewChapter(name: String, scanlator: String, chapterNumber: Double) = Chapter.create().copy(
+    id = 0L,
+    mangaId = 0L,
+    url = "",
+    name = name,
+    scanlator = scanlator,
+    chapterNumber = chapterNumber,
+)
 private val FakeChapter = previewChapter(
     name = "Vol.1, Ch.1 - Fake Chapter Title",
     scanlator = "Scanlator Name",
-    chapterNumber = 1f,
+    chapterNumber = 1.0,
 )
 private val FakeGapChapter = previewChapter(
     name = "Vol.5, Ch.44 - Fake Gap Chapter Title",
     scanlator = "Scanlator Name",
-    chapterNumber = 44f,
+    chapterNumber = 44.0,
 )
 private val FakeChapterLongTitle = previewChapter(
     name = "Vol.1, Ch.0 - The Mundane Musings of a Metafictional Manga: A Chapter About a Chapter, Featuring" +
@@ -311,7 +304,7 @@ private val FakeChapterLongTitle = previewChapter(
         "Fictional Realities and Reality-Bending Fiction, Where the Fourth Wall is Always in Danger of Being Broken " +
         "and the Line Between Author and Character is Forever Blurred.",
     scanlator = "Long Long Funny Scanlator Sniper Group Name Reborn",
-    chapterNumber = 1f,
+    chapterNumber = 1.0,
 )
 
 @PreviewLightDark

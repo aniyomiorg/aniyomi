@@ -314,7 +314,7 @@ fun SearchResultItemDetails(
     title: String,
     text: String,
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall)) {
         Text(
             text = title,
             maxLines = 1,

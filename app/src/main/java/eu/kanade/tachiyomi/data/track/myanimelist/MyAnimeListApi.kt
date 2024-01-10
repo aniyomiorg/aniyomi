@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -33,6 +34,8 @@ import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
 import java.util.Locale
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class MyAnimeListApi(
     private val trackId: Long,
@@ -141,7 +144,7 @@ class MyAnimeListApi(
                     .let {
                         val obj = it.jsonObject
                         MangaTrackSearch.create(trackId).apply {
-                            media_id = obj["id"]!!.jsonPrimitive.long
+                            remote_id = obj["id"]!!.jsonPrimitive.long
                             title = obj["title"]!!.jsonPrimitive.content
                             summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
                             total_chapters = obj["num_chapters"]!!.jsonPrimitive.int
@@ -149,7 +152,7 @@ class MyAnimeListApi(
                             cover_url =
                                 obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content
                                     ?: ""
-                            tracking_url = "https://myanimelist.net/manga/$media_id"
+                            tracking_url = "https://myanimelist.net/manga/$remote_id"
                             publishing_status =
                                 obj["status"]!!.jsonPrimitive.content.replace("_", " ")
                             publishing_type =
@@ -182,7 +185,7 @@ class MyAnimeListApi(
                     .let {
                         val obj = it.jsonObject
                         AnimeTrackSearch.create(trackId).apply {
-                            media_id = obj["id"]!!.jsonPrimitive.long
+                            remote_id = obj["id"]!!.jsonPrimitive.long
                             title = obj["title"]!!.jsonPrimitive.content
                             summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
                             total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
@@ -190,7 +193,7 @@ class MyAnimeListApi(
                             cover_url =
                                 obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content
                                     ?: ""
-                            tracking_url = "https://myanimelist.net/anime/$media_id"
+                            tracking_url = "https://myanimelist.net/anime/$remote_id"
                             publishing_status =
                                 obj["status"]!!.jsonPrimitive.content.replace("_", " ")
                             publishing_type =
@@ -222,7 +225,7 @@ class MyAnimeListApi(
             }
 
             val request = Request.Builder()
-                .url(mangaUrl(track.media_id).toString())
+                .url(mangaUrl(track.remote_id).toString())
                 .put(formBodyBuilder.build())
                 .build()
             with(json) {
@@ -249,7 +252,7 @@ class MyAnimeListApi(
             }
 
             val request = Request.Builder()
-                .url(animeUrl(track.media_id).toString())
+                .url(animeUrl(track.remote_id).toString())
                 .put(formBodyBuilder.build())
                 .build()
             with(json) {
@@ -261,42 +264,27 @@ class MyAnimeListApi(
         }
     }
 
-    suspend fun deleteMangaItem(track: MangaTrack): MangaTrack {
-        return withIOContext {
-            val request = Request.Builder()
-                .url(mangaUrl(track.media_id).toString())
-                .delete()
-                .build()
-            with(json) {
-                authClient.newCall(request)
-                    .awaitSuccess()
-                track
-            }
+    suspend fun deleteMangaItem(track: DomainMangaTrack) {
+        withIOContext {
+            authClient
+                .newCall(DELETE(mangaUrl(track.remoteId).toString()))
+                .awaitSuccess()
         }
     }
 
-    suspend fun deleteAnimeItem(track: AnimeTrack): AnimeTrack {
-        return withIOContext {
-            val request = Request.Builder()
-                .url(animeUrl(track.media_id).toString())
-                .delete()
-                .build()
-            with(json) {
-                authClient.newCall(request)
-                    .awaitSuccess()
-                track
-            }
+    suspend fun deleteAnimeItem(track: DomainAnimeTrack) {
+        withIOContext {
+            authClient
+                .newCall(DELETE(animeUrl(track.remoteId).toString()))
+                .awaitSuccess()
         }
     }
 
     suspend fun findListItem(track: MangaTrack): MangaTrack? {
         return withIOContext {
             val uri = "$baseApiUrl/manga".toUri().buildUpon()
-                .appendPath(track.media_id.toString())
-                .appendQueryParameter(
-                    "fields",
-                    "num_chapters,my_list_status{start_date,finish_date}",
-                )
+                .appendPath(track.remote_id.toString())
+                .appendQueryParameter("fields", "num_chapters,my_list_status{start_date,finish_date}")
                 .build()
             with(json) {
                 authClient.newCall(GET(uri.toString()))
@@ -315,11 +303,8 @@ class MyAnimeListApi(
     suspend fun findListItem(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
             val uri = "$baseApiUrl/anime".toUri().buildUpon()
-                .appendPath(track.media_id.toString())
-                .appendQueryParameter(
-                    "fields",
-                    "num_episodes,my_list_status{start_date,finish_date}",
-                )
+                .appendPath(track.remote_id.toString())
+                .appendQueryParameter("fields", "num_episodes,my_list_status{start_date,finish_date}")
                 .build()
             with(json) {
                 authClient.newCall(GET(uri.toString()))

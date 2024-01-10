@@ -52,6 +52,8 @@ import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
 import eu.kanade.tachiyomi.data.track.simkl.SimklApi
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
@@ -135,7 +137,7 @@ object SettingsTrackingScreen : SearchableSettings {
             ),
             Preference.PreferenceGroup(
                 title = stringResource(MR.strings.services),
-                preferenceItems = listOf(
+                preferenceItems = persistentListOf(
                     Preference.PreferenceItem.TrackerPreference(
                         title = trackerManager.myAnimeList.name,
                         tracker = trackerManager.myAnimeList,
@@ -208,16 +210,17 @@ object SettingsTrackingScreen : SearchableSettings {
             ),
             Preference.PreferenceGroup(
                 title = stringResource(MR.strings.enhanced_services),
-                preferenceItems = enhancedMangaTrackers.first
-                    .map { service ->
-                        Preference.PreferenceItem.TrackerPreference(
-                            title = service.name,
-                            tracker = service,
-                            login = { (service as EnhancedMangaTracker).loginNoop() },
-                            logout = service::logout,
-                        )
-                    } + listOf(Preference.PreferenceItem.InfoPreference(enhancedMangaTrackerInfo)),
-
+                preferenceItems = (
+                    enhancedMangaTrackers.first
+                        .map { service ->
+                            Preference.PreferenceItem.TrackerPreference(
+                                title = service.name,
+                                tracker = service,
+                                login = { (service as EnhancedMangaTracker).loginNoop() },
+                                logout = service::logout,
+                            )
+                        } + listOf(Preference.PreferenceItem.InfoPreference(enhancedMangaTrackerInfo))
+                    ).toImmutableList(),
             ),
         )
     }
@@ -355,7 +358,7 @@ object SettingsTrackingScreen : SearchableSettings {
                 )
             },
             confirmButton = {
-                Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall)) {
                     OutlinedButton(
                         modifier = Modifier.weight(1f),
                         onClick = onDismissRequest,

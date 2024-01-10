@@ -5,12 +5,12 @@ import android.graphics.drawable.Drawable
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
+import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +49,7 @@ class MangaExtensionManager(
     /**
      * API where all the available extensions can be found.
      */
-    private val api = MangaExtensionGithubApi()
+    private val api = MangaExtensionApi()
 
     /**
      * The installer which installs, updates and uninstalls the extensions.
@@ -260,7 +260,6 @@ class MangaExtensionManager(
         val untrustedSignatures = _untrustedExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
 
-        MangaExtensionLoader.trustedSignatures += signature
         preferences.trustedSignatures() += signature
 
         val nowTrustedExtensions = _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }

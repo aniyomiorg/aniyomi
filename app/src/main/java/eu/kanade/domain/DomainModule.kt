@@ -19,6 +19,9 @@ import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.source.anime.interactor.CreateAnimeSourceRepo
+import eu.kanade.domain.source.anime.interactor.DeleteAnimeSourceRepo
+import eu.kanade.domain.source.anime.interactor.GetAnimeSourceRepos
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
@@ -26,8 +29,11 @@ import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.interactor.ToggleLanguage
+import eu.kanade.domain.source.manga.interactor.CreateMangaSourceRepo
+import eu.kanade.domain.source.manga.interactor.DeleteMangaSourceRepo
 import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
 import eu.kanade.domain.source.manga.interactor.GetLanguagesWithMangaSources
+import eu.kanade.domain.source.manga.interactor.GetMangaSourceRepos
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
@@ -88,12 +94,12 @@ import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
-import tachiyomi.domain.entries.anime.interactor.GetMangaByUrlAndSourceId
+import tachiyomi.domain.entries.manga.interactor.GetMangaByUrlAndSourceId
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.interactor.ResetAnimeViewerFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
-import tachiyomi.domain.entries.manga.interactor.GetAnimeByUrlAndSourceId
+import tachiyomi.domain.entries.anime.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
@@ -322,5 +328,12 @@ class DomainModule : InjektModule {
         addFactory { ToggleLanguage(get()) }
         addFactory { ToggleMangaSource(get()) }
         addFactory { ToggleMangaSourcePin(get()) }
+
+        addFactory { CreateMangaSourceRepo(get()) }
+        addFactory { DeleteMangaSourceRepo(get()) }
+        addFactory { GetMangaSourceRepos(get()) }
+        addFactory { CreateAnimeSourceRepo(get()) }
+        addFactory { DeleteAnimeSourceRepo(get()) }
+        addFactory { GetAnimeSourceRepos(get()) }
     }
 }

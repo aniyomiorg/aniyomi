@@ -18,6 +18,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class Shikimori(id: Long) :
     BaseTracker(
@@ -54,11 +56,11 @@ class Shikimori(id: Long) :
         return index.toFloat()
     }
 
-    override fun displayScore(track: MangaTrack): String {
+    override fun displayScore(track: DomainMangaTrack): String {
         return track.score.toInt().toString()
     }
 
-    override fun displayScore(track: AnimeTrack): String {
+    override fun displayScore(track: DomainAnimeTrack): String {
         return track.score.toInt().toString()
     }
 
@@ -98,12 +100,12 @@ class Shikimori(id: Long) :
         return api.updateLibAnime(track, getUsername())
     }
 
-    override suspend fun delete(track: MangaTrack): MangaTrack {
-        return api.deleteLibManga(track)
+    override suspend fun delete(track: DomainMangaTrack) {
+        api.deleteLibManga(track)
     }
 
-    override suspend fun delete(track: AnimeTrack): AnimeTrack {
-        return api.deleteLibAnime(track)
+    override suspend fun delete(track: DomainAnimeTrack) {
+        api.deleteLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {

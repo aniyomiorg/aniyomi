@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -73,9 +74,7 @@ class MangaHistoryScreenModel(
                 val beforeDate = before?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(
-                        afterDate,
-                    )
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
@@ -115,6 +114,10 @@ class MangaHistoryScreenModel(
             if (!result) return@launchIO
             _events.send(Event.HistoryCleared)
         }
+    }
+
+    fun updateSearchQuery(query: String?) {
+        mutableState.update { it.copy(searchQuery = query) }
     }
 
     fun setDialog(dialog: Dialog?) {

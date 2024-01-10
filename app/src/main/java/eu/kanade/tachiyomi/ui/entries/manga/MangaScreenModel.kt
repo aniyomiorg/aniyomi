@@ -5,7 +5,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -23,7 +22,6 @@ import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.util.formattedMessage
@@ -40,6 +38,8 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
@@ -94,7 +94,6 @@ class MangaScreenModel(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     readerPreferences: ReaderPreferences = Injekt.get(),
-    uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
@@ -141,9 +140,7 @@ class MangaScreenModel(
     val chapterSwipeStartAction = libraryPreferences.swipeChapterEndAction().get()
     val chapterSwipeEndAction = libraryPreferences.swipeChapterStartAction().get()
 
-    val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
-    val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
-    val skipFiltered by readerPreferences.skipFiltered().asState(screenModelScope)
+    private val skipFiltered by readerPreferences.skipFiltered().asState(screenModelScope)
 
     val isUpdateIntervalEnabled =
         LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
@@ -383,7 +380,7 @@ class MangaScreenModel(
                 successState.copy(
                     dialog = Dialog.ChangeCategory(
                         manga = manga,
-                        initialSelection = categories.mapAsCheckboxState { it.id in selection },
+                        initialSelection = categories.mapAsCheckboxState { it.id in selection }.toImmutableList(),
                     ),
                 )
             }
@@ -659,17 +656,18 @@ class MangaScreenModel(
     ) {
         val successState = successState ?: return
 
-        if (startNow) {
-            val chapterId = chapters.singleOrNull()?.id ?: return
-            downloadManager.startDownloadNow(chapterId)
-        } else {
-            downloadChapters(chapters)
-        }
-        if (!isFavorited && !successState.hasPromptedToAddBefore) {
-            updateSuccessState { state ->
-                state.copy(hasPromptedToAddBefore = true)
+        screenModelScope.launchNonCancellable {
+            if (startNow) {
+                val chapterId = chapters.singleOrNull()?.id ?: return@launchNonCancellable
+                downloadManager.startDownloadNow(chapterId)
+            } else {
+                downloadChapters(chapters)
             }
-            screenModelScope.launch {
+
+            if (!isFavorited && !successState.hasPromptedToAddBefore) {
+                updateSuccessState { state ->
+                    state.copy(hasPromptedToAddBefore = true)
+                }
                 val result = snackbarHostState.showSnackbar(
                     message = context.stringResource(MR.strings.snack_add_to_manga_library),
                     actionLabel = context.stringResource(MR.strings.action_add),
@@ -1008,12 +1006,7 @@ class MangaScreenModel(
                 .map { tracks ->
                     loggedInTrackers
                         // Map to TrackItem
-                        .map { service ->
-                            MangaTrackItem(
-                                tracks.find { it.syncId.toLong() == service.id },
-                                service,
-                            )
-                        }
+                        .map { service -> MangaTrackItem(tracks.find { it.trackerId == service.id }, service) }
                         // Show only if the service supports this manga's source
                         .filter { (it.tracker as? EnhancedMangaTracker)?.accept(source!!) ?: true }
                 }
@@ -1029,7 +1022,7 @@ class MangaScreenModel(
     sealed interface Dialog {
         data class ChangeCategory(
             val manga: Manga,
-            val initialSelection: List<CheckboxState<Category>>,
+            val initialSelection: ImmutableList<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog

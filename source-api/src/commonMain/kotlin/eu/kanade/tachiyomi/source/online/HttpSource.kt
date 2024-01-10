@@ -469,4 +469,4 @@ abstract class HttpSource : CatalogueSource {
     override fun getFilterList() = FilterList()
 }
 
-class LicensedEntryItemsException : Exception("Licensed - No items to show")
+class LicensedEntryItemsException : RuntimeException()

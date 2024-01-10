@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
@@ -34,6 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class MangaExtensionsScreenModel(
     preferences: SourcePreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
     private val extensionManager: MangaExtensionManager = Injekt.get(),
     private val getExtensions: GetMangaExtensionsByType = Injekt.get(),
 ) : StateScreenModel<MangaExtensionsScreenModel.State>(State()) {
@@ -142,6 +144,10 @@ class MangaExtensionsScreenModel(
         preferences.mangaExtensionUpdatesCount().changes()
             .onEach { mutableState.update { state -> state.copy(updates = it) } }
             .launchIn(screenModelScope)
+
+        basePreferences.extensionInstaller().changes()
+            .onEach { mutableState.update { state -> state.copy(installer = it) } }
+            .launchIn(screenModelScope)
     }
 
     fun search(query: String?) {
@@ -217,6 +223,7 @@ class MangaExtensionsScreenModel(
         val isRefreshing: Boolean = false,
         val items: ItemGroups = mutableMapOf(),
         val updates: Int = 0,
+        val installer: BasePreferences.ExtensionInstaller? = null,
         val searchQuery: String? = null,
     ) {
         val isEmpty = items.isEmpty()

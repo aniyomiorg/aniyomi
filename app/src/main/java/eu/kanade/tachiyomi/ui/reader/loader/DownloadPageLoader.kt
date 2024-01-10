@@ -10,8 +10,8 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import tachiyomi.core.storage.toTempFile
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.core.storage.UniFileTempFileManager
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -23,6 +23,7 @@ internal class DownloadPageLoader(
     private val source: MangaSource,
     private val downloadManager: MangaDownloadManager,
     private val downloadProvider: MangaDownloadProvider,
+    private val tempFileManager: UniFileTempFileManager,
 ) : PageLoader() {
 
     private val context: Application by injectLazy()
@@ -51,8 +52,8 @@ internal class DownloadPageLoader(
         zipPageLoader?.recycle()
     }
 
-    private suspend fun getPagesFromArchive(chapterPath: UniFile): List<ReaderPage> {
-        val loader = ZipPageLoader(chapterPath.toTempFile(context)).also { zipPageLoader = it }
+    private suspend fun getPagesFromArchive(file: UniFile): List<ReaderPage> {
+        val loader = ZipPageLoader(tempFileManager.createTempFile(file)).also { zipPageLoader = it }
         return loader.getPages()
     }
 

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
@@ -36,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -66,7 +66,6 @@ fun AnimeExtensionDetailsScreen(
     state: AnimeExtensionDetailsScreenModel.State,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickWhatsNew: () -> Unit,
-    onClickReadme: () -> Unit,
     onClickEnableAll: () -> Unit,
     onClickDisableAll: () -> Unit,
     onClickClearCookies: () -> Unit,
@@ -88,13 +87,6 @@ fun AnimeExtensionDetailsScreen(
                                             title = stringResource(MR.strings.whats_new),
                                             icon = Icons.Outlined.History,
                                             onClick = onClickWhatsNew,
-                                        ),
-                                    )
-                                    add(
-                                        AppBar.Action(
-                                            title = stringResource(MR.strings.action_faq_and_guides),
-                                            icon = Icons.AutoMirrored.Outlined.HelpOutline,
-                                            onClick = onClickReadme,
                                         ),
                                     )
                                 }
@@ -124,7 +116,7 @@ fun AnimeExtensionDetailsScreen(
     ) { paddingValues ->
         if (state.extension == null) {
             EmptyScreen(
-                stringRes = MR.strings.empty_screen,
+                MR.strings.empty_screen,
                 modifier = Modifier.padding(paddingValues),
             )
             return@Scaffold
@@ -157,6 +149,21 @@ private fun AnimeExtensionDetails(
         contentPadding = contentPadding,
     ) {
         when {
+            extension.isRepoSource ->
+                item {
+                    val uriHandler = LocalUriHandler.current
+                    WarningBanner(
+                        MR.strings.repo_extension_message,
+                        modifier = Modifier.clickable {
+                            extension.repoUrl ?: return@clickable
+                            uriHandler.openUri(
+                                extension.repoUrl
+                                    .replace("https://raw.githubusercontent.com", "https://github.com")
+                                    .removeSuffix("/repo/"),
+                            )
+                        },
+                    )
+                }
             extension.isUnofficial ->
                 item {
                     WarningBanner(MR.strings.unofficial_anime_extension_message)
@@ -296,7 +303,7 @@ private fun DetailsHeader(
                 top = MaterialTheme.padding.small,
                 bottom = MaterialTheme.padding.medium,
             ),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             OutlinedButton(
                 modifier = Modifier.weight(1f),

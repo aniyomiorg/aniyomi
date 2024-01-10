@@ -40,9 +40,8 @@ data class AnimeExtensionDetailsScreen(
         AnimeExtensionDetailsScreen(
             navigateUp = navigator::pop,
             state = state,
-            onClickSourcePreferences = { navigator.push(SourcePreferencesScreen(it)) },
+            onClickSourcePreferences = { navigator.push(AnimeSourcePreferencesScreen(it)) },
             onClickWhatsNew = { uriHandler.openUri(screenModel.getChangelogUrl()) },
-            onClickReadme = { uriHandler.openUri(screenModel.getReadmeUrl()) },
             onClickEnableAll = { screenModel.toggleSources(true) },
             onClickDisableAll = { screenModel.toggleSources(false) },
             onClickClearCookies = screenModel::clearCookies,

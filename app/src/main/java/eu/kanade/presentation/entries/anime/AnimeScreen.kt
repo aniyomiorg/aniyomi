@@ -53,6 +53,7 @@ import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
+import eu.kanade.presentation.components.relativeDateText
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryScreenItem
 import eu.kanade.presentation.entries.anime.components.AnimeActionRow
@@ -70,10 +71,9 @@ import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
-import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
+import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeList
-import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
@@ -90,17 +90,15 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
-import java.text.DateFormat
-import java.util.Date
+import tachiyomi.source.local.entries.anime.isLocal
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 @Composable
 fun AnimeScreen(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    fetchInterval: Int?,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
+    nextUpdate: Instant?,
     isTabletUi: Boolean,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
@@ -156,16 +154,14 @@ fun AnimeScreen(
 
     val navigator = LocalNavigator.currentOrThrow
     val onSettingsClicked: (() -> Unit)? = {
-        navigator.push(SourcePreferencesScreen(state.source.id))
+        navigator.push(AnimeSourcePreferencesScreen(state.source.id))
     }.takeIf { state.source is ConfigurableAnimeSource }
 
     if (!isTabletUi) {
         AnimeScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
-            dateFormat = dateFormat,
-            fetchInterval = fetchInterval,
+            nextUpdate = nextUpdate,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
@@ -204,13 +200,11 @@ fun AnimeScreen(
         AnimeScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
+            nextUpdate = nextUpdate,
             episodeSwipeStartAction = episodeSwipeStartAction,
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
             alwaysUseExternalPlayer = alwaysUseExternalPlayer,
-            dateFormat = dateFormat,
-            fetchInterval = fetchInterval,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -249,9 +243,7 @@ fun AnimeScreen(
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
-    fetchInterval: Int?,
+    nextUpdate: Instant?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -455,7 +447,7 @@ private fun AnimeScreenSmallImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
-                            fetchInterval = fetchInterval,
+                            nextUpdate = nextUpdate,
                             isUserIntervalMode = state.anime.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
@@ -526,8 +518,6 @@ private fun AnimeScreenSmallImpl(
                         anime = state.anime,
                         episodes = listItem,
                         isAnyEpisodeSelected = episodes.fastAny { it.selected },
-                        dateRelativeTime = dateRelativeTime,
-                        dateFormat = dateFormat,
                         episodeSwipeStartAction = episodeSwipeStartAction,
                         episodeSwipeEndAction = episodeSwipeEndAction,
                         onEpisodeClicked = onEpisodeClicked,
@@ -546,9 +536,7 @@ private fun AnimeScreenSmallImpl(
 fun AnimeScreenLargeImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
-    fetchInterval: Int?,
+    nextUpdate: Instant?,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
@@ -734,7 +722,7 @@ fun AnimeScreenLargeImpl(
                         AnimeActionRow(
                             favorite = state.anime.favorite,
                             trackingCount = state.trackingCount,
-                            fetchInterval = fetchInterval,
+                            nextUpdate = nextUpdate,
                             isUserIntervalMode = state.anime.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
@@ -812,8 +800,6 @@ fun AnimeScreenLargeImpl(
                                 anime = state.anime,
                                 episodes = listItem,
                                 isAnyEpisodeSelected = episodes.fastAny { it.selected },
-                                dateRelativeTime = dateRelativeTime,
-                                dateFormat = dateFormat,
                                 episodeSwipeStartAction = episodeSwipeStartAction,
                                 episodeSwipeEndAction = episodeSwipeEndAction,
                                 onEpisodeClicked = onEpisodeClicked,
@@ -884,8 +870,6 @@ private fun LazyListScope.sharedEpisodeItems(
     anime: Anime,
     episodes: List<EpisodeList>,
     isAnyEpisodeSelected: Boolean,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
@@ -904,7 +888,6 @@ private fun LazyListScope.sharedEpisodeItems(
         contentType = { EntryScreenItem.ITEM },
     ) { episodeItem ->
         val haptic = LocalHapticFeedback.current
-        val context = LocalContext.current
 
         when (episodeItem) {
             is EpisodeList.MissingCount -> {
@@ -920,15 +903,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     } else {
                         episodeItem.episode.name
                     },
-                    date = episodeItem.episode.dateUpload
-                        .takeIf { it > 0L }
-                        ?.let {
-                            Date(it).toRelativeString(
-                                context,
-                                dateRelativeTime,
-                                dateFormat,
-                            )
-                        },
+                    date = relativeDateText(episodeItem.episode.dateUpload),
                     watchProgress = episodeItem.episode.lastSecondSeen
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
@@ -942,7 +917,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     seen = episodeItem.episode.seen,
                     bookmark = episodeItem.episode.bookmark,
                     selected = episodeItem.selected,
-                    downloadIndicatorEnabled = !isAnyEpisodeSelected,
+                    downloadIndicatorEnabled = !isAnyEpisodeSelected && !anime.isLocal(),
                     downloadStateProvider = { episodeItem.downloadState },
                     downloadProgressProvider = { episodeItem.downloadProgress },
                     episodeSwipeStartAction = episodeSwipeStartAction,

@@ -39,12 +39,11 @@ class KitsuSearchManga(obj: JsonObject) {
 
     @CallSuper
     fun toTrack() = MangaTrackSearch.create(TrackerManager.KITSU).apply {
-        media_id = this@KitsuSearchManga.id
-        title = canonicalTitle
+        remote_id = this@KitsuSearchManga.id
         total_chapters = chapterCount ?: 0
         cover_url = original ?: ""
         summary = synopsis ?: ""
-        tracking_url = KitsuApi.mangaUrl(media_id)
+        tracking_url = KitsuApi.mangaUrl(remote_id)
         score = rating ?: -1f
         publishing_status = if (endDate == null) {
             "Publishing"
@@ -77,12 +76,11 @@ class KitsuSearchAnime(obj: JsonObject) {
 
     @CallSuper
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.KITSU).apply {
-        media_id = this@KitsuSearchAnime.id
-        title = canonicalTitle
+        remote_id = this@KitsuSearchAnime.id
         total_episodes = episodeCount ?: 0
         cover_url = original ?: ""
         summary = synopsis ?: ""
-        tracking_url = KitsuApi.animeUrl(media_id)
+        tracking_url = KitsuApi.animeUrl(remote_id)
         score = rating ?: -1f
         publishing_status = if (endDate == null) {
             "Publishing"
@@ -110,12 +108,12 @@ class KitsuLibManga(obj: JsonObject, manga: JsonObject) {
     val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
 
     fun toTrack() = MangaTrackSearch.create(TrackerManager.KITSU).apply {
-        media_id = libraryId
+        remote_id = libraryId
         title = canonicalTitle
         total_chapters = chapterCount ?: 0
         cover_url = original
         summary = synopsis
-        tracking_url = KitsuApi.mangaUrl(media_id)
+        tracking_url = KitsuApi.mangaUrl(remote_id)
         publishing_status = this@KitsuLibManga.status
         publishing_type = type
         start_date = startDate
@@ -152,12 +150,12 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
     val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
 
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.KITSU).apply {
-        media_id = libraryId
+        remote_id = libraryId
         title = canonicalTitle
         total_episodes = episodeCount ?: 0
         cover_url = original
         summary = synopsis
-        tracking_url = KitsuApi.animeUrl(media_id)
+        tracking_url = KitsuApi.animeUrl(remote_id)
         publishing_status = this@KitsuLibAnime.status
         publishing_type = type
         start_date = startDate

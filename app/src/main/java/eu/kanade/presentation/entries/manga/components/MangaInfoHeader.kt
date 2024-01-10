@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -87,7 +88,8 @@ import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
-import kotlin.math.absoluteValue
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))
@@ -166,7 +168,7 @@ fun MangaInfoBox(
 fun MangaActionRow(
     favorite: Boolean,
     trackingCount: Int,
-    fetchInterval: Int?,
+    nextUpdate: Instant?,
     isUserIntervalMode: Boolean,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
@@ -177,6 +179,16 @@ fun MangaActionRow(
     modifier: Modifier = Modifier,
 ) {
     val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+
+    // TODO: show something better when using custom interval
+    val nextUpdateDays = remember(nextUpdate) {
+        return@remember if (nextUpdate != null) {
+            val now = Instant.now()
+            now.until(nextUpdate, ChronoUnit.DAYS).toInt().coerceAtLeast(0)
+        } else {
+            null
+        }
+    }
 
     Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
         MangaActionButton(
@@ -190,18 +202,20 @@ fun MangaActionRow(
             onClick = onAddToLibraryClicked,
             onLongClick = onEditCategory,
         )
-        if (onEditIntervalClicked != null && fetchInterval != null) {
-            MangaActionButton(
-                title = pluralStringResource(
+        MangaActionButton(
+            title = if (nextUpdateDays != null) {
+                pluralStringResource(
                     MR.plurals.day,
-                    count = fetchInterval.absoluteValue,
-                    fetchInterval.absoluteValue,
-                ),
-                icon = Icons.Default.HourglassEmpty,
-                color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
-                onClick = onEditIntervalClicked,
-            )
-        }
+                    count = nextUpdateDays,
+                    nextUpdateDays,
+                )
+            } else {
+                stringResource(MR.strings.not_applicable)
+            },
+            icon = Icons.Default.HourglassEmpty,
+            color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
+            onClick = { onEditIntervalClicked?.invoke() },
+        )
         MangaActionButton(
             title = if (trackingCount == 0) {
                 stringResource(MR.strings.manga_tracking_tab)
@@ -287,7 +301,7 @@ fun ExpandableMangaDescription(
                 if (expanded) {
                     FlowRow(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                     ) {
                         tags.forEach {
                             TagsChip(
@@ -303,7 +317,7 @@ fun ExpandableMangaDescription(
                 } else {
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = MaterialTheme.padding.medium),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                     ) {
                         items(items = tags) {
                             TagsChip(
@@ -406,7 +420,7 @@ private fun MangaAndSourceTitlesSmall(
 }
 
 @Composable
-private fun MangaContentInfo(
+private fun ColumnScope.MangaContentInfo(
     title: String,
     doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
@@ -438,7 +452,7 @@ private fun MangaContentInfo(
 
     Row(
         modifier = Modifier.secondaryItemAlpha(),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -469,7 +483,7 @@ private fun MangaContentInfo(
     if (!artist.isNullOrBlank() && author != artist) {
         Row(
             modifier = Modifier.secondaryItemAlpha(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(

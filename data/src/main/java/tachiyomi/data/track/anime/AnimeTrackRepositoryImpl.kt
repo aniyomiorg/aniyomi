@@ -10,32 +10,32 @@ class AnimeTrackRepositoryImpl(
 ) : AnimeTrackRepository {
 
     override suspend fun getTrackByAnimeId(id: Long): AnimeTrack? {
-        return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, ::mapTrack) }
+        return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, AnimeTrackMapper::mapTrack) }
     }
 
     override suspend fun getTracksByAnimeId(animeId: Long): List<AnimeTrack> {
         return handler.awaitList {
-            anime_syncQueries.getTracksByAnimeId(animeId, ::mapTrack)
+            anime_syncQueries.getTracksByAnimeId(animeId, AnimeTrackMapper::mapTrack)
         }
     }
 
     override fun getAnimeTracksAsFlow(): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
-            anime_syncQueries.getAnimeTracks(::mapTrack)
+            anime_syncQueries.getAnimeTracks(AnimeTrackMapper::mapTrack)
         }
     }
 
     override fun getTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
-            anime_syncQueries.getTracksByAnimeId(animeId, ::mapTrack)
+            anime_syncQueries.getTracksByAnimeId(animeId, AnimeTrackMapper::mapTrack)
         }
     }
 
-    override suspend fun deleteAnime(animeId: Long, syncId: Long) {
+    override suspend fun delete(animeId: Long, trackerId: Long) {
         handler.await {
             anime_syncQueries.delete(
                 animeId = animeId,
-                syncId = syncId,
+                syncId = trackerId,
             )
         }
     }
@@ -53,7 +53,7 @@ class AnimeTrackRepositoryImpl(
             tracks.forEach { animeTrack ->
                 anime_syncQueries.insert(
                     animeId = animeTrack.animeId,
-                    syncId = animeTrack.syncId,
+                    syncId = animeTrack.trackerId,
                     remoteId = animeTrack.remoteId,
                     libraryId = animeTrack.libraryId,
                     title = animeTrack.title,
@@ -68,34 +68,4 @@ class AnimeTrackRepositoryImpl(
             }
         }
     }
-
-    private fun mapTrack(
-        id: Long,
-        animeId: Long,
-        syncId: Long,
-        remoteId: Long,
-        libraryId: Long?,
-        title: String,
-        lastEpisodeSeen: Double,
-        totalEpisodes: Long,
-        status: Long,
-        score: Double,
-        remoteUrl: String,
-        startDate: Long,
-        finishDate: Long,
-    ): AnimeTrack = AnimeTrack(
-        id = id,
-        animeId = animeId,
-        syncId = syncId,
-        remoteId = remoteId,
-        libraryId = libraryId,
-        title = title,
-        lastEpisodeSeen = lastEpisodeSeen,
-        totalEpisodes = totalEpisodes,
-        status = status,
-        score = score,
-        remoteUrl = remoteUrl,
-        startDate = startDate,
-        finishDate = finishDate,
-    )
 }

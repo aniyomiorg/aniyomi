@@ -101,7 +101,7 @@ private fun SubtitleFont(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

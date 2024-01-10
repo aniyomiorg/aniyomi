@@ -1,6 +1,7 @@
 package eu.kanade.presentation.browse.manga
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,12 +43,15 @@ import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
+import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.components.DotSeparatorNoSpaceText
+import eu.kanade.presentation.util.rememberRequestPackageInstallsPermissionState
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.launchRequestPackageInstallsPermission
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
@@ -67,7 +71,7 @@ fun MangaExtensionScreen(
     searchQuery: String?,
     onLongClickItem: (MangaExtension) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
-    onClickItemWebView: (MangaExtension.Available) -> Unit,
+    onOpenWebView: (MangaExtension.Available) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,
     onUninstallExtension: (MangaExtension) -> Unit,
     onUpdateExtension: (MangaExtension.Installed) -> Unit,
@@ -100,7 +104,7 @@ fun MangaExtensionScreen(
                     contentPadding = contentPadding,
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
-                    onClickItemWebView = onClickItemWebView,
+                    onOpenWebView = onOpenWebView,
                     onInstallExtension = onInstallExtension,
                     onUninstallExtension = onUninstallExtension,
                     onUpdateExtension = onUpdateExtension,
@@ -118,7 +122,7 @@ private fun ExtensionContent(
     state: MangaExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (MangaExtension) -> Unit,
-    onClickItemWebView: (MangaExtension.Available) -> Unit,
+    onOpenWebView: (MangaExtension.Available) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,
     onUninstallExtension: (MangaExtension) -> Unit,
@@ -127,11 +131,24 @@ private fun ExtensionContent(
     onOpenExtension: (MangaExtension.Installed) -> Unit,
     onClickUpdateAll: () -> Unit,
 ) {
+    val context = LocalContext.current
     var trustState by remember { mutableStateOf<MangaExtension.Untrusted?>(null) }
+    val installGranted = rememberRequestPackageInstallsPermissionState()
 
     FastScrollLazyColumn(
         contentPadding = contentPadding + topSmallPaddingValues,
     ) {
+        if (!installGranted && state.installer?.requiresSystemPermission == true) {
+            item {
+                WarningBanner(
+                    textRes = MR.strings.ext_permission_install_apps_warning,
+                    modifier = Modifier.clickable {
+                        context.launchRequestPackageInstallsPermission()
+                    },
+                )
+            }
+        }
+
         state.items.forEach { (header, items) ->
             item(
                 contentType = "header",
@@ -185,7 +202,13 @@ private fun ExtensionContent(
                         }
                     },
                     onLongClickItem = onLongClickItem,
-                    onClickItemWebView = onClickItemWebView,
+                    onClickItemSecondaryAction = {
+                        when (it) {
+                            is MangaExtension.Available -> onOpenWebView(it)
+                            is MangaExtension.Installed -> onOpenExtension(it)
+                            else -> {}
+                        }
+                    },
                     onClickItemCancel = onClickItemCancel,
                     onClickItemAction = {
                         when (it) {
@@ -229,9 +252,9 @@ private fun ExtensionItem(
     item: MangaExtensionUiModel.Item,
     onClickItem: (MangaExtension) -> Unit,
     onLongClickItem: (MangaExtension) -> Unit,
-    onClickItemWebView: (MangaExtension.Available) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onClickItemAction: (MangaExtension) -> Unit,
+    onClickItemSecondaryAction: (MangaExtension) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val (extension, installStep) = item
@@ -273,9 +296,9 @@ private fun ExtensionItem(
             ExtensionItemActions(
                 extension = extension,
                 installStep = installStep,
-                onClickItemWebView = onClickItemWebView,
                 onClickItemCancel = onClickItemCancel,
                 onClickItemAction = onClickItemAction,
+                onClickItemSecondaryAction = onClickItemSecondaryAction,
             )
         },
     ) {
@@ -305,7 +328,7 @@ private fun ExtensionItemContent(
         // Won't look good but it's not like we can ellipsize overflowing content
         FlowRow(
             modifier = Modifier.secondaryItemAlpha(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is MangaExtension.Installed && extension.lang.isNotEmpty()) {
@@ -360,15 +383,15 @@ private fun ExtensionItemActions(
     extension: MangaExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
-    onClickItemWebView: (MangaExtension.Available) -> Unit = {},
     onClickItemCancel: (MangaExtension) -> Unit = {},
     onClickItemAction: (MangaExtension) -> Unit = {},
+    onClickItemSecondaryAction: (MangaExtension) -> Unit = {},
 ) {
     val isIdle = installStep.isCompleted()
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         when {
             !isIdle -> {
@@ -390,6 +413,13 @@ private fun ExtensionItemActions(
             installStep == InstallStep.Idle -> {
                 when (extension) {
                     is MangaExtension.Installed -> {
+                        IconButton(onClick = { onClickItemSecondaryAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(MR.strings.action_settings),
+                            )
+                        }
+
                         if (extension.hasUpdate) {
                             IconButton(onClick = { onClickItemAction(extension) }) {
                                 Icon(
@@ -397,13 +427,6 @@ private fun ExtensionItemActions(
                                     contentDescription = stringResource(MR.strings.ext_update),
                                 )
                             }
-                        }
-
-                        IconButton(onClick = { onClickItemAction(extension) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = stringResource(MR.strings.action_settings),
-                            )
                         }
                     }
                     is MangaExtension.Untrusted -> {
@@ -417,7 +440,7 @@ private fun ExtensionItemActions(
                     is MangaExtension.Available -> {
                         if (extension.sources.isNotEmpty()) {
                             IconButton(
-                                onClick = { onClickItemWebView(extension) },
+                                onClick = { onClickItemSecondaryAction(extension) },
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.Public,

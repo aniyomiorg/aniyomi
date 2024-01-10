@@ -20,8 +20,8 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 112
-        versionName = "0.14.7"
+        versionCode = 115
+        versionName = "0.15.0.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -130,6 +130,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
 
         // Disable some unused things
         aidl = false
@@ -253,7 +254,7 @@ dependencies {
     implementation(libs.logcat)
 
     // Crash reports
-    implementation(libs.acra.http)
+    implementation(libs.bundles.acra)
 
     // Shizuku
     implementation(libs.bundles.shizuku)

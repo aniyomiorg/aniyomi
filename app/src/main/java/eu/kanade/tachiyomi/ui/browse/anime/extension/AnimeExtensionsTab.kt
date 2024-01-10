@@ -54,7 +54,7 @@ fun animeExtensionsTab(
                 },
                 onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
                 onClickUpdateAll = extensionsScreenModel::updateAllExtensions,
-                onClickItemWebView = { extension ->
+                onOpenWebView = { extension ->
                     extension.sources.getOrNull(0)?.let {
                         navigator.push(
                             WebViewScreen(

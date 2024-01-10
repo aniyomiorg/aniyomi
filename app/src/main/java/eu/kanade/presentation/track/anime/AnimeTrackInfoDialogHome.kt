@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.presentation.track.manga.TrackDetailsItem
@@ -89,7 +88,7 @@ fun AnimeTrackInfoDialogHome(
                         }
                     },
                     onEpisodesClick = { onEpisodeClick(item) },
-                    score = item.tracker.animeService.displayScore(item.track.toDbTrack())
+                    score = item.tracker.animeService.displayScore(item.track)
                         .takeIf { supportsScoring && item.track.score != 0.0 },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },

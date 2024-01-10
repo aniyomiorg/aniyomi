@@ -60,7 +60,6 @@ fun Screen.animeUpdatesTab(
                 state = state,
                 snackbarHostState = screenModel.snackbarHostState,
                 lastUpdated = screenModel.lastUpdated,
-                relativeTime = screenModel.relativeTime,
                 onClickCover = { item -> navigator.push(AnimeScreen(item.update.animeId)) },
                 onSelectAll = screenModel::toggleAllSelection,
                 onInvertSelection = screenModel::invertSelection,

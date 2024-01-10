@@ -32,8 +32,10 @@ import eu.kanade.presentation.more.settings.screen.advanced.ClearDatabaseScreen
 import eu.kanade.presentation.more.settings.screen.debug.DebugInfoScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.anime.AnimeMetadataUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaMetadataUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -51,12 +53,18 @@ import eu.kanade.tachiyomi.network.PREF_DOH_QUAD9
 import eu.kanade.tachiyomi.network.PREF_DOH_SHECAN
 import eu.kanade.tachiyomi.ui.more.OnboardingScreen
 import eu.kanade.tachiyomi.util.CrashLogUtil
+import eu.kanade.tachiyomi.util.system.isDevFlavor
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import okhttp3.Headers
@@ -159,7 +167,7 @@ object SettingsAdvancedScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_background_activity),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_disable_battery_optimization),
                     subtitle = stringResource(MR.strings.pref_disable_battery_optimization_summary),
@@ -200,7 +208,7 @@ object SettingsAdvancedScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_data),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_invalidate_download_cache),
                     subtitle = stringResource(MR.strings.pref_invalidate_download_cache_summary),
@@ -236,7 +244,7 @@ object SettingsAdvancedScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_network),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_clear_cookies),
                     onClick = {
@@ -267,7 +275,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = networkPreferences.dohProvider(),
                     title = stringResource(MR.strings.pref_dns_over_https),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         -1 to stringResource(MR.strings.disabled),
                         PREF_DOH_CLOUDFLARE to "Cloudflare",
                         PREF_DOH_GOOGLE to "Google",
@@ -317,16 +325,17 @@ object SettingsAdvancedScreen : SearchableSettings {
     private fun getLibraryGroup(): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
-        val trackerManager = remember { Injekt.get<TrackerManager>() }
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_library),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_refresh_library_covers),
                     onClick = {
+                        AnimeLibraryUpdateJob.startNow(context)
                         MangaLibraryUpdateJob.startNow(context)
                         AnimeMetadataUpdateJob.startNow(context)
+                        MangaMetadataUpdateJob.startNow(context)
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -388,12 +397,21 @@ object SettingsAdvancedScreen : SearchableSettings {
         }
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_extensions),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = extensionInstallerPref,
                     title = stringResource(MR.strings.ext_installer_pref),
                     entries = extensionInstallerPref.entries
-                        .associateWith { stringResource(it.titleRes) },
+                        .filter {
+                            // TODO: allow private option in stable versions once URL handling is more fleshed out
+                            if (isPreviewBuildType || isDevFlavor) {
+                                true
+                            } else {
+                                it != BasePreferences.ExtensionInstaller.PRIVATE
+                            }
+                        }
+                        .associateWith { stringResource(it.titleRes) }
+                        .toImmutableMap(),
                     onValueChanged = {
                         if (it == BasePreferences.ExtensionInstaller.SHIZUKU &&
                             !context.isShizukuInstalled
@@ -416,12 +434,12 @@ object SettingsAdvancedScreen : SearchableSettings {
         val dataSaver by sourcePreferences.dataSaver().collectAsState()
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.data_saver),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = sourcePreferences.dataSaver(),
                     title = stringResource(MR.strings.data_saver),
                     subtitle = stringResource(MR.strings.data_saver_summary),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         DataSaver.NONE to stringResource(MR.strings.disabled),
                         DataSaver.BANDWIDTH_HERO to stringResource(MR.strings.bandwidth_hero),
                         DataSaver.WSRV_NL to stringResource(MR.strings.wsrv),
@@ -462,7 +480,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         "80%",
                         "90%",
                         "95%",
-                    ).associateBy { it.trimEnd('%').toInt() },
+                    ).associateBy { it.trimEnd('%').toInt() }.toPersistentMap(),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 kotlin.run {

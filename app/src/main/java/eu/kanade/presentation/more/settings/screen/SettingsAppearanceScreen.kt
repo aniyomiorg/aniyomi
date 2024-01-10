@@ -26,6 +26,11 @@ import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
+import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import org.xmlpull.v1.XmlPullParser
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -69,7 +74,7 @@ object SettingsAppearanceScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_theme),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.CustomPreference(
                     title = stringResource(MR.strings.pref_app_theme),
                 ) {
@@ -149,11 +154,11 @@ object SettingsAppearanceScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_display),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPrefs.bottomNavStyle(),
                     title = stringResource(MR.strings.pref_bottom_nav_style),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         0 to stringResource(MR.strings.pref_bottom_nav_no_history),
                         1 to stringResource(MR.strings.pref_bottom_nav_no_updates),
                         2 to stringResource(MR.strings.pref_bottom_nav_no_manga),
@@ -176,7 +181,9 @@ object SettingsAppearanceScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = uiPreferences.tabletUiMode(),
                     title = stringResource(MR.strings.pref_tablet_ui_mode),
-                    entries = TabletUiMode.entries.associateWith { stringResource(it.titleRes) },
+                    entries = TabletUiMode.entries
+                        .associateWith { stringResource(it.titleRes) }
+                        .toImmutableMap(),
                     onValueChanged = {
                         context.stringResource(MR.strings.requires_app_restart)
                         true
@@ -189,7 +196,8 @@ object SettingsAppearanceScreen : SearchableSettings {
                         .associateWith {
                             val formattedDate = UiPreferences.dateFormat(it).format(now)
                             "${it.ifEmpty { stringResource(MR.strings.label_default) }} ($formattedDate)"
-                        },
+                        }
+                        .toImmutableMap(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = uiPreferences.relativeTime(),
@@ -203,7 +211,7 @@ object SettingsAppearanceScreen : SearchableSettings {
             ),
         )
     }
-    private fun getLangs(context: Context): Map<String, String> {
+    private fun getLangs(context: Context): ImmutableMap<String, String> {
         val langs = mutableListOf<Pair<String, String>>()
         val parser = context.resources.getXml(R.xml.locales_config)
         var eventType = parser.eventType
@@ -225,7 +233,7 @@ object SettingsAppearanceScreen : SearchableSettings {
         langs.sortBy { it.second }
         langs.add(0, Pair("", context.stringResource(MR.strings.label_default)))
 
-        return langs.toMap()
+        return langs.toMap().toImmutableMap()
     }
 }
 

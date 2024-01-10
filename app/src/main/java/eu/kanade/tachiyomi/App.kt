@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.PendingIntent
+import android.app.job.JobInfo
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -56,10 +57,12 @@ import logcat.LogPriority
 import logcat.LogcatLogger
 import org.acra.config.httpSender
 import org.acra.data.StringFormat
+import org.acra.config.scheduler
 import org.acra.ktx.initAcra
 import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.preference.Preference
 import tachiyomi.core.util.system.logcat
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
@@ -218,9 +221,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             initAcra {
                 buildConfigClass = BuildConfig::class.java
                 excludeMatchingSharedPreferencesKeys = listOf(
-                    ".*username.*",
-                    ".*password.*",
-                    ".*token.*",
+                    Preference.privateKey(".*"), ".*username.*", ".*password.*", ".*token.*",
                 )
 
                 reportFormat = StringFormat.JSON
@@ -229,6 +230,12 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                     basicAuthLogin = BuildConfig.ACRA_LOGIN
                     basicAuthPassword = BuildConfig.ACRA_PASSWORD
                     httpMethod = HttpSender.Method.POST
+                }
+
+                scheduler {
+                    requiresBatteryNotLow = true
+                    requiresDeviceIdle = true
+                    requiresNetworkType = JobInfo.NETWORK_TYPE_UNMETERED
                 }
             }
         }

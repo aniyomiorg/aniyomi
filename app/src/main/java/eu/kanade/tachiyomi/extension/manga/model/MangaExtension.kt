@@ -13,8 +13,6 @@ sealed class MangaExtension {
     abstract val libVersion: Double
     abstract val lang: String?
     abstract val isNsfw: Boolean
-    abstract val hasReadme: Boolean
-    abstract val hasChangelog: Boolean
 
     data class Installed(
         override val name: String,
@@ -24,8 +22,6 @@ sealed class MangaExtension {
         override val libVersion: Double,
         override val lang: String,
         override val isNsfw: Boolean,
-        override val hasReadme: Boolean,
-        override val hasChangelog: Boolean,
         val pkgFactory: String?,
         val sources: List<MangaSource>,
         val icon: Drawable?,
@@ -33,6 +29,8 @@ sealed class MangaExtension {
         val isObsolete: Boolean = false,
         val isUnofficial: Boolean = false,
         val isShared: Boolean,
+        val repoUrl: String? = null,
+        val isRepoSource: Boolean = false,
     ) : MangaExtension()
 
     data class Available(
@@ -43,11 +41,11 @@ sealed class MangaExtension {
         override val libVersion: Double,
         override val lang: String,
         override val isNsfw: Boolean,
-        override val hasReadme: Boolean,
-        override val hasChangelog: Boolean,
         val sources: List<MangaSource>,
         val apkName: String,
         val iconUrl: String,
+        val repoUrl: String,
+        val isRepoSource: Boolean,
     ) : MangaExtension() {
 
         data class MangaSource(
@@ -75,7 +73,5 @@ sealed class MangaExtension {
         val signatureHash: String,
         override val lang: String? = null,
         override val isNsfw: Boolean = false,
-        override val hasReadme: Boolean = false,
-        override val hasChangelog: Boolean = false,
     ) : MangaExtension()
 }

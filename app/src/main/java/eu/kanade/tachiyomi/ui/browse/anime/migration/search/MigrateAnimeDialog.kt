@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.hasCustomCover
@@ -49,6 +48,7 @@ import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LabeledCheckbox
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
@@ -96,7 +96,7 @@ internal fun MigrateAnimeDialog(
             },
             confirmButton = {
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                 ) {
                     TextButton(
                         onClick = {

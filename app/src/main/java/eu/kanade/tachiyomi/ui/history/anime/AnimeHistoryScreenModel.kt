@@ -73,9 +73,7 @@ class AnimeHistoryScreenModel(
                 val beforeDate = before?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(
-                        afterDate,
-                    )
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
