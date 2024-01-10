@@ -160,6 +160,14 @@ fun EntryToolbar(
                                         ),
                                     )
                                 }
+                                if (onClickSettings != null) {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(MR.strings.settings),
+                                            onClick = onClickSettings,
+                                        ),
+                                    )
+                                }
                             }
                             .build(),
                     )
