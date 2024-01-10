@@ -6,11 +6,13 @@ import eu.kanade.tachiyomi.data.backup.BackupDecoder
 import eu.kanade.tachiyomi.data.backup.BackupNotifier
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSourcePreferences
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.CategoriesRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.ExtensionsRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.PreferenceRestorer
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -34,6 +36,7 @@ class BackupRestorer(
     private val preferenceRestorer: PreferenceRestorer = PreferenceRestorer(context),
     private val animeRestorer: AnimeRestorer = AnimeRestorer(),
     private val mangaRestorer: MangaRestorer = MangaRestorer(),
+    private val extensionsRestorer: ExtensionsRestorer = ExtensionsRestorer(context),
 ) {
 
     private var restoreAmount = 0
@@ -104,7 +107,7 @@ class BackupRestorer(
                 restoreManga(backup.backupManga, backup.backupCategories)
             }
             if (options.extensions) {
-                // TODO: actually restore extensions
+                restoreExtensions(backup.backupExtensions)
             }
 
             // TODO: optionally trigger online library + tracker update
@@ -184,6 +187,19 @@ class BackupRestorer(
     private fun CoroutineScope.restoreSourcePreferences(preferences: List<BackupSourcePreferences>) = launch {
         ensureActive()
         preferenceRestorer.restoreSourcePreferences(preferences)
+
+        restoreProgress += 1
+        notifier.showRestoreProgress(
+            context.stringResource(MR.strings.source_settings),
+            restoreProgress,
+            restoreAmount,
+            isSync,
+        )
+    }
+
+    private fun CoroutineScope.restoreExtensions(extensions: List<BackupExtension>) = launch {
+        ensureActive()
+        extensionsRestorer.restoreExtensions(extensions)
 
         restoreProgress += 1
         notifier.showRestoreProgress(

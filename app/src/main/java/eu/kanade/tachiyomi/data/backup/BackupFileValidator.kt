@@ -54,13 +54,13 @@ class BackupFileValidator(
                 .distinct()
                 .sorted()
 
-        val trackers = backup.backupManga
+        val animeTrackers = backup.backupAnime
             .flatMap { it.tracking }
             .map { it.syncId }
-            .distinct() + backup.backupAnime
+        val mangaTrackers = backup.backupManga
             .flatMap { it.tracking }
             .map { it.syncId }
-            .distinct()
+        val trackers = (animeTrackers + mangaTrackers).distinct()
         val missingTrackers = trackers
             .mapNotNull { trackerManager.get(it.toLong()) }
             .filter { !it.isLoggedIn }
