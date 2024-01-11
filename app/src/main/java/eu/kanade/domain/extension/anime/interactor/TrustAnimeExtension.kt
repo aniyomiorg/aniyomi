@@ -4,7 +4,6 @@ import android.content.pm.PackageInfo
 import androidx.core.content.pm.PackageInfoCompat
 import eu.kanade.domain.source.service.SourcePreferences
 import tachiyomi.core.preference.getAndSet
-import kotlin.math.sign
 
 class TrustAnimeExtension(
     private val preferences: SourcePreferences,
@@ -12,8 +11,8 @@ class TrustAnimeExtension(
 
     fun isTrusted(pkgInfo: PackageInfo, signatureHash: String): Boolean {
         val key = "${pkgInfo.packageName}:${PackageInfoCompat.getLongVersionCode(pkgInfo)}:$signatureHash"
-        return key in preferences.trustedExtensions().get()
-            || signatureHash == officialSignature
+        return key in preferences.trustedExtensions().get() ||
+            signatureHash == officialSignature
     }
 
     fun trust(pkgName: String, versionCode: Long, signatureHash: String) {

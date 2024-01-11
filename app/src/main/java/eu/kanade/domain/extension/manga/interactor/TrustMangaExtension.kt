@@ -11,8 +11,8 @@ class TrustMangaExtension(
 
     fun isTrusted(pkgInfo: PackageInfo, signatureHash: String): Boolean {
         val key = "${pkgInfo.packageName}:${PackageInfoCompat.getLongVersionCode(pkgInfo)}:$signatureHash"
-        return key in preferences.trustedExtensions().get()
-            || signatureHash == officialSignature
+        return key in preferences.trustedExtensions().get() ||
+            signatureHash == officialSignature
     }
 
     fun trust(pkgName: String, versionCode: Long, signatureHash: String) {
