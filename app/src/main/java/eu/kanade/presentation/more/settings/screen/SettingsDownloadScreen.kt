@@ -37,9 +37,9 @@ object SettingsDownloadScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val getCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allCategories by getCategories.subscribe().collectAsState(
-            initial = runBlocking { getCategories.await() },
+        val getMangaCategories = remember { Injekt.get<GetMangaCategories>() }
+        val allMangaCategories by getMangaCategories.subscribe().collectAsState(
+            initial = runBlocking { getMangaCategories.await() },
         )
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
@@ -71,12 +71,13 @@ object SettingsDownloadScreen : SearchableSettings {
             Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.download_slots_info)),
             getDeleteChaptersGroup(
                 downloadPreferences = downloadPreferences,
-                categories = allCategories,
+                animeCategories = allAnimeCategories,
+                mangaCategories = allMangaCategories,
             ),
             getAutoDownloadGroup(
                 downloadPreferences = downloadPreferences,
-                allCategories = allCategories,
                 allAnimeCategories = allAnimeCategories,
+                allMangaCategories = allMangaCategories,
             ),
             getDownloadAheadGroup(downloadPreferences = downloadPreferences),
             getExternalDownloaderGroup(
@@ -89,7 +90,8 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     private fun getDeleteChaptersGroup(
         downloadPreferences: DownloadPreferences,
-        categories: List<Category>,
+        animeCategories: List<Category>,
+        mangaCategories: List<Category>,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_delete_chapters),
@@ -114,9 +116,13 @@ object SettingsDownloadScreen : SearchableSettings {
                     pref = downloadPreferences.removeBookmarkedChapters(),
                     title = stringResource(MR.strings.pref_remove_bookmarked_chapters),
                 ),
+                getExcludedAnimeCategoriesPreference(
+                    downloadPreferences = downloadPreferences,
+                    categories = { animeCategories },
+                ),
                 getExcludedCategoriesPreference(
                     downloadPreferences = downloadPreferences,
-                    categories = { categories },
+                    categories = { mangaCategories },
                 ),
             ),
         )
@@ -137,10 +143,24 @@ object SettingsDownloadScreen : SearchableSettings {
     }
 
     @Composable
+    private fun getExcludedAnimeCategoriesPreference(
+        downloadPreferences: DownloadPreferences,
+        categories: () -> List<Category>,
+    ): Preference.PreferenceItem.MultiSelectListPreference {
+        return Preference.PreferenceItem.MultiSelectListPreference(
+            pref = downloadPreferences.removeExcludeCategories(),
+            title = stringResource(MR.strings.pref_remove_exclude_categories_anime),
+            entries = categories()
+                .associate { it.id.toString() to it.visualName }
+                .toImmutableMap(),
+        )
+    }
+
+    @Composable
     private fun getAutoDownloadGroup(
         downloadPreferences: DownloadPreferences,
-        allCategories: List<Category>,
         allAnimeCategories: List<Category>,
+        allMangaCategories: List<Category>,
     ): Preference.PreferenceGroup {
         val downloadNewEpisodesPref = downloadPreferences.downloadNewEpisodes()
         val downloadNewEpisodeCategoriesPref = downloadPreferences.downloadNewEpisodeCategories()
@@ -185,9 +205,9 @@ object SettingsDownloadScreen : SearchableSettings {
             TriStateListDialog(
                 title = stringResource(MR.strings.manga_categories),
                 message = stringResource(MR.strings.pref_download_new_categories_details),
-                items = allCategories,
-                initialChecked = included.mapNotNull { id -> allCategories.find { it.id.toString() == id } },
-                initialInversed = excluded.mapNotNull { id -> allCategories.find { it.id.toString() == id } },
+                items = allMangaCategories,
+                initialChecked = included.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
+                initialInversed = excluded.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
                 itemLabel = { it.visualName },
                 onDismissRequest = { showDialog = false },
                 onValueChanged = { newIncluded, newExcluded ->
@@ -226,7 +246,7 @@ object SettingsDownloadScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.manga_categories),
                     subtitle = getCategoriesLabel(
-                        allCategories = allCategories,
+                        allCategories = allMangaCategories,
                         included = included,
                         excluded = excluded,
                     ),
