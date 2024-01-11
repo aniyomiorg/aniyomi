@@ -58,11 +58,6 @@
     <string name="default_anime_category">기본 애니메이션 카테고리</string>
     <string name="pref_manga_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
     <string name="pref_anime_library_update_categories_details">제외된 카테고리의 애니메이션은 포함된 카테고리에 있어도 업데이트되지 않습니다.</string>
-    <string name="untrusted_extension_message">이 확장 앱은 신뢰할 수 없는 인증서로 서명되어 활성화되지 않았습니다.
-\n
-\n일부 악의적인 확장 앱은 Aniyomi에 저장된 로그인 정보를 읽거나 임의의 코드를 실행할 수도 있습니다.
-\n
-\n이 인증서를 신뢰하면 이러한 위험에 노출될 수 있습니다.</string>
     <string name="unofficial_extension_message_aniyomi">이 확장 앱은 Aniyomi의 공식 확장 앱이 아닙니다.</string>
     <string name="rotation_reverse_landscape">가로 반전</string>
     <string name="rotation_sensor_portrait">자동 세로</string>

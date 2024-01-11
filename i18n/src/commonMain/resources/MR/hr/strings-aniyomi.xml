@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Prikaži broj nepročitanih na ikoni „Aktualiziranja”</string>
     <string name="default_manga_category">Standardna manga kategorija</string>
     <string name="pref_manga_library_update_categories_details">Manga u isključenim kategorijama neće se aktualizirati čak niti ako se također nalaze u uključenim kategorijama.</string>
-    <string name="untrusted_extension_message">Ovo proširenje potpisano je nepovjerljivim certifikatom i nije aktivirano.
-\n
-\nZlonamjerno proširenje može pročitati sve podatke za prijavu koji su spremljeni u programu Aniyomi ili izvršiti proizvoljni kod.
-\n
-\nVjerujući ovom certifikatu, prihvaćaš te rizike.</string>
     <string name="pref_category_delete_chapters">Izbriši poglavlja</string>
     <string name="pref_remove_after_marked_as_read">Nakon ručnog označivanja kao pročitano</string>
     <string name="pref_remove_after_read">Automatski izbriši nakon čitanja</string>

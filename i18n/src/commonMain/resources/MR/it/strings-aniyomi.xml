@@ -19,11 +19,6 @@
     <string name="pref_library_update_show_tab_badge">Mostra numero di elementi non letti/visti nell\'icona degli aggiornamenti</string>
     <string name="default_manga_category">Categoria manga predefinita</string>
     <string name="pref_manga_library_update_categories_details">I manga nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
-    <string name="untrusted_extension_message">Questa estensione è stata firmata con un certificato non attendibile e non è stata attivata.
-\n
-\nUn\'estensione maliziosa potrebbe leggere credenziali di accesso all\'interno di Aniyomi, o eseguire codice dannoso.
-\n
-\nFidandoti di questo certificato accetti questi rischi.</string>
     <string name="pref_category_delete_chapters">Elimina capitoli/episodi</string>
     <string name="pref_remove_after_marked_as_read">Dopo averli contrassegnati manualmente come letti/visti</string>
     <string name="pref_remove_after_read">Cancella automaticamente dopo la lettura/visione</string>

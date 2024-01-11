@@ -2,11 +2,6 @@
 <resources>
     <string name="manga_categories">კატეგორიები</string>
     <string name="default_manga_category">ნაგულისხმევი კატეგორია</string>
-    <string name="untrusted_extension_message">ეს დამატება ხელმოწერილია უცნობი სერთიფიკატის მიერ და არ არის აქტივირებული.
-\n
-\nმავნე დამატებას შეუძლია წაიკითხოს შესვლის მონაცემები შენახული ამ აპლიკაციაში ან გაუშვას თავისი კოდი.
-\n
-\nამ სერტიფიკატის ნდობით თქვენ თქვენს თავზე იღებთ რისკებს და პასუხისმგებლობას.</string>
     <string name="pref_category_delete_chapters">თავების წაშლა</string>
     <string name="pref_remove_after_marked_as_read">წაშალე წაკითხულად მონიშვნის შემდეგ</string>
     <string name="pref_remove_after_read">წაკკითხვის შემდეგ წაშალე</string>

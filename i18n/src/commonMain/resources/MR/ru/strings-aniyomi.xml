@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Непрочитанные главы на иконке «Обновления»</string>
     <string name="default_manga_category">Основная категория</string>
     <string name="pref_manga_library_update_categories_details">Записи в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
-    <string name="untrusted_extension_message">Это расширение было подписано ненадёжным сертификатом и не было активировано.
-\n
-\nВредоносное расширение может считывать любые учетные данные для входа, хранящиеся в Aniyomi, или выполнять произвольный код.
-\n
-\nДоверяя этому сертификату, вы принимаете эти риски.</string>
     <string name="pref_category_delete_chapters">Удаление глав</string>
     <string name="pref_remove_after_marked_as_read">Удалять помеченое как «Прочитано»</string>
     <string name="pref_remove_after_read">Удалять после прочтения</string>

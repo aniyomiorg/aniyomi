@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Zobrazit počet nepřečtených kapitol na ikoně Aktualizace</string>
     <string name="default_manga_category">Výchozí kategorie mangy</string>
     <string name="pref_manga_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
-    <string name="untrusted_extension_message">Toto rozšíření bylo podepsané nedůvěryhodným certifikátem a nebylo aktivované.
-\n
-\nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v Aniyomi nebo spustit libovolný kód.
-\n
-\nDůvěřováním tomuto certifikátu přijímáte tato rizika.</string>
     <string name="pref_category_delete_chapters">Smazat kapitoly</string>
     <string name="pref_remove_after_marked_as_read">Po ručním označení jako přečtené</string>
     <string name="pref_remove_after_read">Po přečtení automaticky smazat</string>

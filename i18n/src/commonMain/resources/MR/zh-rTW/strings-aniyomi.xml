@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">在「新刊」導覽圖示上標記未讀章數</string>
     <string name="default_manga_category">預設類別</string>
     <string name="pref_manga_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
-    <string name="untrusted_extension_message">這個擴充套件的憑證並不可靠，且尚未被啟用。
-\n
-\n惡意的擴充套件可能存取任何儲存於 Aniyomi 中的登錄憑證，或執行任意的程式碼。
-\n
-\n信任這個憑證，即表示你願意承擔上述風險。</string>
     <string name="pref_category_delete_chapters">刪除章節</string>
     <string name="pref_remove_after_marked_as_read">手動標示為已讀後</string>
     <string name="pref_remove_after_read">翻閱過後自動刪除</string>

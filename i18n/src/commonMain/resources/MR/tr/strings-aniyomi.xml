@@ -57,11 +57,6 @@
     <string name="default_anime_category">Varsayılan anime kategorisi</string>
     <string name="pref_manga_library_update_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile güncellenmeyecektir.</string>
     <string name="pref_anime_library_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
-    <string name="untrusted_extension_message">Bu uzantı güvenilmeyen bir sertifika ile imzalanmış ve etkinleştirilmedi.
-\n
-\nKötü niyetli bir uzantı, Aniyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
-\n
-\nBu sertifikaya güvenerek bu riskleri kabul etmiş oluyorsunuz.</string>
     <string name="unofficial_extension_message_aniyomi">Bu uzantı, resmi Aniyomi uzantıları listesinden değildir.</string>
     <string name="pref_category_player">Oynatıcı</string>
     <string name="pref_category_progress">İlerleyiş</string>

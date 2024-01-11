@@ -58,11 +58,6 @@
     <string name="default_anime_category">Kategori anime standar default</string>
     <string name="pref_manga_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
     <string name="pref_anime_library_update_categories_details">Anime dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
-    <string name="untrusted_extension_message">Ekstensi ini ditanda tangani dengan sertifikat yang tidak terpercaya dan belum diaktifkan.
-\n
-\nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Aniyomi atau mengeksekusi kode berbahaya.
-\n
-\nDengan mempercayai sertifikat ini Anda menyetujui resiko tersebut.</string>
     <string name="unofficial_extension_message_aniyomi">Ektension ini bukan dari daftar ekstension official Aniyomi.</string>
     <string name="rotation_reverse_landscape">Lanskap terbalik</string>
     <string name="rotation_sensor_portrait">Sensor potret</string>

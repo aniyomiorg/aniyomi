@@ -57,11 +57,6 @@
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
-    <string name="untrusted_extension_message">Esta extensión está firmada por una fuente sin certificar y por lo tanto no se ha activado.
-\n
-\nUna extensión maliciosa puede leer credenciales de inicio guardadas en Aniyomi o ejecutar cualquier tipo de código en tu dispositivo.
-\n
-\nAl confiar en este certificado aceptas estos riesgos.</string>
     <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
     <string name="rotation_reverse_landscape">Paisaje invertido</string>
     <string name="rotation_sensor_portrait">Retrato del sensor</string>

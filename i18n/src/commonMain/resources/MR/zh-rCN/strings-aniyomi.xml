@@ -58,11 +58,6 @@
     <string name="default_anime_category">默认动画分类</string>
     <string name="pref_manga_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的漫画将不会被自动更新。</string>
     <string name="pref_anime_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
-    <string name="untrusted_extension_message">此插件的签名证书并不可信，因此未被启用。
-\n
-\n恶意的插件可能会读取储存在 Aniyomi 中的任何登录凭据或执行任意代码。
-\n
-\n信任这个证书，即代表你愿意承担上述风险。</string>
     <string name="unofficial_extension_message_aniyomi">此插件不是Aniyomi官方插件。</string>
     <string name="rotation_reverse_landscape">横向翻转</string>
     <string name="rotation_sensor_portrait">竖向传感器</string>

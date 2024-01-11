@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Ipakita ang bilang ng di pa nakita/nabasa sa Bago</string>
     <string name="default_manga_category">Panimulang lagayan</string>
     <string name="pref_manga_library_update_categories_details">Ang mga entry sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
-    <string name="untrusted_extension_message">Pinirmahan ang extension na ito gamit ang isang kaduda-dudang certificate at hindi muna pinagana.
-\n
-\nMaaaring mabasa ng isang kaduda-dudang extension ang kahit anong credentials sa pag-login na nakatago sa Aniyomi o di kaya nama\'y magsimula ng delikadong code.
-\n
-\nTinatanggap mo ang mga bantang ito sa pagtiwala sa certificate na ito.</string>
     <string name="pref_category_delete_chapters">Magbura ng kabanata</string>
     <string name="pref_remove_after_marked_as_read">Pagkamarkahang nabasa na</string>
     <string name="pref_remove_after_read">Pagkatapos basahin, kusang burahin</string>

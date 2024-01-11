@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Ammustra su nùmeru de capìtulos non lèghidos in s\'icona de sos agiornamentos</string>
     <string name="default_manga_category">Categoria predefinida</string>
     <string name="pref_manga_library_update_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a agiornare nemmancu si sunt fintzas in categorias inclùdidas.</string>
-    <string name="untrusted_extension_message">Custa estensione est istada firmada cun unu tzertificadu chi no est afidàbile e no est istada ativada.
-\n
-\nUn\'estensione mala diat pòdere lèghere totu sas informatziones de atzessu sarvadas in Aniyomi o fàghere eseguire còdighe arbitràriu.
-\n
-\nPonende fidùtzia in custu tzertificadu atzetas custos arriscos.</string>
     <string name="pref_category_delete_chapters">Iscantzella capìtulos</string>
     <string name="pref_remove_after_marked_as_read">A pustis de l\'àere marcadu manualmente comente lèghidu</string>
     <string name="pref_remove_after_read">Iscantzella in automàticu a pustis de sa leghidura</string>
