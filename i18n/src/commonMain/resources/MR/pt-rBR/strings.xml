@@ -769,7 +769,7 @@
     <string name="error_repo_exists">Este repositório já existe!</string>
     <string name="pref_library_update_smart_update">Atualização inteligente</string>
     <string name="invalid_repo_name">URL do repositório inválido</string>
-    <string name="action_add_repo_message">Adiciona repositórios adicionais ao Tachiyomi. Deve ser uma URL que termine com \"index.min.json\".</string>
+    <string name="action_add_repo_message">Adiciona repositórios adicionais ao Aniyomi. Deve ser uma URL que termine com \"index.min.json\".</string>
     <string name="delete_repo_confirmation">Você deseja deletar o repositório \"%s\"?</string>
     <string name="action_delete_repo">Deletar repositório</string>
     <string name="action_add_repo">Adicionar repositório</string>

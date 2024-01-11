@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Οι καταχωρίσεις σε εξαιρούμενες κατηγορίες δε θα ενημερώνονται ακόμη και αν περιλαμβάνονται επίσης σε κατηγορίες που περιλαμβάνονται.</string>
     <string name="untrusted_extension_message">Αυτή η επέκταση υπογράφηκε με μη αξιόπιστο πιστοποιητικό και δεν ενεργοποιήθηκε.
 \n
-\nΜια κακόβουλη επέκταση θα μπορούσε να διαβάσει τα διαπιστευτήρια σύνδεσης που είναι αποθηκευμένα στο Tachiyomi ή να εκτελέσει αυθαίρετο κώδικα.
+\nΜια κακόβουλη επέκταση θα μπορούσε να διαβάσει τα διαπιστευτήρια σύνδεσης που είναι αποθηκευμένα στο Aniyomi ή να εκτελέσει αυθαίρετο κώδικα.
 \n
 \nΕμπιστεύοντας αυτό το πιστοποιητικό αποδέχεστε αυτούς τους κινδύνους.</string>
     <string name="pref_category_delete_chapters">Διαγραφή κεφαλαίων</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">Εφαρμογή επίσης για όλες τις καταχωρήσεις στη βιβλιοθήκη μου</string>
     <string name="dialog_with_checkbox_reset">Επαναφορά όλων των κεφαλαίων για αυτήν την καταχώρηση</string>
     <string name="download_insufficient_space">Δεν ήταν δυνατή η λήψη κεφαλαίων λόγω χαμηλού αποθηκευτικού χώρου</string>
-    <string name="download_queue_size_warning">Προειδοποίηση: οι μαζικές λήψεις ενδέχεται να οδηγήσουν σε επιβράδυνση των πηγών ή/και αποκλεισμό του Tachiyomi. Πατήστε για να μάθετε περισσότερα.</string>
-    <string name="information_webview_required">Το WebView απαιτείται για το Tachiyomi</string>
+    <string name="download_queue_size_warning">Προειδοποίηση: οι μαζικές λήψεις ενδέχεται να οδηγήσουν σε επιβράδυνση των πηγών ή/και αποκλεισμό του Aniyomi. Πατήστε για να μάθετε περισσότερα.</string>
+    <string name="information_webview_required">Το WebView απαιτείται για το Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Λήψη σε παύση</string>
     <string name="channel_new_chapters_episodes">Ενημερώσεις κεφαλαίων</string>
 </resources>

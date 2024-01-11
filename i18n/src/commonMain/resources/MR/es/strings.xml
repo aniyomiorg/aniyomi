@@ -774,7 +774,7 @@
     <string name="error_repo_exists">El repositorio ya existe</string>
     <string name="pref_library_update_smart_update">Actualizaciones inteligentes</string>
     <string name="invalid_repo_name">La dirección URL del repositorio no parece ser correcta</string>
-    <string name="action_add_repo_message">Añade más repositorios a Tachiyomi; la dirección URL tiene que terminar en «index.min.json».</string>
+    <string name="action_add_repo_message">Añade más repositorios a Aniyomi; la dirección URL tiene que terminar en «index.min.json».</string>
     <string name="delete_repo_confirmation">¿Seguro que quieres borrar el repositorio «%s»?</string>
     <string name="action_delete_repo">Borrar repositorio</string>
     <string name="action_add_repo">Añadir un repositorio</string>

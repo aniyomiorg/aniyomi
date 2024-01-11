@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
     <string name="untrusted_extension_message">這個擴充套件的憑證並不可靠，且尚未被啟用。
 \n
-\n惡意的擴充套件可能存取任何儲存於 Tachiyomi 中的登錄憑證，或執行任意的程式碼。
+\n惡意的擴充套件可能存取任何儲存於 Aniyomi 中的登錄憑證，或執行任意的程式碼。
 \n
 \n信任這個憑證，即表示你願意承擔上述風險。</string>
     <string name="pref_category_delete_chapters">刪除章節</string>
@@ -31,8 +31,8 @@
     <string name="also_set_chapter_settings_for_library">同時套用至其餘在書櫃中的作品</string>
     <string name="dialog_with_checkbox_reset">重設此作品所有章節</string>
     <string name="download_insufficient_space">由於儲存空間不足，無法下載章節</string>
-    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源並 (或) 使其封鎖 Tachiyomi。輕觸以瞭解詳情。</string>
-    <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
+    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源並 (或) 使其封鎖 Aniyomi。輕觸以瞭解詳情。</string>
+    <string name="information_webview_required">WebView 為 Aniyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
     <string name="label_manga_library">漫畫</string>

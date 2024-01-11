@@ -4,7 +4,7 @@
     <string name="default_manga_category">Categoría por defecto</string>
     <string name="untrusted_extension_message">Esta extensión foi firmada non un certificado non confiable e non foi activada
 \n
-\nUnha extensión maliciosa podería ler calquera credencial de inicio de sesión gardado en Tachiyomi ou executar código arbitrario.
+\nUnha extensión maliciosa podería ler calquera credencial de inicio de sesión gardado en Aniyomi ou executar código arbitrario.
 \n
 \nConfiando neste certificado aceptas estes riscos.</string>
     <string name="pref_category_delete_chapters">Eliminar capítulos</string>

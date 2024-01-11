@@ -772,7 +772,7 @@
     <string name="pref_library_update_smart_update">อัปเดตอัจฉริยะ</string>
     <string name="label_extension_repos">รีโพส่วนขยาย</string>
     <string name="error_repo_exists">มีรีโพนี้อยู่แล้ว!</string>
-    <string name="action_add_repo_message">เพิ่มรีโพเพิ่มเติมให้กับ Tachiyomi - ควรเป็น URL ที่ลงท้ายด้วย \"index.min.json\"</string>
+    <string name="action_add_repo_message">เพิ่มรีโพเพิ่มเติมให้กับ Aniyomi - ควรเป็น URL ที่ลงท้ายด้วย \"index.min.json\"</string>
     <string name="manga_interval_custom_amount">ความถี่ในการอัปเดตกำหนดเอง:</string>
     <string name="information_empty_repos">คุณไม่มีรีโพที่ตั้งค่าไว้</string>
     <string name="onboarding_storage_help_action">คู่มือการจัดเก็บข้อมูล</string>

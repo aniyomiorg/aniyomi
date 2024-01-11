@@ -9,7 +9,7 @@
     <string name="pref_manga_library_update_categories_details">Манге у искљученим категоријама се неће ажурирати иако су такође у укљученим категоријама.</string>
     <string name="untrusted_extension_message">Овај додатак је потписан неповерљивим сертификатом и због тога није активиран.
 \n
-\nЗлонамерни додаци могу читати податке о пријави које чува Tachiyomi или извршити произвољни ко̂д.
+\nЗлонамерни додаци могу читати податке о пријави које чува Aniyomi или извршити произвољни ко̂д.
 \n
 \nВерујући овом сертификату прихватате наведене ризике.</string>
     <string name="pref_category_delete_chapters">Избриши поглавља</string>
@@ -31,8 +31,8 @@
     <string name="also_set_chapter_settings_for_library">Такође примени на све манге у колекцији</string>
     <string name="dialog_with_checkbox_reset">Ресетујте сва поглавља ове манге</string>
     <string name="download_insufficient_space">Неуспешно преузимање поглавља због недовољне меморије</string>
-    <string name="download_queue_size_warning">Упозорење: велики број преузимања може довести до успоравања извора и/или блокирања Tachiyomi-ја</string>
-    <string name="information_webview_required">За Tachiyomi је потребан WebView</string>
+    <string name="download_queue_size_warning">Упозорење: велики број преузимања може довести до успоравања извора и/или блокирања Aniyomi-ја</string>
+    <string name="information_webview_required">За Aniyomi је потребан WebView</string>
     <string name="download_notifier_download_paused_chapters">Преузимање заустављено</string>
     <string name="channel_new_chapters_episodes">Ажурирања поглавља</string>
 </resources>
