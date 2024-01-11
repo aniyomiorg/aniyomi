@@ -41,9 +41,10 @@ class SourcePreferences(
 
     fun mangaExtensionRepos() = preferenceStore.getStringSet("extension_repos", emptySet())
 
-    fun extensionUpdatesCount() = preferenceStore.getInt("ext_updates_count", 0)
-
-    fun trustedSignatures() = preferenceStore.getStringSet(Preference.appStateKey("trusted_signatures"), emptySet())
+    fun trustedExtensions() = preferenceStore.getStringSet(
+        Preference.appStateKey("trusted_extensions"),
+        emptySet(),
+    )
 
     // Mixture Sources
 

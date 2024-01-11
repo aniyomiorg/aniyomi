@@ -23,10 +23,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.suspendCancellableCoroutine
+import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
+import tachiyomi.core.util.system.logcat
 import java.io.BufferedInputStream
 import java.io.InputStream
 
@@ -80,7 +82,7 @@ class WebtoonPageHolder(
         refreshLayoutParams()
 
         frame.onImageLoaded = { onImageDecoded() }
-        frame.onImageLoadError = { onImageDecodeError() }
+        frame.onImageLoadError = { setError() }
         frame.onScaleChanged = { viewer.activity.hideMenu() }
     }
 
@@ -184,28 +186,35 @@ class WebtoonPageHolder(
 
         val streamFn = page?.stream ?: return
 
-        val (openStream, isAnimated) = withIOContext {
-            val stream = streamFn().buffered(16)
-            val openStream = process(stream)
+        try {
+            val (openStream, isAnimated) = withIOContext {
+                val stream = streamFn().buffered(16)
+                val openStream = process(stream)
 
-            val isAnimated = ImageUtil.isAnimatedAndSupported(stream)
-            Pair(openStream, isAnimated)
-        }
-        withUIContext {
-            frame.setImage(
-                openStream,
-                isAnimated,
-                ReaderPageImageView.Config(
-                    zoomDuration = viewer.config.doubleTapAnimDuration,
-                    minimumScaleType = SubsamplingScaleImageView.SCALE_TYPE_FIT_WIDTH,
-                    cropBorders = viewer.config.imageCropBorders,
-                ),
-            )
-            removeErrorLayout()
-        }
-        // Suspend the coroutine to close the input stream only when the WebtoonPageHolder is recycled
-        suspendCancellableCoroutine<Nothing> { continuation ->
-            continuation.invokeOnCancellation { openStream.close() }
+                val isAnimated = ImageUtil.isAnimatedAndSupported(stream)
+                Pair(openStream, isAnimated)
+            }
+            withUIContext {
+                frame.setImage(
+                    openStream,
+                    isAnimated,
+                    ReaderPageImageView.Config(
+                        zoomDuration = viewer.config.doubleTapAnimDuration,
+                        minimumScaleType = SubsamplingScaleImageView.SCALE_TYPE_FIT_WIDTH,
+                        cropBorders = viewer.config.imageCropBorders,
+                    ),
+                )
+                removeErrorLayout()
+            }
+            // Suspend the coroutine to close the input stream only when the WebtoonPageHolder is recycled
+            suspendCancellableCoroutine<Nothing> { continuation ->
+                continuation.invokeOnCancellation { openStream.close() }
+            }
+        } catch (e: Throwable) {
+            logcat(LogPriority.ERROR, e)
+            withUIContext {
+                setError()
+            }
         }
     }
 
@@ -240,7 +249,7 @@ class WebtoonPageHolder(
      */
     private fun setError() {
         progressContainer.isVisible = false
-        initErrorLayout(withOpenInWebView = false)
+        initErrorLayout()
     }
 
     /**
@@ -249,14 +258,6 @@ class WebtoonPageHolder(
     private fun onImageDecoded() {
         progressContainer.isVisible = false
         removeErrorLayout()
-    }
-
-    /**
-     * Called when the image fails to decode.
-     */
-    private fun onImageDecodeError() {
-        progressContainer.isVisible = false
-        initErrorLayout(withOpenInWebView = true)
     }
 
     /**
@@ -278,7 +279,7 @@ class WebtoonPageHolder(
     /**
      * Initializes a button to retry pages.
      */
-    private fun initErrorLayout(withOpenInWebView: Boolean): ReaderErrorBinding {
+    private fun initErrorLayout(): ReaderErrorBinding {
         if (errorLayout == null) {
             errorLayout = ReaderErrorBinding.inflate(LayoutInflater.from(context), frame, true)
             errorLayout?.root?.layoutParams = FrameLayout.LayoutParams(
@@ -288,15 +289,19 @@ class WebtoonPageHolder(
             errorLayout?.actionRetry?.setOnClickListener {
                 page?.let { it.chapter.pageLoader?.retryPage(it) }
             }
-            val imageUrl = page?.imageUrl
-            if (imageUrl.orEmpty().startsWith("http", true)) {
+        }
+
+        val imageUrl = page?.imageUrl
+        errorLayout?.actionOpenInWebView?.isVisible = imageUrl != null
+        if (imageUrl != null) {
+            if (imageUrl.startsWith("http", true)) {
                 errorLayout?.actionOpenInWebView?.setOnClickListener {
-                    val intent = WebViewActivity.newIntent(context, imageUrl!!)
+                    val intent = WebViewActivity.newIntent(context, imageUrl)
                     context.startActivity(intent)
                 }
             }
         }
-        errorLayout?.actionOpenInWebView?.isVisible = withOpenInWebView
+
         return errorLayout!!
     }
 

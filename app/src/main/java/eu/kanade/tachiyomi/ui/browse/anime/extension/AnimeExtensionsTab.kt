@@ -67,7 +67,7 @@ fun animeExtensionsTab(
                 },
                 onInstallExtension = extensionsScreenModel::installExtension,
                 onOpenExtension = { navigator.push(AnimeExtensionDetailsScreen(it.pkgName)) },
-                onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
+                onTrustExtension = { extensionsScreenModel.trustExtension(it) },
                 onUninstallExtension = { extensionsScreenModel.uninstallExtension(it) },
                 onUpdateExtension = extensionsScreenModel::updateExtension,
                 onRefresh = extensionsScreenModel::findAvailableExtensions,

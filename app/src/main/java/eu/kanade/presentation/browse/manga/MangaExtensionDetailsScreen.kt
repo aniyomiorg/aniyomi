@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.automirrored.outlined.Launch
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -53,6 +53,7 @@ import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaExtensionDetailsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
@@ -62,17 +63,27 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 
 @Composable
-fun ExtensionDetailsScreen(
+fun MangaExtensionDetailsScreen(
     navigateUp: () -> Unit,
     state: MangaExtensionDetailsScreenModel.State,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
-    onClickWhatsNew: () -> Unit,
     onClickEnableAll: () -> Unit,
     onClickDisableAll: () -> Unit,
     onClickClearCookies: () -> Unit,
     onClickUninstall: () -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
 ) {
+    val uriHandler = LocalUriHandler.current
+    val url = remember(state.extension) {
+        val regex = """https://raw.githubusercontent.com/(.+?)/(.+?)/.+""".toRegex()
+        regex.find(state.extension?.repoUrl.orEmpty())
+            ?.let {
+                val (user, repo) = it.destructured
+                "https://github.com/$user/$repo"
+            }
+            ?: state.extension?.repoUrl
+    }
+
     Scaffold(
         topBar = { scrollBehavior ->
             AppBar(
@@ -82,12 +93,14 @@ fun ExtensionDetailsScreen(
                     AppBarActions(
                         actions = persistentListOf<AppBar.AppBarAction>().builder()
                             .apply {
-                                if (state.extension?.isUnofficial == false) {
+                                if (url != null) {
                                     add(
                                         AppBar.Action(
-                                            title = stringResource(MR.strings.whats_new),
-                                            icon = Icons.Outlined.History,
-                                            onClick = onClickWhatsNew,
+                                            title = stringResource(MR.strings.action_open_repo),
+                                            icon = Icons.AutoMirrored.Outlined.Launch,
+                                            onClick = {
+                                                uriHandler.openUri(url)
+                                            },
                                         ),
                                     )
                                 }
@@ -138,7 +151,7 @@ fun ExtensionDetailsScreen(
 private fun ExtensionDetails(
     contentPadding: PaddingValues,
     extension: MangaExtension.Installed,
-    sources: List<MangaExtensionSourceItem>,
+    sources: ImmutableList<MangaExtensionSourceItem>,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickUninstall: () -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
@@ -149,30 +162,10 @@ private fun ExtensionDetails(
     ScrollbarLazyColumn(
         contentPadding = contentPadding,
     ) {
-        when {
-            extension.isRepoSource ->
-                item {
-                    val uriHandler = LocalUriHandler.current
-                    WarningBanner(
-                        MR.strings.repo_extension_message,
-                        modifier = Modifier.clickable {
-                            extension.repoUrl ?: return@clickable
-                            uriHandler.openUri(
-                                extension.repoUrl
-                                    .replace("https://raw.githubusercontent.com", "https://github.com")
-                                    .removeSuffix("/repo/"),
-                            )
-                        },
-                    )
-                }
-            extension.isUnofficial ->
-                item {
-                    WarningBanner(MR.strings.unofficial_extension_message)
-                }
-            extension.isObsolete ->
-                item {
-                    WarningBanner(MR.strings.obsolete_extension_message)
-                }
+        if (extension.isObsolete) {
+            item {
+                WarningBanner(MR.strings.obsolete_extension_message)
+            }
         }
 
         item {

@@ -1,17 +1,17 @@
-package eu.kanade.domain.source.manga.interactor
+package eu.kanade.domain.extension.anime.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
 import tachiyomi.core.preference.plusAssign
 
-class CreateMangaSourceRepo(private val preferences: SourcePreferences) {
+class CreateAnimeExtensionRepo(private val preferences: SourcePreferences) {
 
     fun await(name: String): Result {
         // Do not allow invalid formats
-        if (!name.matches(repoRegex) || name.startsWith(OFFICIAL_REPO_BASE_URL)) {
+        if (!name.matches(repoRegex) || name.startsWith(OFFICIAL_ANIYOMI_REPO_BASE_URL)) {
             return Result.InvalidUrl
         }
 
-        preferences.mangaExtensionRepos() += name.substringBeforeLast("/index.min.json")
+        preferences.mangaExtensionRepos() += name.removeSuffix("/index.min.json")
 
         return Result.Success
     }
@@ -22,5 +22,5 @@ class CreateMangaSourceRepo(private val preferences: SourcePreferences) {
     }
 }
 
-const val OFFICIAL_REPO_BASE_URL = "https://raw.githubusercontent.com/tachiyomiorg/extensions/repo"
+const val OFFICIAL_ANIYOMI_REPO_BASE_URL = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo"
 private val repoRegex = """^https://.*/index\.min\.json$""".toRegex()

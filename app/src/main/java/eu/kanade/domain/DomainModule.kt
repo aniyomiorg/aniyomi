@@ -8,20 +8,25 @@ import eu.kanade.domain.entries.manga.interactor.GetExcludedScanlators
 import eu.kanade.domain.entries.manga.interactor.SetExcludedScanlators
 import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.extension.anime.interactor.CreateAnimeExtensionRepo
+import eu.kanade.domain.extension.anime.interactor.DeleteAnimeExtensionRepo
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
+import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionRepos
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
+import eu.kanade.domain.extension.anime.interactor.TrustAnimeExtension
+import eu.kanade.domain.extension.manga.interactor.CreateMangaExtensionRepo
+import eu.kanade.domain.extension.manga.interactor.DeleteMangaExtensionRepo
 import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
+import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionRepos
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
+import eu.kanade.domain.extension.manga.interactor.TrustMangaExtension
 import eu.kanade.domain.items.chapter.interactor.GetAvailableScanlators
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.source.anime.interactor.CreateAnimeSourceRepo
-import eu.kanade.domain.source.anime.interactor.DeleteAnimeSourceRepo
-import eu.kanade.domain.source.anime.interactor.GetAnimeSourceRepos
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
@@ -29,11 +34,8 @@ import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.interactor.ToggleLanguage
-import eu.kanade.domain.source.manga.interactor.CreateMangaSourceRepo
-import eu.kanade.domain.source.manga.interactor.DeleteMangaSourceRepo
 import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
 import eu.kanade.domain.source.manga.interactor.GetLanguagesWithMangaSources
-import eu.kanade.domain.source.manga.interactor.GetMangaSourceRepos
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
@@ -328,12 +330,14 @@ class DomainModule : InjektModule {
         addFactory { ToggleLanguage(get()) }
         addFactory { ToggleMangaSource(get()) }
         addFactory { ToggleMangaSourcePin(get()) }
+        addFactory { TrustAnimeExtension(get()) }
+        addFactory { TrustMangaExtension(get()) }
 
-        addFactory { CreateMangaSourceRepo(get()) }
-        addFactory { DeleteMangaSourceRepo(get()) }
-        addFactory { GetMangaSourceRepos(get()) }
-        addFactory { CreateAnimeSourceRepo(get()) }
-        addFactory { DeleteAnimeSourceRepo(get()) }
-        addFactory { GetAnimeSourceRepos(get()) }
+        addFactory { CreateMangaExtensionRepo(get()) }
+        addFactory { DeleteMangaExtensionRepo(get()) }
+        addFactory { GetMangaExtensionRepos(get()) }
+        addFactory { CreateAnimeExtensionRepo(get()) }
+        addFactory { DeleteAnimeExtensionRepo(get()) }
+        addFactory { GetAnimeExtensionRepos(get()) }
     }
 }

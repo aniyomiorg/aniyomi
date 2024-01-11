@@ -47,11 +47,7 @@
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_started">Started</string>
-    <string name="action_filter_interval_custom">Customized fetch interval</string>
-    <string name="action_filter_interval_long">Fetch monthly (28 days)</string>
-    <string name="action_filter_interval_late">Late 10+ check</string>
-    <string name="action_filter_interval_dropped">Dropped? Late 20+ and 2 months</string>
-    <string name="action_filter_interval_passed">Passed check period</string>
+    <string name="action_filter_interval_custom">Customized update frequency</string>
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
     <string name="action_sort_count">Total entries</string>
@@ -167,6 +163,8 @@
     <string name="onboarding_storage_info">Select a folder where %1$s will store chapter downloads, backups, and more.\n\nA dedicated folder is recommended.\n\nSelected folder: %2$s</string>
     <string name="onboarding_storage_action_select">Select a folder</string>
     <string name="onboarding_storage_selection_required">A folder must be selected</string>
+    <string name="onboarding_storage_help_info">Updating from an older version and not sure what to select? Refer to the storage guide for more information.</string>
+    <string name="onboarding_storage_help_action">Storage guide</string>
     <string name="onboarding_permission_install_apps">Install apps permission</string>
     <string name="onboarding_permission_install_apps_description">To install source extensions.</string>
     <string name="onboarding_permission_notifications">Notification permission</string>
@@ -206,6 +204,7 @@
     <string name="theme_greenapple">Green Apple</string>
     <string name="theme_lavender">Lavender</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
+    <string name="theme_nord">Nord</string>
     <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
     <string name="theme_tako">Tako</string>
     <string name="theme_tealturquoise">Teal &amp; Turquoise</string>
@@ -280,15 +279,13 @@
     <string name="ext_installing">Installing</string>
     <string name="ext_installed">Installed</string>
     <string name="ext_trust">Trust</string>
-    <string name="ext_unofficial">Unofficial</string>
     <string name="ext_untrusted">Untrusted</string>
     <string name="ext_uninstall">Uninstall</string>
     <string name="ext_app_info">App info</string>
     <string name="untrusted_extension">Untrusted extension</string>
-    <string name="untrusted_extension_message">This extension was signed by any unknown author and wasn\'t loaded.\n\nMalicious extensions can read any stored login credentials or execute arbitrary code.\n\nBy trusting this extension\'s certificate, you accept these risks.</string>
+    <string name="untrusted_extension_message">Malicious extensions can read any stored login credentials or execute arbitrary code.\n\nBy trusting this extension, you accept these risks.</string>
     <string name="obsolete_extension_message">This extension is no longer available. It may not function properly and can cause issues with the app. Uninstalling it is recommended.</string>
-    <string name="unofficial_extension_message">This extension is not from the official Tachiyomi extensions list.</string>
-    <string name="extension_api_error">Failed to get extensions list</string>
+    <string name="extension_api_error">Failed to fetch available extensions</string>
     <string name="ext_info_version">Version</string>
     <string name="ext_info_language">Language</string>
     <string name="ext_info_age_rating">Age rating</string>
@@ -303,6 +300,7 @@
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_private" translatable="false">Private</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
+    <string name="ext_revoke_trust">Revoke trusted unknown extensions</string>
 
     <!-- Extension repos -->
     <string name="label_extension_repos">Extension repos</string>
@@ -314,7 +312,7 @@
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
     <string name="delete_repo_confirmation">Do you wish to delete the repo \"%s\"?</string>
-    <string name="repo_extension_message">This extension is from an external repo. Tap to view the repo.</string>
+    <string name="action_open_repo">Open source repo</string>
 
       <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
@@ -605,9 +603,9 @@
     <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="manga_display_interval_title">Estimate every</string>
     <string name="manga_display_modified_interval_title">Set to update every</string>
-    <string name="manga_interval_header">Next update</string>
     <!-- "... around 2 days" -->
-    <string name="manga_interval_expected_update">Next update expected in around %1$s, checking around every %2$s</string>
+    <string name="manga_interval_expected_update">New chapters predicted to be released in around %1$s, checking around every %2$s.</string>
+    <string name="manga_interval_expected_update_soon">Soon</string>
     <string name="manga_interval_custom_amount">Custom update frequency:</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="show_title">Source title</string>

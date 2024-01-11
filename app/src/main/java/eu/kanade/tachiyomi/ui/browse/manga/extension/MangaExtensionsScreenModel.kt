@@ -213,8 +213,8 @@ class MangaExtensionsScreenModel(
         }
     }
 
-    fun trustSignature(signatureHash: String) {
-        extensionManager.trustSignature(signatureHash)
+    fun trustExtension(extension: MangaExtension.Untrusted) {
+        extensionManager.trust(extension)
     }
 
     @Immutable

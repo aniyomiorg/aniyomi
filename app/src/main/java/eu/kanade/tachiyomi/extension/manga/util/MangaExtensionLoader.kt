@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import dalvik.system.PathClassLoader
+import eu.kanade.domain.extension.manga.interactor.TrustMangaExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
@@ -16,7 +17,6 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
-import eu.kanade.tachiyomi.util.system.isDevFlavor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -43,6 +43,7 @@ import java.io.File
 internal object MangaExtensionLoader {
 
     private val preferences: SourcePreferences by injectLazy()
+    private val trustExtension: TrustMangaExtension by injectLazy()
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -51,9 +52,7 @@ internal object MangaExtensionLoader {
     private const val METADATA_SOURCE_CLASS = "tachiyomi.extension.class"
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
     private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
-    private const val METADATA_HAS_README = "tachiyomi.extension.hasReadme"
-    private const val METADATA_HAS_CHANGELOG = "tachiyomi.extension.hasChangelog"
-    const val LIB_VERSION_MIN = 1.2
+    const val LIB_VERSION_MIN = 1.4
     const val LIB_VERSION_MAX = 1.5
 
     @Suppress("DEPRECATION")
@@ -61,9 +60,6 @@ internal object MangaExtensionLoader {
         PackageManager.GET_META_DATA or
         PackageManager.GET_SIGNATURES or
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else 0)
-
-    // inorichi's key
-    private const val officialSignature = "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
 
     private const val PRIVATE_EXTENSION_EXTENSION = "ext"
 
@@ -130,12 +126,6 @@ internal object MangaExtensionLoader {
      * @param context The application context.
      */
     fun loadMangaExtensions(context: Context): List<MangaLoadResult> {
-        // Always make users trust unknown extensions on cold starts in non-dev builds
-        // due to inherent security risks
-        if (!isDevFlavor) {
-            preferences.trustedSignatures().delete()
-        }
-
         val pkgManager = context.packageManager
 
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -283,7 +273,7 @@ internal object MangaExtensionLoader {
         if (signatures.isNullOrEmpty()) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return MangaLoadResult.Error
-        } else if (!hasTrustedSignature(signatures)) {
+        } else if (!trustExtension.isTrusted(pkgInfo, signatures.last())) {
             val extension = MangaExtension.Untrusted(
                 extName,
                 pkgName,
@@ -301,9 +291,6 @@ internal object MangaExtensionLoader {
             logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
             return MangaLoadResult.Error
         }
-
-        val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
-        val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
 
         val classLoader = try {
             PathClassLoader(appInfo.sourceDir, null, context.classLoader)
@@ -354,7 +341,6 @@ internal object MangaExtensionLoader {
             isNsfw = isNsfw,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
-            isUnofficial = !isOfficiallySigned(signatures),
             icon = appInfo.loadIcon(pkgManager),
             isShared = extensionInfo.isShared,
         )
@@ -412,19 +398,6 @@ internal object MangaExtensionLoader {
         }
             ?.map { Hash.sha256(it.toByteArray()) }
             ?.toList()
-    }
-
-    private fun hasTrustedSignature(signatures: List<String>): Boolean {
-        if (officialSignature in signatures) {
-            return true
-        }
-
-        val trustedSignatures = preferences.trustedSignatures().get()
-        return trustedSignatures.any { signatures.contains(it) }
-    }
-
-    private fun isOfficiallySigned(signatures: List<String>): Boolean {
-        return signatures.all { it == officialSignature }
     }
 
     /**

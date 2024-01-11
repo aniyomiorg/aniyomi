@@ -4,11 +4,11 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.domain.source.manga.interactor.CreateMangaSourceRepo
-import eu.kanade.domain.source.manga.interactor.DeleteMangaSourceRepo
-import eu.kanade.domain.source.manga.interactor.GetMangaSourceRepos
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import eu.kanade.domain.extension.manga.interactor.CreateMangaExtensionRepo
+import eu.kanade.domain.extension.manga.interactor.DeleteMangaExtensionRepo
+import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionRepos
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,9 +19,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MangaExtensionReposScreenModel(
-    private val getSourceRepos: GetMangaSourceRepos = Injekt.get(),
-    private val createSourceRepo: CreateMangaSourceRepo = Injekt.get(),
-    private val deleteSourceRepo: DeleteMangaSourceRepo = Injekt.get(),
+    private val getExtensionRepos: GetMangaExtensionRepos = Injekt.get(),
+    private val createExtensionRepo: CreateMangaExtensionRepo = Injekt.get(),
+    private val deleteExtensionRepo: DeleteMangaExtensionRepo = Injekt.get(),
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -29,11 +29,11 @@ class MangaExtensionReposScreenModel(
 
     init {
         screenModelScope.launchIO {
-            getSourceRepos.subscribe()
+            getExtensionRepos.subscribe()
                 .collectLatest { repos ->
                     mutableState.update {
                         RepoScreenState.Success(
-                            repos = repos.toImmutableList(),
+                            repos = repos.toImmutableSet(),
                         )
                     }
                 }
@@ -47,8 +47,8 @@ class MangaExtensionReposScreenModel(
      */
     fun createRepo(name: String) {
         screenModelScope.launchIO {
-            when (createSourceRepo.await(name)) {
-                is CreateMangaSourceRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+            when (createExtensionRepo.await(name)) {
+                is CreateMangaExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
                 else -> {}
             }
         }
@@ -61,7 +61,7 @@ class MangaExtensionReposScreenModel(
      */
     fun deleteRepo(repo: String) {
         screenModelScope.launchIO {
-            deleteSourceRepo.await(repo)
+            deleteExtensionRepo.await(repo)
         }
     }
 
@@ -101,7 +101,7 @@ sealed class RepoScreenState {
 
     @Immutable
     data class Success(
-        val repos: ImmutableList<String>,
+        val repos: ImmutableSet<String>,
         val dialog: RepoDialog? = null,
     ) : RepoScreenState() {
 

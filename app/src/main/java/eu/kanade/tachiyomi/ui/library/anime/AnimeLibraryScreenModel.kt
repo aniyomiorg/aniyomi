@@ -159,6 +159,7 @@ class AnimeLibraryScreenModel(
                     prefs.filterStarted,
                     prefs.filterBookmarked,
                     prefs.filterCompleted,
+                    prefs.filterIntervalCustom,
                 ) + trackFilter.values
                 ).any { it != TriState.DISABLED }
         }
@@ -180,12 +181,13 @@ class AnimeLibraryScreenModel(
     ): AnimeLibraryMap {
         val prefs = getAnimelibItemPreferencesFlow().first()
         val downloadedOnly = prefs.globalFilterDownloaded
-        val filterDownloaded =
-            if (downloadedOnly) TriState.ENABLED_IS else prefs.filterDownloaded
+        val skipOutsideReleasePeriod = prefs.skipOutsideReleasePeriod
+        val filterDownloaded = if (downloadedOnly) TriState.ENABLED_IS else prefs.filterDownloaded
         val filterUnseen = prefs.filterUnseen
         val filterStarted = prefs.filterStarted
         val filterBookmarked = prefs.filterBookmarked
         val filterCompleted = prefs.filterCompleted
+        val filterIntervalCustom = prefs.filterIntervalCustom
 
         val isNotLoggedInAnyTrack = loggedInTrackers.isEmpty()
 
@@ -217,6 +219,14 @@ class AnimeLibraryScreenModel(
             applyFilter(filterCompleted) { it.libraryAnime.anime.status.toInt() == SAnime.COMPLETED }
         }
 
+        val filterFnIntervalCustom: (AnimeLibraryItem) -> Boolean = {
+            if (skipOutsideReleasePeriod) {
+                applyFilter(filterIntervalCustom) { it.libraryAnime.anime.fetchInterval < 0 }
+            } else {
+                true
+            }
+        }
+
         val filterFnTracking: (AnimeLibraryItem) -> Boolean = tracking@{ item ->
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
@@ -227,7 +237,7 @@ class AnimeLibraryScreenModel(
             val isExcluded = excludedTracks.isNotEmpty() && animeTracks.fastAny { it in excludedTracks }
             val isIncluded = includedTracks.isEmpty() || animeTracks.fastAny { it in includedTracks }
 
-            return@tracking !isExcluded && isIncluded
+            !isExcluded && isIncluded
         }
 
         val filterFn: (AnimeLibraryItem) -> Boolean = {
@@ -236,6 +246,7 @@ class AnimeLibraryScreenModel(
                 filterFnStarted(it) &&
                 filterFnBookmarked(it) &&
                 filterFnCompleted(it) &&
+                filterFnIntervalCustom(it) &&
                 filterFnTracking(it)
         }
 
@@ -331,6 +342,7 @@ class AnimeLibraryScreenModel(
             libraryPreferences.downloadBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
+            libraryPreferences.autoUpdateItemRestrictions().changes(),
 
             preferences.downloadedOnly().changes(),
             libraryPreferences.filterDownloadedAnime().changes(),
@@ -338,17 +350,20 @@ class AnimeLibraryScreenModel(
             libraryPreferences.filterStartedAnime().changes(),
             libraryPreferences.filterBookmarkedAnime().changes(),
             libraryPreferences.filterCompletedAnime().changes(),
+            libraryPreferences.filterIntervalCustom().changes(),
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
                     localBadge = it[1] as Boolean,
                     languageBadge = it[2] as Boolean,
-                    globalFilterDownloaded = it[3] as Boolean,
-                    filterDownloaded = it[4] as TriState,
-                    filterUnseen = it[5] as TriState,
-                    filterStarted = it[6] as TriState,
-                    filterBookmarked = it[7] as TriState,
-                    filterCompleted = it[8] as TriState,
+                    skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[3] as Set<*>),
+                    globalFilterDownloaded = it[4] as Boolean,
+                    filterDownloaded = it[5] as TriState,
+                    filterUnseen = it[6] as TriState,
+                    filterStarted = it[7] as TriState,
+                    filterBookmarked = it[8] as TriState,
+                    filterCompleted = it[9] as TriState,
+                    filterIntervalCustom = it[10] as TriState,
                 )
             },
         )
@@ -721,6 +736,7 @@ class AnimeLibraryScreenModel(
         val downloadBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
+        val skipOutsideReleasePeriod: Boolean,
 
         val globalFilterDownloaded: Boolean,
         val filterDownloaded: TriState,
@@ -728,6 +744,7 @@ class AnimeLibraryScreenModel(
         val filterStarted: TriState,
         val filterBookmarked: TriState,
         val filterCompleted: TriState,
+        val filterIntervalCustom: TriState,
     )
 
     @Immutable

@@ -491,16 +491,6 @@ object Migrations {
                     uiPreferences.relativeTime().set(false)
                 }
             }
-            if (oldVersion < 107) {
-                replacePreferences(
-                    preferenceStore = preferenceStore,
-                    filterPredicate = {
-                        it.key.startsWith("pref_mangasync_") ||
-                            it.key.startsWith("track_token_")
-                    },
-                    newKey = { Preference.privateKey(it) },
-                )
-            }
             if (oldVersion < 113) {
                 val prefsToReplace = listOf(
                     "pref_download_only",
@@ -530,7 +520,19 @@ object Migrations {
             }
             if (oldVersion < 114) {
                 sourcePreferences.mangaExtensionRepos().getAndSet {
-                    it.map { "https://raw.githubusercontent.com/$it/repo" }.toSet()
+                    it.map { repo -> "https://raw.githubusercontent.com/$repo/repo" }.toSet()
+                }
+            }
+            if (oldVersion < 116) {
+                replacePreferences(
+                    preferenceStore = preferenceStore,
+                    filterPredicate = { it.key.startsWith("pref_mangasync_") || it.key.startsWith("track_token_") },
+                    newKey = { Preference.privateKey(it) },
+                )
+            }
+            if (oldVersion < 117) {
+                prefs.edit {
+                    remove(Preference.appStateKey("trusted_signatures"))
                 }
             }
             return true

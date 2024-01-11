@@ -18,7 +18,6 @@
     <string name="pref_remove_after_read">翻閱過後自動刪除</string>
     <string name="pref_remove_bookmarked_chapters">允許刪除有書籤的章節</string>
     <string name="pref_remove_exclude_categories_manga">排除的類別</string>
-    <string name="pref_auto_update_manga_sync">閱後自動更新章節進度</string>
     <string name="pref_clear_chapter_cache">清除章節快取</string>
     <string name="pref_auto_clear_chapter_cache">結束應用程式時清除章節快取</string>
     <string name="pref_clear_manga_database">清除資料庫</string>

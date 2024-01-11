@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
-import eu.kanade.domain.source.manga.interactor.OFFICIAL_REPO_BASE_URL
+import eu.kanade.domain.extension.manga.interactor.OFFICIAL_TACHIYOMI_REPO_BASE_URL
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -38,8 +38,8 @@ internal class MangaExtensionApi {
     suspend fun findExtensions(): List<MangaExtension.Available> {
         return withIOContext {
             val extensions = buildList {
-                addAll(getExtensions(OFFICIAL_REPO_BASE_URL, true))
-                sourcePreferences.mangaExtensionRepos().get().map { addAll(getExtensions(it, false)) }
+                addAll(getExtensions(OFFICIAL_TACHIYOMI_REPO_BASE_URL))
+                sourcePreferences.mangaExtensionRepos().get().map { addAll(getExtensions(it)) }
             }
 
             // Sanity check - a small number of extensions probably means something broke
@@ -52,10 +52,7 @@ internal class MangaExtensionApi {
         }
     }
 
-    private suspend fun getExtensions(
-        repoBaseUrl: String,
-        isOfficialRepo: Boolean,
-    ): List<MangaExtension.Available> {
+    private suspend fun getExtensions(repoBaseUrl: String): List<MangaExtension.Available> {
         return try {
             val response = networkService.client
                 .newCall(GET("$repoBaseUrl/index.min.json"))
@@ -64,7 +61,7 @@ internal class MangaExtensionApi {
             with(json) {
                 response
                     .parseAs<List<ExtensionJsonObject>>()
-                    .toExtensions(repoBaseUrl, isRepoSource = !isOfficialRepo)
+                    .toExtensions(repoBaseUrl)
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Failed to get extensions from $repoBaseUrl" }
@@ -99,7 +96,7 @@ internal class MangaExtensionApi {
             val availableExt = extensions.find { it.pkgName == pkgName } ?: continue
             val hasUpdatedVer = availableExt.versionCode > installedExt.versionCode
             val hasUpdatedLib = availableExt.libVersion > installedExt.libVersion
-            val hasUpdate = installedExt.isUnofficial.not() && (hasUpdatedVer || hasUpdatedLib)
+            val hasUpdate = hasUpdatedVer || hasUpdatedLib
             if (hasUpdate) {
                 extensionsWithUpdate.add(installedExt)
             }
@@ -112,10 +109,7 @@ internal class MangaExtensionApi {
         return extensionsWithUpdate
     }
 
-    private fun List<ExtensionJsonObject>.toExtensions(
-        repoUrl: String,
-        isRepoSource: Boolean,
-    ): List<MangaExtension.Available> {
+    private fun List<ExtensionJsonObject>.toExtensions(repoUrl: String): List<MangaExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -134,7 +128,6 @@ internal class MangaExtensionApi {
                     apkName = it.apk,
                     iconUrl = "$repoUrl/icon/${it.pkg}.png",
                     repoUrl = repoUrl,
-                    isRepoSource = isRepoSource,
                 )
             }
     }

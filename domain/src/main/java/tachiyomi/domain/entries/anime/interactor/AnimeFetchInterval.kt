@@ -14,11 +14,11 @@ class AnimeFetchInterval(
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
 ) {
 
-    suspend fun toAnimeUpdateOrNull(
+    suspend fun toAnimeUpdate(
         anime: Anime,
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
-    ): AnimeUpdate? {
+    ): AnimeUpdate {
         val interval = anime.fetchInterval.takeIf { it < 0 } ?: calculateInterval(
             episodes = getEpisodesByAnimeId.await(anime.id),
             zone = dateTime.zone,
@@ -30,11 +30,7 @@ class AnimeFetchInterval(
         }
         val nextUpdate = calculateNextUpdate(anime, interval, dateTime, currentWindow)
 
-        return if (anime.nextUpdate == nextUpdate && anime.fetchInterval == interval) {
-            null
-        } else {
-            AnimeUpdate(id = anime.id, nextUpdate = nextUpdate, fetchInterval = interval)
-        }
+        return AnimeUpdate(id = anime.id, nextUpdate = nextUpdate, fetchInterval = interval)
     }
 
     fun getWindow(dateTime: ZonedDateTime): Pair<Long, Long> {
@@ -96,34 +92,31 @@ class AnimeFetchInterval(
         dateTime: ZonedDateTime,
         window: Pair<Long, Long>,
     ): Long {
-        return if (
-            anime.nextUpdate !in window.first.rangeTo(window.second + 1) ||
-            anime.fetchInterval == 0
-        ) {
-            val latestDate = ZonedDateTime.ofInstant(
-                if (anime.lastUpdate > 0) Instant.ofEpochMilli(anime.lastUpdate) else Instant.now(),
-                dateTime.zone,
-            )
-                .toLocalDate()
-                .atStartOfDay()
-            val timeSinceLatest = ChronoUnit.DAYS.between(latestDate, dateTime).toInt()
-            val cycle = timeSinceLatest.floorDiv(
-                interval.absoluteValue.takeIf { interval < 0 }
-                    ?: doubleInterval(interval, timeSinceLatest, doubleWhenOver = 10),
-            )
-            latestDate.plusDays((cycle + 1) * interval.toLong()).toEpochSecond(dateTime.offset) * 1000
-        } else {
-            anime.nextUpdate
+        if (anime.nextUpdate in window.first.rangeTo(window.second + 1)) {
+            return anime.nextUpdate
         }
+
+        val latestDate = ZonedDateTime.ofInstant(
+            if (anime.lastUpdate > 0) Instant.ofEpochMilli(anime.lastUpdate) else Instant.now(),
+            dateTime.zone,
+        )
+            .toLocalDate()
+            .atStartOfDay()
+        val timeSinceLatest = ChronoUnit.DAYS.between(latestDate, dateTime).toInt()
+        val cycle = timeSinceLatest.floorDiv(
+            interval.absoluteValue.takeIf { interval < 0 }
+                ?: increaseInterval(interval, timeSinceLatest, increaseWhenOver = 10),
+        )
+        return latestDate.plusDays((cycle + 1) * interval.toLong()).toEpochSecond(dateTime.offset) * 1000
     }
 
-    private fun doubleInterval(delta: Int, timeSinceLatest: Int, doubleWhenOver: Int): Int {
-        if (delta >= MAX_INTERVAL) return MAX_INTERVAL
+    private fun increaseInterval(delta: Int, timeSinceLatest: Int, increaseWhenOver: Int): Int {
+        if (delta >= AnimeFetchInterval.MAX_INTERVAL) return AnimeFetchInterval.MAX_INTERVAL
 
         // double delta again if missed more than 9 check in new delta
         val cycle = timeSinceLatest.floorDiv(delta) + 1
-        return if (cycle > doubleWhenOver) {
-            doubleInterval(delta * 2, timeSinceLatest, doubleWhenOver)
+        return if (cycle > increaseWhenOver) {
+            increaseInterval(delta * 2, timeSinceLatest, increaseWhenOver)
         } else {
             delta
         }

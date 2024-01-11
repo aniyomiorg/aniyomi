@@ -16,15 +16,21 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 import tachiyomi.presentation.core.screens.LoadingScreen
 
-class MangaExtensionReposScreen : Screen() {
+class MangaExtensionReposScreen(
+    private val url: String? = null,
+) : Screen() {
 
     @Composable
     override fun Content() {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = rememberScreenModel { MangaExtensionReposScreenModel() }
 
+        val screenModel = rememberScreenModel { MangaExtensionReposScreenModel() }
         val state by screenModel.state.collectAsState()
+
+        LaunchedEffect(url) {
+            url?.let { screenModel.createRepo(it) }
+        }
 
         if (state is RepoScreenState.Loading) {
             LoadingScreen()
@@ -46,7 +52,7 @@ class MangaExtensionReposScreen : Screen() {
                 ExtensionRepoCreateDialog(
                     onDismissRequest = screenModel::dismissDialog,
                     onCreate = { screenModel.createRepo(it) },
-                    categories = successState.repos,
+                    repos = successState.repos,
                 )
             }
             is RepoDialog.Delete -> {

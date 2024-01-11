@@ -2,10 +2,10 @@ package eu.kanade.presentation.more.settings.screen.browse
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.domain.source.anime.interactor.CreateAnimeSourceRepo
-import eu.kanade.domain.source.anime.interactor.DeleteAnimeSourceRepo
-import eu.kanade.domain.source.anime.interactor.GetAnimeSourceRepos
-import kotlinx.collections.immutable.toImmutableList
+import eu.kanade.domain.extension.anime.interactor.CreateAnimeExtensionRepo
+import eu.kanade.domain.extension.anime.interactor.DeleteAnimeExtensionRepo
+import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionRepos
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,9 +15,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimeExtensionReposScreenModel(
-    private val getSourceRepos: GetAnimeSourceRepos = Injekt.get(),
-    private val createSourceRepo: CreateAnimeSourceRepo = Injekt.get(),
-    private val deleteSourceRepo: DeleteAnimeSourceRepo = Injekt.get(),
+    private val getExtensionRepos: GetAnimeExtensionRepos = Injekt.get(),
+    private val createExtensionRepo: CreateAnimeExtensionRepo = Injekt.get(),
+    private val deleteExtensionRepo: DeleteAnimeExtensionRepo = Injekt.get(),
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -25,11 +25,11 @@ class AnimeExtensionReposScreenModel(
 
     init {
         screenModelScope.launchIO {
-            getSourceRepos.subscribe()
+            getExtensionRepos.subscribe()
                 .collectLatest { repos ->
                     mutableState.update {
                         RepoScreenState.Success(
-                            repos = repos.toImmutableList(),
+                            repos = repos.toImmutableSet(),
                         )
                     }
                 }
@@ -43,8 +43,8 @@ class AnimeExtensionReposScreenModel(
      */
     fun createRepo(name: String) {
         screenModelScope.launchIO {
-            when (createSourceRepo.await(name)) {
-                is CreateAnimeSourceRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+            when (createExtensionRepo.await(name)) {
+                is CreateAnimeExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
                 else -> {}
             }
         }
@@ -57,7 +57,7 @@ class AnimeExtensionReposScreenModel(
      */
     fun deleteRepo(repo: String) {
         screenModelScope.launchIO {
-            deleteSourceRepo.await(repo)
+            deleteExtensionRepo.await(repo)
         }
     }
 

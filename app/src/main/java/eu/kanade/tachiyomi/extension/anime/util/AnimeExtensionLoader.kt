@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import dalvik.system.PathClassLoader
+import eu.kanade.domain.extension.anime.interactor.TrustAnimeExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -16,7 +17,6 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
-import eu.kanade.tachiyomi.util.system.isDevFlavor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -32,6 +32,7 @@ import java.io.File
 internal object AnimeExtensionLoader {
 
     private val preferences: SourcePreferences by injectLazy()
+    private val trustExtension: TrustAnimeExtension by injectLazy()
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -50,9 +51,6 @@ internal object AnimeExtensionLoader {
         PackageManager.GET_META_DATA or
         PackageManager.GET_SIGNATURES or
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else 0)
-
-    // jmir1's key
-    private const val officialSignature = "50ab1d1e3a20d204d0ad6d334c7691c632e41b98dfa132bf385695fdfa63839c"
 
     private const val PRIVATE_EXTENSION_EXTENSION = "ext"
 
@@ -119,12 +117,6 @@ internal object AnimeExtensionLoader {
      * @param context The application context.
      */
     fun loadExtensions(context: Context): List<AnimeLoadResult> {
-        // Always make users trust unknown extensions on cold starts in non-dev builds
-        // due to inherent security risks
-        if (!isDevFlavor) {
-            preferences.trustedSignatures().delete()
-        }
-
         val pkgManager = context.packageManager
 
         val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -271,7 +263,7 @@ internal object AnimeExtensionLoader {
         if (signatures.isNullOrEmpty()) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return AnimeLoadResult.Error
-        } else if (!hasTrustedSignature(signatures)) {
+        } else if (!trustExtension.isTrusted(pkgInfo, signatures.last())) {
             val extension = AnimeExtension.Untrusted(
                 extName,
                 pkgName,
@@ -289,9 +281,6 @@ internal object AnimeExtensionLoader {
             logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
             return AnimeLoadResult.Error
         }
-
-        val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
-        val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
 
         val classLoader = try {
             PathClassLoader(appInfo.sourceDir, null, context.classLoader)
@@ -342,7 +331,6 @@ internal object AnimeExtensionLoader {
             isNsfw = isNsfw,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
-            isUnofficial = !isOfficiallySigned(signatures),
             icon = appInfo.loadIcon(pkgManager),
             isShared = extensionInfo.isShared,
         )
@@ -400,19 +388,6 @@ internal object AnimeExtensionLoader {
         }
             ?.map { Hash.sha256(it.toByteArray()) }
             ?.toList()
-    }
-
-    private fun hasTrustedSignature(signatures: List<String>): Boolean {
-        if (officialSignature in signatures) {
-            return true
-        }
-
-        val trustedSignatures = preferences.trustedSignatures().get()
-        return trustedSignatures.any { signatures.contains(it) }
-    }
-
-    private fun isOfficiallySigned(signatures: List<String>): Boolean {
-        return signatures.all { it == officialSignature }
     }
 
     /**

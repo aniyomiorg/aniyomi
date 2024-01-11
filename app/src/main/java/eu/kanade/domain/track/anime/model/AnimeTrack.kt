@@ -40,7 +40,9 @@ fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
         lastEpisodeSeen = last_episode_seen.toDouble(),
         totalEpisodes = total_episodes.toLong(),
         status = status.toLong(),
-        score = score.toDouble(),
+        // Jank workaround due to precision issues while converting
+        // See https://github.com/tachiyomiorg/tachiyomi/issues/10343
+        score = score.toString().toDouble(),
         remoteUrl = tracking_url,
         startDate = started_watching_date,
         finishDate = finished_watching_date,

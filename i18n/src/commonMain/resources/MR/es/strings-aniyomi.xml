@@ -53,7 +53,6 @@
     <string name="pref_player_summary">Control de progreso, reproductor interno, reproductor externo</string>
     <string name="pref_bottom_nav_style">Estilo inferior de navegación</string>
     <string name="pref_update_only_completely_read">Con episodio(s) sin ver/capítulo(s) sin leer</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar capítulos no leídos en la pestaña actualizaciones</string>
     <string name="default_manga_category">Categoría predeterminada de manga</string>
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
@@ -148,8 +147,6 @@
     <string name="want_to_watch">Quiero ver</string>
     <string name="repeating_anime">Volver a mirar</string>
     <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro?</string>
-    <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
-    <string name="dialog_with_checkbox_reset">Reiniciar todos los capítulos de este manga</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progreso: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progreso: %1$s</string>

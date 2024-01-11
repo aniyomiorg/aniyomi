@@ -26,7 +26,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brush
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Warning
@@ -35,7 +34,6 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.DoneAll
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
@@ -192,15 +190,18 @@ fun AnimeActionRow(
 
     Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
         AnimeActionButton(
-            title = if (favorite) {
-                stringResource(MR.strings.in_library)
-            } else {
-                stringResource(MR.strings.add_to_library)
+            title = when (nextUpdateDays) {
+                null -> stringResource(MR.strings.not_applicable)
+                0 -> stringResource(MR.strings.manga_interval_expected_update_soon)
+                else -> pluralStringResource(
+                    MR.plurals.day,
+                    count = nextUpdateDays,
+                    nextUpdateDays,
+                )
             },
-            icon = if (favorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-            color = if (favorite) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
-            onClick = onAddToLibraryClicked,
-            onLongClick = onEditCategory,
+            icon = Icons.Default.HourglassEmpty,
+            color = if (isUserIntervalMode) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
+            onClick = { onEditIntervalClicked?.invoke() },
         )
         AnimeActionButton(
             title = if (nextUpdateDays != null) {

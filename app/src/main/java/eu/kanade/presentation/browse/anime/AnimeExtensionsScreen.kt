@@ -131,13 +131,13 @@ private fun AnimeExtensionContent(
 ) {
     val context = LocalContext.current
     var trustState by remember { mutableStateOf<AnimeExtension.Untrusted?>(null) }
-    val installGranted = rememberRequestPackageInstallsPermissionState()
+    val installGranted = rememberRequestPackageInstallsPermissionState(initialValue = true)
 
     FastScrollLazyColumn(
         contentPadding = contentPadding + topSmallPaddingValues,
     ) {
         if (!installGranted && state.installer?.requiresSystemPermission == true) {
-            item {
+            item(key = "extension-permissions-warning") {
                 WarningBanner(
                     textRes = MR.strings.ext_permission_install_apps_warning,
                     modifier = Modifier.clickable {
@@ -346,7 +346,6 @@ private fun AnimeExtensionItemContent(
 
                 val warning = when {
                     extension is AnimeExtension.Untrusted -> MR.strings.ext_untrusted
-                    extension is AnimeExtension.Installed && extension.isUnofficial -> MR.strings.ext_unofficial
                     extension is AnimeExtension.Installed && extension.isObsolete -> MR.strings.ext_obsolete
                     extension.isNsfw -> MR.strings.ext_nsfw_short
                     else -> null

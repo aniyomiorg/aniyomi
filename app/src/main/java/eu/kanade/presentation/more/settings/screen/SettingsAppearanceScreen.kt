@@ -1,38 +1,26 @@
 package eu.kanade.presentation.more.settings.screen
 
 import android.app.Activity
-import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
-import androidx.core.os.LocaleListCompat
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.domain.ui.model.ThemeMode
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.screen.appearance.AppLanguageScreen
 import eu.kanade.presentation.more.settings.widget.AppThemeModePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
-import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.util.system.LocaleHelper
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.drop
-import org.xmlpull.v1.XmlPullParser
 import tachiyomi.core.i18n.stringResource
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -111,13 +99,8 @@ object SettingsAppearanceScreen : SearchableSettings {
         uiPreferences: UiPreferences,
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
+        val navigator = LocalNavigator.currentOrThrow
 
-        val langs = remember { getLangs(context) }
-        var currentLanguage by remember {
-            mutableStateOf(
-                AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag() ?: "",
-            )
-        }
         val now = remember { Instant.now().toEpochMilli() }
 
         val dateFormat by uiPreferences.dateFormat().collectAsState()
@@ -125,57 +108,12 @@ object SettingsAppearanceScreen : SearchableSettings {
             UiPreferences.dateFormat(dateFormat).format(now)
         }
 
-        LaunchedEffect(currentLanguage) {
-            val locale = if (currentLanguage.isEmpty()) {
-                LocaleListCompat.getEmptyLocaleList()
-            } else {
-                LocaleListCompat.forLanguageTags(currentLanguage)
-            }
-            AppCompatDelegate.setApplicationLocales(locale)
-        }
-
-        val libraryPrefs = remember { Injekt.get<LibraryPreferences>() }
-
-        LaunchedEffect(Unit) {
-            libraryPrefs.bottomNavStyle().changes()
-                .drop(1)
-                .collectLatest { value ->
-                    HomeScreen.tabs = when (value) {
-                        0 -> HomeScreen.tabsNoHistory
-                        1 -> HomeScreen.tabsNoUpdates
-                        else -> HomeScreen.tabsNoManga
-                    }
-                    (context as? Activity)?.let {
-                        ActivityCompat.recreate(it)
-                    }
-                }
-        }
-
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_display),
             preferenceItems = persistentListOf(
-                Preference.PreferenceItem.ListPreference(
-                    pref = libraryPrefs.bottomNavStyle(),
-                    title = stringResource(MR.strings.pref_bottom_nav_style),
-                    entries = persistentMapOf(
-                        0 to stringResource(MR.strings.pref_bottom_nav_no_history),
-                        1 to stringResource(MR.strings.pref_bottom_nav_no_updates),
-                        2 to stringResource(MR.strings.pref_bottom_nav_no_manga),
-                    ),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPrefs.isDefaultHomeTabLibraryManga(),
-                    title = stringResource(MR.strings.pref_default_home_tab_library),
-                    enabled = libraryPrefs.bottomNavStyle().get() != 2,
-                ),
-                Preference.PreferenceItem.BasicListPreference(
-                    value = currentLanguage,
+                Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_app_language),
-                    entries = langs,
-                    onValueChanged = { newValue ->
-                        currentLanguage = newValue
-                        true
-                    },
+                    onClick = { navigator.push(AppLanguageScreen()) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = uiPreferences.tabletUiMode(),
@@ -209,30 +147,6 @@ object SettingsAppearanceScreen : SearchableSettings {
                 ),
             ),
         )
-    }
-    private fun getLangs(context: Context): ImmutableMap<String, String> {
-        val langs = mutableListOf<Pair<String, String>>()
-        val parser = context.resources.getXml(R.xml.locales_config)
-        var eventType = parser.eventType
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_TAG && parser.name == "locale") {
-                for (i in 0..<parser.attributeCount) {
-                    if (parser.getAttributeName(i) == "name") {
-                        val langTag = parser.getAttributeValue(i)
-                        val displayName = LocaleHelper.getDisplayName(langTag)
-                        if (displayName.isNotEmpty()) {
-                            langs.add(Pair(langTag, displayName))
-                        }
-                    }
-                }
-            }
-            eventType = parser.next()
-        }
-
-        langs.sortBy { it.second }
-        langs.add(0, Pair("", context.stringResource(MR.strings.label_default)))
-
-        return langs.toMap().toImmutableMap()
     }
 }
 

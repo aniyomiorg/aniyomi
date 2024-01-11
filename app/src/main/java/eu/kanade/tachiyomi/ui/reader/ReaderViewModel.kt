@@ -468,7 +468,7 @@ class ReaderViewModel @JvmOverloads constructor(
                 manga.title,
                 manga.source,
             )
-            if (isNextChapterDownloaded) return@launchIO
+            if (!isNextChapterDownloaded) return@launchIO
 
             val chaptersToDownload = getNextChapters.await(manga.id, nextChapter.id!!).run {
                 if (readerPreferences.skipDupe().get()) {
