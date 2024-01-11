@@ -41,7 +41,12 @@ object NotificationHandler {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             action = Constants.SHORTCUT_ANIME_DOWNLOADS
         }
-        return PendingIntent.getActivity(context, 0, intent, 0)
+        return PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
     }
 
     /**
