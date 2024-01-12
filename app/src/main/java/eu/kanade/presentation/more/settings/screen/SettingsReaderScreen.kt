@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
@@ -77,6 +78,9 @@ object SettingsReaderScreen : SearchableSettings {
             getWebtoonGroup(readerPreferences = readerPref),
             getNavigationGroup(readerPreferences = readerPref),
             getActionsGroup(readerPreferences = readerPref),
+            // SY -->
+            getForkSettingsGroup(readerPreferences = readerPref),
+            // SY <--
         )
     }
 
@@ -129,6 +133,10 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getReadingGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val preloadSizePref = readerPreferences.preloadSize()
+
+        val preloadSize by preloadSizePref.collectAsState()
+
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_reading),
             preferenceItems = persistentListOf(
@@ -151,6 +159,16 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = readerPreferences.preserveReadingPosition(),
                     title = stringResource(MR.strings.pref_preserve_reading_position),
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(MR.strings.pref_page_preload_amount),
+                    min = ReaderPreferences.PRELOAD_SIZE_MIN,
+                    max = ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
                 ),
             ),
         )
@@ -389,4 +407,30 @@ object SettingsReaderScreen : SearchableSettings {
             ),
         )
     }
+
+    // SY -->
+    @Composable
+    private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_fork),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    pref = readerPreferences.readerBottomButtons(),
+                    title = stringResource(MR.strings.reader_bottom_buttons),
+                    subtitle = stringResource(MR.strings.reader_bottom_buttons_summary),
+                    entries = ReaderBottomButton.entries
+                        .associate { it.value to stringResource(it.stringRes) },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = readerPreferences.pageLayout(),
+                    title = stringResource(MR.strings.page_layout),
+                    subtitle = stringResource(MR.strings.automatic_can_still_switch),
+                    entries = ReaderPreferences.PageLayouts
+                        .mapIndexed { index, it -> index to stringResource(it) }
+                        .toMap(),
+                ),
+            ),
+        )
+    }
+    // SY <--
 }

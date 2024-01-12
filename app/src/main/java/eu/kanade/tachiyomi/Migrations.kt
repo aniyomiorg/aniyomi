@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
@@ -54,6 +55,10 @@ object Migrations {
         playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
         trackerManager: TrackerManager,
+        // AM (CONNECTIONS) -->
+        connectionsPreferences: ConnectionsPreferences,
+        connectionsManager: ConnectionsManager,
+        // <-- AM (CONNECTIONS)
     ): Boolean {
         val lastVersionCode = preferenceStore.getInt(Preference.appStateKey("last_version_code"), 0)
         val oldVersion = lastVersionCode.get()
@@ -395,6 +400,31 @@ object Migrations {
                         putString(uiPreferences.themeMode().key(), themeMode.uppercase())
                     }
                 }
+                // AM (DISCORD) -->
+                if (connectionsPreferences.discordRPCStatus().isSet()) {
+                    prefs.edit {
+                        val oldString = try {
+                            prefs.getString(connectionsPreferences.discordRPCStatus().key(), null)
+                        } catch (e: ClassCastException) {
+                            null
+                        } ?: return@edit
+                        val newInt = when (oldString) {
+                            "dnd" -> -1
+                            "idle" -> 0
+                            else -> 1
+                        }
+                        putInt(connectionsPreferences.discordRPCStatus().key(), newInt)
+                    }
+                }
+
+                if (connectionsPreferences.connectionsToken(connectionsManager.discord).get().isNotBlank()) {
+                    connectionsPreferences.setConnectionsCredentials(
+                        connectionsManager.discord,
+                        "Discord",
+                        "Logged In",
+                    )
+                }
+                // <-- AM (DISCORD)
             }
             if (oldVersion < 92) {
                 if (playerPreferences.progressPreference().isSet()) {
