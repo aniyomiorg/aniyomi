@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.presentation.browse.InLibraryBadge
-import eu.kanade.presentation.library.CommonEntryItemDefaults
-import eu.kanade.presentation.library.EntryComfortableGridItem
+import eu.kanade.presentation.library.components.CommonEntryItemDefaults
+import eu.kanade.presentation.library.components.EntryComfortableGridItem
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaCover

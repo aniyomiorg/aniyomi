@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -148,7 +147,7 @@ abstract class AnimeSearchScreenModel(
                     }
                     try {
                         val page = withContext(coroutineDispatcher) {
-                            source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
+                            source.getSearchAnime(1, query, source.getFilterList())
                         }
 
                         val titles = page.animes.map {

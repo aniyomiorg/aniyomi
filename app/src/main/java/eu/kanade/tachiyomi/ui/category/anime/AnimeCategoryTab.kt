@@ -47,7 +47,6 @@ fun Screen.animeCategoryTab(): TabContent {
 
                 AnimeCategoryScreen(
                     state = successState,
-                    contentPadding = contentPadding,
                     onClickCreate = { screenModel.showDialog(AnimeCategoryDialog.Create) },
                     onClickRename = { screenModel.showDialog(AnimeCategoryDialog.Rename(it)) },
                     onClickHide = screenModel::hideCategory,

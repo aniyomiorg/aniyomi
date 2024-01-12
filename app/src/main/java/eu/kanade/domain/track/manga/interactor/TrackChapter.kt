@@ -24,7 +24,6 @@ class TrackChapter(
     suspend fun await(context: Context, mangaId: Long, chapterNumber: Double) {
         withNonCancellableContext {
             val tracks = getTracks.await(mangaId)
-
             if (tracks.isEmpty()) return@withNonCancellableContext
 
             tracks.mapNotNull { track ->

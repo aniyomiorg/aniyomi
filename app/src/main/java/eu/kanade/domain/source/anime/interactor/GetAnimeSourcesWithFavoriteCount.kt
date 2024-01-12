@@ -1,6 +1,6 @@
 package eu.kanade.domain.source.anime.interactor
 
-import eu.kanade.domain.source.service.SetMigrateSorting
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

@@ -48,7 +48,6 @@ fun Screen.mangaUpdatesTab(
             MangaUpdateScreen(
                 state = state,
                 snackbarHostState = screenModel.snackbarHostState,
-                contentPadding = contentPadding,
                 lastUpdated = screenModel.lastUpdated,
                 relativeTime = screenModel.relativeTime,
                 onClickCover = { item -> navigator.push(MangaScreen(item.update.mangaId)) },

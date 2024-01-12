@@ -15,8 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.InLibraryBadge
-import eu.kanade.presentation.library.CommonEntryItemDefaults
-import eu.kanade.presentation.library.EntryComfortableGridItem
+import eu.kanade.presentation.library.components.CommonEntryItemDefaults
+import eu.kanade.presentation.library.components.EntryComfortableGridItem
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.entries.manga.model.asMangaCover

@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.sources
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithFavoriteCount
-import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

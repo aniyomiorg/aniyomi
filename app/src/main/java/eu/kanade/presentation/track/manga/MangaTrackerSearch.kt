@@ -59,7 +59,7 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import tachiyomi.i18n.MR
@@ -197,9 +197,8 @@ fun MangaTrackerSearch(
                                     Locale.current,
                                 ),
                                 startDate = it.start_date,
-                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(
-                                    Locale.current,
-                                ),
+                                status = it.publishing_status.toLowerCase(Locale.current).capitalize(Locale.current),
+                                score = it.score,
                                 description = it.summary.trim(),
                                 selected = it == selected,
                                 onClick = { onSelectedChange(it) },
@@ -225,6 +224,7 @@ fun SearchResultItem(
     type: String,
     startDate: String,
     status: String,
+    score: Float,
     description: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -284,6 +284,12 @@ fun SearchResultItem(
                         SearchResultItemDetails(
                             title = stringResource(MR.strings.track_status),
                             text = status,
+                        )
+                    }
+                    if (score != -1f) {
+                        SearchResultItemDetails(
+                            title = stringResource(MR.strings.score),
+                            text = score.toString(),
                         )
                     }
                 }
