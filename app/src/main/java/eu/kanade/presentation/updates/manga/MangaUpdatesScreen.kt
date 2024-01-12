@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.entries.components.EntryBottomActionMenu
@@ -28,13 +27,13 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MangaUpdateScreen(
     state: MangaUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
-    relativeTime: Boolean,
     lastUpdated: Long,
     onClickCover: (MangaUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
@@ -48,8 +47,6 @@ fun MangaUpdateScreen(
     onOpenChapter: (MangaUpdatesItem) -> Unit,
 ) {
     BackHandler(enabled = state.selectionMode, onBack = { onSelectAll(false) })
-
-    val context = LocalContext.current
 
     Scaffold(
         bottomBar = {
@@ -94,7 +91,7 @@ fun MangaUpdateScreen(
                         mangaUpdatesLastUpdatedItem(lastUpdated)
 
                         mangaUpdatesUiItems(
-                            uiModels = state.getUiModel(context, relativeTime),
+                            uiModels = state.getUiModel(),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,
@@ -144,6 +141,6 @@ private fun MangaUpdatesBottomBar(
 }
 
 sealed interface MangaUpdatesUiModel {
-    data class Header(val date: String) : MangaUpdatesUiModel
+    data class Header(val date: Date) : MangaUpdatesUiModel
     data class Item(val item: MangaUpdatesItem) : MangaUpdatesUiModel
 }

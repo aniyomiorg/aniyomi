@@ -43,7 +43,7 @@ interface AnimeTracker {
         return track.score
     }
 
-    fun displayScore(track: AnimeTrack): String
+    fun displayScore(track: DomainAnimeTrack): String
 
     suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean = false): AnimeTrack
 

@@ -62,6 +62,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.BufferedOutputStream
 import java.io.File
+import java.util.Locale
 import java.util.zip.CRC32
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -451,7 +452,7 @@ class MangaDownloader(
         }
 
         val digitCount = (download.pages?.size ?: 0).toString().length.coerceAtLeast(3)
-        val filename = String.format("%0${digitCount}d", page.number)
+        val filename = "%0${digitCount}d".format(Locale.ENGLISH, page.number)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
         // Delete temp file if it exists
@@ -575,15 +576,9 @@ class MangaDownloader(
         if (!downloadPreferences.splitTallImages().get()) return
 
         try {
-            val filenamePrefix = String.format("%03d", page.number)
-            val imageFile = tmpDir.listFiles()?.firstOrNull {
-                it.name.orEmpty().startsWith(
-                    filenamePrefix,
-                )
-            }
-                ?: error(
-                    context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number),
-                )
+            val filenamePrefix = "%03d".format(Locale.ENGLISH, page.number)
+            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
+                ?: error(context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number))
 
             // If the original page was previously split, then skip
             if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return
@@ -621,10 +616,7 @@ class MangaDownloader(
                 else -> true
             }
         }
-        if (downloadedImagesCount != downloadPageCount) {
-            return false
-        }
-        return true
+        return downloadedImagesCount == downloadPageCount
     }
 
     /**

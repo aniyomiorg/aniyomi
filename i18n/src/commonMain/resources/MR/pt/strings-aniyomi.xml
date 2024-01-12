@@ -122,7 +122,7 @@
     <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Não foi possível transferir devido a falta de espaço de armazenamento</string>
-    <string name="download_queue_size_warning">Aviso: descargas grandes em massa podem levar as fontes a ficarem lentas e/ou começarem a bloquear o Tachiyomi. Toque para saber mais.</string>
+    <string name="download_queue_size_warning">Aviso: descargas grandes em massa podem levar as fontes a ficarem lentas e/ou começarem a bloquear o Aniyomi. Toque para saber mais.</string>
     <string name="video_list_empty_error">Nenhum vídeo encontrado</string>
     <string name="notification_new_episodes">Novos episódios encontrados</string>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>

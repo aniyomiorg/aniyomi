@@ -1,18 +1,15 @@
 package eu.kanade.tachiyomi.ui.updates.manga
 
 import android.app.Application
-import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.presentation.updates.manga.MangaUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
@@ -20,7 +17,6 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.util.lang.toDateKey
-import eu.kanade.tachiyomi.util.lang.toRelativeString
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
@@ -63,14 +59,12 @@ class MangaUpdatesScreenModel(
     private val getChapter: GetChapter = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
-    uiPreferences: UiPreferences = Injekt.get(),
 ) : StateScreenModel<MangaUpdatesScreenModel.State>(State()) {
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
 
     val lastUpdated by libraryPreferences.lastUpdatedTimestamp().asState(screenModelScope)
-    val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
 
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
@@ -376,11 +370,7 @@ class MangaUpdatesScreenModel(
         val selected = items.filter { it.selected }
         val selectionMode = selected.isNotEmpty()
 
-        fun getUiModel(context: Context, relativeTime: Boolean): List<MangaUpdatesUiModel> {
-            val dateFormat by mutableStateOf(
-                UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),
-            )
-
+        fun getUiModel(): List<MangaUpdatesUiModel> {
             return items
                 .map { MangaUpdatesUiModel.Item(it) }
                 .insertSeparators { before, after ->
@@ -388,12 +378,7 @@ class MangaUpdatesScreenModel(
                     val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
                     when {
                         beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                            val text = afterDate.toRelativeString(
-                                context = context,
-                                relative = relativeTime,
-                                dateFormat = dateFormat,
-                            )
-                            MangaUpdatesUiModel.Header(text)
+                            MangaUpdatesUiModel.Header(afterDate)
                         }
                         // Return null to avoid adding a separator between two items.
                         else -> null

@@ -61,6 +61,9 @@ import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
 import eu.kanade.presentation.components.IndexingBannerBackgroundColor
+import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.data.RestoreBackupScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.tachiyomi.BuildConfig
@@ -68,14 +71,13 @@ import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
-import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
+import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionApi
+import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionApi
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
@@ -129,7 +131,6 @@ class MainActivity : BaseActivity() {
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
     private val chapterCache: ChapterCache by injectLazy()
-    private val episodeCache: EpisodeCache by injectLazy()
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
@@ -320,7 +321,6 @@ class MainActivity : BaseActivity() {
         if (isLaunch && libraryPreferences.autoClearItemCache().get()) {
             lifecycleScope.launchIO {
                 chapterCache.clear()
-                episodeCache.clear()
             }
         }
 
@@ -382,8 +382,8 @@ class MainActivity : BaseActivity() {
         // Extensions updates
         LaunchedEffect(Unit) {
             try {
-                MangaExtensionGithubApi().checkForUpdates(context)
-                AnimeExtensionGithubApi().checkForUpdates(context)
+                AnimeExtensionApi().checkForUpdates(context)
+                MangaExtensionApi().checkForUpdates(context)
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e)
             }
@@ -395,7 +395,7 @@ class MainActivity : BaseActivity() {
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
-            if (!preferences.shownOnboardingFlow().get()) {
+            if (!preferences.shownOnboardingFlow().get() && navigator.lastItem !is OnboardingScreen) {
                 navigator.push(OnboardingScreen())
             }
         }
@@ -522,6 +522,27 @@ class MainActivity : BaseActivity() {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                     navigator.popUntilRoot()
                     navigator.push(GlobalAnimeSearchScreen(query, filter))
+                }
+                null
+            }
+            Intent.ACTION_VIEW -> {
+                // Handling opening of backup files
+                if (intent.data.toString().endsWith(".tachibk")) {
+                    navigator.popUntilRoot()
+                    navigator.push(RestoreBackupScreen(intent.data.toString()))
+                }
+                // Deep link to add anime extension repo
+                else if (intent.scheme == "aniyomi" && intent.data?.host == "add-repo") {
+                    intent.data?.getQueryParameter("url")?.let { repoUrl ->
+                        navigator.popUntilRoot()
+                        navigator.push(AnimeExtensionReposScreen(repoUrl))
+                    }
+                } // Deep link to add extension repo
+                else if (intent.scheme == "tachiyomi" && intent.data?.host == "add-repo") {
+                    intent.data?.getQueryParameter("url")?.let { repoUrl ->
+                        navigator.popUntilRoot()
+                        navigator.push(MangaExtensionReposScreen(repoUrl))
+                    }
                 }
                 null
             }

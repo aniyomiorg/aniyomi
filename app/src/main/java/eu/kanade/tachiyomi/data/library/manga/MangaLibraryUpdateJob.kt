@@ -22,7 +22,6 @@ import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
@@ -36,7 +35,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -155,8 +153,8 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addMangaToQueue(categoryId: Long) {
-        val libraryManga = runBlocking { getLibraryManga.await() }
+    private suspend fun addMangaToQueue(categoryId: Long) {
+        val libraryManga = getLibraryManga.await()
 
         val listToUpdate = if (categoryId != -1L) {
             libraryManga.filter { it.category == categoryId }
@@ -182,7 +180,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val skippedUpdates = mutableListOf<Pair<Manga, String?>>()
-        val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
+        val (_, fetchWindowUpperBound) = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         mangaToUpdate = listToUpdate
             .filter {
@@ -215,7 +213,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                         false
                     }
 
-                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.manga.nextUpdate > fetchWindow.second -> {
+                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.manga.nextUpdate > fetchWindowUpperBound -> {
                         skippedUpdates.add(
                             it.manga to context.stringResource(MR.strings.skipped_reason_not_in_release_period),
                         )
@@ -226,14 +224,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
             .sortedBy { it.manga.title }
 
-        // Warn when excessively checking a single source
-        val maxUpdatesFromSource = mangaToUpdate
-            .groupBy { it.manga.source }
-            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
-            .maxOfOrNull { it.value.size } ?: 0
-        if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-            notifier.showQueueSizeWarningNotification()
-        }
+        notifier.showQueueSizeWarningNotificationIfNeeded(mangaToUpdate)
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?
@@ -243,7 +234,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
                     .joinToString()
             }
-            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 

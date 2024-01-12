@@ -28,7 +28,7 @@ class TrackEpisode(
             if (tracks.isEmpty()) return@withNonCancellableContext
 
             tracks.mapNotNull { track ->
-                val service = trackerManager.get(track.syncId)
+                val service = trackerManager.get(track.trackerId)
                 if (service == null || !service.isLoggedIn || episodeNumber <= track.lastEpisodeSeen) {
                     return@mapNotNull null
                 }

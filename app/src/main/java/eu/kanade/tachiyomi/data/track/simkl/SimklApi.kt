@@ -57,7 +57,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             putJsonArray(mediaType) {
                 addJsonObject {
                     putJsonObject("ids") {
-                        put("simkl", track.media_id)
+                        put("simkl", track.remote_id)
                     }
                     put("to", track.toSimklStatus())
                 }
@@ -73,7 +73,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             putJsonArray(mediaType) {
                 addJsonObject {
                     putJsonObject("ids") {
-                        put("simkl", track.media_id)
+                        put("simkl", track.remote_id)
                     }
                     put("rating", track.score.toInt())
                 }
@@ -106,7 +106,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         putJsonArray("shows") {
             addJsonObject {
                 putJsonObject("ids") {
-                    put("simkl", track.media_id)
+                    put("simkl", track.remote_id)
                 }
                 putJsonArray("seasons") {
                     addJsonObject {
@@ -168,7 +168,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
 
     private fun jsonToAnimeSearch(obj: JsonObject, type: String): AnimeTrackSearch {
         return AnimeTrackSearch.create(TrackerManager.SIMKL).apply {
-            media_id = obj["ids"]!!.jsonObject["simkl_id"]!!.jsonPrimitive.long
+            remote_id = obj["ids"]!!.jsonObject["simkl_id"]!!.jsonPrimitive.long
             title = obj["title_romaji"]?.jsonPrimitive?.content ?: obj["title"]!!.jsonPrimitive.content
             total_episodes = obj["ep_count"]?.jsonPrimitive?.intOrNull ?: 1
             cover_url = "https://simkl.in/posters/" + obj["poster"]!!.jsonPrimitive.content + "_m.webp"
@@ -191,7 +191,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         return AnimeTrack.create(TrackerManager.SIMKL).apply {
             title = obj[typeName]!!.jsonObject["title"]!!.jsonPrimitive.content
             val id = obj[typeName]!!.jsonObject["ids"]!!.jsonObject["simkl"]!!.jsonPrimitive.long
-            media_id = id
+            remote_id = id
             if (typeName != "movie") {
                 total_episodes =
                     obj["total_episodes_count"]!!
@@ -217,7 +217,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         return withIOContext {
             val payload = buildJsonArray {
                 addJsonObject {
-                    put("simkl", track.media_id)
+                    put("simkl", track.remote_id)
                 }
             }.toString().toRequestBody(jsonMime)
             val foundAnime =
@@ -251,7 +251,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                             it.jsonObject[typeName]
                                 ?.jsonObject?.get("ids")
                                 ?.jsonObject?.get("simkl")
-                                ?.jsonPrimitive?.long == track.media_id
+                                ?.jsonPrimitive?.long == track.remote_id
                         }?.jsonObject ?: return@withIOContext null
                 }
             jsonToAnimeTrack(listAnime, typeName, type, status)

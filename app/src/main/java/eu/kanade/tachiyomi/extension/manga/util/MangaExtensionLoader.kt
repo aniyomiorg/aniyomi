@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import dalvik.system.PathClassLoader
+import eu.kanade.domain.extension.manga.interactor.TrustMangaExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
@@ -42,6 +43,7 @@ import java.io.File
 internal object MangaExtensionLoader {
 
     private val preferences: SourcePreferences by injectLazy()
+    private val trustExtension: TrustMangaExtension by injectLazy()
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -50,9 +52,7 @@ internal object MangaExtensionLoader {
     private const val METADATA_SOURCE_CLASS = "tachiyomi.extension.class"
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
     private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
-    private const val METADATA_HAS_README = "tachiyomi.extension.hasReadme"
-    private const val METADATA_HAS_CHANGELOG = "tachiyomi.extension.hasChangelog"
-    const val LIB_VERSION_MIN = 1.2
+    const val LIB_VERSION_MIN = 1.4
     const val LIB_VERSION_MAX = 1.5
 
     @Suppress("DEPRECATION")
@@ -60,14 +60,6 @@ internal object MangaExtensionLoader {
         PackageManager.GET_META_DATA or
         PackageManager.GET_SIGNATURES or
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) PackageManager.GET_SIGNING_CERTIFICATES else 0)
-
-    // inorichi's key
-    private const val officialSignature = "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
-
-    /**
-     * List of the trusted signatures.
-     */
-    var trustedSignatures = mutableSetOf(officialSignature) + preferences.trustedSignatures().get()
 
     private const val PRIVATE_EXTENSION_EXTENSION = "ext"
 
@@ -154,6 +146,11 @@ internal object MangaExtensionLoader {
             ?.asSequence()
             ?.filter { it.isFile && it.extension == PRIVATE_EXTENSION_EXTENSION }
             ?.mapNotNull {
+                // Just in case, since Android 14+ requires them to be read-only
+                if (it.canWrite()) {
+                    it.setReadOnly()
+                }
+
                 val path = it.absolutePath
                 pkgManager.getPackageArchiveInfo(path, PACKAGE_FLAGS)
                     ?.apply { applicationInfo.fixBasePaths(path) }
@@ -276,7 +273,7 @@ internal object MangaExtensionLoader {
         if (signatures.isNullOrEmpty()) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return MangaLoadResult.Error
-        } else if (!hasTrustedSignature(signatures)) {
+        } else if (!trustExtension.isTrusted(pkgInfo, signatures.last())) {
             val extension = MangaExtension.Untrusted(
                 extName,
                 pkgName,
@@ -295,10 +292,12 @@ internal object MangaExtensionLoader {
             return MangaLoadResult.Error
         }
 
-        val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
-        val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
-
-        val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        val classLoader = try {
+            PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($pkgName)" }
+            return MangaLoadResult.Error
+        }
 
         val sources = appInfo.metaData.getString(METADATA_SOURCE_CLASS)!!
             .split(";")
@@ -315,7 +314,7 @@ internal object MangaExtensionLoader {
                     when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
                         is MangaSource -> listOf(obj)
                         is SourceFactory -> obj.createSources()
-                        else -> throw Exception("Unknown source class type! ${obj.javaClass}")
+                        else -> throw Exception("Unknown source class type: ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
                     logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
@@ -340,11 +339,8 @@ internal object MangaExtensionLoader {
             libVersion = libVersion,
             lang = lang,
             isNsfw = isNsfw,
-            hasReadme = hasReadme,
-            hasChangelog = hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
-            isUnofficial = !isOfficiallySigned(signatures),
             icon = appInfo.loadIcon(pkgManager),
             isShared = extensionInfo.isShared,
         )
@@ -402,14 +398,6 @@ internal object MangaExtensionLoader {
         }
             ?.map { Hash.sha256(it.toByteArray()) }
             ?.toList()
-    }
-
-    private fun hasTrustedSignature(signatures: List<String>): Boolean {
-        return trustedSignatures.any { signatures.contains(it) }
-    }
-
-    private fun isOfficiallySigned(signatures: List<String>): Boolean {
-        return signatures.all { it == officialSignature }
     }
 
     /**

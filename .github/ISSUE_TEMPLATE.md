@@ -6,7 +6,8 @@ I acknowledge that:
   - To the latest version of the app (stable is v0.12.3.10)
   - All extensions
 - I have gone through the FAQ (https://aniyomi.org/docs/faq/general) and troubleshooting guide (https://aniyomi.org/docs/guides/troubleshooting/)
-- If this is an issue with an anime extension, that I should be opening an issue in https://github.com/aniyomiorg/aniyomi-extensions
+- If this is an issue with an official anime extension, that I should be opening an issue in https://github.com/aniyomiorg/aniyomi-extensions
+- If this is an issue with an official manga extension and this issue can be replicated in the Tachiyomi app, that I should be opening an issue in https://github.com/tachiyomiorg/extensions
 - I have searched the existing issues and this is new ticket **NOT** a duplicate or related to another open or closed issue
 - I will fill out the title and the information in this template
 

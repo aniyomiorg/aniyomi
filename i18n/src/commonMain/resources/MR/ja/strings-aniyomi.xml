@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">含まれているカテゴリーに入っていても、除外対象カテゴリーにある項目は更新されません。</string>
     <string name="untrusted_extension_message">この拡張機能は信頼できない証明書でサインされているため、有効にされていません。
 \n
-\n悪意のある拡張機能はTachiyomiに保存されているすべてのログイン情報を読み取ることや、任意コード実行をすることができます。
+\n悪意のある拡張機能はAniyomiに保存されているすべてのログイン情報を読み取ることや、任意コード実行をすることができます。
 \n
 \nこれらのリスクを受け入れ、この証明書を信頼しますか？</string>
     <string name="pref_category_delete_chapters">章を削除</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">ライブラリにあるすべての項目にも適用</string>
     <string name="dialog_with_checkbox_reset">この項目の章をすべてリセット</string>
     <string name="download_insufficient_space">空き領域不足のため、章をダウンロードできませんでした</string>
-    <string name="download_queue_size_warning">警告：大量の一括ダウンロードにより、ソースは遅くなったり、Tachiyomiを接続禁止したりする恐れがあります。詳しくはタップでご覧ください。</string>
-    <string name="information_webview_required">TachiyomiはWebViewを必要としています</string>
+    <string name="download_queue_size_warning">警告：大量の一括ダウンロードにより、ソースは遅くなったり、Aniyomiを接続禁止したりする恐れがあります。詳しくはタップでご覧ください。</string>
+    <string name="information_webview_required">AniyomiはWebViewを必要としています</string>
     <string name="download_notifier_download_paused_chapters">ダウンロード一時停止済み</string>
     <string name="channel_new_chapters_episodes">章の更新</string>
     <string name="pref_library_manga_columns">行あたりの漫画</string>

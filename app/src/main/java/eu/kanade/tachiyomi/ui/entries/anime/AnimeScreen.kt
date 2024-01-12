@@ -107,9 +107,7 @@ class AnimeScreen(
         AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
-            dateRelativeTime = screenModel.relativeTime,
-            dateFormat = screenModel.dateFormat,
-            fetchInterval = successState.anime.fetchInterval,
+            nextUpdate = successState.anime.expectedNextUpdate,
             isTabletUi = isTabletUi(),
             episodeSwipeStartAction = screenModel.episodeSwipeStartAction,
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
@@ -169,7 +167,7 @@ class AnimeScreen(
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
             onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
-                screenModel.isUpdateIntervalEnabled && successState.anime.favorite
+                successState.anime.favorite
             },
             onMigrateClicked = {
                 navigator.push(MigrateAnimeSearchScreen(successState.anime.id))
@@ -271,8 +269,11 @@ class AnimeScreen(
             is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
                     interval = dialog.anime.fetchInterval,
+                    nextUpdate = dialog.anime.expectedNextUpdate,
                     onDismissRequest = onDismissRequest,
-                    onValueChanged = { screenModel.setFetchInterval(dialog.anime, it) },
+                    isManga = false,
+                    onValueChanged = { interval: Int -> screenModel.setFetchInterval(dialog.anime, interval) }
+                        .takeIf { screenModel.isUpdateIntervalEnabled },
                 )
             }
             AnimeScreenModel.Dialog.ChangeAnimeSkipIntro -> {

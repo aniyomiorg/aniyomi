@@ -21,7 +21,6 @@ import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.source.local.entries.anime.isLocal
 import java.lang.Long.max
-import java.time.Instant
 import java.time.ZonedDateTime
 import java.util.TreeSet
 
@@ -55,6 +54,7 @@ class SyncEpisodesWithSource(
         }
 
         val now = ZonedDateTime.now()
+        val nowMillis = now.toInstant().toEpochMilli()
 
         val sourceEpisodes = rawSourceEpisodes
             .distinctBy { it.url }
@@ -65,36 +65,27 @@ class SyncEpisodesWithSource(
                     .copy(animeId = anime.id, sourceOrder = i.toLong())
             }
 
-        // Episodes from db.
         val dbEpisodes = getEpisodesByAnimeId.await(anime.id)
 
-        // Episodes from the source not in db.
-        val toAdd = mutableListOf<Episode>()
-
-        // Episodes whose metadata have changed.
-        val toChange = mutableListOf<Episode>()
-
-        // Episodes from the db not in source.
-        val toDelete = dbEpisodes.filterNot { dbEpisode ->
+        val newEpisodes = mutableListOf<Episode>()
+        val updatedEpisodes = mutableListOf<Episode>()
+        val removedEpisodes = dbEpisodes.filterNot { dbEpisode ->
             sourceEpisodes.any { sourceEpisode ->
                 dbEpisode.url == sourceEpisode.url
             }
         }
 
-        val rightNow = Instant.now().toEpochMilli()
-
         // Used to not set upload date of older episodes
         // to a higher value than newer episodes
         var maxSeenUploadDate = 0L
 
-        val sAnime = anime.toSAnime()
         for (sourceEpisode in sourceEpisodes) {
             var episode = sourceEpisode
 
             // Update metadata from source if necessary.
             if (source is AnimeHttpSource) {
                 val sEpisode = episode.toSEpisode()
-                source.prepareNewEpisode(sEpisode, sAnime)
+                source.prepareNewEpisode(sEpisode, anime.toSAnime())
                 episode = episode.copyFromSEpisode(sEpisode)
             }
 
@@ -110,13 +101,13 @@ class SyncEpisodesWithSource(
 
             if (dbEpisode == null) {
                 val toAddEpisode = if (episode.dateUpload == 0L) {
-                    val altDateUpload = if (maxSeenUploadDate == 0L) rightNow else maxSeenUploadDate
+                    val altDateUpload = if (maxSeenUploadDate == 0L) nowMillis else maxSeenUploadDate
                     episode.copy(dateUpload = altDateUpload)
                 } else {
                     maxSeenUploadDate = max(maxSeenUploadDate, sourceEpisode.dateUpload)
                     episode
                 }
-                toAdd.add(toAddEpisode)
+                newEpisodes.add(toAddEpisode)
             } else {
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
                     val shouldRenameEpisode = downloadProvider.isEpisodeDirNameChanged(
@@ -144,13 +135,13 @@ class SyncEpisodesWithSource(
                             dateUpload = sourceEpisode.dateUpload,
                         )
                     }
-                    toChange.add(toChangeEpisode)
+                    updatedEpisodes.add(toChangeEpisode)
                 }
             }
         }
 
-        // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
-        if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
+        // Return if there's nothing to add, delete, or update to avoid unnecessary db transactions.
+        if (newEpisodes.isEmpty() && removedEpisodes.isEmpty() && updatedEpisodes.isEmpty()) {
             if (manualFetch || anime.fetchInterval == 0 || anime.nextUpdate < fetchWindow.first) {
                 updateAnime.awaitUpdateFetchInterval(
                     anime,
@@ -167,20 +158,20 @@ class SyncEpisodesWithSource(
         val deletedSeenEpisodeNumbers = TreeSet<Double>()
         val deletedBookmarkedEpisodeNumbers = TreeSet<Double>()
 
-        toDelete.forEach { episode ->
+        removedEpisodes.forEach { episode ->
             if (episode.seen) deletedSeenEpisodeNumbers.add(episode.episodeNumber)
             if (episode.bookmark) deletedBookmarkedEpisodeNumbers.add(episode.episodeNumber)
             deletedEpisodeNumbers.add(episode.episodeNumber)
         }
 
-        val deletedEpisodeNumberDateFetchMap = toDelete.sortedByDescending { it.dateFetch }
+        val deletedEpisodeNumberDateFetchMap = removedEpisodes.sortedByDescending { it.dateFetch }
             .associate { it.episodeNumber to it.dateFetch }
 
         // Date fetch is set in such a way that the upper ones will have bigger value than the lower ones
         // Sources MUST return the episodes from most to less recent, which is common.
-        var itemCount = toAdd.size
-        var updatedToAdd = toAdd.map { toAddItem ->
-            var episode = toAddItem.copy(dateFetch = rightNow + itemCount--)
+        var itemCount = newEpisodes.size
+        var updatedToAdd = newEpisodes.map { toAddItem ->
+            var episode = toAddItem.copy(dateFetch = nowMillis + itemCount--)
 
             if (episode.isRecognizedNumber.not() || episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
 
@@ -199,8 +190,8 @@ class SyncEpisodesWithSource(
             episode
         }
 
-        if (toDelete.isNotEmpty()) {
-            val toDeleteIds = toDelete.map { it.id }
+        if (removedEpisodes.isNotEmpty()) {
+            val toDeleteIds = removedEpisodes.map { it.id }
             episodeRepository.removeEpisodesWithIds(toDeleteIds)
         }
 
@@ -208,8 +199,8 @@ class SyncEpisodesWithSource(
             updatedToAdd = episodeRepository.addAllEpisodes(updatedToAdd)
         }
 
-        if (toChange.isNotEmpty()) {
-            val episodeUpdates = toChange.map { it.toEpisodeUpdate() }
+        if (updatedEpisodes.isNotEmpty()) {
+            val episodeUpdates = updatedEpisodes.map { it.toEpisodeUpdate() }
             updateEpisode.awaitAll(episodeUpdates)
         }
         updateAnime.awaitUpdateFetchInterval(anime, now, fetchWindow)

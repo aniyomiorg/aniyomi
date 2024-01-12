@@ -19,7 +19,7 @@ interface ConfigurableAnimeSource : AnimeSource {
     fun setupPreferenceScreen(screen: PreferenceScreen)
 }
 
-private fun ConfigurableAnimeSource.preferenceKey(): String = "source_$id"
+fun ConfigurableAnimeSource.preferenceKey(): String = "source_$id"
 
 // TODO: use getSourcePreferences once all extensions are on ext-lib 1.5
 fun ConfigurableAnimeSource.sourcePreferences(): SharedPreferences =

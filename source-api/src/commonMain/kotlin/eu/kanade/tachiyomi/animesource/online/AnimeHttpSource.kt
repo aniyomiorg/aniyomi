@@ -561,4 +561,4 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     override fun getFilterList() = AnimeFilterList()
 }
 
-class LicensedEntryItemsException : Exception("Licensed - No items to show")
+class LicensedEntryItemsException : RuntimeException()

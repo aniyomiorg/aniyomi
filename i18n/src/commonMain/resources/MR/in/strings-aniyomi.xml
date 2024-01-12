@@ -60,7 +60,7 @@
     <string name="pref_anime_library_update_categories_details">Anime dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
     <string name="untrusted_extension_message">Ekstensi ini ditanda tangani dengan sertifikat yang tidak terpercaya dan belum diaktifkan.
 \n
-\nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Tachiyomi atau mengeksekusi kode berbahaya.
+\nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Aniyomi atau mengeksekusi kode berbahaya.
 \n
 \nDengan mempercayai sertifikat ini Anda menyetujui resiko tersebut.</string>
     <string name="unofficial_extension_message_aniyomi">Ektension ini bukan dari daftar ekstension official Aniyomi.</string>
@@ -163,11 +163,11 @@
     <string name="player_statistics_page_3">Halaman 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Tidak dapat mengunduh karena ruang penyimpanan rendah</string>
-    <string name="download_queue_size_warning">Peringatan: mengunduh dalam jumlah besar bisa menyebabkan sumber menjadi lambat dan/atau memblokir Tachiyomi. Ketuk untuk mempelajari lebih lanjut.</string>
+    <string name="download_queue_size_warning">Peringatan: mengunduh dalam jumlah besar bisa menyebabkan sumber menjadi lambat dan/atau memblokir Aniyomi. Ketuk untuk mempelajari lebih lanjut.</string>
     <string name="video_list_empty_error">Video tidak ditemukan</string>
     <string name="notification_new_episodes">Ada episode baru nihh</string>
     <string name="information_no_recent_anime">Tidak ada yang ditonton baru-baru ini</string>
-    <string name="information_webview_required">WebView dibutuhkan untuk Tachiyomi</string>
+    <string name="information_webview_required">WebView dibutuhkan untuk Aniyomi</string>
     <string name="episode_settings_updated">Ubah pengaturan standar episode</string>
     <string name="download_notifier_download_paused_chapters">Pengunduhan dijeda</string>
     <string name="download_notifier_download_paused_episodes">Unduhan episode dijeda</string>

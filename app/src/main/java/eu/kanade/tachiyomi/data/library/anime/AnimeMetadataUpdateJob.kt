@@ -15,7 +15,6 @@ import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
@@ -24,7 +23,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -96,17 +94,9 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
     /**
      * Adds list of anime to be updated.
      */
-    private fun addAnimeToQueue() {
-        animeToUpdate = runBlocking { getLibraryAnime.await() }
-
-        // Warn when excessively checking a single source
-        val maxUpdatesFromSource = animeToUpdate
-            .groupBy { it.anime.source }
-            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
-            .maxOfOrNull { it.value.size } ?: 0
-        if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-            notifier.showQueueSizeWarningNotification()
-        }
+    private suspend fun addAnimeToQueue() {
+        animeToUpdate = getLibraryAnime.await()
+        notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)
     }
 
     private suspend fun updateMetadata() {

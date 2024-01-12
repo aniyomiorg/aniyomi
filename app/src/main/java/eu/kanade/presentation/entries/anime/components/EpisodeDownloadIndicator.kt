@@ -46,10 +46,10 @@ enum class EpisodeDownloadAction {
 @Composable
 fun EpisodeDownloadIndicator(
     enabled: Boolean,
-    modifier: Modifier = Modifier,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onClick: (EpisodeDownloadAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     when (val downloadState = downloadStateProvider()) {
         AnimeDownload.State.NOT_DOWNLOADED -> NotDownloadedIndicator(
@@ -106,10 +106,10 @@ private fun NotDownloadedIndicator(
 @Composable
 private fun DownloadingIndicator(
     enabled: Boolean,
-    modifier: Modifier = Modifier,
     downloadState: AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onClick: (EpisodeDownloadAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     Box(

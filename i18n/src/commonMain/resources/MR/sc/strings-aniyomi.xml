@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a agiornare nemmancu si sunt fintzas in categorias inclùdidas.</string>
     <string name="untrusted_extension_message">Custa estensione est istada firmada cun unu tzertificadu chi no est afidàbile e no est istada ativada.
 \n
-\nUn\'estensione mala diat pòdere lèghere totu sas informatziones de atzessu sarvadas in Tachiyomi o fàghere eseguire còdighe arbitràriu.
+\nUn\'estensione mala diat pòdere lèghere totu sas informatziones de atzessu sarvadas in Aniyomi o fàghere eseguire còdighe arbitràriu.
 \n
 \nPonende fidùtzia in custu tzertificadu atzetas custos arriscos.</string>
     <string name="pref_category_delete_chapters">Iscantzella capìtulos</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">Àplica fintzas a totu sos elementos in sa biblioteca mea</string>
     <string name="dialog_with_checkbox_reset">Reseta totu sos capìtulos pro custu elementu</string>
     <string name="download_insufficient_space">Iscarrigamentu de sos capìtulos fallidu pro neghe de su pagu ispàtziu lìberu in su discu</string>
-    <string name="download_queue_size_warning">Dae cara: sos iscarrigamentos de massa mannos diant pòdere rallentare sas fontes e/o blocare Tachiyomi. Toca pro nde ischire de prus.</string>
-    <string name="information_webview_required">Pro Tachiyomi b\'at bisòngiu de WebView</string>
+    <string name="download_queue_size_warning">Dae cara: sos iscarrigamentos de massa mannos diant pòdere rallentare sas fontes e/o blocare Aniyomi. Toca pro nde ischire de prus.</string>
+    <string name="information_webview_required">Pro Aniyomi b\'at bisòngiu de WebView</string>
     <string name="download_notifier_download_paused_chapters">Iscarrigamentu in pàusa</string>
     <string name="channel_new_chapters_episodes">Agiornamentos de sos capìtulos</string>
 </resources>

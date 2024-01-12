@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Manga din categoriile excluse nu vor fi actualizate, chiar dacă se află și în categoriile incluse.</string>
     <string name="untrusted_extension_message">Extensia a fost semnată cu un certificat nesigur și nu a fost activată.
 \n
-\nO extensie periculoasă ar putea citi orice date de logare stocate în Tachiyomi sau executa cod periculos.
+\nO extensie periculoasă ar putea citi orice date de logare stocate în Aniyomi sau executa cod periculos.
 \n
 \nPrin acordarea încrederii acestui certificat acceptați riscurile menționate.</string>
     <string name="pref_category_delete_chapters">Ștergeți capitole</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">De asemenea, se aplică la toate manga în biblioteca mea</string>
     <string name="dialog_with_checkbox_reset">Resetează toate capitolele pentru acest manga</string>
     <string name="download_insufficient_space">Nu s-au putut descărca capitole din cauza spațiului de stocare redus</string>
-    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Tachiyomi. Apasa pentru mai multe informatii.</string>
-    <string name="information_webview_required">WebView este necesar pentru Tachiyomi</string>
+    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Aniyomi. Apasa pentru mai multe informatii.</string>
+    <string name="information_webview_required">WebView este necesar pentru Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
 </resources>

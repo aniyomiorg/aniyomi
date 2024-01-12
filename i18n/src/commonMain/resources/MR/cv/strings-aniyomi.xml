@@ -7,7 +7,7 @@
     <string name="default_manga_category">Яланхилле пухмӑш</string>
     <string name="untrusted_extension_message">Ку хушмана шанчӑклӑ мар сертификатпа алӑ пуснӑ тата ӑна активламан.
 \n
-\nСиенлӗ хушма Tachiyomi-ри упранакан кирек мӗнле шут пӗлӗмсене шута илме е хӑй ирӗклӗ юма пурнӑҫлама пултарать.
+\nСиенлӗ хушма Aniyomi-ри упранакан кирек мӗнле шут пӗлӗмсене шута илме е хӑй ирӗклӗ юма пурнӑҫлама пултарать.
 \n
 \nҪак сертификата шаннипе эсӗ ҫав теветкеле йышӑнатӑн.</string>
     <string name="pref_category_delete_chapters">Сыпӑксене катерт</string>
@@ -27,7 +27,7 @@
     <string name="also_set_chapter_settings_for_library">Тата манӑн вулавăшри пур манкӑ валли усӑ кур</string>
     <string name="dialog_with_checkbox_reset">Ҫак манкӑн пур сыпӑка тасат</string>
     <string name="download_insufficient_space">Тиск ҫинче вырӑн ҫитмен пирки сыпӑксене тиесе илес ҫук</string>
-    <string name="information_webview_required">Tachiyomi валли WebView кирлӗ</string>
+    <string name="information_webview_required">Aniyomi валли WebView кирлӗ</string>
     <string name="download_notifier_download_paused_chapters">Тиеве вӑхӑтлӑха чарнӑ</string>
     <string name="channel_new_chapters_episodes">Сыпӑксен ҫӗнетӗвӗсем</string>
 </resources>
