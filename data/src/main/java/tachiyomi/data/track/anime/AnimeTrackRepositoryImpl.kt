@@ -16,13 +16,13 @@ class AnimeTrackRepositoryImpl(
     // SY -->
     override suspend fun getAnimeTracks(): List<AnimeTrack> {
         return handler.awaitList {
-            anime_syncQueries.getAnimeTracks(::mapTrack)
+            anime_syncQueries.getAnimeTracks(AnimeTrackMapper::mapTrack)
         }
     }
 
     override suspend fun getTracksByAnimeIds(animeIds: List<Long>): List<AnimeTrack> {
         return handler.awaitList {
-            anime_syncQueries.getTracksByAnimeIds(animeIds, ::mapTrack)
+            anime_syncQueries.getTracksByAnimeIds(animeIds, AnimeTrackMapper::mapTrack)
         }
     }
     // SY <--

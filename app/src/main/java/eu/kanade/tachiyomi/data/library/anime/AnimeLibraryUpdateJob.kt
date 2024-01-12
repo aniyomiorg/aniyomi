@@ -39,6 +39,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -167,7 +168,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private suspend fun addAnimeToQueue(categoryId: Long) {
+    private suspend fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryAnime = getLibraryAnime.await()
 
         // SY -->
@@ -208,7 +209,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
                     libraryAnime.filter { (anime) ->
                         val status = tracks[anime.id]?.firstNotNullOfOrNull { track ->
-                            TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                            TrackStatus.parseTrackerStatus(track.trackerId, track.status)
                         } ?: TrackStatus.OTHER
                         status.int == trackingExtra
                     }

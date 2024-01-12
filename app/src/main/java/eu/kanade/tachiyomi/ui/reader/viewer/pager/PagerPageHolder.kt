@@ -28,6 +28,8 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.math.max
+import tachiyomi.decoder.ImageDecoder
+
 
 /**
  * View of the ViewPager that contains a page of a chapter.

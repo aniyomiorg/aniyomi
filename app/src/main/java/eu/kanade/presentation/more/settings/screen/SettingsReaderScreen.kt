@@ -14,6 +14,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -413,13 +414,15 @@ object SettingsReaderScreen : SearchableSettings {
     private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_fork),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.MultiSelectListPreference(
                     pref = readerPreferences.readerBottomButtons(),
                     title = stringResource(MR.strings.reader_bottom_buttons),
                     subtitle = stringResource(MR.strings.reader_bottom_buttons_summary),
                     entries = ReaderBottomButton.entries
-                        .associate { it.value to stringResource(it.stringRes) },
+                        .associate { it.value to stringResource(it.stringRes) }
+                        .toImmutableMap(),
+
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = readerPreferences.pageLayout(),
@@ -427,7 +430,8 @@ object SettingsReaderScreen : SearchableSettings {
                     subtitle = stringResource(MR.strings.automatic_can_still_switch),
                     entries = ReaderPreferences.PageLayouts
                         .mapIndexed { index, it -> index to stringResource(it) }
-                        .toMap(),
+                        .toMap()
+                        .toImmutableMap(),
                 ),
             ),
         )

@@ -813,7 +813,7 @@ class AnimeLibraryScreenModel(
                 val tracks = runBlocking { getTracks.await() }.groupBy { it.animeId }
                 libraryAnime.groupBy { item ->
                     val status = tracks[item.libraryAnime.anime.id]?.firstNotNullOfOrNull { track ->
-                        TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                        TrackStatus.parseTrackerStatus(track.trackerId, track.status)
                     } ?: TrackStatus.OTHER
 
                     status.int
