@@ -43,6 +43,10 @@ internal class StorageStep : OnboardingStep {
         val handler = LocalUriHandler.current
 
         val pickStorageLocation = SettingsDataScreen.storageLocationPicker(storagePref)
+        if (!storagePref.isSet()) {
+            storagePref.set("${storagePref.get()}/")
+
+        }
 
         Column(
             modifier = Modifier.padding(16.dp),
