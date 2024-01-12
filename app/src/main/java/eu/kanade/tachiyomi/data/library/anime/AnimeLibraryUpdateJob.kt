@@ -167,8 +167,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
-        val libraryAnime = runBlocking { getLibraryAnime.await() }
+    private suspend fun addAnimeToQueue(categoryId: Long) {
+        val libraryAnime = getLibraryAnime.await()
 
         // SY -->
         val groupAnimeLibraryUpdateType = libraryPreferences.groupAnimeLibraryUpdateType().get()
