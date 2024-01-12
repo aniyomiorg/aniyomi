@@ -11,7 +11,7 @@ class CreateAnimeExtensionRepo(private val preferences: SourcePreferences) {
             return Result.InvalidUrl
         }
 
-        preferences.mangaExtensionRepos() += name.removeSuffix("/index.min.json")
+        preferences.animeExtensionRepos() += name.removeSuffix("/index.min.json")
 
         return Result.Success
     }
