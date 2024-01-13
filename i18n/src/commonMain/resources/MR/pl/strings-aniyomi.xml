@@ -268,4 +268,9 @@
     <string name="playback_options_quality">Jakość</string>
     <string name="enable_volume_brightness_gestures">Włącz gesty głośności i jasności</string>
     <string name="plan_to_watch">Planowane do obejrzenia</string>
+    <string name="label_all">Wszystkie</string>
+    <string name="label_category">Kategorie</string>
+    <string name="unlock_app_title">Odblokuj Aniyomi</string>
+    <string name="action_hide">Ukryj</string>
+    <string name="label_recent_anime_updates">Aktualizacje Anime</string>
 </resources>
