@@ -47,6 +47,7 @@ import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.network.PREF_DOH_CONTROLD
 import eu.kanade.tachiyomi.network.PREF_DOH_DNSPOD
 import eu.kanade.tachiyomi.network.PREF_DOH_GOOGLE
+import eu.kanade.tachiyomi.network.PREF_DOH_LIBREDNS
 import eu.kanade.tachiyomi.network.PREF_DOH_MULLVAD
 import eu.kanade.tachiyomi.network.PREF_DOH_NJALLA
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD101
@@ -289,6 +290,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         PREF_DOH_CONTROLD to "Control D",
                         PREF_DOH_NJALLA to "Njalla",
                         PREF_DOH_SHECAN to "Shecan",
+                        PREF_DOH_LIBREDNS to "LibreDNS",
                     ),
                     onValueChanged = {
                         context.stringResource(MR.strings.requires_app_restart)
