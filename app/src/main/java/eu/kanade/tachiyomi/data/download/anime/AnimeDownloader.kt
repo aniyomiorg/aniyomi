@@ -41,7 +41,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okio.Buffer
+import okio.buffer
+import okio.sink
 import rx.subjects.PublishSubject
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.storage.extension
@@ -73,7 +74,6 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
 ) {
-
     /**
      * Store for persisting downloads across restarts.
      */
@@ -596,7 +596,11 @@ class AnimeDownloader(
         }
     }
 
-    private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {
+    private fun getFFmpegOptions(
+        video: Video,
+        headerOptions: String,
+        ffmpegFilename: String,
+    ): Array<String> {
         val subtitleInputs = video.subtitleTracks.joinToString(" ", postfix = " ") {
             "-i \"${it.url}\""
         }
@@ -663,20 +667,19 @@ class AnimeDownloader(
             try {
                 response.body.source().use { source ->
                     file.openOutputStream(true).use { output ->
-                        val buffer = Buffer()
+                        val sink = output.sink().buffer()
+                        val buffer = ByteArray(4 * 1024)
                         var totalBytesRead = 0L
                         var bytesRead: Int
-                        val bufferSize = 4 * 1024
-                        while (source.read(buffer, bufferSize.toLong()).also { bytesRead = it.toInt() } != -1L) {
+                        while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
                             // Check if the download is paused, if so, wait
                             while (isPaused) {
                                 delay(1000) // Wait for 1 second before checking again
                             }
-
                             // Write the bytes to the file
-                            output.write(bytesRead)
+                            sink.write(buffer, 0, bytesRead)
+                            sink.emitCompleteSegments()
                             totalBytesRead += bytesRead
-                            video.progress = (totalBytesRead * 100 / response.body.contentLength()).toInt()
                             // Update progress here if needed
                         }
                     }
@@ -832,7 +835,10 @@ class AnimeDownloader(
         }
     }
 
-    private fun setProgressSubject(video: Video?, subject: PublishSubject<Video.State>?) {
+    private fun setProgressSubject(
+        video: Video?,
+        subject: PublishSubject<Video.State>?,
+    ) {
         video?.progressSubject = subject
     }
 
