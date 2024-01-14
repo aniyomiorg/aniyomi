@@ -8,12 +8,20 @@ import eu.kanade.domain.entries.manga.interactor.GetExcludedScanlators
 import eu.kanade.domain.entries.manga.interactor.SetExcludedScanlators
 import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.extension.anime.interactor.CreateAnimeExtensionRepo
+import eu.kanade.domain.extension.anime.interactor.DeleteAnimeExtensionRepo
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
+import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionRepos
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
+import eu.kanade.domain.extension.anime.interactor.TrustAnimeExtension
+import eu.kanade.domain.extension.manga.interactor.CreateMangaExtensionRepo
+import eu.kanade.domain.extension.manga.interactor.DeleteMangaExtensionRepo
 import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
+import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionRepos
 import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
+import eu.kanade.domain.extension.manga.interactor.TrustMangaExtension
 import eu.kanade.domain.items.chapter.interactor.GetAvailableScanlators
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
@@ -84,19 +92,19 @@ import tachiyomi.domain.category.manga.interactor.UpdateMangaCategory
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
-import tachiyomi.domain.entries.anime.interactor.GetMangaByUrlAndSourceId
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.interactor.ResetAnimeViewerFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
-import tachiyomi.domain.entries.manga.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.interactor.GetMangaByUrlAndSourceId
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
 import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
@@ -322,5 +330,14 @@ class DomainModule : InjektModule {
         addFactory { ToggleLanguage(get()) }
         addFactory { ToggleMangaSource(get()) }
         addFactory { ToggleMangaSourcePin(get()) }
+        addFactory { TrustAnimeExtension(get()) }
+        addFactory { TrustMangaExtension(get()) }
+
+        addFactory { CreateMangaExtensionRepo(get()) }
+        addFactory { DeleteMangaExtensionRepo(get()) }
+        addFactory { GetMangaExtensionRepos(get()) }
+        addFactory { CreateAnimeExtensionRepo(get()) }
+        addFactory { DeleteAnimeExtensionRepo(get()) }
+        addFactory { GetAnimeExtensionRepos(get()) }
     }
 }

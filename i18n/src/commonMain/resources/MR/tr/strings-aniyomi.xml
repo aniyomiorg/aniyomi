@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Geçmiş\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_updates">Güncellemeler\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_manga">Manga\'yı Daha Fazla Sekmesine Taşı</string>
-    <string name="unlock_app">Aniyomi\'yi Aç</string>
     <string name="action_filter_unseen">İzlenmemiş</string>
     <string name="action_sort_total_episodes">Toplam Anime Bölüm Sayısı</string>
     <string name="action_sort_last_seen">Son Görülen</string>
@@ -60,7 +59,7 @@
     <string name="pref_anime_library_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
     <string name="untrusted_extension_message">Bu uzantı güvenilmeyen bir sertifika ile imzalanmış ve etkinleştirilmedi.
 \n
-\nKötü niyetli bir uzantı, Tachiyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
+\nKötü niyetli bir uzantı, Aniyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
 \n
 \nBu sertifikaya güvenerek bu riskleri kabul etmiş oluyorsunuz.</string>
     <string name="unofficial_extension_message_aniyomi">Bu uzantı, resmi Aniyomi uzantıları listesinden değildir.</string>
@@ -102,18 +101,17 @@
     <string name="pref_auto_clear_chapter_cache">Uygulama kapatıldığında bölüm önbelleğini temizle</string>
     <string name="pref_clear_manga_database">Veritabanını temizle</string>
     <string name="pref_clear_manga_database_summary">Kitaplığınıza kaydedilmeyen girdilerin geçmiş bilgisini sil</string>
-    <string name="clear_database_confirmation">Emin misiniz\? Kitaplıkta olmayan girdilerin okunan bölümleri ve ilerlemesi kaybolacak</string>
-    <string name="pref_refresh_library_tracking_summary">İzleme hizmetlerinden durumu, puanı ve son okunan bölümü günceller</string>
+    <string name="clear_database_confirmation">Emin misiniz? Kitaplıkta olmayan girdilerin okunan bölümleri ve ilerlemesi kaybolacak</string>
     <string name="pref_incognito_mode_summary">Okuma geçmişini duraklatır</string>
     <string name="manga_from_library">Kitaplıktan</string>
-    <string name="snack_add_to_manga_library">Kitaplığa eklensin mi\?</string>
+    <string name="snack_add_to_manga_library">Kitaplığa eklensin mi?</string>
     <string name="download_error">Hata</string>
     <string name="download_paused">Duraklatıldı</string>
     <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm girdilere de uygula</string>
     <string name="dialog_with_checkbox_reset">Bu girdi için tüm bölümleri sıfırla</string>
     <string name="download_insufficient_space">Saklama alanı az olduğundan bölümler indirilemedi</string>
-    <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Tachiyomi\'yi engellemesine neden olabilir. Daha fazlasını öğrenmek için dokunun.</string>
-    <string name="information_webview_required">WebView, Tachiyomi için gereklidir</string>
+    <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Aniyomi\'yi engellemesine neden olabilir. Daha fazlasını öğrenmek için dokunun.</string>
+    <string name="information_webview_required">WebView, Aniyomi için gereklidir</string>
     <string name="download_notifier_download_paused_chapters">İndirme duraklatıldı</string>
     <string name="channel_new_chapters_episodes">Bölüm güncellemeleri</string>
     <string name="pref_default_home_tab_library">Başlangıç ekranını Manga Sekmesi olarak ayarla</string>
@@ -125,14 +123,14 @@
     <string name="local_anime_source">Yerel anime kaynağı</string>
     <string name="episode_not_found">Hiç bölüm bulunmadı</string>
     <string name="local_invalid_episode_format">Geçersiz bölüm biçimi</string>
-    <string name="delete_downloads_for_anime">İndirilen bölümler silinsin mi\?</string>
-    <string name="snack_add_to_anime_library">Anime kitaplığa eklensin mi\?</string>
+    <string name="delete_downloads_for_anime">İndirilen bölümler silinsin mi?</string>
+    <string name="snack_add_to_anime_library">Anime kitaplığa eklensin mi?</string>
     <string name="episode_downloading_progress">İndiriliyor (%d%%)</string>
     <string name="sort_by_episode_number">Bölüm sayısına göre</string>
     <string name="download_unseen">İzlenmeyen</string>
     <string name="also_set_episode_settings_for_library">Kitaplığımdaki bütün animelere uygula</string>
     <string name="no_episodes_error">hiç bölüm bulunmadı</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Bu, bölümün izlenme tarihini kaldırır. Emin misiniz\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Bu, bölümün izlenme tarihini kaldırır. Emin misiniz?</string>
     <string name="dialog_with_checkbox_reset_anime">Bu anime için bütün bölümleri sıfırla</string>
     <string name="episode_progress_no_total">İlerleme: %1$s</string>
     <string name="episode_progress">İlerleme: %1$s/%2$s</string>
@@ -160,7 +158,7 @@
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="screenshot_header">Ekran görüntüsü al</string>
     <string name="show_episode_number">Bölüm sayısı</string>
-    <string name="confirm_delete_episodes">Seçilen bölümleri silmek istediğinize emin misiniz\?</string>
+    <string name="confirm_delete_episodes">Seçilen bölümleri silmek istediğinize emin misiniz?</string>
     <string name="pref_waiting_time_aniskip_6">6 saniye</string>
     <string name="player_aniskip_skip">%s atlandı</string>
     <string name="episode_settings">Bölüm ayarları</string>

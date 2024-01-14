@@ -21,8 +21,8 @@ android {
 
         applicationId = "com.dark.animetailv2"
 
-        versionCode = 112
-        versionName = "0.14.35"
+        versionCode = 118
+        versionName = "0.15.2.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -131,6 +131,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
 
         // Disable some unused things
         aidl = false
@@ -257,7 +258,7 @@ dependencies {
     implementation(libs.logcat)
 
     // Crash reports
-    implementation(libs.acra.http)
+    implementation(libs.bundles.acra)
 
     // Shizuku
     implementation(libs.bundles.shizuku)

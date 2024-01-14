@@ -54,4 +54,7 @@ dependencies {
     implementation(libs.zip4j)
     implementation(libs.exifinterface)
     // SY <--
+
+    // Tests
+    testImplementation(libs.bundles.test)
 }

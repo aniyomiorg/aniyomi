@@ -32,7 +32,6 @@
     <string name="playback_options_quality">ଵିଡ଼ିଓ ଗୁଣଵତ୍ତା</string>
     <string name="episodes">ଅଧ୍ୟାୟ</string>
     <string name="plan_to_watch">ଦେଖିବା ପାଇଁ ଇଚ୍ଛୁକ</string>
-    <string name="stats_header">ପରିସଂଖ୍ୟାନ ଦେଖାଅ</string>
     <string name="pref_clear_chapter_cache">ଅଧ୍ୟାୟର ଦ୍ରୁତିକା ସଫା କରିବା</string>
     <string name="action_download_unread">ଅପଢ଼ା ଅଧ୍ୟାୟ ଡାଉନଲୋଡ୍ କରିବା</string>
     <string name="episode_settings">ଅଧ୍ୟାୟ ସେଟିଂ</string>
@@ -45,11 +44,10 @@
     <string name="pref_update_only_completely_read">ଅଦେଖା/ଅପଢ଼ା ଅଧ୍ୟାୟ(ଗୁଡ଼ିକ) ସହିତ</string>
     <string name="download_error">ତ୍ରୁଟି</string>
     <string name="not_interesting">ରୋଚକ ନୁହଁ</string>
-    <string name="dialog_with_checkbox_remove_description_anime">ଏହା ଏହି ଅଧ୍ୟାୟର ଦର୍ଶନ ତାରିଖକୁ ହଟାଇଦେବ। ଆପଣ ନିଶ୍ଚିତ ଅଛନ୍ତି ତ\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">ଏହା ଏହି ଅଧ୍ୟାୟର ଦର୍ଶନ ତାରିଖକୁ ହଟାଇଦେବ। ଆପଣ ନିଶ୍ଚିତ ଅଛନ୍ତି ତ?</string>
     <string name="want_to_watch">ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି</string>
     <string name="pref_category_progress">ପ୍ରଗତି</string>
     <string name="no_episodes_error">କୌଣସି ଅଧ୍ୟାୟ ମିଳିଲା ନାହିଁ</string>
-    <string name="stats_page_2">ପୃଷ୍ଠା ୨</string>
     <string name="sort_by_episode_number">ଅଧ୍ୟାୟ ସଂଖ୍ୟା ଅନୁଯାୟୀ</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="action_view_episodes">ଅଧ୍ୟାୟଗୁଡ଼ିକ ଦେଖନ୍ତୁ</string>
@@ -58,8 +56,7 @@
     <string name="action_previous_episode">ପୂର୍ବବର୍ତ୍ତୀ ଅଧ୍ୟାୟ</string>
     <string name="no_next_episode">ପରବର୍ତ୍ତୀ ଅଧ୍ୟାୟ ମିଳିଲା ନାହିଁ!</string>
     <string name="download_notifier_download_paused_episodes">ଅଧ୍ୟାୟ ଡାଉନଲୋଡ୍ ବିରତ ହୋଇଛି</string>
-    <string name="stats_page_3">ପୃଷ୍ଠା ୩</string>
-    <string name="confirm_delete_episodes">ଆପଣ ଚୟନିତ ଅଧ୍ୟାୟଗୁଡ଼ିକ ବିଲୋପ କରିବାକୁ ନିଶ୍ଚିତ ଅଛନ୍ତି ତ\?</string>
+    <string name="confirm_delete_episodes">ଆପଣ ଚୟନିତ ଅଧ୍ୟାୟଗୁଡ଼ିକ ବିଲୋପ କରିବାକୁ ନିଶ୍ଚିତ ଅଛନ୍ତି ତ?</string>
     <string name="notification_episodes_multiple">ଅଧ୍ୟାୟ %1$s</string>
     <string name="episode_progress">ପ୍ରଗତି: %1$s/%2$s</string>
     <string name="action_play">ଚଲାଅ</string>
@@ -68,13 +65,11 @@
     <string name="download_paused">ବିରତ ହୋଇଅଛି</string>
     <string name="action_order_by_episode_number">ଅଧ୍ୟାୟ ସଂଖ୍ୟା ଅନୁଯାୟୀ</string>
     <string name="action_sort_latest_episode">ସଦ୍ୟତମ ଅଧ୍ୟାୟ</string>
-    <string name="stats_page">ପରିସଂଖ୍ୟାନ ପୃଷ୍ଠା</string>
     <string name="local_invalid_episode_format">ଅବୈଧ ଅଧ୍ୟାୟ ଫର୍ମାଟ୍</string>
     <string name="pref_invalidate_download_cache_summary">ଡାଉନଲୋଡ୍ ହୋଇଥିବା ଅଧ୍ୟାୟଗୁଡ଼ିକୁ ପୁନଃଯାଞ୍ଚ କରିବାଲାଗି ଆପ୍‌କୁ ବାଧ୍ୟ କରିବା</string>
-    <string name="stats_page_1">ପୃଷ୍ଠା ୧</string>
     <string name="subtitle_dialog_header">ଉପଶୀର୍ଷକ</string>
     <string name="screenshot_header">ସ୍କ୍ରୀନ୍‌ସଟ୍ ନେବା</string>
-    <string name="delete_downloads_for_anime">ଡାଉନଲୋଡ୍ ହୋଇଥିବା ଅଧ୍ୟାୟଗୁଡ଼ିକୁ ବିଲୋପ କରିବେ ତ\?</string>
+    <string name="delete_downloads_for_anime">ଡାଉନଲୋଡ୍ ହୋଇଥିବା ଅଧ୍ୟାୟଗୁଡ଼ିକୁ ବିଲୋପ କରିବେ ତ?</string>
     <string name="action_display_download_badge_anime">ଡାଉନଲୋଡ୍ ହୋଇଥିବା ଅଧ୍ୟାୟଗୁଡ଼ିକ</string>
     <string name="episode_progress_no_total">ପ୍ରଗତି: %1$s</string>
     <string name="unknown_studio">ଅଜଣା ପ୍ରସାର କକ୍ଷ</string>

@@ -32,6 +32,9 @@ interface ThemingDelegate {
                 AppTheme.MOCHA -> {
                     resIds += R.style.Theme_Tachiyomi_Mocha
                 }
+                AppTheme.NORD -> {
+                    resIds += R.style.Theme_Tachiyomi_Nord
+                }
                 AppTheme.STRAWBERRY_DAIQUIRI -> {
                     resIds += R.style.Theme_Tachiyomi_StrawberryDaiquiri
                 }

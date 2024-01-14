@@ -1,10 +1,12 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
+import java.time.Instant
 import kotlin.math.pow
 
 data class Anime(
@@ -33,6 +35,11 @@ data class Anime(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
 ) : Serializable {
+
+    val expectedNextUpdate: Instant?
+        get() = nextUpdate
+            .takeIf { status != SAnime.COMPLETED.toLong() }
+            ?.let { Instant.ofEpochMilli(it) }
 
     // SY -->
     private val customAnimeInfo = if (favorite) {

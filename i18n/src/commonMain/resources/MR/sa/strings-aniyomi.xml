@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">वर्गाः</string>
-    <string name="unlock_app">ताचियोमिम् उद्घाटयतु</string>
     <string name="action_show_manga">माङ्गां दर्शयतु</string>
     <string name="action_display_local_badge_manga">स्थानीयाः माङ्गाः</string>
     <string name="pref_update_only_completely_read">अपठितान् अध्यायान् गृह्णाति</string>
@@ -19,7 +18,6 @@
     <string name="pref_clear_manga_database">दत्तनिधिं मार्जयतु</string>
     <string name="pref_clear_manga_database_summary">तव ग्रन्थालये न रक्षितानां माङ्गानां चरित्रं नाशय</string>
     <string name="clear_database_confirmation">त्वं निश्चितं किम्। पर-ग्रन्थालय-माङ्गानाम् अपिठाध्यायाः नष्टाः भविष्यन्ते</string>
-    <string name="pref_refresh_library_tracking_summary">अनुप्रज्ञानसेवाभ्यः स्थितिं प्राप्ताङ्कं अन्तिमपठिताध्यायं च नवीकरोति</string>
     <string name="pref_incognito_mode_summary">पठनचरित्रं विरमिष्यति</string>
     <string name="manga_from_library">ग्रन्थालयात् माङ्गा</string>
     <string name="snack_add_to_manga_library">माङ्गां ग्रन्थालये योजयानि किम्</string>

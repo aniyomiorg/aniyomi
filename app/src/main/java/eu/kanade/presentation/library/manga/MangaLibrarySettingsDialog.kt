@@ -20,6 +20,8 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsScreenModel
+import eu.kanade.tachiyomi.util.system.isDevFlavor
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.category.model.Category
@@ -92,6 +94,8 @@ private fun ColumnScope.FilterPage(
 ) {
     val filterDownloaded by screenModel.libraryPreferences.filterDownloadedManga().collectAsState()
     val downloadedOnly by screenModel.preferences.downloadedOnly().collectAsState()
+    val autoUpdateMangaRestrictions by screenModel.libraryPreferences.autoUpdateItemRestrictions().collectAsState()
+
     TriStateItem(
         label = stringResource(MR.strings.label_downloaded),
         state = if (downloadedOnly) {
@@ -126,6 +130,18 @@ private fun ColumnScope.FilterPage(
         state = filterCompleted,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterCompletedManga) },
     )
+    // TODO: re-enable when custom intervals are ready for stable
+    if (
+        (isDevFlavor || isPreviewBuildType) &&
+        LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in autoUpdateMangaRestrictions
+    ) {
+        val filterIntervalCustom by screenModel.libraryPreferences.filterIntervalCustom().collectAsState()
+        TriStateItem(
+            label = stringResource(MR.strings.action_filter_interval_custom),
+            state = filterIntervalCustom,
+            onClick = { screenModel.toggleFilter(LibraryPreferences::filterIntervalCustom) },
+        )
+    }
 
     val trackers = remember { screenModel.trackers }
     when (trackers.size) {

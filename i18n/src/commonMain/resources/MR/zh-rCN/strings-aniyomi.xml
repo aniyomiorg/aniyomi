@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">将历史记录移至“更多”选项</string>
     <string name="pref_bottom_nav_no_updates">将更新移至“更多”选项</string>
     <string name="pref_bottom_nav_no_manga">将漫画移至“更多”选项</string>
-    <string name="unlock_app">解锁 Animetail</string>
     <string name="action_filter_unseen">未观看</string>
     <string name="action_sort_total_episodes">所有选集</string>
     <string name="action_sort_last_seen">上次观看</string>
@@ -61,7 +60,7 @@
     <string name="pref_anime_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
     <string name="untrusted_extension_message">此插件的签名证书并不可信，因此未被启用。
 \n
-\n恶意的插件可能会读取储存在 Tachiyomi 中的任何登录凭据或执行任意代码。
+\n恶意的插件可能会读取储存在 Aniyomi 中的任何登录凭据或执行任意代码。
 \n
 \n信任这个证书，即代表你愿意承担上述风险。</string>
     <string name="unofficial_extension_message_aniyomi">此插件不是Aniyomi官方插件。</string>
@@ -117,7 +116,6 @@
     <string name="pref_clear_manga_database_summary">删除未添加到书架的漫画记录</string>
     <string name="pref_clear_anime_database_summary">将未保存在内容库中的动画历史记录清除</string>
     <string name="clear_database_confirmation">你确定吗？不在书架中的漫画的已读章节和进度将会丢失</string>
-    <string name="pref_refresh_library_tracking_summary">从记录平台更新阅读状态、评分和进度</string>
     <string name="pref_incognito_mode_summary">暂停记录阅读历史</string>
     <string name="manga_from_library">书架里的漫画</string>
     <string name="anime_from_library">内容库中的动画</string>
@@ -161,11 +159,11 @@
     <string name="player_statistics_page_2">第二页</string>
     <string name="player_statistics_page_3">第三页</string>
     <string name="download_insufficient_space">存储空间不足，无法下载章节</string>
-    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Tachiyomi。点击了解详情。</string>
+    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Aniyomi。点击了解详情。</string>
     <string name="video_list_empty_error">未找到视频</string>
     <string name="notification_new_episodes">发现新的剧集</string>
     <string name="information_no_recent_anime">最近未观看</string>
-    <string name="information_webview_required">Tachiyomi 依赖于 WebView</string>
+    <string name="information_webview_required">Aniyomi 依赖于 WebView</string>
     <string name="episode_settings_updated">已更新默认剧集设置</string>
     <string name="download_notifier_download_paused_chapters">下载已暂停</string>
     <string name="download_notifier_download_paused_episodes">剧集下载已暂停</string>

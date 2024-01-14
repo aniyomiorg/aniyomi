@@ -49,11 +49,11 @@ class Komga(id: Long) : BaseTracker(id, "Komga"), EnhancedMangaTracker, MangaTra
 
     override fun getRereadingStatus(): Int = -1
 
-    override fun displayScore(track: MangaTrack): String = ""
-
     override fun getCompletionStatus(): Int = COMPLETED
 
     override fun getScoreList(): ImmutableList<String> = persistentListOf()
+
+    override fun displayScore(track: DomainTrack): String = ""
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {

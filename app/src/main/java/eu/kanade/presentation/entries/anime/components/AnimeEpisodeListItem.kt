@@ -210,15 +210,13 @@ fun AnimeEpisodeListItem(
                     }
                 }
 
-                if (onDownloadClick != null) {
-                    EpisodeDownloadIndicator(
-                        enabled = downloadIndicatorEnabled,
-                        modifier = Modifier.padding(start = 4.dp),
-                        downloadStateProvider = downloadStateProvider,
-                        downloadProgressProvider = downloadProgressProvider,
-                        onClick = onDownloadClick,
-                    )
-                }
+                EpisodeDownloadIndicator(
+                    enabled = downloadIndicatorEnabled,
+                    modifier = Modifier.padding(start = 4.dp),
+                    downloadStateProvider = downloadStateProvider,
+                    downloadProgressProvider = downloadProgressProvider,
+                    onClick = { onDownloadClick?.invoke(it) },
+                )
             }
         }
     }

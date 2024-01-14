@@ -19,6 +19,8 @@ import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class Kitsu(id: Long) :
     BaseTracker(
@@ -90,12 +92,12 @@ class Kitsu(id: Long) :
         return if (index > 0) (index + 1) / 2f else 0f
     }
 
-    override fun displayScore(track: MangaTrack): String {
+    override fun displayScore(track: DomainMangaTrack): String {
         val df = DecimalFormat("0.#")
         return df.format(track.score)
     }
 
-    override fun displayScore(track: AnimeTrack): String {
+    override fun displayScore(track: DomainAnimeTrack): String {
         val df = DecimalFormat("0.#")
         return df.format(track.score)
     }
@@ -144,19 +146,19 @@ class Kitsu(id: Long) :
         return api.updateLibAnime(track)
     }
 
-    override suspend fun delete(track: MangaTrack): MangaTrack {
-        return api.removeLibManga(track)
+    override suspend fun delete(track: DomainMangaTrack) {
+        api.removeLibManga(track)
     }
 
-    override suspend fun delete(track: AnimeTrack): AnimeTrack {
-        return api.removeLibAnime(track)
+    override suspend fun delete(track: DomainAnimeTrack) {
+        api.removeLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findLibManga(track, getUserId())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
-            track.media_id = remoteTrack.media_id
+            track.remote_id = remoteTrack.remote_id
 
             if (track.status != COMPLETED) {
                 track.status = if (hasReadChapters) READING else track.status
@@ -174,7 +176,7 @@ class Kitsu(id: Long) :
         val remoteTrack = api.findLibAnime(track, getUserId())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
-            track.media_id = remoteTrack.media_id
+            track.remote_id = remoteTrack.remote_id
 
             if (track.status != COMPLETED) {
                 track.status = if (hasWatchedEpisodes) WATCHING else track.status

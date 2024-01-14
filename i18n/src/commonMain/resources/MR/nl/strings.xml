@@ -358,8 +358,6 @@
     <string name="pref_true_color_summary">Vermindert kleurstrepen, maar beïnvloedt de prestaties</string>
     <string name="pref_refresh_library_covers">Omslagen van manga in bibliotheek bijwerken</string>
     <string name="tracking_info">Eenzijdige synchronisatie om voortang van hoofdstukken bij te werken bij externe trackerdiensten. Stel tracking in bij individuele items via de \"Tracking\"-knop.</string>
-    <string name="unofficial_extension_message">Deze extensie behoort niet tot de officiële Tachiyomi extensielijst.</string>
-    <string name="ext_unofficial">Niet officieel</string>
     <string name="pref_library_update_refresh_metadata_summary">Controleer bij het bijwerken van de bibliotheek op nieuwe omslag en details</string>
     <string name="loader_not_implemented_error">Bron niet gevonden</string>
     <string name="page_list_empty_error">Geen pagina\'s gevonden</string>
@@ -538,18 +536,16 @@
     <string name="privacy_policy">Privacybeleid</string>
     <string name="clear_database_source_item_count">%1$d items niet in de bibliotheek in database</string>
     <string name="save_chapter_as_cbz">Opslaan als CBZ archief</string>
-    <string name="pref_library_update_manga_restriction">Bijwerken overslaan</string>
+    <string name="pref_auto_clear_chapter_cache">Hoofdstuk cache leegmaken na het sluiten van de app</string>
+    <string name="pref_update_only_completely_read">Heeft ongelezen hoofdstukken</string>
     <string name="extension_api_error">Lijst met extensies ophalen mislukt</string>
     <string name="publishing_finished">Uitgave voltooid</string>
     <string name="cancelled">Geannuleerd</string>
     <string name="on_hiatus">Gepauzeerd</string>
-    <string name="action_faq_and_guides">Veelgestelde vragen en handleidingen</string>
-    <string name="notification_update_skipped">%1$d update(s) overgeslagen</string>
     <string name="notification_update_error">%1$d update(s) mislukt</string>
     <string name="learn_more">Kom meer te weten</string>
     <string name="skipped_reason_not_caught_up">Overgeslagen want er zijn geen ongelezen hoofdstukken</string>
     <string name="skipped_reason_not_started">Overgeslagen want er zijn geen gelezen hoofdstukken</string>
-    <string name="channel_skipped">Overgeslagen</string>
     <string name="pref_landscape_zoom">Zoom liggende afbeelding</string>
     <string name="pref_navigate_pan">Tik om door brede afbeeldingen te scrollen</string>
     <string name="action_display_cover_only_grid">Alleen-cover rooster</string>
@@ -652,8 +648,6 @@
     <string name="pref_update_only_in_release_period">Buiten verwachte vrijgave periode</string>
     <string name="action_set_interval">Interval instellen</string>
     <string name="action_filter_interval_custom">Aangepast ophaalinterval</string>
-    <string name="action_filter_interval_long">Maandelijks ophalen (28 dagen)</string>
-    <string name="action_filter_interval_passed">Controleperiode overschreden</string>
     <string name="action_sort_next_updated">Volgende verwachte update</string>
     <string name="split_tall_images">Splits hoge afbeeldingen</string>
     <string name="licensed_manga_chapters_error">Gelicenseerd - Geen hoofdstukken te laten zien</string>
@@ -670,7 +664,6 @@
     <string name="label_read_duration">Leesduur</string>
     <string name="manga_display_interval_title">Schat elke</string>
     <string name="crash_screen_restart_application">Herstart de applicatie</string>
-    <string name="manga_modify_calculated_interval_title">Interval aanpassen</string>
     <string name="download_cache_invalidated">Download Index geïnvalideerd</string>
     <string name="pref_invalidate_download_cache">Maak de downloadindex ongeldig</string>
     <string name="action_ok">OK</string>
@@ -688,8 +681,6 @@
     <string name="skipped_reason_not_in_release_period">Overgeslagen omdat geen uitgave is verwacht vandaag</string>
     <string name="information_required_plain">*vereist</string>
     <string name="label_total_chapters">Totaal</string>
-    <string name="action_filter_interval_late">Late 10+ controle</string>
-    <string name="action_filter_interval_dropped">Gevallen\? Late 20+ en 2 maanden</string>
     <string name="label_read_chapters">Lees</string>
     <string name="label_tracked_titles">Gevolgde titels</string>
     <string name="label_mean_score">Gemiddelde score</string>

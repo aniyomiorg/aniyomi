@@ -6,6 +6,7 @@ package eu.kanade.tachiyomi.animesource.model
  *
  * @since extensions-lib 1.4
  */
+@Suppress("UNUSED")
 enum class AnimeUpdateStrategy {
     /**
      * Series marked as always update will be included in the library

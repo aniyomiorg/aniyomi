@@ -24,11 +24,12 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
-import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.math.max
+import tachiyomi.decoder.ImageDecoder
+
 
 /**
  * View of the ViewPager that contains a page of a chapter.
@@ -161,9 +162,10 @@ class PagerPageHolder(
         val streamFn = page.stream ?: return
         val streamFn2 = extraPage?.stream
 
-        val (bais, isAnimated, background) = withIOContext {
-            streamFn().buffered(16).use { stream ->
-                // SY -->
+        try {
+            val (bais, isAnimated, background) = withIOContext {
+                streamFn().buffered(16).use { stream ->
+                    // SY -->
                 (
                     if (extraPage != null) {
                         streamFn2?.invoke()
@@ -178,38 +180,44 @@ class PagerPageHolder(
                             mergePages(stream, stream2)
                         }.use { itemStream ->
                             // SY <--
-                            val bais = ByteArrayInputStream(itemStream.readBytes())
-                            val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
-                            bais.reset()
-                            val background = if (!isAnimated && viewer.config.automaticBackground) {
-                                ImageUtil.chooseBackground(context, bais)
-                            } else {
-                                null
+                                val bais = ByteArrayInputStream(itemStream.readBytes())
+                                val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
+                                bais.reset()
+                                val background = if (!isAnimated && viewer.config.automaticBackground) {
+                                    ImageUtil.chooseBackground(context, bais)
+                                } else {
+                                    null
+                                }
+                                bais.reset()
+                                Triple(bais, isAnimated, background)
                             }
-                            bais.reset()
-                            Triple(bais, isAnimated, background)
-                        }
                     }
-            }
-        }
-        withUIContext {
-            bais.use {
-                setImage(
-                    it,
-                    isAnimated,
-                    Config(
-                        zoomDuration = viewer.config.doubleTapAnimDuration,
-                        minimumScaleType = viewer.config.imageScaleType,
-                        cropBorders = viewer.config.imageCropBorders,
-                        zoomStartPosition = viewer.config.imageZoomType,
-                        landscapeZoom = viewer.config.landscapeZoom,
-                    ),
-                )
-                if (!isAnimated) {
-                    pageBackground = background
                 }
             }
-            removeErrorLayout()
+            withUIContext {
+                bais.use {
+                    setImage(
+                        it,
+                        isAnimated,
+                        Config(
+                            zoomDuration = viewer.config.doubleTapAnimDuration,
+                            minimumScaleType = viewer.config.imageScaleType,
+                            cropBorders = viewer.config.imageCropBorders,
+                            zoomStartPosition = viewer.config.imageZoomType,
+                            landscapeZoom = viewer.config.landscapeZoom,
+                        ),
+                    )
+                    if (!isAnimated) {
+                        pageBackground = background
+                    }
+                }
+                removeErrorLayout()
+            }
+        } catch (e: Throwable) {
+            logcat(LogPriority.ERROR, e)
+            withUIContext {
+                setError()
+            }
         }
     }
 
@@ -412,7 +420,7 @@ class PagerPageHolder(
      */
     private fun setError() {
         progressIndicator.hide()
-        showErrorLayout(withOpenInWebView = false)
+        showErrorLayout()
     }
 
     override fun onImageLoaded() {
@@ -425,8 +433,7 @@ class PagerPageHolder(
      */
     override fun onImageLoadError() {
         super.onImageLoadError()
-        progressIndicator.hide()
-        showErrorLayout(withOpenInWebView = true)
+        setError()
     }
 
     /**
@@ -437,23 +444,27 @@ class PagerPageHolder(
         viewer.activity.hideMenu()
     }
 
-    private fun showErrorLayout(withOpenInWebView: Boolean): ReaderErrorBinding {
+    private fun showErrorLayout(): ReaderErrorBinding {
         if (errorLayout == null) {
             errorLayout = ReaderErrorBinding.inflate(LayoutInflater.from(context), this, true)
             errorLayout?.actionRetry?.viewer = viewer
             errorLayout?.actionRetry?.setOnClickListener {
                 page.chapter.pageLoader?.retryPage(page)
             }
-            val imageUrl = page.imageUrl
-            if (imageUrl.orEmpty().startsWith("http", true)) {
+        }
+
+        val imageUrl = page.imageUrl
+        errorLayout?.actionOpenInWebView?.isVisible = imageUrl != null
+        if (imageUrl != null) {
+            if (imageUrl.startsWith("http", true)) {
                 errorLayout?.actionOpenInWebView?.viewer = viewer
                 errorLayout?.actionOpenInWebView?.setOnClickListener {
-                    val intent = WebViewActivity.newIntent(context, imageUrl!!)
+                    val intent = WebViewActivity.newIntent(context, imageUrl)
                     context.startActivity(intent)
                 }
             }
         }
-        errorLayout?.actionOpenInWebView?.isVisible = withOpenInWebView
+
         errorLayout?.root?.isVisible = true
         return errorLayout!!
     }

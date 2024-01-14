@@ -62,6 +62,9 @@ import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
 import eu.kanade.presentation.components.IndexingBannerBackgroundColor
+import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.data.RestoreBackupScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.tachiyomi.BuildConfig
@@ -69,7 +72,6 @@ import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
@@ -77,13 +79,15 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
-import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
+import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionApi
+import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionApi
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
+import eu.kanade.tachiyomi.ui.deeplink.DeepLinkScreenType
+import eu.kanade.tachiyomi.ui.deeplink.anime.DeepLinkAnimeScreen
 import eu.kanade.tachiyomi.ui.deeplink.manga.DeepLinkMangaScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -130,7 +134,6 @@ class MainActivity : BaseActivity() {
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: MangaDownloadCache by injectLazy()
     private val chapterCache: ChapterCache by injectLazy()
-    private val episodeCache: EpisodeCache by injectLazy()
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
@@ -350,7 +353,6 @@ class MainActivity : BaseActivity() {
         if (isLaunch && libraryPreferences.autoClearItemCache().get()) {
             lifecycleScope.launchIO {
                 chapterCache.clear()
-                episodeCache.clear()
             }
         }
 
@@ -412,8 +414,8 @@ class MainActivity : BaseActivity() {
         // Extensions updates
         LaunchedEffect(Unit) {
             try {
-                MangaExtensionGithubApi().checkForUpdates(context)
-                AnimeExtensionGithubApi().checkForUpdates(context)
+                AnimeExtensionApi().checkForUpdates(context)
+                MangaExtensionApi().checkForUpdates(context)
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e)
             }
@@ -425,7 +427,7 @@ class MainActivity : BaseActivity() {
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
-            if (!preferences.shownOnboardingFlow().get()) {
+            if (!preferences.shownOnboardingFlow().get() && navigator.lastItem !is OnboardingScreen) {
                 navigator.push(OnboardingScreen())
             }
         }
@@ -514,17 +516,30 @@ class MainActivity : BaseActivity() {
                 // or the Google-specific search intent (triggered by saying or typing "search *query* on *Tachiyomi*" in Google Search/Google Assistant)
 
                 // Get the search query provided in extras, and if not null, perform a global search with it.
-                val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(
-                    Intent.EXTRA_TEXT,
-                )
+                val query = intent.getStringExtra(SearchManager.QUERY)
+                    ?: intent.getStringExtra(Intent.EXTRA_TEXT)
+
                 if (!query.isNullOrEmpty()) {
                     navigator.popUntilRoot()
-                    navigator.push(GlobalMangaSearchScreen(query))
-                    navigator.push(DeepLinkMangaScreen(query))
+
+                    val screenType = intent.getStringExtra(INTENT_SEARCH_TYPE).orEmpty()
+                        .ifBlank { "ANIME" }
+                        .let(DeepLinkScreenType::valueOf)
+
+                    when (screenType) {
+                        DeepLinkScreenType.MANGA -> {
+                            navigator.push(GlobalMangaSearchScreen(query))
+                            navigator.push(DeepLinkMangaScreen(query))
+                        }
+                        DeepLinkScreenType.ANIME -> {
+                            navigator.push(GlobalAnimeSearchScreen(query))
+                            navigator.push(DeepLinkAnimeScreen(query))
+                        }
+                    }
                 }
                 null
             }
-            INTENT_SEARCH -> {
+            INTENT_SEARCH -> { // Used by extensions (url intent handlers)
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
@@ -533,12 +548,33 @@ class MainActivity : BaseActivity() {
                 }
                 null
             }
-            INTENT_ANIMESEARCH -> {
+            INTENT_ANIMESEARCH -> { // Same as above
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                     navigator.popUntilRoot()
                     navigator.push(GlobalAnimeSearchScreen(query, filter))
+                }
+                null
+            }
+            Intent.ACTION_VIEW -> {
+                // Handling opening of backup files
+                if (intent.data.toString().endsWith(".tachibk")) {
+                    navigator.popUntilRoot()
+                    navigator.push(RestoreBackupScreen(intent.data.toString()))
+                }
+                // Deep link to add anime extension repo
+                else if (intent.scheme == "aniyomi" && intent.data?.host == "add-repo") {
+                    intent.data?.getQueryParameter("url")?.let { repoUrl ->
+                        navigator.popUntilRoot()
+                        navigator.push(AnimeExtensionReposScreen(repoUrl))
+                    }
+                } // Deep link to add extension repo
+                else if (intent.scheme == "tachiyomi" && intent.data?.host == "add-repo") {
+                    intent.data?.getQueryParameter("url")?.let { repoUrl ->
+                        navigator.popUntilRoot()
+                        navigator.push(MangaExtensionReposScreen(repoUrl))
+                    }
                 }
                 null
             }
@@ -558,6 +594,7 @@ class MainActivity : BaseActivity() {
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
+        const val INTENT_SEARCH_TYPE = "type"
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 

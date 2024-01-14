@@ -7,7 +7,6 @@ import tachiyomi.domain.track.anime.model.AnimeTrack
 @Serializable
 data class BackupAnimeTracking(
     // in 1.x some of these values have different types or names
-    // syncId is called siteId in 1,x
     @ProtoNumber(1) var syncId: Int,
     // LibraryId is not null in 1.x
     @ProtoNumber(2) var libraryId: Long,
@@ -28,12 +27,13 @@ data class BackupAnimeTracking(
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
+
     @Suppress("DEPRECATION")
-    fun getTrackingImpl(): AnimeTrack {
+    fun getTrackImpl(): AnimeTrack {
         return AnimeTrack(
             id = -1,
             animeId = -1,
-            syncId = this@BackupAnimeTracking.syncId.toLong(),
+            trackerId = this@BackupAnimeTracking.syncId.toLong(),
             remoteId = if (this@BackupAnimeTracking.mediaIdInt != 0) {
                 this@BackupAnimeTracking.mediaIdInt.toLong()
             } else {
@@ -54,7 +54,7 @@ data class BackupAnimeTracking(
     companion object {
         fun copyFrom(track: AnimeTrack): BackupAnimeTracking {
             return BackupAnimeTracking(
-                syncId = track.syncId.toInt(),
+                syncId = track.trackerId.toInt(),
                 mediaId = track.remoteId,
                 // forced not null so its compatible with 1.x backup system
                 libraryId = track.libraryId!!,

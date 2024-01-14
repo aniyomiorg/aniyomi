@@ -13,7 +13,7 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
     private val aTrack = AnimeTrack(
         id = 1L,
         animeId = 2L,
-        syncId = 3L,
+        trackerId = 3L,
         remoteId = 4L,
         libraryId = null,
         title = "Manage Name On Tracker Site",

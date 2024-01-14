@@ -30,9 +30,11 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -179,6 +181,7 @@ class MangaLibraryScreenModel(
                     prefs.filterStarted,
                     prefs.filterBookmarked,
                     prefs.filterCompleted,
+                    prefs.filterIntervalCustom,
                 ) + trackFilter.values
                 ).any { it != TriState.DISABLED }
         }
@@ -210,12 +213,13 @@ class MangaLibraryScreenModel(
     ): MangaLibraryMap {
         val prefs = getLibraryItemPreferencesFlow().first()
         val downloadedOnly = prefs.globalFilterDownloaded
-        val filterDownloaded =
-            if (downloadedOnly) TriState.ENABLED_IS else prefs.filterDownloaded
+        val skipOutsideReleasePeriod = prefs.skipOutsideReleasePeriod
+        val filterDownloaded = if (downloadedOnly) TriState.ENABLED_IS else prefs.filterDownloaded
         val filterUnread = prefs.filterUnread
         val filterStarted = prefs.filterStarted
         val filterBookmarked = prefs.filterBookmarked
         val filterCompleted = prefs.filterCompleted
+        val filterIntervalCustom = prefs.filterIntervalCustom
 
         val isNotLoggedInAnyTrack = loggedInTrackers.isEmpty()
 
@@ -247,17 +251,25 @@ class MangaLibraryScreenModel(
             applyFilter(filterCompleted) { it.libraryManga.manga.status.toInt() == SManga.COMPLETED }
         }
 
+        val filterFnIntervalCustom: (MangaLibraryItem) -> Boolean = {
+            if (skipOutsideReleasePeriod) {
+                applyFilter(filterIntervalCustom) { it.libraryManga.manga.fetchInterval < 0 }
+            } else {
+                true
+            }
+        }
+
         val filterFnTracking: (MangaLibraryItem) -> Boolean = tracking@{ item ->
             if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
             val mangaTracks = trackMap
-                .mapValues { entry -> entry.value.map { it.syncId } }[item.libraryManga.id]
+                .mapValues { entry -> entry.value.map { it.trackerId } }[item.libraryManga.id]
                 .orEmpty()
 
             val isExcluded = excludedTracks.isNotEmpty() && mangaTracks.fastAny { it in excludedTracks }
             val isIncluded = includedTracks.isEmpty() || mangaTracks.fastAny { it in includedTracks }
 
-            return@tracking !isExcluded && isIncluded
+            !isExcluded && isIncluded
         }
 
         val filterFn: (MangaLibraryItem) -> Boolean = {
@@ -266,6 +278,7 @@ class MangaLibraryScreenModel(
                 filterFnStarted(it) &&
                 filterFnBookmarked(it) &&
                 filterFnCompleted(it) &&
+                filterFnIntervalCustom(it) &&
                 filterFnTracking(it)
         }
 
@@ -292,7 +305,7 @@ class MangaLibraryScreenModel(
                     entry.value.isEmpty() -> null
                     else ->
                         entry.value
-                            .mapNotNull { trackerMap[it.syncId]?.mangaService?.get10PointScore(it) }
+                            .mapNotNull { trackerMap[it.trackerId]?.mangaService?.get10PointScore(it) }
                             .average()
                 }
             }
@@ -358,6 +371,7 @@ class MangaLibraryScreenModel(
             libraryPreferences.downloadBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
+            libraryPreferences.autoUpdateItemRestrictions().changes(),
 
             preferences.downloadedOnly().changes(),
             libraryPreferences.filterDownloadedManga().changes(),
@@ -365,20 +379,22 @@ class MangaLibraryScreenModel(
             libraryPreferences.filterStartedManga().changes(),
             libraryPreferences.filterBookmarkedManga().changes(),
             libraryPreferences.filterCompletedManga().changes(),
-            transform = {
-                ItemPreferences(
-                    downloadBadge = it[0] as Boolean,
-                    localBadge = it[1] as Boolean,
-                    languageBadge = it[2] as Boolean,
-                    globalFilterDownloaded = it[3] as Boolean,
-                    filterDownloaded = it[4] as TriState,
-                    filterUnread = it[5] as TriState,
-                    filterStarted = it[6] as TriState,
-                    filterBookmarked = it[7] as TriState,
-                    filterCompleted = it[8] as TriState,
-                )
-            },
-        )
+            libraryPreferences.filterIntervalCustom().changes(),
+        ) {
+            ItemPreferences(
+                downloadBadge = it[0] as Boolean,
+                localBadge = it[1] as Boolean,
+                languageBadge = it[2] as Boolean,
+                skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[3] as Set<*>),
+                globalFilterDownloaded = it[4] as Boolean,
+                filterDownloaded = it[5] as TriState,
+                filterUnread = it[6] as TriState,
+                filterStarted = it[7] as TriState,
+                filterBookmarked = it[8] as TriState,
+                filterCompleted = it[9] as TriState,
+                filterIntervalCustom = it[10] as TriState,
+            )
+        }
     }
 
     /**
@@ -740,13 +756,15 @@ class MangaLibraryScreenModel(
             val common = getCommonCategories(mangaList)
             // Get indexes of the mix categories to preselect.
             val mix = getMixCategories(mangaList)
-            val preselected = categories.map {
-                when (it) {
-                    in common -> CheckboxState.State.Checked(it)
-                    in mix -> CheckboxState.TriState.Exclude(it)
-                    else -> CheckboxState.State.None(it)
+            val preselected = categories
+                .map {
+                    when (it) {
+                        in common -> CheckboxState.State.Checked(it)
+                        in mix -> CheckboxState.TriState.Exclude(it)
+                        else -> CheckboxState.State.None(it)
+                    }
                 }
-            }
+                .toImmutableList()
             mutableState.update { it.copy(dialog = Dialog.ChangeCategory(mangaList, preselected)) }
         }
     }
@@ -764,7 +782,7 @@ class MangaLibraryScreenModel(
         data object SettingsSheet : Dialog
         data class ChangeCategory(
             val manga: List<Manga>,
-            val initialSelection: List<CheckboxState<Category>>,
+            val initialSelection: ImmutableList<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteManga(val manga: List<Manga>) : Dialog
     }
@@ -785,7 +803,7 @@ class MangaLibraryScreenModel(
                 val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
                 libraryManga.groupBy { item ->
                     val status = tracks[item.libraryManga.manga.id]?.firstNotNullOfOrNull { track ->
-                        TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                        TrackStatus.parseTrackerStatus(track.trackerId, track.status)
                     } ?: TrackStatus.OTHER
 
                     status.int
@@ -891,6 +909,7 @@ class MangaLibraryScreenModel(
         val downloadBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
+        val skipOutsideReleasePeriod: Boolean,
 
         val globalFilterDownloaded: Boolean,
         val filterDownloaded: TriState,
@@ -898,6 +917,7 @@ class MangaLibraryScreenModel(
         val filterStarted: TriState,
         val filterBookmarked: TriState,
         val filterCompleted: TriState,
+        val filterIntervalCustom: TriState,
     )
 
     @Immutable

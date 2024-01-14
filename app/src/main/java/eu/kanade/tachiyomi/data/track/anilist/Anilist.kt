@@ -2,6 +2,8 @@ package eu.kanade.tachiyomi.data.track.anilist
 
 import android.graphics.Color
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -20,7 +22,7 @@ import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
-import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class Anilist(id: Long) :
     BaseTracker(
@@ -121,7 +123,7 @@ class Anilist(id: Long) :
         }
     }
 
-    override fun get10PointScore(track: DomainTrack): Double {
+    override fun get10PointScore(track: DomainMangaTrack): Double {
         // Score is stored in 100 point format
         return track.score / 10.0
     }
@@ -153,16 +155,16 @@ class Anilist(id: Long) :
         }
     }
 
-    override fun displayScore(track: MangaTrack): String {
+    override fun displayScore(track: DomainMangaTrack): String {
         val score = track.score
 
         return when (scorePreference.get()) {
             POINT_5 -> when (score) {
-                0f -> "0 ★"
+                0.0 -> "0 ★"
                 else -> "${((score + 10) / 20).toInt()} ★"
             }
             POINT_3 -> when {
-                score == 0f -> "0"
+                score == 0.0 -> "0"
                 score <= 35 -> "😦"
                 score <= 60 -> "😐"
                 else -> "😊"
@@ -171,16 +173,16 @@ class Anilist(id: Long) :
         }
     }
 
-    override fun displayScore(track: AnimeTrack): String {
+    override fun displayScore(track: DomainAnimeTrack): String {
         val score = track.score
 
         return when (scorePreference.get()) {
             POINT_5 -> when (score) {
-                0f -> "0 ★"
+                0.0 -> "0 ★"
                 else -> "${((score + 10) / 20).toInt()} ★"
             }
             POINT_3 -> when {
-                score == 0f -> "0"
+                score == 0.0 -> "0"
                 score <= 35 -> "😦"
                 score <= 60 -> "😐"
                 else -> "😊"
@@ -247,22 +249,22 @@ class Anilist(id: Long) :
         return api.updateLibAnime(track)
     }
 
-    override suspend fun delete(track: MangaTrack): MangaTrack {
-        if (track.library_id == null || track.library_id!! == 0L) {
-            val libManga = api.findLibManga(track, getUsername().toInt()) ?: return track
-            track.library_id = libManga.library_id
+    override suspend fun delete(track: DomainMangaTrack) {
+        if (track.libraryId == null || track.libraryId == 0L) {
+            val libManga = api.findLibManga(track.toDbTrack(), getUsername().toInt()) ?: return
+            return api.deleteLibManga(track.copy(id = libManga.library_id!!))
         }
 
-        return api.deleteLibManga(track)
+        api.deleteLibManga(track)
     }
 
-    override suspend fun delete(track: AnimeTrack): AnimeTrack {
-        if (track.library_id == null || track.library_id!! == 0L) {
-            val libManga = api.findLibAnime(track, getUsername().toInt()) ?: return track
-            track.library_id = libManga.library_id
+    override suspend fun delete(track: DomainAnimeTrack) {
+        if (track.libraryId == null || track.libraryId!! == 0L) {
+            val libAnime = api.findLibAnime(track.toDbTrack(), getUsername().toInt()) ?: return
+            return api.deleteLibAnime(track.copy(id = libAnime.library_id!!))
         }
 
-        return api.deleteLibAnime(track)
+        api.deleteLibAnime(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {

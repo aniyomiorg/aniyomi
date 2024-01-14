@@ -79,12 +79,10 @@
     <string name="pref_fullscreen">Pantalla completa</string>
     <string name="ext_nsfw_warning">As fontes desta extensión poden ter contido NSFW (+18)</string>
     <string name="ext_nsfw_short">+18</string>
-    <string name="unofficial_extension_message">Esta extensión non é da lista de extensións oficiais de Tachiyomi.</string>
     <string name="obsolete_extension_message">Esta extensión xa non está dispoñible. Pode que non funcione ben e cause problemas na aplicación. Recoméndase desinstalala.</string>
     <string name="untrusted_extension">Extensión non confiable</string>
     <string name="ext_untrusted">Non confiable</string>
     <string name="ext_uninstall">Desinstalar</string>
-    <string name="ext_unofficial">Non oficial</string>
     <string name="ext_trust">De confianza</string>
     <string name="ext_installed">Instaladas</string>
     <string name="ext_installing">Instalando</string>
@@ -405,7 +403,6 @@
     <string name="tracking_guide">Guía de seguemento</string>
     <string name="on_hiatus">En pausa</string>
     <string name="action_order_by_chapter_number">Por número de capítulo</string>
-    <string name="action_faq_and_guides">Preguntas frecuentes e guías</string>
     <string name="theme_tako">Tako</string>
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="theme_monet">Dinámico</string>
@@ -466,7 +463,6 @@
     <string name="cancel_all_for_series">Cancelar todo para esta serie</string>
     <string name="action_order_by_upload_date">Por data de subida</string>
     <string name="action_show_errors">Preme para ver os detalles do erro</string>
-    <string name="pref_library_update_manga_restriction">Omitir actualizacións</string>
     <string name="restrictions">Restricións: %s</string>
     <string name="categorized_display_settings">Opcións de ordenación e visualización por categoría</string>
     <string name="pref_dual_page_split">Separar as páxinas anchas</string>
@@ -607,7 +603,6 @@
     <string name="show_chapter_number">Número do capítulo</string>
     <string name="download_notifier_split_page_path_not_found">Non se atopou a ruta do ficheiro da páxina %d</string>
     <string name="channel_complete">Rematada</string>
-    <string name="channel_skipped">Omitidas</string>
     <string name="channel_new_chapters">Actualizacións de capítulos</string>
     <string name="download_notifier_split_page_not_found">Non se atopou a páxina %d ao separar</string>
     <string name="channel_common">Xeral</string>
@@ -662,7 +657,6 @@
     <string name="seconds_short">%dseg</string>
     <string name="label_tracked_titles">Elementos en seguimento</string>
     <string name="label_mean_score">Puntuación media</string>
-    <string name="notification_update_skipped">Actualizacións omitidas: %1$d</string>
     <string name="skipped_reason_not_started">Omitiuse porque non hai capítulos lidos</string>
     <string name="notification_chapters_single_and_more">Capítulo %1$s e %2$d máis</string>
     <string name="notification_chapters_multiple">Capítulos %1$s</string>

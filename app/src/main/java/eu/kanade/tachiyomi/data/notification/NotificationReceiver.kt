@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.data.backup.BackupRestoreJob
+import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
@@ -380,7 +380,6 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val NAME = "NotificationReceiver"
 
         private const val ACTION_SHARE_IMAGE = "$ID.$NAME.SHARE_IMAGE"
-        private const val ACTION_DELETE_IMAGE = "$ID.$NAME.DELETE_IMAGE"
 
         private const val ACTION_SHARE_BACKUP = "$ID.$NAME.SEND_BACKUP"
 
@@ -409,7 +408,6 @@ class NotificationReceiver : BroadcastReceiver() {
 
         private const val ACTION_DISMISS_NOTIFICATION = "$ID.$NAME.ACTION_DISMISS_NOTIFICATION"
 
-        private const val EXTRA_FILE_LOCATION = "$ID.$NAME.FILE_LOCATION"
         private const val EXTRA_URI = "$ID.$NAME.URI"
         private const val EXTRA_NOTIFICATION_ID = "$ID.$NAME.NOTIFICATION_ID"
         private const val EXTRA_GROUP_ID = "$ID.$NAME.EXTRA_GROUP_ID"
@@ -572,7 +570,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     it.id == notificationId
                 }?.groupKey
 
-                if (groupId != null && groupId != 0 && groupKey != null && groupKey.isNotEmpty()) {
+                if (groupId != null && groupId != 0 && !groupKey.isNullOrEmpty()) {
                     val notifications = context.notificationManager.activeNotifications.filter {
                         it.groupKey == groupKey
                     }
