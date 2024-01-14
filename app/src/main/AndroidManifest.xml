@@ -271,7 +271,8 @@
         <service
             android:name=".data.connections.discord.DiscordRPCService"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
             <intent-filter>
                 <action android:name ="android.intent.action.VIEW"/>
                 <category android:name ="android.intent.category.DEFAULT"/>
