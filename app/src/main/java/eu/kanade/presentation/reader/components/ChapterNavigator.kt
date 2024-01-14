@@ -45,6 +45,9 @@ fun ChapterNavigator(
     onPreviousChapter: () -> Unit,
     enabledPrevious: Boolean,
     currentPage: Int,
+    // SY -->
+    currentPageText: String,
+    // SY <--
     totalPages: Int,
     onSliderValueChange: (Int) -> Unit,
 ) {
@@ -93,7 +96,9 @@ fun ChapterNavigator(
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = currentPage.toString())
+                        // SY -->
+                        Text(text = currentPageText)
+                        // SY <--
 
                         val interactionSource = remember { MutableInteractionSource() }
                         val sliderDragged by interactionSource.collectIsDraggedAsState()
