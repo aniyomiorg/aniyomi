@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">Kategorijas</string>
+    <string name="manga_categories">Manga Kategorijas</string>
     <string name="action_sort_last_manga_update">Pēdējā atjauninājuma pārbaude</string>
     <string name="action_show_manga">Rādīt ierakstu</string>
     <string name="action_display_local_badge_manga">Lokālais avots</string>
@@ -28,4 +28,11 @@
     <string name="information_webview_required">Aniyomi ir nepieciešams WebView</string>
     <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
     <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
+    <string name="action_hide">Paslēpt</string>
+    <string name="label_all">Visi</string>
+    <string name="label_category">Kategorija</string>
+    <string name="episodes">Epizodes</string>
+    <string name="anime_categories">Anime Kategorijas</string>
+    <string name="general_categories">Kategorijas</string>
+    <string name="chapters_episodes">Nodaļas un epizodes</string>
 </resources>
