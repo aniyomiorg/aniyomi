@@ -3,7 +3,7 @@
 | [![CI](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 Animetail
-Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
+Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 6.0 and above.
 This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
 
 ## Features
@@ -14,16 +14,15 @@ Features include:
   * Group by tags in library
   * Discord Rich Presence for Manga
 * Aniyomi:
-  * Watching anime from [a variety of sources](https://github.com/aniyomiorg/aniyomi-extensions)
-* Everything you know and love about Tachiyomi: 
-    * Online reading from a variety of sources
-    * Local reading of downloaded content
-    * A configurable reader with multiple viewers, reading directions and other settings.
-    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
-    * Categories to organize your library
-    * Light and dark themes
-    * Schedule updating your library for new chapters
-    * Create backups locally to read offline or to your desired cloud service
+  * Watching videos
+* View images
+* Local reading/watching of downloaded content
+* A configurable reader with multiple viewers, reading directions and other settings.
+* A configurable player built on mpv-android with multiple options and settings
+* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
+* Categories to organize your library
+* Light and dark themes
+* Create backups locally to read/watch offline or to your desired cloud service
 * Other fork features:
   * TachiyomiSY:
     * Data Saver
