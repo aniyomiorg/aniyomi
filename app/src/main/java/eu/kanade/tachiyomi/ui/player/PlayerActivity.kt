@@ -1455,7 +1455,11 @@ class PlayerActivity : BaseActivity() {
                     }
                 }
             }
-            registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
+            }
         } else {
             if (player.paused!!) playerControls.hideControls(false)
             binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
