@@ -689,7 +689,7 @@ class AnimeDownloader(
                         val buffer = ByteArray(4 * 1024)
                         var totalBytesRead = 0L
                         var bytesRead: Int
-                        while (source.read(buffer).also { bytesRead = it.toInt() }.toLong() != -1L) {
+                        while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
                             // Check if the download is paused, if so, wait
                             while (isPaused) {
                                 delay(1000) // Wait for 1 second before checking again
