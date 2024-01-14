@@ -81,9 +81,9 @@ class UpdateAnime(
         dateTime: ZonedDateTime = ZonedDateTime.now(),
         window: Pair<Long, Long> = animeFetchInterval.getWindow(dateTime),
     ): Boolean {
-        return animeFetchInterval.toAnimeUpdateOrNull(anime, dateTime, window)
-            ?.let { animeRepository.updateAnime(it) }
-            ?: false
+        return animeRepository.updateAnime(
+            animeFetchInterval.toAnimeUpdate(anime, dateTime, window),
+        )
     }
 
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {

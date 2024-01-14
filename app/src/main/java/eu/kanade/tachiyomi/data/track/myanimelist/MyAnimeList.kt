@@ -18,6 +18,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class MyAnimeList(id: Long) :
     BaseTracker(
@@ -96,11 +98,11 @@ class MyAnimeList(id: Long) :
         return index.toFloat()
     }
 
-    override fun displayScore(track: MangaTrack): String {
+    override fun displayScore(track: DomainMangaTrack): String {
         return track.score.toInt().toString()
     }
 
-    override fun displayScore(track: AnimeTrack): String {
+    override fun displayScore(track: DomainAnimeTrack): String {
         return track.score.toInt().toString()
     }
 
@@ -150,19 +152,19 @@ class MyAnimeList(id: Long) :
         return api.updateItem(track)
     }
 
-    override suspend fun delete(track: MangaTrack): MangaTrack {
-        return api.deleteMangaItem(track)
+    override suspend fun delete(track: DomainMangaTrack) {
+        api.deleteMangaItem(track)
     }
 
-    override suspend fun delete(track: AnimeTrack): AnimeTrack {
-        return api.deleteAnimeItem(track)
+    override suspend fun delete(track: DomainAnimeTrack) {
+        api.deleteAnimeItem(track)
     }
 
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findListItem(track)
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
-            track.media_id = remoteTrack.media_id
+            track.remote_id = remoteTrack.remote_id
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REREADING
@@ -178,21 +180,21 @@ class MyAnimeList(id: Long) :
         }
     }
 
-    override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack, hasSeenEpisodes: Boolean): AnimeTrack {
         val remoteTrack = api.findListItem(track)
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
-            track.media_id = remoteTrack.media_id
+            track.remote_id = remoteTrack.remote_id
 
             if (track.status != COMPLETED) {
-                val isRereading = track.status == REWATCHING
-                track.status = if (isRereading.not() && hasReadChapters) WATCHING else track.status
+                val isRewatching = track.status == REWATCHING
+                track.status = if (isRewatching.not() && hasSeenEpisodes) WATCHING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) WATCHING else PLAN_TO_WATCH
+            track.status = if (hasSeenEpisodes) WATCHING else PLAN_TO_WATCH
             track.score = 0F
             add(track)
         }

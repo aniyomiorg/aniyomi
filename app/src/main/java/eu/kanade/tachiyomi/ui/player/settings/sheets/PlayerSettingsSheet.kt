@@ -106,7 +106,7 @@ fun PlayerSettingsSheet(
                 )
 
                 Row(
-                    modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
+                    modifier = Modifier.padding(vertical = MaterialTheme.padding.extraSmall),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
                     HwDecState.entries.forEach {
@@ -131,7 +131,7 @@ fun PlayerSettingsSheet(
                 )
 
                 Row(
-                    modifier = Modifier.padding(vertical = MaterialTheme.padding.tiny),
+                    modifier = Modifier.padding(vertical = MaterialTheme.padding.extraSmall),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
                     PlayerStatsPage.entries.forEach {

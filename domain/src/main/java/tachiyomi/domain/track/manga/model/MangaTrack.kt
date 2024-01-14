@@ -3,7 +3,7 @@ package tachiyomi.domain.track.manga.model
 data class MangaTrack(
     val id: Long,
     val mangaId: Long,
-    val syncId: Long,
+    val trackerId: Long,
     val remoteId: Long,
     val libraryId: Long?,
     val title: String,

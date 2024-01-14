@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -18,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.presentation.more.stats.components.StatsItem
 import eu.kanade.presentation.more.stats.components.StatsOverviewItem
-import eu.kanade.presentation.more.stats.components.StatsSection
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.presentation.util.toDurationString
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.SectionCard
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import java.util.Locale
@@ -55,7 +56,7 @@ fun AnimeStatsScreenContent(
 }
 
 @Composable
-private fun OverviewSection(
+private fun LazyItemScope.OverviewSection(
     data: StatsData.AnimeOverview,
 ) {
     val none = stringResource(MR.strings.none)
@@ -65,7 +66,7 @@ private fun OverviewSection(
             .toDuration(DurationUnit.MILLISECONDS)
             .toDurationString(context, fallback = none)
     }
-    StatsSection(MR.strings.label_overview_section) {
+    SectionCard(MR.strings.label_overview_section) {
         Row(
             modifier = Modifier.height(IntrinsicSize.Min),
         ) {
@@ -89,10 +90,10 @@ private fun OverviewSection(
 }
 
 @Composable
-private fun TitlesStats(
+private fun LazyItemScope.TitlesStats(
     data: StatsData.AnimeTitles,
 ) {
-    StatsSection(MR.strings.label_titles_section) {
+    SectionCard(MR.strings.label_titles_section) {
         Row {
             StatsItem(
                 data.globalUpdateItemCount.toString(),
@@ -111,10 +112,10 @@ private fun TitlesStats(
 }
 
 @Composable
-private fun EpisodeStats(
+private fun LazyItemScope.EpisodeStats(
     data: StatsData.Episodes,
 ) {
-    StatsSection(MR.strings.episodes) {
+    SectionCard(MR.strings.episodes) {
         Row {
             StatsItem(
                 data.totalEpisodeCount.toString(),
@@ -133,19 +134,19 @@ private fun EpisodeStats(
 }
 
 @Composable
-private fun TrackerStats(
+private fun LazyItemScope.TrackerStats(
     data: StatsData.Trackers,
 ) {
     val notApplicable = stringResource(MR.strings.not_applicable)
     val meanScoreStr = remember(data.trackedTitleCount, data.meanScore) {
         if (data.trackedTitleCount > 0 && !data.meanScore.isNaN()) {
-            // All other numbers are stringResourced in English
-            String.format(Locale.ENGLISH, "%.2f ★", data.meanScore)
+            // All other numbers are localized in English
+            "%.2f ★".format(Locale.ENGLISH, data.meanScore)
         } else {
             notApplicable
         }
     }
-    StatsSection(MR.strings.label_tracker_section) {
+    SectionCard(MR.strings.label_tracker_section) {
         Row {
             StatsItem(
                 data.trackedTitleCount.toString(),

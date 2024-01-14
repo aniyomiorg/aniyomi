@@ -20,7 +20,7 @@ object LocaleHelper {
         } else if (b == "all") {
             1
         } else {
-            getDisplayName(a).compareTo(getDisplayName(b))
+            getLocalizedDisplayName(a).compareTo(getLocalizedDisplayName(b))
         }
     }
 
@@ -33,8 +33,18 @@ object LocaleHelper {
             PINNED_KEY -> context.stringResource(MR.strings.pinned_sources)
             "other" -> context.stringResource(MR.strings.other_source)
             "all" -> context.stringResource(MR.strings.multi_lang)
-            else -> getDisplayName(lang)
+            else -> getLocalizedDisplayName(lang)
         }
+    }
+
+    fun getDisplayName(lang: String): String {
+        val normalizedLang = when (lang) {
+            "zh-CN" -> "zh-Hans"
+            "zh-TW" -> "zh-Hant"
+            else -> lang
+        }
+
+        return Locale.forLanguageTag(normalizedLang).displayName
     }
 
     /**
@@ -42,7 +52,7 @@ object LocaleHelper {
      *
      * @param lang empty for system language
      */
-    fun getDisplayName(lang: String?): String {
+    fun getLocalizedDisplayName(lang: String?): String {
         if (lang == null) {
             return ""
         }

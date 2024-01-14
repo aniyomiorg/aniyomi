@@ -174,8 +174,8 @@ internal fun PreferenceItem(
                 )
             }
             is Preference.PreferenceItem.TrackerPreference -> {
-                val uName by Injekt.get<PreferenceStore>()
-                    .getString(TrackPreferences.trackUsername(item.tracker.id))
+                val uName by Injekt.get<TrackPreferences>()
+                    .trackUsername(item.tracker)
                     .collectAsState()
                 item.tracker.run {
                     TrackingPreferenceWidget(

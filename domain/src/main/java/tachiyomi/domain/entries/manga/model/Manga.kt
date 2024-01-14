@@ -1,10 +1,12 @@
 package tachiyomi.domain.entries.manga.model
 
+import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
+import java.time.Instant
 
 data class Manga(
     val id: Long,
@@ -32,6 +34,11 @@ data class Manga(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
 ) : Serializable {
+
+    val expectedNextUpdate: Instant?
+        get() = nextUpdate
+            .takeIf { status != SManga.COMPLETED.toLong() }
+            ?.let { Instant.ofEpochMilli(it) }
 
     // SY -->
     private val customMangaInfo = if (favorite) {

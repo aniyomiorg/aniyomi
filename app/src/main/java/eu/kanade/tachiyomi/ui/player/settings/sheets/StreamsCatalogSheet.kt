@@ -170,7 +170,7 @@ private fun StreamsPageBuilder(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                modifier = Modifier.padding(end = MaterialTheme.padding.tiny),
+                modifier = Modifier.padding(end = MaterialTheme.padding.extraSmall),
                 imageVector = Icons.Default.Add,
                 contentDescription = stringResource(addTrackRes),
             )

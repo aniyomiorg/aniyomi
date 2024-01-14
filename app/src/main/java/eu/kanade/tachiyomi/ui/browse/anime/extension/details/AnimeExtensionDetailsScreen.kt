@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -35,14 +34,11 @@ data class AnimeExtensionDetailsScreen(
         }
 
         val navigator = LocalNavigator.currentOrThrow
-        val uriHandler = LocalUriHandler.current
 
         AnimeExtensionDetailsScreen(
             navigateUp = navigator::pop,
             state = state,
-            onClickSourcePreferences = { navigator.push(SourcePreferencesScreen(it)) },
-            onClickWhatsNew = { uriHandler.openUri(screenModel.getChangelogUrl()) },
-            onClickReadme = { uriHandler.openUri(screenModel.getReadmeUrl()) },
+            onClickSourcePreferences = { navigator.push(AnimeSourcePreferencesScreen(it)) },
             onClickEnableAll = { screenModel.toggleSources(true) },
             onClickDisableAll = { screenModel.toggleSources(false) },
             onClickClearCookies = screenModel::clearCookies,

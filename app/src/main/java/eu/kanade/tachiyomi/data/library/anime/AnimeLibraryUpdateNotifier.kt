@@ -20,6 +20,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.cancelNotification
@@ -30,14 +31,21 @@ import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.i18n.MR
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.math.RoundingMode
 import java.text.NumberFormat
 
-class AnimeLibraryUpdateNotifier(private val context: Context) {
+class AnimeLibraryUpdateNotifier(
+    private val context: Context,
 
-    private val preferences: SecurityPreferences by injectLazy()
+    private val securityPreferences: SecurityPreferences = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+) {
+
     private val percentFormatter = NumberFormat.getPercentInstance().apply {
         roundingMode = RoundingMode.DOWN
         maximumFractionDigits = 0
@@ -91,7 +99,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                 ),
             )
 
-        if (!preferences.hideNotificationContent().get()) {
+        if (!securityPreferences.hideNotificationContent().get()) {
             val updatingText = anime.joinToString("\n") { it.title.chop(40) }
             progressNotificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
@@ -114,6 +122,34 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                 NotificationCompat.BigTextStyle().bigText(
                     context.stringResource(MR.strings.notification_size_warning),
                 ),
+            )
+            setSmallIcon(R.drawable.ic_warning_white_24dp)
+            setTimeoutAfter(AnimeDownloader.WARNING_NOTIF_TIMEOUT_MS)
+            setContentIntent(NotificationHandler.openUrl(context, HELP_WARNING_URL))
+        }
+    }
+
+    /**
+     * Warn when excessively checking any single source.
+     */
+    fun showQueueSizeWarningNotificationIfNeeded(animeToUpdate: List<LibraryAnime>) {
+        val maxUpdatesFromSource = animeToUpdate
+            .groupBy { it.anime.source }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
+
+        if (maxUpdatesFromSource <= ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            return
+        }
+
+        context.notify(
+            Notifications.ID_LIBRARY_SIZE_WARNING,
+            Notifications.CHANNEL_LIBRARY_PROGRESS,
+        ) {
+            setContentTitle(context.stringResource(MR.strings.label_warning))
+            setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(context.stringResource(MR.strings.notification_size_warning)),
             )
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setTimeoutAfter(AnimeDownloader.WARNING_NOTIF_TIMEOUT_MS)
@@ -145,29 +181,6 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     }
 
     /**
-     * Shows notification containing update entries that were skipped.
-     *
-     * @param skipped Number of entries that were skipped during the update.
-     */
-    fun showUpdateSkippedNotification(skipped: Int) {
-        if (skipped == 0) {
-            return
-        }
-
-        context.notify(
-            Notifications.ID_LIBRARY_SKIPPED,
-            Notifications.CHANNEL_LIBRARY_SKIPPED,
-        ) {
-            setContentTitle(
-                context.stringResource(MR.strings.notification_update_skipped, skipped),
-            )
-            setContentText(context.stringResource(MR.strings.learn_more))
-            setSmallIcon(R.drawable.ic_ani)
-            setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_ANIME_URL))
-        }
-    }
-
-    /**
      * Shows the notification containing the result of the update done by the service.
      *
      * @param updates a list of anime with new updates.
@@ -179,8 +192,8 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_NEW_CHAPTERS_EPISODES,
         ) {
             setContentTitle(context.stringResource(MR.strings.notification_new_episodes))
-            if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
-                setContentText(updates.first().first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN))
+            if (updates.size == 1 && !securityPreferences.hideNotificationContent().get()) {
+                setContentText(updates.first().first.title.chop(NOTIF_TITLE_MAX_LEN))
             } else {
                 setContentText(
                     context.resources.getQuantityString(
@@ -190,11 +203,11 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                     ),
                 )
 
-                if (!preferences.hideNotificationContent().get()) {
+                if (!securityPreferences.hideNotificationContent().get()) {
                     setStyle(
                         NotificationCompat.BigTextStyle().bigText(
                             updates.joinToString("\n") {
-                                it.first.title.chop(NOTIF_ANIME_TITLE_MAX_LEN)
+                                it.first.title.chop(NOTIF_TITLE_MAX_LEN)
                             },
                         ),
                     )
@@ -214,7 +227,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
         }
 
         // Per-anime notification
-        if (!preferences.hideNotificationContent().get()) {
+        if (!securityPreferences.hideNotificationContent().get()) {
             launchUI {
                 context.notify(
                     updates.map { (anime, episodes) ->
@@ -255,7 +268,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
 
             // Mark episodes as read action
             addAction(
-                R.drawable.ic_glasses_24dp,
+                R.drawable.ic_done_24dp,
                 context.stringResource(MR.strings.action_mark_as_seen),
                 NotificationReceiver.markAsViewedPendingBroadcast(
                     context,
@@ -302,7 +315,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
         val request = ImageRequest.Builder(context)
             .data(anime)
             .transformations(CircleCropTransformation())
-            .size(NOTIF_ANIME_ICON_SIZE)
+            .size(NOTIF_ICON_SIZE)
             .build()
         val drawable = context.imageLoader.execute(request).drawable
         return drawable?.getBitmapOrNull()
@@ -386,15 +399,12 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        // TODO: Change when implemented on Aniyomi website
         const val HELP_WARNING_URL =
             "https://aniyomi.org/docs/faq/library#why-am-i-warned-about-large-bulk-updates-and-downloads"
     }
 }
 
 private const val NOTIF_MAX_EPISODES = 5
-private const val NOTIF_ANIME_TITLE_MAX_LEN = 45
-private const val NOTIF_ANIME_ICON_SIZE = 192
-
-// TODO: Change when implemented on Aniyomi website
-private const val HELP_SKIPPED_ANIME_URL = "https://aniyomi.org/docs/faq/library#why-is-global-update-skipping-entries"
+private const val NOTIF_TITLE_MAX_LEN = 45
+private const val NOTIF_ICON_SIZE = 192
+private const val ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60

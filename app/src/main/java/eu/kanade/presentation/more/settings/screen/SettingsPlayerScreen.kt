@@ -34,7 +34,10 @@ import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentMap
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.i18n.stringResource
@@ -58,7 +61,7 @@ object SettingsPlayerScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 pref = playerPreferences.progressPreference(),
                 title = stringResource(MR.strings.pref_progress_mark_as_seen),
-                entries = mapOf(
+                entries = persistentMapOf(
                     1.00F to stringResource(MR.strings.pref_progress_100),
                     0.95F to stringResource(MR.strings.pref_progress_95),
                     0.90F to stringResource(MR.strings.pref_progress_90),
@@ -92,7 +95,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_internal_player),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerFullscreen,
                     title = stringResource(MR.strings.pref_player_fullscreen),
@@ -119,7 +122,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_volume_brightness),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableVolumeBrightnessGestures,
                     title = stringResource(MR.strings.enable_volume_brightness_gestures),
@@ -145,11 +148,11 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_player_orientation),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationType,
                     title = stringResource(MR.strings.pref_default_player_orientation),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(
                             MR.strings.rotation_free,
                         ),
@@ -180,7 +183,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationPortrait,
                     title = stringResource(MR.strings.pref_default_portrait_orientation),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
                             MR.strings.rotation_portrait,
                         ),
@@ -195,7 +198,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = defaultPlayerOrientationLandscape,
                     title = stringResource(MR.strings.pref_default_landscape_orientation),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
                             MR.strings.rotation_landscape,
                         ),
@@ -242,7 +245,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_player_seeking),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableHorizontalSeekGesture,
                     title = stringResource(MR.strings.enable_horizontal_seek_gesture),
@@ -255,7 +258,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = skipLengthPreference,
                     title = stringResource(MR.strings.pref_skip_length),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         30 to stringResource(MR.strings.pref_skip_30),
                         20 to stringResource(MR.strings.pref_skip_20),
                         10 to stringResource(MR.strings.pref_skip_10),
@@ -294,7 +297,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = waitingTimeAniSkip,
                     title = stringResource(MR.strings.pref_waiting_time_aniskip),
-                    entries = mapOf(
+                    entries = persistentMapOf(
                         5 to stringResource(MR.strings.pref_waiting_time_aniskip_5),
                         6 to stringResource(MR.strings.pref_waiting_time_aniskip_6),
                         7 to stringResource(MR.strings.pref_waiting_time_aniskip_7),
@@ -319,7 +322,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_pip),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enablePip,
                     title = stringResource(MR.strings.pref_enable_pip),
@@ -365,7 +368,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_external_player),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = alwaysUseExternalPlayer,
                     title = stringResource(MR.strings.pref_always_use_external_player),
@@ -373,7 +376,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = externalPlayerPreference,
                     title = stringResource(MR.strings.pref_external_player_preference),
-                    entries = mapOf("" to "None") + packageNamesMap,
+                    entries = (mapOf("" to "None") + packageNamesMap).toPersistentMap(),
                 ),
             ),
         )

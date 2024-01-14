@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">मंगा श्रेणियाँ</string>
-    <string name="unlock_app">अनलॉक अनियोमी</string>
     <string name="action_sort_last_manga_update">अंतिम मंगा अपडेट</string>
     <string name="action_show_manga">आइटम दिखाएँ</string>
     <string name="action_display_local_badge_manga">स्थानीय स्रोत</string>
@@ -24,9 +23,8 @@
     <string name="pref_auto_clear_chapter_cache">ऐप बंद करते समय चैप्टर कैशे साफ़ करें</string>
     <string name="pref_clear_manga_database">डेटाबेस साफ़ करें</string>
     <string name="pref_clear_manga_database_summary">मैंगा जो आपकी लाइब्रेरी में सहेजे नहीं हैं उनका इतिहास हटाएं</string>
-    <string name="pref_refresh_library_tracking_summary">अपडेट की स्थिति, स्कोर और अंतिम अध्याय ट्रैकिंग सेवाओं से पढ़ें</string>
     <string name="pref_incognito_mode_summary">इतिहास पढ़ने से रोक देता है</string>
-    <string name="snack_add_to_manga_library">लाइब्रेरी में मंगा जोड़ें\?</string>
+    <string name="snack_add_to_manga_library">लाइब्रेरी में मंगा जोड़ें?</string>
     <string name="download_error">त्रुटि</string>
     <string name="download_paused">रोके गए</string>
     <string name="also_set_chapter_settings_for_library">मेरी लाइब्रेरी में सभी मंगा पर भी लागू करें</string>

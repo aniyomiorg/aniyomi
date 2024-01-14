@@ -89,7 +89,6 @@
     <string name="categories">Катэгорыі</string>
     <string name="ext_uninstall">Выдаліць</string>
     <string name="ext_untrusted">Ненадзейны</string>
-    <string name="ext_unofficial">Неафіцыйны</string>
     <string name="ext_trust">Надзейны</string>
     <string name="ext_installed">Усталяваны</string>
     <string name="ext_installing">Устаноўка</string>
@@ -185,7 +184,6 @@
     <string name="pref_fullscreen">Поўнаэкранны рэжым</string>
     <string name="ext_nsfw_warning">Можа ўтрымліваць кантэнт NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Гэта пашырэнне не ўваходзіць у афіцыйны спіс пашырэньні Tachiyomi.</string>
     <string name="obsolete_extension_message">Гэта пашырэнне больш недаступна.</string>
     <string name="untrusted_extension">Ненадзейнае пашырэнне</string>
     <string name="pref_viewer_nav">Схема навігацыі</string>
@@ -316,12 +314,11 @@
     <string name="ext_app_info">Аб дадатку</string>
     <string name="action_sort_count">Колькасць мангі</string>
     <string name="action_display_language_badge">Мова</string>
-    <string name="action_faq_and_guides">Часта задаваемые пытанні і кіраўніцтва</string>
     <string name="network_not_metered">Толькі ў безлемітнай сетцы</string>
     <string name="ext_info_language">Мова</string>
     <string name="theme_lavender">Лаванда</string>
     <string name="pref_app_language">Мова дадатку</string>
-    <string name="pref_library_update_manga_restriction">Прапусціць абнаўленні</string>
+    <string name="pref_update_only_completely_read">Ёсць непрачытаныя главы</string>
     <string name="ext_installer_shizuku_stopped">Shizuku не працуе</string>
     <string name="action_close">Закрыць</string>
     <string name="ext_install_service_notif">Устаноўка пашырэнняў…</string>

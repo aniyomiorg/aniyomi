@@ -37,9 +37,8 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import kotlinx.collections.immutable.persistentListOf
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.UniFileTempFileManager
 import tachiyomi.core.storage.extension
-import tachiyomi.core.storage.toTempFile
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
@@ -157,6 +156,7 @@ fun SubtitlePreview(
     backgroundColor: Color,
 ) {
     val storageManager: StorageManager = Injekt.get()
+    val tempFileManager: UniFileTempFileManager = UniFileTempFileManager(LocalContext.current)
     val fontsDir = storageManager.getFontsDirectory()
     val fontMap = fontsDir?.listFiles()?.filter { file ->
         file.extension!!.equals("ttf", true) ||
@@ -166,7 +166,9 @@ fun SubtitlePreview(
     } ?: emptyMap()
 
     val fontFile = fontMap.keys.firstOrNull { it.contains(font, true) }
-        ?.let { Typeface.createFromFile(fontMap[it]?.toTempFile(LocalContext.current)) } ?: Typeface.SANS_SERIF
+        ?.let {
+            Typeface.createFromFile(fontMap[it]?.let { fontFile -> tempFileManager.createTempFile(fontFile) })
+        } ?: Typeface.SANS_SERIF
 
     Box(
         modifier = Modifier

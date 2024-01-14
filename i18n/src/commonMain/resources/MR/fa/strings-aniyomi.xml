@@ -3,7 +3,6 @@
     <string name="manga_categories">دسته بندی مانگا ها</string>
     <string name="general_categories">دسته بندی ها</string>
     <string name="anime_categories">دسته بندی انیمه ها</string>
-    <string name="unlock_app">بازکردن تاچی یومی</string>
     <string name="action_sort_last_manga_update">آخرین به‌روزرسانی مانگا</string>
     <string name="action_show_manga">نمایش مانگا</string>
     <string name="action_display_local_badge_manga">مانگای محلی</string>
@@ -26,7 +25,6 @@
     <string name="pref_clear_manga_database">پاک کردن پایگاه داده</string>
     <string name="pref_clear_manga_database_summary">حذف سابقه برای مانگاهایی که در کتابخانه ذخیره نشده اند</string>
     <string name="clear_database_confirmation">آیا مطمئن هستید؟ اطلاعات قسمت های خوانده شده برای مانگاهایی که در کتابخانه اضافه نشده از دست خواهد رفت</string>
-    <string name="pref_refresh_library_tracking_summary">وضعیت خواندن، امتیاز و آخرین قسمت خوانده شده را از سایت خدمات ردیابی آپدیت می‌کند</string>
     <string name="pref_incognito_mode_summary">متوقف کردن تاریخچه خواندن</string>
     <string name="manga_from_library">مانگاهای کتابخانه</string>
     <string name="snack_add_to_manga_library">مانگا به کتابخانه اضافه شود؟</string>

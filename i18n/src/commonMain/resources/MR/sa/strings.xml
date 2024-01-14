@@ -127,7 +127,6 @@
     <string name="action_open_log">वृत्तम् उद्घाटयतु</string>
     <string name="action_webview_back">प्रतिगच्छतु</string>
     <string name="action_webview_forward">अग्रे गच्छतु</string>
-    <string name="action_faq_and_guides">सामान्यप्रश्नोत्तराणि मार्गदर्शनानि च</string>
     <string name="pref_category_general">सामान्यः</string>
     <string name="pref_category_reader">प्रदर्शकम्</string>
     <string name="pref_category_advanced">विस्तृतम्</string>
@@ -163,7 +162,6 @@
     <string name="update_12hour">प्रतिद्वादशघण्टा</string>
     <string name="update_weekly">प्रतिसप्ताहिकम्</string>
     <string name="pref_library_update_restriction">स्वयङ्कृतनवीकरणनाम् उपकरणनिर्बन्धाः</string>
-    <string name="pref_library_update_manga_restriction">ग्रन्थालयनवीकरणं लङ्घयतु</string>
     <string name="connected_to_wifi">केवलं वै-फ़ै माध्यमेन</string>
     <string name="pref_update_only_non_completed">समापितधारावाहिकाः</string>
     <string name="pref_library_update_refresh_metadata_summary">ग्रन्थालयनवीकरणे सति नूतनमुखचित्राय विवरणाय च मार्गतु</string>
@@ -188,7 +186,6 @@
     <string name="pref_library_update_refresh_metadata">प्रदत्तांशं स्वयञ्चालितं नवीकरोतु</string>
     <string name="categorized_display_settings">प्रतिवर्गं विन्यासस्य प्रदर्शनस्य च कृते समायोजनानि</string>
     <string name="untrusted_extension">अविश्वस्तविस्तारः</string>
-    <string name="unofficial_extension_message">अयं विस्तारः टाचीयोमेः अधिकारिकविस्तारसूच्याः नास्ति।</string>
     <string name="extension_api_error">विस्तारसूच्याः प्राप्तिः अनुत्तीर्णा</string>
     <string name="pref_library_update_categories_details">माङ्गाः याः वर्जितवर्गेषु सन्ति ताः अन्तर्भूतवर्गेषु सन्ति चेदपि तासां नवीकरणं न भविष्यति।</string>
     <string name="obsolete_extension_message">अयं विस्तारः इतःपरं न उपलभ्यः।</string>
@@ -197,7 +194,6 @@
     <string name="ext_update">नवीकरोतु</string>
     <string name="ext_install">प्रतिस्थायतु</string>
     <string name="ext_pending">अपूर्णम्</string>
-    <string name="ext_unofficial">अनधिकारः</string>
     <string name="ext_uninstall">निष्कासयतु</string>
     <string name="ext_installer_shizuku_stopped">शिज़ुकुः न चलति</string>
     <string name="ext_installer_pref">प्रतिष्ठापनसहायकम्</string>
@@ -549,7 +545,6 @@
     <string name="notification_size_warning">पूर्वसूचना -- मूलेभ्यः महद्नवीकरणानि हानिकारकाणि भवन्ति तस्मात् नवीकरणानि मन्दानि भवेयुः अपि च विद्युत्कोषोपयोगः अधिकं भवेत्</string>
     <string name="notification_update_error">%1$d नवीकरणानि अनुत्तीर्णानि</string>
     <string name="learn_more">अधिकं जानातु</string>
-    <string name="notification_update_skipped">%1$d नवीकरणानि लङ्घितानि</string>
     <string name="action_move_to_top_all_for_series">धारावाहिकम् अग्रस्थानं चालयतु</string>
     <string name="rotation_reverse_portrait">विपरीतं लम्बदर्शनम्</string>
     <string name="label_local">स्थानीयम्</string>

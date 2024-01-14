@@ -20,8 +20,8 @@ import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun BaseAnimeListItem(
-    modifier: Modifier = Modifier,
     anime: Anime,
+    modifier: Modifier = Modifier,
     onClickItem: () -> Unit = {},
     onClickCover: () -> Unit = onClickItem,
     cover: @Composable RowScope.() -> Unit = { defaultCover(anime, onClickCover) },

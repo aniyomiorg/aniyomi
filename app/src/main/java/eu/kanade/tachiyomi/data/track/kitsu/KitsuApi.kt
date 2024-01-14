@@ -31,6 +31,8 @@ import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) {
 
@@ -56,7 +58,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                         }
                         putJsonObject("media") {
                             putJsonObject("data") {
-                                put("id", track.media_id)
+                                put("id", track.remote_id)
                                 put("type", "manga")
                             }
                         }
@@ -79,7 +81,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .awaitSuccess()
                     .parseAs<JsonObject>()
                     .let {
-                        track.media_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
+                        track.remote_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
                         track
                     }
             }
@@ -104,7 +106,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                         }
                         putJsonObject("media") {
                             putJsonObject("data") {
-                                put("id", track.media_id)
+                                put("id", track.remote_id)
                                 put("type", "anime")
                             }
                         }
@@ -127,7 +129,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .awaitSuccess()
                     .parseAs<JsonObject>()
                     .let {
-                        track.media_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
+                        track.remote_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
                         track
                     }
             }
@@ -139,7 +141,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             val data = buildJsonObject {
                 putJsonObject("data") {
                     put("type", "libraryEntries")
-                    put("id", track.media_id)
+                    put("id", track.remote_id)
                     putJsonObject("attributes") {
                         put("status", track.toKitsuStatus())
                         put("progress", track.last_chapter_read.toInt())
@@ -153,7 +155,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             with(json) {
                 authClient.newCall(
                     Request.Builder()
-                        .url("${baseUrl}library-entries/${track.media_id}")
+                        .url("${baseUrl}library-entries/${track.remote_id}")
                         .headers(
                             headersOf(
                                 "Content-Type",
@@ -179,7 +181,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             val data = buildJsonObject {
                 putJsonObject("data") {
                     put("type", "libraryEntries")
-                    put("id", track.media_id)
+                    put("id", track.remote_id)
                     putJsonObject("attributes") {
                         put("status", track.toKitsuStatus())
                         put("progress", track.last_episode_seen.toInt())
@@ -193,7 +195,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             with(json) {
                 authClient.newCall(
                     Request.Builder()
-                        .url("${baseUrl}library-entries/${track.media_id}")
+                        .url("${baseUrl}library-entries/${track.remote_id}")
                         .headers(
                             headersOf(
                                 "Content-Type",
@@ -214,35 +216,35 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    suspend fun removeLibManga(track: MangaTrack): MangaTrack {
-        return withIOContext {
-            authClient.newCall(
-                DELETE(
-                    "${baseUrl}library-entries/${track.media_id}",
-                    headers = headersOf(
-                        "Content-Type",
-                        "application/vnd.api+json",
+    suspend fun removeLibManga(track: DomainMangaTrack) {
+        withIOContext {
+            authClient
+                .newCall(
+                    DELETE(
+                        "${baseUrl}library-entries/${track.remoteId}",
+                        headers = headersOf(
+                            "Content-Type",
+                            "application/vnd.api+json",
+                        ),
                     ),
-                ),
-            )
+                )
                 .awaitSuccess()
-            track
         }
     }
 
-    suspend fun removeLibAnime(track: AnimeTrack): AnimeTrack {
-        return withIOContext {
-            authClient.newCall(
-                DELETE(
-                    "${baseUrl}library-entries/${track.media_id}",
-                    headers = headersOf(
-                        "Content-Type",
-                        "application/vnd.api+json",
+    suspend fun removeLibAnime(track: DomainAnimeTrack) {
+        withIOContext {
+            authClient
+                .newCall(
+                    DELETE(
+                        "${baseUrl}library-entries/${track.remoteId}",
+                        headers = headersOf(
+                            "Content-Type",
+                            "application/vnd.api+json",
+                        ),
                     ),
-                ),
-            )
+                )
                 .awaitSuccess()
-            track
         }
     }
 
@@ -345,7 +347,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun findLibManga(track: MangaTrack, userId: String): MangaTrack? {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
-                .encodedQuery("filter[manga_id]=${track.media_id}&filter[user_id]=$userId")
+                .encodedQuery("filter[manga_id]=${track.remote_id}&filter[user_id]=$userId")
                 .appendQueryParameter("include", "manga")
                 .build()
             with(json) {
@@ -368,7 +370,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun findLibAnime(track: AnimeTrack, userId: String): AnimeTrack? {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
-                .encodedQuery("filter[anime_id]=${track.media_id}&filter[user_id]=$userId")
+                .encodedQuery("filter[anime_id]=${track.remote_id}&filter[user_id]=$userId")
                 .appendQueryParameter("include", "anime")
                 .build()
             with(json) {
@@ -391,7 +393,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun getLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
-                .encodedQuery("filter[id]=${track.media_id}")
+                .encodedQuery("filter[id]=${track.remote_id}")
                 .appendQueryParameter("include", "manga")
                 .build()
             with(json) {
@@ -414,7 +416,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun getLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
-                .encodedQuery("filter[id]=${track.media_id}")
+                .encodedQuery("filter[id]=${track.remote_id}")
                 .appendQueryParameter("include", "anime")
                 .build()
             with(json) {

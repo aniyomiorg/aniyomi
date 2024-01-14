@@ -38,7 +38,7 @@ fun GlobalAnimeSearchCardRow(
 
     LazyRow(
         contentPadding = PaddingValues(MaterialTheme.padding.small),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {
         items(titles) {
             val title by getAnime(it)

@@ -20,6 +20,7 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.cancelNotification
@@ -30,14 +31,21 @@ import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.i18n.MR
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.math.RoundingMode
 import java.text.NumberFormat
 
-class MangaLibraryUpdateNotifier(private val context: Context) {
+class MangaLibraryUpdateNotifier(
+    private val context: Context,
 
-    private val preferences: SecurityPreferences by injectLazy()
+    private val securityPreferences: SecurityPreferences = Injekt.get(),
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+) {
+
     private val percentFormatter = NumberFormat.getPercentInstance().apply {
         roundingMode = RoundingMode.DOWN
         maximumFractionDigits = 0
@@ -91,7 +99,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                 ),
             )
 
-        if (!preferences.hideNotificationContent().get()) {
+        if (!securityPreferences.hideNotificationContent().get()) {
             val updatingText = manga.joinToString("\n") { it.title.chop(40) }
             progressNotificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
@@ -104,7 +112,19 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
         )
     }
 
-    fun showQueueSizeWarningNotification() {
+    /**
+     * Warn when excessively checking any single source.
+     */
+    fun showQueueSizeWarningNotificationIfNeeded(mangaToUpdate: List<LibraryManga>) {
+        val maxUpdatesFromSource = mangaToUpdate
+            .groupBy { it.manga.source }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
+
+        if (maxUpdatesFromSource <= MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            return
+        }
+
         context.notify(
             Notifications.ID_LIBRARY_SIZE_WARNING,
             Notifications.CHANNEL_LIBRARY_PROGRESS,
@@ -144,29 +164,6 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
     }
 
     /**
-     * Shows notification containing update entries that were skipped.
-     *
-     * @param skipped Number of entries that were skipped during the update.
-     */
-    fun showUpdateSkippedNotification(skipped: Int) {
-        if (skipped == 0) {
-            return
-        }
-
-        context.notify(
-            Notifications.ID_LIBRARY_SKIPPED,
-            Notifications.CHANNEL_LIBRARY_SKIPPED,
-        ) {
-            setContentTitle(
-                context.stringResource(MR.strings.notification_update_skipped, skipped),
-            )
-            setContentText(context.stringResource(MR.strings.learn_more))
-            setSmallIcon(R.drawable.ic_ani)
-            setContentIntent(NotificationHandler.openUrl(context, HELP_SKIPPED_MANGA_URL))
-        }
-    }
-
-    /**
      * Shows the notification containing the result of the update done by the service.
      *
      * @param updates a list of manga with new updates.
@@ -178,8 +175,8 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
             Notifications.CHANNEL_NEW_CHAPTERS_EPISODES,
         ) {
             setContentTitle(context.stringResource(MR.strings.notification_new_chapters))
-            if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
-                setContentText(updates.first().first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN))
+            if (updates.size == 1 && !securityPreferences.hideNotificationContent().get()) {
+                setContentText(updates.first().first.title.chop(NOTIF_TITLE_MAX_LEN))
             } else {
                 setContentText(
                     context.resources.getQuantityString(
@@ -189,11 +186,11 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
                     ),
                 )
 
-                if (!preferences.hideNotificationContent().get()) {
+                if (!securityPreferences.hideNotificationContent().get()) {
                     setStyle(
                         NotificationCompat.BigTextStyle().bigText(
                             updates.joinToString("\n") {
-                                it.first.title.chop(NOTIF_MANGA_TITLE_MAX_LEN)
+                                it.first.title.chop(NOTIF_TITLE_MAX_LEN)
                             },
                         ),
                     )
@@ -213,7 +210,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
         }
 
         // Per-manga notification
-        if (!preferences.hideNotificationContent().get()) {
+        if (!securityPreferences.hideNotificationContent().get()) {
             launchUI {
                 context.notify(
                     updates.map { (manga, chapters) ->
@@ -258,7 +255,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
 
             // Mark chapters as read action
             addAction(
-                R.drawable.ic_glasses_24dp,
+                R.drawable.ic_done_24dp,
                 context.stringResource(MR.strings.action_mark_as_read),
                 NotificationReceiver.markAsViewedPendingBroadcast(
                     context,
@@ -305,7 +302,7 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
         val request = ImageRequest.Builder(context)
             .data(manga)
             .transformations(CircleCropTransformation())
-            .size(NOTIF_MANGA_ICON_SIZE)
+            .size(NOTIF_ICON_SIZE)
             .build()
         val drawable = context.imageLoader.execute(request).drawable
         return drawable?.getBitmapOrNull()
@@ -396,8 +393,6 @@ class MangaLibraryUpdateNotifier(private val context: Context) {
 }
 
 private const val NOTIF_MAX_CHAPTERS = 5
-private const val NOTIF_MANGA_TITLE_MAX_LEN = 45
-private const val NOTIF_MANGA_ICON_SIZE = 192
-
-// TODO: Change when implemented on Aniyomi website
-private const val HELP_SKIPPED_MANGA_URL = "https://aniyomi.org/docs/faq/library#why-is-global-update-skipping-entries"
+private const val NOTIF_TITLE_MAX_LEN = 45
+private const val NOTIF_ICON_SIZE = 192
+private const val MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60

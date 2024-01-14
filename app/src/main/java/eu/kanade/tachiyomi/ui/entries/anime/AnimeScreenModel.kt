@@ -5,12 +5,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import aniyomi.util.nullIfEmpty
 import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
@@ -21,7 +19,6 @@ import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.util.formattedMessage
@@ -40,6 +37,8 @@ import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
@@ -98,7 +97,6 @@ class AnimeScreenModel(
     private val isFromSource: Boolean,
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
-    uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
@@ -148,9 +146,6 @@ class AnimeScreenModel(
     val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
-
-    val relativeTime by uiPreferences.relativeTime().asState(screenModelScope)
-    val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
     val isUpdateIntervalEnabled =
         LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
@@ -434,7 +429,7 @@ class AnimeScreenModel(
                 successState.copy(
                     dialog = Dialog.ChangeCategory(
                         anime = anime,
-                        initialSelection = categories.mapAsCheckboxState { it.id in selection },
+                        initialSelection = categories.mapAsCheckboxState { it.id in selection }.toImmutableList(),
                     ),
                 )
             }
@@ -450,12 +445,15 @@ class AnimeScreenModel(
 
     fun setFetchInterval(anime: Anime, interval: Int) {
         screenModelScope.launchIO {
-            updateAnime.awaitUpdateFetchInterval(
-                // Custom intervals are negative
-                anime.copy(fetchInterval = -interval),
-            )
-            val updatedAnime = animeRepository.getAnimeById(anime.id)
-            updateSuccessState { it.copy(anime = updatedAnime) }
+            if (
+                updateAnime.awaitUpdateFetchInterval(
+                    // Custom intervals are negative
+                    anime.copy(fetchInterval = -interval),
+                )
+            ) {
+                val updatedAnime = animeRepository.getAnimeById(anime.id)
+                updateSuccessState { it.copy(anime = updatedAnime) }
+            }
         }
     }
 
@@ -712,17 +710,17 @@ class AnimeScreenModel(
     ) {
         val successState = successState ?: return
 
-        if (startNow) {
-            val episodeId = episodes.singleOrNull()?.id ?: return
-            downloadManager.startDownloadNow(episodeId)
-        } else {
-            downloadEpisodes(episodes, false, video)
-        }
-        if (!isFavorited && !successState.hasPromptedToAddBefore) {
-            updateSuccessState { state ->
-                state.copy(hasPromptedToAddBefore = true)
+        screenModelScope.launchNonCancellable {
+            if (startNow) {
+                val episodeId = episodes.singleOrNull()?.id ?: return@launchNonCancellable
+                downloadManager.startDownloadNow(episodeId)
+            } else {
+                downloadEpisodes(episodes, false, video)
             }
-            screenModelScope.launch {
+            if (!isFavorited && !successState.hasPromptedToAddBefore) {
+                updateSuccessState { state ->
+                    state.copy(hasPromptedToAddBefore = true)
+                }
                 val result = snackbarHostState.showSnackbar(
                     message = context.stringResource(MR.strings.snack_add_to_anime_library),
                     actionLabel = context.stringResource(MR.strings.action_add),
@@ -1063,7 +1061,7 @@ class AnimeScreenModel(
                         // Map to TrackItem
                         .map { service ->
                             AnimeTrackItem(
-                                tracks.find { it.syncId == service.id },
+                                tracks.find { it.trackerId == service.id },
                                 service,
                             )
                         }
@@ -1093,7 +1091,7 @@ class AnimeScreenModel(
     sealed interface Dialog {
         data class ChangeCategory(
             val anime: Anime,
-            val initialSelection: List<CheckboxState<Category>>,
+            val initialSelection: ImmutableList<CheckboxState<Category>>,
         ) : Dialog
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
