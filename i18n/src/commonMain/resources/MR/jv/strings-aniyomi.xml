@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
     <string name="untrusted_extension_message">Ekstensi iki ditandatangani nganggo sertifikat sing ora dipercaya lan ora diaktifake.
 \n
-\n Ekstensi angkoro bisa maca kredensial login sing disimpen ing Tachiyomi utawa nglakokake kode sewenang-wenang.
+\n Ekstensi angkoro bisa maca kredensial login sing disimpen ing Aniyomi utawa nglakokake kode sewenang-wenang.
 \n
 \n Kanthi percaya karo sertifikat iki, sampeyan nampa risiko kasebut.</string>
     <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>

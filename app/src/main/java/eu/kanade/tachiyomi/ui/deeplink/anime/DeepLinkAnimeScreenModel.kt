@@ -13,9 +13,9 @@ import eu.kanade.tachiyomi.animesource.online.ResolvableAnimeSource
 import eu.kanade.tachiyomi.animesource.online.UriType
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.entries.anime.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.manga.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByUrlAndAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -74,7 +74,7 @@ class DeepLinkAnimeScreenModel(
     }
 
     private suspend fun getAnimeFromSAnime(sAnime: SAnime, sourceId: Long): Anime {
-        return getAnimeByUrlAndSourceId.awaitAnime(sAnime.url, sourceId)
+        return getAnimeByUrlAndSourceId.await(sAnime.url, sourceId)
             ?: networkToLocalAnime.await(sAnime.toDomainAnime(sourceId))
     }
 

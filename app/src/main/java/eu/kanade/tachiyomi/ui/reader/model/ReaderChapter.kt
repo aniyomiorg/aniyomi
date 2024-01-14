@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.reader.model
 
+import eu.kanade.domain.items.chapter.model.toDbChapter
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.ui.reader.loader.PageLoader
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,8 @@ data class ReaderChapter(val chapter: Chapter) {
     var requestedPage: Int = 0
 
     private var references = 0
+
+    constructor(chapter: tachiyomi.domain.items.chapter.model.Chapter) : this(chapter.toDbChapter())
 
     fun ref() {
         references++

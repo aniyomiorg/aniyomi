@@ -76,7 +76,8 @@
     <string name="all">Alle</string>
     <string name="pref_library_update_restriction">Geräteeinschränkungen für automatische Aktualisierungen</string>
     <string name="charging">Beim Laden</string>
-    <string name="pref_update_only_non_completed">Mit dem Status „Abgeschlossen“</string>
+    <string name="pref_update_only_non_completed">Einträge mit dem Status „Abgeschlossen“ überspringen</string>
+    <string name="pref_auto_update_manga_sync">Fortschritt nach dem Lesen aktualisieren</string>
     <string name="default_category">Standardkategorie</string>
     <string name="default_category_summary">Immer fragen</string>
     <string name="pref_fullscreen">Vollbild</string>
@@ -138,7 +139,7 @@
     <string name="restoring_backup">Datensicherung wird wiederhergestellt</string>
     <string name="creating_backup">Datensicherung wird erstellt</string>
     <string name="used_cache">Belegt: %1$s</string>
-    <string name="cache_deleted">Zwischenspeicher geleert. %1$d Dateien wurden gelöscht</string>
+    <string name="cache_deleted">Zwischenspeicher geleert, %1$d Dateien gelöscht</string>
     <string name="cache_delete_error">Fehler während dem Leeren aufgetreten</string>
     <string name="pref_clear_cookies">Cookies löschen</string>
     <string name="cookies_cleared">Cookies gelöscht</string>
@@ -236,6 +237,11 @@
     <string name="ext_installing">Wird installiert</string>
     <string name="ext_installed">Installiert</string>
     <string name="ext_uninstall">Deinstallieren</string>
+    <string name="untrusted_extension_message">Diese Erweiterung wurde von einem unbekannten Autor signiert und wurde deshalb nicht geladen.
+\n
+\nBösartige Erweiterungen können gespeicherte Anmeldedaten auslesen oder schädlichen Code ausführen.
+\n
+\nDurch das Vertrauen des Zertifikats dieser Erweiterung akzeptierst du diese Risiken.</string>
     <string name="double_tap_anim_speed_0">Keine Animation</string>
     <string name="double_tap_anim_speed_normal">Normal</string>
     <string name="double_tap_anim_speed_fast">Schnell</string>
@@ -292,9 +298,9 @@
     <string name="action_sort_latest_chapter">Neuestes Kapitel</string>
     <string name="action_view_chapters">Kapitel anzeigen</string>
     <string name="action_cancel_all">Alle abbrechen</string>
-    <string name="theme_light">Aus</string>
-    <string name="theme_dark">An</string>
-    <string name="theme_system">Systemeinstellung</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_system">System</string>
     <string name="pref_manage_notifications">Benachrichtigungen verwalten</string>
     <string name="pref_category_security">Sicherheit und Privatsphäre</string>
     <string name="lock_with_biometrics">Entsperren erforderlich</string>
@@ -360,13 +366,11 @@
     <string name="battery_optimization_setting_activity_not_found">Geräteeinstellungen konnten nicht geöffnet werden</string>
     <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den externen Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Trackingbutton ein.</string>
     <string name="pref_refresh_library_covers">Bibliothekscover aktualisieren</string>
-    <string name="unofficial_extension_message">Diese Erweiterung stammt nicht aus der offiziellen Liste.</string>
-    <string name="ext_unofficial">Inoffiziell</string>
     <string name="sort_by_upload_date">Nach Uploaddatum</string>
     <string name="label_data">Daten</string>
     <string name="backup_restore_missing_sources">Fehlende Quellen:</string>
     <string name="invalid_backup_file_missing_manga">Sicherung beinhaltet keinerlei Bibliothekseinträge.</string>
-    <string name="invalid_backup_file">Ungültige Sicherungsdatei</string>
+    <string name="invalid_backup_file">Ungültige Sicherungsdatei:</string>
     <string name="pref_library_update_refresh_metadata_summary">Auf neue Cover und Details überprüfen, wenn die Bibliothek aktualisiert wird</string>
     <string name="pref_library_update_refresh_metadata">Metadaten automatisch aktualisieren</string>
     <string name="action_migrate">Migrieren</string>
@@ -441,9 +445,7 @@
     <string name="pref_dual_page_split">Breite Seiten aufteilen</string>
     <string name="pref_dual_page_invert_summary">Falls die Platzierung der aufgeteilten Seiten nicht mit der Leserichtung übereinstimmt</string>
     <string name="pref_dual_page_invert">Platzierung aufgeteilter Seiten umkehren</string>
-    <string name="backup_restore_content_full">Die Daten der Sicherungsdatei werden wiederhergestellt.
-\n
-\nDu musst jegliche fehlende Erweiterungen installieren und dich anschließend bei den Tracking-Anbietern einloggen, um sie zu benutzen.</string>
+    <string name="backup_restore_content_full">Du musst jegliche fehlende Erweiterungen installieren und dich anschließend bei den Tracking-Anbietern einloggen, um sie zu benutzen.</string>
     <string name="pref_show_navigation_mode_summary">Kurz anzeigen, wenn der Leser geöffnet wird</string>
     <string name="pref_show_navigation_mode">Tippzonen-Overlay anzeigen</string>
     <string name="nav_zone_right">Rechts</string>
@@ -541,23 +543,21 @@
     <string name="database_clean">Nichts zu bereinigen</string>
     <string name="extension_api_error">Herunterladen der Erweiterungsliste ist fehlgeschlagen</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
-    <string name="pref_library_update_manga_restriction">Aktualisierung der Einträge überspringen</string>
+    <string name="pref_update_only_completely_read">Einträge mit ungelesen Kapiteln überspringen</string>
     <string name="library_errors_help">Für Hilfe zum Beheben von Fehlern bei Bibliotheksaktualisierungen, siehe %1$s</string>
     <string name="save_chapter_as_cbz">Als CBZ-Archiv speichern</string>
     <string name="cancelled">Abgebrochen</string>
     <string name="on_hiatus">Unterbrochen</string>
     <string name="publishing_finished">Veröffentlichung abgeschlossen</string>
-    <string name="action_faq_and_guides">Häufige Fragen und Leitfäden</string>
+    <string name="action_show_manga">Eintrag anzeigen</string>
     <string name="action_display_cover_only_grid">Nur-Cover-Kacheln</string>
     <string name="pref_landscape_zoom">Bei breiten Bildern automatisch hineinzoomen</string>
     <string name="pref_navigate_pan">Innerhalb breiter Seiten navigieren</string>
-    <string name="pref_update_only_started">Die noch nicht begonnen wurden</string>
+    <string name="pref_update_only_started">Nicht begonnene Einträge überspringen</string>
     <string name="skipped_reason_completed">Übersprungen, da die Serie abgeschlossen ist</string>
     <string name="skipped_reason_not_caught_up">Übersprungen, weil es ungelesene Kapitel gibt</string>
     <string name="skipped_reason_not_started">Übersprungen, weil keine Kapitel gelesen wurden</string>
     <string name="notification_update_error">%1$d Aktualisierung(en) fehlgeschlagen</string>
-    <string name="notification_update_skipped">%1$d Aktualisierung(en) übersprungen</string>
-    <string name="channel_skipped">Übersprungen</string>
     <string name="learn_more">Antippen, um mehr zu erfahren</string>
     <string name="rotation_reverse_portrait">Umgekehrtes Hochformat</string>
     <string name="action_move_to_top_all_for_series">Serie nach oben verschieben</string>
@@ -689,16 +689,11 @@
     <string name="intervals_header">Intervalle</string>
     <string name="action_filter_interval_custom">Benutzerdefiniertes Abrufintervall</string>
     <string name="action_set_interval">Intervall einstellen</string>
-    <string name="action_filter_interval_long">Monatlich abrufen (28 Tage)</string>
     <string name="action_sort_next_updated">Nächste erwartete Aktualisierung</string>
-    <string name="pref_update_only_in_release_period">Außerhalb des erwarteten Veröffentlichungszeitraums</string>
-    <string name="manga_modify_calculated_interval_title">Intervall anpassen</string>
+    <string name="pref_update_only_in_release_period">Nächsten Veröffentlichungszeitpunkt vorhersagen</string>
     <string name="skipped_reason_not_in_release_period">Übersprungen, da heute keine Veröffentlichung erwartet wurde</string>
     <string name="manga_display_interval_title">Schätzt alle</string>
     <string name="manga_display_modified_interval_title">Aktualisiert alle</string>
-    <string name="action_filter_interval_dropped">Abgebrochen\? Um 20+ Tage und 2 Monate verspätet</string>
-    <string name="action_filter_interval_passed">Überprüfungszeitraum überschritten</string>
-    <string name="action_filter_interval_late">Um 10+ Tage verspätet</string>
     <string name="track_delete_text">Dies wird das lokale Tracking entfernen.</string>
     <string name="track_delete_remote_text">Auch aus %s entfernen</string>
     <string name="action_ok">OK</string>
@@ -728,7 +723,7 @@
     <string name="relative_time_span_never">Nie</string>
     <string name="pref_flash_page_summ">Reduziert Ghosting auf E-Papier-Displays</string>
     <string name="last_auto_backup_info">Zuletzt automatisch gesichert: %s</string>
-    <string name="pref_flash_page">Bei Umblättern weiß aufleuchten</string>
+    <string name="pref_flash_page">Bei Umblättern aufleuchten</string>
     <string name="label_data_storage">Daten und Speicher</string>
     <string name="action_create">Erstellen</string>
     <string name="action_apply">Anwenden</string>
@@ -744,4 +739,45 @@
     <string name="pref_storage_location_info">Wird für automatische Datensicherungen, heruntergeladene Kapitel und lokale Quellen verwendet.</string>
     <string name="action_menu_overflow_description">Weitere Optionen</string>
     <string name="action_bar_up_description">Nach oben navigieren</string>
+    <string name="onboarding_storage_action_select">Ordner auswählen</string>
+    <string name="pref_onboarding_guide">Einführungstour</string>
+    <string name="onboarding_guides_new_user">Neu bei %s? Wir empfehlen dir, unseren Einstiegsleitfaden anzusehen.</string>
+    <string name="onboarding_action_finish">Loslegen</string>
+    <string name="onboarding_storage_selection_required">Es muss ein Ordner ausgewählt sein</string>
+    <string name="onboarding_heading">Willkommen!</string>
+    <string name="onboarding_guides_returning_user">%s reinstallieren?</string>
+    <string name="onboarding_action_skip">Überspringen</string>
+    <string name="onboarding_action_next">Weiter</string>
+    <string name="onboarding_description">Lass uns zuerst ein paar Dinge einrichten. Du kannst diese später in den Einstellungen jederzeit ändern.</string>
+    <string name="no_location_set">Kein Speicherort festgelegt</string>
+    <string name="onboarding_storage_info">Wähle einen Ordner aus, in welchem %1$s Kapitel-Downloads, Datensicherungen und mehr speichern wird.
+\n
+\nEin dedizierter Ordner wird empfohlen.
+\n
+\nAusgewählter Ordner: %2$s</string>
+    <string name="onboarding_permission_notifications">Berechtigung für Benachrichtigungen</string>
+    <string name="onboarding_permission_install_apps">Berechtigung zum Installieren von Apps</string>
+    <string name="available_disk_space_info">Verfügbar: %1$s / Insgesamt: %2$s</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Verhindere Unterbrechungen bei lang anhaltenden Bibliotheksaktualisierungen, Downloads und Sicherungswiederherstellungen.</string>
+    <string name="onboarding_permission_ignore_battery_opts">Akkunutzung im Hintergrund</string>
+    <string name="onboarding_permission_install_apps_description">Zum Installieren von Quellenerweiterungen.</string>
+    <string name="onboarding_permission_notifications_description">Erhalte Benachrichtigungen für Bibliotheksaktualisierungen und mehr.</string>
+    <string name="ext_permission_install_apps_warning">Für das Installieren von Erweiterungen sind Berechtigungen erforderlich. Tippe hier, um sie zu gewähren.</string>
+    <string name="private_settings">Sensible Einstellungen einbeziehen (z. B. Login-Token für Tracker)</string>
+    <string name="onboarding_permission_action_grant">Zulassen</string>
+    <string name="invalid_backup_file_error">Vollständiger Fehler:</string>
+    <string name="manga_interval_custom_amount">Benutzerdefinierte Aktualisierungshäufigkeit:</string>
+    <string name="label_extension_repos">Erweiterungs-Repositories</string>
+    <string name="information_empty_repos">Es wurden noch keine Repositories festgelegt.</string>
+    <string name="action_add_repo">Repository hinzufügen</string>
+    <string name="error_repo_exists">Dieses Repository existiert bereits!</string>
+    <string name="action_delete_repo">Repository löschen</string>
+    <string name="delete_repo_confirmation">Möchtest du das Repository „%s“ löschen?</string>
+    <string name="onboarding_storage_help_info">Du aktualisierst von einer älteren Version und bist dir nicht sicher, was du auswählen sollst? Schau dir den Speicherleitfaden für mehr Informationen an.</string>
+    <string name="onboarding_storage_help_action">Speicherleitfaden</string>
+    <string name="pref_library_update_smart_update">Intelligentes Aktualisieren</string>
+    <string name="label_add_repo_input">Repository-URL</string>
+    <string name="action_add_repo_message">Füge zusätzliche Repositories zu Aniyomi hinzu. Deren URL sollte mit „index.min.json“ enden.</string>
+    <string name="invalid_repo_name">Ungültige Repository-URL</string>
+    <string name="manga_interval_expected_update">Nächste Aktualisierung erwartet in ca. %1$s, überprüfe ca. alle %2$s</string>
 </resources>

@@ -13,7 +13,7 @@ internal class MangaTrackInfoDialogHomePreviewProvider :
     private val aTrack = MangaTrack(
         id = 1L,
         mangaId = 2L,
-        syncId = 3L,
+        trackerId = 3L,
         remoteId = 4L,
         libraryId = null,
         title = "Manage Name On Tracker Site",

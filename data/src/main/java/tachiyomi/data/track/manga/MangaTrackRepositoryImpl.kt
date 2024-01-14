@@ -10,7 +10,7 @@ class MangaTrackRepositoryImpl(
 ) : MangaTrackRepository {
 
     override suspend fun getTrackByMangaId(id: Long): MangaTrack? {
-        return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, ::mapTrack) }
+        return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, MangaTrackMapper::mapTrack) }
     }
 
     // SY -->
@@ -29,27 +29,27 @@ class MangaTrackRepositoryImpl(
 
     override suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack> {
         return handler.awaitList {
-            manga_syncQueries.getTracksByMangaId(mangaId, ::mapTrack)
+            manga_syncQueries.getTracksByMangaId(mangaId, MangaTrackMapper::mapTrack)
         }
     }
 
     override fun getMangaTracksAsFlow(): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
-            manga_syncQueries.getTracks(::mapTrack)
+            manga_syncQueries.getTracks(MangaTrackMapper::mapTrack)
         }
     }
 
     override fun getTracksByMangaIdAsFlow(mangaId: Long): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
-            manga_syncQueries.getTracksByMangaId(mangaId, ::mapTrack)
+            manga_syncQueries.getTracksByMangaId(mangaId, MangaTrackMapper::mapTrack)
         }
     }
 
-    override suspend fun deleteManga(mangaId: Long, syncId: Long) {
+    override suspend fun delete(mangaId: Long, trackerId: Long) {
         handler.await {
             manga_syncQueries.delete(
                 mangaId = mangaId,
-                syncId = syncId,
+                syncId = trackerId,
             )
         }
     }
@@ -67,7 +67,7 @@ class MangaTrackRepositoryImpl(
             tracks.forEach { mangaTrack ->
                 manga_syncQueries.insert(
                     mangaId = mangaTrack.mangaId,
-                    syncId = mangaTrack.syncId,
+                    syncId = mangaTrack.trackerId,
                     remoteId = mangaTrack.remoteId,
                     libraryId = mangaTrack.libraryId,
                     title = mangaTrack.title,
@@ -82,34 +82,4 @@ class MangaTrackRepositoryImpl(
             }
         }
     }
-
-    private fun mapTrack(
-        id: Long,
-        mangaId: Long,
-        syncId: Long,
-        remoteId: Long,
-        libraryId: Long?,
-        title: String,
-        lastChapterRead: Double,
-        totalChapters: Long,
-        status: Long,
-        score: Double,
-        remoteUrl: String,
-        startDate: Long,
-        finishDate: Long,
-    ): MangaTrack = MangaTrack(
-        id = id,
-        mangaId = mangaId,
-        syncId = syncId,
-        remoteId = remoteId,
-        libraryId = libraryId,
-        title = title,
-        lastChapterRead = lastChapterRead,
-        totalChapters = totalChapters,
-        status = status,
-        score = score,
-        remoteUrl = remoteUrl,
-        startDate = startDate,
-        finishDate = finishDate,
-    )
 }

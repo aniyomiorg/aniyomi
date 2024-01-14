@@ -44,7 +44,7 @@ class BangumiApi(
                 .add("rating", track.score.toInt().toString())
                 .add("status", track.toBangumiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = body))
+            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
             track
         }
@@ -56,7 +56,7 @@ class BangumiApi(
                 .add("rating", track.score.toInt().toString())
                 .add("status", track.toBangumiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = body))
+            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
             track
         }
@@ -69,7 +69,7 @@ class BangumiApi(
                 .add("rating", track.score.toInt().toString())
                 .add("status", track.toBangumiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = sbody))
+            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
 
             // chapter update
@@ -78,7 +78,7 @@ class BangumiApi(
                 .build()
             authClient.newCall(
                 POST(
-                    "$apiUrl/subject/${track.media_id}/update/watched_eps",
+                    "$apiUrl/subject/${track.remote_id}/update/watched_eps",
                     body = body,
                 ),
             ).awaitSuccess()
@@ -94,7 +94,7 @@ class BangumiApi(
                 .add("rating", track.score.toInt().toString())
                 .add("status", track.toBangumiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = sbody))
+            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
 
             // chapter update
@@ -103,7 +103,7 @@ class BangumiApi(
                 .build()
             authClient.newCall(
                 POST(
-                    "$apiUrl/subject/${track.media_id}/update/watched_eps",
+                    "$apiUrl/subject/${track.remote_id}/update/watched_eps",
                     body = body,
                 ),
             ).awaitSuccess()
@@ -180,7 +180,7 @@ class BangumiApi(
         }
         val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.floatOrNull ?: -1f
         return MangaTrackSearch.create(trackId).apply {
-            media_id = obj["id"]!!.jsonPrimitive.long
+            remote_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
             cover_url = coverUrl
             summary = obj["name"]!!.jsonPrimitive.content
@@ -205,7 +205,7 @@ class BangumiApi(
 
         val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.floatOrNull ?: -1f
         return AnimeTrackSearch.create(trackId).apply {
-            media_id = obj["id"]!!.jsonPrimitive.long
+            remote_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
             cover_url = coverUrl
             score = rating
@@ -218,7 +218,7 @@ class BangumiApi(
     suspend fun findLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
             with(json) {
-                authClient.newCall(GET("$apiUrl/subject/${track.media_id}"))
+                authClient.newCall(GET("$apiUrl/subject/${track.remote_id}"))
                     .awaitSuccess()
                     .parseAs<JsonObject>()
                     .let { jsonToSearch(it) }
@@ -229,7 +229,7 @@ class BangumiApi(
     suspend fun findLibAnime(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
             with(json) {
-                authClient.newCall(GET("$apiUrl/subject/${track.media_id}"))
+                authClient.newCall(GET("$apiUrl/subject/${track.remote_id}"))
                     .awaitSuccess()
                     .parseAs<JsonObject>()
                     .let { jsonToSearchAnime(it) }
@@ -239,7 +239,7 @@ class BangumiApi(
 
     suspend fun statusLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
-            val urlUserRead = "$apiUrl/collection/${track.media_id}"
+            val urlUserRead = "$apiUrl/collection/${track.remote_id}"
             val requestUserRead = Request.Builder()
                 .url(urlUserRead)
                 .cacheControl(CacheControl.FORCE_NETWORK)
@@ -267,7 +267,7 @@ class BangumiApi(
 
     suspend fun statusLibAnime(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
-            val urlUserRead = "$apiUrl/collection/${track.media_id}"
+            val urlUserRead = "$apiUrl/collection/${track.remote_id}"
             val requestUserRead = Request.Builder()
                 .url(urlUserRead)
                 .cacheControl(CacheControl.FORCE_NETWORK)

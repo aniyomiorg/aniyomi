@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.source.online.ResolvableSource
 import eu.kanade.tachiyomi.source.online.UriType
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.domain.entries.anime.interactor.GetMangaByUrlAndSourceId
+import tachiyomi.domain.entries.manga.interactor.GetMangaByUrlAndSourceId
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.interactor.GetChapterByUrlAndMangaId
@@ -74,7 +74,7 @@ class DeepLinkMangaScreenModel(
     }
 
     private suspend fun getMangaFromSManga(sManga: SManga, sourceId: Long): Manga {
-        return getMangaByUrlAndSourceId.awaitManga(sManga.url, sourceId)
+        return getMangaByUrlAndSourceId.await(sManga.url, sourceId)
             ?: networkToLocalManga.await(sManga.toDomainManga(sourceId))
     }
 

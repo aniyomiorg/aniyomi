@@ -23,7 +23,6 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
 import kotlin.math.pow
@@ -38,7 +37,10 @@ import kotlin.math.roundToLong
  * @param context the application context.
  * @constructor creates an instance of the chapter cache.
  */
-class ChapterCache(private val context: Context) {
+class ChapterCache(
+    private val context: Context,
+    private val json: Json,
+) {
 
     companion object {
         /** Name of cache directory.  */
@@ -53,9 +55,6 @@ class ChapterCache(private val context: Context) {
         /** The maximum number of bytes this cache should use to store.  */
         const val PARAMETER_CACHE_SIZE = 50L * 1024 * 1024
     }
-
-    /** Google Json class used for parsing JSON files.  */
-    private val json: Json by injectLazy()
 
     private val readerPreferences: ReaderPreferences = Injekt.get()
 

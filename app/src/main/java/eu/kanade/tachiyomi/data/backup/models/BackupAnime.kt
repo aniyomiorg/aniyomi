@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
-import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.track.anime.model.AnimeTrack
 
 @Suppress("DEPRECATION")
 @Serializable
@@ -73,13 +71,6 @@ data class BackupAnime(
             favoriteModifiedAt = this@BackupAnime.favoriteModifiedAt,
         )
     }
-
-    fun getEpisodesImpl(): List<Episode> {
-        return episodes.map {
-            it.toEpisodeImpl()
-        }
-    }
-
     // SY -->
     fun getCustomAnimeInfo(): CustomAnimeInfo? {
         if (customTitle != null ||
@@ -102,42 +93,4 @@ data class BackupAnime(
         return null
     }
     // SY <--
-
-    fun getTrackingImpl(): List<AnimeTrack> {
-        return tracking.map {
-            it.getTrackingImpl()
-        }
-    }
-
-    companion object {
-        fun copyFrom(anime: Anime, customAnimeInfo: CustomAnimeInfo?): BackupAnime {
-            return BackupAnime(
-                url = anime.url,
-                title = anime.title,
-                artist = anime.artist,
-                author = anime.author,
-                description = anime.description,
-                genre = anime.genre.orEmpty(),
-                status = anime.status.toInt(),
-                thumbnailUrl = anime.thumbnailUrl,
-                favorite = anime.favorite,
-                source = anime.source,
-                dateAdded = anime.dateAdded,
-                viewer_flags = anime.skipIntroLength,
-                episodeFlags = anime.episodeFlags.toInt(),
-                updateStrategy = anime.updateStrategy,
-                lastModifiedAt = anime.lastModifiedAt,
-                favoriteModifiedAt = anime.favoriteModifiedAt,
-            ).also { backupAnime ->
-                customAnimeInfo?.let {
-                    backupAnime.customTitle = it.title
-                    backupAnime.customArtist = it.artist
-                    backupAnime.customAuthor = it.author
-                    backupAnime.customDescription = it.description
-                    backupAnime.customGenre = it.genre
-                    backupAnime.customStatus = it.status?.toInt() ?: 0
-                }
-            }
-        }
-    }
 }

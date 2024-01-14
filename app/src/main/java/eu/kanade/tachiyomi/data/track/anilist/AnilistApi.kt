@@ -33,6 +33,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import kotlin.time.Duration.Companion.minutes
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
@@ -57,7 +59,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
                 putJsonObject("variables") {
-                    put("mangaId", track.media_id)
+                    put("mangaId", track.remote_id)
                     put("progress", track.last_chapter_read.toInt())
                     put("status", track.toAnilistStatus())
                 }
@@ -115,8 +117,8 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun deleteLibManga(track: MangaTrack): MangaTrack {
-        return withIOContext {
+    suspend fun deleteLibManga(track: DomainMangaTrack) {
+        withIOContext {
             val query = """
             |mutation DeleteManga(${'$'}listId: Int) {
                 |DeleteMediaListEntry(id: ${'$'}listId) { 
@@ -128,12 +130,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
                 putJsonObject("variables") {
-                    put("listId", track.library_id)
+                    put("listId", track.libraryId)
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
-            track
         }
     }
 
@@ -151,7 +152,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
                 putJsonObject("variables") {
-                    put("animeId", track.media_id)
+                    put("animeId", track.remote_id)
                     put("progress", track.last_episode_seen.toInt())
                     put("status", track.toAnilistStatus())
                 }
@@ -209,7 +210,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun deleteLibAnime(track: AnimeTrack): AnimeTrack {
+    suspend fun deleteLibAnime(track: DomainAnimeTrack) {
         return withIOContext {
             val query = """
             |mutation DeleteAnime(${'$'}listId: Int) {
@@ -222,12 +223,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
                 putJsonObject("variables") {
-                    put("listId", track.library_id)
+                    put("listId", track.libraryId)
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
-            track
         }
     }
 
@@ -386,7 +386,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 put("query", query)
                 putJsonObject("variables") {
                     put("id", userid)
-                    put("manga_id", track.media_id)
+                    put("manga_id", track.remote_id)
                 }
             }
             with(json) {
@@ -456,7 +456,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 put("query", query)
                 putJsonObject("variables") {
                     put("id", userid)
-                    put("anime_id", track.media_id)
+                    put("anime_id", track.remote_id)
                 }
             }
             with(json) {
@@ -479,12 +479,12 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun getLibManga(track: MangaTrack, userid: Int): MangaTrack {
-        return findLibManga(track, userid) ?: throw Exception("Could not find manga")
+    suspend fun getLibManga(track: MangaTrack, userId: Int): MangaTrack {
+        return findLibManga(track, userId) ?: throw Exception("Could not find manga")
     }
 
-    suspend fun getLibAnime(track: AnimeTrack, userid: Int): AnimeTrack {
-        return findLibAnime(track, userid) ?: throw Exception("Could not find anime")
+    suspend fun getLibAnime(track: AnimeTrack, userId: Int): AnimeTrack {
+        return findLibAnime(track, userId) ?: throw Exception("Could not find anime")
     }
 
     fun createOAuth(token: String): OAuth {

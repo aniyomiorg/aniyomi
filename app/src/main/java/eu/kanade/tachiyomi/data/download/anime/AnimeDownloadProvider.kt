@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.displayablePath
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -25,7 +26,7 @@ class AnimeDownloadProvider(
     private val storageManager: StorageManager = Injekt.get(),
 ) {
 
-    val downloadsDir: UniFile?
+    private val downloadsDir: UniFile?
         get() = storageManager.getDownloadsDirectory()
 
     /**
@@ -41,7 +42,12 @@ class AnimeDownloadProvider(
                 .createDirectory(getAnimeDirName(animeTitle))!!
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
-            throw Exception(context.stringResource(MR.strings.invalid_location, downloadsDir ?: ""))
+            throw Exception(
+                context.stringResource(
+                    MR.strings.invalid_location,
+                    downloadsDir?.displayablePath ?: "",
+                ),
+            )
         }
     }
 

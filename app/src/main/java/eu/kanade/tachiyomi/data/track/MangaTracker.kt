@@ -43,7 +43,7 @@ interface MangaTracker {
         return track.score
     }
 
-    fun displayScore(track: MangaTrack): String
+    fun displayScore(track: DomainTrack): String
 
     suspend fun update(track: MangaTrack, didReadChapter: Boolean = false): MangaTrack
 

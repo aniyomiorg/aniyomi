@@ -26,7 +26,7 @@ import tachiyomi.presentation.core.util.collectAsState
 fun StreamsDelayPage(
     screenModel: PlayerSettingsScreenModel,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny)) {
+    Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall)) {
         val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
         val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
         var currentSubDelay by rememberSaveable {

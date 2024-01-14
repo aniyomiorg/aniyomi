@@ -142,13 +142,13 @@ private fun SubtitleColorSelector(
     Column(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .padding(MaterialTheme.padding.tiny),
+            .padding(MaterialTheme.padding.extraSmall),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = stringResource(label))
 
-        Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.extraSmall))
 
         Canvas(
             modifier = Modifier
@@ -163,7 +163,7 @@ private fun SubtitleColorSelector(
             )
         }
 
-        Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.extraSmall))
 
         Text(text = colorCode.toHexString())
 

@@ -2,10 +2,11 @@ package eu.kanade.tachiyomi.extension.manga
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import eu.kanade.domain.extension.manga.interactor.TrustMangaExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
+import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionApi
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
@@ -34,13 +35,11 @@ import java.util.Locale
  * To avoid malicious distribution, every extension must be signed and it will only be loaded if its
  * signature is trusted, otherwise the user will be prompted with a warning to trust it before being
  * loaded.
- *
- * @param context The application context.
- * @param preferences The application preferences.
  */
 class MangaExtensionManager(
     private val context: Context,
     private val preferences: SourcePreferences = Injekt.get(),
+    private val trustExtension: TrustMangaExtension = Injekt.get(),
 ) {
 
     var isInitialized = false
@@ -49,7 +48,7 @@ class MangaExtensionManager(
     /**
      * API where all the available extensions can be found.
      */
-    private val api = MangaExtensionGithubApi()
+    private val api = MangaExtensionApi()
 
     /**
      * The installer which installs, updates and uninstalls the extensions.
@@ -182,14 +181,22 @@ class MangaExtensionManager(
             val pkgName = installedExt.pkgName
             val availableExt = availableExtensions.find { it.pkgName == pkgName }
 
-            if (!installedExt.isUnofficial && availableExt == null && !installedExt.isObsolete) {
+            if (availableExt == null && !installedExt.isObsolete) {
                 mutInstalledExtensions[index] = installedExt.copy(isObsolete = true)
                 changed = true
             } else if (availableExt != null) {
                 val hasUpdate = installedExt.updateExists(availableExt)
 
                 if (installedExt.hasUpdate != hasUpdate) {
-                    mutInstalledExtensions[index] = installedExt.copy(hasUpdate = hasUpdate)
+                    mutInstalledExtensions[index] = installedExt.copy(
+                        hasUpdate = hasUpdate,
+                        repoUrl = availableExt.repoUrl,
+                    )
+                    changed = true
+                } else {
+                    mutInstalledExtensions[index] = installedExt.copy(
+                        repoUrl = availableExt.repoUrl,
+                    )
                     changed = true
                 }
             }
@@ -251,19 +258,19 @@ class MangaExtensionManager(
     }
 
     /**
-     * Adds the given signature to the list of trusted signatures. It also loads in background the
-     * extensions that match this signature.
+     * Adds the given extension to the list of trusted extensions. It also loads in background the
+     * now trusted extensions.
      *
-     * @param signature The signature to whitelist.
+     * @param extension the extension to trust
      */
-    fun trustSignature(signature: String) {
-        val untrustedSignatures = _untrustedExtensionsFlow.value.map { it.signatureHash }.toSet()
-        if (signature !in untrustedSignatures) return
+    fun trust(extension: MangaExtension.Untrusted) {
+        val untrustedPkgNames = _untrustedExtensionsFlow.value.map { it.pkgName }.toSet()
+        if (extension.pkgName !in untrustedPkgNames) return
 
-        MangaExtensionLoader.trustedSignatures += signature
-        preferences.trustedSignatures() += signature
+        trustExtension.trust(extension.pkgName, extension.versionCode, extension.signatureHash)
 
-        val nowTrustedExtensions = _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }
+        val nowTrustedExtensions = _untrustedExtensionsFlow.value
+            .filter { it.pkgName == extension.pkgName && it.versionCode == extension.versionCode }
         _untrustedExtensionsFlow.value -= nowTrustedExtensions
 
         launchNow {
@@ -364,7 +371,7 @@ class MangaExtensionManager(
         availableExtension: MangaExtension.Available? = null,
     ): Boolean {
         val availableExt = availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
-        if (isUnofficial || availableExt == null) return false
+            ?: return false
 
         return (availableExt.versionCode > versionCode || availableExt.libVersion > libVersion)
     }

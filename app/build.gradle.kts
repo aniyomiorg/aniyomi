@@ -21,7 +21,7 @@ android {
 
         applicationId = "xyz.luft.tachiyomi.mi"
 
-        versionCode = 112
+        versionCode = 118
         versionName = "0.2.2"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -131,6 +131,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
 
         // Disable some unused things
         aidl = false
@@ -255,9 +256,6 @@ dependencies {
 
     // Logging
     implementation(libs.logcat)
-
-    // Crash reports
-    implementation(libs.acra.http)
 
     // Shizuku
     implementation(libs.bundles.shizuku)

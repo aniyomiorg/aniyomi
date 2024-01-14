@@ -49,6 +49,7 @@ import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.components.relativeDateText
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryScreenItem
 import eu.kanade.presentation.entries.components.EntryBottomActionMenu
@@ -67,7 +68,6 @@ import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterList
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenModel
-import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -83,16 +83,14 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrollingUp
-import java.text.DateFormat
-import java.util.Date
+import tachiyomi.source.local.entries.manga.isLocal
+import java.time.Instant
 
 @Composable
 fun MangaScreen(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    fetchInterval: Int?,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
+    nextUpdate: Instant?,
     isTabletUi: Boolean,
     chapterSwipeStartAction: LibraryPreferences.ChapterSwipeAction,
     chapterSwipeEndAction: LibraryPreferences.ChapterSwipeAction,
@@ -155,9 +153,7 @@ fun MangaScreen(
         MangaScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
-            dateFormat = dateFormat,
-            fetchInterval = fetchInterval,
+            nextUpdate = nextUpdate,
             chapterSwipeStartAction = chapterSwipeStartAction,
             chapterSwipeEndAction = chapterSwipeEndAction,
             onBackClicked = onBackClicked,
@@ -196,11 +192,9 @@ fun MangaScreen(
         MangaScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
-            dateRelativeTime = dateRelativeTime,
             chapterSwipeStartAction = chapterSwipeStartAction,
             chapterSwipeEndAction = chapterSwipeEndAction,
-            dateFormat = dateFormat,
-            fetchInterval = fetchInterval,
+            nextUpdate = nextUpdate,
             onBackClicked = onBackClicked,
             onChapterClicked = onChapterClicked,
             onDownloadChapter = onDownloadChapter,
@@ -240,9 +234,7 @@ fun MangaScreen(
 private fun MangaScreenSmallImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
-    fetchInterval: Int?,
+    nextUpdate: Instant?,
     chapterSwipeStartAction: LibraryPreferences.ChapterSwipeAction,
     chapterSwipeEndAction: LibraryPreferences.ChapterSwipeAction,
     onBackClicked: () -> Unit,
@@ -441,7 +433,7 @@ private fun MangaScreenSmallImpl(
                         MangaActionRow(
                             favorite = state.manga.favorite,
                             trackingCount = state.trackingCount,
-                            fetchInterval = fetchInterval,
+                            nextUpdate = nextUpdate,
                             isUserIntervalMode = state.manga.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
@@ -485,8 +477,6 @@ private fun MangaScreenSmallImpl(
                         manga = state.manga,
                         chapters = listItem,
                         isAnyChapterSelected = chapters.fastAny { it.selected },
-                        dateRelativeTime = dateRelativeTime,
-                        dateFormat = dateFormat,
                         chapterSwipeStartAction = chapterSwipeStartAction,
                         chapterSwipeEndAction = chapterSwipeEndAction,
                         onChapterClicked = onChapterClicked,
@@ -504,9 +494,7 @@ private fun MangaScreenSmallImpl(
 fun MangaScreenLargeImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
-    fetchInterval: Int?,
+    nextUpdate: Instant?,
     chapterSwipeStartAction: LibraryPreferences.ChapterSwipeAction,
     chapterSwipeEndAction: LibraryPreferences.ChapterSwipeAction,
     onBackClicked: () -> Unit,
@@ -693,7 +681,7 @@ fun MangaScreenLargeImpl(
                         MangaActionRow(
                             favorite = state.manga.favorite,
                             trackingCount = state.trackingCount,
-                            fetchInterval = fetchInterval,
+                            nextUpdate = nextUpdate,
                             isUserIntervalMode = state.manga.fetchInterval < 0,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
@@ -744,8 +732,6 @@ fun MangaScreenLargeImpl(
                                 manga = state.manga,
                                 chapters = listItem,
                                 isAnyChapterSelected = chapters.fastAny { it.selected },
-                                dateRelativeTime = dateRelativeTime,
-                                dateFormat = dateFormat,
                                 chapterSwipeStartAction = chapterSwipeStartAction,
                                 chapterSwipeEndAction = chapterSwipeEndAction,
                                 onChapterClicked = onChapterClicked,
@@ -798,7 +784,7 @@ private fun SharedMangaBottomActionMenu(
         onDeleteClicked = {
             onMultiDeleteClicked(selected.fastMap { it.chapter })
         }.takeIf {
-            onDownloadChapter != null && selected.fastAny { it.downloadState == MangaDownload.State.DOWNLOADED }
+            selected.fastAny { it.downloadState == MangaDownload.State.DOWNLOADED }
         },
         isManga = true,
     )
@@ -808,8 +794,6 @@ private fun LazyListScope.sharedChapterItems(
     manga: Manga,
     chapters: List<ChapterList>,
     isAnyChapterSelected: Boolean,
-    dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
     chapterSwipeStartAction: LibraryPreferences.ChapterSwipeAction,
     chapterSwipeEndAction: LibraryPreferences.ChapterSwipeAction,
     onChapterClicked: (Chapter) -> Unit,
@@ -828,7 +812,6 @@ private fun LazyListScope.sharedChapterItems(
         contentType = { EntryScreenItem.ITEM },
     ) { item ->
         val haptic = LocalHapticFeedback.current
-        val context = LocalContext.current
 
         when (item) {
             is ChapterList.MissingCount -> {
@@ -844,15 +827,7 @@ private fun LazyListScope.sharedChapterItems(
                     } else {
                         item.chapter.name
                     },
-                    date = item.chapter.dateUpload
-                        .takeIf { it > 0L }
-                        ?.let {
-                            Date(it).toRelativeString(
-                                context,
-                                dateRelativeTime,
-                                dateFormat,
-                            )
-                        },
+                    date = relativeDateText(item.chapter.dateUpload),
                     readProgress = item.chapter.lastPageRead
                         .takeIf { !item.chapter.read && it > 0L }
                         ?.let {
@@ -865,7 +840,7 @@ private fun LazyListScope.sharedChapterItems(
                     read = item.chapter.read,
                     bookmark = item.chapter.bookmark,
                     selected = item.selected,
-                    downloadIndicatorEnabled = !isAnyChapterSelected,
+                    downloadIndicatorEnabled = !isAnyChapterSelected && !manga.isLocal(),
                     downloadStateProvider = { item.downloadState },
                     downloadProgressProvider = { item.downloadProgress },
                     chapterSwipeStartAction = chapterSwipeStartAction,

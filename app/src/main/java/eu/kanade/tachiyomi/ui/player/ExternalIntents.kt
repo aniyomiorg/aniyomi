@@ -545,7 +545,7 @@ class ExternalIntents {
         withIOContext {
             getTracks.await(anime.id)
                 .mapNotNull { track ->
-                    val tracker = trackerManager.get(track.syncId)
+                    val tracker = trackerManager.get(track.trackerId)
                     if (tracker != null && tracker.isLoggedIn &&
                         tracker is AnimeTracker && episodeNumber > track.lastEpisodeSeen
                     ) {

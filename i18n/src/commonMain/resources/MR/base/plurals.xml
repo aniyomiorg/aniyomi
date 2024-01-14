@@ -36,7 +36,7 @@
         <item quantity="one">%1$s chapter</item>
         <item quantity="other">%1$s chapters</item>
     </plurals>
-    <plurals name="download_amount_manga">
+    <plurals name="download_amount">
         <item quantity="one">Next chapter</item>
         <item quantity="other">Next %d chapters</item>
     </plurals>
@@ -63,5 +63,9 @@
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Extension update available</item>
         <item quantity="other">%d extension updates available</item>
+    </plurals>
+    <plurals name="num_repos">
+        <item quantity="one">%d repo</item>
+        <item quantity="other">%d repos</item>
     </plurals>
 </resources>

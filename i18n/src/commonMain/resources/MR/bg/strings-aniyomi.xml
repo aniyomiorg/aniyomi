@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
     <string name="untrusted_extension_message">Следното разширение имаше непотвърден сертификат и не беше активирано.
 \n
-\nЗлонамереното разширение може да види всичката информация за вход в системата на Tachiyomi или да компилира неблагонадежден код.
+\nЗлонамереното разширение може да види всичката информация за вход в системата на Aniyomi или да компилира неблагонадежден код.
 \n
 \nПотвърждавайки този сертификат, вие приемате тези рискове.</string>
     <string name="pref_category_delete_chapters">Изтрий глави</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>
     <string name="dialog_with_checkbox_reset">Изчисти всички дати за тази манга</string>
     <string name="download_insufficient_space">Главите не можаха да бъдат изтеглени поради недостатъчно място</string>
-    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Tachiyomi. Натиснете тук, за да научите повече.</string>
-    <string name="information_webview_required">WebView е необходим за Tachiyomi</string>
+    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Aniyomi. Натиснете тук, за да научите повече.</string>
+    <string name="information_webview_required">WebView е необходим за Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
     <string name="channel_new_chapters_episodes">Нови глави</string>
 </resources>

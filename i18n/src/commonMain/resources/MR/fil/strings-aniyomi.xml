@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Ang mga entry sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
     <string name="untrusted_extension_message">Pinirmahan ang extension na ito gamit ang isang kaduda-dudang certificate at hindi muna pinagana.
 \n
-\nMaaaring mabasa ng isang kaduda-dudang extension ang kahit anong credentials sa pag-login na nakatago sa Tachiyomi o di kaya nama\'y magsimula ng delikadong code.
+\nMaaaring mabasa ng isang kaduda-dudang extension ang kahit anong credentials sa pag-login na nakatago sa Aniyomi o di kaya nama\'y magsimula ng delikadong code.
 \n
 \nTinatanggap mo ang mga bantang ito sa pagtiwala sa certificate na ito.</string>
     <string name="pref_category_delete_chapters">Magbura ng kabanata</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">Gawin din sa lahat ng mga entry sa aking library</string>
     <string name="dialog_with_checkbox_reset">I-reset ang lahat ng chapters sa entry na ito</string>
     <string name="download_insufficient_space">Di ma-download ang mga kabanata dahil sa mababang espasyo</string>
-    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Tachiyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
-    <string name="information_webview_required">Kailangan ng Tachiyomi ang WebView</string>
+    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Aniyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
+    <string name="information_webview_required">Kailangan ng Aniyomi ang WebView</string>
     <string name="download_notifier_download_paused_chapters">Nakahinto ang pag-download</string>
     <string name="channel_new_chapters_episodes">Mga update sa kabanata</string>
     <string name="action_global_manga_search">Pangkahalatang Paghahanap ng Manga</string>

@@ -1,13 +1,10 @@
 package eu.kanade.tachiyomi.data.backup.models
 
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.items.chapter.model.Chapter
-import tachiyomi.domain.track.manga.model.MangaTrack
 
 @Suppress("DEPRECATION")
 @Serializable
@@ -76,12 +73,6 @@ data class BackupManga(
         )
     }
 
-    fun getChaptersImpl(): List<Chapter> {
-        return chapters.map {
-            it.toChapterImpl()
-        }
-    }
-
     // SY -->
     fun getCustomMangaInfo(): CustomMangaInfo? {
         if (customTitle != null ||
@@ -104,45 +95,4 @@ data class BackupManga(
         return null
     }
     // SY <--
-
-    fun getTrackingImpl(): List<MangaTrack> {
-        return tracking.map {
-            it.getTrackingImpl()
-        }
-    }
-
-    companion object {
-        fun copyFrom(manga: Manga, customMangaInfo: CustomMangaInfo?): BackupManga {
-            return BackupManga(
-                url = manga.url,
-                // SY -->
-                title = manga.ogTitle,
-                artist = manga.ogArtist,
-                author = manga.ogAuthor,
-                description = manga.ogDescription,
-                genre = manga.ogGenre.orEmpty(),
-                status = manga.ogStatus.toInt(),
-                // SY <--
-                thumbnailUrl = manga.thumbnailUrl,
-                favorite = manga.favorite,
-                source = manga.source,
-                dateAdded = manga.dateAdded,
-                viewer = (manga.viewerFlags.toInt() and ReadingMode.MASK),
-                viewer_flags = manga.viewerFlags.toInt(),
-                chapterFlags = manga.chapterFlags.toInt(),
-                updateStrategy = manga.updateStrategy,
-                lastModifiedAt = manga.lastModifiedAt,
-                favoriteModifiedAt = manga.favoriteModifiedAt,
-            ).also { backupManga ->
-                customMangaInfo?.let {
-                    backupManga.customTitle = it.title
-                    backupManga.customArtist = it.artist
-                    backupManga.customAuthor = it.author
-                    backupManga.customDescription = it.description
-                    backupManga.customGenre = it.genre
-                    backupManga.customStatus = it.status?.toInt() ?: 0
-                }
-            }
-        }
-    }
 }

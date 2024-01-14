@@ -75,7 +75,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 val intentSender = PendingIntent.getBroadcast(
                     service,
                     activeSession!!.second,
-                    Intent(INSTALL_ACTION),
+                    Intent(INSTALL_ACTION).setPackage(service.packageName),
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0,
                 ).intentSender
                 session.commit(intentSender)

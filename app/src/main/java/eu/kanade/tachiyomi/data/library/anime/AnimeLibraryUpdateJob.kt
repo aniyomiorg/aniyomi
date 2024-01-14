@@ -40,7 +40,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -169,9 +168,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
-        val libraryAnime = runBlocking { getLibraryAnime.await() }
-
+    private suspend fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
+        val libraryAnime = getLibraryAnime.await()
         // SY -->
         val groupAnimeLibraryUpdateType = libraryPreferences.groupAnimeLibraryUpdateType().get()
         // SY <--
@@ -186,7 +184,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     group == AnimeLibraryGroup.UNGROUPED
                 )
         ) {
-            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map { it.toLong() }
+            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map(String::toLong)
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToUpdate }
             } else {
@@ -206,11 +204,11 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             when (group) {
                 AnimeLibraryGroup.BY_TRACK_STATUS -> {
                     val trackingExtra = groupExtra?.toIntOrNull() ?: -1
-                    val tracks = runBlocking { getTracks.await() }.groupBy { it.animeId }
+                    val tracks = getTracks.await().groupBy { it.animeId }
 
                     libraryAnime.filter { (anime) ->
                         val status = tracks[anime.id]?.firstNotNullOfOrNull { track ->
-                            TrackStatus.parseTrackerStatus(track.syncId, track.status)
+                            TrackStatus.parseTrackerStatus(track.trackerId, track.status)
                         } ?: TrackStatus.OTHER
                         status.int == trackingExtra
                     }
@@ -246,7 +244,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val skippedUpdates = mutableListOf<Pair<Anime, String?>>()
-        val fetchWindow = animeFetchInterval.getWindow(ZonedDateTime.now())
+        val (_, fetchWindowUpperBound) = animeFetchInterval.getWindow(ZonedDateTime.now())
 
         animeToUpdate = listToUpdate
             // SY -->
@@ -282,7 +280,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                         false
                     }
 
-                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.anime.nextUpdate > fetchWindow.second -> {
+                    ENTRY_OUTSIDE_RELEASE_PERIOD in restrictions && it.anime.nextUpdate > fetchWindowUpperBound -> {
                         skippedUpdates.add(
                             it.anime to context.stringResource(MR.strings.skipped_reason_not_in_release_period),
                         )
@@ -292,15 +290,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 }
             }
             .sortedBy { it.anime.title }
-
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = animeToUpdate
             .groupBy { it.anime.source + (0..4).random() }
             .filterKeys { sourceManager.get(it) !is UnmeteredSource }
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-            notifier.showQueueSizeWarningNotification()
-        }
+            notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)        }
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?
@@ -310,7 +306,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     .map { (reason, entries) -> "$reason: [${entries.map { it.first.title }.sorted().joinToString()}]" }
                     .joinToString()
             }
-            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 

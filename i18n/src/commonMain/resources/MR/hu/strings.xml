@@ -181,7 +181,6 @@
     <string name="action_search_settings">Keresési beállítások</string>
     <string name="action_sort_date_added">Dátum hozzáadva</string>
     <string name="untrusted_extension">Nem megbízható bővítmény</string>
-    <string name="ext_unofficial">Nem hivatalos</string>
     <string name="ext_obsolete">Elavult</string>
     <string name="ext_updates_pending">Függőben lévő frissítések</string>
     <string name="pref_library_update_refresh_metadata_summary">Új borító és részletek keresése a könyvtár frissítésekor</string>
@@ -195,7 +194,6 @@
     <string name="pref_show_reading_mode">Olvasó mód mutatása</string>
     <string name="ext_nsfw_warning">Tartalmazhat felnőtt (18+) tartalmat</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Ez a bővítmény nem a hivatalos Tachiyomi bővítménylistából származik.</string>
     <string name="obsolete_extension_message">Ez a bővítmény nem elérhető többé. Előfordulhat, hogy nem működik megfelelően, és problémákat okozhat az alkalmazásban. Az eltávolítása javasolt.</string>
     <string name="add_to_library">Könyvtárhoz adás</string>
     <string name="unknown_status">Ismeretlen állapot</string>
@@ -405,7 +403,6 @@
     <string name="date">Dátum</string>
     <string name="clear_history_confirmation">Biztos benne\? Minden előzmény elvész.</string>
     <string name="delete_category">Kategória törlése</string>
-    <string name="action_faq_and_guides">Gyakori kérdések és Útmutatók</string>
     <string name="pref_app_language">Alkalmazás nyelve</string>
     <string name="unread">Olvasatlan</string>
     <string name="set_chapter_settings_as_default">Beállítás alapértelmezettként</string>
@@ -420,7 +417,6 @@
     <string name="delete_category_confirmation">Törölni akarja a %s kategóriát \?</string>
     <string name="internal_error">InternalError: Nézze meg a hibaüzenetet további információért</string>
     <string name="network_not_metered">Csak nem-lemért hálózatokon</string>
-    <string name="pref_library_update_manga_restriction">Frissülő elemek kihagyása</string>
     <string name="backup_choice">Mit tartalmazzon a biztonsági mentés\?</string>
     <string name="restore_miui_warning">Biztonsági mentés/helyreállítás nem biztos,hogy működik ha a MIUI Optimalizáció ki van kapcsolva.</string>
     <string name="restore_in_progress">Helyreállítás folyamatban van</string>
@@ -456,7 +452,6 @@
     <string name="snack_categories_deleted">Kategóriák törölve</string>
     <string name="file_select_cover">Válasszon képet a fedlapnak</string>
     <string name="update_check_no_new_updates">Nem található új frissítés</string>
-    <string name="channel_skipped">Kihagyott</string>
     <string name="ext_info_version">Verzió</string>
     <string name="ext_info_language">Nyelv</string>
     <string name="ext_info_age_rating">Korhatár</string>
@@ -490,8 +485,7 @@
     <string name="notification_new_chapters">Új fejezet</string>
     <string name="backup_in_progress">Biztonsági mentés már folyamatban van</string>
     <string name="not_installed">Nincs telepítve</string>
-    <string name="download_queue_size_warning">Figyelmeztetés: a tömeges letöltések a források lelassulásához és/vagy a Tachiyomi leállásához vezethetnek. Koppintson további információért.</string>
-    <string name="notification_update_skipped">%1$d frissítés kihagyva</string>
+    <string name="download_queue_size_warning">Figyelmeztetés: a tömeges letöltések a források lelassulásához és/vagy a Aniyomi leállásához vezethetnek. Koppintson további információért.</string>
     <string name="learn_more">Koppintson további információért</string>
     <string name="notification_cover_update_failed">Nem sikerült a fedlap frissítése</string>
     <string name="notification_first_add_to_library">Először adja a mangát a könyvtárhoz</string>
@@ -667,10 +661,6 @@
     <string name="pref_skip_dupe_chapters">Duplikált fejezetek átugrása</string>
     <string name="action_set_interval">Időköz állítása</string>
     <string name="action_filter_interval_custom">Egyedi lekérési időköz</string>
-    <string name="action_filter_interval_long">Lekérés hónaponta (28 nap)</string>
-    <string name="action_filter_interval_late">Késő 10+ ellenőrzés</string>
-    <string name="action_filter_interval_dropped">Dobott\? Késő 20+ és 2 hónap</string>
-    <string name="action_filter_interval_passed">Átment az ellenőrzési időszakon</string>
     <string name="action_sort_next_updated">Következő várt frissítés</string>
     <string name="pref_double_tap_zoom">Dupla koppintás a nagyításhoz</string>
     <string name="pref_hide_in_library_items">Már könyvtári bejegyzések elrejtése</string>
@@ -700,7 +690,6 @@
     <string name="action_menu_overflow_description">További lehetőségek</string>
     <string name="library_sync_complete">Könyvtár szinkronizálása elkészült</string>
     <string name="last_auto_backup_info">Utolsó automatikus biztonsági mentés: %s</string>
-    <string name="manga_modify_calculated_interval_title">Intervallum testreszabása</string>
     <string name="selected">Kiválasztott</string>
     <string name="no_scanlators_found">Nincs szkennelő-fordító találat</string>
     <string name="not_selected">Nem kiválasztott</string>

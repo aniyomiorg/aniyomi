@@ -10,7 +10,7 @@
     <string name="pref_manga_library_update_categories_details">Els elements de les categories excloses no s\'actualitzaran encara que també siguin a les categories incloses.</string>
     <string name="untrusted_extension_message">Aquesta extensió s\'ha signat amb un certificat que no és de confiança i no s\'ha activat.
 \n
-\nUna extensió maliciosa podria llegir qualsevol credencial desada al Tachiyomi o executar codi arbitrari.
+\nUna extensió maliciosa podria llegir qualsevol credencial desada al Aniyomi o executar codi arbitrari.
 \n
 \nSi confieu en aquest certificat, accepteu aquests riscos.</string>
     <string name="pref_category_delete_chapters">Suprimeix capítols</string>
@@ -32,8 +32,8 @@
     <string name="also_set_chapter_settings_for_library">Aplica-ho també a tots els elements de la biblioteca</string>
     <string name="dialog_with_checkbox_reset">Reinicia tots els capítols d\'aquest element</string>
     <string name="download_insufficient_space">No s\'han pogut baixar els capítols perquè hi ha poc espai d\'emmagatzematge</string>
-    <string name="download_queue_size_warning">Advertència: Les baixades massa grosses poden fer que les fonts es tornin més lentes i/o bloquin el Tachiyomi. Premeu per a obtenir-ne més informació.</string>
-    <string name="information_webview_required">El Tachiyomi requereix el WebView</string>
+    <string name="download_queue_size_warning">Advertència: Les baixades massa grosses poden fer que les fonts es tornin més lentes i/o bloquin el Aniyomi. Premeu per a obtenir-ne més informació.</string>
+    <string name="information_webview_required">El Aniyomi requereix el WebView</string>
     <string name="download_notifier_download_paused_chapters">Baixada pausada</string>
     <string name="channel_new_chapters_episodes">Novetats de capítols</string>
     <string name="pref_remove_exclude_categories_anime">Categories d\'anime excloses</string>

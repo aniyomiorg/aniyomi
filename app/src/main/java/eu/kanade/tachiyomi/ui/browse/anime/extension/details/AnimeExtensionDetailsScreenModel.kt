@@ -29,11 +29,6 @@ import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-private const val URL_EXTENSION_COMMITS =
-    "https://github.com/aniyomiorg/aniyomi-extensions/commits/master"
-private const val URL_EXTENSION_BLOB =
-    "https://github.com/aniyomiorg/aniyomi-extensions/blob/master"
-
 class AnimeExtensionDetailsScreenModel(
     pkgName: String,
     context: Context,
@@ -91,31 +86,6 @@ class AnimeExtensionDetailsScreenModel(
         }
     }
 
-    fun getChangelogUrl(): String {
-        val extension = state.value.extension ?: return ""
-
-        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
-        val pkgFactory = extension.pkgFactory
-        if (extension.hasChangelog) {
-            return createUrl(URL_EXTENSION_BLOB, pkgName, pkgFactory, "/CHANGELOG.md")
-        }
-
-        // Falling back on GitHub commit history because there is no explicit changelog in extension
-        return createUrl(URL_EXTENSION_COMMITS, pkgName, pkgFactory)
-    }
-
-    fun getReadmeUrl(): String {
-        val extension = state.value.extension ?: return ""
-
-        if (!extension.hasReadme) {
-            return "https://aniyomi.org/docs/faq/browse/extensions"
-        }
-
-        val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
-        val pkgFactory = extension.pkgFactory
-        return createUrl(URL_EXTENSION_BLOB, pkgName, pkgFactory, "/README.md")
-    }
-
     fun clearCookies() {
         val extension = state.value.extension ?: return
 
@@ -149,22 +119,6 @@ class AnimeExtensionDetailsScreenModel(
         state.value.extension?.sources
             ?.map { it.id }
             ?.let { toggleSource.await(it, enable) }
-    }
-
-    private fun createUrl(
-        url: String,
-        pkgName: String,
-        pkgFactory: String?,
-        path: String = "",
-    ): String {
-        return if (!pkgFactory.isNullOrEmpty()) {
-            when (path.isEmpty()) {
-                true -> "$url/multisrc/src/main/java/eu/kanade/tachiyomi/multisrc/$pkgFactory"
-                else -> "$url/multisrc/overrides/$pkgFactory/" + (pkgName.split(".").lastOrNull() ?: "") + path
-            }
-        } else {
-            url + "/src/" + pkgName.replace(".", "/") + path
-        }
     }
 
     @Immutable
