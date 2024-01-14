@@ -54,6 +54,7 @@ data class Anime(
         get() = customAnimeInfo?.genre ?: ogGenre
     val status: Long
         get() = customAnimeInfo?.status ?: ogStatus
+
     // SY <--
     val expectedNextUpdate: Instant?
         get() = nextUpdate

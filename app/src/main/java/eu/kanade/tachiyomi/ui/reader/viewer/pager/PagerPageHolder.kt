@@ -161,17 +161,17 @@ class PagerPageHolder(
         val streamFn2 = extraPage?.stream
 
         try {
-        val (bais, isAnimated, background) = withIOContext {
-            streamFn().buffered(16).use { stream ->
-                // SY -->
-                (
-                    if (extraPage != null) {
-                        streamFn2?.invoke()
-                            ?.buffered(16)
-                    } else {
-                        null
-                    }
-                    ).use { stream2 ->
+            val (bais, isAnimated, background) = withIOContext {
+                streamFn().buffered(16).use { stream ->
+                    // SY -->
+                    (
+                        if (extraPage != null) {
+                            streamFn2?.invoke()
+                                ?.buffered(16)
+                        } else {
+                            null
+                        }
+                        ).use { stream2 ->
                         if (viewer.config.dualPageSplit) {
                             process(item.first, stream)
                         } else {

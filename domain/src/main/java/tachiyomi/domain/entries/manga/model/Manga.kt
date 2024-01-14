@@ -59,6 +59,7 @@ data class Manga(
 
     val status: Long
         get() = customMangaInfo?.status ?: ogStatus
+
     // SY <--
     val expectedNextUpdate: Instant?
         get() = nextUpdate

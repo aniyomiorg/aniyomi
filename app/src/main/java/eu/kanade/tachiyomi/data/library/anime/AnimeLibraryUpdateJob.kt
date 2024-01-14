@@ -296,7 +296,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             .filterKeys { sourceManager.get(it) !is UnmeteredSource }
             .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-            notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)        }
+            notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)
+        }
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?

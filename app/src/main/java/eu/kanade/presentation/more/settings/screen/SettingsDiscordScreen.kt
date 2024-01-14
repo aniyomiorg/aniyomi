@@ -24,6 +24,8 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.i18n.MR
@@ -78,7 +80,7 @@ object SettingsDiscordScreen : SearchableSettings {
         return listOf(
             Preference.PreferenceGroup(
                 title = stringResource(R.string.connections_discord),
-                preferenceItems = listOf(
+                preferenceItems = persistentListOf(
                     Preference.PreferenceItem.SwitchPreference(
                         pref = enableDRPCPref,
                         title = stringResource(R.string.pref_enable_discord_rpc),
@@ -92,7 +94,7 @@ object SettingsDiscordScreen : SearchableSettings {
                     Preference.PreferenceItem.ListPreference(
                         pref = discordRPCStatus,
                         title = stringResource(R.string.pref_discord_status),
-                        entries = mapOf(
+                        entries = persistentMapOf(
                             -1 to stringResource(R.string.pref_discord_dnd),
                             0 to stringResource(R.string.pref_discord_idle),
                             1 to stringResource(R.string.pref_discord_online),
@@ -149,7 +151,7 @@ object SettingsDiscordScreen : SearchableSettings {
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.general_categories),
-            preferenceItems = listOf(
+            preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = discordRPCIncognitoPref,
                     title = stringResource(R.string.pref_discord_incognito),

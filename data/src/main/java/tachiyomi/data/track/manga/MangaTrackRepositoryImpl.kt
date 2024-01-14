@@ -2,6 +2,7 @@ package tachiyomi.data.track.manga
 
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.data.track.manga.MangaTrackMapper.mapTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.domain.track.manga.repository.MangaTrackRepository
 

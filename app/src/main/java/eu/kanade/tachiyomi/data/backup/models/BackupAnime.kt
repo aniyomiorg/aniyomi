@@ -71,6 +71,7 @@ data class BackupAnime(
             favoriteModifiedAt = this@BackupAnime.favoriteModifiedAt,
         )
     }
+
     // SY -->
     fun getCustomAnimeInfo(): CustomAnimeInfo? {
         if (customTitle != null ||
