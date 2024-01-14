@@ -84,7 +84,11 @@ class DiscordRPCService : Service() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(Notifications.ID_DISCORD_RPC, builder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            startForeground(
+                Notifications.ID_DISCORD_RPC,
+                builder.build(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+            )
         } else {
             startForeground(Notifications.ID_DISCORD_RPC, builder.build())
         }
