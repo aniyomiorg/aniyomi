@@ -47,7 +47,7 @@ internal class StorageStep : OnboardingStep {
         val pickStorageLocation = SettingsDataScreen.storageLocationPicker(storagePref)
 
         if (!storagePref.isSet()) {
-            val storage = File(Environment.getExternalStorageDirectory().toString() + "/Aniyomi/")
+            val storage = File(Environment.getExternalStorageDirectory().toString() + "/${stringResource(MR.strings.app_name)}/")
             if (!storage.exists()) {
                 storage.mkdirs()
             }
