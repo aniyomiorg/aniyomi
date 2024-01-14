@@ -1,7 +1,6 @@
 package eu.kanade.presentation.more.onboarding
 
 import android.content.ActivityNotFoundException
-import android.os.Environment
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +18,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.more.settings.screen.SettingsDataScreen
+import eu.kanade.tachiyomi.util.system.isTvBox
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.storage.AndroidStorageFolderProvider
 import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Button
@@ -28,11 +29,11 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 internal class StorageStep : OnboardingStep {
 
     private val storagePref = Injekt.get<StoragePreferences>().baseStorageDirectory()
+    private val folderProvider = Injekt.get<AndroidStorageFolderProvider>()
 
     private var _isComplete by mutableStateOf(false)
 
@@ -44,17 +45,9 @@ internal class StorageStep : OnboardingStep {
         val context = LocalContext.current
         val handler = LocalUriHandler.current
 
+        val isTvBox = isTvBox(LocalContext.current)
+
         val pickStorageLocation = SettingsDataScreen.storageLocationPicker(storagePref)
-
-        if (!storagePref.isSet()) {
-            val storage = File(Environment.getExternalStorageDirectory().toString() + "/${stringResource(MR.strings.app_name)}/")
-            if (!storage.exists()) {
-                storage.mkdirs()
-            }
-            storagePref.set("${storagePref.get()}/")
-            storagePref.changes()
-
-        }
 
         Column(
             modifier = Modifier.padding(16.dp),
@@ -68,17 +61,34 @@ internal class StorageStep : OnboardingStep {
                 ),
             )
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    try {
-                        pickStorageLocation.launch(null)
-                    } catch (e: ActivityNotFoundException) {
-                        context.toast(MR.strings.file_picker_error)
+            if (isTvBox) {
+                if (!storagePref.isSet()) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            val storage = folderProvider.directory()
+                            if (!storage.exists()) {
+                                storage.mkdirs()
+                            }
+                            storagePref.set(storagePref.get())
+                        },
+                    ) {
+                        Text(stringResource(MR.strings.onboarding_storage_action_create_folder))
                     }
-                },
-            ) {
-                Text(stringResource(MR.strings.onboarding_storage_action_select))
+                }
+            } else {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        try {
+                            pickStorageLocation.launch(null)
+                        } catch (e: ActivityNotFoundException) {
+                            context.toast(MR.strings.file_picker_error)
+                        }
+                    },
+                ) {
+                    Text(stringResource(MR.strings.onboarding_storage_action_select))
+                }
             }
 
             HorizontalDivider(
