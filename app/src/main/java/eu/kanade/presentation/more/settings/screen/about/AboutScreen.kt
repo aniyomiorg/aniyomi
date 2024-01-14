@@ -51,7 +51,6 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.icons.CustomIcons
 import tachiyomi.presentation.core.icons.Discord
 import tachiyomi.presentation.core.icons.Github
-import tachiyomi.presentation.core.icons.Reddit
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat
@@ -186,11 +185,6 @@ object AboutScreen : Screen() {
                             label = "Discord",
                             icon = CustomIcons.Discord,
                             url = "https://discord.gg/F32UjdJZrR",
-                        )
-                        LinkIcon(
-                            label = "Reddit",
-                            icon = CustomIcons.Reddit,
-                            url = "https://www.reddit.com/r/Aniyomi",
                         )
                         LinkIcon(
                             label = "GitHub",
