@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Pokaż wskaźnik nieprzeczytanych na ikonie Aktualizacje</string>
     <string name="default_manga_category">Domyślna kategoria</string>
     <string name="pref_manga_library_update_categories_details">Tytuły w wykluczonych kategoriach nie będą aktualizowane, nawet jeśli są również w uwzględnionych kategoriach.</string>
-    <string name="untrusted_extension_message">To rozszerzenie było podpisane niezaufanym certyfikatem i nie zostało aktywowane.
-\n
-\nZłośliwe rozszerzenie może odczytać dane logowania przechowywane w Aniyomi albo uruchomić złośliwy kod.
-\n
-\nUfając temu rozszerzeniu akceptujesz to zagrożenie.</string>
     <string name="pref_category_delete_chapters">Usuń rozdziały</string>
     <string name="pref_remove_after_marked_as_read">Po ręcznym oznaczeniu jako przeczytane</string>
     <string name="pref_remove_after_read">Usuwaj rozdziały automatycznie po przeczytaniu</string>
@@ -273,4 +268,10 @@
     <string name="playback_options_quality">Jakość</string>
     <string name="enable_volume_brightness_gestures">Włącz gesty głośności i jasności</string>
     <string name="plan_to_watch">Planowane do obejrzenia</string>
+    <string name="label_all">Wszystkie</string>
+    <string name="label_category">Kategorie</string>
+    <string name="unlock_app_title">Odblokuj Aniyomi</string>
+    <string name="action_hide">Ukryj</string>
+    <string name="label_recent_anime_updates">Aktualizacje Anime</string>
+    <string name="pref_bottom_nav_style">Styl dolnej nawigacji</string>
 </resources>

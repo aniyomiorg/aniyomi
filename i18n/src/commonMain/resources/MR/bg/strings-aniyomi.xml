@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Покажи броя на непрочетените в иконата за ъпдейти</string>
     <string name="default_manga_category">Категория по подразбиране</string>
     <string name="pref_manga_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
-    <string name="untrusted_extension_message">Следното разширение имаше непотвърден сертификат и не беше активирано.
-\n
-\nЗлонамереното разширение може да види всичката информация за вход в системата на Aniyomi или да компилира неблагонадежден код.
-\n
-\nПотвърждавайки този сертификат, вие приемате тези рискове.</string>
     <string name="pref_category_delete_chapters">Изтрий глави</string>
     <string name="pref_remove_after_marked_as_read">След маркиране като прочетено</string>
     <string name="pref_remove_after_read">След прочитане автоматично изтрийте</string>

@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Показувати кількість непрочитаних на значку оновлення</string>
     <string name="default_manga_category">Категорія манґи за замовчуванням</string>
     <string name="pref_manga_library_update_categories_details">Манґу в виключених категоріях не буде оновлено, навіть якщо вона також знаходиться у включених категоріях.</string>
-    <string name="untrusted_extension_message">Це розширення було підписано ненадійним сертифікатом та не було активовано.
-\n
-\nЗловмисне розширення может зчитувати будь-які облікові дані для входу, що зберігаються в Aniyomi, або виконувати довільний код.
-\n
-\nДовіряючи цьому сертифікату, ви приймаєте ці ризики.</string>
     <string name="pref_category_delete_chapters">Видалити розділи/епізоди</string>
     <string name="pref_remove_after_marked_as_read">Після того, як було відмічено прочитаним вручну</string>
     <string name="pref_remove_after_read">Автоматично видаляти після прочитання</string>

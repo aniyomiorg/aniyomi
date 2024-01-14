@@ -52,17 +52,12 @@
     <string name="action_start_download_internally">Gunakan pengunduhan internal</string>
     <string name="pref_player_summary">Kontrol kemajuan, pemutaran internal, pemutaran eksternal</string>
     <string name="pref_bottom_nav_style">Gaya tombol navigasi</string>
-    <string name="pref_update_only_completely_read">Dengan episode belum dilihat/chapter belum dibaca</string>
+    <string name="pref_update_only_completely_read">Lewati entri dengan episode yang belum dilihat/bab yang belum dibaca</string>
     <string name="pref_library_update_show_tab_badge">Tampilkan jumlah yang belum dilihat/dibaca pada ikon Pembaruan</string>
     <string name="default_manga_category">Kategori bawaan</string>
     <string name="default_anime_category">Kategori anime standar default</string>
     <string name="pref_manga_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
     <string name="pref_anime_library_update_categories_details">Anime dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
-    <string name="untrusted_extension_message">Ekstensi ini ditanda tangani dengan sertifikat yang tidak terpercaya dan belum diaktifkan.
-\n
-\nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Aniyomi atau mengeksekusi kode berbahaya.
-\n
-\nDengan mempercayai sertifikat ini Anda menyetujui resiko tersebut.</string>
     <string name="unofficial_extension_message_aniyomi">Ektension ini bukan dari daftar ekstension official Aniyomi.</string>
     <string name="rotation_reverse_landscape">Lanskap terbalik</string>
     <string name="rotation_sensor_portrait">Sensor potret</string>
@@ -272,4 +267,20 @@
     <string name="wsrv">wsrv.nl</string>
     <string name="pref_show_next_episode_airing_time">Tampilkan waktu tayang episode berikutnya</string>
     <string name="pref_media_control_chapter_seeking">Gunakan kontrol media untuk mencari chapter</string>
+    <string name="action_hide">Bersembunyi</string>
+    <string name="label_all">Seluruh</string>
+    <string name="label_category">Kategori</string>
+    <string name="go_to_after_opening">Lewati pembukaan</string>
+    <string name="label_recent_anime_updates">Pembaruan Anime</string>
+    <string name="unlock_app_title">Buka Kunci Aniyomi</string>
+    <string name="pref_pip_replace_with_previous">Mengganti opsi Lewati 10 detik dengan Episode sebelumnya</string>
+    <string name="pref_anime_storage_usage">Penggunaan penyimpanan Anime</string>
+    <string name="pref_manga_storage_usage">Penggunaan Penyimpanan Manga</string>
+    <string name="pref_media_control_chapter_seeking_summary">Saat diaktifkan, penggunaan berikutnya akan memanggil tombol lewati intro jika tidak ada bab yang ditemukan</string>
+    <string name="go_to_next_chapter">Bab selanjutnya</string>
+    <string name="go_to_previous_chapter">Bab sebelumnya</string>
+    <string name="delete_confirmation">Apakah kau yakin ingin menghapus \"%s\"?</string>
+    <string name="pref_category_player_advanced">Pengaturan pemain tingkat lanjut</string>
+    <string name="pref_reset_mpv_conf">Setel ulang file konfigurasi MPV</string>
+    <string name="pref_mpv_input">Edit file input MPV untuk konfigurasi pemetaan keyboard</string>
 </resources>

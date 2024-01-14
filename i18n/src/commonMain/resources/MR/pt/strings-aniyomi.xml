@@ -45,11 +45,6 @@
     <string name="default_anime_category">Categoria de anime padrão</string>
     <string name="pref_manga_library_update_categories_details">Os mangás nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
     <string name="pref_anime_library_update_categories_details">Os animes nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
-    <string name="untrusted_extension_message">Esta extensão possui um certificado não confiável e não foi ativada.
-\n
-\nUma extensão maliciosa pode ler qualquer credencial de entrada armazenada no Aniyomi ou executar código arbitrário.
-\n
-\nAo confiar neste certificado serão aceites estes riscos.</string>
     <string name="unofficial_extension_message_aniyomi">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
     <string name="pref_category_progress">Progresso</string>
     <string name="pref_progress_mark_as_seen">Em que ponto marcar o episódio como visto</string>
