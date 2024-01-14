@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">הראה מספור של פרקים שלא נקראו באייקון העדכונים</string>
     <string name="default_manga_category">קטגוריית ברירת המחדל מאנגה</string>
     <string name="pref_manga_library_update_categories_details">מנגה בקטגוריות שאינן נכללות לא יעודכנו גם אם הן נמצאות גם בקטגוריות כלולות.</string>
-    <string name="untrusted_extension_message">תוסף זה נחתם עם אישור לא מהימן ולא הופעל.
-\n
-\nתוסף זדוני יכול לקרוא את אישורי ההתחברות המאוחסנים באניומי (Aniyomi) או להריץ קוד שרירותי.
-\n
-\nעל ידי אמון באישור זה אתה מקבל סיכונים אלה.</string>
     <string name="pref_category_delete_chapters">מחק חלקים/פרקים</string>
     <string name="pref_remove_after_marked_as_read">אחרי שסומן ידנית כנקרא/נצפה</string>
     <string name="pref_remove_after_read">לאחר קריאה/צפייה מחיקה אוטומטית</string>

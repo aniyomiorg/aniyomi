@@ -52,17 +52,12 @@
     <string name="action_start_download_internally">내부 다운로더 사용</string>
     <string name="pref_player_summary">진행 상황 조정, 내부 플레이어, 외부 플레이어</string>
     <string name="pref_bottom_nav_style">하단 탐색 스타일</string>
-    <string name="pref_update_only_completely_read">안 읽은 회차가 있음</string>
+    <string name="pref_update_only_completely_read">안 읽은 회차가 있을 때 건너뛰기</string>
     <string name="pref_library_update_show_tab_badge">업데이트 아이콘에 읽지 않은 횟수 표시</string>
     <string name="default_manga_category">기본 카테고리</string>
     <string name="default_anime_category">기본 애니메이션 카테고리</string>
     <string name="pref_manga_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
     <string name="pref_anime_library_update_categories_details">제외된 카테고리의 애니메이션은 포함된 카테고리에 있어도 업데이트되지 않습니다.</string>
-    <string name="untrusted_extension_message">이 확장 앱은 신뢰할 수 없는 인증서로 서명되어 활성화되지 않았습니다.
-\n
-\n일부 악의적인 확장 앱은 Aniyomi에 저장된 로그인 정보를 읽거나 임의의 코드를 실행할 수도 있습니다.
-\n
-\n이 인증서를 신뢰하면 이러한 위험에 노출될 수 있습니다.</string>
     <string name="unofficial_extension_message_aniyomi">이 확장 앱은 Aniyomi의 공식 확장 앱이 아닙니다.</string>
     <string name="rotation_reverse_landscape">가로 반전</string>
     <string name="rotation_sensor_portrait">자동 세로</string>
@@ -197,7 +192,7 @@
     <string name="player_aniskip_ed">엔딩 건너뛰기</string>
     <string name="player_aniskip_mixedOp">MixedOp 건너뛰기</string>
     <string name="player_aniskip_recap">요약 건너뛰기</string>
-    <string name="pref_category_player_aniskip_info">AniSkip 설정</string>
+    <string name="pref_category_player_aniskip_info">AniSkip이 작동하려면 애니메이션이 MAL 또는 Anilist의 트래커가 작동되어야 합니다</string>
     <string name="pref_enable_aniskip">AniSkip 사용</string>
     <string name="pref_enable_auto_skip_ani_skip">자동 건너뛰기 사용</string>
     <string name="pref_waiting_time_aniskip">버튼 시간 초과</string>
@@ -284,4 +279,46 @@
     <string name="data_saver_ignore_jpeg">Jpeg 이미지 무시</string>
     <string name="action_hide">숨기기</string>
     <string name="pref_category_hide_hidden">카테고리 화면에서 카테고리 숨기기</string>
+    <string name="label_all">전체</string>
+    <string name="label_category">카테고리</string>
+    <string name="pref_reset_mpv_conf">MPV 구성 파일 초기화</string>
+    <string name="delete_confirmation">정말로 \"%s\"을/를 삭제하시겠습니까?</string>
+    <string name="label_storage">저장공간</string>
+    <string name="player_subtitle_settings_color_tab">색상</string>
+    <string name="player_subtitle_settings">자막 설정</string>
+    <string name="player_subtitle_empty_warning">이 영상에는 자막 트랙이 없으므로 효과가 없습니다</string>
+    <string name="player_reset_subtitles">자막을 기본으로 초기화</string>
+    <string name="player_override_ass_subtitles">ASS 자막 재정의</string>
+    <string name="player_audio_delay">오디오 딜레이</string>
+    <string name="player_audio_remember_delay">오디오 딜레이 기억하기</string>
+    <string name="player_add_external_audio_intent">오디오 파일을 선택하세요.</string>
+    <string name="player_add_external_audio">외부 오디오 추가</string>
+    <string name="player_add_external_subtitles">외부 자막 추가</string>
+    <string name="player_add_external_subtitles_intent">자막 파일을 선택하세요.</string>
+    <string name="download_slots_info">자체 호스팅 또는 무제한 소스에서만 동시에 다운로드됩니다</string>
+    <string name="player_subtitle_settings_example">다람쥐 헌 쳇바퀴에 타고파.</string>
+    <string name="theme_mocha">모카</string>
+    <string name="player_subtitle_settings_delay_tab">딜레이</string>
+    <string name="unlock_app_title">Aniyomi 잠금해재</string>
+    <string name="pref_pip_replace_with_previous">10초 건너뛰기 옵션을 이전 에피소드로 대체</string>
+    <string name="pref_anime_storage_usage">애니메이션 저장공간 사용량</string>
+    <string name="pref_manga_storage_usage">만화 저장공간 사용량</string>
+    <string name="pref_update_anime_release_grace_period">예상 애니메이션 예정 기간</string>
+    <string name="player_subtitle_settings_font_tab">폰트</string>
+    <string name="unseen">보지 않음</string>
+    <string name="pref_mpv_input">키보드 매핑 구성을 위한 MPV 입력 파일 편집</string>
+    <string name="theme_cottoncandy">솜사탕</string>
+    <string name="player_track_delay_text_field">딜레이</string>
+    <string name="player_subtitle_delay">자막 딜레이</string>
+    <string name="player_subtitle_remember_delay">자막 딜레이 기억하기</string>
+    <string name="player_font_size_text_field">폰트 크기</string>
+    <string name="player_subtitle_font_text_field">폰트 이름</string>
+    <string name="label_manga_extension_repos">만화 확장앱 저장소</string>
+    <string name="label_anime_extension_repos">애니메이션 확장앱 저장소</string>
+    <string name="settings_dialog_header">플레이어 설정</string>
+    <string name="video_custom_screen">사용자 지정 종횡비</string>
+    <string name="player_subtitle_text_color">텍스트</string>
+    <string name="player_subtitle_border_color">테두리</string>
+    <string name="player_subtitle_background_color">배경</string>
+    <string name="label_recent_anime_updates">애니메이션 업데이트</string>
 </resources>

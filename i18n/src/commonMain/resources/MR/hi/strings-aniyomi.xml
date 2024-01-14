@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">अपडेट आइकन पर अपठित संख्या दिखाएं</string>
     <string name="default_manga_category">डिफ़ॉल्ट श्रेणी</string>
     <string name="pref_manga_library_update_categories_details">बहिष्कृत श्रेणियों की पुस्तकें अपडेट नहीं की जाएंगी, भले ही वे भी शामिल श्रेणियों में हों।</string>
-    <string name="untrusted_extension_message">यह एक्सटेंशन एक अविश्वस्त प्रमाणपत्र के साथ हस्ताक्षरित हुआ था और सक्रिय नहीं हुआ था।
-\n
-\nदुर्भावनापूर्ण विस्तार, किसी भी लॉगिन क्रेडेंशियल्स को ताचियोमी में संग्रहीत या मनमाना कोड निष्पादित कर सकता है
-\n
-\nइस प्रमाणपत्र पर विश्वास करके आप इन जोखिमों को स्वीकार करते हैं।</string>
     <string name="pref_category_delete_chapters">अध्यायों को हटाएं</string>
     <string name="pref_remove_after_marked_as_read">\'पढ़ें\' के रूप में खुद से चिह्नित करने के बाद</string>
     <string name="pref_remove_after_read">पढ़ने के बाद स्वचालित रूप से हटाएं</string>

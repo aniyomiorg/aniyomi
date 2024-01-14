@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Hiển thị số lượng chưa đọc ở phần biểu tượng Cập nhật</string>
     <string name="default_manga_category">Danh mục mặc định</string>
     <string name="pref_manga_library_update_categories_details">Manga trong danh mục bị loại trừ sẽ không được cập nhật.</string>
-    <string name="untrusted_extension_message">Tiện ích mở rộng này được đăng ký bằng chứng chỉ không đáng tin cậy và chưa được kích hoạt.
-\n
-\nMột tiện ích mở rộng độc hại có thể đọc được bất kỳ thông tin đăng nhập được lưu trữ nào của Aniyomi hoặc tự ý thay đổi mã nguồn.\t
-\n
-\nBạn sẽ chấp nhận những rủi ro khi tin tưởng chứng chỉ này.</string>
     <string name="pref_category_delete_chapters">Xoá chương</string>
     <string name="pref_remove_after_marked_as_read">Sau khi đánh dấu thủ công là đã đọc</string>
     <string name="pref_remove_after_read">Tự động xóa sau khi đọc</string>

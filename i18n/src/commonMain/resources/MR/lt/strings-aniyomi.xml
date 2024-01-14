@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
     <string name="default_manga_category">Numatyta kategorija</string>
     <string name="pref_manga_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
-    <string name="untrusted_extension_message">Šis plėtinys buvo pasirašytas nepatikimu sertifikatu ir nebuvo aktyvuotas.
-\n
-\nPlėtinys, su negeranoriškais ketinimais, gali perskaityti prisijungimo duomenys patalpintus Aniyomi arba gali paleisti kenkėjišką kodą.
-\n
-\nJūs priimate šias rizikas pasitikėdami sertifikatu.</string>
     <string name="pref_category_delete_chapters">Naikinti skyrius</string>
     <string name="pref_remove_after_marked_as_read">Rankinių būdu pažymėtas, kaip skaitytas</string>
     <string name="pref_remove_after_read">Perskaičius automatiškai naikinti</string>

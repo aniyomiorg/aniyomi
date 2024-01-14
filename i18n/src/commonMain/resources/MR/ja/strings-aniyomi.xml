@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">更新アイコンで未読カウンターを表示</string>
     <string name="default_manga_category">デフォルトカテゴリー</string>
     <string name="pref_manga_library_update_categories_details">含まれているカテゴリーに入っていても、除外対象カテゴリーにある項目は更新されません。</string>
-    <string name="untrusted_extension_message">この拡張機能は信頼できない証明書でサインされているため、有効にされていません。
-\n
-\n悪意のある拡張機能はAniyomiに保存されているすべてのログイン情報を読み取ることや、任意コード実行をすることができます。
-\n
-\nこれらのリスクを受け入れ、この証明書を信頼しますか？</string>
     <string name="pref_category_delete_chapters">章を削除</string>
     <string name="pref_remove_after_marked_as_read">手動で既読にした後</string>
     <string name="pref_remove_after_read">読んだ後自動で削除</string>
