@@ -210,9 +210,6 @@ class PrivacyPolicyStep : OnboardingStep {
             BodyText(stringResource(MR.strings.onboarding_privacy_information_collection_use_data))
             Spacer(10)
 
-            BulletPoint("Sentry", "https://sentry.io/privacy/")
-            BulletPoint("Firebase Analytics", "https://www.google.com/analytics/terms/")
-
             Spacer(20)
             HorizontalDivider()
             Spacer(20)
