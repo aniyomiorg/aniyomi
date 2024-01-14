@@ -35,6 +35,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -73,6 +74,7 @@ object HomeScreen : Screen() {
     private const val TabNavigatorKey = "HomeTabs"
 
     private val libraryPreferences: LibraryPreferences by injectLazy()
+    private val uiPreferences: UiPreferences by injectLazy()
 
     val tabsNoHistory = listOf(
         AnimeLibraryTab,
@@ -107,13 +109,7 @@ object HomeScreen : Screen() {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val defaultTab = if (libraryPreferences.isDefaultHomeTabLibraryManga().get() &&
-            libraryPreferences.bottomNavStyle().get() != 2
-        ) {
-            MangaLibraryTab
-        } else {
-            AnimeLibraryTab
-        }
+        val defaultTab = uiPreferences.startScreen().get().tab
         TabNavigator(
             tab = defaultTab,
             key = TabNavigatorKey,
