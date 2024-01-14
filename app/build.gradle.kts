@@ -18,7 +18,8 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
+
+        applicationId = "com.dark.animetailv2"
 
         versionCode = 119
         versionName = "0.15.2.1"
@@ -227,6 +228,9 @@ dependencies {
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))
