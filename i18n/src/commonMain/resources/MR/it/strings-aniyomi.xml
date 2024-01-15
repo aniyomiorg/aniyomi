@@ -156,7 +156,7 @@
     <string name="action_mark_previous_as_seen">Segna i precedenti come visti</string>
     <string name="action_edit_manga_categories">Modifica categorie manga</string>
     <string name="action_view_episodes">Guarda gli episodi</string>
-    <string name="action_screen_fit">Adatta allo schermo</string>
+    <string name="action_screen_fit">Modalità adatta allo schermo</string>
     <string name="action_sort_episode_fetch_date">Data episodio</string>
     <string name="pref_always_use_external_player">Usa sempre un player esterno</string>
     <string name="pref_remove_exclude_categories_anime">Categorie anime escluse</string>
