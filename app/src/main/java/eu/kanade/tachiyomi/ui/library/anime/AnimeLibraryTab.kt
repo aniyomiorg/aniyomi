@@ -30,6 +30,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -60,7 +61,6 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
@@ -72,13 +72,11 @@ import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab() {
 
-    val libraryPreferences: LibraryPreferences by injectLazy()
-    private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
-
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
+            val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
             val title = if (fromMore) {
                 MR.strings.label_library
             } else {
@@ -148,7 +146,7 @@ object AnimeLibraryTab : Tab() {
             )
         }
 
-        val defaultTitle = if (fromMore) {
+        val defaultTitle = if (currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE) {
             stringResource(MR.strings.label_library)
         } else {
             stringResource(

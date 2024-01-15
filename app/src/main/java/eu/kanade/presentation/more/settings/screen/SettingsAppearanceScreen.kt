@@ -11,6 +11,8 @@ import androidx.core.app.ActivityCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.NavStyle
+import eu.kanade.domain.ui.model.StartScreen
 import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.domain.ui.model.ThemeMode
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
@@ -125,6 +127,25 @@ object SettingsAppearanceScreen : SearchableSettings {
                         context.stringResource(MR.strings.requires_app_restart)
                         true
                     },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = uiPreferences.startScreen(),
+                    title = stringResource(MR.strings.pref_start_screen),
+                    entries = StartScreen.entries
+                        .associateWith { stringResource(it.titleRes) }
+                        .toImmutableMap(),
+                    onValueChanged = {
+                        context.stringResource(MR.strings.requires_app_restart)
+                        true
+                    },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = uiPreferences.navStyle(),
+                    title = "Navigation Style",
+                    entries = NavStyle.entries
+                        .associateWith { stringResource(it.titleRes) }
+                        .toImmutableMap(),
+                    onValueChanged = { true },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = uiPreferences.dateFormat(),
