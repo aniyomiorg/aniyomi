@@ -40,6 +40,7 @@ class KitsuSearchManga(obj: JsonObject) {
     @CallSuper
     fun toTrack() = MangaTrackSearch.create(TrackerManager.KITSU).apply {
         remote_id = this@KitsuSearchManga.id
+        title = canonicalTitle
         total_chapters = chapterCount ?: 0
         cover_url = original ?: ""
         summary = synopsis ?: ""
@@ -77,6 +78,7 @@ class KitsuSearchAnime(obj: JsonObject) {
     @CallSuper
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.KITSU).apply {
         remote_id = this@KitsuSearchAnime.id
+        title = canonicalTitle
         total_episodes = episodeCount ?: 0
         cover_url = original ?: ""
         summary = synopsis ?: ""
