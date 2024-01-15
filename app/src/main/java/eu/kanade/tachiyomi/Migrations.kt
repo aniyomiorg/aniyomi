@@ -535,6 +535,12 @@ object Migrations {
                     remove(Preference.appStateKey("trusted_signatures"))
                 }
             }
+
+            if (oldVersion < 120) {
+                prefs.edit {
+                    remove(Preference.appStateKey("trusted_signatures"))
+                }
+            }
             return true
         }
         return false

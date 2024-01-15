@@ -171,6 +171,7 @@ object MangaLibraryTab : Tab() {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+                    navigateUp = navigateUp,
                 )
             },
             bottomBar = {
