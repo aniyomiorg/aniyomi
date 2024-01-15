@@ -124,7 +124,7 @@ object SettingsDataScreen : SearchableSettings {
         val context = LocalContext.current
         val storageDir by storageDirPref.collectAsState()
 
-        if (storageDir == storageDirPref.defaultValue()) {
+        if (!storageDirPref.isSet()) {
             return stringResource(MR.strings.no_location_set)
         }
 

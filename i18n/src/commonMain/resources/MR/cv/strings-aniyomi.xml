@@ -5,11 +5,6 @@
     <string name="action_show_manga">Ҫырава кӑтарт</string>
     <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫран</string>
     <string name="default_manga_category">Яланхилле пухмӑш</string>
-    <string name="untrusted_extension_message">Ку хушмана шанчӑклӑ мар сертификатпа алӑ пуснӑ тата ӑна активламан.
-\n
-\nСиенлӗ хушма Aniyomi-ри упранакан кирек мӗнле шут пӗлӗмсене шута илме е хӑй ирӗклӗ юма пурнӑҫлама пултарать.
-\n
-\nҪак сертификата шаннипе эсӗ ҫав теветкеле йышӑнатӑн.</string>
     <string name="pref_category_delete_chapters">Сыпӑксене катерт</string>
     <string name="pref_remove_after_marked_as_read">Вуланӑ пек палӑртнӑ хыҫҫӑн катерт</string>
     <string name="pref_remove_after_read">Вуланӑ хыҫҫӑн</string>

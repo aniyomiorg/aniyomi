@@ -4,19 +4,14 @@
     <string name="action_sort_last_manga_update">Zadnje aktualiziranje mange</string>
     <string name="action_show_manga">Prikaži manga</string>
     <string name="action_display_local_badge_manga">Lokalna manga</string>
-    <string name="pref_update_only_completely_read">S nepročitanim poglavljima</string>
+    <string name="pref_update_only_completely_read">Preskoči unose s nepogledanim epizodama / nepročitanim poglavljima</string>
     <string name="pref_library_update_show_tab_badge">Prikaži broj nepročitanih na ikoni „Aktualiziranja”</string>
     <string name="default_manga_category">Standardna manga kategorija</string>
     <string name="pref_manga_library_update_categories_details">Manga u isključenim kategorijama neće se aktualizirati čak niti ako se također nalaze u uključenim kategorijama.</string>
-    <string name="untrusted_extension_message">Ovo proširenje potpisano je nepovjerljivim certifikatom i nije aktivirano.
-\n
-\nZlonamjerno proširenje može pročitati sve podatke za prijavu koji su spremljeni u programu Aniyomi ili izvršiti proizvoljni kod.
-\n
-\nVjerujući ovom certifikatu, prihvaćaš te rizike.</string>
-    <string name="pref_category_delete_chapters">Izbriši poglavlja</string>
-    <string name="pref_remove_after_marked_as_read">Nakon ručnog označivanja kao pročitano</string>
-    <string name="pref_remove_after_read">Automatski izbriši nakon čitanja</string>
-    <string name="pref_remove_bookmarked_chapters">Dozvoli brisanje označenih poglavlja</string>
+    <string name="pref_category_delete_chapters">Izbriši poglavlja/epizode</string>
+    <string name="pref_remove_after_marked_as_read">Nakon ručnog označivinja kao pročitano/pogledano</string>
+    <string name="pref_remove_after_read">Automatski izbriši nakon čitanja/gledanja</string>
+    <string name="pref_remove_bookmarked_chapters">Dozvoli brisanje označenih poglavlja/epizoda</string>
     <string name="pref_remove_exclude_categories_manga">Isključene manga kategorije</string>
     <string name="pref_auto_update_manga_sync">Ažuriraj napredak nakon čitanja</string>
     <string name="pref_clear_chapter_cache">Isprazni predmemoriju poglavlja i epizoda</string>
@@ -186,7 +181,7 @@
     <string name="pref_skip_length">Dodirni dvaput za preskakanje vremena</string>
     <string name="pref_player_hide_controls">Sakrij kontrole playera pri otvaranju playera</string>
     <string name="pref_category_external_player">Eksterni player</string>
-    <string name="episode_download_progress">%1$d%%</string>
+    <string name="episode_download_progress">%1$d% %</string>
     <string name="pref_player_fullscreen">Prikaži sadržaj u izresku ekrana</string>
     <string name="pref_pip_on_exit">Automatski prebaci u modus slika-u-slici pri zatvaranju playera</string>
     <string name="pref_mpv_conf">Uredi MPV konfiguracijsku datoteku za daljnje postavke playera</string>
@@ -199,7 +194,7 @@
     <string name="local_manga_source">Izvor lokalnog manga</string>
     <string name="local_anime_source">Izvor lokalnog animea</string>
     <string name="delete_downloads_for_anime">Izbrisati preuzete epizode?</string>
-    <string name="episode_downloading_progress">Preuzimanje (%d%%)</string>
+    <string name="episode_downloading_progress">Preuzimanje (%d% %)</string>
     <string name="show_episode_number">Broj epizode</string>
     <string name="plan_to_watch">Planiram gledati</string>
     <string name="not_interesting">Nezanimljivo</string>
@@ -288,4 +283,43 @@
     <string name="label_recent_anime_updates">Anime aktualiziranja</string>
     <string name="download_slots_info">Istodobno će se preuzimati samo iz izvora koji se sami hostiraju ili bez mjerenja</string>
     <string name="theme_cottoncandy">Cotton Candy</string>
+    <string name="player_subtitle_empty_warning">Nema utjecaja jer ovaj video nema titlova</string>
+    <string name="label_storage">Memorija</string>
+    <string name="player_audio_remember_delay">Zapamti kašnjenje zvuka</string>
+    <string name="player_override_ass_subtitles">Nemoj koristiti ASS titlove</string>
+    <string name="player_subtitle_background_color">Pozadina</string>
+    <string name="player_subtitle_text_color">Tekst</string>
+    <string name="player_subtitle_border_color">Rub</string>
+    <string name="player_reset_subtitles">Obnovi titlove na zadane vrijednosti</string>
+    <string name="player_track_delay_text_field">Kašnjenja</string>
+    <string name="player_add_external_audio_intent">Odaberi audio datoteku.</string>
+    <string name="player_add_external_subtitles_intent">Odaberi datoteku titlova.</string>
+    <string name="player_font_size_text_field">Veličina fonta</string>
+    <string name="player_subtitle_font_text_field">Ime fonta</string>
+    <string name="player_subtitle_settings">Postavke titlova</string>
+    <string name="unlock_app_title">Otključaj Aniyomi</string>
+    <string name="label_all">Sve</string>
+    <string name="label_category">Kategorija</string>
+    <string name="pref_pip_replace_with_previous">Zamjenjuje opciju Preskoči 10 sekundi s prethodnom epizodom</string>
+    <string name="pref_anime_storage_usage">Korištenje Anime spremišta</string>
+    <string name="pref_manga_storage_usage">Korištenje Manga spremišta</string>
+    <string name="player_subtitle_remember_delay">Zapamti kašnjenje titlova</string>
+    <string name="player_subtitle_settings_font_tab">Font</string>
+    <string name="player_audio_delay">Kašnjenje zvuka</string>
+    <string name="licensed_manga_chapters_error">Licencirano – nema stavki za prikaz</string>
+    <string name="pref_update_anime_release_grace_period">Očekivano razdoblje odgode izdavanje animea</string>
+    <string name="unseen">Nepogledano</string>
+    <string name="player_add_external_audio">Dodaj eksternu audio snimku</string>
+    <string name="player_add_external_subtitles">Dodaj eksterne titlove</string>
+    <string name="video_custom_screen">Prilagođeni omjer slike</string>
+    <string name="label_manga_extension_repos">Repozitoriji Manga proširenja</string>
+    <string name="label_anime_extension_repos">Repozitoriji Anime proširenja</string>
+    <string name="delete_confirmation">Stvarno želiš izbrisati „%s”?</string>
+    <string name="pref_reset_mpv_conf">Obnovi MPV konfiguracijsku datoteku</string>
+    <string name="settings_dialog_header">Postavke playera</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_settings_delay_tab">Kašnjenje</string>
+    <string name="player_subtitle_settings_color_tab">Boja</string>
+    <string name="player_subtitle_delay">Kašnjenje titlova</string>
+    <string name="pref_mpv_input">Uredi MPV ulaznu datoteku za konfiguraciju mapiranja tipkovnice</string>
 </resources>

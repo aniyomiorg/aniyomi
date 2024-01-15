@@ -7,11 +7,6 @@
     <string name="pref_library_update_show_tab_badge">Erakutsi irakurri gabekoen kopurua Eguneraketak ikonoan</string>
     <string name="default_manga_category">Kategoria lehentsia</string>
     <string name="pref_manga_library_update_categories_details">Baztertutako kategorietako mangak ez dira eguneratuko, sarturiko kategorietan egon arren.</string>
-    <string name="untrusted_extension_message">Luzapen hau fidagarria ez den ziurtagiri batekin sinatu zen eta ez zen aktibatu.
-\n
-\nLuzapen maltzur batek Aniyomi-n gordetako saio-hasierako kredentzialak irakur ditzake edo kode arbitrarioa exekutatu.
-\n
-\nZiurtagiri honetaz fidatzean, arrisku hauek onartzen dituzu.</string>
     <string name="pref_category_delete_chapters">Ezabatu kapituluak</string>
     <string name="pref_remove_after_marked_as_read">Irakurria bezala eskuz markatu ondoren</string>
     <string name="pref_remove_after_read">Irakurri ondoren automatikoki ezabatu</string>

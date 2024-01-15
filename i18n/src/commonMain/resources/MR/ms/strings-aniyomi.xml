@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Tunjuk bilangan belum dibaca pada ikon Kemas kini</string>
     <string name="default_manga_category">Kategori lalai</string>
     <string name="pref_manga_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
-    <string name="untrusted_extension_message">Sambungan ini telah ditandatangani dengan sijil tidak dipercayai dan ia tidak diaktifkan.
-\n
-\nSambungan yang berniat jahat kemungkinan membaca sebarang kelayakan log masuk yang di simpan dalam Aniyomi atau melaksanakan kod sesuka hati.
-\n
-\nDengan mempercayai sijil ini, anda menerima risiko tersebut.</string>
     <string name="pref_category_delete_chapters">Padam bab</string>
     <string name="pref_remove_after_marked_as_read">Selepas secara manual ditandakan sebagai dibaca</string>
     <string name="pref_remove_after_read">Selepas membaca padam secara automatik</string>

@@ -4,11 +4,6 @@
     <string name="action_display_local_badge_manga">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
     <string name="default_manga_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>
     <string name="pref_manga_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
-    <string name="untrusted_extension_message">ಈ ವಿಸ್ತರಣೆಯನ್ನು ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲದ ಪ್ರಮಾಣಪತ್ರದೊಂದಿಗೆ ಸಹಿ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿಲ್ಲ.
-\n
-\nದುರುದ್ದೇಶಪೂರಿತ ವಿಸ್ತರಣೆಯು ತಚಿಯೋಮಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗಿರುವ ಯಾವುದೇ ಲಾಗಿನ್ ರುಜುವಾತುಗಳನ್ನು ಓದಬಹುದು ಅಥವಾ ಅನಿಯಂತ್ರಿತ ಕೋಡ್ ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಬಹುದು.
-\n
-\nಈ ಪ್ರಮಾಣಪತ್ರವನ್ನು ನಂಬುವ ಮೂಲಕ ನೀವು ಈ ಅಪಾಯಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತೀರಿ.</string>
     <string name="pref_category_delete_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
     <string name="pref_remove_after_marked_as_read">ಓದಿದಂತೆ ಗುರುತಿಸಿದಾಗ ತೆಗೆದುಹಾಕಿ</string>
     <string name="pref_remove_after_read">ಓದಿದ ನಂತರ</string>

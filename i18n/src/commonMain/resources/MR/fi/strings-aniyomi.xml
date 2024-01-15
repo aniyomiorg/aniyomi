@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Näytä lukemattomien määrä päivitys ikoneissa</string>
     <string name="default_manga_category">Oletus kategoria</string>
     <string name="pref_manga_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
-    <string name="untrusted_extension_message">Tämä laajennus on allekirjoitettu luottamattomalla sertifikaatilla ja sitä ei ole aktivoitu.
-\n
-\nHaitallinen laajennus voisi lukea mahdolliset kirjautumistiedot Aniyomista tai suorittaa luvatonta koodia.
-\n
-\nLuottamalla tähän sertifikaattiin hyväksyt nämä riskit.</string>
     <string name="pref_category_delete_chapters">Poista luvut</string>
     <string name="pref_remove_after_marked_as_read">Manuaalisesti luetuksi merkitsemisen jälkeen</string>
     <string name="pref_remove_after_read">Lukemisen jälkeen</string>

@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">แสดงไอคอนจำนวนตอนที่ยังไม่ได้อ่าน</string>
     <string name="default_manga_category">หมวดหมู่เริ่มต้น</string>
     <string name="pref_manga_library_update_categories_details">มังงะในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
-    <string name="untrusted_extension_message">ส่วนขยายนี้ลงนามด้วยใบรับรองที่ไม่น่าเชื่อถือและจะไม่ถูกเปิดใช้งาน
-\n
-\nส่วนขยายที่เป็นอันตรายสามารถอ่านข้อมูลการเข้าสู่ระบบที่จัดเก็บไว้ใน Aniyomi หรือเรียกใช้โค้ดโดยอำเภอใจ
-\n
-\nการเชื่อถือใบรับรองนี้แสดงว่าคุณยอมรับความเสี่ยงเหล่านี้</string>
     <string name="pref_category_delete_chapters">การลบตอน</string>
     <string name="pref_remove_after_marked_as_read">หลังจากทําเครื่องหมายว่าอ่านแล้วด้วยตนเอง</string>
     <string name="pref_remove_after_read">ลบอัตโนมัติหลังจากที่อ่านแล้ว</string>

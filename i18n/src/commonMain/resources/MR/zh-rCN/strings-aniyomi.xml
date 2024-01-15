@@ -52,17 +52,12 @@
     <string name="action_start_download_internally">使用内置下载器</string>
     <string name="pref_player_summary">播放进度设置，内置播放器和外置播放器</string>
     <string name="pref_bottom_nav_style">底部导航样式</string>
-    <string name="pref_update_only_completely_read">有未读章节</string>
+    <string name="pref_update_only_completely_read">跳过未看剧集/未读章节</string>
     <string name="pref_library_update_show_tab_badge">在“更新”图标上显示未读章数</string>
     <string name="default_manga_category">默认漫画分类</string>
     <string name="default_anime_category">默认动画分类</string>
     <string name="pref_manga_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的漫画将不会被自动更新。</string>
     <string name="pref_anime_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
-    <string name="untrusted_extension_message">此插件的签名证书并不可信，因此未被启用。
-\n
-\n恶意的插件可能会读取储存在 Aniyomi 中的任何登录凭据或执行任意代码。
-\n
-\n信任这个证书，即代表你愿意承担上述风险。</string>
     <string name="unofficial_extension_message_aniyomi">此插件不是Aniyomi官方插件。</string>
     <string name="rotation_reverse_landscape">横向翻转</string>
     <string name="rotation_sensor_portrait">竖向传感器</string>
@@ -201,4 +196,11 @@
     <string name="action_global_manga_search">全局漫画搜索</string>
     <string name="action_global_anime_search">全局动画搜索</string>
     <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
+    <string name="pref_hide_in_manga_library_items">隐藏库中已有的漫画</string>
+    <string name="action_hide">隐藏</string>
+    <string name="label_all">所有标签</string>
+    <string name="pref_hide_in_anime_library_items">隐藏库中已有的动画</string>
+    <string name="label_category">所有分类</string>
+    <string name="label_recent_anime_updates">动画更新</string>
+    <string name="label_watched_episodes">已观看</string>
 </resources>
