@@ -10,11 +10,6 @@
     <string name="pref_library_update_show_tab_badge">تعداد خوانده‌نشده را بر روی آیکون به‌روزرسانی نشان بده</string>
     <string name="default_manga_category">دسته بندی پیشفرض</string>
     <string name="pref_manga_library_update_categories_details">مانگاهایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
-    <string name="untrusted_extension_message">این افزونه با یک گواهی نامطمئن امضا شده است و فعال نشده است.
-\n
-\nیک افزونه مخرب می تواند هر گونه طلاعات ورود به سیستم ذخیره شده تاچیومی را بخواند یا کدهای دلخواه(احتمالا خطرناک) را اجرا کند.
-\n
-\nبا اعتماد به این گواهی شما این خطرات را می‌پذیرید.</string>
     <string name="pref_category_delete_chapters">حذف قسمت ها</string>
     <string name="pref_remove_after_marked_as_read">بعد از آن‌هایی که به صورت دستی به عنوان خوانده‌شده علامت‌گذاری شده‌اند</string>
     <string name="pref_remove_after_read">بعد از خواندن به‌صورت خودکار پاک کن</string>

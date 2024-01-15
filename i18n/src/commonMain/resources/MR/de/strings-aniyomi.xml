@@ -58,11 +58,6 @@
     <string name="default_anime_category">Standard-Animekategorie</string>
     <string name="pref_manga_library_update_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
     <string name="pref_anime_library_update_categories_details">Anime in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
-    <string name="untrusted_extension_message">Diese Erweiterung ist mit einem nicht vertrauenswürdigen Zertifikat unterschrieben und wurde nicht aktiviert.
-\n
-\nEine bösartige Erweiterung könnte in Aniyomi gespeicherte Anmeldedaten auslesen oder einen schädlichen Code ausführen.
-\n
-\nDurch das Vertrauen dieses Zertifikats akzeptierst du diese Risiken.</string>
     <string name="unofficial_extension_message_aniyomi">Diese Erweiterung stammt nicht von der offiziellen Aniyomi-Erweiterungsliste.</string>
     <string name="rotation_reverse_landscape">Umgekehrtes Querformat</string>
     <string name="rotation_sensor_portrait">Sensor-Hochformat</string>

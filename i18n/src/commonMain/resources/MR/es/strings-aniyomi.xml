@@ -52,16 +52,11 @@
     <string name="action_start_download_internally">Usar descargador interno</string>
     <string name="pref_player_summary">Control de progreso, reproductor interno, reproductor externo</string>
     <string name="pref_bottom_nav_style">Estilo inferior de navegación</string>
-    <string name="pref_update_only_completely_read">Con episodio(s) sin ver/capítulo(s) sin leer</string>
+    <string name="pref_update_only_completely_read">Saltar entradas con episodio(s) no visto(s)/capítulo(s) no leído(s)</string>
     <string name="default_manga_category">Categoría predeterminada de manga</string>
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
-    <string name="untrusted_extension_message">Esta extensión está firmada por una fuente sin certificar y por lo tanto no se ha activado.
-\n
-\nUna extensión maliciosa puede leer credenciales de inicio guardadas en Aniyomi o ejecutar cualquier tipo de código en tu dispositivo.
-\n
-\nAl confiar en este certificado aceptas estos riesgos.</string>
     <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
     <string name="rotation_reverse_landscape">Paisaje invertido</string>
     <string name="rotation_sensor_portrait">Retrato del sensor</string>
@@ -285,4 +280,46 @@
     <string name="label_recent_anime_updates">Actualizaciones del anime</string>
     <string name="theme_cottoncandy">Algodón de azúcar</string>
     <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
+    <string name="player_subtitle_settings_font_tab">Fuente</string>
+    <string name="player_subtitle_settings">Ajustes de los subtítulos</string>
+    <string name="player_subtitle_settings_color_tab">Color</string>
+    <string name="dialog_with_checkbox_reset">Restablecer todos los capítulos de este manga</string>
+    <string name="settings_dialog_header">Ajustes del reproductor</string>
+    <string name="player_audio_delay">Retraso del audio</string>
+    <string name="player_audio_remember_delay">Recordar el retardo del audio</string>
+    <string name="player_track_delay_text_field">Retraso(s)</string>
+    <string name="label_all">Todo</string>
+    <string name="label_category">Categoría</string>
+    <string name="player_add_external_audio">Añadir un sonido externo</string>
+    <string name="player_subtitle_font_text_field">Nombre de la fuente</string>
+    <string name="player_subtitle_empty_warning">No tiene efecto porque no hay pistas de subtítulos en este vídeo</string>
+    <string name="player_add_external_subtitles">Añadir subtítulos externos</string>
+    <string name="player_add_external_subtitles_intent">Seleccione un archivo con los subtítulos.</string>
+    <string name="label_storage">Almacenamiento</string>
+    <string name="player_font_size_text_field">Tamaño de la fuente</string>
+    <string name="unlock_app_title">Desbloquear Aniyomi</string>
+    <string name="pref_pip_replace_with_previous">Sustituir la opción saltar 10 segundos por episodio anterior</string>
+    <string name="pref_reset_mpv_conf">Restablecer el archivo de configuración MPV</string>
+    <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
+    <string name="pref_manga_storage_usage">Uso del espacio de almacenamiento del manga</string>
+    <string name="delete_confirmation">¿Seguro que desea borrar \"%s\"?</string>
+    <string name="licensed_manga_chapters_error">Con licencia - No hay artículos para mostrar</string>
+    <string name="video_custom_screen">Relación del aspecto personalizada</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_delay">Retraso de los subtítulos</string>
+    <string name="player_subtitle_remember_delay">Recuerde el retraso de los subtítulos</string>
+    <string name="player_subtitle_text_color">Texto</string>
+    <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
+    <string name="pref_mpv_input">Editar el archivo de entrada MPV para la configuración de la asignación del teclado</string>
+    <string name="player_subtitle_settings_delay_tab">Demora</string>
+    <string name="player_add_external_audio_intent">Selecciona un archivo de audio.</string>
+    <string name="player_override_ass_subtitles">Anular los subtítulos de ASS</string>
+    <string name="player_reset_subtitles">Restablecer los subtítulos por defecto</string>
+    <string name="player_subtitle_background_color">Fondo</string>
+    <string name="unseen">Sin ver</string>
+    <string name="label_anime_extension_repos">Repositorios de extensiones Anime</string>
+    <string name="label_manga_extension_repos">Repositorios de extensiones Manga</string>
+    <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
+    <string name="player_subtitle_border_color">Borde</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar el recuento de no vistos/no leídos en el icono actualizaciones</string>
 </resources>
