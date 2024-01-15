@@ -71,8 +71,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 libraryPreferences,
             ),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
-            getChapterSwipeActionsGroup(libraryPreferences),
             getEpisodeSwipeActionsGroup(libraryPreferences),
+            getChapterSwipeActionsGroup(libraryPreferences),
         )
     }
 
