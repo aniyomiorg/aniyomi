@@ -322,4 +322,5 @@
     <string name="action_play_externally">Смотреть в другом плеере</string>
     <string name="action_download_unseen">Скачать не просмотренные эпизоды</string>
     <string name="pref_category_internal_player">Внутренний плеер</string>
+    <string name="onboarding_storage_action_create_folder">Создать папку Aniyomi по умолчанию</string>
 </resources>
