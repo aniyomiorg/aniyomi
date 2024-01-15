@@ -27,7 +27,8 @@ import kotlinx.coroutines.plus
 import soup.compose.material.motion.animation.materialSharedAxisX
 import soup.compose.material.motion.animation.rememberSlideDistance
 import tachiyomi.presentation.core.util.collectAsState
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 /**
  * For invoking back press to the parent activity
@@ -35,16 +36,16 @@ import uy.kohesive.injekt.injectLazy
 @SuppressLint("ComposeCompositionLocalUsage")
 val LocalBackPress: ProvidableCompositionLocal<(() -> Unit)?> = staticCompositionLocalOf { null }
 
+private val uiPreferences: UiPreferences = Injekt.get()
+
 abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
 
     override val key: ScreenKey = uniqueScreenKey
     open suspend fun onReselect(navigator: Navigator) {}
 
+
     @Composable
-    fun currentNavigationStyle(): NavStyle {
-        val uiPreferences: UiPreferences by injectLazy()
-        return uiPreferences.navStyle().collectAsState().value
-    }
+    fun currentNavigationStyle(): NavStyle = uiPreferences.navStyle().collectAsState().value
 }
 
 abstract class Screen : Screen {
