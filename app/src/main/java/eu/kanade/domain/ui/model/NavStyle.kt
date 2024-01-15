@@ -19,15 +19,16 @@ import tachiyomi.i18n.MR
 
 enum class NavStyle(
     val titleRes: StringResource,
-    val moreTab: Tab
+    val moreTab: Tab,
 ) {
     MOVE_MANGA_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_manga, moreTab = MangaLibraryTab),
     MOVE_UPDATES_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_updates, moreTab = UpdatesTab),
-    MOVE_HISTORY_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_history, moreTab = HistoriesTab);
+    MOVE_HISTORY_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_history, moreTab = HistoriesTab),
+    ;
 
     val moreIcon: ImageVector
         @Composable
-        get() = when(this) {
+        get() = when (this) {
             MOVE_MANGA_TO_MORE -> Icons.Outlined.CollectionsBookmark
             MOVE_UPDATES_TO_MORE -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
             MOVE_HISTORY_TO_MORE -> Icons.Outlined.History
@@ -41,7 +42,7 @@ enum class NavStyle(
                 UpdatesTab,
                 HistoriesTab,
                 BrowseTab(),
-                MoreTab
+                MoreTab,
             ).apply { remove(this@NavStyle.moreTab) }
         }
 }

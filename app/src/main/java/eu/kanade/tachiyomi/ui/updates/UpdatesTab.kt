@@ -28,7 +28,7 @@ object UpdatesTab : Tab() {
         get() {
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
-            val index: UShort = when(currentNavigationStyle()) {
+            val index: UShort = when (currentNavigationStyle()) {
                 NavStyle.MOVE_UPDATES_TO_MORE -> 5u
                 NavStyle.MOVE_HISTORY_TO_MORE -> 2u
                 NavStyle.MOVE_MANGA_TO_MORE -> 1u

@@ -43,7 +43,6 @@ abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
     override val key: ScreenKey = uniqueScreenKey
     open suspend fun onReselect(navigator: Navigator) {}
 
-
     @Composable
     fun currentNavigationStyle(): NavStyle = uiPreferences.navStyle().collectAsState().value
 }

@@ -33,7 +33,7 @@ object HistoriesTab : Tab() {
         get() {
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
-            val index: UShort = when(currentNavigationStyle()) {
+            val index: UShort = when (currentNavigationStyle()) {
                 NavStyle.MOVE_HISTORY_TO_MORE -> 5u
                 else -> 2u
             }
