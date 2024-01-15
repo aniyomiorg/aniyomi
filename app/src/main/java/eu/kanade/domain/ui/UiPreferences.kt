@@ -38,7 +38,7 @@ class UiPreferences(
 
     fun startScreen() = preferenceStore.getEnum("start_screen", StartScreen.ANIME)
 
-    fun navStyle() = preferenceStore.getEnum("bottom_nav_style", NavStyle.MOVE_HISTORY_TO_MORE)
+    fun navStyle() = preferenceStore.getEnum("bottom_rail_nav_style", NavStyle.MOVE_HISTORY_TO_MORE)
 
     companion object {
         fun dateFormat(format: String): DateFormat = when (format) {
