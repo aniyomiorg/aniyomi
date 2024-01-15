@@ -12,6 +12,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -25,16 +26,17 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
-data class HistoriesTab(
-    private val fromMore: Boolean,
-) : Tab() {
+object HistoriesTab : Tab() {
 
     override val options: TabOptions
         @Composable
         get() {
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
-            val index: UShort = if (fromMore) 5u else 2u
+            val index: UShort = when (currentNavigationStyle()) {
+                NavStyle.MOVE_HISTORY_TO_MORE -> 5u
+                else -> 2u
+            }
             return TabOptions(
                 index = index,
                 title = stringResource(MR.strings.history),
@@ -49,6 +51,7 @@ data class HistoriesTab(
     @Composable
     override fun Content() {
         val context = LocalContext.current
+        val fromMore = currentNavigationStyle() == NavStyle.MOVE_HISTORY_TO_MORE
         // Hoisted for history tab's search bar
         val mangaHistoryScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
         val mangaSearchQuery by mangaHistoryScreenModel.query.collectAsState()
