@@ -40,7 +40,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 
 object MoreTab : Tab() {
 
@@ -73,7 +72,8 @@ object MoreTab : Tab() {
             incognitoMode = screenModel.incognitoMode,
             onIncognitoModeChange = { screenModel.incognitoMode = it },
             isFDroid = context.isInstalledFromFDroid(),
-            onClickAlt = { navigator.push(altOpen!!) },
+            bottomNavStyle = screenModel.bottomNavStyle,
+            onClickAlt = { navigator.push(screenModel.bottomNavStyle.moreTab) },
             onClickDownloadQueue = { navigator.push(DownloadsTab()) },
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
@@ -85,18 +85,18 @@ object MoreTab : Tab() {
     }
 }
 
-private val uiPreferences: UiPreferences by injectLazy()
 
-private val altOpen = uiPreferences.navStyle().get().moreTab
 
 private class MoreScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
+    uiPreferences: UiPreferences  = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
 
     var downloadedOnly by preferences.downloadedOnly().asState(screenModelScope)
     var incognitoMode by preferences.incognitoMode().asState(screenModelScope)
+    val bottomNavStyle by uiPreferences.navStyle().asState(screenModelScope)
 
     private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
         DownloadQueueState.Stopped,

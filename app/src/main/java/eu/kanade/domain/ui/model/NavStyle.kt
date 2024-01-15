@@ -20,8 +20,7 @@ import tachiyomi.i18n.MR
 enum class NavStyle(
     val titleRes: StringResource,
     val tabs: List<Tab>,
-    val moreLabel: StringResource,
-    val moreTab: Tab? = null,
+    val moreTab: Tab,
 ) {
     MOVE_MANGA_TO_MORE(
         titleRes = MR.strings.pref_bottom_nav_no_manga,
@@ -32,7 +31,6 @@ enum class NavStyle(
             BrowseTab(),
             MoreTab,
         ),
-        moreLabel = MR.strings.label_manga,
         moreTab = MangaLibraryTab,
     ),
     MOVE_UPDATES_TO_MORE(
@@ -44,7 +42,6 @@ enum class NavStyle(
             BrowseTab(),
             MoreTab,
         ),
-        moreLabel = MR.strings.label_recent_updates,
         moreTab = UpdatesTab(fromMore = true, inMiddle = false),
     ),
     MOVE_HISTORY_TO_MORE(
@@ -56,7 +53,6 @@ enum class NavStyle(
             BrowseTab(),
             MoreTab,
         ),
-        moreLabel = MR.strings.label_history,
         moreTab = HistoriesTab(fromMore = true),
     );
 

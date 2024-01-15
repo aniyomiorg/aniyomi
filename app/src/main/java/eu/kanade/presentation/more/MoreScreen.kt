@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
-import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
@@ -35,7 +35,6 @@ import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import uy.kohesive.injekt.injectLazy
 
 @Composable
 fun MoreScreen(
@@ -45,6 +44,7 @@ fun MoreScreen(
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
     isFDroid: Boolean,
+    bottomNavStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,
     onClickCategories: () -> Unit,
@@ -105,15 +105,10 @@ fun MoreScreen(
 
             item { HorizontalDivider() }
 
-            val uiPreferences: UiPreferences by injectLazy()
-
             item {
-                val bottomNavStyle = uiPreferences.navStyle().get()
-                val titleRes = bottomNavStyle.moreLabel
-                val icon = bottomNavStyle.moreIcon
                 TextPreferenceWidget(
-                    title = stringResource(titleRes),
-                    icon = icon,
+                    title = bottomNavStyle.moreTab.options.title,
+                    icon = bottomNavStyle.moreIcon,
                     onPreferenceClick = onClickAlt,
                 )
             }
