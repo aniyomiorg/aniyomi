@@ -76,7 +76,6 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
 ) {
-
     /**
      * Store for persisting downloads across restarts.
      */
@@ -724,7 +723,24 @@ class AnimeDownloader(
                                 ?: tmpDir.createFile("$filename.part${rangeList.indexOf(range)}.tmp")!!
                         // try to open the file and append the bytes
                         try {
-                            response.body.source().saveTo(file.openOutputStream(true))
+                            response.body.source().use { source ->
+                                file.openOutputStream(true).use { output ->
+                                    val sink = output.sink().buffer()
+                                    val buffer = ByteArray(4 * 1024)
+                                    var totalBytesRead = 0L
+                                    var bytesRead: Int
+                                    while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
+                                        // Check if the download is paused, if so, wait
+                                        while (isPaused) {
+                                            delay(1000) // Wait for 1 second before checking again
+                                        }
+                                        // Write the bytes to the file
+                                        sink.write(buffer, 0, bytesRead)
+                                        sink.emitCompleteSegments()
+                                        totalBytesRead += bytesRead
+                                    }
+                                }
+                            }
                         } catch (e: Exception) {
                             response.close()
                             failed = true
