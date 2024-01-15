@@ -61,6 +61,7 @@ import tachiyomi.presentation.core.components.material.NavigationBar
 import tachiyomi.presentation.core.components.material.NavigationRail
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -76,10 +77,9 @@ object HomeScreen : Screen() {
 
     private val uiPreferences: UiPreferences by injectLazy()
 
-    val tabs = uiPreferences.navStyle().get().tabs
-
     @Composable
     override fun Content() {
+        val navStyle by uiPreferences.navStyle().collectAsState()
         val navigator = LocalNavigator.currentOrThrow
         val defaultTab = uiPreferences.startScreen().get().tab
         TabNavigator(
@@ -92,7 +92,7 @@ object HomeScreen : Screen() {
                     startBar = {
                         if (isTabletUi()) {
                             NavigationRail {
-                                tabs.fastForEach {
+                                navStyle.tabs.fastForEach {
                                     NavigationRailItem(it)
                                 }
                             }
@@ -109,7 +109,7 @@ object HomeScreen : Screen() {
                                 exit = shrinkVertically(),
                             ) {
                                 NavigationBar {
-                                    tabs.fastForEach {
+                                    navStyle.tabs.fastForEach {
                                         NavigationBarItem(it)
                                     }
                                 }
@@ -161,8 +161,8 @@ object HomeScreen : Screen() {
                             is Tab.Animelib -> AnimeLibraryTab
                             is Tab.Library -> MangaLibraryTab
                             is Tab.Updates -> UpdatesTab(
-                                NavStyle.MOVE_UPDATES_TO_MORE.tabs == tabs,
-                                NavStyle.MOVE_HISTORY_TO_MORE.tabs == tabs,
+                                NavStyle.MOVE_UPDATES_TO_MORE.tabs == navStyle.tabs,
+                                NavStyle.MOVE_HISTORY_TO_MORE.tabs == navStyle.tabs,
                             )
                             is Tab.History -> HistoriesTab(false)
                             is Tab.Browse -> BrowseTab(it.toExtensions)

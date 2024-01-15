@@ -64,18 +64,21 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab() {
 
     val uiPreferences: UiPreferences by injectLazy()
-    private val fromMore = uiPreferences.navStyle().get() == NavStyle.MOVE_MANGA_TO_MORE
+    var fromMore = uiPreferences.navStyle().get() == NavStyle.MOVE_MANGA_TO_MORE
 
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
+            val navStyle by uiPreferences.navStyle().collectAsState()
+            fromMore = navStyle == NavStyle.MOVE_MANGA_TO_MORE
             val title = if (fromMore) {
                 MR.strings.label_library
             } else {
