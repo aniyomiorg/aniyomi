@@ -97,14 +97,6 @@ object MoreTab : Tab() {
     }
 }
 
-private val libraryPreferences: LibraryPreferences by injectLazy()
-
-private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true)
-    1 -> UpdatesTab(fromMore = true, inMiddle = false)
-    else -> MangaLibraryTab
-}
-
 private class MoreScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
