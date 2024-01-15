@@ -36,6 +36,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -73,38 +74,9 @@ object HomeScreen : Screen() {
     private const val TabFadeDuration = 200
     private const val TabNavigatorKey = "HomeTabs"
 
-    private val libraryPreferences: LibraryPreferences by injectLazy()
     private val uiPreferences: UiPreferences by injectLazy()
 
-    val tabsNoHistory = listOf(
-        AnimeLibraryTab,
-        MangaLibraryTab,
-        UpdatesTab(fromMore = false, inMiddle = true),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    val tabsNoUpdates = listOf(
-        AnimeLibraryTab,
-        MangaLibraryTab,
-        HistoriesTab(false),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    val tabsNoManga = listOf(
-        AnimeLibraryTab,
-        UpdatesTab(fromMore = false, inMiddle = false),
-        HistoriesTab(false),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    var tabs = when (libraryPreferences.bottomNavStyle().get()) {
-        0 -> tabsNoHistory
-        1 -> tabsNoUpdates
-        else -> tabsNoManga
-    }
+    val tabs = uiPreferences.navStyle().get().tabs
 
     @Composable
     override fun Content() {
@@ -189,8 +161,8 @@ object HomeScreen : Screen() {
                             is Tab.Animelib -> AnimeLibraryTab
                             is Tab.Library -> MangaLibraryTab
                             is Tab.Updates -> UpdatesTab(
-                                libraryPreferences.bottomNavStyle().get() == 1,
-                                libraryPreferences.bottomNavStyle().get() == 0,
+                                NavStyle.MOVE_UPDATES_TO_MORE.tabs == tabs,
+                                NavStyle.MOVE_HISTORY_TO_MORE.tabs == tabs,
                             )
                             is Tab.History -> HistoriesTab(false)
                             is Tab.Browse -> BrowseTab(it.toExtensions)

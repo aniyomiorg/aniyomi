@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -25,12 +26,9 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
-import eu.kanade.tachiyomi.ui.history.HistoriesTab
-import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
 import eu.kanade.tachiyomi.ui.storage.StorageTab
-import eu.kanade.tachiyomi.ui.updates.UpdatesTab
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +36,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -76,7 +73,7 @@ object MoreTab : Tab() {
             incognitoMode = screenModel.incognitoMode,
             onIncognitoModeChange = { screenModel.incognitoMode = it },
             isFDroid = context.isInstalledFromFDroid(),
-            onClickAlt = { navigator.push(altOpen) },
+            onClickAlt = { navigator.push(altOpen!!) },
             onClickDownloadQueue = { navigator.push(DownloadsTab()) },
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
@@ -88,13 +85,9 @@ object MoreTab : Tab() {
     }
 }
 
-private val libraryPreferences: LibraryPreferences by injectLazy()
+private val uiPreferences: UiPreferences by injectLazy()
 
-private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
-    0 -> HistoriesTab(true)
-    1 -> UpdatesTab(fromMore = true, inMiddle = false)
-    else -> MangaLibraryTab
-}
+private val altOpen = uiPreferences.navStyle().get().moreTab
 
 private class MoreScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
