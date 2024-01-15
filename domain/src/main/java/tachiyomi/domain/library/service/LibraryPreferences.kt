@@ -14,13 +14,6 @@ class LibraryPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
 
-    // Common options
-
-    fun bottomNavStyle() = preferenceStore.getInt("bottom_nav_style", 0)
-
-    fun isDefaultHomeTabLibraryManga() =
-        preferenceStore.getBoolean("default_home_tab_library", false)
-
     fun displayMode() = preferenceStore.getObject(
         "pref_display_mode_library",
         LibraryDisplayMode.default,
