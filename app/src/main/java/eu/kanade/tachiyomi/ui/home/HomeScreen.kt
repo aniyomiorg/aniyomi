@@ -35,6 +35,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -59,6 +60,7 @@ import tachiyomi.presentation.core.components.material.NavigationBar
 import tachiyomi.presentation.core.components.material.NavigationRail
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.pluralStringResource
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -72,48 +74,13 @@ object HomeScreen : Screen() {
     private const val TabFadeDuration = 200
     private const val TabNavigatorKey = "HomeTabs"
 
-    private val libraryPreferences: LibraryPreferences by injectLazy()
-
-    val tabsNoHistory = listOf(
-        AnimeLibraryTab,
-        MangaLibraryTab,
-        UpdatesTab(fromMore = false, inMiddle = true),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    val tabsNoUpdates = listOf(
-        AnimeLibraryTab,
-        MangaLibraryTab,
-        HistoriesTab(false),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    val tabsNoManga = listOf(
-        AnimeLibraryTab,
-        UpdatesTab(fromMore = false, inMiddle = false),
-        HistoriesTab(false),
-        BrowseTab(),
-        MoreTab,
-    )
-
-    var tabs = when (libraryPreferences.bottomNavStyle().get()) {
-        0 -> tabsNoHistory
-        1 -> tabsNoUpdates
-        else -> tabsNoManga
-    }
+    private val uiPreferences: UiPreferences by injectLazy()
 
     @Composable
     override fun Content() {
+        val navStyle by uiPreferences.navStyle().collectAsState()
         val navigator = LocalNavigator.currentOrThrow
-        val defaultTab = if (libraryPreferences.isDefaultHomeTabLibraryManga().get() &&
-            libraryPreferences.bottomNavStyle().get() != 2
-        ) {
-            MangaLibraryTab
-        } else {
-            AnimeLibraryTab
-        }
+        val defaultTab = uiPreferences.startScreen().get().tab
         TabNavigator(
             tab = defaultTab,
             key = TabNavigatorKey,
@@ -124,7 +91,7 @@ object HomeScreen : Screen() {
                     startBar = {
                         if (isTabletUi()) {
                             NavigationRail {
-                                tabs.fastForEach {
+                                navStyle.tabs.fastForEach {
                                     NavigationRailItem(it)
                                 }
                             }
@@ -136,12 +103,12 @@ object HomeScreen : Screen() {
                                 showBottomNavEvent.receiveAsFlow().collectLatest { value = it }
                             }
                             AnimatedVisibility(
-                                visible = bottomNavVisible,
+                                visible = bottomNavVisible && tabNavigator.current != navStyle.moreTab,
                                 enter = expandVertically(),
                                 exit = shrinkVertically(),
                             ) {
                                 NavigationBar {
-                                    tabs.fastForEach {
+                                    navStyle.tabs.fastForEach {
                                         NavigationBarItem(it)
                                     }
                                 }
@@ -174,34 +141,31 @@ object HomeScreen : Screen() {
                 }
             }
 
-            val goToAnimelibTab = { tabNavigator.current = AnimeLibraryTab }
+            val goToAnimeLibTab = { tabNavigator.current = AnimeLibraryTab }
             BackHandler(
                 enabled = tabNavigator.current != AnimeLibraryTab,
-                onBack = goToAnimelibTab,
+                onBack = goToAnimeLibTab,
             )
 
             LaunchedEffect(Unit) {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
-                        goToAnimelibTab()
+                        goToAnimeLibTab()
                         AnimeLibraryTab.search(it)
                     }
                 }
                 launch {
                     openTabEvent.receiveAsFlow().collectLatest {
                         tabNavigator.current = when (it) {
-                            is Tab.Animelib -> AnimeLibraryTab
+                            is Tab.AnimeLib -> AnimeLibraryTab
                             is Tab.Library -> MangaLibraryTab
-                            is Tab.Updates -> UpdatesTab(
-                                libraryPreferences.bottomNavStyle().get() == 1,
-                                libraryPreferences.bottomNavStyle().get() == 0,
-                            )
-                            is Tab.History -> HistoriesTab(false)
+                            is Tab.Updates -> UpdatesTab
+                            is Tab.History -> HistoriesTab
                             is Tab.Browse -> BrowseTab(it.toExtensions)
                             is Tab.More -> MoreTab
                         }
 
-                        if (it is Tab.Animelib && it.animeIdToOpen != null) {
+                        if (it is Tab.AnimeLib && it.animeIdToOpen != null) {
                             navigator.push(AnimeScreen(it.animeIdToOpen))
                         }
                         if (it is Tab.Library && it.mangaIdToOpen != null) {
@@ -348,7 +312,7 @@ object HomeScreen : Screen() {
     }
 
     sealed interface Tab {
-        data class Animelib(val animeIdToOpen: Long? = null) : Tab
+        data class AnimeLib(val animeIdToOpen: Long? = null) : Tab
         data class Library(val mangaIdToOpen: Long? = null) : Tab
         data object Updates : Tab
         data object History : Tab

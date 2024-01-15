@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -20,17 +21,18 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
-data class UpdatesTab(
-    private val fromMore: Boolean,
-    private val inMiddle: Boolean,
-) : Tab() {
+object UpdatesTab : Tab() {
 
     override val options: TabOptions
         @Composable
         get() {
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
-            val index: UShort = if (fromMore) 5u else if (inMiddle) 2u else 1u
+            val index: UShort = when (currentNavigationStyle()) {
+                NavStyle.MOVE_UPDATES_TO_MORE -> 5u
+                NavStyle.MOVE_HISTORY_TO_MORE -> 2u
+                NavStyle.MOVE_MANGA_TO_MORE -> 1u
+            }
             return TabOptions(
                 index = index,
                 title = stringResource(MR.strings.label_recent_updates),
@@ -44,6 +46,7 @@ data class UpdatesTab(
     @Composable
     override fun Content() {
         val context = LocalContext.current
+        val fromMore = currentNavigationStyle() == NavStyle.MOVE_UPDATES_TO_MORE
 
         TabbedScreen(
             titleRes = MR.strings.label_recent_updates,
