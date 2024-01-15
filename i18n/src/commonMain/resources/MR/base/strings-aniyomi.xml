@@ -333,4 +333,8 @@
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
     <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
+    <string name="multi_thread_download">Multi-threaded downloading for anime</string>
+    <string name="multi_thread_download_summary">Enable downloading anime using multiple threads</string>
+    <string name="multi_thread_download_threads_number">Thread count</string>
+    <string name="multi_thread_download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
 </resources>
