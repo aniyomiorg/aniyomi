@@ -133,14 +133,14 @@
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
     <string name="also_set_episode_settings_for_library">Aplicar también a todo el anime en mi biblioteca</string>
     <string name="no_episodes_error">No se han encontrado episodios</string>
-    <string name="watching">Mirando</string>
+    <string name="watching">Viendo</string>
     <string name="currently_reading">Actualmente leyendo</string>
     <string name="currently_watching">Actualmente viendo</string>
     <string name="plan_to_watch">Planear para ver</string>
     <string name="not_interesting">No es interesante</string>
     <string name="want_to_read">Quiero leer</string>
     <string name="want_to_watch">Quiero ver</string>
-    <string name="repeating_anime">Volver a mirar</string>
+    <string name="repeating_anime">Volviendo a ver</string>
     <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro?</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progreso: %1$s/%2$s</string>
@@ -326,4 +326,5 @@
     <string name="multi_thread_download">Descarga multiproceso para el anime</string>
     <string name="multi_thread_download_summary">Habilite la descarga de anime usando subprocesos múltiples</string>
     <string name="multi_thread_download_threads_number">Número de hilos</string>
+    <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
 </resources>
