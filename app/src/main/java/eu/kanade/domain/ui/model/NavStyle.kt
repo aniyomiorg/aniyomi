@@ -3,6 +3,7 @@ package eu.kanade.domain.ui.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import dev.icerock.moko.resources.StringResource
@@ -20,7 +21,6 @@ enum class NavStyle(
     val titleRes: StringResource,
     val tabs: List<Tab>,
     val moreLabel: StringResource,
-    val moreIcon: ImageVector,
     val moreTab: Tab? = null,
 ) {
     MOVE_MANGA_TO_MORE(
@@ -33,7 +33,6 @@ enum class NavStyle(
             MoreTab,
         ),
         moreLabel = MR.strings.label_manga,
-        moreIcon = Icons.Outlined.CollectionsBookmark,
         moreTab = MangaLibraryTab,
     ),
     MOVE_UPDATES_TO_MORE(
@@ -46,7 +45,6 @@ enum class NavStyle(
             MoreTab,
         ),
         moreLabel = MR.strings.label_recent_updates,
-        moreIcon = ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp),
         moreTab = UpdatesTab(fromMore = true, inMiddle = false),
     ),
     MOVE_HISTORY_TO_MORE(
@@ -59,7 +57,14 @@ enum class NavStyle(
             MoreTab,
         ),
         moreLabel = MR.strings.label_history,
-        moreIcon = Icons.Outlined.History,
         moreTab = HistoriesTab(fromMore = true),
-    ),
+    );
+
+    val moreIcon: ImageVector
+        @Composable
+        get() = when(this) {
+            MOVE_MANGA_TO_MORE -> Icons.Outlined.CollectionsBookmark
+            MOVE_UPDATES_TO_MORE -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
+            MOVE_HISTORY_TO_MORE -> Icons.Outlined.History
+        }
 }
