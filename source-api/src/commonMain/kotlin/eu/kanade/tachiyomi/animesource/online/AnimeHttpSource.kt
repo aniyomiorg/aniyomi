@@ -85,11 +85,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @return a unique ID for the source
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    protected fun generateId(
-        name: String,
-        lang: String,
-        versionId: Int,
-    ): Long {
+    protected fun generateId(name: String, lang: String, versionId: Int): Long {
         val key = "${name.lowercase()}/$lang/$versionId"
         val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
         return (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE
@@ -98,10 +94,9 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     /**
      * Headers builder for requests. Implementations can override this method for custom headers.
      */
-    protected open fun headersBuilder() =
-        Headers.Builder().apply {
-            add("User-Agent", network.defaultUserAgentProvider())
-        }
+    protected open fun headersBuilder() = Headers.Builder().apply {
+        add("User-Agent", network.defaultUserAgentProvider())
+    }
 
     /**
      * Visible name of the source.
@@ -152,11 +147,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         "Use the non-RxJava API instead",
         ReplaceWith("getSearchAnime"),
     )
-    override fun fetchSearchAnime(
-        page: Int,
-        query: String,
-        filters: AnimeFilterList,
-    ): Observable<AnimesPage> {
+    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
         return Observable.defer {
             try {
                 client.newCall(searchAnimeRequest(page, query, filters)).asObservableSuccess()
@@ -178,11 +169,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param query the search query.
      * @param filters the list of filters to apply.
      */
-    protected abstract fun searchAnimeRequest(
-        page: Int,
-        query: String,
-        filters: AnimeFilterList,
-    ): Request
+    protected abstract fun searchAnimeRequest(page: Int, query: String, filters: AnimeFilterList): Request
 
     /**
      * Parses the response from the site and returns a [AnimesPage] object.
@@ -466,17 +453,13 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param video the video whose link has to be fetched
      */
-    protected open fun videoRequest(
-        video: Video,
-        bytes: Long = 0L,
-    ): Request {
+    protected open fun videoRequest(video: Video, bytes: Long = 0L): Request {
         val headers = video.headers ?: headers
-        val newHeaders =
-            if (bytes > 0L) {
-                Headers.Builder().addAll(headers).add("Range", "bytes=$bytes-").build()
-            } else {
-                null
-            }
+        val newHeaders = if (bytes > 0L) {
+            Headers.Builder().addAll(headers).add("Range", "bytes=$bytes-").build()
+        } else {
+            null
+        }
         return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 
@@ -550,10 +533,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param episode the episode to be added.
      * @param anime the anime of the episode.
      */
-    open fun prepareNewEpisode(
-        episode: SEpisode,
-        anime: SAnime,
-    ) {}
+    open fun prepareNewEpisode(episode: SEpisode, anime: SAnime) {}
 
     /**
      * Returns the list of filters for the source.
