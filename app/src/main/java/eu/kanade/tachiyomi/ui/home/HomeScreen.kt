@@ -36,7 +36,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -104,7 +103,7 @@ object HomeScreen : Screen() {
                                 showBottomNavEvent.receiveAsFlow().collectLatest { value = it }
                             }
                             AnimatedVisibility(
-                                visible = bottomNavVisible,
+                                visible = bottomNavVisible && tabNavigator.current != navStyle.moreTab,
                                 enter = expandVertically(),
                                 exit = shrinkVertically(),
                             ) {
@@ -142,34 +141,31 @@ object HomeScreen : Screen() {
                 }
             }
 
-            val goToAnimelibTab = { tabNavigator.current = AnimeLibraryTab }
+            val goToAnimeLibTab = { tabNavigator.current = AnimeLibraryTab }
             BackHandler(
                 enabled = tabNavigator.current != AnimeLibraryTab,
-                onBack = goToAnimelibTab,
+                onBack = goToAnimeLibTab,
             )
 
             LaunchedEffect(Unit) {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
-                        goToAnimelibTab()
+                        goToAnimeLibTab()
                         AnimeLibraryTab.search(it)
                     }
                 }
                 launch {
                     openTabEvent.receiveAsFlow().collectLatest {
                         tabNavigator.current = when (it) {
-                            is Tab.Animelib -> AnimeLibraryTab
+                            is Tab.AnimeLib -> AnimeLibraryTab
                             is Tab.Library -> MangaLibraryTab
-                            is Tab.Updates -> UpdatesTab(
-                                NavStyle.MOVE_UPDATES_TO_MORE.tabs == navStyle.tabs,
-                                NavStyle.MOVE_HISTORY_TO_MORE.tabs == navStyle.tabs,
-                            )
-                            is Tab.History -> HistoriesTab(false)
+                            is Tab.Updates -> UpdatesTab
+                            is Tab.History -> HistoriesTab
                             is Tab.Browse -> BrowseTab(it.toExtensions)
                             is Tab.More -> MoreTab
                         }
 
-                        if (it is Tab.Animelib && it.animeIdToOpen != null) {
+                        if (it is Tab.AnimeLib && it.animeIdToOpen != null) {
                             navigator.push(AnimeScreen(it.animeIdToOpen))
                         }
                         if (it is Tab.Library && it.mangaIdToOpen != null) {
@@ -316,7 +312,7 @@ object HomeScreen : Screen() {
     }
 
     sealed interface Tab {
-        data class Animelib(val animeIdToOpen: Long? = null) : Tab
+        data class AnimeLib(val animeIdToOpen: Long? = null) : Tab
         data class Library(val mangaIdToOpen: Long? = null) : Tab
         data object Updates : Tab
         data object History : Tab

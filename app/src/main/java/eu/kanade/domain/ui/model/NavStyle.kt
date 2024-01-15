@@ -19,42 +19,11 @@ import tachiyomi.i18n.MR
 
 enum class NavStyle(
     val titleRes: StringResource,
-    val tabs: List<Tab>,
-    val moreTab: Tab,
+    val moreTab: Tab
 ) {
-    MOVE_MANGA_TO_MORE(
-        titleRes = MR.strings.pref_bottom_nav_no_manga,
-        tabs = listOf(
-            AnimeLibraryTab,
-            UpdatesTab(fromMore = false, inMiddle = false),
-            HistoriesTab(fromMore = false),
-            BrowseTab(),
-            MoreTab,
-        ),
-        moreTab = MangaLibraryTab,
-    ),
-    MOVE_UPDATES_TO_MORE(
-        titleRes = MR.strings.pref_bottom_nav_no_updates,
-        tabs = listOf(
-            AnimeLibraryTab,
-            MangaLibraryTab,
-            HistoriesTab(fromMore = false),
-            BrowseTab(),
-            MoreTab,
-        ),
-        moreTab = UpdatesTab(fromMore = true, inMiddle = false),
-    ),
-    MOVE_HISTORY_TO_MORE(
-        titleRes = MR.strings.pref_bottom_nav_no_history,
-        tabs = listOf(
-            AnimeLibraryTab,
-            MangaLibraryTab,
-            UpdatesTab(fromMore = false, inMiddle = true),
-            BrowseTab(),
-            MoreTab,
-        ),
-        moreTab = HistoriesTab(fromMore = true),
-    );
+    MOVE_MANGA_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_manga, moreTab = MangaLibraryTab),
+    MOVE_UPDATES_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_updates, moreTab = UpdatesTab),
+    MOVE_HISTORY_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_history, moreTab = HistoriesTab);
 
     val moreIcon: ImageVector
         @Composable
@@ -62,5 +31,17 @@ enum class NavStyle(
             MOVE_MANGA_TO_MORE -> Icons.Outlined.CollectionsBookmark
             MOVE_UPDATES_TO_MORE -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
             MOVE_HISTORY_TO_MORE -> Icons.Outlined.History
+        }
+
+    val tabs: List<Tab>
+        get() {
+            return mutableListOf(
+                AnimeLibraryTab,
+                MangaLibraryTab,
+                UpdatesTab,
+                HistoriesTab,
+                BrowseTab(),
+                MoreTab
+            ).apply { remove(this@NavStyle.moreTab) }
         }
 }

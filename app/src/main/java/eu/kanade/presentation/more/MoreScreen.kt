@@ -44,7 +44,7 @@ fun MoreScreen(
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
     isFDroid: Boolean,
-    bottomNavStyle: NavStyle,
+    navStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,
     onClickCategories: () -> Unit,
@@ -107,8 +107,8 @@ fun MoreScreen(
 
             item {
                 TextPreferenceWidget(
-                    title = bottomNavStyle.moreTab.options.title,
-                    icon = bottomNavStyle.moreIcon,
+                    title = navStyle.moreTab.options.title,
+                    icon = navStyle.moreIcon,
                     onPreferenceClick = onClickAlt,
                 )
             }

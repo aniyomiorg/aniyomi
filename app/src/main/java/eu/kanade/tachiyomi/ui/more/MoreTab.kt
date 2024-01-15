@@ -18,7 +18,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -65,6 +64,7 @@ object MoreTab : Tab() {
         val navigator = LocalNavigator.currentOrThrow
         val screenModel = rememberScreenModel { MoreScreenModel() }
         val downloadQueueState by screenModel.downloadQueueState.collectAsState()
+        val navStyle = currentNavigationStyle()
         MoreScreen(
             downloadQueueStateProvider = { downloadQueueState },
             downloadedOnly = screenModel.downloadedOnly,
@@ -72,8 +72,8 @@ object MoreTab : Tab() {
             incognitoMode = screenModel.incognitoMode,
             onIncognitoModeChange = { screenModel.incognitoMode = it },
             isFDroid = context.isInstalledFromFDroid(),
-            bottomNavStyle = screenModel.bottomNavStyle,
-            onClickAlt = { navigator.push(screenModel.bottomNavStyle.moreTab) },
+            navStyle = navStyle,
+            onClickAlt = { navigator.push(navStyle.moreTab) },
             onClickDownloadQueue = { navigator.push(DownloadsTab()) },
             onClickCategories = { navigator.push(CategoriesTab()) },
             onClickStats = { navigator.push(StatsTab()) },
@@ -90,13 +90,11 @@ object MoreTab : Tab() {
 private class MoreScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
-    uiPreferences: UiPreferences  = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
 
     var downloadedOnly by preferences.downloadedOnly().asState(screenModelScope)
     var incognitoMode by preferences.incognitoMode().asState(screenModelScope)
-    val bottomNavStyle by uiPreferences.navStyle().asState(screenModelScope)
 
     private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
         DownloadQueueState.Stopped,

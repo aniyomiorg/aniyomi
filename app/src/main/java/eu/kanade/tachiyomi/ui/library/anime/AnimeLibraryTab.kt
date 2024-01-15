@@ -29,7 +29,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
@@ -64,21 +63,16 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
-import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab() {
 
-    val uiPreferences: UiPreferences by injectLazy()
-    var fromMore = uiPreferences.navStyle().get() == NavStyle.MOVE_MANGA_TO_MORE
-
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
-            val navStyle by uiPreferences.navStyle().collectAsState()
-            fromMore = navStyle == NavStyle.MOVE_MANGA_TO_MORE
+            val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
             val title = if (fromMore) {
                 MR.strings.label_library
             } else {
@@ -128,7 +122,7 @@ object AnimeLibraryTab : Tab() {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
-        val defaultTitle = if (fromMore) {
+        val defaultTitle = if (currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE) {
             stringResource(MR.strings.label_library)
         } else {
             stringResource(
