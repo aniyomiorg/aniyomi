@@ -728,7 +728,7 @@ class AnimeDownloader(
                                     val sink = output.sink().buffer()
                                     val buffer = ByteArray(4 * 1024)
                                     var totalBytesRead = 0L
-                                    var bytesRead: Int =source.read(buffer)
+                                    var bytesRead: Int = source.read(buffer)
                                     while (bytesRead.toLong() != -1L) {
                                         // Check if the download is paused, if so, wait
                                         while (isPaused) {
@@ -761,7 +761,8 @@ class AnimeDownloader(
             job.join()
         }
         try {
-            val file0 = tmpDir.findFile("$filename.part0.tmp")?: tmpDir.createFile("$filename.part0.tmp")!!
+            val mergeSize = (10.toFloat()/(nParts-1).toFloat())
+            val file0 = tmpDir.findFile("$filename.part0.tmp") ?: tmpDir.createFile("$filename.part0.tmp")!!
             // merge all parts into file0
             for (i in 1 until nParts) {
                 val part = tmpDir.findFile("$filename.part$i.tmp")
@@ -772,6 +773,7 @@ class AnimeDownloader(
                     }
                 }
                 part.delete()
+                video.progress = 90+ ((mergeSize * i).toInt())
             }
             file0.renameTo("$filename.mp4")
         } catch (e: Exception) {
