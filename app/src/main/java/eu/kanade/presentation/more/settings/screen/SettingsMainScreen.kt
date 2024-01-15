@@ -187,16 +187,16 @@ object SettingsMainScreen : Screen() {
             screen = SettingsLibraryScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_reader,
-            subtitleRes = MR.strings.pref_reader_summary,
-            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
-            screen = SettingsReaderScreen,
-        ),
-        Item(
             titleRes = MR.strings.pref_category_player,
             subtitleRes = MR.strings.pref_player_summary,
             icon = Icons.Outlined.PlayCircleOutline,
             screen = SettingsPlayerScreen,
+        ),
+        Item(
+            titleRes = MR.strings.pref_category_reader,
+            subtitleRes = MR.strings.pref_reader_summary,
+            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
+            screen = SettingsReaderScreen,
         ),
         Item(
             titleRes = MR.strings.pref_category_downloads,

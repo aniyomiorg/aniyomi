@@ -274,19 +274,6 @@ object SettingsDownloadScreen : SearchableSettings {
             title = stringResource(MR.strings.download_ahead),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = downloadPreferences.autoDownloadWhileReading(),
-                    title = stringResource(MR.strings.auto_download_while_reading),
-                    entries = listOf(0, 2, 3, 5, 10)
-                        .associateWith {
-                            if (it == 0) {
-                                stringResource(MR.strings.disabled)
-                            } else {
-                                pluralStringResource(MR.plurals.next_unread_chapters, count = it, it)
-                            }
-                        }
-                        .toImmutableMap(),
-                ),
-                Preference.PreferenceItem.ListPreference(
                     pref = downloadPreferences.autoDownloadWhileWatching(),
                     title = stringResource(MR.strings.auto_download_while_watching),
                     entries = listOf(0, 2, 3, 5, 10)
@@ -295,6 +282,19 @@ object SettingsDownloadScreen : SearchableSettings {
                                 stringResource(MR.strings.disabled)
                             } else {
                                 pluralStringResource(MR.plurals.next_unseen_episodes, count = it, it)
+                            }
+                        }
+                        .toImmutableMap(),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = downloadPreferences.autoDownloadWhileReading(),
+                    title = stringResource(MR.strings.auto_download_while_reading),
+                    entries = listOf(0, 2, 3, 5, 10)
+                        .associateWith {
+                            if (it == 0) {
+                                stringResource(MR.strings.disabled)
+                            } else {
+                                pluralStringResource(MR.plurals.next_unread_chapters, count = it, it)
                             }
                         }
                         .toImmutableMap(),
