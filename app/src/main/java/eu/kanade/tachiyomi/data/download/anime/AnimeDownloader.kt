@@ -775,7 +775,6 @@ class AnimeDownloader(
             }
             file0.renameTo("$filename.mp4")
         } catch (e: Exception) {
-            System.err.println(e.message)
             throw e
         }
         if (failed) {
