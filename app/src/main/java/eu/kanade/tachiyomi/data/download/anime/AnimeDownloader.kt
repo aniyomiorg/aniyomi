@@ -761,7 +761,7 @@ class AnimeDownloader(
             job.join()
         }
         try {
-            val mergeSize = (10.toFloat()/(nParts-1).toFloat())
+            val mergeSize = (10.toFloat() / (nParts - 1).toFloat())
             val file0 = tmpDir.findFile("$filename.part0.tmp") ?: tmpDir.createFile("$filename.part0.tmp")!!
             // merge all parts into file0
             for (i in 1 until nParts) {
@@ -773,7 +773,7 @@ class AnimeDownloader(
                     }
                 }
                 part.delete()
-                video.progress = 90+ ((mergeSize * i).toInt())
+                video.progress = 90 + ((mergeSize * i).toInt())
             }
             file0.renameTo("$filename.mp4")
         } catch (e: Exception) {
