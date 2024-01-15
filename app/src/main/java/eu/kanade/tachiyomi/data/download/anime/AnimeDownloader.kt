@@ -728,8 +728,8 @@ class AnimeDownloader(
                                     val sink = output.sink().buffer()
                                     val buffer = ByteArray(4 * 1024)
                                     var totalBytesRead = 0L
-                                    var bytesRead: Int
-                                    while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
+                                    var bytesRead: Int = source.read(buffer)
+                                    while (bytesRead.toLong() != -1L) {
                                         // Check if the download is paused, if so, wait
                                         while (isPaused) {
                                             delay(1000) // Wait for 1 second before checking again
@@ -738,7 +738,10 @@ class AnimeDownloader(
                                         sink.write(buffer, 0, bytesRead)
                                         sink.emitCompleteSegments()
                                         totalBytesRead += bytesRead
+                                        bytesRead = source.read(buffer)
                                     }
+                                    sink.flush()
+                                    sink.close()
                                 }
                             }
                         } catch (e: Exception) {
@@ -757,36 +760,25 @@ class AnimeDownloader(
         for (job in partJobList) {
             job.join()
         }
-        val partFiles =
-            (0 until nParts).toMutableList().map { i ->
-                tmpDir.findFile("$filename.part$i.tmp")
-                    ?: tmpDir.createFile("$filename.part$i.tmp")!!
-            }.toMutableList()
-        val mergeSize = 10 / (nParts - 1).toFloat()
         try {
-            val finalPartFile = partFiles.first()
-            finalPartFile.openOutputStream().use { output ->
-                for (i in 1 until nParts) {
-                    val partFile = partFiles[i]
-                    partFile.openInputStream().use { input ->
-                        output.write(input.readBytes())
+            val mergeSize = (10.toFloat() / (nParts - 1).toFloat())
+            val file0 = tmpDir.findFile("$filename.part0.tmp") ?: tmpDir.createFile("$filename.part0.tmp")!!
+            // merge all parts into file0
+            for (i in 1 until nParts) {
+                val part = tmpDir.findFile("$filename.part$i.tmp")
+                    ?: tmpDir.createFile("$filename.part$i.tmp")!!
+                part.openInputStream().use { input ->
+                    file0.openOutputStream(true).use { output ->
+                        input.copyTo(output)
                     }
-                    video.progress = 90 + (mergeSize * (i)).toInt()
                 }
+                part.delete()
+                video.progress = 90 + ((mergeSize * i).toInt())
             }
-            finalPartFile.renameTo("$filename.mp4")
+            file0.renameTo("$filename.mp4")
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR) { e.message ?: "Unknown error" }
-            failed = true
+            throw e
         }
-
-        for (i in 0 until nParts) {
-            val part =
-                tmpDir.findFile("$filename.part$i.tmp")
-                    ?: continue
-            part.delete()
-        }
-
         if (failed) {
             for (i in 0 until nParts) {
                 val part =
