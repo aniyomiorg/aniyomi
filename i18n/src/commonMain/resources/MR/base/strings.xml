@@ -176,7 +176,7 @@
     <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
 
     <!-- Preferences -->
-      <!-- Subsections -->
+    <!-- Subsections -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_appearance">Appearance</string>
     <string name="pref_category_library">Library</string>
@@ -249,6 +249,11 @@
     <string name="update_weekly">Weekly</string>
     <string name="pref_library_update_restriction">Automatic updates device restrictions</string>
     <string name="connected_to_wifi">Only on Wi-Fi</string>
+    <string name="multi_thread_download">Multi-threaded downloading for anime</string>
+    <string name="multi_thread_download_summary">Enable downloading anime using multiple threads</string>
+    <!--    multi_thread_download_threads_number-->
+    <string name="multi_thread_download_threads_number">Thread count</string>
+    <string name="multi_thread_download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
     <string name="network_not_metered">Only on unmetered network</string>
     <string name="charging">When charging</string>
     <string name="restrictions">Restrictions: %s</string>

@@ -45,14 +45,23 @@ object SettingsDownloadScreen : SearchableSettings {
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
             initial = runBlocking { getAnimeCategories.await() },
         )
-
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
-
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(MR.strings.connected_to_wifi),
+            ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = downloadPreferences.multithreadingDownload(),
+                title = stringResource(MR.strings.multi_thread_download),
+                subtitle = stringResource(MR.strings.multi_thread_download_summary),
+            ),
+            Preference.PreferenceItem.ListPreference(
+                pref = downloadPreferences.numberOfThreads(),
+                title = stringResource(MR.strings.multi_thread_download_threads_number),
+                subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
+                entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
