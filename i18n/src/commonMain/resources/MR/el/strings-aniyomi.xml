@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Εμφάνιση του αριθμού των μη αναγνωσμένων στο εικονίδιο Ενημερώσεις</string>
     <string name="default_manga_category">Προεπιλεγμένη κατηγορία</string>
     <string name="pref_manga_library_update_categories_details">Οι καταχωρίσεις σε εξαιρούμενες κατηγορίες δε θα ενημερώνονται ακόμη και αν περιλαμβάνονται επίσης σε κατηγορίες που περιλαμβάνονται.</string>
-    <string name="untrusted_extension_message">Αυτή η επέκταση υπογράφηκε με μη αξιόπιστο πιστοποιητικό και δεν ενεργοποιήθηκε.
-\n
-\nΜια κακόβουλη επέκταση θα μπορούσε να διαβάσει τα διαπιστευτήρια σύνδεσης που είναι αποθηκευμένα στο Aniyomi ή να εκτελέσει αυθαίρετο κώδικα.
-\n
-\nΕμπιστεύοντας αυτό το πιστοποιητικό αποδέχεστε αυτούς τους κινδύνους.</string>
     <string name="pref_category_delete_chapters">Διαγραφή κεφαλαίων</string>
     <string name="pref_remove_after_marked_as_read">Αφού επισημανθεί χειροκίνητα ως αναγνωσμένο</string>
     <string name="pref_remove_after_read">Αυτόματη διαγραφή μετά την ανάγνωση</string>

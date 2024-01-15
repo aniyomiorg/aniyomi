@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">अपडेट आइकनमा नपढिएको संख्या देखाउनुहोस्</string>
     <string name="default_manga_category">पूर्वनिर्धारित वर्ग</string>
     <string name="pref_manga_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
-    <string name="untrusted_extension_message">यो एक्सटेनशन एक अविश्वसनीय प्रमाणपत्र संग हस्ताक्षर गरिएको थियो र सक्रिय गरिएको थिएन।
-\n
-\nएउटा खराब एक्सटेनशनले ताचियोमीमा भण्डारण गरिएका कुनै पनि लगइन प्रमाणहरू पढ्न वा स्वेच्छाचारी कोड कार्यान्वयन गर्न सक्छ।
-\n
-\nयस प्रमाणपत्रमा विश्वास गरेर तपाईंले यी जोखिमहरू स्वीकार गर्नुहुन्छ।</string>
     <string name="pref_category_delete_chapters">अध्यायहरू हटाउनुहोस्</string>
     <string name="pref_remove_after_marked_as_read">आफै पढिएको रूपमा चिन्ह लगाइएपछि</string>
     <string name="pref_remove_after_read">पढिसकेपछि स्वचालित रूपमा हटाउनुहोस्</string>

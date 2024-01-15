@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">Vis antall uleste på oppdateringsikonet</string>
     <string name="default_manga_category">Standard kategori</string>
     <string name="pref_manga_library_update_categories_details">Oppførninger i utelukkede kategorier vil ikke bli oppdatert selv om de også er i inkluderte kategorier.</string>
-    <string name="untrusted_extension_message">Denne utvidelsen ble signert med et usikkert sertifikat, og ble dermed ikke aktivert
-\n
-\nEn skadelig utvidelse kan lese innloggingsdetaljer lagret i Aniyomi, eller kjøre ukjent kode.
-\n
-\nVed å godta dette sertifikatet aksepterer du overstående risikoer.</string>
     <string name="pref_category_delete_chapters">Slett kapitler</string>
     <string name="pref_remove_after_marked_as_read">Etter manuelt markert som lest</string>
     <string name="pref_remove_after_read">Slett automatisk etter lesing</string>

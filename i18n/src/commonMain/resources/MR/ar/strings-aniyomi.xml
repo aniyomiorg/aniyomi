@@ -8,11 +8,6 @@
     <string name="pref_library_update_show_tab_badge">إظهار عدد الغير مقروء/ الغير مشاهد على أيقونة التحديثات</string>
     <string name="default_manga_category">فئة المانغا الإفتراضية</string>
     <string name="pref_manga_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
-    <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
-\n
-\nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في \"Ainyomi\" أو تنفيذ تعليمات برمجية عشوائية.
-\n
-\nبالثقة في هذه الشهادة تقبل هذه المخاطر.</string>
     <string name="pref_category_delete_chapters">حذف الفصول</string>
     <string name="pref_remove_after_marked_as_read">بعد وضع علامة \"مقروءة\" يدوياً</string>
     <string name="pref_remove_after_read">الحذف تلقائيا بعد القراءة</string>

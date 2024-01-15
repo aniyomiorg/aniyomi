@@ -15,15 +15,10 @@
     <string name="action_sort_last_manga_update">Ultimo aggiornamento manga</string>
     <string name="action_show_manga">Mostra manga</string>
     <string name="action_display_local_badge_manga">Manga locali</string>
-    <string name="pref_update_only_completely_read">Con capitoli non letti</string>
+    <string name="pref_update_only_completely_read">Con episodi/capitoli non letti</string>
     <string name="pref_library_update_show_tab_badge">Mostra numero di elementi non letti/visti nell\'icona degli aggiornamenti</string>
     <string name="default_manga_category">Categoria manga predefinita</string>
     <string name="pref_manga_library_update_categories_details">I manga nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
-    <string name="untrusted_extension_message">Questa estensione è stata firmata con un certificato non attendibile e non è stata attivata.
-\n
-\nUn\'estensione maliziosa potrebbe leggere credenziali di accesso all\'interno di Aniyomi, o eseguire codice dannoso.
-\n
-\nFidandoti di questo certificato accetti questi rischi.</string>
     <string name="pref_category_delete_chapters">Elimina capitoli/episodi</string>
     <string name="pref_remove_after_marked_as_read">Dopo averli contrassegnati manualmente come letti/visti</string>
     <string name="pref_remove_after_read">Cancella automaticamente dopo la lettura/visione</string>
@@ -173,8 +168,8 @@
     <string name="pref_clear_anime_database">Pulisci database anime</string>
     <string name="anime_from_library">Anime dalla libreria</string>
     <string name="downloaded_episodes">Episodi scaricati</string>
-    <string name="local_manga_source">Manga locali</string>
-    <string name="local_anime_source">Anime locali</string>
+    <string name="local_manga_source">Sorgente manga locali</string>
+    <string name="local_anime_source">Sorgente anime locali</string>
     <string name="episode_not_found">Episodio non trovato</string>
     <string name="snack_add_to_anime_library">Aggiungere anime alla libreria?</string>
     <string name="watching">Guardando</string>
@@ -288,4 +283,43 @@
     <string name="data_saver_image_quality_summary">Valori alti si traducono in una maggiore qualità dell\'immagine, ma questo implica file di dimensione più grande, 80 per cento è una buona media tra dimensione e qualità</string>
     <string name="data_saver_image_format">Comprimi in JPEG</string>
     <string name="data_saver_color_bw">Converte in bianco e nero</string>
+    <string name="label_all">Tutti</string>
+    <string name="player_reset_subtitles">Reimposta sottotitoli di default</string>
+    <string name="player_add_external_audio_intent">Seleziona un file audio.</string>
+    <string name="player_audio_delay">Ritardo audio</string>
+    <string name="settings_dialog_header">Impostazioni del player</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_track_delay_text_field">Ritardi</string>
+    <string name="player_subtitle_background_color">Sfondo</string>
+    <string name="label_storage">Memoria</string>
+    <string name="unlock_app_title">Sblocca Aniyomi</string>
+    <string name="pref_pip_replace_with_previous">Sostituisce l\'opzione Salta 10 secondi con Episodio precedente</string>
+    <string name="pref_mpv_input">Modifica mappa dei tasti del file di input MPV</string>
+    <string name="pref_anime_storage_usage">Utilizzo memoria Anime</string>
+    <string name="pref_manga_storage_usage">Utilizzo memoria Manga</string>
+    <string name="licensed_manga_chapters_error">Licenziato - nessun elemento da mostrare</string>
+    <string name="pref_update_anime_release_grace_period">Finestra di rilascio stimata per l\'anime</string>
+    <string name="player_subtitle_settings_delay_tab">Ritardo</string>
+    <string name="player_subtitle_settings_font_tab">Font</string>
+    <string name="player_audio_remember_delay">Memorizza ritardo audio</string>
+    <string name="player_font_size_text_field">Dimensioni del font</string>
+    <string name="unseen">Non visto</string>
+    <string name="video_custom_screen">Rapporto d\'aspetto personalizzato</string>
+    <string name="player_subtitle_empty_warning">Non ci sono tracce sottotitoli in questo video</string>
+    <string name="label_category">Categoria</string>
+    <string name="delete_confirmation">Sei sicuro di voler eliminare \"%s\"?</string>
+    <string name="player_subtitle_settings">Impostazioni dei sottotitoli</string>
+    <string name="player_subtitle_text_color">Testo</string>
+    <string name="player_subtitle_border_color">Bordo</string>
+    <string name="player_subtitle_settings_color_tab">Colore</string>
+    <string name="player_add_external_subtitles">Aggiungi sottotitoli esterni</string>
+    <string name="player_override_ass_subtitles">Sovrascrivi sottotitoli ASS</string>
+    <string name="player_subtitle_delay">Ritardo dei sottotitoli</string>
+    <string name="player_subtitle_remember_delay">Memorizza ritardo dei sottotitoli</string>
+    <string name="player_subtitle_font_text_field">Nome del font</string>
+    <string name="label_manga_extension_repos">Repo delle estensioni manga</string>
+    <string name="player_add_external_audio">Aggiungi audio esterno</string>
+    <string name="player_add_external_subtitles_intent">Selezione un file sottotitoli.</string>
+    <string name="label_anime_extension_repos">Repo delle estensioni anime</string>
+    <string name="pref_reset_mpv_conf">Reimposta configurazione MPV</string>
 </resources>

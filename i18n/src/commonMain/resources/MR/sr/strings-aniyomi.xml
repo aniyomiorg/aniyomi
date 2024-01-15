@@ -7,11 +7,6 @@
     <string name="pref_library_update_show_tab_badge">Прикажи број непрочитаних на икони \"Ново\"</string>
     <string name="default_manga_category">Podrazumevana kategorija</string>
     <string name="pref_manga_library_update_categories_details">Манге у искљученим категоријама се неће ажурирати иако су такође у укљученим категоријама.</string>
-    <string name="untrusted_extension_message">Овај додатак је потписан неповерљивим сертификатом и због тога није активиран.
-\n
-\nЗлонамерни додаци могу читати податке о пријави које чува Aniyomi или извршити произвољни ко̂д.
-\n
-\nВерујући овом сертификату прихватате наведене ризике.</string>
     <string name="pref_category_delete_chapters">Избриши поглавља</string>
     <string name="pref_remove_after_marked_as_read">Када су означена као прочитана</string>
     <string name="pref_remove_after_read">Аутоматски обриши након читања</string>

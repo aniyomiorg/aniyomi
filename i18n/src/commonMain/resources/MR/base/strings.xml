@@ -182,7 +182,7 @@
     <string name="onboarding_privacy_information_collection_use_intro">For a better experience, while using our Service, we may require you to provide us with certain personally identifiable information. The information that we request will be retained by us and used as described in this privacy policy.</string>
     <string name="onboarding_privacy_information_collection_use_data">Links to the privacy policy of third-party service providers used by the app:</string>
     <!-- Preferences -->
-      <!-- Subsections -->
+    <!-- Subsections -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_appearance">Appearance</string>
     <string name="pref_category_library">Library</string>
