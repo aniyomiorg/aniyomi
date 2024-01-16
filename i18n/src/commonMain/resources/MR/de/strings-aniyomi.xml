@@ -52,7 +52,7 @@
     <string name="action_start_download_internally">Internen Downloader benutzen</string>
     <string name="pref_player_summary">Fortschrittskontrolle, interner Player, externer Player</string>
     <string name="pref_bottom_nav_style">Stil der unteren Navigation</string>
-    <string name="pref_update_only_completely_read">Mit ungelesenen Kapiteln</string>
+    <string name="pref_update_only_completely_read">Überspringe Einträge mit ungelesenen Kapiteln oder angesehenen Folgen</string>
     <string name="pref_library_update_show_tab_badge">Anzahl von Ungelesenem auf dem „Neues“-Symbol anzeigen</string>
     <string name="default_manga_category">Standardkategorie</string>
     <string name="default_anime_category">Standard-Animekategorie</string>
@@ -320,4 +320,14 @@
     <string name="player_subtitle_settings_font_tab">Schriftart</string>
     <string name="theme_cottoncandy">Zuckerwatte</string>
     <string name="video_custom_screen">Individuelles Seitenverhältnis</string>
+    <string name="onboarding_storage_action_create_folder">Standard-Aniyomi-Ordner erstellen</string>
+    <string name="multi_thread_download_summary">Multithreading für Anime-Downloads aktivieren</string>
+    <string name="multi_thread_download_threads_number">Anzahl der Threads</string>
+    <string name="label_manga_extension_repos">Manga-Erweiterungs-Bibliotheken</string>
+    <string name="label_anime_extension_repos">Anime-Erweiterungs-Bibliotheken</string>
+    <string name="multi_thread_download">Multithreading für Anime-Downloads</string>
+    <string name="multi_thread_download_threads_number_summary">Anzahl der Threads, die zum Herunterladen benutzt werden. Eine hohe Anzahl kann dazu führen, dass deine IP-Adresse blockiert wird. 4 ist normalerweise eine gute Anzahl um Überlastung des Quellservers zu vermeiden.</string>
+    <string name="download_speed_limit_hint">Auf 0 setzen, um Geschwindigkeitsbegrenzung zu deaktivieren.</string>
+    <string name="pref_start_screen">Startbildschirm</string>
+    <string name="download_speed_limit">Download-Geschwindigkeitsbegrenzung</string>
 </resources>
