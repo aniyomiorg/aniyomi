@@ -43,4 +43,5 @@
     <string name="entries">圖書館目錄</string>
     <string name="label_manga">漫畫</string>
     <string name="label_anime">動畫</string>
+    <string name="label_recent_anime_updates">動漫更新</string>
 </resources>
