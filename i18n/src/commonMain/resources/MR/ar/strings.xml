@@ -1029,4 +1029,15 @@
     <string name="pref_category_hide_hidden">إخفاء الفئات المخفية من شاشة الفئات</string>
     <string name="pref_category_player_advanced">إعدادات المشغل المتقدمة</string>
     <string name="theme_cottoncandy">حلوى القطن</string>
+    <string name="action_sort_airing_time">وقت البث</string>
+    <string name="action_reorganize_by">اعد الترتيب</string>
+    <string name="onboarding_permission_notifications_description">احصل على إشعارات تحديثات المكتبة والمزيد.</string>
+    <string name="ext_permission_install_apps_warning">التطبيق يحتاج صلاحيات تثبيت التطبيقات لتثبيت المصادر, إضغط هنا لمنحها.</string>
+    <string name="onboarding_storage_help_info">حدثت من نسخة قديمة ولا تعرف ماذا تختار؟ راجع دليل التخزين للمزيد من المعلومات.</string>
+    <string name="onboarding_storage_help_action">دليل التخزين</string>
+    <string name="onboarding_permission_install_apps">صلاحية تثبيت التطبيقات</string>
+    <string name="onboarding_permission_notifications">صلاحية الاشعارات</string>
+    <string name="onboarding_permission_ignore_battery_opts">استخدام البطارية في الخلفية</string>
+    <string name="onboarding_permission_action_grant">منح</string>
+    <string name="pref_general_summary">لغة التطبيق, الاشعارات.</string>
 </resources>
