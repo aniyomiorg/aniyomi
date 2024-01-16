@@ -178,4 +178,6 @@
     <string name="episode_not_found">未找到該集</string>
     <string name="local_invalid_episode_format">無效的劇集格式</string>
     <string name="pref_category_player_seeking">尋求</string>
+    <string name="label_manga_sources">漫畫源</string>
+    <string name="label_anime_sources">動畫源</string>
 </resources>
