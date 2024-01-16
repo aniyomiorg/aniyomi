@@ -32,4 +32,13 @@
     <string name="channel_new_chapters_episodes">新刊發行</string>
     <string name="label_manga_library">漫畫</string>
     <string name="general_categories">分類</string>
+    <string name="label_category">所有分類</string>
+    <string name="action_hide">隱藏</string>
+    <string name="episodes">劇集</string>
+    <string name="chapters_episodes">章節和劇集</string>
+    <string name="backup_settings_warning">警告：備份設定將同時存儲您的軌跡密碼，不要分享此備份文件！</string>
+    <string name="label_all">所有標籤</string>
+    <string name="anime_categories">動畫分類</string>
+    <string name="label_anime_library">動漫</string>
+    <string name="entries">圖書館目錄</string>
 </resources>
