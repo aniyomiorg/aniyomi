@@ -69,11 +69,8 @@
     <string name="sort_by_source">לפי מקור</string>
     <string name="show_chapter_number">מספר פרק</string>
     <string name="show_title">כותרת</string>
-    <string name="chapter_paused">מושהה</string>
-    <string name="chapter_error">שגיאה</string>
     <string name="chapter_downloading_progress">מוריד (%1$d/%2$d)</string>
     <string name="display_mode_chapter">פרקים %1$s</string>
-    <string name="snack_add_to_library">להוסיף לספרייה\?</string>
     <string name="source_not_installed">המקור לא הותקן: %1$s</string>
     <string name="delete_downloads_for_manga">למחוק פרקים שירדו\?</string>
     <string name="manga_added_library">נוסף לספרייה</string>
@@ -354,7 +351,6 @@
     <string name="action_sort_date_added">תאריך הוספה</string>
     <string name="action_sort_chapter_fetch_date">תאריך האחזור של הפרקים</string>
     <string name="theme_monet">דינמי</string>
-    <string name="pref_library_update_categories_details">פריט הנמצא בקטגוריית מנועי העדכונים לא יעודכן גם אם הוא נכלל בקטגורייה אחרת שכן מתעדכנת.</string>
     <string name="action_move_to_top_all_for_series">העבר סדרה לראש</string>
     <string name="ext_obsolete">מיושן</string>
     <string name="pref_update_only_started">זה עוד לא התחיל</string>

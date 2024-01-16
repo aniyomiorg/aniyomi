@@ -132,8 +132,6 @@
     <string name="copied_to_clipboard">已複製到剪貼簿：
 \n「%1$s」</string>
     <string name="source_not_installed">來源未安裝：%1$s</string>
-    <string name="chapter_error">錯誤</string>
-    <string name="chapter_paused">已暫停</string>
     <string name="manga_download">下載</string>
     <string name="snack_categories_deleted">已刪除類別</string>
     <string name="picture_saved">圖片已儲存</string>
@@ -195,7 +193,6 @@
     <string name="username">使用者名稱</string>
     <string name="updating_category">正在更新類別</string>
     <string name="action_global_search_hint">全域搜尋…</string>
-    <string name="snack_add_to_library">將作品收藏至書櫃？</string>
     <string name="file_select_cover">選擇封面圖片</string>
     <string name="information_no_recent_manga">無近期閱讀</string>
     <string name="channel_common">一般</string>
@@ -465,7 +462,6 @@
     <string name="pref_download_new_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動下載。</string>
     <string name="pref_show_navigation_mode_summary">開始閱讀時，短暫浮現輕觸區域</string>
     <string name="pref_show_navigation_mode">輕觸區域提示</string>
-    <string name="pref_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
     <string name="cancel_all_for_series">取消此作品</string>
     <string name="automatic_background">自動</string>
     <string name="pref_grayscale">灰階</string>

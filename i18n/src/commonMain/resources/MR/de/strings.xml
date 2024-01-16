@@ -165,8 +165,6 @@
     <string name="delete_downloads_for_manga">Heruntergeladene Kapitel löschen?</string>
     <string name="display_mode_chapter">Kapitel %1$s</string>
     <string name="chapter_downloading_progress">Wird heruntergeladen (%1$d/%2$d)</string>
-    <string name="chapter_error">Fehler</string>
-    <string name="chapter_paused">Pausiert</string>
     <string name="show_title">Quellentitel</string>
     <string name="show_chapter_number">Kapitelnummer</string>
     <string name="sort_by_source">Quelle</string>
@@ -186,7 +184,6 @@
     <string name="error_category_exists">Eine Kategorie mit diesem Namen existiert bereits!</string>
     <string name="snack_categories_deleted">Kategorien gelöscht</string>
     <string name="dialog_with_checkbox_remove_description">Das Lesedatum dieses Kapitels wird gelöscht. Bist du sicher\?</string>
-    <string name="snack_add_to_library">Zur Bibliothek hinzufügen\?</string>
     <string name="picture_saved">Bild gespeichert</string>
     <string name="custom_filter">Eigener Filter</string>
     <string name="set_as_cover">Als Vorschaubild festlegen</string>
@@ -459,7 +456,6 @@
     <string name="action_sort_chapter_fetch_date">Abrufdatum des Kapitels</string>
     <string name="pref_download_new_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht heruntergeladen, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
     <string name="pref_category_auto_download">Automatisches Herunterladen</string>
-    <string name="pref_library_update_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
     <string name="action_show_errors">Tippe, um Details anzuzeigen</string>
     <string name="update_check_eol">Diese Android-Version wird nicht mehr unterstützt</string>
     <string name="clipboard_copy_error">Kopieren in die Zwischenablage fehlgeschlagen</string>

@@ -195,8 +195,6 @@
     <string name="source_not_installed">Källa inte installerad: %1$s</string>
     <string name="display_mode_chapter">Kapitel %1$s</string>
     <string name="chapter_downloading_progress">Laddar ner (%1$d/%2$d)</string>
-    <string name="chapter_error">Fel</string>
-    <string name="chapter_paused">Pausad</string>
     <string name="show_title">Källtitel</string>
     <string name="show_chapter_number">Kapitelnummer</string>
     <string name="sort_by_source">Efter källa</string>
@@ -219,7 +217,6 @@
     <string name="error_category_exists">En kategori med detta namn finns redan!</string>
     <string name="snack_categories_deleted">Kategorier raderade</string>
     <string name="dialog_with_checkbox_remove_description">Detta kommer att ta bort läs datumet för detta kapitel. Är du säker\?</string>
-    <string name="snack_add_to_library">Lägg till i biblioteket\?</string>
     <string name="picture_saved">Bild sparad</string>
     <string name="custom_filter">Anpassat filter</string>
     <string name="set_as_cover">Ställ in som omslag</string>
@@ -453,7 +450,6 @@
     <string name="action_sort_chapter_fetch_date">Datum för hämtning av kapitel</string>
     <string name="pref_download_new_categories_details">Inlägg i uteslutna kategorier laddas inte ner även om de också ingår i inkluderade kategorier.</string>
     <string name="pref_category_auto_download">Ladda ned automatiskt</string>
-    <string name="pref_library_update_categories_details">Inlägg i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
     <string name="action_show_errors">Tryck för att se detaljer</string>
     <string name="update_check_eol">Denna Android-version stöds inte längre</string>
     <string name="clipboard_copy_error">Kunde inte kopiera till urklipp</string>

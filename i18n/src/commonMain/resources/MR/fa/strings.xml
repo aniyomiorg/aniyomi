@@ -64,11 +64,8 @@
     <string name="sort_by_number">بر اساس شماره قسمت</string>
     <string name="show_chapter_number">شماره قسمت</string>
     <string name="show_title">عنوان منبع</string>
-    <string name="chapter_paused">متوقف</string>
-    <string name="chapter_error">خطا</string>
     <string name="chapter_downloading_progress">درحال بارگیری (%1$d/%2$d)</string>
     <string name="display_mode_chapter">قسمت %1$s</string>
-    <string name="snack_add_to_library">مانگا به کتابخانه اضافه شود؟</string>
     <string name="source_not_installed">منبع نصب نشده است: %1$s</string>
     <string name="copied_to_clipboard">کپی شد:
 \n%1$s</string>
@@ -519,7 +516,6 @@
     <string name="none">هیچ‌کدام</string>
     <string name="include">شامل: %s</string>
     <string name="exclude">بدون: %s</string>
-    <string name="pref_library_update_categories_details">ورودی هایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
     <string name="save_chapter_as_cbz">ذخیره به عنوان فایل آرشیو CBZ</string>
     <string name="publishing_finished">انتشار به پایان رسید</string>
     <string name="local_invalid_format">قالب فصل نامعتبر است</string>

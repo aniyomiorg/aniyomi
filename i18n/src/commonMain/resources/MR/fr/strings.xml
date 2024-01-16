@@ -134,7 +134,6 @@
     <string name="remove_from_library">Retirer de la bibliothèque</string>
     <string name="display_mode_chapter">Chapitre %1$s</string>
     <string name="chapter_downloading_progress">En téléchargement (%1$d/%2$d)</string>
-    <string name="chapter_error">Erreur</string>
     <string name="show_title">Titre de la source</string>
     <string name="show_chapter_number">Numéro de chapitre</string>
     <string name="sort_by_number">Par numéro de chapitre</string>
@@ -152,7 +151,6 @@
     <string name="chapters">Chapitres</string>
     <string name="error_category_exists">Une catégorie avec ce nom existe déjà !</string>
     <string name="dialog_with_checkbox_remove_description">Ceci enlèvera la date de lecture de ce chapitre. Êtes-vous sûr(e) \?</string>
-    <string name="snack_add_to_library">Ajouter à la bibliothèque \?</string>
     <string name="picture_saved">Image sauvegardée</string>
     <string name="custom_filter">Filtre personnalisé</string>
     <string name="set_as_cover">Ajouter comme couverture</string>
@@ -198,7 +196,6 @@
     <string name="default_category">Catégorie par défaut</string>
     <string name="download_notifier_download_paused">Téléchargement en pause</string>
     <string name="local_source">Source locale</string>
-    <string name="chapter_paused">En pause</string>
     <string name="action_open_log">Ouvrir le fichier</string>
     <string name="action_restore">Restaurer</string>
     <string name="restore_completed">Restauration terminée</string>
@@ -450,7 +447,6 @@
     <string name="include">Inclure : %s</string>
     <string name="none">Aucun(e)</string>
     <string name="action_sort_chapter_fetch_date">Date de récupération du chapitre</string>
-    <string name="pref_library_update_categories_details">Les entrées dans les catégories exclues ne seront pas mises à jour même si elles sont aussi dans les catégories inclues.</string>
     <string name="pref_download_new_categories_details">Les entrées des catégories exclues ne seront pas mis à jour même si elles appartiennent aussi à des catégories incluses.</string>
     <string name="pref_category_auto_download">Téléchargement automatique</string>
     <string name="action_show_errors">Appuyez pour voir les détails</string>

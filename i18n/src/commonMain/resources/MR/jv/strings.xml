@@ -78,7 +78,6 @@
     <string name="action_sort_total">Total bab</string>
     <string name="action_sort_alpha">Miturut abjad</string>
     <string name="action_filter_unread">Durung kewoco</string>
-    <string name="action_filter_downloaded">Kedonlot</string>
     <string name="action_filter">Saringan</string>
     <string name="action_settings">Pengaturan</string>
     <string name="history">Sejarah</string>

@@ -238,7 +238,6 @@
     <string name="default_category">पूर्वनिर्धारित वर्ग</string>
     <string name="categorized_display_settings">क्रमबद्धका लागि प्रति-वर्ग सेटिङहरू</string>
     <string name="include">समावेश गर्नुहोस्: %s</string>
-    <string name="pref_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका इन्ट्री \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
     <string name="ext_app_info">एप जानकारी</string>
     <string name="untrusted_extension">अविश्वसनीय एक्सटेन्शन</string>
     <string name="exclude">समावेश नगर्नुहोस्: %s</string>
@@ -460,7 +459,6 @@
     <string name="clear_history_confirmation">के तपाईँ निश्चित हुनुहुन्छ\? सबै इतिहास हराउनेछ।</string>
     <string name="transition_pages_error">पृष्ठहरू लोड हुन असफल भयो: %1$s</string>
     <string name="source_not_installed">स्रोत स्थापना गरिएको छैन: %1$s</string>
-    <string name="chapter_paused">रोकिएको</string>
     <string name="chapter_downloading_progress">डाउनलोड गर्दै (%1$d/%2$d)</string>
     <string name="sort_by_number">अध्याय संख्या द्वारा</string>
     <string name="sort_by_upload_date">अपलोड मिति द्वारा</string>
@@ -488,7 +486,6 @@
     <string name="cover_updated">आवरण अपडेट भयो</string>
     <string name="share_page_info">%1$s: %2$s, पृष्ठ %3$d</string>
     <string name="pref_clear_history">इतिहास हटाउनुहोस्</string>
-    <string name="snack_add_to_library">पुस्तकालयमा राख्ने\?</string>
     <string name="transition_next">अर्को:</string>
     <string name="viewer">पढ्ने मोड</string>
     <string name="transition_finished">सकिएको:</string>
@@ -501,7 +498,6 @@
     <string name="paused">रोकिएको</string>
     <string name="transition_no_next">अर्को अध्याय छैन</string>
     <string name="manga_cover">आवरण</string>
-    <string name="chapter_error">त्रुटि</string>
     <string name="show_title">स्रोत शीर्षक</string>
     <string name="sort_by_source">स्रोत द्वारा</string>
     <string name="repeating">फेरी पढ्दै</string>

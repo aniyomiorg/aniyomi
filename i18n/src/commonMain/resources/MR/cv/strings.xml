@@ -311,10 +311,7 @@
     <string name="sort_by_source">Ҫӑл куҫпа</string>
     <string name="show_chapter_number">Сыпӑк шучӗ</string>
     <string name="show_title">Ҫӑл куҫ ячӗ</string>
-    <string name="chapter_paused">Вӑхӑтлӑха чарнӑ</string>
-    <string name="chapter_error">Йӑнӑш</string>
     <string name="chapter_downloading_progress">Тиенет (%1$d/%2$d)</string>
-    <string name="snack_add_to_library">Манкка вулавăша хушмалла-и\?</string>
     <string name="source_not_installed">Ҫӑл куҫа лартман: %1$s</string>
     <string name="copied_to_clipboard">Пайлашу буфере ӑтавланӑ:
 \n%1$s</string>
@@ -547,7 +544,6 @@
     <string name="action_ok">Йурӗ</string>
     <string name="unlock_app_title">%s уҫ</string>
     <string name="action_move_to_bottom_all_for_series">Серилӗхе вӗҫе куҫар</string>
-    <string name="pref_library_update_categories_details">Кӗртнӗ пухмӑшсенче пулнӑ пулсан та кӑларса пӑрахнӑ пухмӑшсенче пулнӑ серилӗхсем ҫӗнелмӗҫ.</string>
     <string name="manga_categories">Пухмӑшсем</string>
     <string name="action_sort_last_manga_update">Юлашки ҫӗнетӗве тӗрӗслени</string>
     <string name="action_show_manga">Ҫырава кӑтарт</string>

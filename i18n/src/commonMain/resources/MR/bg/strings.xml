@@ -140,7 +140,6 @@
     <string name="remove_from_library">Премахни от библиотеката</string>
     <string name="display_mode_chapter">Глава %1$s</string>
     <string name="chapter_downloading_progress">Изтегляне (%1$d/%2$d)</string>
-    <string name="chapter_error">Грешка</string>
     <string name="show_title">Оригинално заглавие</string>
     <string name="show_chapter_number">Номер на главата</string>
     <string name="sort_by_source">По източник</string>
@@ -161,7 +160,6 @@
     <string name="error_category_exists">Категория със същото име вече съществува!</string>
     <string name="snack_categories_deleted">Категориите бяха изтрити</string>
     <string name="dialog_with_checkbox_remove_description">Това ще премахне датата на прочитане на главата. Сигурни ли сте?</string>
-    <string name="snack_add_to_library">Добавяне на мангата към библиотеката\?</string>
     <string name="picture_saved">Изображението запазено</string>
     <string name="custom_filter">Персонализиран филтър</string>
     <string name="set_as_cover">Постави за корица</string>
@@ -216,7 +214,6 @@
     <string name="creating_backup">Създаване на резервно копие</string>
     <string name="local_source">Локални</string>
     <string name="delete_downloads_for_manga">Да се изтрият ли изтеглените глави?</string>
-    <string name="chapter_paused">На пауза</string>
     <string name="download_notifier_download_paused">Изтеглянето спряно</string>
     <string name="action_global_search">Глобално търсене</string>
     <string name="other_source">Други</string>
@@ -467,7 +464,6 @@
     <string name="theme_yotsuba">Йоцуба</string>
     <string name="restrictions">Ограничения: %s</string>
     <string name="categorized_display_settings">Различно сортиране и показване за всяка категоря</string>
-    <string name="pref_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
     <string name="none">Никоя</string>
     <string name="include">Включва: %s</string>
     <string name="exclude">Изключва: %s</string>

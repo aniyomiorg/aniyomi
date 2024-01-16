@@ -62,8 +62,6 @@
     <string name="pref_library_columns">Rozmiar siatki</string>
     <string name="remove_from_library">Usuń z biblioteki</string>
     <string name="display_mode_chapter">Rozdział %1$s</string>
-    <string name="chapter_error">Błąd</string>
-    <string name="chapter_paused">Wstrzymane</string>
     <string name="manga_download">Pobierz</string>
     <string name="download_unread">Pobierz nieprzeczytane</string>
     <string name="confirm_delete_chapters">Czy na pewno chcesz usunąć wybrane rozdziały?</string>
@@ -204,7 +202,6 @@
     <string name="status">Status</string>
     <string name="snack_categories_deleted">Usunięto kategorie</string>
     <string name="dialog_with_checkbox_remove_description">To usunie datę przeczytania tego rozdziału. Na pewno?</string>
-    <string name="snack_add_to_library">Dodać do biblioteki\?</string>
     <string name="custom_filter">Filtr niestandardowy</string>
     <string name="decode_image_error">Nie udało się wczytać obrazka</string>
     <string name="confirm_set_image_as_cover">Ustawić ten obrazek jako okładkę\?</string>
@@ -454,7 +451,6 @@
     <string name="none">Brak</string>
     <string name="update_check_eol">Ta wersja Androida nie jest już wspierana</string>
     <string name="clipboard_copy_error">Nie udało się skopiować do schowka</string>
-    <string name="pref_library_update_categories_details">Tytuły w wykluczonych kategoriach nie będą aktualizowane, nawet jeśli są również w uwzględnionych kategoriach.</string>
     <string name="pref_download_new_categories_details">Tytuły w wykluczonych kategoriach nie będą pobierane, nawet jeśli są również w uwzględnionych kategoriach.</string>
     <string name="pref_category_auto_download">Automatyczne pobieranie</string>
     <string name="rotation_landscape">Poziomo</string>

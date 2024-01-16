@@ -172,8 +172,6 @@
     <string name="delete_downloads_for_manga">ডাউনলোডকৃত অধ্যায়গুলো মুছে ফেলতে চান?</string>
     <string name="display_mode_chapter">অধ্যায় %1$s</string>
     <string name="chapter_downloading_progress">ডাউনলোড হচ্ছে (%1$d/%2$d)</string>
-    <string name="chapter_error">ত্রুটি</string>
-    <string name="chapter_paused">থেমে আছে</string>
     <string name="show_title">উৎস শিরোনাম</string>
     <string name="show_chapter_number">অধ্যায় নাম্বার</string>
     <string name="sort_by_source">উৎস অনুযায়ী</string>
@@ -193,7 +191,6 @@
     <string name="error_category_exists">এই নামের একটি বিভাগ ইতিমধ্যে বিদ্যমান!</string>
     <string name="snack_categories_deleted">বিভাগগুলি মোছা হয়েছে</string>
     <string name="dialog_with_checkbox_remove_description">এটা এই অধ্যায়ের পড়ার সময়কাল সরিয়ে ফেলবে। আপনি নিশ্চিত?</string>
-    <string name="snack_add_to_library">সংগ্রহশালায় মাঙ্গা যোগ করবেন\?</string>
     <string name="picture_saved">ছবি সংরক্ষিত হয়েছে</string>
     <string name="custom_filter">স্বনির্ধারিত ফিল্টার</string>
     <string name="set_as_cover">প্রচ্ছদ হিসাবে সংরক্ষণ করুন</string>
@@ -489,7 +486,6 @@
     <string name="exclude">বাদ দিন: %s</string>
     <string name="include">অন্তর্ভুক্ত করুন: %s</string>
     <string name="none">শূন্য</string>
-    <string name="pref_library_update_categories_details">বাদ দেওয়া ক্যাটাগরিতে মঙ্গা আপডেট করা হবে না যদিও সেগুলি অন্তর্ভুক্ত ক্যাটাগরিতেও থাকে।</string>
     <string name="categorized_display_settings">সাজানোর এবং প্রদর্শনের জন্য প্রতি শ্রেণীর সেটিংস</string>
     <string name="restrictions">বিধিনিষেধ: %s</string>
     <string name="relative_time_today">সম্প্রতি</string>

@@ -46,7 +46,6 @@
     <string name="cache_delete_error">Возникла ошибка при очистке</string>
     <string name="cache_deleted">Кэш очищен, %1$d файлов удалено</string>
     <string name="chapter_downloading_progress">Загружается (%1$d/%2$d)</string>
-    <string name="chapter_error">Ошибка</string>
     <string name="chapter_progress">Страница: %1$d</string>
     <string name="chapters">Главы</string>
     <string name="charging">Когда заряжается</string>
@@ -156,7 +155,6 @@
     <string name="set_as_cover">Установить как обложку</string>
     <string name="show_chapter_number">Номер главы</string>
     <string name="show_title">Название источника</string>
-    <string name="snack_add_to_library">Добавить в библиотеку\?</string>
     <string name="sort_by_number">Номер главы</string>
     <string name="sort_by_source">Источник</string>
     <string name="status">Статус</string>
@@ -191,7 +189,6 @@
     <string name="backup_choice">Что добавить в резервную копию\?</string>
     <string name="backup_created">Резервная копия создана</string>
     <string name="categories">Категории</string>
-    <string name="chapter_paused">Пауза</string>
     <string name="creating_backup">Создание резервной копии</string>
     <string name="default_category">Основная категория</string>
     <string name="default_category_summary">Спрашивать</string>
@@ -453,7 +450,6 @@
     <string name="include">Включать: %s</string>
     <string name="action_sort_chapter_fetch_date">Последнее получение главы</string>
     <string name="pref_download_new_categories_details">Серии в исключённых категориях не будут загружаться, даже если находятся во включённых категориях.</string>
-    <string name="pref_library_update_categories_details">Серии в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
     <string name="pref_category_auto_download">Автозагрузка</string>
     <string name="action_show_errors">Нажать, чтобы увидеть подробности</string>
     <string name="update_check_eol">Эта версия Android больше не поддерживается</string>

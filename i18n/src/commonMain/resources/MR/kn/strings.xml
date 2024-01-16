@@ -291,11 +291,8 @@
     <string name="sort_by_source">ಮೂಲದ ಪ್ರಕಾರ</string>
     <string name="show_chapter_number">ಅಧ್ಯಾಯ ಸಂಖ್ಯೆ</string>
     <string name="show_title">ಮೂಲ ಶೀರ್ಷಿಕೆ</string>
-    <string name="chapter_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
-    <string name="chapter_error">ದೋಷ</string>
     <string name="chapter_downloading_progress">ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ (%1$d/%2$d)</string>
     <string name="display_mode_chapter">ಅಧ್ಯಾಯ %1$s</string>
-    <string name="snack_add_to_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ\?</string>
     <string name="source_not_installed">ಮೂಲವನ್ನು ಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ: %1$s</string>
     <string name="copied_to_clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ:
 \n%1$s</string>
@@ -455,7 +452,6 @@
     <string name="exclude">ಹೊರಗಿಡಿ: %s</string>
     <string name="include">ಸೇರಿಸಿ: %s</string>
     <string name="none">ಯಾವುದು ಅಲ್ಲ</string>
-    <string name="pref_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
     <string name="action_show_errors">ದೋಷಗಳನ್ನು ತೋರಿಸು</string>
     <string name="cancel_all_for_series">ಈ ಸರಣಿಯ ಎಲ್ಲವನ್ನೂ ರದ್ದುಮಾಡಿ</string>
     <string name="action_display_local_badge">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
