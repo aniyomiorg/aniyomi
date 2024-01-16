@@ -1,17 +1,26 @@
 package eu.kanade.presentation.more.settings.screen
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.widget.BasePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
@@ -23,6 +32,8 @@ import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.OutlinedNumericChooser
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -47,6 +58,7 @@ object SettingsDownloadScreen : SearchableSettings {
         )
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+        val currentSpeedLimit = remember {mutableIntStateOf(downloadPreferences.downloadSpeedLimit().get()) }
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
@@ -63,6 +75,34 @@ object SettingsDownloadScreen : SearchableSettings {
                 subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
                 entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
             ),
+            Preference.PreferenceItem.CustomPreference(
+                title = stringResource(MR.strings.download_speed_limit),
+            ) {
+                BasePreferenceWidget(
+                    subcomponent = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = MaterialTheme.padding.medium),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                        ) {
+                            OutlinedNumericChooser(
+                                label = stringResource(MR.strings.download_speed_limit),
+                                placeholder = "0",
+                                suffix = "kB/s",
+                                value = currentSpeedLimit.value,
+                                step = 100,
+                                min = 0,
+                                onValueChanged = {
+                                    downloadPreferences.downloadSpeedLimit().set(it)
+                                    currentSpeedLimit.value = it
+                                },
+                            )
+                        }
+                    },
+                )
+            },
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
                 title = stringResource(MR.strings.save_chapter_as_cbz),
