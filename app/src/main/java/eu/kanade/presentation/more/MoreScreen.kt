@@ -12,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.outlined.CloudOff
-import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.GetApp
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material.icons.outlined.Settings
@@ -25,19 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import uy.kohesive.injekt.injectLazy
 
 @Composable
 fun MoreScreen(
@@ -47,6 +44,7 @@ fun MoreScreen(
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
     isFDroid: Boolean,
+    navStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,
     onClickCategories: () -> Unit,
@@ -107,23 +105,10 @@ fun MoreScreen(
 
             item { HorizontalDivider() }
 
-            val libraryPreferences: LibraryPreferences by injectLazy()
-
             item {
-                val bottomNavStyle = libraryPreferences.bottomNavStyle().get()
-                val titleRes = when (bottomNavStyle) {
-                    0 -> MR.strings.label_recent_manga
-                    1 -> MR.strings.label_recent_updates
-                    else -> MR.strings.label_manga
-                }
-                val icon = when (bottomNavStyle) {
-                    0 -> Icons.Outlined.History
-                    1 -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
-                    else -> Icons.Outlined.CollectionsBookmark
-                }
                 TextPreferenceWidget(
-                    title = stringResource(titleRes),
-                    icon = icon,
+                    title = navStyle.moreTab.options.title,
+                    icon = navStyle.moreIcon,
                     onPreferenceClick = onClickAlt,
                 )
             }
@@ -148,6 +133,7 @@ fun MoreScreen(
                                 }"
                             }
                         }
+
                         is DownloadQueueState.Downloading -> {
                             val pending = downloadQueueState.pending
                             pluralStringResource(

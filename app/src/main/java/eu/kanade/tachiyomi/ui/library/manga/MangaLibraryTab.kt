@@ -29,6 +29,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -55,7 +56,6 @@ import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
@@ -63,17 +63,14 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.source.local.entries.manga.isLocal
-import uy.kohesive.injekt.injectLazy
 
 object MangaLibraryTab : Tab() {
-
-    val libraryPreferences: LibraryPreferences by injectLazy()
-    private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
 
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
+            val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
             val title = if (fromMore) {
                 MR.strings.label_library
             } else {
@@ -115,6 +112,8 @@ object MangaLibraryTab : Tab() {
             }
             started
         }
+
+        val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
 
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
@@ -167,6 +166,7 @@ object MangaLibraryTab : Tab() {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+                    navigateUp = navigateUp,
                 )
             },
             bottomBar = {
