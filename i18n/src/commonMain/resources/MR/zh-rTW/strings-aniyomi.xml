@@ -39,6 +39,6 @@
     <string name="backup_settings_warning">警告：備份設定將同時存儲您的軌跡密碼，不要分享此備份文件！</string>
     <string name="label_all">所有標籤</string>
     <string name="anime_categories">動畫分類</string>
-    <string name="label_anime_library">動漫</string>
+    <string name="label_anime_library">動畫</string>
     <string name="entries">圖書館目錄</string>
 </resources>
