@@ -702,10 +702,6 @@ class AnimeDownloader(
         val totalProgresses = mutableListOf<Int>()
         totalProgresses.addAll(List(nParts) { 0 })
 
-        val multipartThrottler = Throttler().apply {
-            bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024 / nParts)
-        }
-
         for (range in rangeList) {
             val splitWeight = (range[1] - range[0]).toFloat() / size.toFloat()
             // create a listener for each part, so we can update the progress generally
@@ -721,6 +717,9 @@ class AnimeDownloader(
                         video.progress = min(totalProgresses.reduce(Int::plus), 90)
                     }
                 }
+            throttler.apply {
+                bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024)
+            }
             partJobList.add(
                 scope.launchIO {
                     try {
@@ -738,7 +737,7 @@ class AnimeDownloader(
                                     val buffer = ByteArray(4 * 1024)
                                     var totalBytesRead = 0L
                                     var bytesRead: Int
-                                    val throttledSource = multipartThrottler.source(source).buffer()
+                                    val throttledSource = throttler.source(source).buffer()
                                     while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
                                         // Check if the download is paused, if so, wait
                                         while (isPaused) {
