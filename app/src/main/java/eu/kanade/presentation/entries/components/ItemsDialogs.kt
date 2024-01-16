@@ -93,7 +93,11 @@ fun SetIntervalDialog(
                 if (nextUpdateDays != null && nextUpdateDays >= 0 && interval >= 0) {
                     Text(
                         stringResource(
-                            MR.strings.manga_interval_expected_update,
+                            if (isManga) {
+                                MR.strings.manga_interval_expected_update
+                            } else {
+                                MR.strings.anime_interval_expected_update
+                            },
                             pluralStringResource(
                                 MR.plurals.day,
                                 count = nextUpdateDays,
