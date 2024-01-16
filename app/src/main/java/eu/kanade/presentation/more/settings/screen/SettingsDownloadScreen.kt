@@ -58,7 +58,7 @@ object SettingsDownloadScreen : SearchableSettings {
         )
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
-        val currentSpeedLimit = remember {mutableIntStateOf(downloadPreferences.downloadSpeedLimit().get()) }
+        val currentSpeedLimit = remember { mutableIntStateOf(downloadPreferences.downloadSpeedLimit().get()) }
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
