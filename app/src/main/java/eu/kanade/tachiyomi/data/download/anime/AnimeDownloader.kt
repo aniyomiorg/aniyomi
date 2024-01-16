@@ -827,7 +827,7 @@ class AnimeDownloader(
                 // Write to file with pause/resume capability
                 try {
                     throttler.apply {
-                        bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024, 4086,  8192)
+                        bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024, 4086, 8192)
                     }
                     response.body.source().use { source ->
                         file.openOutputStream(true).use { output ->
