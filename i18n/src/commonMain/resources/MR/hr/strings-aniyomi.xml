@@ -322,4 +322,8 @@
     <string name="player_subtitle_settings_color_tab">Boja</string>
     <string name="player_subtitle_delay">Kašnjenje titlova</string>
     <string name="pref_mpv_input">Uredi MPV ulaznu datoteku za konfiguraciju mapiranja tipkovnice</string>
+    <string name="onboarding_storage_action_create_folder">Stvori standardnu mapu za Aniyomi</string>
+    <string name="download_speed_limit_hint">Postavi na 0 za deaktiviranje ograničenja brzine.</string>
+    <string name="download_speed_limit">Ograničenje brzine preuzimanja</string>
+    <string name="pref_start_screen">Početni ekran</string>
 </resources>
