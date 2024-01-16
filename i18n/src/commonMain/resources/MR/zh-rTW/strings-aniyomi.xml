@@ -41,4 +41,6 @@
     <string name="anime_categories">動畫分類</string>
     <string name="label_anime_library">動畫</string>
     <string name="entries">圖書館目錄</string>
+    <string name="label_manga">漫畫</string>
+    <string name="label_anime">動畫</string>
 </resources>
