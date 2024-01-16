@@ -43,6 +43,8 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
+import okio.Throttler
+import okio.buffer
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
@@ -105,6 +107,11 @@ class MangaDownloader(
      * Notifier for the downloader state and progress.
      */
     private val notifier by lazy { MangaDownloadNotifier(context) }
+
+    /**
+     * The throttler used to control the download speed.
+     */
+    private val throttler = Throttler()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var downloaderJob: Job? = null
@@ -512,7 +519,12 @@ class MangaDownloader(
             val response = source.getImage(page, dataSaver)
             val file = tmpDir.createFile("$filename.tmp")!!
             try {
-                response.body.source().saveTo(file.openOutputStream())
+                throttler.apply {
+                    bytesPerSecond(downloadPreferences.downloadSpeedLimit().get().toLong() * 1024)
+                }
+                val throttledSource = throttler.source(response.body.source()).buffer()
+                throttledSource.saveTo(file.openOutputStream())
+                throttledSource.close()
                 val extension = getImageExtension(response, file)
                 file.renameTo("$filename.$extension")
             } catch (e: Exception) {
@@ -531,6 +543,7 @@ class MangaDownloader(
                     false
                 }
             }
+            .flowOn(Dispatchers.IO)
             .first()
     }
 

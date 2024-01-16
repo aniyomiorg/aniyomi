@@ -1,13 +1,25 @@
 package eu.kanade.presentation.more.settings.screen
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
@@ -23,6 +35,8 @@ import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.OutlinedNumericChooser
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -47,6 +61,22 @@ object SettingsDownloadScreen : SearchableSettings {
         )
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+        val speedLimit by downloadPreferences.downloadSpeedLimit().collectAsState()
+        var currentSpeedLimit by remember { mutableIntStateOf(speedLimit) }
+        var showDownloadLimitDialog by rememberSaveable { mutableStateOf(false) }
+        if (showDownloadLimitDialog) {
+            DownloadLimitDialog(
+                initialValue = currentSpeedLimit,
+                onDismissRequest = { showDownloadLimitDialog = false },
+                onValueChanged = {
+                    currentSpeedLimit = it
+                },
+                onConfirm = {
+                    downloadPreferences.downloadSpeedLimit().set(currentSpeedLimit)
+                    showDownloadLimitDialog = false
+                },
+            )
+        }
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
@@ -62,6 +92,15 @@ object SettingsDownloadScreen : SearchableSettings {
                 title = stringResource(MR.strings.multi_thread_download_threads_number),
                 subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
                 entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
+            ),
+            Preference.PreferenceItem.TextPreference(
+                title = stringResource(MR.strings.download_speed_limit),
+                subtitle = if (speedLimit == 0) {
+                    stringResource(MR.strings.off)
+                } else {
+                    "$speedLimit KiB/s"
+                },
+                onClick = { showDownloadLimitDialog = true },
             ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
@@ -345,6 +384,55 @@ object SettingsDownloadScreen : SearchableSettings {
                     entries = packageNamesMap.toPersistentMap(),
                 ),
             ),
+        )
+    }
+
+    @Composable
+    private fun DownloadLimitDialog(
+        initialValue: Int,
+        onDismissRequest: () -> Unit,
+        onValueChanged: (newValue: Int) -> Unit,
+        onConfirm: () -> Unit,
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = { Text(stringResource(MR.strings.download_speed_limit)) },
+            text = {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .padding(bottom = MaterialTheme.padding.medium)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        OutlinedNumericChooser(
+                            label = stringResource(MR.strings.download_speed_limit),
+                            placeholder = "0",
+                            suffix = "KiB/s",
+                            value = initialValue,
+                            step = 100,
+                            min = 0,
+                            onValueChanged = onValueChanged,
+                        )
+                    }
+                    Text(text = stringResource(MR.strings.download_speed_limit_hint))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismissRequest) {
+                    Text(text = stringResource(MR.strings.action_cancel))
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onConfirm()
+                    },
+                ) {
+                    Text(text = stringResource(MR.strings.action_ok))
+                }
+            },
         )
     }
 }
