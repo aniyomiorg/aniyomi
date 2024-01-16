@@ -35,4 +35,4 @@ class CreateMangaExtensionRepo(private val preferences: SourcePreferences) {
 
 const val OFFICIAL_TACHIYOMI_REPO_BASE_URL = "https://raw.githubusercontent.com/tachiyomiorg/extensions/repo"
 private val repoRegex = """^https://.*/index\.min\.json$""".toRegex()
-private val githubRepoRegex = """https://github\.com/[^/]+/[^/]+/blob/(?:[^/]+/)+index\.min\.json""".toRegex()
+private val githubRepoRegex = """https://github\.com/[^/]+/[^/]+/blob/(?:[^/]+/)+index\.min\.json$""".toRegex()
