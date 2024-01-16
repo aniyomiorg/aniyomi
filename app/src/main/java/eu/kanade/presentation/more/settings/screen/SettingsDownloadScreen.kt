@@ -98,7 +98,7 @@ object SettingsDownloadScreen : SearchableSettings {
                 subtitle = if (speedLimit == 0) {
                     stringResource(MR.strings.off)
                 } else {
-                    "$speedLimit kB/s"
+                    "$speedLimit KiB/s"
                 },
                 onClick = { showDownloadLimitDialog = true },
             ),
@@ -409,7 +409,7 @@ object SettingsDownloadScreen : SearchableSettings {
                         OutlinedNumericChooser(
                             label = stringResource(MR.strings.download_speed_limit),
                             placeholder = "0",
-                            suffix = "kB/s",
+                            suffix = "KiB/s",
                             value = initialValue,
                             step = 100,
                             min = 0,
