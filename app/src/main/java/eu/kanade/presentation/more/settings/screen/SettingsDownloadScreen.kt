@@ -1,10 +1,14 @@
 package eu.kanade.presentation.more.settings.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
@@ -20,7 +24,6 @@ import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.more.settings.widget.BasePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
@@ -58,7 +61,22 @@ object SettingsDownloadScreen : SearchableSettings {
         )
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
-        val currentSpeedLimit = remember { mutableIntStateOf(downloadPreferences.downloadSpeedLimit().get()) }
+        val speedLimit by downloadPreferences.downloadSpeedLimit().collectAsState()
+        var currentSpeedLimit by remember { mutableIntStateOf(speedLimit) }
+        var showDownloadLimitDialog by rememberSaveable { mutableStateOf(false) }
+        if (showDownloadLimitDialog) {
+            DownloadLimitDialog(
+                initialValue = currentSpeedLimit,
+                onDismissRequest = { showDownloadLimitDialog = false },
+                onValueChanged = {
+                    currentSpeedLimit = it
+                },
+                onConfirm = {
+                    downloadPreferences.downloadSpeedLimit().set(currentSpeedLimit)
+                    showDownloadLimitDialog = false
+                },
+            )
+        }
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
@@ -75,34 +93,15 @@ object SettingsDownloadScreen : SearchableSettings {
                 subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
                 entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
             ),
-            Preference.PreferenceItem.CustomPreference(
+            Preference.PreferenceItem.TextPreference(
                 title = stringResource(MR.strings.download_speed_limit),
-            ) {
-                BasePreferenceWidget(
-                    subcomponent = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = MaterialTheme.padding.medium),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                        ) {
-                            OutlinedNumericChooser(
-                                label = stringResource(MR.strings.download_speed_limit),
-                                placeholder = "0",
-                                suffix = "kB/s",
-                                value = currentSpeedLimit.value,
-                                step = 100,
-                                min = 0,
-                                onValueChanged = {
-                                    downloadPreferences.downloadSpeedLimit().set(it)
-                                    currentSpeedLimit.value = it
-                                },
-                            )
-                        }
-                    },
-                )
-            },
+                subtitle = if (speedLimit == 0) {
+                    stringResource(MR.strings.off)
+                } else {
+                    "$speedLimit kB/s"
+                },
+                onClick = { showDownloadLimitDialog = true },
+            ),
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.saveChaptersAsCBZ(),
                 title = stringResource(MR.strings.save_chapter_as_cbz),
@@ -385,6 +384,55 @@ object SettingsDownloadScreen : SearchableSettings {
                     entries = packageNamesMap.toPersistentMap(),
                 ),
             ),
+        )
+    }
+
+    @Composable
+    private fun DownloadLimitDialog(
+        initialValue: Int,
+        onDismissRequest: () -> Unit,
+        onValueChanged: (newValue: Int) -> Unit,
+        onConfirm: () -> Unit,
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            title = { Text(stringResource(MR.strings.download_speed_limit)) },
+            text = {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .padding(bottom = MaterialTheme.padding.medium)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        OutlinedNumericChooser(
+                            label = stringResource(MR.strings.download_speed_limit),
+                            placeholder = "0",
+                            suffix = "kB/s",
+                            value = initialValue,
+                            step = 100,
+                            min = 0,
+                            onValueChanged = onValueChanged,
+                        )
+                    }
+                    Text(text = stringResource(MR.strings.download_speed_limit_hint))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismissRequest) {
+                    Text(text = stringResource(MR.strings.action_cancel))
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onConfirm()
+                    },
+                ) {
+                    Text(text = stringResource(MR.strings.action_ok))
+                }
+            },
         )
     }
 }
