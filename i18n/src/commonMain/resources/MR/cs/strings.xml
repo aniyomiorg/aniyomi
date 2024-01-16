@@ -710,7 +710,7 @@
     <string name="pref_relative_format_summary">\"%1$s\" namísto \"%2$s\"</string>
     <string name="app_settings">Nastavení aplikace</string>
     <string name="source_settings">Nastavení zdroje</string>
-    <string name="notification_updating_progress">Aktualizace knihovny... (%s)</string>
+    <string name="notification_updating_progress">Aktualizace knihovny… (%s)</string>
     <string name="action_sort_category">Seřadit kategorie</string>
     <string name="sort_category_confirmation">Chtěli byste seřadit kategorie abecedně?</string>
     <string name="action_create">Vytvořit</string>

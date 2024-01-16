@@ -487,7 +487,6 @@
     <string name="label_data">Data</string>
     <string name="pref_storage_usage">Storage usage</string>
     <string name="available_disk_space_info">Available: %1$s / Total: %2$s</string>
-    <string name="pref_clear_chapter_cache">Clear chapter cache</string>
     <string name="used_cache">Used: %1$s</string>
     <string name="cache_deleted">Cache cleared, %1$d files deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
@@ -603,7 +602,7 @@
     <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="manga_display_interval_title">Estimate every</string>
     <string name="manga_display_modified_interval_title">Set to update every</string>
-    <!-- "... around 2 days" -->
+    <!-- "… around 2 days" -->
     <string name="manga_interval_expected_update">New chapters predicted to be released in around %1$s, checking around every %2$s.</string>
     <string name="anime_interval_expected_update">New episodes predicted to be released in around %1$s, checking around every %2$s.</string>
     <string name="manga_interval_expected_update_soon">Soon</string>

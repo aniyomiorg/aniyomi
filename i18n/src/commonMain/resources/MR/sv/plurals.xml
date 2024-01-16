@@ -52,10 +52,6 @@
         <item quantity="one">Nästa olästa kapitel</item>
         <item quantity="other">Nästa %d olästa kapitel</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Saknar %1$s kapitel</item>
-        <item quantity="other">Saknar %1$s kapitel</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 dag</item>
         <item quantity="other">%d dagar</item>

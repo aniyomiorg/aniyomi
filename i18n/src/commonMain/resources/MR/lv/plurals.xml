@@ -60,11 +60,6 @@
         <item quantity="one">Nodaļa %1$s un vēl 1</item>
         <item quantity="other">Nodaļa %1$s un vēl %2$d</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="zero">Trūkst %1$s nodaļu</item>
-        <item quantity="one">Trūkst %1$s nodaļa</item>
-        <item quantity="other">Trūkst %1$s nodaļas</item>
-    </plurals>
     <plurals name="download_amount">
         <item quantity="zero">Nākošā %d nodaļa</item>
         <item quantity="one">Nākošā %d nodaļa</item>

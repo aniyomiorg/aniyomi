@@ -717,7 +717,7 @@
     <string name="pref_relative_format">ประทับเวลาแบบสัมพันธ์กัน</string>
     <string name="pref_relative_format_summary">แสดง \"%1$s\" แทน \"%2$s\"</string>
     <string name="action_sort_category">จัดเรียงหมวดหมู่</string>
-    <string name="notification_updating_progress">กำลังอัปเดตคลัง... (%s)</string>
+    <string name="notification_updating_progress">กำลังอัปเดตคลัง… (%s)</string>
     <string name="sort_category_confirmation">ต้องการจัดเรียงหมวดหมู่ตามตัวอักษรหรือไม่\?</string>
     <string name="source_settings">การตั้งค่าแหล่งที่มา</string>
     <string name="app_settings">การตั้งค่าแอป</string>

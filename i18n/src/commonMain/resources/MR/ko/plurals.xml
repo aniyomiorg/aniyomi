@@ -42,9 +42,6 @@
     <plurals name="download_amount">
         <item quantity="other">다음 %d화</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="other">누락된 회차 %1$s개</item>
-    </plurals>
     <plurals name="day">
         <item quantity="other">%d일</item>
     </plurals>

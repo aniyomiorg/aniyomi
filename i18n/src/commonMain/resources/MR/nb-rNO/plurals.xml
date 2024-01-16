@@ -56,10 +56,6 @@
         <item quantity="one">Neste kapittel</item>
         <item quantity="other">Neste %d kapitler</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Mangler %1$s kapittel</item>
-        <item quantity="other">Mangler %1$s kapitler</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">%d dag</item>
         <item quantity="other">%d dager</item>

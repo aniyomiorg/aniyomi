@@ -70,11 +70,6 @@
         <item quantity="few">Следећа %d поглавља</item>
         <item quantity="other">Следећих %d поглавља</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Недостаје %1$s поглавље</item>
-        <item quantity="few">Недостају %1$s поглавља</item>
-        <item quantity="other">Недостаје %1$s поглавља</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 дан</item>
         <item quantity="few">%d дана</item>

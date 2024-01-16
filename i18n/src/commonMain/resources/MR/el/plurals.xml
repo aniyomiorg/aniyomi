@@ -56,10 +56,6 @@
         <item quantity="one">Επόμενο κεφάλαιο</item>
         <item quantity="other">Επόμενα %d κεφάλαια</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Λείπει %1$s κεφάλαιο</item>
-        <item quantity="other">Λείπουν %1$s κεφάλαια</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 ημέρα</item>
         <item quantity="other">%d ημέρες</item>

@@ -523,7 +523,7 @@
     <string name="viewer">Olvasó mód</string>
     <string name="transition_finished">Befejezve:</string>
     <string name="transition_current">Jelenlegi:</string>
-    <string name="empty_screen">Hát ez kínos...</string>
+    <string name="empty_screen">Hát ez kínos…</string>
     <string name="notification_size_warning">A nagy frissítések kárt okoznak a forrásoknak, és lassabb frissítésekhez, valamint megnövekedett akkumulátorhasználathoz vezethetnek. Koppintson további információért.</string>
     <string name="notification_update_error">%1$d frissítés sikertelen</string>
     <string name="split_tall_images_summary">Növeli a teljesítményt a nagy képek elválasztásával.</string>
@@ -628,7 +628,7 @@
     <string name="action_copy_to_clipboard">Másolás a vágólapra</string>
     <string name="action_update_category">Kategória frissítése</string>
     <string name="copied_to_clipboard_plain">Vágólapra másolva</string>
-    <string name="confirm_add_duplicate_manga">Van már ilyen nevű ... a könyvtáradban.
+    <string name="confirm_add_duplicate_manga">Van már ilyen nevű … a könyvtáradban.
 \n
 \nBiztos folytatni akarod\?</string>
     <string name="track_remove_start_date_conf_text">Ez eltávolítja az eddig kiválasztott kezdeti dátumot a/az %s</string>
@@ -698,7 +698,7 @@
     <string name="pref_flash_page">Villantson fehéren lap változtatáskor</string>
     <string name="exception_offline">Nincs internet kapcsolat</string>
     <string name="pref_storage_usage">Tárolóhely felhasználás</string>
-    <string name="notification_updating_progress">Könyvtár frissítése ... (%s)</string>
+    <string name="notification_updating_progress">Könyvtár frissítése … (%s)</string>
     <string name="label_titles_section">Bejegyzések</string>
     <string name="action_bar_up_description">Felnavigálás</string>
     <string name="label_data_storage">Adat és tárolás</string>

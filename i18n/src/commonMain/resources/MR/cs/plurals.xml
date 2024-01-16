@@ -70,11 +70,6 @@
         <item quantity="few">Další %d kapitoly</item>
         <item quantity="other">Dalších %d kapitol</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Chybí %1$s kapitola</item>
-        <item quantity="few">Chybí %1$s kapitoly</item>
-        <item quantity="other">Chybí %1$s kapitol</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 den</item>
         <item quantity="few">%d dny</item>

@@ -583,7 +583,7 @@
     <string name="description_placeholder">요약 없음</string>
     <string name="download_notifier_split_page_path_not_found">페이지 %d의 파일 경로를 찾을 수 없습니다</string>
     <string name="unfinished_list">미완성된 목록</string>
-    <string name="empty_screen">와...이거 좀 어색하네</string>
+    <string name="empty_screen">와…이거 좀 어색하네</string>
     <string name="custom_cover">맞춤 표지</string>
     <string name="ext_info_age_rating">연령 등급</string>
     <string name="action_remove_everything">모두 제거</string>
@@ -708,7 +708,7 @@
     <string name="exception_http">HTTP %d, WebView의 웹 사이트를 확인해 주세요</string>
     <string name="exception_unknown_host">%s에 연결할 수 없습니다</string>
     <string name="action_sort_category">카테고리 정렬</string>
-    <string name="notification_updating_progress">서재 업데이트 중...(%s)</string>
+    <string name="notification_updating_progress">서재 업데이트 중…(%s)</string>
     <string name="sort_category_confirmation">카테고리를 알파벳 순으로 정렬하시겠습니까\?</string>
     <string name="source_settings">소스 설정</string>
     <string name="app_settings">앱 설정</string>

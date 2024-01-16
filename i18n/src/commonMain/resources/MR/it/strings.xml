@@ -710,7 +710,7 @@
     <string name="pref_relative_format_summary">«%1$s» invece di «%2$s»</string>
     <string name="app_settings">Impostazioni app</string>
     <string name="source_settings">Impostazioni delle fonti</string>
-    <string name="notification_updating_progress">Aggiornando libreria... (%s)</string>
+    <string name="notification_updating_progress">Aggiornando libreria… (%s)</string>
     <string name="action_sort_category">Ordinamento categorie</string>
     <string name="sort_category_confirmation">Vuoi ordinare le categorie alfabeticamente\?</string>
     <string name="file_null_uri_error">Il selettore di file ha restituito file all\'app</string>

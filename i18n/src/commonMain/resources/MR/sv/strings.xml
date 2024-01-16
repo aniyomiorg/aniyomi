@@ -706,7 +706,7 @@
     <string name="unlock_app_title">Lås upp %s</string>
     <string name="action_move_to_bottom_all_for_series">Flytta serien till botten</string>
     <string name="action_sort_category">Sortera kategorier</string>
-    <string name="notification_updating_progress">Uppdaterar biblioteket... (%s)</string>
+    <string name="notification_updating_progress">Uppdaterar biblioteket… (%s)</string>
     <string name="sort_category_confirmation">Vill du sortera kategorierna i alfabetisk ordning\?</string>
     <string name="source_settings">Inställningar för källa</string>
     <string name="app_settings">Appinställningar</string>

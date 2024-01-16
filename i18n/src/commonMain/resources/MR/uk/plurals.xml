@@ -83,12 +83,6 @@
         <item quantity="many">Наступних %d розділів</item>
         <item quantity="other">Наступних %d розділів</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Відсутній %1$s розділ</item>
-        <item quantity="few">Відсутні %1$s розділи</item>
-        <item quantity="many">Відсутні %1$s розділів</item>
-        <item quantity="other">Відсутні %1$s розділів</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 день</item>
         <item quantity="few">%d дні</item>

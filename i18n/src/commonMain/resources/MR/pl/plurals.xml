@@ -84,12 +84,6 @@
         <item quantity="many">Następne %d rozdziałów</item>
         <item quantity="other">Następne %d rozdziałów</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Brakujący %1$s rozdział</item>
-        <item quantity="few">Brakujące %1$s rozdziały</item>
-        <item quantity="many">Brakuje %1$s rozdziałów</item>
-        <item quantity="other">Brakuje %1$s rozdziałów</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 dzień</item>
         <item quantity="few">%d dni</item>

@@ -90,7 +90,6 @@
     <string name="pref_remove_after_marked_as_read">Borrarlos tras marcarlos como leídos de forma manual</string>
     <string name="pref_remove_after_read">Borrar capítulos terminados de forma automática</string>
     <string name="services">Servicios de seguimiento</string>
-    <string name="pref_clear_chapter_cache">Limpiar la caché de capítulos</string>
     <string name="used_cache">Usado: %1$s</string>
     <string name="cache_deleted">Se vació la caché. Se han borrado %1$d archivos</string>
     <string name="cache_delete_error">Se produjo un error al limpiar</string>
@@ -370,7 +369,7 @@
     <string name="tracking_info">La sincronización de estos servicios solo funciona en un solo sentido. Cada elemento en tu biblioteca tiene un botón de seguimiento y tendrás que configurarlo a mano, uno a uno.</string>
     <string name="label_data">Datos</string>
     <string name="backup_restore_missing_sources">Fuentes que faltan:</string>
-    <string name="invalid_backup_file_missing_manga">La copia de seguridad no contiene ningun elemento; la biblioteca está vacía.</string>
+    <string name="invalid_backup_file_missing_manga">La copia de seguridad no contiene ningún elemento; la biblioteca está vacía.</string>
     <string name="invalid_backup_file">El archivo de copia de seguridad no parece estar bien:</string>
     <string name="pref_library_update_refresh_metadata_summary">Comprueba si hay una nueva portada, información y descripción al actualizar la biblioteca</string>
     <string name="pref_library_update_refresh_metadata">Actualizar automáticamente los metadatos</string>
@@ -717,7 +716,7 @@
     <string name="action_move_to_bottom_all_for_series">Mover al último puesto</string>
     <string name="pref_relative_format">Marcas de tiempo relativas</string>
     <string name="pref_relative_format_summary">«%1$s» en vez de «%2$s»</string>
-    <string name="notification_updating_progress">Actualizando biblioteca... (%s)</string>
+    <string name="notification_updating_progress">Actualizando biblioteca… (%s)</string>
     <string name="source_settings">Ajustes de la fuente</string>
     <string name="app_settings">Ajustes de la aplicación</string>
     <string name="action_sort_category">Ordenar categorías</string>
@@ -804,7 +803,7 @@
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
-    <string name="action_sort_last_seen">Ultimo visto</string>
+    <string name="action_sort_last_seen">Último visto</string>
     <string name="action_sort_last_checked">Última comprobación</string>
     <string name="action_sort_latest_episode">Último episodio</string>
     <string name="action_sort_last_manga_update">Última actualización de manga</string>
@@ -1056,7 +1055,7 @@
     <string name="go_to_previous_chapter">Capítulo anterior</string>
     <string name="go_to_after_opening">Omitir la introducción</string>
     <string name="pref_category_player_advanced">Ajustes avanzados del reproductor</string>
-    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf... etc</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
     <string name="pref_debanding_disabled">Desactivado</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_debanding_cpu">CPU</string>

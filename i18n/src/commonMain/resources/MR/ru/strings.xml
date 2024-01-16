@@ -709,7 +709,7 @@
     <string name="pref_relative_format_summary">\"%1$s\" вместо \"%2$s\"</string>
     <string name="app_settings">Настройки приложения</string>
     <string name="source_settings">Настройки источников</string>
-    <string name="notification_updating_progress">Обновление библиотеки... (%s)</string>
+    <string name="notification_updating_progress">Обновление библиотеки… (%s)</string>
     <string name="action_sort_category">Сортировать категории</string>
     <string name="sort_category_confirmation">Хотите ли вы сортировать категории по алфавиту\?</string>
     <string name="file_null_uri_error">Файл не выбран</string>
@@ -1022,7 +1022,7 @@
     <string name="pref_enable_pip">Разрешить использование режима PiP</string>
     <string name="enable_volume_brightness_gestures">Включить Жесты Громкости и Яркости</string>
     <string name="pref_category_player_advanced">Расширенные настройки плеера</string>
-    <string name="pref_category_player_advanced_subtitle">Отладка, mpv.conf... и т.д</string>
+    <string name="pref_category_player_advanced_subtitle">Отладка, mpv.conf… и т.д</string>
     <string name="pref_debanding_disabled">Выключено</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="go_to_after_opening">Пропустить опеннинг</string>

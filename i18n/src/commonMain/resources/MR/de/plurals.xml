@@ -56,10 +56,6 @@
         <item quantity="one">Nächstes Kapitel</item>
         <item quantity="other">Nächste %d Kapitel</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">%1$s Kapitel fehlt</item>
-        <item quantity="other">%1$s Kapitel fehlen</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 Tag</item>
         <item quantity="other">%d Tage</item>

@@ -56,10 +56,6 @@
         <item quantity="one">Su capìtulu imbeniente</item>
         <item quantity="other">Sos %d capìtulos imbenientes</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Mancat %1$s capìtulu</item>
-        <item quantity="other">Mancant %1$s capìtulos</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 die</item>
         <item quantity="other">%d dies</item>

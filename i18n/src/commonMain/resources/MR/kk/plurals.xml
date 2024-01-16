@@ -56,10 +56,6 @@
         <item quantity="one">Келесі тарау</item>
         <item quantity="other">Келесі %d тарау</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one"/>
-        <item quantity="other">Жоқ %1$s тараулары</item>
-    </plurals>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>

@@ -70,11 +70,6 @@
         <item quantity="few">Următoarele %d capitole</item>
         <item quantity="other">Următoarele %d capitole</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Lipsește %1$s capitol</item>
-        <item quantity="few">Lipsesc %1$s capitole</item>
-        <item quantity="other">Lipsesc %1$s capitole</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">O zi</item>
         <item quantity="few">%d zile</item>

@@ -710,7 +710,7 @@
     <string name="action_move_to_bottom_all_for_series">Breng serie naar beneden</string>
     <string name="pref_flash_page">Scherm wit flitsen bij het wisselen van pagina\'s</string>
     <string name="pref_storage_usage">Opslaggebruik</string>
-    <string name="notification_updating_progress">Bibliotheek bijwerken... (%s)</string>
+    <string name="notification_updating_progress">Bibliotheek bijwerken… (%s)</string>
     <string name="label_data_storage">Data en opslag</string>
     <string name="sort_category_confirmation">Wil je de categorieën sorteren op alfabetische volgorde\?</string>
     <string name="file_null_uri_error">Bestandskiezer gaf geen bestand terug aan de app</string>

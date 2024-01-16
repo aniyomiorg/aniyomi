@@ -725,7 +725,7 @@
     <string name="no_scanlators_found">Перекладачів не знайдено</string>
     <string name="pref_flash_page">Блимати екраном при зміні сторінки</string>
     <string name="pref_storage_usage">Використання сховища</string>
-    <string name="notification_updating_progress">Оновлення бібліотеки... (%s)</string>
+    <string name="notification_updating_progress">Оновлення бібліотеки… (%s)</string>
     <string name="file_null_uri_error">Файл не вибрано</string>
     <string name="exclude_scanlators">Виключити перекладачів</string>
     <string name="manga_categories">Категорії манґи</string>

@@ -90,12 +90,6 @@
         <item quantity="many">%d ימים</item>
         <item quantity="other"/>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">חסר פרק אחד</item>
-        <item quantity="two">חסרים שני פרקים</item>
-        <item quantity="many">חסרים %1$s פרקים</item>
-        <item quantity="other"/>
-    </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one">פרק %1$s</item>
         <item quantity="two">%1$s פרקים</item>

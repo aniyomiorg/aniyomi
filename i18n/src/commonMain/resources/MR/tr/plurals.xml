@@ -56,10 +56,6 @@
         <item quantity="one">Sonraki bölüm</item>
         <item quantity="other">Sonraki %d bölüm</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">%1$s bölüm eksik</item>
-        <item quantity="other">%1$s bölüm eksik</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 gün</item>
         <item quantity="other">%d gün</item>

@@ -70,11 +70,6 @@
         <item quantity="many">Els següents %d capítols</item>
         <item quantity="other">Els següents %d capítols</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Manca %1$s capítol</item>
-        <item quantity="many">Manquen %1$s capítols</item>
-        <item quantity="other">Manquen %1$s capítols</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 dia</item>
         <item quantity="many">%d dies</item>

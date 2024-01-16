@@ -70,11 +70,6 @@
         <item quantity="many">Los siguientes %d capítulos</item>
         <item quantity="other">Los siguientes %d capítulos</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Falta %1$s capítulo</item>
-        <item quantity="many">Faltan %1$s capítulos</item>
-        <item quantity="other">Faltan %1$s capítulos</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">Un día</item>
         <item quantity="many">%d días</item>

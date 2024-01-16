@@ -56,10 +56,6 @@
         <item quantity="one">अर्को अध्याय</item>
         <item quantity="other">अर्को %d अध्यायहरू</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">%1$s अध्याय छुटेको छ</item>
-        <item quantity="other">%1$s अध्यायहरू छुटेका छन्</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">१ दिन</item>
         <item quantity="other">%d दिन</item>

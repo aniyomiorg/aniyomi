@@ -112,14 +112,6 @@
         <item quantity="many">%d فصل تالي</item>
         <item quantity="other">%d فصل تالي</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="zero">لا يوجد أيُّ فصل مفقود</item>
-        <item quantity="one">فصل واحد مفقود</item>
-        <item quantity="two">فصلان مفقودان</item>
-        <item quantity="few">%1$s فصول مفقودة</item>
-        <item quantity="many">%1$s فصلًا مفقودًا</item>
-        <item quantity="other">%1$s فصل مفقود</item>
-    </plurals>
     <plurals name="day">
         <item quantity="zero">لا يوم</item>
         <item quantity="one">يوم واحد</item>

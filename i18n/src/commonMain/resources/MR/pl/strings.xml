@@ -713,7 +713,7 @@
     <string name="onboarding_action_skip">Pomiń</string>
     <string name="onboarding_action_next">Następny</string>
     <string name="onboarding_permission_ignore_battery_opts">Zużycie baterii w tle</string>
-    <string name="notification_updating_progress">Aktualizowanie biblioteki... (%s)</string>
+    <string name="notification_updating_progress">Aktualizowanie biblioteki… (%s)</string>
     <string name="invalid_repo_name">Nieprawidłowa nazwa repozytorium</string>
     <string name="sort_category_confirmation">Czy chciałbyś posortować kategorie alfabetycznie?</string>
     <string name="source_settings">Ustawienia źródła</string>

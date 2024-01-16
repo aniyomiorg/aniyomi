@@ -84,12 +84,6 @@
         <item quantity="many">Следующие %d глав</item>
         <item quantity="other">Следующие %d глав</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Отсутствует %1$s глава</item>
-        <item quantity="few">Отсутствуют %1$s главы</item>
-        <item quantity="many">Отсутствуют %1$s глав</item>
-        <item quantity="other">Отсутствуют %1$s глав</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">1 день</item>
         <item quantity="few">%d дня</item>

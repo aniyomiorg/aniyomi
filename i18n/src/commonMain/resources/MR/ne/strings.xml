@@ -707,7 +707,7 @@
     <string name="unlock_app_title">अनलक %s</string>
     <string name="action_move_to_bottom_all_for_series">श्रृङ्खलालाई तल सार्नुहोस्</string>
     <string name="action_sort_category">वर्गहरू क्रमबद्ध गर्नुहोस्</string>
-    <string name="notification_updating_progress">पुस्तकालय अपडेट गर्दै... (%s)</string>
+    <string name="notification_updating_progress">पुस्तकालय अपडेट गर्दै… (%s)</string>
     <string name="sort_category_confirmation">के तपाई वर्गहरू वर्णमाला अनुसार क्रमबद्ध गर्न चाहनुहुन्छ\?</string>
     <string name="source_settings">स्रोत सेटिङहरू</string>
     <string name="app_settings">एप सेटिङहरू</string>

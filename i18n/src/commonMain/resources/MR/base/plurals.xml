@@ -25,7 +25,7 @@
         <item quantity="other">%1$s remaining</item>
     </plurals>
     <plurals name="day">
-        <item quantity="one">1 day</item>
+        <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
     </plurals>
     <plurals name="missing_items">
@@ -57,7 +57,7 @@
         <item quantity="other">%1$d new chapters</item>
     </plurals>
     <plurals name="notification_chapters_multiple_and_more">
-        <item quantity="one">Chapters %1$s and 1 more</item>
+        <item quantity="one">Chapters %1$s and %2$d more</item>
         <item quantity="other">Chapters %1$s and %2$d more</item>
     </plurals>
     <plurals name="update_check_notification_ext_updates">
@@ -81,11 +81,11 @@
         <item quantity="other">Next %d episodes</item>
     </plurals>
     <plurals name="notification_new_episodes_summary">
-        <item quantity="one">For 1 title</item>
+        <item quantity="one">For %d title</item>
         <item quantity="other">For %d titles</item>
     </plurals>
     <plurals name="notification_episodes_generic">
-        <item quantity="one">1 new episode</item>
+        <item quantity="one">%d new episode</item>
         <item quantity="other">%1$d new episodes</item>
     </plurals>
     <plurals name="seconds">
@@ -93,7 +93,7 @@
         <item quantity="other">%d seconds</item>
     </plurals>
     <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Episodes %1$s and 1 more</item>
+        <item quantity="one">Episodes %1$s and %2$d more</item>
         <item quantity="other">Episodes %1$s and %2$d more</item>
     </plurals>
 </resources>
