@@ -209,4 +209,8 @@
     <string name="action_sort_last_manga_update">ពិនិត្យបច្ចុប្បន្នភាពចុងក្រោយ</string>
     <string name="delete_category">លុបថ្នាក់ក្រម</string>
     <string name="action_sort_next_updated">ភាគថ្មីរំពឹងទុកនៅ</string>
+    <string name="manga_categories">ការតម្រៀបថ្នាក់</string>
+    <string name="action_show_manga">បង្ហាញម៊េងហ្គា</string>
+    <string name="action_display_local_badge_manga">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
+    <string name="default_manga_category">ថ្នាក់ធម្មតា</string>
 </resources>
