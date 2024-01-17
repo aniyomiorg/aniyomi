@@ -77,6 +77,7 @@ object SettingsDownloadScreen : SearchableSettings {
                 },
             )
         }
+        val multithreadingDownload by downloadPreferences.multithreadingDownload().collectAsState()
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
@@ -92,6 +93,7 @@ object SettingsDownloadScreen : SearchableSettings {
                 title = stringResource(MR.strings.multi_thread_download_threads_number),
                 subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
                 entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
+                enabled = multithreadingDownload,
             ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(MR.strings.download_speed_limit),
