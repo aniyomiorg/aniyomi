@@ -1122,5 +1122,4 @@
     <string name="pref_general_summary">Idioma de la aplicación, notificaciones</string>
     <string name="action_reorganize_by">Reordenar</string>
     <string name="anime_interval_expected_update">Se espera que haya nuevos episodios alrededor de %1$s y se comprobará aproximadamente cada %2$s</string>
-    <string name="download_notifier_download_finish"></string>
 </resources>
