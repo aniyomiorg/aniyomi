@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.ExtensionHeader
@@ -185,7 +186,7 @@ private fun AnimeExtensionContent(
             }
 
             items(
-                items = items,
+                items = items.fastDistinctBy { it.hashCode() },
                 contentType = { "item" },
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
