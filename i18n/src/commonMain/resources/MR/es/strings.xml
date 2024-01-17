@@ -1122,4 +1122,8 @@
     <string name="pref_general_summary">Idioma de la aplicación, notificaciones</string>
     <string name="action_reorganize_by">Reordenar</string>
     <string name="anime_interval_expected_update">Se espera que haya nuevos episodios alrededor de %1$s y se comprobará aproximadamente cada %2$s</string>
+    <string name="pref_start_screen">Pantalla de inicio</string>
+    <string name="download_speed_limit_hint">Establezca a 0 para desactivar el limite de velocidad de descarga.</string>
+    <string name="download_speed_limit">Límite de velocidad de descarga</string>
+    <string name="download_notifier_download_finish">Descarga completada</string>
 </resources>
