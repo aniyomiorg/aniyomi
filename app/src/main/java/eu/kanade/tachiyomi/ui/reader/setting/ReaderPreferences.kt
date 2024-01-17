@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.reader.setting
 import android.os.Build
 import androidx.compose.ui.graphics.BlendMode
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
 import tachiyomi.i18n.MR
@@ -167,6 +168,18 @@ class ReaderPreferences(
         false,
     )
 
+    // J2K -->
+    fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
+    // J2K <--
+
+    // SY -->
+    fun readerBottomButtons() = preferenceStore.getStringSet(
+        "reader_bottom_buttons",
+        ReaderBottomButton.BUTTONS_DEFAULTS,
+    )
+    fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
+    // SY <--
+
     // endregion
 
     enum class TappingInvertMode(
@@ -195,6 +208,9 @@ class ReaderPreferences(
         const val WEBTOON_PADDING_MIN = 0
         const val WEBTOON_PADDING_MAX = 25
 
+        const val PRELOAD_SIZE_MIN = 4
+        const val PRELOAD_SIZE_MAX = 20
+
         val TapZones = listOf(
             MR.strings.label_default,
             MR.strings.l_nav,
@@ -219,6 +235,14 @@ class ReaderPreferences(
             MR.strings.zoom_start_right,
             MR.strings.zoom_start_center,
         )
+
+        // SY -->
+        val PageLayouts = listOf(
+            MR.strings.single_page,
+            MR.strings.double_pages,
+            MR.strings.automatic_orientation,
+        )
+        // SY <--
 
         val ColorFilterMode = buildList {
             addAll(
