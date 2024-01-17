@@ -210,4 +210,6 @@
     <string name="action_set_interval">मध्यांतर</string>
     <string name="action_filter_tracked">ट्रॅक केले</string>
     <string name="action_filter_interval_custom">कस्टमाईज्ड फेच इंटरवल</string>
+    <string name="manga_categories">श्रेण्या</string>
+    <string name="default_manga_category">मूलभूत श्रेणी</string>
 </resources>

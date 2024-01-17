@@ -342,4 +342,5 @@
     <string name="scale_type_fit_height">Uzunasiga</string>
     <string name="pref_webtoon_side_padding">Yon bo\'shliq</string>
     <string name="third_to_last">O\'qilgan bobdan uchinchisi</string>
+    <string name="manga_categories">Kategoriyalar</string>
 </resources>

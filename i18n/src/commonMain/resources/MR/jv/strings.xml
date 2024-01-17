@@ -301,4 +301,13 @@
     <string name="delete_downloaded">Ngehapus downloadan</string>
     <string name="selected">Dipilih</string>
     <string name="not_selected">Gak dipilih</string>
+    <string name="manga_categories">Kategori</string>
+    <string name="action_sort_last_manga_update">Nganyari manga pungkasan</string>
+    <string name="action_show_manga">Nampilno manga</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="pref_update_only_completely_read">Karo bab durung diwaca</string>
+    <string name="pref_library_update_show_tab_badge">Tampilake itungan kang durung diwaca ing ikon nganyari</string>
+    <string name="default_manga_category">kategori gawan</string>
+    <string name="pref_manga_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
+    <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>
 </resources>

@@ -228,4 +228,9 @@
     <string name="action_search_hint">گەڕان…</string>
     <string name="delete_category_confirmation">\?ڕەشبکەیتەوە \"%s\"ئایا ئەتەوێ کە بەشی</string>
     <string name="label_download_queue">لیستی داونلۆد</string>
+    <string name="manga_categories">کاتیگۆرییەکان</string>
+    <string name="action_sort_last_manga_update">کۆتانوێکردنەوەی مانگا</string>
+    <string name="action_show_manga">نیشاندانی مانگا</string>
+    <string name="action_display_local_badge_manga">مانگای ناوخۆیی</string>
+    <string name="snack_add_to_manga_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
 </resources>

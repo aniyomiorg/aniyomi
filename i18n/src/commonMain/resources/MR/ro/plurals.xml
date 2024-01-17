@@ -70,14 +70,44 @@
         <item quantity="few">Următoarele %d capitole</item>
         <item quantity="other">Următoarele %d capitole</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="one">Lipsește %1$s capitol</item>
-        <item quantity="few">Lipsesc %1$s capitole</item>
-        <item quantity="other">Lipsesc %1$s capitole</item>
-    </plurals>
     <plurals name="day">
         <item quantity="one">O zi</item>
         <item quantity="few">%d zile</item>
         <item quantity="other">%d zile</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
     </plurals>
 </resources>
