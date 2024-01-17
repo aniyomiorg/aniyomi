@@ -135,7 +135,6 @@
     <string name="remove_from_library">Rimuovi dalla libreria</string>
     <string name="display_mode_chapter">Capitolo %1$s</string>
     <string name="chapter_downloading_progress">Scaricando (%1$d/%2$d)</string>
-    <string name="chapter_error">Errore</string>
     <string name="show_title">Titolo della fonte</string>
     <string name="show_chapter_number">Numero del capitolo</string>
     <string name="sort_by_source">Per fonte</string>
@@ -212,9 +211,7 @@
     <string name="no_more_results">Nessun altro risultato</string>
     <string name="local_source">Fonte locale</string>
     <string name="delete_downloads_for_manga">Eliminare i capitoli scaricati?</string>
-    <string name="chapter_paused">In pausa</string>
     <string name="manga_tracking_tab">Tracking</string>
-    <string name="snack_add_to_library">Aggiungere alla libreria\?</string>
     <string name="download_notifier_download_paused">Download in pausa</string>
     <string name="label_migration">Migra</string>
     <string name="label_extensions">Estensioni</string>
@@ -452,7 +449,6 @@
     <string name="pref_download_new_categories_details">Le voci che si trovano in categorie escluse non saranno scaricate nonostante si trovino anche in categorie incluse.</string>
     <string name="nav_zone_right">Destra</string>
     <string name="nav_zone_left">Sinistra</string>
-    <string name="pref_library_update_categories_details">Le voci in categorie escluse non saranno aggiornati nonostante si trovino anche in categorie incluse.</string>
     <string name="pref_dns_over_https">DNS su HTTPS (DoH)</string>
     <string name="pref_show_navigation_mode">Mostra sovrapposizione con zone di tocco</string>
     <string name="pref_show_navigation_mode_summary">Mostra brevemente quando il lettore viene aperto</string>

@@ -172,8 +172,6 @@
     <string name="delete_downloads_for_manga">डाउनलोड किए गए अध्याय हटाएं?</string>
     <string name="display_mode_chapter">अध्याय %1$s</string>
     <string name="chapter_downloading_progress">डाउनलोड किया जा रहा है (%1$d/%2$d)</string>
-    <string name="chapter_error">त्रुटि</string>
-    <string name="chapter_paused">रोके गए</string>
     <string name="show_title">स्रोत शीर्षक</string>
     <string name="show_chapter_number">अध्याय संख्या</string>
     <string name="sort_by_source">स्रोत से</string>
@@ -193,7 +191,6 @@
     <string name="error_category_exists">इस नाम के साथ एक श्रेणी पहले से मौजूद है!</string>
     <string name="snack_categories_deleted">श्रेणियाँ हटाई गयी</string>
     <string name="dialog_with_checkbox_remove_description">यह इस अध्याय की पठन तिथि को निकाल देगा क्या आप निश्चित है?</string>
-    <string name="snack_add_to_library">पुस्तकालय में जोड़ें\?</string>
     <string name="picture_saved">चित्र सहेजा गया</string>
     <string name="custom_filter">इच्छा अनुसार फिल्टर</string>
     <string name="set_as_cover">कवर के रूप में सेट करें</string>
@@ -507,7 +504,6 @@
     <string name="information_empty_category_dialog">आपके पास अभी तक कोई श्रेणी नहीं है।</string>
     <string name="confirm_lock_change">परिवर्तन की पुष्टि करने के लिए प्रमाणित करें</string>
     <string name="action_sort_chapter_fetch_date">अध्याय लाई की तिथि</string>
-    <string name="pref_library_update_categories_details">बहिष्कृत श्रेणियों की पुस्तकें अपडेट नहीं की जाएंगी, भले ही वे भी शामिल श्रेणियों में हों।</string>
     <string name="ext_installer_shizuku_unavailable_dialog">शिज़ुकु को एक्सटेंशन इंस्टॉलर के रूप में उपयोग करने के लिए शिज़ुकु को इंस्टॉल और प्रारंभ करें।</string>
     <string name="help_translate">अनुवाद में मदद करें</string>
     <string name="date">दिनांक</string>

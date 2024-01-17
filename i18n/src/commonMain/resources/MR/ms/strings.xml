@@ -171,8 +171,6 @@
     <string name="delete_downloads_for_manga">Padam bab-bab yang dimuat turun?</string>
     <string name="display_mode_chapter">Bab %1$s</string>
     <string name="chapter_downloading_progress">Memuat turun (%1$d/%2$d)</string>
-    <string name="chapter_error">Ralat</string>
-    <string name="chapter_paused">Ditangguh</string>
     <string name="show_title">Tajuk sumber</string>
     <string name="show_chapter_number">Nombor bab</string>
     <string name="sort_by_source">Mengikut sumber</string>
@@ -192,7 +190,6 @@
     <string name="error_category_exists">Kategori dengan nama ini sudah wujud!</string>
     <string name="snack_categories_deleted">Kategori dipadam</string>
     <string name="dialog_with_checkbox_remove_description">Tarikh bacaan bab ini akan dipadam. Adakah anda pasti?</string>
-    <string name="snack_add_to_library">Tambah ke pustaka\?</string>
     <string name="action_display_download_badge">Bab dimuat turun</string>
     <string name="picture_saved">Gambar disimpan</string>
     <string name="custom_filter">Tapisan tersuai</string>
@@ -453,7 +450,6 @@
     <string name="exclude">Kecuali: %s</string>
     <string name="include">Hanya: %s</string>
     <string name="none">Tiada</string>
-    <string name="pref_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
     <string name="pref_download_new_categories_details">Entri di dalam kategori berkecuali tidak akan dimuat turun walaupun ianya ada di dalam kategori hanya.</string>
     <string name="pref_category_auto_download">Muat turun automatik</string>
     <string name="action_show_errors">Ketik untuk lihat butiran</string>

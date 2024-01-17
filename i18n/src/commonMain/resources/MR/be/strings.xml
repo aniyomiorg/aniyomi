@@ -102,7 +102,6 @@
     <string name="include">Уключаць: %s</string>
     <string name="none">Ніхто</string>
     <string name="all">Усе</string>
-    <string name="pref_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <string name="categorized_display_settings">Налады для кожнай катэгорыі для сартавання і адлюстравання</string>
     <string name="default_category_summary">Заўсёды пытацца</string>
     <string name="default_category">Катэгорыя па змаўчанні</string>

@@ -187,7 +187,6 @@
     <string name="categorized_display_settings">प्रतिवर्गं विन्यासस्य प्रदर्शनस्य च कृते समायोजनानि</string>
     <string name="untrusted_extension">अविश्वस्तविस्तारः</string>
     <string name="extension_api_error">विस्तारसूच्याः प्राप्तिः अनुत्तीर्णा</string>
-    <string name="pref_library_update_categories_details">माङ्गाः याः वर्जितवर्गेषु सन्ति ताः अन्तर्भूतवर्गेषु सन्ति चेदपि तासां नवीकरणं न भविष्यति।</string>
     <string name="obsolete_extension_message">अयं विस्तारः इतःपरं न उपलभ्यः।</string>
     <string name="ext_trust">विश्वासः</string>
     <string name="ext_update_all">सर्वाणि नवीकरोतु</string>
@@ -340,8 +339,6 @@
     <string name="cancelled">अलोप्यत</string>
     <string name="manga_info_expand">अधिकम्</string>
     <string name="manga_info_collapse">न्यूनम्</string>
-    <string name="chapter_error">दोषः</string>
-    <string name="chapter_paused">विरमितम्</string>
     <string name="download_unread">अपठितम्</string>
     <string name="manga_cover">मुखचित्रम्</string>
     <string name="dropped">त्यक्तम्</string>
@@ -489,7 +486,6 @@
     <string name="login_title">%1$s प्रति अन्तर्गच्छतु</string>
     <string name="logout_title">%1$s इतः बहिर्गच्छानि किम्</string>
     <string name="source_not_installed">मूलं न प्रतिष्ठापितम् - %1$s</string>
-    <string name="snack_add_to_library">माङ्गां ग्रन्थालये योजयानि किम्</string>
     <string name="notification_cover_update_failed">मुखचित्रनवीकरणम् अनुत्तीर्णम्</string>
     <string name="no_next_chapter">अग्रिमाध्यायः न लभ्यः</string>
     <string name="recent_manga_time">अध्यायः %1$s – %2$s</string>

@@ -140,8 +140,6 @@
     <string name="remove_from_library">Gỡ bỏ khỏi thư viện</string>
     <string name="display_mode_chapter">Chương %1$s</string>
     <string name="chapter_downloading_progress">Đang tải xuống (%1$d/%2$d)</string>
-    <string name="chapter_error">Lỗi</string>
-    <string name="chapter_paused">Đã tạm dừng</string>
     <string name="show_title">Tiêu đề nguồn</string>
     <string name="show_chapter_number">Số chương</string>
     <string name="sort_by_source">Theo nguồn truyện</string>
@@ -162,7 +160,6 @@
     <string name="error_category_exists">Tên danh mục này đã tồn tại!</string>
     <string name="snack_categories_deleted">Danh mục đã bị xóa</string>
     <string name="dialog_with_checkbox_remove_description">Sẽ xóa ngày đọc các chương. Bạn chắc chứ?</string>
-    <string name="snack_add_to_library">Thêm truyện vào thư viện\?</string>
     <string name="picture_saved">Đã lưu ảnh</string>
     <string name="custom_filter">Bộ lọc tùy chỉnh</string>
     <string name="set_as_cover">Đặt làm ảnh bìa</string>
@@ -353,7 +350,6 @@
     <string name="action_search_settings">Cài đặt tìm kiếm</string>
     <string name="backup_in_progress">Sao lưu đang trong quá trình thực hiện</string>
     <string name="clear_history_confirmation">Bạn có chắc không\? Tất cả lịch sử sẽ bị xoá.</string>
-    <string name="pref_library_update_categories_details">Truyện trong danh mục bị loại trừ sẽ không được cập nhật.</string>
     <string name="track_finished_reading_date">Ngày kết thúc</string>
     <string name="filter_mode_lighten">Chế độ làm sáng lên</string>
     <string name="filter_mode_darken">Chế độ làm tối đi</string>

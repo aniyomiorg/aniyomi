@@ -202,8 +202,6 @@
     <string name="source_not_installed">未安装图源：%1$s</string>
     <string name="display_mode_chapter">第 %1$s 章</string>
     <string name="chapter_downloading_progress">正在下载（%1$d/%2$d）</string>
-    <string name="chapter_error">错误</string>
-    <string name="chapter_paused">搁置中</string>
     <string name="show_title">图源标题</string>
     <string name="show_chapter_number">章节编号</string>
     <string name="sort_by_source">按图源</string>
@@ -227,7 +225,6 @@
     <string name="snack_categories_deleted">分类已删除</string>
     <string name="dialog_with_checkbox_remove_description">此章节的阅读日期将被清除，您确定吗？</string>
     <string name="dialog_with_checkbox_reset">重置此作品的所有章节</string>
-    <string name="snack_add_to_library">要添加到书架吗？</string>
     <string name="picture_saved">图片已保存</string>
     <string name="custom_filter">滤镜</string>
     <string name="set_as_cover">设为封面</string>
@@ -460,7 +457,6 @@
     <string name="exclude">排除：%s</string>
     <string name="include">包含：%s</string>
     <string name="action_sort_chapter_fetch_date">章节获取时间</string>
-    <string name="pref_library_update_categories_details">应用不会更新位于排除分类的作品，即使它们同样位于包含分类。</string>
     <string name="pref_download_new_categories_details">应用不会下载位于排除分类的作品，即使它们同样位于包含分类。</string>
     <string name="pref_category_auto_download">自动下载</string>
     <string name="action_show_errors">点击查看详情</string>

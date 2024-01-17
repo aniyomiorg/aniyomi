@@ -119,7 +119,6 @@
     <string name="remove_from_library">Remover da biblioteca</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="chapter_downloading_progress">A Transferir (%1$d/%2$d)</string>
-    <string name="chapter_error">Erro</string>
     <string name="show_title">Título da fonte</string>
     <string name="show_chapter_number">Número do capítulo</string>
     <string name="sort_by_source">Por fonte</string>
@@ -237,14 +236,12 @@
     <string name="copied_to_clipboard">Copiado para área de transferência:
 \n%1$s</string>
     <string name="source_not_installed">Fonte não instalada: %1$s</string>
-    <string name="chapter_paused">Pausado</string>
     <string name="manga_tracking_tab">Monitorização</string>
     <string name="repeating">Relendo</string>
     <string name="track_status">Estado</string>
     <string name="track_type">Tipo</string>
     <string name="error_category_exists">Já existe uma categoria com este nome!</string>
     <string name="snack_categories_deleted">Categorias eliminadas</string>
-    <string name="snack_add_to_library">Adicionar à biblioteca\?</string>
     <string name="picture_saved">Imagem guardada</string>
     <string name="custom_filter">Filtro personalizado</string>
     <string name="set_as_cover">Usar como capa</string>
@@ -456,7 +453,6 @@
     <string name="pref_download_new_categories_details">Os itens nas categorias excluídas não serão disponibilizados offline mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="exclude">Excluir: %s</string>
     <string name="include">Incluir: %s</string>
-    <string name="pref_library_update_categories_details">Os itens nas categorias excluídas não serão atualizados mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="action_show_errors">Toque para ver detalhes</string>
     <string name="action_sort_chapter_fetch_date">Data de procura do capítulo</string>
     <string name="rotation_landscape">Horizontal</string>

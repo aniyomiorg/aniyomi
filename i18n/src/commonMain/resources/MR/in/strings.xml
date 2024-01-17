@@ -165,8 +165,6 @@
     <string name="delete_downloads_for_manga">Hapus bab terunduh\?</string>
     <string name="display_mode_chapter">Bab %1$s</string>
     <string name="chapter_downloading_progress">Mengunduh (%1$d/%2$d)</string>
-    <string name="chapter_error">Kesalahan</string>
-    <string name="chapter_paused">Jeda</string>
     <string name="show_title">Judul</string>
     <string name="show_chapter_number">Nomor bab</string>
     <string name="sort_by_source">Sumber</string>
@@ -186,7 +184,6 @@
     <string name="error_category_exists">Kategori dengan nama ini sudah ada!</string>
     <string name="snack_categories_deleted">Kategori dihapus</string>
     <string name="dialog_with_checkbox_remove_description">Ini akan menghapus tanggal baca bab ini. Apakah Anda yakin\?</string>
-    <string name="snack_add_to_library">Tambahkan ke pustaka\?</string>
     <string name="picture_saved">Gambar disimpan</string>
     <string name="custom_filter">Filter khusus</string>
     <string name="set_as_cover">Tetapkan sebagai sampul</string>
@@ -472,7 +469,6 @@
     <string name="rotation_type">Rotasi</string>
     <string name="pref_grayscale">Skala abu-abu</string>
     <string name="pref_show_navigation_mode">Tampilkan zona ketukan</string>
-    <string name="pref_library_update_categories_details">Entri dalam kategori yang dikecualikan tidak akan diperbarui meskipun mereka juga termasuk dalam kategori yang disertakan.</string>
     <string name="date">Tanggal</string>
     <string name="local_filter_order_by">Urutkan menurut</string>
     <string name="local_invalid_format">Format bab tidak valid</string>

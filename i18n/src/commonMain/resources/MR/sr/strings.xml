@@ -195,8 +195,6 @@
     <string name="source_not_installed">Извор није инсталиран: %1$s</string>
     <string name="display_mode_chapter">Поглавље %1$s</string>
     <string name="chapter_downloading_progress">Преузима се (%1$d/%2$d)</string>
-    <string name="chapter_error">Грешка</string>
-    <string name="chapter_paused">Паузирано</string>
     <string name="show_title">Наслов извора</string>
     <string name="show_chapter_number">Број поглавља</string>
     <string name="pref_read_with_long_tap">Прикажи радње при дугом додиру</string>
@@ -301,7 +299,6 @@
     <string name="reading">Читање</string>
     <string name="add_tracking">Додај праћење</string>
     <string name="manga_tracking_tab">Праћење</string>
-    <string name="snack_add_to_library">Додати у колекцију\?</string>
     <string name="manga_info_collapse">Мање</string>
     <string name="manga_info_expand">Више</string>
     <string name="in_library">У колекцији</string>
@@ -487,7 +484,6 @@
     <string name="connected_to_wifi">Само преко Wi-Fi-а</string>
     <string name="restrictions">Ограничења: %s</string>
     <string name="categorized_display_settings">Поставке за сортирање одвојено за сваку категорију</string>
-    <string name="pref_library_update_categories_details">Наслови у искљученим категоријама се неће ажурирати иако су такође у укљученим категоријама.</string>
     <string name="include">Укључи: %s</string>
     <string name="exclude">Искључи: %s</string>
     <string name="ext_install_service_notif">Инсталирање додатка…</string>
