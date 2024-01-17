@@ -132,8 +132,6 @@
     <string name="remove_from_library">Verwijderen uit bibliotheek</string>
     <string name="display_mode_chapter">Hoofdstuk %1$s</string>
     <string name="chapter_downloading_progress">Aan het downloaden (%1$d/%2$d)</string>
-    <string name="chapter_error">Fout</string>
-    <string name="chapter_paused">Gepauzeerd</string>
     <string name="show_title">Brontitel</string>
     <string name="show_chapter_number">Hoofdstuknummer</string>
     <string name="sort_by_source">Op bron</string>
@@ -148,7 +146,6 @@
     <string name="status">Status</string>
     <string name="error_category_exists">Er bestaat al een categorie met deze naam!</string>
     <string name="snack_categories_deleted">Categorieën verwijderd</string>
-    <string name="snack_add_to_library">Toevoegen aan bibliotheek\?</string>
     <string name="picture_saved">Afbeelding opgeslagen</string>
     <string name="custom_filter">Aangepast filter</string>
     <string name="set_as_cover">Instellen als omslagfoto</string>
@@ -451,7 +448,6 @@
     <string name="pref_category_auto_download">Automatisch downloaden</string>
     <string name="exclude">Uitgezonderd: %s</string>
     <string name="include">Inbegrepen: %s</string>
-    <string name="pref_library_update_categories_details">Items in uitgesloten categorieën worden niet bijgewerkt, zelfs niet als ze onder opgenomen categorieën vallen.</string>
     <string name="action_sort_chapter_fetch_date">Datum opgehaald</string>
     <string name="none">Geen</string>
     <string name="action_show_errors">Klik om details te weergeven</string>

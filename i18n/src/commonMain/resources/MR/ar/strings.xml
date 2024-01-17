@@ -171,8 +171,6 @@
     <string name="delete_downloads_for_manga">حذف الفصول المنزلة؟</string>
     <string name="display_mode_chapter">الفصل %1$s</string>
     <string name="chapter_downloading_progress">جاري التنزيل (%1$d/%2$d)</string>
-    <string name="chapter_error">خطأ</string>
-    <string name="chapter_paused">متوقّف</string>
     <string name="show_title">عنوان المصدر</string>
     <string name="show_chapter_number">رقم الفصل</string>
     <string name="sort_by_source">حسب المصدر</string>
@@ -192,7 +190,6 @@
     <string name="error_category_exists">توجد بالفعل فئة بهذا الاسم!</string>
     <string name="snack_categories_deleted">تم حذف الفئات</string>
     <string name="dialog_with_checkbox_remove_description">سيؤدي هذا إلى إزالة تاريخ قراءة هذا الفصل. هل أنت متأكد؟</string>
-    <string name="snack_add_to_library">إضافة إلى المكتبة؟</string>
     <string name="picture_saved">تم حفظ الصورة</string>
     <string name="custom_filter">مُرشح مخصص</string>
     <string name="set_as_cover">عيِّنها غلافًا</string>
@@ -461,7 +458,6 @@
     <string name="exclude">إستثناء: %s</string>
     <string name="include">تضمين: %s</string>
     <string name="none">لا شيء</string>
-    <string name="pref_library_update_categories_details">الإدخالات في الفئات المستبعدة لن يتم تحديثها حتى و ان كانت أيضا في الفئات المضمنة.</string>
     <string name="action_show_errors">اضغط لإظهار التفاصيل</string>
     <string name="pref_category_auto_download">التنزيل التلقائي</string>
     <string name="pref_download_new_categories_details">لن يتم تنزيل الإدخالات في الفئات المستبعدة حتى إذا كانت موجودة أيضًا في الفئات المضمنة.</string>
@@ -539,13 +535,11 @@
     <string name="library_errors_help">للحصول على المساعده في إصلاح أخطاء تحديث المكتبة، أنظر هنا%1$s</string>
     <string name="save_chapter_as_cbz">احفظ كأرشيف CBZ</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
-    <string name="pref_library_update_manga_restriction">تخطي تحديث الإدخالات</string>
     <string name="ext_installer_legacy">قياسي</string>
     <string name="database_clean">لا شئ للتنظيف</string>
     <string name="clear_database_source_item_count">%1$d مدخلةً في قاعدة البيانات وليست في المكتبة</string>
     <string name="extension_api_error">فشل الحصول على قائمة الملحقات</string>
     <string name="ext_installer_shizuku_unavailable_dialog">ثبِّت «شيزوكو» وشغِّله لتستخدمه مثبِّت إضافات.</string>
-    <string name="action_faq_and_guides">الاسئله الشائعه والأدلة</string>
     <string name="action_show_manga">إظهار الدخول</string>
     <string name="action_display_cover_only_grid">شبكة بالاغلفة</string>
     <string name="skipped_reason_not_started">تُخُطِّيت بسبب عدم وجود فصول قُرئت</string>
@@ -1035,4 +1029,15 @@
     <string name="pref_category_hide_hidden">إخفاء الفئات المخفية من شاشة الفئات</string>
     <string name="pref_category_player_advanced">إعدادات المشغل المتقدمة</string>
     <string name="theme_cottoncandy">حلوى القطن</string>
+    <string name="action_sort_airing_time">وقت البث</string>
+    <string name="action_reorganize_by">اعد الترتيب</string>
+    <string name="onboarding_permission_notifications_description">احصل على إشعارات تحديثات المكتبة والمزيد.</string>
+    <string name="ext_permission_install_apps_warning">التطبيق يحتاج صلاحيات تثبيت التطبيقات لتثبيت المصادر, إضغط هنا لمنحها.</string>
+    <string name="onboarding_storage_help_info">حدثت من نسخة قديمة ولا تعرف ماذا تختار؟ راجع دليل التخزين للمزيد من المعلومات.</string>
+    <string name="onboarding_storage_help_action">دليل التخزين</string>
+    <string name="onboarding_permission_install_apps">صلاحية تثبيت التطبيقات</string>
+    <string name="onboarding_permission_notifications">صلاحية الاشعارات</string>
+    <string name="onboarding_permission_ignore_battery_opts">استخدام البطارية في الخلفية</string>
+    <string name="onboarding_permission_action_grant">منح</string>
+    <string name="pref_general_summary">لغة التطبيق, الاشعارات.</string>
 </resources>

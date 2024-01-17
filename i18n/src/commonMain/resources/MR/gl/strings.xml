@@ -244,7 +244,6 @@
     <string name="pref_advanced_summary">Baixar os rexistros de erros, optimizacións de batería</string>
     <string name="theme_tidalwave">Maremoto</string>
     <string name="relative_time_today">Hoxe</string>
-    <string name="pref_library_update_categories_details">Os elementos das categorías excluídas non se actualizarán aínda se están tamén nas categorías incluídas.</string>
     <string name="ext_info_version">Versión</string>
     <string name="ext_install_service_notif">Instalando a extensión…</string>
     <string name="ext_installer_legacy">Clásico</string>
@@ -381,7 +380,6 @@
     <string name="pref_dns_over_https">DNS por HTTPS (DoH)</string>
     <string name="update_72hour">Cada 3 días</string>
     <string name="downloaded_only_summary">Filtra tódolos elementos da túa biblioteca</string>
-    <string name="snack_add_to_library">Engadir á biblioteca\?</string>
     <string name="description_placeholder">Sen descripción</string>
     <string name="status">Estado</string>
     <string name="restore_miui_warning">É posible que as opcións de copia de seguridade e de restauración non funcionen correctamente se a \"Optimización de MIUI\" está desactivada.</string>
@@ -495,7 +493,6 @@
     <string name="login_title">Iniciar sesión en %1$s</string>
     <string name="updating_category">Actualizando a categoría</string>
     <string name="unknown_error">Erro descoñecido</string>
-    <string name="chapter_paused">En pausa</string>
     <string name="show_title">Título da fonte</string>
     <string name="sort_by_number">Por número de capítulo</string>
     <string name="manga_download">Baixar</string>
@@ -524,7 +521,6 @@
     <string name="manga_info_expand">Máis</string>
     <string name="copied_to_clipboard_plain">Copiado ao portapapeis</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
-    <string name="chapter_error">Erro</string>
     <string name="wish_list">Para ler máis adiante</string>
     <string name="track_remove_finish_date_conf_text">Isto eliminará a data de finalización de %s</string>
     <string name="custom_filter">Filtro personalizado</string>

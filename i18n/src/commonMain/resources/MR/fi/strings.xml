@@ -230,8 +230,6 @@
     <string name="source_not_installed">Lähdettä ei ole asennettu: %1$s</string>
     <string name="display_mode_chapter">Luku %1$s</string>
     <string name="chapter_downloading_progress">Ladataan (%1$d/%2$d)</string>
-    <string name="chapter_error">Virhe</string>
-    <string name="chapter_paused">Pysäytetty</string>
     <string name="show_title">Nimike</string>
     <string name="show_chapter_number">Luvun numero</string>
     <string name="sort_by_source">Lähteen mukaan</string>
@@ -265,7 +263,6 @@
     <string name="plan_to_read">Aikomus lukea</string>
     <string name="repeating">Uudelleenluettava</string>
     <string name="dialog_with_checkbox_remove_description">Tämä poistaa luvun lukupäivän. Haluatko jatkaa\?</string>
-    <string name="snack_add_to_library">Lisää sarja kirjastoon\?</string>
     <string name="picture_saved">Kuva tallennetu</string>
     <string name="pref_color_filter_mode">Värisuodattimen sekoitus tyyppi</string>
     <string name="filter_mode_overlay">Päällys</string>
@@ -455,7 +452,6 @@
     <string name="action_sort_chapter_fetch_date">Haettu päivämäärä</string>
     <string name="pref_download_new_categories_details">Poissuljettuihin kategorioihin kuuluvia mangoja ei ladata, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="pref_category_auto_download">Automaattinen lataus</string>
-    <string name="pref_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="action_show_errors">Näytä lisätiedot</string>
     <string name="update_check_eol">Tätä Android-versiota ei enää tueta</string>
     <string name="clipboard_copy_error">Kopiointi leikepöydälle epäonnistui</string>

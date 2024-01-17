@@ -202,8 +202,6 @@
     <string name="source_not_installed">ไม่ได้ติดตั้งแหลงที่มา: %1$s</string>
     <string name="display_mode_chapter">ตอนที่ %1$s</string>
     <string name="chapter_downloading_progress">กำลังดาวน์โหลด (%1$d/%2$d)</string>
-    <string name="chapter_error">เกิดข้อผิดพลาด</string>
-    <string name="chapter_paused">หยุดชั่วคราว</string>
     <string name="show_title">ชื่อตามแหล่งที่มา</string>
     <string name="show_chapter_number">หมายเลขตอน</string>
     <string name="sort_by_source">ตามแหล่งที่มา</string>
@@ -235,7 +233,6 @@
     <string name="error_category_exists">หมวดหมู่ที่มีชื่อนี้มีอยู่แล้ว!</string>
     <string name="snack_categories_deleted">หมวดหมู่ถูกลบแล้ว</string>
     <string name="dialog_with_checkbox_remove_description">การดำเนินการนี้จะลบวันที่อ่านของตอนนี้ คุณแน่ใจไหม\?</string>
-    <string name="snack_add_to_library">เพิ่มไปยังคลัง\?</string>
     <string name="picture_saved">บันทึกรูปภาพแล้ว</string>
     <string name="custom_filter">ตัวกรอง</string>
     <string name="set_as_cover">ตั้งเป็นปก</string>
@@ -319,7 +316,6 @@
     <string name="exclude">ที่ยกเว้นไว้: %s</string>
     <string name="include">ที่รวมไว้: %s</string>
     <string name="none">ไม่มี</string>
-    <string name="pref_library_update_categories_details">รายการในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
     <string name="pref_library_update_refresh_metadata_summary">ตรวจสอบหน้าปกและรายละเอียดใหม่เมื่ออัปเดตคลัง</string>
     <string name="pref_library_update_refresh_metadata">โหลดข้อมูลเมตาใหม่โดยอัตโนมัติ</string>
     <string name="pref_category_library_update">อัปเดตทั้งหมด</string>

@@ -247,7 +247,6 @@
     <string name="pref_update_only_started">Kas nav sāktas</string>
     <string name="default_category_summary">Vienmēr jautāt</string>
     <string name="categorized_display_settings">Kategorijas iestatījumi kārtošanai</string>
-    <string name="pref_library_update_categories_details">Izslēgto kategoriju ieraksti netiks atjaunināti, pat ja tie ir iekļautajās kategorijās.</string>
     <string name="none">Neviens</string>
     <string name="include">Iekļaut: %s</string>
     <string name="ext_update_all">Atjaunināt visu</string>
@@ -442,8 +441,6 @@
     <string name="fifth_to_last">Piektā pirmspēdējā izlasītā nodaļa</string>
     <string name="action_global_search_hint">Globālā meklēšana…</string>
     <string name="information_cloudflare_bypass_failure">Neizdevās apiet Cloudflare</string>
-    <string name="chapter_error">Kļūda</string>
-    <string name="chapter_paused">Pārtraukts</string>
     <string name="library_errors_help">Lai uzzinātu, kā novērst bibliotēkas atjaunināšanas kļūdas, skatiet %1$s</string>
     <string name="transition_current">Pašreizējais:</string>
     <string name="page_list_empty_error">Lapas nav atrastas</string>
@@ -465,7 +462,6 @@
     <string name="pref_clear_history">Notīrīt vēsturi</string>
     <string name="share_page_info">%1$s: %2$s, lapa %3$d</string>
     <string name="manga_added_library">Pievienots bibliotēkai</string>
-    <string name="snack_add_to_library">Pievienot bibliotēkai\?</string>
     <string name="show_title">Avota nosaukums</string>
     <string name="manga_cover">Vāks</string>
     <string name="on_hold">Aizturēts</string>

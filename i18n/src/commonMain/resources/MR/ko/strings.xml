@@ -165,8 +165,6 @@
     <string name="source_not_installed">소스 미설치: %1$s</string>
     <string name="display_mode_chapter">%1$s화</string>
     <string name="chapter_downloading_progress">다운로드 중 (%1$d/%2$d)</string>
-    <string name="chapter_error">오류</string>
-    <string name="chapter_paused">일시정지</string>
     <string name="show_chapter_number">회차 번호</string>
     <string name="sort_by_source">소스 기준</string>
     <string name="sort_by_number">회차 번호 기준</string>
@@ -180,7 +178,6 @@
     <string name="track_status">상태</string>
     <string name="snack_categories_deleted">카테고리 삭제됨</string>
     <string name="dialog_with_checkbox_remove_description">이 회차의 읽은 기록을 삭제합니다. 계속하시겠습니까\?</string>
-    <string name="snack_add_to_library">서재에 추가합니까\?</string>
     <string name="picture_saved">사진 저장됨</string>
     <string name="custom_filter">이미지 필터</string>
     <string name="set_as_cover">표지로 설정</string>
@@ -551,7 +548,6 @@
     <string name="action_show_errors">터치하여 자세히 보기</string>
     <string name="update_72hour">3일</string>
     <string name="restrictions">제한: %s</string>
-    <string name="pref_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
     <string name="ext_updates_pending">업데이트 대기 중</string>
     <string name="pref_library_update_refresh_metadata_summary">서재 업데이트 시 새로운 표지와 설명 확인</string>
     <string name="notification_chapters_single_and_more">%1$s화와 그 외 %2$d화</string>

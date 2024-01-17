@@ -96,8 +96,6 @@
     <string name="source_not_installed">Zdroj není nainstalován: %1$s</string>
     <string name="display_mode_chapter">Kapitola %1$s</string>
     <string name="chapter_downloading_progress">Stahování (%1$d/%2$d)</string>
-    <string name="chapter_error">Chyba</string>
-    <string name="chapter_paused">Pozastaveno</string>
     <string name="sort_by_source">Podle zdroje</string>
     <string name="manga_download">Stáhnout</string>
     <string name="download_unread">Stáhnout nepřečtené</string>
@@ -109,7 +107,6 @@
     <string name="score">Skóre</string>
     <string name="title">Název</string>
     <string name="track_type">Typ</string>
-    <string name="snack_add_to_library">Přidat do knihovny\?</string>
     <string name="picture_saved">Obrázek uložen</string>
     <string name="custom_filter">Vlastní filtr</string>
     <string name="chapter_progress">Stránka: %1$d</string>
@@ -442,7 +439,6 @@
     <string name="exclude">Vynechat: %s</string>
     <string name="include">Zahrnout: %s</string>
     <string name="none">Žádné</string>
-    <string name="pref_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
     <string name="pref_category_display">Zobrazení</string>
     <string name="action_display_show_tabs">Zobrazovat karty kategorií</string>
     <string name="update_check_eol">Tato verze systému Android již není podporována</string>

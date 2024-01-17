@@ -202,7 +202,6 @@
     <string name="include">Įtraukti: %s</string>
     <string name="none">Nėra</string>
     <string name="all">Visi</string>
-    <string name="pref_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
     <string name="update_check_notification_download_error">Atsiuntimo klaida</string>
     <string name="update_check_notification_update_available">Nauja versija pasiekiama!</string>
     <string name="scale_type_fit_height">Pagal aukštį talpinimas</string>
@@ -367,13 +366,10 @@
     <string name="cover_updated">Atnaujintas viršelis</string>
     <string name="logout_success">Dabar esate atsijungęs</string>
     <string name="set_as_cover">Nustatyti kaip viršelį</string>
-    <string name="chapter_paused">Pristabdyta</string>
     <string name="source_not_installed">Šaltinis neįdiegtas: %1$s</string>
-    <string name="snack_add_to_library">Pridėti į biblioteką\?</string>
     <string name="track_type">Тipas</string>
     <string name="track_started_reading_date">Pradžios data</string>
     <string name="display_mode_chapter">Skyrius %1$s</string>
-    <string name="chapter_error">Klaida</string>
     <string name="login_success">Prisijungęs</string>
     <string name="unknown_error">Nežinoma klaida</string>
     <string name="downloaded_chapters">Atsisiųsti skyriai</string>

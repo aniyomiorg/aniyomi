@@ -212,8 +212,6 @@
     <string name="source_not_installed">Zdroj nie je nainštalovaný: %1$s</string>
     <string name="display_mode_chapter">Kapitola %1$s</string>
     <string name="chapter_downloading_progress">Sťahovanie (%1$d/%2$d)</string>
-    <string name="chapter_error">Chyba</string>
-    <string name="chapter_paused">Pozastavené</string>
     <string name="show_title">Názov zdroja</string>
     <string name="show_chapter_number">Číslo kapitoly</string>
     <string name="sort_by_source">Podľa zdroja</string>
@@ -236,7 +234,6 @@
     <string name="error_category_exists">Kategória s týmto názvom už existuje!</string>
     <string name="snack_categories_deleted">Kategórie boli odstránené</string>
     <string name="dialog_with_checkbox_remove_description">Týmto sa odstráni dátum prečítania tejto kapitoly. Si si istý\?</string>
-    <string name="snack_add_to_library">Pridať mangu do knižnice\?</string>
     <string name="picture_saved">Obrázok bol uložený</string>
     <string name="custom_filter">Vlastný filter</string>
     <string name="set_as_cover">Nastaviť ako obal</string>
@@ -529,7 +526,6 @@
     <string name="share_page_info">%1$s: %2$s, strana %3$d</string>
     <string name="rotation_type">Typ rotácie</string>
     <string name="action_close">Zatvoriť</string>
-    <string name="pref_library_update_categories_details">Záznamy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
     <string name="ext_updates_pending">Čakajúce aktualizácie</string>
     <string name="spen_next_page">Ďalšia strana</string>
     <string name="update_check_open">Otvoriť na GitHub-e</string>

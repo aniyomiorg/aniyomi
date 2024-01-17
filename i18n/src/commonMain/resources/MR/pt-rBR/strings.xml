@@ -167,8 +167,6 @@
     <string name="delete_downloads_for_manga">Excluir os capítulos disponíveis offline\?</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="chapter_downloading_progress">Fazendo download (%1$d/%2$d)</string>
-    <string name="chapter_error">Erro</string>
-    <string name="chapter_paused">Pausado</string>
     <string name="show_title">Título da fonte</string>
     <string name="show_chapter_number">Número do capítulo</string>
     <string name="sort_by_source">Pela fonte</string>
@@ -188,7 +186,6 @@
     <string name="error_category_exists">Já existe uma categoria com este nome!</string>
     <string name="snack_categories_deleted">Categorias excluídas</string>
     <string name="dialog_with_checkbox_remove_description">Isso irá remover a data de leitura deste capítulo. Você tem certeza\?</string>
-    <string name="snack_add_to_library">Adicionar à biblioteca\?</string>
     <string name="picture_saved">Imagem salva</string>
     <string name="custom_filter">Filtro personalizado</string>
     <string name="set_as_cover">Usar como capa</string>
@@ -457,7 +454,6 @@
     <string name="exclude">Excluir: %s</string>
     <string name="include">Incluir: %s</string>
     <string name="action_sort_chapter_fetch_date">Data de busca do capítulo</string>
-    <string name="pref_library_update_categories_details">Os itens nas categorias excluídas não serão atualizados mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="pref_download_new_categories_details">Os itens nas categorias excluídas não serão disponibilizados offline mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="pref_category_auto_download">Download automático</string>
     <string name="action_show_errors">Toque para ver os detalhes</string>
