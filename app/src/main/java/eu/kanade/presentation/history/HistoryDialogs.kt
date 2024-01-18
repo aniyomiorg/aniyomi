@@ -43,7 +43,11 @@ fun HistoryDeleteDialog(
                 Text(text = stringResource(subtitle))
 
                 LabeledCheckbox(
-                    label = stringResource(MR.strings.dialog_with_checkbox_reset),
+                    label = if (isManga) {
+                        stringResource(MR.strings.dialog_with_checkbox_reset)
+                    } else {
+                        stringResource(MR.strings.dialog_with_checkbox_reset_anime)
+                    },
                     checked = removeEverything,
                     onCheckedChange = { removeEverything = it },
                 )
