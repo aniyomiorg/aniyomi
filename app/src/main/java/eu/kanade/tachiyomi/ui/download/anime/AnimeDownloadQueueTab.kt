@@ -6,6 +6,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -14,7 +15,9 @@ import eu.kanade.presentation.components.TabContent
 import tachiyomi.i18n.MR
 
 @Composable
-fun Screen.animeDownloadTab(): TabContent {
+fun Screen.animeDownloadTab(
+    nestedScrollConnection: NestedScrollConnection,
+): TabContent {
     val navigator = LocalNavigator.currentOrThrow
     val scope = rememberCoroutineScope()
     val screenModel = rememberScreenModel { AnimeDownloadQueueScreenModel() }
@@ -32,6 +35,7 @@ fun Screen.animeDownloadTab(): TabContent {
                 scope = scope,
                 screenModel = screenModel,
                 downloadList = downloadList,
+                nestedScrollConnection = nestedScrollConnection,
             )
         },
         numberTitle = downloadCount,

@@ -213,7 +213,6 @@
 \n%1$s</string>
     <string name="delete_downloads_for_manga">Törli a kijelölt fejezeteket\?</string>
     <string name="spen_previous_page">Előző oldal</string>
-    <string name="chapter_error">Hiba</string>
     <string name="website">Weboldal</string>
     <string name="check_for_updates">Frissítések keresése</string>
     <string name="licenses">Nyílt forráskódú licenc</string>
@@ -249,8 +248,6 @@
     <string name="repeating">Újraolvasás</string>
     <string name="confirm_delete_chapters">Biztosan törölni akarja a kijelölt fejezeteket\?</string>
     <string name="download_unread">Olvasatlan</string>
-    <string name="chapter_paused">Szünetel</string>
-    <string name="snack_add_to_library">Manga könyvtárhoz adása\?</string>
     <string name="source_not_installed">Forrás nincs telepítve: %1$s</string>
     <string name="ongoing">Folyamatban van</string>
     <string name="last_used_source">Utoljára használt</string>
@@ -273,7 +270,6 @@
     <string name="include">Kedvelt: %s</string>
     <string name="none">Semmi</string>
     <string name="pref_download_new_categories_details">Bejegyzések a tiltott kategóriákban nem lesznek letöltve, még akkor se, ha a kedvelt kategóriában is vannak.</string>
-    <string name="pref_library_update_categories_details">Mangák a tiltott kategóriákban nem lesznek frissítve, még akkor se, ha a kedvelt kategóriákban is vannak.</string>
     <string name="secure_screen">Biztonságos képernyő</string>
     <string name="lock_when_idle">Zárás tétlen állapotban</string>
     <string name="lock_with_biometrics">Biometrikus zár</string>

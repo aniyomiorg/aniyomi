@@ -253,11 +253,8 @@
     <string name="copied_to_clipboard">დაკოპირებულია ბუფერში:
 \n%1$s</string>
     <string name="source_not_installed">წყარო არ არის დაინსტალირებული: %1$s</string>
-    <string name="snack_add_to_library">დავამატო ბიბლიოთეკაში\?</string>
     <string name="display_mode_chapter">თავი %1$s</string>
     <string name="chapter_downloading_progress">მიმდინარეობს გადმოწერა (%1$d/%2$d)</string>
-    <string name="chapter_error">შეცდომა</string>
-    <string name="chapter_paused">დაპაუზებულია</string>
     <string name="show_title">წყაროს სათაური</string>
     <string name="show_chapter_number">თავის ნომერი</string>
     <string name="sort_by_source">წყაროს მიხედვით</string>

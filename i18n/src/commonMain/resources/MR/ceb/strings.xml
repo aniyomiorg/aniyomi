@@ -240,7 +240,6 @@
     <string name="exclude">Dili iapil: %s</string>
     <string name="ext_install">Pag-instalar</string>
     <string name="ext_downloading">Nag-download</string>
-    <string name="pref_library_update_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-update bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
     <string name="none">Wala</string>
     <string name="ext_pending">Naghulat</string>
     <string name="ext_app_info">Impormasyon sa app</string>

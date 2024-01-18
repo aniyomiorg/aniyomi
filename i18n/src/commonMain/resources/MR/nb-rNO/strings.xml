@@ -196,8 +196,6 @@
     <string name="source_not_installed">Kilde ikke installert: %1$s</string>
     <string name="display_mode_chapter">Kapittel %1$s</string>
     <string name="chapter_downloading_progress">Laster ned (%1$d/%2$d)</string>
-    <string name="chapter_error">Feil</string>
-    <string name="chapter_paused">Pauset</string>
     <string name="show_title">Kildetittel</string>
     <string name="show_chapter_number">Kapittelnummer</string>
     <string name="sort_by_source">Etter kilde</string>
@@ -220,7 +218,6 @@
     <string name="error_category_exists">En kategori ved dette navnet finnes allerede!</string>
     <string name="snack_categories_deleted">Kategorier slettet</string>
     <string name="dialog_with_checkbox_remove_description">Lesningsdato for dette kapittelet vil bli fjernet. Er du sikker\?</string>
-    <string name="snack_add_to_library">Legg til i bibliotek\?</string>
     <string name="picture_saved">Bilde lagret</string>
     <string name="custom_filter">Egendefinert filter</string>
     <string name="set_as_cover">Sett som omslag</string>
@@ -457,7 +454,6 @@
     <string name="action_sort_chapter_fetch_date">Dato hentet</string>
     <string name="pref_download_new_categories_details">Oppføringer i utelukkede kategorier vil ikke bli nedlastet selv om de også er i inkluderte kategorier.</string>
     <string name="pref_category_auto_download">Last ned automatisk</string>
-    <string name="pref_library_update_categories_details">Oppførninger i utelukkede kategorier vil ikke bli oppdatert selv om de også er i inkluderte kategorier.</string>
     <string name="action_show_errors">Trykk for å se detaljer</string>
     <string name="clipboard_copy_error">Kunne ikke kopiere til utklippstavlen</string>
     <string name="update_check_eol">Denne Android-versjonen støttes ikke lenger</string>

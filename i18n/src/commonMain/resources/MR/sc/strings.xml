@@ -196,8 +196,6 @@
     <string name="source_not_installed">Fonte no installada: %1$s</string>
     <string name="display_mode_chapter">Capìtulu %1$s</string>
     <string name="chapter_downloading_progress">Iscarrighende (%1$d/%2$d)</string>
-    <string name="chapter_error">Errore</string>
-    <string name="chapter_paused">In pàusa</string>
     <string name="show_title">Tìtulu de sa fonte</string>
     <string name="show_chapter_number">Nùmeru de capìtulu</string>
     <string name="sort_by_source">Pro fonte</string>
@@ -220,7 +218,6 @@
     <string name="error_category_exists">Esistit giai una categoria cun custu nùmene!</string>
     <string name="snack_categories_deleted">Categorias iscantzelladas</string>
     <string name="dialog_with_checkbox_remove_description">Custu at a bogare sa data de leghidura de custu capìtulu. Seguru ses\?</string>
-    <string name="snack_add_to_library">Annànghere a sa biblioteca\?</string>
     <string name="picture_saved">Immàgine sarvada</string>
     <string name="custom_filter">Filtru personalizadu</string>
     <string name="set_as_cover">Imposta comente cobertedda</string>
@@ -455,7 +452,6 @@
     <string name="action_sort_chapter_fetch_date">Data de recùperu de su capìtulu</string>
     <string name="pref_download_new_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a iscarrigare nemmancu si sunt fintzas in categorias inclùdidas.</string>
     <string name="pref_category_auto_download">Iscarrigamentu automàticu</string>
-    <string name="pref_library_update_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a agiornare nemmancu si sunt fintzas in categorias inclùdidas.</string>
     <string name="action_show_errors">Toca pro bìdere sos detàllios</string>
     <string name="clipboard_copy_error">Còpia in punta de billete fallida</string>
     <string name="update_check_eol">Custa versione de Android no est prus suportada</string>

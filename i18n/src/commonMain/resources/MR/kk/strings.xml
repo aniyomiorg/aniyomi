@@ -202,7 +202,6 @@
     <string name="action_display_comfortable_grid">Ыңғайлы кесте</string>
     <string name="action_display_cover_only_grid">Атаусыз кесте</string>
     <string name="pref_library_update_refresh_metadata">Метадеректерді автоматты түрде жаңарту</string>
-    <string name="pref_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
     <string name="all">Барлығы</string>
     <string name="none">Ешқайсы</string>
     <string name="exclude">Шығару: %s</string>
@@ -524,8 +523,6 @@
     <string name="channel_common">Ортақ</string>
     <string name="channel_progress">Прогресс</string>
     <string name="chapter_settings">Тарау баптауы</string>
-    <string name="chapter_error">Қателік</string>
-    <string name="chapter_paused">Тоқтатылды</string>
     <string name="track_status">Күйі</string>
     <string name="wish_list">Жоспардағылар Тізімі</string>
     <string name="migration_dialog_what_to_include">Қай деректі тасымалдау керек</string>
@@ -623,7 +620,6 @@
 \n%1$s</string>
     <string name="clipboard_copy_error">Буферге көшірілмеді</string>
     <string name="source_not_installed">Дереккөз орнатылмаған: %1$s</string>
-    <string name="snack_add_to_library">Кітапханаға қосайық па\?</string>
     <string name="set_chapter_settings_as_default">Әдепкі қылып орнату</string>
     <string name="page_list_empty_error">Беттер табылмады</string>
     <string name="transition_no_next">Келесі тарау жоқ</string>

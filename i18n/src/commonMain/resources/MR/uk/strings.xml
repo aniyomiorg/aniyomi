@@ -195,8 +195,6 @@
     <string name="source_not_installed">Джерело не встановлено: %1$s</string>
     <string name="display_mode_chapter">Розділ %1$s</string>
     <string name="chapter_downloading_progress">Завантажується (%1$d/%2$d)</string>
-    <string name="chapter_error">Помилка</string>
-    <string name="chapter_paused">Призупинено</string>
     <string name="show_title">Назва джерела</string>
     <string name="show_chapter_number">Номер розділу</string>
     <string name="sort_by_source">За каталогом</string>
@@ -219,7 +217,6 @@
     <string name="error_category_exists">Категорія з таким іменем вже існує!</string>
     <string name="snack_categories_deleted">Категорію видалено</string>
     <string name="dialog_with_checkbox_remove_description">Ця дія видалить дату прочитання розділу. Ви впевнені\?</string>
-    <string name="snack_add_to_library">Додати до бібліотеки\?</string>
     <string name="picture_saved">Картинку збережено</string>
     <string name="custom_filter">Користувацький фільтр</string>
     <string name="set_as_cover">Встановити як обкладинку</string>
@@ -454,7 +451,6 @@
     <string name="exclude">Виключати: %s</string>
     <string name="include">Включати: %s</string>
     <string name="none">Немає</string>
-    <string name="pref_library_update_categories_details">Записи в виключених категоріях не буде оновлено, навіть якщо вони також знаходяться у включених категоріях.</string>
     <string name="action_sort_chapter_fetch_date">Дата отримання розділу</string>
     <string name="action_show_errors">Тицьніть для перегляду подробиць</string>
     <string name="update_check_eol">Ця версія Android більше не підтримується</string>

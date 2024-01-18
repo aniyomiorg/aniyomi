@@ -279,11 +279,8 @@
     <string name="sort_by_source">Po izvoru</string>
     <string name="show_chapter_number">Broj poglavlja</string>
     <string name="show_title">Naslov izvora</string>
-    <string name="chapter_paused">Zaustavljeno</string>
-    <string name="chapter_error">Greška</string>
     <string name="chapter_downloading_progress">Preuzimanje (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Poglavlje %1$s</string>
-    <string name="snack_add_to_library">Dodati u biblioteku\?</string>
     <string name="source_not_installed">Izvor nije instaliran: %1$s</string>
     <string name="copied_to_clipboard">Kopirano u međuspremnik:
 \n%1$s</string>
@@ -454,7 +451,6 @@
     <string name="pref_category_auto_download">Automatsko preuzimanje</string>
     <string name="exclude">Isključi: %s</string>
     <string name="include">Uključi: %s</string>
-    <string name="pref_library_update_categories_details">Unosi u isključenim kategorijama neće se ažurirati čak i ako su također u uključenim kategorijama.</string>
     <string name="action_sort_chapter_fetch_date">Datum preuzimanja poglavlja</string>
     <string name="action_show_errors">Dodirni za prikaz detalja</string>
     <string name="update_check_eol">Ove verzija androida više nije podržana</string>

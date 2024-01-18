@@ -201,8 +201,6 @@
     <string name="source_not_installed">Kaynak kurulmadı: %1$s</string>
     <string name="display_mode_chapter">Bölüm %1$s</string>
     <string name="chapter_downloading_progress">(%1$d/%2$d) indiriliyor</string>
-    <string name="chapter_error">Hata</string>
-    <string name="chapter_paused">Duraklatıldı</string>
     <string name="show_title">Kaynak başlığı</string>
     <string name="show_chapter_number">Bölüm numarası</string>
     <string name="sort_by_source">Kaynağa göre</string>
@@ -225,7 +223,6 @@
     <string name="error_category_exists">Bu adla bir ulam zaten var!</string>
     <string name="snack_categories_deleted">Ulamlar silindi</string>
     <string name="dialog_with_checkbox_remove_description">Bu, bu bölümün okunma tarihini kaldıracak. Emin misiniz?</string>
-    <string name="snack_add_to_library">Kitaplığa eklensin mi\?</string>
     <string name="picture_saved">Resim kaydedildi</string>
     <string name="custom_filter">Özel süzgeç</string>
     <string name="set_as_cover">Kapak olarak ayarla</string>
@@ -459,7 +456,6 @@
     <string name="action_sort_chapter_fetch_date">Bölümün alındığı tarih</string>
     <string name="pref_download_new_categories_details">Hariç tutulan ulamlardaki girdiler, dahil edilen ulamlarda olsa bile indirilmeyecektir.</string>
     <string name="pref_category_auto_download">Kendiliğinden indir</string>
-    <string name="pref_library_update_categories_details">Hariç tutulan ulamlardaki girdiler, dahil edilen ulamlarda olsa bile güncellenmeyecektir.</string>
     <string name="action_show_errors">Ayrıntıları görmek için dokun</string>
     <string name="update_check_eol">Bu Android sürümü artık desteklenmiyor</string>
     <string name="clipboard_copy_error">Panoya kopyalanamadı</string>
