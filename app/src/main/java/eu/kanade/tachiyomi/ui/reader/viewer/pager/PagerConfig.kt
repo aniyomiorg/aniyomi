@@ -52,7 +52,6 @@ class PagerConfig(
     var landscapeZoom = false
         private set
 
-  
     var shiftDoublePage = false
 
     var doublePages = readerPreferences.pageLayout().get() == PageLayout.DOUBLE_PAGES &&
@@ -70,8 +69,6 @@ class PagerConfig(
     var pageCanvasColor = Color.WHITE
 
     var centerMarginType = CenterMarginType.NONE
-
-
 
     init {
         readerPreferences.readerTheme()

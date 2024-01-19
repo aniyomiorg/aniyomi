@@ -104,7 +104,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
         pager.id = R.id.reader_pager
         pager.adapter = adapter
         pager.addOnPageChangeListener(
-             // SY -->
+            // SY -->
             pagerListener,
             // SY <--
         )
@@ -173,7 +173,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     private fun getPageHolder(page: ReaderPage): PagerPageHolder? =
         pager.children
-             .filterIsInstance<PagerPageHolder>()
+            .filterIsInstance<PagerPageHolder>()
             .firstOrNull { it.item.first == page || it.item.second == page }
 
     /**
@@ -283,7 +283,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
         val forceTransition = config.alwaysShowChapterTransition ||
-        adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
+            adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set

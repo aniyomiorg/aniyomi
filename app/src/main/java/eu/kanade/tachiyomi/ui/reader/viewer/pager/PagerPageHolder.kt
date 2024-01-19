@@ -24,12 +24,11 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
+import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.math.max
-import tachiyomi.decoder.ImageDecoder
-
 
 /**
  * View of the ViewPager that contains a page of a chapter.
@@ -166,31 +165,31 @@ class PagerPageHolder(
             val (bais, isAnimated, background) = withIOContext {
                 streamFn().buffered(16).use { stream ->
                     // SY -->
-                (
-                    if (extraPage != null) {
-                        streamFn2?.invoke()
-                            ?.buffered(16)
-                    } else {
-                        null
-                    }
-                    ).use { stream2 ->
+                    (
+                        if (extraPage != null) {
+                            streamFn2?.invoke()
+                                ?.buffered(16)
+                        } else {
+                            null
+                        }
+                        ).use { stream2 ->
                         if (viewer.config.dualPageSplit) {
                             process(item.first, stream)
                         } else {
                             mergePages(stream, stream2)
                         }.use { itemStream ->
                             // SY <--
-                                val bais = ByteArrayInputStream(itemStream.readBytes())
-                                val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
-                                bais.reset()
-                                val background = if (!isAnimated && viewer.config.automaticBackground) {
-                                    ImageUtil.chooseBackground(context, bais)
-                                } else {
-                                    null
-                                }
-                                bais.reset()
-                                Triple(bais, isAnimated, background)
+                            val bais = ByteArrayInputStream(itemStream.readBytes())
+                            val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
+                            bais.reset()
+                            val background = if (!isAnimated && viewer.config.automaticBackground) {
+                                ImageUtil.chooseBackground(context, bais)
+                            } else {
+                                null
                             }
+                            bais.reset()
+                            Triple(bais, isAnimated, background)
+                        }
                     }
                 }
             }

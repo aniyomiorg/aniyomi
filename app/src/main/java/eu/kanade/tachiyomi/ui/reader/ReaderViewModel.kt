@@ -179,20 +179,20 @@ class ReaderViewModel @JvmOverloads constructor(
                                 (
                                     manga.downloadedFilterRaw ==
                                         Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
-                                        it.name,
-                                        it.scanlator,
-                                        manga.title,
-                                        manga.source,
-                                    )
+                                            it.name,
+                                            it.scanlator,
+                                            manga.title,
+                                            manga.source,
+                                        )
                                     ) ||
                                 (
                                     manga.downloadedFilterRaw ==
                                         Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
-                                        it.name,
-                                        it.scanlator,
-                                        manga.title,
-                                        manga.source,
-                                    )
+                                            it.name,
+                                            it.scanlator,
+                                            manga.title,
+                                            manga.source,
+                                        )
                                     ) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_BOOKMARKED && !it.bookmark) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_NOT_BOOKMARKED && it.bookmark)
@@ -676,12 +676,11 @@ class ReaderViewModel @JvmOverloads constructor(
     fun getMangaReadingMode(resolveDefault: Boolean = true): Int {
         val default = readerPreferences.defaultReadingMode().get()
         val readingMode = ReadingMode.fromPreference(manga?.readingMode?.toInt())
-       
+
         return when {
             resolveDefault && readingMode == ReadingMode.DEFAULT -> default
             else -> manga?.readingMode?.toInt() ?: default
         }
-        
     }
 
     /**
