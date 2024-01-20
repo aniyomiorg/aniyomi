@@ -1099,6 +1099,32 @@
     <string name="player_reset_subtitles">Restablecer subtítulos a valores predeterminados</string>
     <string name="player_subtitle_background_color">Fondo</string>
     <string name="unseen">Sin ver</string>
+    <!-- Connections section -->
+    <string name="special_services">Servicios Especiales</string>
+    <string name="pref_category_connections">Conexiones</string>
+    <string name="pref_connections_summary">Discord, más por venir...</string>
+    <string name="connections_info">Servicios especiales que son exclusivos de Animetail y mejoran la forma en que utilizas la aplicación.</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">Este servicio de Discord funciona a través del registro de tokens. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Animetail no lo comparte en ningún otro lugar.</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="show_chapters_titles_title">Muestra los Títulos de los Episodios/Capítulos.</string>
+    <string name="show_chapters_titles_subtitle">Muestra el título del episodio/capítulo que estás leyendo.</string>
+    <string name="pref_enable_discord_rpc">Habilitar Discord Rich Presence</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ No Molestar</string>
+    <string name="pref_discord_idle">🌙 Ausente</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord en Modo Incógnito</string>
+    <string name="pref_discord_incognito_summary">Anulado cuando el modo incógnito está habilitado</string>
+    <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Navegando</string>
+    <string name="scrolling">Desplazandose por</string>
+    <string name="messing">Jugando con</string>
+    <string name="video">Video</string>
+    <string name="comic">Manga</string>
     <string name="label_anime_extension_repos">Repositorios de extensiones de anime</string>
     <string name="label_manga_extension_repos">Repositorios de extensiones de manga</string>
     <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
