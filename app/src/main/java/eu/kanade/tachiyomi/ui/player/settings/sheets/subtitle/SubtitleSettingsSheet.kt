@@ -168,7 +168,7 @@ fun SubtitlePreview(
     val fontFile = fontMap.keys.firstOrNull { it.contains(font, true) }
         ?.let {
             Typeface.createFromFile(fontMap[it]?.let { fontFile -> tempFileManager.createTempFile(fontFile) })
-        } ?: Typeface.SANS_SERIF
+        } ?: Typeface.createFromAsset(LocalContext.current.assets, "subfont.ttf")
 
     Box(
         modifier = Modifier

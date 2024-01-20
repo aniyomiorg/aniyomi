@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
 import eu.kanade.presentation.components.WarningBanner
@@ -187,7 +188,7 @@ private fun ExtensionContent(
             }
 
             items(
-                items = items,
+                items = items.fastDistinctBy { it.hashCode() },
                 contentType = { "item" },
                 key = { "extension-${it.hashCode()}" },
             ) { item ->

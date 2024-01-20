@@ -202,7 +202,6 @@
     <string name="action_display_comfortable_grid">Ыңғайлы кесте</string>
     <string name="action_display_cover_only_grid">Атаусыз кесте</string>
     <string name="pref_library_update_refresh_metadata">Метадеректерді автоматты түрде жаңарту</string>
-    <string name="pref_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
     <string name="all">Барлығы</string>
     <string name="none">Ешқайсы</string>
     <string name="exclude">Шығару: %s</string>
@@ -524,8 +523,6 @@
     <string name="channel_common">Ортақ</string>
     <string name="channel_progress">Прогресс</string>
     <string name="chapter_settings">Тарау баптауы</string>
-    <string name="chapter_error">Қателік</string>
-    <string name="chapter_paused">Тоқтатылды</string>
     <string name="track_status">Күйі</string>
     <string name="wish_list">Жоспардағылар Тізімі</string>
     <string name="migration_dialog_what_to_include">Қай деректі тасымалдау керек</string>
@@ -623,7 +620,6 @@
 \n%1$s</string>
     <string name="clipboard_copy_error">Буферге көшірілмеді</string>
     <string name="source_not_installed">Дереккөз орнатылмаған: %1$s</string>
-    <string name="snack_add_to_library">Кітапханаға қосайық па\?</string>
     <string name="set_chapter_settings_as_default">Әдепкі қылып орнату</string>
     <string name="page_list_empty_error">Беттер табылмады</string>
     <string name="transition_no_next">Келесі тарау жоқ</string>
@@ -680,4 +676,31 @@
     <string name="pref_page_rotate">Кең беттерді сыйғызу үшін бұрыңыз</string>
     <string name="pref_page_rotate_invert">Бұрылған кең беттерді аудару бағдары</string>
     <string name="pref_debug_info">Дебаг туралы ақпарат</string>
+    <string name="manga_categories">Санаттар</string>
+    <string name="action_sort_last_manga_update">Соңғы жаңартуды тексеру</string>
+    <string name="action_show_manga">Жазбаны көрсету</string>
+    <string name="action_display_local_badge_manga">Локалды дереккөз</string>
+    <string name="pref_update_only_completely_read">Оқылмаған тарау(лар)мен</string>
+    <string name="pref_library_update_show_tab_badge">Жаңартулар белгішесінде оқылмағандар санын көрсету</string>
+    <string name="default_manga_category">Әдепкі санат</string>
+    <string name="pref_manga_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
+    <string name="pref_category_delete_chapters">Тарауларды жою</string>
+    <string name="pref_remove_after_marked_as_read">Қолмен оқылған деп белгіленгеннен кейін</string>
+    <string name="pref_remove_after_read">Оқығаннан кейін автоматты түрде жою</string>
+    <string name="pref_remove_bookmarked_chapters">Бетбелгіленген тарауларды жоюға рұқсат беру</string>
+    <string name="pref_remove_exclude_categories_manga">Саналмайтын санаттар</string>
+    <string name="pref_auto_update_manga_sync">Оқығаннан кейін прогрессті жаңарту</string>
+    <string name="pref_clear_chapter_cache">Тарау кешің тазалау</string>
+    <string name="pref_auto_clear_chapter_cache">Қолданба жабылғанда тараулар кешің тазалау</string>
+    <string name="pref_clear_manga_database">Дерекқорды тазалау</string>
+    <string name="pref_clear_manga_database_summary">Кітапханада жоқ жазбалардың тарихын жою</string>
+    <string name="clear_database_confirmation">Сенімдісіз бе? Кітапханадағы емес жазбалардың оқылған тараулары мен прогрессі жоғалады</string>
+    <string name="pref_incognito_mode_summary">Оқу тарихын тоқтатады</string>
+    <string name="manga_from_library">Кітапханадан</string>
+    <string name="snack_add_to_manga_library">Кітапханаға қосайық па?</string>
+    <string name="also_set_chapter_settings_for_library">Сонымен қоса кітапханадағы жазбаларға қолдану</string>
+    <string name="dialog_with_checkbox_reset">Бұл жазба үшін түгел тарауларды қалпына келтіру</string>
+    <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>
+    <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Aniyomi бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
+    <string name="information_webview_required">Aniyomi-ны қолдану үшін WebView керек</string>
 </resources>

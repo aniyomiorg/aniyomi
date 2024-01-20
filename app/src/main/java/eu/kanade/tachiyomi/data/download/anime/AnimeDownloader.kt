@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okio.Throttler
 import okio.buffer
 import okio.sink
 import rx.subjects.PublishSubject
@@ -91,6 +92,11 @@ class AnimeDownloader(
      * Notifier for the downloader state and progress.
      */
     private val notifier by lazy { AnimeDownloadNotifier(context) }
+
+    /**
+     * The throttler used to control the download speed.
+     */
+    private val throttler = Throttler()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var downloaderJob: Job? = null
@@ -706,12 +712,14 @@ class AnimeDownloader(
                         contentLength: Long,
                         done: Boolean,
                     ) {
-                        val progress = (((bytesRead * 90 / (range[1] - range[0])) * splitWeight).toInt()) + 1
+                        val progress = (((bytesRead * 90 / (range[1] - range[0])) * splitWeight).toInt())
                         totalProgresses[rangeList.indexOf(range)] = progress
                         video.progress = min(totalProgresses.reduce(Int::plus), 90)
                     }
                 }
-
+            throttler.apply {
+                bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024)
+            }
             partJobList.add(
                 scope.launchIO {
                     try {
@@ -729,7 +737,8 @@ class AnimeDownloader(
                                     val buffer = ByteArray(4 * 1024)
                                     var totalBytesRead = 0L
                                     var bytesRead: Int
-                                    while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
+                                    val throttledSource = throttler.source(source).buffer()
+                                    while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
                                         // Check if the download is paused, if so, wait
                                         while (isPaused) {
                                             delay(1000) // Wait for 1 second before checking again
@@ -739,6 +748,9 @@ class AnimeDownloader(
                                         sink.emitCompleteSegments()
                                         totalBytesRead += bytesRead
                                     }
+                                    sink.flush()
+                                    sink.close()
+                                    throttledSource.close()
                                 }
                             }
                         } catch (e: Exception) {
@@ -757,36 +769,26 @@ class AnimeDownloader(
         for (job in partJobList) {
             job.join()
         }
-        val partFiles =
-            (0 until nParts).toMutableList().map { i ->
-                tmpDir.findFile("$filename.part$i.tmp")
-                    ?: tmpDir.createFile("$filename.part$i.tmp")!!
-            }.toMutableList()
-        val mergeSize = 10 / (nParts - 1).toFloat()
         try {
-            val finalPartFile = partFiles.first()
-            finalPartFile.openOutputStream().use { output ->
-                for (i in 1 until nParts) {
-                    val partFile = partFiles[i]
-                    partFile.openInputStream().use { input ->
-                        output.write(input.readBytes())
+            val mergeSize = (10.toFloat() / (nParts - 1).toFloat())
+            val file0 = tmpDir.findFile("$filename.part0.tmp") ?: tmpDir.createFile("$filename.part0.tmp")!!
+            // merge all parts into file0
+            for (i in 1 until nParts) {
+                val part = tmpDir.findFile("$filename.part$i.tmp")
+                    ?: tmpDir.createFile("$filename.part$i.tmp")!!
+                part.openInputStream().use { input ->
+                    file0.openOutputStream(true).use { output ->
+                        input.copyTo(output)
                     }
-                    video.progress = 90 + (mergeSize * (i)).toInt()
                 }
+                part.delete()
+                video.progress = 90 + ((mergeSize * i).toInt())
             }
-            finalPartFile.renameTo("$filename.mp4")
+            file0.renameTo("$filename.mp4")
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR) { e.message ?: "Unknown error" }
+            logcat(LogPriority.ERROR, e)
             failed = true
         }
-
-        for (i in 0 until nParts) {
-            val part =
-                tmpDir.findFile("$filename.part$i.tmp")
-                    ?: continue
-            part.delete()
-        }
-
         if (failed) {
             for (i in 0 until nParts) {
                 val part =
@@ -810,7 +812,6 @@ class AnimeDownloader(
         while (isPaused) {
             delay(1000) // This is a pause check delay, adjust the timing as needed.
         }
-
         when {
             isHls(video) || isMpd(video) -> {
                 return ffmpegDownload(video, download, tmpDir, filename)
@@ -825,13 +826,17 @@ class AnimeDownloader(
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
                 // Write to file with pause/resume capability
                 try {
+                    throttler.apply {
+                        bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024, 4096, 8192)
+                    }
                     response.body.source().use { source ->
                         file.openOutputStream(true).use { output ->
                             val sink = output.sink().buffer()
                             val buffer = ByteArray(4 * 1024)
                             var totalBytesRead = 0L
                             var bytesRead: Int
-                            while (source.read(buffer).also { bytesRead = it }.toLong() != -1L) {
+                            val throttledSource = throttler.source(source).buffer()
+                            while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
                                 // Check if the download is paused, if so, wait
                                 while (isPaused) {
                                     delay(1000) // Wait for 1 second before checking again
@@ -842,6 +847,9 @@ class AnimeDownloader(
                                 totalBytesRead += bytesRead
                                 // Update progress here if needed
                             }
+                            sink.flush()
+                            sink.close()
+                            throttledSource.close()
                         }
                     }
                     // After download is complete, rename the file to its final name
