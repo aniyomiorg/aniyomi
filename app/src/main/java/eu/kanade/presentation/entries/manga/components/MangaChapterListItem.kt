@@ -187,14 +187,6 @@ fun MangaChapterListItem(
                                     overflow = TextOverflow.Ellipsis,
                                 )
                             }
-                            if (scanlator != null) {
-                                DotSeparatorText()
-                                Text(
-                                    text = scanlator,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
                             if (readProgress != null) {
                                 DotSeparatorText()
                                 Text(
@@ -202,6 +194,14 @@ fun MangaChapterListItem(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
+                                )
+                            }
+                            if (scanlator != null) {
+                                DotSeparatorText()
+                                Text(
+                                    text = scanlator,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
