@@ -7,6 +7,8 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.mangaupdates.dto.ListItem
+import eu.kanade.tachiyomi.data.track.mangaupdates.dto.Rating
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
@@ -24,10 +26,16 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
         const val UNFINISHED_LIST = 3
         const val ON_HOLD_LIST = 4
 
-        private val SCORE_LIST = (
-            (0..9)
-                .flatMap { i -> (0..9).map { j -> "$i.$j" } } + listOf("10.0")
-            )
+        private val SCORE_LIST = (0..10)
+            .flatMap { decimal ->
+                when (decimal) {
+                    0 -> listOf("-")
+                    10 -> listOf("10.0")
+                    else -> (0..9).map { fraction ->
+                        "$decimal.$fraction"
+                    }
+                }
+            }
             .toImmutableList()
     }
 
@@ -60,7 +68,7 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
 
     override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
-    override fun indexToScore(index: Int): Float = SCORE_LIST[index].toFloat()
+    override fun indexToScore(index: Int): Float = if (index == 0) 0f else SCORE_LIST[index].toFloat()
 
     override fun displayScore(track: DomainTrack): String = track.score.toString()
 
@@ -79,9 +87,9 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         return try {
             val (series, rating) = api.getSeriesListItem(track)
-            series.copyTo(track)
-            rating?.copyTo(track) ?: track
+            track.copyFrom(series, rating)
         } catch (e: Exception) {
+            track.score = 0f
             api.addSeriesToList(track, hasReadChapters)
             track
         }
@@ -96,8 +104,12 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {
         val (series, rating) = api.getSeriesListItem(track)
-        series.copyTo(track)
-        return rating?.copyTo(track) ?: track
+        return track.copyFrom(series, rating)
+    }
+
+    private fun MangaTrack.copyFrom(item: ListItem, rating: Rating?): MangaTrack = apply {
+        item.copyTo(this)
+        score = rating?.rating ?: 0f
     }
 
     override suspend fun login(username: String, password: String) {
@@ -109,6 +121,6 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
     }
 
     fun restoreSession(): String? {
-        return trackPreferences.trackPassword(this).get()
+        return trackPreferences.trackPassword(this).get().ifBlank { null }
     }
 }
