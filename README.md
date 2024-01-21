@@ -32,7 +32,7 @@ Features include:
     * Discord Rich Presence
 
 ## Download
-Get the app from the [releases page](https://github.com/dark25/animetailv2/releases).
+Get the app from the [releases page](https://github.com/dark25/animetail2/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -40,7 +40,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/dark25/animetailv2/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/dark25/animetail2/issues).**
 2. Also take a look at issues opened on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
 3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
 

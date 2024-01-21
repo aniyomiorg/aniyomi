@@ -24,7 +24,7 @@ private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 // Constant for metadata list
 /*private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/dark25/animetailv2"
+        "https://github.com/dark25/animetail2"
     ),
 )
 
