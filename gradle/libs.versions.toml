@@ -31,6 +31,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:7c257e1c64"
 junrar = "com.github.junrar:junrar:7.5.5"
+zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
@@ -47,6 +48,7 @@ coil-compose = { module = "io.coil-kt:coil-compose" }
 
 subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:7e57335"
 image-decoder = "com.github.tachiyomiorg:image-decoder:fbd6601290"
+exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
