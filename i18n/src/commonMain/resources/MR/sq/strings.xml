@@ -58,7 +58,6 @@
     <string name="pref_update_only_completely_read">Me kapituj të palexuar</string>
     <string name="pref_library_update_refresh_metadata_summary">Kontrolloni për kopertinë dhe detaje të reja kur përditësoni bibliotekën</string>
     <string name="default_category">Kategoria e parazgjedhur</string>
-    <string name="pref_library_update_categories_details">Elementet në kategoritë e përjashtuara nuk do të përditësohen edhe nëse janë gjithashtu në kategoritë e përfshira.</string>
     <string name="all">Të gjitha</string>
     <string name="none">Asnje</string>
     <string name="include">Përfshi: %s</string>
@@ -542,11 +541,8 @@
     <string name="in_library">Në bibliotekë</string>
     <string name="copied_to_clipboard">Kopjuar në kujtesën e fragmenteve:
 \n %1$s</string>
-    <string name="snack_add_to_library">Të shtohet në bibliotekë\?</string>
     <string name="display_mode_chapter">Kapitulli %1$s</string>
     <string name="chapter_downloading_progress">Po shkarkohet (%1$d/%2$d)</string>
-    <string name="chapter_error">Gabim</string>
-    <string name="chapter_paused">Ndaloi</string>
     <string name="show_title">Titulli i burimit</string>
     <string name="sort_by_source">Sipas burimit</string>
     <string name="sort_by_number">Sipas numrit të kapitullit</string>

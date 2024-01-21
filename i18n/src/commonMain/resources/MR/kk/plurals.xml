@@ -56,8 +56,32 @@
         <item quantity="one">Келесі тарау</item>
         <item quantity="other">Келесі %d тарау</item>
     </plurals>
-    <plurals name="missing_chapters">
+    <plurals name="notification_episodes_generic">
         <item quantity="one"/>
-        <item quantity="other">Жоқ %1$s тараулары</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
     </plurals>
 </resources>
