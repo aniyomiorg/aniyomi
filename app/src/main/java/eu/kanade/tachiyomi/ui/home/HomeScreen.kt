@@ -141,16 +141,16 @@ object HomeScreen : Screen() {
                 }
             }
 
-            val goToAnimeLibTab = { tabNavigator.current = AnimeLibraryTab }
+            val goToStartScreen = { tabNavigator.current = uiPreferences.startScreen().get().tab }
             BackHandler(
                 enabled = tabNavigator.current != AnimeLibraryTab,
-                onBack = goToAnimeLibTab,
+                onBack = goToStartScreen,
             )
 
             LaunchedEffect(Unit) {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
-                        goToAnimeLibTab()
+                        goToStartScreen()
                         AnimeLibraryTab.search(it)
                     }
                 }
