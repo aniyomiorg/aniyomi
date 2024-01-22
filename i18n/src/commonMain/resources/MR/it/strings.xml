@@ -967,7 +967,7 @@
     <string name="pref_waiting_time_aniskip_7">7 secondi</string>
     <string name="pref_waiting_time_aniskip_8">8 secondi</string>
     <string name="pref_waiting_time_aniskip_10">10 secondi</string>
-    <string name="player_aniskip_dontskip_toast">Salta di %d secondi</string>
+    <string name="player_aniskip_dontskip_toast">Salto fra %d secondi</string>
     <string name="player_aniskip_skip">%s saltati</string>
     <string name="notification_episodes_single">Episodio %1$s</string>
     <string name="notification_episodes_single_and_more">Episodio %1$s e altri %2$d</string>
