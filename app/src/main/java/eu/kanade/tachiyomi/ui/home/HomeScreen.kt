@@ -143,12 +143,15 @@ object HomeScreen : Screen() {
             }
 
             val goToStartScreen = {
-                if(defaultTab != moreTab) tabNavigator.current = defaultTab
-                else tabNavigator.current = AnimeLibraryTab
+                if (defaultTab != moreTab) {
+                    tabNavigator.current = defaultTab
+                } else {
+                    tabNavigator.current = AnimeLibraryTab
+                }
             }
             BackHandler(
-                enabled = (tabNavigator.current == moreTab || tabNavigator.current != defaultTab)
-                    && (tabNavigator.current != AnimeLibraryTab || defaultTab != moreTab),
+                enabled = (tabNavigator.current == moreTab || tabNavigator.current != defaultTab) &&
+                    (tabNavigator.current != AnimeLibraryTab || defaultTab != moreTab),
                 onBack = goToStartScreen,
             )
 
@@ -156,7 +159,7 @@ object HomeScreen : Screen() {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
                         goToStartScreen()
-                        when(defaultTab) {
+                        when (defaultTab) {
                             AnimeLibraryTab -> AnimeLibraryTab.search(it)
                             MangaLibraryTab -> MangaLibraryTab.search(it)
                             else -> {}
