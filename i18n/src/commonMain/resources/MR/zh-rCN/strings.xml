@@ -57,7 +57,7 @@
     <string name="action_reset">重置</string>
     <string name="action_undo">撤销</string>
     <string name="track">进度记录</string>
-    <string name="label_migration">迁移</string>
+    <string name="label_migration">漫画迁移</string>
     <string name="action_mark_previous_as_read">标记之前章节为已读</string>
     <string name="action_open_log">打开日志</string>
     <string name="action_restore">还原</string>
@@ -986,4 +986,16 @@
     <string name="label_category">所有分类</string>
     <string name="label_recent_anime_updates">动画更新</string>
     <string name="label_watched_episodes">已观看</string>
+    <string name="confirm_exit">再按一次返回键退出</string>
+    <string name="player_add_external_audio">添加外部音频</string>
+    <string name="player_add_external_subtitles">添加外部字幕</string>
+    <string name="label_manga_extensions">漫画插件</string>
+    <string name="player_hwdec_mode">解码模式</string>
+    <string name="settings_dialog_header">播放器设置</string>
+    <string name="pref_remember_brightness">记住并切换至上次使用的亮度</string>
+    <string name="pref_remember_volume">记住并切换至上次使用的音量</string>
+    <string name="label_migration_anime">动画迁移</string>
+    <string name="pref_start_screen">开始屏幕</string>
+    <string name="pref_category_player_advanced">播放器高级设置</string>
+    <string name="pref_category_player_advanced_subtitle">视频去色带，MPV设定等</string>
 </resources>
