@@ -27,6 +27,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.i18n.MR
@@ -43,7 +44,17 @@ fun Screen.animeUpdatesTab(
     val scope = rememberCoroutineScope()
     val state by screenModel.state.collectAsState()
 
-    val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
+    val navigateUp: (() -> Unit)? = if (fromMore) {
+        {
+            if (navigator.lastItem == HomeScreen) {
+                scope.launch { HomeScreen.openTab(HomeScreen.Tab.AnimeLib()) }
+            } else {
+                navigator.pop()
+            }
+        }
+    } else {
+        null
+    }
 
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
