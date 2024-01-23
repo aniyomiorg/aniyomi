@@ -71,11 +71,7 @@ object MangaLibraryTab : Tab() {
         @Composable
         get() {
             val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
-            val title = if (fromMore) {
-                MR.strings.label_library
-            } else {
-                MR.strings.label_manga_library
-            }
+            val title = MR.strings.label_manga_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
             val index: UShort = if (fromMore) 5u else 1u
@@ -115,15 +111,19 @@ object MangaLibraryTab : Tab() {
 
         val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
 
-        val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
-
-        val defaultTitle = if (fromMore) {
-            stringResource(MR.strings.label_library)
+        val navigateUp: (() -> Unit)? = if (fromMore) {
+            {
+                if (navigator.lastItem == HomeScreen) {
+                    scope.launch { HomeScreen.openTab(HomeScreen.Tab.AnimeLib()) }
+                } else {
+                    navigator.pop()
+                }
+            }
         } else {
-            stringResource(
-                MR.strings.label_manga_library,
-            )
+            null
         }
+
+        val defaultTitle = stringResource(MR.strings.label_manga_library)
 
         Scaffold(
             topBar = { scrollBehavior ->

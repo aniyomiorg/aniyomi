@@ -10,6 +10,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -24,6 +25,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -37,7 +39,18 @@ fun Screen.mangaUpdatesTab(
     val screenModel = rememberScreenModel { MangaUpdatesScreenModel() }
     val state by screenModel.state.collectAsState()
 
-    val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
+    val scope = rememberCoroutineScope()
+    val navigateUp: (() -> Unit)? = if (fromMore) {
+        {
+            if (navigator.lastItem == HomeScreen) {
+                scope.launch { HomeScreen.openTab(HomeScreen.Tab.AnimeLib()) }
+            } else {
+                navigator.pop()
+            }
+        }
+    } else {
+        null
+    }
 
     return TabContent(
         titleRes = MR.strings.label_updates,
