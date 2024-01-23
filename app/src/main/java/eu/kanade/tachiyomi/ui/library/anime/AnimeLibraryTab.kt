@@ -30,7 +30,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -76,12 +75,7 @@ object AnimeLibraryTab : Tab() {
     override val options: TabOptions
         @Composable
         get() {
-            val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
-            val title = if (fromMore) {
-                MR.strings.label_library
-            } else {
-                MR.strings.label_anime_library
-            }
+            val title = MR.strings.label_anime_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(
                 R.drawable.anim_animelibrary_leave,
@@ -146,13 +140,7 @@ object AnimeLibraryTab : Tab() {
             )
         }
 
-        val defaultTitle = if (currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE) {
-            stringResource(MR.strings.label_library)
-        } else {
-            stringResource(
-                MR.strings.label_anime_library,
-            )
-        }
+        val defaultTitle = stringResource(MR.strings.label_anime_library)
 
         Scaffold(
             topBar = { scrollBehavior ->
