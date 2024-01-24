@@ -960,7 +960,7 @@
     <string name="playback_speed_dialog_reset">重置</string>
     <string name="quality_dialog_header">画质</string>
     <string name="subtitle_dialog_header">字幕</string>
-    <string name="audio_dialog_header">音轨</string>
+    <string name="audio_dialog_header">选择音轨</string>
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
