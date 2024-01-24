@@ -570,6 +570,10 @@ class PlayerActivity : BaseActivity() {
             3 -> MPVLib.setOptionString("vf", "format=yuv420p")
         }
 
+        if(playerPreferences.gpuNext().get()) {
+            MPVLib.setOptionString("vo", "gpu-next")
+        }
+
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
         if (currentPlayerStatisticsPage != 0) {
             MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
