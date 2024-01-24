@@ -230,16 +230,16 @@ object SettingsTrackingScreen : SearchableSettings {
                                 logout = service::logout,
                             )
                         } +
-                    enhancedAnimeTrackers.first
-                        .map { service ->
-                            Preference.PreferenceItem.TrackerPreference(
-                                title = service.name,
-                                tracker = service,
-                                login = { (service as EnhancedAnimeTracker).loginNoop() },
-                                logout = service::logout,
-                            )
-                        } + listOf(Preference.PreferenceItem.InfoPreference(enhancedTrackerInfo))
-                ).toImmutableList(),
+                        enhancedAnimeTrackers.first
+                            .map { service ->
+                                Preference.PreferenceItem.TrackerPreference(
+                                    title = service.name,
+                                    tracker = service,
+                                    login = { (service as EnhancedAnimeTracker).loginNoop() },
+                                    logout = service::logout,
+                                )
+                            } + listOf(Preference.PreferenceItem.InfoPreference(enhancedTrackerInfo))
+                    ).toImmutableList(),
             ),
         )
     }

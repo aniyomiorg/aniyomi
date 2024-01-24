@@ -30,7 +30,7 @@ class JellyfinApi(
                 val httpUrl = url.toHttpUrl()
                 val fragment = httpUrl.fragment!!
 
-                val track = with (json) {
+                val track = with(json) {
                     client.newCall(GET(url))
                         .awaitSuccess()
                         .parseAs<ItemDto>()
@@ -50,7 +50,7 @@ class JellyfinApi(
         }
 
     private fun ItemDto.toTrack(): AnimeTrackSearch = AnimeTrackSearch.create(
-        trackId
+        trackId,
     ).also {
         it.title = name
         it.total_episodes = 1
@@ -85,7 +85,7 @@ class JellyfinApi(
     private suspend fun getTrackFromSeries(track: AnimeTrackSearch, url: HttpUrl): AnimeTrackSearch {
         val episodesUrl = getEpisodesUrl(url)
 
-        val episodes = with (json) {
+        val episodes = with(json) {
             client.newCall(GET(episodesUrl))
                 .awaitSuccess()
                 .parseAs<ItemsDto>()
@@ -127,7 +127,7 @@ class JellyfinApi(
             httpUrl.pathSegments.last()
         } else {
             val episodesUrl = getEpisodesUrl(httpUrl)
-            val episodes = with (json) {
+            val episodes = with(json) {
                 client.newCall(GET(episodesUrl))
                     .awaitSuccess()
                     .parseAs<ItemsDto>()
@@ -148,7 +148,7 @@ class JellyfinApi(
         }.build().toString()
 
         client.newCall(
-            POST(postUrl)
+            POST(postUrl),
         ).awaitSuccess()
 
         return getTrackSearch(track.tracking_url)

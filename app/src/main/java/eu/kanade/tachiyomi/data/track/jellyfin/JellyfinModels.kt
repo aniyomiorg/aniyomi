@@ -13,10 +13,10 @@ data class ItemDto(
 
 @Serializable
 data class UserDataDto(
-    @SerialName("Played") val played: Boolean
+    @SerialName("Played") val played: Boolean,
 )
 
 @Serializable
 data class ItemsDto(
-    @SerialName("Items") val items: List<ItemDto>
+    @SerialName("Items") val items: List<ItemDto>,
 )

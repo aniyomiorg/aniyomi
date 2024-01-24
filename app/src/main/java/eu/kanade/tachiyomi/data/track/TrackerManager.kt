@@ -35,7 +35,10 @@ class TrackerManager(context: Context) {
     val simkl = Simkl(SIMKL)
     val jellyfin = Jellyfin(JELLYFIN)
 
-    val trackers = listOf(myAnimeList, aniList, kitsu, shikimori, bangumi, komga, mangaUpdates, kavita, suwayomi, simkl, jellyfin)
+    val trackers = listOf(
+        myAnimeList, aniList, kitsu, shikimori, bangumi,
+        komga, mangaUpdates, kavita, suwayomi, simkl, jellyfin,
+    )
 
     fun loggedInTrackers() = trackers.filter { it.isLoggedIn }
 
