@@ -960,9 +960,9 @@
     <string name="video_stretch_screen">拉伸至屏幕</string>
     <string name="playback_speed_dialog_title">更改播放速度：</string>
     <string name="playback_speed_dialog_reset">重置</string>
-    <string name="quality_dialog_header">选择画质：</string>
-    <string name="subtitle_dialog_header">选择字幕：</string>
-    <string name="audio_dialog_header">选择音轨：</string>
+    <string name="quality_dialog_header">画质</string>
+    <string name="subtitle_dialog_header">字幕</string>
+    <string name="audio_dialog_header">音轨</string>
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
@@ -998,4 +998,8 @@
     <string name="pref_start_screen">开始屏幕</string>
     <string name="pref_category_player_advanced">播放器高级设置</string>
     <string name="pref_category_player_advanced_subtitle">视频去色带，MPV设定等</string>
+    <string name="player_aniskip_ed">跳过片尾</string>
+    <string name="label_migration_manga">漫画迁移</string>
+    <string name="pref_category_pip">画中画模式</string>
+    <string name="pref_enable_pip">开启画中画模式</string>
 </resources>
