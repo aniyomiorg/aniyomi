@@ -570,7 +570,7 @@ class PlayerActivity : BaseActivity() {
             3 -> MPVLib.setOptionString("vf", "format=yuv420p")
         }
 
-        if(playerPreferences.gpuNext().get()) {
+        if (playerPreferences.gpuNext().get()) {
             MPVLib.setOptionString("vo", "gpu-next")
         }
 

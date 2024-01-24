@@ -92,7 +92,6 @@ class PlayerPreferences(
 
     fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
     fun deband() = preferenceStore.getInt("pref_deband", 0)
-
     fun gpuNext() = preferenceStore.getBoolean("gpu_next", false)
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)

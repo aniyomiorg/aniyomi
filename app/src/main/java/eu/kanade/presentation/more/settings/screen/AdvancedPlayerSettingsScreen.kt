@@ -50,7 +50,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
             Preference.PreferenceItem.SwitchPreference(
                 title = context.stringResource(MR.strings.pref_gpu_next_title),
                 subtitle = context.stringResource(MR.strings.pref_gpu_next_subtitle),
-                pref = playerPreferences.gpuNext()
+                pref = playerPreferences.gpuNext(),
             ),
             Preference.PreferenceItem.ListPreference(
                 title = context.stringResource(MR.strings.pref_debanding_title),
