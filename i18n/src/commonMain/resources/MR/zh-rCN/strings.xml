@@ -97,11 +97,9 @@
     <string name="ext_untrusted">不可信</string>
     <string name="ext_uninstall">卸载</string>
     <string name="untrusted_extension">不可信的插件</string>
-    <string name="untrusted_extension_message">此插件由未知作者签名且尚未加载。
+    <string name="untrusted_extension_message">恶意插件能读取储存在Tachiyomi 中的任何登录凭据恶意插件可能会读取所有登录的账号或执行任意代码。
 \n
-\n恶意插件可以读取任何存储的登录凭据或执行任意代码。
-\n
-\n信任此插件证书即代表您愿意承担上述风险。</string>
+\n信任这个证书此插件即代表你愿意承担上述风险。</string>
     <string name="pref_fullscreen">全屏</string>
     <string name="pref_page_transitions">页面过渡动画</string>
     <string name="pref_double_tap_anim_speed">双击动画速度</string>
@@ -381,7 +379,7 @@
     <string name="action_enable_all">全部开启</string>
     <string name="pref_show_reading_mode_summary">开始阅读时，短暂显示当前阅读模式</string>
     <string name="pref_show_reading_mode">阅读模式提示</string>
-    <string name="action_start">开始阅读</string>
+    <string name="action_start">开始</string>
     <string name="loader_not_implemented_error">未找到图源</string>
     <string name="action_disable">关闭</string>
     <string name="requires_app_restart">需要重启应用才能生效</string>
@@ -681,7 +679,7 @@
     <string name="pref_page_rotate">旋转横向图片</string>
     <string name="pref_page_rotate_invert">旋转横向图片时反转方向</string>
     <string name="pref_debug_info">调试信息</string>
-    <string name="pref_chapter_swipe">目录左右滑动</string>
+    <string name="pref_chapter_swipe">漫画章节目录左右滑动</string>
     <string name="pref_chapter_swipe_end">向右滑动操作</string>
     <string name="pref_chapter_swipe_start">向左滑动操作</string>
     <string name="pref_double_tap_zoom">双击放大</string>
@@ -992,8 +990,8 @@
     <string name="label_manga_extensions">漫画插件</string>
     <string name="player_hwdec_mode">解码模式</string>
     <string name="settings_dialog_header">播放器设置</string>
-    <string name="pref_remember_brightness">记住并切换至上次使用的亮度</string>
-    <string name="pref_remember_volume">记住并切换至上次使用的音量</string>
+    <string name="pref_remember_brightness">保持并切换到最近使用的亮度</string>
+    <string name="pref_remember_volume">保持并切换到最近使用的音量</string>
     <string name="label_migration_anime">动画迁移</string>
     <string name="pref_start_screen">开始屏幕</string>
     <string name="pref_category_player_advanced">播放器高级设置</string>
@@ -1002,4 +1000,13 @@
     <string name="label_migration_manga">漫画迁移</string>
     <string name="pref_category_pip">画中画模式</string>
     <string name="pref_enable_pip">开启画中画模式</string>
+    <string name="player_aniskip_op">跳过开头</string>
+    <string name="label_anime_extension_repos">动画插件仓库</string>
+    <string name="pref_episode_swipe_end">将划向右边设置为</string>
+    <string name="pref_episode_swipe_start">将划向左边设置为</string>
+    <string name="pref_episode_swipe">动画剧集目录左右滑动</string>
+    <string name="pref_invalidate_download_cache_summary">强制重新扫描已下载的章节以及剧集</string>
+    <string name="label_manga_extension_repos">漫画插件仓库</string>
+    <string name="download_speed_limit_hint">归零则取消限速</string>
+    <string name="download_speed_limit">限速下载</string>
 </resources>
