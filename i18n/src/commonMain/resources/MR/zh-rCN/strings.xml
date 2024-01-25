@@ -858,7 +858,7 @@
     <string name="pref_skip_length">双击时快进的时长</string>
     <string name="pref_skip_disable">禁用</string>
     <string name="pref_player_smooth_seek">启用精准调节播放位置</string>
-    <string name="pref_player_smooth_seek_summary">启用后，播放器定位将不再基于关键帧，使其更慢且更精确</string>
+    <string name="pref_player_smooth_seek_summary">当启用时，寻位将不会关注关键帧，使其更慢但更精确</string>
     <string name="pref_player_fullscreen">在屏幕边栏中显示内容</string>
     <string name="pref_player_hide_controls">在播放器启动时隐藏播放器控制台</string>
     <string name="pref_pip_episode_toasts">在画中画模式下切换剧集时显示剧集信息</string>
