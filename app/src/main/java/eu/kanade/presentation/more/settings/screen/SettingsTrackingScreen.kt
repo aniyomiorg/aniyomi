@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -57,6 +58,7 @@ import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
@@ -86,7 +88,8 @@ object SettingsTrackingScreen : SearchableSettings {
         val context = LocalContext.current
         val trackPreferences = remember { Injekt.get<TrackPreferences>() }
         val trackerManager = remember { Injekt.get<TrackerManager>() }
-        val sourceManager = remember { Injekt.get<MangaSourceManager>() }
+        val mangaSourceManager = remember { Injekt.get<MangaSourceManager>() }
+        val animeSourceManager = remember { Injekt.get<AnimeSourceManager>() }
 
         var dialog by remember { mutableStateOf<Any?>(null) }
         dialog?.run {
@@ -111,15 +114,22 @@ object SettingsTrackingScreen : SearchableSettings {
             .filter { it is EnhancedMangaTracker }
             .partition { service ->
                 val acceptedMangaSources = (service as EnhancedMangaTracker).getAcceptedSources()
-                sourceManager.getCatalogueSources().any { it::class.qualifiedName in acceptedMangaSources }
+                mangaSourceManager.getCatalogueSources().any { it::class.qualifiedName in acceptedMangaSources }
             }
-        var enhancedMangaTrackerInfo = stringResource(MR.strings.enhanced_tracking_info)
-        if (enhancedMangaTrackers.second.isNotEmpty()) {
-            val missingMangaSourcesInfo = stringResource(
+        val enhancedAnimeTrackers = trackerManager.trackers
+            .filter { it is EnhancedAnimeTracker }
+            .partition { service ->
+                val acceptedAnimeSources = (service as EnhancedAnimeTracker).getAcceptedSources()
+                animeSourceManager.getCatalogueSources().any { it::class.qualifiedName in acceptedAnimeSources }
+            }
+
+        var enhancedTrackerInfo = stringResource(MR.strings.enhanced_tracking_info)
+        if (enhancedMangaTrackers.second.isNotEmpty() || enhancedAnimeTrackers.second.isNotEmpty()) {
+            val missingSourcesInfo = stringResource(
                 MR.strings.enhanced_services_not_installed,
-                enhancedMangaTrackers.second.joinToString { it.name },
+                (enhancedMangaTrackers.second + enhancedAnimeTrackers.second).joinToString { it.name },
             )
-            enhancedMangaTrackerInfo += "\n\n$missingMangaSourcesInfo"
+            enhancedTrackerInfo += "\n\n$missingSourcesInfo"
         }
 
         return listOf(
@@ -219,7 +229,16 @@ object SettingsTrackingScreen : SearchableSettings {
                                 login = { (service as EnhancedMangaTracker).loginNoop() },
                                 logout = service::logout,
                             )
-                        } + listOf(Preference.PreferenceItem.InfoPreference(enhancedMangaTrackerInfo))
+                        } +
+                        enhancedAnimeTrackers.first
+                            .map { service ->
+                                Preference.PreferenceItem.TrackerPreference(
+                                    title = service.name,
+                                    tracker = service,
+                                    login = { (service as EnhancedAnimeTracker).loginNoop() },
+                                    logout = service::logout,
+                                )
+                            } + listOf(Preference.PreferenceItem.InfoPreference(enhancedTrackerInfo))
                     ).toImmutableList(),
             ),
         )

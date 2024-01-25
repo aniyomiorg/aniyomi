@@ -75,12 +75,13 @@ object HomeScreen : Screen() {
     private const val TabNavigatorKey = "HomeTabs"
 
     private val uiPreferences: UiPreferences by injectLazy()
+    private val defaultTab = uiPreferences.startScreen().get().tab
+    private val moreTab = uiPreferences.navStyle().get().moreTab
 
     @Composable
     override fun Content() {
         val navStyle by uiPreferences.navStyle().collectAsState()
         val navigator = LocalNavigator.currentOrThrow
-        val defaultTab = uiPreferences.startScreen().get().tab
         TabNavigator(
             tab = defaultTab,
             key = TabNavigatorKey,
@@ -141,17 +142,28 @@ object HomeScreen : Screen() {
                 }
             }
 
-            val goToAnimeLibTab = { tabNavigator.current = AnimeLibraryTab }
+            val goToStartScreen = {
+                if (defaultTab != moreTab) {
+                    tabNavigator.current = defaultTab
+                } else {
+                    tabNavigator.current = AnimeLibraryTab
+                }
+            }
             BackHandler(
-                enabled = tabNavigator.current != AnimeLibraryTab,
-                onBack = goToAnimeLibTab,
+                enabled = (tabNavigator.current == moreTab || tabNavigator.current != defaultTab) &&
+                    (tabNavigator.current != AnimeLibraryTab || defaultTab != moreTab),
+                onBack = goToStartScreen,
             )
 
             LaunchedEffect(Unit) {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
-                        goToAnimeLibTab()
-                        AnimeLibraryTab.search(it)
+                        goToStartScreen()
+                        when (defaultTab) {
+                            AnimeLibraryTab -> AnimeLibraryTab.search(it)
+                            MangaLibraryTab -> MangaLibraryTab.search(it)
+                            else -> {}
+                        }
                     }
                 }
                 launch {
