@@ -764,7 +764,7 @@
     <string name="pref_library_update_smart_update">智能更新</string>
     <string name="onboarding_permission_notifications_description">用来发送仓库更新等通知。</string>
     <string name="label_extension_repos">插件仓库</string>
-    <string name="information_empty_repos">尚未设置仓库</string>
+    <string name="information_empty_repos">尚未添加任何仓库。</string>
     <string name="label_add_repo_input">仓库网址</string>
     <string name="action_add_repo_message">在 Aniyomi 中添加仓库，输入的网址结尾应为“index.min.json”。</string>
     <string name="onboarding_storage_help_info">如果你是从旧版更新而来，可以查看存储指南了解详情。</string>
@@ -857,8 +857,8 @@
     <string name="pref_intro_length">跳过开头的时长</string>
     <string name="pref_skip_length">双击时快进的时长</string>
     <string name="pref_skip_disable">禁用</string>
-    <string name="pref_player_smooth_seek">启用进度条精准调节</string>
-    <string name="pref_player_smooth_seek_summary">启用时，定位将不会关注关键帧，使其更慢但更精确</string>
+    <string name="pref_player_smooth_seek">开启进度条精准调节</string>
+    <string name="pref_player_smooth_seek_summary">开启后，定位将不会关注关键帧，使其更慢但更精确</string>
     <string name="pref_player_fullscreen">在屏幕边栏中显示内容</string>
     <string name="pref_player_hide_controls">在播放器启动时隐藏播放器控制台</string>
     <string name="pref_pip_episode_toasts">在画中画模式下切换剧集时显示剧集信息</string>
@@ -977,10 +977,10 @@
     <string name="action_global_manga_search">全局漫画搜索</string>
     <string name="action_global_anime_search">全局动画搜索</string>
     <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
-    <string name="pref_hide_in_manga_library_items">隐藏库中已有的漫画</string>
+    <string name="pref_hide_in_manga_library_items">隐藏已添加到仓库中的漫画作品</string>
     <string name="action_hide">隐藏</string>
     <string name="label_all">所有标签</string>
-    <string name="pref_hide_in_anime_library_items">隐藏库中已有的动画</string>
+    <string name="pref_hide_in_anime_library_items">隐藏已添加到仓库中的动画作品</string>
     <string name="label_category">所有分类</string>
     <string name="label_recent_anime_updates">动画更新</string>
     <string name="label_watched_episodes">已看</string>
@@ -1068,8 +1068,8 @@
     <string name="data_saver">流量节省程序</string>
     <string name="pref_waiting_time_aniskip_5">5 秒</string>
     <string name="pref_waiting_time_aniskip_9">9 秒</string>
-    <string name="data_saver_downloader">在下载器中启用流量节省程序</string>
-    <string name="pref_enable_aniskip">启用 AniSkip</string>
+    <string name="data_saver_downloader">在下载器中开启流量节省程序</string>
+    <string name="pref_enable_aniskip">开启 AniSkip</string>
     <string name="copied_video_link_to_clipboard">已将视频画质链接复制到剪贴板</string>
     <string name="data_saver_ignore_gif">忽略 Gif 动图</string>
     <string name="data_saver_exclude">从流量节省程序中排除</string>
@@ -1097,7 +1097,7 @@
     <string name="data_saver_image_quality">图片质量</string>
     <string name="go_to_previous_chapter">上一章</string>
     <string name="pref_reset_mpv_conf">重置 MPV 设置</string>
-    <string name="pref_enable_auto_skip_ani_skip">启用自动跳过</string>
+    <string name="pref_enable_auto_skip_ani_skip">开启自动跳过</string>
     <string name="pref_waiting_time_aniskip_7">7 秒</string>
     <string name="pref_waiting_time_aniskip_10">10 秒</string>
     <string name="player_aniskip_dontskip_toast">将在 %d 秒后跳过</string>
@@ -1112,4 +1112,10 @@
     <string name="multi_thread_download_threads_number_summary">用于下载的线程数，如果太高可能会导致被封 IP ，一般设定为 4 来避免资源服务器负载过重。</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="pref_category_hide_hidden">完全隐藏分类及分类存储占用中的隐藏分类</string>
+    <string name="pref_waiting_time_aniskip">按钮延时</string>
+    <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
+    <string name="download_slots_info">仅同时从自建或无限制资源下载</string>
+    <string name="pref_pip_replace_with_previous">将快进 10 秒选项替换为上一集</string>
+    <string name="pref_update_anime_release_grace_period">预期动画播出截止时间</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
 </resources>
