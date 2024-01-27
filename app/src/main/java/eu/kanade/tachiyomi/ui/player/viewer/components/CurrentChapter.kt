@@ -81,9 +81,16 @@ class CurrentChapter(
                         SizeTransform(clip = false),
                     )
                 },
-                label = "segment",
+                label = "Chapter",
             ) { currentSegment ->
                 Row {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_video_chapter_20dp),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(end = MaterialTheme.padding.small)
+                            .size(16.dp),
+                    )
                     Text(
                         text = Utils.prettyTime(currentSegment.time.toInt()),
                         fontWeight = FontWeight.ExtraBold,
