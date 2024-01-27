@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
@@ -20,8 +21,9 @@ import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
 
-class CurrentChapterText(
+class CurrentChapter(
     private val view: ComposeView,
+    private val onClick: () -> Unit,
 ) {
     private var value: Float = 0F
     private var chapters: List<Chapter> = listOf()
@@ -43,46 +45,48 @@ class CurrentChapterText(
         view.setComposeContent {
             CurrentChapterComposable(
                 chapter = chapter,
+                modifier = Modifier.clickable { onClick() },
             )
         }
     }
-}
 
-@Composable
-fun CurrentChapterComposable(
-    chapter: Chapter,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.CenterStart,
+    @Composable
+    private fun CurrentChapterComposable(
+        chapter: Chapter,
+        modifier: Modifier = Modifier,
     ) {
-        AnimatedContent(
-            targetState = chapter,
-            transitionSpec = {
-                if (targetState.time > initialState.time) {
-                    (slideInVertically { height -> height } + fadeIn())
-                        .togetherWith(slideOutVertically { height -> -height } + fadeOut())
-                } else {
-                    (slideInVertically { height -> -height } + fadeIn())
-                        .togetherWith(slideOutVertically { height -> height } + fadeOut())
-                }.using(
-                    SizeTransform(clip = false),
-                )
-            },
-            label = "segment",
-        ) { currentSegment ->
-            Row {
-                Text(
-                    text = Utils.prettyTime(currentSegment.time.toInt()),
-                    fontWeight = FontWeight.Bold,
-                )
-                DotSeparatorText()
-                Text(
-                    text = " ${currentSegment.title}",
-                    fontWeight = FontWeight.Bold,
-                )
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            AnimatedContent(
+                targetState = chapter,
+                transitionSpec = {
+                    if (targetState.time > initialState.time) {
+                        (slideInVertically { height -> height } + fadeIn())
+                            .togetherWith(slideOutVertically { height -> -height } + fadeOut())
+                    } else {
+                        (slideInVertically { height -> -height } + fadeIn())
+                            .togetherWith(slideOutVertically { height -> height } + fadeOut())
+                    }.using(
+                        SizeTransform(clip = false),
+                    )
+                },
+                label = "segment",
+            ) { currentSegment ->
+                Row {
+                    Text(
+                        text = Utils.prettyTime(currentSegment.time.toInt()),
+                        fontWeight = FontWeight.Bold,
+                    )
+                    DotSeparatorText()
+                    Text(
+                        text = " ${currentSegment.title}",
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
         }
     }
 }
+

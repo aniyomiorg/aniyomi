@@ -16,7 +16,7 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.viewer.components.CurrentChapterText
+import eu.kanade.tachiyomi.ui.player.viewer.components.CurrentChapter
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -45,7 +45,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         onValueChangeFinished = ::onValueChangeFinished,
     )
 
-    val chapterText = CurrentChapterText(binding.currentChapter)
+    val chapterText: CurrentChapter = CurrentChapter(
+        view = binding.currentChapter,
+        onClick = { activity.viewModel.showVideoChapters() },
+    )
 
     private fun onValueChange(value: Float, wasSeeking: Boolean) {
         if (!wasSeeking) {
