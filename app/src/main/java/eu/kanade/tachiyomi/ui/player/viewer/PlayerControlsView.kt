@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.viewer.components.CurrentChapterText
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -43,6 +44,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         onValueChange = ::onValueChange,
         onValueChangeFinished = ::onValueChangeFinished,
     )
+
+    val chapterText = CurrentChapterText(binding.currentChapter)
 
     private fun onValueChange(value: Float, wasSeeking: Boolean) {
         if (!wasSeeking) {
@@ -319,6 +322,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             activity.viewModel.onSecondReached(position, duration)
         }
         seekbar.updateSeekbar(value = position.toFloat())
+        chapterText.updateCurrentChapterText(value = position.toFloat())
     }
 
     @SuppressLint("SetTextI18n")

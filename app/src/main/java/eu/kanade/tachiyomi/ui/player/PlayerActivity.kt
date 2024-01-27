@@ -286,6 +286,7 @@ class PlayerActivity : BaseActivity() {
             field = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
+                playerControls.chapterText.updateCurrentChapterText(chapters = value)
             }
         }
 

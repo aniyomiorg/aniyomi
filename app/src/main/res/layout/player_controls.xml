@@ -263,6 +263,17 @@
             android:layoutDirection="ltr"
             android:visibility="visible">
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/currentChapter"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_weight="80"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bottomRightControlsGroup"
+                app:layout_constraintStart_toEndOf="@+id/bottomLeftControlsGroup" />
+
             <LinearLayout
                 android:id="@+id/bottomLeftControlsGroup"
                 android:layout_width="wrap_content"
@@ -388,7 +399,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
-
 
 
     <!-- Extra Controls -->
