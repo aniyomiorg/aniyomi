@@ -144,8 +144,10 @@ class ReaderPreferences(
     // SY -->
     fun preserveReadingPosition() = preferenceStore.getBoolean("eh_preserve_reading_position", false)
 
-    fun readerBottomButtons() = preferenceStore.getStringSet("reader_bottom_buttons",
-        ReaderBottomButton.BUTTONS_DEFAULTS)
+    fun readerBottomButtons() = preferenceStore.getStringSet(
+        "reader_bottom_buttons",
+        ReaderBottomButton.BUTTONS_DEFAULTS,
+    )
 
     fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
 
