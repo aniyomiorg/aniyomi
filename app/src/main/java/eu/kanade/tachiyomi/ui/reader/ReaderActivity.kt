@@ -782,7 +782,11 @@ class ReaderActivity : BaseActivity() {
         // SY -->
         val currentPageText = if (hasExtraPage) {
             val invertDoublePage = (viewModel.state.value.viewer as? PagerViewer)?.config?.invertDoublePages ?: false
-            if ((resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) xor invertDoublePage) "${page.number}-${page.number + 1}" else "${page.number + 1}-${page.number}"
+            if ((resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) xor invertDoublePage) {
+                "${page.number}-${page.number + 1}"
+            } else {
+                "${page.number + 1}-${page.number}"
+            }
         } else {
             "${page.number}"
         }
