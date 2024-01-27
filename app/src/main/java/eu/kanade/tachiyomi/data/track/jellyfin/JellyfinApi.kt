@@ -132,24 +132,27 @@ class JellyfinApi(
                     .awaitSuccess()
                     .parseAs<ItemsDto>()
             }.items
-            episodes.first {
+
+            episodes.firstOrNull {
                 it.indexNumber!!.equalsTo(track.last_episode_seen)
-            }.id
+            }?.id
         }
 
-        val time = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(Date())
-        val postUrl = httpUrl.newBuilder().apply {
-            fragment(null)
-            removePathSegment(3)
-            removePathSegment(2)
-            addPathSegment("PlayedItems")
-            addPathSegment(itemId)
-            addQueryParameter("DatePlayed", time)
-        }.build().toString()
+        if (itemId != null) {
+            val time = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(Date())
+            val postUrl = httpUrl.newBuilder().apply {
+                fragment(null)
+                removePathSegment(3)
+                removePathSegment(2)
+                addPathSegment("PlayedItems")
+                addPathSegment(itemId)
+                addQueryParameter("DatePlayed", time)
+            }.build().toString()
 
-        client.newCall(
-            POST(postUrl),
-        ).awaitSuccess()
+            client.newCall(
+                POST(postUrl),
+            ).awaitSuccess()
+        }
 
         return getTrackSearch(track.tracking_url)
     }
