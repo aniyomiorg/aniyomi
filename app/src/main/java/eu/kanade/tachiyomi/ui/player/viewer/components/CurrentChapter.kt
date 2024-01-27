@@ -93,6 +93,7 @@ class CurrentChapter(
                     Text(
                         text = " ${currentSegment.title}",
                         fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
