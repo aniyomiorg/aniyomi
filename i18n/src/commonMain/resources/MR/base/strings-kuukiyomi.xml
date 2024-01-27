@@ -94,5 +94,15 @@
     <string name="single_page">Single page</string>
     <string name="automatic_orientation">Automatic (based on orientation)</string>
     <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
+    <string name="invert_double_pages">Invert double pages</string>
+
+    <!-- Center margin -->
+    <string name="center_margin">Center Margin</string>
+    <string name="center_margin_none">None</string>
+    <string name="center_margin_double_page">Add to double Page</string>
+    <string name="center_margin_wide_page">Add to wide Page</string>
+    <string name="center_margin_double_and_wide_page">Add to both</string>
+    <string name="pref_center_margin">Center margin type</string>
+    <string name="pref_center_margin_summary">Insert spacer to accommodate deadspace on foldable devices.</string>
 
 </resources>

@@ -50,9 +50,7 @@ class PagerPageHolder(
     /**
      * Loading progress bar to indicate the current progress.
      */
-    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(
-        readerThemedContext,
-    )
+    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(readerThemedContext)
 
     /**
      * Error layout to show when the image fails to load.
@@ -172,24 +170,24 @@ class PagerPageHolder(
                             null
                         }
                         ).use { stream2 ->
-                        if (viewer.config.dualPageSplit) {
-                            process(item.first, stream)
-                        } else {
-                            mergePages(stream, stream2)
-                        }.use { itemStream ->
-                            // SY <--
-                            val bais = ByteArrayInputStream(itemStream.readBytes())
-                            val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
-                            bais.reset()
-                            val background = if (!isAnimated && viewer.config.automaticBackground) {
-                                ImageUtil.chooseBackground(context, bais)
+                            if (viewer.config.dualPageSplit) {
+                                process(item.first, stream)
                             } else {
-                                null
+                                mergePages(stream, stream2)
+                            }.use { itemStream ->
+                                // SY <--
+                                val bais = ByteArrayInputStream(itemStream.readBytes())
+                                val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
+                                bais.reset()
+                                val background = if (!isAnimated && viewer.config.automaticBackground) {
+                                    ImageUtil.chooseBackground(context, bais)
+                                } else {
+                                    null
+                                }
+                                bais.reset()
+                                Triple(bais, isAnimated, background)
                             }
-                            bais.reset()
-                            Triple(bais, isAnimated, background)
                         }
-                    }
                 }
             }
             withUIContext {
@@ -351,22 +349,17 @@ class PagerPageHolder(
             splitDoublePages()
             return imageBytes.inputStream()
         }
-        val isLTR = (viewer !is R2LPagerViewer)
+        val isLTR = (viewer !is R2LPagerViewer) xor viewer.config.invertDoublePages
 
         imageStream.close()
         imageStream2.close()
 
-        val centerMargin =
-            if (viewer.config.centerMarginType and PagerConfig.CenterMarginType.DOUBLE_PAGE_CENTER_MARGIN > 0 &&
-                !viewer.config.imageCropBorders
-            ) {
-                96 / (
-                    this.height.coerceAtLeast(1) /
-                        max(height, height2).coerceAtLeast(1)
-                    ).coerceAtLeast(1)
-            } else {
-                0
-            }
+        val centerMargin = if (viewer.config.centerMarginType and PagerConfig.CenterMarginType.
+            DOUBLE_PAGE_CENTER_MARGIN > 0 && !viewer.config.imageCropBorders) {
+            96 / (this.height.coerceAtLeast(1) / max(height, height2).coerceAtLeast(1)).coerceAtLeast(1)
+        } else {
+            0
+        }
 
         return ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, centerMargin, viewer.config.pageCanvasColor) {
             scope.launch {
@@ -405,7 +398,16 @@ class PagerPageHolder(
             }
         }
 
-        return ImageUtil.splitInHalf(imageStream, side)
+        val sideMargin = if ((viewer.config.centerMarginType and PagerConfig.CenterMarginType.
+            DOUBLE_PAGE_CENTER_MARGIN) > 0 &&
+            viewer.config.doublePages && !viewer.config.imageCropBorders
+        ) {
+            48
+        } else {
+            0
+        }
+
+        return ImageUtil.splitInHalf(imageStream, side, sideMargin)
     }
 
     private fun onPageSplit(page: ReaderPage) {

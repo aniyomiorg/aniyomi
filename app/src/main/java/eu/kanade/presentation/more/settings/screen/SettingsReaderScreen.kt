@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
@@ -64,10 +65,12 @@ object SettingsReaderScreen : SearchableSettings {
                 subtitle = stringResource(MR.strings.pref_true_color_summary),
                 enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O,
             ),
+            /* SY -->
             Preference.PreferenceItem.SwitchPreference(
                 pref = readerPref.pageTransitions(),
                 title = stringResource(MR.strings.pref_page_transitions),
             ),
+            SY <-- */
             Preference.PreferenceItem.SwitchPreference(
                 pref = readerPref.flashOnPageChange(),
                 title = stringResource(MR.strings.pref_flash_page),
@@ -412,6 +415,7 @@ object SettingsReaderScreen : SearchableSettings {
     // SY -->
     @Composable
     private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val pageLayout by readerPreferences.pageLayout().collectAsState()
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_fork),
             preferenceItems = persistentListOf(
@@ -429,6 +433,20 @@ object SettingsReaderScreen : SearchableSettings {
                     entries = ReaderPreferences.PageLayouts
                         .mapIndexed { index, it -> index to stringResource(it) }
                         .toMap().toPersistentMap(),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = readerPreferences.invertDoublePages(),
+                    title = stringResource(MR.strings.invert_double_pages),
+                    enabled = pageLayout != PagerConfig.PageLayout.SINGLE_PAGE,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = readerPreferences.centerMarginType(),
+                    title = stringResource(MR.strings.center_margin),
+                    subtitle = stringResource(MR.strings.pref_center_margin_summary),
+                    entries = ReaderPreferences.CenterMarginTypes
+                        .mapIndexed { index, it -> index to stringResource(it) }
+                        .toMap()
+                        .toImmutableMap(),
                 ),
             ),
         )

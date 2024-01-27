@@ -150,16 +150,16 @@ object ImageUtil {
     /**
      * Extract the 'side' part from imageStream and return it as InputStream.
      */
-    fun splitInHalf(imageStream: InputStream, side: Side): InputStream {
+    fun splitInHalf(imageStream: InputStream, side: Side, sidePadding: Int): InputStream {
         val imageBytes = imageStream.readBytes()
 
         val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         val height = imageBitmap.height
         val width = imageBitmap.width
 
-        val singlePage = Rect(0, 0, width / 2, height)
+        val singlePage = Rect(0, 0, width / 2 + sidePadding, height)
 
-        val half = createBitmap(width / 2, height)
+        val half = createBitmap(width / 2 + sidePadding, height)
         val part = when (side) {
             Side.RIGHT -> Rect(width - width / 2, 0, width, height)
             Side.LEFT -> Rect(0, 0, width / 2, height)

@@ -82,6 +82,8 @@ import eu.kanade.tachiyomi.util.system.isNightMode
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -382,7 +384,8 @@ class ReaderActivity : BaseActivity() {
             val isPagerType = ReadingMode.isPagerType(viewModel.getMangaReadingMode())
             val cropEnabled = if (isPagerType) cropBorderPaged else cropBorderWebtoon
             // SY -->
-            val readerBottomButtons by readerPreferences.readerBottomButtons().collectAsState()
+            val readerBottomButtons by readerPreferences.readerBottomButtons().changes().map { it.toImmutableSet() }
+                .collectAsState(persistentSetOf())
             val dualPageSplitPaged by readerPreferences.dualPageSplitPaged().collectAsState()
             // SY <--
 
@@ -406,7 +409,6 @@ class ReaderActivity : BaseActivity() {
                 onShare = ::shareChapter.takeIf { isHttpSource },
 
                 viewer = state.viewer,
-
                 onNextChapter = ::loadNextChapter,
                 enabledNext = state.viewerChapters?.nextChapter != null,
                 onPreviousChapter = ::loadPreviousChapter,
@@ -775,10 +777,12 @@ class ReaderActivity : BaseActivity() {
      * Called from the viewer whenever a [page] is marked as active. It updates the values of the
      * bottom menu and delegates the change to the presenter.
      */
+    @SuppressLint("SetTextI18n")
     fun onPageSelected(page: ReaderPage, hasExtraPage: Boolean = false) {
         // SY -->
         val currentPageText = if (hasExtraPage) {
-            "${page.number + 1}-${page.number}"
+            val invertDoublePage = (viewModel.state.value.viewer as? PagerViewer)?.config?.invertDoublePages ?: false
+            if ((resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) xor invertDoublePage) "${page.number}-${page.number + 1}" else "${page.number + 1}-${page.number}"
         } else {
             "${page.number}"
         }
@@ -851,7 +855,7 @@ class ReaderActivity : BaseActivity() {
                 },
             )
         } else {
-            getString(R.string.share_page_info, manga.title, chapter.name, page.number)
+            stringResource(MR.strings.share_page_info, manga.title, chapter.name, page.number)
         }
         // SY <--
 
