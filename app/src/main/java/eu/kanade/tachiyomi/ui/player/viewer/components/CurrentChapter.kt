@@ -11,21 +11,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
+import tachiyomi.presentation.core.components.material.padding
 
 class CurrentChapter(
     private val view: ComposeView,
@@ -65,7 +74,8 @@ class CurrentChapter(
             modifier = modifier
                 .clip(RoundedCornerShape(25))
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = MaterialTheme.padding.large)
+                .fillMaxWidth(0.5f),
             contentAlignment = Alignment.CenterStart,
         ) {
             AnimatedContent(
@@ -82,7 +92,7 @@ class CurrentChapter(
                     )
                 },
                 label = "Chapter",
-            ) { currentSegment ->
+            ) { currentChapter ->
                 Row {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_video_chapter_20dp),
@@ -92,13 +102,17 @@ class CurrentChapter(
                             .size(16.dp),
                     )
                     Text(
-                        text = Utils.prettyTime(currentSegment.time.toInt()),
+                        text = Utils.prettyTime(currentChapter.time.toInt()),
+                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.tertiary,
                     )
                     DotSeparatorText()
                     Text(
-                        text = " ${currentSegment.title}",
+                        text = "${currentChapter.title}",
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,
                     )
