@@ -271,7 +271,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="80"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/bottomRightControlsGroup"
                 app:layout_constraintStart_toEndOf="@+id/bottomLeftControlsGroup" />
 
             <LinearLayout

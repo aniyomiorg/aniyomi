@@ -7,15 +7,21 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVView.Chapter
@@ -56,7 +62,10 @@ class CurrentChapter(
         modifier: Modifier = Modifier,
     ) {
         Box(
-            modifier = modifier,
+            modifier = modifier
+                .clip(RoundedCornerShape(25))
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
+                .padding(horizontal = 24.dp),
             contentAlignment = Alignment.CenterStart,
         ) {
             AnimatedContent(
@@ -77,7 +86,8 @@ class CurrentChapter(
                 Row {
                     Text(
                         text = Utils.prettyTime(currentSegment.time.toInt()),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.tertiary,
                     )
                     DotSeparatorText()
                     Text(
