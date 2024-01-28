@@ -244,6 +244,11 @@
                 <data android:host="myanimelist-auth" />
                 <data android:host="shikimori-auth" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.setting.track.MyAnimeListLoginActivity"
+            android:label="MyAnimeList"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -271,8 +276,7 @@
         <service
             android:name=".data.connections.discord.DiscordRPCService"
             android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="dataSync">
+            android:exported="false">
             <intent-filter>
                 <action android:name ="android.intent.action.VIEW"/>
                 <category android:name ="android.intent.category.DEFAULT"/>

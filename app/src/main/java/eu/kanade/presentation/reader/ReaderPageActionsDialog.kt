@@ -45,7 +45,7 @@ fun ReaderPageActionsDialog(
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,
     ) {
-        Column(modifier = Modifier.padding(vertical = 16.dp)) {
+       Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
@@ -163,7 +163,7 @@ fun ReaderPageActionsDialog(
     if (showSetCoverDialog) {
         SetCoverDialog(
             onConfirm = {
-                // SY -->
+                 // SY -->
                 onSetAsCover(useExtraPage)
                 showSetCoverDialog = false
                 useExtraPage = false

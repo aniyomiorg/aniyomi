@@ -54,11 +54,11 @@ class GetApplicationRelease(
         // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
         return if (isPreview) {
-            // Preview builds: based on releases in "LuftVerbot/kuukiyomi-preview" repo
+            // Preview builds: based on releases in "Dark25/animetailv2-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > commitCount
         } else {
-            // Release builds: based on releases in "LuftVerbot/kuukiyomi" repo
+            // Release builds: based on releases in "Dark25/animetailv2" repo
             // tagged as something like "v0.1.2"
             val oldVersion = versionName.replace("[^\\d.]".toRegex(), "")
 

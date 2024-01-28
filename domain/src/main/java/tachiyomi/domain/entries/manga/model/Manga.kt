@@ -66,6 +66,32 @@ data class Manga(
             .takeIf { status != SManga.COMPLETED.toLong() }
             ?.let { Instant.ofEpochMilli(it) }
 
+    // SY -->
+    private val customMangaInfo = if (favorite) {
+        getCustomMangaInfo.get(id)
+    } else {
+        null
+    }
+
+    val title: String
+        get() = customMangaInfo?.title ?: ogTitle
+
+    val author: String?
+        get() = customMangaInfo?.author ?: ogAuthor
+
+    val artist: String?
+        get() = customMangaInfo?.artist ?: ogArtist
+
+    val description: String?
+        get() = customMangaInfo?.description ?: ogDescription
+
+    val genre: List<String>?
+        get() = customMangaInfo?.genre ?: ogGenre
+
+    val status: Long
+        get() = customMangaInfo?.status ?: ogStatus
+    // SY <--
+
     val sorting: Long
         get() = chapterFlags and CHAPTER_SORTING_MASK
 

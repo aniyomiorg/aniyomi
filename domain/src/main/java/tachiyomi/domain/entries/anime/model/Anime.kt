@@ -61,6 +61,26 @@ data class Anime(
             .takeIf { status != SAnime.COMPLETED.toLong() }
             ?.let { Instant.ofEpochMilli(it) }
 
+    // SY -->
+    private val customAnimeInfo = if (favorite) {
+        getCustomAnimeInfo.get(id)
+    } else {
+        null
+    }
+    val title: String
+        get() = customAnimeInfo?.title ?: ogTitle
+    val author: String?
+        get() = customAnimeInfo?.author ?: ogAuthor
+    val artist: String?
+        get() = customAnimeInfo?.artist ?: ogArtist
+    val description: String?
+        get() = customAnimeInfo?.description ?: ogDescription
+    val genre: List<String>?
+        get() = customAnimeInfo?.genre ?: ogGenre
+    val status: Long
+        get() = customAnimeInfo?.status ?: ogStatus
+    // SY <--
+
     val sorting: Long
         get() = episodeFlags and EPISODE_SORTING_MASK
 

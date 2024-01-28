@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
 
-        applicationId = "xyz.luft.tachiyomi.mi"
+        applicationId = "com.dark.animetailv2"
 
         versionCode = 120
         versionName = "0.2.2"
@@ -231,6 +231,9 @@ dependencies {
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))
