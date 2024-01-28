@@ -557,6 +557,13 @@ object Migrations {
                     preferenceStore.getEnum("bottom_rail_nav_style", NavStyle.MOVE_HISTORY_TO_MORE).set(navStyle)
                 }
             }
+
+            if (oldVersion < 121) {
+                if (trackerManager.myAnimeList.isLoggedIn) {
+                    trackerManager.myAnimeList.logout()
+                    context.stringResource(MR.strings.myanimelist_relogin)
+                }
+            }
             return true
         }
         return false
