@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.workManager
-import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.TriState
@@ -160,7 +159,6 @@ object Migrations {
                 // v53: switched from WebView to OAuth
                 if (trackerManager.myAnimeList.isLoggedIn) {
                     trackerManager.myAnimeList.logout()
-                    context.stringResource(MR.strings.myanimelist_relogin)
                 }
             }
             if (oldVersion < 57) {
@@ -561,7 +559,6 @@ object Migrations {
             if (oldVersion < 121) {
                 if (trackerManager.myAnimeList.isLoggedIn) {
                     trackerManager.myAnimeList.logout()
-                    context.stringResource(MR.strings.myanimelist_relogin)
                 }
             }
             return true
