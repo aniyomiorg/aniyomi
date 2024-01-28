@@ -253,7 +253,7 @@
     <string name="update_check_notification_download_in_progress">正在下载…</string>
     <string name="update_check_notification_download_complete">点击安装更新</string>
     <string name="update_check_notification_download_error">下载失败</string>
-    <string name="update_check_notification_update_available">有新版本！</string>
+    <string name="update_check_notification_update_available">发现新版本！</string>
     <string name="information_no_downloads">无下载任务</string>
     <string name="information_no_recent">最近没有更新</string>
     <string name="information_no_recent_manga">最近没有阅读</string>
@@ -927,7 +927,7 @@
     <string name="dialog_with_checkbox_reset_anime">重置此动画所有剧集</string>
     <string name="dialog_with_checkbox_reset">重置此漫画所有章节</string>
     <string name="screenshot_header">截取屏幕</string>
-    <string name="screenshot_show_subs">在截屏中显示字幕</string>
+    <string name="screenshot_show_subs">在截图中包含字幕</string>
     <string name="enable_volume_brightness_gestures">启用音量和亮度手势</string>
     <string name="enable_horizontal_seek_gesture">启用水平定位手势</string>
     <string name="toggle_player_statistics_page">显示播放器统计页面</string>
