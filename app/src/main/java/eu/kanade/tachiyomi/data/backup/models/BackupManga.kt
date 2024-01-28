@@ -71,4 +71,27 @@ data class BackupManga(
             favoriteModifiedAt = this@BackupManga.favoriteModifiedAt,
         )
     }
+
+    // SY -->
+    fun getCustomMangaInfo(): CustomMangaInfo? {
+        if (customTitle != null ||
+            customArtist != null ||
+            customAuthor != null ||
+            customDescription != null ||
+            customGenre != null ||
+            customStatus != 0
+        ) {
+            return CustomMangaInfo(
+                id = 0L,
+                title = customTitle,
+                author = customAuthor,
+                artist = customArtist,
+                description = customDescription,
+                genre = customGenre,
+                status = customStatus.takeUnless { it == 0 }?.toLong(),
+            )
+        }
+        return null
+    }
+    // SY <--
 }

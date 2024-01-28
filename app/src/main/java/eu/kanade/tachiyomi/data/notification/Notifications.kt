@@ -70,6 +70,12 @@ object Notifications {
     const val CHANNEL_INCOGNITO_MODE = "incognito_mode_channel"
     const val ID_INCOGNITO_MODE = -701
 
+    /**
+     * Notification channel and ids used for torrent server
+     */
+    const val CHANNEL_TORRENT_SERVER = "torrent_server_channel"
+    const val ID_TORRENT_SERVER = -801
+
     // AM (DISCORD) -->
     /**
      * Notification channel used for Discord RPC
@@ -171,6 +177,10 @@ object Notifications {
                 },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName(context.stringResource(MR.strings.pref_incognito_mode))
+                },
+                buildNotificationChannel(CHANNEL_TORRENT_SERVER, IMPORTANCE_LOW) {
+                    setName("Torrent server") // TODO: change this
+                    setShowBadge(false)
                 },
                 // AM (DISCORD) -->
                 buildNotificationChannel(CHANNEL_DISCORD_RPC, IMPORTANCE_LOW) {

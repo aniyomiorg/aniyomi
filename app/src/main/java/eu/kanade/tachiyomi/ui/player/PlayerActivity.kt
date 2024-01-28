@@ -20,6 +20,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -41,7 +42,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -49,6 +52,10 @@ import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
@@ -117,10 +124,18 @@ class PlayerActivity : BaseActivity() {
     internal val playerPreferences: PlayerPreferences = Injekt.get()
 
     companion object {
-        fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
+        fun newIntent(
+            context: Context,
+            animeId: Long?,
+            episodeId: Long?,
+            vidList: List<Video>? = null,
+            vidIndex: Int? = null,
+        ): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
                 putExtra("animeId", animeId)
                 putExtra("episodeId", episodeId)
+                vidIndex?.let { putExtra("vidIndex", it) }
+                vidList?.let { putExtra("vidList", it.serialize()) }
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
@@ -133,6 +148,8 @@ class PlayerActivity : BaseActivity() {
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
+        val vidList = intent.extras!!.getString("vidList", "")
+        val vidIndex = intent.extras!!.getInt("vidIndex", 0)
         if (animeId == -1L || episodeId == -1L) {
             finish()
             return
@@ -150,7 +167,7 @@ class PlayerActivity : BaseActivity() {
                 it.copy(isLoadingEpisode = true)
             }
 
-            val initResult = viewModel.init(animeId, episodeId)
+            val initResult = viewModel.init(animeId, episodeId, vidList, vidIndex)
             if (!initResult.second.getOrDefault(false)) {
                 val exception = initResult.second.exceptionOrNull() ?: IllegalStateException(
                     "Unknown error",
@@ -561,7 +578,8 @@ class PlayerActivity : BaseActivity() {
         playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
-        player.initialize(applicationContext.filesDir.path, logLevel)
+        val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+        player.initialize(applicationContext.filesDir.path, logLevel, vo)
 
         val speedProperty = MPVLib.getPropertyDouble("speed")
         val currentSpeed = if (speedProperty == 1.0) playerPreferences.playerSpeed().get().toDouble() else speedProperty
@@ -1525,7 +1543,23 @@ class PlayerActivity : BaseActivity() {
             }
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
+                launchIO {
+                    if (TorrentServerService.isInstalled()) {
+                        TorrentServerService.start()
+                    } else {
+                        UpdateTorrentServer.updateFromNet { progress ->
+                            if (BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
+                        }
+                    }
+                    TorrentServerService.wait(10)
+                    val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
+                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
+                    MPVLib.command(arrayOf("loadfile", torrentUrl))
+                }
+            } else {
+                MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            }
         }
         refreshUi()
     }

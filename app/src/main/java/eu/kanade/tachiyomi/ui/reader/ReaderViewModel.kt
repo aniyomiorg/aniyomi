@@ -51,6 +51,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -120,9 +121,6 @@ class ReaderViewModel @JvmOverloads constructor(
      */
     val manga: Manga?
         get() = state.value.manga
-
-    val currentChapter: Chapter?
-        get() = state.value.chapter
 
     val currentSource: MangaSource?
         get() = state.value.source
@@ -238,6 +236,9 @@ class ReaderViewModel @JvmOverloads constructor(
         state.map { it.viewerChapters?.currChapter }
             .distinctUntilChanged()
             .filterNotNull()
+            // SY -->
+            .drop(1) // allow the loader to set the first page and chapter id
+            // SY <-
             .onEach { currentChapter ->
                 if (chapterPageIndex >= 0) {
                     // Restore from SavedState
@@ -676,7 +677,6 @@ class ReaderViewModel @JvmOverloads constructor(
     fun getMangaReadingMode(resolveDefault: Boolean = true): Int {
         val default = readerPreferences.defaultReadingMode().get()
         val readingMode = ReadingMode.fromPreference(manga?.readingMode?.toInt())
-
         return when {
             resolveDefault && readingMode == ReadingMode.DEFAULT -> default
             else -> manga?.readingMode?.toInt() ?: default
@@ -819,7 +819,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Saves the image of this the selected page on the pictures directory and notifies the UI of the result.
+     * Saves the image of the selected page on the pictures directory and notifies the UI of the result.
      * There's also a notification to allow sharing the image somewhere else or deleting it.
      */
     fun saveImage(useExtraPage: Boolean) {
@@ -841,9 +841,7 @@ class ReaderViewModel @JvmOverloads constructor(
 
         // Pictures directory.
         val relativePath = if (readerPreferences.folderPerManga().get()) {
-            DiskUtil.buildValidFilename(
-                manga.title,
-            )
+            DiskUtil.buildValidFilename(manga.title)
         } else {
             ""
         }
@@ -873,7 +871,7 @@ class ReaderViewModel @JvmOverloads constructor(
     fun saveImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
-        val isLTR = (viewer !is R2LPagerViewer)
+        val isLTR = (viewer !is R2LPagerViewer) xor (viewer.config.invertDoublePages)
         val bg = viewer.config.pageCanvasColor
 
         if (firstPage.status != Page.State.READY) return
@@ -893,7 +891,7 @@ class ReaderViewModel @JvmOverloads constructor(
                     page2 = secondPage,
                     isLTR = isLTR,
                     bg = bg,
-                    location = Location.Pictures(DiskUtil.buildValidFilename(manga.title)),
+                    location = Location.Pictures.create(DiskUtil.buildValidFilename(manga.title)),
                     manga = manga,
                 )
                 eventChannel.send(Event.SavedImage(SaveImageResult.Success(uri)))
@@ -938,7 +936,7 @@ class ReaderViewModel @JvmOverloads constructor(
     // SY <--
 
     /**
-     * Shares the image of this the selected page and notifies the UI with the path of the file to share.
+     * Shares the image of the selected page and notifies the UI with the path of the file to share.
      * The image must be first copied to the internal partition because there are many possible
      * formats it can come from, like a zipped chapter, in which case it's not possible to directly
      * get a path to the file and it has to be decompressed somewhere first. Only the last shared
@@ -981,7 +979,7 @@ class ReaderViewModel @JvmOverloads constructor(
     fun shareImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
-        val isLTR = (viewer !is R2LPagerViewer)
+        val isLTR = (viewer !is R2LPagerViewer) xor (viewer.config.invertDoublePages)
         val bg = viewer.config.pageCanvasColor
 
         if (firstPage.status != Page.State.READY) return
@@ -1008,11 +1006,10 @@ class ReaderViewModel @JvmOverloads constructor(
             logcat(LogPriority.ERROR, e)
         }
     }
-
     // SY <--
 
     /**
-     * Sets the image of this the selected page as cover and notifies the UI of the result.
+     * Sets the image of the selected page as cover and notifies the UI of the result.
      */
     fun setAsCover(useExtraPage: Boolean) {
         // SY -->

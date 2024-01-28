@@ -21,8 +21,8 @@ android {
 
         applicationId = "com.dark.animetailv2"
 
-        versionCode = 120
-        versionName = "0.15.2.4"
+        versionCode = 121
+        versionName = "0.15.2.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -222,6 +222,9 @@ dependencies {
     implementation(libs.disklrucache)
     implementation(libs.unifile)
     implementation(libs.junrar)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Preferences
     implementation(libs.preferencektx)
@@ -257,9 +260,6 @@ dependencies {
     // Logging
     implementation(libs.logcat)
 
-    // Crash reports
-    implementation(libs.bundles.acra)
-
     // Shizuku
     implementation(libs.bundles.shizuku)
 
@@ -280,6 +280,8 @@ dependencies {
     implementation(libs.seeker)
     // true type parser
     implementation(libs.truetypeparser)
+    // shell
+    implementation(libs.libsucore)
 }
 
 androidComponents {

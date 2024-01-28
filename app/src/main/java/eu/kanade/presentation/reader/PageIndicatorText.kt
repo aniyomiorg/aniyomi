@@ -16,7 +16,6 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 
 @Composable
 fun PageIndicatorText(
-
     // SY -->
     currentPage: String,
     // SY <--

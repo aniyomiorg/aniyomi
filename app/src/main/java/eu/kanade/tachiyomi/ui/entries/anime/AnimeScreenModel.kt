@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
 import aniyomi.util.nullIfEmpty
 import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel

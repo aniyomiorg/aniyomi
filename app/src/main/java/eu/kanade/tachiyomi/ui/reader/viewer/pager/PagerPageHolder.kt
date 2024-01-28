@@ -50,9 +50,7 @@ class PagerPageHolder(
     /**
      * Loading progress bar to indicate the current progress.
      */
-    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(
-        readerThemedContext,
-    )
+    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(readerThemedContext)
 
     /**
      * Error layout to show when the image fails to load.
@@ -102,7 +100,6 @@ class PagerPageHolder(
         page ?: return
         // SY <--
         val loader = page.chapter.pageLoader ?: return
-
         supervisorScope {
             launchIO {
                 loader.loadPage(page)
@@ -352,22 +349,18 @@ class PagerPageHolder(
             splitDoublePages()
             return imageBytes.inputStream()
         }
-        val isLTR = (viewer !is R2LPagerViewer)
+        val isLTR = (viewer !is R2LPagerViewer) xor viewer.config.invertDoublePages
 
         imageStream.close()
         imageStream2.close()
 
-        val centerMargin =
-            if (viewer.config.centerMarginType and PagerConfig.CenterMarginType.DOUBLE_PAGE_CENTER_MARGIN > 0 &&
-                !viewer.config.imageCropBorders
-            ) {
-                96 / (
-                    this.height.coerceAtLeast(1) /
-                        max(height, height2).coerceAtLeast(1)
-                    ).coerceAtLeast(1)
-            } else {
-                0
-            }
+        val centerMargin = if (viewer.config.centerMarginType and PagerConfig.CenterMarginType
+                .DOUBLE_PAGE_CENTER_MARGIN > 0 && !viewer.config.imageCropBorders
+        ) {
+            96 / (this.height.coerceAtLeast(1) / max(height, height2).coerceAtLeast(1)).coerceAtLeast(1)
+        } else {
+            0
+        }
 
         return ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, centerMargin, viewer.config.pageCanvasColor) {
             scope.launch {
@@ -406,7 +399,18 @@ class PagerPageHolder(
             }
         }
 
-        return ImageUtil.splitInHalf(imageStream, side)
+        val sideMargin = if ((
+                viewer.config.centerMarginType and PagerConfig.CenterMarginType
+                    .DOUBLE_PAGE_CENTER_MARGIN
+                ) > 0 &&
+            viewer.config.doublePages && !viewer.config.imageCropBorders
+        ) {
+            48
+        } else {
+            0
+        }
+
+        return ImageUtil.splitInHalf(imageStream, side, sideMargin)
     }
 
     private fun onPageSplit(page: ReaderPage) {

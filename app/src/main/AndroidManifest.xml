@@ -237,26 +237,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tachiyomi" />
-
-                <data android:host="anilist-auth" />
-                <data android:host="bangumi-auth" />
-                <data android:host="myanimelist-auth" />
-                <data android:host="shikimori-auth" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.setting.track.MyAnimeListLoginActivity"
-            android:label="MyAnimeList"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="aniyomi"/>
 
+                <data android:host="myanimelist-auth" />
+                <data android:host="anilist-auth" />
+                <data android:host="bangumi-auth" />
+                <data android:host="shikimori-auth" />
                 <data android:host="simkl-auth"/>
             </intent-filter>
         </activity>
@@ -313,6 +299,9 @@
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
             tools:node="merge" />
+
+        <service android:name=".data.torrentServer.service.TorrentServerService" />
+        <service android:name=".data.torrentServer.service.TorrentServerNotification" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
