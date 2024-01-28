@@ -20,6 +20,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -41,6 +42,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -49,6 +51,10 @@ import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
@@ -1525,7 +1531,23 @@ class PlayerActivity : BaseActivity() {
             }
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
+                launchIO {
+                    if(TorrentServerService.isInstalled()){
+                        TorrentServerService.start()
+                    }else{
+                        UpdateTorrentServer.updateFromNet { progress ->
+                            if(BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
+                        }
+                    }
+                    TorrentServerService.wait(10)
+                    val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
+                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
+                    MPVLib.command(arrayOf("loadfile", torrentUrl))
+                }
+            } else {
+                MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            }
         }
         refreshUi()
     }
