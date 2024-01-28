@@ -156,18 +156,6 @@ class ReaderPreferences(
     fun centerMarginType() = preferenceStore.getInt("center_margin_type", PagerConfig.CenterMarginType.NONE)
     // SY <--
 
-    // J2K -->
-    fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
-    // J2K <--
-
-    // SY -->
-    fun readerBottomButtons() = preferenceStore.getStringSet(
-        "reader_bottom_buttons",
-        ReaderBottomButton.BUTTONS_DEFAULTS,
-    )
-    fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
-    // SY <--
-
     // endregion
 
     enum class TappingInvertMode(
@@ -219,14 +207,6 @@ class ReaderPreferences(
             MR.strings.zoom_start_right,
             MR.strings.zoom_start_center,
         )
-
-        // SY -->
-        val PageLayouts = listOf(
-            MR.strings.single_page,
-            MR.strings.double_pages,
-            MR.strings.automatic_orientation,
-        )
-        // SY <--
 
         val ColorFilterMode = buildList {
             addAll(
