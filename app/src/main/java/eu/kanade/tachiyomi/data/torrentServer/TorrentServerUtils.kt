@@ -13,20 +13,17 @@ object TorrentServerUtils {
     fun getTorrentPlayLink(torr: Torrent, index: Int): String {
         val file = findFile(torr, index)
         val name = file?.let { File(it.path).name } ?: torr.title
-        return "$hostUrl/stream/${name.urlEncode()}?link=${torr.hash}&index=${index}&play"
+        return "$hostUrl/stream/${name.urlEncode()}?link=${torr.hash}&index=$index&play"
     }
 
     fun findFile(torrent: Torrent, index: Int): FileStat? {
         torrent.file_stats?.forEach {
-            if (it.id == index)
+            if (it.id == index) {
                 return it
+            }
         }
         return null
     }
 
-
     private fun String.urlEncode(): String = URLEncoder.encode(this, "utf8")
-
-
-
 }

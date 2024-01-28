@@ -18,7 +18,8 @@ import java.io.File
 import java.io.IOException
 
 object UpdateTorrentServer {
-    private const val UPDATE_SERVER_PATH = "https://raw.githubusercontent.com/Diegopyl1209/TorrServer/master/server_release.json"
+    private const val UPDATE_SERVER_PATH =
+        "https://raw.githubusercontent.com/Diegopyl1209/TorrServer/master/server_release.json"
     private val serverFile = TorrentServerFile()
     private val network: NetworkHelper by injectLazy()
     private val applicationContext: Application by injectLazy()

@@ -416,7 +416,7 @@ object SettingsPlayerScreen : SearchableSettings {
                             Integer.parseInt(it)
                             TorrentServerService.stop()
                             true
-                        } catch(e :Exception) {
+                        } catch (e: Exception) {
                             false
                         }
                     },
