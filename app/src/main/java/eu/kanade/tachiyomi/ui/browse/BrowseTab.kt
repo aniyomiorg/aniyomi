@@ -15,6 +15,8 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
@@ -81,6 +83,10 @@ data class BrowseTab(
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordScreen.BROWSE)
+            DiscordRPCService.setMangaScreen(context, DiscordScreen.BROWSE)
+            // <-- AM (DISCORD)
         }
     }
 }
