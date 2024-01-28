@@ -220,10 +220,10 @@ object AboutScreen : Screen() {
                         onAvailableUpdate(result)
                     }
                     is GetApplicationRelease.Result.NoNewUpdate -> {
-                        context.stringResource(MR.strings.update_check_no_new_updates)
+                        context.toast(context.stringResource(MR.strings.update_check_no_new_updates))
                     }
                     is GetApplicationRelease.Result.OsTooOld -> {
-                        context.stringResource(MR.strings.update_check_eol)
+                        context.toast(context.stringResource(MR.strings.update_check_eol))
                     }
                     else -> {}
                 }

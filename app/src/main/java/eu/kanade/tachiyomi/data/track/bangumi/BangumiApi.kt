@@ -315,14 +315,14 @@ class BangumiApi(
     )
 
     companion object {
-        private const val clientId = "bgm10555cda0762e80ca"
-        private const val clientSecret = "8fff394a8627b4c388cbf349ec865775"
+        private const val clientId = "bgm293165b66d7e58156"
+        private const val clientSecret = "21d5f5c19ac24b4bc9c855ffa2387030"
 
         private const val apiUrl = "https://api.bgm.tv"
         private const val oauthUrl = "https://bgm.tv/oauth/access_token"
         private const val loginUrl = "https://bgm.tv/oauth/authorize"
 
-        private const val redirectUrl = "tachiyomi://bangumi-auth"
+        private const val redirectUrl = "aniyomi://bangumi-auth"
 
         fun authUrl(): Uri =
             loginUrl.toUri().buildUpon()
