@@ -1132,8 +1132,4 @@
     <string name="multi_thread_download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
     <string name="download_speed_limit">Download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
-    <string name="pref_category_torrentserver">TorrentServer Preferences</string>
-    <string name="pref_torrentserver_port">TorrentServer Port</string>
-    <string name="pref_torrentserver_update">Install/Update TorrentServer</string>
-    <string name="torrentserver_isrunning">TorrentServer is running</string>
 </resources>
