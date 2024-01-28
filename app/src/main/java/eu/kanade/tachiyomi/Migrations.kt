@@ -32,7 +32,6 @@ import tachiyomi.core.preference.plusAssign
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
-import tachiyomi.i18n.MR
 import java.io.File
 
 object Migrations {
