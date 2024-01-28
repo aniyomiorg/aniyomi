@@ -4,9 +4,13 @@ import android.net.Uri
 import eu.kanade.tachiyomi.network.ProgressListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.Headers
 import rx.subjects.Subject
 
+@Serializable
 data class Track(val url: String, val lang: String)
 
 open class Video(
@@ -88,5 +92,47 @@ open class Video(
         DOWNLOAD_IMAGE,
         READY,
         ERROR,
+    }
+}
+
+@Serializable
+data class SerializableVideo(
+    val url: String = "",
+    val quality: String = "",
+    var videoUrl: String? = null,
+    val headers: List<Pair<String, String>>? = null,
+    val subtitleTracks: List<Track> = emptyList(),
+    val audioTracks: List<Track> = emptyList(),
+) {
+
+    companion object {
+        fun List<Video>.serialize(): String =
+            Json.encodeToString(
+                this.map { vid ->
+                    SerializableVideo(
+                        vid.url,
+                        vid.quality,
+                        vid.videoUrl,
+                        headers = vid.headers?.toList(),
+                        vid.subtitleTracks,
+                        vid.audioTracks,
+                    )
+                },
+            )
+
+        fun String.toVideoList(): List<Video> =
+            Json.decodeFromString<List<SerializableVideo>>(this)
+                .map { sVid ->
+                    Video(
+                        sVid.url,
+                        sVid.quality,
+                        sVid.videoUrl,
+                        sVid.headers
+                            ?.flatMap { it.toList() }
+                            ?.let { Headers.headersOf(*it.toTypedArray()) },
+                        sVid.subtitleTracks,
+                        sVid.audioTracks,
+                    )
+                }
     }
 }

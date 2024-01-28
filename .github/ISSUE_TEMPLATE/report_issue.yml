@@ -52,7 +52,7 @@ body:
       label: Kuukiyomi version
       description: You can find your Kuukiyomi version in **More → About**.
       placeholder: |
-        Example: "0.15.2.3"
+        Example: "0.15.2.4"
     validations:
       required: true
 

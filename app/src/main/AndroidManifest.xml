@@ -252,6 +252,10 @@
 
                 <data android:scheme="kuukiyomi"/>
 
+                <data android:host="myanimelist-auth" />
+                <data android:host="anilist-auth" />
+                <data android:host="bangumi-auth" />
+                <data android:host="shikimori-auth" />
                 <data android:host="simkl-auth"/>
             </intent-filter>
         </activity>

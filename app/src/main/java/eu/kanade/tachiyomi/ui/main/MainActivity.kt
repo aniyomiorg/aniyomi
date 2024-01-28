@@ -605,6 +605,7 @@ class MainActivity : BaseActivity() {
             episodeUrl: String?,
             extPlayer: Boolean,
             video: Video? = null,
+            videoList: List<Video>? = null,
         ) {
             if (extPlayer || (episodeUrl?.startsWith("magnet:") == true)) {
                 val intent = try {
@@ -616,7 +617,9 @@ class MainActivity : BaseActivity() {
                 }
                 externalPlayerResult?.launch(intent) ?: return
             } else {
-                context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
+                context.startActivity(
+                    PlayerActivity.newIntent(context, animeId, episodeId, videoList, videoList?.indexOf(video)),
+                )
             }
         }
     }
