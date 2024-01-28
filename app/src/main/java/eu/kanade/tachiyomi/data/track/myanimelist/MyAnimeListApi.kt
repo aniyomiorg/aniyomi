@@ -25,7 +25,6 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
-import logcat.logcat
 import okhttp3.FormBody
 import okhttp3.Headers
 import okhttp3.OkHttpClient
