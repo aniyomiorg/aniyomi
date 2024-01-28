@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Input
 import androidx.compose.material.icons.outlined.NavigateNext
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.SystemUpdateAlt
@@ -256,6 +257,18 @@ private fun VideoList(
                             )
                         }
                     },
+                    onIntPlayerClicked = {
+                        scope.launch {
+                            MainActivity.startPlayerActivity(
+                                context,
+                                anime.id,
+                                episode.id,
+                                false,
+                                selectedVideo,
+                                videoList,
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -289,6 +302,7 @@ private fun QualityOptions(
     onExtDownloadClicked: () -> Unit = {},
     onCopyClicked: () -> Unit = {},
     onExtPlayerClicked: () -> Unit = {},
+    onIntPlayerClicked: () -> Unit = {},
 ) {
     val closeMenu = { EpisodeOptionsDialogScreen.onDismissDialog() }
 
@@ -322,6 +336,15 @@ private fun QualityOptions(
             icon = Icons.Outlined.OpenInNew,
             onClick = {
                 onExtPlayerClicked()
+                closeMenu()
+            },
+        )
+
+        ClickableRow(
+            text = stringResource(MR.strings.action_play_internally),
+            icon = Icons.Outlined.Input,
+            onClick = {
+                onIntPlayerClicked()
                 closeMenu()
             },
         )
