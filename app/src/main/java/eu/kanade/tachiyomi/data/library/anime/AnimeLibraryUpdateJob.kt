@@ -21,6 +21,7 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -291,8 +292,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 }
             }
             .sortedBy { it.anime.title }
-
-        notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)
+        // Warn when excessively checking a single source
+        val maxUpdatesFromSource = animeToUpdate
+            .groupBy { it.anime.source + (0..4).random() }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
+        if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            notifier.showQueueSizeWarningNotificationIfNeeded(animeToUpdate)
+        }
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?
@@ -510,7 +517,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private fun writeErrorFile(errors: List<Pair<Anime, String?>>): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("kuukiyomi_update_errors.txt")
+                val file = context.createFileInCacheDir("animetail_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(
                         context.stringResource(MR.strings.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",

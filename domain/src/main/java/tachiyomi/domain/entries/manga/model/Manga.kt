@@ -35,11 +35,6 @@ data class Manga(
     val favoriteModifiedAt: Long?,
 ) : Serializable {
 
-    val expectedNextUpdate: Instant?
-        get() = nextUpdate
-            .takeIf { status != SManga.COMPLETED.toLong() }
-            ?.let { Instant.ofEpochMilli(it) }
-
     // SY -->
     private val customMangaInfo = if (favorite) {
         getCustomMangaInfo.get(id)
@@ -64,7 +59,12 @@ data class Manga(
 
     val status: Long
         get() = customMangaInfo?.status ?: ogStatus
+
     // SY <--
+    val expectedNextUpdate: Instant?
+        get() = nextUpdate
+            .takeIf { status != SManga.COMPLETED.toLong() }
+            ?.let { Instant.ofEpochMilli(it) }
 
     val sorting: Long
         get() = chapterFlags and CHAPTER_SORTING_MASK

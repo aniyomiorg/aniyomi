@@ -11,10 +11,11 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-
+import kotlinx.collections.immutable.toPersistentMap
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -64,10 +65,12 @@ object SettingsReaderScreen : SearchableSettings {
                 subtitle = stringResource(MR.strings.pref_true_color_summary),
                 enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O,
             ),
+            /* SY -->
             Preference.PreferenceItem.SwitchPreference(
                 pref = readerPref.pageTransitions(),
                 title = stringResource(MR.strings.pref_page_transitions),
             ),
+            SY <-- */
             Preference.PreferenceItem.SwitchPreference(
                 pref = readerPref.flashOnPageChange(),
                 title = stringResource(MR.strings.pref_flash_page),
@@ -412,6 +415,7 @@ object SettingsReaderScreen : SearchableSettings {
     // SY -->
     @Composable
     private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val pageLayout by readerPreferences.pageLayout().collectAsState()
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_fork),
             preferenceItems = persistentListOf(
@@ -420,15 +424,26 @@ object SettingsReaderScreen : SearchableSettings {
                     title = stringResource(MR.strings.reader_bottom_buttons),
                     subtitle = stringResource(MR.strings.reader_bottom_buttons_summary),
                     entries = ReaderBottomButton.entries
-                        .associate { it.value to stringResource(it.stringRes) }
-                        .toImmutableMap(),
-
+                        .associate { it.value to stringResource(it.stringRes) }.toPersistentMap(),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = readerPreferences.pageLayout(),
                     title = stringResource(MR.strings.page_layout),
                     subtitle = stringResource(MR.strings.automatic_can_still_switch),
                     entries = ReaderPreferences.PageLayouts
+                        .mapIndexed { index, it -> index to stringResource(it) }
+                        .toMap().toPersistentMap(),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = readerPreferences.invertDoublePages(),
+                    title = stringResource(MR.strings.invert_double_pages),
+                    enabled = pageLayout != PagerConfig.PageLayout.SINGLE_PAGE,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = readerPreferences.centerMarginType(),
+                    title = stringResource(MR.strings.center_margin),
+                    subtitle = stringResource(MR.strings.pref_center_margin_summary),
+                    entries = ReaderPreferences.CenterMarginTypes
                         .mapIndexed { index, it -> index to stringResource(it) }
                         .toMap()
                         .toImmutableMap(),
