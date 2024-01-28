@@ -255,7 +255,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="kuukiyomi"/>
+                <data android:scheme="animetail"/>
 
                 <data android:host="simkl-auth"/>
             </intent-filter>
