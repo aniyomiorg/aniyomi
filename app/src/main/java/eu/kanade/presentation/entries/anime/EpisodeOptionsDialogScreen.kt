@@ -255,6 +255,7 @@ private fun VideoList(
                                 selectedVideo.videoUrl,
                                 true,
                                 selectedVideo,
+                                videoList,
                             )
                         }
                     },
@@ -267,6 +268,7 @@ private fun VideoList(
                                 selectedVideo.videoUrl,
                                 false,
                                 selectedVideo,
+                                videoList,
                             )
                         }
                     },
