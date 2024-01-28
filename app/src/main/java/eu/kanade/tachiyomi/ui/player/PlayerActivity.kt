@@ -1533,11 +1533,11 @@ class PlayerActivity : BaseActivity() {
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
                 launchIO {
-                    if(TorrentServerService.isInstalled()){
+                    if (TorrentServerService.isInstalled()){
                         TorrentServerService.start()
-                    }else{
+                    } else {
                         UpdateTorrentServer.updateFromNet { progress ->
-                            if(BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
+                            if (BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
                         }
                     }
                     TorrentServerService.wait(10)

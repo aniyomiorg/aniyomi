@@ -36,13 +36,12 @@ data class Torrent(
     var pieces_dirtied_bad: Long? = null,
     var duration_seconds: Double? = null,
     var bit_rate: String? = null,
-
-    var file_stats: List<FileStat>? = null
+    var file_stats: List<FileStat>? = null,
 )
 
 @Serializable
 data class FileStat(
     var id: Int,
     var path: String,
-    var length: Long
+    var length: Long,
 )

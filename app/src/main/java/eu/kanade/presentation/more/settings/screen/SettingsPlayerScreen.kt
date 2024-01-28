@@ -91,7 +91,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 basePreferences = basePreferences,
             ),
             getTorrentServerGroup(torrentServerPreferences),
-            )
+        )
     }
 
     @Composable
@@ -402,7 +402,7 @@ object SettingsPlayerScreen : SearchableSettings {
                     onClick = {
                         TorrentServerService.stop()
                         launchIO {
-                            UpdateTorrentServer.updateFromNet{
+                            UpdateTorrentServer.updateFromNet {
                                 // TODO: add progress notification or something
                             }
                         }
@@ -416,7 +416,7 @@ object SettingsPlayerScreen : SearchableSettings {
                             Integer.parseInt(it)
                             TorrentServerService.stop()
                             true
-                        }catch(e:Exception){
+                        } catch(e :Exception) {
                             false
                         }
                     },
@@ -424,7 +424,6 @@ object SettingsPlayerScreen : SearchableSettings {
             ),
         )
     }
-
 
     @Composable
     private fun SkipIntroLengthDialog(

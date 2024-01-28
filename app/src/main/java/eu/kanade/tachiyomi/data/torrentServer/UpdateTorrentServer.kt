@@ -10,10 +10,7 @@ import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import eu.kanade.tachiyomi.util.storage.saveTo
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
@@ -21,7 +18,7 @@ import java.io.File
 import java.io.IOException
 
 object UpdateTorrentServer {
-    private const val updateServerPath = "https://raw.githubusercontent.com/Diegopyl1209/TorrServer/master/server_release.json"
+    private const val UPDATE_SERVER_PATH = "https://raw.githubusercontent.com/Diegopyl1209/TorrServer/master/server_release.json"
     private val serverFile = TorrentServerFile()
     private val network: NetworkHelper by injectLazy()
     private val applicationContext: Application by injectLazy()
@@ -35,25 +32,30 @@ object UpdateTorrentServer {
         return lv ?: ""
     }
 
-
     suspend fun updateFromNet(onProgress: ((prc: Int) -> Unit)?) {
         val url = getLink()
-        val progressListener = object : ProgressListener {
-            // Progress of the download
-            var savedProgress = 0
+        val progressListener =
+            object : ProgressListener {
+                // Progress of the download
+                var savedProgress = 0
 
-            override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-                val prc = (bytesRead * 100 / contentLength).toInt()
-                if (prc > savedProgress) {
-                    savedProgress = prc
-                    onProgress?.invoke(prc)
+                override fun update(
+                    bytesRead: Long,
+                    contentLength: Long,
+                    done: Boolean,
+                ) {
+                    val prc = (bytesRead * 100 / contentLength).toInt()
+                    if (prc > savedProgress) {
+                        savedProgress = prc
+                        onProgress?.invoke(prc)
+                    }
                 }
             }
-        }
         if (url.isNotBlank()) {
-            //download the file
-            val response = network.client.newCachelessCallWithProgress(GET(url), progressListener)
-                .await()
+            // download the file
+            val response =
+                network.client.newCachelessCallWithProgress(GET(url), progressListener)
+                    .await()
 
             val updateFile = File(applicationContext.filesDir, "torrserver_update")
 
@@ -72,7 +74,6 @@ object UpdateTorrentServer {
                 serverFile.delete()
                 throw IOException("error set exec permission")
             }
-
         }
         TorrentServerService.start()
     }
@@ -89,7 +90,7 @@ object UpdateTorrentServer {
 
     private fun check(): Boolean {
         return try {
-            val body = network.client.newCall(GET(updateServerPath)).execute().body.string()
+            val body = network.client.newCall(GET(UPDATE_SERVER_PATH)).execute().body.string()
             version = Json.decodeFromString(TorrServVersion.serializer(), body)
             true
         } catch (e: Exception) {
@@ -97,22 +98,20 @@ object UpdateTorrentServer {
         }
     }
 
-
     private fun getLink(): String {
-        if (version == null)
+        if (version == null) {
             check()
-        if (version == null)
+        }
+        if (version == null) {
             return ""
+        }
         version?.let { ver ->
             val arch = getArch()
-            if (arch.isEmpty())
+            if (arch.isEmpty()) {
                 throw IOException("error get arch")
+            }
             return ver.links["android-$arch"] ?: ""
         }
         return ""
     }
-
-
-
-
 }

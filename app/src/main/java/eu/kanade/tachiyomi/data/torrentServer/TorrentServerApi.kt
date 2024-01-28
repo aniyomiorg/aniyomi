@@ -33,30 +33,52 @@ object TorrentServerApi {
         }
     }
 
-    /// Torrents
-    fun addTorrent(link: String, title: String, poster: String, data: String, save: Boolean): Torrent {
-        val req = TorrentRequest("add", link = link, title = title, poster = poster, data = data, save_to_db = save,).toString()
-        val resp = network.client.newCall(POST("$hostUrl/torrents",body = req.toRequestBody("application/json".toMediaTypeOrNull()))).execute()
+    // / Torrents
+    fun addTorrent(
+        link: String,
+        title: String,
+        poster: String,
+        data: String,
+        save: Boolean,
+    ): Torrent {
+        val req =
+            TorrentRequest(
+                "add",
+                link = link,
+                title = title,
+                poster = poster,
+                data = data,
+                save_to_db = save,
+            ).toString()
+        val resp =
+            network.client.newCall(
+                POST("$hostUrl/torrents", body = req.toRequestBody("application/json".toMediaTypeOrNull())),
+            ).execute()
         return Json.decodeFromString(Torrent.serializer(), resp.body.string())
     }
 
     fun getTorrent(hash: String): Torrent {
-        val req = TorrentRequest("get", hash,).toString()
-        val resp = network.client.newCall(POST("$hostUrl/torrents",body = req.toRequestBody("application/json".toMediaTypeOrNull()))).execute()
+        val req = TorrentRequest("get", hash).toString()
+        val resp =
+            network.client.newCall(
+                POST("$hostUrl/torrents", body = req.toRequestBody("application/json".toMediaTypeOrNull())),
+            ).execute()
         return Json.decodeFromString(Torrent.serializer(), resp.body.string())
     }
 
     fun remTorrent(hash: String) {
-        val req = TorrentRequest("rem", hash,).toString()
-        network.client.newCall(POST("$hostUrl/torrents",body = req.toRequestBody("application/json".toMediaTypeOrNull()))).execute()
+        val req = TorrentRequest("rem", hash).toString()
+        network.client.newCall(
+            POST("$hostUrl/torrents", body = req.toRequestBody("application/json".toMediaTypeOrNull())),
+        ).execute()
     }
-
 
     fun listTorrent(): List<Torrent> {
-        val req = TorrentRequest("list",).toString()
-        val resp = network.client.newCall(POST("$hostUrl/torrents",body = req.toRequestBody("application/json".toMediaTypeOrNull()))).execute()
+        val req = TorrentRequest("list").toString()
+        val resp =
+            network.client.newCall(
+                POST("$hostUrl/torrents", body = req.toRequestBody("application/json".toMediaTypeOrNull())),
+            ).execute()
         return Json.decodeFromString<List<Torrent>>(resp.body.string())
     }
-
-
 }

@@ -19,5 +19,5 @@ data class TorrentDetails(
     val Hash: String,
     val IMDBID: String,
     val VideoQuality: Int,
-    val AudioQuality: Int
+    val AudioQuality: Int,
 )

@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.torrentServer.model
 
-
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,7 +22,7 @@ data class BTSets(
     var EnableDLNA: Boolean,
     var FriendlyName: String,
     // Rutor search
-    var EnableRutorSearch:Boolean,
+    var EnableRutorSearch: Boolean,
     // BT Config
     var EnableIPv6: Boolean,
     var DisableTCP: Boolean,
