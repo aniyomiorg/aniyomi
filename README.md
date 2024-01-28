@@ -10,6 +10,7 @@ This version of Aniyomi aims to implement as many features of other forks as pos
 
 Features include:
 * Kuukiyomi:
+  * Torrent support(Needs right extensions) (@Diegopyl1209)
   * resmush.it(Data Saver Provider)
   * Group by tags in library
   * Discord Rich Presence for Manga
@@ -28,8 +29,11 @@ Features include:
     * Data Saver
     * Edit Info
     * Library Grouping
+    * Double Pages
   * Animiru:
     * Discord Rich Presence
+  * TachiyomiJ2K:
+    * Page Preload
 
 ## Download
 Get the app from the [releases page](https://github.com/LuftVerbot/kuukiyomi/releases).
@@ -56,9 +60,9 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
 
-DO: https://github.com/tachiyomiorg/tachiyomi/issues/24 https://github.com/tachiyomiorg/tachiyomi/issues/71
+DO: https://github.com/LuftVerbot/kuukiyomi/issues/24 https://github.com/LuftVerbot/kuukiyomi/issues/71
 
-DON'T: https://github.com/tachiyomiorg/tachiyomi/issues/75
+DON'T: https://github.com/LuftVerbot/kuukiyomi/issues/75
 
 </details>
 
