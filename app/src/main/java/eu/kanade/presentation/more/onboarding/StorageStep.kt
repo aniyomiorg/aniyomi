@@ -52,13 +52,13 @@ internal class StorageStep : OnboardingStep {
         val pickStorageLocation = SettingsDataScreen.storageLocationPicker(storagePref)
 
         if (!storagePref.isSet()) {
-            val storage = File(Environment.getExternalStorageDirectory().toString() + "/${stringResource(MR.strings.app_name)}/")
+            val storage =
+                File(Environment.getExternalStorageDirectory().toString() + "/${stringResource(MR.strings.app_name)}/")
             if (!storage.exists()) {
                 storage.mkdirs()
             }
             storagePref.set("${storagePref.get()}/")
             storagePref.changes()
-
         }
 
         Column(

@@ -52,7 +52,9 @@ class PagerConfig(
     var landscapeZoom = false
         private set
 
-  
+    // SY -->
+    var usePageTransitions = false
+
     var shiftDoublePage = false
 
     var doublePages = readerPreferences.pageLayout().get() == PageLayout.DOUBLE_PAGES &&
@@ -64,6 +66,8 @@ class PagerConfig(
             }
         }
 
+    var invertDoublePages = false
+
     var autoDoublePages = readerPreferences.pageLayout().get() == PageLayout.AUTOMATIC
 
     @ColorInt
@@ -71,7 +75,7 @@ class PagerConfig(
 
     var centerMarginType = CenterMarginType.NONE
 
-
+    // SY <--
 
     init {
         readerPreferences.readerTheme()
@@ -132,6 +136,19 @@ class PagerConfig(
                 { imagePropertyChangedListener?.invoke() },
             )
 
+        // SY -->
+        readerPreferences.pageTransitionsPager()
+            .register({ usePageTransitions = it }, { imagePropertyChangedListener?.invoke() })
+        readerPreferences.readerTheme()
+            .register(
+                {
+                    themeToColor(it)
+                },
+                {
+                    themeToColor(it)
+                    reloadChapterListener?.invoke(doublePages)
+                },
+            )
         readerPreferences.pageLayout()
             .register(
                 {
@@ -148,6 +165,13 @@ class PagerConfig(
                     reloadChapterListener?.invoke(doublePages)
                 },
             )
+
+        readerPreferences.centerMarginType()
+            .register({ centerMarginType = it }, { imagePropertyChangedListener?.invoke() })
+
+        readerPreferences.invertDoublePages()
+            .register({ invertDoublePages = it && dualPageSplit == false }, { imagePropertyChangedListener?.invoke() })
+        // SY <--
     }
 
     private fun zoomTypeFromPreference(value: Int) {
@@ -192,8 +216,6 @@ class PagerConfig(
         navigationModeChangedListener?.invoke()
     }
 
-    // SY -->
-
     object CenterMarginType {
         const val NONE = 0
         const val DOUBLE_PAGE_CENTER_MARGIN = 1
@@ -206,5 +228,12 @@ class PagerConfig(
         const val DOUBLE_PAGES = 1
         const val AUTOMATIC = 2
     }
-    // SY <--
+
+    fun themeToColor(theme: Int) {
+        pageCanvasColor = when (theme) {
+            1 -> Color.BLACK
+            2 -> 0x202125
+            else -> Color.WHITE
+        }
+    }
 }

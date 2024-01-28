@@ -377,11 +377,11 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         setJoinedItems(
             oldCurrent?.second == current ||
                 (current.index + 1) < (
-                (
-                    oldCurrent?.second
-                        ?: oldCurrent?.first
-                    ) as? ReaderPage
-                )?.index ?: 0,
+                    (
+                        oldCurrent?.second
+                            ?: oldCurrent?.first
+                        ) as? ReaderPage
+                    )?.index ?: 0,
         )
 
         // The listener may be removed when we split a page, so the ui may not have updated properly

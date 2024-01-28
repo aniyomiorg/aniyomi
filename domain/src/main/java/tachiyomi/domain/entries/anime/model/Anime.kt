@@ -36,11 +36,6 @@ data class Anime(
     val favoriteModifiedAt: Long?,
 ) : Serializable {
 
-    val expectedNextUpdate: Instant?
-        get() = nextUpdate
-            .takeIf { status != SAnime.COMPLETED.toLong() }
-            ?.let { Instant.ofEpochMilli(it) }
-
     // SY -->
     private val customAnimeInfo = if (favorite) {
         getCustomAnimeInfo.get(id)
@@ -59,7 +54,12 @@ data class Anime(
         get() = customAnimeInfo?.genre ?: ogGenre
     val status: Long
         get() = customAnimeInfo?.status ?: ogStatus
+
     // SY <--
+    val expectedNextUpdate: Instant?
+        get() = nextUpdate
+            .takeIf { status != SAnime.COMPLETED.toLong() }
+            ?.let { Instant.ofEpochMilli(it) }
 
     val sorting: Long
         get() = episodeFlags and EPISODE_SORTING_MASK

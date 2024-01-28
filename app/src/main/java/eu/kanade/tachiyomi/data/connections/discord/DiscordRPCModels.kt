@@ -19,7 +19,7 @@ const val RICH_PRESENCE_TAG = "discord_rpc"
 private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
-//private val RICH_PRESENCE_BUTTONS = listOf("Descargar")
+// private val RICH_PRESENCE_BUTTONS = listOf("Descargar")
 
 // Constant for metadata list
 /*private val RICH_PRESENCE_METADATA = Activity.Metadata(
@@ -44,7 +44,7 @@ data class Activity(
   val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
 
     val metadata: Metadata? = RICH_PRESENCE_METADATA,
- */
+   */
 ) {
     @Serializable
     data class Assets(

@@ -107,6 +107,9 @@ seeker = "io.github.2307vivek:seeker:1.1.1"
 
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
+libsucore = "com.github.topjohnwu.libsu:core:5.2.2"
+
+
 [bundles]
 acra = ["acra-http", "acra-scheduler"]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]

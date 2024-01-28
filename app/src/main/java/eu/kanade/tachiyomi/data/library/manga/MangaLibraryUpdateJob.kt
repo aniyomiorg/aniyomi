@@ -25,6 +25,7 @@ import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.track.TrackStatus
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -290,7 +291,14 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
             .sortedBy { it.manga.title }
 
-        notifier.showQueueSizeWarningNotificationIfNeeded(mangaToUpdate)
+        // Warn when excessively checking a single source
+        val maxUpdatesFromSource = mangaToUpdate
+            .groupBy { it.manga.source + (0..4).random() }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
+        if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            notifier.showQueueSizeWarningNotificationIfNeeded(mangaToUpdate)
+        }
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?

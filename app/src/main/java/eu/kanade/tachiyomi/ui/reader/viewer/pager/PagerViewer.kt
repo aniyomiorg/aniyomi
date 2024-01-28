@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
+import eu.kanade.tachiyomi.ui.reader.model.ReaderItem
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.viewer.Viewer
@@ -54,7 +55,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
     /**
      * Currently active item. It can be a chapter page or a chapter transition.
      */
-    private var currentPage: Any? = null
+    var currentPage: ReaderItem? = null
 
     /**
      * Viewer chapters to set when the pager enters idle mode. Otherwise, if the view was settling
@@ -104,12 +105,19 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
         pager.id = R.id.reader_pager
         pager.adapter = adapter
         pager.addOnPageChangeListener(
-             // SY -->
+            // SY -->
             pagerListener,
             // SY <--
         )
         pager.tapListener = { event ->
-            val pos = PointF(event.x / pager.width, event.y / pager.height)
+            val viewPosition = IntArray(2)
+            pager.getLocationOnScreen(viewPosition)
+            val viewPositionRelativeToWindow = IntArray(2)
+            pager.getLocationInWindow(viewPositionRelativeToWindow)
+            val pos = PointF(
+                (event.rawX - viewPosition[0] + viewPositionRelativeToWindow[0]) / pager.width,
+                (event.rawY - viewPosition[1] + viewPositionRelativeToWindow[1]) / pager.height,
+            )
             when (config.navigator.getAction(pos)) {
                 NavigationRegion.MENU -> activity.toggleMenu()
                 NavigationRegion.NEXT -> moveToNext()
@@ -173,7 +181,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     private fun getPageHolder(page: ReaderPage): PagerPageHolder? =
         pager.children
-             .filterIsInstance<PagerPageHolder>()
+            .filterIsInstance<PagerPageHolder>()
             .firstOrNull { it.item.first == page || it.item.second == page }
 
     /**
@@ -272,7 +280,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     override fun setChapters(chapters: ViewerChapters) {
         if (isIdle) {
-            setChaptersInternal(chapters)
+            setChaptersDoubleShift(chapters)
         } else {
             awaitingIdleViewerChapters = chapters
         }
@@ -283,7 +291,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
         val forceTransition = config.alwaysShowChapterTransition ||
-        adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
+            adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set
@@ -479,5 +487,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
     fun splitDoublePages(currentPage: ReaderPage) {
         adapter.splitDoublePages(currentPage)
     }
+
+    fun getShiftedPage(): ReaderPage? = adapter.pageToShift
     // SY <--
 }
