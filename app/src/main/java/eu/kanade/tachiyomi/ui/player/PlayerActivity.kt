@@ -553,7 +553,8 @@ class PlayerActivity : BaseActivity() {
         playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
-        player.initialize(applicationContext.filesDir.path, logLevel)
+        val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+        player.initialize(applicationContext.filesDir.path, logLevel, vo)
 
         val speedProperty = MPVLib.getPropertyDouble("speed")
         val currentSpeed = if (speedProperty == 1.0) playerPreferences.playerSpeed().get().toDouble() else speedProperty

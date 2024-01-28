@@ -1000,6 +1000,8 @@
     <string name="player_statistics_page_3">Page 3</string>
     <string name="pref_category_player_advanced">Advanced player settings</string>
     <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
+    <string name="pref_gpu_next_title">Enable gpu-next</string>
+    <string name="pref_gpu_next_subtitle">A new video rendering backend</string>
     <string name="pref_debanding_title">Debanding</string>
     <string name="pref_debanding_disabled">Disabled</string>
     <string name="pref_debanding_cpu">CPU</string>

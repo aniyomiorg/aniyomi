@@ -47,6 +47,11 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         postfix = if (mpvInput.asState(scope).value.lines().size > 2) "\n..." else "",
                     ),
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                title = context.stringResource(MR.strings.pref_gpu_next_title),
+                subtitle = context.stringResource(MR.strings.pref_gpu_next_subtitle),
+                pref = playerPreferences.gpuNext(),
+            ),
             Preference.PreferenceItem.ListPreference(
                 title = context.stringResource(MR.strings.pref_debanding_title),
                 pref = playerPreferences.deband(),
