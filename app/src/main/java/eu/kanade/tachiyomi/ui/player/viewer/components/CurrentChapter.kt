@@ -62,7 +62,8 @@ class CurrentChapter(
                 chapter = chapter,
                 modifier = Modifier
                     .clickable { onClick() }
-                    .padding(end = MaterialTheme.padding.large),
+                    .padding(end = MaterialTheme.padding.large)
+                    .wrapContentSize(Alignment.CenterStart),
             )
         }
     }
@@ -76,8 +77,7 @@ class CurrentChapter(
             modifier = modifier
                 .clip(RoundedCornerShape(25))
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
-                .padding(horizontal = MaterialTheme.padding.large)
-                .wrapContentSize(Alignment.CenterStart),
+                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         ) {
             AnimatedContent(
                 targetState = chapter,
@@ -106,17 +106,26 @@ class CurrentChapter(
                         text = Utils.prettyTime(currentChapter.time.toInt()),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.ExtraBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
                         color = MaterialTheme.colorScheme.tertiary,
                     )
-                    DotSeparatorText()
-                    Text(
-                        text = "${currentChapter.title}",
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
+                    currentChapter.title?.let {
+                        Text(
+                            text = " • ",
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Clip,
+                        )
+                        Text(
+                            text = it,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                 }
             }
         }
