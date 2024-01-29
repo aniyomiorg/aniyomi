@@ -11,9 +11,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -60,7 +60,9 @@ class CurrentChapter(
         view.setComposeContent {
             CurrentChapterComposable(
                 chapter = chapter,
-                modifier = Modifier.clickable { onClick() },
+                modifier = Modifier
+                    .clickable { onClick() }
+                    .padding(end = MaterialTheme.padding.large),
             )
         }
     }
@@ -75,8 +77,7 @@ class CurrentChapter(
                 .clip(RoundedCornerShape(25))
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
                 .padding(horizontal = MaterialTheme.padding.large)
-                .fillMaxWidth(0.5f),
-            contentAlignment = Alignment.CenterStart,
+                .wrapContentSize(Alignment.CenterStart)
         ) {
             AnimatedContent(
                 targetState = chapter,
