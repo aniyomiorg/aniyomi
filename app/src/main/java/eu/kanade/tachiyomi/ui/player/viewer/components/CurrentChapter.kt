@@ -77,7 +77,7 @@ class CurrentChapter(
                 .clip(RoundedCornerShape(25))
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
                 .padding(horizontal = MaterialTheme.padding.large)
-                .wrapContentSize(Alignment.CenterStart)
+                .wrapContentSize(Alignment.CenterStart),
         ) {
             AnimatedContent(
                 targetState = chapter,
