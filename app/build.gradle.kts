@@ -276,6 +276,8 @@ dependencies {
     implementation(libs.seeker)
     // true type parser
     implementation(libs.truetypeparser)
+    // Cast
+    implementation(libs.bundles.cast)
 }
 
 androidComponents {
