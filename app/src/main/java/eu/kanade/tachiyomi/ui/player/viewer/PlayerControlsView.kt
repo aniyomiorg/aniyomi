@@ -152,8 +152,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.streamsBtn.setOnClickListener { activity.viewModel.showStreamsCatalog() }
 
-        binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
-
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
@@ -378,6 +376,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.bottomLeftControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
             )
+            binding.currentChapter.startAnimation(
+                AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
+            )
             binding.middleControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_fade_out),
             )
@@ -404,6 +405,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             AnimationUtils.loadAnimation(context, R.anim.player_enter_right),
         )
         binding.bottomLeftControlsGroup.startAnimation(
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
+        )
+        binding.currentChapter.startAnimation(
             AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
         )
         binding.middleControlsGroup.startAnimation(
