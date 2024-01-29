@@ -13,6 +13,7 @@ import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.toVideoList
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -233,7 +234,12 @@ class PlayerViewModel @JvmOverloads constructor(
      * Initializes this presenter with the given [animeId] and [initialEpisodeId]. This method will
      * fetch the anime from the database and initialize the episode.
      */
-    suspend fun init(animeId: Long, initialEpisodeId: Long): Pair<InitResult, Result<Boolean>> {
+    suspend fun init(
+        animeId: Long,
+        initialEpisodeId: Long,
+        vidList: String,
+        vidIndex: Int,
+    ): Pair<InitResult, Result<Boolean>> {
         val defaultResult = InitResult(currentVideoList, 0, null)
         if (!needsInit()) return Pair(defaultResult, Result.success(true))
         return try {
@@ -252,13 +258,21 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 val currentEp = currentEpisode ?: throw Exception("No episode loaded.")
 
-                EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source)
-                    .takeIf { it.isNotEmpty() }
-                    ?.also { currentVideoList = it }
-                    ?: run {
+                if (vidList.isNotBlank()) {
+                    currentVideoList = vidList.toVideoList().ifEmpty {
                         currentVideoList = null
-                        throw Exception("Video list is empty.")
+                        throw Exception("Video selected from empty list?")
                     }
+                    qualityIndex = vidIndex
+                } else {
+                    EpisodeLoader.getLinks(currentEp.toDomainEpisode()!!, anime, source)
+                        .takeIf { it.isNotEmpty() }
+                        ?.also { currentVideoList = it }
+                        ?: run {
+                            currentVideoList = null
+                            throw Exception("Video list is empty.")
+                        }
+                }
 
                 val result = InitResult(
                     videoList = currentVideoList,
