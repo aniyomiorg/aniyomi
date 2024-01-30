@@ -297,6 +297,7 @@ class PlayerActivity : BaseActivity() {
             field = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
+                playerControls.chapterText.updateCurrentChapterText(chapters = value)
             }
         }
 
@@ -1766,7 +1767,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
