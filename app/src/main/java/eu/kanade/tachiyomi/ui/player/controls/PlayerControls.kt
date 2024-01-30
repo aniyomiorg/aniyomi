@@ -37,27 +37,26 @@ import kotlinx.coroutines.delay
 fun PlayerControls(
     activity: PlayerActivity,
     modifier: Modifier = Modifier,
+    timerState: TimerState = rememberTimerState(),
 ) {
-
-    var timer by remember { mutableLongStateOf(3500L) }
     val state by activity.viewModel.state.collectAsState()
 
-    val onPlayerPressed = { timer = if (timer > 0L) 0L else 3500L }
+    val onPlayerPressed = { timerState.controls = if (timerState.controls > 0L) 0L else 3500L }
     val playerModifier = Modifier.pointerInput(Unit) { detectTapGestures(onPress = { onPlayerPressed() }) }
 
     Surface(modifier = playerModifier, color = Color.Transparent) {
         if (state.seekState == SeekState.LOCKED) {
             LockedPlayerControls { activity.viewModel.updateSeekState(SeekState.NONE) }
         } else {
-            if (timer > 0L) UnlockedPlayerControls(activity, playerModifier)
+            if (timerState.controls > 0L) UnlockedPlayerControls(activity, playerModifier)
         }
     }
 
 
-    LaunchedEffect(key1 = timer, key2 = state.timeData.paused) {
-        if(timer > 0L && !state.timeData.paused) {
+    LaunchedEffect(key1 = timerState.controls, key2 = state.timeData.paused) {
+        if(timerState.controls > 0L && !state.timeData.paused) {
             delay(500L)
-            timer -= 500L
+            timerState.controls -= 500L
         }
     }
 }
@@ -98,11 +97,14 @@ fun PlayerIcon(
     modifier: Modifier = Modifier,
     multiplier: Int = 1,
     enabled: Boolean = true,
+    timerState: TimerState = rememberTimerState(),
     onClick: () -> Unit = {},
 ) {
     val iconSize = iconSize * multiplier
     val buttonSize = iconSize + 30.dp
-    IconButton(onClick = onClick, modifier = modifier.size(buttonSize), enabled = enabled){
+    val onPlayerPressed = { timerState.controls = if (timerState.controls > 0L) 0L else 3500L }
+
+        IconButton(onClick = { onClick(); onPlayerPressed() }, modifier = modifier.size(buttonSize), enabled = enabled){
         Icon(
             imageVector = icon,
             contentDescription = null,
@@ -145,6 +147,21 @@ fun PlayerTextButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
+        )
+    }
+}
+
+class TimerState (
+    var controls: Long = 3500L,
+)
+
+@Composable
+fun rememberTimerState(
+    controls: Long = 3500L,
+): TimerState {
+    return remember {
+        TimerState(
+            controls = controls,
         )
     }
 }
