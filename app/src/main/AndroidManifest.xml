@@ -237,7 +237,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="kuukiyomi" />
+                <data android:scheme="aniyomi" />
 
                 <data android:host="anilist-auth" />
                 <data android:host="bangumi-auth" />
