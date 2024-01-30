@@ -1119,4 +1119,6 @@
     <string name="multi_thread_download_summary">Включение загрузку аниме с использованием нескольких потоков</string>
     <string name="multi_thread_download_threads_number">Количество связей</string>
     <string name="multi_thread_download_threads_number_summary">Количество потоков, используемых для загрузки, может привести к блокировке вашего IP, если оно слишком велико, обычно 4 - это хорошее число, чтобы избежать большой нагрузки на исходные серверы.</string>
+    <string name="pref_gpu_next_title">Включить gpu-next</string>
+    <string name="pref_gpu_next_subtitle">Новый бэкэнд для рендеринга видео</string>
 </resources>
