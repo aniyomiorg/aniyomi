@@ -1559,8 +1559,14 @@ class PlayerActivity : BaseActivity() {
                     }
                     TorrentServerService.wait(10)
                     val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
-                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
-                    MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    if (it.videoUrl!!.contains("index=")) {
+                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 0
+                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+                        MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    } else {
+                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
+                        MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    }
                 }
             } else {
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
