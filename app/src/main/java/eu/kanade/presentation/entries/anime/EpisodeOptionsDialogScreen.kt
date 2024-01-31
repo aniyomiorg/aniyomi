@@ -255,6 +255,7 @@ private fun VideoList(
                                 selectedVideo.videoUrl,
                                 true,
                                 selectedVideo,
+                                videoList,
                             )
                         }
                     },
@@ -264,6 +265,7 @@ private fun VideoList(
                                 context,
                                 anime.id,
                                 episode.id,
+                                selectedVideo.videoUrl,
                                 false,
                                 selectedVideo,
                                 videoList,

@@ -78,7 +78,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="aniyomi" />
+                <data android:scheme="animetail" />
                 <data android:host="add-repo" />
             </intent-filter>
 
@@ -237,7 +237,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="aniyomi"/>
+                <data android:scheme="animetail"/>
 
                 <data android:host="myanimelist-auth" />
                 <data android:host="anilist-auth" />
