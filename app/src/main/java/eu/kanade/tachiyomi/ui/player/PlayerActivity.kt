@@ -311,6 +311,7 @@ class PlayerActivity : BaseActivity() {
             field = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
+                playerControls.chapterText.updateCurrentChapterText(chapters = value)
             }
         }
 
@@ -577,6 +578,8 @@ class PlayerActivity : BaseActivity() {
         val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
         playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
+        copyScripts()
+
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
         player.initialize(
@@ -685,6 +688,35 @@ class PlayerActivity : BaseActivity() {
                 applicationContext.filesDir.path,
             )
             logcat { "FINISHED FONTS" }
+        }
+    }
+
+    private fun copyScripts() {
+        CoroutineScope(Dispatchers.IO).launchIO {
+            // First, delete all present scripts
+            val scriptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+            }
+            val scriptOptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
+            }
+            scriptsDir()?.delete()
+            scriptOptsDir()?.delete()
+
+            // Then, copy the scripts from the Aniyomi directory
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            storageManager.getScriptOptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptOptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
         }
     }
 
@@ -1802,7 +1834,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
