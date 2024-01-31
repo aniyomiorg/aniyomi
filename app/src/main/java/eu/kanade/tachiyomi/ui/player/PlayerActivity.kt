@@ -54,7 +54,6 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
-import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.source.anime.isNsfw
@@ -1551,13 +1550,7 @@ class PlayerActivity : BaseActivity() {
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
                 launchIO {
-                    if (TorrentServerService.isInstalled()) {
-                        TorrentServerService.start()
-                    } else {
-                        UpdateTorrentServer.updateFromNet { progress ->
-                            if (BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
-                        }
-                    }
+                    TorrentServerService.start()
                     TorrentServerService.wait(10)
                     val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
                     if (it.videoUrl!!.contains("index=")) {

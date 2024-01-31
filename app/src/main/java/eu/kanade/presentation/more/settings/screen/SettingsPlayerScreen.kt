@@ -23,7 +23,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
-import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.ui.player.AMNIS
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
@@ -41,8 +40,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.DelicateCoroutinesApi
-import tachiyomi.core.util.lang.launchIO
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.i18n.stringResource
@@ -389,7 +386,6 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Composable
     private fun getTorrentServerGroup(
         torrentServerPreferences: TorrentServerPreferences,
@@ -397,17 +393,6 @@ object SettingsPlayerScreen : SearchableSettings {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_torrentserver),
             preferenceItems = persistentListOf(
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_torrentserver_update),
-                    onClick = {
-                        TorrentServerService.stop()
-                        launchIO {
-                            UpdateTorrentServer.updateFromNet {
-                                // TODO: add progress notification or something
-                            }
-                        }
-                    },
-                ),
                 Preference.PreferenceItem.EditTextPreference(
                     pref = torrentServerPreferences.port(),
                     title = stringResource(MR.strings.pref_torrentserver_port),

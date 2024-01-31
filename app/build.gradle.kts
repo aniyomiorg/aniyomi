@@ -277,8 +277,6 @@ dependencies {
     implementation(libs.seeker)
     // true type parser
     implementation(libs.truetypeparser)
-    // shell
-    implementation(libs.libsucore)
     // torrserver
     implementation(files("libs/server.aar"))
 }
