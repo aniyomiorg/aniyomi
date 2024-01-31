@@ -179,17 +179,17 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = stringResource(MR.strings.website),
                             icon = Icons.Outlined.Public,
-                            url = "https://aniyomi.org",
+                            url = "https://akiled.org",
                         )
                         LinkIcon(
                             label = "Discord",
                             icon = CustomIcons.Discord,
-                            url = "https://discord.gg/s82Vu589Ya",
+                            url = "https://discord.gg/wPRFW6ccDE",
                         )
                         LinkIcon(
                             label = "GitHub",
                             icon = CustomIcons.Github,
-                            url = "https://github.com/LuftVerbot/kuukiyomi",
+                            url = "https://github.com/Dark25/animetail2",
                         )
                     }
                 }
@@ -220,10 +220,10 @@ object AboutScreen : Screen() {
                         onAvailableUpdate(result)
                     }
                     is GetApplicationRelease.Result.NoNewUpdate -> {
-                        context.stringResource(MR.strings.update_check_no_new_updates)
+                        context.toast(context.stringResource(MR.strings.update_check_no_new_updates))
                     }
                     is GetApplicationRelease.Result.OsTooOld -> {
-                        context.stringResource(MR.strings.update_check_eol)
+                        context.toast(context.stringResource(MR.strings.update_check_eol))
                     }
                     else -> {}
                 }

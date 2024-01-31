@@ -44,6 +44,7 @@ import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -123,10 +124,18 @@ class PlayerActivity : BaseActivity() {
     internal val playerPreferences: PlayerPreferences = Injekt.get()
 
     companion object {
-        fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
+        fun newIntent(
+            context: Context,
+            animeId: Long?,
+            episodeId: Long?,
+            vidList: List<Video>? = null,
+            vidIndex: Int? = null,
+        ): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
                 putExtra("animeId", animeId)
                 putExtra("episodeId", episodeId)
+                vidIndex?.let { putExtra("vidIndex", it) }
+                vidList?.let { putExtra("vidList", it.serialize()) }
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
@@ -139,6 +148,8 @@ class PlayerActivity : BaseActivity() {
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
+        val vidList = intent.extras!!.getString("vidList", "")
+        val vidIndex = intent.extras!!.getInt("vidIndex", 0)
         if (animeId == -1L || episodeId == -1L) {
             finish()
             return
@@ -156,7 +167,7 @@ class PlayerActivity : BaseActivity() {
                 it.copy(isLoadingEpisode = true)
             }
 
-            val initResult = viewModel.init(animeId, episodeId)
+            val initResult = viewModel.init(animeId, episodeId, vidList, vidIndex)
             if (!initResult.second.getOrDefault(false)) {
                 val exception = initResult.second.exceptionOrNull() ?: IllegalStateException(
                     "Unknown error",
@@ -300,6 +311,7 @@ class PlayerActivity : BaseActivity() {
             field = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
+                playerControls.chapterText.updateCurrentChapterText(chapters = value)
             }
         }
 
@@ -566,8 +578,16 @@ class PlayerActivity : BaseActivity() {
         val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
         playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
+        copyScripts()
+
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
-        player.initialize(applicationContext.filesDir.path, logLevel)
+        val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+        player.initialize(
+            configDir = applicationContext.filesDir.path,
+            cacheDir = applicationContext.cacheDir.path,
+            logLvl = logLevel,
+            vo = vo,
+        )
 
         val speedProperty = MPVLib.getPropertyDouble("speed")
         val currentSpeed = if (speedProperty == 1.0) playerPreferences.playerSpeed().get().toDouble() else speedProperty
@@ -668,6 +688,35 @@ class PlayerActivity : BaseActivity() {
                 applicationContext.filesDir.path,
             )
             logcat { "FINISHED FONTS" }
+        }
+    }
+
+    private fun copyScripts() {
+        CoroutineScope(Dispatchers.IO).launchIO {
+            // First, delete all present scripts
+            val scriptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+            }
+            val scriptOptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
+            }
+            scriptsDir()?.delete()
+            scriptOptsDir()?.delete()
+
+            // Then, copy the scripts from the Aniyomi directory
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            storageManager.getScriptOptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptOptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
         }
     }
 
@@ -1785,7 +1834,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 

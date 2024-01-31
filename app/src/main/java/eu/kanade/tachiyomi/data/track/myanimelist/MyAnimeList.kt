@@ -52,7 +52,7 @@ class MyAnimeList(id: Long) :
 
     private val json: Json by injectLazy()
 
-    private val interceptor by lazy { MyAnimeListInterceptor(this, getPassword()) }
+    private val interceptor by lazy { MyAnimeListInterceptor(this) }
     private val api by lazy { MyAnimeListApi(id, client, interceptor) }
 
     override val supportsReadingDates: Boolean = true
@@ -257,6 +257,14 @@ class MyAnimeList(id: Long) :
         super.logout()
         trackPreferences.trackToken(this).delete()
         interceptor.setAuth(null)
+    }
+
+    fun getIfAuthExpired(): Boolean {
+        return trackPreferences.trackAuthExpired(this).get()
+    }
+
+    fun setAuthExpired() {
+        trackPreferences.trackAuthExpired(this).set(true)
     }
 
     fun saveOAuth(oAuth: OAuth?) {
