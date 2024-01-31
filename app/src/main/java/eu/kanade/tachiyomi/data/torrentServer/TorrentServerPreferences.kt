@@ -34,5 +34,6 @@ class TorrentServerPreferences(
            udp://tracker.tiny-vps.com:6969/announce,
            udp://tracker.torrent.eu.org:451/announce,
            udp://valakas.rollo.dnsabr.com:2710/announce,
-           udp://www.torrent.eu.org:451/announce""".replace(" ", ""))
+           udp://www.torrent.eu.org:451/announce""".replace(" ", ""),
+    )
 }
