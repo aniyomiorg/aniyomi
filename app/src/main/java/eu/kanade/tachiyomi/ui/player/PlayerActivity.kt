@@ -1578,10 +1578,10 @@ class PlayerActivity : BaseActivity() {
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
-                if(it.videoUrl!!.contains("&tr=")) {
-                    val trackerList = it.videoUrl!!.substringAfter("&tr=").split("&tr=").map { track -> track.trim() }.filter { track -> track.isNotBlank() }.joinToString { "," }
-                    val mergedTrackerList = TorrentServerUtils.getTrackerList(trackerList)
-                    it.videoUrl = "${it.videoUrl!!.substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
+                if (it.videoUrl!!.contains("&tr=")) {
+                    val mergedTrackerList = TorrentServerUtils.getTrackerList(it.videoUrl)
+                    it.videoUrl = "${it.videoUrl!!
+                        .substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
                 } else {
                     val trackerList = TorrentServerUtils.getTrackerList()
                     it.videoUrl = "${it.videoUrl}$trackerList"
