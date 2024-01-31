@@ -72,6 +72,14 @@ class StorageManager(
     fun getFontsDirectory(): UniFile? {
         return baseDir?.createDirectory(FONTS_PATH)
     }
+
+    fun getScriptsDirectory(): UniFile? {
+        return baseDir?.createDirectory(SCRIPTS_PATH)
+    }
+
+    fun getScriptOptsDirectory(): UniFile? {
+        return baseDir?.createDirectory(SCRIPT_OPTS_PATH)
+    }
 }
 
 private const val AUTOMATIC_BACKUPS_PATH = "autobackup"
@@ -79,3 +87,5 @@ private const val DOWNLOADS_PATH = "downloads"
 private const val LOCAL_SOURCE_PATH = "local"
 private const val LOCAL_ANIMESOURCE_PATH = "localanime"
 private const val FONTS_PATH = "fonts"
+private const val SCRIPTS_PATH = "scripts"
+private const val SCRIPT_OPTS_PATH = "script-opts"
