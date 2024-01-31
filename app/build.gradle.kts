@@ -279,6 +279,8 @@ dependencies {
     implementation(libs.truetypeparser)
     // shell
     implementation(libs.libsucore)
+    // torrserver
+    implementation(files("libs/server.aar"))
 }
 
 androidComponents {
