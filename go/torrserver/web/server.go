@@ -118,7 +118,7 @@ func Start() {
 	go func() {
 		log.TLogln("Start http server at port", settings.Port)
 		httpServer.ListenAndServe()
-		//waitChan <- route.Run(":" + settings.Port)
+		//waitChan <- route.Run(" :" + settings.Port)
 	}()
 }
 
