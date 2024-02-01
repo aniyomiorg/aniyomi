@@ -2,6 +2,7 @@ package web
 
 import (
 	"net"
+	"net/http"
 	"os"
 	"sort"
 
@@ -27,8 +28,9 @@ import (
 )
 
 var (
-	BTS      = torr.NewBTS()
-	waitChan = make(chan error)
+	BTS        = torr.NewBTS()
+	waitChan   = make(chan error)
+	httpServer *http.Server
 )
 
 //	@title			Swagger Torrserver API
@@ -108,9 +110,15 @@ func Start() {
 		}()
 	}
 
+	httpServer = &http.Server{
+		Addr:    ":" + settings.Port,
+		Handler: route,
+	}
+
 	go func() {
 		log.TLogln("Start http server at port", settings.Port)
-		waitChan <- route.Run(":" + settings.Port)
+		httpServer.ListenAndServe()
+		//waitChan <- route.Run(":" + settings.Port)
 	}()
 }
 
@@ -119,8 +127,11 @@ func Wait() error {
 }
 
 func Stop() {
+	if httpServer != nil {
+		httpServer.Close()
+	}
 	BTS.Disconnect()
-	waitChan <- nil
+	//waitChan <- nil
 }
 
 // echo godoc
