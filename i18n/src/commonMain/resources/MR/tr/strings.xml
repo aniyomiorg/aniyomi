@@ -1123,4 +1123,6 @@
     <string name="pref_start_screen">Ekranı başlat(?)</string>
     <string name="multi_thread_download_threads_number">Thread sayısı</string>
     <string name="multi_thread_download_threads_number_summary">İndirme için kullanılacak thread sayısı, çok yüksek olması durumunda IP\'nizin bloke edilmesine neden olabilir; sunucularda ağır yükü önlemek için (ban yememek için) genellikle 4 iyi bir sayıdır.</string>
+    <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
+    <string name="pref_gpu_next_subtitle">Yeni bir video işleme backend\'i</string>
 </resources>
