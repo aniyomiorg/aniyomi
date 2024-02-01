@@ -1126,4 +1126,6 @@
     <string name="download_speed_limit_hint">Establezca a 0 para desactivar el limite de velocidad de descarga.</string>
     <string name="download_speed_limit">Límite de velocidad de descarga</string>
     <string name="download_notifier_download_finish">Descarga completada</string>
+    <string name="pref_gpu_next_subtitle">Un nuevo backend de renderizado de video</string>
+    <string name="pref_gpu_next_title">Activar gpu-next</string>
 </resources>
