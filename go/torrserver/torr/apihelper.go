@@ -233,7 +233,6 @@ func Shutdown() {
 	bts.Disconnect()
 	sets.CloseDB()
 	log.TLogln("Received shutdown. Quit")
-	os.Exit(0)
 }
 
 func WriteStatus(w io.Writer) {
