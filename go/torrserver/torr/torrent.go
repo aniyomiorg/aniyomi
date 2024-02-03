@@ -2,7 +2,6 @@ package torr
 
 import (
 	"errors"
-	"sort"
 	"sync"
 	"time"
 
@@ -330,12 +329,9 @@ func (t *Torrent) Status() *state.TorrentStatus {
 			st.TorrentSize = t.Torrent.Length()
 
 			files := t.Files()
-			sort.Slice(files, func(i, j int) bool {
-				return files[i].Path() < files[j].Path()
-			})
 			for i, f := range files {
 				st.FileStats = append(st.FileStats, &state.TorrentFileStat{
-					Id:     i + 1, // in web id 0 is undefined
+					Id:     i,
 					Path:   f.Path(),
 					Length: f.Length(),
 				})
