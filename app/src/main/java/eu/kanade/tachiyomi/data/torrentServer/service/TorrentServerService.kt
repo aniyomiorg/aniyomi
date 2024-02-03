@@ -7,7 +7,6 @@ import android.os.IBinder
 import android.util.Log
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
-import eu.kanade.tachiyomi.data.torrentServer.TorrentServerFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
@@ -15,7 +14,6 @@ import uy.kohesive.injekt.api.get
 import kotlin.coroutines.EmptyCoroutineContext
 
 class TorrentServerService : Service() {
-    private val serverFile = TorrentServerFile()
     private val serviceScope = CoroutineScope(EmptyCoroutineContext)
     private val applicationContext = Injekt.get<Application>()
 
@@ -45,9 +43,9 @@ class TorrentServerService : Service() {
 
     private fun startServer() {
         serviceScope.launch {
-            if (serverFile.exists() && TorrentServerApi.echo() == "") {
+            if (TorrentServerApi.echo() == "") {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
-                serverFile.run()
+                server.Server.start(filesDir.absolutePath, "", "", "", "", false, false, false)
                 applicationContext.startService(Intent(applicationContext, TorrentServerNotification::class.java))
             }
         }
@@ -55,12 +53,11 @@ class TorrentServerService : Service() {
 
     private fun stopServer() {
         serviceScope.launch {
-            if (serverFile.exists()) {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
-                serverFile.stop()
-                applicationContext.stopService(Intent(applicationContext, TorrentServerNotification::class.java))
-                stopSelf()
-            }
+            if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
+            server.Server.stop()
+            TorrentServerApi.shutdown()
+            applicationContext.stopService(Intent(applicationContext, TorrentServerNotification::class.java))
+            stopSelf()
         }
     }
 
@@ -109,7 +106,5 @@ class TorrentServerService : Service() {
             }
             return true
         }
-
-        fun isInstalled(): Boolean = TorrentServerFile().exists()
     }
 }

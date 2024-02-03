@@ -18,12 +18,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
-import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.ui.player.AMNIS
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
@@ -41,8 +42,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.DelicateCoroutinesApi
-import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.i18n.stringResource
@@ -389,25 +389,18 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Composable
     private fun getTorrentServerGroup(
         torrentServerPreferences: TorrentServerPreferences,
     ): Preference.PreferenceGroup {
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val trackersPref = torrentServerPreferences.trackers()
+        val trackers by trackersPref.collectAsState()
+
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_torrentserver),
             preferenceItems = persistentListOf(
-                Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_torrentserver_update),
-                    onClick = {
-                        TorrentServerService.stop()
-                        launchIO {
-                            UpdateTorrentServer.updateFromNet {
-                                // TODO: add progress notification or something
-                            }
-                        }
-                    },
-                ),
                 Preference.PreferenceItem.EditTextPreference(
                     pref = torrentServerPreferences.port(),
                     title = stringResource(MR.strings.pref_torrentserver_port),
@@ -419,6 +412,24 @@ object SettingsPlayerScreen : SearchableSettings {
                         } catch (e: Exception) {
                             false
                         }
+                    },
+                ),
+                Preference.PreferenceItem.MultiLineEditTextPreference(
+                    pref = torrentServerPreferences.trackers(),
+                    title = context.stringResource(MR.strings.pref_torrent_trackers),
+                    subtitle = trackersPref.asState(scope).value
+                        .lines().take(2)
+                        .joinToString(
+                            separator = "\n",
+                            postfix = if (trackersPref.asState(scope).value.lines().size > 2) "\n..." else "",
+                        ),
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(MR.strings.pref_reset_torrent_trackers_string),
+                    enabled = remember(trackers) { trackers != trackersPref.defaultValue() },
+                    onClick = {
+                        trackersPref.delete()
+                        context.stringResource(MR.strings.requires_app_restart)
                     },
                 ),
             ),

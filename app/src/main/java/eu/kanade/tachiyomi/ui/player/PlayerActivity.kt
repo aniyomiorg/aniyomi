@@ -20,7 +20,6 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -42,7 +41,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -54,7 +52,6 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
-import eu.kanade.tachiyomi.data.torrentServer.UpdateTorrentServer
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.source.anime.isNsfw
@@ -1581,18 +1578,26 @@ class PlayerActivity : BaseActivity() {
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
+                val videoUrl: String = if (it.videoUrl!!.contains("&tr=")) {
+                    val mergedTrackerList = TorrentServerUtils.getTrackerList(it.videoUrl)
+                    "${it.videoUrl!!
+                        .substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
+                } else {
+                    val trackerList = TorrentServerUtils.getTrackerList()
+                    "${it.videoUrl}&tr=$trackerList"
+                }
                 launchIO {
-                    if (TorrentServerService.isInstalled()) {
-                        TorrentServerService.start()
-                    } else {
-                        UpdateTorrentServer.updateFromNet { progress ->
-                            if (BuildConfig.DEBUG) Log.d("TorrentUpdateProgress", progress.toString())
-                        }
-                    }
+                    TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
-                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
-                    MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    val currentTorrent = TorrentServerApi.addTorrent(videoUrl, it.quality, "", "", false)
+                    if (it.videoUrl!!.contains("index=")) {
+                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 1
+                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+                        MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    } else {
+                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 1)
+                        MPVLib.command(arrayOf("loadfile", torrentUrl))
+                    }
                 }
             } else {
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
