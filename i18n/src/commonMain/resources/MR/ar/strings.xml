@@ -1004,7 +1004,6 @@
     <string name="copied_video_link_to_clipboard">نسخ رابط جودة الفيديو إلى الحافظة</string>
     <string name="choose_video_quality">اختر جودة الفيديو:</string>
     <string name="extension_settings">إعدادات الامتداد</string>
-    <string name="data_saver_image_quality_summary">تعني أنه يتم حفظ نسبة مئوية أعلى من جودة الصورة ، ولكن هذا يعني أيضًا أن حجم الملف أكبر ، و 80% متوسط جيد بين حجم الملف وجودة الصورة</string>
     <string name="pref_hide_in_manga_library_items">تم إخفاء مدخلات المانجا بالفعل في المكتبة</string>
     <string name="data_saver_downloader">استخدم موفر البيانات عند التنزيل</string>
     <string name="data_saver_ignore_jpeg">تجاهل الصور التي بصيغة (Jpeg)</string>
