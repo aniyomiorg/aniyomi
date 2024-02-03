@@ -1578,24 +1578,24 @@ class PlayerActivity : BaseActivity() {
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
-                if (it.videoUrl!!.contains("&tr=")) {
+                val videoUrl: String = if (it.videoUrl!!.contains("&tr=")) {
                     val mergedTrackerList = TorrentServerUtils.getTrackerList(it.videoUrl)
-                    it.videoUrl = "${it.videoUrl!!
+                    "${it.videoUrl!!
                         .substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
                 } else {
                     val trackerList = TorrentServerUtils.getTrackerList()
-                    it.videoUrl = "${it.videoUrl}$trackerList"
+                    "${it.videoUrl}&tr=$trackerList"
                 }
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    val currentTorrent = TorrentServerApi.addTorrent(it.videoUrl!!, it.quality, "", "", false)
+                    val currentTorrent = TorrentServerApi.addTorrent(videoUrl, it.quality, "", "", false)
                     if (it.videoUrl!!.contains("index=")) {
-                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 0
+                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 1
                         val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
                         MPVLib.command(arrayOf("loadfile", torrentUrl))
                     } else {
-                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
+                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 1)
                         MPVLib.command(arrayOf("loadfile", torrentUrl))
                     }
                 }
