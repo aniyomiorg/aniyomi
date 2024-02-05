@@ -1660,7 +1660,7 @@ class PlayerActivity : BaseActivity() {
             currentVideoList?.getOrNull(streams.quality.index)
                 ?.subtitleTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName)
+                        it.lang.contains(localLangName, true)
                     }
                     val requestedLanguage = if (langIndex == -1) 0 else langIndex
                     tracks.getOrNull(requestedLanguage)?.let { sub ->
