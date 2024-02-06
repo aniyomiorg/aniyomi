@@ -22,7 +22,6 @@ object TorrentServerUtils {
         return mergedTrackerList.split(",").map { it.trim() }.filter { it.isNotBlank() }.joinToString("&tr=")
     }
 
-    // INDEX START IN 1
     fun getTorrentPlayLink(torr: Torrent, index: Int): String {
         val file = findFile(torr, index)
         val name = file?.let { File(it.path).name } ?: torr.title
