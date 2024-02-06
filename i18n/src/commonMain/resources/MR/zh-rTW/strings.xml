@@ -1124,4 +1124,6 @@
     <string name="multi_thread_download_threads_number_summary">用於下載的線程數，如果太高可能會導致您的 IP 被阻止，通常 4 是一個很好的數字，以避免來源伺服器負載過重。</string>
     <string name="multi_thread_download">動漫多執行緒下載</string>
     <string name="multi_thread_download_summary">啟用使用多執行緒下載動漫</string>
+    <string name="pref_gpu_next_title">啟用 gpu-next</string>
+    <string name="pref_gpu_next_subtitle">一個新的影片渲染後端</string>
 </resources>
