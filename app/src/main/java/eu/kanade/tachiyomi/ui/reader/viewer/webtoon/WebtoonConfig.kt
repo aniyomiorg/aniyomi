@@ -98,6 +98,11 @@ class WebtoonConfig(
             .distinctUntilChanged()
             .onEach { themeChangedListener?.invoke() }
             .launchIn(scope)
+
+        // SY -->
+        readerPreferences.pageTransitionsWebtoon()
+            .register({ usePageTransitions = it }, { imagePropertyChangedListener?.invoke() })
+        // SY <--
     }
 
     override var navigator: ViewerNavigation = defaultNavigation()
