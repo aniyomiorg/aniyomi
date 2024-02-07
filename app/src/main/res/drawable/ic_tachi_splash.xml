@@ -3,6 +3,6 @@
     <item
         android:width="108dp"
         android:height="108dp"
-        android:drawable="@drawable/ic_suac"
+        android:drawable="@drawable/ic_ani"
         android:gravity="center" />
 </layer-list>

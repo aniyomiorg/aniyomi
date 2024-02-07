@@ -16,18 +16,19 @@ import kotlinx.serialization.json.JsonElement
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
-private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
+private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
-private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
+// private val RICH_PRESENCE_BUTTONS = listOf("Descargar")
 
 // Constant for metadata list
-private val RICH_PRESENCE_METADATA = Activity.Metadata(
+/*private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/LuftVerbot/Kuukiyomi",
-        "https://discord.gg/s82Vu589Ya",
+        "https://github.com/dark25/animetail2"
     ),
 )
+
+ */
 
 @Serializable
 data class Activity(
@@ -39,8 +40,11 @@ data class Activity(
     val type: Int? = null,
     val timestamps: Timestamps? = null,
     val assets: Assets? = null,
-    val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
+  /*
+  val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
+
     val metadata: Metadata? = RICH_PRESENCE_METADATA,
+   */
 ) {
     @Serializable
     data class Assets(
@@ -177,7 +181,7 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, kuukiyomiImageUrl),
+    APP(R.string.app_name, R.string.browsing, animetailImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, updatesImageUrl),
     HISTORY(R.string.label_recent_manga, R.string.scrolling, historyImageUrl),
@@ -189,14 +193,14 @@ enum class DiscordScreen(
 }
 
 // Constants for standard Rich Presence image urls
-// change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val kuukiyomiImageUrl = "attachments/1133407425886691390/1157665173729980416/ic_launcher.png"
-private const val libraryImageUrl = "attachments/1133407425886691390/1165004086928740392/library.png"
-private const val updatesImageUrl = "attachments/1133407425886691390/1165006394248937645/updates.png"
-private const val historyImageUrl = "attachments/1133407425886691390/1165012765203767336/history.png"
-private const val browseImageUrl = "attachments/1133407425886691390/1165002904982278256/browse.png"
-private const val moreImageUrl = "attachments/1133407425886691390/1165013750189936761/more.png"
-private const val webviewImageUrl = "attachments/1133407425886691390/1165014654624477246/webview.png"
-private const val videoImageUrl = "attachments/1133407425886691390/1165018112618405919/video.png"
-private const val mangaImageUrl = "attachments/1133407425886691390/1165017344108666951/manga.png"
+// change the image Urls used here to match animetail brown/ green theme, Luft
+private const val animetailImageUrl = "attachments/1174858955244179519/1174872993458049075/ic_launcher_round_1.png"
+private const val libraryImageUrl = "attachments/1174858955244179519/1174872992946327632/argus.png"
+private const val updatesImageUrl = "attachments/1174858955244179519/1174872993994911844/update_1.png"
+private const val historyImageUrl = "attachments/1174858955244179519/1174864383571148912/history.png"
+private const val browseImageUrl = "attachments/1174858955244179519/1174865904929095721/navegador.png"
+private const val moreImageUrl = "attachments/1174858955244179519/1174866545462231040/mas.png"
+private const val webviewImageUrl = "attachments/1174858955244179519/1174867088788164680/webview.png"
+private const val videoImageUrl = "attachments/1174858955244179519/1174867584450048050/play.png"
+private const val mangaImageUrl = "attachments/1174858955244179519/1174872992627577002/manga.png?"
 // <-- AM (DISCORD)

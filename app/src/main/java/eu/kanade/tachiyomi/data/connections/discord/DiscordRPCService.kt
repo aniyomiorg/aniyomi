@@ -7,9 +7,7 @@ package eu.kanade.tachiyomi.data.connections.discord
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -83,15 +81,7 @@ class DiscordRPCService : Service() {
             setUsesChronometer(true)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(
-                Notifications.ID_DISCORD_RPC,
-                builder.build(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
-            )
-        } else {
-            startForeground(Notifications.ID_DISCORD_RPC, builder.build())
-        }
+        startForeground(Notifications.ID_DISCORD_RPC, builder.build())
     }
 
     companion object {

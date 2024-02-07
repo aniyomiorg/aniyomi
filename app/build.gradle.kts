@@ -19,10 +19,12 @@ android {
 
     defaultConfig {
 
-        applicationId = "xyz.luft.tachiyomi.mi"
+        applicationId = "com.dark.animetailv2"
 
-        versionCode = 122
-        versionName = "0.3.1"
+
+        versionCode = 121
+        versionName = "0.15.2.8"
+
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -231,6 +233,9 @@ dependencies {
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))
