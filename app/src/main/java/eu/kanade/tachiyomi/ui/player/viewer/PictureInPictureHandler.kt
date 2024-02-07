@@ -26,7 +26,7 @@ class PictureInPictureHandler {
         pipOnExit: Boolean,
         videoAspect: Double,
         playlistCount: Int,
-        playlistPosition: Int
+        playlistPosition: Int,
     ): PictureInPictureParams {
         val aspectRatio = videoAspect.let { aspect ->
             when {
@@ -129,7 +129,6 @@ class PictureInPictureHandler {
         action.isEnabled = isEnabled
         return action
     }
-
 }
 
 // TODO: https://developer.android.com/develop/ui/views/picture-in-picture#setautoenterenabled

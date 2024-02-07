@@ -918,7 +918,9 @@ class PlayerActivity : BaseActivity() {
         if (player.paused == false &&
             playerPreferences.pipOnExit().get() &&
             Build.VERSION.SDK_INT < Build.VERSION_CODES.S
-        ) updatePip(start = true)
+        ) {
+            updatePip(start = true)
+        }
         super.onUserLeaveHint()
     }
 
@@ -1434,12 +1436,12 @@ class PlayerActivity : BaseActivity() {
 
     // TODO: Move into function once compose is implemented
     val supportedAndEnabled = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
-    internal fun updatePip(start: Boolean){
+    internal fun updatePip(start: Boolean) {
         val anime = viewModel.currentAnime ?: return
         val episode = viewModel.currentEpisode ?: return
         val paused = player.paused ?: return
         val videoAspect = player.videoAspect ?: return
-        if(supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             PictureInPictureHandler().update(
                 context = this,
                 title = anime.title,
