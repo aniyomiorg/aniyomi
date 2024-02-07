@@ -572,6 +572,7 @@ class MainActivity : BaseActivity() {
             episodeId: Long,
             extPlayer: Boolean,
             video: Video? = null,
+            videoList: List<Video>? = null,
         ) {
             if (extPlayer) {
                 val intent = try {
@@ -579,11 +580,13 @@ class MainActivity : BaseActivity() {
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
                     withUIContext { Injekt.get<Application>().toast(e.message) }
-                    return
-                }
+                    null
+                } ?: return
                 externalPlayerResult?.launch(intent) ?: return
             } else {
-                context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
+                context.startActivity(
+                    PlayerActivity.newIntent(context, animeId, episodeId, videoList, videoList?.indexOf(video)),
+                )
             }
         }
     }
