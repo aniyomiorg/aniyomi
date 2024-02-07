@@ -121,7 +121,7 @@ func stream(c *gin.Context) {
 	// find file
 	index := -1
 	if len(tor.Files()) == 1 {
-		index = 1
+		index = 0
 	} else {
 		ind, err := strconv.Atoi(indexStr)
 		if err == nil {
@@ -129,8 +129,7 @@ func stream(c *gin.Context) {
 		}
 	}
 	if index == -1 && play { // if file index not set and play file exec
-		c.AbortWithError(http.StatusBadRequest, errors.New("\"index\" is empty or wrong"))
-		return
+		index = 0
 	}
 	// preload torrent
 	if preload {
@@ -211,7 +210,7 @@ func streamNoAuth(c *gin.Context) {
 	// find file
 	index := -1
 	if len(tor.Files()) == 1 {
-		index = 1
+		index = 0
 	} else {
 		ind, err := strconv.Atoi(indexStr)
 		if err == nil {
@@ -219,8 +218,7 @@ func streamNoAuth(c *gin.Context) {
 		}
 	}
 	if index == -1 && play { // if file index not set and play file exec
-		c.AbortWithError(http.StatusBadRequest, errors.New("\"index\" is empty or wrong"))
-		return
+		index = 0
 	}
 	// preload torrent
 	if preload {
