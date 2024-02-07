@@ -142,7 +142,7 @@
     <string name="update_weekly">Kada semana</string>
     <string name="charging">Sa dihang nag-charge</string>
     <string name="restrictions">Mga pagdili: %s</string>
-    <string name="pref_library_update_manga_restriction">Laktawan ang pag-update sa mga titulo</string>
+    <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>
     <string name="pref_update_only_started">Wala pa kana nagsugod</string>
     <string name="pref_library_update_refresh_metadata">Awtomatikong i-refresh ang metadata</string>
     <string name="default_category_summary">Pangutana kanunay</string>
@@ -153,7 +153,6 @@
     <string name="action_move_to_top">Ibalhin sa ibabaw</string>
     <string name="action_move_to_top_all_for_series">Ibalhin ang serye sa ibabaw</string>
     <string name="action_show_errors">I-tap aron makita ang mga detalye</string>
-    <string name="action_faq_and_guides">FAQ ug mga Giya</string>
     <string name="action_asc">Pagsaka</string>
     <string name="action_share">Ipaambit</string>
     <string name="action_open_log">Bukas nga log</string>
@@ -186,12 +185,10 @@
     <string name="ext_installing">Pag-instalar</string>
     <string name="ext_installed">Gi-install</string>
     <string name="ext_trust">Pagsalig</string>
-    <string name="ext_unofficial">Dili opisyal</string>
     <string name="ext_untrusted">Dili kasaligan</string>
     <string name="ext_uninstall">I-uninstall</string>
     <string name="untrusted_extension">Dili kasaligan nga extension</string>
     <string name="obsolete_extension_message">Kini nga extension dili na magamit.</string>
-    <string name="unofficial_extension_message">Kini nga extension dili gikan sa opisyal nga listahan sa mga extension sa Tachiyomi.</string>
     <string name="extension_api_error">Napakyas sa pagkuha sa listahan sa mga extension</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="ext_nsfw_warning">Ang mga tinubdan gikan niini nga extension mahimong adunay sulod nga NSFW (18+)</string>
@@ -243,7 +240,6 @@
     <string name="exclude">Dili iapil: %s</string>
     <string name="ext_install">Pag-instalar</string>
     <string name="ext_downloading">Nag-download</string>
-    <string name="pref_library_update_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-update bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
     <string name="none">Wala</string>
     <string name="ext_pending">Naghulat</string>
     <string name="ext_app_info">Impormasyon sa app</string>
@@ -432,4 +428,23 @@
     <string name="pref_appearance_summary">Tema, format sa petsa ug panahon</string>
     <string name="action_not_now">Dili karon</string>
     <string name="information_required_plain">*gikinahanlan</string>
+    <string name="manga_categories">Mga Kategoriya</string>
+    <string name="action_sort_last_manga_update">Katapusan nga update sa manga</string>
+    <string name="action_show_manga">Ipakita ang pagsulod</string>
+    <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>
+    <string name="pref_library_update_show_tab_badge">Ipakita ang wala pa mabasa nga ihap sa icon sa Updates</string>
+    <string name="default_manga_category">Default nga kategorya</string>
+    <string name="pref_manga_library_update_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-update bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
+    <string name="pref_category_delete_chapters">Pagtangtang sa mga kapitulo</string>
+    <string name="pref_remove_after_marked_as_read">Human gimarkahan sa mano-mano ingon nabasa na</string>
+    <string name="pref_remove_after_read">Human sa pagbasa awtomatikong tangtangon</string>
+    <string name="pref_remove_bookmarked_chapters">Tugoti ang pagtangtang sa gimarkahan nga mga kapitulo</string>
+    <string name="pref_remove_exclude_categories_manga">Wala iapil nga mga kategorya</string>
+    <string name="pref_auto_update_manga_sync">Ang pag-uswag sa pag-update pagkahuman sa pagbasa</string>
+    <string name="pref_clear_chapter_cache">Hawani ang cache sa kapitulo</string>
+    <string name="pref_auto_clear_chapter_cache">Hawani ang cache sa kapitulo sa pagsira sa app</string>
+    <string name="pref_clear_manga_database">Klaro nga database</string>
+    <string name="pref_clear_manga_database_summary">I-delete ang history para sa manga nga wala ma-save sa imong library</string>
+    <string name="clear_database_confirmation">Sigurado ka? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
+    <string name="pref_incognito_mode_summary">Paghunong sa pagbasa sa kasaysayan</string>
 </resources>

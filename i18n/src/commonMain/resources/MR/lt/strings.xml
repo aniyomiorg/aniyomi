@@ -185,14 +185,12 @@
     <string name="pref_fullscreen">Pilno ekrano rėžimas</string>
     <string name="ext_nsfw_warning">Šaltiniuose gali būti N18 turinio</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Šis plėtinys nėra iš oficialaus Tachiyomi sąrašo.</string>
     <string name="obsolete_extension_message">Šis plėtinys nebėra prieinamas. Plėtinys gali veikti netinkamai arba sukelti problemas programėlėje. Rekomenduojama išdiegti plėtinį.</string>
     <string name="untrusted_extension">Nepatikimas plėtinys</string>
     <string name="ext_app_info">Aplikacijos informacija</string>
     <string name="ext_uninstall">Šalinti</string>
     <string name="ext_trust">Patikimas</string>
     <string name="ext_untrusted">Nepatikimas</string>
-    <string name="ext_unofficial">Neoficiali</string>
     <string name="ext_installed">Įdiegtas</string>
     <string name="ext_installing">Diegiasi</string>
     <string name="ext_downloading">Siunčiasi</string>
@@ -204,7 +202,6 @@
     <string name="include">Įtraukti: %s</string>
     <string name="none">Nėra</string>
     <string name="all">Visi</string>
-    <string name="pref_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
     <string name="update_check_notification_download_error">Atsiuntimo klaida</string>
     <string name="update_check_notification_update_available">Nauja versija pasiekiama!</string>
     <string name="scale_type_fit_height">Pagal aukštį talpinimas</string>
@@ -286,8 +283,6 @@
     <string name="ext_installer_shizuku_unavailable_dialog">Instaliuoti ir paleisti Shizuku, kad galėtumėte naudoti Shizuku kaip papildinių instaliuotoją.</string>
     <string name="pref_show_navigation_mode">Rodyti lietimui jautrias zonas</string>
     <string name="label_warning">Įspėjimas</string>
-    <string name="action_faq_and_guides">DUK ir vadovai</string>
-    <string name="pref_library_update_manga_restriction">Praleisti įrašų atnaujinimą</string>
     <string name="update_72hour">Kas 3 dienas</string>
     <string name="connected_to_wifi">Kai naudojamas Wi-Fi</string>
     <string name="ext_updates_pending">Yra naujinių</string>
@@ -357,7 +352,6 @@
     <string name="migration_dialog_what_to_include">Pasirinkite duomenis, kuriuos norite įtraukti</string>
     <string name="copy">Kopijuoti</string>
     <string name="notification_new_chapters">Atrasti nauji skyriai</string>
-    <string name="notification_update_skipped">Praleistas %1$d naujinys (-iai)</string>
     <string name="skipped_reason_not_caught_up">Praleista, nes yra neperskaitytų skyrių</string>
     <string name="update_check_notification_download_in_progress">Atsiunčiama…</string>
     <string name="file_select_cover">Pasirinkti viršelio vaizdą</string>
@@ -372,13 +366,10 @@
     <string name="cover_updated">Atnaujintas viršelis</string>
     <string name="logout_success">Dabar esate atsijungęs</string>
     <string name="set_as_cover">Nustatyti kaip viršelį</string>
-    <string name="chapter_paused">Pristabdyta</string>
     <string name="source_not_installed">Šaltinis neįdiegtas: %1$s</string>
-    <string name="snack_add_to_library">Pridėti į biblioteką\?</string>
     <string name="track_type">Тipas</string>
     <string name="track_started_reading_date">Pradžios data</string>
     <string name="display_mode_chapter">Skyrius %1$s</string>
-    <string name="chapter_error">Klaida</string>
     <string name="login_success">Prisijungęs</string>
     <string name="unknown_error">Nežinoma klaida</string>
     <string name="downloaded_chapters">Atsisiųsti skyriai</string>
@@ -476,7 +467,6 @@
     <string name="download_notifier_split_page_path_not_found">Nepavyko rasti puslapio failo kelio %d</string>
     <string name="channel_common">Bendras</string>
     <string name="channel_complete">Baigtas</string>
-    <string name="channel_skipped">Praleistas</string>
     <string name="download_notifier_download_paused">Atsisiuntimas pristabdytas</string>
     <string name="channel_new_chapters">Skyriaus atnaujinimai</string>
     <string name="spen_next_page">Kitas puslapis</string>
@@ -668,4 +658,33 @@
     <string name="confirm_add_duplicate_manga">Bibliotekoje jau turite įrašą tokiu pačiu pavadinimu.
 \n
 \nAr vis tiek norite tęsti\?</string>
+    <string name="manga_categories">Kategorijos</string>
+    <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
+    <string name="action_show_manga">Rodyti įrašą</string>
+    <string name="action_display_local_badge_manga">Vietinis šaltinis</string>
+    <string name="pref_update_only_completely_read">Kai yra neskaitytų skyrių</string>
+    <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
+    <string name="default_manga_category">Numatyta kategorija</string>
+    <string name="pref_manga_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
+    <string name="pref_category_delete_chapters">Naikinti skyrius</string>
+    <string name="pref_remove_after_marked_as_read">Rankinių būdu pažymėtas, kaip skaitytas</string>
+    <string name="pref_remove_after_read">Perskaičius automatiškai naikinti</string>
+    <string name="pref_remove_bookmarked_chapters">Leisti naikinti žymėtus skyrius</string>
+    <string name="pref_remove_exclude_categories_manga">Neįtrauktos kategorijos</string>
+    <string name="pref_auto_update_manga_sync">Po perskaitymo atnaujinti statusą</string>
+    <string name="pref_clear_chapter_cache">Išvalyti skyriaus talpyklą</string>
+    <string name="pref_auto_clear_chapter_cache">Išvalyti skyriaus talpyklą uždarius programą</string>
+    <string name="pref_clear_manga_database">Išvalyti duomenų bazę</string>
+    <string name="pref_clear_manga_database_summary">Ištrinkite įrašų istoriją, kurie nėra išsaugoti jūsų bibliotekoje</string>
+    <string name="clear_database_confirmation">Ar tikrai? Perskaityti skyriai ir nebibliotekinių įrašų progresas bus prarastas</string>
+    <string name="pref_incognito_mode_summary">Pristabdo skaitymo istoriją</string>
+    <string name="manga_from_library">Iš bibliotekos</string>
+    <string name="snack_add_to_manga_library">Pridėti į biblioteką?</string>
+    <string name="download_error">Klaida</string>
+    <string name="download_paused">Pristabdyta</string>
+    <string name="also_set_chapter_settings_for_library">Taip pat taikyti visiems mano bibliotekoje esantiems įrašams</string>
+    <string name="dialog_with_checkbox_reset">Iš naujo nustatyti visus šio įrašo skyrius</string>
+    <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
+    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Aniyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
+    <string name="information_webview_required">\"WebView\" reikalingas \"Aniyomi\"</string>
 </resources>

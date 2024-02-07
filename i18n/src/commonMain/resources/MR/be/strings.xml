@@ -89,7 +89,6 @@
     <string name="categories">Катэгорыі</string>
     <string name="ext_uninstall">Выдаліць</string>
     <string name="ext_untrusted">Ненадзейны</string>
-    <string name="ext_unofficial">Неафіцыйны</string>
     <string name="ext_trust">Надзейны</string>
     <string name="ext_installed">Усталяваны</string>
     <string name="ext_installing">Устаноўка</string>
@@ -103,7 +102,6 @@
     <string name="include">Уключаць: %s</string>
     <string name="none">Ніхто</string>
     <string name="all">Усе</string>
-    <string name="pref_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <string name="categorized_display_settings">Налады для кожнай катэгорыі для сартавання і адлюстравання</string>
     <string name="default_category_summary">Заўсёды пытацца</string>
     <string name="default_category">Катэгорыя па змаўчанні</string>
@@ -185,7 +183,6 @@
     <string name="pref_fullscreen">Поўнаэкранны рэжым</string>
     <string name="ext_nsfw_warning">Можа ўтрымліваць кантэнт NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="unofficial_extension_message">Гэта пашырэнне не ўваходзіць у афіцыйны спіс пашырэньні Tachiyomi.</string>
     <string name="obsolete_extension_message">Гэта пашырэнне больш недаступна.</string>
     <string name="untrusted_extension">Ненадзейнае пашырэнне</string>
     <string name="pref_viewer_nav">Схема навігацыі</string>
@@ -316,12 +313,11 @@
     <string name="ext_app_info">Аб дадатку</string>
     <string name="action_sort_count">Колькасць мангі</string>
     <string name="action_display_language_badge">Мова</string>
-    <string name="action_faq_and_guides">Часта задаваемые пытанні і кіраўніцтва</string>
     <string name="network_not_metered">Толькі ў безлемітнай сетцы</string>
     <string name="ext_info_language">Мова</string>
     <string name="theme_lavender">Лаванда</string>
     <string name="pref_app_language">Мова дадатку</string>
-    <string name="pref_library_update_manga_restriction">Прапусціць абнаўленні</string>
+    <string name="pref_update_only_completely_read">Ёсць непрачытаныя главы</string>
     <string name="ext_installer_shizuku_stopped">Shizuku не працуе</string>
     <string name="action_close">Закрыць</string>
     <string name="ext_install_service_notif">Устаноўка пашырэнняў…</string>
@@ -331,4 +327,17 @@
     <string name="action_remove_everything">Выдаліць усё</string>
     <string name="update_72hour">Кожныя 3 дні</string>
     <string name="connected_to_wifi">Толькі па Wi-Fi</string>
+    <string name="manga_categories">Катэгорыі</string>
+    <string name="action_sort_last_manga_update">Апошняе абнаўленне мангі</string>
+    <string name="action_show_manga">Паказаць мангу</string>
+    <string name="action_display_local_badge_manga">Значкі лакальных</string>
+    <string name="pref_update_only_completely_read">Ёсць непрачытаныя главы</string>
+    <string name="pref_library_update_show_tab_badge">Паказваць непрачытаныя главы ў укладцы \"Абнаўленні\"</string>
+    <string name="default_manga_category">Катэгорыя па змаўчанні</string>
+    <string name="pref_manga_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
+    <string name="pref_category_delete_chapters">Выдаліць часткі</string>
+    <string name="pref_remove_after_marked_as_read">Пасля таго, як пазначана як \"Прачытанае\"</string>
+    <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
+    <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
+    <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
 </resources>

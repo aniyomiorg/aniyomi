@@ -68,7 +68,6 @@
     <string name="action_open_log">Opne logg</string>
     <string name="action_show_errors">Trykk for å sjå detaljar</string>
     <string name="action_webview_back">Tilbake</string>
-    <string name="action_faq_and_guides">FAQ og guidar</string>
     <string name="loading">Lastar…</string>
     <string name="pref_category_general">Generelt</string>
     <string name="pref_category_appearance">Utsjånad</string>
@@ -125,7 +124,6 @@
     <string name="ext_untrusted">Ikkje-tiltrudd</string>
     <string name="ext_uninstall">Avinstaller</string>
     <string name="untrusted_extension">Ikkje-tiltrudd utvidelse</string>
-    <string name="unofficial_extension_message">Denne utvidinga kjem ikkje frå den offisielle Tachiyomi-utvidingslista.</string>
     <string name="extension_api_error">Kunne ikkje henta utvidingslista</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="ext_install_service_notif">Installerer utviding…</string>
@@ -231,7 +229,6 @@
     <string name="update_6hour">Kvar sjette time</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Installer og start Shizuku for å bruka Shizuku som utvidingsinstallatør.</string>
     <string name="update_12hour">Kvar tolvte time</string>
-    <string name="ext_unofficial">Uoffisiell</string>
     <string name="obsolete_extension_message">Denne utvidinga er ikkje lengre tilgjengeleg.</string>
     <string name="ext_nsfw_warning">Kan innehalda NSFW (18+) innhald</string>
     <string name="pref_download_new_categories_details">Manga i utelatne kategoriar vil ikkje bli nedlasta sjølv om dei òg er i inkluderte kategoriar.</string>
@@ -261,4 +258,14 @@
     <string name="sort_by_source">Etter kjelde</string>
     <string name="manga_cover">Omslag</string>
     <string name="manga_download">Last ned</string>
+    <string name="manga_categories">Kategoriar</string>
+    <string name="action_show_manga">Vis manga</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="default_manga_category">Standard kategori</string>
+    <string name="pref_manga_library_update_categories_details">Manga i utelatne kategoriar vil ikkje bli oppdatert sjølv om dei òg er i inkluderte kategoriar.</string>
+    <string name="pref_category_delete_chapters">Slett kapittel</string>
+    <string name="pref_remove_exclude_categories_manga">Utelatne kategoriar</string>
+    <string name="manga_from_library">Manga frå biblioteket</string>
+    <string name="snack_add_to_manga_library">Legg manga til i bibliotek?</string>
+    <string name="download_error">Feil</string>
 </resources>

@@ -42,10 +42,10 @@
     <plurals name="download_amount">
         <item quantity="other">後續 %d 章</item>
     </plurals>
-    <plurals name="missing_chapters">
-        <item quantity="other">缺漏 %1$s 章</item>
-    </plurals>
     <plurals name="day">
         <item quantity="other">%d 天</item>
+    </plurals>
+    <plurals name="num_repos">
+        <item quantity="other">%d 處儲存庫</item>
     </plurals>
 </resources>

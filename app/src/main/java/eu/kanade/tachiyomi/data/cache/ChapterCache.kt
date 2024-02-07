@@ -14,7 +14,6 @@ import okio.buffer
 import okio.sink
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
-import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
 
@@ -27,9 +26,10 @@ import java.io.IOException
  * @param context the application context.
  * @constructor creates an instance of the chapter cache.
  */
-class ChapterCache(private val context: Context) {
-
-    private val json: Json by injectLazy()
+class ChapterCache(
+    private val context: Context,
+    private val json: Json,
+) {
 
     /** Cache class used for cache management. */
     private val diskCache = DiskLruCache.open(

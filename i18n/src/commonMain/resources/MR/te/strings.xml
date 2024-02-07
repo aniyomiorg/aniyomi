@@ -114,7 +114,6 @@
     <string name="pref_category_advanced">ఆధునికము</string>
     <string name="action_display_download_badge">దిగుమతి చేసిన అధ్యాయములు</string>
     <string name="action_display_language_badge">భాష</string>
-    <string name="action_faq_and_guides">తరుచుగా అడిగిన ప్రశ్నలు మరియు మార్గదర్శకములు</string>
     <string name="pref_category_about">గురించి</string>
     <string name="pref_category_theme">వీక్షణము</string>
     <string name="theme_system">పరికరమును అనుసరించుము</string>
@@ -190,4 +189,5 @@
     <string name="portrait">చిత్తరువు</string>
     <string name="landscape">ప్రకృతి దృశ్యం</string>
     <string name="paused">నిలిపివేయబడింది</string>
+    <string name="manga_categories">విభాగములు</string>
 </resources>

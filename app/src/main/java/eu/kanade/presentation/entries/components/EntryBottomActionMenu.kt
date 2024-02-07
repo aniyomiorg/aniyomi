@@ -225,7 +225,10 @@ private fun RowScope.Button(
     onClick: () -> Unit,
     content: (@Composable () -> Unit)? = null,
 ) {
-    val animatedWeight by animateFloatAsState(if (toConfirm) 2f else 1f)
+    val animatedWeight by animateFloatAsState(
+        targetValue = if (toConfirm) 2f else 1f,
+        label = "weight",
+    )
     Column(
         modifier = Modifier
             .size(48.dp)
@@ -262,13 +265,13 @@ private fun RowScope.Button(
 @Composable
 fun LibraryBottomActionMenu(
     visible: Boolean,
-    modifier: Modifier = Modifier,
     onChangeCategoryClicked: () -> Unit,
     onMarkAsViewedClicked: () -> Unit,
     onMarkAsUnviewedClicked: () -> Unit,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onDeleteClicked: () -> Unit,
     isManga: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
         visible = visible,

@@ -49,4 +49,7 @@ dependencies {
 
     // FFmpeg-kit
     implementation(libs.ffmpeg.kit)
+
+    // Tests
+    testImplementation(libs.bundles.test)
 }

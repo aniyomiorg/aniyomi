@@ -44,4 +44,32 @@
         <item quantity="one">१ अध्यायं लङ्घयति यतः मूले सः अनुपस्थितः अस्ति उत सः बहिः सम्मृष्टः कृतः</item>
         <item quantity="other">२ अध्यायौ लङ्घयति यतः मूले तौ अनुपस्थितौ स्तः उत तौ बहिः सम्मृष्टौ कृतौ</item>
     </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

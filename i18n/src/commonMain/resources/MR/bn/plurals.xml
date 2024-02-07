@@ -52,4 +52,40 @@
         <item quantity="one">পরবর্তী অপঠিত অধ্যায়</item>
         <item quantity="other">পরবর্তী %d টি অপঠিত অধ্যায়</item>
     </plurals>
+    <plurals name="download_amount">
+        <item quantity="one">পরের %d চ্যাপ্টার</item>
+        <item quantity="other">পরের %d চ্যাপ্টার</item>
+    </plurals>
+    <plurals name="day">
+        <item quantity="one">%d দিন</item>
+        <item quantity="other">%d দিন</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

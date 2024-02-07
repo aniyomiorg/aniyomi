@@ -188,9 +188,9 @@ fun AnimeEpisodeListItem(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                 )
-                                if (watchProgress != null || scanlator != null) DotSeparatorText()
                             }
                             if (watchProgress != null) {
+                                DotSeparatorText()
                                 Text(
                                     text = watchProgress,
                                     maxLines = 1,
@@ -200,6 +200,7 @@ fun AnimeEpisodeListItem(
                                 if (scanlator != null) DotSeparatorText()
                             }
                             if (scanlator != null) {
+                                DotSeparatorText()
                                 Text(
                                     text = scanlator,
                                     maxLines = 1,
@@ -210,15 +211,13 @@ fun AnimeEpisodeListItem(
                     }
                 }
 
-                if (onDownloadClick != null) {
-                    EpisodeDownloadIndicator(
-                        enabled = downloadIndicatorEnabled,
-                        modifier = Modifier.padding(start = 4.dp),
-                        downloadStateProvider = downloadStateProvider,
-                        downloadProgressProvider = downloadProgressProvider,
-                        onClick = onDownloadClick,
-                    )
-                }
+                EpisodeDownloadIndicator(
+                    enabled = downloadIndicatorEnabled,
+                    modifier = Modifier.padding(start = 4.dp),
+                    downloadStateProvider = downloadStateProvider,
+                    downloadProgressProvider = downloadProgressProvider,
+                    onClick = { onDownloadClick?.invoke(it) },
+                )
             }
         }
     }

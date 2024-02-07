@@ -81,9 +81,9 @@ class UpdateManga(
         dateTime: ZonedDateTime = ZonedDateTime.now(),
         window: Pair<Long, Long> = mangaFetchInterval.getWindow(dateTime),
     ): Boolean {
-        return mangaFetchInterval.toMangaUpdateOrNull(manga, dateTime, window)
-            ?.let { mangaRepository.updateManga(it) }
-            ?: false
+        return mangaRepository.updateManga(
+            mangaFetchInterval.toMangaUpdate(manga, dateTime, window),
+        )
     }
 
     suspend fun awaitUpdateLastUpdate(mangaId: Long): Boolean {

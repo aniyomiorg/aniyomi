@@ -160,7 +160,7 @@
     <string name="restoring_backup">Återställer säkerhetskopia</string>
     <string name="creating_backup">Skapar säkerhetskopia</string>
     <string name="used_cache">Används: %1$s</string>
-    <string name="cache_deleted">Cache rensad. %1$d filer har tagits bort</string>
+    <string name="cache_deleted">Cache rensad, %1$d filer togs bort</string>
     <string name="cache_delete_error">Fel inträffade vid rensning</string>
     <string name="pref_clear_cookies">Radera cookies</string>
     <string name="cookies_cleared">Cookies rensade</string>
@@ -195,8 +195,6 @@
     <string name="source_not_installed">Källa inte installerad: %1$s</string>
     <string name="display_mode_chapter">Kapitel %1$s</string>
     <string name="chapter_downloading_progress">Laddar ner (%1$d/%2$d)</string>
-    <string name="chapter_error">Fel</string>
-    <string name="chapter_paused">Pausad</string>
     <string name="show_title">Källtitel</string>
     <string name="show_chapter_number">Kapitelnummer</string>
     <string name="sort_by_source">Efter källa</string>
@@ -219,7 +217,6 @@
     <string name="error_category_exists">En kategori med detta namn finns redan!</string>
     <string name="snack_categories_deleted">Kategorier raderade</string>
     <string name="dialog_with_checkbox_remove_description">Detta kommer att ta bort läs datumet för detta kapitel. Är du säker\?</string>
-    <string name="snack_add_to_library">Lägg till i biblioteket\?</string>
     <string name="picture_saved">Bild sparad</string>
     <string name="custom_filter">Anpassat filter</string>
     <string name="set_as_cover">Ställ in som omslag</string>
@@ -292,9 +289,9 @@
     <string name="action_sort_latest_chapter">Senaste kapitel</string>
     <string name="action_view_chapters">Visa kapitel</string>
     <string name="action_cancel_all">Avbryt alla</string>
-    <string name="theme_light">Av</string>
-    <string name="theme_dark">På</string>
-    <string name="theme_system">Följ systemet</string>
+    <string name="theme_light">Ljus</string>
+    <string name="theme_dark">Mörk</string>
+    <string name="theme_system">System</string>
     <string name="pref_manage_notifications">Hantera aviseringar</string>
     <string name="pref_category_security">Säkerhet och integritet</string>
     <string name="lock_with_biometrics">Kräver upplåsning</string>
@@ -364,9 +361,7 @@
     <string name="label_data">Data</string>
     <string name="backup_restore_missing_sources">Saknade källor:</string>
     <string name="invalid_backup_file_missing_manga">Säkerhetskopian innehåller inga biblioteksposter.</string>
-    <string name="invalid_backup_file">Ogiltig säkerhetskopia</string>
-    <string name="unofficial_extension_message">Detta tillägg är inte från den officiella listan.</string>
-    <string name="ext_unofficial">Inofficiell</string>
+    <string name="invalid_backup_file">Ogiltig säkerhetskopiafil:</string>
     <string name="pref_library_update_refresh_metadata_summary">Sök efter nytt omslag och detaljer när du uppdaterar biblioteket</string>
     <string name="pref_library_update_refresh_metadata">Uppdatera metadata automatiskt</string>
     <string name="action_migrate">Migrera</string>
@@ -439,9 +434,7 @@
     <string name="right_and_left_nav">Höger och Vänster</string>
     <string name="action_display_show_number_of_items">Visa antal objekt</string>
     <string name="pref_dual_page_split">Delning av breda sidor</string>
-    <string name="backup_restore_content_full">Data från säkerhetskopian återställs.
-\n
-\nDu måste installera eventuella tillägg som saknas och logga in på spårningstjänster efteråt för att kunna använda dem.</string>
+    <string name="backup_restore_content_full">Du måste installera eventuella tillägg som saknas och logga in på spårningstjänster efteråt för att kunna använda dem.</string>
     <string name="nav_zone_right">Höger</string>
     <string name="nav_zone_left">Vänster</string>
     <string name="nav_zone_next">Nästa</string>
@@ -457,7 +450,6 @@
     <string name="action_sort_chapter_fetch_date">Datum för hämtning av kapitel</string>
     <string name="pref_download_new_categories_details">Inlägg i uteslutna kategorier laddas inte ner även om de också ingår i inkluderade kategorier.</string>
     <string name="pref_category_auto_download">Ladda ned automatiskt</string>
-    <string name="pref_library_update_categories_details">Inlägg i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
     <string name="action_show_errors">Tryck för att se detaljer</string>
     <string name="update_check_eol">Denna Android-version stöds inte längre</string>
     <string name="clipboard_copy_error">Kunde inte kopiera till urklipp</string>
@@ -540,13 +532,12 @@
     <string name="clear_database_source_item_count">%1$d icke-biblioteksposter i databasen</string>
     <string name="database_clean">Inget att rensa</string>
     <string name="library_errors_help">För hjälp med att åtgärda fel i biblioteksuppdateringar, se %1$s</string>
-    <string name="pref_library_update_manga_restriction">Hoppa över uppdatering av poster</string>
     <string name="cancelled">Avbruten</string>
     <string name="on_hiatus">På uppehåll</string>
     <string name="publishing_finished">Publiceringen avslutad</string>
     <string name="save_chapter_as_cbz">Spara som CBZ-arkiv</string>
     <string name="privacy_policy">Integritetspolicy</string>
-    <string name="action_faq_and_guides">Vanliga frågor och guider</string>
+    <string name="pref_update_only_completely_read">Med olästa kapitel</string>
     <string name="extension_api_error">Det gick inte att hämta tilläggslistan</string>
     <string name="action_display_cover_only_grid">Endast omslags-rutnät</string>
     <string name="pref_update_only_started">Som inte har startats</string>
@@ -557,8 +548,6 @@
     <string name="skipped_reason_not_started">Hoppade över eftersom inga kapitel läses</string>
     <string name="learn_more">Tryck på för att få veta mer</string>
     <string name="notification_update_error">%1$d uppdatering(ar) misslyckades</string>
-    <string name="notification_update_skipped">%1$d uppdatering(ar) hoppades över</string>
-    <string name="channel_skipped">Hoppat över</string>
     <string name="rotation_reverse_portrait">Omvänt porträtt</string>
     <string name="action_move_to_top_all_for_series">Flytta serien till toppen</string>
     <string name="disabled_nav">Inaktiverad</string>
@@ -671,16 +660,11 @@
     <string name="manga_display_interval_title">Uppskatta varje</string>
     <string name="action_set_interval">Ange intervall</string>
     <string name="action_filter_interval_custom">Anpassat hämtningsintervall</string>
-    <string name="action_filter_interval_long">Hämta månadsvis (28 dagar)</string>
-    <string name="action_filter_interval_late">Sen 10+ check</string>
     <string name="action_sort_next_updated">Nästa förväntade uppdatering</string>
     <string name="skipped_reason_not_in_release_period">Hoppades över eftersom ingen publicering förväntades idag</string>
     <string name="label_tracked_titles">Spårade inlägg</string>
     <string name="day_short">%dd</string>
-    <string name="manga_modify_calculated_interval_title">Anpassa intervall</string>
     <string name="track_error">%1$s fel: %2$s</string>
-    <string name="action_filter_interval_dropped">Avhoppad\? Sen 20+ och 2 månader</string>
-    <string name="action_filter_interval_passed">Godkänd kontrollperiod</string>
     <string name="pref_double_tap_zoom">Dubbeltryck för att zooma</string>
     <string name="track_remove_start_date_conf_text">Detta kommer att ta bort ditt tidigare valda startdatum från %s</string>
     <string name="track_delete_title">Ta bort %s spårning\?</string>
@@ -718,7 +702,7 @@
     <string name="unlock_app_title">Lås upp %s</string>
     <string name="action_move_to_bottom_all_for_series">Flytta serien till botten</string>
     <string name="action_sort_category">Sortera kategorier</string>
-    <string name="notification_updating_progress">Uppdaterar biblioteket... (%s)</string>
+    <string name="notification_updating_progress">Uppdaterar biblioteket… (%s)</string>
     <string name="sort_category_confirmation">Vill du sortera kategorierna i alfabetisk ordning\?</string>
     <string name="source_settings">Inställningar för källa</string>
     <string name="app_settings">Appinställningar</string>
@@ -732,7 +716,7 @@
     <string name="last_auto_backup_info">Senaste automatiska säkerhetskopieringen: %s</string>
     <string name="no_scanlators_found">Inga scanlatorer hittades</string>
     <string name="scanlator">Scanlator</string>
-    <string name="pref_flash_page">Blinka vitt vid sidbyte</string>
+    <string name="pref_flash_page">Blinka vid sidbyte</string>
     <string name="pref_storage_usage">Lagringsanvändning</string>
     <string name="action_sort_tracker_score">Spårares betyg</string>
     <string name="label_data_storage">Data och lagring</string>
@@ -744,4 +728,63 @@
     <string name="selected">Vald</string>
     <string name="not_selected">Inte vald</string>
     <string name="action_bar_up_description">Navigera upp</string>
+    <string name="onboarding_storage_action_select">Välj en mapp</string>
+    <string name="pref_onboarding_guide">Introduktionsguide</string>
+    <string name="onboarding_guides_new_user">Ny till %s? Vi rekommenderar att du tar en titt på komma igång guiden.</string>
+    <string name="onboarding_action_finish">Kom igång</string>
+    <string name="onboarding_storage_selection_required">En mapp måste väljas</string>
+    <string name="onboarding_heading">Välkommen!</string>
+    <string name="onboarding_guides_returning_user">Redan använt %s förut?</string>
+    <string name="onboarding_action_skip">Hoppa över</string>
+    <string name="onboarding_action_next">Nästa</string>
+    <string name="onboarding_description">Låt oss ställa in några saker först. Du kan alltid ändra dessa i inställningarna senare.</string>
+    <string name="no_location_set">Ingen lagringsplats inställd</string>
+    <string name="onboarding_storage_info">Välj en mapp där %1$s lagrar kapitelnedladdningar, säkerhetskopior och mer.
+\n
+\nEn dedikerad mapp rekommenderas.
+\n
+\nVald mapp: %2$s</string>
+    <string name="onboarding_permission_notifications">Aviseringsbehörigheter</string>
+    <string name="onboarding_permission_install_apps">Installera app behörigheter</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Undvik avbrott i långvariga biblioteksuppdateringar, nedladdningar och säkerhetskopieringsåterställningar.</string>
+    <string name="onboarding_permission_ignore_battery_opts">Bakgrundsbatterianvändning</string>
+    <string name="onboarding_permission_install_apps_description">För att installera källtillägg.</string>
+    <string name="onboarding_permission_notifications_description">Få aviseringar om biblioteksuppdateringar och mer.</string>
+    <string name="onboarding_permission_action_grant">Bevilja</string>
+    <string name="available_disk_space_info">Tillgängligt: %1$s / Totalt: %2$s</string>
+    <string name="ext_permission_install_apps_warning">Behörigheter krävs för att installera tillägg. Tryck här för att bevilja.</string>
+    <string name="private_settings">Inkludera känsliga inställningar (t.ex. spårningsinloggningstokens)</string>
+    <string name="manga_interval_expected_update">Nästa uppdatering förväntas om cirka %s</string>
+    <string name="invalid_backup_file_error">Fullständigt fel:</string>
+    <string name="manga_categories">Kategorier</string>
+    <string name="action_sort_last_manga_update">Senaste uppdateringskontroll</string>
+    <string name="action_show_manga">Visa inlägg</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="pref_update_only_completely_read">Med olästa kapitel</string>
+    <string name="pref_library_update_show_tab_badge">Visa antalet olästa på ikonen Uppdateringar</string>
+    <string name="default_manga_category">Standardkategori</string>
+    <string name="pref_manga_library_update_categories_details">Manga i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
+    <string name="pref_category_delete_chapters">Ta bort kapitel</string>
+    <string name="pref_remove_after_marked_as_read">Efter manuellt markerad som läst</string>
+    <string name="pref_remove_after_read">Ta bort automatiskt efter läsning</string>
+    <string name="pref_remove_bookmarked_chapters">Tillåt att radera bokmärkta kapitel</string>
+    <string name="pref_remove_exclude_categories_manga">Uteslutna kategorier</string>
+    <string name="pref_auto_update_manga_sync">Uppdatera förlopp efter läsning</string>
+    <string name="pref_clear_chapter_cache">Rensa kapitelcache</string>
+    <string name="pref_auto_clear_chapter_cache">Rensa kapitelcache när appen stängs</string>
+    <string name="pref_clear_manga_database">Rensa databas</string>
+    <string name="pref_clear_manga_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
+    <string name="clear_database_confirmation">Är du säker? Lästa kapitel och framsteg för poster som inte är biblioteksinlägg kommer att gå förlorade</string>
+    <string name="pref_incognito_mode_summary">Pausar läshistoriken</string>
+    <string name="manga_from_library">Från biblioteket</string>
+    <string name="snack_add_to_manga_library">Lägg till manga i biblioteket?</string>
+    <string name="download_error">Fel</string>
+    <string name="download_paused">Pausad</string>
+    <string name="also_set_chapter_settings_for_library">Gäller även alla inlägg i biblioteket</string>
+    <string name="dialog_with_checkbox_reset">Återställ alla kapitel för denna post</string>
+    <string name="download_insufficient_space">Det gick inte att ladda ner kapitelt på grund av lågt lagringsutrymme</string>
+    <string name="download_queue_size_warning">Varning: stora massnerladdningar kan leda till att källor blir långsamma och/eller blockerar Aniyomi. Tryck för att få veta mer.</string>
+    <string name="information_webview_required">WebView krävs för Aniyomi</string>
+    <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
+    <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
 </resources>

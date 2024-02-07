@@ -43,6 +43,8 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
+import okio.Throttler
+import okio.buffer
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
@@ -62,6 +64,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.BufferedOutputStream
 import java.io.File
+import java.util.Locale
 import java.util.zip.CRC32
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -104,6 +107,11 @@ class MangaDownloader(
      * Notifier for the downloader state and progress.
      */
     private val notifier by lazy { MangaDownloadNotifier(context) }
+
+    /**
+     * The throttler used to control the download speed.
+     */
+    private val throttler = Throttler()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var downloaderJob: Job? = null
@@ -451,7 +459,7 @@ class MangaDownloader(
         }
 
         val digitCount = (download.pages?.size ?: 0).toString().length.coerceAtLeast(3)
-        val filename = String.format("%0${digitCount}d", page.number)
+        val filename = "%0${digitCount}d".format(Locale.ENGLISH, page.number)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
         // Delete temp file if it exists
@@ -511,7 +519,12 @@ class MangaDownloader(
             val response = source.getImage(page, dataSaver)
             val file = tmpDir.createFile("$filename.tmp")!!
             try {
-                response.body.source().saveTo(file.openOutputStream())
+                throttler.apply {
+                    bytesPerSecond(downloadPreferences.downloadSpeedLimit().get().toLong() * 1024)
+                }
+                val throttledSource = throttler.source(response.body.source()).buffer()
+                throttledSource.saveTo(file.openOutputStream())
+                throttledSource.close()
                 val extension = getImageExtension(response, file)
                 file.renameTo("$filename.$extension")
             } catch (e: Exception) {
@@ -530,6 +543,7 @@ class MangaDownloader(
                     false
                 }
             }
+            .flowOn(Dispatchers.IO)
             .first()
     }
 
@@ -575,15 +589,9 @@ class MangaDownloader(
         if (!downloadPreferences.splitTallImages().get()) return
 
         try {
-            val filenamePrefix = String.format("%03d", page.number)
-            val imageFile = tmpDir.listFiles()?.firstOrNull {
-                it.name.orEmpty().startsWith(
-                    filenamePrefix,
-                )
-            }
-                ?: error(
-                    context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number),
-                )
+            val filenamePrefix = "%03d".format(Locale.ENGLISH, page.number)
+            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
+                ?: error(context.stringResource(MR.strings.download_notifier_split_page_not_found, page.number))
 
             // If the original page was previously split, then skip
             if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return
@@ -621,10 +629,7 @@ class MangaDownloader(
                 else -> true
             }
         }
-        if (downloadedImagesCount != downloadPageCount) {
-            return false
-        }
-        return true
+        return downloadedImagesCount == downloadPageCount
     }
 
     /**

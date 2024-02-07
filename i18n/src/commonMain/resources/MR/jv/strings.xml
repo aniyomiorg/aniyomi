@@ -78,7 +78,6 @@
     <string name="action_sort_total">Total bab</string>
     <string name="action_sort_alpha">Miturut abjad</string>
     <string name="action_filter_unread">Durung kewoco</string>
-    <string name="action_filter_downloaded">Kedonlot</string>
     <string name="action_filter">Saringan</string>
     <string name="action_settings">Pengaturan</string>
     <string name="history">Sejarah</string>
@@ -174,7 +173,6 @@
     <string name="pref_app_theme">Tema aplikasi</string>
     <string name="theme_monet">Dinamis</string>
     <string name="theme_greenapple">Ijo apel</string>
-    <string name="action_faq_and_guides">Takon jawab lan panduan</string>
     <string name="parental_controls_info">Iki ora nyegah ekstensi kang ora resmi utawa salah dilabeli kanggo nampilake konten NSFW (18+) ing aplikasi.</string>
     <string name="update_never">Mati</string>
     <string name="pref_category_security">Kaamanan</string>
@@ -206,7 +204,6 @@
     <string name="ext_install">pasang</string>
     <string name="ext_installed">Ngetrap</string>
     <string name="ext_trust">Pracaya</string>
-    <string name="ext_unofficial">Ora resmi</string>
     <string name="untrusted_extension">Ekstensi ora kapracaya</string>
     <string name="default_category_summary">Tansah takon</string>
     <string name="pref_show_page_number">Tampilake nomer halaman</string>
@@ -241,9 +238,12 @@
     <string name="lock_with_biometrics">Mbutuhake mbukak kunci</string>
     <string name="pref_library_update_refresh_metadata">Nganyari metadata otomatis</string>
     <string name="network_not_metered">Jaringan gak kebates tok</string>
-    <string name="pref_library_update_manga_restriction">Lewati updatean judul</string>
     <string name="pref_app_language">Bohoso aplikasi</string>
-    <string name="unofficial_extension_message">Ekstensi iki ora saka dhaptar ekstensi Tachiyomi resmi.</string>
+    <string name="untrusted_extension_message">Ekstensi iki ditandatangani nganggo sertifikat sing ora dipercaya lan ora diaktifake.
+\n
+\n Ekstensi angkoro bisa maca kredensial login sing disimpen ing Aniyomi utawa nglakokake kode sewenang-wenang.
+\n
+\n Kanthi percaya karo sertifikat iki, sampeyan nampa risiko kasebut.</string>
     <string name="ext_downloading">Ndownload</string>
     <string name="pref_show_navigation_mode">Tampilake overlay zona tutul</string>
     <string name="none">Ora ono</string>
@@ -300,4 +300,13 @@
     <string name="delete_downloaded">Ngehapus downloadan</string>
     <string name="selected">Dipilih</string>
     <string name="not_selected">Gak dipilih</string>
+    <string name="manga_categories">Kategori</string>
+    <string name="action_sort_last_manga_update">Nganyari manga pungkasan</string>
+    <string name="action_show_manga">Nampilno manga</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="pref_update_only_completely_read">Karo bab durung diwaca</string>
+    <string name="pref_library_update_show_tab_badge">Tampilake itungan kang durung diwaca ing ikon nganyari</string>
+    <string name="default_manga_category">kategori gawan</string>
+    <string name="pref_manga_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
+    <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>
 </resources>

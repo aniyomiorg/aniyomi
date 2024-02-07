@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
 import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.storage.displayablePath
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.io.File
@@ -67,18 +68,18 @@ class BackupNotifier(private val context: Context) {
         }
     }
 
-    fun showBackupComplete(unifile: UniFile) {
+    fun showBackupComplete(file: UniFile) {
         context.cancelNotification(Notifications.ID_BACKUP_PROGRESS)
 
         with(completeNotificationBuilder) {
             setContentTitle(context.stringResource(MR.strings.backup_created))
-            setContentText(unifile.filePath ?: unifile.name)
+            setContentText(file.displayablePath)
 
             clearActions()
             addAction(
                 R.drawable.ic_share_24dp,
                 context.stringResource(MR.strings.action_share),
-                NotificationReceiver.shareBackupPendingBroadcast(context, unifile.uri),
+                NotificationReceiver.shareBackupPendingBroadcast(context, file.uri),
             )
 
             show(Notifications.ID_BACKUP_COMPLETE)
@@ -87,11 +88,16 @@ class BackupNotifier(private val context: Context) {
 
     fun showRestoreProgress(
         content: String = "",
-        contentTitle: String = context.stringResource(MR.strings.restoring_backup),
         progress: Int = 0,
         maxAmount: Int = 100,
+        sync: Boolean = false,
     ): NotificationCompat.Builder {
         val builder = with(progressNotificationBuilder) {
+            val contentTitle = if (sync) {
+                context.stringResource(MR.strings.syncing_library)
+            } else {
+                context.stringResource(MR.strings.restoring_backup)
+            }
             setContentTitle(contentTitle)
 
             if (!preferences.hideNotificationContent().get()) {
@@ -133,8 +139,14 @@ class BackupNotifier(private val context: Context) {
         errorCount: Int,
         path: String?,
         file: String?,
-        contentTitle: String = context.stringResource(MR.strings.restore_completed),
+        sync: Boolean,
     ) {
+        val contentTitle = if (sync) {
+            context.stringResource(MR.strings.library_sync_complete)
+        } else {
+            context.stringResource(MR.strings.restore_completed)
+        }
+
         context.cancelNotification(Notifications.ID_RESTORE_PROGRESS)
 
         val timeString = context.stringResource(

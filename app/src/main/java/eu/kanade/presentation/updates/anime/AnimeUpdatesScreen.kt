@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
@@ -31,13 +30,13 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AnimeUpdateScreen(
     state: AnimeUpdatesScreenModel.State,
     snackbarHostState: SnackbarHostState,
-    relativeTime: Boolean,
     lastUpdated: Long,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onSelectAll: (Boolean) -> Unit,
@@ -51,8 +50,6 @@ fun AnimeUpdateScreen(
     onOpenEpisode: (AnimeUpdatesItem, altPlayer: Boolean) -> Unit,
 ) {
     BackHandler(enabled = state.selectionMode, onBack = { onSelectAll(false) })
-
-    val context = LocalContext.current
 
     Scaffold(
         bottomBar = {
@@ -98,7 +95,7 @@ fun AnimeUpdateScreen(
                         animeUpdatesLastUpdatedItem(lastUpdated)
 
                         animeUpdatesUiItems(
-                            uiModels = state.getUiModel(context, relativeTime),
+                            uiModels = state.getUiModel(),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,
@@ -156,6 +153,6 @@ private fun AnimeUpdatesBottomBar(
 }
 
 sealed interface AnimeUpdatesUiModel {
-    data class Header(val date: String) : AnimeUpdatesUiModel
+    data class Header(val date: Date) : AnimeUpdatesUiModel
     data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel
 }

@@ -73,9 +73,7 @@ class MangaHistoryScreenModel(
                 val beforeDate = before?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(
-                        afterDate,
-                    )
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
@@ -115,6 +113,10 @@ class MangaHistoryScreenModel(
             if (!result) return@launchIO
             _events.send(Event.HistoryCleared)
         }
+    }
+
+    fun updateSearchQuery(query: String?) {
+        mutableState.update { it.copy(searchQuery = query) }
     }
 
     fun setDialog(dialog: Dialog?) {

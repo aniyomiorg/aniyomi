@@ -56,7 +56,6 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
-import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
@@ -68,18 +67,11 @@ import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab() {
 
-    val libraryPreferences: LibraryPreferences by injectLazy()
-    private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
-
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
-            val title = if (fromMore) {
-                MR.strings.label_library
-            } else {
-                MR.strings.label_anime_library
-            }
+            val title = MR.strings.label_anime_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(
                 R.drawable.anim_animelibrary_leave,
@@ -124,13 +116,7 @@ object AnimeLibraryTab : Tab() {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
-        val defaultTitle = if (fromMore) {
-            stringResource(MR.strings.label_library)
-        } else {
-            stringResource(
-                MR.strings.label_anime_library,
-            )
-        }
+        val defaultTitle = stringResource(MR.strings.label_anime_library)
 
         Scaffold(
             topBar = { scrollBehavior ->

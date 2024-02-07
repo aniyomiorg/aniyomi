@@ -186,9 +186,9 @@ fun MangaChapterListItem(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                 )
-                                if (readProgress != null || scanlator != null) DotSeparatorText()
                             }
                             if (readProgress != null) {
+                                DotSeparatorText()
                                 Text(
                                     text = readProgress,
                                     maxLines = 1,
@@ -197,6 +197,7 @@ fun MangaChapterListItem(
                                 )
                             }
                             if (scanlator != null) {
+                                DotSeparatorText()
                                 Text(
                                     text = scanlator,
                                     maxLines = 1,
@@ -207,15 +208,13 @@ fun MangaChapterListItem(
                     }
                 }
 
-                if (onDownloadClick != null) {
-                    ChapterDownloadIndicator(
-                        enabled = downloadIndicatorEnabled,
-                        modifier = Modifier.padding(start = 4.dp),
-                        downloadStateProvider = downloadStateProvider,
-                        downloadProgressProvider = downloadProgressProvider,
-                        onClick = onDownloadClick,
-                    )
-                }
+                ChapterDownloadIndicator(
+                    enabled = downloadIndicatorEnabled,
+                    modifier = Modifier.padding(start = 4.dp),
+                    downloadStateProvider = downloadStateProvider,
+                    downloadProgressProvider = downloadProgressProvider,
+                    onClick = { onDownloadClick?.invoke(it) },
+                )
             }
         }
     }

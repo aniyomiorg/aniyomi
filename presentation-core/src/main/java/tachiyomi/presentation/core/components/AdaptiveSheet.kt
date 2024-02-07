@@ -12,7 +12,6 @@ import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,7 +85,7 @@ fun AdaptiveSheet(
                 onDismissRequest()
             }
         }
-        BoxWithConstraints(
+        Box(
             modifier = Modifier
                 .clickable(
                     enabled = true,

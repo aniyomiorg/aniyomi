@@ -212,8 +212,6 @@
     <string name="source_not_installed">Zdroj nie je nainštalovaný: %1$s</string>
     <string name="display_mode_chapter">Kapitola %1$s</string>
     <string name="chapter_downloading_progress">Sťahovanie (%1$d/%2$d)</string>
-    <string name="chapter_error">Chyba</string>
-    <string name="chapter_paused">Pozastavené</string>
     <string name="show_title">Názov zdroja</string>
     <string name="show_chapter_number">Číslo kapitoly</string>
     <string name="sort_by_source">Podľa zdroja</string>
@@ -236,7 +234,6 @@
     <string name="error_category_exists">Kategória s týmto názvom už existuje!</string>
     <string name="snack_categories_deleted">Kategórie boli odstránené</string>
     <string name="dialog_with_checkbox_remove_description">Týmto sa odstráni dátum prečítania tejto kapitoly. Si si istý\?</string>
-    <string name="snack_add_to_library">Pridať mangu do knižnice\?</string>
     <string name="picture_saved">Obrázok bol uložený</string>
     <string name="custom_filter">Vlastný filter</string>
     <string name="set_as_cover">Nastaviť ako obal</string>
@@ -334,7 +331,6 @@
     <string name="action_unpin">Odopnúť</string>
     <string name="label_warning">Upozornenie</string>
     <string name="action_filter_tracked">Sledované</string>
-    <string name="action_faq_and_guides">FAQ a návody</string>
     <string name="pref_category_theme">Téma</string>
     <string name="theme_light">Vyp.</string>
     <string name="theme_dark">Zap.</string>
@@ -353,7 +349,6 @@
     <string name="lock_when_idle">Uzamknúť pri nečinnosti</string>
     <string name="lock_always">Vždy</string>
     <string name="lock_never">Nikdy</string>
-    <string name="pref_library_update_manga_restriction">Preskočiť aktualizáciu záznamov</string>
     <string name="pref_show_nsfw_source">Zobraziť v zoznamoch zdrojov a rozšírení</string>
     <string name="pref_category_nsfw_content">NSFW (18+) zdroje</string>
     <string name="relative_time_today">Dnes</string>
@@ -445,7 +440,6 @@
     <string name="channel_errors">Chyby</string>
     <string name="off">Vyp.</string>
     <string name="action_sort_count">Celkový počet</string>
-    <string name="ext_unofficial">Neoficiálne</string>
     <string name="ext_installer_legacy">Pôvodný</string>
     <string name="automatic_background">Automatický</string>
     <string name="tapping_inverted_none">Žiadne</string>
@@ -479,7 +473,6 @@
     <string name="set_chapter_settings_as_default">Nastaviť ako predvolené</string>
     <string name="tracking_info">Jednosmerná synchronizácia na aktualizáciu priebehu kapitol v službách sledovania. Nastavte sledovanie pre jednotlivé položky mangy z ich tlačidla sledovania.</string>
     <string name="pref_category_reading_mode">Režim čítania</string>
-    <string name="channel_skipped">Vynechané</string>
     <string name="channel_new_chapters">Aktualizácie kapitol</string>
     <string name="clear_database_source_item_count">V databáze je manga %1$d, ktorá sa nenachádza v knižnici</string>
     <string name="updating_library">Aktualizácia knižnice</string>
@@ -510,7 +503,6 @@
     <string name="manga_cover">Obal</string>
     <string name="cover_saved">Obal uložený</string>
     <string name="delete_category_confirmation">Prajete si vymazať kategóriu „%s“\?</string>
-    <string name="unofficial_extension_message">Toto rozšírenie nie je z oficiálneho zoznamu rozšírení Tachiyomi.</string>
     <string name="tapping_inverted_vertical">Vertikálne</string>
     <string name="backup_restore_missing_trackers">Sledovače, do ktorých nie ste prihlásení:</string>
     <string name="pref_dns_over_https">DNS cez HTTPS (DoH)</string>
@@ -534,7 +526,6 @@
     <string name="share_page_info">%1$s: %2$s, strana %3$d</string>
     <string name="rotation_type">Typ rotácie</string>
     <string name="action_close">Zatvoriť</string>
-    <string name="pref_library_update_categories_details">Záznamy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
     <string name="ext_updates_pending">Čakajúce aktualizácie</string>
     <string name="spen_next_page">Ďalšia strana</string>
     <string name="update_check_open">Otvoriť na GitHub-e</string>
@@ -607,7 +598,6 @@
     <string name="email">Emailová adresa</string>
     <string name="pref_skip_filtered_chapters">Preskočiť filtrované kapitoly</string>
     <string name="in_library">V knižnici</string>
-    <string name="notification_update_skipped">Preskočené aktualizácie: %1$d</string>
     <string name="library_errors_help">Pomoc s opravou chýb aktualizácie knižnice nájdete v %1$s</string>
     <string name="skipped_reason_completed">Preskočené, pretože séria je dokončená</string>
     <string name="skipped_reason_not_caught_up">Preskočené, pretože obsahuje neprečítané kapitoly</string>
@@ -619,4 +609,31 @@
     <string name="label_started">Začaté</string>
     <string name="action_search_hint">Hľadať…</string>
     <string name="action_open_random_manga">Otvoriť náhodný záznam</string>
+    <string name="manga_categories">Kategórie Mangy</string>
+    <string name="action_sort_last_manga_update">Posledná aktualizácia mangy</string>
+    <string name="action_show_manga">Zobraziť mangu</string>
+    <string name="action_display_local_badge_manga">Lokálna manga</string>
+    <string name="pref_update_only_completely_read">S neprečítanými kapitolami</string>
+    <string name="pref_library_update_show_tab_badge">Zobraziť počet neprečítaných kapitol na ikone Aktualizácie</string>
+    <string name="default_manga_category">Predvolená kategória</string>
+    <string name="pref_manga_library_update_categories_details">Mangy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
+    <string name="pref_category_delete_chapters">Odstrániť kapitoly</string>
+    <string name="pref_remove_after_marked_as_read">Po manuálnom označení ako prečítané</string>
+    <string name="pref_remove_after_read">Po prečítaní automaticky odstrániť</string>
+    <string name="pref_remove_bookmarked_chapters">Povoliť odstraňovanie kapitol so záložkami</string>
+    <string name="pref_remove_exclude_categories_manga">Vylúčené kategórie</string>
+    <string name="pref_auto_update_manga_sync">Aktualizácia priebehu po prečítaní</string>
+    <string name="pref_clear_chapter_cache">Vymazať vyrovnávaciu pamäť kapitol</string>
+    <string name="pref_auto_clear_chapter_cache">Vymazanie vyrovnávacej pamäte kapitoly pri zatvorení aplikácie</string>
+    <string name="pref_clear_manga_database">Vymazať databázu</string>
+    <string name="pref_clear_manga_database_summary">Odstránenie histórie mangy, ktorá nie je uložená vo vašej knižnici</string>
+    <string name="clear_database_confirmation">Ste si istý? Čítanie kapitol a pokrok v mangách mimo vašu knižnicu sa stratí</string>
+    <string name="pref_incognito_mode_summary">Pozastaví históriu čítania</string>
+    <string name="manga_from_library">Manga z knižnice</string>
+    <string name="snack_add_to_manga_library">Pridať mangu do knižnice?</string>
+    <string name="also_set_chapter_settings_for_library">Taktiež nastaviť pre všetky mangy v mojej knižnici</string>
+    <string name="dialog_with_checkbox_reset">Resetovať všetky kapitoly mangy</string>
+    <string name="download_insufficient_space">Nepodarilo sa stiahnuť kapitoly z dôvodu nedostatku úložného priestoru</string>
+    <string name="download_queue_size_warning">Upozornenie: Veľké hromadné sťahovanie môže viesť k spomaleniu zdrojov a/alebo blokovaniu Aniyomi. Klepnutím sa dozviete viac.</string>
+    <string name="information_webview_required">WebView je potrebné pre Aniyomi</string>
 </resources>

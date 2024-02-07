@@ -30,7 +30,7 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns default interval of 7 days when not enough distinct days`() {
         val episodesWithUploadDate = (1..50).map {
-            chapterWithTime(episode, 1.days)
+            episodeWithTime(episode, 1.days)
         }
         fetchInterval.calculateInterval(episodesWithUploadDate, testZoneId) shouldBe 7
 
@@ -43,10 +43,10 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval based on more recent episodes`() {
         val oldEpisodes = (1..5).map {
-            chapterWithTime(episode, (it * 7).days) // Would have interval of 7 days
+            episodeWithTime(episode, (it * 7).days) // Would have interval of 7 days
         }
         val newEpisodes = (1..10).map {
-            chapterWithTime(episode, oldEpisodes.lastUploadDate() + it.days)
+            episodeWithTime(episode, oldEpisodes.lastUploadDate() + it.days)
         }
 
         val episodes = oldEpisodes + newEpisodes
@@ -55,9 +55,24 @@ class AnimeFetchIntervalTest {
     }
 
     @Test
+    fun `returns interval based on smaller subset of recent episodes if very few episodes`() {
+        val oldEpisodes = (1..3).map {
+            episodeWithTime(episode, (it * 7).days)
+        }
+        // Significant gap between episodes
+        val newEpisodes = (1..3).map {
+            episodeWithTime(episode, oldEpisodes.lastUploadDate() + 365.days + (it * 7).days)
+        }
+
+        val episodes = oldEpisodes + newEpisodes
+
+        fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 7
+    }
+
+    @Test
     fun `returns interval of 7 days when multiple episodes in 1 day`() {
         val episodes = (1..10).map {
-            chapterWithTime(episode, 10.hours)
+            episodeWithTime(episode, 10.hours)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 7
     }
@@ -65,9 +80,9 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval of 7 days when multiple episodes in 2 days`() {
         val episodes = (1..2).map {
-            chapterWithTime(episode, 1.days)
+            episodeWithTime(episode, 1.days)
         } + (1..5).map {
-            chapterWithTime(episode, 2.days)
+            episodeWithTime(episode, 2.days)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 7
     }
@@ -75,7 +90,7 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval of 1 day when episodes are released every 1 day`() {
         val episodes = (1..20).map {
-            chapterWithTime(episode, it.days)
+            episodeWithTime(episode, it.days)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 1
     }
@@ -83,7 +98,7 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval of 1 day when delta is less than 1 day`() {
         val episodes = (1..20).map {
-            chapterWithTime(episode, (15 * it).hours)
+            episodeWithTime(episode, (15 * it).hours)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 1
     }
@@ -91,7 +106,7 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval of 2 days when episodes are released every 2 days`() {
         val episodes = (1..20).map {
-            chapterWithTime(episode, (2 * it).days)
+            episodeWithTime(episode, (2 * it).days)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 2
     }
@@ -99,7 +114,7 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval with floored value when interval is decimal`() {
         val episodesWithUploadDate = (1..5).map {
-            chapterWithTime(episode, (25 * it).hours)
+            episodeWithTime(episode, (25 * it).hours)
         }
         fetchInterval.calculateInterval(episodesWithUploadDate, testZoneId) shouldBe 1
 
@@ -112,12 +127,12 @@ class AnimeFetchIntervalTest {
     @Test
     fun `returns interval of 1 day when episodes are released just below every 2 days`() {
         val episodes = (1..20).map {
-            chapterWithTime(episode, (43 * it).hours)
+            episodeWithTime(episode, (43 * it).hours)
         }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 1
     }
 
-    private fun chapterWithTime(episode: Episode, duration: Duration): Episode {
+    private fun episodeWithTime(episode: Episode, duration: Duration): Episode {
         val newTime = testTime.plus(duration.toJavaDuration()).toEpochSecond() * 1000
         return episode.copy(dateFetch = newTime, dateUpload = newTime)
     }

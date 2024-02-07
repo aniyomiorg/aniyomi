@@ -56,7 +56,7 @@ class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaT
 
     override fun getScoreList(): ImmutableList<String> = persistentListOf()
 
-    override fun displayScore(track: MangaTrack): String = ""
+    override fun displayScore(track: DomainTrack): String = ""
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {

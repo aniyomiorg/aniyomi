@@ -94,6 +94,7 @@ class PlayerPreferences(
 
     fun hardwareDecoding() = preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec)
     fun videoDebanding() = preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED)
+    fun gpuNext() = preferenceStore.getBoolean("pref_gpu_next", false)
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
     fun audioDelay() = preferenceStore.getInt("pref_audio_delay", 0)

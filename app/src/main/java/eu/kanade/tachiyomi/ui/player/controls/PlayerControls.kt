@@ -19,9 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,22 +39,23 @@ fun PlayerControls(
 ) {
     val state by activity.viewModel.state.collectAsState()
 
-    val onPlayerPressed = { timerState.controls = if (timerState.controls > 0L) 0L else 3500L }
-    val playerModifier = Modifier.pointerInput(Unit) { detectTapGestures(onPress = { onPlayerPressed() }) }
+    val onPlayerPressed = { timerState.controls = if (timerState.controls > 0L) 0L else 3000L }
+    val playerModifier = modifier.pointerInput(Unit) { detectTapGestures(onPress = { onPlayerPressed() }) }
 
     Surface(modifier = playerModifier, color = Color.Transparent) {
         if (state.seekState == SeekState.LOCKED) {
             LockedPlayerControls { activity.viewModel.updateSeekState(SeekState.NONE) }
         } else {
-            if (timerState.controls > 0L) UnlockedPlayerControls(activity, playerModifier)
+            if (timerState.controls > 0L) UnlockedPlayerControls(activity)
         }
-    }
 
+        Text(timerState.controls.toString())
+    }
 
     LaunchedEffect(key1 = timerState.controls, key2 = state.timeData.paused) {
         if(timerState.controls > 0L && !state.timeData.paused) {
-            delay(500L)
-            timerState.controls -= 500L
+            delay(1000L)
+            timerState.controls -= 1000L
         }
     }
 }

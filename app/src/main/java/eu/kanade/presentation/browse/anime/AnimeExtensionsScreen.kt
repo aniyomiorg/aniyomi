@@ -1,6 +1,7 @@
 package eu.kanade.presentation.browse.anime
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,16 +38,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.ExtensionHeader
 import eu.kanade.presentation.browse.manga.ExtensionTrustDialog
+import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.components.DotSeparatorNoSpaceText
+import eu.kanade.presentation.util.rememberRequestPackageInstallsPermissionState
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.launchRequestPackageInstallsPermission
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.PullRefresh
@@ -65,7 +70,7 @@ fun AnimeExtensionScreen(
     searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
-    onClickItemWebView: (AnimeExtension.Available) -> Unit,
+    onOpenWebView: (AnimeExtension.Available) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,
     onUninstallExtension: (AnimeExtension) -> Unit,
     onUpdateExtension: (AnimeExtension.Installed) -> Unit,
@@ -98,7 +103,7 @@ fun AnimeExtensionScreen(
                     contentPadding = contentPadding,
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
-                    onClickItemWebView = onClickItemWebView,
+                    onOpenWebView = onOpenWebView,
                     onInstallExtension = onInstallExtension,
                     onUninstallExtension = onUninstallExtension,
                     onUpdateExtension = onUpdateExtension,
@@ -116,7 +121,7 @@ private fun AnimeExtensionContent(
     state: AnimeExtensionsScreenModel.State,
     contentPadding: PaddingValues,
     onLongClickItem: (AnimeExtension) -> Unit,
-    onClickItemWebView: (AnimeExtension.Available) -> Unit,
+    onOpenWebView: (AnimeExtension.Available) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,
     onUninstallExtension: (AnimeExtension) -> Unit,
@@ -125,11 +130,24 @@ private fun AnimeExtensionContent(
     onOpenExtension: (AnimeExtension.Installed) -> Unit,
     onClickUpdateAll: () -> Unit,
 ) {
+    val context = LocalContext.current
     var trustState by remember { mutableStateOf<AnimeExtension.Untrusted?>(null) }
+    val installGranted = rememberRequestPackageInstallsPermissionState(initialValue = true)
 
     FastScrollLazyColumn(
         contentPadding = contentPadding + topSmallPaddingValues,
     ) {
+        if (!installGranted && state.installer?.requiresSystemPermission == true) {
+            item(key = "extension-permissions-warning") {
+                WarningBanner(
+                    textRes = MR.strings.ext_permission_install_apps_warning,
+                    modifier = Modifier.clickable {
+                        context.launchRequestPackageInstallsPermission()
+                    },
+                )
+            }
+        }
+
         state.items.forEach { (header, items) ->
             item(
                 contentType = "header",
@@ -168,7 +186,7 @@ private fun AnimeExtensionContent(
             }
 
             items(
-                items = items,
+                items = items.fastDistinctBy { it.hashCode() },
                 contentType = { "item" },
                 key = { "extension-${it.hashCode()}" },
             ) { item ->
@@ -183,8 +201,14 @@ private fun AnimeExtensionContent(
                         }
                     },
                     onLongClickItem = onLongClickItem,
+                    onClickItemSecondaryAction = {
+                        when (it) {
+                            is AnimeExtension.Available -> onOpenWebView(it)
+                            is AnimeExtension.Installed -> onOpenExtension(it)
+                            else -> {}
+                        }
+                    },
                     onClickItemCancel = onClickItemCancel,
-                    onClickItemWebView = onClickItemWebView,
                     onClickItemAction = {
                         when (it) {
                             is AnimeExtension.Available -> onInstallExtension(it)
@@ -227,10 +251,10 @@ private fun AnimeExtensionItem(
     item: AnimeExtensionUiModel.Item,
     onClickItem: (AnimeExtension) -> Unit,
     onLongClickItem: (AnimeExtension) -> Unit,
-    onClickItemWebView: (AnimeExtension.Available) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onClickItemAction: (AnimeExtension) -> Unit,
     modifier: Modifier = Modifier,
+    onClickItemSecondaryAction: (AnimeExtension) -> Unit,
 ) {
     val (extension, installStep) = item
     BaseBrowseItem(
@@ -271,9 +295,9 @@ private fun AnimeExtensionItem(
             AnimeExtensionItemActions(
                 extension = extension,
                 installStep = installStep,
-                onClickItemWebView = onClickItemWebView,
                 onClickItemCancel = onClickItemCancel,
                 onClickItemAction = onClickItemAction,
+                onClickItemSecondaryAction = onClickItemSecondaryAction,
             )
         },
     ) {
@@ -303,7 +327,7 @@ private fun AnimeExtensionItemContent(
         // Won't look good but it's not like we can ellipsize overflowing content
         FlowRow(
             modifier = Modifier.secondaryItemAlpha(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is AnimeExtension.Installed && extension.lang.isNotEmpty()) {
@@ -323,7 +347,6 @@ private fun AnimeExtensionItemContent(
 
                 val warning = when {
                     extension is AnimeExtension.Untrusted -> MR.strings.ext_untrusted
-                    extension is AnimeExtension.Installed && extension.isUnofficial -> MR.strings.ext_unofficial
                     extension is AnimeExtension.Installed && extension.isObsolete -> MR.strings.ext_obsolete
                     extension.isNsfw -> MR.strings.ext_nsfw_short
                     else -> null
@@ -358,15 +381,15 @@ private fun AnimeExtensionItemActions(
     extension: AnimeExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
-    onClickItemWebView: (AnimeExtension.Available) -> Unit = {},
     onClickItemCancel: (AnimeExtension) -> Unit = {},
     onClickItemAction: (AnimeExtension) -> Unit = {},
+    onClickItemSecondaryAction: (AnimeExtension) -> Unit = {},
 ) {
     val isIdle = installStep.isCompleted()
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         when {
             !isIdle -> {
@@ -388,6 +411,13 @@ private fun AnimeExtensionItemActions(
             installStep == InstallStep.Idle -> {
                 when (extension) {
                     is AnimeExtension.Installed -> {
+                        IconButton(onClick = { onClickItemSecondaryAction(extension) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = stringResource(MR.strings.action_settings),
+                            )
+                        }
+
                         if (extension.hasUpdate) {
                             IconButton(onClick = { onClickItemAction(extension) }) {
                                 Icon(
@@ -395,13 +425,6 @@ private fun AnimeExtensionItemActions(
                                     contentDescription = stringResource(MR.strings.ext_update),
                                 )
                             }
-                        }
-
-                        IconButton(onClick = { onClickItemAction(extension) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = stringResource(MR.strings.action_settings),
-                            )
                         }
                     }
                     is AnimeExtension.Untrusted -> {
@@ -415,7 +438,7 @@ private fun AnimeExtensionItemActions(
                     is AnimeExtension.Available -> {
                         if (extension.sources.isNotEmpty()) {
                             IconButton(
-                                onClick = { onClickItemWebView(extension) },
+                                onClick = { onClickItemSecondaryAction(extension) },
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.Public,

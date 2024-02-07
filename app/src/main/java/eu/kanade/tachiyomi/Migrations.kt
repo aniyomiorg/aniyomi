@@ -6,8 +6,10 @@ import androidx.preference.PreferenceManager
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.NavStyle
+import eu.kanade.domain.ui.model.StartScreen
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.data.backup.BackupCreateJob
+import eu.kanade.tachiyomi.data.backup.create.BackupCreateJob
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.track.TrackerManager
@@ -22,7 +24,6 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.workManager
-import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.TriState
@@ -33,7 +34,6 @@ import tachiyomi.core.preference.plusAssign
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
-import tachiyomi.i18n.MR
 import java.io.File
 
 object Migrations {
@@ -74,11 +74,6 @@ object Migrations {
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-            if (oldVersion < 14) {
-                // Restore jobs after upgrading to Evernote's job scheduler.
-                MangaLibraryUpdateJob.setupTask(context)
-                AnimeLibraryUpdateJob.setupTask(context)
-            }
             if (oldVersion < 15) {
                 // Delete internal chapter cache dir.
                 File(context.cacheDir, "chapter_disk_cache").deleteRecursively()
@@ -104,12 +99,6 @@ object Migrations {
                         chapterCache.deleteRecursively()
                     }
                 }
-            }
-            if (oldVersion < 43) {
-                // Restore jobs after migrating from Evernote's job scheduler to WorkManager.
-                MangaLibraryUpdateJob.setupTask(context)
-                AnimeLibraryUpdateJob.setupTask(context)
-                BackupCreateJob.setupTask(context)
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
@@ -171,7 +160,6 @@ object Migrations {
                 // v53: switched from WebView to OAuth
                 if (trackerManager.myAnimeList.isLoggedIn) {
                     trackerManager.myAnimeList.logout()
-                    context.stringResource(MR.strings.myanimelist_relogin)
                 }
             }
             if (oldVersion < 57) {
@@ -316,9 +304,6 @@ object Migrations {
                         BasePreferences.ExtensionInstaller.LEGACY,
                     )
                 }
-            }
-            if (oldVersion < 76) {
-                BackupCreateJob.setupTask(context)
             }
             if (oldVersion < 77) {
                 val oldReaderTap = prefs.getBoolean("reader_tap", false)
@@ -495,9 +480,6 @@ object Migrations {
                     }
                 }
             }
-            if (oldVersion < 100) {
-                BackupCreateJob.setupTask(context)
-            }
             if (oldVersion < 105) {
                 val pref = libraryPreferences.autoUpdateDeviceRestrictions()
                 if (pref.isSet() && "battery_not_low" in pref.get()) {
@@ -510,22 +492,7 @@ object Migrations {
                     uiPreferences.relativeTime().set(false)
                 }
             }
-            if (oldVersion < 107) {
-                replacePreferences(
-                    preferenceStore = preferenceStore,
-                    filterPredicate = {
-                        it.key.startsWith("pref_mangasync_") ||
-                            it.key.startsWith("track_token_")
-                    },
-                    newKey = { Preference.privateKey(it) },
-                )
-            }
-            if (oldVersion < 111) {
-                File(context.cacheDir, "dl_index_cache")
-                    .takeIf { it.exists() }
-                    ?.delete()
-            }
-            if (oldVersion < 112) {
+            if (oldVersion < 113) {
                 val prefsToReplace = listOf(
                     "pref_download_only",
                     "incognito_mode",
@@ -547,11 +514,60 @@ object Migrations {
                 )
             }
             if (oldVersion < 113) {
+                // Deleting old download cache index files, but might as well clear it all out
+                context.cacheDir.deleteRecursively()
+            }
+            if (oldVersion < 114) {
+                sourcePreferences.mangaExtensionRepos().getAndSet {
+                    it.map { repo -> "https://raw.githubusercontent.com/$repo/repo" }.toSet()
+                }
+            }
+            if (oldVersion < 116) {
+                replacePreferences(
+                    preferenceStore = preferenceStore,
+                    filterPredicate = { it.key.startsWith("pref_mangasync_") || it.key.startsWith("track_token_") },
+                    newKey = { Preference.privateKey(it) },
+                )
+            }
+            if (oldVersion < 117) {
+                prefs.edit {
+                    remove(Preference.appStateKey("trusted_signatures"))
+                }
+            }
+
+            if (oldVersion < 120) {
+                val bottomNavStyle = preferenceStore.getInt("bottom_nav_style", 0)
+
+                val isDefaultTabManga = preferenceStore.getBoolean("default_home_tab_library", false)
+                prefs.edit {
+                    remove("bottom_nav_style")
+                    remove("default_home_tab_library")
+
+                    val startScreen = if (isDefaultTabManga.get()) StartScreen.MANGA else StartScreen.ANIME
+                    val navStyle = when (bottomNavStyle.get()) {
+                        0 -> NavStyle.MOVE_HISTORY_TO_MORE
+                        1 -> NavStyle.MOVE_UPDATES_TO_MORE
+                        else -> NavStyle.MOVE_MANGA_TO_MORE
+                    }
+
+                    preferenceStore.getEnum("start_screen", StartScreen.ANIME).set(startScreen)
+                    preferenceStore.getEnum("bottom_rail_nav_style", NavStyle.MOVE_HISTORY_TO_MORE).set(navStyle)
+                }
+            }
+
+            if (oldVersion < 121) {
+                if (trackerManager.myAnimeList.isLoggedIn) {
+                    trackerManager.myAnimeList.logout()
+                }
+            }
+
+            if (oldVersion < 122) {
                 val invertedPosition = preferenceStore.getBoolean("pref_invert_playback_txt", false)
                 val invertedDuration = preferenceStore.getBoolean("pref_invert_duration_txt", false)
                 val hwDec = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
                 val deband = preferenceStore.getInt("pref_deband", 0)
                 val playerViewMode = preferenceStore.getInt("pref_player_view_mode", 1)
+                val gpuNext = preferenceStore.getBoolean("gpu_next", false)
 
                 prefs.edit {
                     remove("pref_invert_playback_txt")
@@ -559,6 +575,7 @@ object Migrations {
                     remove("pref_hwdec")
                     remove("pref_deband")
                     remove("pref_player_view_mode")
+                    remove("gpu_next")
 
                     val invertedPlayback = when {
                         invertedPosition.get() -> InvertedPlayback.POSITION
@@ -573,6 +590,7 @@ object Migrations {
                     preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec).set(hardwareDecoding)
                     preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
                     preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
+                    preferenceStore.getBoolean("pref_gpu_next", false).set(gpuNext.get())
                 }
             }
             return true

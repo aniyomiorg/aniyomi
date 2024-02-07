@@ -69,6 +69,10 @@ getAllAnime:
 SELECT *
 FROM animes;
 
+getAllAnimeSourceAndUrl:
+SELECT source, url
+FROM animes;
+
 getAnimesWithFavoriteTimestamp:
 SELECT *
 FROM animes

@@ -21,6 +21,7 @@ const val PREF_DOH_MULLVAD = 9
 const val PREF_DOH_CONTROLD = 10
 const val PREF_DOH_NJALLA = 11
 const val PREF_DOH_SHECAN = 12
+const val PREF_DOH_LIBREDNS = 13
 
 fun OkHttpClient.Builder.dohCloudflare() = dns(
     DnsOverHttps.Builder().client(build())
@@ -128,14 +129,13 @@ fun OkHttpClient.Builder.dohQuad101() = dns(
 /*
  * Mullvad DoH
  * without ad blocking option
- * Source : https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/
+ * Source: https://mullvad.net/en/help/dns-over-https-and-dns-over-tls
  */
 fun OkHttpClient.Builder.dohMullvad() = dns(
     DnsOverHttps.Builder().client(build())
-        .url("https://doh.mullvad.net/dns-query".toHttpUrl())
+        .url(" https://dns.mullvad.net/dns-query".toHttpUrl())
         .bootstrapDnsHosts(
             InetAddress.getByName("194.242.2.2"),
-            InetAddress.getByName("193.19.108.2"),
             InetAddress.getByName("2a07:e340::2"),
         )
         .build(),
@@ -144,7 +144,7 @@ fun OkHttpClient.Builder.dohMullvad() = dns(
 /*
  * Control D
  * unfiltered option
- * Source : https://controld.com/free-dns/?
+ * Source: https://controld.com/free-dns/?
  */
 fun OkHttpClient.Builder.dohControlD() = dns(
     DnsOverHttps.Builder().client(build())
@@ -181,6 +181,19 @@ fun OkHttpClient.Builder.dohShecan() = dns(
         .bootstrapDnsHosts(
             InetAddress.getByName("178.22.122.100"),
             InetAddress.getByName("185.51.200.2"),
+        )
+        .build(),
+)
+
+/**
+ * Source: https://libredns.gr/
+ */
+fun OkHttpClient.Builder.dohLibreDNS() = dns(
+    DnsOverHttps.Builder().client(build())
+        .url("https://doh.libredns.gr/dns-query".toHttpUrl())
+        .bootstrapDnsHosts(
+            InetAddress.getByName("116.202.176.26"),
+            InetAddress.getByName("2a01:4f8:1c0c:8274::1"),
         )
         .build(),
 )

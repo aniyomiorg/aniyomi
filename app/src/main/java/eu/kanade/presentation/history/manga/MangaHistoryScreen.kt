@@ -6,24 +6,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.components.RelativeDateHeader
+import eu.kanade.presentation.components.relativeDateText
 import eu.kanade.presentation.history.manga.components.MangaHistoryItem
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
-import tachiyomi.core.preference.InMemoryPreferenceStore
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import java.util.Date
 
 @Composable
@@ -33,7 +29,6 @@ fun MangaHistoryScreen(
     onClickCover: (mangaId: Long) -> Unit,
     onClickResume: (mangaId: Long, chapterId: Long) -> Unit,
     onDialogChange: (MangaHistoryScreenModel.Dialog?) -> Unit,
-    preferences: UiPreferences = Injekt.get(),
     searchQuery: String? = null,
 ) {
     Scaffold(
@@ -53,17 +48,12 @@ fun MangaHistoryScreen(
                     modifier = Modifier.padding(contentPadding),
                 )
             } else {
-                MangaHistoryContent(
+                MangaHistoryScreenContent(
                     history = it,
                     contentPadding = contentPadding,
                     onClickCover = { history -> onClickCover(history.mangaId) },
                     onClickResume = { history -> onClickResume(history.mangaId, history.chapterId) },
-                    onClickDelete = { item ->
-                        onDialogChange(
-                            MangaHistoryScreenModel.Dialog.Delete(item),
-                        )
-                    },
-                    preferences = preferences,
+                    onClickDelete = { item -> onDialogChange(MangaHistoryScreenModel.Dialog.Delete(item)) },
                 )
             }
         }
@@ -71,17 +61,13 @@ fun MangaHistoryScreen(
 }
 
 @Composable
-private fun MangaHistoryContent(
+private fun MangaHistoryScreenContent(
     history: List<MangaHistoryUiModel>,
     contentPadding: PaddingValues,
     onClickCover: (MangaHistoryWithRelations) -> Unit,
     onClickResume: (MangaHistoryWithRelations) -> Unit,
     onClickDelete: (MangaHistoryWithRelations) -> Unit,
-    preferences: UiPreferences,
 ) {
-    val relativeTime = remember { preferences.relativeTime().get() }
-    val dateFormat = remember { UiPreferences.dateFormat(preferences.dateFormat().get()) }
-
     FastScrollLazyColumn(
         contentPadding = contentPadding,
     ) {
@@ -97,11 +83,9 @@ private fun MangaHistoryContent(
         ) { item ->
             when (item) {
                 is MangaHistoryUiModel.Header -> {
-                    RelativeDateHeader(
+                    ListGroupHeader(
                         modifier = Modifier.animateItemPlacement(),
-                        date = item.date,
-                        relativeTime = relativeTime,
-                        dateFormat = dateFormat,
+                        text = relativeDateText(item.date),
                     )
                 }
                 is MangaHistoryUiModel.Item -> {
@@ -138,17 +122,6 @@ internal fun HistoryScreenPreviews(
             onClickCover = {},
             onClickResume = { _, _ -> run {} },
             onDialogChange = {},
-            preferences = UiPreferences(
-                InMemoryPreferenceStore(
-                    sequenceOf(
-                        InMemoryPreferenceStore.InMemoryPreference(
-                            key = "relative_time_v2",
-                            data = false,
-                            defaultValue = false,
-                        ),
-                    ),
-                ),
-            ),
         )
     }
 }

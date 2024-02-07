@@ -8,6 +8,7 @@ import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
+import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -47,10 +48,15 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         postfix = if (mpvInput.asState(scope).value.lines().size > 2) "\n..." else "",
                     ),
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                title = context.stringResource(MR.strings.pref_gpu_next_title),
+                subtitle = context.stringResource(MR.strings.pref_gpu_next_subtitle),
+                pref = playerPreferences.gpuNext(),
+            ),
             Preference.PreferenceItem.ListPreference(
                 title = context.stringResource(MR.strings.pref_debanding_title),
                 pref = playerPreferences.videoDebanding(),
-                entries = VideoDebanding.entries.associateWith { context.stringResource(it.stringRes) }
+                entries = VideoDebanding.entries.associateWith { context.stringResource(it.stringRes) }.toImmutableMap()
             ),
         )
     }

@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -257,7 +256,7 @@ data class MangaTrackInfoDialogHomeScreen(
             val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
             return loggedInTrackers
                 // Map to TrackItem
-                .map { service -> MangaTrackItem(find { it.syncId == service.id }, service) }
+                .map { service -> MangaTrackItem(find { it.trackerId == service.id }, service) }
                 // Show only if the service supports this manga's source
                 .filter { (it.tracker as? EnhancedMangaTracker)?.accept(source) ?: true }
         }
@@ -416,7 +415,7 @@ private data class TrackScoreSelectorScreen(
     private class Model(
         private val track: DbMangaTrack,
         private val tracker: Tracker,
-    ) : StateScreenModel<Model.State>(State(tracker.mangaService.displayScore(track.toDbTrack()))) {
+    ) : StateScreenModel<Model.State>(State(tracker.mangaService.displayScore(track))) {
 
         fun getSelections(): ImmutableList<String> {
             return tracker.mangaService.getScoreList()
@@ -781,7 +780,7 @@ private data class TrackerMangaRemoveScreen(
             },
             text = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
                     Text(
                         text = stringResource(MR.strings.track_delete_text, serviceName),
@@ -837,7 +836,7 @@ private data class TrackerMangaRemoveScreen(
 
         fun deleteMangaFromService() {
             screenModelScope.launchNonCancellable {
-                (tracker as DeletableMangaTracker).delete(track.toDbTrack())
+                (tracker as DeletableMangaTracker).delete(track)
             }
         }
 

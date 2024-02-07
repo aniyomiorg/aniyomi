@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.URLConnection
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -282,6 +283,7 @@ object ImageUtil {
     }
 
     private fun splitImageName(filenamePrefix: String, index: Int) = "${filenamePrefix}__${"%03d".format(
+        Locale.ENGLISH,
         index + 1,
     )}.jpg"
 

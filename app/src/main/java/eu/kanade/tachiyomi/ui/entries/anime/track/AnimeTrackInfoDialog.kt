@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -257,7 +256,7 @@ data class AnimeTrackInfoDialogHomeScreen(
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedInTrackers
                 // Map to TrackItem
-                .map { service -> AnimeTrackItem(find { it.syncId.toLong() == service.id }, service) }
+                .map { service -> AnimeTrackItem(find { it.trackerId == service.id }, service) }
                 // Show only if the service supports this anime's source
                 .filter { (it.tracker as? EnhancedAnimeTracker)?.accept(source) ?: true }
         }
@@ -416,7 +415,7 @@ private data class TrackScoreSelectorScreen(
     private class Model(
         private val track: DbAnimeTrack,
         private val tracker: Tracker,
-    ) : StateScreenModel<Model.State>(State(tracker.animeService.displayScore(track.toDbTrack()))) {
+    ) : StateScreenModel<Model.State>(State(tracker.animeService.displayScore(track))) {
 
         fun getSelections(): ImmutableList<String> {
             return tracker.animeService.getScoreList()
@@ -781,7 +780,7 @@ private data class TrackerAnimeRemoveScreen(
             },
             text = {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
                     Text(
                         text = stringResource(MR.strings.track_delete_text, serviceName),
@@ -837,7 +836,7 @@ private data class TrackerAnimeRemoveScreen(
 
         fun deleteAnimeFromService() {
             screenModelScope.launchNonCancellable {
-                (tracker as DeletableAnimeTracker).delete(track.toDbTrack())
+                (tracker as DeletableAnimeTracker).delete(track)
             }
         }
 

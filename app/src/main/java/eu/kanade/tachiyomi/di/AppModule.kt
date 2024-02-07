@@ -15,7 +15,6 @@ import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -34,10 +33,12 @@ import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.protobuf.ProtoBuf
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.storage.AndroidStorageFolderProvider
+import tachiyomi.core.storage.UniFileTempFileManager
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
@@ -173,9 +174,13 @@ class AppModule(val app: Application) : InjektModule {
                 xmlVersion = XmlVersion.XML10
             }
         }
+        addSingletonFactory<ProtoBuf> {
+            ProtoBuf
+        }
 
-        addSingletonFactory { ChapterCache(app) }
-        addSingletonFactory { EpisodeCache(app) }
+        addSingletonFactory { UniFileTempFileManager(app) }
+
+        addSingletonFactory { ChapterCache(app, get()) }
 
         addSingletonFactory { MangaCoverCache(app) }
         addSingletonFactory { AnimeCoverCache(app) }

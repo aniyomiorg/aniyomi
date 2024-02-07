@@ -11,9 +11,11 @@ import kotlinx.serialization.Serializable
 import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
 import java.util.Locale
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 data class ALManga(
-    val media_id: Long,
+    val remote_id: Long,
     val title_user_pref: String,
     val image_url_lge: String,
     val description: String?,
@@ -25,13 +27,13 @@ data class ALManga(
 ) {
 
     fun toTrack() = MangaTrackSearch.create(TrackerManager.ANILIST).apply {
-        media_id = this@ALManga.media_id
+        remote_id = this@ALManga.remote_id
         title = title_user_pref
         total_chapters = this@ALManga.total_chapters
         cover_url = image_url_lge
         summary = description?.htmlDecode() ?: ""
         score = average_score.toFloat()
-        tracking_url = AnilistApi.mangaUrl(media_id)
+        tracking_url = AnilistApi.mangaUrl(remote_id)
         publishing_status = this@ALManga.publishing_status
         publishing_type = format
         if (start_date_fuzzy != 0L) {
@@ -46,7 +48,7 @@ data class ALManga(
 }
 
 data class ALAnime(
-    val media_id: Long,
+    val remote_id: Long,
     val title_user_pref: String,
     val image_url_lge: String,
     val description: String?,
@@ -58,13 +60,13 @@ data class ALAnime(
 ) {
 
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.ANILIST).apply {
-        media_id = this@ALAnime.media_id
+        remote_id = this@ALAnime.remote_id
         title = title_user_pref
         total_episodes = this@ALAnime.total_episodes
         cover_url = image_url_lge
         summary = description?.htmlDecode() ?: ""
         score = average_score.toFloat()
-        tracking_url = AnilistApi.animeUrl(media_id)
+        tracking_url = AnilistApi.animeUrl(remote_id)
         publishing_status = this@ALAnime.publishing_status
         publishing_type = format
         if (start_date_fuzzy != 0L) {
@@ -89,7 +91,7 @@ data class ALUserManga(
 ) {
 
     fun toTrack() = MangaTrack.create(TrackerManager.ANILIST).apply {
-        media_id = manga.media_id
+        remote_id = manga.remote_id
         title = manga.title_user_pref
         status = toTrackStatus()
         score = score_raw.toFloat()
@@ -122,7 +124,7 @@ data class ALUserAnime(
 ) {
 
     fun toTrack() = AnimeTrack.create(TrackerManager.ANILIST).apply {
-        media_id = anime.media_id
+        remote_id = anime.remote_id
         title = anime.title_user_pref
         status = toTrackStatus()
         score = score_raw.toFloat()
@@ -176,54 +178,54 @@ fun AnimeTrack.toAnilistStatus() = when (status) {
 
 private val preferences: TrackPreferences by injectLazy()
 
-fun MangaTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
-// 10 point
+fun DomainMangaTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
+    // 10 point
     "POINT_10" -> (score.toInt() / 10).toString()
-// 100 point
+    // 100 point
     "POINT_100" -> score.toInt().toString()
-// 5 stars
+    // 5 stars
     "POINT_5" -> when {
-        score == 0f -> "0"
+        score == 0.0 -> "0"
         score < 30 -> "1"
         score < 50 -> "2"
         score < 70 -> "3"
         score < 90 -> "4"
         else -> "5"
     }
-// Smiley
+    // Smiley
     "POINT_3" -> when {
-        score == 0f -> "0"
+        score == 0.0 -> "0"
         score <= 35 -> ":("
         score <= 60 -> ":|"
         else -> ":)"
     }
-// 10 point decimal
+    // 10 point decimal
     "POINT_10_DECIMAL" -> (score / 10).toString()
     else -> throw NotImplementedError("Unknown score type")
 }
 
-fun AnimeTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
-// 10 point
+fun DomainAnimeTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
+    // 10 point
     "POINT_10" -> (score.toInt() / 10).toString()
-// 100 point
+    // 100 point
     "POINT_100" -> score.toInt().toString()
-// 5 stars
+    // 5 stars
     "POINT_5" -> when {
-        score == 0f -> "0"
+        score == 0.0 -> "0"
         score < 30 -> "1"
         score < 50 -> "2"
         score < 70 -> "3"
         score < 90 -> "4"
         else -> "5"
     }
-// Smiley
+    // Smiley
     "POINT_3" -> when {
-        score == 0f -> "0"
+        score == 0.0 -> "0"
         score <= 35 -> ":("
         score <= 60 -> ":|"
         else -> ":)"
     }
-// 10 point decimal
+    // 10 point decimal
     "POINT_10_DECIMAL" -> (score / 10).toString()
     else -> throw NotImplementedError("Unknown score type")
 }

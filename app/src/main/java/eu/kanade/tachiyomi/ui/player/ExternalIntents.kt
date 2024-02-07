@@ -188,7 +188,7 @@ class ExternalIntents {
 
             val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
             video.subtitleTracks.firstOrNull {
-                it.lang.contains(localLangName)
+                it.lang.contains(localLangName, true)
             }?.let {
                 putExtra("subtitle", it.url)
             } ?: video.subtitleTracks.firstOrNull()?.let {
@@ -225,7 +225,7 @@ class ExternalIntents {
 
             val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
             val langIndex = video.subtitleTracks.indexOfFirst {
-                it.lang.contains(localLangName)
+                it.lang.contains(localLangName, true)
             }
             val requestedLanguage = if (langIndex == -1) 0 else langIndex
             val requestedUrl = video.subtitleTracks.getOrNull(requestedLanguage)?.url
@@ -495,7 +495,7 @@ class ExternalIntents {
         withIOContext {
             getTracks.await(anime.id)
                 .mapNotNull { track ->
-                    val tracker = trackerManager.get(track.syncId)
+                    val tracker = trackerManager.get(track.trackerId)
                     if (tracker != null && tracker.isLoggedIn &&
                         tracker is AnimeTracker && episodeNumber > track.lastEpisodeSeen
                     ) {

@@ -1,8 +1,10 @@
 package tachiyomi.domain.entries.anime.model
 
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.preference.TriState
 import java.io.Serializable
+import java.time.Instant
 import kotlin.math.pow
 
 data class Anime(
@@ -29,6 +31,11 @@ data class Anime(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
 ) : Serializable {
+
+    val expectedNextUpdate: Instant?
+        get() = nextUpdate
+            .takeIf { status != SAnime.COMPLETED.toLong() }
+            ?.let { Instant.ofEpochMilli(it) }
 
     val sorting: Long
         get() = episodeFlags and EPISODE_SORTING_MASK

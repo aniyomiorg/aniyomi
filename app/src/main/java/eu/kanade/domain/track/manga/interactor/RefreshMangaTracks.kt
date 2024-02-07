@@ -25,14 +25,14 @@ class RefreshMangaTracks(
     suspend fun await(mangaId: Long): List<Pair<Tracker?, Throwable>> {
         return supervisorScope {
             return@supervisorScope getTracks.await(mangaId)
-                .map { it to trackerManager.get(it.syncId) }
+                .map { it to trackerManager.get(it.trackerId) }
                 .filter { (_, service) -> service?.isLoggedIn == true }
                 .map { (track, service) ->
                     async {
                         return@async try {
-                            val updatedTrack = service!!.mangaService.refresh(track.toDbTrack())
-                            insertTrack.await(updatedTrack.toDomainTrack()!!)
-                            syncChapterProgressWithTrack.await(mangaId, track, service.mangaService)
+                            val updatedTrack = service!!.mangaService.refresh(track.toDbTrack()).toDomainTrack()!!
+                            insertTrack.await(updatedTrack)
+                            syncChapterProgressWithTrack.await(mangaId, updatedTrack, service.mangaService)
                             null
                         } catch (e: Throwable) {
                             service to e

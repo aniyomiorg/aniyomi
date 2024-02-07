@@ -107,11 +107,7 @@ fun TopPlayerControls(
                     onClick = ::toggleAutoplay,
                 )
 
-                if (state.videoChapters.isNotEmpty()) {
-                    PlayerIcon(icon = Icons.Outlined.AutoStories) {
-                        viewModel.showVideoChapters()
-                    }
-                }
+
 
                 PlayerIcon(icon = Icons.Outlined.VideoSettings) { viewModel.showStreamsCatalog() }
                 PlayerIcon(icon = Icons.Outlined.MoreVert) { viewModel.showPlayerSettings() }
