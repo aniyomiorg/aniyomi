@@ -20,6 +20,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -1578,32 +1579,53 @@ class PlayerActivity : BaseActivity() {
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
-                val videoUrl: String = if (it.videoUrl!!.contains("&tr=")) {
-                    val mergedTrackerList = TorrentServerUtils.getTrackerList(it.videoUrl)
-                    "${it.videoUrl!!
-                        .substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
-                } else {
-                    val trackerList = TorrentServerUtils.getTrackerList()
-                    "${it.videoUrl}&tr=$trackerList"
-                }
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    val currentTorrent = TorrentServerApi.addTorrent(videoUrl, it.quality, "", "", false)
-                    if (it.videoUrl!!.contains("index=")) {
-                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 0
-                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
-                        MPVLib.command(arrayOf("loadfile", torrentUrl))
-                    } else {
-                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
-                        MPVLib.command(arrayOf("loadfile", torrentUrl))
-                    }
+                    torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
             }
         }
         refreshUi()
+    }
+
+    private fun torrentLinkHandler(videoUrl: String, quality: String) {
+        var index = 0
+        var finalUrl = videoUrl
+
+        //check if link is from localSource
+        if (videoUrl.startsWith("content://")) {
+            val videoInputStream = applicationContext.contentResolver.openInputStream(Uri.parse(videoUrl))
+            val torrent = TorrentServerApi.uploadTorrent(videoInputStream!!, quality, "", "", false)
+            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(torrent, 0)
+            MPVLib.command(arrayOf("loadfile", torrentUrl))
+            return
+        }
+
+        //check if link is from magnet, in that case add tracker list
+        if (videoUrl.startsWith("magnet")) {
+            if (videoUrl.contains("index=")){
+                index = try {
+                    videoUrl.substringAfter("index=").toInt()
+                } catch (e: NumberFormatException) {
+                    0
+                }
+            }
+            finalUrl = if (videoUrl.contains("&tr=")) {
+                val mergedTrackerList = TorrentServerUtils.getTrackerList(videoUrl)
+                "${videoUrl
+                    .substringBefore("&tr=")}$mergedTrackerList&index=${videoUrl.substringAfter("&index=")}"
+            } else {
+                val trackerList = TorrentServerUtils.getTrackerList()
+                "${videoUrl}&tr=$trackerList"
+            }
+        }
+
+        val currentTorrent = TorrentServerApi.addTorrent(finalUrl, quality, "", "", false)
+        val videoTorrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        MPVLib.command(arrayOf("loadfile", videoTorrentUrl))
     }
 
     private fun parseVideoUrl(videoUrl: String?): String? {

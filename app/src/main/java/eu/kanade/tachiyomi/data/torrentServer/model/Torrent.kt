@@ -41,7 +41,7 @@ data class Torrent(
 
 @Serializable
 data class FileStat(
-    var id: Int,
+    var id: Int? = null,
     var path: String,
     var length: Long,
 )
