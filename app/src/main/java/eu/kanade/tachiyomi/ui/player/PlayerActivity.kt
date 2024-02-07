@@ -1500,7 +1500,7 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_EXPORTED)
+                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_NOT_EXPORTED)
             } else {
                 registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
             }
