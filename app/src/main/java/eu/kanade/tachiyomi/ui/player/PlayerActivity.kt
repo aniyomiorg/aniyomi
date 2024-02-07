@@ -1594,7 +1594,7 @@ class PlayerActivity : BaseActivity() {
         var index = 0
         var finalUrl = videoUrl
 
-        //check if link is from localSource
+        // check if link is from localSource
         if (videoUrl.startsWith("content://")) {
             val videoInputStream = applicationContext.contentResolver.openInputStream(Uri.parse(videoUrl))
             val torrent = TorrentServerApi.uploadTorrent(videoInputStream!!, quality, "", "", false)
@@ -1603,9 +1603,9 @@ class PlayerActivity : BaseActivity() {
             return
         }
 
-        //check if link is from magnet, in that case add tracker list
+        // check if link is from magnet, in that case add tracker list
         if (videoUrl.startsWith("magnet")) {
-            if (videoUrl.contains("index=")){
+            if (videoUrl.contains("index=")) {
                 index = try {
                     videoUrl.substringAfter("index=").toInt()
                 } catch (e: NumberFormatException) {
@@ -1618,7 +1618,7 @@ class PlayerActivity : BaseActivity() {
                     .substringBefore("&tr=")}$mergedTrackerList&index=${videoUrl.substringAfter("&index=")}"
             } else {
                 val trackerList = TorrentServerUtils.getTrackerList()
-                "${videoUrl}&tr=$trackerList"
+                "$videoUrl&tr=$trackerList"
             }
         }
 

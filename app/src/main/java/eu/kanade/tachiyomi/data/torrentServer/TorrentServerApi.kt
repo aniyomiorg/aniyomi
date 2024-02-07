@@ -96,5 +96,4 @@ object TorrentServerApi {
             .post()
         return Json.decodeFromString(Torrent.serializer(), resp.body().text())
     }
-
 }
