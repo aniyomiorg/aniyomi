@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.torrentServer
 
-import android.util.Log
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
 import eu.kanade.tachiyomi.data.torrentServer.model.TorrentRequest
@@ -9,7 +8,6 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.POST
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.create
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.jsoup.Jsoup
 import uy.kohesive.injekt.injectLazy
@@ -96,7 +94,6 @@ object TorrentServerApi {
             .ignoreContentType(true)
             .ignoreHttpErrors(true)
             .post()
-        Log.i("uploadTorrent", resp.body().text())
         return Json.decodeFromString(Torrent.serializer(), resp.body().text())
     }
 

@@ -20,7 +20,6 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
