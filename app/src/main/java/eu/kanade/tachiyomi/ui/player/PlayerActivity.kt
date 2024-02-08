@@ -1581,6 +1581,7 @@ class PlayerActivity : BaseActivity() {
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
+                    TorrentServerUtils.setTrackersList()
                     torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {
@@ -1592,7 +1593,6 @@ class PlayerActivity : BaseActivity() {
 
     private fun torrentLinkHandler(videoUrl: String, quality: String) {
         var index = 0
-        var finalUrl = videoUrl
 
         // check if link is from localSource
         if (videoUrl.startsWith("content://")) {
@@ -1603,7 +1603,7 @@ class PlayerActivity : BaseActivity() {
             return
         }
 
-        // check if link is from magnet, in that case add tracker list
+        // check if link is from magnet, in that check if index is present
         if (videoUrl.startsWith("magnet")) {
             if (videoUrl.contains("index=")) {
                 index = try {
@@ -1612,17 +1612,9 @@ class PlayerActivity : BaseActivity() {
                     0
                 }
             }
-            finalUrl = if (videoUrl.contains("&tr=")) {
-                val mergedTrackerList = TorrentServerUtils.getTrackerList(videoUrl)
-                "${videoUrl
-                    .substringBefore("&tr=")}$mergedTrackerList&index=${videoUrl.substringAfter("&index=")}"
-            } else {
-                val trackerList = TorrentServerUtils.getTrackerList()
-                "$videoUrl&tr=$trackerList"
-            }
         }
 
-        val currentTorrent = TorrentServerApi.addTorrent(finalUrl, quality, "", "", false)
+        val currentTorrent = TorrentServerApi.addTorrent(videoUrl, quality, "", "", false)
         val videoTorrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
         MPVLib.command(arrayOf("loadfile", videoTorrentUrl))
     }
