@@ -109,9 +109,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.playBtn.setOnClickListener { playPause() }
         binding.nextBtn.setOnClickListener { switchEpisode(previous = false) }
 
-        binding.pipBtn.setOnClickListener { activity.pip.start() }
+        binding.pipBtn.setOnClickListener { activity.updatePip(start = true) }
 
-        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
+        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.supportedAndEnabled
 
         binding.controlsSkipIntroBtn.setOnLongClickListener {
             activity.viewModel.showSkipIntroLength()

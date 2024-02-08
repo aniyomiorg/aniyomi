@@ -40,6 +40,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -172,8 +173,6 @@ class PlayerActivity : BaseActivity() {
         }
         super.onNewIntent(intent)
     }
-
-    internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
     private val playerObserver = PlayerObserver(this)
 
@@ -886,9 +885,6 @@ class PlayerActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         refreshUi()
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let { pip.update(!it) }
-        }
     }
 
     override fun onPause() {
@@ -901,7 +897,7 @@ class PlayerActivity : BaseActivity() {
         if (!playerIsDestroyed) {
             player.paused = true
         }
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON && powerManager.isInteractive) {
+        if (PipState.mode == PipState.ON && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -935,12 +931,11 @@ class PlayerActivity : BaseActivity() {
         super.onDestroy()
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (pip.supportedAndEnabled) {
+        if (supportedAndEnabled) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                pip.start()
+                updatePip(true)
             } else {
                 finishAndRemoveTask()
                 super.onBackPressed()
@@ -952,7 +947,12 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onUserLeaveHint() {
-        if (player.paused == false && playerPreferences.pipOnExit().get()) pip.start()
+        if (player.paused == false &&
+            playerPreferences.pipOnExit().get() &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+        ) {
+            updatePip(start = true)
+        }
         super.onUserLeaveHint()
     }
 
@@ -1013,7 +1013,6 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
-            if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
             viewModel.closeDialogSheet()
         }
     }
@@ -1431,6 +1430,7 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
+            updatePip(start = false)
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateSpeedButton()
@@ -1456,7 +1456,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) pip.update(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1467,7 +1466,35 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
+    // TODO: Move into function once compose is implemented
+    val supportedAndEnabled = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
+    internal fun updatePip(start: Boolean) {
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+        val paused = player.paused ?: return
+        val videoAspect = player.videoAspect ?: return
+        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PictureInPictureHandler().update(
+                context = this,
+                title = anime.title,
+                subtitle = episode.name,
+                paused = paused,
+                replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
+                pipOnExit = playerPreferences.pipOnExit().get() && !paused,
+                videoAspect = videoAspect * 10000,
+                playlistCount = viewModel.getCurrentEpisodeIndex(),
+                playlistPosition = viewModel.currentPlaylist.size,
+            ).let {
+                setPictureInPictureParams(it)
+                if (PipState.mode == PipState.OFF && start) {
+                    PipState.mode = PipState.STARTED
+                    playerControls.hideControls(hide = true)
+                    enterPictureInPictureMode(it)
+                }
+            }
+        }
+    }
+
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1543,13 +1570,12 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = if (position != null) {
-                        position
-                    } else if ((episode.seen && !preservePos) || fromStart) {
-                        0L
-                    } else {
-                        episode.last_second_seen
-                    }
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
                     playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
@@ -1881,6 +1907,7 @@ class PlayerActivity : BaseActivity() {
                     setAudioFocus(value)
                     updatePlaybackStatus(value)
                     updatePlaybackState(pause = true)
+                    refreshUi()
                 }
             }
             "eof-reached" -> endFile(value)
