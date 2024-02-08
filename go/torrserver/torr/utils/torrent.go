@@ -29,9 +29,14 @@ var defTrackers = []string{
 	"udp://explodie.org:6969/announce",
 	"wss://tracker.btorrent.xyz",
 	"wss://tracker.openwebtorrent.com",
+	"http://superTRACKKKERRSSRSS.com",
 }
 
 var loadedTrackers []string
+
+func SetDefTrackers(trackers []string) {
+	defTrackers = trackers
+}
 
 func GetTrackerFromFile() []string {
 	name := filepath.Join(settings.Path, "trackers.txt")

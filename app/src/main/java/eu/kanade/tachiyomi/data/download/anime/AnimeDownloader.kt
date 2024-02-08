@@ -534,26 +534,18 @@ class AnimeDownloader(
 
     private fun isTor(video: Video): Boolean {
         if (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true) {
-            val videoUrl: String = if (video.videoUrl!!.contains("&tr=")) {
-                val mergedTrackerList = TorrentServerUtils.getTrackerList(video.videoUrl)
-                "${video.videoUrl!!
-                    .substringBefore("&tr=")}$mergedTrackerList&index=${video.videoUrl!!.substringAfter("&index=")}"
-            } else {
-                val trackerList = TorrentServerUtils.getTrackerList()
-                "${video.videoUrl}&tr=$trackerList"
-            }
             launchIO {
                 TorrentServerService.start()
                 TorrentServerService.wait(10)
-                val currentTorrent = TorrentServerApi.addTorrent(videoUrl, video.quality, "", "", false)
+                TorrentServerUtils.setTrackersList()
+                val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+                var index = 0
                 if (video.videoUrl!!.contains("index=")) {
-                    val index = video.videoUrl?.substringAfter("index=")?.toInt() ?: 0
-                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
-                    video.videoUrl = torrentUrl
-                } else {
-                    val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 0)
-                    video.videoUrl = torrentUrl
+                    index = video.videoUrl?.substringAfter("index=")?.toInt() ?: 0
                 }
+                val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+                video.videoUrl = torrentUrl
+
             }
         }
         return video.videoUrl?.toHttpUrl()?.encodedPath?.contains(TorrentServerUtils.hostUrl) ?: false
