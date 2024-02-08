@@ -545,7 +545,6 @@ class AnimeDownloader(
                 }
                 val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
                 video.videoUrl = torrentUrl
-
             }
         }
         return video.videoUrl?.toHttpUrl()?.encodedPath?.contains(TorrentServerUtils.hostUrl) ?: false
