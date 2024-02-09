@@ -12,17 +12,10 @@ object TorrentServerUtils {
 
     private val animeTrackers = preferences.trackers().get()
 
-    fun getTrackerList(videoUrl: String? = ""): String {
-        val trackerList = videoUrl!!.substringAfter(
-            "&tr=",
-        ).split("&tr=").map { track -> track.trim() }.filter { track -> track.isNotBlank() }.joinToString {
-            ","
-        }
-        val mergedTrackerList = "$animeTrackers, $trackerList".trimIndent()
-        return mergedTrackerList.split(",").map { it.trim() }.filter { it.isNotBlank() }.joinToString("&tr=")
+    fun setTrackersList() {
+        server.Server.addTrackers(animeTrackers)
     }
 
-    // INDEX START IN 1
     fun getTorrentPlayLink(torr: Torrent, index: Int): String {
         val file = findFile(torr, index)
         val name = file?.let { File(it.path).name } ?: torr.title

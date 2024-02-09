@@ -40,6 +40,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
@@ -183,8 +184,6 @@ class PlayerActivity : BaseActivity() {
         }
         super.onNewIntent(intent)
     }
-
-    internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
     private val playerObserver = PlayerObserver(this)
 
@@ -897,9 +896,6 @@ class PlayerActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         refreshUi()
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let { pip.update(!it) }
-        }
     }
 
     override fun onPause() {
@@ -912,7 +908,7 @@ class PlayerActivity : BaseActivity() {
         if (!playerIsDestroyed) {
             player.paused = true
         }
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON && powerManager.isInteractive) {
+        if (PipState.mode == PipState.ON && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -949,12 +945,11 @@ class PlayerActivity : BaseActivity() {
         super.onDestroy()
     }
 
-    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (pip.supportedAndEnabled) {
+        if (supportedAndEnabled) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                pip.start()
+                updatePip(true)
             } else {
                 finishAndRemoveTask()
                 super.onBackPressed()
@@ -966,7 +961,12 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onUserLeaveHint() {
-        if (player.paused == false && playerPreferences.pipOnExit().get()) pip.start()
+        if (player.paused == false &&
+            playerPreferences.pipOnExit().get() &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+        ) {
+            updatePip(start = true)
+        }
         super.onUserLeaveHint()
     }
 
@@ -1027,7 +1027,6 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
-            if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
             viewModel.closeDialogSheet()
         }
     }
@@ -1445,6 +1444,7 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
+            updatePip(start = false)
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateSpeedButton()
@@ -1473,7 +1473,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) pip.update(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1484,7 +1483,35 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
+    // TODO: Move into function once compose is implemented
+    val supportedAndEnabled = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
+    internal fun updatePip(start: Boolean) {
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+        val paused = player.paused ?: return
+        val videoAspect = player.videoAspect ?: return
+        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PictureInPictureHandler().update(
+                context = this,
+                title = anime.title,
+                subtitle = episode.name,
+                paused = paused,
+                replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
+                pipOnExit = playerPreferences.pipOnExit().get() && !paused,
+                videoAspect = videoAspect * 10000,
+                playlistCount = viewModel.getCurrentEpisodeIndex(),
+                playlistPosition = viewModel.currentPlaylist.size,
+            ).let {
+                setPictureInPictureParams(it)
+                if (PipState.mode == PipState.OFF && start) {
+                    PipState.mode = PipState.STARTED
+                    playerControls.hideControls(hide = true)
+                    enterPictureInPictureMode(it)
+                }
+            }
+        }
+    }
+
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1560,13 +1587,12 @@ class PlayerActivity : BaseActivity() {
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = if (position != null) {
-                        position
-                    } else if ((episode.seen && !preservePos) || fromStart) {
-                        0L
-                    } else {
-                        episode.last_second_seen
-                    }
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
                     MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
                     playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
                 }
@@ -1578,32 +1604,45 @@ class PlayerActivity : BaseActivity() {
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
             if (it.videoUrl?.startsWith("magnet") == true || it.videoUrl?.endsWith(".torrent") == true) {
-                val videoUrl: String = if (it.videoUrl!!.contains("&tr=")) {
-                    val mergedTrackerList = TorrentServerUtils.getTrackerList(it.videoUrl)
-                    "${it.videoUrl!!
-                        .substringBefore("&tr=")}$mergedTrackerList&index=${it.videoUrl!!.substringAfter("&index=")}"
-                } else {
-                    val trackerList = TorrentServerUtils.getTrackerList()
-                    "${it.videoUrl}&tr=$trackerList"
-                }
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    val currentTorrent = TorrentServerApi.addTorrent(videoUrl, it.quality, "", "", false)
-                    if (it.videoUrl!!.contains("index=")) {
-                        val index = it.videoUrl?.substringAfter("index=")?.toInt() ?: 1
-                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
-                        MPVLib.command(arrayOf("loadfile", torrentUrl))
-                    } else {
-                        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, 1)
-                        MPVLib.command(arrayOf("loadfile", torrentUrl))
-                    }
+                    TorrentServerUtils.setTrackersList()
+                    torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
             }
         }
         refreshUi()
+    }
+
+    private fun torrentLinkHandler(videoUrl: String, quality: String) {
+        var index = 0
+
+        // check if link is from localSource
+        if (videoUrl.startsWith("content://")) {
+            val videoInputStream = applicationContext.contentResolver.openInputStream(Uri.parse(videoUrl))
+            val torrent = TorrentServerApi.uploadTorrent(videoInputStream!!, quality, "", "", false)
+            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(torrent, 0)
+            MPVLib.command(arrayOf("loadfile", torrentUrl))
+            return
+        }
+
+        // check if link is from magnet, in that check if index is present
+        if (videoUrl.startsWith("magnet")) {
+            if (videoUrl.contains("index=")) {
+                index = try {
+                    videoUrl.substringAfter("index=").toInt()
+                } catch (e: NumberFormatException) {
+                    0
+                }
+            }
+        }
+
+        val currentTorrent = TorrentServerApi.addTorrent(videoUrl, quality, "", "", false)
+        val videoTorrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        MPVLib.command(arrayOf("loadfile", videoTorrentUrl))
     }
 
     private fun parseVideoUrl(videoUrl: String?): String? {
@@ -1701,7 +1740,7 @@ class PlayerActivity : BaseActivity() {
             currentVideoList?.getOrNull(streams.quality.index)
                 ?.subtitleTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName)
+                        it.lang.contains(localLangName, true)
                     }
                     val requestedLanguage = if (langIndex == -1) 0 else langIndex
                     tracks.getOrNull(requestedLanguage)?.let { sub ->
@@ -1922,6 +1961,7 @@ class PlayerActivity : BaseActivity() {
                     setAudioFocus(value)
                     updatePlaybackStatus(value)
                     updatePlaybackState(pause = true)
+                    refreshUi()
                 }
             }
             "eof-reached" -> endFile(value)

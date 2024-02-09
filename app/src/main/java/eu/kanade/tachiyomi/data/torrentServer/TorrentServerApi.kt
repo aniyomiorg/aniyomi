@@ -9,7 +9,9 @@ import eu.kanade.tachiyomi.network.POST
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.jsoup.Jsoup
 import uy.kohesive.injekt.injectLazy
+import java.io.InputStream
 
 object TorrentServerApi {
     private val network: NetworkHelper by injectLazy()
@@ -80,5 +82,18 @@ object TorrentServerApi {
                 POST("$hostUrl/torrents", body = req.toRequestBody("application/json".toMediaTypeOrNull())),
             ).execute()
         return Json.decodeFromString<List<Torrent>>(resp.body.string())
+    }
+
+    fun uploadTorrent(file: InputStream, title: String, poster: String, data: String, save: Boolean): Torrent {
+        val resp = Jsoup.connect("$hostUrl/torrent/upload")
+            .data("title", title)
+            .data("poster", poster)
+            .data("data", data)
+            .data("save", save.toString())
+            .data("file1", "filename", file)
+            .ignoreContentType(true)
+            .ignoreHttpErrors(true)
+            .post()
+        return Json.decodeFromString(Torrent.serializer(), resp.body().text())
     }
 }

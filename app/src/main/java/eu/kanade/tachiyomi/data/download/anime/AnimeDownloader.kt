@@ -19,6 +19,9 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -529,6 +532,24 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
+    private fun isTor(video: Video): Boolean {
+        if (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true) {
+            launchIO {
+                TorrentServerService.start()
+                TorrentServerService.wait(10)
+                TorrentServerUtils.setTrackersList()
+                val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+                var index = 0
+                if (video.videoUrl!!.contains("index=")) {
+                    index = video.videoUrl?.substringAfter("index=")?.toInt() ?: 0
+                }
+                val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+                video.videoUrl = torrentUrl
+            }
+        }
+        return video.videoUrl?.toHttpUrl()?.encodedPath?.contains(TorrentServerUtils.hostUrl) ?: false
+    }
+
     private suspend fun ffmpegDownload(
         video: Video,
         download: AnimeDownload,
@@ -813,6 +834,9 @@ class AnimeDownloader(
             delay(1000) // This is a pause check delay, adjust the timing as needed.
         }
         when {
+            isTor(video) -> {
+                return ffmpegDownload(video, download, tmpDir, filename)
+            }
             isHls(video) || isMpd(video) -> {
                 return ffmpegDownload(video, download, tmpDir, filename)
             }
