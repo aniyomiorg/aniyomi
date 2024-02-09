@@ -73,7 +73,7 @@ jobs:
         
       - name: Push changes
         if: steps.filter.outputs.gofiles == 'true'
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@akidev
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
