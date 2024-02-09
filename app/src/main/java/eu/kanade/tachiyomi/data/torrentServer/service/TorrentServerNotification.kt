@@ -23,7 +23,7 @@ class TorrentServerNotification : Service() {
         ) {
             setContentTitle(stringResource(MR.strings.app_name))
             setContentText(stringResource(MR.strings.torrentserver_isrunning))
-            setSmallIcon(R.drawable.ic_sua)
+            setSmallIcon(R.drawable.ic_ani)
             setOngoing(true)
             val exitPendingIntent =
                 PendingIntent.getService(
