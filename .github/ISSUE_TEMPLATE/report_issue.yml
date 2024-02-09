@@ -52,7 +52,7 @@ body:
       label: Animetail version
       description: You can find your Animetail version in **More → About**.
       placeholder: |
-        Example: "0.3"
+        Example: "0.3.2"
     validations:
       required: true
 
