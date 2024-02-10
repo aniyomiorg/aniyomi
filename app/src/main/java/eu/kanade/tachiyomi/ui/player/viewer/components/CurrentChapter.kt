@@ -59,8 +59,8 @@ class CurrentChapter(
         view.setComposeContent {
             CurrentChapterComposable(
                 chapter = chapter,
+                onClick = onClick,
                 modifier = Modifier
-                    .clickable { onClick() }
                     .padding(end = MaterialTheme.padding.large)
                     .wrapContentSize(Alignment.CenterStart),
             )
@@ -70,6 +70,7 @@ class CurrentChapter(
     @Composable
     private fun CurrentChapterComposable(
         chapter: Chapter,
+        onClick: () -> Unit,
         modifier: Modifier = Modifier,
     ) {
         Box(
@@ -93,7 +94,7 @@ class CurrentChapter(
                 },
                 label = "Chapter",
             ) { currentChapter ->
-                Row {
+                Row(modifier = Modifier.clickable { onClick() }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_video_chapter_20dp),
                         contentDescription = null,
