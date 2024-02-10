@@ -1118,8 +1118,9 @@
     <string name="pref_pip_replace_with_previous">将快进 10 秒选项替换为上一集</string>
     <string name="pref_update_anime_release_grace_period">预期动画播出截止时间</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
-    <string name="chapter_dialog_header">为键盘映射配置编辑 MPV 输入文档</string>
+    <string name="chapter_dialog_header"></string>
     <string name="pref_mpv_input">为键盘映射配置编辑 MPV 输入文档</string>
     <string name="pref_gpu_next_title">开启 gpu-next</string>
     <string name="pref_gpu_next_subtitle">一种新的视频后端渲染方式</string>
+    <string name="player_aniskip_mixedOp">跳过含混合故事情节的开头</string>
 </resources>
