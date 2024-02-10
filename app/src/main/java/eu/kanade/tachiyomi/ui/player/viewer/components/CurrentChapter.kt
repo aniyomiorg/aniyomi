@@ -55,7 +55,7 @@ class CurrentChapter(
         if (this.chapters.isEmpty()) {
             return
         }
-        val chapter = this.chapters.last { it.time <= (value ?: 0F) }
+        val chapter = this.chapters.last { it.time <= (value ?: 0F).coerceAtLeast(0F) }
         view.setComposeContent {
             CurrentChapterComposable(
                 chapter = chapter,
