@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,7 +44,7 @@ fun PlayerSettingsSheet(
         )
     }
     var statisticsPage by remember {
-        mutableStateOf(
+        mutableIntStateOf(
             screenModel.preferences.playerStatisticsPage().get(),
         )
     }
@@ -71,7 +74,9 @@ fun PlayerSettingsSheet(
         onDismissRequest = onDismissRequest,
     ) {
         Column(
-            modifier = Modifier.padding(MaterialTheme.padding.medium),
+            modifier = Modifier
+                .padding(MaterialTheme.padding.medium)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
             Text(
@@ -96,9 +101,9 @@ fun PlayerSettingsSheet(
             //  from 'SettingsItems.kt'
 
             Column(
-                modifier = Modifier.fillMaxWidth().padding(
-                    horizontal = MaterialTheme.padding.medium,
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.padding.medium),
             ) {
                 Text(
                     text = stringResource(MR.strings.player_hwdec_mode),
@@ -121,9 +126,9 @@ fun PlayerSettingsSheet(
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth().padding(
-                    horizontal = MaterialTheme.padding.medium,
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.padding.medium),
             ) {
                 Text(
                     text = stringResource(MR.strings.toggle_player_statistics_page),
