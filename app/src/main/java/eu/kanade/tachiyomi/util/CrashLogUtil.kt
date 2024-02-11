@@ -50,7 +50,7 @@ class CrashLogUtil(
             Device model: ${Build.MODEL}
             WebView: ${WebViewUtil.getVersion(context)}
             MPVLib version: ${MainActivity.mpvVersions.mpvCommit} (${MainActivity.mpvVersions.buildDate})
-            libPlacebo version: ${MainActivity.mpvVersions.libPlacebo}
+            Libplacebo version: ${MainActivity.mpvVersions.libPlacebo}
             FFmpeg version: ${MainActivity.mpvVersions.ffmpeg}
         """.trimIndent()
     }
