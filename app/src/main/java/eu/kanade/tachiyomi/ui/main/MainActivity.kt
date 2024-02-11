@@ -625,7 +625,7 @@ class MainActivity : BaseActivity() {
                 if (prefix != "cplayer") return
 
                 if (level == MPVLib.mpvLogLevel.MPV_LOG_LEVEL_V) {
-                    with (text) {
+                    with(text) {
                         if (recordMPVLog) {
                             when {
                                 contains("Copyright ©") -> mpvVersions.mpvCommit = this
