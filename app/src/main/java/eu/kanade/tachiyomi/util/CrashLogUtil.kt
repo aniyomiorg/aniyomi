@@ -5,6 +5,7 @@ import android.os.Build
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -48,6 +49,9 @@ class CrashLogUtil(
             Device name: ${Build.DEVICE} (${Build.PRODUCT})
             Device model: ${Build.MODEL}
             WebView: ${WebViewUtil.getVersion(context)}
+            MPVLib version: ${MainActivity.mpvVersions.mpvCommit} (${MainActivity.mpvVersions.buildDate})
+            Libplacebo version: ${MainActivity.mpvVersions.libPlacebo}
+            FFmpeg version: ${MainActivity.mpvVersions.ffmpeg}
         """.trimIndent()
     }
 

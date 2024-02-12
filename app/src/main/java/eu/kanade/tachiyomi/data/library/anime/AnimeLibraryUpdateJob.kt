@@ -294,7 +294,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
                                             is NoEpisodesException -> context.stringResource(
-                                                MR.strings.no_chapters_error,
+                                                MR.strings.no_episodes_error,
                                             )
                                             // failedUpdates will already have the source, don't need to copy it into the message
                                             is AnimeSourceNotInstalledException -> context.stringResource(
