@@ -148,7 +148,7 @@ object SettingsDataScreen : SearchableSettings {
                 try {
                     pickStorageLocation.launch(null)
                 } catch (e: ActivityNotFoundException) {
-                    context.stringResource(MR.strings.file_picker_error)
+                    context.toast(MR.strings.file_picker_error)
                 }
             },
         )

@@ -20,6 +20,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.appearance.AppLanguageScreen
 import eu.kanade.presentation.more.settings.widget.AppThemeModePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.core.i18n.stringResource
@@ -124,7 +125,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     onValueChanged = {
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
@@ -135,7 +136,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     onValueChanged = {
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
