@@ -1036,4 +1036,8 @@
     <string name="action_hide">Amaga</string>
     <string name="pref_start_screen">Pantalla d’inici</string>
     <string name="pref_media_control_chapter_seeking">Cerca capítols amb els controls multimèdia</string>
+    <string name="go_to_next_chapter">Seguent capítol</string>
+    <string name="go_to_previous_chapter">Capítol anterior</string>
+    <string name="go_to_after_opening">Saltar opening</string>
+    <string name="pref_media_control_chapter_seeking_summary">Quan està activat, al fer servir Seguent, apareixerà el botó de saltar la introducció si no es troba cap capítol</string>
 </resources>
