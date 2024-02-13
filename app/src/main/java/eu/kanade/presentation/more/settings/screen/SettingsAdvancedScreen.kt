@@ -119,7 +119,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         title = stringResource(MR.strings.pref_verbose_logging),
                         subtitle = stringResource(MR.strings.pref_verbose_logging_summary),
                         onValueChanged = {
-                            context.stringResource(MR.strings.requires_app_restart)
+                            context.toast(MR.strings.requires_app_restart)
                             true
                         },
                     ),
@@ -184,12 +184,10 @@ object SettingsAdvancedScreen : SearchableSettings {
                                 }
                                 context.startActivity(intent)
                             } catch (e: ActivityNotFoundException) {
-                                context.toast(
-                                    MR.strings.battery_optimization_setting_activity_not_found,
-                                )
+                                context.toast(MR.strings.battery_optimization_setting_activity_not_found)
                             }
                         } else {
-                            context.stringResource(MR.strings.battery_optimization_disabled)
+                            context.toast(MR.strings.battery_optimization_disabled)
                         }
                     },
                 ),
@@ -216,7 +214,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     onClick = {
                         Injekt.get<MangaDownloadCache>().invalidateCache()
                         Injekt.get<AnimeDownloadCache>().invalidateCache()
-                        context.stringResource(MR.strings.download_cache_invalidated)
+                        context.toast(MR.strings.download_cache_invalidated)
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -250,7 +248,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     title = stringResource(MR.strings.pref_clear_cookies),
                     onClick = {
                         networkHelper.cookieJar.removeAll()
-                        context.stringResource(MR.strings.cookies_cleared)
+                        context.toast(MR.strings.cookies_cleared)
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -266,10 +264,10 @@ object SettingsAdvancedScreen : SearchableSettings {
                             }
                             WebStorage.getInstance().deleteAllData()
                             context.applicationInfo?.dataDir?.let { File("$it/app_webview/").deleteRecursively() }
-                            context.stringResource(MR.strings.webview_data_deleted)
+                            context.toast(MR.strings.webview_data_deleted)
                         } catch (e: Throwable) {
                             logcat(LogPriority.ERROR, e)
-                            context.stringResource(MR.strings.cache_delete_error)
+                            context.toast(MR.strings.cache_delete_error)
                         }
                     },
                 ),
@@ -293,7 +291,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         PREF_DOH_LIBREDNS to "LibreDNS",
                     ),
                     onValueChanged = {
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
@@ -305,7 +303,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                             // OkHttp checks for valid values internally
                             Headers.Builder().add("User-Agent", it)
                         } catch (_: IllegalArgumentException) {
-                            context.stringResource(MR.strings.error_user_agent_string_invalid)
+                            context.toast(MR.strings.error_user_agent_string_invalid)
                             return@EditTextPreference false
                         }
                         true
@@ -316,7 +314,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     enabled = remember(userAgent) { userAgent != userAgentPref.defaultValue() },
                     onClick = {
                         userAgentPref.delete()
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                     },
                 ),
             ),
