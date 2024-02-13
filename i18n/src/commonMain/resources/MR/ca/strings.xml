@@ -1030,8 +1030,8 @@
     <string name="pref_download_slots">Màxim de baixades</string>
     <string name="label_category">Categoria</string>
     <string name="label_all">Tot</string>
-    <string name="label_recent_anime_updates">Actualitzacions d\'anime</string>
-    <string name="anime_interval_expected_update">Es prediu que el seguent capítol sortirà en aproximadament %1$s, comprovant cada %2$s.</string>
-    <string name="download_notifier_download_finish">Descàrrega completada</string>
-    <string name="action_hide">Amagar</string>
+    <string name="label_recent_anime_updates">Actualitzacions d’anime</string>
+    <string name="anime_interval_expected_update">Es preveu que hi haurà nous capítols d’aquí a aproximadament %1$s, es comprova cada %2$s.</string>
+    <string name="download_notifier_download_finish">Baixada completada</string>
+    <string name="action_hide">Amaga</string>
 </resources>
