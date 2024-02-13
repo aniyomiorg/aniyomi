@@ -1022,4 +1022,10 @@
     <string name="action_filter_started">Començat</string>
     <string name="confirm_exit">Prem de nou per sortir</string>
     <string name="theme_doom">Doom</string>
+    <string name="local_source_badge">Local</string>
+    <string name="action_open_repo">Repositori de codi obert</string>
+    <string name="pref_preserve_reading_position">Preservar la posició de lectura en el capítols llegits</string>
+    <string name="pref_create_folder_per_manga">Guardar les pàgines en carpetes separades</string>
+    <string name="pref_create_folder_per_manga_summary">Crea carpetes segons el títol de les entrades</string>
+    <string name="pref_download_slots">Descàrregues màximes</string>
 </resources>
