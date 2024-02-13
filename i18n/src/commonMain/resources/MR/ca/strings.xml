@@ -1040,7 +1040,7 @@
     <string name="go_to_previous_chapter">Capítol anterior</string>
     <string name="go_to_after_opening">S’ha saltat l’opening</string>
     <string name="pref_media_control_chapter_seeking_summary">Quan està activat, en fer servir Següent, apareixerà el botó de saltar la introducció si no es troba cap capítol</string>
-    <string name="pref_pip_replace_with_previous">Intercanvia l\'opció de Saltar 10 segons amb l\'opció Capítol anterior</string>
+    <string name="pref_pip_replace_with_previous">Substitueix l’opció de saltar 10 segons amb la de capítol anterior</string>
     <string name="pref_mpv_input">Edita el fitxer d\'entrada MPV per a la configuració de mapes del teclat</string>
     <string name="pref_reset_mpv_conf">Restableix el fitxer de configuració MPV</string>
     <string name="data_saver_image_format">Comprimeix a Jpeg</string>
