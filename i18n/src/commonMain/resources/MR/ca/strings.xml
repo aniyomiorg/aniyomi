@@ -1028,4 +1028,10 @@
     <string name="pref_create_folder_per_manga">Guardar les pàgines en carpetes separades</string>
     <string name="pref_create_folder_per_manga_summary">Crea carpetes segons el títol de les entrades</string>
     <string name="pref_download_slots">Descàrregues màximes</string>
+    <string name="label_category">Categoria</string>
+    <string name="label_all">Tot</string>
+    <string name="label_recent_anime_updates">Actualitzacions d\'anime</string>
+    <string name="anime_interval_expected_update">Es prediu que el seguent capítol sortirà en aproximadament %1$s, comprovant cada %2$s.</string>
+    <string name="download_notifier_download_finish">Descàrrega completada</string>
+    <string name="action_hide">Amagar</string>
 </resources>
