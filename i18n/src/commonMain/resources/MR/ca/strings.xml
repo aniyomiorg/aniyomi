@@ -1020,4 +1020,6 @@
     <string name="theme_sapphire">Safir</string>
     <string name="theme_matrix">Matrix</string>
     <string name="action_filter_started">Començat</string>
+    <string name="confirm_exit">Prem de nou per sortir</string>
+    <string name="theme_doom">Doom</string>
 </resources>
