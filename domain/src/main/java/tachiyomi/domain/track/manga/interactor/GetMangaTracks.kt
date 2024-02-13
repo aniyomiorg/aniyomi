@@ -19,6 +19,27 @@ class GetMangaTracks(
         }
     }
 
+    // SY -->
+    suspend fun await(): List<MangaTrack> {
+        return try {
+            trackRepository.getMangaTracks()
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            emptyList()
+        }
+    }
+
+    suspend fun await(mangaIds: List<Long>): Map<Long, List<MangaTrack>> {
+        return try {
+            trackRepository.getTracksByMangaIds(mangaIds)
+                .groupBy { it.mangaId }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            emptyMap()
+        }
+    }
+    // SY <--
+
     suspend fun await(mangaId: Long): List<MangaTrack> {
         return try {
             trackRepository.getTracksByMangaId(mangaId)

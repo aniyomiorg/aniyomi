@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Generic strings -->
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -9,7 +8,7 @@
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
 
-    <string name="app_name" translatable="false">Aniyomi</string>
+    <string name="app_name" translatable="false">Animetail</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
     <string name="manga">Manga</string>
@@ -307,7 +306,7 @@
     <string name="information_empty_repos">You have no repos set.</string>
     <string name="action_add_repo">Add repo</string>
     <string name="label_add_repo_input">Repo URL</string>
-    <string name="action_add_repo_message">Add additional repos to Aniyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="action_add_repo_message">Add additional repos to Kuukiyomi. This should be a URL that ends with \"index.min.json\".</string>
     <string name="error_repo_exists">This repo already exists!</string>
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
@@ -818,7 +817,7 @@
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
-    <string name="unlock_app_title">Unlock Aniyomi</string>
+    <string name="unlock_app_title">Unlock Kuukiyomi</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_global_manga_search">Global Manga Search</string>
     <string name="action_global_anime_search">Global Anime Search</string>
@@ -1008,7 +1007,7 @@
     <string name="pref_debanding_gpu">GPU</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Kuukiyomi. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
@@ -1128,7 +1127,7 @@
     <string name="unseen">Unseen</string>
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
-    <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
+    <string name="onboarding_storage_action_create_folder">Create default Kuukiyomi folder</string>
     <string name="multi_thread_download">Multi-threaded downloading for anime</string>
     <string name="multi_thread_download_summary">Enable downloading anime using multiple threads</string>
     <string name="multi_thread_download_threads_number">Thread count</string>
