@@ -298,10 +298,10 @@
     <string name="theme_light">Clar</string>
     <string name="theme_dark">Fosc</string>
     <string name="theme_system">Sistema</string>
-    <string name="pref_manage_notifications">Gestiona les notificacions</string>
-    <string name="pref_category_security">Seguretat i privadesa</string>
-    <string name="lock_with_biometrics">Requereix desblocatge</string>
-    <string name="lock_when_idle">Bloca per inactivitat</string>
+    <string name="pref_manage_notifications">Gestionar les notificacions</string>
+    <string name="pref_category_security">Seguretat i privaçitat</string>
+    <string name="lock_with_biometrics">Requereix desbloquejar</string>
+    <string name="lock_when_idle">Bloquejar per inactivitat</string>
     <string name="lock_always">Sempre</string>
     <string name="lock_never">Mai</string>
     <string name="secure_screen">Mode discret</string>
@@ -310,12 +310,12 @@
     <string name="information_cloudflare_bypass_failure">No s’ha pogut evitar el Cloudflare</string>
     <string name="information_webview_outdated">Actualitzeu l’aplicació WebView per a tenir més bona compatibilitat</string>
     <string name="channel_new_chapters">Novetats de capítols</string>
-    <string name="secure_screen_summary">El mode discret amaga el contingut de l’aplicació en canviar entre aplicacions i bloca les captures de pantalla</string>
+    <string name="secure_screen_summary">El mode discret amaga el contingut de l’aplicació en canviar entre aplicacions i bloqueja les captures de pantalla</string>
     <string name="pref_category_display">Visualització</string>
     <string name="notification_chapters_single">Capítol %1$s</string>
     <string name="notification_chapters_single_and_more">Capítol %1$s i %2$d més</string>
     <string name="notification_chapters_multiple">Capítols %1$s</string>
-    <string name="hide_notification_content">Amaga el contingut de les notificacions</string>
+    <string name="hide_notification_content">Amagar el contingut de les notificacions</string>
     <string name="pref_disable_battery_optimization">Desactiva l’optimització de la bateria</string>
     <string name="pref_disable_battery_optimization_summary">Fa que funcionin millor les actualitzacions de la biblioteca en segon pla i les còpies de seguretat</string>
     <string name="battery_optimization_disabled">L’optimització de la bateria ja està desactivada</string>
@@ -422,7 +422,7 @@
     <string name="migration_help_guide">Guia de migració de fonts</string>
     <string name="pref_category_nsfw_content">Fonts NSFW (+18)</string>
     <string name="file_picker_error">No s’ha trobat cap aplicació de selecció de fitxers</string>
-    <string name="pref_show_nsfw_source">Mostra a la llista de fonts i extensions</string>
+    <string name="pref_show_nsfw_source">Mostrar a la llista de fonts i extensions</string>
     <string name="myanimelist_relogin">Torneu a iniciar la sessió a MAL</string>
     <string name="track_finished_reading_date">Data de finalització</string>
     <string name="track_started_reading_date">Data d’inici</string>
@@ -1013,4 +1013,11 @@
     <string name="local_manga_source">Manga en font local</string>
     <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
     <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
+    <string name="action_sort_airing_time">Temps d\'emissió</string>
+    <string name="action_reorganize_by">Reordenar</string>
+    <string name="pref_general_summary">Idioma de l\'aplicació, notificacions</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Safir</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="action_filter_started">Començat</string>
 </resources>
