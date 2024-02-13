@@ -422,7 +422,7 @@
     <string name="migration_help_guide">Guia de migració de fonts</string>
     <string name="pref_category_nsfw_content">Fonts NSFW (+18)</string>
     <string name="file_picker_error">No s’ha trobat cap aplicació de selecció de fitxers</string>
-    <string name="pref_show_nsfw_source">Mostrar a la llista de fonts i extensions</string>
+    <string name="pref_show_nsfw_source">Mostra a la llista de fonts i extensions</string>
     <string name="myanimelist_relogin">Torneu a iniciar la sessió a MAL</string>
     <string name="track_finished_reading_date">Data de finalització</string>
     <string name="track_started_reading_date">Data d’inici</string>
