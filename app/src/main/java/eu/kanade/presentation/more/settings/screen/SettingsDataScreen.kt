@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -42,6 +43,7 @@ import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.backup.create.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.ui.storage.StorageTab
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
@@ -249,6 +251,7 @@ object SettingsDataScreen : SearchableSettings {
     @Composable
     private fun getDataGroup(): Preference.PreferenceGroup {
         val context = LocalContext.current
+        val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
@@ -259,6 +262,7 @@ object SettingsDataScreen : SearchableSettings {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_storage_usage),
             preferenceItems = persistentListOf(
+
                 Preference.PreferenceItem.CustomPreference(
                     title = stringResource(MR.strings.pref_storage_usage),
                 ) {
@@ -270,6 +274,14 @@ object SettingsDataScreen : SearchableSettings {
                         },
                     )
                 },
+
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(MR.strings.label_storage),
+                    icon = Icons.Outlined.Storage,
+                    onClick = {
+                        navigator.push(StorageTab())
+                    },
+                ),
 
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_clear_chapter_cache),
