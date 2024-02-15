@@ -4,7 +4,7 @@
 
 Animetail
 Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 6.0 and above.
-This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
+This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY, Kuukiyomi but also other forks
 
 ## Features
 
@@ -42,7 +42,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/dark25/animetail2/issues).**
 2. Also take a look at issues opened on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
-3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
+3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph)
 
 </details>
 
@@ -56,9 +56,6 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
 
-DO: https://github.com/LuftVerbot/kuukiyomi/issues/24 https://github.com/LuftVerbot/kuukiyomi/issues/71
-
-DON'T: https://github.com/LuftVerbot/kuukiyomi/issues/75
 
 </details>
 
