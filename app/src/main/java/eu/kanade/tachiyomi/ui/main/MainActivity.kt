@@ -141,7 +141,6 @@ class MainActivity : BaseActivity() {
 
     init {
         registerSecureActivity(this)
-        while (recordMPVLog) { /* Empty loop */ }
         mpvVersions.trim()
         MPVLib.removeLogObserver(recordMPVVersion)
         MPVLib.destroy()
