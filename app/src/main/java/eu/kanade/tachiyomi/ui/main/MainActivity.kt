@@ -99,6 +99,10 @@ import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -613,26 +617,38 @@ class MainActivity : BaseActivity() {
         internal val mpvVersions = MPVVersions()
 
         private var recordMPVLog = true
+    }
 
-        class RecordMPVVersion(context: Context) : MPVLib.LogObserver {
-            init {
-                MPVLib.create(context, "v")
-                MPVLib.addLogObserver(this@RecordMPVVersion)
-                MPVLib.init()
-            }
+    fun onLoggingComplete() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            mpvVersions.trim()
+            MPVLib.removeLogObserver(recordMPVVersion)
+            MPVLib.destroy()
+            ready = true
+        }
+    }
 
-            override fun logMessage(prefix: String, level: Int, text: String) {
-                if (prefix != "cplayer") return
+    inner class RecordMPVVersion(context: Context) : MPVLib.LogObserver {
+        init {
+            MPVLib.create(context, "v")
+            MPVLib.addLogObserver(this)
+            MPVLib.init()
+        }
 
-                if (level == MPVLib.mpvLogLevel.MPV_LOG_LEVEL_V) {
-                    with(text) {
-                        if (recordMPVLog) {
-                            when {
-                                contains("Copyright ©") -> mpvVersions.mpvCommit = this
-                                contains("built on") -> mpvVersions.buildDate = this
-                                contains("libplacebo version:") -> mpvVersions.libPlacebo = this
-                                contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
-                                else -> recordMPVLog = false
+        override fun logMessage(prefix: String, level: Int, text: String) {
+            if (prefix != "cplayer") return
+
+            if (level == MPVLib.mpvLogLevel.MPV_LOG_LEVEL_V) {
+                with(text) {
+                    if (recordMPVLog) {
+                        when {
+                            contains("Copyright ©") -> mpvVersions.mpvCommit = this
+                            contains("built on") -> mpvVersions.buildDate = this
+                            contains("libplacebo version:") -> mpvVersions.libPlacebo = this
+                            contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
+                            else -> {
+                                recordMPVLog = false
+                                this@MainActivity.onLoggingComplete() // Direct call to MainActivity's method
                             }
                         }
                     }
