@@ -141,6 +141,7 @@ class MainActivity : BaseActivity() {
 
     init {
         registerSecureActivity(this)
+        while (recordMPVLog) { /* Empty loop */ }
         mpvVersions.trim()
         MPVLib.removeLogObserver(recordMPVVersion)
         MPVLib.destroy()
@@ -627,7 +628,7 @@ class MainActivity : BaseActivity() {
                     with(text) {
                         if (recordMPVLog) {
                             when {
-                                contains("Copyright ©") -> mpvVersions.mpvCommit = this
+                                contains("Copyright") -> mpvVersions.mpvCommit = this
                                 contains("built on") -> mpvVersions.buildDate = this
                                 contains("libplacebo version:") -> mpvVersions.libPlacebo = this
                                 contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
