@@ -141,10 +141,11 @@ class MainActivity : BaseActivity() {
 
     init {
         registerSecureActivity(this)
-        while (recordMPVLog) { /* Empty loop */ }
-        mpvVersions.trim()
-        MPVLib.removeLogObserver(recordMPVVersion)
-        MPVLib.destroy()
+        if (!recordMPVLog) {
+            mpvVersions.trim()
+            MPVLib.removeLogObserver(recordMPVVersion)
+            MPVLib.destroy()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
