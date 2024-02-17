@@ -141,11 +141,10 @@ class MainActivity : BaseActivity() {
 
     init {
         registerSecureActivity(this)
-        if (!recordMPVLog) {
-            mpvVersions.trim()
-            MPVLib.removeLogObserver(recordMPVVersion)
-            MPVLib.destroy()
-        }
+        while (recordMPVLog) { /* Empty loop */ }
+        mpvVersions.trim()
+        MPVLib.removeLogObserver(recordMPVVersion)
+        MPVLib.destroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -633,7 +632,7 @@ class MainActivity : BaseActivity() {
                                 contains("built on") -> mpvVersions.buildDate = this
                                 contains("libplacebo version:") -> mpvVersions.libPlacebo = this
                                 contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
-                                else -> recordMPVLog = false
+                                else -> MPVLib.destroy() //boom
                             }
                         }
                     }
