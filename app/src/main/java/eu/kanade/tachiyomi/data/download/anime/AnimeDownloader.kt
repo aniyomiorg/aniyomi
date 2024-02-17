@@ -20,6 +20,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.network.ProgressListener
+import eu.kanade.tachiyomi.util.size
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import kotlinx.coroutines.CoroutineScope
@@ -60,7 +61,8 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Locale
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.math.min
+import okhttp3.Request
+import okio.Lock
 
 /**
  * This class is the one in charge of downloading episodes.
@@ -117,6 +119,12 @@ class AnimeDownloader(
      */
     @Volatile
     var isPaused: Boolean = false
+
+    /**
+     * Lock for pause purpose
+     */
+    @Volatile
+    var pauseLock: Lock = Lock()
 
     /**
      * Whether FFmpeg is running.
@@ -384,14 +392,6 @@ class AnimeDownloader(
             download.video!!
         }
 
-        if (download.video!!.bytesDownloaded == 0L) {
-            // Delete all temporary (unfinished) files
-            tmpDir.listFiles()
-                ?.filter { it.extension == ".tmp" }
-                ?.forEach { it.delete() }
-        }
-
-        download.downloadedImages = 0
         download.status = AnimeDownload.State.DOWNLOADING
 
         val progressJob = scope.launch {
@@ -444,23 +444,19 @@ class AnimeDownloader(
             return video
         }
 
+        // Get filename from download info
         val filename = DiskUtil.buildValidFilename(download.episode.name)
 
-        if (video.bytesDownloaded == 0L) {
-            val tmpFile = tmpDir.findFile("$filename.tmp")
-
-            // Delete temp file if it exists
-            tmpFile?.delete()
-        }
-
-        val videoFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") }
+        // Get VideoFile if existing
+        val videoFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.mp4") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
         val file = when {
             videoFile != null -> videoFile
             else -> {
+                // If videoFile is not existing then download it
                 if (preferences.useExternalDownloader().get() == download.changeDownloader) {
-                    downloadVideo(video, download, tmpDir, filename)
+                    downloadVideo(video, download, tmpDir, filename, preferences.safeDownload().get())
                 } else {
                     val betterFileName = DiskUtil.buildValidFilename(
                         "${download.anime.title} - ${download.episode.name}",
@@ -474,7 +470,6 @@ class AnimeDownloader(
         try {
             video.videoUrl = file.uri.path
             video.progress = 100
-            download.downloadedImages++
             video.status = Video.State.READY
         } catch (e: Exception) {
             video.progress = 0
@@ -492,33 +487,33 @@ class AnimeDownloader(
      * @param download the AnimeDownload.
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
+     * @param safeDownload whether to use safe download mode
      */
     private suspend fun downloadVideo(
         video: Video,
         download: AnimeDownload,
         tmpDir: UniFile,
         filename: String,
+        safeDownload: Boolean,
     ): UniFile {
         video.status = Video.State.DOWNLOAD_IMAGE
-        video.progress = 0
+
         var tries = 0
-        var forceSequential = false
 
         // Define a suspend function to encapsulate the retry logic
-        suspend fun attemptDownload(): UniFile {
+        suspend fun attemptDownload(safe: Boolean): UniFile {
             return try {
-                newDownload(video, download, tmpDir, filename, forceSequential)
+                newDownload(video, download, tmpDir, filename, safe)
             } catch (e: Exception) {
-                // If the download failed, try again in sequential mode
-                forceSequential = true
+                // If the download failed, try again in safe mode
                 if (tries >= 2) throw e
                 tries++
                 delay((2 shl (tries - 1)) * 1000L)
-                attemptDownload()
+                attemptDownload(true)
             }
         }
 
-        return attemptDownload()
+        return attemptDownload(safeDownload)
     }
 
     private fun isMpd(video: Video): Boolean {
@@ -529,6 +524,7 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
+    // ffmpeg is always on safe mode
     private suspend fun ffmpegDownload(
         video: Video,
         download: AnimeDownload,
@@ -653,57 +649,82 @@ class AnimeDownloader(
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
-    private suspend fun multiPartDownload(
+    private suspend fun newDownload(
         video: Video,
         download: AnimeDownload,
         tmpDir: UniFile,
         filename: String,
+        safeDownload: Boolean,
     ): UniFile {
-        // first we fetch the size of the video
-        val size: Long = download.source.getVideoSize(video, 3)
-        if (size == -1L) {
-            throw Exception("Could not get video size")
+
+        if (isHls(video) || isMpd(video)) {
+            return ffmpegDownload(video, download, tmpDir, filename)
         }
-        var nParts = preferences.numberOfThreads().get()
-        var partSize = size.div(nParts)
-        if (partSize < 1024) {
-            nParts = size.div(1024).toInt()
-            partSize = size.div(nParts)
+
+        var threads = preferences.numberOfThreads().get()
+
+        // always reset parts directory
+        tmpDir.findFile("${filename}_parts")?.delete()
+        val tmpPartDir = tmpDir.createDirectory("${filename}_parts")!!
+
+        // try to get tmp file
+        val tTmpFile = tmpDir.findFile("$filename.tmp")
+
+        // if safe mode than always delete tmp file and set thread number = 1
+        if (safeDownload) {
+            tTmpFile?.delete()
+            threads = 1
         }
-        if (partSize < 1024) {
-            logcat(LogPriority.WARN) {
-                "Part size is too small, falling back to sequential download"
-            }
-            return newDownload(video, download, tmpDir, filename, true)
-        }
-        val partList = mutableListOf<UniFile>()
-        val rangeList = mutableListOf<Array<Long>>()
+
+        // ensure tmp file exists
+        val tmpFile = tTmpFile ?: tmpDir.createFile("$filename.tmp")!!
+
+        val jobRequestAssociation = mutableMapOf<Job, Request>()
+        val requestList = mutableListOf<Request>()
         val partJobList = mutableListOf<Job>()
 
-        // clear the tmp dir, when pause/resume is implemented, this should be changed, we will need the old files to resume
-        tmpDir.listFiles()?.forEach { it.delete() }
-        // create the parts as start byte and end byte, when p/r we will need to check if the file exists and resume from there using existing file size
-        // a better way would be to create chunk of predefined size and use X workers to download them, but this is easier to implement
-        // if we will use the second method pause/resume will be easier to implement since we can discard the partially downloaded chunks without losing too much progress
-        for (i in 0 until nParts) {
-            val start = i * partSize
-            val end =
-                if (i == nParts - 1) {
-                    size
-                } else {
-                    (i + 1) * partSize - 1
-                }
-            rangeList.add(arrayOf(start, end))
-            val part = tmpDir.createFile("$filename.part$i.tmp")!!
-            partList.add(part)
+        // on safe mode only one range is requested
+        if (safeDownload) {
+            requestList.add(download.source.safeVideoRequest(video))
+        } else {
+            // otherwise we get all needed ranges
+
+            // first we fetch the size of the video
+            val videoSize: Long = download.source.getVideoSize(video, 3)
+            if (videoSize == -1L) {
+                throw Exception("Could not get video size")
+            }
+
+            // get remaining bytes that we have to download
+            var toDownloadSize = videoSize - download.downloadedBytes
+
+            // set partSize big at least 1024 bytes
+            val partSize = maxOf(1024, toDownloadSize.floorDiv(threads))
+
+
+            var tempStart = download.downloadedBytes
+            var tempEnd = tempStart + partSize
+            // we subdivide in parts of at least partSize bytes
+            while (toDownloadSize > 2 * partSize) {
+                requestList.add(download.source.videoRequest(video, tempStart, tempEnd))
+                toDownloadSize -= partSize
+                tempStart = tempEnd + 1
+                tempEnd = tempStart + partSize
+            }
+            requestList.add(download.source.videoRequest(video, tempStart, 0))
         }
 
-        var failed = false
-        val totalProgresses = mutableListOf<Int>()
-        totalProgresses.addAll(List(nParts) { 0 })
+        // set throttler max bound
+        throttler.apply {
+            bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024)
+        }
 
-        for (range in rangeList) {
-            val splitWeight = (range[1] - range[0]).toFloat() / size.toFloat()
+        // set download as not failed
+        var failed = false
+
+        val progressMap = mutableMapOf<ProgressListener, Array<Long>>()
+
+        for (request in requestList) {
             // create a listener for each part, so we can update the progress generally
             val listener =
                 object : ProgressListener {
@@ -712,41 +733,56 @@ class AnimeDownloader(
                         contentLength: Long,
                         done: Boolean,
                     ) {
-                        val progress = (((bytesRead * 90 / (range[1] - range[0])) * splitWeight).toInt())
-                        totalProgresses[rangeList.indexOf(range)] = progress
-                        video.progress = min(totalProgresses.reduce(Int::plus), 90)
+                        //TODO maybe there is a more efficient way to compute progress, maybe increasing a total number of bytes read instead of summing all the parts each time
+                        synchronized(
+                            progressMap,
+                            block = {
+                                // updates values of the part
+                                if (!done) {
+                                    progressMap[this] = arrayOf(bytesRead, contentLength, 0)
+                                } else {
+                                    progressMap[this] = arrayOf(contentLength, contentLength, 1)
+                                }
+
+                                // compute totalBytesRead, totalContentLenght and totalDone
+                                val vals = progressMap.values.reduce(
+                                    fun(prog1, prog2): Array<Long> {
+                                        return arrayOf(
+                                            prog1[0] + prog2[0],
+                                            prog1[1] + prog2[1],
+                                            when {
+                                                (prog1[2] + prog2[2] == 2L) -> 1L
+                                                else -> 0L
+                                            },
+                                        )
+                                    },
+                                )
+
+                                // update value on video
+                                video.update(vals[0], vals[1], vals[2] == 1L)
+                            },
+                        )
                     }
                 }
-            throttler.apply {
-                bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024)
-            }
-            partJobList.add(
+            val newJob =
                 scope.launchIO {
                     try {
                         if (failed) throw Exception("Download failed")
-                        // I don't know if this is "pausable", I suspect that will only write the bytes to the file when the download of the segment is complete
-                        val response = download.source.getVideoChunk(video, range[0], range[1], listener)
-                        val file =
-                            tmpDir.findFile("$filename.part${rangeList.indexOf(range)}.tmp")
-                                ?: tmpDir.createFile("$filename.part${rangeList.indexOf(range)}.tmp")!!
+                        // I don't if this is "pausable", I suspect that will only write the bytes to the file when the download of the segment is complete
+                        val response = download.source.getVideo(request, listener)
+                        val file = tmpPartDir.createFile("$filename.part${requestList.indexOf(request)}.tmp")!!
                         // try to open the file and append the bytes
                         try {
                             response.body.source().use { source ->
                                 file.openOutputStream(true).use { output ->
                                     val sink = output.sink().buffer()
                                     val buffer = ByteArray(4 * 1024)
-                                    var totalBytesRead = 0L
                                     var bytesRead: Int
                                     val throttledSource = throttler.source(source).buffer()
                                     while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
-                                        // Check if the download is paused, if so, wait
-                                        while (isPaused) {
-                                            delay(1000) // Wait for 1 second before checking again
-                                        }
                                         // Write the bytes to the file
                                         sink.write(buffer, 0, bytesRead)
                                         sink.emitCompleteSegments()
-                                        totalBytesRead += bytesRead
                                     }
                                     sink.flush()
                                     sink.close()
@@ -762,106 +798,50 @@ class AnimeDownloader(
                         failed = true
                         throw e
                     }
-                },
-            )
+                }
+            partJobList.add(newJob)
+            jobRequestAssociation[newJob] = request
         }
 
+        // scan for jobs on starting bytes order
         for (job in partJobList) {
+            // await for job to be completed (download of part has finished)
             job.join()
-        }
-        try {
-            val mergeSize = (10.toFloat() / (nParts - 1).toFloat())
-            val file0 = tmpDir.findFile("$filename.part0.tmp") ?: tmpDir.createFile("$filename.part0.tmp")!!
-            // merge all parts into file0
-            for (i in 1 until nParts) {
-                val part = tmpDir.findFile("$filename.part$i.tmp")
-                    ?: tmpDir.createFile("$filename.part$i.tmp")!!
-                part.openInputStream().use { input ->
-                    file0.openOutputStream(true).use { output ->
-                        input.copyTo(output)
-                    }
-                }
-                part.delete()
-                video.progress = 90 + ((mergeSize * i).toInt())
-            }
-            file0.renameTo("$filename.mp4")
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-            failed = true
-        }
-        if (failed) {
-            for (i in 0 until nParts) {
-                val part =
-                    tmpDir.findFile("$filename.part$i.tmp")
-                        ?: tmpDir.createFile("$filename.part$i.tmp")!!
-                part.delete()
-            }
-            throw Exception("Download failed")
-        }
-        return tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed")
-    }
 
-    private suspend fun newDownload(
-        video: Video,
-        download: AnimeDownload,
-        tmpDir: UniFile,
-        filename: String,
-        forceSequential: Boolean,
-    ): UniFile {
-        // Check if the download is paused before starting
-        while (isPaused) {
-            delay(1000) // This is a pause check delay, adjust the timing as needed.
-        }
-        when {
-            isHls(video) || isMpd(video) -> {
-                return ffmpegDownload(video, download, tmpDir, filename)
-            }
+            if (!failed) {
+                // get part file (remind that we are taking parts file in order from first to last)
+                val tmpPartFile =
+                    tmpPartDir.findFile("$filename.part${requestList.indexOf(jobRequestAssociation[job])}.tmp")!!
 
-            preferences.multithreadingDownload().get() && !forceSequential -> {
-                return multiPartDownload(video, download, tmpDir, filename)
-            }
-
-            else -> {
-                val response = download.source.getVideo(video)
-                val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
-                // Write to file with pause/resume capability
+                // copy part into general temp file
                 try {
-                    throttler.apply {
-                        bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024, 4096, 8192)
+                    val buffer = ByteArray(4 * 1024)
+                    val output = tmpFile.openOutputStream(true)
+                    val input = tmpPartFile.openInputStream()
+
+                    var readed = input.read(buffer)
+                    while (readed > 0) {
+                        output.write(buffer, 0, readed)
+                        readed = input.read(buffer)
                     }
-                    response.body.source().use { source ->
-                        file.openOutputStream(true).use { output ->
-                            val sink = output.sink().buffer()
-                            val buffer = ByteArray(4 * 1024)
-                            var totalBytesRead = 0L
-                            var bytesRead: Int
-                            val throttledSource = throttler.source(source).buffer()
-                            while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
-                                // Check if the download is paused, if so, wait
-                                while (isPaused) {
-                                    delay(1000) // Wait for 1 second before checking again
-                                }
-                                // Write the bytes to the file
-                                sink.write(buffer, 0, bytesRead)
-                                sink.emitCompleteSegments()
-                                totalBytesRead += bytesRead
-                                // Update progress here if needed
-                            }
-                            sink.flush()
-                            sink.close()
-                            throttledSource.close()
-                        }
-                    }
-                    // After download is complete, rename the file to its final name
-                    file.renameTo("$filename.mp4")
-                    return file
+
+                    output.flush()
+                    output.close()
+                    input.close()
+
+                    download.downloadedBytes = tmpFile.size()
                 } catch (e: Exception) {
-                    response.close()
-                    if (!queueState.value.equals(download)) file.delete()
-                    throw e
+                    print("ERROR") //TODO modify catch management
                 }
+            }else{
+                throw Exception("Download failed")
             }
         }
+
+        tmpPartDir.delete()
+        tmpFile.renameTo("$filename.mp4")
+
+        return tmpFile
     }
 
     /**

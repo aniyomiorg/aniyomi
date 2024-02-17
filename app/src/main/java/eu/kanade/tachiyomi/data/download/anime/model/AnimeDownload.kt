@@ -38,7 +38,7 @@ data class AnimeDownload(
 
     @Volatile
     @Transient
-    var downloadedImages: Int = 0
+    var downloadedBytes: Long = 0
 
     @Transient
     private val _statusFlow = MutableStateFlow(State.NOT_DOWNLOADED)
