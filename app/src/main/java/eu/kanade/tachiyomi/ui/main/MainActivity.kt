@@ -617,7 +617,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun onLoggingComplete() {
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launchIO {
             mpvVersions.trim()
             MPVLib.removeLogObserver(recordMPVVersion)
             MPVLib.destroy()
