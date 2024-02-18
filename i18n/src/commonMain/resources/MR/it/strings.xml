@@ -363,7 +363,7 @@
     <string name="label_data">Dati</string>
     <string name="backup_restore_missing_sources">Fonti mancanti:</string>
     <string name="invalid_backup_file_missing_manga">Il backup non contiene alcuna voce di libreria.</string>
-    <string name="invalid_backup_file">File di backup invalido</string>
+    <string name="invalid_backup_file">File di backup invalido:</string>
     <string name="pref_library_update_refresh_metadata_summary">Controlla nuove copertine e descrizioni durante l\'aggiornamento della libreria</string>
     <string name="pref_library_update_refresh_metadata">Ricarica metadati automaticamente</string>
     <string name="action_display_show_tabs">Mostra schede delle categorie</string>
@@ -967,7 +967,7 @@
     <string name="pref_waiting_time_aniskip_7">7 secondi</string>
     <string name="pref_waiting_time_aniskip_8">8 secondi</string>
     <string name="pref_waiting_time_aniskip_10">10 secondi</string>
-    <string name="player_aniskip_dontskip_toast">Salta di %d secondi</string>
+    <string name="player_aniskip_dontskip_toast">Salto fra %d secondi</string>
     <string name="player_aniskip_skip">%s saltati</string>
     <string name="notification_episodes_single">Episodio %1$s</string>
     <string name="notification_episodes_single_and_more">Episodio %1$s e altri %2$d</string>
@@ -1082,4 +1082,45 @@
     <string name="multi_thread_download">Scaricamento multi-threaded per anime</string>
     <string name="multi_thread_download_summary">Abilita lo scaricamento degli anime usando i multi-threads</string>
     <string name="multi_thread_download_threads_number_summary">Il numero dei threads usati per il download può portare al blocco del tuo IP se il numero è troppo alto , di solito 4 è un buon numero per evitare di sovraccaricare i server delle fonti.</string>
+    <string name="pref_download_slots">Numero di download massimo</string>
+    <string name="local_source_badge">Locale</string>
+    <string name="information_empty_repos">Non hai impostato alcuna repo.</string>
+    <string name="action_add_repo">Aggiungi repo</string>
+    <string name="label_add_repo_input">URL della repo</string>
+    <string name="confirm_exit">Premi di nuovo indietro per uscire</string>
+    <string name="action_filter_started">Iniziato</string>
+    <string name="action_sort_airing_time">Orario di messa in onda</string>
+    <string name="onboarding_storage_help_info">Stai aggiornato da una versione precedente e non sei sicuro su cosa selezionare? Leggi la guida sui dati di archiviazione per ulteriori informazioni.</string>
+    <string name="pref_general_summary">Lingua dell\'app, notifiche</string>
+    <string name="action_add_repo_message">Aggiungi repo addizionali ad Aniyomi. L\'URL deve terminare per \"index.min.json\".</string>
+    <string name="invalid_repo_name">URL della repo non valido</string>
+    <string name="manga_interval_expected_update">Nuovi capitoli dovrebbero essere rilasciati fra %1$s, verranno controllati ogni %2$s.</string>
+    <string name="anime_interval_expected_update">Nuovi episodi dovrebbero essere rilasciati fra %1$s, verranno controllati ogni %2$s.</string>
+    <string name="delete_repo_confirmation">Desideri eliminare la repo \"%s\"?</string>
+    <string name="action_reorganize_by">Riordina</string>
+    <string name="onboarding_storage_help_action">Guida sui dati di archiviazione</string>
+    <string name="theme_nord">Nord</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Zaffiro</string>
+    <string name="theme_doom">Doom</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="pref_library_update_smart_update">Aggiornamento intelligente</string>
+    <string name="ext_revoke_trust">Revoca attendibilità alle estensioni sconosciute</string>
+    <string name="label_extension_repos">Repo delle estensioni</string>
+    <string name="error_repo_exists">Questa repo esiste già!</string>
+    <string name="action_delete_repo">Elimina repo</string>
+    <string name="action_open_repo">Repo open source</string>
+    <string name="pref_preserve_reading_position">Ricorda l\'ultima pagina letta nei capitoli già letti</string>
+    <string name="pref_create_folder_per_manga">Salva pagine in cartelle separate</string>
+    <string name="pref_create_folder_per_manga_summary">Crea cartelle in base ai titoli dei manga</string>
+    <string name="invalid_backup_file_error">Log di errore completo:</string>
+    <string name="untrusted_extension_message">Le estensioni che si rivelano malevoli possono leggere qualsiasi credenziale di login salvata o eseguire codice arbitrario.
+\n
+\nRendendo attendibile questa estensione, accetti tutti questi rischi.</string>
+    <string name="pref_start_screen">Schermata di avvio</string>
+    <string name="manga_interval_custom_amount">Personalizza frequenza di aggiornamento:</string>
+    <string name="download_speed_limit">Limite velocità di download</string>
+    <string name="download_speed_limit_hint">Imposta a 0 per disattivare il limite di velocità.</string>
+    <string name="manga_interval_expected_update_soon">A breve</string>
+    <string name="download_notifier_download_finish">Download completato</string>
 </resources>
