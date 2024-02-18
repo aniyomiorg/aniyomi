@@ -211,7 +211,7 @@
     <string name="local_source">Fuente local</string>
     <string name="delete_downloads_for_manga">¿Quieres borrar los capítulos descargados?</string>
     <string name="manga_tracking_tab">Seguimiento</string>
-    <string name="error_category_exists">Ya existe una categoría con este nombre</string>
+    <string name="error_category_exists">Ya existe una categoría con este nombre!</string>
     <string name="snack_categories_deleted">Categorías eliminadas</string>
     <string name="picture_saved">Imagen guardada</string>
     <string name="custom_filter">Filtro personalizado</string>
@@ -742,15 +742,15 @@
     <string name="onboarding_guides_new_user">¿Es la primera vez que instalas %s? Te recomendamos leer la guía de introducción.</string>
     <string name="onboarding_action_finish">Comenzar</string>
     <string name="onboarding_storage_selection_required">Tienes que elegir una carpeta</string>
-    <string name="onboarding_heading">Te damos la bienvenida</string>
+    <string name="onboarding_heading">Bienvenido!</string>
     <string name="onboarding_guides_returning_user">¿No es la primera vez que instalas %s?</string>
     <string name="onboarding_action_skip">Saltar</string>
     <string name="onboarding_action_next">Siguiente</string>
     <string name="onboarding_description">Lo primero de todo es dejar las cosas a tu gusto. Siempre puedes volver a cambiarlas más tarde en los ajustes.</string>
     <string name="no_location_set">Todavía no has proporcionado ninguna carpeta</string>
-    <string name="onboarding_storage_info">Selecciona una carpeta donde %1$s almacenará las descargas de capítulos, copias de seguridad y otras cosas.
+    <string name="onboarding_storage_info">Seleccione una carpeta donde %1$s almacenará las descargas de capítulos, copias de seguridad y otras cosas.
 \n
-\nTe recomendamos que sea solo para %1$s.
+\nTe recomendamos usar una carpeta dedicada.
 \n
 \nCarpeta seleccionada: %2$s</string>
     <string name="onboarding_permission_install_apps">Permiso para instalar aplicaciones</string>
@@ -766,7 +766,7 @@
     <string name="invalid_backup_file_error">Descripción completa del problema:</string>
     <string name="manga_interval_expected_update">Se espera que se publiquen nuevos capítulos alrededor de %1$s, comprobando alrededor de cada %2$s.</string>
     <string name="manga_interval_custom_amount">Frecuencia de actualización personalizada:</string>
-    <string name="error_repo_exists">El repositorio ya existe</string>
+    <string name="error_repo_exists">El repositorio ya existe!</string>
     <string name="pref_library_update_smart_update">Actualizaciones inteligentes</string>
     <string name="invalid_repo_name">La dirección URL del repositorio no parece ser correcta</string>
     <string name="action_add_repo_message">Añade más repositorios a Aniyomi; la dirección URL tiene que terminar en «index.min.json».</string>
@@ -1109,4 +1109,23 @@
     <string name="multi_thread_download_summary">Habilite la descarga de anime usando subprocesos múltiples</string>
     <string name="multi_thread_download_threads_number">Número de hilos</string>
     <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="theme_doom">Doom</string>
+    <string name="confirm_exit">Presione Atrás nuevamente para salir</string>
+    <string name="theme_sapphire">Zafiro</string>
+    <string name="pref_preserve_reading_position">Conservar la posición de lectura en los capítulos leídos</string>
+    <string name="action_filter_started">Iniciado</string>
+    <string name="action_sort_airing_time">Fecha de retransmisión</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="pref_download_slots">Descargas máximas</string>
+    <string name="local_source_badge">Local</string>
+    <string name="pref_general_summary">Idioma de la aplicación, notificaciones</string>
+    <string name="action_reorganize_by">Reordenar</string>
+    <string name="anime_interval_expected_update">Se espera que haya nuevos episodios en alrededor de %1$s y se comprobará aproximadamente cada %2$s.</string>
+    <string name="pref_start_screen">Pantalla de inicio</string>
+    <string name="download_speed_limit_hint">Establezca en 0 para desactivar el límite de velocidad de descarga.</string>
+    <string name="download_speed_limit">Límite de velocidad de la descarga</string>
+    <string name="download_notifier_download_finish">Descarga finalizada</string>
+    <string name="pref_gpu_next_subtitle">Un nuevo backend de renderizado de video</string>
+    <string name="pref_gpu_next_title">Activar gpu-next</string>
 </resources>

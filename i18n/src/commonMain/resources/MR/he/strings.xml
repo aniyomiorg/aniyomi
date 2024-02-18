@@ -940,4 +940,48 @@
     <string name="label_anime_history">אנימה</string>
     <string name="notification_new_episodes">נמצאו פרקים חדשים</string>
     <string name="label_anime_updates">אנימה</string>
+    <string name="not_selected">לא נבחר</string>
+    <string name="selected">נבחר</string>
+    <string name="scanlator">קבוצה סורקת-מתרגמת</string>
+    <string name="label_data_storage">מידע ואחסון</string>
+    <string name="action_sort_category">מיין קטגוריות</string>
+    <string name="action_revert_to_default">שחזר לברירת המחדל</string>
+    <string name="sort_category_confirmation">האם ברצונך למיין את הקטגוריות בסדר אלפביתי?</string>
+    <string name="action_apply">החל</string>
+    <string name="action_move_to_bottom_all_for_series">הזז סדרה לתחתית</string>
+    <string name="onboarding_permission_install_apps_description">בכדי להתקין הרחבות.</string>
+    <string name="onboarding_permission_ignore_battery_opts">שימוש בסוללה ברקע</string>
+    <string name="onboarding_guides_returning_user">התקנת שוב את %s?</string>
+    <string name="pref_relative_format">חותמות זמן יחסיות</string>
+    <string name="pref_general_summary">שפת האפליקציה, התרעות</string>
+    <string name="action_menu_overflow_description">עוד אפשרויות</string>
+    <string name="action_bar_up_description">נווט למעלה</string>
+    <string name="confirm_exit">לחץ \"חזור\" שוב על מנת לצאת</string>
+    <string name="action_filter_started">התחלתי</string>
+    <string name="action_sort_airing_time">זמן שידור</string>
+    <string name="onboarding_heading">ברוכים הבאים!</string>
+    <string name="onboarding_description">בוא נכוון כמה דברים קודם. אתה תמיד יכול לשנות אותם בהגדרות יותר מאוחר.</string>
+    <string name="onboarding_action_next">הבא</string>
+    <string name="onboarding_action_finish">להתחיל</string>
+    <string name="onboarding_action_skip">דלג</string>
+    <string name="onboarding_storage_selection_required">תיקייה חייבת להבחר</string>
+    <string name="onboarding_storage_action_select">בחר תיקייה</string>
+    <string name="onboarding_storage_info">בחר תיקייה שבה %1$s יאחסן את הפרקים שהורדת, הגיבויים, ועוד.
+\n
+\nתיקייה יעודית מומלצת.
+\n
+\nהתיקייה שנבחרה:%2$s</string>
+    <string name="pref_onboarding_guide">מדריך היכרות</string>
+    <string name="onboarding_storage_help_info">עדכנת מגרסה ישנה יותר ואתה לא בטוח במה לבחור? תפנה למדריך האחסון לעוד מידע.</string>
+    <string name="onboarding_storage_help_action">מדריך אחסון</string>
+    <string name="onboarding_permission_install_apps">הרשאת התקנת אפליקציות</string>
+    <string name="onboarding_permission_notifications">הרשאת התראות</string>
+    <string name="onboarding_permission_notifications_description">קבל התראה על עדכוני ספרייה ועוד.</string>
+    <string name="onboarding_permission_action_grant">הסכם</string>
+    <string name="theme_nord">Nord</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Sapphire</string>
+    <string name="theme_doom">Doom</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">המנע מהפרעות לתהליכים ממושכים כמו: עדכוני ספרייה, הורדות, ושחזור מגיבויים</string>
 </resources>
