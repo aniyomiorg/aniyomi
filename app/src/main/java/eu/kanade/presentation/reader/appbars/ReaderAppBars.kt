@@ -64,6 +64,14 @@ fun ReaderAppBars(
     cropEnabled: Boolean,
     onClickCropBorder: () -> Unit,
     onClickSettings: () -> Unit,
+    // SY -->
+    currentPageText: String,
+    enabledButtons: Set<String>,
+    dualPageSplitEnabled: Boolean,
+    doublePages: Boolean,
+    onClickPageLayout: () -> Unit,
+    onClickShiftPage: () -> Unit,
+    // SY <--
 ) {
     val isRtl = viewer is R2LPagerViewer
     val backgroundColor = MaterialTheme.colorScheme
@@ -168,9 +176,13 @@ fun ReaderAppBars(
                     currentPage = currentPage,
                     totalPages = totalPages,
                     onSliderValueChange = onSliderValueChange,
+                    currentPageText = currentPageText,
                 )
 
                 BottomReaderBar(
+                    // SY -->
+                    enabledButtons = enabledButtons,
+                    // SY <--
                     backgroundColor = backgroundColor,
                     readingMode = readingMode,
                     onClickReadingMode = onClickReadingMode,
@@ -179,6 +191,13 @@ fun ReaderAppBars(
                     cropEnabled = cropEnabled,
                     onClickCropBorder = onClickCropBorder,
                     onClickSettings = onClickSettings,
+                    // SY -->
+                    dualPageSplitEnabled = dualPageSplitEnabled,
+                    doublePages = doublePages,
+                    onClickWebView = onOpenInWebView,
+                    onClickShare = onShare,
+                    onClickPageLayout = onClickPageLayout,
+                    onClickShiftPage = onClickShiftPage,
                 )
             }
         }
