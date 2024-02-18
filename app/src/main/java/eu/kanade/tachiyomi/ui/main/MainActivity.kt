@@ -617,7 +617,6 @@ class MainActivity : BaseActivity() {
             mpvVersions.trim()
             MPVLib.removeLogObserver(recordMPVVersion)
             MPVLib.destroy()
-            ready = true
         }
     }
 
