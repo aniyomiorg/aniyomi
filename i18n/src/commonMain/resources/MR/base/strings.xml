@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Generic strings -->
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -8,7 +7,6 @@
     <string name="not_selected">Not selected</string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
-
     <string name="app_name" translatable="false">Aniyomi</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
@@ -152,7 +150,6 @@
     <string name="loading">Loading…</string>
     <string name="internal_error">InternalError: Check crash logs for further information</string>
     <string name="app_not_available">App not available</string>
-
     <!-- Onboarding -->
     <string name="pref_onboarding_guide">Onboarding guide</string>
     <string name="onboarding_heading">Welcome!</string>
@@ -174,7 +171,6 @@
     <string name="onboarding_permission_action_grant">Grant</string>
     <string name="onboarding_guides_new_user">New to %s? We recommend checking out the getting started guide.</string>
     <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
-
     <!-- Preferences -->
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
@@ -301,7 +297,6 @@
     <string name="ext_installer_private" translatable="false">Private</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
     <string name="ext_revoke_trust">Revoke trusted unknown extensions</string>
-
     <!-- Extension repos -->
     <string name="label_extension_repos">Extension repos</string>
     <string name="information_empty_repos">You have no repos set.</string>
@@ -313,8 +308,7 @@
     <string name="invalid_repo_name">Invalid repo URL</string>
     <string name="delete_repo_confirmation">Do you wish to delete the repo \"%s\"?</string>
     <string name="action_open_repo">Open source repo</string>
-
-      <!-- Reader section -->
+    <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
     <string name="pref_show_navigation_mode">Show tap zones overlay</string>
     <string name="pref_show_navigation_mode_summary">Briefly show when reader is opened</string>
