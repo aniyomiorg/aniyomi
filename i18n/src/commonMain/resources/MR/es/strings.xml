@@ -156,7 +156,7 @@
     <string name="download_notifier_unknown_error">No se ha podido descargar el capítulo debido a un error inesperado</string>
     <string name="download_notifier_text_only_wifi">No estás conectado a ninguna red Wi-Fi</string>
     <string name="categories">Categorías</string>
-    <string name="manga">Títulos en la biblioteca</string>
+    <string name="manga">Manga</string>
     <string name="track">Seguimiento</string>
     <string name="history">Historial</string>
     <string name="action_filter_bookmarked">Favoritos</string>
@@ -734,7 +734,7 @@
     <string name="selected">Seleccionado</string>
     <string name="not_selected">Sin seleccionar</string>
     <string name="action_menu_overflow_description">Más opciones</string>
-    <string name="action_bar_up_description">Subir un nivel</string>
+    <string name="action_bar_up_description">Navegar hacia arriba</string>
     <string name="pref_storage_location">Ubicación del almacenamiento</string>
     <string name="pref_storage_location_info">Se utiliza para las copias de seguridad automáticas, poder descargar capítulos y abrir los que ya tengas en tu dispositivo.</string>
     <string name="onboarding_storage_action_select">Elige una carpeta</string>
