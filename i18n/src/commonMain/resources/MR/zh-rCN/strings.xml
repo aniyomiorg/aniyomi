@@ -1122,4 +1122,6 @@
     <string name="pref_gpu_next_title">开启 gpu-next</string>
     <string name="pref_gpu_next_subtitle">一种新的视频后端渲染方式</string>
     <string name="player_aniskip_mixedOp">跳过含混合故事情节的开头</string>
+    <string name="pref_preserve_reading_position">记住已读章节的阅读位置</string>
+    <string name="pref_media_control_chapter_seeking">使用媒体控制功能寻找章节</string>
 </resources>
