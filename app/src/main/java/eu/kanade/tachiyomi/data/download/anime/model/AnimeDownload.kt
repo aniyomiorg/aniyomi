@@ -48,8 +48,20 @@ data class AnimeDownload(
     var totalContentLength: Long = 0L
 
     @Transient
-    @Volatile
-    var totalBytesDownloaded: Long = 0L
+    private val _totalBytesDownloadedFlow = MutableStateFlow(0L)
+
+    var totalBytesDownloaded: Long
+        get() = _totalBytesDownloadedFlow.value
+        set(value) {
+            _totalBytesDownloadedFlow.value += value
+        }
+
+
+    fun reset() {
+        _totalBytesDownloadedFlow.value = 0L
+        _progressFlow.value = 0
+    }
+
 
     @Transient
     @Volatile
@@ -64,6 +76,7 @@ data class AnimeDownload(
             field = value
         }
 
+    //Maybe we can change this by using bytesRead as the partial increment, we could removed totalContentLength since is only used for progress calculation and we supply it in the update method
     /**
      * Updates the status of the download
      *
@@ -72,14 +85,9 @@ data class AnimeDownload(
      * @param done whether progress has completed or not
      */
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-        bytesDownloaded = bytesRead
 
-        if (contentLength > totalContentLength) {
-            totalContentLength = contentLength
-        }
-
-        val newProgress = if (totalContentLength > 0) {
-            (100 * totalBytesDownloaded / totalContentLength).toInt()
+        val newProgress = if (contentLength > 0) {
+            (100 * bytesRead / contentLength).toInt()
         } else {
             -1
         }

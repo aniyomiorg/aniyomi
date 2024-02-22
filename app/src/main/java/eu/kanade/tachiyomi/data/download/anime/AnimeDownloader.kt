@@ -770,9 +770,8 @@ class AnimeDownloader(
         val partProgressLock = Object()
         var partProgress = -1
         val partCompletedList: MutableList<Boolean> = MutableList(requestList.size) { false }
-
-        val progressMap = mutableMapOf<ProgressListener, Array<Long>>()
-
+        download.reset()
+        download.totalBytesDownloaded = tmpSize
         // do an initial update
         download.update(tmpSize, download.totalContentLength, false)
 
@@ -790,45 +789,8 @@ class AnimeDownloader(
                         // create a listener for each part, so we can then funnel updates
                         val listener =
                             object : ProgressListener {
-                                override fun update(
-                                    bytesRead: Long,
-                                    contentLength: Long,
-                                    done: Boolean,
-                                ) {
-                                    /*
-                                        TODO change method to funnel part progress, this implementation is working,
-                                        but is very computational intensive (and is introducing a synchronization layer)
-                                        Maybe there is some better implementation using flows
-                                    */
-                                    synchronized(
-                                        progressMap,
-                                        block = {
-                                            // updates values of the part
-                                            if (!done) {
-                                                progressMap[this] = arrayOf(bytesRead, contentLength, 0)
-                                            } else {
-                                                progressMap[this] = arrayOf(contentLength, contentLength, 1)
-                                            }
-
-                                            // compute totalBytesRead, totalContentLength
-                                            // and totalDone collecting from all part downloads
-                                            val vals = progressMap.values.reduce(
-                                                fun(prog1, prog2): Array<Long> {
-                                                    return arrayOf(
-                                                        prog1[0] + prog2[0],
-                                                        prog1[1] + prog2[1],
-                                                        when {
-                                                            (prog1[2] + prog2[2] == 2L) -> 1L
-                                                            else -> 0L
-                                                        },
-                                                    )
-                                                },
-                                            )
-
-                                            // update value on video
-                                            download.update(vals[0], vals[1], vals[2] == 1L)
-                                        },
-                                    )
+                                override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+                                    download.update(download.totalBytesDownloaded, download.totalContentLength, false)
                                 }
                             }
                         // If failed before even starting, then just return
@@ -861,13 +823,17 @@ class AnimeDownloader(
                                                 // Write the bytes to the file
                                                 sink.write(buffer, 0, bytesRead)
                                                 sink.emitCompleteSegments()
+                                                download.totalBytesDownloaded = bytesRead.toLong()
+                                                download.update(download.totalBytesDownloaded, download.totalContentLength, false)
+
                                             }
                                             sink.flush()
                                             sink.close()
                                             throttledSource.close()
                                         }
                                 }
-
+                            // update the progress and set the part as completed
+                            download.update(download.totalBytesDownloaded, download.totalContentLength, false)
                             partCompletedList[index] = true
                         } catch (e: Exception) {
                             response?.close()
@@ -888,6 +854,7 @@ class AnimeDownloader(
         // scan for jobs following starting bytes order
         for (mergingPart in 0..<requestList.size) {
             // await for job to be completed (download of part has finished
+            // should we really stop if downloadscope is not active? I think we should merge at least the next part
             synchronized(mergeWaiter) {
                 while (!partCompletedList[mergingPart] && downloadScope.isActive && !failedDownload) {
                     mergeWaiter.wait()
@@ -926,7 +893,8 @@ class AnimeDownloader(
                 tmpPartFile.delete()
             }
         }
-
+        //do a final update, to ensure that the progress is 100%
+        download.update(download.totalContentLength, download.totalContentLength, true)
         if (downloadScope.isActive) {
             tmpFile.renameTo("$filename.mp4")
         }
