@@ -391,7 +391,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      */
     suspend fun getVideo(
         request: Request,
-        listener: ProgressListener
+        listener: ProgressListener,
     ): Response {
         return client.newCachelessCallWithProgress(request, listener)
             .awaitSuccess()
@@ -435,10 +435,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         val newHeaders =
             if (end - start > 0L) {
                 Headers.Builder().addAll(headers).add("Range", "bytes=$start-$end").build()
-            } else if (start >= 0L){
+            } else if (start >= 0L) {
                 Headers.Builder().addAll(headers).add("Range", "bytes=$start-").build()
             } else {
-                //logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
+                // logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
                 null
             }
         return GET(video.videoUrl!!, newHeaders ?: headers)
@@ -457,8 +457,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     ): Request {
         return GET(video.videoUrl!!, video.headers ?: headers)
     }
-
-
 
     /**
      * Assigns the url of the episode without the scheme and domain. It saves some redundancy from

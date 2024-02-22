@@ -141,7 +141,7 @@ class AnimeDownloadManager(
         episodes: List<Episode>,
         autoStart: Boolean = true,
         alt: Boolean = false,
-        video: Video ? = null,
+        video: Video? = null,
     ) {
         downloader.queueEpisodes(anime, episodes, autoStart, alt, video)
     }

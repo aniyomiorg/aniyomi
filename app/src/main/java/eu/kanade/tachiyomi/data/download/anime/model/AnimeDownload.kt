@@ -48,35 +48,22 @@ data class AnimeDownload(
     var totalContentLength: Long = 0L
 
     @Transient
-    private val _totalBytesDownloadedFlow = MutableStateFlow(0L)
+    private val _bytesDownloadedFlow = MutableStateFlow(0L)
 
-    var totalBytesDownloaded: Long
-        get() = _totalBytesDownloadedFlow.value
+    var bytesDownloaded: Long
+        get() = _bytesDownloadedFlow.value
         set(value) {
-            _totalBytesDownloadedFlow.value += value
+            _bytesDownloadedFlow.value += value
         }
 
-
-    fun reset() {
-        _totalBytesDownloadedFlow.value = 0L
+    /**
+     * resets the internal progress state of download
+     */
+    fun resetProgress() {
+        _bytesDownloadedFlow.value = 0L
         _progressFlow.value = 0
     }
 
-
-    @Transient
-    @Volatile
-    var bytesDownloaded: Long = 0L
-        set(value) {
-            // reset feature
-            totalBytesDownloaded += if (value < field) {
-                value
-            } else {
-                value - field
-            }
-            field = value
-        }
-
-    //Maybe we can change this by using bytesRead as the partial increment, we could removed totalContentLength since is only used for progress calculation and we supply it in the update method
     /**
      * Updates the status of the download
      *
@@ -85,7 +72,6 @@ data class AnimeDownload(
      * @param done whether progress has completed or not
      */
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-
         val newProgress = if (contentLength > 0) {
             (100 * bytesRead / contentLength).toInt()
         } else {
