@@ -790,6 +790,8 @@ class AnimeDownloader(
                         val listener =
                             object : ProgressListener {
                                 override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+                                    if (safeDownload)
+                                    { download.totalContentLength = contentLength }
                                     download.update(download.totalBytesDownloaded, download.totalContentLength, false)
                                 }
                             }
