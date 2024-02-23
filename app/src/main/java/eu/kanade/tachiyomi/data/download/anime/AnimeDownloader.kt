@@ -769,7 +769,7 @@ class AnimeDownloader(
             bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024)
         }
 
-        // list of request to do//
+        // list of request to do
         val requestList = requestMap.keys.toList()
 
         // set download as not failed and not stopped
