@@ -249,12 +249,12 @@
     <string name="file_select_cover">选择封面图片</string>
     <string name="file_select_backup">选择备份文件</string>
     <string name="update_check_confirm">下载</string>
-    <string name="update_check_no_new_updates">没有新版本</string>
+    <string name="update_check_no_new_updates">已是最新版本</string>
     <string name="update_check_notification_download_in_progress">正在下载…</string>
     <string name="update_check_notification_download_complete">点击安装更新</string>
     <string name="update_check_notification_download_error">下载失败</string>
     <string name="update_check_notification_update_available">发现新版本！</string>
-    <string name="information_no_downloads">无下载任务</string>
+    <string name="information_no_downloads">暂无下载任务</string>
     <string name="information_no_recent">最近没有更新</string>
     <string name="information_no_recent_manga">暂无阅读记录</string>
     <string name="information_empty_library">仓库为空</string>
@@ -340,7 +340,7 @@
     <string name="add_tracking">添加进度记录</string>
     <string name="manga_info_collapse">收起</string>
     <string name="manga_info_expand">展开</string>
-    <string name="licenses">开源许可证</string>
+    <string name="licenses">开源许可</string>
     <string name="website">官网</string>
     <string name="add_to_library">添加到仓库</string>
     <string name="in_library">在仓库中</string>
@@ -530,7 +530,7 @@
     <string name="pref_verbose_logging">详细日志记录</string>
     <string name="label_warning">警告</string>
     <string name="action_display_language_badge">语言</string>
-    <string name="backup_info">你应该将备份数据保存到多个地方。备份可能含有敏感数据（例如储存的密码），分享时请留意。</string>
+    <string name="backup_info">应将备份数据保存到多个地方。备份可能含有敏感数据（例如储存的密码），请谨慎分享。</string>
     <string name="notification_size_warning">大量更新会损害资源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
@@ -540,7 +540,7 @@
     <string name="database_clean">无需清理</string>
     <string name="clear_database_source_item_count">数据库中有 %1$d 部作品未添加到仓库</string>
     <string name="extension_api_error">获取插件列表失败</string>
-    <string name="privacy_policy">隐私声明</string>
+    <string name="privacy_policy">隐私政策</string>
     <string name="pref_update_only_completely_read">跳过有未读章节的作品</string>
     <string name="library_errors_help">关于仓库更新出错的解决方法，请参阅 %1$s</string>
     <string name="save_chapter_as_cbz">保存为 CBZ 压缩包</string>
@@ -753,11 +753,11 @@
     <string name="error_repo_exists">此仓库已存在！</string>
     <string name="action_delete_repo">删除仓库</string>
     <string name="invalid_repo_name">仓库地址无效</string>
-    <string name="pref_storage_location_info">用于自动备份、下载章节和本地资源。</string>
+    <string name="pref_storage_location_info">用于存储自动备份文件、下载章节和本地资源。</string>
     <string name="manga_interval_expected_update">新章节预计在%1$s后发布，每隔%2$s检查一次。</string>
     <string name="manga_interval_custom_amount">自定义更新频率：</string>
     <string name="onboarding_permission_install_apps">应用安装权限</string>
-    <string name="onboarding_permission_install_apps_description">用来安装资源插件。</string>
+    <string name="onboarding_permission_install_apps_description">用于安装资源插件。</string>
     <string name="onboarding_permission_notifications">通知权限</string>
     <string name="onboarding_guides_new_user">如果你是第一次使用 %s，推荐查看入门指南。</string>
     <string name="onboarding_guides_returning_user">如果你是重新安装了 %s，可以使用以下功能。</string>
@@ -886,7 +886,7 @@
     <string name="pref_backup_flags_summary">哪些信息将被包含在备份文件内</string>
     <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
-    <string name="pref_auto_clear_chapter_cache">关闭应用时清除章节缓存</string>
+    <string name="pref_auto_clear_chapter_cache">打开应用时清除章节缓存</string>
     <string name="pref_clear_manga_database">清除漫画数据库</string>
     <string name="pref_clear_anime_database">清除动画数据库</string>
     <string name="pref_clear_manga_database_summary">清除未保存在仓库中的漫画历史记录</string>
@@ -979,7 +979,7 @@
     <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
     <string name="pref_hide_in_manga_library_items">隐藏已添加到仓库中的漫画作品</string>
     <string name="action_hide">隐藏</string>
-    <string name="label_all">所有标签</string>
+    <string name="label_all">所有分类</string>
     <string name="pref_hide_in_anime_library_items">隐藏已添加到仓库中的动画作品</string>
     <string name="label_category">所有分类</string>
     <string name="label_recent_anime_updates">动画更新</string>
