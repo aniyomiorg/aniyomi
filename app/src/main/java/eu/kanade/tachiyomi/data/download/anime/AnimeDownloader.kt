@@ -680,10 +680,8 @@ class AnimeDownloader(
         threadNumber: Int,
         safeDownload: Boolean,
     ): UniFile {
-
         val downloadScope = CoroutineScope(coroutineContext)
         val video = download.video!!
-
 
         // reset bytesDownloaded and totalBytesDownloaded
         download.resetProgress()
@@ -784,7 +782,6 @@ class AnimeDownloader(
                         // try to open the file and append the bytes
                         try {
                             if (!part.completed) {
-
                                 response = download.source.getVideo(part.request!!, part.listener!!)
 
                                 response.body.source()
@@ -939,7 +936,6 @@ class AnimeDownloader(
         return result.toList()
     }
 
-
     /**
      * Merge download parts in order to reduce the total number of file used then in the downloader
      * Two successive parts are merged if the previous is completed and the following not
@@ -951,20 +947,20 @@ class AnimeDownloader(
         val sortedParts = parts.sortedBy { it.range.first }
 
         // -1 since the last one has no successive to merge
-        while(i<sortedParts.size-1){
+        while (i < sortedParts.size - 1) {
             val part = sortedParts[i]
             result.add(part)
-            if(part.completed && !sortedParts[i+1].completed){
-                part.completed = false  // not completed anymore
-                part.range = sortedParts[i].range.copy(second = sortedParts[i+1].range.second) // extends range
-                part.request = sortedParts[i+1].request // Assumes that not completed parts have at least a Request
-                part.listener = sortedParts[i+1].listener // same for listener
-                i+=1 // skip the merged part
+            if (part.completed && !sortedParts[i+1].completed) {
+                part.completed = false // not completed anymore
+                part.range = sortedParts[i].range.copy(second = sortedParts[i + 1].range.second) // extends range
+                part.request = sortedParts[i + 1].request // Assumes that not completed parts have at least a Request
+                part.listener = sortedParts[i + 1].listener // same for listener
+                i += 1 // skip the merged part
             }
-            i+=1
+            i += 1
         }
         // if the last one has not been merged then add it
-        if(i<sortedParts.size){
+        if (i < sortedParts.size) {
             result.add(sortedParts[i])
         }
 
@@ -978,7 +974,9 @@ class AnimeDownloader(
      * @param parts not merged nor sorted list of download ranges
      * @return a merged, not sorted, list of download ranges
      */
-    private fun mergeSuccessiveFiles(parts: List<Pair<Pair<Long, Long>, UniFile>>): List<Pair<Pair<Long, Long>, UniFile>> {
+    private fun mergeSuccessiveFiles(
+        parts: List<Pair<Pair<Long, Long>, UniFile>>,
+    ): List<Pair<Pair<Long, Long>, UniFile>> {
         val newRanges = mutableListOf<Pair<Pair<Long, Long>, UniFile>>()
 
         // support variable that is used to merge multiple ranges
@@ -1061,7 +1059,6 @@ class AnimeDownloader(
         return result.toList()
     }
 
-
     private fun getDownloadParts(
         download: AnimeDownload,
         video: Video,
@@ -1069,7 +1066,6 @@ class AnimeDownloader(
         threadNumber: Int,
         videoSize: Long,
     ): List<AnimeDownloadPart> {
-
         // Get non empty part files
         val partFiles = cleanAndGetPartFile(tmpDir)
 
@@ -1089,7 +1085,6 @@ class AnimeDownloader(
         val tempRanges = mutableListOf<Pair<Long, Long>>()
         downloadedRanges.forEach { tempRanges.add(it.first) }
         val complementaryRanges = getComplementaryRanges(Pair(0, videoSize - 1), tempRanges)
-
 
         // Calculate the parts size on new threadNumber value
         val partSize = maxOf(
@@ -1149,7 +1144,6 @@ class AnimeDownloader(
 
         return mergedDownloadParts.toList()
     }
-
 
     /**
      * Returns the observable which downloads the video with an external downloader.
