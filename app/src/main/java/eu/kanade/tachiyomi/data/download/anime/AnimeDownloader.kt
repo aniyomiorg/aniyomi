@@ -702,19 +702,17 @@ class AnimeDownloader(
 
         // on safe mode only one range is requested
         if (safeDownload) {
-            val listener =
+            val range = Pair(0L, 0L)
+            val part = AnimeDownloadPart(tmpDir, range)
+            part.listener =
                 object : ProgressListener {
                     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
                         download.update(bytesRead, contentLength, false)
                     }
                 }
-            val request = download.source.safeVideoRequest(video)
-            val file = tmpDir.createFile("0.part.tmp")!!
-            val range = Pair(0L, 0L)
-            val part = AnimeDownloadPart(file, range)
+            part.request = download.source.safeVideoRequest(video)
+            part.file = tmpDir.createFile("0.part.tmp")!!
             part.completed = false
-            part.request = request
-            part.listener = listener
             downloadParts.add(part)
 
             // on safe mode the tmp file has been deleted, so when content length will be updated
