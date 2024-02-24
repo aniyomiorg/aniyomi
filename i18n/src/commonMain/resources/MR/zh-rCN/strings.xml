@@ -331,7 +331,7 @@
     <string name="updating_library">正在更新仓库</string>
     <string name="pref_category_reading">阅读</string>
     <string name="pref_skip_filtered_chapters">跳过筛选掉的章节</string>
-    <string name="pinned_sources">已置顶</string>
+    <string name="pinned_sources">置顶资源</string>
     <string name="action_unpin">取消置顶</string>
     <string name="action_pin">置顶</string>
     <string name="pref_webtoon_side_padding">侧边留白</string>
@@ -697,7 +697,7 @@
     <string name="manga_display_interval_title">估计每个</string>
     <string name="manga_display_modified_interval_title">设定更新为每</string>
     <string name="skipped_reason_not_in_release_period">已跳过，因为预计今天没有更新</string>
-    <string name="has_results">有结果</string>
+    <string name="has_results">存在结果</string>
     <string name="syncing_library">正在同步仓库</string>
     <string name="library_sync_complete">仓库同步完成</string>
     <string name="information_cloudflare_help">点击这里查看 Cloudflare 帮助</string>
