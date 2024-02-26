@@ -1040,4 +1040,6 @@
     <string name="onboarding_permission_ignore_battery_opts">استخدام البطارية في الخلفية</string>
     <string name="onboarding_permission_action_grant">منح</string>
     <string name="pref_general_summary">لغة التطبيق, الاشعارات.</string>
+    <string name="action_filter_started">بدأت</string>
+    <string name="confirm_exit">اضغط مرة أخرى للخروج</string>
 </resources>
