@@ -194,13 +194,13 @@ enum class DiscordScreen(
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match animetail brown/ green theme, Luft
-private const val animetailImageUrl = "attachments/1174858955244179519/1174872993458049075/ic_launcher_round_1.png"
-private const val libraryImageUrl = "attachments/1174858955244179519/1174872992946327632/argus.png"
-private const val updatesImageUrl = "attachments/1174858955244179519/1174872993994911844/update_1.png"
-private const val historyImageUrl = "attachments/1174858955244179519/1174864383571148912/history.png"
-private const val browseImageUrl = "attachments/1174858955244179519/1174865904929095721/navegador.png"
-private const val moreImageUrl = "attachments/1174858955244179519/1174866545462231040/mas.png"
-private const val webviewImageUrl = "attachments/1174858955244179519/1174867088788164680/webview.png"
-private const val videoImageUrl = "attachments/1174858955244179519/1174867584450048050/play.png"
-private const val mangaImageUrl = "attachments/1174858955244179519/1174872992627577002/manga.png?"
+private const val animetailImageUrl = "https://i.ibb.co/3fSkpgt/ic-launcher-round-1.png"
+private const val libraryImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609019407736852.png"
+private const val updatesImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018858283038.png"
+private const val historyImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018342510702.png"
+private const val browseImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939355373608.png"
+private const val moreImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939032154173.png"
+private const val webviewImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018208161873.png"
+private const val videoImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939053391942.png"
+private const val mangaImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018598236270.png"
 // <-- AM (DISCORD)

@@ -630,7 +630,7 @@
     <string name="error_user_agent_string_invalid">Geçersiz kullanıcı aracısı dizgesi</string>
     <string name="updates_last_update_info_just_now">Şimdi</string>
     <string name="download_notifier_cache_renewal">İndirilenler denetleniyor</string>
-    <string name="action_open_random_manga">Gelişigüzel girdi aç</string>
+    <string name="action_open_random_manga">Rasgele bir girdi aç</string>
     <string name="information_no_entries_found">Bu ulamda girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
@@ -1100,4 +1100,29 @@
     <string name="player_add_external_audio_intent">Bir ses dosyası seçiniz.</string>
     <string name="player_add_external_subtitles">Harici altyazılar ekleyin</string>
     <string name="pref_debanding_title">Debanding</string>
+    <string name="confirm_exit">Çıkmak için tekrar geriye basın</string>
+    <string name="action_filter_started">Başlandı</string>
+    <string name="action_reorganize_by">Yeniden sırala</string>
+    <string name="pref_general_summary">Uygulama dili, bildirimler</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="action_open_repo">Kaynak reposunu aç</string>
+    <string name="pref_download_slots">Maksimum indirme sayısı</string>
+    <string name="local_source_badge">Lokal</string>
+    <string name="anime_interval_expected_update">Yeni bölümlerin yaklaşık %1$s içinde yayınlanacağı tahmin ediliyor ve yaklaşık her %2$s\'de bir kontrol ediliyor.</string>
+    <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
+    <string name="multi_thread_download_summary">Birden fazla thread kullanarak anime indirmeyi etkinleştir</string>
+    <string name="download_speed_limit">İndirme hızı limiti</string>
+    <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0\'a ayarlayın.</string>
+    <string name="download_notifier_download_finish">İndirme tamamlandı</string>
+    <string name="multi_thread_download">Anime için multi-threadedli indirme</string>
+    <string name="action_sort_airing_time">Yayınlama tarihi</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Sapphire</string>
+    <string name="theme_doom">Doom</string>
+    <string name="pref_preserve_reading_position">Okunmuş bölümlerde okuma pozisyonunu sakla</string>
+    <string name="pref_start_screen">Ekranı başlat(?)</string>
+    <string name="multi_thread_download_threads_number">Thread sayısı</string>
+    <string name="multi_thread_download_threads_number_summary">İndirme için kullanılacak thread sayısı, çok yüksek olması durumunda IP\'nizin bloke edilmesine neden olabilir; sunucularda ağır yükü önlemek için (ban yememek için) genellikle 4 iyi bir sayıdır.</string>
+    <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
+    <string name="pref_gpu_next_subtitle">Yeni bir video işleme backend\'i</string>
 </resources>
