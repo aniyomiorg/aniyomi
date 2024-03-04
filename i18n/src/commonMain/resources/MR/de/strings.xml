@@ -1105,4 +1105,5 @@
     <string name="download_speed_limit_hint">Auf 0 setzen, um Geschwindigkeitsbegrenzung zu deaktivieren.</string>
     <string name="pref_start_screen">Startbildschirm</string>
     <string name="download_speed_limit">Download-Geschwindigkeitsbegrenzung</string>
+    <string name="action_filter_started">Gestartet</string>
 </resources>
