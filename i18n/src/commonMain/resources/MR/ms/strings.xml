@@ -585,7 +585,7 @@
     <string name="pref_app_language">Bahasa aplikasi</string>
     <string name="theme_lavender">Lavender</string>
     <string name="description_placeholder">Tiada deskripsi</string>
-    <string name="delete_category_confirmation">Adakah anda ingin padam kategori \"%s\"\?</string>
+    <string name="delete_category_confirmation">Adakah anda ingin padam kategori \"%s\"?</string>
     <string name="internal_error">RalatDalam: semak log kerosakan untuk maklumat lanjut</string>
     <string name="delete_category">Padam kategori</string>
     <string name="pref_user_agent_string">Untaian ejen pengguna lalai</string>
