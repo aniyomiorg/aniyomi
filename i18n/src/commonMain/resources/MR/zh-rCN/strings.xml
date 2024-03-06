@@ -476,7 +476,7 @@
     <string name="date">日期</string>
     <string name="local_filter_order_by">排序依据</string>
     <string name="local_invalid_format">章节格式无效</string>
-    <string name="chapter_not_found">未找到章节</string>
+    <string name="chapter_not_found">章节未找到</string>
     <string name="restrictions">限制：%s</string>
     <string name="action_display_local_badge">本地资源</string>
     <string name="off">关闭</string>
