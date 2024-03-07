@@ -108,6 +108,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
@@ -613,14 +614,16 @@ class MainActivity : BaseActivity() {
     }
 
     fun onLoggingComplete() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            mpvVersions.trim()
-            MPVLib.removeLogObserver(recordMPVVersion)
-            MPVLib.destroy()
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                mpvVersions.trim()
+                MPVLib.removeLogObserver(recordMPVVersion)
+                MPVLib.destroy()
+            }
         }
     }
 
-    inner class RecordMPVVersion(context: Context) : MPVLib.LogObserver {
+    inner class RecordMPVVersion(private val context: Context) : MPVLib.LogObserver {
         init {
             MPVLib.create(context, "v")
             MPVLib.addLogObserver(this)
@@ -640,11 +643,19 @@ class MainActivity : BaseActivity() {
                             contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
                             else -> {
                                 recordMPVLog = false
-                                this@MainActivity.onLoggingComplete() // Direct call to MainActivity's method
+                                // Use a safe way to call back to the MainActivity
+                                safeOnLoggingComplete()
                             }
                         }
                     }
                 }
+            }
+        }
+
+        private fun safeOnLoggingComplete() {
+            // Ensure we're calling MainActivity's method safely
+            (context as? MainActivity)?.runOnUiThread {
+                context.onLoggingComplete()
             }
         }
     }
