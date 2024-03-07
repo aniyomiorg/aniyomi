@@ -654,10 +654,8 @@ class MainActivity : BaseActivity() {
 
         private fun safeOnLoggingComplete() {
             // Ensure we're calling MainActivity's method safely
-            (context as? Activity)?.runOnUiThread {
-                if (context is MainActivity) {
-                    (context).onLoggingComplete()
-                }
+            (context as? MainActivity)?.runOnUiThread {
+                context.onLoggingComplete()
             }
         }
     }
