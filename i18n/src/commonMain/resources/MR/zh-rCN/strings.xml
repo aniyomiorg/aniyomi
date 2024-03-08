@@ -1106,10 +1106,6 @@
     <string name="data_saver_image_format">压缩为 Jpeg</string>
     <string name="data_saver_image_format_summary_off">Jpeg 文件大小比 Webp 更小 （可以保存更多资料），但它会使图片损失更多质量。
 \n目前压缩为 Webp</string>
-    <string name="multi_thread_download">下载动画时实行多线程下载</string>
-    <string name="multi_thread_download_summary">使用多线程下载动画</string>
-    <string name="multi_thread_download_threads_number">线程数</string>
-    <string name="multi_thread_download_threads_number_summary">用于下载的线程数，如果太高可能会导致被封 IP ，一般设定为 4 来避免资源服务器负载过重。</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="pref_category_hide_hidden">完全隐藏分类及分类存储占用中的隐藏分类</string>
     <string name="pref_waiting_time_aniskip">按钮延时</string>

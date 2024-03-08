@@ -1121,10 +1121,6 @@
     <string name="label_manga_extension_repos">Repo ekstensi manga</string>
     <string name="label_anime_extension_repos">Repo ekstensi anime</string>
     <string name="onboarding_storage_action_create_folder">Buat folder Aniyomi bawaan</string>
-    <string name="multi_thread_download">Pengunduhan multi-utas untuk anime</string>
-    <string name="multi_thread_download_summary">Aktifkan pengunduhan anime menggunakan banyak utas</string>
-    <string name="multi_thread_download_threads_number">Jumlah thread</string>
-    <string name="multi_thread_download_threads_number_summary">Jumlah thread yang digunakan untuk mendownload, mungkin membuat IP Anda diblokir jika terlalu tinggi, biasanya 4 adalah angka yang baik untuk menghindari beban berat pada server sumber.</string>
     <string name="download_speed_limit">Batas kecepatan unduh</string>
     <string name="download_speed_limit_hint">Setel ke 0 untuk menonaktifkan batas kecepatan.</string>
 </resources>

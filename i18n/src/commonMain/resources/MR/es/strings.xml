@@ -1104,10 +1104,6 @@
     <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
     <string name="player_subtitle_border_color">Borde</string>
     <string name="pref_library_update_show_tab_badge">Mostrar el recuento de no vistos/no leídos en el icono actualizaciones</string>
-    <string name="multi_thread_download_threads_number_summary">La cantidad de subprocesos a usar para la descarga puede bloquear su IP si es demasiado alta; generalmente 4 es un buen número para evitar una carga pesada en los servidores de origen.</string>
-    <string name="multi_thread_download">Descarga multiproceso para anime</string>
-    <string name="multi_thread_download_summary">Habilite la descarga de anime usando subprocesos múltiples</string>
-    <string name="multi_thread_download_threads_number">Número de hilos</string>
     <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
     <string name="theme_matrix">Matrix</string>
     <string name="theme_doom">Doom</string>

@@ -1108,7 +1108,6 @@
     <string name="settings_dialog_header">Mga setting ng player</string>
     <string name="player_add_external_audio">Magdagdag ng external na audio</string>
     <string name="player_add_external_audio_intent">Pumili ng audio file.</string>
-    <string name="multi_thread_download_threads_number">Bilang ng thread</string>
     <string name="player_add_external_subtitles_intent">Pumili ng subtitle file.</string>
     <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
@@ -1119,11 +1118,8 @@
     <string name="pref_gpu_next_subtitle">Isang bagong video rendering backend</string>
     <string name="player_override_ass_subtitles">I-override ang mga subtitle ng ASS</string>
     <string name="label_anime_extension_repos">Extension repo ng anime</string>
-    <string name="multi_thread_download">Multi-threaded na pag-download para sa anime</string>
-    <string name="multi_thread_download_threads_number_summary">Bilang ng mga thread na gagamitin para sa pag-download, maaaring ma-block ang iyong IP kung masyadong mataas, kadalasan ang 4 ay isang magandang numero upang maiwasan ang mabigat na load sa mga source server.</string>
     <string name="pref_gpu_next_title">Paganahin ang gpu-next</string>
     <string name="label_manga_extension_repos">Extension repo ng manga</string>
     <string name="download_slots_info">Magda-download lang nang sabay-sabay mula sa self-host o hindi nasusukat na mga source</string>
     <string name="onboarding_storage_action_create_folder">Lumikha ng default na Aniyomi folder</string>
-    <string name="multi_thread_download_summary">Paganahin ang pag-download ng anime gamit ang maraming thread</string>
 </resources>
