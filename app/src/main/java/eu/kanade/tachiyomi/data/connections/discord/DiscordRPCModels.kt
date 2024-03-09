@@ -190,13 +190,13 @@ enum class DiscordScreen(
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val kuukiyomiImageUrl = "attachments/1133407425886691390/1157665173729980416/ic_launcher.png"
-private const val libraryImageUrl = "attachments/1133407425886691390/1165004086928740392/library.png"
-private const val updatesImageUrl = "attachments/1133407425886691390/1165006394248937645/updates.png"
-private const val historyImageUrl = "attachments/1133407425886691390/1165012765203767336/history.png"
-private const val browseImageUrl = "attachments/1133407425886691390/1165002904982278256/browse.png"
-private const val moreImageUrl = "attachments/1133407425886691390/1165013750189936761/more.png"
-private const val webviewImageUrl = "attachments/1133407425886691390/1165014654624477246/webview.png"
-private const val videoImageUrl = "attachments/1133407425886691390/1165018112618405919/video.png"
-private const val mangaImageUrl = "attachments/1133407425886691390/1165017344108666951/manga.png"
+private const val kuukiyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
+private const val libraryImageUrl = "emojis/1216125466033918052.webp?quality=lossless"
+private const val updatesImageUrl = "emojis/1216122475688231003.webp?quality=lossless"
+private const val historyImageUrl = "emojis/1216122387515310170.webp?quality=lossless"
+private const val browseImageUrl = "emojis/1216122371501723718.webp?quality=lossless"
+private const val moreImageUrl = "emojis/1216122403219050536.webp?quality=lossless"
+private const val webviewImageUrl = "emojis/1216122455618490509.webp?quality=lossless"
+private const val videoImageUrl = "emojis/1216122435200483459.webp?quality=lossless"
+private const val mangaImageUrl = "emojis/1216122415751626782.webp?quality=lossless"
 // <-- AM (DISCORD)
