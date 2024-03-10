@@ -306,8 +306,10 @@
             android:foregroundServiceType="dataSync"
             tools:node="merge" />
 
-        <service android:name=".data.torrentServer.service.TorrentServerService" />
-        <service android:name=".data.torrentServer.service.TorrentServerNotification" />
+        <service
+            android:name=".data.torrentServer.service.TorrentServerService"
+            android:foregroundServiceType="dataSync"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"
