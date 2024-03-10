@@ -171,6 +171,13 @@
     <string name="onboarding_permission_action_grant">Grant</string>
     <string name="onboarding_guides_new_user">New to %s? We recommend checking out the getting started guide.</string>
     <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
+    <string name="onboarding_privacy_agree_to_terms">I agree to the Privacy Policy</string>
+    <string name="onboarding_privacy_intro">Aniyomi is an Open Source app. This SERVICE is provided at no cost and is intended for use as is.</string>
+    <string name="onboarding_privacy_info_overview">This page details our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.</string>
+    <string name="onboarding_privacy_agreement_acknowledgement">If you choose to use our Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that we collect is used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.</string>
+    <string name="onboarding_privacy_information_collection_use">Information Collection and Use</string>
+    <string name="onboarding_privacy_information_collection_use_intro">For a better experience, while using our Service, we may require you to provide us with certain personally identifiable information. The information that we request will be retained by us and used as described in this privacy policy.</string>
+    <string name="onboarding_privacy_information_collection_use_data">Links to the privacy policy of third-party service providers used by the app:</string>
     <!-- Preferences -->
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
