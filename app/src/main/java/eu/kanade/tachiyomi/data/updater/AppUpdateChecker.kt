@@ -46,9 +46,9 @@ class AppUpdateChecker {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "LuftVerbot/kuukiyomi-preview"
+        "dark25/animetail2-preview"
     } else {
-        "LuftVerbot/kuukiyomi"
+        "dark25/animetail2"
     }
 }
 
