@@ -1078,10 +1078,6 @@
     <string name="label_anime_extension_repos">Repo delle estensioni anime</string>
     <string name="pref_reset_mpv_conf">Reimposta configurazione MPV</string>
     <string name="onboarding_storage_action_create_folder">Crea una cartella default per Aniyomi</string>
-    <string name="multi_thread_download_threads_number">Numero dei Thread</string>
-    <string name="multi_thread_download">Scaricamento multi-threaded per anime</string>
-    <string name="multi_thread_download_summary">Abilita lo scaricamento degli anime usando i multi-threads</string>
-    <string name="multi_thread_download_threads_number_summary">Il numero dei threads usati per il download può portare al blocco del tuo IP se il numero è troppo alto , di solito 4 è un buon numero per evitare di sovraccaricare i server delle fonti.</string>
     <string name="pref_download_slots">Numero di download massimo</string>
     <string name="local_source_badge">Locale</string>
     <string name="information_empty_repos">Non hai impostato alcuna repo.</string>

@@ -1040,4 +1040,13 @@
     <string name="onboarding_permission_ignore_battery_opts">استخدام البطارية في الخلفية</string>
     <string name="onboarding_permission_action_grant">منح</string>
     <string name="pref_general_summary">لغة التطبيق, الاشعارات.</string>
+    <string name="action_filter_started">بدأت</string>
+    <string name="confirm_exit">اضغط مرة أخرى للخروج</string>
+    <string name="theme_cloudflare">كلاودفلير</string>
+    <string name="pref_library_update_smart_update">التحديث الذكي</string>
+    <string name="theme_nord">نورد</string>
+    <string name="theme_sapphire">ياقوت</string>
+    <string name="theme_doom">الهلاك</string>
+    <string name="theme_matrix">ماتريكس</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">تجنب مقاطعة تحديثات المكتبة، التنزيلات والنسخ الاحتياطي التي تستغرق وقتا طويلا</string>
 </resources>
