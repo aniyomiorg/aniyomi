@@ -1096,13 +1096,11 @@
     <string name="theme_cottoncandy">Zuckerwatte</string>
     <string name="video_custom_screen">Individuelles Seitenverhältnis</string>
     <string name="onboarding_storage_action_create_folder">Standard-Aniyomi-Ordner erstellen</string>
-    <string name="multi_thread_download_summary">Multithreading für Anime-Downloads aktivieren</string>
-    <string name="multi_thread_download_threads_number">Anzahl der Threads</string>
     <string name="label_manga_extension_repos">Manga-Erweiterungs-Bibliotheken</string>
     <string name="label_anime_extension_repos">Anime-Erweiterungs-Bibliotheken</string>
-    <string name="multi_thread_download">Multithreading für Anime-Downloads</string>
-    <string name="multi_thread_download_threads_number_summary">Anzahl der Threads, die zum Herunterladen benutzt werden. Eine hohe Anzahl kann dazu führen, dass deine IP-Adresse blockiert wird. 4 ist normalerweise eine gute Anzahl um Überlastung des Quellservers zu vermeiden.</string>
     <string name="download_speed_limit_hint">Auf 0 setzen, um Geschwindigkeitsbegrenzung zu deaktivieren.</string>
     <string name="pref_start_screen">Startbildschirm</string>
     <string name="download_speed_limit">Download-Geschwindigkeitsbegrenzung</string>
+    <string name="action_filter_started">Gestartet</string>
+    <string name="pref_general_summary">App-Sprache, Benachrichtigungen</string>
 </resources>

@@ -1035,4 +1035,30 @@
 \nAtualmente compacta para Jpeg</string>
     <string name="data_saver_image_format_summary_off">O tamanho do arquivo JPEG é consideravelmente menor que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente compacta para Webp</string>
+    <string name="label_all">Todos</string>
+    <string name="onboarding_storage_action_create_folder">Crie a pasta Aniyomi padrão</string>
+    <string name="player_subtitle_background_color">Fundo</string>
+    <string name="player_subtitle_border_color">Bordas</string>
+    <string name="player_subtitle_text_color">Texto</string>
+    <string name="player_font_size_text_field">Tamanho da fonte</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="action_hide">Esconder</string>
+    <string name="pref_media_control_chapter_seeking">Procure capítulos com controles de mídia</string>
+    <string name="player_subtitle_settings_font_tab">Fonte</string>
+    <string name="player_subtitle_settings_color_tab">Cor</string>
+    <string name="label_category">Categoria</string>
+    <string name="theme_sapphire">Safira</string>
+    <string name="anime_interval_expected_update">Novos episódios previstos para serem lançados em torno de %1$s, verificando a cada %2$s.</string>
+    <string name="player_subtitle_font_text_field">Nome da fonte</string>
+    <string name="local_source_badge">Local</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="action_reorganize_by">Reordenar</string>
+    <string name="pref_general_summary">Idioma do aplicativo, notificações</string>
+    <string name="action_open_repo">Repositório de código aberto</string>
+    <string name="pref_preserve_reading_position">Preservar a posição de leitura nos capítulos lidos</string>
+    <string name="pref_create_folder_per_manga">Salve páginas em pastas separadas</string>
+    <string name="pref_create_folder_per_manga_summary">Cria pastas de acordo com o título das entradas</string>
+    <string name="pref_download_slots">Máximo de downloads</string>
+    <string name="download_speed_limit">Limite de velocidade de download</string>
+    <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
 </resources>

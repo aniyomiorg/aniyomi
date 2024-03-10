@@ -2,15 +2,9 @@ package eu.kanade.tachiyomi.data.download.anime.model
 
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import kotlinx.coroutines.delay
+import eu.kanade.tachiyomi.network.ProgressListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import rx.subjects.PublishSubject
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisode
@@ -25,20 +19,7 @@ data class AnimeDownload(
     val episode: Episode,
     val changeDownloader: Boolean = false,
     var video: Video? = null,
-) {
-
-    @Volatile
-    @Transient
-    var totalProgress: Int = 0
-        set(progress) {
-            field = progress
-            progressSubject?.onNext(this)
-            progressCallback?.invoke(this)
-        }
-
-    @Volatile
-    @Transient
-    var downloadedImages: Int = 0
+) : ProgressListener {
 
     @Transient
     private val _statusFlow = MutableStateFlow(State.NOT_DOWNLOADED)
@@ -52,31 +33,52 @@ data class AnimeDownload(
         }
 
     @Transient
-    val progressFlow = flow {
-        if (video == null) {
-            emit(0)
-            while (video == null) {
-                delay(50)
-            }
+    private val _progressFlow = MutableStateFlow(0)
+
+    @Transient
+    val progressFlow = _progressFlow.asStateFlow()
+    var progress: Int
+        get() = _progressFlow.value
+        set(value) {
+            _progressFlow.value = value
         }
 
-        val progressFlows = video!!.progressFlow
-        emitAll(combine(progressFlows) { it.average().toInt() })
+    @Transient
+    @Volatile
+    var totalContentLength: Long = 0L
+
+    @Transient
+    private val _bytesDownloadedFlow = MutableStateFlow(0L)
+
+    var bytesDownloaded: Long
+        get() = _bytesDownloadedFlow.value
+        set(value) {
+            _bytesDownloadedFlow.value += value
+        }
+
+    /**
+     * resets the internal progress state of download
+     */
+    fun resetProgress() {
+        _bytesDownloadedFlow.value = 0L
+        _progressFlow.value = 0
     }
-        .distinctUntilChanged()
-        .debounce(50)
 
-    @Transient
-    var progressSubject: PublishSubject<AnimeDownload>? = null
-
-    @Transient
-    var progressCallback: ((AnimeDownload) -> Unit)? = null
-
-    val progress: Int
-        get() {
-            val video = video ?: return 0
-            return video.progress
+    /**
+     * Updates the status of the download
+     *
+     * @param bytesRead the updated TOTAL number of bytes read (not a partial increment)
+     * @param contentLength the updated content length
+     * @param done whether progress has completed or not
+     */
+    override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+        val newProgress = if (contentLength > 0) {
+            (100 * bytesRead / contentLength).toInt()
+        } else {
+            -1
         }
+        if (progress != newProgress) progress = newProgress
+    }
 
     enum class State(val value: Int) {
         NOT_DOWNLOADED(0),

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Generic strings -->
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -8,7 +7,6 @@
     <string name="not_selected">Not selected</string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
-
     <string name="app_name" translatable="false">Aniyomi</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
@@ -152,7 +150,6 @@
     <string name="loading">Loading…</string>
     <string name="internal_error">InternalError: Check crash logs for further information</string>
     <string name="app_not_available">App not available</string>
-
     <!-- Onboarding -->
     <string name="pref_onboarding_guide">Onboarding guide</string>
     <string name="onboarding_heading">Welcome!</string>
@@ -307,7 +304,6 @@
     <string name="ext_installer_private" translatable="false">Private</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
     <string name="ext_revoke_trust">Revoke trusted unknown extensions</string>
-
     <!-- Extension repos -->
     <string name="label_extension_repos">Extension repos</string>
     <string name="information_empty_repos">You have no repos set.</string>
@@ -319,8 +315,7 @@
     <string name="invalid_repo_name">Invalid repo URL</string>
     <string name="delete_repo_confirmation">Do you wish to delete the repo \"%s\"?</string>
     <string name="action_open_repo">Open source repo</string>
-
-      <!-- Reader section -->
+    <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
     <string name="pref_show_navigation_mode">Show tap zones overlay</string>
     <string name="pref_show_navigation_mode_summary">Briefly show when reader is opened</string>
@@ -1135,10 +1130,10 @@
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
     <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
-    <string name="multi_thread_download">Multi-threaded downloading for anime</string>
-    <string name="multi_thread_download_summary">Enable downloading anime using multiple threads</string>
-    <string name="multi_thread_download_threads_number">Thread count</string>
-    <string name="multi_thread_download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
+    <string name="safe_download">Safe downloading mode for anime</string>
+    <string name="safe_download_summary">Enable single thread and no range downloading mode</string>
+    <string name="download_threads_number">Thread count</string>
+    <string name="download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
     <string name="download_speed_limit">Download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
 </resources>

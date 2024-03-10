@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi
 
 import android.content.Context
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.domain.base.BasePreferences
@@ -511,9 +510,10 @@ object Migrations {
                     newKey = { Preference.appStateKey(it) },
                 )
 
-                if (Build.MODEL == "Subsystem for Android(TM)") {
+                if (HwDecState.isWSA) {
                     playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
                 }
+
                 // Deleting old download cache index files, but might as well clear it all out
                 context.cacheDir.deleteRecursively()
             }
@@ -559,6 +559,10 @@ object Migrations {
                 if (trackerManager.myAnimeList.isLoggedIn) {
                     trackerManager.myAnimeList.logout()
                 }
+            }
+
+            if (oldVersion < 122) {
+                if (HwDecState.isWSA) playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
             }
             return true
         }
