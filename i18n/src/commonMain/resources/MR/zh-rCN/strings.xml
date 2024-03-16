@@ -778,7 +778,7 @@
 \n已选文件夹：%2$s</string>
     <string name="onboarding_storage_selection_required">必须选中一个文件夹</string>
     <string name="available_disk_space_info">可用：%1$s / 全部：%2$s</string>
-    <string name="theme_nord">Nord</string>
+    <string name="theme_nord">诺德</string>
     <string name="manga_interval_expected_update_soon">即将更新</string>
     <string name="ext_revoke_trust">撤销已信任的未知插件</string>
     <string name="manga_categories">漫画分类</string>
@@ -833,7 +833,7 @@
     <string name="action_start_download_internally">使用内置下载器</string>
     <string name="pref_player_summary">播放进度设置 • 内置播放器 • 外置播放器</string>
     <string name="pref_bottom_nav_style">底部导航栏设置</string>
-    <string name="pref_update_only_completely_read">跳过有未看剧集/未读章节的作品</string>
+    <string name="pref_update_only_completely_read">跳过存在未看剧集/未读章节的作品</string>
     <string name="pref_library_update_show_tab_badge">在更新中显示未看/未读数量</string>
     <string name="default_manga_category">默认漫画分类</string>
     <string name="default_anime_category">默认动画分类</string>
@@ -845,8 +845,8 @@
     <string name="rotation_sensor_landscape">感应横屏</string>
     <string name="pref_category_player">播放器</string>
     <string name="pref_category_progress">观看进度</string>
-    <string name="pref_progress_mark_as_seen">在进度为多少时将这集标记为已观看</string>
-    <string name="pref_preserve_watching_position">在已观看的剧集中记忆上次播放位置</string>
+    <string name="pref_progress_mark_as_seen">在观看进度为多少时将剧集标记为已看</string>
+    <string name="pref_preserve_watching_position">记住已看剧集的上次观看位置</string>
     <string name="pref_category_player_orientation">播放器方向</string>
     <string name="pref_default_player_orientation">默认方向</string>
     <string name="pref_adjust_orientation_video_dimensions">根据视频长宽比自动调节方向</string>
@@ -860,17 +860,17 @@
     <string name="pref_player_smooth_seek">开启进度条精准调节</string>
     <string name="pref_player_smooth_seek_summary">开启后，定位将不会关注关键帧，使其更慢但更精确</string>
     <string name="pref_player_fullscreen">在屏幕边栏中显示内容</string>
-    <string name="pref_player_hide_controls">在播放器启动时隐藏播放器控制台</string>
+    <string name="pref_player_hide_controls">在启动播放器时隐藏播放器控制界面</string>
     <string name="pref_pip_episode_toasts">小窗模式下切换剧集时显示剧集信息</string>
     <string name="pref_pip_on_exit">在退出播放器时自动使用小窗播放</string>
-    <string name="pref_mpv_conf">编辑MPV配置文件以进一步调节播放器相关设置</string>
+    <string name="pref_mpv_conf">编辑 MPV 配置文件以进一步调节播放器相关设置</string>
     <string name="pref_category_external_player">外置播放器</string>
-    <string name="pref_always_use_external_player">总是使用外置播放器</string>
-    <string name="pref_external_player_preference">外置播放器首选项</string>
+    <string name="pref_always_use_external_player">总是使用外部播放器</string>
+    <string name="pref_external_player_preference">外部播放器首选项</string>
     <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">删除章节/剧集</string>
-    <string name="pref_remove_after_marked_as_read">手动标记为已读/已看后</string>
+    <string name="pref_remove_after_marked_as_read">手动标记为已读/已看后删除</string>
     <string name="pref_remove_after_read">看完/读完自动删除</string>
     <string name="pref_remove_bookmarked_chapters">允许删除已添加书签的章节/剧集</string>
     <string name="pref_remove_exclude_categories_manga">排除的漫画分类</string>
@@ -1002,8 +1002,8 @@
     <string name="pref_enable_pip">开启小窗模式</string>
     <string name="player_aniskip_op">跳过开头</string>
     <string name="label_anime_extension_repos">动画插件仓库</string>
-    <string name="pref_episode_swipe_end">将滑向右边设置为</string>
-    <string name="pref_episode_swipe_start">将滑向左边设置为</string>
+    <string name="pref_episode_swipe_end">向右滑动操作</string>
+    <string name="pref_episode_swipe_start">向左滑动操作</string>
     <string name="pref_episode_swipe">动画剧集目录左右滑动</string>
     <string name="pref_invalidate_download_cache_summary">强制重新扫描已下载的章节以及剧集</string>
     <string name="label_manga_extension_repos">漫画插件仓库</string>
@@ -1041,7 +1041,7 @@
     <string name="video_custom_screen">自定义画面比例</string>
     <string name="pref_debanding_title">去除色带</string>
     <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_debanding_disabled">已禁用</string>
+    <string name="pref_debanding_disabled">关闭</string>
     <string name="delete_confirmation">确定删除\"%s\"？</string>
     <string name="player_subtitle_settings">字幕设置</string>
     <string name="player_subtitle_empty_warning">视频中没有载入任何字幕所以无效</string>
@@ -1088,9 +1088,9 @@
 \n目前压缩为 Jpeg</string>
     <string name="player_aniskip_skip">已跳过 %s</string>
     <string name="notification_episodes_single_and_more">第 %1$s 集及另外 %2$d 集</string>
-    <string name="pref_category_player_aniskip_info">AniSkip 需要你在 MyAnimeList 或 Anilist 上标记动画后才能使用</string>
+    <string name="pref_category_player_aniskip_info">AniSkip 需要你在 MyAnimeList 或 Anilist 上标记进度记录后才能使用</string>
     <string name="go_to_next_chapter">下一章</string>
-    <string name="pref_enable_netflix_style_aniskip">开启网飞风格</string>
+    <string name="pref_enable_netflix_style_aniskip">开启奈飞风格</string>
     <string name="pref_anime_storage_usage">动画存储占用</string>
     <string name="pref_manga_storage_usage">漫画存储占用</string>
     <string name="unseen">未看</string>
@@ -1115,7 +1115,7 @@
     <string name="pref_update_anime_release_grace_period">预期动画播出截止时间</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
     <string name="pref_mpv_input">为键盘映射配置编辑 MPV 输入文档</string>
-    <string name="pref_gpu_next_title">开启 gpu-next</string>
+    <string name="pref_gpu_next_title">开启 GPU-Next</string>
     <string name="pref_gpu_next_subtitle">一种新的视频渲染后端方式</string>
     <string name="player_aniskip_mixedOp">跳过含混合故事情节的片头</string>
     <string name="pref_preserve_reading_position">记住已读章节的上次阅读位置</string>
