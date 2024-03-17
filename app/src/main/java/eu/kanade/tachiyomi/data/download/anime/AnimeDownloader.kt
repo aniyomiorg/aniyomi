@@ -20,6 +20,9 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadPart
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.util.size
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -525,6 +528,24 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
+    private fun isTor(video: Video): Boolean {
+        if (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true) {
+            launchIO {
+                TorrentServerService.start()
+                TorrentServerService.wait(10)
+                TorrentServerUtils.setTrackersList()
+                val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+                var index = 0
+                if (video.videoUrl!!.contains("index=")) {
+                    index = video.videoUrl?.substringAfter("index=")?.toInt() ?: 0
+                }
+                val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+                video.videoUrl = torrentUrl
+            }
+        }
+        return video.videoUrl?.toHttpUrl()?.encodedPath?.contains(TorrentServerUtils.hostUrl) ?: false
+    }
+
     // ffmpeg is always on safe mode
     private fun ffmpegDownload(
         download: AnimeDownload,
@@ -930,217 +951,70 @@ class AnimeDownloader(
             val endByte = startByte + it.size() - 1
             result.add(Pair(Pair(startByte, endByte), it))
         }
-
-        return result.toList()
+        return tmpDir.findFile("$filename.mp4") ?: throw Exception("Download failed")
     }
 
-    /**
-     * Merge download parts in order to reduce the total number of file used then in the downloader
-     * Two successive parts are merged if the previous is completed and the following not
-     */
-    private fun mergeSuccessiveParts(parts: List<AnimeDownloadPart>): List<AnimeDownloadPart> {
-        val result = mutableListOf<AnimeDownloadPart>()
-
-        var i = 0
-        val sortedParts = parts.sortedBy { it.range.first }
-
-        // -1 since the last one has no successive to merge
-        while (i < sortedParts.size - 1) {
-            val part = sortedParts[i]
-            result.add(part)
-            if (part.completed && !sortedParts[i+1].completed) {
-                part.completed = false // not completed anymore
-                part.range = sortedParts[i].range.copy(second = sortedParts[i + 1].range.second) // extends range
-                part.request = sortedParts[i + 1].request // Assumes that not completed parts have at least a Request
-                part.listener = sortedParts[i + 1].listener // same for listener
-                i += 1 // skip the merged part
-            }
-            i += 1
-        }
-        // if the last one has not been merged then add it
-        if (i < sortedParts.size) {
-            result.add(sortedParts[i])
-        }
-
-        return result.toList()
-    }
-
-    /**
-     * Check if two subsequent download ranges are touching each other,
-     * in that case merge the two ranges and the corresponding files
-     *
-     * @param parts not merged nor sorted list of download ranges
-     * @return a merged, not sorted, list of download ranges
-     */
-    private fun mergeSuccessiveFiles(
-        parts: List<Pair<Pair<Long, Long>, UniFile>>,
-    ): List<Pair<Pair<Long, Long>, UniFile>> {
-        val newRanges = mutableListOf<Pair<Pair<Long, Long>, UniFile>>()
-
-        // support variable that is used to merge multiple ranges
-        var tempRange: Pair<Pair<Long, Long>, UniFile>? = null
-
-        // sort range on ascending order, then for each one...
-        parts.sortedBy { it.first.first }.forEach {
-            tempRange = if (tempRange == null) {
-                // If a temp range has not already been assigned then assign it
-                it
-            } else if (tempRange!!.first.second != it.first.first - 1) {
-                // If the current range isn't touched by the temp one then add the previous to the final
-                // list and set the current as the temp range
-                newRanges.add(tempRange!!)
-                it
-            } else {
-                // If the current range touches the temp one then merge them and assign the result to the temp
-                Pair(
-                    Pair(tempRange!!.first.first, it.first.second),
-                    mergeFile(tempRange!!.second, it.second),
-                )
-            }
-        }
-        // This ensures that the last temp range is added to the list if present
-        if (tempRange != null) {
-            newRanges.add(tempRange!!)
-        }
-
-        return newRanges
-    }
-
-    /**
-     * Takes two file and merge them appending the source to the sink
-     *
-     * @param sinkFile the sink
-     * @param sourceFile the source
-     * @return a file composed by appending the source to the sink
-     */
-    private fun mergeFile(sinkFile: UniFile?, sourceFile: UniFile): UniFile {
-        if (sinkFile == null) {
-            return sourceFile
-        }
-
-        val buffer = ByteArray(4 * 1024)
-        val output = sinkFile.openOutputStream(true)
-        val input = sourceFile.openInputStream()
-
-        var bytesRead = input.read(buffer)
-        while (bytesRead > 0) {
-            output.write(buffer, 0, bytesRead)
-            bytesRead = input.read(buffer)
-        }
-
-        output.flush()
-        output.close()
-        input.close()
-
-        sourceFile.delete()
-
-        return sinkFile
-    }
-
-    private fun getComplementaryRanges(
-        range: Pair<Long, Long>,
-        toRemove: List<Pair<Long, Long>>,
-    ): List<Pair<Long, Long>> {
-        val result = mutableListOf<Pair<Long, Long>>()
-
-        var tempRange = range.copy()
-        toRemove.sortedBy { it.first }.forEach {
-            if (it.first > tempRange.first) {
-                result.add(Pair(tempRange.first, it.first - 1))
-            }
-            tempRange = tempRange.copy(first = it.second + 1)
-        }
-        if (tempRange.first <= tempRange.second) {
-            result.add(tempRange)
-        }
-
-        return result.toList()
-    }
-
-    private fun getDownloadParts(
-        download: AnimeDownload,
+    private suspend fun newDownload(
         video: Video,
+        download: AnimeDownload,
         tmpDir: UniFile,
-        threadNumber: Int,
-        videoSize: Long,
-    ): List<AnimeDownloadPart> {
-        // Get non empty part files
-        val partFiles = cleanAndGetPartFile(tmpDir)
-
-        // Retrieve from part files the downloaded ranges
-        var downloadedRanges = getRangesAndFiles(partFiles).sortedByDescending { it.first.first }
-
-        // Merge ranges and files that can form a unique range and file
-        downloadedRanges = mergeSuccessiveFiles(downloadedRanges)
-
-        // Get total downloaded size
-        var downloadedSize = 0L
-        downloadedRanges.forEach {
-            downloadedSize += (it.first.second - it.first.first)
+        filename: String,
+        forceSequential: Boolean,
+    ): UniFile {
+        // Check if the download is paused before starting
+        while (isPaused) {
+            delay(1000) // This is a pause check delay, adjust the timing as needed.
         }
-
-        // Get all ranges that aren't downloaded
-        val tempRanges = mutableListOf<Pair<Long, Long>>()
-        downloadedRanges.forEach { tempRanges.add(it.first) }
-        val complementaryRanges = getComplementaryRanges(Pair(0, videoSize - 1), tempRanges)
-
-        // Calculate the parts size on new threadNumber value
-        val partSize = maxOf(
-            1024 * 1024,
-            minOf(
-                1024 * 1024 * 10,
-                (videoSize - downloadedSize).floorDiv(threadNumber),
-            ),
-        )
-
-        // Get part subdivision of non-downloaded ranges
-        val rangesToDownload = mutableListOf<Pair<Long, Long>>()
-
-        complementaryRanges.forEach { entry ->
-            var partialToDownloadSize = entry.second - entry.first
-            var tempStart = entry.first
-            var tempEnd = tempStart + partSize
-            // we subdivide in parts of at least partSize bytes
-            while (partialToDownloadSize > 2 * partSize) {
-                rangesToDownload.add(Pair(tempStart, tempEnd))
-                partialToDownloadSize -= partSize
-                tempStart = tempEnd + 1
-                tempEnd = tempStart + partSize
+        when {
+            isHls(video) || isMpd(video) -> {
+                return ffmpegDownload(video, download, tmpDir, filename)
             }
-            rangesToDownload.add(Pair(tempStart, entry.second))
-        }
 
-        val downloadParts = mutableListOf<AnimeDownloadPart>()
+            preferences.multithreadingDownload().get() && !forceSequential -> {
+                return multiPartDownload(video, download, tmpDir, filename)
+            }
 
-        // Add downloaded ranges to parts as completed parts
-        downloadedRanges.forEach { rF ->
-            val part = AnimeDownloadPart(tmpDir, rF.first)
-            part.file = rF.second
-            part.completed = true
-            downloadParts.add(part)
-        }
-
-        // Add ranges to download to parts as non-completed parts
-        rangesToDownload.forEach { r ->
-            val request = download.source.videoRequest(video, r.first, r.second)
-            val listener = object : ProgressListener {
-                override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-                    download.update(download.bytesDownloaded, download.totalContentLength, false)
+            else -> {
+                val response = download.source.getVideo(video)
+                val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")!!
+                // Write to file with pause/resume capability
+                try {
+                    throttler.apply {
+                        bytesPerSecond(preferences.downloadSpeedLimit().get().toLong() * 1024, 4096, 8192)
+                    }
+                    response.body.source().use { source ->
+                        file.openOutputStream(true).use { output ->
+                            val sink = output.sink().buffer()
+                            val buffer = ByteArray(4 * 1024)
+                            var totalBytesRead = 0L
+                            var bytesRead: Int
+                            val throttledSource = throttler.source(source).buffer()
+                            while (throttledSource.read(buffer).also { bytesRead = it }.toLong() != -1L) {
+                                // Check if the download is paused, if so, wait
+                                while (isPaused) {
+                                    delay(1000) // Wait for 1 second before checking again
+                                }
+                                // Write the bytes to the file
+                                sink.write(buffer, 0, bytesRead)
+                                sink.emitCompleteSegments()
+                                totalBytesRead += bytesRead
+                                // Update progress here if needed
+                            }
+                            sink.flush()
+                            sink.close()
+                            throttledSource.close()
+                        }
+                    }
+                    // After download is complete, rename the file to its final name
+                    file.renameTo("$filename.mp4")
+                    return file
+                } catch (e: Exception) {
+                    response.close()
+                    if (!queueState.value.equals(download)) file.delete()
+                    throw e
                 }
             }
-            val part = AnimeDownloadPart(tmpDir, r)
-            part.completed = false
-            part.request = request
-            part.listener = listener
-            downloadParts.add(part)
         }
-
-        val mergedDownloadParts = mergeSuccessiveParts(downloadParts)
-
-        // update downloaded size at sum of downloaded parts size
-        download.bytesDownloaded = downloadedSize
-
-        return mergedDownloadParts.toList()
     }
 
     /**

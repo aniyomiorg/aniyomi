@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,7 @@ internal class HttpPageLoader(
     private val source: HttpSource,
     private val chapterCache: ChapterCache = Injekt.get(),
     // SY -->
+    private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     // SY <--
 ) : PageLoader() {
@@ -45,7 +47,7 @@ internal class HttpPageLoader(
      */
     private val queue = PriorityBlockingQueue<PriorityPage>()
 
-    private val preloadSize = 4
+    private val preloadSize = readerPreferences.preloadSize().get()
 
     // SY -->
     private val dataSaver = DataSaver(source, sourcePreferences)
@@ -141,10 +143,7 @@ internal class HttpPageLoader(
                 try {
                     // Convert to pages without reader information
                     val pagesToSave = pages.map { Page(it.index, it.url, it.imageUrl) }
-                    chapterCache.putPageListToCache(
-                        chapter.chapter.toDomainChapter()!!,
-                        pagesToSave,
-                    )
+                    chapterCache.putPageListToCache(chapter.chapter.toDomainChapter()!!, pagesToSave)
                 } catch (e: Throwable) {
                     if (e is CancellationException) {
                         throw e
