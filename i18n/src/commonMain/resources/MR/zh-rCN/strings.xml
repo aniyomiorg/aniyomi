@@ -343,7 +343,7 @@
     <string name="licenses">开源许可</string>
     <string name="website">官网</string>
     <string name="add_to_library">添加到仓库</string>
-    <string name="in_library">在仓库中</string>
+    <string name="in_library">已在仓库中</string>
     <string name="label_downloaded_only">仅显示已下载内容</string>
     <string name="creating_backup_error">备份失败</string>
     <string name="restoring_backup_canceled">已取消还原</string>
