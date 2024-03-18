@@ -255,7 +255,7 @@
     <string name="update_check_notification_download_error">下载失败</string>
     <string name="update_check_notification_update_available">发现新版本！</string>
     <string name="information_no_downloads">下载列表为空</string>
-    <string name="information_no_recent">最近没有更新</string>
+    <string name="information_no_recent">暂无更新记录</string>
     <string name="information_no_recent_manga">暂无阅读记录</string>
     <string name="information_empty_library">仓库为空</string>
     <string name="information_empty_category">尚未添加任何分类，点击加号按钮创建一个分类来管理仓库。</string>
@@ -317,7 +317,7 @@
     <string name="notification_chapters_single_and_more">第 %1$s 章及另外 %2$d 章</string>
     <string name="notification_chapters_multiple">第 %1$s 章</string>
     <string name="pref_disable_battery_optimization">关闭电池优化</string>
-    <string name="pref_disable_battery_optimization_summary">有助于后台更新仓库和备份</string>
+    <string name="pref_disable_battery_optimization_summary">帮助后台更新仓库和备份</string>
     <string name="battery_optimization_disabled">电池优化已经关闭</string>
     <string name="email">电子邮件地址</string>
     <string name="pref_always_show_chapter_transition">始终显示章节间的过渡页面</string>
@@ -361,7 +361,7 @@
     <string name="viewer">阅读模式</string>
     <string name="battery_optimization_setting_activity_not_found">打开系统设置失败</string>
     <string name="pref_true_color_summary">缓解色带问题，但可能会影响性能</string>
-    <string name="pref_refresh_library_covers">刷新仓库封面</string>
+    <string name="pref_refresh_library_covers">刷新仓库中作品的封面</string>
     <string name="tracking_info">将阅读进度上传到第三方进度记录平台，在作品页面点击“进度记录”按钮即可设置。</string>
     <string name="sort_by_upload_date">按上传日期</string>
     <string name="label_data">数据</string>
@@ -489,7 +489,7 @@
     <string name="tracking_guide">进度记录指南</string>
     <string name="information_empty_category_dialog">还没有创建分类。</string>
     <string name="action_start_downloading_now">立即开始下载</string>
-    <string name="about_dont_kill_my_app">部分厂商杀掉后台服务的现象比较严重，此网站提供了一些解决方法。</string>
+    <string name="about_dont_kill_my_app">部分厂商杀掉后台服务的现象比较严重，此网站提供了一些解决方法</string>
     <string name="restore_miui_warning">如果关闭 MIUI 优化，备份与还原可能会出现问题。</string>
     <string name="pref_dark_theme_pure_black">纯黑深色模式</string>
     <string name="theme_yotsuba">四叶草</string>
@@ -886,7 +886,7 @@
     <string name="pref_backup_flags_summary">哪些信息将被包含在备份文件内</string>
     <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
-    <string name="pref_auto_clear_chapter_cache">打开应用时清除章节缓存</string>
+    <string name="pref_auto_clear_chapter_cache">启动应用时清除剧集/章节缓存</string>
     <string name="pref_clear_manga_database">清除漫画数据库</string>
     <string name="pref_clear_anime_database">清除动画数据库</string>
     <string name="pref_clear_manga_database_summary">清除未保存在仓库中的漫画历史记录</string>
