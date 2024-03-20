@@ -745,4 +745,8 @@
     <string name="information_webview_required">WebView is vereist voor Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
     <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
+    <string name="selected">Geselecteerd</string>
+    <string name="not_selected">Niet geselecteerd</string>
+    <string name="action_menu_overflow_description">Meer opties</string>
+    <string name="action_bar_up_description">Naar boven</string>
 </resources>
