@@ -365,8 +365,8 @@
     <string name="restore_in_progress">Gjenoppretting allerede underveis</string>
     <string name="pref_show_reading_mode">Vis lesemodus</string>
     <string name="action_disable">deaktivere</string>
-    <string name="action_disable_all">deaktiver alle</string>
-    <string name="action_enable_all">aktiver alle</string>
+    <string name="action_disable_all">Deaktiver alle</string>
+    <string name="action_enable_all">Aktiver alle</string>
     <string name="action_sort_latest_chapter">Siste kapittel</string>
     <string name="pref_read_with_tapping_inverted">Inverter trykk</string>
     <string name="restoring_backup_error">Gjenoppretting av sikkerhetskopi mislyktes</string>
