@@ -369,7 +369,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
-        if (seconds >= totalSeconds * progress && shouldTrack) {
+        if (seconds >= totalSeconds * progress && shouldTrack && !currentEp.seen) {
             currentEp.seen = true
             updateTrackEpisodeSeen(currentEp)
             deleteEpisodeIfNeeded(currentEp)
