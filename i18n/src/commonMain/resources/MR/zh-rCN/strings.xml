@@ -610,7 +610,7 @@
     <string name="download_ahead_info">要求当前章节/剧集和下一章节/剧集都已下载。</string>
     <string name="are_you_sure">你确定吗？</string>
     <string name="multi_lang">多语言</string>
-    <string name="updates_last_update_info">仓库更新时间：%s</string>
+    <string name="updates_last_update_info">上次更新仓库时间：%s</string>
     <string name="remove_manga">即将从仓库中删除“%s”</string>
     <string name="popular">热门</string>
     <string name="missing_storage_permission">未授予存储权限</string>
@@ -631,7 +631,7 @@
     <string name="unknown_title">未知标题</string>
     <string name="invalid_location">无效位置：%s</string>
     <string name="error_user_agent_string_invalid">User Agent 字符串无效</string>
-    <string name="updates_last_update_info_just_now">刚才</string>
+    <string name="updates_last_update_info_just_now">刚刚</string>
     <string name="download_notifier_cache_renewal">正在扫描已下载章节/剧集</string>
     <string name="action_open_random_manga">随机打开作品</string>
     <string name="information_no_entries_found">此分类没有作品</string>
