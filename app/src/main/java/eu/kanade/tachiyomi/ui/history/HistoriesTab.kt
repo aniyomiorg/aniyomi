@@ -35,6 +35,7 @@ object HistoriesTab : Tab() {
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
             val index: UShort = when (currentNavigationStyle()) {
                 NavStyle.MOVE_HISTORY_TO_MORE -> 5u
+                NavStyle.MOVE_BROWSE_TO_MORE -> 3u
                 else -> 2u
             }
             return TabOptions(

@@ -812,6 +812,7 @@
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
+    <string name="pref_bottom_nav_no_browse">Move Browse to the More tab</string>
     <string name="unlock_app_title">Unlock Aniyomi</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_global_manga_search">Global Manga Search</string>
