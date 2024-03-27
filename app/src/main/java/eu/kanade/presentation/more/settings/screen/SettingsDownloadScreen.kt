@@ -25,8 +25,10 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.runBlocking
@@ -77,23 +79,23 @@ object SettingsDownloadScreen : SearchableSettings {
                 },
             )
         }
-        val multithreadingDownload by downloadPreferences.multithreadingDownload().collectAsState()
+        val safeDownload by downloadPreferences.safeDownload().collectAsState()
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(MR.strings.connected_to_wifi),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = downloadPreferences.multithreadingDownload(),
-                title = stringResource(MR.strings.multi_thread_download),
-                subtitle = stringResource(MR.strings.multi_thread_download_summary),
+                pref = downloadPreferences.safeDownload(),
+                title = stringResource(MR.strings.safe_download),
+                subtitle = stringResource(MR.strings.safe_download_summary),
             ),
             Preference.PreferenceItem.ListPreference(
                 pref = downloadPreferences.numberOfThreads(),
-                title = stringResource(MR.strings.multi_thread_download_threads_number),
-                subtitle = stringResource(MR.strings.multi_thread_download_threads_number_summary),
+                title = stringResource(MR.strings.download_threads_number),
+                subtitle = stringResource(MR.strings.download_threads_number_summary),
                 entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
-                enabled = multithreadingDownload,
+                enabled = !safeDownload,
             ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(MR.strings.download_speed_limit),
@@ -121,13 +123,13 @@ object SettingsDownloadScreen : SearchableSettings {
             Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.download_slots_info)),
             getDeleteChaptersGroup(
                 downloadPreferences = downloadPreferences,
-                animeCategories = allAnimeCategories,
-                mangaCategories = allMangaCategories,
+                animeCategories = allAnimeCategories.toImmutableList(),
+                mangaCategories = allMangaCategories.toImmutableList(),
             ),
             getAutoDownloadGroup(
                 downloadPreferences = downloadPreferences,
-                allAnimeCategories = allAnimeCategories,
-                allMangaCategories = allMangaCategories,
+                allAnimeCategories = allAnimeCategories.toImmutableList(),
+                allMangaCategories = allMangaCategories.toImmutableList(),
             ),
             getDownloadAheadGroup(downloadPreferences = downloadPreferences),
             getExternalDownloaderGroup(
@@ -140,8 +142,8 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     private fun getDeleteChaptersGroup(
         downloadPreferences: DownloadPreferences,
-        animeCategories: List<Category>,
-        mangaCategories: List<Category>,
+        animeCategories: ImmutableList<Category>,
+        mangaCategories: ImmutableList<Category>,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_delete_chapters),
@@ -209,8 +211,8 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     private fun getAutoDownloadGroup(
         downloadPreferences: DownloadPreferences,
-        allAnimeCategories: List<Category>,
-        allMangaCategories: List<Category>,
+        allAnimeCategories: ImmutableList<Category>,
+        allMangaCategories: ImmutableList<Category>,
     ): Preference.PreferenceGroup {
         val downloadNewEpisodesPref = downloadPreferences.downloadNewEpisodes()
         val downloadNewEpisodeCategoriesPref = downloadPreferences.downloadNewEpisodeCategories()

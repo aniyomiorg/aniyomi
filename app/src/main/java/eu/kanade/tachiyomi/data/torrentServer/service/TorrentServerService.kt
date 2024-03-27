@@ -1,14 +1,24 @@
 package eu.kanade.tachiyomi.data.torrentServer.service
 
 import android.app.Application
+import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import eu.kanade.tachiyomi.BuildConfig
+import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.util.system.cancelNotification
+import eu.kanade.tachiyomi.util.system.notificationBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import tachiyomi.core.i18n.stringResource
+import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.coroutines.EmptyCoroutineContext
@@ -29,6 +39,7 @@ class TorrentServerService : Service() {
                 when (it.action) {
                     ACTION_START -> {
                         startServer()
+                        notification(applicationContext)
                         return START_STICKY
                     }
                     ACTION_STOP -> {
@@ -46,7 +57,6 @@ class TorrentServerService : Service() {
             if (TorrentServerApi.echo() == "") {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
                 server.Server.start(filesDir.absolutePath, "", "", "", "", false, false, false)
-                applicationContext.startService(Intent(applicationContext, TorrentServerNotification::class.java))
             }
         }
     }
@@ -56,8 +66,43 @@ class TorrentServerService : Service() {
             if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
             server.Server.stop()
             TorrentServerApi.shutdown()
-            applicationContext.stopService(Intent(applicationContext, TorrentServerNotification::class.java))
+            applicationContext.cancelNotification(Notifications.ID_TORRENT_SERVER)
             stopSelf()
+        }
+    }
+
+    private fun notification(context: Context) {
+        val exitPendingIntent =
+            PendingIntent.getService(
+                applicationContext,
+                0,
+                Intent(applicationContext, TorrentServerService::class.java).apply {
+                    action = ACTION_STOP
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+        val builder = context.notificationBuilder(Notifications.CHANNEL_TORRENT_SERVER) {
+            setSmallIcon(R.drawable.ic_sua)
+            setContentText(stringResource(MR.strings.torrentserver_isrunning))
+            setContentTitle(stringResource(MR.strings.app_name))
+            setAutoCancel(false)
+            setOngoing(true)
+            setUsesChronometer(true)
+            addAction(
+                R.drawable.ic_close_24dp,
+                "Stop",
+                exitPendingIntent,
+            )
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                Notifications.ID_TORRENT_SERVER,
+                builder.build(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+            )
+        } else {
+            startForeground(Notifications.ID_TORRENT_SERVER, builder.build())
         }
     }
 

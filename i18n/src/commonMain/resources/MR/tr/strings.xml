@@ -1110,19 +1110,15 @@
     <string name="local_source_badge">Lokal</string>
     <string name="anime_interval_expected_update">Yeni bölümlerin yaklaşık %1$s içinde yayınlanacağı tahmin ediliyor ve yaklaşık her %2$s\'de bir kontrol ediliyor.</string>
     <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
-    <string name="multi_thread_download_summary">Birden fazla thread kullanarak anime indirmeyi etkinleştir</string>
     <string name="download_speed_limit">İndirme hızı limiti</string>
     <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0\'a ayarlayın.</string>
     <string name="download_notifier_download_finish">İndirme tamamlandı</string>
-    <string name="multi_thread_download">Anime için multi-threadedli indirme</string>
     <string name="action_sort_airing_time">Yayınlama tarihi</string>
     <string name="theme_cloudflare">Cloudflare</string>
     <string name="theme_sapphire">Sapphire</string>
     <string name="theme_doom">Doom</string>
     <string name="pref_preserve_reading_position">Okunmuş bölümlerde okuma pozisyonunu sakla</string>
     <string name="pref_start_screen">Ekranı başlat(?)</string>
-    <string name="multi_thread_download_threads_number">Thread sayısı</string>
-    <string name="multi_thread_download_threads_number_summary">İndirme için kullanılacak thread sayısı, çok yüksek olması durumunda IP\'nizin bloke edilmesine neden olabilir; sunucularda ağır yükü önlemek için (ban yememek için) genellikle 4 iyi bir sayıdır.</string>
     <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
     <string name="pref_gpu_next_subtitle">Yeni bir video işleme backend\'i</string>
 </resources>

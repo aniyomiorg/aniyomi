@@ -1116,10 +1116,6 @@
     <string name="untrusted_extension_message">Zlonamjerna proširenja mogu čitati sve spremljene podatke za prijavu ili izvršiti proizvoljni kod.
 \n
 \nVjerujući ovom proširenju, prihvaćaš te rizike.</string>
-    <string name="multi_thread_download_summary">Aktiviraj preuzimanje animea pomoću višebrojnih instrukcija procesa</string>
-    <string name="multi_thread_download_threads_number_summary">Broj instrukcija procesa koje se koriste za preuzimanje. Može blokirati tvoj IP ako je prevelik, obično je 4 dobar broj za izbjegavanje preopterećenja izvornih servera.</string>
     <string name="pref_gpu_next_subtitle">Nov pozadinski sustav za iscrtavanje videa</string>
     <string name="pref_gpu_next_title">Aktiviraj gpu-next</string>
-    <string name="multi_thread_download">Preuzimanje animea pomoću višebrojnih instrukcija procesa</string>
-    <string name="multi_thread_download_threads_number">Broj instrukcija procesa</string>
 </resources>
