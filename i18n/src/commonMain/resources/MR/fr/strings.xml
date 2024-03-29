@@ -770,7 +770,7 @@
     <string name="action_play_internally">Lire avec le lecteur interne</string>
     <string name="action_download_unread">Télécharger les chapitres non lus</string>
     <string name="action_download_unseen">Télécharger les épisodes inédits</string>
-    <string name="action_bookmark_episode">Ajouter un marque-page</string>
+    <string name="action_bookmark_episode">Marquer L\'épisode</string>
     <string name="action_remove_bookmark_episode">Enlever le marque-page</string>
     <string name="action_edit_anime_categories">Modifier les catégories d\'animé</string>
     <string name="action_edit_manga_categories">Modifier les catégories de mangas</string>
@@ -780,7 +780,7 @@
     <string name="action_next_episode">Épisode suivant</string>
     <string name="action_screen_fit">Mode d\'ajustement de l\'écran</string>
     <string name="action_player_pip">Mode image incrustée</string>
-    <string name="action_show_manga">Afficher le titre</string>
+    <string name="action_show_manga">Afficher le manga</string>
     <string name="action_show_anime">Afficher l\'animé</string>
     <string name="action_display_download_badge_anime">Épisodes téléchargés</string>
     <string name="action_display_local_badge_manga">Source locale</string>
@@ -968,7 +968,7 @@
     <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
     <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
-    <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
+    <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées dans la recherche globale</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
     <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
