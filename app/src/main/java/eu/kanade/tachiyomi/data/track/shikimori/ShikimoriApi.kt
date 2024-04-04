@@ -329,7 +329,7 @@ class ShikimoriApi(
         private const val oauthUrl = "$baseUrl/oauth/token"
         private const val loginUrl = "$baseUrl/oauth/authorize"
 
-        private const val redirectUrl = "aniyomi://shikimori-auth"
+        private const val redirectUrl = "animetail://shikimori-auth"
 
         fun authUrl(): Uri = loginUrl.toUri().buildUpon()
             .appendQueryParameter("client_id", clientId)
