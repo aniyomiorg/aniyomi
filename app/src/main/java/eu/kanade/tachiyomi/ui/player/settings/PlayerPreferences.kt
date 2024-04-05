@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import eu.kanade.presentation.more.settings.screen.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
+import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum

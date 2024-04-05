@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
@@ -109,14 +110,10 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerAudioChannels,
                     title = stringResource(MR.strings.pref_player_audio_channels),
                     entries = persistentMapOf(
-                        AudioChannels.Auto to
-                            stringResource(MR.strings.pref_player_audio_channels_auto),
-                        AudioChannels.Mono to
-                            stringResource(MR.strings.pref_player_audio_channels_mono),
-                        AudioChannels.Stereo to
-                            stringResource(MR.strings.pref_player_audio_channels_stereo),
-                        AudioChannels.ReverseStereo to
-                            stringResource(MR.strings.pref_player_audio_channels_reverse_stereo),
+                        AudioChannels.Auto to stringResource(AudioChannels.Auto.textRes),
+                        AudioChannels.Mono to stringResource(AudioChannels.Mono.textRes),
+                        AudioChannels.Stereo to stringResource(AudioChannels.Stereo.textRes),
+                        AudioChannels.ReverseStereo to stringResource(AudioChannels.ReverseStereo.textRes),
                     ),
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -453,10 +450,3 @@ val externalPlayers = listOf(
     X_PLAYER,
     WEB_VIDEO_CASTER,
 )
-
-enum class AudioChannels(val propertyName: String, val propertyValue: String) {
-    Auto("audio-channels", "auto"),
-    Mono("audio-channels", "mono"),
-    Stereo("audio-channels", "stereo"),
-    ReverseStereo("af", "pan=[stereo|c0=c1|c1=c0]"),
-}
