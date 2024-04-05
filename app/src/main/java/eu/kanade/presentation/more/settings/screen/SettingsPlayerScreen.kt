@@ -90,6 +90,7 @@ object SettingsPlayerScreen : SearchableSettings {
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
+        val playerAudioChannels = playerPreferences.audioChannels()
         val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
@@ -103,6 +104,20 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerHideControls,
                     title = stringResource(MR.strings.pref_player_hide_controls),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = playerAudioChannels,
+                    title = stringResource(MR.strings.pref_player_audio_channels),
+                    entries = persistentMapOf(
+                        AudioChannels.Auto to
+                            stringResource(MR.strings.pref_player_audio_channels_auto),
+                        AudioChannels.Mono to
+                            stringResource(MR.strings.pref_player_audio_channels_mono),
+                        AudioChannels.Stereo to
+                            stringResource(MR.strings.pref_player_audio_channels_stereo),
+                        AudioChannels.ReverseStereo to
+                            stringResource(MR.strings.pref_player_audio_channels_reverse_stereo),
+                    ),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_category_player_advanced),
@@ -438,3 +453,10 @@ val externalPlayers = listOf(
     X_PLAYER,
     WEB_VIDEO_CASTER,
 )
+
+enum class AudioChannels(val propertyName: String, val propertyValue: String) {
+    Auto("audio-channels", "auto"),
+    Mono("audio-channels", "mono"),
+    Stereo("audio-channels", "stereo"),
+    ReverseStereo("af", "pan=[stereo|c0=c1|c1=c0]"),
+}

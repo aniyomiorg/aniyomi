@@ -906,6 +906,11 @@
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
+    <string name="pref_player_audio_channels">Audio channels</string>
+    <string name="pref_player_audio_channels_auto">Auto</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
     <string name="pref_enable_pip">Enable the use of PiP mode</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
