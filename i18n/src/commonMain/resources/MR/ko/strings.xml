@@ -1104,4 +1104,19 @@
     <string name="last_auto_backup_info">마지막 자동 백업: %s</string>
     <string name="pref_storage_usage">저장공간 사용량</string>
     <string name="available_disk_space_info">사용 가능: %1$s / 전체: %2$s</string>
+    <string name="manga_interval_expected_update">새 회차는 약 %1$s 후에 출시될 것으로 예상되며 매 %2$s마다 확인됩니다.</string>
+    <string name="anime_interval_expected_update">새 에피소드는 약 %1$s 후에 공개될 것으로 예상되며 매 %2$s마다 확인됩니다.</string>
+    <string name="manga_interval_custom_amount">맞춤 업데이트 빈도:</string>
+    <string name="exclude_scanlators">스캔레이터 제외</string>
+    <string name="no_scanlators_found">스캔레이터를 찾을 수 없습니다</string>
+    <string name="file_null_uri_error">파일이 선택되지 않았습니다</string>
+    <string name="download_notifier_download_finish">다운로드 완료</string>
+    <string name="download_speed_limit">다운로드 속도 제한</string>
+    <string name="relative_time_span_never">없음</string>
+    <string name="action_create">생성</string>
+    <string name="pref_start_screen">시작화면</string>
+    <string name="pref_gpu_next_title">gpu-next 활성화</string>
+    <string name="pref_gpu_next_subtitle">새로운 비디오 렌더링 백엔드</string>
+    <string name="onboarding_storage_action_create_folder">기본 Aniyomi 폴더 생성</string>
+    <string name="download_speed_limit_hint">속도 제한을 비활성화하려면 0으로 설정하세요.</string>
 </resources>

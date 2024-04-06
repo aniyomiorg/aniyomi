@@ -53,7 +53,7 @@ class DelayedMangaTrackingUpdateJob(private val context: Context, workerParams: 
     }
 
     companion object {
-        private const val TAG = "DelayedTrackingUpdate"
+        private const val TAG = "DelayedMangaTrackingUpdate"
 
         fun setupTask(context: Context) {
             val constraints = Constraints(

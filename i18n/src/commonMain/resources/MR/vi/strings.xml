@@ -789,4 +789,5 @@
     <string name="entries">Thư viên</string>
     <string name="chapters_episodes">Chương và tập</string>
     <string name="anime_categories">Thể loại Anime</string>
+    <string name="confirm_exit">Hãy nhấn lại nút quay lại để thoát</string>
 </resources>

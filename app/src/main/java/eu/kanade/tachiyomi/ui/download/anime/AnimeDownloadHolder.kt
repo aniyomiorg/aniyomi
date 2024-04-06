@@ -32,7 +32,7 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
     /**
      * Binds this holder with the given category.
      *
-     * @param category The category to bind.
+     * @param download the download to bind.
      */
     fun bind(download: AnimeDownload) {
         this.download = download
@@ -62,11 +62,11 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
         if (binding.downloadProgress.max == 1) {
             binding.downloadProgress.max = 100
         }
-        if (download.totalProgress == 0) {
+        if (download.progress == 0) {
             binding.downloadProgress.isIndeterminate = true
         } else {
             binding.downloadProgress.isIndeterminate = false
-            binding.downloadProgress.setProgressCompat(download.totalProgress, true)
+            binding.downloadProgress.setProgressCompat(download.progress, true)
         }
     }
 
@@ -74,7 +74,7 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
      * Updates the text field of the number of downloaded pages.
      */
     fun notifyDownloadedPages() {
-        binding.downloadProgressText.text = if (download.totalProgress == 0) {
+        binding.downloadProgressText.text = if (download.progress == 0) {
             view.context.stringResource(MR.strings.update_check_notification_download_in_progress)
         } else {
             view.context.stringResource(MR.strings.episode_download_progress, download.progress)
