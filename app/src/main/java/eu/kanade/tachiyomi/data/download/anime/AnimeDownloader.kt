@@ -486,7 +486,7 @@ class AnimeDownloader(
 
             if (downloadScope.isActive) {
                 file = try {
-                    if(isTor(download.video!!)) {
+                    if (isTor(download.video!!)) {
                         ffmpegDownload(download, tmpDir, filename)
                     } else {
                         if (isHls(download.video!!) || isMpd(download.video!!)) {
