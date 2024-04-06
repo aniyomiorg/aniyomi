@@ -710,7 +710,7 @@
     <string name="exception_unknown_host">无法连接到 %s</string>
     <string name="source_settings">资源设置</string>
     <string name="app_settings">应用设置</string>
-    <string name="unlock_app_title">解锁 Aniyomi</string>
+    <string name="unlock_app_title">解锁 Kuukiyomi</string>
     <string name="action_sort_category">分类排序</string>
     <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
     <string name="notification_updating_progress">正在更新仓库…(%s)</string>
