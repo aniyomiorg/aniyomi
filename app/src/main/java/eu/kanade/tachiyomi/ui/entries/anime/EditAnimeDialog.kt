@@ -194,7 +194,11 @@ private fun onViewCreated(
     binding.animeGenresTags.clearFocus()
 
     binding.resetTags.setOnClickListener { resetTags(anime, binding, scope) }
+    // SY -->
+    binding.resetInfo.setOnClickListener { resetInfo(anime, binding, scope) }
+    // SY <--
 }
+
 
 private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {
     if (anime.genre.isNullOrEmpty() || anime.isLocal()) {
@@ -202,6 +206,14 @@ private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: Coro
     } else {
         binding.animeGenresTags.setChips(anime.ogGenre.orEmpty(), scope)
     }
+}
+
+private fun resetInfo(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {
+    binding.title.setText("")
+    binding.animeAuthor.setText("")
+    binding.animeArtist.setText("")
+    binding.animeDescription.setText("")
+    resetTags(anime, binding, scope)
 }
 
 private fun loadCover(anime: Anime, context: Context, binding: EditAnimeDialogBinding) {

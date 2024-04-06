@@ -194,6 +194,9 @@ private fun onViewCreated(
     binding.mangaGenresTags.clearFocus()
 
     binding.resetTags.setOnClickListener { resetTags(manga, binding, scope) }
+    //SY-->
+    binding.resetInfo.setOnClickListener { resetInfo(manga, binding, scope) }
+    //SY<--
 }
 
 private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: CoroutineScope) {
@@ -202,6 +205,13 @@ private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: Coro
     } else {
         binding.mangaGenresTags.setChips(manga.ogGenre.orEmpty(), scope)
     }
+}
+private fun resetInfo(manga: Manga, binding: EditMangaDialogBinding, scope: CoroutineScope) {
+    binding.title.setText("")
+    binding.mangaAuthor.setText("")
+    binding.mangaArtist.setText("")
+    binding.mangaDescription.setText("")
+    resetTags(manga, binding, scope)
 }
 
 private fun loadCover(manga: Manga, context: Context, binding: EditMangaDialogBinding) {
