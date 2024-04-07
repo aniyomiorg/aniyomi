@@ -37,7 +37,6 @@ import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.widget.materialdialogs.setTextInput
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.manga.isLocal
 
 @Composable
@@ -183,15 +182,15 @@ private fun onViewCreated(
         binding.mangaDescription.hint =
             context.getString(
                 R.string.description_hint,
-                manga.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: ""
+                manga.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: "",
             )
     }
     binding.mangaGenresTags.clearFocus()
 
     binding.resetTags.setOnClickListener { resetTags(manga, binding, scope) }
-    //SY-->
+    // SY-->
     binding.resetInfo.setOnClickListener { resetInfo(manga, binding, scope) }
-    //SY<--
+    // SY<--
 }
 
 private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: CoroutineScope) {

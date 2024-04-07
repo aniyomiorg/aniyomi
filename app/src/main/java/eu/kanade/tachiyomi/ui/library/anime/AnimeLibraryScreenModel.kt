@@ -540,7 +540,6 @@ class AnimeLibraryScreenModel(
         clearSelection()
     }
 
-
     /**
      * Queues the amount specified of unseen episodes from the list of animes given.
      *

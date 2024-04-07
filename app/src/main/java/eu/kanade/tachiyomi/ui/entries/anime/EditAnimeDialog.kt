@@ -182,7 +182,7 @@ private fun onViewCreated(
         binding.animeDescription.hint =
             context.getString(
                 R.string.description_hint,
-                anime.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: ""
+                anime.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: "",
             )
     }
     binding.animeGenresTags.clearFocus()
@@ -192,7 +192,6 @@ private fun onViewCreated(
     binding.resetInfo.setOnClickListener { resetInfo(anime, binding, scope) }
     // SY <--
 }
-
 
 private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {
     if (anime.genre.isNullOrEmpty() || anime.isLocal()) {

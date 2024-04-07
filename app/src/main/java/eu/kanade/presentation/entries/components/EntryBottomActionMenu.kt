@@ -304,7 +304,7 @@ fun LibraryBottomActionMenu(
                     if (isActive) confirm[toConfirmIndex] = false
                 }
             }
-            val showOverflow =  onClickResetInfo != null
+            val showOverflow = onClickResetInfo != null
             Row(
                 modifier = Modifier
                     .windowInsetsPadding(
@@ -372,7 +372,6 @@ fun LibraryBottomActionMenu(
                     )
                 }
                 // SY <--
-
             }
         }
     }

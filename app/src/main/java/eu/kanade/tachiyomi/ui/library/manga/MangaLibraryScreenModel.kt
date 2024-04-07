@@ -571,6 +571,7 @@ class MangaLibraryScreenModel(
         }
         clearSelection()
     }
+
 // SY -->
     fun resetInfo() {
         state.value.selection.fastForEach { (manga) ->
