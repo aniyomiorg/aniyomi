@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.widget.materialdialogs.setTextInput
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.manga.isLocal
 
 @Composable
@@ -177,19 +178,13 @@ private fun onViewCreated(
         binding.mangaGenresTags.setChips(manga.genre.orEmpty().dropBlank(), scope)
 
         binding.title.hint = context.getString(R.string.title_hint, manga.ogTitle)
-        if (manga.ogAuthor != null) {
-            binding.mangaAuthor.hint = context.getString(R.string.author_hint, manga.ogAuthor)
-        }
-        if (manga.ogArtist != null) {
-            binding.mangaArtist.hint = context.getString(R.string.artist_hint, manga.ogArtist)
-        }
-        if (!manga.ogDescription.isNullOrBlank()) {
-            binding.mangaDescription.hint =
-                context.getString(
-                    R.string.description_hint,
-                    manga.ogDescription!!.replace("\n", " ").chop(20),
-                )
-        }
+        binding.mangaAuthor.hint = context.getString(R.string.author_hint, manga.ogAuthor ?: "")
+        binding.mangaArtist.hint = context.getString(R.string.artist_hint, manga.ogArtist ?: "")
+        binding.mangaDescription.hint =
+            context.getString(
+                R.string.description_hint,
+                manga.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: ""
+            )
     }
     binding.mangaGenresTags.clearFocus()
 

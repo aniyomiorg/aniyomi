@@ -177,19 +177,13 @@ private fun onViewCreated(
         binding.animeGenresTags.setChips(anime.genre.orEmpty().dropBlank(), scope)
 
         binding.title.hint = context.getString(R.string.title_hint, anime.ogTitle)
-        if (anime.ogAuthor != null) {
-            binding.animeAuthor.hint = context.getString(R.string.author_hint, anime.ogAuthor)
-        }
-        if (anime.ogArtist != null) {
-            binding.animeArtist.hint = context.getString(R.string.artist_hint, anime.ogArtist)
-        }
-        if (!anime.ogDescription.isNullOrBlank()) {
-            binding.animeDescription.hint =
-                context.getString(
-                    R.string.description_hint,
-                    anime.ogDescription!!.replace("\n", " ").chop(20),
-                )
-        }
+        binding.animeAuthor.hint = context.getString(R.string.author_hint, anime.ogAuthor ?: "")
+        binding.animeArtist.hint = context.getString(R.string.artist_hint, anime.ogArtist ?: "")
+        binding.animeDescription.hint =
+            context.getString(
+                R.string.description_hint,
+                anime.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: ""
+            )
     }
     binding.animeGenresTags.clearFocus()
 
