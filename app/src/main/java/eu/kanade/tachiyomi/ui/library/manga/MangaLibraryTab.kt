@@ -194,6 +194,9 @@ object MangaLibraryTab : Tab() {
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.manga.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteMangaDialog,
+                    // SY -->
+                    onClickResetInfo = screenModel::resetInfo.takeIf { state.showResetInfo },
+                    // SY <--
                     isManga = true,
                 )
             },

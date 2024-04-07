@@ -26,6 +26,7 @@
     <string name="author_hint">Author: %1$s</string>
     <string name="artist_hint">Artist: %1$s</string>
     <string name="custom_entry_info">Custom entry info</string>
+    <string name="reset_info">Reset Info</string>
     <!-- Preferences -->
     <!-- Subsections -->
     <string name="pref_category_fork">Fork Settings</string>

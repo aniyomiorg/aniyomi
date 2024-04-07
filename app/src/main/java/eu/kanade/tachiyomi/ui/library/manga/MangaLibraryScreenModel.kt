@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -571,6 +572,28 @@ class MangaLibraryScreenModel(
         clearSelection()
     }
 
+// SY -->
+    fun resetInfo() {
+        state.value.selection.fastForEach { (manga) ->
+            val mangaInfo = MangaUpdate(
+                id = manga.id,
+                title = null,
+                author = null,
+                artist = null,
+                thumbnailUrl = null,
+                description = null,
+                genre = null,
+                status = null,
+            )
+
+            screenModelScope.launchNonCancellable {
+                updateManga.await(mangaInfo)
+            }
+        }
+        clearSelection()
+    }
+// SY <--
+
     /**
      * Remove the selected manga.
      *
@@ -947,6 +970,19 @@ class MangaLibraryScreenModel(
         val selectionMode = selection.isNotEmpty()
 
         val categories = library.keys.toList()
+
+        // SY -->
+        val showResetInfo: Boolean by lazy {
+            selection.fastAny { (manga) ->
+                manga.title != manga.ogTitle ||
+                    manga.author != manga.ogAuthor ||
+                    manga.artist != manga.ogArtist ||
+                    manga.description != manga.ogDescription ||
+                    manga.genre != manga.ogGenre ||
+                    manga.status != manga.ogStatus
+            }
+        }
+        // SY <--
 
         fun getLibraryItemsByCategoryId(categoryId: Long): List<MangaLibraryItem>? {
             return library.firstNotNullOfOrNull { (k, v) -> v.takeIf { k.id == categoryId } }
