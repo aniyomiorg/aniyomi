@@ -51,6 +51,7 @@ object HistoriesTab : Tab() {
 
     @Composable
     override fun Content() {
+        throw RuntimeException()
         val context = LocalContext.current
         val fromMore = currentNavigationStyle() == NavStyle.MOVE_HISTORY_TO_MORE
         // Hoisted for history tab's search bar
