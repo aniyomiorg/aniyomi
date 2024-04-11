@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import `is`.xyz.mpv.Utils
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.lang.withUIContext
 import uy.kohesive.injekt.Injekt
@@ -49,9 +50,9 @@ class CrashLogUtil(
             Device name: ${Build.DEVICE} (${Build.PRODUCT})
             Device model: ${Build.MODEL}
             WebView: ${WebViewUtil.getVersion(context)}
-            MPVLib version: ${MainActivity.mpvVersions.mpvCommit} (${MainActivity.mpvVersions.buildDate})
-            Libplacebo version: ${MainActivity.mpvVersions.libPlacebo}
-            FFmpeg version: ${MainActivity.mpvVersions.ffmpeg}
+            MPV version: ${Utils.VERSIONS.mpv}
+            Libplacebo version: ${Utils.VERSIONS.libPlacebo}
+            FFmpeg version: ${Utils.VERSIONS.ffmpeg}
         """.trimIndent()
     }
 

@@ -98,8 +98,6 @@ import eu.kanade.tachiyomi.util.system.isNavigationBarNeedsScrim
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
-import `is`.xyz.mpv.MPVLib
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -108,7 +106,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import tachiyomi.core.i18n.stringResource
 import tachiyomi.core.util.lang.launchIO
@@ -139,7 +136,6 @@ class MainActivity : BaseActivity() {
     var ready = false
 
     private var navigator: Navigator? = null
-    private val recordMPVVersion = RecordMPVVersion(this)
 
     init {
         registerSecureActivity(this)
@@ -591,71 +587,6 @@ class MainActivity : BaseActivity() {
                 context.startActivity(
                     PlayerActivity.newIntent(context, animeId, episodeId, videoList, videoList?.indexOf(video)),
                 )
-            }
-        }
-
-        data class MPVVersions(
-            var mpvCommit: String = "",
-            var buildDate: String = "",
-            var libPlacebo: String = "",
-            var ffmpeg: String = "",
-        ) {
-            fun trim() {
-                mpvCommit = mpvCommit.substringBefore("Copyright").trim()
-                buildDate = buildDate.substringAfter("built on ").trim()
-                libPlacebo = libPlacebo.substringAfter(": ").trim()
-                ffmpeg = ffmpeg.substringAfter(": ").trim()
-            }
-        }
-
-        internal val mpvVersions = MPVVersions()
-
-        private var recordMPVLog = true
-    }
-
-    fun onLoggingComplete() {
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                mpvVersions.trim()
-                MPVLib.removeLogObserver(recordMPVVersion)
-                MPVLib.destroy()
-            }
-        }
-    }
-
-    inner class RecordMPVVersion(private val context: Context) : MPVLib.LogObserver {
-        init {
-            MPVLib.create(context, "v")
-            MPVLib.addLogObserver(this)
-            MPVLib.init()
-        }
-
-        override fun logMessage(prefix: String, level: Int, text: String) {
-            if (prefix != "cplayer") return
-
-            if (level == MPVLib.mpvLogLevel.MPV_LOG_LEVEL_V) {
-                with(text) {
-                    if (recordMPVLog) {
-                        when {
-                            contains("Copyright ©") -> mpvVersions.mpvCommit = this
-                            contains("built on") -> mpvVersions.buildDate = this
-                            contains("libplacebo version:") -> mpvVersions.libPlacebo = this
-                            contains("FFmpeg version:") -> mpvVersions.ffmpeg = this
-                            else -> {
-                                recordMPVLog = false
-                                // Use a safe way to call back to the MainActivity
-                                safeOnLoggingComplete()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private fun safeOnLoggingComplete() {
-            // Ensure we're calling MainActivity's method safely
-            (context as? MainActivity)?.runOnUiThread {
-                context.onLoggingComplete()
             }
         }
     }
