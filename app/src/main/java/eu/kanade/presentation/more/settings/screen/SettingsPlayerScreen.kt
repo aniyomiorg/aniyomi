@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
@@ -90,6 +91,7 @@ object SettingsPlayerScreen : SearchableSettings {
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
+        val playerAudioChannels = playerPreferences.audioChannels()
         val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
@@ -103,6 +105,16 @@ object SettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = playerHideControls,
                     title = stringResource(MR.strings.pref_player_hide_controls),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = playerAudioChannels,
+                    title = stringResource(MR.strings.pref_player_audio_channels),
+                    entries = persistentMapOf(
+                        AudioChannels.Auto to stringResource(AudioChannels.Auto.textRes),
+                        AudioChannels.Mono to stringResource(AudioChannels.Mono.textRes),
+                        AudioChannels.Stereo to stringResource(AudioChannels.Stereo.textRes),
+                        AudioChannels.ReverseStereo to stringResource(AudioChannels.ReverseStereo.textRes),
+                    ),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_category_player_advanced),
