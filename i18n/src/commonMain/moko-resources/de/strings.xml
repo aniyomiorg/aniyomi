@@ -220,7 +220,7 @@
     <string name="other_source">Andere</string>
     <string name="action_global_search_hint">Globale Suche…</string>
     <string name="latest">Neueste</string>
-    <string name="browse">Stöbern</string>
+    <string name="browse">Durchsuchen</string>
     <string name="channel_common">Allgemein</string>
     <string name="action_display_download_badge">Heruntergelade Kapitel</string>
     <string name="information_empty_category">Keine Kategorien vorhanden. Tippe auf die Plus-Schaltfläche, um eine Kategorie zum Sortieren deiner Bibliothek zu erstellen.</string>
@@ -774,7 +774,7 @@
     <string name="label_add_repo_input">Repository-URL</string>
     <string name="action_add_repo_message">Füge zusätzliche Repositories zu Aniyomi hinzu. Deren URL sollte mit „index.min.json“ enden.</string>
     <string name="invalid_repo_name">Ungültige Repository-URL</string>
-    <string name="manga_interval_expected_update">Nächste Aktualisierung erwartet in ca. %1$s, überprüfe ca. alle %2$s.</string>
+    <string name="manga_interval_expected_update">Nächste Aktualisierung erwartet in ca. %1$s, überprüfe ca. alle %2$s</string>
     <string name="manga_categories">Manga-Kategorien</string>
     <string name="general_categories">Kategorien</string>
     <string name="anime_categories">Anime-Kategorien</string>
@@ -1109,7 +1109,7 @@
     <string name="pref_gpu_next_subtitle">Ein neues Video-Rendering-Backend</string>
     <string name="safe_download">Sicherer Downloadmodus für Anime</string>
     <string name="download_threads_number">Thread Anzahl</string>
-    <string name="download_threads_number_summary">Die Anzahl der beim Herunterladen zu verwendenden Threads. Kann zur Blockierung Ihrer IP führen, wenn sie zu hoch ist. Normalerweise sind ca. 4 Threads empfehlenswert, um eine hohe Belastung der Quellserver zu vermeiden.</string>
+    <string name="download_threads_number_summary">Die Anzahl der beim Herunterladen zu verwendenden Threads. Kann zur Blockierung der IP-Adresse führen, wenn sie zu hoch ist. Normalerweise sind ca. 4 Threads empfehlenswert, um eine hohe Belastung der Quellserver zu vermeiden.</string>
     <string name="local_source_badge">Lokal</string>
     <string name="anime_interval_expected_update">Voraussichtliche Veröffentlichung einer neuen Episode in %1$s, Aktualisierung alle %2$s</string>
     <string name="download_notifier_download_finish">Download abgeschlossen</string>
@@ -1125,7 +1125,7 @@
     <string name="pref_preserve_reading_position">Lesefortschritt bei gelesenen Kapiteln speichern</string>
     <string name="pref_download_slots">Maximale Downloads</string>
     <string name="pref_gpu_next_title">GPU-Next aktivieren</string>
-    <string name="safe_download_summary">Aktivieren Sie den Einzelthread- und keinen Bereichsdownloadmodus</string>
+    <string name="safe_download_summary">Aktiviere den Einzelthread- und keinen Bereichsdownloadmodus</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels">Audiokanäle</string>
