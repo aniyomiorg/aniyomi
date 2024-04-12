@@ -1125,7 +1125,7 @@
     <string name="pref_preserve_reading_position">Lesefortschritt bei gelesenen Kapiteln speichern</string>
     <string name="pref_download_slots">Maximale Downloads</string>
     <string name="pref_gpu_next_title">GPU-Next aktivieren</string>
-    <string name="safe_download_summary">Aktiviere den Einzelthread- und den Nicht-Bereichs-Download-Modus</string>
+    <string name="safe_download_summary">Aktivieren Sie den Einzelthread- und keinen Bereichsdownloadmodus</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels">Audiokanäle</string>
