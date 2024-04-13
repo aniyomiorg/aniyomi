@@ -1119,4 +1119,16 @@
     <string name="pref_gpu_next_subtitle">새로운 비디오 렌더링 백엔드</string>
     <string name="onboarding_storage_action_create_folder">기본 Aniyomi 폴더 생성</string>
     <string name="download_speed_limit_hint">속도 제한을 비활성화하려면 0으로 설정하세요.</string>
+    <string name="pref_player_audio_channels">오디오 채널</string>
+    <string name="pref_player_audio_channels_auto">자동</string>
+    <string name="pref_player_audio_channels_mono">모노</string>
+    <string name="pref_player_audio_channels_stereo">스테레오</string>
+    <string name="pref_player_audio_channels_reverse_stereo">스테레오(반대로)</string>
+    <string name="safe_download">애니메이션용 보안 다운로드 모드</string>
+    <string name="safe_download_summary">영역 다운로드 모드가 아닌 단일 스레드 활성화</string>
+    <string name="download_threads_number">스레드 수</string>
+    <string name="download_threads_number_summary">다운로드 시 사용할 스레드 수입니다. IP 주소가 너무 높으면 차단될 수 있습니다. 보통 대략적으로, 4개의 스레드가 소스 서버에 과부하를 주지 않도록 하는 것이 좋습니다.</string>
+    <string name="manga_interval_expected_update_soon">지원</string>
+    <string name="action_reorganize_by">재정렬</string>
+    <string name="pref_bottom_nav_no_browse">\"추가\" 탭으로 이동</string>
 </resources>
