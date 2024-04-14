@@ -132,13 +132,13 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     val dualPageSplitPaged by screenModel.preferences.dualPageSplitPaged().collectAsState()
     CheckboxItem(
         label = stringResource(MR.strings.pref_dual_page_split),
-        pref = screenModel.preferences.dualPageInvertPaged(),
+        pref = screenModel.preferences.dualPageSplitPaged(),
     )
 
     if (dualPageSplitPaged) {
         CheckboxItem(
             label = stringResource(MR.strings.pref_dual_page_invert),
-            pref = screenModel.preferences.dualPageRotateToFitInvert(),
+            pref = screenModel.preferences.dualPageInvertPaged(),
         )
     }
 
