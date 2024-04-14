@@ -1126,8 +1126,8 @@
     <string name="download_threads_number_summary">用于下载的线程数，若设置过高会导致IP封禁，为避免资源服务器负担过重，通常设定为 4 最佳。</string>
     <string name="chapter_dialog_header">寻找章节</string>
     <string name="pref_bottom_nav_no_browse">将浏览移至更多选项</string>
-    <string name="pref_player_audio_channels">音频频道</string>
-    <string name="pref_player_audio_channels_auto">自动</string>
+    <string name="pref_player_audio_channels">音频声道</string>
+    <string name="pref_player_audio_channels_auto">自动选择</string>
     <string name="pref_player_audio_channels_mono">单声道</string>
     <string name="pref_player_audio_channels_stereo">立体声</string>
     <string name="pref_player_audio_channels_reverse_stereo">反转立体声</string>
