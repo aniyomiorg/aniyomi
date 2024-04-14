@@ -19,6 +19,7 @@ import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.saveTo
+import eu.kanade.tachiyomi.util.system.setForegroundSafely
 import eu.kanade.tachiyomi.util.system.workManager
 import logcat.LogPriority
 import okhttp3.internal.http2.ErrorCode
@@ -45,11 +46,7 @@ class AppUpdateDownloadJob(private val context: Context, workerParams: WorkerPar
             return Result.failure()
         }
 
-        try {
-            setForeground(getForegroundInfo())
-        } catch (e: IllegalStateException) {
-            logcat(LogPriority.ERROR, e) { "Not allowed to run on foreground service" }
-        }
+        setForegroundSafely()
 
         withIOContext {
             downloadApk(title, url)
