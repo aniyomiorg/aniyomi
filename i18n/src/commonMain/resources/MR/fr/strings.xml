@@ -770,7 +770,7 @@
     <string name="action_play_internally">Lire avec le lecteur interne</string>
     <string name="action_download_unread">Télécharger les chapitres non lus</string>
     <string name="action_download_unseen">Télécharger les épisodes inédits</string>
-    <string name="action_bookmark_episode">Ajouter un marque-page</string>
+    <string name="action_bookmark_episode">Marquer L\'épisode</string>
     <string name="action_remove_bookmark_episode">Enlever le marque-page</string>
     <string name="action_edit_anime_categories">Modifier les catégories d\'animé</string>
     <string name="action_edit_manga_categories">Modifier les catégories de mangas</string>
@@ -780,7 +780,7 @@
     <string name="action_next_episode">Épisode suivant</string>
     <string name="action_screen_fit">Mode d\'ajustement de l\'écran</string>
     <string name="action_player_pip">Mode image incrustée</string>
-    <string name="action_show_manga">Afficher le titre</string>
+    <string name="action_show_manga">Afficher le manga</string>
     <string name="action_show_anime">Afficher l\'animé</string>
     <string name="action_display_download_badge_anime">Épisodes téléchargés</string>
     <string name="action_display_local_badge_manga">Source locale</string>
@@ -954,8 +954,8 @@
     <string name="auto_download_while_watching">Télécharger automatiquement pendant le visionnage</string>
     <string name="pref_waiting_time_aniskip">Délai d\'expiration du bouton</string>
     <string name="action_global_manga_search">Recherche de Manga Globale</string>
-    <string name="action_global_anime_search">Recherche Globale d\'Anime</string>
-    <string name="pref_search_pinned_anime_sources_only">N\'inclure que les sources d\'anime épinglées</string>
+    <string name="action_global_anime_search">Recherche d\'Anime Globale</string>
+    <string name="pref_search_pinned_anime_sources_only">N\'inclure que les sources d\'anime épinglées dans la recherche globale</string>
     <string name="pref_category_volume_brightness">Volume et Luminosité</string>
     <string name="pref_category_player_seeking">Recherche en cours</string>
     <string name="pref_category_pip">Incrustation vidéo (PiP)</string>
@@ -968,7 +968,7 @@
     <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
     <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
-    <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
+    <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées dans la recherche globale</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
     <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
@@ -1064,4 +1064,44 @@
     <string name="theme_cottoncandy">Barbe à papa</string>
     <string name="theme_mocha">Mocha</string>
     <string name="pref_hide_in_anime_library_items">Cacher les entrées d\'animes déjà dans la bibliothèque</string>
+    <string name="data_saver_downloader">Utiliser l\'économiseur de données dans le téléchargeur</string>
+    <string name="player_subtitle_settings_delay_tab">Délai</string>
+    <string name="player_subtitle_settings_font_tab">Police de caractères</string>
+    <string name="player_reset_subtitles">Réinitialiser les paramètres des sous-titres</string>
+    <string name="player_subtitle_delay">Délai des sous-titres</string>
+    <string name="player_subtitle_settings_color_tab">Couleur</string>
+    <string name="player_audio_remember_delay">Se rappeler du délai de l\'audio</string>
+    <string name="player_track_delay_text_field">Délai(s)</string>
+    <string name="player_subtitle_remember_delay">Se rappeler du délai des sous-titres</string>
+    <string name="player_audio_delay">Délai de l\'audio</string>
+    <string name="player_subtitle_background_color">Arrière plan</string>
+    <string name="player_add_external_subtitles">Ajouter des sous-titres externes</string>
+    <string name="player_subtitle_font_text_field">Police</string>
+    <string name="data_saver_image_format_summary_on">La taille des fichiers Jpeg est considérablement plus basse qu\'en Webp (il y a donc moins de données utilisées) mais les images sont de moins bonne qualité.
+\nCompresse actuellement en Jpeg</string>
+    <string name="data_saver_color_bw">Convertir en noir et blanc</string>
+    <string name="data_saver_exclude">Exclure de l’économiseur de données</string>
+    <string name="data_saver_ignore_gif">Ignorer les GiF</string>
+    <string name="data_saver_image_quality_summary">Une plus grande valeur signifie une meilleure qualité d\'image mais les fichiers enregistrés seront plus gros. 80% est un bon compromis entre taille du fichier et qualité d\'image.</string>
+    <string name="player_subtitle_border_color">Bordure</string>
+    <string name="data_saver">Économiseur de données</string>
+    <string name="data_saver_stop_exclude">Stopper l\'exclusion de l’économiseur de données</string>
+    <string name="data_saver_ignore_jpeg">Ignorer le format d\'image Jpeg</string>
+    <string name="data_saver_image_quality">Qualité d\'image</string>
+    <string name="player_override_ass_subtitles">Ecraser les sous-titres ASS</string>
+    <string name="pref_gpu_next_title">Activer gpu-next</string>
+    <string name="player_font_size_text_field">Taille de la police</string>
+    <string name="player_add_external_audio">Ajouter un audio externe</string>
+    <string name="player_add_external_subtitles_intent">Sélectionner un fichier de sous-titres.</string>
+    <string name="data_saver_summary">Compresser les images avant de les télécharger ou de les charger dans le lecteur</string>
+    <string name="data_saver_image_format">Compresser en Jpeg</string>
+    <string name="data_saver_image_format_summary_off">La taille des fichiers Jpeg est considérablement plus basse qu\'en Webp (il y a donc moins de données utilisées) mais les images sont de moins bonne qualité.
+\nCompresse actuellement en Webp</string>
+    <string name="download_speed_limit">Limite de vitesse de téléchargement</string>
+    <string name="download_speed_limit_hint">Mettre à 0 pour désactiver la limite.</string>
+    <string name="player_subtitle_settings">Paramètres des sous-titres</string>
+    <string name="player_add_external_audio_intent">Sélectionner une piste audio.</string>
+    <string name="player_subtitle_empty_warning">N\'a pas d\'effet car il n\'y a pas de sous-titres dans cette vidéo</string>
+    <string name="player_subtitle_text_color">Texte</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
 </resources>

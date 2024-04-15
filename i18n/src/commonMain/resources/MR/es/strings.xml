@@ -1026,24 +1026,24 @@
     <string name="data_saver_exclude">Excluir del protector de datos</string>
     <string name="pref_episode_swipe_start">Deslizar a la izquierda</string>
     <string name="data_saver_stop_exclude">Detener la excepción del protector de datos</string>
-    <string name="data_saver_image_quality_summary">Los valores más altos significan que se guarda un mayor porcentaje de la calidad de la imagen, pero también significa que el tamaño del archivo es mayor, el 80 por ciento es un buen término medio entre el tamaño del archivo y la calidad de la imagen</string>
-    <string name="data_saver_image_format_summary_off">El tamaño del archivo Jpeg es considerablemente más pequeño que Webp (lo que significa que se guardan más datos), pero también hace que las imágenes pierdan más calidad.
-\nActualmente comprime a Webp</string>
+    <string name="data_saver_image_quality_summary">Valores más altos significan que un mayor porcentaje de la calidad de la imagen es guardada, pero también significa que el tamaño del archivo es mayor, el 80 por ciento es un buen término medio entre el tamaño del archivo y la calidad de la imagen</string>
+    <string name="data_saver_image_format_summary_off">El tamaño del archivo JPEG es considerablemente más pequeño que el del WEBP (lo que significa que se más datos son salvados), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a WEBP</string>
     <string name="data_saver">Ahorro de datos</string>
     <string name="data_saver_summary">Comprimir las imágenes antes de descargarlas o cargarlas en el lector</string>
     <string name="data_saver_downloader">Usar el ahorrador de datos en el descargador</string>
-    <string name="data_saver_ignore_jpeg">Ignorar las imágenes Jpeg</string>
-    <string name="data_saver_ignore_gif">Ignorar las imágenes Gif</string>
+    <string name="data_saver_ignore_jpeg">Ignorar las imágenes JPEG</string>
+    <string name="data_saver_ignore_gif">Ignorar las imágenes GIF</string>
     <string name="data_saver_image_quality">Calidad de la imagen</string>
     <string name="data_saver_image_format">Comprimir a Jpeg</string>
-    <string name="data_saver_image_format_summary_on">El tamaño del archivo Jpeg es considerablemente menor que el de Webp (lo que significa que se ahorran más datos), pero también hace que las imágenes pierdan más calidad.
-\nActualmente comprime a Jpeg</string>
+    <string name="data_saver_image_format_summary_on">El tamaño del archivo JPEG es menor que el de WEBP (lo que significa que más datos son guardados), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a JPEG</string>
     <string name="data_saver_color_bw">Convertir a blanco y negro</string>
     <string name="bandwidth_hero">Bandwidth Hero (requiere un servidor proxy Bandwidth Hero)</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="resmush">resmush.it</string>
-    <string name="bandwidth_data_saver_server">Servidor Proxy Bandwidth Hero</string>
-    <string name="data_saver_server_summary">Pon aquí la dirección url del servidor Proxy de Bandwidth Hero</string>
+    <string name="bandwidth_data_saver_server">Servidor de Bandwidth Hero Proxy</string>
+    <string name="data_saver_server_summary">Poner la URL del servidor de Bandwith Hero Proxy aquí</string>
     <string name="pref_show_next_episode_airing_time">Mostrar la hora de emisión del próximo episodio</string>
     <string name="pref_media_control_chapter_seeking">Buscar los capítulos con los controles multimedia</string>
     <string name="go_to_next_chapter">Siguiente capítulo</string>
@@ -1128,4 +1128,5 @@
     <string name="safe_download">Modo seguro para la descarga del anime</string>
     <string name="safe_download_summary">Activar el modo de descarga de un solo hilo y sin rangos</string>
     <string name="download_threads_number_summary">Número de hilos a utilizar para la descarga, podría bloquear su IP si es demasiado alto, por lo general 4 es un buen número para evitar una carga pesada en los servidores.</string>
+    <string name="pref_bottom_nav_no_browse">Mover la navegación a más opciones</string>
 </resources>
