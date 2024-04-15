@@ -8,7 +8,7 @@
     <string name="label_settings">设置</string>
     <string name="label_download_queue">下载列表</string>
     <string name="label_library">仓库</string>
-    <string name="label_recent_manga">历史</string>
+    <string name="label_recent_manga">历史记录</string>
     <string name="label_recent_updates">更新</string>
     <string name="label_backup">备份和还原</string>
     <string name="label_extensions">插件</string>
@@ -57,7 +57,7 @@
     <string name="action_reset">重置</string>
     <string name="action_undo">撤销</string>
     <string name="track">进度记录</string>
-    <string name="label_migration">迁移</string>
+    <string name="label_migration">漫画迁移</string>
     <string name="action_mark_previous_as_read">标记之前章节为已读</string>
     <string name="action_open_log">打开日志</string>
     <string name="action_restore">还原</string>
@@ -86,7 +86,7 @@
     <string name="pref_update_only_non_completed">跳过已完结的作品</string>
     <string name="pref_auto_update_manga_sync">阅读后更新进度</string>
     <string name="default_category">默认归入分类</string>
-    <string name="default_category_summary">每次都询问</string>
+    <string name="default_category_summary">总是询问</string>
     <string name="ext_update">更新</string>
     <string name="ext_install">安装</string>
     <string name="ext_pending">等待中</string>
@@ -97,9 +97,9 @@
     <string name="ext_untrusted">未信任</string>
     <string name="ext_uninstall">卸载</string>
     <string name="untrusted_extension">插件未受信用</string>
-    <string name="untrusted_extension_message">恶意插件可能会读取所有登录的账号或执行任意代码。
+    <string name="untrusted_extension_message">恶意插件可能会读取所有已登录的账号或执行任意代码。
 \n
-\n信任此插件即代表你愿意承担上述风险。</string>
+\n信任此插件即代表愿意承担上述风险。</string>
     <string name="pref_fullscreen">全屏</string>
     <string name="pref_page_transitions">翻页动画</string>
     <string name="pref_double_tap_anim_speed">双击动画速度</string>
@@ -209,7 +209,7 @@
     <string name="confirm_delete_chapters">确定要删除所选章节吗？</string>
     <string name="manga_tracking_tab">进度记录</string>
     <string name="reading">在读</string>
-    <string name="completed">读过</string>
+    <string name="completed">看过/读过</string>
     <string name="dropped">抛弃</string>
     <string name="on_hold">搁置</string>
     <string name="plan_to_read">想读</string>
@@ -254,11 +254,11 @@
     <string name="update_check_notification_download_complete">点击安装更新</string>
     <string name="update_check_notification_download_error">下载失败</string>
     <string name="update_check_notification_update_available">发现新版本！</string>
-    <string name="information_no_downloads">暂无下载任务</string>
-    <string name="information_no_recent">最近没有更新</string>
+    <string name="information_no_downloads">下载列表为空</string>
+    <string name="information_no_recent">暂无更新记录</string>
     <string name="information_no_recent_manga">暂无阅读记录</string>
     <string name="information_empty_library">仓库为空</string>
-    <string name="information_empty_category">尚无任何分类。点击加号按钮创建一个分类以管理仓库。</string>
+    <string name="information_empty_category">尚未添加任何分类，点击加号按钮创建一个分类来管理仓库。</string>
     <string name="download_notifier_downloader_title">下载</string>
     <string name="download_notifier_title_error">错误</string>
     <string name="download_notifier_unknown_error">下载时发生意外错误</string>
@@ -317,7 +317,7 @@
     <string name="notification_chapters_single_and_more">第 %1$s 章及另外 %2$d 章</string>
     <string name="notification_chapters_multiple">第 %1$s 章</string>
     <string name="pref_disable_battery_optimization">关闭电池优化</string>
-    <string name="pref_disable_battery_optimization_summary">有助于后台更新仓库和备份</string>
+    <string name="pref_disable_battery_optimization_summary">帮助后台更新仓库和备份</string>
     <string name="battery_optimization_disabled">电池优化已经关闭</string>
     <string name="email">电子邮件地址</string>
     <string name="pref_always_show_chapter_transition">始终显示章节间的过渡页面</string>
@@ -343,7 +343,7 @@
     <string name="licenses">开源许可</string>
     <string name="website">官网</string>
     <string name="add_to_library">添加到仓库</string>
-    <string name="in_library">在仓库中</string>
+    <string name="in_library">已在仓库中</string>
     <string name="label_downloaded_only">仅显示已下载内容</string>
     <string name="creating_backup_error">备份失败</string>
     <string name="restoring_backup_canceled">已取消还原</string>
@@ -361,12 +361,12 @@
     <string name="viewer">阅读模式</string>
     <string name="battery_optimization_setting_activity_not_found">打开系统设置失败</string>
     <string name="pref_true_color_summary">缓解色带问题，但可能会影响性能</string>
-    <string name="pref_refresh_library_covers">刷新仓库封面</string>
-    <string name="tracking_info">将阅读进度上传到第三方进度记录平台。在作品页面点击“进度记录”按钮即可设置。</string>
+    <string name="pref_refresh_library_covers">刷新仓库中作品的封面</string>
+    <string name="tracking_info">将阅读进度上传到第三方进度记录平台，在作品页面点击“进度记录”按钮即可设置。</string>
     <string name="sort_by_upload_date">按上传日期</string>
     <string name="label_data">数据</string>
-    <string name="backup_restore_missing_sources">资源缺失：</string>
-    <string name="invalid_backup_file_missing_manga">备份未包含任何作品。</string>
+    <string name="backup_restore_missing_sources">缺少资源插件：</string>
+    <string name="invalid_backup_file_missing_manga">备份文件中未包含仓库中的任何作品。</string>
     <string name="invalid_backup_file">备份文件无效：</string>
     <string name="pref_library_update_refresh_metadata_summary">更新仓库时一并检查封面和简介的变动</string>
     <string name="pref_library_update_refresh_metadata">自动刷新作品信息</string>
@@ -401,10 +401,10 @@
     <string name="channel_complete">完成</string>
     <string name="channel_progress">进度</string>
     <string name="channel_errors">错误</string>
-    <string name="backup_restore_missing_trackers">尚未登录进度记录平台：</string>
-    <string name="ext_nsfw_warning">来自此插件的资源可能包含 NSFW (18+) 内容</string>
-    <string name="ext_nsfw_short">18+</string>
-    <string name="parental_controls_info">这并不能防止非官方或可能被错误标记的插件在应用中显示 NSFW (18+) 内容。</string>
+    <string name="backup_restore_missing_trackers">尚未登录的进度记录平台：</string>
+    <string name="ext_nsfw_warning">来自此插件的资源可能包含成人内容</string>
+    <string name="ext_nsfw_short">R18</string>
+    <string name="parental_controls_info">但无法防止非官方或可能被错误标记的资源插件在本应用中显示成人内容。</string>
     <string name="no_chapters_error">未找到章节</string>
     <string name="chapter_settings_updated">已更新默认章节设置</string>
     <string name="set_chapter_settings_as_default">设为默认</string>
@@ -416,18 +416,18 @@
     <string name="downloaded_chapters">已下载的章节</string>
     <string name="pref_incognito_mode">无痕模式</string>
     <string name="pref_clear_history">清除历史记录</string>
-    <string name="clear_history_confirmation">你确定吗？所有历史记录都会丢失。</string>
+    <string name="clear_history_confirmation">确定要清除吗？历史记录将会全部丢失。</string>
     <string name="clear_history_completed">历史记录已删除</string>
     <string name="spen_next_page">下一页</string>
     <string name="spen_previous_page">上一页</string>
     <string name="migration_help_guide">资源迁移指南</string>
-    <string name="pref_category_nsfw_content">NSFW (18+) 资源</string>
+    <string name="pref_category_nsfw_content">成人内容资源</string>
     <string name="file_picker_error">没有文件管理器</string>
     <string name="myanimelist_relogin">请重新登录 MyAnimeList</string>
     <string name="pref_show_nsfw_source">在资源和插件列表中显示</string>
     <string name="pref_viewer_nav">点按区域</string>
     <string name="edge_nav">两侧</string>
-    <string name="kindlish_nav">Kindle</string>
+    <string name="kindlish_nav">Kindle式</string>
     <string name="l_nav">L 形</string>
     <string name="track_finished_reading_date">阅读完毕日期</string>
     <string name="track_started_reading_date">开始阅读日期</string>
@@ -443,7 +443,7 @@
     <string name="pref_dual_page_split">拆分双页</string>
     <string name="pref_dual_page_invert">拆分双页时交换顺序</string>
     <string name="pref_dual_page_invert_summary">拆分双页的顺序与阅读方向不符时可以开启</string>
-    <string name="backup_restore_content_full">可能需要安装缺失的插件并重新登录进度记录平台。</string>
+    <string name="backup_restore_content_full">可能需要安装缺少的资源插件并重新登录进度记录平台来继续使用。</string>
     <string name="nav_zone_right">往右</string>
     <string name="nav_zone_left">往左</string>
     <string name="nav_zone_next">下一页</string>
@@ -489,7 +489,7 @@
     <string name="tracking_guide">进度记录指南</string>
     <string name="information_empty_category_dialog">还没有创建分类。</string>
     <string name="action_start_downloading_now">立即开始下载</string>
-    <string name="about_dont_kill_my_app">部分厂商杀掉后台服务的现象比较严重，此网站提供了一些解决方法。</string>
+    <string name="about_dont_kill_my_app">部分厂商杀掉后台服务的现象比较严重，此网站提供了一些解决方法</string>
     <string name="restore_miui_warning">如果关闭 MIUI 优化，备份与还原可能会出现问题。</string>
     <string name="pref_dark_theme_pure_black">纯黑深色模式</string>
     <string name="theme_yotsuba">四叶草</string>
@@ -499,7 +499,7 @@
     <string name="theme_midnightdusk">午夜幽暗</string>
     <string name="theme_greenapple">青苹果</string>
     <string name="pref_app_theme">应用主题</string>
-    <string name="enhanced_tracking_info">为特定图源提供增强功能。作品在添加到仓库时会自动同步进度。</string>
+    <string name="enhanced_tracking_info">为特定图源提供增强功能，作品在添加到仓库时会自动同步进度。</string>
     <string name="enhanced_services">增强平台</string>
     <string name="theme_monet">动态</string>
     <string name="label_background_activity">后台活动</string>
@@ -515,7 +515,7 @@
     <string name="label_default">默认</string>
     <string name="pref_category_appearance">外观</string>
     <string name="action_track">记录进度</string>
-    <string name="getting_started_guide">入门指南</string>
+    <string name="getting_started_guide">新手指南</string>
     <string name="pref_tablet_ui_mode">平板界面</string>
     <string name="pref_remove_exclude_categories">排除的分类</string>
     <string name="help_translate">协助翻译</string>
@@ -530,7 +530,7 @@
     <string name="pref_verbose_logging">详细日志记录</string>
     <string name="label_warning">警告</string>
     <string name="action_display_language_badge">语言</string>
-    <string name="backup_info">应将备份数据保存到多个地方。备份可能含有敏感数据（例如储存的密码），请谨慎分享。</string>
+    <string name="backup_info">应将备份数据保存到多个地方，备份可能含有敏感数据（例如储存的密码），请谨慎分享。</string>
     <string name="notification_size_warning">大量更新会损害资源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
@@ -561,7 +561,7 @@
     <string name="action_move_to_top_all_for_series">将作品移到顶部</string>
     <string name="disabled_nav">关闭</string>
     <string name="error_saving_picture">保存图片出错</string>
-    <string name="update_check_fdroid_migration_info">官方发布了新版本。点击以了解如何从非官方 F-Droid 版本迁移。</string>
+    <string name="update_check_fdroid_migration_info">官方发布了新版本，点击了解如何从非官方 F-Droid 版本迁移到新版本。</string>
     <string name="empty_backup_error">仓库中没有可备份的作品</string>
     <string name="update_check_open">打开 GitHub 页面</string>
     <string name="webview_data_deleted">已清除 WebView 数据</string>
@@ -610,7 +610,7 @@
     <string name="download_ahead_info">要求当前章节/剧集和下一章节/剧集都已下载。</string>
     <string name="are_you_sure">你确定吗？</string>
     <string name="multi_lang">多语言</string>
-    <string name="updates_last_update_info">仓库更新时间：%s</string>
+    <string name="updates_last_update_info">上次更新仓库时间：%s</string>
     <string name="remove_manga">即将从仓库中删除“%s”</string>
     <string name="popular">热门</string>
     <string name="missing_storage_permission">未授予存储权限</string>
@@ -631,7 +631,7 @@
     <string name="unknown_title">未知标题</string>
     <string name="invalid_location">无效位置：%s</string>
     <string name="error_user_agent_string_invalid">User Agent 字符串无效</string>
-    <string name="updates_last_update_info_just_now">刚才</string>
+    <string name="updates_last_update_info_just_now">刚刚</string>
     <string name="download_notifier_cache_renewal">正在扫描已下载章节/剧集</string>
     <string name="action_open_random_manga">随机打开作品</string>
     <string name="information_no_entries_found">此分类没有作品</string>
@@ -641,20 +641,20 @@
     <string name="track_remove_date_conf_title">要删除日期吗？</string>
     <string name="track_remove_start_date_conf_text">将会删除之前在 %s 中标记的开始日期</string>
     <string name="track_remove_finish_date_conf_text">将会删除之前在 %s 中标记的结束日期</string>
-    <string name="label_stats">统计</string>
+    <string name="label_stats">阅读统计</string>
     <string name="label_local">本地</string>
     <string name="label_downloaded">已下载</string>
     <string name="label_overview_section">总览</string>
     <string name="label_read_duration">阅读时长</string>
     <string name="label_titles_section">作品</string>
-    <string name="label_completed_titles">读完的作品数</string>
+    <string name="label_completed_titles">看完/读完的作品数</string>
     <string name="label_total_chapters">总数</string>
     <string name="label_titles_in_global_update">在全局更新范围</string>
     <string name="label_tracker_section">进度记录</string>
     <string name="label_tracked_titles">记录的作品数</string>
     <string name="label_read_chapters">已读</string>
     <string name="label_mean_score">平均评分</string>
-    <string name="label_started">看过/读过</string>
+    <string name="label_started">已开始观看/阅读</string>
     <string name="action_not_now">以后再说</string>
     <string name="label_used">平台数</string>
     <string name="not_applicable">无</string>
@@ -714,7 +714,7 @@
     <string name="action_sort_category">分类排序</string>
     <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
     <string name="notification_updating_progress">正在更新仓库…(%s)</string>
-    <string name="sort_category_confirmation">要按字母顺序对分类进行排序吗？</string>
+    <string name="sort_category_confirmation">确定要按字母顺序对分类进行排序吗？</string>
     <string name="file_null_uri_error">未选择文件</string>
     <string name="pref_relative_format">相对时间戳</string>
     <string name="pref_relative_format_summary">显示“%1$s”而不是“%2$s”</string>
@@ -740,8 +740,8 @@
     <string name="onboarding_action_skip">跳过</string>
     <string name="onboarding_action_next">下一步</string>
     <string name="action_bar_up_description">返回</string>
-    <string name="onboarding_description">首先调整一些设置。稍后也可以在设置中修改。</string>
-    <string name="onboarding_permission_ignore_battery_opts_description">避免需要长时间运行的仓库更新、下载、备份恢复任务受到中断。</string>
+    <string name="onboarding_description">在开始使用之前先调整一些设定，也可以之后在设置选项中更改这些设定。</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">避免需要长时间运行的仓库更新、下载、备份恢复任务被中断。</string>
     <string name="onboarding_permission_action_grant">允许</string>
     <string name="no_location_set">未设置存储位置</string>
     <string name="invalid_backup_file_error">完整错误信息：</string>
@@ -759,26 +759,26 @@
     <string name="onboarding_permission_install_apps">应用安装权限</string>
     <string name="onboarding_permission_install_apps_description">用于安装资源插件。</string>
     <string name="onboarding_permission_notifications">通知权限</string>
-    <string name="onboarding_guides_new_user">如果你是第一次使用 %s，推荐查看入门指南。</string>
-    <string name="onboarding_guides_returning_user">如果你是重新安装了 %s，可以使用以下功能。</string>
+    <string name="onboarding_guides_new_user">如果你是初次使用 %s，推荐查看新手指南。</string>
+    <string name="onboarding_guides_returning_user">如果你是重装了 %s，可以使用以下功能。</string>
     <string name="pref_library_update_smart_update">智能更新</string>
     <string name="onboarding_permission_notifications_description">用来发送仓库更新等通知。</string>
     <string name="label_extension_repos">插件仓库</string>
     <string name="information_empty_repos">尚未添加任何仓库。</string>
     <string name="label_add_repo_input">仓库网址</string>
     <string name="action_add_repo_message">在 Aniyomi 中添加仓库，输入的网址结尾应为“index.min.json”。</string>
-    <string name="onboarding_storage_help_info">如果你是从旧版更新而来，可以查看存储指南了解详情。</string>
+    <string name="onboarding_storage_help_info">如果你是从旧版本更新而来但不知道该如何选择，可以查看存储指南了解更多。</string>
     <string name="onboarding_storage_help_action">存储指南</string>
     <string name="pref_storage_location">存储位置</string>
     <string name="onboarding_storage_action_select">选择文件夹</string>
-    <string name="onboarding_storage_info">选择一个%1$s文件夹用以存放下载章节、备份文件等。
+    <string name="onboarding_storage_info">选择一个 %1$s 文件夹用来存放下载及备份等文件。
 \n
 \n推荐选择一个专用的文件夹。
 \n
 \n已选文件夹：%2$s</string>
     <string name="onboarding_storage_selection_required">必须选中一个文件夹</string>
     <string name="available_disk_space_info">可用：%1$s / 全部：%2$s</string>
-    <string name="theme_nord">Nord</string>
+    <string name="theme_nord">诺德</string>
     <string name="manga_interval_expected_update_soon">即将更新</string>
     <string name="ext_revoke_trust">撤销已信任的未知插件</string>
     <string name="manga_categories">漫画分类</string>
@@ -832,21 +832,21 @@
     <string name="action_start_download_externally">使用外置下载器</string>
     <string name="action_start_download_internally">使用内置下载器</string>
     <string name="pref_player_summary">播放进度设置 • 内置播放器 • 外置播放器</string>
-    <string name="pref_bottom_nav_style">底部导航样式</string>
-    <string name="pref_update_only_completely_read">跳过有未看剧集/未读章节的作品</string>
+    <string name="pref_bottom_nav_style">底部导航栏设置</string>
+    <string name="pref_update_only_completely_read">跳过存在未看剧集/未读章节的作品</string>
     <string name="pref_library_update_show_tab_badge">在更新中显示未看/未读数量</string>
     <string name="default_manga_category">默认漫画分类</string>
     <string name="default_anime_category">默认动画分类</string>
     <string name="pref_manga_library_update_categories_details">排除优先于包含，同时属于包含和排除分类的漫画不会自动更新。</string>
-    <string name="pref_anime_library_update_categories_details">同时属于包含和排除分类的动画不会自动更新。</string>
+    <string name="pref_anime_library_update_categories_details">排除优先于包含，同时属于包含和排除分类的动画不会自动更新。</string>
     <string name="unofficial_extension_message_aniyomi">此插件不是 Aniyomi 官方插件。</string>
     <string name="rotation_reverse_landscape">翻转横屏</string>
     <string name="rotation_sensor_portrait">感应竖屏</string>
     <string name="rotation_sensor_landscape">感应横屏</string>
     <string name="pref_category_player">播放器</string>
     <string name="pref_category_progress">观看进度</string>
-    <string name="pref_progress_mark_as_seen">在进度为多少时将这集标记为已观看</string>
-    <string name="pref_preserve_watching_position">在已观看的剧集中记忆上次播放位置</string>
+    <string name="pref_progress_mark_as_seen">在观看进度为多少时将剧集标记为已看</string>
+    <string name="pref_preserve_watching_position">记住已看剧集的上次观看位置</string>
     <string name="pref_category_player_orientation">播放器方向</string>
     <string name="pref_default_player_orientation">默认方向</string>
     <string name="pref_adjust_orientation_video_dimensions">根据视频长宽比自动调节方向</string>
@@ -860,17 +860,17 @@
     <string name="pref_player_smooth_seek">开启进度条精准调节</string>
     <string name="pref_player_smooth_seek_summary">开启后，定位将不会关注关键帧，使其更慢但更精确</string>
     <string name="pref_player_fullscreen">在屏幕边栏中显示内容</string>
-    <string name="pref_player_hide_controls">在播放器启动时隐藏播放器控制台</string>
+    <string name="pref_player_hide_controls">在启动播放器时隐藏播放器控制界面</string>
     <string name="pref_pip_episode_toasts">小窗模式下切换剧集时显示剧集信息</string>
     <string name="pref_pip_on_exit">在退出播放器时自动使用小窗播放</string>
-    <string name="pref_mpv_conf">编辑MPV配置文件以进一步调节播放器相关设置</string>
+    <string name="pref_mpv_conf">编辑 MPV 配置文件以进一步调节播放器相关设置</string>
     <string name="pref_category_external_player">外置播放器</string>
-    <string name="pref_always_use_external_player">总是使用外置播放器</string>
-    <string name="pref_external_player_preference">外置播放器首选项</string>
+    <string name="pref_always_use_external_player">总是使用外部播放器</string>
+    <string name="pref_external_player_preference">外部播放器首选项</string>
     <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">删除章节/剧集</string>
-    <string name="pref_remove_after_marked_as_read">手动标记为已读/已看后</string>
+    <string name="pref_remove_after_marked_as_read">手动标记为已读/已看后删除</string>
     <string name="pref_remove_after_read">看完/读完自动删除</string>
     <string name="pref_remove_bookmarked_chapters">允许删除已添加书签的章节/剧集</string>
     <string name="pref_remove_exclude_categories_manga">排除的漫画分类</string>
@@ -882,16 +882,16 @@
     <string name="auto_download_while_watching">观看时自动下载</string>
     <string name="download_ahead_info_anime">仅对仓库中的作品有效，并且要求当前剧集和下一剧集都已下载</string>
     <string name="pref_auto_update_manga_sync">阅读后更新进度</string>
-    <string name="pref_track_on_add_library">在添加到仓库时打开进度记录菜单</string>
+    <string name="pref_track_on_add_library">添加到仓库时打开进度记录菜单</string>
     <string name="pref_backup_flags_summary">哪些信息将被包含在备份文件内</string>
     <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
-    <string name="pref_auto_clear_chapter_cache">打开应用时清除章节缓存</string>
+    <string name="pref_auto_clear_chapter_cache">启动应用时清除剧集/章节缓存</string>
     <string name="pref_clear_manga_database">清除漫画数据库</string>
     <string name="pref_clear_anime_database">清除动画数据库</string>
     <string name="pref_clear_manga_database_summary">清除未保存在仓库中的漫画历史记录</string>
     <string name="pref_clear_anime_database_summary">清除未保存在仓库中的动画历史记录</string>
-    <string name="clear_database_confirmation">未添加到仓库中的作品的观看/阅读进度将会丢失，你确定吗</string>
+    <string name="clear_database_confirmation">未添加到仓库中的作品的观看/阅读进度将会丢失，确定要清除吗？</string>
     <string name="pref_incognito_mode_summary">暂停记录历史</string>
     <string name="manga_from_library">仓库里的漫画</string>
     <string name="anime_from_library">仓库里的动画</string>
@@ -904,7 +904,7 @@
     <string name="delete_downloads_for_anime">要删除已下载的剧集吗？</string>
     <string name="snack_add_to_manga_library">要将漫画添加到仓库吗？</string>
     <string name="snack_add_to_anime_library">要将动画添加至仓库吗？</string>
-    <string name="display_mode_episode">第%1$s集</string>
+    <string name="display_mode_episode">第 %1$s 集</string>
     <string name="episode_downloading_progress">下载中（%d%%）</string>
     <string name="download_error">错误</string>
     <string name="download_paused">下载已暂停</string>
@@ -1002,15 +1002,15 @@
     <string name="pref_enable_pip">开启小窗模式</string>
     <string name="player_aniskip_op">跳过开头</string>
     <string name="label_anime_extension_repos">动画插件仓库</string>
-    <string name="pref_episode_swipe_end">将滑向右边设置为</string>
-    <string name="pref_episode_swipe_start">将滑向左边设置为</string>
+    <string name="pref_episode_swipe_end">向右滑动操作</string>
+    <string name="pref_episode_swipe_start">向左滑动操作</string>
     <string name="pref_episode_swipe">动画剧集目录左右滑动</string>
     <string name="pref_invalidate_download_cache_summary">强制重新扫描已下载的章节以及剧集</string>
     <string name="label_manga_extension_repos">漫画插件仓库</string>
     <string name="download_speed_limit_hint">归零则取消限速。</string>
     <string name="download_speed_limit">限速下载</string>
     <string name="pref_default_home_tab_library">将启动界面设置到漫画栏</string>
-    <string name="recent_anime_time">第%1$s - %2$s集</string>
+    <string name="recent_anime_time">第 %1$s 集- %2$s</string>
     <string name="player_aniskip_recap">跳过前情提要</string>
     <string name="player_subtitle_settings_color_tab">颜色</string>
     <string name="player_override_ass_subtitles">覆盖到 ASS 字幕</string>
@@ -1019,7 +1019,7 @@
     <string name="player_subtitle_text_color">文本</string>
     <string name="player_subtitle_border_color">边框</string>
     <string name="episode_settings">剧集设置</string>
-    <string name="action_change_intro_length">改变跳过开头时间</string>
+    <string name="action_change_intro_length">更改跳过开头时间</string>
     <string name="action_sort_airing_time">播放时间</string>
     <string name="pref_general_summary">应用语言 • 通知</string>
     <string name="action_open_repo">打开资源仓库</string>
@@ -1041,7 +1041,7 @@
     <string name="video_custom_screen">自定义画面比例</string>
     <string name="pref_debanding_title">去除色带</string>
     <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_debanding_disabled">已禁用</string>
+    <string name="pref_debanding_disabled">关闭</string>
     <string name="delete_confirmation">确定删除\"%s\"？</string>
     <string name="player_subtitle_settings">字幕设置</string>
     <string name="player_subtitle_empty_warning">视频中没有载入任何字幕所以无效</string>
@@ -1053,7 +1053,7 @@
     <string name="player_subtitle_settings_delay_tab">延迟</string>
     <string name="player_subtitle_settings_font_tab">字体</string>
     <string name="pref_backup_flags">备份设置</string>
-    <string name="action_filter_started">看过/读过</string>
+    <string name="action_filter_started">已开始观看/阅读</string>
     <string name="action_reorganize_by">重新排序</string>
     <string name="theme_cloudflare">Cloudflare</string>
     <string name="theme_sapphire">蓝宝石</string>
@@ -1088,9 +1088,9 @@
 \n目前压缩为 Jpeg</string>
     <string name="player_aniskip_skip">已跳过 %s</string>
     <string name="notification_episodes_single_and_more">第 %1$s 集及另外 %2$d 集</string>
-    <string name="pref_category_player_aniskip_info">AniSkip 需要你在 MyAnimeList 或 Anilist 上标记动画后才能使用</string>
+    <string name="pref_category_player_aniskip_info">AniSkip 需要你在 MyAnimeList 或 Anilist 上标记进度记录后才能使用</string>
     <string name="go_to_next_chapter">下一章</string>
-    <string name="pref_enable_netflix_style_aniskip">开启网飞风格</string>
+    <string name="pref_enable_netflix_style_aniskip">开启奈飞风格</string>
     <string name="pref_anime_storage_usage">动画存储占用</string>
     <string name="pref_manga_storage_usage">漫画存储占用</string>
     <string name="unseen">未看</string>
@@ -1107,7 +1107,7 @@
     <string name="data_saver_image_format_summary_off">Jpeg 文件大小比 Webp 更小 （可以保存更多资料），但它会使图片损失更多质量。
 \n目前压缩为 Webp</string>
     <string name="wsrv">wsrv.nl</string>
-    <string name="pref_category_hide_hidden">完全隐藏分类及分类存储占用中的隐藏分类</string>
+    <string name="pref_category_hide_hidden">将分类及分类存储占用中的隐藏分类完全隐藏</string>
     <string name="pref_waiting_time_aniskip">按钮延时</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="download_slots_info">仅同时从自建或无限制资源下载</string>
@@ -1115,9 +1115,15 @@
     <string name="pref_update_anime_release_grace_period">预期动画播出截止时间</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
     <string name="pref_mpv_input">为键盘映射配置编辑 MPV 输入文档</string>
-    <string name="pref_gpu_next_title">开启 gpu-next</string>
+    <string name="pref_gpu_next_title">开启 GPU-Next</string>
     <string name="pref_gpu_next_subtitle">一种新的视频渲染后端方式</string>
     <string name="player_aniskip_mixedOp">跳过含混合故事情节的片头</string>
-    <string name="pref_preserve_reading_position">记住已读章节的阅读位置</string>
+    <string name="pref_preserve_reading_position">记住已读章节的上次阅读位置</string>
     <string name="pref_media_control_chapter_seeking">使用媒体控制功能寻找章节</string>
+    <string name="safe_download">动画安全下载模式</string>
+    <string name="safe_download_summary">开启单线程与无范围下载模式</string>
+    <string name="download_threads_number">线程数</string>
+    <string name="download_threads_number_summary">用于下载的线程数，若设置过高会导致IP封禁，为避免资源服务器负担过重，通常设定为 4 最佳。</string>
+    <string name="chapter_dialog_header">寻找章节</string>
+    <string name="pref_bottom_nav_no_browse">将浏览移至更多选项</string>
 </resources>

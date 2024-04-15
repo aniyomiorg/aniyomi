@@ -606,6 +606,7 @@ class PlayerActivity : BaseActivity() {
     private fun setupPlayerAudio() {
         with(playerPreferences) {
             audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val audioChannel = audioChannels().get()
 
             val useDeviceVolume = playerVolumeValue().get() == -1.0F || !rememberPlayerVolume().get()
             fineVolume = if (useDeviceVolume) {
@@ -617,6 +618,8 @@ class PlayerActivity : BaseActivity() {
             if (rememberAudioDelay().get()) {
                 MPVLib.setPropertyDouble("audio-delay", (audioDelay().get() / 1000.0))
             }
+
+            MPVLib.setOptionString(audioChannel.propertyName, audioChannel.propertyValue)
         }
 
         verticalScrollRight(0F)
