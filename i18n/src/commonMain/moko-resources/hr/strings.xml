@@ -1119,4 +1119,8 @@
     <string name="pref_gpu_next_subtitle">Nov pozadinski sustav za iscrtavanje videa</string>
     <string name="pref_gpu_next_title">Aktiviraj gpu-next</string>
     <string name="safe_download">Sigurno preuzimanje anime filmova</string>
+    <string name="pref_player_audio_channels">Audio kanali</string>
+    <string name="pref_player_audio_channels_auto">Automatski</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
 </resources>
