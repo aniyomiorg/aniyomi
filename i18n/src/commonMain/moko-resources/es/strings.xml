@@ -1129,4 +1129,9 @@
     <string name="safe_download_summary">Activar el modo de descarga de un solo hilo y sin rangos</string>
     <string name="download_threads_number_summary">Número de hilos a utilizar para la descarga, podría bloquear su IP si es demasiado alto, por lo general 4 es un buen número para evitar una carga pesada en los servidores.</string>
     <string name="pref_bottom_nav_no_browse">Mover la navegación a más opciones</string>
+    <string name="pref_player_audio_channels">Canales de audio</string>
+    <string name="pref_player_audio_channels_auto">Automático</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Estéreo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Revertir estéreo</string>
 </resources>
