@@ -1122,4 +1122,10 @@
     <string name="safe_download_summary">Habilite o modo de download único e sem intervalo</string>
     <string name="download_threads_number">Contagem de fios</string>
     <string name="download_threads_number_summary">O número de fios a serem usados para download pode bloquear seu IP se for muito alto, geralmente 4 é um bom número para evitar carga pesada nos servidores de origem.</string>
+    <string name="pref_player_audio_channels">Canais de áudio</string>
+    <string name="pref_player_audio_channels_auto">Automático</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Estéreo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Estéreo reverso</string>
+    <string name="pref_bottom_nav_no_browse">Mover Navegar para a guia Mais</string>
 </resources>
