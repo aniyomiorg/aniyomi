@@ -1049,4 +1049,9 @@
     <string name="theme_doom">الهلاك</string>
     <string name="theme_matrix">ماتريكس</string>
     <string name="onboarding_permission_ignore_battery_opts_description">تجنب مقاطعة تحديثات المكتبة، التنزيلات والنسخ الاحتياطي التي تستغرق وقتا طويلا</string>
+    <string name="onboarding_permission_install_apps_description">لتثبيت ملحقات المصدر</string>
+    <string name="ext_revoke_trust">ابطال الاضافات الموثوقة الغير معرفة</string>
+    <string name="label_extension_repos"></string>
+    <string name="untrusted_extension_message">يمكن للملحقات الضارة قراءة بيانات تسجيل الدخول المخزنة أو تنفيذ تعليمات برمجية عشوائية. 
+\nمن خلال الثقة بهذه الاضافة ، فإنك تتحمل مسؤولية هذه المخاطر.</string>
 </resources>
