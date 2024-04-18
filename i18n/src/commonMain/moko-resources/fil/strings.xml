@@ -1127,4 +1127,9 @@
     <string name="download_threads_number">Bilang ng thread</string>
     <string name="download_threads_number_summary">Bilang ng mga thread na gagamitin para sa pag-download, maaaring ma-block ang iyong IP kung masyadong mataas, kadalasan ang 4 ay isang magandang numero upang maiwasan ang mabigat na load sa mga source server.</string>
     <string name="pref_bottom_nav_no_browse">Ilipat ang Maghanap sa Iba pa na tab</string>
+    <string name="pref_player_audio_channels">Mga audio channel</string>
+    <string name="pref_player_audio_channels_auto">Awto</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
 </resources>
