@@ -20,7 +20,6 @@ internal class CustomColorScheme(uiPreferences: UiPreferences) : BaseColorScheme
 
     override val lightScheme
         get() = custom.lightScheme
-
 }
 
 private class CustomCompatColorScheme(seed: Int) : BaseColorScheme() {
@@ -37,7 +36,7 @@ private class CustomCompatColorScheme(seed: Int) : BaseColorScheme() {
             val scheme = SchemeContent(
                 Hct.fromInt(seed),
                 dark,
-                0.0
+                0.0,
             )
             val dynamicColors = MaterialDynamicColors()
             return ColorScheme(
@@ -81,5 +80,3 @@ private class CustomCompatColorScheme(seed: Int) : BaseColorScheme() {
         }
     }
 }
-
-
