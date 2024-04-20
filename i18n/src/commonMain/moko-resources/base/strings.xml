@@ -1171,5 +1171,6 @@
 
     <!-- Custom Color Picker -->
     <string name="pref_custom_color">Custom Color Picker</string>
+    <string name="custom_color_description">Pick a color for the custom Theme</string>
     <string name="theme_custom">Custom Theme</string>
 </resources>
