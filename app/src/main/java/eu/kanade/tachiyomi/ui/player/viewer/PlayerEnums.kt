@@ -84,3 +84,14 @@ enum class PlayerStatsPage(val page: Int, val textRes: StringResource) {
     PAGE2(2, MR.strings.player_statistics_page_2),
     PAGE3(3, MR.strings.player_statistics_page_3),
 }
+
+enum class AudioChannels(val propertyName: String, val propertyValue: String, val textRes: StringResource) {
+    Auto("audio-channels", "auto", MR.strings.pref_player_audio_channels_auto),
+    Mono("audio-channels", "mono", MR.strings.pref_player_audio_channels_mono),
+    Stereo("audio-channels", "stereo", MR.strings.pref_player_audio_channels_stereo),
+    ReverseStereo(
+        "af",
+        "pan=[stereo|c0=c1|c1=c0]",
+        MR.strings.pref_player_audio_channels_reverse_stereo,
+    ),
+}
