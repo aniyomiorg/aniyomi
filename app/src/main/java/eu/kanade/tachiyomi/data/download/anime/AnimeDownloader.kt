@@ -486,10 +486,14 @@ class AnimeDownloader(
 
             if (downloadScope.isActive) {
                 file = try {
-                    if (isHls(download.video!!) || isMpd(download.video!!)) {
+                    if (isTor(download.video!!)) {
                         ffmpegDownload(download, tmpDir, filename)
                     } else {
-                        httpDownload(download, tmpDir, filename, newThreads, safe)
+                        if (isHls(download.video!!) || isMpd(download.video!!)) {
+                            ffmpegDownload(download, tmpDir, filename)
+                        } else {
+                            httpDownload(download, tmpDir, filename, newThreads, safe)
+                        }
                     }
                 } catch (e: Exception) {
                     notifier.onError(e.message + ", retrying..", download.episode.name, download.anime.title)

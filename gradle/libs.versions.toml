@@ -50,6 +50,7 @@ subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-vie
 image-decoder = "com.github.tachiyomiorg:image-decoder:e08e9be535"
 exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
 
+
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
 richtext-commonmark = { module = "com.halilibo.compose-richtext:richtext-commonmark", version.ref = "richtext" }
