@@ -107,4 +107,9 @@
     <string name="center_margin_double_and_wide_page">Add to both</string>
     <string name="pref_center_margin">Center margin type</string>
     <string name="pref_center_margin_summary">Insert spacer to accommodate deadspace on foldable devices.</string>
+
+    <!-- Custom Color Picker -->
+    <string name="pref_custom_color">Custom Color Picker</string>
+    <string name="custom_color_description">Pick a color for the custom Theme</string>
+    <string name="theme_custom">Custom Theme</string>
 </resources>
