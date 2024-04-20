@@ -22,7 +22,7 @@ android {
         applicationId = "com.dark.animetailv2"
 
         versionCode = 122
-        versionName = "0.15.2.13"
+        versionName = "0.15.2.14"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -175,6 +175,8 @@ dependencies {
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
+
+    implementation(compose.colorpicker)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
