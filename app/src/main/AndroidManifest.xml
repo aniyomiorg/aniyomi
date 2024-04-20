@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
-    <!-- Internet -->
+    <!-- Android TV -->
+   <uses-feature android:name="android.software.leanback" android:required="false" />
+   <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+   <!-- Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -47,7 +51,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tachiyomi">
+        android:theme="@style/Theme.Tachiyomi"
+        android:banner="@mipmap/ic_banner">
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -58,6 +63,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
             </intent-filter>
 
             <!-- Deep link to add manga repos -->
@@ -78,7 +84,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="aniyomi" />
+                <data android:scheme="animetail" />
                 <data android:host="add-repo" />
             </intent-filter>
 
@@ -237,7 +243,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="aniyomi"/>
+                <data android:scheme="animetail"/>
 
                 <data android:host="myanimelist-auth" />
                 <data android:host="anilist-auth" />
@@ -246,6 +252,32 @@
                 <data android:host="simkl-auth"/>
             </intent-filter>
         </activity>
+
+        <activity android:label="Discord Login"
+            android:name=".ui.setting.connections.DiscordLoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https" android:host="account.samsung.com" android:path="/accounts/oauth/callback"/>
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".data.connections.discord.DiscordRPCService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name ="android.intent.action.VIEW"/>
+                <category android:name ="android.intent.category.DEFAULT"/>
+                <category android:name ="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                    android:host="account.samsung.com"
+                    android:path="/accounts/oauth/callback"/>
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".data.notification.NotificationReceiver"
@@ -273,6 +305,11 @@
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
             tools:node="merge" />
+
+        <service
+            android:name=".data.torrentServer.service.TorrentServerService"
+            android:foregroundServiceType="dataSync"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"
