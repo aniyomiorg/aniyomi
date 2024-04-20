@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Ad</string>
-    <string name="categories">Ulamlar</string>
+    <string name="categories">Kategoriler</string>
     <string name="manga">Kitaplık girdileri</string>
     <string name="chapters">Bölümler</string>
     <string name="track">İzleme</string>
@@ -97,9 +97,7 @@
     <string name="ext_untrusted">Güvenilmeyen</string>
     <string name="ext_uninstall">Kaldır</string>
     <string name="untrusted_extension">Güvenilmeyen uzantı</string>
-    <string name="untrusted_extension_message">Bu uzantı bilinmeyen bir yazar tarafından imzalandı ve yüklenmedi.
-\n
-\nKötü niyetli uzantılar, saklanan oturum açma kimlik bilgilerini okuyabilir veya rastgele kod çalıştırabilir.
+    <string name="untrusted_extension_message">Kötü niyetli uzantılar, saklanan oturum açma kimlik bilgilerini okuyabilir veya rastgele kod çalıştırabilir.
 \n
 \nBu uzantının sertifikasına güvenerek bu riskleri kabul etmiş olursunuz.</string>
     <string name="pref_fullscreen">Tam Ekran</string>
@@ -1050,7 +1048,7 @@
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_episode_swipe">Bölüm kaydırma</string>
-    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… vb.</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… vb</string>
     <string name="resmush">resmush.it</string>
     <string name="theme_mocha">Mocha</string>
     <string name="action_hide">Gizle</string>
@@ -1121,4 +1119,9 @@
     <string name="pref_start_screen">Ekranı başlat(?)</string>
     <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
     <string name="pref_gpu_next_subtitle">Yeni bir video işleme backend\'i</string>
+    <string name="safe_download">Anime için güvenli indirme modu</string>
+    <string name="pref_bottom_nav_no_browse">Gözat sekmesini daha fazla bölümüne taşı</string>
+    <string name="download_threads_number">Mantıksal işlemci (Thread) sayısı</string>
+    <string name="download_threads_number_summary">İndirme için kullanılacak mantıksal işlemci (thread) sayısı, çok yüksekse IP\'nizin engellenmesine neden olabilir, kaynak sunucularda ağır yükü önlemek için genellikle 4 iyi bir sayıdır.</string>
+    <string name="safe_download_summary">Tek mantık çekirdeği (thread) ve aralıksız indirme modunu etkinleştirin</string>
 </resources>
