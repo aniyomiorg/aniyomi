@@ -1,10 +1,15 @@
 package eu.kanade.domain.ui
 
+import android.os.Build
+import androidx.compose.ui.graphics.toArgb
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.domain.ui.model.StartScreen
 import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.domain.ui.model.ThemeMode
+import eu.kanade.presentation.theme.colorscheme.BaseColorScheme
+import eu.kanade.presentation.theme.colorscheme.CloudflareColorScheme
+import eu.kanade.presentation.theme.colorscheme.TachiyomiColorScheme
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isDynamicColorAvailable
 import tachiyomi.core.common.preference.PreferenceStore
@@ -22,6 +27,16 @@ class UiPreferences(
     fun appTheme() = preferenceStore.getEnum(
         "pref_app_theme",
         if (DeviceUtil.isDynamicColorAvailable) { AppTheme.MONET } else { AppTheme.DEFAULT },
+    )
+
+    fun colorTheme() = preferenceStore.getInt(
+        "pref_color-theme",
+        if(themeMode().get() == ThemeMode.DARK) { TachiyomiColorScheme.darkScheme.primary.toArgb() } else {TachiyomiColorScheme.lightScheme.primary.toArgb() }
+    )
+
+    fun colorPickerCoordinates() = preferenceStore.getString(
+        "color_picker_coordinates",
+        ""
     )
 
     fun themeDarkAmoled() = preferenceStore.getBoolean("pref_theme_dark_amoled_key", false)
