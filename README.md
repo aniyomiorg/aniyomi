@@ -11,6 +11,7 @@ This version of Aniyomi aims to implement as many features of other forks as pos
 Features include:
 * Kuukiyomi:
   * Torrent support(Needs right extensions) (@Diegopyl1209)
+  * Custom Theme support
   * resmush.it(Data Saver Provider)
   * Group by tags in library
   * Discord Rich Presence for Manga
