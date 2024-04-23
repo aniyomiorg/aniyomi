@@ -6,6 +6,8 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import java.util.UUID
 
+/** Made by @kaiserbh. Huge thx for making this feature. **/
+
 class SyncPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
