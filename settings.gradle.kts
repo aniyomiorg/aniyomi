@@ -35,7 +35,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Kuukiyomi"
+rootProject.name = "Animetail"
 include(":app")
 include(":i18n")
 include(":source-api")
