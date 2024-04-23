@@ -110,6 +110,7 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = playerAudioChannels,
                     title = stringResource(MR.strings.pref_player_audio_channels),
                     entries = persistentMapOf(
+                        AudioChannels.AutoSafe to stringResource(AudioChannels.AutoSafe.textRes),
                         AudioChannels.Auto to stringResource(AudioChannels.Auto.textRes),
                         AudioChannels.Mono to stringResource(AudioChannels.Mono.textRes),
                         AudioChannels.Stereo to stringResource(AudioChannels.Stereo.textRes),

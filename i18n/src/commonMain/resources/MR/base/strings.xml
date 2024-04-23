@@ -907,6 +907,7 @@
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
     <string name="pref_player_audio_channels">Audio channels</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
     <string name="pref_player_audio_channels_auto">Auto</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
