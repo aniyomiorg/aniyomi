@@ -88,13 +88,6 @@ jobs:
           java-version: 17
           distribution: adopt
 
-      - name: Write client_secrets.json
-        uses: DamianReeves/write-file-action@v1.2
-        with:
-         path: app/src/main/assets/client_secrets.json
-         contents: ${{ secrets.CLIENT_SECRETS_TEXT }}
-         write-mode: overwrite
-
       - name: Set ACRA properties
         env:
           acraUri: ${{ secrets.ACRA_URI }}
@@ -104,7 +97,12 @@ jobs:
           echo "ACRA_URI=$acraUri" >> acra.properties
           echo "ACRA_LOGIN=$acraLogin" >> acra.properties
           echo "ACRA_PASSWORD=$acraPassword" >> acra.properties
-
+      - name: Write client_secrets.json
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: app/src/main/assets/client_secrets.json
+          contents: ${{ secrets.CLIENT_SECRETS_TEXT }}
+          write-mode: overwrite
       - name: Build app and run unit tests
         uses: gradle/gradle-command-action@v2
         with:
