@@ -28,7 +28,7 @@ abstract class SyncService(
     val json: Json,
     val syncPreferences: SyncPreferences,
 ) {
-    abstract suspend fun doSync(syncData: SyncData): Backup?;
+    abstract suspend fun doSync(syncData: SyncData): Backup?
 
     /**
      * Merges the local and remote sync data into a single JSON string.
@@ -46,13 +46,15 @@ abstract class SyncService(
             remoteSyncData.backup?.backupManga,
             localSyncData.backup?.backupCategories ?: emptyList(),
             remoteSyncData.backup?.backupCategories ?: emptyList(),
-            mergedCategoriesList)
+            mergedCategoriesList,
+        )
         val mergedAnimeList = mergeAnimeLists(
             localSyncData.backup?.backupAnime,
             remoteSyncData.backup?.backupAnime,
             localSyncData.backup?.backupCategories ?: emptyList(),
             remoteSyncData.backup?.backupCategories ?: emptyList(),
-            mergedCategoriesList)
+            mergedCategoriesList,
+        )
 
         val mergedAnimeCategoriesList =
             mergeCategoriesLists(
@@ -130,11 +132,13 @@ abstract class SyncService(
         val mergedCategoriesMapByName = mergedCategories.associateBy { it.name }
 
         fun updateCategories(theManga: BackupManga, theMap: Map<Long, BackupCategory>): BackupManga {
-            return theManga.copy(categories = theManga.categories.mapNotNull {
-                theMap[it]?.let { category ->
-                    mergedCategoriesMapByName[category.name]?.order
-                }
-            })
+            return theManga.copy(
+                categories = theManga.categories.mapNotNull {
+                    theMap[it]?.let { category ->
+                        mergedCategoriesMapByName[category.name]?.order
+                    }
+                },
+            )
         }
 
         logcat(LogPriority.DEBUG, logTag) {
@@ -158,7 +162,7 @@ abstract class SyncService(
                         ) { "Keeping local version of ${local.title} with merged chapters." }
                         updateCategories(
                             local.copy(chapters = mergeChapters(local.chapters, remote.chapters)),
-                            localCategoriesMapByOrder
+                            localCategoriesMapByOrder,
                         )
                     } else {
                         logcat(
@@ -167,7 +171,7 @@ abstract class SyncService(
                         ) { "Keeping remote version of ${remote.title} with merged chapters." }
                         updateCategories(
                             remote.copy(chapters = mergeChapters(local.chapters, remote.chapters)),
-                            remoteCategoriesMapByOrder
+                            remoteCategoriesMapByOrder,
                         )
                     }
                 }
@@ -215,11 +219,13 @@ abstract class SyncService(
         val mergedCategoriesMapByName = mergedCategories.associateBy { it.name }
 
         fun updateCategories(theAnime: BackupAnime, theMap: Map<Long, BackupCategory>): BackupAnime {
-            return theAnime.copy(categories = theAnime.categories.mapNotNull {
-                theMap[it]?.let { category ->
-                    mergedCategoriesMapByName[category.name]?.order
-                }
-            })
+            return theAnime.copy(
+                categories = theAnime.categories.mapNotNull {
+                    theMap[it]?.let { category ->
+                        mergedCategoriesMapByName[category.name]?.order
+                    }
+                },
+            )
         }
 
         logcat(LogPriority.DEBUG, logTag) {
@@ -243,7 +249,7 @@ abstract class SyncService(
                         ) { "Keeping local version of ${local.title} with merged episodes." }
                         updateCategories(
                             local.copy(episodes = mergeEpisodes(local.episodes, remote.episodes)),
-                            localCategoriesMapByOrder
+                            localCategoriesMapByOrder,
                         )
                     } else {
                         logcat(
@@ -252,7 +258,7 @@ abstract class SyncService(
                         ) { "Keeping remote version of ${remote.title} with merged episodes." }
                         updateCategories(
                             remote.copy(episodes = mergeEpisodes(local.episodes, remote.episodes)),
-                            remoteCategoriesMapByOrder
+                            remoteCategoriesMapByOrder,
                         )
                     }
                 }

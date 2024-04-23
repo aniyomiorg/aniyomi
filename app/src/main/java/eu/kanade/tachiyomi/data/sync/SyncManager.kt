@@ -155,7 +155,7 @@ class SyncManager(
             return
         }
 
-        if (remoteBackup === syncData.backup){
+        if (remoteBackup === syncData.backup) {
             // nothing changed
             syncPreferences.lastSyncTimestamp().set(Date().time)
             notifier.showSyncSuccess("Sync completed successfully")
@@ -176,49 +176,49 @@ class SyncManager(
             return
         }
 
-            val (mangaFilteredFavorites, mangaNonFavorites) = mangaFilterFavoritesAndNonFavorites(remoteBackup)
-            val (animeFilteredFavorites, animeNonFavorites) = aniFilterFavoritesAndNonFavorites(remoteBackup)
-            mangaUpdateNonFavorites(mangaNonFavorites)
-            animeUpdateNonFavorites(animeNonFavorites)
+        val (mangaFilteredFavorites, mangaNonFavorites) = mangaFilterFavoritesAndNonFavorites(remoteBackup)
+        val (animeFilteredFavorites, animeNonFavorites) = aniFilterFavoritesAndNonFavorites(remoteBackup)
+        mangaUpdateNonFavorites(mangaNonFavorites)
+        animeUpdateNonFavorites(animeNonFavorites)
 
-            val newSyncData = backup.copy(
-                backupManga = mangaFilteredFavorites,
-                backupAnime = animeFilteredFavorites,
-                backupCategories = remoteBackup.backupCategories,
-                backupAnimeCategories = remoteBackup.backupAnimeCategories,
-                backupSources = remoteBackup.backupSources,
-                backupAnimeSources = remoteBackup.backupAnimeSources,
-                backupPreferences = remoteBackup.backupPreferences,
-                backupSourcePreferences = remoteBackup.backupSourcePreferences,
+        val newSyncData = backup.copy(
+            backupManga = mangaFilteredFavorites,
+            backupAnime = animeFilteredFavorites,
+            backupCategories = remoteBackup.backupCategories,
+            backupAnimeCategories = remoteBackup.backupAnimeCategories,
+            backupSources = remoteBackup.backupSources,
+            backupAnimeSources = remoteBackup.backupAnimeSources,
+            backupPreferences = remoteBackup.backupPreferences,
+            backupSourcePreferences = remoteBackup.backupSourcePreferences,
+        )
+
+        // It's local sync no need to restore data. (just update remote data)
+        if (mangaFilteredFavorites.isEmpty() && animeFilteredFavorites.isEmpty()) {
+            // update the sync timestamp
+            syncPreferences.lastSyncTimestamp().set(Date().time)
+            notifier.showSyncSuccess("Sync completed successfully")
+            return
+        }
+
+        val backupUri = writeSyncDataToCache(context, newSyncData)
+        logcat(LogPriority.DEBUG) { "Got Backup Uri: $backupUri" }
+        if (backupUri != null) {
+            BackupRestoreJob.start(
+                context,
+                backupUri,
+                sync = true,
+                options = RestoreOptions(
+                    appSettings = true,
+                    sourceSettings = true,
+                    library = true,
+                ),
             )
 
-            // It's local sync no need to restore data. (just update remote data)
-            if (mangaFilteredFavorites.isEmpty() && animeFilteredFavorites.isEmpty()) {
-                // update the sync timestamp
-                syncPreferences.lastSyncTimestamp().set(Date().time)
-                notifier.showSyncSuccess("Sync completed successfully")
-                return
-            }
-
-            val backupUri = writeSyncDataToCache(context, newSyncData)
-            logcat(LogPriority.DEBUG) { "Got Backup Uri: $backupUri" }
-            if (backupUri != null) {
-                BackupRestoreJob.start(
-                    context,
-                    backupUri,
-                    sync = true,
-                    options = RestoreOptions(
-                        appSettings = true,
-                        sourceSettings = true,
-                        library = true,
-                    ),
-                )
-
-                // update the sync timestamp
-                syncPreferences.lastSyncTimestamp().set(Date().time)
-            } else {
-                logcat(LogPriority.ERROR) { "Failed to write sync data to file" }
-            }
+            // update the sync timestamp
+            syncPreferences.lastSyncTimestamp().set(Date().time)
+        } else {
+            logcat(LogPriority.ERROR) { "Failed to write sync data to file" }
+        }
     }
 
     private fun writeSyncDataToCache(context: Context, backup: Backup): Uri? {
