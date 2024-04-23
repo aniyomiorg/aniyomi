@@ -42,12 +42,14 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
+import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -178,6 +180,13 @@ object AnimeLibraryTab : Tab() {
                                     context.stringResource(MR.strings.information_no_entries_found),
                                 )
                             }
+                        }
+                    },
+                    onClickSyncNow = {
+                        if (!SyncDataJob.isRunning(context)) {
+                            SyncDataJob.startNow(context)
+                        } else {
+                            context.toast(MR.strings.sync_in_progress)
                         }
                     },
                     searchQuery = state.searchQuery,

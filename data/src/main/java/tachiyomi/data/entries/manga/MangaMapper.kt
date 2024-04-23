@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
 object MangaMapper {
+    @Suppress("LongParameterList")
     fun mapManga(
         id: Long,
         source: Long,
@@ -27,6 +28,9 @@ object MangaMapper {
         calculateInterval: Long,
         lastModifiedAt: Long,
         favoriteModifiedAt: Long?,
+        version: Long,
+        @Suppress("UNUSED_PARAMETER")
+        isSyncing: Long,
     ): Manga = Manga(
         id = id,
         source = source,
@@ -52,8 +56,10 @@ object MangaMapper {
         initialized = initialized,
         lastModifiedAt = lastModifiedAt,
         favoriteModifiedAt = favoriteModifiedAt,
+        version = version,
     )
 
+    @Suppress("LongParameterList")
     fun mapLibraryManga(
         id: Long,
         source: Long,
@@ -77,6 +83,8 @@ object MangaMapper {
         calculateInterval: Long,
         lastModifiedAt: Long,
         favoriteModifiedAt: Long?,
+        version: Long,
+        isSyncing: Long,
         totalCount: Long,
         readCount: Double,
         latestUpload: Long,
@@ -108,6 +116,8 @@ object MangaMapper {
             calculateInterval,
             lastModifiedAt,
             favoriteModifiedAt,
+            version,
+            isSyncing,
         ),
         category = category,
         totalChapters = totalCount,
