@@ -34,6 +34,7 @@ data class Anime(
     val initialized: Boolean,
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
+    val version: Long,
 ) : Serializable {
 
     // SY -->
@@ -169,6 +170,7 @@ data class Anime(
             initialized = false,
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
+            version = 0L,
         )
 
         // SY -->

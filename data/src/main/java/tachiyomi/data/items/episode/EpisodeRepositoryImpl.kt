@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.items.episode.EpisodeMapper.mapEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
@@ -29,6 +30,7 @@ class EpisodeRepositoryImpl(
                         episode.sourceOrder,
                         episode.dateFetch,
                         episode.dateUpload,
+                        episode.version,
                     )
                     val lastInsertId = episodesQueries.selectLastInsertedRowId().executeAsOne()
                     episode.copy(id = lastInsertId)
@@ -65,6 +67,8 @@ class EpisodeRepositoryImpl(
                     dateFetch = episodeUpdate.dateFetch,
                     dateUpload = episodeUpdate.dateUpload,
                     episodeId = episodeUpdate.id,
+                    version = episodeUpdate.version,
+                    isSyncing = 0,
                 )
             }
         }
@@ -113,36 +117,4 @@ class EpisodeRepositoryImpl(
             )
         }
     }
-
-    private fun mapEpisode(
-        id: Long,
-        animeId: Long,
-        url: String,
-        name: String,
-        scanlator: String?,
-        seen: Boolean,
-        bookmark: Boolean,
-        lastSecondSeen: Long,
-        totalSeconds: Long,
-        episodeNumber: Double,
-        sourceOrder: Long,
-        dateFetch: Long,
-        dateUpload: Long,
-        lastModifiedAt: Long,
-    ): Episode = Episode(
-        id = id,
-        animeId = animeId,
-        seen = seen,
-        bookmark = bookmark,
-        lastSecondSeen = lastSecondSeen,
-        totalSeconds = totalSeconds,
-        dateFetch = dateFetch,
-        sourceOrder = sourceOrder,
-        url = url,
-        name = name,
-        dateUpload = dateUpload,
-        episodeNumber = episodeNumber,
-        scanlator = scanlator,
-        lastModifiedAt = lastModifiedAt,
-    )
 }

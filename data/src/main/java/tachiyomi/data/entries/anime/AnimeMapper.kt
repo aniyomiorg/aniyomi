@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.anime.LibraryAnime
 object AnimeMapper {
+    @Suppress("LongParameterList")
     fun mapAnime(
         id: Long,
         source: Long,
@@ -27,6 +28,9 @@ object AnimeMapper {
         calculateInterval: Long,
         lastModifiedAt: Long,
         favoriteModifiedAt: Long?,
+        version: Long,
+        @Suppress("UNUSED_PARAMETER")
+        isSyncing: Long,
     ): Anime = Anime(
         id = id,
         source = source,
@@ -52,6 +56,7 @@ object AnimeMapper {
         initialized = initialized,
         lastModifiedAt = lastModifiedAt,
         favoriteModifiedAt = favoriteModifiedAt,
+        version = version,
     )
 
     fun mapLibraryAnime(
@@ -77,6 +82,8 @@ object AnimeMapper {
         calculateInterval: Long,
         lastModifiedAt: Long,
         favoriteModifiedAt: Long?,
+        version: Long,
+        isSyncing: Long,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -108,6 +115,8 @@ object AnimeMapper {
             calculateInterval,
             lastModifiedAt,
             favoriteModifiedAt,
+            version,
+            isSyncing,
         ),
         category = category,
         totalEpisodes = totalCount,

@@ -259,6 +259,9 @@ dependencies {
     implementation(libs.compose.materialmotion)
     implementation(libs.swipe)
 
+    implementation(libs.google.api.services.drive)
+    implementation(libs.google.api.client.oauth)
+
     // Logging
     implementation(libs.logcat)
 
