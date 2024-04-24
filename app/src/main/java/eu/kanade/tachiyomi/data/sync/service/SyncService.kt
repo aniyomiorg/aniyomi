@@ -57,8 +57,8 @@ abstract class SyncService(
         val mergedAnimeList = mergeAnimeLists(
             localSyncData.backup?.backupAnime,
             remoteSyncData.backup?.backupAnime,
-            localSyncData.backup?.backupCategories ?: emptyList(),
-            remoteSyncData.backup?.backupCategories ?: emptyList(),
+            localSyncData.backup?.backupAnimeCategories ?: emptyList(),
+            remoteSyncData.backup?.backupAnimeCategories ?: emptyList(),
             mergedAnimeCategoriesList,
         )
 
@@ -395,7 +395,7 @@ abstract class SyncService(
                     remoteEpisode
                 }
                 localEpisode != null && remoteEpisode != null -> {
-                    // Use version number to decide which chapter to keep
+                    // Use version number to decide which episode to keep
                     val chosenChapter =
                         if (localEpisode.version >= remoteEpisode.version) localEpisode else remoteEpisode
                     logcat(LogPriority.DEBUG, logTag) {
