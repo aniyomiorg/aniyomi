@@ -41,6 +41,12 @@ abstract class SyncService(
         val mergedCategoriesList =
             mergeCategoriesLists(localSyncData.backup?.backupCategories, remoteSyncData.backup?.backupCategories)
 
+        val mergedAnimeCategoriesList =
+            mergeCategoriesLists(
+                localSyncData.backup?.backupAnimeCategories,
+                remoteSyncData.backup?.backupAnimeCategories,
+            )
+
         val mergedMangaList = mergeMangaLists(
             localSyncData.backup?.backupManga,
             remoteSyncData.backup?.backupManga,
@@ -53,14 +59,8 @@ abstract class SyncService(
             remoteSyncData.backup?.backupAnime,
             localSyncData.backup?.backupCategories ?: emptyList(),
             remoteSyncData.backup?.backupCategories ?: emptyList(),
-            mergedCategoriesList,
+            mergedAnimeCategoriesList,
         )
-
-        val mergedAnimeCategoriesList =
-            mergeCategoriesLists(
-                localSyncData.backup?.backupAnimeCategories,
-                remoteSyncData.backup?.backupAnimeCategories,
-            )
 
         val mergedSourcesList =
             mergeMangaSourcesLists(localSyncData.backup?.backupSources, remoteSyncData.backup?.backupSources)

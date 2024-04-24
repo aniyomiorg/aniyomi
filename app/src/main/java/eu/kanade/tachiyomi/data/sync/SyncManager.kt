@@ -163,13 +163,13 @@ class SyncManager(
         }
 
         // Stop the sync early if the remote backup is null or empty
-        if (remoteBackup.backupManga?.size == 0) {
+        if (remoteBackup.backupManga?.size == 0 && remoteBackup.backupAnime?.size == 0) {
             notifier.showSyncError("No data found on remote server.")
             return
         }
 
         // Check if it's first sync based on lastSyncTimestamp
-        if (syncPreferences.lastSyncTimestamp().get() == 0L && databaseManga.isNotEmpty()) {
+        if (syncPreferences.lastSyncTimestamp().get() == 0L && (databaseManga.isNotEmpty() && databaseAnime.isNotEmpty())) {
             // It's first sync no need to restore data. (just update remote data)
             syncPreferences.lastSyncTimestamp().set(Date().time)
             notifier.showSyncSuccess("Updated remote data successfully")
@@ -195,6 +195,7 @@ class SyncManager(
         // It's local sync no need to restore data. (just update remote data)
         if (mangaFilteredFavorites.isEmpty() && animeFilteredFavorites.isEmpty()) {
             // update the sync timestamp
+
             syncPreferences.lastSyncTimestamp().set(Date().time)
             notifier.showSyncSuccess("Sync completed successfully")
             return
