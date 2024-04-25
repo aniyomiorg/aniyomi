@@ -41,7 +41,7 @@ abstract class SyncService(
         val mergedCategoriesList =
             mergeCategoriesLists(
                 localSyncData.backup?.backupCategories,
-                remoteSyncData.backup?.backupCategories
+                remoteSyncData.backup?.backupCategories,
             )
         val mergedAnimeCategoriesList =
             mergeCategoriesLists(
