@@ -39,7 +39,15 @@ abstract class SyncService(
      */
     protected fun mergeSyncData(localSyncData: SyncData, remoteSyncData: SyncData): SyncData {
         val mergedCategoriesList =
-            mergeCategoriesLists(localSyncData.backup?.backupCategories, remoteSyncData.backup?.backupCategories)
+            mergeCategoriesLists(
+                localSyncData.backup?.backupCategories,
+                remoteSyncData.backup?.backupCategories,
+            )
+        val mergedAnimeCategoriesList =
+            mergeCategoriesLists(
+                localSyncData.backup?.backupAnimeCategories,
+                remoteSyncData.backup?.backupAnimeCategories,
+            )
 
         val mergedMangaList = mergeMangaLists(
             localSyncData.backup?.backupManga,
@@ -51,16 +59,10 @@ abstract class SyncService(
         val mergedAnimeList = mergeAnimeLists(
             localSyncData.backup?.backupAnime,
             remoteSyncData.backup?.backupAnime,
-            localSyncData.backup?.backupCategories ?: emptyList(),
-            remoteSyncData.backup?.backupCategories ?: emptyList(),
-            mergedCategoriesList,
+            localSyncData.backup?.backupAnimeCategories ?: emptyList(),
+            remoteSyncData.backup?.backupAnimeCategories ?: emptyList(),
+            mergedAnimeCategoriesList,
         )
-
-        val mergedAnimeCategoriesList =
-            mergeCategoriesLists(
-                localSyncData.backup?.backupAnimeCategories,
-                remoteSyncData.backup?.backupAnimeCategories,
-            )
 
         val mergedSourcesList =
             mergeMangaSourcesLists(localSyncData.backup?.backupSources, remoteSyncData.backup?.backupSources)
@@ -395,7 +397,7 @@ abstract class SyncService(
                     remoteEpisode
                 }
                 localEpisode != null && remoteEpisode != null -> {
-                    // Use version number to decide which chapter to keep
+                    // Use version number to decide which episode to keep
                     val chosenChapter =
                         if (localEpisode.version >= remoteEpisode.version) localEpisode else remoteEpisode
                     logcat(LogPriority.DEBUG, logTag) {

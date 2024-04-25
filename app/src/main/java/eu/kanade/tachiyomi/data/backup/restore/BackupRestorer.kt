@@ -72,7 +72,7 @@ class BackupRestorer(
 
         // Store source mapping for error messages
         val backupAnimeMaps = backup.backupAnimeSources + backup.backupBrokenAnimeSources.map { it.toBackupSource() }
-        mangaSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
+        animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
         val backupMangaMaps = backup.backupSources + backup.backupBrokenSources.map { it.toBackupSource() }
         mangaSourceMapping = backupMangaMaps.associate { it.sourceId to it.name }
 
