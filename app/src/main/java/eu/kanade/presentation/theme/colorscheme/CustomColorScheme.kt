@@ -32,7 +32,6 @@ private class CustomCompatColorScheme(seed: Int) : BaseColorScheme() {
 
         @SuppressLint("RestrictedApi")
         private fun generateColorSchemeFromSeed(seed: Int, dark: Boolean): ColorScheme {
-            Log.i("customcolorscheme", seed.toString())
             val scheme = SchemeContent(
                 Hct.fromInt(seed),
                 dark,
