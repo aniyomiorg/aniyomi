@@ -1,7 +1,6 @@
 package eu.kanade.presentation.theme.colorscheme
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.google.android.material.color.utilities.Hct
