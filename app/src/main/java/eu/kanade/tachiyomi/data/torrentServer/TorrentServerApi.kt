@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.torrentServer
 
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
-import eu.kanade.tachiyomi.data.torrentServer.model.TorrentRequest
+import eu.kanade.tachiyomi.torrentutils.model.Torrent
+import eu.kanade.tachiyomi.torrentutils.model.TorrentRequest
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.POST
@@ -39,8 +39,8 @@ object TorrentServerApi {
     fun addTorrent(
         link: String,
         title: String,
-        poster: String,
-        data: String,
+        poster: String = "",
+        data: String = "",
         save: Boolean,
     ): Torrent {
         val req =

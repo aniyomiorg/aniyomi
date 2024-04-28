@@ -125,6 +125,7 @@ internal class AnimeExtensionApi {
                     libVersion = it.extractLibVersion(),
                     lang = it.lang,
                     isNsfw = it.nsfw == 1,
+                    isTorrent = it.torrent == 1,
                     sources = it.sources?.map(extensionAnimeSourceMapper).orEmpty(),
                     apkName = it.apk,
                     iconUrl = "$repoUrl/icon/${it.pkg}.png",
@@ -151,6 +152,7 @@ private data class AnimeExtensionJsonObject(
     val code: Long,
     val version: String,
     val nsfw: Int,
+    val torrent: Int = 0,
     val sources: List<AnimeExtensionSourceJsonObject>?,
 )
 
