@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.data.torrentServer
 
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.torrentutils.model.Torrent
-import eu.kanade.tachiyomi.torrentutils.model.TorrentRequest
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.POST
+import eu.kanade.tachiyomi.torrentutils.model.Torrent
+import eu.kanade.tachiyomi.torrentutils.model.TorrentRequest
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -84,16 +84,23 @@ object TorrentServerApi {
         return Json.decodeFromString<List<Torrent>>(resp.body.string())
     }
 
-    fun uploadTorrent(file: InputStream, title: String, poster: String, data: String, save: Boolean): Torrent {
-        val resp = Jsoup.connect("$hostUrl/torrent/upload")
-            .data("title", title)
-            .data("poster", poster)
-            .data("data", data)
-            .data("save", save.toString())
-            .data("file1", "filename", file)
-            .ignoreContentType(true)
-            .ignoreHttpErrors(true)
-            .post()
+    fun uploadTorrent(
+        file: InputStream,
+        title: String,
+        poster: String,
+        data: String,
+        save: Boolean,
+    ): Torrent {
+        val resp =
+            Jsoup.connect("$hostUrl/torrent/upload")
+                .data("title", title)
+                .data("poster", poster)
+                .data("data", data)
+                .data("save", save.toString())
+                .data("file1", "filename", file)
+                .ignoreContentType(true)
+                .ignoreHttpErrors(true)
+                .post()
         return Json.decodeFromString(Torrent.serializer(), resp.body().text())
     }
 }

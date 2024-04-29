@@ -344,15 +344,12 @@ class AnimeScreen(
 
     private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
         withIOContext {
-
-                MainActivity.startPlayerActivity(
-                    context,
-                    episode.animeId,
-                    episode.id,
-                    episode.url,
-                    useExternalPlayer,
-                )
-
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                episode.url,
+                useExternalPlayer,)
         }
     }
 
