@@ -7,7 +7,9 @@ package eu.kanade.tachiyomi.data.connections.discord
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -81,7 +83,15 @@ class DiscordRPCService : Service() {
             setUsesChronometer(true)
         }
 
-        startForeground(Notifications.ID_DISCORD_RPC, builder.build())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                Notifications.ID_DISCORD_RPC,
+                builder.build(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+            )
+        } else {
+            startForeground(Notifications.ID_DISCORD_RPC, builder.build())
+        }
     }
 
     companion object {
@@ -141,8 +151,7 @@ class DiscordRPCService : Service() {
 
             val state = playerData.episodeNumber ?: context.resources.getString(discordScreen.text)
 
-            val imageUrl = playerData.thumbnailUrl ?: getSmallImage(discordScreen.imageUrl)
-            val imagesmall = getSmallImage(DiscordScreen.APP.imageUrl)
+            val imageUrl = playerData.thumbnailUrl ?: discordScreen.imageUrl
 
             rpc!!.updateRPC(
                 activity = Activity(
@@ -153,28 +162,12 @@ class DiscordRPCService : Service() {
                     timestamps = Activity.Timestamps(start = since),
                     assets = Activity.Assets(
                         largeImage = "mp:$imageUrl",
-                        smallImage = "mp:$imagesmall",
+                        smallImage = "mp:${DiscordScreen.APP.imageUrl}",
                         smallText = context.resources.getString(DiscordScreen.APP.text),
                     ),
                 ),
                 since = since,
             )
-        }
-        private suspend fun getSmallImage(originalUrl: String): String? {
-            return withIOContext {
-                val networkService: NetworkHelper by injectLazy()
-                val client = networkService.client
-
-                try {
-                    client.newCall(GET("https://kizzy-api.vercel.app/image?url=$originalUrl")).execute()
-                        .body?.string()
-                        ?.takeIf { !it.contains("external/Not Found") }
-                        ?.substringAfter("\"id\": \"")?.substringBefore("\"}")
-                        ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
-                } catch (e: Throwable) {
-                    null
-                }
-            }
         }
 
         internal suspend fun setMangaScreen(
@@ -194,8 +187,7 @@ class DiscordRPCService : Service() {
 
             val state = readerData.chapterNumber ?: context.resources.getString(discordScreen.text)
 
-            val imageUrl = readerData.thumbnailUrl ?: getSmallImage(discordScreen.imageUrl)
-            val imagesmall = getSmallImage(DiscordScreen.APP.imageUrl)
+            val imageUrl = readerData.thumbnailUrl ?: discordScreen.imageUrl
 
             rpc!!.updateRPC(
                 activity = Activity(
@@ -206,7 +198,7 @@ class DiscordRPCService : Service() {
                     timestamps = Activity.Timestamps(start = since),
                     assets = Activity.Assets(
                         largeImage = "mp:$imageUrl",
-                        smallImage = "mp:$imagesmall",
+                        smallImage = "mp:${DiscordScreen.APP.imageUrl}",
                         smallText = context.resources.getString(DiscordScreen.APP.text),
                     ),
                 ),

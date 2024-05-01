@@ -192,13 +192,13 @@ enum class DiscordScreen(
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match animetail brown/ green theme, Luft
-private const val animetailImageUrl = "https://i.ibb.co/3fSkpgt/ic-launcher-round-1.png"
-private const val libraryImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609019407736852.png"
-private const val updatesImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018858283038.png"
-private const val historyImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018342510702.png"
-private const val browseImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939355373608.png"
-private const val moreImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939032154173.png"
-private const val webviewImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018208161873.png"
-private const val videoImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213608939053391942.png"
-private const val mangaImageUrl = "https://cdn.discordapp.com/app-assets/1173423931865170070/1213609018598236270.png"
+private const val animetailImageUrl = "emojis/1235352881260138547.webp?quality=lossless"
+private const val libraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
+private const val updatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
+private const val historyImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
+private const val browseImageUrl = "emojis/1235354864419344455.webp?quality=lossless"
+private const val moreImageUrl = "emojis/1235355169752088706.webp?quality=lossless"
+private const val webviewImageUrl = "emojis/1235355362169851996.webp?quality=lossless"
+private const val videoImageUrl = "emojis/1235355607201218660.webp?quality=lossless"
+private const val mangaImageUrl = "emojis/1235355804274659390.webp?quality=lossless"
 // <-- AM (DISCORD)
