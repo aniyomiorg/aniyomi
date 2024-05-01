@@ -20,6 +20,6 @@ data class TorrentFile(
 
     fun toVideoUrl(): String {
         val encodedName = URLEncoder.encode(getFileName(), "utf8")
-        return "${TorrentServerUtils.hostUrl}/stream/${encodedName}?link=${torrentHash}&index=$indexFile&play"
+        return "${TorrentServerUtils.hostUrl}/stream/$encodedName?link=$torrentHash&index=$indexFile&play"
     }
 }
