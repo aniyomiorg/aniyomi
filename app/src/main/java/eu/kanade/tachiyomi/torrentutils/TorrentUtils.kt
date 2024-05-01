@@ -16,9 +16,9 @@ object TorrentUtils {
         val torrent = TorrentServerApi.addTorrent(url, title, "", "", false)
         return TorrentInfo(
             torrent.title,
-            torrent.file_stats!!.map { file ->
+            torrent.file_stats?.map { file ->
                 TorrentFile(file.path, file.id ?: 0, file.length, torrent.hash!!)
-            },
+            } ?: emptyList(),
             torrent.hash!!,
             torrent.torrent_size!!,
         )
