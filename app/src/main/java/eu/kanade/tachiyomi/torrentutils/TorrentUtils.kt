@@ -2,24 +2,29 @@ package eu.kanade.tachiyomi.torrentutils
 
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
-import eu.kanade.tachiyomi.torrentutils.model.Torrent
+import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
+import eu.kanade.tachiyomi.torrentutils.model.TorrentFile
+import eu.kanade.tachiyomi.torrentutils.model.TorrentInfo
 
 /**
  * Used by extensions.
  */
 @Suppress("UNUSED")
 object TorrentUtils {
-    fun getTorrent(
+    fun getTorrentInfo(
         url: String,
         title: String,
-    ): Torrent {
-        return TorrentServerApi.addTorrent(url, title, "", "", false)
+    ): TorrentInfo {
+        val torrent = TorrentServerApi.addTorrent(url, title, "", "", false)
+        return TorrentInfo(torrent.title, torrent.file_stats!!.map{ file ->
+            TorrentFile(file.path, file.id?:0, file.length, torrent.hash!!)
+        }, torrent.hash!!, torrent.torrent_size!!)
     }
 
     fun getTorrentPlayUrl(
-        torrent: Torrent,
-        indexFile: Int,
+        torrent: TorrentInfo,
+        indexFile: Int = 0,
     ): String {
-        return TorrentServerUtils.getTorrentPlayLink(torrent, indexFile)
+        return torrent.files[indexFile].toVideoUrl()
     }
 }

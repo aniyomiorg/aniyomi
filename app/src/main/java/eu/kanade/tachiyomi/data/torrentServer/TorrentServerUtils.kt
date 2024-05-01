@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.torrentServer
 
-import eu.kanade.tachiyomi.torrentutils.model.FileStat
-import eu.kanade.tachiyomi.torrentutils.model.Torrent
+import eu.kanade.tachiyomi.data.torrentServer.model.FileStat
+import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.net.URLEncoder
