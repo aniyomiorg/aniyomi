@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"server/log"
 	"server/torr"
@@ -115,6 +116,11 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 			torr.SaveTorrentToDB(tor)
 		}
 	}()
+	for tor.Status().FileStats == nil {
+		// wait for file stats to be set
+		time.Sleep(100 * time.Millisecond)
+	}
+
 	c.JSON(200, tor.Status())
 }
 

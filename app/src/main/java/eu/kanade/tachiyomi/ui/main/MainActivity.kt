@@ -607,7 +607,7 @@ class MainActivity : BaseActivity() {
             video: Video? = null,
             videoList: List<Video>? = null,
         ) {
-            if (extPlayer || (episodeUrl?.startsWith("magnet:") == true)) {
+            if (extPlayer) {
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)
                 } catch (e: Exception) {
