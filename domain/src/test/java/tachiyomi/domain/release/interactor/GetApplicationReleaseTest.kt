@@ -45,10 +45,9 @@ class GetApplicationReleaseTest {
         val result = getApplicationRelease.await(
             GetApplicationRelease.Arguments(
                 isPreview = false,
-                isThirdParty = true,
                 commitCount = 0,
                 versionName = "v1.0.0",
-                repository = "test",
+                repoUrl = "test",
             ),
         )
 
@@ -72,10 +71,9 @@ class GetApplicationReleaseTest {
         val result = getApplicationRelease.await(
             GetApplicationRelease.Arguments(
                 isPreview = true,
-                isThirdParty = false,
                 commitCount = 1000,
                 versionName = "",
-                repository = "test",
+                repoUrl = "test",
             ),
         )
 
@@ -101,10 +99,9 @@ class GetApplicationReleaseTest {
         val result = getApplicationRelease.await(
             GetApplicationRelease.Arguments(
                 isPreview = false,
-                isThirdParty = false,
                 commitCount = 0,
                 versionName = "v1.0.0",
-                repository = "test",
+                repoUrl = "test",
             ),
         )
 
@@ -130,10 +127,9 @@ class GetApplicationReleaseTest {
         val result = getApplicationRelease.await(
             GetApplicationRelease.Arguments(
                 isPreview = false,
-                isThirdParty = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repository = "test",
+                repoUrl = "test",
             ),
         )
 
@@ -157,10 +153,9 @@ class GetApplicationReleaseTest {
         val result = getApplicationRelease.await(
             GetApplicationRelease.Arguments(
                 isPreview = false,
-                isThirdParty = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repository = "test",
+                repoUrl = "test",
             ),
         )
 
