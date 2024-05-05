@@ -62,6 +62,5 @@ class GetApplicationRelease(
         data class NewUpdate(val release: Release) : Result
         data object NoNewUpdate : Result
         data object OsTooOld : Result
-        data object ThirdPartyInstallation : Result
     }
 }
