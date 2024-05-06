@@ -319,15 +319,15 @@
     <string name="downloaded_only_summary">Filtrira sve unose u biblioteci</string>
     <string name="label_downloaded_only">Samo preuzeto</string>
     <string name="pref_acra_summary">Pomaže pri ispravljanju grešaka. Ne šalju se nikoji privatni podaci</string>
-    <string name="pref_enable_acra">Pošalji izvještaj o padu programa</string>
+    <string name="pref_enable_acra">Šalji izvještaje o iznenadnim prekidima rada aplikacije</string>
     <string name="check_for_updates">Traži nove verzije</string>
     <string name="licenses">Licence otvorenog koda</string>
     <string name="version">Verzija</string>
     <string name="website">Web-stranica</string>
     <string name="battery_optimization_setting_activity_not_found">Nije moguće otvoriti postavke uređaja</string>
-    <string name="battery_optimization_disabled">Optimiranje baterije je već isključeno</string>
+    <string name="battery_optimization_disabled">Optimiranje trošenja baterije je već deaktivirano</string>
     <string name="pref_disable_battery_optimization_summary">Pomaže pri ažuriranju biblioteke u pozadini i spremanju sigurnosnih kopija</string>
-    <string name="pref_disable_battery_optimization">Deaktiviraj optimiranje baterije</string>
+    <string name="pref_disable_battery_optimization">Deaktiviraj optimiranje trošenja baterije</string>
     <string name="clear_database_completed">Unosi su izbrisani</string>
     <string name="pref_clear_database_summary">Izbriši povijest za unose koji nisu spremljeni u biblioteci</string>
     <string name="pref_clear_database">Isprazni bazu podataka</string>
@@ -369,10 +369,10 @@
     <string name="action_enable_all">Aktiviraj sve</string>
     <string name="page_list_empty_error">Nema stranica</string>
     <string name="tabs_header">Kartice</string>
-    <string name="pref_show_reading_mode_summary">Nakratko prikaži trenutačni modus kad se čitač otvori</string>
+    <string name="pref_show_reading_mode_summary">Kratko prikaži trenutačni modus kad se čitač otvori</string>
     <string name="pref_show_reading_mode">Prikaži modus čitanja</string>
     <string name="action_display_show_tabs">Prikaži kartice kategorija</string>
-    <string name="action_display_comfortable_grid">Mreža</string>
+    <string name="action_display_comfortable_grid">Prostrano</string>
     <string name="action_start">Pokreni</string>
     <string name="action_disable">Deaktiviraj</string>
     <string name="loader_not_implemented_error">Izvor nije pronađen</string>
@@ -420,8 +420,8 @@
     <string name="pref_show_nsfw_source">Prikaži u popisu izvora i proširenja</string>
     <string name="track_finished_reading_date">Datum kraja</string>
     <string name="track_started_reading_date">Datum početka</string>
-    <string name="pref_dump_crash_logs_summary">Sprema zapise grešaka u datoteku za obavještavanje programera</string>
-    <string name="pref_dump_crash_logs">Dijeli zapise prekida programa</string>
+    <string name="pref_dump_crash_logs_summary">Sprema zapise grešaka u datoteku za dijeljenje s programerima</string>
+    <string name="pref_dump_crash_logs">Dijeli zapise o iznenadnim prekidima rada aplikacije</string>
     <string name="pref_viewer_nav">Područja dodira</string>
     <string name="edge_nav">Rub</string>
     <string name="kindlish_nav">Kao Kindle</string>
@@ -437,12 +437,12 @@
     <string name="pref_dual_page_invert_summary">Ako se položaj rastavljenih širokih stranica ne podudara sa smjerom čitanja</string>
     <string name="pref_dual_page_invert">Obrni položaj rastavljene stranice</string>
     <string name="pref_dual_page_split">Rastavi široke stranice</string>
-    <string name="pref_show_navigation_mode_summary">Kratko prikaži kada je čitač otvoren</string>
+    <string name="pref_show_navigation_mode_summary">Kratko prikaži kad se čitač otvori</string>
     <string name="nav_zone_right">Desno</string>
     <string name="nav_zone_left">Lijevo</string>
     <string name="nav_zone_next">Sljedeće</string>
     <string name="nav_zone_prev">Prethodno</string>
-    <string name="pref_show_navigation_mode">Prikaži raspored navigacije</string>
+    <string name="pref_show_navigation_mode">Prikaži modus navigacije</string>
     <string name="pref_dns_over_https">DNS preko HTTPS-a (DoH)</string>
     <string name="none">Ništa</string>
     <string name="pref_download_new_categories_details">Unosi u isključenim kategorijama neće se ažurirati čak i ako su također u uključenim kategorijama.</string>
@@ -515,7 +515,7 @@
     <string name="pref_verbose_logging">Opširno zapisivanje</string>
     <string name="pref_verbose_logging_summary">Ispiši opširan zapis u zapisnik sustava (smanjuje performanse aplikacije)</string>
     <string name="backup_info">Čuvaj sigurnosne kopije i na drugim mjestima. Sigurnosne kopije mogu sadržati osjetljive podatke uključujući sve spremljene lozinke; oprez pri dijeljenju podataka.</string>
-    <string name="pref_tablet_ui_mode">Korisničko sučelje tableta</string>
+    <string name="pref_tablet_ui_mode">Korisničko sučelje za tablet</string>
     <string name="notification_size_warning">Velika aktualiziranja štete izvorima i mogu usporiti aktualiziranja i povećati potrošnju baterije. Dodirni i saznaj više.</string>
     <string name="pref_low">Niska</string>
     <string name="label_background_activity">Aktivnost u pozadini</string>
@@ -568,7 +568,7 @@
     <string name="delete_category">Izbriši kategoriju</string>
     <string name="delete_category_confirmation">Želiš li izbrisati kategoriju „%s”\?</string>
     <string name="auto_download_while_reading">Automatski preuzmi tijekom čitanja</string>
-    <string name="internal_error">Interna greška: Provjeri zapisnike o prekidu programa za daljnje informacije</string>
+    <string name="internal_error">Interna greška: Provjeri zapise o iznenadnom prekidu rada aplikacije za daljnje informacije</string>
     <string name="pref_app_language">Jezik aplikacije</string>
     <string name="action_close">Zatvori</string>
     <string name="action_remove_everything">Ukloni sve</string>
@@ -582,7 +582,7 @@
     <string name="missing_storage_permission">Dozvole za spremanje nisu odobrena</string>
     <string name="theme_tidalwave">Tsunami</string>
     <string name="invalid_location">Nevažeće mjesto: %s</string>
-    <string name="pref_advanced_summary">Zapisnici iznenadnog gašenja aplikacije, optimizacije baterije</string>
+    <string name="pref_advanced_summary">Ispis zapisa o iznenadnom prekidu rada aplikacije, optimiranja trošenja baterije</string>
     <string name="label_started">Započeto</string>
     <string name="label_local">Lokalno</string>
     <string name="action_search_hint">Traži …</string>
@@ -592,7 +592,7 @@
     <string name="label_downloaded">Preuzeto</string>
     <string name="pref_appearance_summary">Tema, format datuma i vremena</string>
     <string name="pref_browse_summary">Izvori, ekstenzije, globalno pretraživanje</string>
-    <string name="pref_reader_summary">Način čitanja, zaslon, navigacija</string>
+    <string name="pref_reader_summary">Modus čitanja, prikaz, navigacija</string>
     <string name="pref_downloads_summary">Automatsko preuzimanje, preuzimanje unaprijed</string>
     <string name="pref_security_summary">Zaključavanje aplikacije, siguran zaslon</string>
     <string name="pref_tracking_summary">Jednosmjerna sinkronizacija napretka, poboljšana sinkronizacija</string>
@@ -607,7 +607,7 @@
     <string name="custom_cover">Prilagođena naslovnica</string>
     <string name="description_placeholder">Nema opisa</string>
     <string name="label_titles_section">Unosi</string>
-    <string name="label_titles_in_global_update">Globalno aktualiziranje</string>
+    <string name="label_titles_in_global_update">U globalnom ažuriranju</string>
     <string name="label_tracker_section">Usluge praćenja</string>
     <string name="label_mean_score">Srednja ocjena</string>
     <string name="label_used">Korišteno</string>
@@ -617,9 +617,9 @@
     <string name="unknown_title">Nepoznat naslov</string>
     <string name="updates_last_update_info">Zadnje aktualiziranje biblioteke: %s</string>
     <string name="are_you_sure">Sigurno\?</string>
-    <string name="crash_screen_description">%s je naišao na neočekivanu grešku. Predlažemo da podijeliš zapis o prekidu programa u našem kanalu za podršku na Discordu.</string>
+    <string name="crash_screen_description">%s je naišao na neočekivanu grešku. Predlažemo da podijeliš zapise o iznenadnim prekidima rada aplikacije u našem kanalu za podršku na Discordu.</string>
     <string name="label_overview_section">Pregled</string>
-    <string name="label_completed_titles">Dovršene stavke</string>
+    <string name="label_completed_titles">Dovršeni unosi</string>
     <string name="label_read_duration">Trajanje čitanja</string>
     <string name="label_total_chapters">Ukupno</string>
     <string name="label_read_chapters">Pročitano</string>
@@ -637,7 +637,7 @@
     <string name="source_filter_empty_screen">Nije pronađen instalirani izvor</string>
     <string name="pref_reset_viewer_flags_summary">Obnavlja modus čitanja i položaj svih serija</string>
     <string name="error_saving_picture">Pogreška pri spremanju slike</string>
-    <string name="crash_screen_restart_application">Ponovno pokretanje aplikacije</string>
+    <string name="crash_screen_restart_application">Ponovo pokreni aplikaciju</string>
     <string name="crash_screen_title">Ups!</string>
     <string name="not_installed">Nije instalirano</string>
     <string name="updates_last_update_info_just_now">Upravo sada</string>
@@ -666,7 +666,7 @@
     <string name="action_copy_to_clipboard">Kopiraj u međuspremnik</string>
     <string name="action_update_category">Aktualiziraj katogoriju</string>
     <string name="split_tall_images">Rastavi visoke slike</string>
-    <string name="overlay_header">Oznake</string>
+    <string name="overlay_header">Prekrivanje</string>
     <string name="pref_page_rotate">Prilagodi prikaz širokih stranica okretanjem</string>
     <string name="pref_page_rotate_invert">Preokreni položaj širokih stranica</string>
     <string name="pref_debug_info">Informacije o otklanjanju grešaka</string>
@@ -770,7 +770,7 @@
     <string name="pref_clear_manga_database">Isprazni manga bazu podataka</string>
     <string name="pref_clear_manga_database_summary">Izbriši povijest za manga koji nisu spremljeni u tvojoj biblioteci</string>
     <string name="clear_database_confirmation">Sigurno? Izgubit ćeš pročitana poglavlja i napredak manga koji nisu u biblioteci</string>
-    <string name="pref_incognito_mode_summary">Zaustavlja čitanje povijesti</string>
+    <string name="pref_incognito_mode_summary">Zaustavlja tvoju povijest</string>
     <string name="manga_from_library">Manga iz biblioteke</string>
     <string name="snack_add_to_manga_library">Dodati manga u biblioteku?</string>
     <string name="download_error">Greška</string>
@@ -828,7 +828,7 @@
     <string name="pref_waiting_time_aniskip_10">10 sekunda</string>
     <string name="player_aniskip_dontskip_toast">Preskoči za %d sekunde</string>
     <string name="player_aniskip_skip">%s preskočeno</string>
-    <string name="player_hwdec_mode">Postavi standardni modus hardverskog dekodiranja</string>
+    <string name="player_hwdec_mode">Modus hardverskog dekodiranja</string>
     <string name="notification_episodes_multiple">Epizode %1$s</string>
     <string name="episode_settings">Postavke epizode</string>
     <string name="pref_backup_flags">Opcije za sigurnosne kopije</string>
@@ -859,7 +859,7 @@
     <string name="action_play">Reproduciraj</string>
     <string name="action_bookmark_episode">Zabilježi epizodu</string>
     <string name="label_manga">Manga</string>
-    <string name="pref_bottom_nav_no_history">Premjesti povijest na karticu „Više”</string>
+    <string name="pref_bottom_nav_no_history">Premjesti „Povijest” na karticu „Više”</string>
     <string name="action_display_local_badge_anime">Lokalni anime</string>
     <string name="action_sort_last_seen">Zadnje gledano</string>
     <string name="action_display_show_continue_reading_button">Gumb za nastavljanje gledanja/čitanja</string>
@@ -900,8 +900,8 @@
     <string name="chapters_episodes">Poglavlja i epizode</string>
     <string name="episodes">Epizode</string>
     <string name="backup_settings_warning">Upozorenje: Sigurnosno kopiranje postavki također će spremiti tvoje lozinke. Nemoj dijeliti ovu datoteku sigurnosne kopije!</string>
-    <string name="pref_bottom_nav_no_updates">Premjesti aktualiziranja na karticu „Više”</string>
-    <string name="pref_bottom_nav_no_manga">Premjesti manga na karticu „Više”</string>
+    <string name="pref_bottom_nav_no_updates">Premjesti „Aktualiziranja” na karticu „Više”</string>
+    <string name="pref_bottom_nav_no_manga">Premjesti „Manga” na karticu „Više”</string>
     <string name="action_play_internally">Reproduciraj s internim playerom</string>
     <string name="action_play_externally">Reproduciraj s eksternim playerom</string>
     <string name="action_show_anime">Prikaži anime</string>
@@ -913,8 +913,8 @@
     <string name="action_edit_anime_categories">Uredi anime kategorije</string>
     <string name="action_edit_manga_categories">Uredi manga kategorije</string>
     <string name="action_previous_episode">Prethodna epizoda</string>
-    <string name="action_screen_fit">Prilagodi veličini ekrana</string>
-    <string name="action_player_pip">Slika-u-slici</string>
+    <string name="action_screen_fit">Modus prilagođavanja veličini ekrana</string>
+    <string name="action_player_pip">Modus „slika-u-slici”</string>
     <string name="action_start_download_externally">Koristi eksterno preuzimanje</string>
     <string name="pref_player_summary">Kontrola napretka, interni player, eksterni player</string>
     <string name="pref_bottom_nav_style">Stil donje navigacije</string>
@@ -961,8 +961,8 @@
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Sljedeća epizoda nije pronađena!</string>
     <string name="information_no_recent_anime">Ništa nije nedavno gledano</string>
-    <string name="enable_auto_play">Automatska reprodukcija je uključena</string>
-    <string name="disable_auto_play">Automatska reprodukcija je isključena</string>
+    <string name="enable_auto_play">Automatska reprodukcija je aktivirana</string>
+    <string name="disable_auto_play">Automatska reprodukcija je deaktivirana</string>
     <string name="video_crop_screen">Odrezano na veličinu ekrana</string>
     <string name="playback_speed_dialog_title">Promijeni brzinu reprodukcije:</string>
     <string name="playback_speed_dialog_reset">Obnovi</string>
@@ -1062,7 +1062,7 @@
     <string name="unseen">Nepogledano</string>
     <string name="player_add_external_audio">Dodaj eksternu audio snimku</string>
     <string name="player_add_external_subtitles">Dodaj eksterne titlove</string>
-    <string name="video_custom_screen">Prilagođeni omjer slike</string>
+    <string name="video_custom_screen">Prilagođeni omjer</string>
     <string name="label_manga_extension_repos">Repozitoriji Manga proširenja</string>
     <string name="label_anime_extension_repos">Repozitoriji Anime proširenja</string>
     <string name="delete_confirmation">Stvarno želiš izbrisati „%s”?</string>
@@ -1118,10 +1118,11 @@
 \nVjerujući ovom proširenju, prihvaćaš te rizike.</string>
     <string name="pref_gpu_next_subtitle">Nov pozadinski sustav za iscrtavanje videa</string>
     <string name="pref_gpu_next_title">Aktiviraj gpu-next</string>
-    <string name="safe_download">Sigurno preuzimanje anime filmova</string>
+    <string name="safe_download">Modus sigurnog preuzimanje za anime</string>
     <string name="pref_player_audio_channels">Audio kanali</string>
     <string name="pref_player_audio_channels_auto">Automatski</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Preokrenuti stereo</string>
+    <string name="pref_bottom_nav_no_browse">Premjesti „Pretraživanje” na karticu „Više”</string>
 </resources>
