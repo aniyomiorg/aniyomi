@@ -66,7 +66,6 @@ class MangaRestorer(
                 restoreExistingManga(manga, dbManga)
             }
 
-
             restoreMangaDetails(
                 manga = restoredManga,
                 chapters = backupManga.chapters,
