@@ -37,18 +37,10 @@ internal class AnimeExtensionApi {
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            val extensions = buildList {
+            buildList {
                 addAll(getExtensions(OFFICIAL_ANIYOMI_REPO_BASE_URL))
                 sourcePreferences.animeExtensionRepos().get().map { addAll(getExtensions(it)) }
             }
-
-            // Sanity check - a small number of extensions probably means something broke
-            // with the repo generator
-            if (extensions.size < 50) {
-                throw Exception()
-            }
-
-            extensions
         }
     }
 

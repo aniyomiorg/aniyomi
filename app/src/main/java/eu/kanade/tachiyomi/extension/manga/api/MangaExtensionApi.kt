@@ -36,15 +36,7 @@ internal class MangaExtensionApi {
 
     suspend fun findExtensions(): List<MangaExtension.Available> {
         return withIOContext {
-            val extensions = sourcePreferences.mangaExtensionRepos().get().flatMap { getExtensions(it) }
-
-            // Sanity check - a small number of extensions probably means something broke
-            // with the repo generator
-            if (extensions.isEmpty()) {
-                throw Exception()
-            }
-
-            extensions
+            sourcePreferences.mangaExtensionRepos().get().flatMap { getExtensions(it) }
         }
     }
 
