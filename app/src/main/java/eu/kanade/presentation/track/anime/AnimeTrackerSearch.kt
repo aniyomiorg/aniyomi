@@ -69,7 +69,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.ItemCover
-import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import tachiyomi.i18n.MR
@@ -383,7 +383,7 @@ private fun TrackerSearchPreviews(
     @PreviewParameter(AnimeTrackerSearchPreviewProvider::class)
     content: @Composable () -> Unit,
 ) {
-    TachiyomiTheme {
+    TachiyomiPreviewTheme {
         Surface {
             content()
         }

@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
@@ -326,5 +326,5 @@ private fun TrackInfoDialogHomePreviews(
     @PreviewParameter(MangaTrackInfoDialogHomePreviewProvider::class)
     content: @Composable () -> Unit,
 ) {
-    TachiyomiTheme { content() }
+    TachiyomiPreviewTheme { content() }
 }
