@@ -1110,7 +1110,7 @@
     <string name="player_add_external_audio_intent">Pumili ng audio file.</string>
     <string name="player_add_external_subtitles_intent">Pumili ng subtitle file.</string>
     <string name="theme_doom">Doom</string>
-    <string name="theme_matrix">Matrix</string>
+    <string name="theme_matrix">Matris</string>
     <string name="action_sort_airing_time">Oras ng pagpapalabas</string>
     <string name="action_reorganize_by">Muling ayusin</string>
     <string name="action_open_repo">Open source na repo</string>
@@ -1131,5 +1131,6 @@
     <string name="pref_player_audio_channels_auto">Awto</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
-    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Baliktad na stereo</string>
+    <string name="pref_player_audio_channels_auto_safe">Awto-safe</string>
 </resources>
