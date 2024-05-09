@@ -482,7 +482,7 @@
     <string name="error_saving_cover">Di ma-save ang cover</string>
     <string name="cover_saved">Na-save na ang cover</string>
     <string name="manga_cover">Takip ng manga</string>
-    <string name="off">Naka-off</string>
+    <string name="off">Naka-on</string>
     <string name="on">Naka-on</string>
     <string name="action_display_local_badge">Lokal na source</string>
     <string name="categorized_display_settings">Mga setting ng bawat kategorya para sa pag-aayos</string>
