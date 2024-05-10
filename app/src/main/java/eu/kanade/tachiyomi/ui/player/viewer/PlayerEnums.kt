@@ -86,6 +86,7 @@ enum class PlayerStatsPage(val page: Int, val textRes: StringResource) {
 }
 
 enum class AudioChannels(val propertyName: String, val propertyValue: String, val textRes: StringResource) {
+    AutoSafe("audio-channels", "auto-safe", MR.strings.pref_player_audio_channels_auto_safe),
     Auto("audio-channels", "auto", MR.strings.pref_player_audio_channels_auto),
     Mono("audio-channels", "mono", MR.strings.pref_player_audio_channels_mono),
     Stereo("audio-channels", "stereo", MR.strings.pref_player_audio_channels_stereo),

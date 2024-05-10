@@ -25,7 +25,7 @@ class PlayerPreferences(
     fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
     fun playerVolumeValue() = preferenceStore.getFloat("player_volume_value", -1.0F)
 
-    fun audioChannels() = preferenceStore.getEnum("pref_audio_config", AudioChannels.Auto)
+    fun audioChannels() = preferenceStore.getEnum("pref_audio_config", AudioChannels.AutoSafe)
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
 

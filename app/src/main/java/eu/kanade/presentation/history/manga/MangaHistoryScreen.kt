@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.presentation.components.relativeDateText
 import eu.kanade.presentation.history.manga.components.MangaHistoryItem
-import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.i18n.MR
@@ -114,7 +114,7 @@ internal fun HistoryScreenPreviews(
     @PreviewParameter(MangaHistoryScreenModelStateProvider::class)
     historyState: MangaHistoryScreenModel.State,
 ) {
-    TachiyomiTheme {
+    TachiyomiPreviewTheme {
         MangaHistoryScreen(
             state = historyState,
             snackbarHostState = SnackbarHostState(),
