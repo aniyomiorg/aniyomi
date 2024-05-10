@@ -17,7 +17,7 @@ func Start(pathdb, port, sslport, sslCert, sslKey string, sslEnabled, roSets, se
 	settings.Path = pathdb
 	settings.InitSets(roSets, searchWA)
 	if roSets {
-		log.TLogln("Enabled Read-only DB mode!")
+		log.TLogln("Enabled Read-only DB mode!") 
 	}
 	// https checks
 	if sslEnabled {

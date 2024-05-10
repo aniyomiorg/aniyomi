@@ -205,13 +205,12 @@ object AboutScreen : Screen() {
         onAvailableUpdate: (GetApplicationRelease.Result.NewUpdate) -> Unit,
         onFinish: () -> Unit,
     ) {
-        val updateChecker = AppUpdateChecker()
+        val updateChecker = AppUpdateChecker(context)
         withUIContext {
             try {
                 when (
                     val result = withIOContext {
-                        updateChecker.checkForUpdate(
-                            context,
+                        updateChecker.checkForUpdates(
                             forceCheck = true,
                         )
                     }

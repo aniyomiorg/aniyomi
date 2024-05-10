@@ -395,7 +395,7 @@ class MainActivity : BaseActivity() {
         LaunchedEffect(Unit) {
             if (BuildConfig.INCLUDE_UPDATER) {
                 try {
-                    val result = AppUpdateChecker().checkForUpdate(context)
+                    val result = AppUpdateChecker(context).checkForUpdates()
                     if (result is GetApplicationRelease.Result.NewUpdate) {
                         val updateScreen = NewUpdateScreen(
                             versionName = result.release.version,
@@ -607,7 +607,7 @@ class MainActivity : BaseActivity() {
             video: Video? = null,
             videoList: List<Video>? = null,
         ) {
-            if (extPlayer || (episodeUrl?.startsWith("magnet:") == true)) {
+            if (extPlayer) {
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)
                 } catch (e: Exception) {
