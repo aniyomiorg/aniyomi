@@ -52,7 +52,7 @@ body:
       label: Animetail version
       description: You can find your Animetail version in **More → About**.
       placeholder: |
-        Example: "0.3.2"
+        Example: "0.15.3.0"
     validations:
       required: true
 
@@ -99,7 +99,7 @@ body:
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/docs/faq/general) and [troubleshooting guide](https://aniyomi.org/docs/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.15.2.9](https://github.com/dark25/animetail2/releases/latest)**.
+        - label: I have updated the app to version **[0.15.3.0](https://github.com/dark25/animetail2/releases/latest)**.
           required: true
         - label: I have updated all installed extensions.
           required: true
