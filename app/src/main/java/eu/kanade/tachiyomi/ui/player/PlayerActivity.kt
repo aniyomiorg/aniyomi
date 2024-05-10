@@ -28,7 +28,6 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -230,38 +229,20 @@ class PlayerActivity : BaseActivity() {
 
     private var hasAudioFocus = false
 
-    private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-            .setOnAudioFocusChangeListener(audioFocusChangeListener)
-            .build()
-    } else {
-        null
-    }
+    private val audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+        .setOnAudioFocusChangeListener(audioFocusChangeListener)
+        .build()
 
-    @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
         if (hasAudioFocus) return
         hasAudioFocus = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager!!.requestAudioFocus(audioFocusRequest!!)
-        } else {
-            audioManager!!.requestAudioFocus(
-                audioFocusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN,
-            )
-        }
+        audioManager!!.requestAudioFocus(audioFocusRequest!!)
     }
 
-    @Suppress("DEPRECATION")
     private fun abandonAudioFocus() {
         if (!hasAudioFocus) return
         hasAudioFocus = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager!!.abandonAudioFocusRequest(audioFocusRequest!!)
-        } else {
-            audioManager!!.abandonAudioFocus(audioFocusChangeListener)
-        }
+        audioManager!!.abandonAudioFocusRequest(audioFocusRequest!!)
     }
 
     private fun setAudioFocus(paused: Boolean) {
@@ -1476,7 +1457,7 @@ class PlayerActivity : BaseActivity() {
         val episode = viewModel.currentEpisode ?: return
         val paused = player.paused ?: return
         val videoAspect = player.videoAspect ?: return
-        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (supportedAndEnabled) {
             PictureInPictureHandler().update(
                 context = this,
                 title = anime.title,
@@ -1499,7 +1480,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     @Deprecated("Deprecated in Java")
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         PipState.mode = if (isInPictureInPictureMode) PipState.ON else PipState.OFF
 

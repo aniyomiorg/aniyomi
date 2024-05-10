@@ -12,7 +12,7 @@ fun String.toFFmpegString(context: Context): String {
 }
 
 fun Uri.toFFmpegString(context: Context): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.scheme == "content") {
+    return if (this.scheme == "content") {
         FFmpegKitConfig.getSafParameter(context, this, "rw")
     } else {
         this.path!!
@@ -20,7 +20,7 @@ fun Uri.toFFmpegString(context: Context): String {
 }
 
 fun UniFile.toFFmpegString(context: Context? = null): String {
-    return if (context != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.uri.scheme == "content") {
+    return if (context != null && this.uri.scheme == "content") {
         FFmpegKitConfig.getSafParameter(context, this.uri, "rw")
     } else {
         this.filePath!!
