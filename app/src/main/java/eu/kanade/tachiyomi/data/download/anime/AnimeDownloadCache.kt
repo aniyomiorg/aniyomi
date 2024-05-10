@@ -94,12 +94,15 @@ class AnimeDownloadCache(
         scope.launch {
             rootDownloadsDirLock.withLock {
                 try {
-                    val diskCache = diskCacheFile.inputStream().use {
-                        ProtoBuf.decodeFromByteArray<RootDirectory>(it.readBytes())
+                    if (diskCacheFile.exists()) {
+                        val diskCache = diskCacheFile.inputStream().use {
+                            ProtoBuf.decodeFromByteArray<RootDirectory>(it.readBytes())
+                        }
+                        rootDownloadsDir = diskCache
+                        lastRenew = System.currentTimeMillis()
                     }
-                    rootDownloadsDir = diskCache
-                    lastRenew = System.currentTimeMillis()
                 } catch (e: Throwable) {
+                    logcat(LogPriority.ERROR, e) { "Failed to initialize disk cache" }
                     diskCacheFile.delete()
                 }
             }

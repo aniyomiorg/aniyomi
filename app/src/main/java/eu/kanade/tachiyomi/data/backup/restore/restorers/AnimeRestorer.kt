@@ -57,22 +57,24 @@ class AnimeRestorer(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
     ) {
-        val dbAnime = findExistingAnime(backupAnime)
-        val anime = backupAnime.getAnimeImpl()
-        val restoredAnime = if (dbAnime == null) {
-            restoreNewAnime(anime)
-        } else {
-            restoreExistingAnime(anime, dbAnime)
-        }
+        handler.await(inTransaction = true) {
+            val dbAnime = findExistingAnime(backupAnime)
+            val anime = backupAnime.getAnimeImpl()
+            val restoredAnime = if (dbAnime == null) {
+                restoreNewAnime(anime)
+            } else {
+                restoreExistingAnime(anime, dbAnime)
+            }
 
-        restoreAnimeDetails(
-            anime = restoredAnime,
-            episodes = backupAnime.episodes,
-            categories = backupAnime.categories,
-            backupCategories = backupCategories,
-            history = backupAnime.history + backupAnime.brokenHistory.map { it.toBackupHistory() },
-            tracks = backupAnime.tracking,
-        )
+            restoreAnimeDetails(
+                anime = restoredAnime,
+                episodes = backupAnime.episodes,
+                categories = backupAnime.categories,
+                backupCategories = backupCategories,
+                history = backupAnime.history + backupAnime.brokenHistory.map { it.toBackupHistory() },
+                tracks = backupAnime.tracking,
+            )
+        }
     }
 
     private suspend fun findExistingAnime(backupAnime: BackupAnime): Anime? {
