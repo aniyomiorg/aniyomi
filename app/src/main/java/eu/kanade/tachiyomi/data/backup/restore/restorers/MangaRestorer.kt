@@ -24,6 +24,8 @@ import java.util.Date
 import kotlin.math.max
 
 class MangaRestorer(
+    private var isSync: Boolean = false,
+
     private val handler: MangaDatabaseHandler = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
     private val getMangaByUrlAndSourceId: GetMangaByUrlAndSourceId = Injekt.get(),
@@ -33,7 +35,6 @@ class MangaRestorer(
     private val insertTrack: InsertMangaTrack = Injekt.get(),
     fetchInterval: MangaFetchInterval = Injekt.get(),
 ) {
-
     private var now = ZonedDateTime.now()
     private var currentFetchWindow = fetchInterval.getWindow(now)
 
@@ -74,6 +75,11 @@ class MangaRestorer(
                 history = backupManga.history + backupManga.brokenHistory.map { it.toBackupHistory() },
                 tracks = backupManga.tracking,
             )
+
+            if (isSync) {
+                mangasQueries.resetIsSyncing()
+                chaptersQueries.resetIsSyncing()
+            }
         }
     }
 
@@ -82,7 +88,7 @@ class MangaRestorer(
     }
 
     private suspend fun restoreExistingManga(manga: Manga, dbManga: Manga): Manga {
-        return if (manga.lastModifiedAt > dbManga.lastModifiedAt) {
+        return if (manga.version > dbManga.version) {
             updateManga(dbManga.copyFrom(manga).copy(id = dbManga.id))
         } else {
             updateManga(manga.copyFrom(dbManga).copy(id = dbManga.id))
@@ -92,17 +98,18 @@ class MangaRestorer(
     private fun Manga.copyFrom(newer: Manga): Manga {
         return this.copy(
             favorite = this.favorite || newer.favorite,
-            author = newer.author,
-            artist = newer.artist,
-            description = newer.description,
-            genre = newer.genre,
+            ogAuthor = newer.author,
+            ogArtist = newer.artist,
+            ogDescription = newer.description,
+            ogGenre = newer.genre,
             thumbnailUrl = newer.thumbnailUrl,
-            status = newer.status,
+            ogStatus = newer.status,
             initialized = this.initialized || newer.initialized,
+            version = newer.version,
         )
     }
 
-    private suspend fun updateManga(manga: Manga): Manga {
+    suspend fun updateManga(manga: Manga): Manga {
         handler.await(true) {
             mangasQueries.update(
                 source = manga.source,
@@ -125,6 +132,8 @@ class MangaRestorer(
                 dateAdded = manga.dateAdded,
                 mangaId = manga.id,
                 updateStrategy = manga.updateStrategy.let(MangaUpdateStrategyColumnAdapter::encode),
+                version = manga.version,
+                isSyncing = 1,
             )
         }
         return manga
@@ -136,6 +145,7 @@ class MangaRestorer(
         return manga.copy(
             initialized = manga.description != null,
             id = insertManga(manga),
+            version = manga.version,
         )
     }
 
@@ -144,36 +154,16 @@ class MangaRestorer(
             .associateBy { it.url }
 
         val (existingChapters, newChapters) = backupChapters
-            .mapNotNull {
-                val chapter = it.toChapterImpl().copy(mangaId = manga.id)
+            .mapNotNull { backupChapter ->
+                val chapter = backupChapter.toChapterImpl().copy(mangaId = manga.id)
 
                 val dbChapter = dbChaptersByUrl[chapter.url]
-                    ?: // New chapter
-                    return@mapNotNull chapter
 
-                if (chapter.forComparison() == dbChapter.forComparison()) {
-                    // Same state; skip
-                    return@mapNotNull null
+                when {
+                    dbChapter == null -> chapter // New chapter
+                    chapter.forComparison() == dbChapter.forComparison() -> null // Same state; skip
+                    else -> updateChapterBasedOnSyncState(chapter, dbChapter)
                 }
-
-                // Update to an existing chapter
-                var updatedChapter = chapter
-                    .copyFrom(dbChapter)
-                    .copy(
-                        id = dbChapter.id,
-                        bookmark = chapter.bookmark || dbChapter.bookmark,
-                    )
-                if (dbChapter.read && !updatedChapter.read) {
-                    updatedChapter = updatedChapter.copy(
-                        read = true,
-                        lastPageRead = dbChapter.lastPageRead,
-                    )
-                } else if (updatedChapter.lastPageRead == 0L && dbChapter.lastPageRead != 0L) {
-                    updatedChapter = updatedChapter.copy(
-                        lastPageRead = dbChapter.lastPageRead,
-                    )
-                }
-                updatedChapter
             }
             .partition { it.id > 0 }
 
@@ -181,8 +171,29 @@ class MangaRestorer(
         updateExistingChapters(existingChapters)
     }
 
+    private fun updateChapterBasedOnSyncState(chapter: Chapter, dbChapter: Chapter): Chapter {
+        return if (isSync) {
+            chapter.copy(
+                id = dbChapter.id,
+                bookmark = chapter.bookmark || dbChapter.bookmark,
+                read = chapter.read,
+                lastPageRead = chapter.lastPageRead,
+            )
+        } else {
+            chapter.copyFrom(dbChapter).let {
+                when {
+                    dbChapter.read && !it.read -> it.copy(read = true, lastPageRead = dbChapter.lastPageRead)
+                    it.lastPageRead == 0L && dbChapter.lastPageRead != 0L -> it.copy(
+                        lastPageRead = dbChapter.lastPageRead,
+                    )
+                    else -> it
+                }
+            }
+        }
+    }
+
     private fun Chapter.forComparison() =
-        this.copy(id = 0L, mangaId = 0L, dateFetch = 0L, dateUpload = 0L, lastModifiedAt = 0L)
+        this.copy(id = 0L, mangaId = 0L, dateFetch = 0L, dateUpload = 0L, lastModifiedAt = 0L, version = 0L)
 
     private suspend fun insertNewChapters(chapters: List<Chapter>) {
         handler.await(true) {
@@ -199,6 +210,7 @@ class MangaRestorer(
                     chapter.sourceOrder,
                     chapter.dateFetch,
                     chapter.dateUpload,
+                    chapter.version,
                 )
             }
         }
@@ -220,6 +232,8 @@ class MangaRestorer(
                     dateFetch = null,
                     dateUpload = null,
                     chapterId = chapter.id,
+                    version = chapter.version,
+                    isSyncing = 0,
                 )
             }
         }
@@ -252,6 +266,7 @@ class MangaRestorer(
                 coverLastModified = manga.coverLastModified,
                 dateAdded = manga.dateAdded,
                 updateStrategy = manga.updateStrategy,
+                version = manga.version,
             )
             mangasQueries.selectLastInsertedRowId()
         }

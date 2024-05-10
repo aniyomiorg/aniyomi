@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
@@ -131,7 +132,7 @@ actual class LocalMangaSource(
 
                         // Try to find the cover
                         coverManager.find(mangaDir.name.orEmpty())?.let {
-                            thumbnail_url = it.uri.toString()
+                            thumbnail_url = it.filePath
                         }
                     }
                 }
@@ -141,10 +142,27 @@ actual class LocalMangaSource(
         MangasPage(mangas, false)
     }
 
+    // SY -->
+    fun updateMangaInfo(manga: SManga) {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it.filePath, manga.url) }.find {
+            it.exists()
+        } ?: return
+        val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
+        val file = File(directory, existingFileName ?: "info.json")
+        file.outputStream().use {
+            json.encodeToStream(manga.toJson(), it)
+        }
+    }
+
+    private fun SManga.toJson(): MangaDetails {
+        return MangaDetails(title, author, artist, description, genre?.split(", "), status)
+    }
+    // SY <--
+
     // Manga details related
     override suspend fun getMangaDetails(manga: SManga): SManga = withIOContext {
         coverManager.find(manga.url)?.let {
-            manga.thumbnail_url = it.uri.toString()
+            manga.thumbnail_url = it.filePath
         }
 
         // Augment manga details based on metadata files

@@ -10,6 +10,7 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.presentation.theme.colorscheme.CloudflareColorScheme
 import eu.kanade.presentation.theme.colorscheme.CottoncandyColorScheme
+import eu.kanade.presentation.theme.colorscheme.CustomColorScheme
 import eu.kanade.presentation.theme.colorscheme.DoomColorScheme
 import eu.kanade.presentation.theme.colorscheme.GreenAppleColorScheme
 import eu.kanade.presentation.theme.colorscheme.LavenderColorScheme
@@ -72,6 +73,7 @@ private fun getThemeColorScheme(
     val colorScheme = when (appTheme) {
         AppTheme.DEFAULT -> TachiyomiColorScheme
         AppTheme.MONET -> MonetColorScheme(LocalContext.current)
+        AppTheme.CUSTOM -> CustomColorScheme(uiPreferences)
         AppTheme.CLOUDFLARE -> CloudflareColorScheme
         AppTheme.COTTONCANDY -> CottoncandyColorScheme
         AppTheme.DOOM -> DoomColorScheme
