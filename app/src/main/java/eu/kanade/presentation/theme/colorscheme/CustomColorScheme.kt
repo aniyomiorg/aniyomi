@@ -1,7 +1,6 @@
 package eu.kanade.presentation.theme.colorscheme
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.google.android.material.color.utilities.Hct
@@ -32,7 +31,6 @@ private class CustomCompatColorScheme(seed: Int) : BaseColorScheme() {
 
         @SuppressLint("RestrictedApi")
         private fun generateColorSchemeFromSeed(seed: Int, dark: Boolean): ColorScheme {
-            Log.i("customcolorscheme", seed.toString())
             val scheme = SchemeContent(
                 Hct.fromInt(seed),
                 dark,

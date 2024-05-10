@@ -248,11 +248,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="animetail"/>
+                <data android:scheme="animetail" />
 
-                <data android:host="myanimelist-auth" />
                 <data android:host="anilist-auth" />
                 <data android:host="bangumi-auth" />
+                <data android:host="myanimelist-auth" />
                 <data android:host="shikimori-auth" />
                 <data android:host="simkl-auth"/>
             </intent-filter>
