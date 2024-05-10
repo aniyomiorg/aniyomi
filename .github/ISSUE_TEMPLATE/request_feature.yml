@@ -1,12 +1,12 @@
 name: ⭐ Feature request
-description: Suggest a feature to improve Kuukiyomi
+description: Suggest a feature to improve Animetail
 labels: [Feature request]
 body:
   - type: textarea
     id: feature-description
     attributes:
       label: Describe your suggested feature
-      description: How can Kuukiyomi be improved?
+      description: How can Animetail be improved?
       placeholder: |
         Example:
           "It should work like this..."
@@ -32,7 +32,7 @@ body:
           required: true
         - label: If this is an issue with an official extension, I should be opening an issue in the [extensions repository](https://github.com/aniyomiorg/aniyomi-extensions/issues/new/choose).
           required: true
-        - label: I have updated the app to version **[0.3.2](https://github.com/LuftVerbot/kuukiyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.15.2.9](https://github.com/dark25/animetail2/releases/latest)**.
           required: true
         - label: I will fill out all of the requested information in this form.
           required: true

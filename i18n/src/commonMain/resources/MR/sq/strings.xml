@@ -597,7 +597,7 @@
     <string name="crash_screen_description">%s hasi në një gabim të papritur. Ne ju sugjerojmë që të fotografoni këtë mesazh, të hidhni regjistrat e aksidenteve dhe më pas ta shpërndani në kanalin tonë të mbështetjes në Discord.</string>
     <string name="crash_screen_restart_application">Rinisni aplikacionin</string>
     <string name="download_insufficient_space">Kapitujt nuk mund të shkarkoheshin për shkak të hapësirës së ulët të ruajtjes</string>
-    <string name="download_queue_size_warning">Paralajmërim: shkarkimet e mëdha me shumicë mund të çojnë në ngadalësimin e burimeve dhe/ose bllokimin e Kuukiyomi. Trokit për të mësuar më shumë.</string>
+    <string name="download_queue_size_warning">Paralajmërim: shkarkimet e mëdha me shumicë mund të çojnë në ngadalësimin e burimeve dhe/ose bllokimin e Animetail. Trokit për të mësuar më shumë.</string>
     <string name="notification_new_chapters">U gjetën kapituj të rinj</string>
     <string name="learn_more">Trokit për të mësuar më shumë</string>
     <string name="notification_cover_update_failed">Përditësimi i kopertinës dështoi</string>
