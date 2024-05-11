@@ -3,8 +3,6 @@ package api
 import (
 	"net/http"
 
-	"server/rutor"
-
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 
@@ -44,13 +42,10 @@ func settings(c *gin.Context) {
 		return
 	} else if req.Action == "set" {
 		torr.SetSettings(req.Sets)
-		rutor.Stop()
-		rutor.Start()
 		c.Status(200)
 		return
 	} else if req.Action == "def" {
 		torr.SetDefSettings()
-		rutor.Stop()
 		c.Status(200)
 		return
 	}

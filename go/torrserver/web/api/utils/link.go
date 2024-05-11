@@ -6,7 +6,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"runtime"
 	"strings"
 	"time"
 
@@ -56,7 +55,7 @@ func ParseLink(link string) (*torrent.TorrentSpec, error) {
 }
 
 func fromMagnet(link string) (*torrent.TorrentSpec, error) {
-	mag, err := metainfo.ParseMagnetURI(link)
+	mag, err := metainfo.ParseMagnetUri(link)
 	if err != nil {
 		return nil, err
 	}
@@ -118,9 +117,6 @@ func fromHttp(link string) (*torrent.TorrentSpec, error) {
 }
 
 func fromFile(path string) (*torrent.TorrentSpec, error) {
-	if runtime.GOOS == "windows" && strings.HasPrefix(path, "/") {
-		path = strings.TrimPrefix(path, "/")
-	}
 	minfo, err := metainfo.LoadFromFile(path)
 	if err != nil {
 		return nil, err

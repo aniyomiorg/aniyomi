@@ -31,9 +31,6 @@ type BTSets struct {
 	EnableDLNA   bool
 	FriendlyName string
 
-	// Rutor
-	EnableRutorSearch bool
-
 	// BT Config
 	EnableIPv6        bool
 	DisableTCP        bool
@@ -46,11 +43,6 @@ type BTSets struct {
 	UploadRateLimit   int // in kb, 0 - inf
 	ConnectionsLimit  int
 	PeersListenPort   int
-
-	// HTTPS
-	SslPort int
-	SslCert string
-	SslKey  string
 }
 
 func (v *BTSets) String() string {

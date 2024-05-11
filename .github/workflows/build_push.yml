@@ -59,7 +59,8 @@ jobs:
           cd go/torrserver
           go get golang.org/x/mobile/bind
           gomobile init
-          gomobile bind -target=android -androidapi 23 -ldflags "-s -w" -o ../../app/libs/server.aar
+          cd bindings
+          gomobile bind -target=android -androidapi 23 -ldflags "-s -w" -o ../../../app/libs/server.aar
   
       - name: Commit build library
         if: steps.filter.outputs.gofiles == 'true'

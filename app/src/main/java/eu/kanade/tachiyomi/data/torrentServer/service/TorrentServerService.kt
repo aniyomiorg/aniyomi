@@ -56,7 +56,7 @@ class TorrentServerService : Service() {
         serviceScope.launch {
             if (TorrentServerApi.echo() == "") {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
-                server.Server.start(filesDir.absolutePath, "", "", "", "", false, false, false)
+                torrServer.TorrServer.startTorrentServer(filesDir.absolutePath)
             }
         }
     }
@@ -64,7 +64,7 @@ class TorrentServerService : Service() {
     private fun stopServer() {
         serviceScope.launch {
             if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
-            server.Server.stop()
+            torrServer.TorrServer.stopTorrentServer()
             TorrentServerApi.shutdown()
             applicationContext.cancelNotification(Notifications.ID_TORRENT_SERVER)
             stopSelf()
