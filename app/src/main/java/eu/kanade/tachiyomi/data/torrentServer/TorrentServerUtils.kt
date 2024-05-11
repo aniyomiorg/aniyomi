@@ -13,7 +13,7 @@ object TorrentServerUtils {
     private val animeTrackers = preferences.trackers().get()
 
     fun setTrackersList() {
-        server.Server.addTrackers(animeTrackers)
+        torrServer.TorrServer.addTrackers(animeTrackers)
     }
 
     fun getTorrentPlayLink(torr: Torrent, index: Int): String {
