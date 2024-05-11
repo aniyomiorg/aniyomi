@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"server/log"
 	"server/torr"
@@ -103,7 +104,6 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 
 		if tor.Title == "" {
 			tor.Title = torrSpec.DisplayName // prefer dn over name
-			tor.Title = strings.ReplaceAll(tor.Title, "rutor.info", "")
 			tor.Title = strings.ReplaceAll(tor.Title, "_", " ")
 			tor.Title = strings.Trim(tor.Title, " ")
 			if tor.Title == "" {
@@ -115,6 +115,11 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 			torr.SaveTorrentToDB(tor)
 		}
 	}()
+	for tor.Status().FileStats == nil {
+		// wait for file stats to be set
+		time.Sleep(100 * time.Millisecond)
+	}
+
 	c.JSON(200, tor.Status())
 }
 

@@ -34,8 +34,4 @@ func SetupRoute(route *gin.RouterGroup) {
 	route.GET("/playlist/*fname", playList) // Is this endpoint still needed ? `fname` is never used in handler
 
 	route.GET("/download/:size", download)
-
-	route.GET("/search/*query", rutorSearch)
-
-	route.GET("/ffp/:hash/:id", ffp)
 }

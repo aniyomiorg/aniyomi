@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
-import eu.kanade.domain.extension.manga.interactor.OFFICIAL_TACHIYOMI_REPO_BASE_URL
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -37,18 +36,7 @@ internal class MangaExtensionApi {
 
     suspend fun findExtensions(): List<MangaExtension.Available> {
         return withIOContext {
-            val extensions = buildList {
-                addAll(getExtensions(OFFICIAL_TACHIYOMI_REPO_BASE_URL))
-                sourcePreferences.mangaExtensionRepos().get().map { addAll(getExtensions(it)) }
-            }
-
-            // Sanity check - a small number of extensions probably means something broke
-            // with the repo generator
-            if (extensions.isEmpty()) {
-                throw Exception()
-            }
-
-            extensions
+            sourcePreferences.mangaExtensionRepos().get().flatMap { getExtensions(it) }
         }
     }
 

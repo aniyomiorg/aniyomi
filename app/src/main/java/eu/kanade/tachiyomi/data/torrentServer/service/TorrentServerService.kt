@@ -56,7 +56,7 @@ class TorrentServerService : Service() {
         serviceScope.launch {
             if (TorrentServerApi.echo() == "") {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
-                server.Server.start(filesDir.absolutePath, "", "", "", "", false, false, false)
+                torrServer.TorrServer.startTorrentServer(filesDir.absolutePath)
             }
         }
     }
@@ -64,7 +64,7 @@ class TorrentServerService : Service() {
     private fun stopServer() {
         serviceScope.launch {
             if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
-            server.Server.stop()
+            torrServer.TorrServer.stopTorrentServer()
             TorrentServerApi.shutdown()
             applicationContext.cancelNotification(Notifications.ID_TORRENT_SERVER)
             stopSelf()
@@ -72,6 +72,14 @@ class TorrentServerService : Service() {
     }
 
     private fun notification(context: Context) {
+        val startAgainIntent = PendingIntent.getService(
+            applicationContext,
+            0,
+            Intent(applicationContext, TorrentServerService::class.java).apply {
+                action = ACTION_START
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
         val exitPendingIntent =
             PendingIntent.getService(
                 applicationContext,
@@ -87,6 +95,7 @@ class TorrentServerService : Service() {
             setContentTitle(stringResource(MR.strings.app_name))
             setAutoCancel(false)
             setOngoing(true)
+            setDeleteIntent(startAgainIntent)
             setUsesChronometer(true)
             addAction(
                 R.drawable.ic_close_24dp,
