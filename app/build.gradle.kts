@@ -1,6 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -8,6 +6,10 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization")
     id("com.github.zellius.shortcut-helper")
+}
+
+if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
+    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -19,28 +21,16 @@ android {
 
     defaultConfig {
 
-        applicationId = "xyz.luft.tachiyomi.mi"
+        applicationId = "com.dark.animetailv2"
 
         versionCode = 123
-        versionName = "0.3.2"
+        versionName = "0.15.3.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
         buildConfigField("boolean", "PREVIEW", "false")
-
-        // Put these fields in acra.properties
-        val acraProperties = Properties()
-        rootProject.file("acra.properties")
-            .takeIf { it.exists() }
-            ?.let { acraProperties.load(FileInputStream(it)) }
-        val acraUri = acraProperties.getProperty("ACRA_URI", "")
-        val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
-        val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
-        buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
-        buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
-        buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS
@@ -224,15 +214,15 @@ dependencies {
     implementation(libs.disklrucache)
     implementation(libs.unifile)
     implementation(libs.junrar)
-    // SY -->
-    implementation(libs.zip4j)
-    // SY <--
 
     // Preferences
     implementation(libs.preferencektx)
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))
@@ -261,6 +251,9 @@ dependencies {
 
     // Logging
     implementation(libs.logcat)
+
+    // Crash reports/analytics
+    "standardImplementation"(libs.firebase.analytics)
 
     // Shizuku
     implementation(libs.bundles.shizuku)

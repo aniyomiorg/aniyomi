@@ -235,7 +235,7 @@
     <string name="untrusted_extension">Сенімсіз кеңейту</string>
     <string name="untrusted_extension_message">Бұл кеңейту сенімсіз сертификатпен қол қойылған және іске қосылмаған.
 \n
-\nЗиянды кеңейту Kuukiyomi-де сақталған кез келген кіру тіркелгі деректерін оқуы немесе еркін кодты орындауы мүмкін.
+\nЗиянды кеңейту Animetail-де сақталған кез келген кіру тіркелгі деректерін оқуы немесе еркін кодты орындауы мүмкін.
 \n
 \nОсы сертификатқа сену арқылы сіз осы қауіп-қатерді қабылдайсыз.</string>
     <string name="ext_nsfw_short">18+</string>
@@ -595,7 +595,7 @@
     <string name="empty_screen">Қателік пайда болды</string>
     <string name="download_notifier_downloader_title">Жүктеуіш</string>
     <string name="file_picker_error">Файл таңдайтын қолданба табылмады</string>
-    <string name="update_check_fdroid_migration_info">Жаңа нұсқа Aniyomi сайтында қолжетімді. F-Droid қолданбасының бейресми нұсқасынан көшуді білу үшін басыңыз.</string>
+    <string name="update_check_fdroid_migration_info">Жаңа нұсқа Animetail сайтында қолжетімді. F-Droid қолданбасының бейресми нұсқасынан көшуді білу үшін басыңыз.</string>
     <string name="complete_list">Оқылғандар Тізімі</string>
     <string name="on_hold_list">Тоқтап тұрғандар Тізімі</string>
     <string name="no_next_chapter">Келісі тарау табылмады</string>
@@ -701,6 +701,6 @@
     <string name="also_set_chapter_settings_for_library">Сонымен қоса кітапханадағы жазбаларға қолдану</string>
     <string name="dialog_with_checkbox_reset">Бұл жазба үшін түгел тарауларды қалпына келтіру</string>
     <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>
-    <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Kuukiyomi бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
-    <string name="information_webview_required">Kuukiyomi-ны қолдану үшін WebView керек</string>
+    <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Animetail бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
+    <string name="information_webview_required">Animetail-ны қолдану үшін WebView керек</string>
 </resources>

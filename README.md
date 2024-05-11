@@ -1,10 +1,10 @@
 | Build                                                                                                                                                                 | Preview Release                                                                                                                                                                          | Codefactor | Stable                                                                                                                                                             | Translate Aniyomi                                                                                                                                 | Discord Server |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [![CI](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi-preview.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi/badge)](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi) | [![stable release](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya) |
+| [![CI](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml/badge.svg)](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/Dark25/Animetail2-preview.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/v/release/Dark25/Animetail2.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1196139193664028762?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph) |
 
-# ![app icon](.github/readme-images/app-icon.png)Kuukiyomi
-Kuukiyomi is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
-This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
+# ![app icon](.github/readme-images/icon.png) Animetail
+Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 6.0 and above.
+This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY, Kuukiyomi but also other forks
 
 ## Features
 
@@ -17,27 +17,24 @@ Features include:
   * Discord Rich Presence for Manga
 * Aniyomi:
   * Watching videos
-  * View images
-  * Local reading/watching of downloaded content
-  * A configurable reader with multiple viewers, reading directions and other settings.
-  * A configurable player built on mpv-android with multiple options and settings
-  * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
-  * Categories to organize your library
-  * Light and dark themes
-  * Create backups locally to read/watch offline or to your desired cloud service
+* View images
+* Local reading/watching of downloaded content
+* A configurable reader with multiple viewers, reading directions and other settings.
+* A configurable player built on mpv-android with multiple options and settings
+* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
+* Categories to organize your library
+* Light and dark themes
+* Create backups locally to read/watch offline or to your desired cloud service
 * Other fork features:
   * TachiyomiSY:
     * Data Saver
     * Edit Info
     * Library Grouping
-    * Double Pages
   * Animiru:
     * Discord Rich Presence
-  * TachiyomiJ2K:
-    * Page Preload
 
 ## Download
-Get the app from the [releases page](https://github.com/LuftVerbot/kuukiyomi/releases).
+Get the app from the [releases page](https://github.com/dark25/animetail2/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -45,9 +42,9 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/LuftVerbot/kuukiyomi/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/dark25/animetail2/issues).**
 2. Also take a look at issues opened on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
-3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
+3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph)
 
 </details>
 
@@ -61,9 +58,6 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
 
-DO: https://github.com/LuftVerbot/kuukiyomi/issues/24 https://github.com/LuftVerbot/kuukiyomi/issues/71
-
-DON'T: https://github.com/LuftVerbot/kuukiyomi/issues/75
 
 </details>
 

@@ -219,10 +219,6 @@ class WebtoonPageHolder(
     }
 
     private fun process(imageStream: BufferedInputStream): InputStream {
-        if (viewer.config.dualPageRotateToFit) {
-            return rotateDualPage(imageStream)
-        }
-
         if (viewer.config.dualPageSplit) {
             val isDoublePage = ImageUtil.isWideImage(
                 imageStream,
