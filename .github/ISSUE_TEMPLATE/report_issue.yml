@@ -99,7 +99,7 @@ body:
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/docs/faq/general) and [troubleshooting guide](https://aniyomi.org/docs/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.3](https://github.com/LuftVerbot/kuukiyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.3.2](https://github.com/LuftVerbot/kuukiyomi/releases/latest)**.
           required: true
         - label: I have updated all installed extensions.
           required: true

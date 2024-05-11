@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.ui.browse.anime.extension
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +8,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.AnimeExtensionScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionReposScreen
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
@@ -29,14 +28,17 @@ fun animeExtensionsTab(
         badgeNumber = state.updates.takeIf { it > 0 },
         searchEnabled = true,
         actions = persistentListOf(
-            AppBar.Action(
+            AppBar.OverflowAction(
                 title = stringResource(MR.strings.action_filter),
-                icon = Icons.Outlined.Translate,
                 onClick = {
                     navigator.push(
-                        eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionFilterScreen(),
+                        AnimeExtensionFilterScreen(),
                     )
                 },
+            ),
+            AppBar.OverflowAction(
+                title = stringResource(MR.strings.label_extension_repos),
+                onClick = { navigator.push(AnimeExtensionReposScreen()) },
             ),
         ),
         content = { contentPadding, _ ->

@@ -58,7 +58,7 @@ class AnimeRestorer(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
     ) {
-        handler.await(true) {
+        handler.await(inTransaction = true) {
             val dbAnime = findExistingAnime(backupAnime)
             val anime = backupAnime.getAnimeImpl()
             val restoredAnime = if (dbAnime == null) {
