@@ -212,4 +212,26 @@
     <string name="action_filter_interval_custom">कस्टमाईज्ड फेच इंटरवल</string>
     <string name="manga_categories">श्रेण्या</string>
     <string name="default_manga_category">मूलभूत श्रेणी</string>
+    <string name="action_search_hint">शोधा…</string>
+    <string name="action_start">सुरवात करा</string>
+    <string name="action_close">बंद करा</string>
+    <string name="action_show_errors">माहिती साठी टॅप करा</string>
+    <string name="action_not_now">आत्ता नाही</string>
+    <string name="onboarding_permission_action_grant">अनुदान करा</string>
+    <string name="relative_time_today">आज</string>
+    <string name="ext_info_age_rating">वय मूल्यांकन</string>
+    <string name="update_72hour">प्रत्येक ३ दिवस</string>
+    <string name="connected_to_wifi">फक्त Wi-Fi वर</string>
+    <string name="restrictions">बंधन: %s</string>
+    <string name="ext_info_language">भाषा</string>
+    <string name="selected">निवडलेले</string>
+    <string name="not_selected">निवडलेले नाही</string>
+    <string name="action_menu_overflow_description">अजून पर्याय</string>
+    <string name="action_filter_started">चालु केले</string>
+    <string name="action_sort_count">एकूण नोंदण्या</string>
+    <string name="action_display_language_badge">भाषा</string>
+    <string name="action_asc">चढतं</string>
+    <string name="action_desc">उतरतं</string>
+    <string name="onboarding_heading">स्वागत आहे!</string>
+    <string name="onboarding_action_next">पुढे</string>
 </resources>

@@ -37,7 +37,7 @@ internal class DownloadPageLoader(
         val chapterPath = downloadProvider.findChapterDir(
             dbChapter.name,
             dbChapter.scanlator,
-            manga.title,
+            manga.ogTitle,
             source,
         )
         return if (chapterPath?.isFile == true) {
@@ -58,11 +58,7 @@ internal class DownloadPageLoader(
     }
 
     private fun getPagesFromDirectory(): List<ReaderPage> {
-        val pages = downloadManager.buildPageList(
-            source,
-            manga,
-            chapter.chapter.toDomainChapter()!!,
-        )
+        val pages = downloadManager.buildPageList(source, manga, chapter.chapter.toDomainChapter()!!)
         return pages.map { page ->
             ReaderPage(page.index, page.url, page.imageUrl) {
                 context.contentResolver.openInputStream(page.uri ?: Uri.EMPTY)!!

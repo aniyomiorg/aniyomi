@@ -24,6 +24,8 @@ import java.util.Date
 import kotlin.math.max
 
 class AnimeRestorer(
+    private var isSync: Boolean = false,
+
     private val handler: AnimeDatabaseHandler = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getAnimeByUrlAndSourceId: GetAnimeByUrlAndSourceId = Injekt.get(),
@@ -33,7 +35,6 @@ class AnimeRestorer(
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     fetchInterval: AnimeFetchInterval = Injekt.get(),
 ) {
-
     private var now = ZonedDateTime.now()
     private var currentFetchWindow = fetchInterval.getWindow(now)
 
@@ -57,22 +58,29 @@ class AnimeRestorer(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
     ) {
-        val dbAnime = findExistingAnime(backupAnime)
-        val anime = backupAnime.getAnimeImpl()
-        val restoredAnime = if (dbAnime == null) {
-            restoreNewAnime(anime)
-        } else {
-            restoreExistingAnime(anime, dbAnime)
-        }
+        handler.await(inTransaction = true) {
+            val dbAnime = findExistingAnime(backupAnime)
+            val anime = backupAnime.getAnimeImpl()
+            val restoredAnime = if (dbAnime == null) {
+                restoreNewAnime(anime)
+            } else {
+                restoreExistingAnime(anime, dbAnime)
+            }
 
-        restoreAnimeDetails(
-            anime = restoredAnime,
-            episodes = backupAnime.episodes,
-            categories = backupAnime.categories,
-            backupCategories = backupCategories,
-            history = backupAnime.history + backupAnime.brokenHistory.map { it.toBackupHistory() },
-            tracks = backupAnime.tracking,
-        )
+            restoreAnimeDetails(
+                anime = restoredAnime,
+                episodes = backupAnime.episodes,
+                categories = backupAnime.categories,
+                backupCategories = backupCategories,
+                history = backupAnime.history + backupAnime.brokenHistory.map { it.toBackupHistory() },
+                tracks = backupAnime.tracking,
+            )
+
+            if (isSync) {
+                animesQueries.resetIsSyncing()
+                episodesQueries.resetIsSyncing()
+            }
+        }
     }
 
     private suspend fun findExistingAnime(backupAnime: BackupAnime): Anime? {
@@ -80,7 +88,7 @@ class AnimeRestorer(
     }
 
     private suspend fun restoreExistingAnime(anime: Anime, dbAnime: Anime): Anime {
-        return if (anime.lastModifiedAt > dbAnime.lastModifiedAt) {
+        return if (anime.version > dbAnime.version) {
             updateAnime(dbAnime.copyFrom(anime).copy(id = dbAnime.id))
         } else {
             updateAnime(anime.copyFrom(dbAnime).copy(id = dbAnime.id))
@@ -90,17 +98,18 @@ class AnimeRestorer(
     private fun Anime.copyFrom(newer: Anime): Anime {
         return this.copy(
             favorite = this.favorite || newer.favorite,
-            author = newer.author,
-            artist = newer.artist,
-            description = newer.description,
-            genre = newer.genre,
+            ogAuthor = newer.author,
+            ogArtist = newer.artist,
+            ogDescription = newer.description,
+            ogGenre = newer.genre,
             thumbnailUrl = newer.thumbnailUrl,
-            status = newer.status,
+            ogStatus = newer.status,
             initialized = this.initialized || newer.initialized,
+            version = newer.version,
         )
     }
 
-    private suspend fun updateAnime(anime: Anime): Anime {
+    suspend fun updateAnime(anime: Anime): Anime {
         handler.await(true) {
             animesQueries.update(
                 source = anime.source,
@@ -123,6 +132,8 @@ class AnimeRestorer(
                 dateAdded = anime.dateAdded,
                 animeId = anime.id,
                 updateStrategy = anime.updateStrategy.let(AnimeUpdateStrategyColumnAdapter::encode),
+                version = anime.version,
+                isSyncing = 1,
             )
         }
         return anime
@@ -134,6 +145,7 @@ class AnimeRestorer(
         return anime.copy(
             initialized = anime.description != null,
             id = insertAnime(anime),
+            version = anime.version,
         )
     }
 
@@ -142,36 +154,16 @@ class AnimeRestorer(
             .associateBy { it.url }
 
         val (existingEpisodes, newEpisodes) = backupEpisodes
-            .mapNotNull {
-                val episode = it.toEpisodeImpl().copy(animeId = anime.id)
+            .mapNotNull { backupEpisode ->
+                val episode = backupEpisode.toEpisodeImpl().copy(animeId = anime.id)
 
                 val dbEpisode = dbEpisodesByUrl[episode.url]
-                    ?: // New episode
-                    return@mapNotNull episode
 
-                if (episode.forComparison() == dbEpisode.forComparison()) {
-                    // Same state; skip
-                    return@mapNotNull null
+                when {
+                    dbEpisode == null -> episode // New episode
+                    episode.forComparison() == dbEpisode.forComparison() -> null // Same state; skip
+                    else -> updateEpisodeBasedOnSyncState(episode, dbEpisode)
                 }
-
-                // Update to an existing episode
-                var updatedEpisode = episode
-                    .copyFrom(dbEpisode)
-                    .copy(
-                        id = dbEpisode.id,
-                        bookmark = episode.bookmark || dbEpisode.bookmark,
-                    )
-                if (dbEpisode.seen && !updatedEpisode.seen) {
-                    updatedEpisode = updatedEpisode.copy(
-                        seen = true,
-                        lastSecondSeen = dbEpisode.lastSecondSeen,
-                    )
-                } else if (updatedEpisode.lastSecondSeen == 0L && dbEpisode.lastSecondSeen != 0L) {
-                    updatedEpisode = updatedEpisode.copy(
-                        lastSecondSeen = dbEpisode.lastSecondSeen,
-                    )
-                }
-                updatedEpisode
             }
             .partition { it.id > 0 }
 
@@ -179,8 +171,29 @@ class AnimeRestorer(
         updateExistingEpisodes(existingEpisodes)
     }
 
+    private fun updateEpisodeBasedOnSyncState(episode: Episode, dbEpisode: Episode): Episode {
+        return if (isSync) {
+            episode.copy(
+                id = dbEpisode.id,
+                bookmark = episode.bookmark || dbEpisode.bookmark,
+                seen = episode.seen,
+                lastSecondSeen = episode.lastSecondSeen,
+            )
+        } else {
+            episode.copyFrom(dbEpisode).let {
+                when {
+                    dbEpisode.seen && !it.seen -> it.copy(seen = true, lastSecondSeen = dbEpisode.lastSecondSeen)
+                    it.lastSecondSeen == 0L && dbEpisode.lastSecondSeen != 0L -> it.copy(
+                        lastSecondSeen = dbEpisode.lastSecondSeen,
+                    )
+                    else -> it
+                }
+            }
+        }
+    }
+
     private fun Episode.forComparison() =
-        this.copy(id = 0L, animeId = 0L, dateFetch = 0L, dateUpload = 0L, lastModifiedAt = 0L)
+        this.copy(id = 0L, animeId = 0L, dateFetch = 0L, dateUpload = 0L, lastModifiedAt = 0L, version = 0L)
 
     private suspend fun insertNewEpisodes(episodes: List<Episode>) {
         handler.await(true) {
@@ -198,6 +211,7 @@ class AnimeRestorer(
                     episode.sourceOrder,
                     episode.dateFetch,
                     episode.dateUpload,
+                    episode.version,
                 )
             }
         }
@@ -220,6 +234,8 @@ class AnimeRestorer(
                     dateFetch = null,
                     dateUpload = null,
                     episodeId = episode.id,
+                    version = episode.version,
+                    isSyncing = 0,
                 )
             }
         }
@@ -252,6 +268,7 @@ class AnimeRestorer(
                 coverLastModified = anime.coverLastModified,
                 dateAdded = anime.dateAdded,
                 updateStrategy = anime.updateStrategy,
+                version = anime.version,
             )
             animesQueries.selectLastInsertedRowId()
         }

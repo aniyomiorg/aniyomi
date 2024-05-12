@@ -22,7 +22,6 @@ import uy.kohesive.injekt.injectLazy
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
 
 /**
  * A simple implementation for sources from a website.
@@ -387,55 +386,24 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * Typically does not need to be overridden.
      *
      * @since extensions-lib 1.5
-     * @param video the video whose source video has to be downloaded.
+     * @param request the http request for the video that has to be downloaded.
+     * @param listener the progress listener that has to be attached to the http request
      */
-    open suspend fun getVideo(video: Video): Response {
-        return client.newCachelessCallWithProgress(videoRequest(video), video)
-            .awaitSuccess()
-    }
-
-    suspend fun getVideoChunk(
-        video: Video,
-        start: Long,
-        end: Long,
+    suspend fun getVideo(
+        request: Request,
         listener: ProgressListener,
     ): Response {
-        val animeDownloadClient =
-            client.newBuilder()
-                .callTimeout(30, TimeUnit.MINUTES)
-                .build()
-
-        return animeDownloadClient.newCachelessCallWithProgress(chunkRequest(video, start, end), listener)
+        return client.newCachelessCallWithProgress(request, listener)
             .awaitSuccess()
-    }
-
-    private fun chunkRequest(
-        video: Video,
-        start: Long,
-        end: Long,
-    ): Request {
-        val headers = video.headers ?: headers
-        val newHeaders =
-            if (end - start > 0L) {
-                Headers.Builder().addAll(headers).add("range", "bytes=$start-$end").build()
-            } else {
-//            logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
-                null
-            }
-        return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 
     fun getVideoSize(
         video: Video,
         tries: Int,
     ): Long {
-        val animeDownloadClient =
-            client.newBuilder()
-                .callTimeout(30, TimeUnit.MINUTES)
-                .build()
         val headers = Headers.Builder().addAll(video.headers ?: headers).add("Range", "bytes=0-1").build()
         val request = GET(video.videoUrl!!, headers)
-        val response = animeDownloadClient.newCall(request).execute()
+        val response = client.newCall(request).execute()
         // parse the response headers to get the size of the video, in particular the content-range header
         val contentRange = response.header("Content-Range")
         if (contentRange != null) {
@@ -448,19 +416,46 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     }
 
     /**
-     * Returns the request for getting the source image. Override only if it's needed to override
+     * Returns the request for getting the source image, with range header attributes. Override only if it's needed to override
      * the url, send different headers or request method like POST.
+     *
+     * If end is over start than the request is a range request
+     * If end if equal or less than start then the request is initial-point request
+     *
+     * @param video the video whose link has to be fetched
+     * @param start starting byte of chunk
+     * @param end   ending byte of chunk
+     */
+    fun videoRequest(
+        video: Video,
+        start: Long,
+        end: Long,
+    ): Request {
+        val headers = video.headers ?: headers
+        val newHeaders =
+            if (end - start > 0L) {
+                Headers.Builder().addAll(headers).add("Range", "bytes=$start-$end").build()
+            } else if (start >= 0L) {
+                Headers.Builder().addAll(headers).add("Range", "bytes=$start-").build()
+            } else {
+                // logcat(LogPriority.ERROR) { "Error: end-start is less than 0" }
+                null
+            }
+        return GET(video.videoUrl!!, newHeaders ?: headers)
+    }
+
+    /**
+     * Returns the request for getting the source image without range header attributes. Override only if it's needed to override
+     * the url, send different headers or request method like POST.
+     *
      *
      * @param video the video whose link has to be fetched
      */
-    protected open fun videoRequest(video: Video, bytes: Long = 0L): Request {
-        val headers = video.headers ?: headers
-        val newHeaders = if (bytes > 0L) {
-            Headers.Builder().addAll(headers).add("Range", "bytes=$bytes-").build()
-        } else {
-            null
-        }
-        return GET(video.videoUrl!!, newHeaders ?: headers)
+
+    fun safeVideoRequest(
+        video: Video,
+    ): Request {
+        return GET(video.videoUrl!!, video.headers ?: headers)
     }
 
     /**
@@ -523,7 +518,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @return url of the episode
      */
     open fun getEpisodeUrl(episode: SEpisode): String {
-        return episode.url.toString()
+        return episode.url
     }
 
     /**

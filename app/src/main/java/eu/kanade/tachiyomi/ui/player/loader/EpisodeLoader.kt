@@ -69,6 +69,7 @@ class EpisodeLoader {
 
                 try {
                     video.videoUrl = source.getVideoUrl(video)
+                    video.status = Video.State.READY
                 } catch (e: Throwable) {
                     video.status = Video.State.ERROR
                 }

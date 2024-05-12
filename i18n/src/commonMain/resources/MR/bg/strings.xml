@@ -316,7 +316,7 @@
     <string name="restoring_backup_error">Възстановяването неуспешно</string>
     <string name="restore_in_progress">Възстановяването е в процес</string>
     <string name="creating_backup_error">Съхраняването неуспешно</string>
-    <string name="backup_in_progress">Копието вече се запазва</string>
+    <string name="backup_in_progress">Архивирането вече е в ход</string>
     <string name="restore_duration">%02d мин, %02d сек</string>
     <string name="pref_webtoon_side_padding">Странично разстояние</string>
     <string name="pref_category_reading">Четене</string>
@@ -331,7 +331,7 @@
     <string name="lock_never">Никога</string>
     <string name="lock_always">Винаги</string>
     <string name="lock_when_idle">Заключи при неактивност</string>
-    <string name="lock_with_biometrics">Изисквай отключване</string>
+    <string name="lock_with_biometrics">Изискване на отключване</string>
     <string name="pref_category_security">Сигурност</string>
     <string name="pref_manage_notifications">Уведомления</string>
     <string name="theme_system">Система на абонаментите</string>
@@ -533,7 +533,7 @@
     <string name="extension_api_error">Неуспешно получаване на списък с разширения</string>
     <string name="update_72hour">На всеки 3 дена</string>
     <string name="connected_to_wifi">Само през Wi-Fi</string>
-    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Aniyomi. Натиснете тук, за да научите повече.</string>
+    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Animetail. Натиснете тук, за да научите повече.</string>
     <string name="action_show_manga">Покажи манга</string>
     <string name="action_display_cover_only_grid">Решетка само с корици</string>
     <string name="delete_category_confirmation">Искате ли да изтриете категорията \"%s\"\?</string>
@@ -647,8 +647,8 @@
     <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>
     <string name="dialog_with_checkbox_reset">Изчисти всички дати за тази манга</string>
     <string name="download_insufficient_space">Главите не можаха да бъдат изтеглени поради недостатъчно място</string>
-    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Aniyomi. Натиснете тук, за да научите повече.</string>
-    <string name="information_webview_required">WebView е необходим за Aniyomi</string>
+    <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Animetail. Натиснете тук, за да научите повече.</string>
+    <string name="information_webview_required">WebView е необходим за Animetail</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
     <string name="channel_new_chapters_episodes">Нови глави</string>
 </resources>

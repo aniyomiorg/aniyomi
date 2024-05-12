@@ -63,7 +63,7 @@ class PlayerObserver(val activity: PlayerActivity) :
             MPVLib.mpvLogLevel.MPV_LOG_LEVEL_FATAL, MPVLib.mpvLogLevel.MPV_LOG_LEVEL_ERROR -> LogPriority.ERROR
             MPVLib.mpvLogLevel.MPV_LOG_LEVEL_WARN -> LogPriority.WARN
             MPVLib.mpvLogLevel.MPV_LOG_LEVEL_INFO -> LogPriority.INFO
-            else -> null
+            else -> LogPriority.VERBOSE
         }
         if (logPriority != null) {
             if (text.contains("HTTP error")) httpError = text

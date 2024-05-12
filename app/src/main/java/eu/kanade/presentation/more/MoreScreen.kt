@@ -163,13 +163,6 @@ fun MoreScreen(
             }
             item {
                 TextPreferenceWidget(
-                    title = stringResource(MR.strings.label_storage),
-                    icon = Icons.Outlined.Storage,
-                    onPreferenceClick = onClickStorage,
-                )
-            }
-            item {
-                TextPreferenceWidget(
                     title = stringResource(MR.strings.label_data_storage),
                     icon = Icons.Outlined.Storage,
                     onPreferenceClick = onClickDataAndStorage,

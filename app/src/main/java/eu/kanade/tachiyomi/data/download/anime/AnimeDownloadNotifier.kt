@@ -87,7 +87,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 )
             }
 
-            val downloadingProgressText = if (download.totalProgress == 0) {
+            val downloadingProgressText = if (download.progress == 0) {
                 context.stringResource(MR.strings.update_check_notification_download_in_progress)
             } else {
                 context.stringResource(MR.strings.episode_downloading_progress, download.progress)
@@ -106,7 +106,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setContentTitle("$title - $episode".chop(30))
                 setContentText(downloadingProgressText)
             }
-            if (download.totalProgress == 0) {
+            if (download.progress == 0) {
                 setProgress(100, download.progress, true)
             } else {
                 setProgress(100, download.progress, false)

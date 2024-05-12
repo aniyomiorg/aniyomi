@@ -449,7 +449,7 @@
     <string name="pref_clear_history">내역 삭제</string>
     <string name="clear_history_completed">기록이 삭제되었습니다</string>
     <string name="download_insufficient_space">저장 공간이 부족하여 회차를 다운로드 할 수 없습니다</string>
-    <string name="download_queue_size_warning">경고: 대량 다운로드는 소스가 느려지거나 Aniyomi를 차단할 수 있습니다. 탭하여 자세히 알아보기.</string>
+    <string name="download_queue_size_warning">경고: 대량 다운로드는 소스가 느려지거나 Animetail를 차단할 수 있습니다. 탭하여 자세히 알아보기.</string>
     <string name="notification_size_warning">대규모 업데이트는 소스에 피해를 입히고 업데이트가 느려지고 배터리 사용량이 증가할 수 있습니다. 탭하여 자세히 알아보기.</string>
     <string name="notification_chapters_single">%1$s화</string>
     <string name="notification_update_error">%1$d개의 업데이트가 실패했습니다</string>
@@ -766,7 +766,7 @@
     <string name="default_anime_category">기본 애니메이션 카테고리</string>
     <string name="pref_manga_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
     <string name="pref_anime_library_update_categories_details">제외된 카테고리의 애니메이션은 포함된 카테고리에 있어도 업데이트되지 않습니다.</string>
-    <string name="unofficial_extension_message_aniyomi">이 확장 앱은 Aniyomi의 공식 확장 앱이 아닙니다.</string>
+    <string name="unofficial_extension_message_aniyomi">이 확장 앱은 Animetail의 공식 확장 앱이 아닙니다.</string>
     <string name="rotation_reverse_landscape">가로 반전</string>
     <string name="rotation_sensor_portrait">자동 세로</string>
     <string name="rotation_sensor_landscape">자동 가로</string>
@@ -866,11 +866,11 @@
     <string name="player_statistics_page_3">3페이지</string>
     <string name="recent_anime_time">%1$s ‐ %2$s화</string>
     <string name="download_insufficient_space">저장 공간이 부족하여 회차를 다운로드 할 수 없습니다</string>
-    <string name="download_queue_size_warning">경고: 대량 다운로드는 소스가 느려지거나 Aniyomi를 차단할 수 있습니다. 탭하여 자세히 알아보기.</string>
+    <string name="download_queue_size_warning">경고: 대량 다운로드는 소스가 느려지거나 Animetail를 차단할 수 있습니다. 탭하여 자세히 알아보기.</string>
     <string name="video_list_empty_error">비디오를 찾을 수 없음</string>
     <string name="notification_new_episodes">새로운 에피소드 발견</string>
     <string name="information_no_recent_anime">최근에 본 동영상이 없습니다</string>
-    <string name="information_webview_required">Aniyomi를 사용하려면 WebView가 필요합니다</string>
+    <string name="information_webview_required">Animetail를 사용하려면 WebView가 필요합니다</string>
     <string name="episode_settings_updated">업데이트된 기본 에피소드 설정</string>
     <string name="download_notifier_download_paused_chapters">다운로드 일시중지됨</string>
     <string name="download_notifier_download_paused_episodes">에피소드 다운로드가 일시 중지됨</string>
@@ -938,7 +938,7 @@
     <string name="action_global_anime_search">전체 애니메이션 검색</string>
     <string name="pref_search_pinned_manga_sources_only">전체 검색에서 핀 설정된 만화 소스만 검색</string>
     <string name="pref_search_pinned_anime_sources_only">전체 검색에서 핀 설정된 애니메이션 소스만 검색</string>
-    <string name="unofficial_anime_extension_message">이 확장 앱은 Aniyomi의 공식 확장 앱이 아닙니다.</string>
+    <string name="unofficial_anime_extension_message">이 확장 앱은 Animetail의 공식 확장 앱이 아닙니다.</string>
     <string name="pref_category_volume_brightness">볼륨 및 밝기</string>
     <string name="pref_category_player_seeking">찾기</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
@@ -1007,7 +1007,7 @@
     <string name="player_subtitle_settings_example">다람쥐 헌 쳇바퀴에 타고파.</string>
     <string name="theme_mocha">모카</string>
     <string name="player_subtitle_settings_delay_tab">딜레이</string>
-    <string name="unlock_app_title">Aniyomi 잠금해재</string>
+    <string name="unlock_app_title">Animetail 잠금해재</string>
     <string name="pref_pip_replace_with_previous">10초 건너뛰기 옵션을 이전 에피소드로 대체</string>
     <string name="pref_anime_storage_usage">애니메이션 저장공간 사용량</string>
     <string name="pref_manga_storage_usage">만화 저장공간 사용량</string>
@@ -1029,4 +1029,94 @@
     <string name="player_subtitle_border_color">테두리</string>
     <string name="player_subtitle_background_color">배경</string>
     <string name="label_recent_anime_updates">애니메이션 업데이트</string>
+    <string name="local_source_badge">로컬</string>
+    <string name="onboarding_permission_install_apps">앱 설치 권한</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">장기 실행되는 서재 업데이트, 다운로드 및 백업 복원이 중단을 방지합니다.</string>
+    <string name="theme_sapphire">사파이어</string>
+    <string name="pref_library_update_smart_update">스마트 업데이트</string>
+    <string name="information_empty_repos">추가된 저장소가 없습니다.</string>
+    <string name="action_add_repo_message">Aniyomi에 추가 저장소를 추가합니다. \"index.min.json\"으로 끝나는 URL이어야 합니다.</string>
+    <string name="error_repo_exists">이 저장소는 이미 존재합니다!</string>
+    <string name="pref_download_slots">최대 다운로드</string>
+    <string name="pref_preserve_reading_position">읽은 회차의 위치를 유지</string>
+    <string name="pref_create_folder_per_manga_summary">항목 제목에 따라 폴더를 생성</string>
+    <string name="pref_storage_location">저장 장소</string>
+    <string name="pref_storage_location_info">자동 백업, 회차 다운로드 및 로컬 소스에 사용됩니다.</string>
+    <string name="selected">선택됨</string>
+    <string name="not_selected">선택되지 않음</string>
+    <string name="action_menu_overflow_description">기타 옵션</string>
+    <string name="action_bar_up_description">위로 이동</string>
+    <string name="scanlator">스캔레이터</string>
+    <string name="label_data_storage">데이터 및 저장공간</string>
+    <string name="confirm_exit">종료하려면 뒤로버튼을 다시 누르세요</string>
+    <string name="action_filter_started">시작됨</string>
+    <string name="action_sort_tracker_score">트래커 평가점수</string>
+    <string name="action_sort_airing_time">방영시간</string>
+    <string name="action_apply">적용</string>
+    <string name="action_revert_to_default">기본값으로 돌아가기</string>
+    <string name="pref_onboarding_guide">초기설정 가이드</string>
+    <string name="onboarding_heading">환영합니다!</string>
+    <string name="onboarding_description">먼저 몇 가지 사항을 설정해 보겠습니다. 나중에 언제든지 설정에서 변경할 수도 있습니다.</string>
+    <string name="onboarding_action_next">다음</string>
+    <string name="onboarding_action_finish">시작하기</string>
+    <string name="onboarding_storage_info">%1$s이 회차 다운로드, 백업 등을 저장할 폴더를 선택하세요.
+\n
+\n전용 폴더를 권장합니다.
+\n
+\n
+\n선택한 폴더: %2$s</string>
+    <string name="onboarding_storage_action_select">폴더 선택</string>
+    <string name="onboarding_action_skip">건너뛰기</string>
+    <string name="onboarding_storage_selection_required">폴더를 선택해야 합니다</string>
+    <string name="onboarding_storage_help_info">이전 버전에서 업데이트하는데 무엇을 선택해야 할지 모르시나요? 자세한 내용은 저장공간 가이드를 참조하세요.</string>
+    <string name="onboarding_storage_help_action">저장공간 가이드</string>
+    <string name="onboarding_permission_install_apps_description">소스 확장 앱을 설치하는 데 필요합니다.</string>
+    <string name="onboarding_permission_notifications">알림 권한</string>
+    <string name="onboarding_permission_notifications_description">서재 업데이트 등에 대한 알림을 받으세요.</string>
+    <string name="onboarding_permission_ignore_battery_opts">백그라운드 배터리 사용 권한</string>
+    <string name="onboarding_permission_action_grant">허용</string>
+    <string name="onboarding_guides_new_user">%s을(를) 처음 사용하시나요? 초기 설정 가이드를 확인해 보시기 바랍니다.</string>
+    <string name="onboarding_guides_returning_user">%s를 재설치하였습니까?</string>
+    <string name="pref_general_summary">앱 언어, 알림</string>
+    <string name="theme_nord">Nord</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_doom">둠</string>
+    <string name="theme_matrix">매트릭스</string>
+    <string name="pref_relative_format">상대적인 타임스탬프</string>
+    <string name="pref_relative_format_summary">\"%2$s\" 대신 \"%1$s\"을(를) 사용</string>
+    <string name="untrusted_extension_message">악성 확장 앱은 저장된 로그인 자격 증명을 읽거나 임의 코드를 실행할 수 있습니다.
+\n
+\n이 확장 프로그램을 신뢰함으로써 귀하는 이러한 위험을 감수하게 됩니다.</string>
+    <string name="ext_permission_install_apps_warning">확장 앱을 설치하려면 권한이 필요합니다. 허용하려면 여기를 탭하세요.</string>
+    <string name="ext_revoke_trust">신뢰했던 확장 앱 신뢰 취소</string>
+    <string name="label_extension_repos">확장 저장소</string>
+    <string name="action_add_repo">저장소 추가</string>
+    <string name="label_add_repo_input">저장소 URL</string>
+    <string name="action_delete_repo">저장소 제거</string>
+    <string name="invalid_repo_name">잘못된 저장소 URL</string>
+    <string name="delete_repo_confirmation">\"%s\" 저장소를 삭제하시겠습니까?</string>
+    <string name="action_open_repo">소스 저장소 열기</string>
+    <string name="pref_flash_page">페이지 전환시 화면 점멸</string>
+    <string name="pref_flash_page_summ">e-ink 디스플레이의 고스팅 감소</string>
+    <string name="no_location_set">저장 위치가 설정되지 않았습니다</string>
+    <string name="invalid_backup_file_error">자세한 오류 정보:</string>
+    <string name="private_settings">민감한 설정 포함(예: 트래커 로그인 토큰)</string>
+    <string name="last_auto_backup_info">마지막 자동 백업: %s</string>
+    <string name="pref_storage_usage">저장공간 사용량</string>
+    <string name="available_disk_space_info">사용 가능: %1$s / 전체: %2$s</string>
+    <string name="manga_interval_expected_update">새 회차는 약 %1$s 후에 출시될 것으로 예상되며 매 %2$s마다 확인됩니다.</string>
+    <string name="anime_interval_expected_update">새 에피소드는 약 %1$s 후에 공개될 것으로 예상되며 매 %2$s마다 확인됩니다.</string>
+    <string name="manga_interval_custom_amount">맞춤 업데이트 빈도:</string>
+    <string name="exclude_scanlators">스캔레이터 제외</string>
+    <string name="no_scanlators_found">스캔레이터를 찾을 수 없습니다</string>
+    <string name="file_null_uri_error">파일이 선택되지 않았습니다</string>
+    <string name="download_notifier_download_finish">다운로드 완료</string>
+    <string name="download_speed_limit">다운로드 속도 제한</string>
+    <string name="relative_time_span_never">없음</string>
+    <string name="action_create">생성</string>
+    <string name="pref_start_screen">시작화면</string>
+    <string name="pref_gpu_next_title">gpu-next 활성화</string>
+    <string name="pref_gpu_next_subtitle">새로운 비디오 렌더링 백엔드</string>
+    <string name="onboarding_storage_action_create_folder">기본 Aniyomi 폴더 생성</string>
+    <string name="download_speed_limit_hint">속도 제한을 비활성화하려면 0으로 설정하세요.</string>
 </resources>

@@ -11,15 +11,18 @@ import androidx.core.app.ActivityCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.domain.ui.model.StartScreen
 import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.domain.ui.model.ThemeMode
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.screen.appearance.AppCustomThemeColorPickerScreen
 import eu.kanade.presentation.more.settings.screen.appearance.AppLanguageScreen
 import eu.kanade.presentation.more.settings.widget.AppThemeModePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.core.i18n.stringResource
@@ -51,6 +54,7 @@ object SettingsAppearanceScreen : SearchableSettings {
         uiPreferences: UiPreferences,
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
+        val navigator = LocalNavigator.currentOrThrow
 
         val themeModePref = uiPreferences.themeMode()
         val themeMode by themeModePref.collectAsState()
@@ -60,6 +64,18 @@ object SettingsAppearanceScreen : SearchableSettings {
 
         val amoledPref = uiPreferences.themeDarkAmoled()
         val amoled by amoledPref.collectAsState()
+
+        val customPreferenceItem = if (appTheme == AppTheme.CUSTOM) {
+            listOf(
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(MR.strings.pref_custom_color),
+                    subtitle = stringResource(MR.strings.custom_color_description),
+                    onClick = { navigator.push(AppCustomThemeColorPickerScreen()) },
+                ),
+            )
+        } else {
+            emptyList()
+        }
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_theme),
@@ -83,6 +99,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                         )
                     }
                 },
+                *customPreferenceItem.toTypedArray(),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = amoledPref,
                     title = stringResource(MR.strings.pref_dark_theme_pure_black),
@@ -124,7 +141,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     onValueChanged = {
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
@@ -135,7 +152,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     onValueChanged = {
-                        context.stringResource(MR.strings.requires_app_restart)
+                        context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),

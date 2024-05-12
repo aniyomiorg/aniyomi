@@ -33,6 +33,7 @@ import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -77,7 +78,7 @@ class ClearDatabaseScreen : Screen() {
                                         model.removeMangaBySourceId()
                                         model.clearSelection()
                                         model.hideConfirmation()
-                                        context.stringResource(MR.strings.clear_database_completed)
+                                        context.toast(MR.strings.clear_database_completed)
                                     }
                                 },
                             ) {

@@ -17,6 +17,7 @@ import com.google.android.gms.cast.framework.CastButtonFactory
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.viewer.components.CurrentChapter
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -43,6 +44,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         view = binding.playbackSeekbar,
         onValueChange = ::onValueChange,
         onValueChangeFinished = ::onValueChangeFinished,
+    )
+
+    val chapterText: CurrentChapter = CurrentChapter(
+        view = binding.currentChapter,
+        onClick = { activity.viewModel.showVideoChapters() },
     )
 
     private fun onValueChange(value: Float, wasSeeking: Boolean) {
@@ -104,9 +110,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.playBtn.setOnClickListener { playPause() }
         binding.nextBtn.setOnClickListener { switchEpisode(previous = false) }
 
-        binding.pipBtn.setOnClickListener { activity.pip.start() }
+        binding.pipBtn.setOnClickListener { activity.updatePip(start = true) }
 
-        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
+        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.supportedAndEnabled
 
         binding.controlsSkipIntroBtn.setOnLongClickListener {
             activity.viewModel.showSkipIntroLength()
@@ -146,8 +152,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.settingsBtn.setOnClickListener { activity.viewModel.showPlayerSettings() }
 
         binding.streamsBtn.setOnClickListener { activity.viewModel.showStreamsCatalog() }
-
-        binding.chaptersBtn.setOnClickListener { activity.viewModel.showVideoChapters() }
 
         binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
@@ -322,6 +326,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             activity.viewModel.onSecondReached(position, duration)
         }
         seekbar.updateSeekbar(value = position.toFloat())
+        chapterText.updateCurrentChapterText(value = position.toFloat())
     }
 
     @SuppressLint("SetTextI18n")
@@ -374,6 +379,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.bottomLeftControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
             )
+            binding.currentChapter.startAnimation(
+                AnimationUtils.loadAnimation(context, R.anim.player_exit_left),
+            )
             binding.middleControlsGroup.startAnimation(
                 AnimationUtils.loadAnimation(context, R.anim.player_fade_out),
             )
@@ -400,6 +408,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             AnimationUtils.loadAnimation(context, R.anim.player_enter_right),
         )
         binding.bottomLeftControlsGroup.startAnimation(
+            AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
+        )
+        binding.currentChapter.startAnimation(
             AnimationUtils.loadAnimation(context, R.anim.player_enter_left),
         )
         binding.middleControlsGroup.startAnimation(

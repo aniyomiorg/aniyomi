@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
+import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.getEnum
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,
@@ -22,6 +24,8 @@ class PlayerPreferences(
 
     fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
     fun playerVolumeValue() = preferenceStore.getFloat("player_volume_value", -1.0F)
+
+    fun audioChannels() = preferenceStore.getEnum("pref_audio_config", AudioChannels.AutoSafe)
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
 

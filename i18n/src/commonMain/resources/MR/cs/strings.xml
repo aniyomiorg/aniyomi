@@ -344,13 +344,11 @@
     <string name="creating_backup_error">Zálohování selhalo</string>
     <string name="backup_in_progress">Zálohování již probíhá</string>
     <string name="restore_duration">%02d minut, %02d sekund</string>
-    <string name="backup_restore_content_full">Data ze zálohy budou obnovena.
-\n
-\nBudeš poté muset doinstalovat jakékoliv chybějící rozšíření a přihlásit se do sledovacích služeb pro jejich použití.</string>
+    <string name="backup_restore_content_full">Možná bude nutné nainstalovat chybějící rozšíření a následně se přihlásit ke službám sledování, abyste je mohli používat.</string>
     <string name="backup_restore_missing_trackers">Sledovače, ve kterých nejsi přihlášený/á:</string>
     <string name="backup_restore_missing_sources">Chybějící zdroje:</string>
     <string name="invalid_backup_file_missing_manga">Záloha neobsahuje žádné položky knihovny.</string>
-    <string name="invalid_backup_file">Neplatný soubor se zálohou</string>
+    <string name="invalid_backup_file">Neplatný soubor zálohy:</string>
     <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol v externích sledovacích službách. Nastavení sledování pro každou položku je možné z jejich tlačítka sledování.</string>
     <string name="pref_category_reading_mode">Režim čtení</string>
     <string name="pref_viewer_nav">Oblasti dotyku</string>
@@ -700,7 +698,7 @@
     <string name="exception_offline">Bez připojení k internetu</string>
     <string name="exception_unknown_host">Nelze dosáhnout %s</string>
     <string name="exception_http">HTTP %d, zkontrolovat web v WebView</string>
-    <string name="unlock_app_title">Odemknout %s</string>
+    <string name="unlock_app_title">Odemknout Kuukiyomi</string>
     <string name="action_move_to_bottom_all_for_series">Přesunout sérii na konec</string>
     <string name="pref_relative_format">Relativní časová razítka</string>
     <string name="pref_relative_format_summary">\"%1$s\" namísto \"%2$s\"</string>
@@ -782,7 +780,7 @@
     <string name="also_set_chapter_settings_for_library">Také nastavit pro všechny položky v mé knihovně</string>
     <string name="dialog_with_checkbox_reset">Obnovit všechny kapitoly pro tento záznam</string>
     <string name="download_insufficient_space">Nelze stáhnout kvůli nedostatku místa</string>
-    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Aniyomi. Klepnutím se dozvíte více.</string>
+    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Animetail. Klepnutím se dozvíte více.</string>
     <string name="information_webview_required">Je nutné mít nainstalovanou aplikaci WebView</string>
     <string name="download_notifier_download_paused_chapters">Stahování kapitoly pozastaveno</string>
     <string name="channel_new_chapters_episodes">Aktualizace kapitol/epizod</string>
@@ -790,7 +788,7 @@
     <string name="pref_anime_library_update_categories_details">Anime odebrané z kategorií nebudou aktualizována, ani když jsou zároveň v zahrnutých kategoriích.</string>
     <string name="action_start_download_internally">Použít stahovač uvnitř aplikace</string>
     <string name="pref_player_summary">Ovládání průběhu, interní přehrávač, externí přehrávač</string>
-    <string name="unofficial_extension_message_aniyomi">Toto rozšíření není z oficiálního seznamu Aniyomi rozšíření.</string>
+    <string name="unofficial_extension_message_aniyomi">Toto rozšíření není z oficiálního seznamu Animetail rozšíření.</string>
     <string name="pref_category_player">Přehrávač</string>
     <string name="pref_progress_mark_as_seen">Od jakého okamžiku označovat epizodu jako viděnou</string>
     <string name="pref_category_player_orientation">Orientace</string>
@@ -934,9 +932,9 @@
     <string name="video_stretch_screen">Roztaženo na obrazovku</string>
     <string name="playback_speed_dialog_title">Změnit rychlost přehrávání:</string>
     <string name="playback_speed_dialog_reset">Obnovit</string>
-    <string name="quality_dialog_header">Změnit kvalitu videa:</string>
-    <string name="subtitle_dialog_header">Změnit stopu titulků:</string>
-    <string name="audio_dialog_header">Změnit zvukovou stopu:</string>
+    <string name="quality_dialog_header">Kvalita videa</string>
+    <string name="subtitle_dialog_header">Titulky</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Rychlost přehrávání</string>
     <string name="playback_options_quality">Kvalita videa</string>
     <string name="label_history">Manga</string>

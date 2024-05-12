@@ -1,5 +1,5 @@
 [versions]
-compiler = "1.5.7"
+compiler = "1.5.8"
 compose-bom = "2023.12.00-alpha04"
 accompanist = "0.33.2-alpha"
 
@@ -20,6 +20,8 @@ material-icons = { module = "androidx.compose.material:material-icons-extended" 
 material-core = { module = "androidx.compose.material:material" }
 
 glance = "androidx.glance:glance-appwidget:1.0.0"
+
+colorpicker = {module = "com.github.skydoves:colorpicker-compose", version = "1.0.7"}
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

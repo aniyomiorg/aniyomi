@@ -156,7 +156,7 @@
     <string name="download_notifier_unknown_error">No se ha podido descargar el capítulo debido a un error inesperado</string>
     <string name="download_notifier_text_only_wifi">No estás conectado a ninguna red Wi-Fi</string>
     <string name="categories">Categorías</string>
-    <string name="manga">Títulos en la biblioteca</string>
+    <string name="manga">Manga</string>
     <string name="track">Seguimiento</string>
     <string name="history">Historial</string>
     <string name="action_filter_bookmarked">Favoritos</string>
@@ -211,7 +211,7 @@
     <string name="local_source">Fuente local</string>
     <string name="delete_downloads_for_manga">¿Quieres borrar los capítulos descargados?</string>
     <string name="manga_tracking_tab">Seguimiento</string>
-    <string name="error_category_exists">Ya existe una categoría con este nombre</string>
+    <string name="error_category_exists">Ya existe una categoría con este nombre!</string>
     <string name="snack_categories_deleted">Categorías eliminadas</string>
     <string name="picture_saved">Imagen guardada</string>
     <string name="custom_filter">Filtro personalizado</string>
@@ -734,7 +734,7 @@
     <string name="selected">Seleccionado</string>
     <string name="not_selected">Sin seleccionar</string>
     <string name="action_menu_overflow_description">Más opciones</string>
-    <string name="action_bar_up_description">Subir un nivel</string>
+    <string name="action_bar_up_description">Navegar hacia arriba</string>
     <string name="pref_storage_location">Ubicación del almacenamiento</string>
     <string name="pref_storage_location_info">Se utiliza para las copias de seguridad automáticas, poder descargar capítulos y abrir los que ya tengas en tu dispositivo.</string>
     <string name="onboarding_storage_action_select">Elige una carpeta</string>
@@ -742,15 +742,15 @@
     <string name="onboarding_guides_new_user">¿Es la primera vez que instalas %s? Te recomendamos leer la guía de introducción.</string>
     <string name="onboarding_action_finish">Comenzar</string>
     <string name="onboarding_storage_selection_required">Tienes que elegir una carpeta</string>
-    <string name="onboarding_heading">Te damos la bienvenida</string>
+    <string name="onboarding_heading">Bienvenido!</string>
     <string name="onboarding_guides_returning_user">¿No es la primera vez que instalas %s?</string>
     <string name="onboarding_action_skip">Saltar</string>
     <string name="onboarding_action_next">Siguiente</string>
     <string name="onboarding_description">Lo primero de todo es dejar las cosas a tu gusto. Siempre puedes volver a cambiarlas más tarde en los ajustes.</string>
     <string name="no_location_set">Todavía no has proporcionado ninguna carpeta</string>
-    <string name="onboarding_storage_info">Selecciona una carpeta donde %1$s almacenará las descargas de capítulos, copias de seguridad y otras cosas.
+    <string name="onboarding_storage_info">Seleccione una carpeta donde %1$s almacenará las descargas de capítulos, copias de seguridad y otras cosas.
 \n
-\nTe recomendamos que sea solo para %1$s.
+\nTe recomendamos usar una carpeta dedicada.
 \n
 \nCarpeta seleccionada: %2$s</string>
     <string name="onboarding_permission_install_apps">Permiso para instalar aplicaciones</string>
@@ -766,10 +766,10 @@
     <string name="invalid_backup_file_error">Descripción completa del problema:</string>
     <string name="manga_interval_expected_update">Se espera que se publiquen nuevos capítulos alrededor de %1$s, comprobando alrededor de cada %2$s.</string>
     <string name="manga_interval_custom_amount">Frecuencia de actualización personalizada:</string>
-    <string name="error_repo_exists">El repositorio ya existe</string>
+    <string name="error_repo_exists">El repositorio ya existe!</string>
     <string name="pref_library_update_smart_update">Actualizaciones inteligentes</string>
     <string name="invalid_repo_name">La dirección URL del repositorio no parece ser correcta</string>
-    <string name="action_add_repo_message">Añade más repositorios a Aniyomi; la dirección URL tiene que terminar en «index.min.json».</string>
+    <string name="action_add_repo_message">Añade más repositorios a Animetail; la dirección URL tiene que terminar en «index.min.json».</string>
     <string name="delete_repo_confirmation">¿Seguro que quieres borrar el repositorio «%s»?</string>
     <string name="action_delete_repo">Borrar repositorio</string>
     <string name="action_add_repo">Añadir un repositorio</string>
@@ -839,7 +839,7 @@
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
-    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Animetail.</string>
     <string name="rotation_reverse_landscape">Paisaje invertido</string>
     <string name="rotation_sensor_portrait">Retrato del sensor</string>
     <string name="rotation_sensor_landscape">Paisaje de sensores</string>
@@ -937,7 +937,7 @@
     <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Episodio %1$s - %2$s</string>
     <string name="download_insufficient_space">No se pudo descargar ningún capítulo, queda muy poco espacio</string>
-    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Aniyomi. Toca aquí para más información.</string>
+    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Animetail. Toca aquí para más información.</string>
     <string name="video_list_empty_error">No se encontró ningún vídeo</string>
     <string name="notification_new_episodes">Nuevos episodios encontrados</string>
     <string name="information_no_recent_anime">No he visto nada recientemente</string>
@@ -1010,7 +1010,7 @@
     <string name="pref_search_pinned_manga_sources_only">Buscar sólo fuentes de manga incrustadas en la búsqueda global</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
     <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes del anime incrustadas en la búsqueda global</string>
-    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Animetail.</string>
     <string name="pref_category_volume_brightness">Volumen y Brillo</string>
     <string name="pref_category_pip">Imagen en imagen (PiP)</string>
     <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
@@ -1026,24 +1026,24 @@
     <string name="data_saver_exclude">Excluir del protector de datos</string>
     <string name="pref_episode_swipe_start">Deslizar a la izquierda</string>
     <string name="data_saver_stop_exclude">Detener la excepción del protector de datos</string>
-    <string name="data_saver_image_quality_summary">Los valores más altos significan que se guarda un mayor porcentaje de la calidad de la imagen, pero también significa que el tamaño del archivo es mayor, el 80 por ciento es un buen término medio entre el tamaño del archivo y la calidad de la imagen</string>
-    <string name="data_saver_image_format_summary_off">El tamaño del archivo Jpeg es considerablemente más pequeño que Webp (lo que significa que se guardan más datos), pero también hace que las imágenes pierdan más calidad.
-\nActualmente comprime a Webp</string>
+    <string name="data_saver_image_quality_summary">Valores más altos significan que un mayor porcentaje de la calidad de la imagen es guardada, pero también significa que el tamaño del archivo es mayor, el 80 por ciento es un buen término medio entre el tamaño del archivo y la calidad de la imagen</string>
+    <string name="data_saver_image_format_summary_off">El tamaño del archivo JPEG es considerablemente más pequeño que el del WEBP (lo que significa que se más datos son salvados), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a WEBP</string>
     <string name="data_saver">Ahorro de datos</string>
     <string name="data_saver_summary">Comprimir las imágenes antes de descargarlas o cargarlas en el lector</string>
     <string name="data_saver_downloader">Usar el ahorrador de datos en el descargador</string>
-    <string name="data_saver_ignore_jpeg">Ignorar las imágenes Jpeg</string>
-    <string name="data_saver_ignore_gif">Ignorar las imágenes Gif</string>
+    <string name="data_saver_ignore_jpeg">Ignorar las imágenes JPEG</string>
+    <string name="data_saver_ignore_gif">Ignorar las imágenes GIF</string>
     <string name="data_saver_image_quality">Calidad de la imagen</string>
     <string name="data_saver_image_format">Comprimir a Jpeg</string>
-    <string name="data_saver_image_format_summary_on">El tamaño del archivo Jpeg es considerablemente menor que el de Webp (lo que significa que se ahorran más datos), pero también hace que las imágenes pierdan más calidad.
-\nActualmente comprime a Jpeg</string>
+    <string name="data_saver_image_format_summary_on">El tamaño del archivo JPEG es menor que el de WEBP (lo que significa que más datos son guardados), pero también hace que las imágenes pierdan más calidad.
+\nActualmente comprime a JPEG</string>
     <string name="data_saver_color_bw">Convertir a blanco y negro</string>
     <string name="bandwidth_hero">Bandwidth Hero (requiere un servidor proxy Bandwidth Hero)</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="resmush">resmush.it</string>
-    <string name="bandwidth_data_saver_server">Servidor Proxy Bandwidth Hero</string>
-    <string name="data_saver_server_summary">Pon aquí la dirección url del servidor Proxy de Bandwidth Hero</string>
+    <string name="bandwidth_data_saver_server">Servidor de Bandwidth Hero Proxy</string>
+    <string name="data_saver_server_summary">Poner la URL del servidor de Bandwith Hero Proxy aquí</string>
     <string name="pref_show_next_episode_airing_time">Mostrar la hora de emisión del próximo episodio</string>
     <string name="pref_media_control_chapter_seeking">Buscar los capítulos con los controles multimedia</string>
     <string name="go_to_next_chapter">Siguiente capítulo</string>
@@ -1079,7 +1079,7 @@
     <string name="player_add_external_subtitles_intent">Seleccionar un archivo de subtítulos.</string>
     <string name="label_storage">Almacenamiento</string>
     <string name="player_font_size_text_field">Tamaño de la fuente</string>
-    <string name="unlock_app_title">Desbloquear Aniyomi</string>
+    <string name="unlock_app_title">Desbloquear Animetail</string>
     <string name="pref_pip_replace_with_previous">Sustituir la opción saltar 10 segundos por episodio anterior</string>
     <string name="pref_reset_mpv_conf">Restablecer el archivo de configuración MPV</string>
     <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
@@ -1099,6 +1099,32 @@
     <string name="player_reset_subtitles">Restablecer subtítulos a valores predeterminados</string>
     <string name="player_subtitle_background_color">Fondo</string>
     <string name="unseen">Sin ver</string>
+    <!-- Connections section -->
+    <string name="special_services">Servicios Especiales</string>
+    <string name="pref_category_connections">Conexiones</string>
+    <string name="pref_connections_summary">Discord, más por venir...</string>
+    <string name="connections_info">Servicios especiales que son exclusivos de Animetail y mejoran la forma en que utilizas la aplicación.</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">Este servicio de Discord funciona a través del registro de tokens. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Animetail no lo comparte en ningún otro lugar.</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="show_chapters_titles_title">Muestra los Títulos de los Episodios/Capítulos.</string>
+    <string name="show_chapters_titles_subtitle">Muestra el título del episodio/capítulo que estás leyendo.</string>
+    <string name="pref_enable_discord_rpc">Habilitar Discord Rich Presence</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ No Molestar</string>
+    <string name="pref_discord_idle">🌙 Ausente</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord en Modo Incógnito</string>
+    <string name="pref_discord_incognito_summary">Anulado cuando el modo incógnito está habilitado</string>
+    <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Navegando</string>
+    <string name="scrolling">Desplazandose por</string>
+    <string name="messing">Jugando con</string>
+    <string name="video">Video</string>
+    <string name="comic">Manga</string>
     <string name="label_anime_extension_repos">Repositorios de extensiones de anime</string>
     <string name="label_manga_extension_repos">Repositorios de extensiones de manga</string>
     <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
@@ -1108,5 +1134,29 @@
     <string name="multi_thread_download">Descarga multiproceso para anime</string>
     <string name="multi_thread_download_summary">Habilite la descarga de anime usando subprocesos múltiples</string>
     <string name="multi_thread_download_threads_number">Número de hilos</string>
-    <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
+    <string name="onboarding_storage_action_create_folder">Crear carpeta de Animetail por defecto</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="theme_doom">Doom</string>
+    <string name="confirm_exit">Presione Atrás nuevamente para salir</string>
+    <string name="theme_sapphire">Zafiro</string>
+    <string name="pref_preserve_reading_position">Conservar la posición de lectura en los capítulos leídos</string>
+    <string name="action_filter_started">Iniciado</string>
+    <string name="action_sort_airing_time">Fecha de retransmisión</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="pref_download_slots">Descargas máximas</string>
+    <string name="local_source_badge">Local</string>
+    <string name="pref_general_summary">Idioma de la aplicación, notificaciones</string>
+    <string name="action_reorganize_by">Reordenar</string>
+    <string name="anime_interval_expected_update">Se espera que haya nuevos episodios en alrededor de %1$s y se comprobará aproximadamente cada %2$s.</string>
+    <string name="pref_start_screen">Pantalla de inicio</string>
+    <string name="download_speed_limit_hint">Establezca en 0 para desactivar el límite de velocidad de descarga.</string>
+    <string name="download_speed_limit">Límite de velocidad de la descarga</string>
+    <string name="download_notifier_download_finish">Descarga finalizada</string>
+    <string name="pref_gpu_next_subtitle">Un nuevo backend de renderizado de video</string>
+    <string name="pref_gpu_next_title">Activar gpu-next</string>
+    <string name="download_threads_number">Número de hilos</string>
+    <string name="safe_download">Modo seguro para la descarga del anime</string>
+    <string name="safe_download_summary">Activar el modo de descarga de un solo hilo y sin rangos</string>
+    <string name="download_threads_number_summary">Número de hilos a utilizar para la descarga, podría bloquear su IP si es demasiado alto, por lo general 4 es un buen número para evitar una carga pesada en los servidores.</string>
+    <string name="pref_bottom_nav_no_browse">Mover la navegación a más opciones</string>
 </resources>

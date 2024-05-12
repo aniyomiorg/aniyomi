@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.network.AndroidCookieJar
 import eu.kanade.tachiyomi.util.system.WebViewClientCompat
 import eu.kanade.tachiyomi.util.system.isOutdated
+import eu.kanade.tachiyomi.util.system.toast
 import okhttp3.Cookie
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
@@ -126,7 +127,7 @@ class CloudflareInterceptor(
         if (!cloudflareBypassed) {
             // Prompt user to update WebView if it seems too outdated
             if (isWebViewOutdated) {
-                context.stringResource(MR.strings.information_webview_outdated, Toast.LENGTH_LONG)
+                context.toast(MR.strings.information_webview_outdated, Toast.LENGTH_LONG)
             }
 
             throw CloudflareBypassException()

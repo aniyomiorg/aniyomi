@@ -10,6 +10,7 @@ import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import `is`.xyz.mpv.Utils
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.lang.withUIContext
 import uy.kohesive.injekt.Injekt
@@ -23,7 +24,7 @@ class CrashLogUtil(
 
     suspend fun dumpLogs() = withNonCancellableContext {
         try {
-            val file = context.createFileInCacheDir("aniyomi_crash_logs.txt")
+            val file = context.createFileInCacheDir("animetail_crash_logs.txt")
 
             file.appendText(getDebugInfo() + "\n\n")
             getMangaExtensionsInfo()?.let { file.appendText("$it\n\n") }
@@ -48,6 +49,9 @@ class CrashLogUtil(
             Device name: ${Build.DEVICE} (${Build.PRODUCT})
             Device model: ${Build.MODEL}
             WebView: ${WebViewUtil.getVersion(context)}
+            MPV version: ${Utils.VERSIONS.mpv}
+            Libplacebo version: ${Utils.VERSIONS.libPlacebo}
+            FFmpeg version: ${Utils.VERSIONS.ffmpeg}
         """.trimIndent()
     }
 

@@ -773,8 +773,8 @@
     <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
     <string name="dialog_with_checkbox_reset">إعادة تعيين جميع الفصول لهذه المانجا</string>
     <string name="download_insufficient_space">تعذّر تنزيل الفصول بسبب انخفاض مساحة التخزين</string>
-    <string name="download_queue_size_warning">تحذير: يمكن أن تؤدِّي التنزيلات كبيرة الحجم والعدد إلى إبطاء المصادر، وقد يُحظر Aniyomi منها بسبب ذلك. اضغط لمعرفة المزيد۔</string>
-    <string name="information_webview_required">يتطلب Aniyomi وجود WebView</string>
+    <string name="download_queue_size_warning">تحذير: يمكن أن تؤدِّي التنزيلات كبيرة الحجم والعدد إلى إبطاء المصادر، وقد يُحظر Animetail منها بسبب ذلك. اضغط لمعرفة المزيد۔</string>
+    <string name="information_webview_required">يتطلب Animetail وجود WebView</string>
     <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
     <string name="default_anime_category">تصنيف الأنمي الإفتراضي</string>
@@ -791,7 +791,7 @@
     <string name="action_edit_manga_categories">تعديل فئات المانغا</string>
     <string name="action_previous_episode">الحلقة السابقة</string>
     <string name="action_start_download_internally">إستخدام أداة التحميل الداخلية</string>
-    <string name="unofficial_extension_message_aniyomi">هذا الامتداد ليس من قائمة ملحقات \"Aniyomi\" الرسمية.</string>
+    <string name="unofficial_extension_message_aniyomi">هذا الامتداد ليس من قائمة ملحقات \"Animetail\" الرسمية.</string>
     <string name="pref_progress_mark_as_seen">في أي نسبة تحدد الحلقة كـ\"تم مشاهدتها\"</string>
     <string name="pref_category_progress">التقدم</string>
     <string name="pref_category_player_orientation">التوجيه</string>
@@ -1004,7 +1004,6 @@
     <string name="copied_video_link_to_clipboard">نسخ رابط جودة الفيديو إلى الحافظة</string>
     <string name="choose_video_quality">اختر جودة الفيديو:</string>
     <string name="extension_settings">إعدادات الامتداد</string>
-    <string name="data_saver_image_quality_summary">تعني أنه يتم حفظ نسبة مئوية أعلى من جودة الصورة ، ولكن هذا يعني أيضًا أن حجم الملف أكبر ، و 80% متوسط جيد بين حجم الملف وجودة الصورة</string>
     <string name="pref_hide_in_manga_library_items">تم إخفاء مدخلات المانجا بالفعل في المكتبة</string>
     <string name="data_saver_downloader">استخدم موفر البيانات عند التنزيل</string>
     <string name="data_saver_ignore_jpeg">تجاهل الصور التي بصيغة (Jpeg)</string>
@@ -1040,4 +1039,13 @@
     <string name="onboarding_permission_ignore_battery_opts">استخدام البطارية في الخلفية</string>
     <string name="onboarding_permission_action_grant">منح</string>
     <string name="pref_general_summary">لغة التطبيق, الاشعارات.</string>
+    <string name="action_filter_started">بدأت</string>
+    <string name="confirm_exit">اضغط مرة أخرى للخروج</string>
+    <string name="theme_cloudflare">كلاودفلير</string>
+    <string name="pref_library_update_smart_update">التحديث الذكي</string>
+    <string name="theme_nord">نورد</string>
+    <string name="theme_sapphire">ياقوت</string>
+    <string name="theme_doom">الهلاك</string>
+    <string name="theme_matrix">ماتريكس</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">تجنب مقاطعة تحديثات المكتبة، التنزيلات والنسخ الاحتياطي التي تستغرق وقتا طويلا</string>
 </resources>

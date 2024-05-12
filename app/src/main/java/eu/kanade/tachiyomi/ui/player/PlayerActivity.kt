@@ -47,14 +47,22 @@ import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
@@ -138,6 +146,10 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    // AM (CONNECTIONS) -->
+    private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
+    // <-- AM (CONNECTIONS)
+
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
@@ -179,8 +191,6 @@ class PlayerActivity : BaseActivity() {
         }
         super.onNewIntent(intent)
     }
-
-    internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
     private val playerObserver = PlayerObserver(this)
 
@@ -309,6 +319,7 @@ class PlayerActivity : BaseActivity() {
             field = value
             runOnUiThread {
                 playerControls.seekbar.updateSeekbar(chapters = value)
+                playerControls.chapterText.updateCurrentChapterText(chapters = value)
             }
         }
 
@@ -579,6 +590,8 @@ class PlayerActivity : BaseActivity() {
         val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
         playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
+        copyScripts()
+
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
         player.initialize(
@@ -620,6 +633,7 @@ class PlayerActivity : BaseActivity() {
     private fun setupPlayerAudio() {
         with(playerPreferences) {
             audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val audioChannel = audioChannels().get()
 
             val useDeviceVolume = playerVolumeValue().get() == -1.0F || !rememberPlayerVolume().get()
             fineVolume = if (useDeviceVolume) {
@@ -631,6 +645,8 @@ class PlayerActivity : BaseActivity() {
             if (rememberAudioDelay().get()) {
                 MPVLib.setPropertyDouble("audio-delay", (audioDelay().get() / 1000.0))
             }
+
+            MPVLib.setOptionString(audioChannel.propertyName, audioChannel.propertyValue)
         }
 
         verticalScrollRight(0F)
@@ -687,6 +703,35 @@ class PlayerActivity : BaseActivity() {
                 applicationContext.filesDir.path,
             )
             logcat { "FINISHED FONTS" }
+        }
+    }
+
+    private fun copyScripts() {
+        CoroutineScope(Dispatchers.IO).launchIO {
+            // First, delete all present scripts
+            val scriptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+            }
+            val scriptOptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
+            }
+            scriptsDir()?.delete()
+            scriptOptsDir()?.delete()
+
+            // Then, copy the scripts from the Aniyomi directory
+            val storageManager: StorageManager = Injekt.get()
+            storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            storageManager.getScriptOptsDirectory()?.listFiles()?.forEach { file ->
+                val outFile = scriptOptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
         }
     }
 
@@ -876,9 +921,6 @@ class PlayerActivity : BaseActivity() {
 
         super.onResume()
         refreshUi()
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) {
-            player.paused?.let { pip.update(!it) }
-        }
     }
 
     override fun onPause() {
@@ -895,7 +937,7 @@ class PlayerActivity : BaseActivity() {
         if (!playerIsDestroyed) {
             player.paused = true
         }
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON && powerManager.isInteractive) {
+        if (PipState.mode == PipState.ON && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -926,14 +968,17 @@ class PlayerActivity : BaseActivity() {
             player.destroy()
         }
         abandonAudioFocus()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingPlayer = true)
+        // <-- AM (DISCORD)
         super.onDestroy()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (pip.supportedAndEnabled) {
+        if (supportedAndEnabled) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                pip.start()
+                updatePip(true)
             } else {
                 finishAndRemoveTask()
                 super.onBackPressed()
@@ -945,7 +990,12 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onUserLeaveHint() {
-        if (player.paused == false && playerPreferences.pipOnExit().get()) pip.start()
+        if (player.paused == false &&
+            playerPreferences.pipOnExit().get() &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+        ) {
+            updatePip(start = true)
+        }
         super.onUserLeaveHint()
     }
 
@@ -1006,7 +1056,6 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
-            if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
             viewModel.closeDialogSheet()
         }
     }
@@ -1424,9 +1473,13 @@ class PlayerActivity : BaseActivity() {
             player.timePos?.let { playerControls.updatePlaybackPos(it) }
             player.duration?.let { playerControls.updatePlaybackDuration(it) }
             updatePlaybackStatus(player.paused ?: return@launchUI)
+            updatePip(start = false)
             playerControls.updateEpisodeText()
             playerControls.updatePlaylistButtons()
             playerControls.updateSpeedButton()
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingPlayer = false)
+            // <-- AM (DISCORD)
             withIOContext { player.loadTracks() }
         }
     }
@@ -1449,7 +1502,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) pip.update(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1457,6 +1509,35 @@ class PlayerActivity : BaseActivity() {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    // TODO: Move into function once compose is implemented
+    val supportedAndEnabled = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
+    internal fun updatePip(start: Boolean) {
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+        val paused = player.paused ?: return
+        val videoAspect = player.videoAspect ?: return
+        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PictureInPictureHandler().update(
+                context = this,
+                title = anime.title,
+                subtitle = episode.name,
+                paused = paused,
+                replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
+                pipOnExit = playerPreferences.pipOnExit().get() && !paused,
+                videoAspect = videoAspect * 10000,
+                playlistCount = viewModel.getCurrentEpisodeIndex(),
+                playlistPosition = viewModel.currentPlaylist.size,
+            ).let {
+                setPictureInPictureParams(it)
+                if (PipState.mode == PipState.OFF && start) {
+                    PipState.mode = PipState.STARTED
+                    playerControls.hideControls(hide = true)
+                    enterPictureInPictureMode(it)
+                }
+            }
         }
     }
 
@@ -1532,6 +1613,7 @@ class PlayerActivity : BaseActivity() {
         currentVideoList?.getOrNull(qualityIndex)?.let {
             streams.quality.index = qualityIndex
             setHttpOptions(it)
+            viewModel.currentSource!!.isNsfw()
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
                     val preservePos = playerPreferences.preserveWatchingPosition().get()
@@ -1551,9 +1633,49 @@ class PlayerActivity : BaseActivity() {
             }
             streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
             streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            if (it.videoUrl?.startsWith(TorrentServerUtils.hostUrl) == true ||
+                it.videoUrl?.startsWith("magnet") == true ||
+                it.videoUrl?.endsWith(".torrent") == true
+            ) {
+                launchIO {
+                    TorrentServerService.start()
+                    TorrentServerService.wait(10)
+                    TorrentServerUtils.setTrackersList()
+                    torrentLinkHandler(it.videoUrl!!, it.quality)
+                }
+            } else {
+                MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            }
         }
         refreshUi()
+    }
+
+    private fun torrentLinkHandler(videoUrl: String, quality: String) {
+        var index = 0
+
+        // check if link is from localSource
+        if (videoUrl.startsWith("content://")) {
+            val videoInputStream = applicationContext.contentResolver.openInputStream(Uri.parse(videoUrl))
+            val torrent = TorrentServerApi.uploadTorrent(videoInputStream!!, quality, "", "", false)
+            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(torrent, 0)
+            MPVLib.command(arrayOf("loadfile", torrentUrl))
+            return
+        }
+
+        // check if link is from magnet, in that check if index is present
+        if (videoUrl.startsWith("magnet")) {
+            if (videoUrl.contains("index=")) {
+                index = try {
+                    videoUrl.substringAfter("index=").toInt()
+                } catch (e: NumberFormatException) {
+                    0
+                }
+            }
+        }
+
+        val currentTorrent = TorrentServerApi.addTorrent(videoUrl, quality, "", "", false)
+        val videoTorrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        MPVLib.command(arrayOf("loadfile", videoTorrentUrl))
     }
 
     private fun parseVideoUrl(videoUrl: String?): String? {
@@ -1651,7 +1773,7 @@ class PlayerActivity : BaseActivity() {
             currentVideoList?.getOrNull(streams.quality.index)
                 ?.subtitleTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName)
+                        it.lang.contains(localLangName, true)
                     }
                     val requestedLanguage = if (langIndex == -1) 0 else langIndex
                     tracks.getOrNull(requestedLanguage)?.let { sub ->
@@ -1789,7 +1911,6 @@ class PlayerActivity : BaseActivity() {
             emptyList()
         }
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
         videoChapters = combinedChapters
     }
 
@@ -1873,6 +1994,7 @@ class PlayerActivity : BaseActivity() {
                     setAudioFocus(value)
                     updatePlaybackStatus(value)
                     updatePlaybackState(pause = true)
+                    refreshUi()
                 }
             }
             "eof-reached" -> endFile(value)
@@ -1898,6 +2020,36 @@ class PlayerActivity : BaseActivity() {
             animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
         }
     }
+
+    // AM (DISCORD) -->
+    private fun updateDiscordRPC(exitingPlayer: Boolean) {
+        if (connectionsPreferences.enableDiscordRPC().get()) {
+            viewModel.viewModelScope.launchIO {
+                if (!exitingPlayer) {
+                    DiscordRPCService.setPlayerActivity(
+                        context = this@PlayerActivity,
+                        PlayerData(
+                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
+                            animeId = viewModel.currentAnime?.id,
+                            // AM (CU)>
+                            animeTitle = viewModel.currentAnime?.ogTitle,
+                            thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                            episodeNumber =
+                            if (connectionsPreferences.useChapterTitles().get()) {
+                                viewModel.currentEpisode?.name.toString()
+                            } else {
+                                viewModel.state.value.episode?.episode_number.toString()
+                            },
+                        ),
+                    )
+                } else {
+                    val lastUsedScreen = DiscordRPCService.lastUsedScreen
+                    DiscordRPCService.setAnimeScreen(this@PlayerActivity, lastUsedScreen)
+                }
+            }
+        }
+    }
+    // <-- AM (DISCORD)
 
     // -- CAST --
 

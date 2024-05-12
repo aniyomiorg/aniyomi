@@ -77,8 +77,7 @@ object LocaleHelper {
      * Return English display string from string language code
      */
     fun getSimpleLocaleDisplayName(): String {
-        val sp = Locale.getDefault().language.split("_", "-")
-        return Locale(sp[0]).getDisplayLanguage(LocaleListCompat.getDefault()[0]!!)
+        return LocaleListCompat.getDefault()[0]!!.displayLanguage
     }
 }
 

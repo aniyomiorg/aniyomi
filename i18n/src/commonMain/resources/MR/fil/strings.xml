@@ -73,7 +73,7 @@
     <string name="track">Tina-track</string>
     <string name="chapters">Mga Kabanata</string>
     <string name="manga">Mga entry ng aklatan</string>
-    <string name="categories">Kategorya</string>
+    <string name="categories">Mga Kategorya</string>
     <string name="information_empty_category">Wala ka pang kategorya. Pindutin ang plus button para gumawa ng isa para sa pag-aayos ng iyong aklatan.</string>
     <string name="information_empty_library">Bakante ang Aklatan mo</string>
     <string name="information_no_recent_manga">Walang binasa kamakailan</string>
@@ -179,11 +179,9 @@
     <string name="pref_cutout_short">Ipakita ang laman sa cutout area</string>
     <string name="pref_fullscreen">Naka-fullscreen</string>
     <string name="obsolete_extension_message">Hindi na available ang extension na ito. Maaaring hindi ito gumana nang maayos at maaaring magdulot ng mga isyu sa app. Inirerekomenda ang pag-uninstall nito.</string>
-    <string name="untrusted_extension_message">Ang extension na ito ay nilagdaan ng sinumang hindi kilalang author at hindi na-load.
+    <string name="untrusted_extension_message">Maaaring basahin ng mga nakakahamak na extension ang anumang nakatagong kredensyal sa pag-log in o magsagawa ng arbitrary code.
 \n
-\nMaaaring basahin ng mga nakakahamak na extension ang anumang nakatagong kredensyal sa pag-log in o magsagawa ng arbitrary code.
-\n
-\nSa pamamagitan ng pagtitiwala sa certificate ng extension na ito, tinatanggap mo ang mga panganib na ito.</string>
+\nSa pamamagitan ng pagtitiwala sa extension na ito, tinatanggap mo ang mga panganib na ito.</string>
     <string name="untrusted_extension">Di-pinagkakatiwalaang extension</string>
     <string name="ext_uninstall">I-uninstall</string>
     <string name="ext_trust">Tiwala</string>
@@ -536,7 +534,7 @@
     <string name="backup_info">Dapat nagtatabi rin kayo ng mga kopya ng backup sa ibang mga lugar. Ang mga backup ay naglalaman ng sensitibong data tulad ng nakaimbak na password; mag-ingat kung ibahagi ito.</string>
     <string name="connected_to_wifi">Sa Wi-Fi lang</string>
     <string name="update_72hour">Kada 3 araw</string>
-    <string name="download_queue_size_warning">Babala: maaaring humantong sa pagbagal at/o pagharang ng mga source sa Aniyomi ang maramihang pag-download. I-tap para matuto pa.</string>
+    <string name="download_queue_size_warning">Babala: maaaring humantong sa pagbagal at/o pagharang ng mga source sa Kuukiyomi ang maramihang pag-download. I-tap para matuto pa.</string>
     <string name="channel_app_updates">Mga update sa app</string>
     <string name="ext_update_all">I-update lahat</string>
     <string name="clear_database_source_item_count">%1$d na entry sa database na wala sa aklatan</string>
@@ -707,7 +705,7 @@
     <string name="create_backup_file_error">Hindi makalikha ng backup file</string>
     <string name="track_activity_name">Pag-login sa tracker</string>
     <string name="licensed_manga_chapters_error">Lisensyado - Walang mapakitang kabanata</string>
-    <string name="unlock_app_title">I-unlock ang %s</string>
+    <string name="unlock_app_title">I-unlock ang Kuukiyomi</string>
     <string name="exception_offline">Walang koneksyon sa Internet</string>
     <string name="exception_http">HTTP %d, tignan ang website sa WebView</string>
     <string name="exception_unknown_host">Hindi maabot ang %s</string>
@@ -776,7 +774,7 @@
     <string name="error_repo_exists">Umiiral na ang repo na ito!</string>
     <string name="action_delete_repo">Tanggalin ang repo</string>
     <string name="label_add_repo_input">URL ng repo</string>
-    <string name="action_add_repo_message">Magdagdag ng mga karagdagang repo sa Aniyomi. Dapat ito ay isang URL na nagtatapos sa \"index.min.json\".</string>
+    <string name="action_add_repo_message">Magdagdag ng mga karagdagang repo sa Kuukiyomi. Dapat ito ay isang URL na nagtatapos sa \"index.min.json\".</string>
     <string name="invalid_repo_name">Di-wastong URL ng repo</string>
     <string name="delete_repo_confirmation">Gusto mo bang tanggalin ang repo na \"%s\"?</string>
     <string name="manga_interval_custom_amount">Ipasadya ang update frequency:</string>
@@ -810,8 +808,8 @@
     <string name="also_set_chapter_settings_for_library">Gawin din sa lahat ng mga entry sa aking library</string>
     <string name="dialog_with_checkbox_reset">I-reset ang lahat ng chapters sa entry na ito</string>
     <string name="download_insufficient_space">Di ma-download ang mga kabanata dahil sa mababang espasyo</string>
-    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Aniyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
-    <string name="information_webview_required">Kailangan ng Aniyomi ang WebView</string>
+    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Kuukiyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
+    <string name="information_webview_required">Kailangan ng Kuukiyomi ang WebView</string>
     <string name="download_notifier_download_paused_chapters">Nakahinto ang pag-download</string>
     <string name="channel_new_chapters_episodes">Mga update sa kabanata</string>
     <string name="action_global_manga_search">Pangkahalatang Paghahanap ng Manga</string>
@@ -867,9 +865,9 @@
     <string name="player_overlay_back">Bumalik</string>
     <string name="enable_auto_play">Naka-on ang auto-play</string>
     <string name="video_stretch_screen">Naka-stretch sa screen</string>
-    <string name="quality_dialog_header">Baguhin ang kalidad ng video:</string>
-    <string name="subtitle_dialog_header">Baguhin ang subtitle track:</string>
-    <string name="audio_dialog_header">Baguhin ang audio track:</string>
+    <string name="quality_dialog_header">Kalidad ng video</string>
+    <string name="subtitle_dialog_header">Baguhin ang subtitle</string>
+    <string name="audio_dialog_header">Baguhin ang audio</string>
     <string name="playback_speed_dialog_title">Baguhin ang bilis ng pag-playback:</string>
     <string name="playback_speed_dialog_reset">I-reset</string>
     <string name="playback_options_speed">Bilis ng playback</string>
@@ -1035,7 +1033,7 @@
     <string name="wsrv">wsrv.nl</string>
     <string name="data_saver_server_summary">Ilagay ang server url ng Bandwidth Hero Proxy dito</string>
     <string name="pref_show_next_episode_airing_time">Ipakita ang oras ng pag-ere ng susunod na episode</string>
-    <string name="data_saver_image_quality_summary">Ang mas mataas na mga halaga ay nangangahulugan na ang isang mas mataas na porsyento ng kalidad ng imahe ay nai-save, ngunit nangangahulugan din ito na ang laki ng file ay mas malaki, 80 porsyento ay isang magandang median sa pagitan ng laki ng file at kalidad ng imahe.</string>
+    <string name="data_saver_image_quality_summary">Ang mas mataas na halaga ay nangangahulugan na ang isang mas mataas na porsyento ng kalidad ng imahe ay nai-save, ngunit nangangahulugan din ito na ang laki ng file ay mas malaki, 80 porsyento ay isang magandang median sa pagitan ng laki ng file at kalidad ng imahe</string>
     <string name="data_saver_image_format_summary_off">Ang laki ng file na Jpeg ay mas maliit kaysa sa Webp ay (ibig sabihin, mas maraming data ang nai-save), ngunit ginagawa nitong mas mawalan din ng kalidad ang mga imahe.
 \nKasalukuyang nagko-compress sa Webp</string>
     <string name="pref_episode_swipe_start">Mag-swipe ng pakaliwang pagkilos</string>
@@ -1065,4 +1063,68 @@
     <string name="pref_category_player_advanced">Mga setting sa Advanced player</string>
     <string name="go_to_previous_chapter">Nakaraang kabanata</string>
     <string name="theme_cottoncandy">Koton Kendi</string>
+    <string name="label_all">Lahat</string>
+    <string name="label_category">Kategorya</string>
+    <string name="delete_confirmation">Sigurado ka ba na alisin ang \"%s\"?</string>
+    <string name="player_subtitle_settings_font_tab">Font</string>
+    <string name="player_subtitle_settings_color_tab">Kulay</string>
+    <string name="player_reset_subtitles">Ibalik ang subtitles sa dati</string>
+    <string name="player_audio_remember_delay">Tandaan ang kahulihan ng tunog</string>
+    <string name="player_subtitle_font_text_field">Pangalan ng font</string>
+    <string name="player_subtitle_background_color">Likod</string>
+    <string name="label_storage">Espasyo</string>
+    <string name="pref_pip_replace_with_previous">Pinapalitan ang \"Skip 10 seconds option\" ng huling episode</string>
+    <string name="pref_anime_storage_usage">Espasyo na nagagamit ng Anime</string>
+    <string name="pref_manga_storage_usage">Espasyo na nagagamit ng Manga</string>
+    <string name="pref_reset_mpv_conf">Ibalik sa dati ang MPV configuration file</string>
+    <string name="pref_update_anime_release_grace_period">Inaasahan na paglabas ng anime</string>
+    <string name="player_subtitle_border_color">Gilid</string>
+    <string name="unseen">Hindi pa nakikita</string>
+    <string name="player_subtitle_text_color">Teksto</string>
+    <string name="player_font_size_text_field">Laki ng font</string>
+    <string name="pref_mpv_input">I-edit ang MPV input file para sa keyboard mapping configuration</string>
+    <string name="pref_preserve_reading_position">Panatiliin ang posisyon ng pahina kapag nabasa na</string>
+    <string name="pref_download_slots">Pinakamataas na download</string>
+    <string name="anime_interval_expected_update">Mga bago na episode ay lalabas sa %1$s, i-check kada %2$s.</string>
+    <string name="pref_start_screen">Simulang Pahina</string>
+    <string name="download_notifier_download_finish">Nakumpleto ang download</string>
+    <string name="player_subtitle_remember_delay">Tandaan ang kahulihan ng subtitle</string>
+    <string name="download_speed_limit">Limito ng bilis ng pag-download</string>
+    <string name="player_audio_delay">Kahulihan ng tunog</string>
+    <string name="download_speed_limit_hint">Ilagay ay 0 para tanggalin ang limitadong bilis.</string>
+    <string name="confirm_exit">Pindutin ulit ang back para umalis</string>
+    <string name="action_filter_started">Nagsimula</string>
+    <string name="pref_general_summary">Lenguwahe ng app, mga notification</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Sapphire</string>
+    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_settings_delay_tab">Kabagalan</string>
+    <string name="player_subtitle_delay">Kahulihan ng subtitle</string>
+    <string name="video_custom_screen">Pasadya ang aspect ratio</string>
+    <string name="player_subtitle_settings">Mga setting sa subtitle</string>
+    <string name="player_subtitle_empty_warning">Wala itong epekto dahil walang anumang subtitle na track sa video na ito</string>
+    <string name="player_track_delay_text_field">Mga abala</string>
+    <string name="player_add_external_subtitles">Magdagdag ng mga external na subtitle</string>
+    <string name="settings_dialog_header">Mga setting ng player</string>
+    <string name="player_add_external_audio">Magdagdag ng external na audio</string>
+    <string name="player_add_external_audio_intent">Pumili ng audio file.</string>
+    <string name="player_add_external_subtitles_intent">Pumili ng subtitle file.</string>
+    <string name="theme_doom">Doom</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="action_sort_airing_time">Oras ng pagpapalabas</string>
+    <string name="action_reorganize_by">Muling ayusin</string>
+    <string name="action_open_repo">Open source na repo</string>
+    <string name="local_source_badge">Lokal</string>
+    <string name="pref_gpu_next_subtitle">Isang bagong video rendering backend</string>
+    <string name="player_override_ass_subtitles">I-override ang mga subtitle ng ASS</string>
+    <string name="label_anime_extension_repos">Extension repo ng anime</string>
+    <string name="pref_gpu_next_title">Paganahin ang gpu-next</string>
+    <string name="label_manga_extension_repos">Extension repo ng manga</string>
+    <string name="download_slots_info">Magda-download lang nang sabay-sabay mula sa self-host o hindi nasusukat na mga source</string>
+    <string name="onboarding_storage_action_create_folder">Lumikha ng default na Aniyomi folder</string>
+    <string name="safe_download">Ligtas na download mode para sa anime</string>
+    <string name="safe_download_summary">Paganahin ang isahang thread at walang range na download mode</string>
+    <string name="download_threads_number">Bilang ng thread</string>
+    <string name="download_threads_number_summary">Bilang ng mga thread na gagamitin para sa pag-download, maaaring ma-block ang iyong IP kung masyadong mataas, kadalasan ang 4 ay isang magandang numero upang maiwasan ang mabigat na load sa mga source server.</string>
+    <string name="pref_bottom_nav_no_browse">Ilipat ang Maghanap sa Iba pa na tab</string>
 </resources>

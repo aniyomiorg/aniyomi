@@ -179,17 +179,17 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = stringResource(MR.strings.website),
                             icon = Icons.Outlined.Public,
-                            url = "https://aniyomi.org",
+                            url = "https://akiled.org",
                         )
                         LinkIcon(
                             label = "Discord",
                             icon = CustomIcons.Discord,
-                            url = "https://discord.gg/F32UjdJZrR",
+                            url = "https://discord.gg/wPRFW6ccDE",
                         )
                         LinkIcon(
                             label = "GitHub",
                             icon = CustomIcons.Github,
-                            url = "https://github.com/aniyomiorg/aniyomi",
+                            url = "https://github.com/Dark25/animetail2",
                         )
                     }
                 }
@@ -205,13 +205,12 @@ object AboutScreen : Screen() {
         onAvailableUpdate: (GetApplicationRelease.Result.NewUpdate) -> Unit,
         onFinish: () -> Unit,
     ) {
-        val updateChecker = AppUpdateChecker()
+        val updateChecker = AppUpdateChecker(context)
         withUIContext {
             try {
                 when (
                     val result = withIOContext {
-                        updateChecker.checkForUpdate(
-                            context,
+                        updateChecker.checkForUpdates(
                             forceCheck = true,
                         )
                     }
@@ -220,10 +219,10 @@ object AboutScreen : Screen() {
                         onAvailableUpdate(result)
                     }
                     is GetApplicationRelease.Result.NoNewUpdate -> {
-                        context.toast(context.stringResource(MR.strings.update_check_no_new_updates))
+                        context.toast(MR.strings.update_check_no_new_updates)
                     }
                     is GetApplicationRelease.Result.OsTooOld -> {
-                        context.toast(context.stringResource(MR.strings.update_check_eol))
+                        context.toast(MR.strings.update_check_eol)
                     }
                     else -> {}
                 }

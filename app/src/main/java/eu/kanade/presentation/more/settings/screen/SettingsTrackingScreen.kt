@@ -352,7 +352,7 @@ object SettingsTrackingScreen : SearchableSettings {
     ): Boolean {
         return try {
             tracker.login(username, password)
-            withUIContext { context.stringResource(MR.strings.login_success) }
+            withUIContext { context.toast(MR.strings.login_success) }
             true
         } catch (e: Throwable) {
             tracker.logout()
@@ -389,7 +389,7 @@ object SettingsTrackingScreen : SearchableSettings {
                         onClick = {
                             tracker.logout()
                             onDismissRequest()
-                            context.stringResource(MR.strings.logout_success)
+                            context.toast(MR.strings.logout_success)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,

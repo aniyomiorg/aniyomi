@@ -156,7 +156,7 @@
     <string name="action_sort_date_added">Pridėjimo data</string>
     <string name="action_sort_chapter_fetch_date">Atnaujinimo data</string>
     <string name="action_sort_latest_chapter">Naujausiais skyriais</string>
-    <string name="action_sort_last_read">Paskiausiai žiurėtas</string>
+    <string name="action_sort_last_read">Paskiausiai skaitytas</string>
     <string name="action_sort_total">Skyrių skaičius</string>
     <string name="action_sort_alpha">Abėcėlės tvarka</string>
     <string name="action_filter_empty">Panaikinti filtrą</string>
@@ -685,6 +685,15 @@
     <string name="also_set_chapter_settings_for_library">Taip pat taikyti visiems mano bibliotekoje esantiems įrašams</string>
     <string name="dialog_with_checkbox_reset">Iš naujo nustatyti visus šio įrašo skyrius</string>
     <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
-    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Aniyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
-    <string name="information_webview_required">\"WebView\" reikalingas \"Aniyomi\"</string>
+    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Animetail\". Bakstelėkite , jei norite sužinoti daugiau.</string>
+    <string name="information_webview_required">\"WebView\" reikalingas \"Animetail\"</string>
+    <string name="action_sort_unseen_count">Neperžiūrėtų skaičius</string>
+    <string name="action_mark_as_seen">Pažymėti kaip peržiūrėtą</string>
+    <string name="action_sort_last_seen">Paskiausiai žiurėtas</string>
+    <string name="action_mark_as_unseen">Pažymėti kaip nežiūrėtą</string>
+    <string name="selected">Pasirinkta</string>
+    <string name="not_selected">Nepasirinkta</string>
+    <string name="action_menu_overflow_description">Daugiau pasirinkimų</string>
+    <string name="delete_downloaded">Ištrinti atsisiųstą</string>
+    <string name="confirm_exit">Paspauskite atgal dar kartą, kad išeitumėte</string>
 </resources>

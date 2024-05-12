@@ -322,7 +322,7 @@ class BangumiApi(
         private const val oauthUrl = "https://bgm.tv/oauth/access_token"
         private const val loginUrl = "https://bgm.tv/oauth/authorize"
 
-        private const val redirectUrl = "aniyomi://bangumi-auth"
+        private const val redirectUrl = "animetail://bangumi-auth"
 
         fun authUrl(): Uri =
             loginUrl.toUri().buildUpon()

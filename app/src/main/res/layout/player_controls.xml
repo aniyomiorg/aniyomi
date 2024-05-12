@@ -129,22 +129,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Tracks"
                 android:src="@drawable/ic_video_settings_20dp"
-                app:layout_constraintLeft_toRightOf="@id/chaptersBtn"
+                app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
                 app:layout_constraintRight_toLeftOf="@id/settingsBtn"
                 app:layout_constraintTop_toTopOf="@id/settingsBtn"
-                app:tint="?attr/colorOnPrimarySurface" />
-
-            <ImageButton
-                android:id="@+id/chaptersBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="Settings"
-                android:src="@drawable/ic_video_chapter_20dp"
-                android:visibility="gone"
-                app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
-                app:layout_constraintRight_toLeftOf="@id/streamsBtn"
-                app:layout_constraintTop_toTopOf="@id/streamsBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -152,9 +139,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 tools:checked="true"
-                app:layout_constraintLeft_toRightOf="@id/castBtn"
-                app:layout_constraintRight_toLeftOf="@id/chaptersBtn"
-                app:layout_constraintTop_toTopOf="@id/chaptersBtn" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/streamsBtn"
+                app:layout_constraintTop_toTopOf="@id/streamsBtn" />
 
             <androidx.mediarouter.app.MediaRouteButton
                 android:id="@+id/castBtn"
@@ -275,6 +262,16 @@
             android:layout_marginHorizontal="10dp"
             android:layoutDirection="ltr"
             android:visibility="visible">
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/currentChapter"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="80"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bottomRightControlsGroup"
+                app:layout_constraintStart_toEndOf="@+id/bottomLeftControlsGroup" />
 
             <LinearLayout
                 android:id="@+id/bottomLeftControlsGroup"
@@ -401,7 +398,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
-
 
 
     <!-- Extra Controls -->

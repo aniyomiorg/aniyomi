@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Ad</string>
-    <string name="categories">Ulamlar</string>
+    <string name="categories">Kategoriler</string>
     <string name="manga">Kitaplık girdileri</string>
     <string name="chapters">Bölümler</string>
     <string name="track">İzleme</string>
@@ -97,9 +97,7 @@
     <string name="ext_untrusted">Güvenilmeyen</string>
     <string name="ext_uninstall">Kaldır</string>
     <string name="untrusted_extension">Güvenilmeyen uzantı</string>
-    <string name="untrusted_extension_message">Bu uzantı bilinmeyen bir yazar tarafından imzalandı ve yüklenmedi.
-\n
-\nKötü niyetli uzantılar, saklanan oturum açma kimlik bilgilerini okuyabilir veya rastgele kod çalıştırabilir.
+    <string name="untrusted_extension_message">Kötü niyetli uzantılar, saklanan oturum açma kimlik bilgilerini okuyabilir veya rastgele kod çalıştırabilir.
 \n
 \nBu uzantının sertifikasına güvenerek bu riskleri kabul etmiş olursunuz.</string>
     <string name="pref_fullscreen">Tam Ekran</string>
@@ -630,7 +628,7 @@
     <string name="error_user_agent_string_invalid">Geçersiz kullanıcı aracısı dizgesi</string>
     <string name="updates_last_update_info_just_now">Şimdi</string>
     <string name="download_notifier_cache_renewal">İndirilenler denetleniyor</string>
-    <string name="action_open_random_manga">Gelişigüzel girdi aç</string>
+    <string name="action_open_random_manga">Rasgele bir girdi aç</string>
     <string name="information_no_entries_found">Bu ulamda girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
@@ -766,7 +764,7 @@
     <string name="onboarding_storage_help_action">Depolama kılavuzu</string>
     <string name="action_add_repo">Depo ekle</string>
     <string name="label_add_repo_input">Depo URL\'si</string>
-    <string name="action_add_repo_message">Aniyomi\'ye ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
+    <string name="action_add_repo_message">Kuukiyomi\'ye ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
     <string name="error_repo_exists">Bu depo zaten var!</string>
     <string name="action_delete_repo">Depoyu sil</string>
     <string name="invalid_repo_name">Geçersiz depo URL\'si</string>
@@ -883,8 +881,8 @@
     <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm girdilere de uygula</string>
     <string name="dialog_with_checkbox_reset">Bu girdi için tüm bölümleri sıfırla</string>
     <string name="download_insufficient_space">Saklama alanı az olduğundan bölümler indirilemedi</string>
-    <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Aniyomi\'yi engellemesine neden olabilir. Daha fazlasını öğrenmek için dokunun.</string>
-    <string name="information_webview_required">WebView, Aniyomi için gereklidir</string>
+    <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Kuukiyomi\'yi engellemesine neden olabilir. Daha fazlasını öğrenmek için dokunun.</string>
+    <string name="information_webview_required">WebView, Kuukiyomi için gereklidir</string>
     <string name="download_notifier_download_paused_chapters">İndirme duraklatıldı</string>
     <string name="channel_new_chapters_episodes">Bölüm güncellemeleri</string>
     <string name="pref_default_home_tab_library">Başlangıç ekranını Manga Sekmesi olarak ayarla</string>
@@ -1050,7 +1048,7 @@
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_episode_swipe">Bölüm kaydırma</string>
-    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… vb.</string>
+    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… vb</string>
     <string name="resmush">resmush.it</string>
     <string name="theme_mocha">Mocha</string>
     <string name="action_hide">Gizle</string>
@@ -1100,4 +1098,30 @@
     <string name="player_add_external_audio_intent">Bir ses dosyası seçiniz.</string>
     <string name="player_add_external_subtitles">Harici altyazılar ekleyin</string>
     <string name="pref_debanding_title">Debanding</string>
+    <string name="confirm_exit">Çıkmak için tekrar geriye basın</string>
+    <string name="action_filter_started">Başlandı</string>
+    <string name="action_reorganize_by">Yeniden sırala</string>
+    <string name="pref_general_summary">Uygulama dili, bildirimler</string>
+    <string name="theme_matrix">Matrix</string>
+    <string name="action_open_repo">Kaynak reposunu aç</string>
+    <string name="pref_download_slots">Maksimum indirme sayısı</string>
+    <string name="local_source_badge">Lokal</string>
+    <string name="anime_interval_expected_update">Yeni bölümlerin yaklaşık %1$s içinde yayınlanacağı tahmin ediliyor ve yaklaşık her %2$s\'de bir kontrol ediliyor.</string>
+    <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
+    <string name="download_speed_limit">İndirme hızı limiti</string>
+    <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0\'a ayarlayın.</string>
+    <string name="download_notifier_download_finish">İndirme tamamlandı</string>
+    <string name="action_sort_airing_time">Yayınlama tarihi</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">Sapphire</string>
+    <string name="theme_doom">Doom</string>
+    <string name="pref_preserve_reading_position">Okunmuş bölümlerde okuma pozisyonunu sakla</string>
+    <string name="pref_start_screen">Ekranı başlat(?)</string>
+    <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
+    <string name="pref_gpu_next_subtitle">Yeni bir video işleme backend\'i</string>
+    <string name="safe_download">Anime için güvenli indirme modu</string>
+    <string name="pref_bottom_nav_no_browse">Gözat sekmesini daha fazla bölümüne taşı</string>
+    <string name="download_threads_number">Mantıksal işlemci (Thread) sayısı</string>
+    <string name="download_threads_number_summary">İndirme için kullanılacak mantıksal işlemci (thread) sayısı, çok yüksekse IP\'nizin engellenmesine neden olabilir, kaynak sunucularda ağır yükü önlemek için genellikle 4 iyi bir sayıdır.</string>
+    <string name="safe_download_summary">Tek mantık çekirdeği (thread) ve aralıksız indirme modunu etkinleştirin</string>
 </resources>

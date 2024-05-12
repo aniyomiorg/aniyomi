@@ -179,10 +179,18 @@ data class DownloadsTab(
                     val mangaIsRunning by mangaScreenModel.isDownloaderRunning.collectAsState()
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (animeIsRunning) {
-                                MR.strings.action_pause
-                            } else {
-                                MR.strings.action_resume
+                            val id = when (state.currentPage) {
+                                0 -> if (animeIsRunning) {
+                                    MR.strings.action_pause
+                                } else {
+                                    MR.strings.action_resume
+                                }
+                                1 -> if (mangaIsRunning) {
+                                    MR.strings.action_pause
+                                } else {
+                                    MR.strings.action_resume
+                                }
+                                else -> MR.strings.action_pause
                             }
                             Text(text = stringResource(id))
                         },
@@ -210,7 +218,7 @@ data class DownloadsTab(
                                     animeScreenModel.startDownloads()
                                 }
 
-                                1 -> if (animeIsRunning) {
+                                1 -> if (mangaIsRunning) {
                                     mangaScreenModel.pauseDownloads()
                                 } else {
                                     mangaScreenModel.startDownloads()
