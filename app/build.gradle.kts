@@ -277,6 +277,8 @@ dependencies {
     implementation(libs.truetypeparser)
     // torrserver
     implementation(files("libs/server.aar"))
+    // Cast
+    implementation(libs.bundles.cast)
 }
 
 androidComponents {

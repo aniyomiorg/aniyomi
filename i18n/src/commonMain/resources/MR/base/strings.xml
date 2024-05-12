@@ -9,6 +9,8 @@
     <string name="action_bar_up_description">Navigate up</string>
 
     <string name="app_name" translatable="false">Animetail</string>
+    <!-- unpublished -> 4C1B4D71 / published -> F033F567 -->
+    <string name="app_cast_id" translatable="false">4C1B4D71</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
     <string name="manga">Manga</string>
