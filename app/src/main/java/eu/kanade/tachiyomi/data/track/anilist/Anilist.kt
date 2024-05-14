@@ -275,7 +275,7 @@ class Anilist(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REPEATING
-                track.status = if (isRereading.not() && hasReadChapters) READING else track.status
+                track.status = if (!isRereading && hasReadChapters) READING else track.status
             }
 
             update(track)
@@ -295,7 +295,7 @@ class Anilist(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REPEATING_ANIME
-                track.status = if (isRereading.not() && hasReadChapters) WATCHING else track.status
+                track.status = if (!isRereading && hasReadChapters) WATCHING else track.status
             }
 
             update(track)

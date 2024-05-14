@@ -29,7 +29,7 @@ fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(trackerId).also {
 }
 
 fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
-    val trackId = id ?: if (idRequired.not()) -1 else return null
+    val trackId = id ?: if (!idRequired) -1 else return null
     return AnimeTrack(
         id = trackId,
         animeId = anime_id,

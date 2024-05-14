@@ -168,7 +168,7 @@ class MyAnimeList(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REREADING
-                track.status = if (isRereading.not() && hasReadChapters) READING else track.status
+                track.status = if (!isRereading && hasReadChapters) READING else track.status
             }
 
             update(track)
@@ -188,7 +188,7 @@ class MyAnimeList(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRewatching = track.status == REWATCHING
-                track.status = if (isRewatching.not() && hasSeenEpisodes) WATCHING else track.status
+                track.status = if (!isRewatching && hasSeenEpisodes) WATCHING else track.status
             }
 
             update(track)
