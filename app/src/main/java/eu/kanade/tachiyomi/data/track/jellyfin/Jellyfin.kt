@@ -27,6 +27,7 @@ class Jellyfin(id: Long) : BaseTracker(id, "Jellyfin"), EnhancedAnimeTracker, An
 
     override val client: OkHttpClient =
         networkService.client.newBuilder()
+            .addInterceptor(JellyfinInterceptor())
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
 
