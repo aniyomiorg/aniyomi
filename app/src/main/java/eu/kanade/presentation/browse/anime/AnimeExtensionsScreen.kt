@@ -202,7 +202,13 @@ private fun AnimeExtensionContent(
             items(
                 items = items.fastDistinctBy { it.hashCode() },
                 contentType = { "item" },
-                key = { "extension-${it.hashCode()}" },
+                key = { item ->
+                    when (item.extension) {
+                        is AnimeExtension.Untrusted -> "extension-untrusted-${item.hashCode()}"
+                        is AnimeExtension.Installed -> "extension-installed-${item.hashCode()}"
+                        is AnimeExtension.Available -> "extension-available-${item.hashCode()}"
+                    }
+                },
             ) { item ->
                 AnimeExtensionItem(
                     item = item,

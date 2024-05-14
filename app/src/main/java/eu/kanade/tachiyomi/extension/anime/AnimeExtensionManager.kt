@@ -356,6 +356,10 @@ class AnimeExtensionManager(
         }
 
         override fun onExtensionUntrusted(extension: AnimeExtension.Untrusted) {
+            val installedExtension = _installedAnimeExtensionsFlow.value
+                .find { it.pkgName == extension.pkgName }
+                ?: return
+            _installedAnimeExtensionsFlow.value -= installedExtension
             _untrustedExtensionsFlow.value += extension
         }
 

@@ -204,7 +204,13 @@ private fun ExtensionContent(
             items(
                 items = items.fastDistinctBy { it.hashCode() },
                 contentType = { "item" },
-                key = { "extension-${it.hashCode()}" },
+                key = { item ->
+                    when (item.extension) {
+                        is MangaExtension.Untrusted -> "extension-untrusted-${item.hashCode()}"
+                        is MangaExtension.Installed -> "extension-installed-${item.hashCode()}"
+                        is MangaExtension.Available -> "extension-available-${item.hashCode()}"
+                    }
+                },
             ) { item ->
                 ExtensionItem(
                     modifier = Modifier.animateItemPlacement(),
