@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.ExtensionHeader
@@ -200,7 +199,7 @@ private fun AnimeExtensionContent(
             }
 
             items(
-                items = items.fastDistinctBy { it.hashCode() },
+                items = items,
                 contentType = { "item" },
                 key = { item ->
                     when (item.extension) {
