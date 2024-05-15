@@ -304,7 +304,7 @@ private fun SearchResultItem(
                             text = status,
                         )
                     }
-                    if (trackSearch.score != -1f) {
+                    if (trackSearch.score != -1.0) {
                         SearchResultItemDetails(
                             title = stringResource(MR.strings.score),
                             text = trackSearch.score.toString(),
