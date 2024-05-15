@@ -34,6 +34,7 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.net.URLConnection
 import java.security.SecureRandom
@@ -677,17 +678,36 @@ object ImageUtil {
         // SY <--
         resetAfterExtraction: Boolean = true,
     ): BitmapFactory.Options {
+        // Ensure the stream supports marking and resetting
+        val bufferedStream = if (imageStream is BufferedInputStream) {
+            imageStream
+        } else {
+            BufferedInputStream(imageStream)
+        }
+
         // SY -->
         // zip4j does currently not support mark() and reset()
         if (zip4jFile != null && zip4jEntry != null) return extractImageOptionsZip4j(zip4jFile, zip4jEntry)
         // SY <--
 
-        imageStream.mark(imageStream.available() + 1)
+        // Mark the stream with a large enough read-ahead limit
+        val markLimit = 1024 * 1024 // 1 MB mark limit
+        bufferedStream.mark(markLimit)
 
-        val imageBytes = imageStream.readBytes()
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, options)
-        if (resetAfterExtraction) imageStream.reset()
+        try {
+            BitmapFactory.decodeStream(bufferedStream, null, options)
+        } catch (e: Exception) {
+            // Handle decoding exception
+        } finally {
+            if (resetAfterExtraction) {
+                try {
+                    bufferedStream.reset()
+                } catch (e: IOException) {
+                    // Handle reset exception
+                }
+            }
+        }
         return options
     }
 
