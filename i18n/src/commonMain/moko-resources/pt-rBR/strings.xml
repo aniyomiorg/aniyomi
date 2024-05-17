@@ -1128,4 +1128,5 @@
     <string name="pref_player_audio_channels_stereo">Estéreo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Estéreo reverso</string>
     <string name="pref_bottom_nav_no_browse">Mover Navegar para a guia Mais</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-seguro</string>
 </resources>
