@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioFocusRequest
@@ -105,6 +106,10 @@ import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
@@ -314,7 +319,6 @@ class PlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
         overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
-        Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
         setupPlayerControls()
@@ -540,6 +544,32 @@ class PlayerActivity : BaseActivity() {
             IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
         )
     }
+    private fun copyAssets(configDir: String) {
+        val assetManager = this.assets
+        val files = arrayOf("subfont.ttf", "cacert.pem")
+        for (filename in files) {
+            var ins: InputStream? = null
+            var out: OutputStream? = null
+            try {
+                ins = assetManager.open(filename, AssetManager.ACCESS_STREAMING)
+                val outFile = File("$configDir/$filename")
+                // Note that .available() officially returns an *estimated* number of bytes available
+                // this is only true for generic streams, asset streams return the full file size
+                if (outFile.length() == ins.available().toLong()) {
+                    logcat(LogPriority.VERBOSE) { "Skipping copy of asset file (exists same size): $filename" }
+                    continue
+                }
+                out = FileOutputStream(outFile)
+                ins.copyTo(out)
+                logcat(LogPriority.WARN) { "Copied asset file: $filename" }
+            } catch (e: IOException) {
+                logcat(LogPriority.ERROR, e) { "Failed to copy asset file: $filename" }
+            } finally {
+                ins?.close()
+                out?.close()
+            }
+        }
+    }
 
     private fun setupPlayerControls() {
         binding = PlayerActivityBinding.inflate(layoutInflater)
@@ -578,6 +608,8 @@ class PlayerActivity : BaseActivity() {
         } else {
             applicationContext.filesDir.path
         }
+
+        copyAssets(configDir)
 
         player.initialize(
             configDir = configDir,
@@ -686,7 +718,10 @@ class PlayerActivity : BaseActivity() {
                 "sub-fonts-dir",
                 applicationContext.filesDir.path,
             )
-            logcat { "FINISHED FONTS" }
+            MPVLib.setPropertyString(
+                "osd-fonts-dir",
+                applicationContext.filesDir.path,
+            )
         }
     }
 
