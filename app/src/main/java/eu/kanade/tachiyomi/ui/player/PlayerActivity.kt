@@ -2094,6 +2094,7 @@ class PlayerActivity : BaseActivity() {
                 player.paused = true
                 isInCastMode = false
                 invalidateOptionsMenu()
+
             }
         }
     }
@@ -2115,7 +2116,6 @@ class PlayerActivity : BaseActivity() {
         val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
         viewModel.currentAnime?.title?.let { movieMetadata.putString(MediaMetadata.KEY_TITLE, it) }
         viewModel.currentEpisode?.name?.let { movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, it) }
-        movieMetadata.addImage(WebImage(Uri.parse(viewModel.currentAnime!!.thumbnailUrl!!)))
         movieMetadata.addImage(WebImage(Uri.parse(viewModel.currentAnime!!.thumbnailUrl!!)))
 
         return currentVideoList?.getOrNull(0)?.videoUrl!!.let {
