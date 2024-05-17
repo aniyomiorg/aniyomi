@@ -13,6 +13,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -113,6 +114,8 @@ class PlayerActivity : BaseActivity() {
     internal val viewModel by viewModels<PlayerViewModel>()
 
     internal val playerPreferences: PlayerPreferences = Injekt.get()
+
+    private val storageManager: StorageManager = Injekt.get()
 
     companion object {
         fun newIntent(
@@ -558,17 +561,26 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerMPV() {
-        val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
-        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
-        val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
-        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
-
-        copyScripts()
-
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+
+        val configDir = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
+            playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+            val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
+            playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
+            if (playerPreferences.mpvScripts().get()) {
+                copyScripts()
+            }
+            applicationContext.filesDir.path
+        } else if (playerPreferences.mpvScripts().get() && Environment.isExternalStorageManager()) {
+            storageManager.getMPVConfigDirectory()!!.filePath!!
+        } else {
+            applicationContext.filesDir.path
+        }
+
         player.initialize(
-            configDir = applicationContext.filesDir.path,
+            configDir = configDir,
             cacheDir = applicationContext.cacheDir.path,
             logLvl = logLevel,
             vo = vo,
@@ -664,7 +676,6 @@ class PlayerActivity : BaseActivity() {
         // TODO: I think this is a bad hack.
         //  We need to find a way to let MPV directly access our fonts directory.
         CoroutineScope(Dispatchers.IO).launchIO {
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
                 val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
                 outFile?.let {
@@ -692,7 +703,6 @@ class PlayerActivity : BaseActivity() {
             scriptOptsDir()?.delete()
 
             // Then, copy the scripts from the Aniyomi directory
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
