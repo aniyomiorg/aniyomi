@@ -594,20 +594,19 @@ class PlayerActivity : BaseActivity() {
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
 
-        val configDir = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
-            playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
-            val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
-            playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
+        val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+            storageManager.getMPVConfigDirectory()!!.filePath!!
+        } else {
             if (playerPreferences.mpvScripts().get()) {
                 copyScripts()
             }
             applicationContext.filesDir.path
-        } else if (playerPreferences.mpvScripts().get() && Environment.isExternalStorageManager()) {
-            storageManager.getMPVConfigDirectory()!!.filePath!!
-        } else {
-            applicationContext.filesDir.path
         }
+
+        val mpvConfFile = File("$configDir/mpv.conf")
+        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+        val mpvInputFile = File("$configDir/input.conf")
+        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
         copyAssets(configDir)
 

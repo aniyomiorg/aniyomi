@@ -50,11 +50,11 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         inputFile?.openOutputStream()?.bufferedWriter().use { writer ->
                             writer?.write(it)
                         }
-                        mpvInput.set(it)
+                        mpvConf.set(it)
                     }
                     true
                 },
-
+                canBeBlank = true,
             ),
             Preference.PreferenceItem.MultiLineEditTextPreference(
                 pref = mpvInput,
@@ -76,6 +76,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                     }
                     true
                 },
+                canBeBlank = true,
             ),
             Preference.PreferenceItem.SwitchPreference(
                 title = context.stringResource(MR.strings.pref_gpu_next_title),
