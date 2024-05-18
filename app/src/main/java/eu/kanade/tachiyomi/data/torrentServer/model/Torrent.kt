@@ -37,6 +37,7 @@ data class Torrent(
     var duration_seconds: Double? = null,
     var bit_rate: String? = null,
     var file_stats: List<FileStat>? = null,
+    var trackers: List<String>? = null
 )
 
 @Serializable

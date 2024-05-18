@@ -21,6 +21,7 @@ object TorrentUtils {
             } ?: emptyList(),
             torrent.hash!!,
             torrent.torrent_size!!,
+            torrent.trackers ?: emptyList(),
         )
     }
 
