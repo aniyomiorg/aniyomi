@@ -1614,7 +1614,6 @@ class PlayerActivity : BaseActivity() {
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    TorrentServerUtils.setTrackersList()
                     torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {

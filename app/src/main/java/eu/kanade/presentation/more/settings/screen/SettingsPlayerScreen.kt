@@ -436,6 +436,10 @@ object SettingsPlayerScreen : SearchableSettings {
                             separator = "\n",
                             postfix = if (trackersPref.asState(scope).value.lines().size > 2) "\n..." else "",
                         ),
+                    onValueChanged = {
+                        TorrentServerService.stop()
+                        true
+                    },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_reset_torrent_trackers_string),

@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +58,8 @@ class TorrentServerService : Service() {
             if (TorrentServerApi.echo() == "") {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
                 torrServer.TorrServer.startTorrentServer(filesDir.absolutePath)
+                wait(10)
+                TorrentServerUtils.setTrackersList()
             }
         }
     }
