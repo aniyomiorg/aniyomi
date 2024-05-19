@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioFocusRequest
@@ -13,6 +14,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -118,6 +120,10 @@ import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
@@ -127,6 +133,8 @@ class PlayerActivity : BaseActivity() {
     internal val viewModel by viewModels<PlayerViewModel>()
 
     internal val playerPreferences: PlayerPreferences = Injekt.get()
+
+    private val storageManager: StorageManager = Injekt.get()
 
     companion object {
         fun newIntent(
@@ -334,7 +342,6 @@ class PlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
         overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
-        Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
         setupPlayerControls()
@@ -564,6 +571,32 @@ class PlayerActivity : BaseActivity() {
         mCastSession = mCastContext!!.sessionManager.currentCastSession
         setupCastListener()
     }
+    private fun copyAssets(configDir: String) {
+        val assetManager = this.assets
+        val files = arrayOf("subfont.ttf", "cacert.pem")
+        for (filename in files) {
+            var ins: InputStream? = null
+            var out: OutputStream? = null
+            try {
+                ins = assetManager.open(filename, AssetManager.ACCESS_STREAMING)
+                val outFile = File("$configDir/$filename")
+                // Note that .available() officially returns an *estimated* number of bytes available
+                // this is only true for generic streams, asset streams return the full file size
+                if (outFile.length() == ins.available().toLong()) {
+                    logcat(LogPriority.VERBOSE) { "Skipping copy of asset file (exists same size): $filename" }
+                    continue
+                }
+                out = FileOutputStream(outFile)
+                ins.copyTo(out)
+                logcat(LogPriority.WARN) { "Copied asset file: $filename" }
+            } catch (e: IOException) {
+                logcat(LogPriority.ERROR, e) { "Failed to copy asset file: $filename" }
+            } finally {
+                ins?.close()
+                out?.close()
+            }
+        }
+    }
 
     private fun setupPlayerControls() {
         binding = PlayerActivityBinding.inflate(layoutInflater)
@@ -585,17 +618,27 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerMPV() {
-        val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
-        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
-        val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
-        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
-
-        copyScripts()
-
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+
+        val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+            storageManager.getMPVConfigDirectory()!!.filePath!!
+        } else {
+            if (playerPreferences.mpvScripts().get()) {
+                copyScripts()
+            }
+            applicationContext.filesDir.path
+        }
+
+        val mpvConfFile = File("$configDir/mpv.conf")
+        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+        val mpvInputFile = File("$configDir/input.conf")
+        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
+
+        copyAssets(configDir)
+
         player.initialize(
-            configDir = applicationContext.filesDir.path,
+            configDir = configDir,
             cacheDir = applicationContext.cacheDir.path,
             logLvl = logLevel,
             vo = vo,
@@ -691,7 +734,6 @@ class PlayerActivity : BaseActivity() {
         // TODO: I think this is a bad hack.
         //  We need to find a way to let MPV directly access our fonts directory.
         CoroutineScope(Dispatchers.IO).launchIO {
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
                 val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
                 outFile?.let {
@@ -702,7 +744,10 @@ class PlayerActivity : BaseActivity() {
                 "sub-fonts-dir",
                 applicationContext.filesDir.path,
             )
-            logcat { "FINISHED FONTS" }
+            MPVLib.setPropertyString(
+                "osd-fonts-dir",
+                applicationContext.filesDir.path,
+            )
         }
     }
 
@@ -719,7 +764,6 @@ class PlayerActivity : BaseActivity() {
             scriptOptsDir()?.delete()
 
             // Then, copy the scripts from the Aniyomi directory
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
