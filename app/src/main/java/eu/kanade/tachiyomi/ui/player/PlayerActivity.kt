@@ -597,6 +597,32 @@ class PlayerActivity : BaseActivity() {
             }
         }
     }
+    private fun copyAssets(configDir: String) {
+        val assetManager = this.assets
+        val files = arrayOf("subfont.ttf", "cacert.pem")
+        for (filename in files) {
+            var ins: InputStream? = null
+            var out: OutputStream? = null
+            try {
+                ins = assetManager.open(filename, AssetManager.ACCESS_STREAMING)
+                val outFile = File("$configDir/$filename")
+                // Note that .available() officially returns an *estimated* number of bytes available
+                // this is only true for generic streams, asset streams return the full file size
+                if (outFile.length() == ins.available().toLong()) {
+                    logcat(LogPriority.VERBOSE) { "Skipping copy of asset file (exists same size): $filename" }
+                    continue
+                }
+                out = FileOutputStream(outFile)
+                ins.copyTo(out)
+                logcat(LogPriority.WARN) { "Copied asset file: $filename" }
+            } catch (e: IOException) {
+                logcat(LogPriority.ERROR, e) { "Failed to copy asset file: $filename" }
+            } finally {
+                ins?.close()
+                out?.close()
+            }
+        }
+    }
 
     private fun setupPlayerControls() {
         binding = PlayerActivityBinding.inflate(layoutInflater)
@@ -1684,7 +1710,6 @@ class PlayerActivity : BaseActivity() {
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    TorrentServerUtils.setTrackersList()
                     torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {
