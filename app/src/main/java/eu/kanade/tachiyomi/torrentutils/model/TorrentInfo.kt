@@ -5,4 +5,5 @@ data class TorrentInfo(
     val files: List<TorrentFile>,
     val hash: String,
     val size: Long,
+    val trackers: List<String> = emptyList(),
 )
