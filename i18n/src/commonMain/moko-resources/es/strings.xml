@@ -1135,4 +1135,6 @@
     <string name="pref_player_audio_channels_stereo">Estéreo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Revertir estéreo</string>
     <string name="pref_player_audio_channels_auto_safe">Seguridad automática</string>
+    <string name="pref_mpv_scripts">Activar scripts MPV</string>
+    <string name="pref_mpv_scripts_summary">Necesita permisos de almacenamiento externo.</string>
 </resources>
