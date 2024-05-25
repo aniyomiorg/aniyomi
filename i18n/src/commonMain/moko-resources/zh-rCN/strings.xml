@@ -1131,4 +1131,6 @@
     <string name="pref_player_audio_channels_mono">单声道</string>
     <string name="pref_player_audio_channels_stereo">立体声</string>
     <string name="pref_player_audio_channels_reverse_stereo">反转立体声</string>
+    <string name="pref_mpv_scripts_summary">需要内部存储权限。</string>
+    <string name="pref_mpv_scripts">开启 MPV 脚本</string>
 </resources>
