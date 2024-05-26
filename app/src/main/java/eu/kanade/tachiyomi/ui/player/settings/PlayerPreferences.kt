@@ -118,4 +118,6 @@ class PlayerPreferences(
     fun textColorSubtitles() = preferenceStore.getInt("pref_text_color_subtitles", -1)
     fun borderColorSubtitles() = preferenceStore.getInt("pref_border_color_subtitles", -16777216)
     fun backgroundColorSubtitles() = preferenceStore.getInt("pref_background_color_subtitles", 0)
+
+    fun mpvScripts() = preferenceStore.getBoolean("mpv_scripts", false)
 }

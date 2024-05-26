@@ -23,7 +23,7 @@ class GetAnimeExtensionSources(
                     AnimeExtensionSourceItem(
                         source = source,
                         enabled = source.isEnabled(),
-                        labelAsName = isMultiSource && isMultiLangSingleSource.not(),
+                        labelAsName = isMultiSource && !isMultiLangSingleSource,
                     )
                 }
         }
