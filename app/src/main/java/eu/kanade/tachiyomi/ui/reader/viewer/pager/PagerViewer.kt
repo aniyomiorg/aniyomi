@@ -105,18 +105,6 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
         pager.id = R.id.reader_pager
         pager.adapter = adapter
         pager.addOnPageChangeListener(
-            object : ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    if (!activity.isScrollingThroughPages) {
-                        activity.hideMenu()
-                    }
-                    onPageChange(position)
-                }
-
-                override fun onPageScrollStateChanged(state: Int) {
-                    isIdle = state == ViewPager.SCROLL_STATE_IDLE
-                }
-            },
             // SY -->
             pagerListener,
             // SY <--
