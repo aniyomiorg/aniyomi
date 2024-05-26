@@ -8,7 +8,7 @@ data class ItemDto(
     @SerialName("Name") val name: String,
     @SerialName("Id") val id: String,
     @SerialName("UserData") val userData: UserDataDto,
-    @SerialName("IndexNumber") val indexNumber: Int? = null,
+    @SerialName("IndexNumber") val indexNumber: Long? = null,
 )
 
 @Serializable

@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.track.myanimelist
 
+import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -31,9 +32,30 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
         // Add the authorization header to the original request
         val authRequest = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer ${oauth!!.access_token}")
+            .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
-        return chain.proceed(authRequest)
+        val response = chain.proceed(authRequest)
+        val tokenIsExpired = response.headers["www-authenticate"]
+            ?.contains("The access token expired") ?: false
+
+        // Retry the request once with a new token in case it was not already refreshed
+        // by the is expired check before.
+        if (response.code == 401 && tokenIsExpired) {
+            response.close()
+
+            val newToken = refreshToken(chain)
+            setAuth(newToken)
+
+            val newRequest = originalRequest.newBuilder()
+                .addHeader("Authorization", "Bearer ${newToken.access_token}")
+                .header("User-Agent", "Animetail v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
+                .build()
+
+            return chain.proceed(newRequest)
+        }
+
+        return response
     }
 
     /**

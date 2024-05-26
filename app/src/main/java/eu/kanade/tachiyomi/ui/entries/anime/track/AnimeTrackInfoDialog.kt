@@ -298,13 +298,13 @@ private data class TrackStatusSelectorScreen(
     private class Model(
         private val track: DbAnimeTrack,
         private val tracker: Tracker,
-    ) : StateScreenModel<Model.State>(State(track.status.toInt())) {
+    ) : StateScreenModel<Model.State>(State(track.status)) {
 
-        fun getSelections(): Map<Int, StringResource?> {
+        fun getSelections(): Map<Long, StringResource?> {
             return tracker.animeService.getStatusListAnime().associateWith { tracker.getStatus(it) }
         }
 
-        fun setSelection(selection: Int) {
+        fun setSelection(selection: Long) {
             mutableState.update { it.copy(selection = selection) }
         }
 
@@ -316,7 +316,7 @@ private data class TrackStatusSelectorScreen(
 
         @Immutable
         data class State(
-            val selection: Int,
+            val selection: Long,
         )
     }
 }

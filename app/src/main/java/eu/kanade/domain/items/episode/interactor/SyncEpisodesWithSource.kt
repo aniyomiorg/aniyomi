@@ -173,7 +173,7 @@ class SyncEpisodesWithSource(
         var updatedToAdd = newEpisodes.map { toAddItem ->
             var episode = toAddItem.copy(dateFetch = nowMillis + itemCount--)
 
-            if (episode.isRecognizedNumber.not() || episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
+            if (!episode.isRecognizedNumber || episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
 
             episode = episode.copy(
                 seen = episode.episodeNumber in deletedSeenEpisodeNumbers,
