@@ -3,7 +3,7 @@
 | [![CI](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml/badge.svg)](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/Dark25/Animetail2-preview.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/v/release/Dark25/Animetail2.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1196139193664028762?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph) |
 
 # ![app icon](.github/readme-images/icon.png) Animetail
-Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 6.0 and above.
+Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 8.0 and above.
 This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY, Kuukiyomi but also other forks
 
 ## Features

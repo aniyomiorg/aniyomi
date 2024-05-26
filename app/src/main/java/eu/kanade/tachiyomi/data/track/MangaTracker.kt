@@ -23,20 +23,20 @@ private val insertTrack: InsertMangaTrack by injectLazy()
 interface MangaTracker {
 
     // Common functions
-    fun getCompletionStatus(): Int
+    fun getCompletionStatus(): Long
 
     fun getScoreList(): ImmutableList<String>
 
-    fun indexToScore(index: Int): Float {
-        return index.toFloat()
+    fun indexToScore(index: Int): Double {
+        return index.toDouble()
     }
 
     // Manga specific functions
-    fun getStatusListManga(): List<Int>
+    fun getStatusListManga(): List<Long>
 
-    fun getReadingStatus(): Int
+    fun getReadingStatus(): Long
 
-    fun getRereadingStatus(): Int
+    fun getRereadingStatus(): Long
 
     // TODO: Store all scores as 10 point in the future maybe?
     fun get10PointScore(track: DomainTrack): Double {
@@ -62,23 +62,23 @@ interface MangaTracker {
         }
     }
 
-    suspend fun setRemoteMangaStatus(track: MangaTrack, status: Int) {
+    suspend fun setRemoteMangaStatus(track: MangaTrack, status: Long) {
         track.status = status
-        if (track.status == getCompletionStatus() && track.total_chapters != 0) {
-            track.last_chapter_read = track.total_chapters.toFloat()
+        if (track.status == getCompletionStatus() && track.total_chapters != 0L) {
+            track.last_chapter_read = track.total_chapters.toDouble()
         }
         updateRemote(track)
     }
 
     suspend fun setRemoteLastChapterRead(track: MangaTrack, chapterNumber: Int) {
-        if (track.last_chapter_read == 0f &&
+        if (track.last_chapter_read == 0.0 &&
             track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()
         ) {
             track.status = getReadingStatus()
         }
-        track.last_chapter_read = chapterNumber.toFloat()
-        if (track.total_chapters != 0 &&
-            track.last_chapter_read.toInt() == track.total_chapters
+        track.last_chapter_read = chapterNumber.toDouble()
+        if (track.total_chapters != 0L &&
+            track.last_chapter_read.toLong() == track.total_chapters
         ) {
             track.status = getCompletionStatus()
             track.finished_reading_date = System.currentTimeMillis()

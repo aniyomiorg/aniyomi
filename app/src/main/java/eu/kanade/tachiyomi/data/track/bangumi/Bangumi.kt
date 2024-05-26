@@ -29,8 +29,8 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
 
     override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
-    override fun indexToScore(index: Int): Float {
-        return index.toFloat()
+    override fun indexToScore(index: Int): Double {
+        return index.toDouble()
     }
 
     override fun displayScore(track: DomainMangaTrack): String {
@@ -52,7 +52,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
+                if (track.last_chapter_read.toLong() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                 } else {
                     track.status = READING
@@ -66,7 +66,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen.toInt() == track.total_episodes && track.total_episodes > 0) {
+                if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                 } else {
                     track.status = READING
@@ -95,7 +95,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasReadChapters) READING else PLAN_TO_READ
-            track.score = 0F
+            track.score = 0.0
             add(track)
             update(track)
         }
@@ -120,7 +120,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasSeenEpisodes) READING else PLAN_TO_READ
-            track.score = 0F
+            track.score = 0.0
             add(track)
             update(track)
         }
@@ -156,15 +156,15 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
 
     override fun getLogoColor() = Color.rgb(240, 145, 153)
 
-    override fun getStatusListManga(): List<Int> {
+    override fun getStatusListManga(): List<Long> {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
-    override fun getStatusListAnime(): List<Int> {
+    override fun getStatusListAnime(): List<Long> {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         READING -> MR.strings.reading
         PLAN_TO_READ -> MR.strings.plan_to_read
         COMPLETED -> MR.strings.completed
@@ -173,15 +173,15 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
         else -> null
     }
 
-    override fun getReadingStatus(): Int = READING
+    override fun getReadingStatus(): Long = READING
 
-    override fun getWatchingStatus(): Int = READING
+    override fun getWatchingStatus(): Long = READING
 
-    override fun getRereadingStatus(): Int = -1
+    override fun getRereadingStatus(): Long = -1
 
-    override fun getRewatchingStatus(): Int = -1
+    override fun getRewatchingStatus(): Long = -1
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override suspend fun login(username: String, password: String) = login(password)
 
@@ -214,11 +214,11 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     }
 
     companion object {
-        const val READING = 3
-        const val COMPLETED = 2
-        const val ON_HOLD = 4
-        const val DROPPED = 5
-        const val PLAN_TO_READ = 1
+        const val READING = 3L
+        const val COMPLETED = 2L
+        const val ON_HOLD = 4L
+        const val DROPPED = 5L
+        const val PLAN_TO_READ = 1L
 
         private val SCORE_LIST = IntRange(0, 10)
             .map(Int::toString)

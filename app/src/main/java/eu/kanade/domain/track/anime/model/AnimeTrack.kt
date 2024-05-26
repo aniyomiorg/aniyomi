@@ -19,17 +19,17 @@ fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(trackerId).also {
     it.remote_id = remoteId
     it.library_id = libraryId
     it.title = title
-    it.last_episode_seen = lastEpisodeSeen.toFloat()
-    it.total_episodes = totalEpisodes.toInt()
-    it.status = status.toInt()
-    it.score = score.toFloat()
+    it.last_episode_seen = lastEpisodeSeen
+    it.total_episodes = totalEpisodes
+    it.status = status
+    it.score = score
     it.tracking_url = remoteUrl
     it.started_watching_date = startDate
     it.finished_watching_date = finishDate
 }
 
 fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
-    val trackId = id ?: if (idRequired.not()) -1 else return null
+    val trackId = id ?: if (!idRequired) -1 else return null
     return AnimeTrack(
         id = trackId,
         animeId = anime_id,
@@ -37,12 +37,10 @@ fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
         remoteId = remote_id,
         libraryId = library_id,
         title = title,
-        lastEpisodeSeen = last_episode_seen.toDouble(),
-        totalEpisodes = total_episodes.toLong(),
-        status = status.toLong(),
-        // Jank workaround due to precision issues while converting
-        // See https://github.com/tachiyomiorg/tachiyomi/issues/10343
-        score = score.toString().toDouble(),
+        lastEpisodeSeen = last_episode_seen,
+        totalEpisodes = total_episodes,
+        status = status,
+        score = score,
         remoteUrl = tracking_url,
         startDate = started_watching_date,
         finishDate = finished_watching_date,
