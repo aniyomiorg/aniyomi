@@ -35,15 +35,15 @@ class Anilist(id: Long) :
     DeletableAnimeTracker {
 
     companion object {
-        const val READING = 1
-        const val WATCHING = 11
-        const val COMPLETED = 2
-        const val PAUSED = 3
-        const val DROPPED = 4
-        const val PLANNING = 5
-        const val PLANNING_ANIME = 15
-        const val REPEATING = 6
-        const val REPEATING_ANIME = 16
+        const val READING = 1L
+        const val WATCHING = 11L
+        const val COMPLETED = 2L
+        const val PAUSED = 3L
+        const val DROPPED = 4L
+        const val PLANNING = 5L
+        const val PLANNING_ANIME = 15L
+        const val REPEATING = 6L
+        const val REPEATING_ANIME = 16L
 
         const val POINT_100 = "POINT_100"
         const val POINT_10 = "POINT_10"
@@ -76,15 +76,15 @@ class Anilist(id: Long) :
 
     override fun getLogoColor() = Color.rgb(18, 25, 35)
 
-    override fun getStatusListManga(): List<Int> {
+    override fun getStatusListManga(): List<Long> {
         return listOf(READING, PLANNING, COMPLETED, REPEATING, PAUSED, DROPPED)
     }
 
-    override fun getStatusListAnime(): List<Int> {
+    override fun getStatusListAnime(): List<Long> {
         return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
     }
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         WATCHING -> MR.strings.watching
         READING -> MR.strings.reading
         PLANNING -> MR.strings.plan_to_read
@@ -97,15 +97,15 @@ class Anilist(id: Long) :
         else -> null
     }
 
-    override fun getReadingStatus(): Int = READING
+    override fun getReadingStatus(): Long = READING
 
-    override fun getWatchingStatus(): Int = WATCHING
+    override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRereadingStatus(): Int = REPEATING
+    override fun getRereadingStatus(): Long = REPEATING
 
-    override fun getRewatchingStatus(): Int = REPEATING_ANIME
+    override fun getRewatchingStatus(): Long = REPEATING_ANIME
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override fun getScoreList(): ImmutableList<String> {
         return when (scorePreference.get()) {
@@ -133,24 +133,24 @@ class Anilist(id: Long) :
         return track.score / 10.0
     }
 
-    override fun indexToScore(index: Int): Float {
+    override fun indexToScore(index: Int): Double {
         return when (scorePreference.get()) {
             // 10 point
-            POINT_10 -> index * 10f
+            POINT_10 -> index * 10.0
             // 100 point
-            POINT_100 -> index.toFloat()
+            POINT_100 -> index.toDouble()
             // 5 stars
             POINT_5 -> when (index) {
-                0 -> 0f
-                else -> index * 20f - 10f
+                0 -> 0.0
+                else -> index * 20.0 - 10.0
             }
             // Smiley
             POINT_3 -> when (index) {
-                0 -> 0f
-                else -> index * 25f + 10f
+                0 -> 0.0
+                else -> index * 25.0 + 10.0
             }
             // 10 point decimal
-            POINT_10_DECIMAL -> index.toFloat()
+            POINT_10_DECIMAL -> index.toDouble()
             else -> throw Exception("Unknown score type")
         }
     }
@@ -209,12 +209,12 @@ class Anilist(id: Long) :
 
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
+                if (track.last_chapter_read.toLong() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                     track.finished_reading_date = System.currentTimeMillis()
                 } else if (track.status != REPEATING) {
                     track.status = READING
-                    if (track.last_chapter_read == 1F) {
+                    if (track.last_chapter_read == 1.0) {
                         track.started_reading_date = System.currentTimeMillis()
                     }
                 }
@@ -234,12 +234,12 @@ class Anilist(id: Long) :
 
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen.toInt() == track.total_episodes && track.total_episodes > 0) {
+                if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                     track.finished_watching_date = System.currentTimeMillis()
                 } else if (track.status != REPEATING_ANIME) {
                     track.status = WATCHING
-                    if (track.last_episode_seen == 1F) {
+                    if (track.last_episode_seen == 1.0) {
                         track.started_watching_date = System.currentTimeMillis()
                     }
                 }
@@ -275,14 +275,14 @@ class Anilist(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REPEATING
-                track.status = if (isRereading.not() && hasReadChapters) READING else track.status
+                track.status = if (!isRereading && hasReadChapters) READING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasReadChapters) READING else PLANNING
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }
@@ -295,14 +295,14 @@ class Anilist(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REPEATING_ANIME
-                track.status = if (isRereading.not() && hasReadChapters) WATCHING else track.status
+                track.status = if (!isRereading && hasReadChapters) WATCHING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasReadChapters) WATCHING else PLANNING_ANIME
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }

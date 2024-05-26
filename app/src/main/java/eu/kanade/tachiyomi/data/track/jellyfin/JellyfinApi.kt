@@ -55,10 +55,10 @@ class JellyfinApi(
         it.title = name
         it.total_episodes = 1
         if (userData.played) {
-            it.last_episode_seen = 1F
+            it.last_episode_seen = 1.0
             it.status = Jellyfin.COMPLETED
         } else {
-            it.last_episode_seen = 0F
+            it.last_episode_seen = 0.0
             it.status = Jellyfin.UNSEEN
         }
     }
@@ -97,7 +97,7 @@ class JellyfinApi(
         if (firstUnwatched == 0) {
             return track.apply {
                 this.total_episodes = totalEpisodes
-                this.last_episode_seen = 0F
+                this.last_episode_seen = 0.0
                 this.status = Jellyfin.UNSEEN
             }
         }
@@ -105,7 +105,7 @@ class JellyfinApi(
         if (firstUnwatched == -1) {
             return track.apply {
                 this.total_episodes = totalEpisodes
-                this.last_episode_seen = totalEpisodes.toFloat()
+                this.last_episode_seen = totalEpisodes.toDouble()
                 this.status = Jellyfin.COMPLETED
             }
         }
@@ -114,7 +114,7 @@ class JellyfinApi(
 
         return track.apply {
             this.total_episodes = totalEpisodes
-            this.last_episode_seen = lastContinuousSeen.toFloat()
+            this.last_episode_seen = lastContinuousSeen.toDouble()
             this.status = Jellyfin.WATCHING
         }
     }
@@ -157,7 +157,7 @@ class JellyfinApi(
         return getTrackSearch(track.tracking_url)
     }
 
-    private fun Int.equalsTo(other: Float): Boolean {
+    private fun Long.equalsTo(other: Double): Boolean {
         return abs(this - other) < 0.001
     }
 }

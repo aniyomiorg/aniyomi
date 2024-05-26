@@ -32,15 +32,15 @@ class MyAnimeList(id: Long) :
     DeletableAnimeTracker {
 
     companion object {
-        const val READING = 1
-        const val WATCHING = 11
-        const val COMPLETED = 2
-        const val ON_HOLD = 3
-        const val DROPPED = 4
-        const val PLAN_TO_READ = 6
-        const val PLAN_TO_WATCH = 16
-        const val REREADING = 7
-        const val REWATCHING = 17
+        const val READING = 1L
+        const val WATCHING = 11L
+        const val COMPLETED = 2L
+        const val ON_HOLD = 3L
+        const val DROPPED = 4L
+        const val PLAN_TO_READ = 6L
+        const val PLAN_TO_WATCH = 16L
+        const val REREADING = 7L
+        const val REWATCHING = 17L
 
         private const val SEARCH_ID_PREFIX = "id:"
         private const val SEARCH_LIST_PREFIX = "my:"
@@ -61,15 +61,15 @@ class MyAnimeList(id: Long) :
 
     override fun getLogoColor() = Color.rgb(46, 81, 162)
 
-    override fun getStatusListManga(): List<Int> {
+    override fun getStatusListManga(): List<Long> {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ, REREADING)
     }
 
-    override fun getStatusListAnime(): List<Int> {
+    override fun getStatusListAnime(): List<Long> {
         return listOf(WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH, REWATCHING)
     }
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         READING -> MR.strings.reading
         WATCHING -> MR.strings.watching
         COMPLETED -> MR.strings.completed
@@ -82,20 +82,20 @@ class MyAnimeList(id: Long) :
         else -> null
     }
 
-    override fun getReadingStatus(): Int = READING
+    override fun getReadingStatus(): Long = READING
 
-    override fun getWatchingStatus(): Int = WATCHING
+    override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRereadingStatus(): Int = REREADING
+    override fun getRereadingStatus(): Long = REREADING
 
-    override fun getRewatchingStatus(): Int = REWATCHING
+    override fun getRewatchingStatus(): Long = REWATCHING
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
-    override fun indexToScore(index: Int): Float {
-        return index.toFloat()
+    override fun indexToScore(index: Int): Double {
+        return index.toDouble()
     }
 
     override fun displayScore(track: DomainMangaTrack): String {
@@ -112,19 +112,19 @@ class MyAnimeList(id: Long) :
 
     private suspend fun add(track: AnimeTrack): AnimeTrack {
         track.status = WATCHING
-        track.score = 0F
+        track.score = 0.0
         return api.updateItem(track)
     }
 
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
+                if (track.last_chapter_read.toLong() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                     track.finished_reading_date = System.currentTimeMillis()
                 } else if (track.status != REREADING) {
                     track.status = READING
-                    if (track.last_chapter_read == 1F) {
+                    if (track.last_chapter_read == 1.0) {
                         track.started_reading_date = System.currentTimeMillis()
                     }
                 }
@@ -137,12 +137,12 @@ class MyAnimeList(id: Long) :
     override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen.toInt() == track.total_episodes && track.total_episodes > 0) {
+                if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                     track.finished_watching_date = System.currentTimeMillis()
                 } else if (track.status != REWATCHING) {
                     track.status = WATCHING
-                    if (track.last_episode_seen == 1F) {
+                    if (track.last_episode_seen == 1.0) {
                         track.started_watching_date = System.currentTimeMillis()
                     }
                 }
@@ -168,14 +168,14 @@ class MyAnimeList(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRereading = track.status == REREADING
-                track.status = if (isRereading.not() && hasReadChapters) READING else track.status
+                track.status = if (!isRereading && hasReadChapters) READING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasReadChapters) READING else PLAN_TO_READ
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }
@@ -188,14 +188,14 @@ class MyAnimeList(id: Long) :
 
             if (track.status != COMPLETED) {
                 val isRewatching = track.status == REWATCHING
-                track.status = if (isRewatching.not() && hasSeenEpisodes) WATCHING else track.status
+                track.status = if (!isRewatching && hasSeenEpisodes) WATCHING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasSeenEpisodes) WATCHING else PLAN_TO_WATCH
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }

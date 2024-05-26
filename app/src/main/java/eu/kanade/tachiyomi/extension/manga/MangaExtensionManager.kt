@@ -346,6 +346,10 @@ class MangaExtensionManager(
         }
 
         override fun onExtensionUntrusted(extension: MangaExtension.Untrusted) {
+            val installedExtension = _installedExtensionsFlow.value
+                .find { it.pkgName == extension.pkgName }
+                ?: return
+            _installedExtensionsFlow.value -= installedExtension
             _untrustedExtensionsFlow.value += extension
         }
 

@@ -23,20 +23,20 @@ private val insertTrack: InsertAnimeTrack by injectLazy()
 interface AnimeTracker {
 
     // Common functions
-    fun getCompletionStatus(): Int
+    fun getCompletionStatus(): Long
 
     fun getScoreList(): ImmutableList<String>
 
-    fun indexToScore(index: Int): Float {
-        return index.toFloat()
+    fun indexToScore(index: Int): Double {
+        return index.toDouble()
     }
 
     // Anime specific functions
-    fun getStatusListAnime(): List<Int>
+    fun getStatusListAnime(): List<Long>
 
-    fun getWatchingStatus(): Int
+    fun getWatchingStatus(): Long
 
-    fun getRewatchingStatus(): Int
+    fun getRewatchingStatus(): Long
 
     // TODO: Store all scores as 10 point in the future maybe?
     fun get10PointScore(track: DomainAnimeTrack): Double {
@@ -63,23 +63,23 @@ interface AnimeTracker {
         }
     }
 
-    suspend fun setRemoteAnimeStatus(track: AnimeTrack, status: Int) {
+    suspend fun setRemoteAnimeStatus(track: AnimeTrack, status: Long) {
         track.status = status
-        if (track.status == getCompletionStatus() && track.total_episodes != 0) {
-            track.last_episode_seen = track.total_episodes.toFloat()
+        if (track.status == getCompletionStatus() && track.total_episodes != 0L) {
+            track.last_episode_seen = track.total_episodes.toDouble()
         }
         updateRemote(track)
     }
 
     suspend fun setRemoteLastEpisodeSeen(track: AnimeTrack, episodeNumber: Int) {
-        if (track.last_episode_seen == 0f &&
+        if (track.last_episode_seen == 0.0 &&
             track.last_episode_seen < episodeNumber &&
             track.status != getRewatchingStatus()
         ) {
             track.status = getWatchingStatus()
         }
-        track.last_episode_seen = episodeNumber.toFloat()
-        if (track.total_episodes != 0 && track.last_episode_seen.toInt() == track.total_episodes) {
+        track.last_episode_seen = episodeNumber.toDouble()
+        if (track.total_episodes != 0L && track.last_episode_seen.toLong() == track.total_episodes) {
             track.status = getCompletionStatus()
             track.finished_watching_date = System.currentTimeMillis()
         }
