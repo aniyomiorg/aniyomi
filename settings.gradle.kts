@@ -35,6 +35,8 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Kuukiyomi"
 include(":app")
 include(":i18n")

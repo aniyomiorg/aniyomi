@@ -22,6 +22,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
+import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import okhttp3.OkHttpClient
@@ -537,7 +538,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["format"]!!.jsonPrimitive.content.replace("_", "-"),
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
-            struct["chapters"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["chapters"]!!.jsonPrimitive.longOrNull ?: 0,
             struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }
@@ -551,7 +552,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["format"]!!.jsonPrimitive.content.replace("_", "-"),
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
-            struct["episodes"]!!.jsonPrimitive.intOrNull ?: 0,
+            struct["episodes"]!!.jsonPrimitive.longOrNull ?: 0,
             struct["averageScore"]?.jsonPrimitive?.intOrNull ?: -1,
         )
     }

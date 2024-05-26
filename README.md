@@ -3,7 +3,7 @@
 | [![CI](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi-preview.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi/badge)](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi) | [![stable release](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya) |
 
 # ![app icon](.github/readme-images/app-icon.png)Kuukiyomi
-Kuukiyomi is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
+Kuukiyomi is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 8.0 and above.
 This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
 
 ## Features

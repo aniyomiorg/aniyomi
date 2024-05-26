@@ -38,7 +38,7 @@ data class BrowseTab(
     override val options: TabOptions
         @Composable
         get() {
-            val isSelected = LocalTabNavigator.current.current.key == key
+            val isSelected = LocalTabNavigator.current.current is BrowseTab
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
             return TabOptions(
                 index = 3u,

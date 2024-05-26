@@ -8,7 +8,7 @@ class AnimeTrackSearch : AnimeTrack {
 
     override var anime_id: Long = 0
 
-    override var tracker_id: Int = 0
+    override var tracker_id: Long = 0
 
     override var remote_id: Long = 0
 
@@ -16,13 +16,13 @@ class AnimeTrackSearch : AnimeTrack {
 
     override lateinit var title: String
 
-    override var last_episode_seen: Float = 0F
+    override var last_episode_seen: Double = 0.0
 
-    override var total_episodes: Int = 0
+    override var total_episodes: Long = 0
 
-    override var score: Float = -1f
+    override var score: Double = -1.0
 
-    override var status: Int = 0
+    override var status: Long = 0
 
     override var started_watching_date: Long = 0
 
@@ -55,14 +55,14 @@ class AnimeTrackSearch : AnimeTrack {
 
     override fun hashCode(): Int {
         var result = anime_id.hashCode()
-        result = 31 * result + tracker_id
+        result = 31 * result + tracker_id.hashCode()
         result = 31 * result + remote_id.hashCode()
         return result
     }
 
     companion object {
         fun create(serviceId: Long): AnimeTrackSearch = AnimeTrackSearch().apply {
-            tracker_id = serviceId.toInt()
+            tracker_id = serviceId
         }
     }
 }
