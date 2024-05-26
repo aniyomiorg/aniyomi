@@ -91,4 +91,5 @@ private fun Anime.toBackupAnime() =
         updateStrategy = this.updateStrategy,
         lastModifiedAt = this.lastModifiedAt,
         favoriteModifiedAt = this.favoriteModifiedAt,
+        version = this.version,
     )

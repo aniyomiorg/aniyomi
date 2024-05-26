@@ -2,53 +2,39 @@ package eu.kanade.tachiyomi.data.updater
 
 import android.content.Context
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
-import tachiyomi.core.util.lang.withIOContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
 
-class AppUpdateChecker {
-
+class AppUpdateChecker(private val context: Context) {
     private val getApplicationRelease: GetApplicationRelease by injectLazy()
 
-    suspend fun checkForUpdate(context: Context, forceCheck: Boolean = false): GetApplicationRelease.Result {
-        // Disabling app update checks for older Android versions that we're going to drop support for
-        // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-        //    return GetApplicationRelease.Result.OsTooOld
-        // }
-
-        return withIOContext {
-            val result = getApplicationRelease.await(
+    suspend fun checkForUpdates(forceCheck: Boolean = false): GetApplicationRelease.Result {
+        return withContext(Dispatchers.IO) {
+            getApplicationRelease.await(
                 GetApplicationRelease.Arguments(
-                    BuildConfig.PREVIEW,
-                    context.isInstalledFromFDroid(),
-                    BuildConfig.COMMIT_COUNT.toInt(),
-                    BuildConfig.VERSION_NAME,
-                    GITHUB_REPO,
-                    forceCheck,
+                    isPreview = BuildConfig.PREVIEW,
+                    commitCount = BuildConfig.COMMIT_COUNT.toInt(),
+                    versionName = BuildConfig.VERSION_NAME,
+                    repoUrl = GITHUB_REPO,
+                    forceCheck = forceCheck,
                 ),
-            )
-
-            when (result) {
-                is GetApplicationRelease.Result.NewUpdate -> AppUpdateNotifier(context).promptUpdate(
-                    result.release,
-                )
-                is GetApplicationRelease.Result.ThirdPartyInstallation -> AppUpdateNotifier(
-                    context,
-                ).promptFdroidUpdate()
-                else -> {}
+            ).also { result ->
+                when (result) {
+                    is GetApplicationRelease.Result.NewUpdate -> AppUpdateNotifier(context).promptUpdate(result.release)
+                    else -> {} // Handle other cases
+                }
             }
-
-            result
         }
     }
 }
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "aniyomiorg/aniyomi-preview"
+        "dark25/animetail2-preview"
     } else {
-        "aniyomiorg/aniyomi"
+        "dark25/animetail2"
     }
 }
 

@@ -129,40 +129,40 @@ class BackupCreator(
         }
     }
 
-    private suspend fun backupAnimeCategories(options: BackupOptions): List<BackupCategory> {
+    suspend fun backupAnimeCategories(options: BackupOptions): List<BackupCategory> {
         if (!options.categories) return emptyList()
 
         return categoriesBackupCreator.backupAnimeCategories()
     }
 
-    private suspend fun backupMangaCategories(options: BackupOptions): List<BackupCategory> {
+    suspend fun backupMangaCategories(options: BackupOptions): List<BackupCategory> {
         if (!options.categories) return emptyList()
 
         return categoriesBackupCreator.backupMangaCategories()
     }
 
-    private suspend fun backupMangas(mangas: List<Manga>, options: BackupOptions): List<BackupManga> {
+    suspend fun backupMangas(mangas: List<Manga>, options: BackupOptions): List<BackupManga> {
         return mangaBackupCreator.backupMangas(mangas, options)
     }
 
-    private suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
+    suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
         return animeBackupCreator.backupAnimes(animes, options)
     }
 
-    private fun backupAnimeSources(animes: List<Anime>): List<BackupAnimeSource> {
+    fun backupAnimeSources(animes: List<Anime>): List<BackupAnimeSource> {
         return sourcesBackupCreator.backupAnimeSources(animes)
     }
-    private fun backupMangaSources(mangas: List<Manga>): List<BackupSource> {
+    fun backupMangaSources(mangas: List<Manga>): List<BackupSource> {
         return sourcesBackupCreator.backupMangaSources(mangas)
     }
 
-    private fun backupAppPreferences(options: BackupOptions): List<BackupPreference> {
+    fun backupAppPreferences(options: BackupOptions): List<BackupPreference> {
         if (!options.appSettings) return emptyList()
 
         return preferenceBackupCreator.backupAppPreferences(includePrivatePreferences = options.privateSettings)
     }
 
-    private fun backupSourcePreferences(options: BackupOptions): List<BackupSourcePreferences> {
+    fun backupSourcePreferences(options: BackupOptions): List<BackupSourcePreferences> {
         if (!options.sourceSettings) return emptyList()
 
         return preferenceBackupCreator.backupSourcePreferences(includePrivatePreferences = options.privateSettings)

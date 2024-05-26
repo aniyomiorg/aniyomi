@@ -764,7 +764,7 @@
     <string name="onboarding_storage_help_action">Depolama kılavuzu</string>
     <string name="action_add_repo">Depo ekle</string>
     <string name="label_add_repo_input">Depo URL\'si</string>
-    <string name="action_add_repo_message">Aniyomi\'a ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
+    <string name="action_add_repo_message">Animetail\'a ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
     <string name="error_repo_exists">Bu depo zaten var!</string>
     <string name="action_delete_repo">Depoyu sil</string>
     <string name="invalid_repo_name">Geçersiz depo URL\'si</string>
@@ -881,8 +881,8 @@
     <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm girdilere de uygula</string>
     <string name="dialog_with_checkbox_reset">Bu girdi için tüm bölümleri sıfırla</string>
     <string name="download_insufficient_space">Saklama alanı az olduğundan bölümler indirilemedi</string>
-    <string name="download_queue_size_warning">Uyarı: Büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Aniyomi\'u engellemesine neden olabilir. Daha çok öğrenmek için dokunun.</string>
-    <string name="information_webview_required">WebView, Aniyomi için gereklidir</string>
+    <string name="download_queue_size_warning">Uyarı: Büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Animetail\'u engellemesine neden olabilir. Daha çok öğrenmek için dokunun.</string>
+    <string name="information_webview_required">WebView, Kuukiyomi için gereklidir</string>
     <string name="download_notifier_download_paused_chapters">İndirme duraklatıldı</string>
     <string name="channel_new_chapters_episodes">Bölüm güncellemeleri</string>
     <string name="pref_default_home_tab_library">Başlangıç ekranını Manga Sekmesi olarak ayarla</string>

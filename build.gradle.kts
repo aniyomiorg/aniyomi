@@ -2,10 +2,12 @@ import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.BasePlugin
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
 
 buildscript {
     dependencies {
         classpath(libs.android.shortcut.gradle)
+        classpath(libs.google.services.gradle)
         classpath(libs.aboutLibraries.gradle)
         classpath(libs.sqldelight.gradle)
         classpath(libs.moko.gradle)
