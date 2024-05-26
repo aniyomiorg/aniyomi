@@ -211,7 +211,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                         val status = tracks[manga.id]?.firstNotNullOfOrNull { track ->
                             TrackStatus.parseTrackerStatus(track.trackerId, track.status)
                         } ?: TrackStatus.OTHER
-                        status.int == trackingExtra
+                        status.int == trackingExtra.toLong()
                     }
                 }
                 MangaLibraryGroup.BY_SOURCE -> {
