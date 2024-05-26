@@ -35,15 +35,15 @@ class GetAnimeSourcesWithFavoriteCount(
             when (sorting) {
                 SetMigrateSorting.Mode.ALPHABETICAL -> {
                     when {
-                        a.first.isStub && b.first.isStub.not() -> -1
-                        b.first.isStub && a.first.isStub.not() -> 1
+                        a.first.isStub && !b.first.isStub -> -1
+                        b.first.isStub && !a.first.isStub -> 1
                         else -> a.first.name.lowercase().compareToWithCollator(b.first.name.lowercase())
                     }
                 }
                 SetMigrateSorting.Mode.TOTAL -> {
                     when {
-                        a.first.isStub && b.first.isStub.not() -> -1
-                        b.first.isStub && a.first.isStub.not() -> 1
+                        a.first.isStub && !b.first.isStub -> -1
+                        b.first.isStub && !a.first.isStub -> 1
                         else -> a.second.compareTo(b.second)
                     }
                 }

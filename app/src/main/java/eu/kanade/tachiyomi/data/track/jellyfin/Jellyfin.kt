@@ -20,13 +20,14 @@ import tachiyomi.domain.track.anime.model.AnimeTrack as DomainTrack
 class Jellyfin(id: Long) : BaseTracker(id, "Jellyfin"), EnhancedAnimeTracker, AnimeTracker {
 
     companion object {
-        const val UNSEEN = 1
-        const val WATCHING = 2
-        const val COMPLETED = 3
+        const val UNSEEN = 1L
+        const val WATCHING = 2L
+        const val COMPLETED = 3L
     }
 
     override val client: OkHttpClient =
         networkService.client.newBuilder()
+            .addInterceptor(JellyfinInterceptor())
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
 
@@ -36,20 +37,20 @@ class Jellyfin(id: Long) : BaseTracker(id, "Jellyfin"), EnhancedAnimeTracker, An
 
     override fun getLogoColor() = Color.rgb(0, 11, 37)
 
-    override fun getStatusListAnime() = listOf(UNSEEN, WATCHING, COMPLETED)
+    override fun getStatusListAnime(): List<Long> = listOf(UNSEEN, WATCHING, COMPLETED)
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         UNSEEN -> MR.strings.unseen
         WATCHING -> MR.strings.watching
         COMPLETED -> MR.strings.completed
         else -> null
     }
 
-    override fun getWatchingStatus(): Int = WATCHING
+    override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRewatchingStatus(): Int = -1
+    override fun getRewatchingStatus(): Long = -1
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override fun getScoreList(): ImmutableList<String> = persistentListOf()
 

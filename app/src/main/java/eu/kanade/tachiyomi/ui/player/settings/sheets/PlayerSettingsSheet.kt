@@ -134,7 +134,6 @@ fun PlayerSettingsSheet(
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 ) {
                     HwDecState.entries.forEach {
-                        if (!HwDecState.isHwSupported && it.title == "HW+") return@forEach
                         FilterChip(
                             selected = decoder == it.mpvValue,
                             onClick = { togglePlayerDecoder(it) },

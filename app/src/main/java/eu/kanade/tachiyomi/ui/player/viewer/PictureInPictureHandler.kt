@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.util.Rational
-import androidx.annotation.RequiresApi
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import tachiyomi.core.i18n.stringResource
@@ -16,7 +15,6 @@ import tachiyomi.i18n.MR
 
 class PictureInPictureHandler {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun update(
         context: Context,
         title: String,
@@ -51,7 +49,6 @@ class PictureInPictureHandler {
         return pictureInPictureParams.build()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun pipActions(
         context: Context,
         paused: Boolean,
@@ -106,7 +103,6 @@ class PictureInPictureHandler {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createRemoteAction(
         context: Context,
         iconResId: Int,

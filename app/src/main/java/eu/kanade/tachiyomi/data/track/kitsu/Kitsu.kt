@@ -33,13 +33,13 @@ class Kitsu(id: Long) :
     DeletableAnimeTracker {
 
     companion object {
-        const val READING = 1
-        const val WATCHING = 11
-        const val COMPLETED = 2
-        const val ON_HOLD = 3
-        const val DROPPED = 4
-        const val PLAN_TO_READ = 5
-        const val PLAN_TO_WATCH = 15
+        const val READING = 1L
+        const val WATCHING = 11L
+        const val COMPLETED = 2L
+        const val ON_HOLD = 3L
+        const val DROPPED = 4L
+        const val PLAN_TO_READ = 5L
+        const val PLAN_TO_WATCH = 15L
     }
 
     override val supportsReadingDates: Boolean = true
@@ -54,15 +54,15 @@ class Kitsu(id: Long) :
 
     override fun getLogoColor() = Color.rgb(51, 37, 50)
 
-    override fun getStatusListManga(): List<Int> {
+    override fun getStatusListManga(): List<Long> {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
-    override fun getStatusListAnime(): List<Int> {
+    override fun getStatusListAnime(): List<Long> {
         return listOf(WATCHING, PLAN_TO_WATCH, COMPLETED, ON_HOLD, DROPPED)
     }
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         READING -> MR.strings.currently_reading
         WATCHING -> MR.strings.currently_watching
         PLAN_TO_READ -> MR.strings.want_to_read
@@ -73,23 +73,23 @@ class Kitsu(id: Long) :
         else -> null
     }
 
-    override fun getReadingStatus(): Int = READING
+    override fun getReadingStatus(): Long = READING
 
-    override fun getWatchingStatus(): Int = WATCHING
+    override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRereadingStatus(): Int = -1
+    override fun getRereadingStatus(): Long = -1
 
-    override fun getRewatchingStatus(): Int = -1
+    override fun getRewatchingStatus(): Long = -1
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override fun getScoreList(): ImmutableList<String> {
         val df = DecimalFormat("0.#")
         return (listOf("0") + IntRange(2, 20).map { df.format(it / 2f) }).toImmutableList()
     }
 
-    override fun indexToScore(index: Int): Float {
-        return if (index > 0) (index + 1) / 2f else 0f
+    override fun indexToScore(index: Int): Double {
+        return if (index > 0) (index + 1) / 2.0 else 0.0
     }
 
     override fun displayScore(track: DomainMangaTrack): String {
@@ -113,12 +113,12 @@ class Kitsu(id: Long) :
     override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
+                if (track.last_chapter_read.toLong() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                     track.finished_reading_date = System.currentTimeMillis()
                 } else {
                     track.status = READING
-                    if (track.last_chapter_read == 1F) {
+                    if (track.last_chapter_read == 1.0) {
                         track.started_reading_date = System.currentTimeMillis()
                     }
                 }
@@ -131,12 +131,12 @@ class Kitsu(id: Long) :
     override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen.toInt() == track.total_episodes && track.total_episodes > 0) {
+                if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                     track.finished_watching_date = System.currentTimeMillis()
                 } else {
                     track.status = WATCHING
-                    if (track.last_episode_seen == 1F) {
+                    if (track.last_episode_seen == 1.0) {
                         track.started_watching_date = System.currentTimeMillis()
                     }
                 }
@@ -167,7 +167,7 @@ class Kitsu(id: Long) :
             update(track)
         } else {
             track.status = if (hasReadChapters) READING else PLAN_TO_READ
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }
@@ -185,7 +185,7 @@ class Kitsu(id: Long) :
             update(track)
         } else {
             track.status = if (hasWatchedEpisodes) WATCHING else PLAN_TO_WATCH
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }

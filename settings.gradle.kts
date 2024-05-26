@@ -35,6 +35,8 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Aniyomi"
 include(":app")
 include(":i18n")

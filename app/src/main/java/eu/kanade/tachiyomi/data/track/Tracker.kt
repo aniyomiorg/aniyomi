@@ -24,9 +24,9 @@ interface Tracker {
     @ColorInt
     fun getLogoColor(): Int
 
-    fun getStatus(status: Int): StringResource?
+    fun getStatus(status: Long): StringResource?
 
-    fun getCompletionStatus(): Int
+    fun getCompletionStatus(): Long
 
     fun getScoreList(): ImmutableList<String>
 

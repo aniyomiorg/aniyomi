@@ -20,7 +20,7 @@ END;
 
 insert:
 INSERT INTO animes_categories(anime_id, category_id, last_modified_at)
-VALUES (:animeId, :categoryId, strftime('%s', 'now'));
+VALUES (:animeId, :categoryId, 0);
 
 deleteAnimeCategoryByAnimeId:
 DELETE FROM animes_categories
