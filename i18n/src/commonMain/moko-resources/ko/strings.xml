@@ -1131,4 +1131,7 @@
     <string name="manga_interval_expected_update_soon">지원</string>
     <string name="action_reorganize_by">재정렬</string>
     <string name="pref_bottom_nav_no_browse">\"추가\" 탭으로 이동</string>
+    <string name="pref_mpv_scripts">MPV 스크립트 활성화</string>
+    <string name="pref_mpv_scripts_summary">외부 저장소 권한이 필요합니다.</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
 </resources>
