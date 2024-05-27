@@ -1133,4 +1133,6 @@
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Baliktad na stereo</string>
     <string name="pref_player_audio_channels_auto_safe">Awto-safe</string>
+    <string name="pref_mpv_scripts">Paganahin ang mga script ng MPV</string>
+    <string name="pref_mpv_scripts_summary">Kinakailangan ng permiso sa external storage.</string>
 </resources>
