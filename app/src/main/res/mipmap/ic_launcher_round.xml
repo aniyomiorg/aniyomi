@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-  <background android:drawable="@mipmap/ic_launcher_background"/>
-  <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-  <monochrome android:drawable="@mipmap/ic_launcher_monochrome"/>
+  <background android:drawable="@android:color/transparent"/>
+  <foreground>
+    <inset
+        android:drawable="@drawable/ic_suac"
+        android:insetBottom="70dp"
+        android:insetTop="70dp"
+        android:insetLeft="70dp"
+        android:insetRight="70dp">
+    </inset>
+  </foreground>
+  <monochrome>
+    <inset
+        android:drawable="@drawable/ic_sua"
+        android:insetBottom="20dp"
+        android:insetTop="20dp"
+        android:insetLeft="20dp"
+        android:insetRight="20dp">
+    </inset>
+  </monochrome>
 </adaptive-icon>
