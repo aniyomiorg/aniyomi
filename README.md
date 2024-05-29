@@ -37,8 +37,8 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 <details><summary>Bugs</summary>
 
 * Include version (More → About → Version)
- * If not latest, try updating, it may have already been solved
- * Preview version is equal to the number of commits as seen on the main page
+  * If not latest, try updating, it may have already been solved
+  * Preview version is equal to the number of commits as seen on the main page
 * Include steps to reproduce (if not obvious from description)
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)
