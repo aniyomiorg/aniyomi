@@ -45,25 +45,22 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/LuftVerbot/kuukiyomi/issues).**
-2. Also take a look at issues opened on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
-3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
+1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/LuftVerbot/kuukiyomi/issues).**
+2. Also take a look at issues opened and closed on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
+3. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
 
 </details>
 
 <details><summary>Bugs</summary>
 
 * Include version (More → About → Version)
- * If not latest, try updating, it may have already been solved
- * Preview version is equal to the number of commits as seen on the main page
+  * If not latest, try updating, it may have already been solved
+  * Preview version is equal to the number of commits as seen on the main page
 * Include steps to reproduce (if not obvious from description)
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
 
-DO: https://github.com/LuftVerbot/kuukiyomi/issues/24 https://github.com/LuftVerbot/kuukiyomi/issues/71
-
-DON'T: https://github.com/LuftVerbot/kuukiyomi/issues/75
 
 </details>
 

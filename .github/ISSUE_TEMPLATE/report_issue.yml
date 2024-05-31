@@ -93,9 +93,9 @@ body:
           required: true
         - label: I have written a short but informative title.
           required: true
-        - label: If this is an issue with an official extension, I should be opening an issue in the [extensions repository](https://github.com/aniyomiorg/aniyomi-extensions/issues/new/choose).
+        - label: If this is an issue with an official anime extension, I should be opening an issue in the [extensions repository](https://github.com/aniyomiorg/aniyomi-extensions/issues/new/choose).
           required: true
-        - label: If this is an issue with an official manga extension and this issue can be replicated in the Tachiyomi app, that I should be opening an issue in [Tachiyomi's extensions repository](https://github.com/tachiyomiorg/extensions/issues/new/choose).
+        - label: If this is an issue with a manga extension, report it to the manga source extension project you added it from.
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/docs/faq/general) and [troubleshooting guide](https://aniyomi.org/docs/guides/troubleshooting/).
           required: true
