@@ -106,5 +106,5 @@ fun AdaptiveSheet(
 
 private val dialogProperties = DialogProperties(
     usePlatformDefaultWidth = false,
-    decorFitsSystemWindows = false,
+    decorFitsSystemWindows = true,
 )
