@@ -4,6 +4,7 @@ import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -118,12 +119,14 @@ fun AdaptiveSheet(
             }
         }
     } else {
+        val decayAnimationSpec = rememberSplineBasedDecay<Float>()
         val anchoredDraggableState = remember {
             AnchoredDraggableState(
                 initialValue = 1,
-                animationSpec = sheetAnimationSpec,
                 positionalThreshold = { with(density) { 56.dp.toPx() } },
                 velocityThreshold = { with(density) { 125.dp.toPx() } },
+                snapAnimationSpec = sheetAnimationSpec,
+                decayAnimationSpec = decayAnimationSpec,
             )
         }
         val internalOnDismissRequest = {
