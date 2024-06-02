@@ -19,13 +19,14 @@ import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.float
+import kotlinx.serialization.json.double
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
+import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
@@ -80,7 +81,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             }
         }.toString().toRequestBody(jsonMime)
 
-        if (track.score == 0F) {
+        if (track.score == 0.0) {
             authClient.newCall(
                 POST("$apiUrl/sync/ratings/remove", body = payload),
             ).awaitSuccess()
@@ -170,7 +171,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         return AnimeTrackSearch.create(TrackerManager.SIMKL).apply {
             remote_id = obj["ids"]!!.jsonObject["simkl_id"]!!.jsonPrimitive.long
             title = obj["title_romaji"]?.jsonPrimitive?.content ?: obj["title"]!!.jsonPrimitive.content
-            total_episodes = obj["ep_count"]?.jsonPrimitive?.intOrNull ?: 1
+            total_episodes = obj["ep_count"]?.jsonPrimitive?.longOrNull ?: 1
             cover_url = "https://simkl.in/posters/" + obj["poster"]!!.jsonPrimitive.content + "_m.webp"
             summary = obj["all_titles"]?.jsonArray
                 ?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
@@ -195,15 +196,15 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             if (typeName != "movie") {
                 total_episodes =
                     obj["total_episodes_count"]!!
-                        .jsonPrimitive.int
+                        .jsonPrimitive.long
                 last_episode_seen =
                     obj["watched_episodes_count"]!!
-                        .jsonPrimitive.float
+                        .jsonPrimitive.double
             } else {
                 total_episodes = 1
-                last_episode_seen = if (statusString == "completed") 1F else 0F
+                last_episode_seen = if (statusString == "completed") 1.0 else 0.0
             }
-            score = obj["user_rating"]!!.jsonPrimitive.intOrNull?.toFloat() ?: 0F
+            score = obj["user_rating"]!!.jsonPrimitive.intOrNull?.toDouble() ?: 0.0
             status = toTrackStatus(statusString)
             tracking_url = "/$type/$id"
         }

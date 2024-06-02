@@ -18,11 +18,11 @@ import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
     companion object {
-        const val WATCHING = 1
-        const val COMPLETED = 2
-        const val ON_HOLD = 3
-        const val NOT_INTERESTING = 4
-        const val PLAN_TO_WATCH = 5
+        const val WATCHING = 1L
+        const val COMPLETED = 2L
+        const val ON_HOLD = 3L
+        const val NOT_INTERESTING = 4L
+        const val PLAN_TO_WATCH = 5L
 
         private val SCORE_LIST = IntRange(0, 10)
             .map(Int::toString)
@@ -48,7 +48,7 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
     override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen.toInt() == track.total_episodes && track.total_episodes > 0) {
+                if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                 } else {
                     track.status = WATCHING
@@ -73,7 +73,7 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasSeenEpisodes) WATCHING else PLAN_TO_WATCH
-            track.score = 0F
+            track.score = 0.0
             add(track)
         }
     }
@@ -96,11 +96,11 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
     override fun getLogoColor() = Color.rgb(0, 0, 0)
 
-    override fun getStatusListAnime(): List<Int> {
+    override fun getStatusListAnime(): List<Long> {
         return listOf(WATCHING, COMPLETED, ON_HOLD, NOT_INTERESTING, PLAN_TO_WATCH)
     }
 
-    override fun getStatus(status: Int): StringResource? = when (status) {
+    override fun getStatus(status: Long): StringResource? = when (status) {
         WATCHING -> MR.strings.watching
         PLAN_TO_WATCH -> MR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed
@@ -109,11 +109,11 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
         else -> null
     }
 
-    override fun getWatchingStatus(): Int = WATCHING
+    override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRewatchingStatus(): Int = 0
+    override fun getRewatchingStatus(): Long = 0
 
-    override fun getCompletionStatus(): Int = COMPLETED
+    override fun getCompletionStatus(): Long = COMPLETED
 
     override suspend fun login(username: String, password: String) = login(password)
 

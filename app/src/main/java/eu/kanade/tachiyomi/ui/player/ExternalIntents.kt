@@ -124,7 +124,7 @@ class ExternalIntents {
                 )
             }
 
-            return if (isOnDevice && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {
+            return if (isOnDevice && uri.scheme != "content") {
                 FileProvider.getUriForFile(
                     context,
                     context.applicationContext.packageName + ".provider",

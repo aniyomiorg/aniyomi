@@ -135,7 +135,7 @@ class AnimeDownloadProvider(
         val newEpisodeName = sanitizeEpisodeName(episodeName)
         return DiskUtil.buildValidFilename(
             when {
-                episodeScanlator.isNullOrBlank().not() -> "${episodeScanlator}_$newEpisodeName"
+                !episodeScanlator.isNullOrBlank() -> "${episodeScanlator}_$newEpisodeName"
                 else -> newEpisodeName
             },
         )

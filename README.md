@@ -3,7 +3,7 @@
 | [![CI](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 # ![app icon](.github/readme-images/app-icon.png)Aniyomi
-Aniyomi is a video player and image viewer for Android 6.0 and above.
+Aniyomi is a video player and image viewer for Android 8.0 and above.
 
 ## Features
 
@@ -29,24 +29,20 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://aniyomi.org/changelogs/).**
-2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
+1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/aniyomiorg/aniyomi/issues), and [recent release version changes](https://aniyomi.org/changelogs/).**
+2. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
 
 </details>
 
 <details><summary>Bugs</summary>
 
 * Include version (More → About → Version)
- * If not latest, try updating, it may have already been solved
- * Preview version is equal to the number of commits as seen on the main page
+  * If not latest, try updating, it may have already been solved
+  * Preview version is equal to the number of commits as seen on the main page
 * Include steps to reproduce (if not obvious from description)
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
-
-DO: https://github.com/tachiyomiorg/tachiyomi/issues/24 https://github.com/tachiyomiorg/tachiyomi/issues/71
-
-DON'T: https://github.com/tachiyomiorg/tachiyomi/issues/75
 
 </details>
 

@@ -101,8 +101,8 @@ detekt-gradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plug
 detekt-rules-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-rules-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
 
-aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.14.n"
-ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.13"
+aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.15.n"
+ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.15"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.2.1"
 
 seeker = "io.github.2307vivek:seeker:1.1.1"

@@ -135,7 +135,7 @@ class MangaDownloadProvider(
         val newChapterName = sanitizeChapterName(chapterName)
         return DiskUtil.buildValidFilename(
             when {
-                chapterScanlator.isNullOrBlank().not() -> "${chapterScanlator}_$newChapterName"
+                !chapterScanlator.isNullOrBlank() -> "${chapterScanlator}_$newChapterName"
                 else -> newChapterName
             },
         )
