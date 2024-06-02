@@ -68,10 +68,9 @@ fun GlobalAnimeSearchToolbar(
         }
 
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .horizontalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.padding.small)
-                .then(modifier),
+                .padding(horizontal = MaterialTheme.padding.small),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
         ) {
             // TODO: make this UX better; it only applies when triggering a new search
