@@ -52,7 +52,7 @@ fun GlobalAnimeSearchScreen(
                 modifier = Modifier
                     .focusProperties {
                         down = contentFocus
-                    }
+                    },
             )
         },
     ) { paddingValues ->
@@ -63,7 +63,7 @@ fun GlobalAnimeSearchScreen(
             onClickSource = onClickSource,
             onClickItem = onClickItem,
             onLongClickItem = onLongClickItem,
-            modifier = Modifier.focusRequester(contentFocus)
+            modifier = Modifier.focusRequester(contentFocus),
         )
     }
 }
@@ -81,7 +81,7 @@ internal fun GlobalSearchContent(
 ) {
     LazyColumn(
         contentPadding = contentPadding,
-        modifier = modifier
+        modifier = modifier,
     ) {
         items.forEach { (source, result) ->
             item(key = source.id) {
