@@ -1129,4 +1129,6 @@
     <string name="pref_player_audio_channels_reverse_stereo">Ters stereo</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_auto">Otomatik</string>
+    <string name="pref_mpv_scripts">MPV scriptlerini aktifleştir</string>
+    <string name="pref_mpv_scripts_summary">Harici depolama iznine ihtiyacımız var.</string>
 </resources>
