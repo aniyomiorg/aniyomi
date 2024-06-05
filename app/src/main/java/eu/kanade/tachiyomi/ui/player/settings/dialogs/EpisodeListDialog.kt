@@ -42,8 +42,10 @@ import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
-import java.text.DateFormat
-import java.util.Date
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun EpisodeListDialog(
@@ -51,7 +53,7 @@ fun EpisodeListDialog(
     currentEpisodeIndex: Int,
     episodeList: List<Episode>,
     dateRelativeTime: Boolean,
-    dateFormat: DateFormat,
+    dateFormat: DateTimeFormatter,
     onBookmarkClicked: (Long?, Boolean) -> Unit,
     onEpisodeClicked: (Long?) -> Unit,
     onDismissRequest: () -> Unit,
@@ -92,7 +94,14 @@ fun EpisodeListDialog(
                     val date = episode.date_upload
                         .takeIf { it > 0L }
                         ?.let {
-                            Date(it).toRelativeString(context, dateRelativeTime, dateFormat)
+                            LocalDate.ofInstant(
+                                Instant.ofEpochMilli(it),
+                                ZoneId.systemDefault(),
+                            ).toRelativeString(
+                                context = context,
+                                relative = dateRelativeTime,
+                                dateFormat = dateFormat,
+                            )
                         } ?: ""
 
                     EpisodeListItem(

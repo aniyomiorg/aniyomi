@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
-import eu.kanade.tachiyomi.util.lang.toDateKey
+import eu.kanade.tachiyomi.util.lang.toLocalDate
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
@@ -45,8 +45,8 @@ import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.Date
 
 class MangaUpdatesScreenModel(
     private val sourceManager: MangaSourceManager = Injekt.get(),
@@ -374,12 +374,12 @@ class MangaUpdatesScreenModel(
             return items
                 .map { MangaUpdatesUiModel.Item(it) }
                 .insertSeparators { before, after ->
-                    val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                    val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
+                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
                     when {
-                        beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                            MangaUpdatesUiModel.Header(afterDate)
-                        }
+                        beforeDate.isAfter(afterDate)
+                            or afterDate.equals(LocalDate.MIN)
+                            or beforeDate.equals(LocalDate.MIN) -> MangaUpdatesUiModel.Header(afterDate)
                         // Return null to avoid adding a separator between two items.
                         else -> null
                     }
