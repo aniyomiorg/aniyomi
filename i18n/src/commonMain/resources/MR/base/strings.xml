@@ -416,6 +416,7 @@
     <string name="pref_high">High</string>
     <string name="pref_low">Low</string>
     <string name="pref_lowest">Lowest</string>
+    <string name="pref_webtoon_disable_zoom_out">Disable zoom out</string>
     <string name="pref_remove_exclude_categories">Excluded categories</string>
     <string name="no_location_set">No storage location set</string>
     <string name="invalid_location">Invalid location: %s</string>
