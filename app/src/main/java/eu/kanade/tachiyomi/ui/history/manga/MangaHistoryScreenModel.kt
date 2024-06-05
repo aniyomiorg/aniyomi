@@ -31,7 +31,6 @@ import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.LocalDate
 
 class MangaHistoryScreenModel(
     private val getHistory: GetMangaHistory = Injekt.get(),
@@ -70,12 +69,10 @@ class MangaHistoryScreenModel(
     private fun List<MangaHistoryWithRelations>.toHistoryUiModels(): List<MangaHistoryUiModel> {
         return map { MangaHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
-                val beforeDate = before?.item?.readAt?.time?.toLocalDate() ?: LocalDate.MIN
-                val afterDate = after?.item?.readAt?.time?.toLocalDate() ?: LocalDate.MIN
+                val beforeDate = before?.item?.readAt?.time?.toLocalDate()
+                val afterDate = after?.item?.readAt?.time?.toLocalDate()
                 when {
-                    beforeDate.isAfter(afterDate)
-                        or afterDate.equals(LocalDate.MIN)
-                        or beforeDate.equals(LocalDate.MIN) -> MangaHistoryUiModel.Header(afterDate)
+                    beforeDate != afterDate && afterDate != null -> MangaHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }

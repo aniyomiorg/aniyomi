@@ -46,7 +46,6 @@ import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class AnimeUpdatesScreenModel(
@@ -393,12 +392,10 @@ class AnimeUpdatesScreenModel(
             return items
                 .map { AnimeUpdatesUiModel.Item(it) }
                 .insertSeparators { before, after ->
-                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
-                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
+                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate()
+                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate()
                     when {
-                        beforeDate.isAfter(afterDate)
-                            or afterDate.equals(LocalDate.MIN)
-                            or beforeDate.equals(LocalDate.MIN) -> AnimeUpdatesUiModel.Header(afterDate)
+                        beforeDate != afterDate && afterDate != null -> AnimeUpdatesUiModel.Header(afterDate)
                         // Return null to avoid adding a separator between two items.
                         else -> null
                     }

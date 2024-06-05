@@ -31,7 +31,6 @@ import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.LocalDate
 
 class AnimeHistoryScreenModel(
     private val getHistory: GetAnimeHistory = Injekt.get(),
@@ -70,12 +69,10 @@ class AnimeHistoryScreenModel(
     private fun List<AnimeHistoryWithRelations>.toAnimeHistoryUiModels(): List<AnimeHistoryUiModel> {
         return map { AnimeHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
-                val beforeDate = before?.item?.seenAt?.time?.toLocalDate() ?: LocalDate.MIN
-                val afterDate = after?.item?.seenAt?.time?.toLocalDate() ?: LocalDate.MIN
+                val beforeDate = before?.item?.seenAt?.time?.toLocalDate()
+                val afterDate = after?.item?.seenAt?.time?.toLocalDate()
                 when {
-                    beforeDate.isAfter(afterDate)
-                        or afterDate.equals(LocalDate.MIN)
-                        or beforeDate.equals(LocalDate.MIN) -> AnimeHistoryUiModel.Header(afterDate)
+                    beforeDate != afterDate && afterDate != null -> AnimeHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }

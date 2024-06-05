@@ -45,7 +45,6 @@ import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class MangaUpdatesScreenModel(
@@ -374,12 +373,10 @@ class MangaUpdatesScreenModel(
             return items
                 .map { MangaUpdatesUiModel.Item(it) }
                 .insertSeparators { before, after ->
-                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
-                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate() ?: LocalDate.MIN
+                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate()
+                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate()
                     when {
-                        beforeDate.isAfter(afterDate)
-                            or afterDate.equals(LocalDate.MIN)
-                            or beforeDate.equals(LocalDate.MIN) -> MangaUpdatesUiModel.Header(afterDate)
+                        beforeDate != afterDate && afterDate != null -> MangaUpdatesUiModel.Header(afterDate)
                         // Return null to avoid adding a separator between two items.
                         else -> null
                     }
