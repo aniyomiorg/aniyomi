@@ -22,7 +22,7 @@ class TrackEpisode(
     private val delayedTrackingStore: DelayedAnimeTrackingStore,
 ) {
 
-    suspend fun await(context: Context, animeId: Long, episodeNumber: Double) {
+    suspend fun await(context: Context, animeId: Long, episodeNumber: Double, setupJobOnFailure: Boolean = true) {
         withNonCancellableContext {
             val tracks = getTracks.await(animeId)
             if (tracks.isEmpty()) return@withNonCancellableContext
@@ -44,7 +44,9 @@ class TrackEpisode(
                             delayedTrackingStore.removeAnimeItem(track.id)
                         } else {
                             delayedTrackingStore.addAnime(track.id, episodeNumber)
-                            DelayedAnimeTrackingUpdateJob.setupTask(context)
+                            if (setupJobOnFailure) {
+                                DelayedAnimeTrackingUpdateJob.setupTask(context)
+                            }
                         }
                     }
                 }

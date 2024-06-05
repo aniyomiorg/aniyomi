@@ -21,7 +21,7 @@ class TrackChapter(
     private val delayedTrackingStore: DelayedMangaTrackingStore,
 ) {
 
-    suspend fun await(context: Context, mangaId: Long, chapterNumber: Double) {
+    suspend fun await(context: Context, mangaId: Long, chapterNumber: Double, setupJobOnFailure: Boolean = true) {
         withNonCancellableContext {
             val tracks = getTracks.await(mangaId)
             if (tracks.isEmpty()) return@withNonCancellableContext
@@ -45,7 +45,9 @@ class TrackChapter(
                             delayedTrackingStore.removeMangaItem(track.id)
                         } catch (e: Exception) {
                             delayedTrackingStore.addManga(track.id, chapterNumber)
-                            DelayedMangaTrackingUpdateJob.setupTask(context)
+                            if (setupJobOnFailure) {
+                                DelayedMangaTrackingUpdateJob.setupTask(context)
+                            }
                             throw e
                         }
                     }
