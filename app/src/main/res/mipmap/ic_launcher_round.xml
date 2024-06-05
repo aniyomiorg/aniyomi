@@ -4,10 +4,10 @@
   <foreground>
     <inset
         android:drawable="@drawable/ic_suac"
-        android:insetBottom="70dp"
-        android:insetTop="70dp"
-        android:insetLeft="70dp"
-        android:insetRight="70dp">
+        android:insetBottom="20dp"
+        android:insetTop="20dp"
+        android:insetLeft="20dp"
+        android:insetRight="20dp">
     </inset>
   </foreground>
   <monochrome>
