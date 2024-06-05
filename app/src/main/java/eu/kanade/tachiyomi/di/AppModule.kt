@@ -38,7 +38,6 @@ import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.common.storage.AndroidStorageFolderProvider
-import tachiyomi.core.common.storage.UniFileTempFileManager
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
@@ -177,8 +176,6 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory<ProtoBuf> {
             ProtoBuf
         }
-
-        addSingletonFactory { UniFileTempFileManager(app) }
 
         addSingletonFactory { ChapterCache(app, get()) }
 

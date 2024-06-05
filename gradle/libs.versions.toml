@@ -32,6 +32,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:7c257e1c64"
+common-compress = "org.apache.commons:commons-compress:1.25.0"
 junrar = "com.github.junrar:junrar:7.5.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
@@ -110,6 +111,7 @@ seeker = "io.github.2307vivek:seeker:1.1.1"
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
 [bundles]
+archive = ["common-compress", "junrar"]
 acra = ["acra-http", "acra-scheduler"]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]
 js-engine = ["quickjs-android"]
