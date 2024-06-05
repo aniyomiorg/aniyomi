@@ -59,9 +59,9 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.launchUI
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisode

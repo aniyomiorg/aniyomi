@@ -13,7 +13,7 @@ import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.collections.immutable.persistentMapOf
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt

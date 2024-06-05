@@ -4,7 +4,7 @@ import android.content.Context
 import eu.kanade.tachiyomi.animesource.online.LicensedEntryItemsException
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.util.system.isOnline
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException

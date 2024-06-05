@@ -10,8 +10,8 @@ import eu.kanade.tachiyomi.util.system.isOnline
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import logcat.LogPriority
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 

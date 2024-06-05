@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.player.settings
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.preference.getEnum
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.preference.getEnum
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,

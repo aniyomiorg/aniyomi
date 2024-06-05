@@ -32,7 +32,7 @@ import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.core.storage.extension
+import tachiyomi.core.common.storage.extension
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser

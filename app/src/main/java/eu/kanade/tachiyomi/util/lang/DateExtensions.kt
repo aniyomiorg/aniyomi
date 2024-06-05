@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.util.lang
 
 import android.content.Context
 import eu.kanade.tachiyomi.R
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import java.text.DateFormat
 import java.time.Instant

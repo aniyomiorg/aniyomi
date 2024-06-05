@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import kotlinx.collections.immutable.persistentListOf
-import tachiyomi.core.preference.TriState
+import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.anime.model.sort

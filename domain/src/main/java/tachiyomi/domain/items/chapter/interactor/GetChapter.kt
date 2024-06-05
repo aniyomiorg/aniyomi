@@ -1,7 +1,7 @@
 package tachiyomi.domain.items.chapter.interactor
 
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.repository.ChapterRepository
 

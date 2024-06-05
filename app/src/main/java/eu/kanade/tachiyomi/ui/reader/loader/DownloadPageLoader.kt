@@ -10,7 +10,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import tachiyomi.core.storage.UniFileTempFileManager
+import tachiyomi.core.common.storage.UniFileTempFileManager
 import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.injectLazy
 

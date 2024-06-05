@@ -10,7 +10,7 @@ import android.os.Build
 import android.util.Rational
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 
 class PictureInPictureHandler {

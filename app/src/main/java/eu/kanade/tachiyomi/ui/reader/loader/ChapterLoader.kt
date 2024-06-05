@@ -8,10 +8,10 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.storage.UniFileTempFileManager
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.storage.UniFileTempFileManager
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.i18n.MR
