@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
-import dalvik.system.PathClassLoader
 import eu.kanade.domain.extension.anime.interactor.TrustAnimeExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
@@ -17,6 +16,7 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.storage.copyAndSetReadOnlyTo
+import eu.kanade.tachiyomi.util.system.ChildFirstPathClassLoader
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -283,7 +283,7 @@ internal object AnimeExtensionLoader {
         }
 
         val classLoader = try {
-            PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+            ChildFirstPathClassLoader(appInfo.sourceDir, null, context.classLoader)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($pkgName)" }
             return AnimeLoadResult.Error
