@@ -88,4 +88,8 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">भोलि</item>
+        <item quantity="other">%1$d दिनमा</item>
+    </plurals>
 </resources>
