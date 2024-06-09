@@ -118,7 +118,7 @@ class PictureInPictureHandler {
             PendingIntent.getBroadcast(
                 context,
                 requestCode,
-                Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
+                Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType).setPackage(context.packageName),
                 PendingIntent.FLAG_IMMUTABLE,
             ),
         )
