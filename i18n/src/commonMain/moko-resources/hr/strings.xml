@@ -1126,4 +1126,6 @@
     <string name="pref_player_audio_channels_reverse_stereo">Preokrenuti stereo</string>
     <string name="pref_bottom_nav_no_browse">Premjesti „Pretraživanje” na karticu „Više”</string>
     <string name="pref_player_audio_channels_auto_safe">Automatsko spremanje</string>
+    <string name="pref_mpv_scripts">Omogući MPV skripta</string>
+    <string name="pref_mpv_scripts_summary">Potrebna je dozvola za eksterno spremanje.</string>
 </resources>
