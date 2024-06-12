@@ -17,7 +17,7 @@ kotlin {
         }
 
         androidMain {
-            dependsOn(commonMain)  // https://github.com/icerockdev/moko-resources/issues/562
+            dependsOn(commonMain) // https://github.com/icerockdev/moko-resources/issues/562
         }
     }
 }
