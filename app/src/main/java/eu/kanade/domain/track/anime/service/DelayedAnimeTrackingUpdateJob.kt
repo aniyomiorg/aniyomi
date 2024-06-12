@@ -47,7 +47,12 @@ class DelayedAnimeTrackingUpdateJob(private val context: Context, workerParams: 
                         "Updating delayed track item: ${animeTrack.animeId}" +
                             ", last chapter read: ${animeTrack.lastEpisodeSeen}"
                     }
-                    trackEpisode.await(context, animeTrack.animeId, animeTrack.lastEpisodeSeen, setupJobOnFailure = false)
+                    trackEpisode.await(
+                        context,
+                        animeTrack.animeId,
+                        animeTrack.lastEpisodeSeen,
+                        setupJobOnFailure = false,
+                    )
                 }
         }
 

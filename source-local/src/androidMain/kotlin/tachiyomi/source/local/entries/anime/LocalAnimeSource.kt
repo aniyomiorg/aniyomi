@@ -19,12 +19,12 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.common.i18n.stringResource
-import tachiyomi.core.metadata.tachiyomi.AnimeDetails
-import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.core.common.storage.extension
 import tachiyomi.core.common.storage.nameWithoutExtension
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.core.metadata.tachiyomi.AnimeDetails
+import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.i18n.MR

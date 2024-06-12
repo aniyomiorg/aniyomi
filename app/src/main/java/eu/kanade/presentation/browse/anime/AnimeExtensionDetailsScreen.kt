@@ -232,7 +232,7 @@ private fun DetailsHeader(
                             Extension name: ${extension.name} (lang: ${extension.lang}; package: ${extension.pkgName})
                             Extension version: ${extension.versionName} (lib: ${extension.libVersion}; version code: ${extension.versionCode})
                             NSFW: ${extension.isNsfw}
-                            """.trimIndent()
+                            """.trimIndent(),
                         )
 
                         if (extension is AnimeExtension.Installed) {
@@ -243,7 +243,7 @@ private fun DetailsHeader(
                                 Obsolete: ${extension.isObsolete}
                                 Shared: ${extension.isShared}
                                 Repository: ${extension.repoUrl} 
-                                """.trimIndent()
+                                """.trimIndent(),
                             )
                         }
                     }
