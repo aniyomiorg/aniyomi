@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -42,12 +42,11 @@ jobs:
           echo "ACRA_URI=$acraUri" >> acra.properties
           echo "ACRA_LOGIN=$acraLogin" >> acra.properties
           echo "ACRA_PASSWORD=$acraPassword" >> acra.properties
-          
-      - name: Set up gradle
-        uses: gradle/actions/setup-gradle@v3
 
       - name: Build app and run unit tests
-        run: ./gradlew detekt assembleStandardRelease testReleaseUnitTest
+        uses: gradle/gradle-command-action@v2
+        with:
+          arguments: ktlintCheck assembleStandardRelease testReleaseUnitTest
 
       # Sign APK and create release for tags
 
@@ -113,8 +112,6 @@ jobs:
             | armeabi-v7a | ${{ env.APK_ARMEABI_V7A_SHA }}
             | x86 | ${{ env.APK_X86_SHA }}
             | x86_64 | ${{ env.APK_X86_64_SHA }} |
-            
-            ## If you are unsure which version to choose then go with aniyomi-${{ env.VERSION_TAG }}.apk
           files: |
             aniyomi-${{ env.VERSION_TAG }}.apk
             aniyomi-arm64-v8a-${{ env.VERSION_TAG }}.apk

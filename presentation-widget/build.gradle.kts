@@ -27,6 +27,7 @@ dependencies {
     api(projects.i18n)
 
     implementation(compose.glance)
+    lintChecks(compose.lintchecks)
 
     implementation(kotlinx.immutables)
 
