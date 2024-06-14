@@ -122,10 +122,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             if (player.timePos != null && player.duration != null) {
                 with(playerPreferences.invertedPlayback()) {
                     this.set(
-                        if (this.get() == InvertedPlayback.POSITION)
+                        if (this.get() == InvertedPlayback.POSITION) {
                             InvertedPlayback.NONE
-                        else
+                        } else {
                             InvertedPlayback.POSITION
+                        },
                     )
                 }
                 updatePlaybackPos(player.timePos!!)
@@ -137,10 +138,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             if (player.timePos != null && player.duration != null) {
                 with(playerPreferences.invertedPlayback()) {
                     this.set(
-                        if (this.get() == InvertedPlayback.DURATION)
+                        if (this.get() == InvertedPlayback.DURATION) {
                             InvertedPlayback.NONE
-                        else
+                        } else {
                             InvertedPlayback.DURATION
+                        },
                     )
                 }
                 updatePlaybackPos(player.timePos!!)

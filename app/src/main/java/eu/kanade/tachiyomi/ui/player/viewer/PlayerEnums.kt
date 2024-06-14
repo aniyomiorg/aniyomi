@@ -15,7 +15,7 @@ enum class SetAsCover {
  * Player's inverted playback text handler
  */
 enum class InvertedPlayback {
-    NONE, POSITION, DURATION;
+    NONE, POSITION, DURATION
 }
 
 /**
@@ -84,7 +84,6 @@ enum class PlayerStatsPage(val stringRes: StringResource) {
     PAGE1(stringRes = MR.strings.player_statistics_page_1),
     PAGE2(stringRes = MR.strings.player_statistics_page_2),
     PAGE3(stringRes = MR.strings.player_statistics_page_3),
-    ;
 }
 
 /**
@@ -95,7 +94,6 @@ enum class VideoDebanding(val stringRes: StringResource) {
     CPU(stringRes = MR.strings.pref_debanding_cpu),
     GPU(stringRes = MR.strings.pref_debanding_gpu),
     YUV420P(stringRes = MR.strings.pref_debanding_yuv420p),
-    ;
 }
 
 enum class AudioChannels(val propertyName: String, val propertyValue: String, val textRes: StringResource) {
