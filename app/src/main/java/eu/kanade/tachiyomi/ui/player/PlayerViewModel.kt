@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
@@ -30,6 +31,7 @@ import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
@@ -40,6 +42,7 @@ import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
+import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +72,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
 import java.util.Date
+import tachiyomi.i18n.MR
 
 class PlayerViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
@@ -354,7 +358,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Called every time a second is reached in the player. Used to mark the flag of episode being
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
-    fun onSecondReached(position: Int, duration: Int) {
+    fun onSecondReached(position: Long, duration: Long) {
         if (state.value.isLoadingEpisode) return
         val currentEp = currentEpisode ?: return
         if (episodeId == -1L) return
@@ -729,8 +733,31 @@ class PlayerViewModel @JvmOverloads constructor(
         mutableState.update { it.copy(dialog = null, sheet = null) }
     }
 
+    fun updateSkipIntroText(text: String) {
+        mutableState.update { it.copy(skipIntroText = text) }
+    }
+
+    fun updatePlayerInformation(stringResource: StringResource) {
+        mutableState.update { it.copy(playerInformation = stringResource) }
+    }
+
+    fun updateSeekState(seekState: SeekState) {
+        mutableState.update { it.copy(seekState = seekState) }
+    }
+
+    fun updatePlayerTime(paused: Boolean? = null, position: Long? = null, duration: Long? = null, readAhead: Long? = null) {
+        with(state.value.timeData) {
+            val pause = paused ?: this.paused
+            val pos = position ?: this.position
+            val dur = duration ?: this.duration
+            val rea = readAhead ?: this.readAhead
+            mutableState.update { it.copy(timeData = TimeData(pause, pos, dur, rea)) }
+        }
+    }
+
     @Immutable
     data class State(
+        val timeData: TimeData = TimeData(),
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
         val anime: Anime? = null,
@@ -739,7 +766,15 @@ class PlayerViewModel @JvmOverloads constructor(
         val isLoadingEpisode: Boolean = false,
         val dialog: Dialog? = null,
         val sheet: Sheet? = null,
+        val videoChapters: List<MPVView.Chapter> = emptyList(),
+        val skipIntroText: String = "",
+        val playerInformation: StringResource = MR.strings.enable_auto_play,
+        val seekState: SeekState = SeekState.NONE,
     )
+
+    class TimeData(val paused: Boolean, val position: Long, val duration: Long, val readAhead: Long) {
+        constructor() : this(false,0L, 0L, 0L)
+    }
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())
@@ -747,17 +782,17 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     sealed class Dialog {
-        object EpisodeList : Dialog()
-        object SpeedPicker : Dialog()
-        object SkipIntroLength : Dialog()
+        data object EpisodeList : Dialog()
+        data object SpeedPicker : Dialog()
+        data object SkipIntroLength : Dialog()
     }
 
     sealed class Sheet {
-        object SubtitleSettings : Sheet()
-        object ScreenshotOptions : Sheet()
-        object PlayerSettings : Sheet()
-        object VideoChapters : Sheet()
-        object StreamsCatalog : Sheet()
+        data object SubtitleSettings : Sheet()
+        data object ScreenshotOptions : Sheet()
+        data object PlayerSettings : Sheet()
+        data object VideoChapters : Sheet()
+        data object StreamsCatalog : Sheet()
     }
 
     sealed class Event {
