@@ -54,7 +54,7 @@ fun PlayerSettingsSheet(
             screenModel.preferences.playerStatisticsPage().get(),
         )
     }
-    var decoder by remember { mutableStateOf(screenModel.preferences.hwDec().get()) }
+    var decoder by remember { mutableStateOf(screenModel.preferences.hardwareDecoding().get()) }
 
     val changeAudioChannel: (AudioChannels) -> Unit = { channel ->
         audioChannel = channel
@@ -82,10 +82,9 @@ fun PlayerSettingsSheet(
     }
 
     val togglePlayerDecoder: (HwDecState) -> Unit = { hwDecState ->
-        val hwDec = hwDecState.mpvValue
-        MPVLib.setOptionString("hwdec", hwDec)
-        decoder = hwDec
-        screenModel.preferences.hwDec().set(hwDec)
+        MPVLib.setOptionString("hwdec", hwDecState.mpvValue)
+        decoder = hwDecState
+        screenModel.preferences.hardwareDecoding().set(hwDecState)
     }
 
     AdaptiveSheet(
@@ -135,7 +134,7 @@ fun PlayerSettingsSheet(
                 ) {
                     HwDecState.entries.forEach {
                         FilterChip(
-                            selected = decoder == it.mpvValue,
+                            selected = decoder == it,
                             onClick = { togglePlayerDecoder(it) },
                             label = { Text(it.title) },
                         )
@@ -183,9 +182,9 @@ fun PlayerSettingsSheet(
                 ) {
                     PlayerStatsPage.entries.forEach {
                         FilterChip(
-                            selected = statisticsPage == it.page,
-                            onClick = { togglePlayerStatsPage(it.page) },
-                            label = { Text(stringResource(it.textRes)) },
+                            selected = statisticsPage == it.ordinal,
+                            onClick = { togglePlayerStatsPage(it.ordinal) },
+                            label = { Text(stringResource(it.stringRes)) },
                         )
                     }
                 }
