@@ -487,7 +487,7 @@ class AnimeDownloader(
             if (downloadScope.isActive) {
                 file = try {
                     if (isTor(download.video!!)) {
-                        ffmpegDownload(download, tmpDir, filename)
+                        torrentDownload(download, tmpDir, filename)
                     } else {
                         if (isHls(download.video!!) || isMpd(download.video!!)) {
                             ffmpegDownload(download, tmpDir, filename)
@@ -533,21 +533,30 @@ class AnimeDownloader(
     }
 
     private fun isTor(video: Video): Boolean {
-        if (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true) {
-            launchIO {
-                TorrentServerService.start()
-                TorrentServerService.wait(10)
-                TorrentServerUtils.setTrackersList()
-                val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
-                var index = 0
-                if (video.videoUrl!!.contains("index=")) {
-                    index = video.videoUrl?.substringAfter("index=")?.toInt() ?: 0
+        return (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true)
+    }
+
+    private fun torrentDownload(
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
+        val video = download.video!!
+            TorrentServerService.start()
+            TorrentServerService.wait(10)
+            val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+            var index = 0
+            if (video.videoUrl!!.contains("index=")) {
+                index = try {
+                    video.videoUrl?.substringAfter("index=")
+                        ?.substringBefore("&")?.toInt() ?: 0
+                } catch (_: Exception) {
+                    0
                 }
-                val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
-                video.videoUrl = torrentUrl
             }
-        }
-        return video.videoUrl?.toHttpUrl()?.encodedPath?.contains(TorrentServerUtils.hostUrl) ?: false
+            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+            video.videoUrl = torrentUrl
+        return ffmpegDownload(download, tmpDir, filename)
     }
 
     // ffmpeg is always on safe mode
@@ -705,6 +714,14 @@ class AnimeDownloader(
         threadNumber: Int,
         safeDownload: Boolean,
     ): UniFile {
+
+        // check if url is from torrent server
+        if (download.video!!.videoUrl!!.startsWith(TorrentServerUtils.hostUrl)) {
+            // start torrent server if not running
+            TorrentServerService.start()
+            TorrentServerService.wait(2)
+        }
+
         val downloadScope = CoroutineScope(coroutineContext)
         val video = download.video!!
 
