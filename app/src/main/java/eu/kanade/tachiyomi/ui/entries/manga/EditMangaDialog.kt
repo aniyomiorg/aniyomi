@@ -177,23 +177,20 @@ private fun onViewCreated(
         binding.mangaGenresTags.setChips(manga.genre.orEmpty().dropBlank(), scope)
 
         binding.title.hint = context.getString(R.string.title_hint, manga.ogTitle)
-        if (manga.ogAuthor != null) {
-            binding.mangaAuthor.hint = context.getString(R.string.author_hint, manga.ogAuthor)
-        }
-        if (manga.ogArtist != null) {
-            binding.mangaArtist.hint = context.getString(R.string.artist_hint, manga.ogArtist)
-        }
-        if (!manga.ogDescription.isNullOrBlank()) {
-            binding.mangaDescription.hint =
-                context.getString(
-                    R.string.description_hint,
-                    manga.ogDescription!!.replace("\n", " ").chop(20),
-                )
-        }
+        binding.mangaAuthor.hint = context.getString(R.string.author_hint, manga.ogAuthor ?: "")
+        binding.mangaArtist.hint = context.getString(R.string.artist_hint, manga.ogArtist ?: "")
+        binding.mangaDescription.hint =
+            context.getString(
+                R.string.description_hint,
+                manga.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: "",
+            )
     }
     binding.mangaGenresTags.clearFocus()
 
     binding.resetTags.setOnClickListener { resetTags(manga, binding, scope) }
+    // SY-->
+    binding.resetInfo.setOnClickListener { resetInfo(manga, binding, scope) }
+    // SY<--
 }
 
 private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: CoroutineScope) {
@@ -202,6 +199,13 @@ private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: Coro
     } else {
         binding.mangaGenresTags.setChips(manga.ogGenre.orEmpty(), scope)
     }
+}
+private fun resetInfo(manga: Manga, binding: EditMangaDialogBinding, scope: CoroutineScope) {
+    binding.title.setText("")
+    binding.mangaAuthor.setText("")
+    binding.mangaArtist.setText("")
+    binding.mangaDescription.setText("")
+    resetTags(manga, binding, scope)
 }
 
 private fun loadCover(manga: Manga, context: Context, binding: EditMangaDialogBinding) {

@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Kuukiyomi"
+rootProject.name = "Animetail"
 include(":app")
 include(":i18n")
 include(":source-api")

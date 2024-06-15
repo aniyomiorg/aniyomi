@@ -272,6 +272,9 @@ fun LibraryBottomActionMenu(
     onMarkAsUnviewedClicked: () -> Unit,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onDeleteClicked: () -> Unit,
+    // SY -->
+    onClickResetInfo: (() -> Unit)?,
+    // SY <--
     isManga: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -301,6 +304,7 @@ fun LibraryBottomActionMenu(
                     if (isActive) confirm[toConfirmIndex] = false
                 }
             }
+            val showOverflow = onClickResetInfo != null
             Row(
                 modifier = Modifier
                     .windowInsetsPadding(
@@ -357,6 +361,17 @@ fun LibraryBottomActionMenu(
                     onLongClick = { onLongClickItem(4) },
                     onClick = onDeleteClicked,
                 )
+                // SY -->
+                if (showOverflow) {
+                    Button(
+                        title = stringResource(MR.strings.reset_info),
+                        icon = Icons.Outlined.Delete,
+                        toConfirm = confirm[5],
+                        onLongClick = { onLongClickItem(5) },
+                        onClick = onClickResetInfo!!,
+                    )
+                }
+                // SY <--
             }
         }
     }
