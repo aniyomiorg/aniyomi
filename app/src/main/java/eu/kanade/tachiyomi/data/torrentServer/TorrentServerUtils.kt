@@ -10,7 +10,8 @@ object TorrentServerUtils {
     private val preferences: TorrentServerPreferences by injectLazy()
     val hostUrl = "http://127.0.0.1:${preferences.port().get()}"
 
-    private val animeTrackers = preferences.trackers().get()
+    // Is necessary separate the trackers by comma because is hardcoded in go-torrent-server
+    private val animeTrackers = preferences.trackers().get().split("\n").joinToString(",\n")
 
     fun setTrackersList() {
         torrServer.TorrServer.addTrackers(animeTrackers)

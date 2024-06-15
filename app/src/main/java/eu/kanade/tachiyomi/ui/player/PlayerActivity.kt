@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioFocusRequest
@@ -13,6 +14,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
@@ -28,7 +30,6 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -111,6 +112,10 @@ import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
@@ -120,6 +125,8 @@ class PlayerActivity : BaseActivity() {
     internal val viewModel by viewModels<PlayerViewModel>()
 
     internal val playerPreferences: PlayerPreferences = Injekt.get()
+
+    private val storageManager: StorageManager = Injekt.get()
 
     companion object {
         fun newIntent(
@@ -241,38 +248,20 @@ class PlayerActivity : BaseActivity() {
 
     private var hasAudioFocus = false
 
-    private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-            .setOnAudioFocusChangeListener(audioFocusChangeListener)
-            .build()
-    } else {
-        null
-    }
+    private val audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+        .setOnAudioFocusChangeListener(audioFocusChangeListener)
+        .build()
 
-    @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
         if (hasAudioFocus) return
         hasAudioFocus = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager!!.requestAudioFocus(audioFocusRequest!!)
-        } else {
-            audioManager!!.requestAudioFocus(
-                audioFocusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN,
-            )
-        }
+        audioManager!!.requestAudioFocus(audioFocusRequest!!)
     }
 
-    @Suppress("DEPRECATION")
     private fun abandonAudioFocus() {
         if (!hasAudioFocus) return
         hasAudioFocus = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioManager!!.abandonAudioFocusRequest(audioFocusRequest!!)
-        } else {
-            audioManager!!.abandonAudioFocus(audioFocusChangeListener)
-        }
+        audioManager!!.abandonAudioFocusRequest(audioFocusRequest!!)
     }
 
     private fun setAudioFocus(paused: Boolean) {
@@ -322,7 +311,6 @@ class PlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
         overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
-        Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
         setupPlayerControls()
@@ -548,6 +536,32 @@ class PlayerActivity : BaseActivity() {
             IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
         )
     }
+    private fun copyAssets(configDir: String) {
+        val assetManager = this.assets
+        val files = arrayOf("subfont.ttf", "cacert.pem")
+        for (filename in files) {
+            var ins: InputStream? = null
+            var out: OutputStream? = null
+            try {
+                ins = assetManager.open(filename, AssetManager.ACCESS_STREAMING)
+                val outFile = File("$configDir/$filename")
+                // Note that .available() officially returns an *estimated* number of bytes available
+                // this is only true for generic streams, asset streams return the full file size
+                if (outFile.length() == ins.available().toLong()) {
+                    logcat(LogPriority.VERBOSE) { "Skipping copy of asset file (exists same size): $filename" }
+                    continue
+                }
+                out = FileOutputStream(outFile)
+                ins.copyTo(out)
+                logcat(LogPriority.WARN) { "Copied asset file: $filename" }
+            } catch (e: IOException) {
+                logcat(LogPriority.ERROR, e) { "Failed to copy asset file: $filename" }
+            } finally {
+                ins?.close()
+                out?.close()
+            }
+        }
+    }
 
     private fun setupPlayerControls() {
         binding = PlayerActivityBinding.inflate(layoutInflater)
@@ -556,6 +570,10 @@ class PlayerActivity : BaseActivity() {
         window.statusBarColor = 70000000
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = 70000000
+        }
+
+        if (playerPreferences.defaultIntroLength().get() == 0) {
+            playerControls.binding.controlsSkipIntroBtn.visibility = View.GONE
         }
 
         refreshUi()
@@ -569,17 +587,27 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerMPV() {
-        val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
-        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
-        val mpvInputFile = File("${applicationContext.filesDir.path}/input.conf")
-        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
-
-        copyScripts()
-
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         val vo = if (playerPreferences.gpuNext().get()) "gpu-next" else "gpu"
+
+        val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+            storageManager.getMPVConfigDirectory()!!.filePath!!
+        } else {
+            if (playerPreferences.mpvScripts().get()) {
+                copyScripts()
+            }
+            applicationContext.filesDir.path
+        }
+
+        val mpvConfFile = File("$configDir/mpv.conf")
+        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+        val mpvInputFile = File("$configDir/input.conf")
+        playerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
+
+        copyAssets(configDir)
+
         player.initialize(
-            configDir = applicationContext.filesDir.path,
+            configDir = configDir,
             cacheDir = applicationContext.cacheDir.path,
             logLvl = logLevel,
             vo = vo,
@@ -675,7 +703,6 @@ class PlayerActivity : BaseActivity() {
         // TODO: I think this is a bad hack.
         //  We need to find a way to let MPV directly access our fonts directory.
         CoroutineScope(Dispatchers.IO).launchIO {
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
                 val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
                 outFile?.let {
@@ -686,7 +713,10 @@ class PlayerActivity : BaseActivity() {
                 "sub-fonts-dir",
                 applicationContext.filesDir.path,
             )
-            logcat { "FINISHED FONTS" }
+            MPVLib.setPropertyString(
+                "osd-fonts-dir",
+                applicationContext.filesDir.path,
+            )
         }
     }
 
@@ -703,7 +733,6 @@ class PlayerActivity : BaseActivity() {
             scriptOptsDir()?.delete()
 
             // Then, copy the scripts from the Aniyomi directory
-            val storageManager: StorageManager = Injekt.get()
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
@@ -1493,7 +1522,7 @@ class PlayerActivity : BaseActivity() {
         val episode = viewModel.currentEpisode ?: return
         val paused = player.paused ?: return
         val videoAspect = player.videoAspect ?: return
-        if (supportedAndEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (supportedAndEnabled) {
             PictureInPictureHandler().update(
                 context = this,
                 title = anime.title,
@@ -1516,7 +1545,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     @Deprecated("Deprecated in Java")
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         PipState.mode = if (isInPictureInPictureMode) PipState.ON else PipState.OFF
 
@@ -1614,7 +1642,6 @@ class PlayerActivity : BaseActivity() {
                 launchIO {
                     TorrentServerService.start()
                     TorrentServerService.wait(10)
-                    TorrentServerUtils.setTrackersList()
                     torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {

@@ -171,6 +171,7 @@ internal fun PreferenceItem(
                         accepted
                     },
                     singleLine = false,
+                    canBeBlank = item.canBeBlank,
                 )
             }
             is Preference.PreferenceItem.TrackerPreference -> {

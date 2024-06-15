@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.floatOrNull
+import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -174,11 +174,11 @@ class BangumiApi(
             ""
         }
         val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.int
+            obj["eps_count"]!!.jsonPrimitive.long
         } else {
             0
         }
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.floatOrNull ?: -1f
+        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
         return MangaTrackSearch.create(trackId).apply {
             remote_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
@@ -198,12 +198,12 @@ class BangumiApi(
             ""
         }
         val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.int
+            obj["eps_count"]!!.jsonPrimitive.long
         } else {
             0
         }
 
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.floatOrNull ?: -1f
+        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
         return AnimeTrackSearch.create(trackId).apply {
             remote_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
@@ -257,7 +257,7 @@ class BangumiApi(
             } else {
                 json.decodeFromString<Collection>(responseBody).let {
                     track.status = it.status?.id!!
-                    track.last_chapter_read = it.ep_status!!.toFloat()
+                    track.last_chapter_read = it.ep_status!!.toDouble()
                     track.score = it.rating!!
                     track
                 }
@@ -285,7 +285,7 @@ class BangumiApi(
             } else {
                 json.decodeFromString<Collection>(responseBody).let {
                     track.status = it.status?.id!!
-                    track.last_episode_seen = it.ep_status!!.toFloat()
+                    track.last_episode_seen = it.ep_status!!.toDouble()
                     track.score = it.rating!!
                     track
                 }

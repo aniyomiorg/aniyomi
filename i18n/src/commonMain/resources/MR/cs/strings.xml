@@ -698,7 +698,7 @@
     <string name="exception_offline">Bez připojení k internetu</string>
     <string name="exception_unknown_host">Nelze dosáhnout %s</string>
     <string name="exception_http">HTTP %d, zkontrolovat web v WebView</string>
-    <string name="unlock_app_title">Odemknout Kuukiyomi</string>
+    <string name="unlock_app_title">Odemknout Animetail</string>
     <string name="action_move_to_bottom_all_for_series">Přesunout sérii na konec</string>
     <string name="pref_relative_format">Relativní časová razítka</string>
     <string name="pref_relative_format_summary">\"%1$s\" namísto \"%2$s\"</string>

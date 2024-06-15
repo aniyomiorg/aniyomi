@@ -534,7 +534,7 @@
     <string name="notification_size_warning">大量更新会损害资源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
-    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Kuukiyomi。点击了解详情。</string>
+    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Animetail。点击了解详情。</string>
     <string name="ext_update_all">全部更新</string>
     <string name="channel_app_updates">应用更新</string>
     <string name="database_clean">无需清理</string>
@@ -710,7 +710,7 @@
     <string name="exception_unknown_host">无法连接到 %s</string>
     <string name="source_settings">资源设置</string>
     <string name="app_settings">应用设置</string>
-    <string name="unlock_app_title">解锁 Kuukiyomi</string>
+    <string name="unlock_app_title">解锁 Animetail</string>
     <string name="action_sort_category">分类排序</string>
     <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
     <string name="notification_updating_progress">正在更新仓库…(%s)</string>

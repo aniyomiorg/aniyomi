@@ -436,6 +436,10 @@ object SettingsPlayerScreen : SearchableSettings {
                             separator = "\n",
                             postfix = if (trackersPref.asState(scope).value.lines().size > 2) "\n..." else "",
                         ),
+                    onValueChanged = {
+                        TorrentServerService.stop()
+                        true
+                    },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_reset_torrent_trackers_string),
@@ -466,7 +470,7 @@ object SettingsPlayerScreen : SearchableSettings {
                     content = {
                         WheelTextPicker(
                             modifier = Modifier.align(Alignment.Center),
-                            items = remember { 1..255 }.map {
+                            items = remember { 0..255 }.map {
                                 stringResource(
                                     MR.strings.seconds_short,
                                     it,

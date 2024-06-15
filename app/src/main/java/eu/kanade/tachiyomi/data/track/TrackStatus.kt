@@ -11,7 +11,7 @@ import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.data.track.shikimori.Shikimori
 import eu.kanade.tachiyomi.data.track.simkl.Simkl
 
-enum class TrackStatus(val int: Int, @StringRes val res: Int) {
+enum class TrackStatus(val int: Long, @StringRes val res: Int) {
     READING(1, R.string.reading),
     WATCHING(11, R.string.watching),
     REPEATING(2, R.string.repeating),
@@ -26,10 +26,9 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
 
     companion object {
         fun parseTrackerStatus(tracker: Long, statusLong: Long): TrackStatus? {
-            val status = statusLong.toInt()
             return when (tracker) {
                 (1L) -> {
-                    when (status) {
+                    when (statusLong) {
                         MyAnimeList.READING -> READING
                         MyAnimeList.WATCHING -> WATCHING
                         MyAnimeList.COMPLETED -> COMPLETED
@@ -43,7 +42,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 TrackerManager.ANILIST -> {
-                    when (status) {
+                    when (statusLong) {
                         Anilist.READING -> READING
                         Anilist.WATCHING -> WATCHING
                         Anilist.REPEATING_ANIME -> REWATCHING
@@ -57,7 +56,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 TrackerManager.KITSU -> {
-                    when (status) {
+                    when (statusLong) {
                         Kitsu.READING -> READING
                         Kitsu.WATCHING -> WATCHING
                         Kitsu.COMPLETED -> COMPLETED
@@ -69,7 +68,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 (4L) -> {
-                    when (status) {
+                    when (statusLong) {
                         Shikimori.READING -> READING
                         Shikimori.COMPLETED -> COMPLETED
                         Shikimori.ON_HOLD -> PAUSED
@@ -80,7 +79,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 (5L) -> {
-                    when (status) {
+                    when (statusLong) {
                         Bangumi.READING -> READING
                         Bangumi.COMPLETED -> COMPLETED
                         Bangumi.ON_HOLD -> PAUSED
@@ -90,7 +89,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 (6L) -> {
-                    when (status) {
+                    when (statusLong) {
                         Komga.READING -> READING
                         Komga.COMPLETED -> COMPLETED
                         Komga.UNREAD -> null
@@ -98,7 +97,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 (7L) -> {
-                    when (status) {
+                    when (statusLong) {
                         MangaUpdates.READING_LIST -> READING
                         MangaUpdates.COMPLETE_LIST -> COMPLETED
                         MangaUpdates.ON_HOLD_LIST -> PAUSED
@@ -108,7 +107,7 @@ enum class TrackStatus(val int: Int, @StringRes val res: Int) {
                     }
                 }
                 TrackerManager.SIMKL -> {
-                    when (status) {
+                    when (statusLong) {
                         Simkl.WATCHING -> WATCHING
                         Simkl.COMPLETED -> COMPLETED
                         Simkl.ON_HOLD -> PAUSED

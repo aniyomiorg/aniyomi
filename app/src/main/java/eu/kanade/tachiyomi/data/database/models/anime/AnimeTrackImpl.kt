@@ -6,7 +6,7 @@ class AnimeTrackImpl : AnimeTrack {
 
     override var anime_id: Long = 0
 
-    override var tracker_id: Int = 0
+    override var tracker_id: Long = 0
 
     override var remote_id: Long = 0
 
@@ -14,13 +14,13 @@ class AnimeTrackImpl : AnimeTrack {
 
     override lateinit var title: String
 
-    override var last_episode_seen: Float = 0F
+    override var last_episode_seen: Double = 0.0
 
-    override var total_episodes: Int = 0
+    override var total_episodes: Long = 0
 
-    override var score: Float = 0f
+    override var score: Double = 0.0
 
-    override var status: Int = 0
+    override var status: Long = 0
 
     override var started_watching_date: Long = 0
 

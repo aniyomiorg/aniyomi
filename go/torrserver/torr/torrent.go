@@ -324,6 +324,7 @@ func (t *Torrent) Status() *state.TorrentStatus {
 		st.ActivePeers = tst.ActivePeers
 		st.ConnectedSeeders = tst.ConnectedSeeders
 		st.HalfOpenPeers = tst.HalfOpenPeers
+		st.Trackers = flattenStringArray(t.TorrentSpec.Trackers)
 
 		if t.Torrent.Info() != nil {
 			st.TorrentSize = t.Torrent.Length()
@@ -349,4 +350,12 @@ func (t *Torrent) CacheState() *cacheSt.CacheState {
 		return st
 	}
 	return nil
+}
+
+func flattenStringArray(arr [][]string) []string {
+	var result []string
+	for _, subArray := range arr {
+		result = append(result, subArray...)
+	}
+	return result
 }

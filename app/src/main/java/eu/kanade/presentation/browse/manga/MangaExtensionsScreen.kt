@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
 import eu.kanade.presentation.components.WarningBanner
@@ -202,13 +201,19 @@ private fun ExtensionContent(
             }
 
             items(
-                items = items.fastDistinctBy { it.hashCode() },
+                items = items,
                 contentType = { "item" },
-                key = { "extension-${it.hashCode()}" },
+                key = { item ->
+                    when (item.extension) {
+                        is MangaExtension.Untrusted -> "extension-untrusted-${item.hashCode()}"
+                        is MangaExtension.Installed -> "extension-installed-${item.hashCode()}"
+                        is MangaExtension.Available -> "extension-available-${item.hashCode()}"
+                    }
+                },
             ) { item ->
                 ExtensionItem(
-                    modifier = Modifier.animateItemPlacement(),
                     item = item,
+                    modifier = Modifier.animateItemPlacement(),
                     onClickItem = {
                         when (it) {
                             is MangaExtension.Available -> onInstallExtension(it)

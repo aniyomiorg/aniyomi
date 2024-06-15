@@ -8,7 +8,7 @@ interface AnimeTrack : Serializable {
 
     var anime_id: Long
 
-    var tracker_id: Int
+    var tracker_id: Long
 
     var remote_id: Long
 
@@ -16,13 +16,13 @@ interface AnimeTrack : Serializable {
 
     var title: String
 
-    var last_episode_seen: Float
+    var last_episode_seen: Double
 
-    var total_episodes: Int
+    var total_episodes: Long
 
-    var score: Float
+    var score: Double
 
-    var status: Int
+    var status: Long
 
     var started_watching_date: Long
 
@@ -40,7 +40,7 @@ interface AnimeTrack : Serializable {
 
     companion object {
         fun create(serviceId: Long): AnimeTrack = AnimeTrackImpl().apply {
-            tracker_id = serviceId.toInt()
+            tracker_id = serviceId
         }
     }
 }
