@@ -212,8 +212,8 @@ private fun ExtensionContent(
                 },
             ) { item ->
                 ExtensionItem(
-                    modifier = Modifier.animateItemPlacement(),
                     item = item,
+                    modifier = Modifier.animateItemPlacement(),
                     onClickItem = {
                         when (it) {
                             is MangaExtension.Available -> onInstallExtension(it)

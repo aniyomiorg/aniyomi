@@ -700,7 +700,7 @@
     <string name="track_activity_name">Inici de sessió al servei de seguiment</string>
     <string name="download_cache_invalidated">S’ha invalidat l\'índex de baixades</string>
     <string name="information_cloudflare_help">Premeu aquí per a obtenir ajuda amb el Cloudflare</string>
-    <string name="unlock_app_title">Desbloqueja Kuukiyomi</string>
+    <string name="unlock_app_title">Desbloqueja Animetail</string>
     <string name="exception_offline">No hi ha connexió a Internet</string>
     <string name="exception_http">HTTP %d, comproveu el lloc web en una WebView</string>
     <string name="exception_unknown_host">No s’ha pogut accedir a %s</string>

@@ -42,17 +42,17 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/dark25/animetail2/issues).**
-2. Also take a look at issues opened on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
-3. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph)
+1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/dark25/animetail2/issues).**
+2. Also take a look at issues opened and closed on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
+3. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph)
 
 </details>
 
 <details><summary>Bugs</summary>
 
 * Include version (More → About → Version)
- * If not latest, try updating, it may have already been solved
- * Preview version is equal to the number of commits as seen on the main page
+  * If not latest, try updating, it may have already been solved
+  * Preview version is equal to the number of commits as seen on the main page
 * Include steps to reproduce (if not obvious from description)
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)

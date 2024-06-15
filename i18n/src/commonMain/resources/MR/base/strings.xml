@@ -303,7 +303,7 @@
     <string name="information_empty_repos">You have no repos set.</string>
     <string name="action_add_repo">Add repo</string>
     <string name="label_add_repo_input">Repo URL</string>
-    <string name="action_add_repo_message">Add additional repos to Kuukiyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="action_add_repo_message">Add additional repos to Animetail. This should be a URL that ends with \"index.min.json\".</string>
     <string name="error_repo_exists">This repo already exists!</string>
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
@@ -1010,7 +1010,7 @@
     <string name="pref_debanding_gpu">GPU</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Kuukiyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Animetail. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
