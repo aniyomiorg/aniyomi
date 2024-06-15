@@ -588,6 +588,10 @@ class PlayerActivity : BaseActivity() {
             window.navigationBarColor = 70000000
         }
 
+        if (playerPreferences.defaultIntroLength().get() == 0) {
+            playerControls.binding.controlsSkipIntroBtn.visibility = View.GONE
+        }
+
         refreshUi()
 
         if (playerPreferences.hideControls().get()) {

@@ -424,7 +424,7 @@
     <string name="download_paused">დაპაუზებულია</string>
     <string name="dialog_with_checkbox_reset">ამ ჩანაწერის ყველა თავის თავიდან წაკითხვა</string>
     <string name="download_insufficient_space">შეუძლებელია თავების გადმოწერა დისკზე ადგილის უკმარისობის გამო</string>
-    <string name="information_webview_required">WebView არის აუცილებელი Kuukiyomi-ს სამუშაოდ</string>
+    <string name="information_webview_required">WebView არის აუცილებელი Animetail-ს სამუშაოდ</string>
     <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_new_chapters_episodes">თავების განახლებები</string>
 </resources>
