@@ -542,20 +542,20 @@ class AnimeDownloader(
         filename: String,
     ): UniFile {
         val video = download.video!!
-            TorrentServerService.start()
-            TorrentServerService.wait(10)
-            val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
-            var index = 0
-            if (video.videoUrl!!.contains("index=")) {
-                index = try {
-                    video.videoUrl?.substringAfter("index=")
-                        ?.substringBefore("&")?.toInt() ?: 0
-                } catch (_: Exception) {
-                    0
-                }
+        TorrentServerService.start()
+        TorrentServerService.wait(10)
+        val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+        var index = 0
+        if (video.videoUrl!!.contains("index=")) {
+            index = try {
+                video.videoUrl?.substringAfter("index=")
+                    ?.substringBefore("&")?.toInt() ?: 0
+            } catch (_: Exception) {
+                0
             }
-            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
-            video.videoUrl = torrentUrl
+        }
+        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        video.videoUrl = torrentUrl
         return ffmpegDownload(download, tmpDir, filename)
     }
 
@@ -714,7 +714,6 @@ class AnimeDownloader(
         threadNumber: Int,
         safeDownload: Boolean,
     ): UniFile {
-
         // check if url is from torrent server
         if (download.video!!.videoUrl!!.startsWith(TorrentServerUtils.hostUrl)) {
             // start torrent server if not running
