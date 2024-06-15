@@ -10,7 +10,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
-import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.InputStreamContent
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonFactory
@@ -21,11 +20,8 @@ import com.google.api.services.drive.model.File
 import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.json.encodeToStream
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import logcat.logcat
@@ -38,7 +34,6 @@ import uy.kohesive.injekt.api.get
 import java.io.IOException
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
-import java.time.Instant
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
