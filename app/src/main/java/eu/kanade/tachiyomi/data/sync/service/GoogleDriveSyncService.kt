@@ -20,11 +20,13 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.tachiyomi.data.backup.models.Backup
+import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
+import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import logcat.logcat
 import tachiyomi.core.i18n.stringResource
@@ -63,11 +65,11 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
 
     private val appName = context.stringResource(MR.strings.app_name)
 
-    private val remoteFileName = "${appName}_sync_data.gz"
-
-    private val lockFileName = "${appName}_sync.lock"
+    private val remoteFileName = "${appName}_sync.proto.gz"
 
     private val googleDriveService = GoogleDriveService(context)
+
+    private val protoBuf: ProtoBuf = Injekt.get()
 
     override suspend fun doSync(syncData: SyncData): Backup? {
         beforeSync()
@@ -106,59 +108,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
     }
 
     private suspend fun beforeSync() {
-        try {
-            googleDriveService.refreshToken()
-            val drive = googleDriveService.driveService
-                ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
-
-            var backoff = 1000L
-            var retries = 0 // Retry counter
-            val maxRetries = 10 // Maximum number of retries
-
-            while (retries < maxRetries) {
-                val lockFiles = findLockFile(drive)
-                logcat(LogPriority.DEBUG) { "Found ${lockFiles.size} lock file(s)" }
-
-                when {
-                    lockFiles.isEmpty() -> {
-                        logcat(LogPriority.DEBUG) { "No lock file found, creating a new one" }
-                        createLockFile(drive)
-                        break
-                    }
-                    lockFiles.size == 1 -> {
-                        val lockFile = lockFiles.first()
-                        val createdTime = Instant.parse(lockFile.createdTime.toString())
-                        val ageMinutes = java.time.Duration.between(createdTime, Instant.now()).toMinutes()
-                        logcat(LogPriority.DEBUG) { "Lock file age: $ageMinutes minutes" }
-                        if (ageMinutes <= 3) {
-                            logcat(LogPriority.DEBUG) { "Lock file is new, proceeding with sync" }
-                            break
-                        } else {
-                            logcat(LogPriority.DEBUG) { "Lock file is old, deleting and creating a new one" }
-                            deleteLockFile(drive)
-                            createLockFile(drive)
-                            break
-                        }
-                    }
-                    else -> {
-                        logcat(LogPriority.DEBUG) { "Multiple lock files found, applying backoff" }
-                        delay(backoff) // Apply backoff strategy
-                        backoff = (backoff * 2).coerceAtMost(16000L)
-                        logcat(LogPriority.DEBUG) { "Backoff increased to $backoff milliseconds" }
-                    }
-                }
-                retries++ // Increment retry counter
-                logcat(LogPriority.DEBUG) { "Loop iteration complete, retry count: $retries, backoff time: $backoff" }
-            }
-
-            if (retries >= maxRetries) {
-                logcat(LogPriority.ERROR) { "Max retries reached, exiting sync process" }
-                throw Exception(context.stringResource(MR.strings.error_before_sync_gdrive) + ": Max retries reached.")
-            }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, throwable = e) { "Error in GoogleDrive beforeSync" }
-            throw Exception(context.stringResource(MR.strings.error_before_sync_gdrive) + ": ${e.message}", e)
-        }
+        googleDriveService.refreshToken()
     }
 
     private fun pullSyncData(): SyncData? {
@@ -177,7 +127,10 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         try {
             drive.files().get(gdriveFileId).executeMediaAsInputStream().use { inputStream ->
                 GZIPInputStream(inputStream).use { gzipInputStream ->
-                    return Json.decodeFromStream(SyncData.serializer(), gzipInputStream)
+                    val byteArray = gzipInputStream.readBytes()
+                    val backup = protoBuf.decodeFromByteArray(BackupSerializer, byteArray)
+                    val deviceId = fileList[0].appProperties["deviceId"] ?: ""
+                    return SyncData(deviceId = deviceId, backup = backup)
                 }
             }
         } catch (e: Exception) {
@@ -191,30 +144,42 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
             ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
 
         val fileList = getAppDataFileList(drive)
+        val backup = syncData.backup ?: return
+
+        val byteArray = protoBuf.encodeToByteArray(BackupSerializer, backup)
+        if (byteArray.isEmpty()) {
+            throw IllegalStateException(context.stringResource(MR.strings.empty_backup_error))
+        }
 
         PipedOutputStream().use { pos ->
             PipedInputStream(pos).use { pis ->
                 withIOContext {
-                    // Start a coroutine or a background thread to write JSON to the PipedOutputStream
                     launch {
                         GZIPOutputStream(pos).use { gzipOutputStream ->
-                            Json.encodeToStream(SyncData.serializer(), syncData, gzipOutputStream)
+                            gzipOutputStream.write(byteArray)
                         }
                     }
+
+                    val mediaContent = InputStreamContent("application/octet-stream", pis)
+
                     if (fileList.isNotEmpty()) {
                         val fileId = fileList[0].id
-                        val mediaContent = InputStreamContent("application/gzip", pis)
-                        drive.files().update(fileId, null, mediaContent).execute()
+                        val fileMetadata = File().apply {
+                            name = remoteFileName
+                            mimeType = "application/octet-stream"
+                            appProperties = mapOf("deviceId" to syncData.deviceId)
+                        }
+                        drive.files().update(fileId, fileMetadata, mediaContent).execute()
                         logcat(
                             LogPriority.DEBUG,
                         ) { "Updated existing sync data file in Google Drive with file ID: $fileId" }
                     } else {
                         val fileMetadata = File().apply {
                             name = remoteFileName
-                            mimeType = "application/gzip"
+                            mimeType = "application/octet-stream"
                             parents = listOf("appDataFolder")
+                            appProperties = mapOf("deviceId" to syncData.deviceId)
                         }
-                        val mediaContent = InputStreamContent("application/gzip", pis)
                         val uploadedFile = drive.files().create(fileMetadata, mediaContent)
                             .setFields("id")
                             .execute()
@@ -230,12 +195,12 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
     private fun getAppDataFileList(drive: Drive): MutableList<File> {
         try {
             // Search for the existing file by name in the appData folder
-            val query = "mimeType='application/gzip' and name = '$remoteFileName'"
+            val query = "mimeType='application/x-gzip' and name = '$remoteFileName'"
             val fileList = drive.files()
                 .list()
                 .setSpaces("appDataFolder")
                 .setQ(query)
-                .setFields("files(id, name, createdTime)")
+                .setFields("files(id, name, createdTime, appProperties)")
                 .execute()
                 .files
             logcat { "AppData folder file list: $fileList" }
@@ -244,63 +209,6 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, throwable = e) { "Error no sync data found in appData folder" }
             return mutableListOf()
-        }
-    }
-
-    private fun createLockFile(drive: Drive) {
-        try {
-            val fileMetadata = File().apply {
-                name = lockFileName
-                mimeType = "text/plain"
-                parents = listOf("appDataFolder")
-            }
-
-            // Create an empty content to upload as the lock file
-            val emptyContent = ByteArrayContent.fromString("text/plain", "")
-
-            val file = drive.files().create(fileMetadata, emptyContent)
-                .setFields("id, name, createdTime")
-                .execute()
-
-            logcat { "Created lock file with ID: ${file.id}" }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, throwable = e) { "Error creating lock file" }
-            throw Exception(e.message)
-        }
-    }
-
-    private fun findLockFile(drive: Drive): MutableList<File> {
-        return try {
-            val query = "mimeType='text/plain' and name = '$lockFileName'"
-            val fileList = drive.files()
-                .list()
-                .setSpaces("appDataFolder")
-                .setQ(query)
-                .setFields("files(id, name, createdTime)")
-                .execute().files
-            logcat { "Lock file search result: $fileList" }
-            fileList
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, throwable = e) { "Error finding lock file" }
-            mutableListOf()
-        }
-    }
-
-    private fun deleteLockFile(drive: Drive) {
-        try {
-            val lockFiles = findLockFile(drive)
-
-            if (lockFiles.isNotEmpty()) {
-                for (file in lockFiles) {
-                    drive.files().delete(file.id).execute()
-                    logcat { "Deleted lock file with ID: ${file.id}" }
-                }
-            } else {
-                logcat { "No lock file found to delete." }
-            }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, throwable = e) { "Error deleting lock file" }
-            throw Exception(context.stringResource(MR.strings.error_deleting_google_drive_lock_file), e)
         }
     }
 

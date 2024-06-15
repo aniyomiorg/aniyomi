@@ -31,7 +31,7 @@ class SyncPreferences(
     )
 
     fun uniqueDeviceID(): String {
-        val uniqueIDPreference = preferenceStore.getString("unique_device_id", "")
+        val uniqueIDPreference = preferenceStore.getString(Preference.appStateKey("unique_device_id"), "")
 
         // Retrieve the current value of the preference
         var uniqueID = uniqueIDPreference.get()
