@@ -2121,7 +2121,6 @@ class PlayerActivity : BaseActivity() {
                 player.paused = true
                 isInCastMode = false
                 invalidateOptionsMenu()
-
             }
         }
     }

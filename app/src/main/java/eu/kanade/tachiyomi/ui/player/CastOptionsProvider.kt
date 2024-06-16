@@ -25,7 +25,8 @@ open class CastOptionsProvider : OptionsProvider {
     private fun getReceiverApplicationId(context: Context): String {
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_META_DATA)
-            packageInfo.applicationInfo.metaData.getString(context.getString(R.string.app_cast_id)) ?: CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID
+            packageInfo.applicationInfo.metaData.getString(context.getString(R.string.app_cast_id))
+                ?: CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID
         } catch (e: PackageManager.NameNotFoundException) {
             CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID
         }
@@ -41,20 +42,26 @@ open class CastOptionsProvider : OptionsProvider {
                         return when {
                             hasQueue() -> listOf(
                                 NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_REWIND).build(),
-                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK).build(),
+                                NotificationAction.Builder().setAction(
+                                    MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK,
+                                ).build(),
                                 NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_FORWARD).build(),
-                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_STOP_CASTING).build()
+                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_STOP_CASTING).build(),
 
                             )
                             isPhoto -> listOf(
-                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK).build(),
+                                NotificationAction.Builder().setAction(
+                                    MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK,
+                                ).build(),
                                 NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_STOP_CASTING).build(),
                             )
                             else -> listOf(
                                 NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_REWIND).build(),
-                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK).build(),
+                                NotificationAction.Builder().setAction(
+                                    MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK,
+                                ).build(),
                                 NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_FORWARD).build(),
-                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_STOP_CASTING).build()
+                                NotificationAction.Builder().setAction(MediaIntentReceiver.ACTION_STOP_CASTING).build(),
                             )
                         }
                     }
@@ -107,26 +114,24 @@ open class CastOptionsProvider : OptionsProvider {
         return null
     }
 
-
-        private class ImagePickerImpl : ImagePicker() {
-            @Deprecated("Deprecated in Java")
-            override fun onPickImage(mediaMetadata: MediaMetadata?, type: Int): WebImage? {
-                if (mediaMetadata == null || !mediaMetadata.hasImages()) {
-                    return null
-                }
-                val images = mediaMetadata.images
-                return if (images.size == 1) {
+    private class ImagePickerImpl : ImagePicker() {
+        @Deprecated("Deprecated in Java")
+        override fun onPickImage(mediaMetadata: MediaMetadata?, type: Int): WebImage? {
+            if (mediaMetadata == null || !mediaMetadata.hasImages()) {
+                return null
+            }
+            val images = mediaMetadata.images
+            return if (images.size == 1) {
+                images[0]
+            } else {
+                if (type ==
+                    IMAGE_TYPE_MEDIA_ROUTE_CONTROLLER_DIALOG_BACKGROUND
+                ) {
                     images[0]
                 } else {
-                    if (type ==
-                        IMAGE_TYPE_MEDIA_ROUTE_CONTROLLER_DIALOG_BACKGROUND
-                    ) {
-                        images[0]
-                    } else {
-                        images[1]
-                    }
+                    images[1]
                 }
             }
+        }
     }
-
 }
