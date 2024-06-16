@@ -97,7 +97,7 @@
     <string name="single_page">Single page</string>
     <string name="automatic_orientation">Automatic (based on orientation)</string>
     <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
-    <string name="invert_double_pages">Invert double pages</string>
+    <string name="invert_double_pages">Invert double pages </string>
 
     <!-- Center margin -->
     <string name="center_margin">Center Margin</string>
