@@ -93,7 +93,7 @@ body:
           required: true
         - label: I have written a short but informative title.
           required: true
-        - label: If this is an issue with an official anime extension, I should be opening an issue in the [extensions repository](https://github.com/aniyomiorg/aniyomi-extensions/issues/new/choose).
+        - label: If this is an issue with an anime extension, I should be opening an issue in the extensions repository.
           required: true
         - label: If this is an issue with a manga extension, report it to the manga source extension project you added it from.
           required: true

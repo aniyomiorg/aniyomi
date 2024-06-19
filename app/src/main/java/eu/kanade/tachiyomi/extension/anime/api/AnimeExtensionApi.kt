@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
-import eu.kanade.domain.extension.anime.interactor.OFFICIAL_ANIYOMI_REPO_BASE_URL
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -37,10 +36,7 @@ internal class AnimeExtensionApi {
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            buildList {
-                addAll(getExtensions(OFFICIAL_ANIYOMI_REPO_BASE_URL))
-                sourcePreferences.animeExtensionRepos().get().map { addAll(getExtensions(it)) }
-            }
+            sourcePreferences.animeExtensionRepos().get().flatMap { getExtensions(it) }
         }
     }
 

@@ -18,7 +18,7 @@ class CreateAnimeExtensionRepo(private val preferences: SourcePreferences) {
         }
 
         // Do not allow invalid formats
-        if (!name.matches(repoRegex) || name.startsWith(OFFICIAL_ANIYOMI_REPO_BASE_URL)) {
+        if (!name.matches(repoRegex)) {
             return Result.InvalidUrl
         }
 
@@ -33,6 +33,5 @@ class CreateAnimeExtensionRepo(private val preferences: SourcePreferences) {
     }
 }
 
-const val OFFICIAL_ANIYOMI_REPO_BASE_URL = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo"
 private val repoRegex = """^https://.*/index\.min\.json$""".toRegex()
 private val githubRepoRegex = """https://github\.com/[^/]+/[^/]+/blob/(?:[^/]+/)+index\.min\.json$""".toRegex()
