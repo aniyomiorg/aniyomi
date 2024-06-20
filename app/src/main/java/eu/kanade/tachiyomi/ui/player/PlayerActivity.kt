@@ -75,6 +75,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -610,11 +611,12 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        MPVLib.setOptionString("hwdec", playerPreferences.hwDec().get())
-        when (playerPreferences.deband().get()) {
-            1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
-            2 -> MPVLib.setOptionString("deband", "yes")
-            3 -> MPVLib.setOptionString("vf", "format=yuv420p")
+        MPVLib.setOptionString("hwdec", playerPreferences.hardwareDecoding().get().mpvValue)
+        when (playerPreferences.videoDebanding().get()) {
+            VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
+            VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
+            VideoDebanding.YUV420P -> MPVLib.setOptionString("vf", "format=yuv420p")
+            VideoDebanding.DISABLED -> {}
         }
 
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
@@ -882,7 +884,7 @@ class PlayerActivity : BaseActivity() {
         AspectState.mode = if (aspectProperty != -1.0 && aspectProperty != (deviceWidth / deviceHeight).toDouble()) {
             AspectState.CUSTOM
         } else {
-            AspectState.get(playerPreferences.playerViewMode().get())
+            playerPreferences.aspectState().get()
         }
 
         playerControls.setViewMode(showText = false)
