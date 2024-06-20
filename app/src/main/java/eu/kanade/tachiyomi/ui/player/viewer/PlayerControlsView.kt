@@ -20,8 +20,8 @@ import eu.kanade.tachiyomi.ui.player.viewer.components.CurrentChapter
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.lang.withUIContext
 import kotlin.math.abs
 
 class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :

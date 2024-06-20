@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerDoubleTapSeekViewBinding
-import tachiyomi.core.i18n.pluralStringResource
+import tachiyomi.core.common.i18n.pluralStringResource
 import tachiyomi.i18n.MR
 
 /**

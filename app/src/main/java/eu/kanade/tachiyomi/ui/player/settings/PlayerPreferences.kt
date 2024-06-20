@@ -5,8 +5,8 @@ import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
 import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.preference.getEnum
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.preference.getEnum
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,

@@ -1,6 +1,6 @@
 package tachiyomi.domain.category.anime.interactor
 
-import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.CategoryUpdate
 

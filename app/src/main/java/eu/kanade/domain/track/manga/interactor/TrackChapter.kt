@@ -9,8 +9,8 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import logcat.LogPriority
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 
@@ -21,7 +21,7 @@ class TrackChapter(
     private val delayedTrackingStore: DelayedMangaTrackingStore,
 ) {
 
-    suspend fun await(context: Context, mangaId: Long, chapterNumber: Double) {
+    suspend fun await(context: Context, mangaId: Long, chapterNumber: Double, setupJobOnFailure: Boolean = true) {
         withNonCancellableContext {
             val tracks = getTracks.await(mangaId)
             if (tracks.isEmpty()) return@withNonCancellableContext
@@ -45,7 +45,9 @@ class TrackChapter(
                             delayedTrackingStore.removeMangaItem(track.id)
                         } catch (e: Exception) {
                             delayedTrackingStore.addManga(track.id, chapterNumber)
-                            DelayedMangaTrackingUpdateJob.setupTask(context)
+                            if (setupJobOnFailure) {
+                                DelayedMangaTrackingUpdateJob.setupTask(context)
+                            }
                             throw e
                         }
                     }
