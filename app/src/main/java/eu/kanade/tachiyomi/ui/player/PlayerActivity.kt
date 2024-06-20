@@ -1626,7 +1626,6 @@ class PlayerActivity : BaseActivity() {
             ) {
                 launchIO {
                     TorrentServerService.start()
-                    TorrentServerService.wait(10)
                     torrentLinkHandler(it.videoUrl!!, it.quality)
                 }
             } else {

@@ -120,7 +120,6 @@ class AnimeScreen(
                 scope.launchIO {
                     if (successState.source.isSourceForTorrents()) {
                         TorrentServerService.start()
-                        TorrentServerService.wait(10)
                     }
                     val extPlayer = screenModel.alwaysUseExternalPlayer != alt
                     openEpisode(context, episode, extPlayer)
