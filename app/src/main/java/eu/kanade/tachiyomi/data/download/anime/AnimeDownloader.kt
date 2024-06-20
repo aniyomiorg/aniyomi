@@ -510,7 +510,7 @@ class AnimeDownloader(
             file ?: try {
                 if (isTor(download.video!!)) {
                     torrentDownload(download, tmpDir, filename)
-                } else if (isHls(download.video!!) || isMpd(download.video!!)){
+                } else if (isHls(download.video!!) || isMpd(download.video!!)) {
                     ffmpegDownload(download, tmpDir, filename)
                 } else {
                     httpDownload(download, tmpDir, filename, 1, true)

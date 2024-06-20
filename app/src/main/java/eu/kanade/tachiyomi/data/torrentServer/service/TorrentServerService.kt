@@ -20,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.launchIO
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -127,7 +126,7 @@ class TorrentServerService : Service() {
         const val ACTION_STOP = "stop_torrent_server"
         val applicationContext = Injekt.get<Application>()
 
-         suspend fun start() {
+        suspend fun start() {
             try {
                 val intent =
                     Intent(applicationContext, TorrentServerService::class.java).apply {
