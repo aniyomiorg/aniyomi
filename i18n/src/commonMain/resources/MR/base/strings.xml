@@ -1139,8 +1139,8 @@
     <string name="pref_mpv_scripts">Enable MPV scripts</string>
     <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
     <string name="torrentserver_is_running">Torrent Server is running</string>
-    <string name="pref_category_torrentserver">TorrentServer Preferences</string>
-    <string name="pref_torrentserver_port">TorrentServer Port</string>
+    <string name="pref_category_torrentserver">Torrent Server Preferences</string>
+    <string name="pref_torrentserver_port">Torrent Server Port</string>
     <string name="pref_torrent_trackers">Torrent Trackers</string>
     <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
 </resources>
