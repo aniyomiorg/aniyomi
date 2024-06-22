@@ -1,6 +1,6 @@
 package tachiyomi.domain.items.episode.interactor
 
-import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.model.Anime

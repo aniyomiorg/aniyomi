@@ -51,10 +51,10 @@ import okhttp3.Response
 import okio.Throttler
 import okio.buffer
 import okio.sink
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.storage.extension
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.storage.extension
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode

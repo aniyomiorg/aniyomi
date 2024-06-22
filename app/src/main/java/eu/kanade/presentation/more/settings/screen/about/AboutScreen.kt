@@ -38,10 +38,10 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withUIContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.LinkIcon
@@ -53,10 +53,10 @@ import tachiyomi.presentation.core.icons.Discord
 import tachiyomi.presentation.core.icons.Github
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.TimeZone
 
 object AboutScreen : Screen() {
 
@@ -270,16 +270,9 @@ object AboutScreen : Screen() {
 
     internal fun getFormattedBuildTime(): String {
         return try {
-            val inputDf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.US)
-            inputDf.timeZone = TimeZone.getTimeZone("UTC")
-            val buildTime = inputDf.parse(BuildConfig.BUILD_TIME)
-
-            val outputDf = DateFormat.getDateTimeInstance(
-                DateFormat.MEDIUM,
-                DateFormat.SHORT,
-                Locale.getDefault(),
-            )
-            outputDf.timeZone = TimeZone.getDefault()
+            val df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm'Z'", Locale.US)
+                .withZone(ZoneId.of("UTC"))
+            val buildTime = LocalDateTime.from(df.parse(BuildConfig.BUILD_TIME))
 
             buildTime!!.toDateTimestampString(
                 UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()),

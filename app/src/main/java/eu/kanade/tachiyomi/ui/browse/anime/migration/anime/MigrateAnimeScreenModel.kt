@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.source.anime.service.AnimeSourceManager

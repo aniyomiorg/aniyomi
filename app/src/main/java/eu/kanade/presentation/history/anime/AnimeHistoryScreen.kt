@@ -20,7 +20,7 @@ import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import java.util.Date
+import java.time.LocalDate
 
 @Composable
 fun AnimeHistoryScreen(
@@ -104,7 +104,7 @@ private fun AnimeHistoryScreenContent(
 }
 
 sealed interface AnimeHistoryUiModel {
-    data class Header(val date: Date) : AnimeHistoryUiModel
+    data class Header(val date: LocalDate) : AnimeHistoryUiModel
     data class Item(val item: AnimeHistoryWithRelations) : AnimeHistoryUiModel
 }
 

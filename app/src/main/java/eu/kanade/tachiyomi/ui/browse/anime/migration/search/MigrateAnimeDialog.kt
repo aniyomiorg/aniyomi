@@ -32,10 +32,10 @@ import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.ui.browse.anime.migration.AnimeMigrationFlags
 import kotlinx.coroutines.flow.update
-import tachiyomi.core.preference.Preference
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.common.preference.Preference
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.entries.anime.model.Anime

@@ -37,10 +37,10 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.launchUI
+import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.data.Database
 import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import tachiyomi.domain.source.manga.model.MangaSourceWithCount

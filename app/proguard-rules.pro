@@ -77,3 +77,6 @@
 
 # XmlUtil
 -keep public enum nl.adaptivity.xmlutil.EventType { *; }
+
+# Apache Commons Compress
+-keep class * extends org.apache.commons.compress.archivers.zip.ZipExtraField { <init>(); }

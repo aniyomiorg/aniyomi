@@ -54,13 +54,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.preference.toggle
-import tachiyomi.core.storage.UniFileTempFileManager
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchNonCancellable
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.preference.toggle
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withUIContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
@@ -86,7 +85,6 @@ class ReaderViewModel @JvmOverloads constructor(
     private val sourceManager: MangaSourceManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),
-    private val tempFileManager: UniFileTempFileManager = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
     val readerPreferences: ReaderPreferences = Injekt.get(),
@@ -277,7 +275,7 @@ class ReaderViewModel @JvmOverloads constructor(
 
                     val context = Injekt.get<Application>()
                     val source = sourceManager.getOrStub(manga.source)
-                    loader = ChapterLoader(context, downloadManager, downloadProvider, tempFileManager, manga, source)
+                    loader = ChapterLoader(context, downloadManager, downloadProvider, manga, source)
 
                     loadChapter(loader!!, chapterList.first { chapterId == it.chapter.id })
                     Result.success(true)
@@ -920,7 +918,6 @@ class ReaderViewModel @JvmOverloads constructor(
     private fun deletePendingChapters() {
         viewModelScope.launchNonCancellable {
             downloadManager.deletePendingChapters()
-            tempFileManager.deleteTempFiles()
         }
     }
 
