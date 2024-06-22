@@ -42,7 +42,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
-import tachiyomi.core.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.i18n.stringResource
@@ -406,7 +405,6 @@ object SettingsPlayerScreen : SearchableSettings {
         torrentServerPreferences: TorrentServerPreferences,
     ): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
-        val context = LocalContext.current
         val trackersPref = torrentServerPreferences.trackers()
         val trackers by trackersPref.collectAsState()
 
@@ -428,7 +426,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.MultiLineEditTextPreference(
                     pref = torrentServerPreferences.trackers(),
-                    title = context.stringResource(MR.strings.pref_torrent_trackers),
+                    title = stringResource(MR.strings.pref_torrent_trackers),
                     subtitle = trackersPref.asState(scope).value
                         .lines().take(2)
                         .joinToString(
@@ -445,7 +443,6 @@ object SettingsPlayerScreen : SearchableSettings {
                     enabled = remember(trackers) { trackers != trackersPref.defaultValue() },
                     onClick = {
                         trackersPref.delete()
-                        context.stringResource(MR.strings.requires_app_restart)
                     },
                 ),
             ),
