@@ -32,8 +32,6 @@ class WebtoonConfig(
     var zoomOutDisabled = false
         private set
 
-    var zoomPropertyChangedListener: ((Boolean) -> Unit)? = null
-
     var sidePadding = 0
         private set
 
