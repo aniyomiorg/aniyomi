@@ -4,7 +4,7 @@ import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import tachiyomi.core.util.lang.compareToWithCollator
+import tachiyomi.core.common.util.lang.compareToWithCollator
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
 import tachiyomi.source.local.entries.manga.LocalMangaSource

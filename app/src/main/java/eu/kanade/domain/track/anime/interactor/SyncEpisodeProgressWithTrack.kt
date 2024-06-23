@@ -4,7 +4,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate

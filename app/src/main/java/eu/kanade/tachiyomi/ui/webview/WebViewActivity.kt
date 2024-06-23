@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.ui.webview
 
+import android.app.Activity
 import android.app.assist.AssistContent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.net.toUri
@@ -22,8 +24,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.i18n.MR
@@ -42,7 +44,16 @@ class WebViewActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                Activity.OVERRIDE_TRANSITION_OPEN,
+                R.anim.shared_axis_x_push_enter,
+                R.anim.shared_axis_x_push_exit,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.shared_axis_x_push_enter, R.anim.shared_axis_x_push_exit)
+        }
         super.onCreate(savedInstanceState)
 
         if (!WebViewUtil.supportsWebView(this)) {
@@ -106,7 +117,16 @@ class WebViewActivity : BaseActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                Activity.OVERRIDE_TRANSITION_CLOSE,
+                R.anim.shared_axis_x_pop_enter,
+                R.anim.shared_axis_x_pop_exit,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.shared_axis_x_pop_enter, R.anim.shared_axis_x_pop_exit)
+        }
     }
 
     private fun shareWebpage(url: String) {

@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.torrentServer
 
-import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.common.preference.PreferenceStore
 
 class TorrentServerPreferences(
     private val preferenceStore: PreferenceStore,

@@ -12,7 +12,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt

@@ -2,7 +2,7 @@ package tachiyomi.data.history.anime
 
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.history.anime.model.AnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate

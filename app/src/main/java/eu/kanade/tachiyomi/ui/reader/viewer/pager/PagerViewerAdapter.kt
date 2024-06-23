@@ -12,8 +12,8 @@ import eu.kanade.tachiyomi.ui.reader.viewer.calculateChapterGap
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import kotlinx.coroutines.delay
-import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.launchUI
+import tachiyomi.core.common.util.system.logcat
 import kotlin.math.max
 
 /**

@@ -2,7 +2,7 @@ package tachiyomi.data.entries.anime
 
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
 import tachiyomi.data.StringListColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler

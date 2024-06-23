@@ -12,8 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlinx.collections.immutable.persistentMapOf
-import tachiyomi.core.i18n.stringResource
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
+import kotlinx.collections.immutable.toImmutableMap
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -85,13 +86,12 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
             ),
             Preference.PreferenceItem.ListPreference(
                 title = context.stringResource(MR.strings.pref_debanding_title),
-                pref = playerPreferences.deband(),
-                entries = persistentMapOf(
-                    0 to context.stringResource(MR.strings.pref_debanding_disabled),
-                    1 to context.stringResource(MR.strings.pref_debanding_cpu),
-                    2 to context.stringResource(MR.strings.pref_debanding_gpu),
-                    3 to "YUV420P",
-                ),
+                pref = playerPreferences.videoDebanding(),
+                entries = VideoDebanding.entries.associateWith {
+                    context.stringResource(
+                        it.stringRes,
+                    )
+                }.toImmutableMap(),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 title = context.stringResource(MR.strings.pref_mpv_scripts),

@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
-import eu.kanade.tachiyomi.util.lang.toDateKey
+import eu.kanade.tachiyomi.util.lang.toLocalDate
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
@@ -32,9 +32,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchNonCancellable
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.items.episode.interactor.GetEpisode
@@ -47,7 +47,6 @@ import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.ZonedDateTime
-import java.util.Date
 
 class AnimeUpdatesScreenModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -393,12 +392,10 @@ class AnimeUpdatesScreenModel(
             return items
                 .map { AnimeUpdatesUiModel.Item(it) }
                 .insertSeparators { before, after ->
-                    val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
-                    val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
+                    val beforeDate = before?.item?.update?.dateFetch?.toLocalDate()
+                    val afterDate = after?.item?.update?.dateFetch?.toLocalDate()
                     when {
-                        beforeDate.time != afterDate.time && afterDate.time != 0L -> {
-                            AnimeUpdatesUiModel.Header(afterDate)
-                        }
+                        beforeDate != afterDate && afterDate != null -> AnimeUpdatesUiModel.Header(afterDate)
                         // Return null to avoid adding a separator between two items.
                         else -> null
                     }

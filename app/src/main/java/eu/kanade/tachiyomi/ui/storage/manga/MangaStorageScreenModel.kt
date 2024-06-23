@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.storage.CommonStorageScreenModel
-import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.GetVisibleMangaCategories
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
