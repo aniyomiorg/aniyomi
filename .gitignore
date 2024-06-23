@@ -7,6 +7,7 @@
 !.idea/icon.png
 *iml
 *.iml
+app/**/assets/client_secrets.json
 
 # Built files
 */build

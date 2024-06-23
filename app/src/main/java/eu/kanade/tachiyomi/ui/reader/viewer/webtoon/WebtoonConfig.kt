@@ -44,6 +44,19 @@ class WebtoonConfig(
 
     val theme = readerPreferences.readerTheme().get()
 
+    // SY -->
+    var usePageTransitions = false
+
+    var enableZoomOut = false
+        private set
+
+    var continuousCropBorders = false
+        private set
+
+    var zoomPropertyChangedListener: ((Boolean) -> Unit)? = null
+
+    // SY <--
+
     init {
         readerPreferences.cropBordersWebtoon()
             .register({ imageCropBorders = it }, { imagePropertyChangedListener?.invoke() })
@@ -96,6 +109,11 @@ class WebtoonConfig(
             .distinctUntilChanged()
             .onEach { themeChangedListener?.invoke() }
             .launchIn(scope)
+
+        // SY -->
+        readerPreferences.pageTransitionsWebtoon()
+            .register({ usePageTransitions = it }, { imagePropertyChangedListener?.invoke() })
+        // SY <--
     }
 
     override var navigator: ViewerNavigation = defaultNavigation()

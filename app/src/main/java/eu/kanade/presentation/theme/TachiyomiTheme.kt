@@ -11,6 +11,7 @@ import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.presentation.theme.colorscheme.BaseColorScheme
 import eu.kanade.presentation.theme.colorscheme.CloudflareColorScheme
 import eu.kanade.presentation.theme.colorscheme.CottoncandyColorScheme
+import eu.kanade.presentation.theme.colorscheme.CustomColorScheme
 import eu.kanade.presentation.theme.colorscheme.DoomColorScheme
 import eu.kanade.presentation.theme.colorscheme.GreenAppleColorScheme
 import eu.kanade.presentation.theme.colorscheme.LavenderColorScheme
@@ -72,6 +73,7 @@ private fun getThemeColorScheme(
     val uiPreferences = Injekt.get<UiPreferences>()
     val colorScheme = if (appTheme == AppTheme.MONET) {
         MonetColorScheme(LocalContext.current)
+        AppTheme.CUSTOM -> CustomColorScheme(uiPreferences)
     } else {
         colorSchemes.getOrDefault(appTheme, TachiyomiColorScheme)
     }
