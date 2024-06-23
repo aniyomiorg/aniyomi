@@ -29,6 +29,9 @@ class WebtoonConfig(
     var imageCropBorders = false
         private set
 
+    var zoomOutDisabled = false
+        private set
+
     var sidePadding = 0
         private set
 
@@ -85,6 +88,12 @@ class WebtoonConfig(
             .register(
                 { dualPageRotateToFitInvert = it },
                 { imagePropertyChangedListener?.invoke() },
+            )
+
+        readerPreferences.webtoonDisableZoomOut()
+            .register(
+                { zoomOutDisabled = it },
+                { zoomPropertyChangedListener?.invoke(it) },
             )
 
         readerPreferences.webtoonDoubleTapZoomEnabled()

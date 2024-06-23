@@ -35,27 +35,7 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
             .header("User-Agent", "Animetail v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
-        val response = chain.proceed(authRequest)
-        val tokenIsExpired = response.headers["www-authenticate"]
-            ?.contains("The access token expired") ?: false
-
-        // Retry the request once with a new token in case it was not already refreshed
-        // by the is expired check before.
-        if (response.code == 401 && tokenIsExpired) {
-            response.close()
-
-            val newToken = refreshToken(chain)
-            setAuth(newToken)
-
-            val newRequest = originalRequest.newBuilder()
-                .addHeader("Authorization", "Bearer ${newToken.access_token}")
-                .header("User-Agent", "Animetail v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
-                .build()
-
-            return chain.proceed(newRequest)
-        }
-
-        return response
+        return chain.proceed(authRequest)
     }
 
     /**

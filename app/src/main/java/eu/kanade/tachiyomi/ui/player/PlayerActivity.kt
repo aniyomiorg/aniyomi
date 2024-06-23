@@ -82,6 +82,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -100,13 +101,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchNonCancellable
-import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.launchUI
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withUIContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -621,11 +622,12 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        MPVLib.setOptionString("hwdec", playerPreferences.hwDec().get())
-        when (playerPreferences.deband().get()) {
-            1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
-            2 -> MPVLib.setOptionString("deband", "yes")
-            3 -> MPVLib.setOptionString("vf", "format=yuv420p")
+        MPVLib.setOptionString("hwdec", playerPreferences.hardwareDecoding().get().mpvValue)
+        when (playerPreferences.videoDebanding().get()) {
+            VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
+            VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
+            VideoDebanding.YUV420P -> MPVLib.setOptionString("vf", "format=yuv420p")
+            VideoDebanding.DISABLED -> {}
         }
 
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
@@ -893,7 +895,7 @@ class PlayerActivity : BaseActivity() {
         AspectState.mode = if (aspectProperty != -1.0 && aspectProperty != (deviceWidth / deviceHeight).toDouble()) {
             AspectState.CUSTOM
         } else {
-            AspectState.get(playerPreferences.playerViewMode().get())
+            playerPreferences.aspectState().get()
         }
 
         playerControls.setViewMode(showText = false)

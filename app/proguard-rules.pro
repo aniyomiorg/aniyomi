@@ -104,3 +104,6 @@
 -dontwarn org.ietf.jgss.GSSManager
 -dontwarn org.ietf.jgss.GSSName
 -dontwarn org.ietf.jgss.Oid
+
+# Apache Commons Compress
+-keep class * extends org.apache.commons.compress.archivers.zip.ZipExtraField { <init>(); }
