@@ -21,7 +21,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okio.buffer
 import okio.sink
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.io.File

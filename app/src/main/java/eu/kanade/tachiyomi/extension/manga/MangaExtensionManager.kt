@@ -19,10 +19,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import logcat.LogPriority
-import tachiyomi.core.preference.plusAssign
-import tachiyomi.core.util.lang.launchNow
-import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.preference.plusAssign
+import tachiyomi.core.common.util.lang.launchNow
+import tachiyomi.core.common.util.lang.withUIContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -348,9 +348,12 @@ class MangaExtensionManager(
         override fun onExtensionUntrusted(extension: MangaExtension.Untrusted) {
             val installedExtension = _installedExtensionsFlow.value
                 .find { it.pkgName == extension.pkgName }
-                ?: return
-            _installedExtensionsFlow.value -= installedExtension
-            _untrustedExtensionsFlow.value += extension
+
+            if (installedExtension != null) {
+                _installedExtensionsFlow.value -= installedExtension
+            } else {
+                _untrustedExtensionsFlow.value += extension
+            }
         }
 
         override fun onPackageUninstalled(pkgName: String) {

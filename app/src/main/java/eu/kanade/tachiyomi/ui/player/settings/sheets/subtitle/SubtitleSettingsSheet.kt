@@ -37,8 +37,8 @@ import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import kotlinx.collections.immutable.persistentListOf
-import tachiyomi.core.storage.UniFileTempFileManager
-import tachiyomi.core.storage.extension
+import tachiyomi.core.common.storage.UniFileTempFileManager
+import tachiyomi.core.common.storage.extension
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding

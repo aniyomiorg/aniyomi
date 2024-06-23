@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.getUriSize
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 
 class PackageInstallerInstallerAnime(private val service: Service) : InstallerAnime(service) {
 

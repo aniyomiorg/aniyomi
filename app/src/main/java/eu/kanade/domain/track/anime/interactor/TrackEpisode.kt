@@ -10,8 +10,8 @@ import eu.kanade.tachiyomi.util.system.isOnline
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import logcat.LogPriority
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 
@@ -22,7 +22,7 @@ class TrackEpisode(
     private val delayedTrackingStore: DelayedAnimeTrackingStore,
 ) {
 
-    suspend fun await(context: Context, animeId: Long, episodeNumber: Double) {
+    suspend fun await(context: Context, animeId: Long, episodeNumber: Double, setupJobOnFailure: Boolean = true) {
         withNonCancellableContext {
             val tracks = getTracks.await(animeId)
             if (tracks.isEmpty()) return@withNonCancellableContext
@@ -44,7 +44,9 @@ class TrackEpisode(
                             delayedTrackingStore.removeAnimeItem(track.id)
                         } else {
                             delayedTrackingStore.addAnime(track.id, episodeNumber)
-                            DelayedAnimeTrackingUpdateJob.setupTask(context)
+                            if (setupJobOnFailure) {
+                                DelayedAnimeTrackingUpdateJob.setupTask(context)
+                            }
                         }
                     }
                 }
