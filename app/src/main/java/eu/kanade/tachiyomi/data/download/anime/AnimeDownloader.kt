@@ -524,11 +524,11 @@ class AnimeDownloader(
         }
     }
 
-    private fun isTor(video: Video): Boolean {
+    private fun isTorrent(video: Video): Boolean {
         return when {
-            video.videoUrl?.startsWith("magnet") == true -> true
-            video.videoUrl?.endsWith(".torrent") == true -> true
-            video.videoUrl?.startsWith(TorrentServerUtils.hostUrl) == true -> true
+            video.videoUrl?.startsWith("magnet") -> true
+            video.videoUrl?.endsWith(".torrent") -> true
+            video.videoUrl?.startsWith(TorrentServerUtils.hostUrl) -> true
             else -> false
         }
     }
