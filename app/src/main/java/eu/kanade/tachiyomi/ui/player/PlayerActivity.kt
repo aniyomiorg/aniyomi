@@ -1653,7 +1653,7 @@ class PlayerActivity : BaseActivity() {
         if (videoUrl.startsWith("magnet")) {
             if (videoUrl.contains("index=")) {
                 index = try {
-                    videoUrl.substringAfter("index=").toInt()
+                    videoUrl.substringAfter("index=").substringBefore("&").toInt()
                 } catch (e: NumberFormatException) {
                     0
                 }

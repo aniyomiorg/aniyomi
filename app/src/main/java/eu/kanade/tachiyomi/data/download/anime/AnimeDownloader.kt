@@ -486,7 +486,7 @@ class AnimeDownloader(
 
             if (downloadScope.isActive) {
                 file = try {
-                    if (isTor(download.video!!)) {
+                    if (isTorrent(download.video!!)) {
                         torrentDownload(download, tmpDir, filename)
                     } else if (isHls(download.video!!) || isMpd(download.video!!)) {
                         ffmpegDownload(download, tmpDir, filename)
@@ -508,7 +508,7 @@ class AnimeDownloader(
         // otherwise we attempt a final try forcing safe mode
         return if (downloadScope.isActive) {
             file ?: try {
-                if (isTor(download.video!!)) {
+                if (isTorrent(download.video!!)) {
                     torrentDownload(download, tmpDir, filename)
                 } else if (isHls(download.video!!) || isMpd(download.video!!)) {
                     ffmpegDownload(download, tmpDir, filename)
@@ -526,9 +526,9 @@ class AnimeDownloader(
 
     private fun isTorrent(video: Video): Boolean {
         return when {
-            video.videoUrl?.startsWith("magnet") -> true
-            video.videoUrl?.endsWith(".torrent") -> true
-            video.videoUrl?.startsWith(TorrentServerUtils.hostUrl) -> true
+            video.videoUrl?.startsWith("magnet") == true -> true
+            video.videoUrl?.endsWith(".torrent") == true -> true
+            video.videoUrl?.startsWith(TorrentServerUtils.hostUrl) == true -> true
             else -> false
         }
     }
