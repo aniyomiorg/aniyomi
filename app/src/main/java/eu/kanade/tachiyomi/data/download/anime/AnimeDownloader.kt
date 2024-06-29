@@ -525,12 +525,8 @@ class AnimeDownloader(
     }
 
     private fun isTorrent(video: Video): Boolean {
-        return when {
-            video.videoUrl?.startsWith("magnet") == true -> true
-            video.videoUrl?.endsWith(".torrent") == true -> true
-            video.videoUrl?.startsWith(TorrentServerUtils.hostUrl) == true -> true
-            else -> false
-        }
+        val url = video.videoUrl ?: return false
+        return url.startsWith("magnet") || url.endsWith(".torrent") || url.startsWith(TorrentServerUtils.hostUrl)
     }
 
     private fun isMpd(video: Video): Boolean {
