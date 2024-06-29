@@ -9,9 +9,10 @@ data class TorrentFile(
     val indexFile: Int,
     val size: Long,
     private val torrentHash: String,
+    private val trackers : List<String> = emptyList(),
 ) {
-    fun toVideoUrl(): String {
-        val encodedName = URLEncoder.encode(File(path).name, "utf8")
-        return "${TorrentServerUtils.hostUrl}/stream/$encodedName?link=$torrentHash&index=$indexFile&play"
+    fun toMagnetURI(): String {
+        val trackers = trackers.joinToString("&tr=") { URLEncoder.encode(it, "UTF-8") }
+        return "magnet:?xt=urn:btih:$torrentHash${if (trackers.isNotEmpty()) "&tr=$trackers" else ""}&index=$indexFile"
     }
 }
