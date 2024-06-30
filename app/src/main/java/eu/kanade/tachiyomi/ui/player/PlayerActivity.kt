@@ -40,6 +40,13 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaLoadRequestData
+import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastSession
+import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.connections.service.ConnectionsPreferences
@@ -204,6 +211,11 @@ class PlayerActivity : BaseActivity() {
     private val playbackStateBuilder = PlaybackStateCompat.Builder()
 
     private lateinit var headsetReceiver: BroadcastReceiver
+
+    private var mCastContext: CastContext? = null
+    private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
+    internal var mCastSession: CastSession? = null
+    private var isInCastMode: Boolean = false
 
     internal val player get() = binding.player
 
@@ -536,6 +548,10 @@ class PlayerActivity : BaseActivity() {
             headsetReceiver,
             IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
         )
+
+        mCastContext = CastContext.getSharedInstance(this)
+        mCastSession = mCastContext!!.sessionManager.currentCastSession
+        setupCastListener()
     }
     private fun copyAssets(configDir: String) {
         val assetManager = this.assets
@@ -928,12 +944,22 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        mCastContext!!.sessionManager.addSessionManagerListener(
+            mSessionManagerListener!!,
+            CastSession::class.java,
+        )
+        isInCastMode = mCastSession != null && mCastSession!!.isConnected
+
         super.onResume()
         refreshUi()
     }
 
     override fun onPause() {
         viewModel.saveCurrentEpisodeWatchingProgress()
+        mCastContext!!.sessionManager.removeSessionManagerListener(
+            mSessionManagerListener!!,
+            CastSession::class.java,
+        )
         super.onPause()
     }
 
@@ -2053,4 +2079,81 @@ class PlayerActivity : BaseActivity() {
         }
     }
     // <-- AM (DISCORD)
+
+    // -- CAST --
+
+    private fun setupCastListener() {
+        mSessionManagerListener = object : SessionManagerListener<CastSession> {
+            override fun onSessionEnded(session: CastSession, error: Int) {
+                onApplicationDisconnected()
+            }
+
+            override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
+                onApplicationConnected(session)
+            }
+
+            override fun onSessionResumeFailed(session: CastSession, error: Int) {
+                onApplicationDisconnected()
+            }
+
+            override fun onSessionStarted(session: CastSession, sessionId: String) {
+                onApplicationConnected(session)
+            }
+
+            override fun onSessionStartFailed(session: CastSession, error: Int) {
+                onApplicationDisconnected()
+            }
+
+            override fun onSessionStarting(session: CastSession) {}
+            override fun onSessionEnding(session: CastSession) {}
+            override fun onSessionResuming(session: CastSession, sessionId: String) {}
+            override fun onSessionSuspended(session: CastSession, reason: Int) {}
+
+            private fun onApplicationConnected(castSession: CastSession) {
+                mCastSession = castSession
+                if (player.timePos != null) {
+                    player.paused = true
+                    loadRemoteMedia()
+                }
+                isInCastMode = true
+                invalidateOptionsMenu()
+            }
+
+            private fun onApplicationDisconnected() {
+                player.paused = true
+                isInCastMode = false
+                invalidateOptionsMenu()
+            }
+        }
+    }
+
+    private fun loadRemoteMedia() {
+        if (mCastSession == null) {
+            return
+        }
+        val remoteMediaClient = mCastSession!!.remoteMediaClient ?: return
+        remoteMediaClient.load(
+            MediaLoadRequestData.Builder()
+                .setMediaInfo(buildMediaInfo())
+                .setAutoplay(playerControls.binding.toggleAutoplay.isChecked)
+                .setCurrentTime(player.timePos!!.toLong() * 1000).build(),
+        )
+    }
+
+    private fun buildMediaInfo(): MediaInfo {
+        val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
+        viewModel.currentAnime?.title?.let { movieMetadata.putString(MediaMetadata.KEY_TITLE, it) }
+        viewModel.currentEpisode?.name?.let { movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, it) }
+        movieMetadata.addImage(WebImage(Uri.parse(viewModel.currentAnime!!.thumbnailUrl!!)))
+
+        return currentVideoList?.getOrNull(0)?.videoUrl!!.let {
+            MediaInfo.Builder(it)
+                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                .setContentType("videos/mp4")
+                .setContentUrl(it)
+                .setMetadata(movieMetadata)
+                .setStreamDuration((player.duration!!).toLong())
+                .build()
+        }
+    }
 }
