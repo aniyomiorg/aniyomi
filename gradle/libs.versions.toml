@@ -3,10 +3,10 @@ aboutlib_version = "10.10.0"
 acra = "5.11.3"
 leakcanary = "2.13"
 moko = "0.23.0"
-okhttp_version = "5.0.0-alpha.12"
+okhttp_version = "5.0.0-alpha.14"
 richtext = "0.20.0"
 shizuku_version = "12.2.0"
-sqldelight = "2.0.0"
+sqldelight = "2.0.2"
 sqlite = "2.4.0"
 voyager = "1.0.0"
 
@@ -31,7 +31,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:7c257e1c64"
-common-compress = "org.apache.commons:commons-compress:1.26.0"
+common-compress = "org.apache.commons:commons-compress:1.26.2"
 junrar = "com.github.junrar:junrar:7.5.5"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 
@@ -63,7 +63,7 @@ flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
-compose-materialmotion = "io.github.fornewid:material-motion-compose-core:1.2.0"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:1.2.1"
 
 swipe = "me.saket.swipe:swipe:1.2.0"
 
@@ -93,9 +93,9 @@ sqldelight-android-paging = { module = "app.cash.sqldelight:androidx-paging3-ext
 sqldelight-dialects-sql = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "sqldelight" }
 sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
-junit = "org.junit.jupiter:junit-jupiter:5.10.1"
+junit = "org.junit.jupiter:junit-jupiter:5.10.3"
 kotest-assertions = "io.kotest:kotest-assertions-core:5.8.0"
-mockk = "io.mockk:mockk:1.13.9"
+mockk = "io.mockk:mockk:1.13.11"
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
