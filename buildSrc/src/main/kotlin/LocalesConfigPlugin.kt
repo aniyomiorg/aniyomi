@@ -9,7 +9,7 @@ private val valuesPrefix = "values(-(b\\+)?)?".toRegex()
 fun TaskContainerScope.registerLocalesConfigTask(project: Project): TaskProvider<Task> {
     return with(project) {
         register("generateLocalesConfig") {
-            val languages = fileTree("$projectDir/src/commonMain/resources/MR/")
+            val languages = fileTree("$projectDir/src/commonMain/moko-resources/")
                 .matching { include("**/strings.xml") }
                 .filterNot { it.readText().contains(emptyResourcesElement) }
                 .map {
