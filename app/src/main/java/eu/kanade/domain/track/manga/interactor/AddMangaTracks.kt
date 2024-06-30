@@ -9,9 +9,9 @@ import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import logcat.LogPriority
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.manga.interactor.GetMangaHistory
 import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId

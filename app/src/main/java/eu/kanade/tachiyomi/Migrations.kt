@@ -16,18 +16,21 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
+import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.workManager
-import tachiyomi.core.preference.Preference
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.preference.TriState
-import tachiyomi.core.preference.getAndSet
-import tachiyomi.core.preference.getEnum
-import tachiyomi.core.preference.minusAssign
-import tachiyomi.core.preference.plusAssign
+import tachiyomi.core.common.preference.Preference
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.preference.TriState
+import tachiyomi.core.common.preference.getAndSet
+import tachiyomi.core.common.preference.getEnum
+import tachiyomi.core.common.preference.minusAssign
+import tachiyomi.core.common.preference.plusAssign
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
@@ -510,10 +513,6 @@ object Migrations {
                     newKey = { Preference.appStateKey(it) },
                 )
 
-                if (HwDecState.isWSA) {
-                    playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
-                }
-
                 // Deleting old download cache index files, but might as well clear it all out
                 context.cacheDir.deleteRecursively()
             }
@@ -561,8 +560,37 @@ object Migrations {
                 }
             }
 
-            if (oldVersion < 122) {
-                if (HwDecState.isWSA) playerPreferences.hwDec().set(HwDecState.SW.mpvValue)
+            if (oldVersion < 123) {
+                val invertedPosition = preferenceStore.getBoolean("pref_invert_playback_txt", false)
+                val invertedDuration = preferenceStore.getBoolean("pref_invert_duration_txt", false)
+                val hwDec = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+                val deband = preferenceStore.getInt("pref_deband", 0)
+                val playerViewMode = preferenceStore.getInt("pref_player_view_mode", 1)
+                val gpuNext = preferenceStore.getBoolean("gpu_next", false)
+
+                prefs.edit {
+                    remove("pref_invert_playback_txt")
+                    remove("pref_invert_duration_txt")
+                    remove("pref_hwdec")
+                    remove("pref_deband")
+                    remove("pref_player_view_mode")
+                    remove("gpu_next")
+
+                    val invertedPlayback = when {
+                        invertedPosition.get() -> InvertedPlayback.POSITION
+                        invertedDuration.get() -> InvertedPlayback.DURATION
+                        else -> InvertedPlayback.NONE
+                    }
+                    val hardwareDecoding = HwDecState.entries.first { it.mpvValue == hwDec.get() }
+                    val videoDebanding = VideoDebanding.entries.first { it.ordinal == deband.get() }
+                    val aspectState = AspectState.entries.first { it.ordinal == playerViewMode.get() }
+
+                    preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE).set(invertedPlayback)
+                    preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec).set(hardwareDecoding)
+                    preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
+                    preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
+                    preferenceStore.getBoolean("pref_gpu_next", false).set(gpuNext.get())
+                }
             }
             return true
         }

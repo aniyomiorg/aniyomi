@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.storage.CommonStorageScreenModel
-import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime

@@ -1,7 +1,7 @@
 package tachiyomi.domain.category.manga.interactor
 
 import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 
 class SetMangaCategories(

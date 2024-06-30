@@ -36,8 +36,8 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.core.preference.Preference
-import tachiyomi.core.preference.getAndSet
+import tachiyomi.core.common.preference.Preference
+import tachiyomi.core.common.preference.getAndSet
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource

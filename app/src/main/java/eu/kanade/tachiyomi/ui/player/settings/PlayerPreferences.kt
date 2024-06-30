@@ -3,8 +3,10 @@ package eu.kanade.tachiyomi.ui.player.settings
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.preference.getEnum
+import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.preference.getEnum
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,
@@ -29,8 +31,7 @@ class PlayerPreferences(
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
 
-    fun invertedPlaybackTxt() = preferenceStore.getBoolean("pref_invert_playback_txt", false)
-    fun invertedDurationTxt() = preferenceStore.getBoolean("pref_invert_duration_txt", false)
+    fun invertedPlayback() = preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE)
 
     fun mpvConf() = preferenceStore.getString("pref_mpv_conf", "")
 
@@ -60,7 +61,7 @@ class PlayerPreferences(
 
     fun mediaChapterSeek() = preferenceStore.getBoolean("pref_media_control_chapter_seeking", false)
 
-    fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", AspectState.FIT.index)
+    fun aspectState() = preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT)
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
 
@@ -94,9 +95,9 @@ class PlayerPreferences(
         false,
     )
 
-    fun hwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
-    fun deband() = preferenceStore.getInt("pref_deband", 0)
-    fun gpuNext() = preferenceStore.getBoolean("gpu_next", false)
+    fun hardwareDecoding() = preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec)
+    fun videoDebanding() = preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED)
+    fun gpuNext() = preferenceStore.getBoolean("pref_gpu_next", false)
 
     fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
     fun audioDelay() = preferenceStore.getInt("pref_audio_delay", 0)

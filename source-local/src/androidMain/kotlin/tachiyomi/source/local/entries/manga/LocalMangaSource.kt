@@ -18,19 +18,20 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
-import tachiyomi.core.i18n.stringResource
+import org.apache.commons.compress.archivers.zip.ZipFile
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.storage.extension
+import tachiyomi.core.common.storage.nameWithoutExtension
+import tachiyomi.core.common.storage.openReadOnlyChannel
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.system.ImageUtil
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
 import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.metadata.comicinfo.copyFromComicInfo
 import tachiyomi.core.metadata.comicinfo.getComicInfo
 import tachiyomi.core.metadata.tachiyomi.ChapterDetails
 import tachiyomi.core.metadata.tachiyomi.MangaDetails
-import tachiyomi.core.storage.UniFileTempFileManager
-import tachiyomi.core.storage.extension
-import tachiyomi.core.storage.nameWithoutExtension
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.system.ImageUtil
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.i18n.MR
@@ -41,13 +42,11 @@ import tachiyomi.source.local.io.Format
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import tachiyomi.source.local.metadata.fillMetadata
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import java.util.zip.ZipFile
 import kotlin.math.abs
 import com.github.junrar.Archive as JunrarArchive
 
@@ -59,7 +58,6 @@ actual class LocalMangaSource(
 
     private val json: Json by injectLazy()
     private val xml: XML by injectLazy()
-    private val tempFileManager: UniFileTempFileManager by injectLazy()
 
     private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular(context))
     private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest(context))
@@ -149,8 +147,8 @@ actual class LocalMangaSource(
 
         // Augment manga details based on metadata files
         try {
-            val mangaDir by lazy { fileSystem.getMangaDirectory(manga.url) }
-            val mangaDirFiles = fileSystem.getFilesInMangaDirectory(manga.url)
+            val mangaDir = fileSystem.getMangaDirectory(manga.url) ?: error("${manga.url} is not a valid directory")
+            val mangaDirFiles = mangaDir.listFiles().orEmpty()
 
             val comicInfoFile = mangaDirFiles
                 .firstOrNull { it.name == COMIC_INFO_FILE }
@@ -180,7 +178,7 @@ actual class LocalMangaSource(
                     // Replace with ComicInfo.xml file
                     val comicInfo = manga.getComicInfo()
                     mangaDir
-                        ?.createFile(COMIC_INFO_FILE)
+                        .createFile(COMIC_INFO_FILE)
                         ?.openOutputStream()
                         ?.use {
                             val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
@@ -195,14 +193,12 @@ actual class LocalMangaSource(
                         .filter(ArchiveManga::isSupported)
                         .toList()
 
-                    val folderPath = mangaDir?.filePath
-
-                    val copiedFile = copyComicInfoFileFromArchive(chapterArchives, folderPath)
+                    val copiedFile = copyComicInfoFileFromArchive(chapterArchives, mangaDir)
                     if (copiedFile != null) {
-                        setMangaDetailsFromComicInfoFile(copiedFile.inputStream(), manga)
+                        setMangaDetailsFromComicInfoFile(copiedFile.openInputStream(), manga)
                     } else {
                         // Avoid re-scanning
-                        mangaDir?.createFile(".noxml")
+                        mangaDir.createFile(".noxml")
                     }
                 }
             }
@@ -216,23 +212,23 @@ actual class LocalMangaSource(
         return@withIOContext manga
     }
 
-    private fun copyComicInfoFileFromArchive(chapterArchives: List<UniFile>, folderPath: String?): File? {
+    private fun copyComicInfoFileFromArchive(chapterArchives: List<UniFile>, folder: UniFile): UniFile? {
         for (chapter in chapterArchives) {
             when (Format.valueOf(chapter)) {
                 is Format.Zip -> {
-                    ZipFile(tempFileManager.createTempFile(chapter)).use { zip: ZipFile ->
+                    ZipFile(chapter.openReadOnlyChannel(context)).use { zip: ZipFile ->
                         zip.getEntry(COMIC_INFO_FILE)?.let { comicInfoFile ->
                             zip.getInputStream(comicInfoFile).buffered().use { stream ->
-                                return copyComicInfoFile(stream, folderPath)
+                                return copyComicInfoFile(stream, folder)
                             }
                         }
                     }
                 }
                 is Format.Rar -> {
-                    JunrarArchive(tempFileManager.createTempFile(chapter)).use { rar ->
+                    JunrarArchive(chapter.openInputStream()).use { rar ->
                         rar.fileHeaders.firstOrNull { it.fileName == COMIC_INFO_FILE }?.let { comicInfoFile ->
                             rar.getInputStream(comicInfoFile).buffered().use { stream ->
-                                return copyComicInfoFile(stream, folderPath)
+                                return copyComicInfoFile(stream, folder)
                             }
                         }
                     }
@@ -243,9 +239,9 @@ actual class LocalMangaSource(
         return null
     }
 
-    private fun copyComicInfoFile(comicInfoFileStream: InputStream, folderPath: String?): File {
-        return File("$folderPath/$COMIC_INFO_FILE").apply {
-            outputStream().use { outputStream ->
+    private fun copyComicInfoFile(comicInfoFileStream: InputStream, folder: UniFile): UniFile? {
+        return folder.createFile(COMIC_INFO_FILE)?.apply {
+            openOutputStream().use { outputStream ->
                 comicInfoFileStream.use { it.copyTo(outputStream) }
             }
         }
@@ -290,7 +286,7 @@ actual class LocalMangaSource(
 
                     val format = Format.valueOf(chapterFile)
                     if (format is Format.Epub) {
-                        EpubFile(tempFileManager.createTempFile(format.file)).use { epub ->
+                        EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
                             epub.fillMetadata(manga, this)
                         }
                     }
@@ -368,8 +364,8 @@ actual class LocalMangaSource(
                     entry?.let { coverManager.update(manga, it.openInputStream()) }
                 }
                 is Format.Zip -> {
-                    ZipFile(tempFileManager.createTempFile(format.file)).use { zip ->
-                        val entry = zip.entries().toList()
+                    ZipFile(format.file.openReadOnlyChannel(context)).use { zip ->
+                        val entry = zip.entries.toList()
                             .sortedWith { f1, f2 ->
                                 f1.name.compareToCaseInsensitiveNaturalOrder(
                                     f2.name,
@@ -387,7 +383,7 @@ actual class LocalMangaSource(
                     }
                 }
                 is Format.Rar -> {
-                    JunrarArchive(tempFileManager.createTempFile(format.file)).use { archive ->
+                    JunrarArchive(format.file.openInputStream()).use { archive ->
                         val entry = archive.fileHeaders
                             .sortedWith { f1, f2 ->
                                 f1.fileName.compareToCaseInsensitiveNaturalOrder(
@@ -406,7 +402,7 @@ actual class LocalMangaSource(
                     }
                 }
                 is Format.Epub -> {
-                    EpubFile(tempFileManager.createTempFile(format.file)).use { epub ->
+                    EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
                         val entry = epub.getImagesFromPages()
                             .firstOrNull()
                             ?.let { epub.getEntry(it) }

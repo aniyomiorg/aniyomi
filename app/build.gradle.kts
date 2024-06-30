@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 123
+        versionCode = 124
         versionName = "0.15.3.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -150,7 +150,7 @@ android {
 
 dependencies {
     implementation(projects.i18n)
-    implementation(projects.core)
+    implementation(projects.core.common)
     implementation(projects.coreMetadata)
     implementation(projects.sourceApi)
     implementation(projects.sourceLocal)
@@ -220,7 +220,7 @@ dependencies {
     // Disk
     implementation(libs.disklrucache)
     implementation(libs.unifile)
-    implementation(libs.junrar)
+    implementation(libs.bundles.archive)
 
     // Preferences
     implementation(libs.preferencektx)
