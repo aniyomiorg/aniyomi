@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import tachiyomi.core.common.preference.Preference
 import uy.kohesive.injekt.injectLazy
+import java.net.URLEncoder
 
 interface DataSaver {
 
@@ -80,8 +81,9 @@ private class BandwidthHeroDataSaver(preferences: SourcePreferences) : DataSaver
     }
 
     private fun getUrl(imageUrl: String): String {
+        val escapedUrl = URLEncoder.encode(imageUrl, "utf-8")
         // Network Request sent for the Bandwidth Hero Proxy server
-        return "$dataSavedServer/?jpg=$format&l=$quality&bw=$colorBW&url=$imageUrl"
+        return "$dataSavedServer/?jpg=$format&l=$quality&bw=$colorBW&url=$escapedUrl"
     }
 
     private fun Preference<Boolean>.toIntRepresentation() = if (get()) "1" else "0"
