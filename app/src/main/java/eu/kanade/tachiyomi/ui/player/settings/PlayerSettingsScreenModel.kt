@@ -88,7 +88,7 @@ class PlayerSettingsScreenModel(
 
         val updateOverrideASS = {
             val newOverrideValue = togglePreference(PlayerPreferences::overrideSubsASS)
-            val overrideType = if (newOverrideValue) "force" else "no"
+            val overrideType = if (newOverrideValue) "force" else "scale"
             MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
 
