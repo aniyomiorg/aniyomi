@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.items.chapter.model.Chapter
 
+@Suppress("MagicNumber")
 @Serializable
 data class BackupChapter(
     // in 1.x some of these values have different names
@@ -21,6 +22,7 @@ data class BackupChapter(
     @ProtoNumber(9) var chapterNumber: Float = 0F,
     @ProtoNumber(10) var sourceOrder: Long = 0,
     @ProtoNumber(11) var lastModifiedAt: Long = 0,
+    @ProtoNumber(12) var version: Long = 0,
 ) {
     fun toChapterImpl(): Chapter {
         return Chapter.create().copy(
@@ -35,6 +37,7 @@ data class BackupChapter(
             dateUpload = this@BackupChapter.dateUpload,
             sourceOrder = this@BackupChapter.sourceOrder,
             lastModifiedAt = this@BackupChapter.lastModifiedAt,
+            version = this@BackupChapter.version,
         )
     }
 }
@@ -49,10 +52,12 @@ val backupChapterMapper = {
         bookmark: Boolean,
         lastPageRead: Long,
         chapterNumber: Double,
-        source_order: Long,
+        sourceOrder: Long,
         dateFetch: Long,
         dateUpload: Long,
         lastModifiedAt: Long,
+        version: Long,
+        _: Long,
     ->
     BackupChapter(
         url = url,
@@ -64,7 +69,8 @@ val backupChapterMapper = {
         lastPageRead = lastPageRead,
         dateFetch = dateFetch,
         dateUpload = dateUpload,
-        sourceOrder = source_order,
+        sourceOrder = sourceOrder,
         lastModifiedAt = lastModifiedAt,
+        version = version,
     )
 }

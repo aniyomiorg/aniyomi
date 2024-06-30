@@ -21,7 +21,7 @@ class SimklInterceptor(val simkl: Simkl) : Interceptor {
         val authRequest = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer ${oauth.access_token}")
             .addHeader("simkl-api-key", clientId)
-            .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
+            .header("User-Agent", "Animetail v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
         return chain.proceed(authRequest)

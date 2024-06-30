@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
+import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -24,6 +25,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
+import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
@@ -85,6 +87,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
+    private val syncPreferences: SyncPreferences = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
@@ -97,7 +100,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    internal val incognitoMode = basePreferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -359,6 +362,9 @@ class PlayerViewModel @JvmOverloads constructor(
         val currentEp = currentEpisode ?: return
         if (episodeId == -1L) return
 
+        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
+        val isSyncEnabled = syncPreferences.isSyncEnabled()
+
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
         // Save last second seen and mark as seen if needed
@@ -373,6 +379,11 @@ class PlayerViewModel @JvmOverloads constructor(
             currentEp.seen = true
             updateTrackEpisodeSeen(currentEp)
             deleteEpisodeIfNeeded(currentEp)
+
+            // Check if syncing is enabled for chapter read:
+            if (isSyncEnabled && syncTriggerOpt.syncOnEpisodeSeen) {
+                SyncDataJob.startNow(Injekt.get<Application>())
+            }
         }
 
         saveWatchingProgress(currentEp)
@@ -446,6 +457,9 @@ class PlayerViewModel @JvmOverloads constructor(
      * If incognito mode isn't on or has at least 1 tracker
      */
     private suspend fun saveEpisodeProgress(episode: Episode) {
+        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
+        val isSyncEnabled = syncPreferences.isSyncEnabled()
+
         if (!incognitoMode || hasTrackers) {
             updateEpisode.await(
                 EpisodeUpdate(
@@ -456,6 +470,11 @@ class PlayerViewModel @JvmOverloads constructor(
                     totalSeconds = episode.total_seconds,
                 ),
             )
+
+            // Check if syncing is enabled for chapter open:
+            if (isSyncEnabled && syncTriggerOpt.syncOnChapterOpen && episode.last_second_seen == 0L) {
+                SyncDataJob.startNow(Injekt.get<Application>())
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.viewer.pager
 
 import android.content.Context
+import android.os.Parcelable
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -26,6 +27,18 @@ open class Pager(
      * Long tap listener function to execute when a long tap is detected.
      */
     var longTapListener: ((MotionEvent) -> Boolean)? = null
+
+    // SY -->
+    var isRestoring = false
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        isRestoring = true
+        val currentItem = currentItem
+        super.onRestoreInstanceState(state)
+        setCurrentItem(currentItem, false)
+        isRestoring = false
+    }
+    // SY <--
 
     /**
      * Gesture listener that implements tap and long tap events.

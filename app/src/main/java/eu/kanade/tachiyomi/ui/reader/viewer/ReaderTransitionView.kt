@@ -36,7 +36,7 @@ class ReaderTransitionView @JvmOverloads constructor(context: Context, attrs: At
                     downloadManager.isChapterDownloaded(
                         chapterName = goingToChapter.name,
                         chapterScanlator = goingToChapter.scanlator,
-                        mangaTitle = manga.title,
+                        mangaTitle = manga.ogTitle,
                         sourceId = manga.source,
                         skipCache = true,
                     )
@@ -64,6 +64,7 @@ class ReaderTransitionView @JvmOverloads constructor(context: Context, attrs: At
             }
         }
     }
+
     private data class Data(
         val transition: ChapterTransition,
         val currChapterDownloaded: Boolean,

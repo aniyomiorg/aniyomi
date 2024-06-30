@@ -101,6 +101,19 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
         }
     }
 
+    // SY -->
+    val pageLayout by screenModel.preferences.pageLayout().collectAsState()
+    SettingsChipRow(MR.strings.page_layout) {
+        ReaderPreferences.PageLayouts.mapIndexed { index, it ->
+            FilterChip(
+                selected = pageLayout == index,
+                onClick = { screenModel.preferences.pageLayout().set(index) },
+                label = { Text(stringResource(it)) },
+            )
+        }
+    }
+    // SY <--
+
     CheckboxItem(
         label = stringResource(MR.strings.pref_crop_borders),
         pref = screenModel.preferences.cropBorders(),
@@ -119,13 +132,13 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     val dualPageSplitPaged by screenModel.preferences.dualPageSplitPaged().collectAsState()
     CheckboxItem(
         label = stringResource(MR.strings.pref_dual_page_split),
-        pref = screenModel.preferences.dualPageInvertPaged(),
+        pref = screenModel.preferences.dualPageSplitPaged(),
     )
 
     if (dualPageSplitPaged) {
         CheckboxItem(
             label = stringResource(MR.strings.pref_dual_page_invert),
-            pref = screenModel.preferences.dualPageRotateToFitInvert(),
+            pref = screenModel.preferences.dualPageInvertPaged(),
         )
     }
 
@@ -141,6 +154,29 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
             pref = screenModel.preferences.dualPageRotateToFitInvert(),
         )
     }
+
+    // SY -->
+    CheckboxItem(
+        label = stringResource(MR.strings.pref_page_transitions),
+        pref = screenModel.preferences.pageTransitionsPager(),
+    )
+
+    CheckboxItem(
+        label = stringResource(MR.strings.invert_double_pages),
+        pref = screenModel.preferences.invertDoublePages(),
+    )
+
+    val centerMarginType by screenModel.preferences.centerMarginType().collectAsState()
+    SettingsChipRow(MR.strings.pref_center_margin) {
+        ReaderPreferences.CenterMarginTypes.mapIndexed { index, it ->
+            FilterChip(
+                selected = centerMarginType == index,
+                onClick = { screenModel.preferences.centerMarginType().set(index) },
+                label = { Text(stringResource(it)) },
+            )
+        }
+    }
+    // SY <--
 }
 
 @Composable

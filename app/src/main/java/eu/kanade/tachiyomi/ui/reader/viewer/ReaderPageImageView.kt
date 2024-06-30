@@ -110,30 +110,13 @@ open class ReaderPageImageView @JvmOverloads constructor(
     }
 
     private fun SubsamplingScaleImageView.landscapeZoom(forward: Boolean) {
-        if (config != null &&
-            config!!.landscapeZoom &&
-            config!!.minimumScaleType == SCALE_TYPE_CENTER_INSIDE &&
-            sWidth > sHeight &&
-            scale == minScale
+        if (config != null && config!!.landscapeZoom && config!!.minimumScaleType == SCALE_TYPE_CENTER_INSIDE &&
+            sWidth > sHeight && scale == minScale
         ) {
             handler?.postDelayed(500) {
                 val point = when (config!!.zoomStartPosition) {
-                    ZoomStartPosition.LEFT -> if (forward) {
-                        PointF(0F, 0F)
-                    } else {
-                        PointF(
-                            sWidth.toFloat(),
-                            0F,
-                        )
-                    }
-                    ZoomStartPosition.RIGHT -> if (forward) {
-                        PointF(sWidth.toFloat(), 0F)
-                    } else {
-                        PointF(
-                            0F,
-                            0F,
-                        )
-                    }
+                    ZoomStartPosition.LEFT -> if (forward) PointF(0F, 0F) else PointF(sWidth.toFloat(), 0F)
+                    ZoomStartPosition.RIGHT -> if (forward) PointF(sWidth.toFloat(), 0F) else PointF(0F, 0F)
                     ZoomStartPosition.CENTER -> center
                 }
 
@@ -298,9 +281,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
         when (image) {
             is BitmapDrawable -> setImage(ImageSource.bitmap(image.bitmap))
             is InputStream -> setImage(ImageSource.inputStream(image))
-            else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}",
-            )
+            else -> throw IllegalArgumentException("Not implemented for class ${image::class.simpleName}")
         }
         isVisible = true
     }
@@ -355,9 +336,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
         val data = when (image) {
             is Drawable -> image
             is InputStream -> ByteBuffer.wrap(image.readBytes())
-            else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}",
-            )
+            else -> throw IllegalArgumentException("Not implemented for class ${image::class.simpleName}")
         }
         val request = ImageRequest.Builder(context)
             .data(data)

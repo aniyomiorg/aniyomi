@@ -15,6 +15,8 @@ CREATE TABLE episodes(
     date_fetch INTEGER NOT NULL,
     date_upload INTEGER NOT NULL,
     last_modified_at INTEGER NOT NULL DEFAULT 0,
+    version INTEGER NOT NULL DEFAULT 0,
+    is_syncing INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
@@ -29,6 +31,22 @@ BEGIN
   UPDATE episodes
   SET last_modified_at = strftime('%s', 'now')
   WHERE _id = new._id;
+END;
+
+CREATE TRIGGER update_episode_and_anime_version AFTER UPDATE ON episodes
+WHEN new.is_syncing = 0 AND (
+    new.seen != old.seen OR
+    new.bookmark != old.bookmark OR
+    new.last_second_seen != old.last_second_seen
+)
+BEGIN
+    -- Update the episode version
+    UPDATE episodes SET version = version + 1
+    WHERE _id = new._id;
+
+    -- Update the anime version
+    UPDATE animes SET version = version + 1
+    WHERE _id = new.anime_id AND (SELECT is_syncing FROM animes WHERE _id = new.anime_id) = 0;
 END;
 
 getEpisodeById:
@@ -63,9 +81,14 @@ removeEpisodesWithIds:
 DELETE FROM episodes
 WHERE _id IN :episodeIds;
 
+resetIsSyncing:
+UPDATE episodes
+SET is_syncing = 0
+WHERE is_syncing = 1;
+
 insert:
-INSERT INTO episodes(anime_id, url, name, scanlator, seen, bookmark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at)
-VALUES (:animeId, :url, :name, :scanlator, :seen, :bookmark, :lastSecondSeen, :totalSeconds, :episodeNumber, :sourceOrder, :dateFetch, :dateUpload, 0);
+INSERT INTO episodes(anime_id, url, name, scanlator, seen, bookmark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing)
+VALUES (:animeId, :url, :name, :scanlator, :seen, :bookmark, :lastSecondSeen, :totalSeconds, :episodeNumber, :sourceOrder, :dateFetch, :dateUpload, 0, :version, 0);
 
 update:
 UPDATE episodes
@@ -80,7 +103,9 @@ SET anime_id = coalesce(:animeId, anime_id),
     episode_number = coalesce(:episodeNumber, episode_number),
     source_order = coalesce(:sourceOrder, source_order),
     date_fetch = coalesce(:dateFetch, date_fetch),
-    date_upload = coalesce(:dateUpload, date_upload)
+    date_upload = coalesce(:dateUpload, date_upload),
+    version = coalesce(:version, version),
+    is_syncing = coalesce(:isSyncing, is_syncing)
 WHERE _id = :episodeId;
 
 selectLastInsertedRowId:

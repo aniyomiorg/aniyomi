@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.reader.setting
 import android.os.Build
 import androidx.compose.ui.graphics.BlendMode
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 import tachiyomi.i18n.MR
@@ -13,7 +14,11 @@ class ReaderPreferences(
 
     // region General
 
-    fun pageTransitions() = preferenceStore.getBoolean("pref_enable_transitions_key", true)
+    // SY -->
+    fun pageTransitionsPager() = preferenceStore.getBoolean("pref_enable_transitions_pager_key", true)
+
+    fun pageTransitionsWebtoon() = preferenceStore.getBoolean("pref_enable_transitions_webtoon_key", true)
+    // SY <--
 
     fun flashOnPageChange() = preferenceStore.getBoolean("pref_reader_flash", false)
 
@@ -42,10 +47,7 @@ class ReaderPreferences(
         ReaderOrientation.FREE.flagValue,
     )
 
-    fun webtoonDoubleTapZoomEnabled() = preferenceStore.getBoolean(
-        "pref_enable_double_tap_zoom_webtoon",
-        true,
-    )
+    fun webtoonDoubleTapZoomEnabled() = preferenceStore.getBoolean("pref_enable_double_tap_zoom_webtoon", true)
 
     fun imageScaleType() = preferenceStore.getInt("pref_image_scale_type_key", 1)
 
@@ -53,15 +55,7 @@ class ReaderPreferences(
 
     fun readerTheme() = preferenceStore.getInt("pref_reader_theme_key", 1)
 
-    fun alwaysShowChapterTransition() = preferenceStore.getBoolean(
-        "always_show_chapter_transition",
-        true,
-    )
-
-    fun preserveReadingPosition() = preferenceStore.getBoolean(
-        "pref_preserve_reading_position",
-        false,
-    )
+    fun alwaysShowChapterTransition() = preferenceStore.getBoolean("always_show_chapter_transition", true)
 
     fun cropBorders() = preferenceStore.getBoolean("crop_borders", false)
 
@@ -99,20 +93,11 @@ class ReaderPreferences(
 
     fun dualPageRotateToFit() = preferenceStore.getBoolean("pref_dual_page_rotate", false)
 
-    fun dualPageRotateToFitInvert() = preferenceStore.getBoolean(
-        "pref_dual_page_rotate_invert",
-        false,
-    )
+    fun dualPageRotateToFitInvert() = preferenceStore.getBoolean("pref_dual_page_rotate_invert", false)
 
-    fun dualPageRotateToFitWebtoon() = preferenceStore.getBoolean(
-        "pref_dual_page_rotate_webtoon",
-        false,
-    )
+    fun dualPageRotateToFitWebtoon() = preferenceStore.getBoolean("pref_dual_page_rotate_webtoon", false)
 
-    fun dualPageRotateToFitInvertWebtoon() = preferenceStore.getBoolean(
-        "pref_dual_page_rotate_invert_webtoon",
-        false,
-    )
+    fun dualPageRotateToFitInvertWebtoon() = preferenceStore.getBoolean("pref_dual_page_rotate_invert_webtoon", false)
 
     // endregion
 
@@ -140,34 +125,38 @@ class ReaderPreferences(
 
     fun readWithVolumeKeys() = preferenceStore.getBoolean("reader_volume_keys", false)
 
-    fun readWithVolumeKeysInverted() = preferenceStore.getBoolean(
-        "reader_volume_keys_inverted",
-        false,
-    )
+    fun readWithVolumeKeysInverted() = preferenceStore.getBoolean("reader_volume_keys_inverted", false)
 
     fun navigationModePager() = preferenceStore.getInt("reader_navigation_mode_pager", 0)
 
     fun navigationModeWebtoon() = preferenceStore.getInt("reader_navigation_mode_webtoon", 0)
 
-    fun pagerNavInverted() = preferenceStore.getEnum(
-        "reader_tapping_inverted",
-        TappingInvertMode.NONE,
+    fun pagerNavInverted() = preferenceStore.getEnum("reader_tapping_inverted", TappingInvertMode.NONE)
+
+    fun webtoonNavInverted() = preferenceStore.getEnum("reader_tapping_inverted_webtoon", TappingInvertMode.NONE)
+
+    fun showNavigationOverlayNewUser() = preferenceStore.getBoolean("reader_navigation_overlay_new_user", true)
+
+    fun showNavigationOverlayOnStart() = preferenceStore.getBoolean("reader_navigation_overlay_on_start", false)
+
+    // J2K -->
+    fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
+    // J2K <--
+
+    // SY -->
+    fun preserveReadingPosition() = preferenceStore.getBoolean("eh_preserve_reading_position", false)
+
+    fun readerBottomButtons() = preferenceStore.getStringSet(
+        "reader_bottom_buttons",
+        ReaderBottomButton.BUTTONS_DEFAULTS,
     )
 
-    fun webtoonNavInverted() = preferenceStore.getEnum(
-        "reader_tapping_inverted_webtoon",
-        TappingInvertMode.NONE,
-    )
+    fun pageLayout() = preferenceStore.getInt("page_layout", PagerConfig.PageLayout.AUTOMATIC)
 
-    fun showNavigationOverlayNewUser() = preferenceStore.getBoolean(
-        "reader_navigation_overlay_new_user",
-        true,
-    )
+    fun invertDoublePages() = preferenceStore.getBoolean("invert_double_pages", false)
 
-    fun showNavigationOverlayOnStart() = preferenceStore.getBoolean(
-        "reader_navigation_overlay_on_start",
-        false,
-    )
+    fun centerMarginType() = preferenceStore.getInt("center_margin_type", PagerConfig.CenterMarginType.NONE)
+    // SY <--
 
     // endregion
 
@@ -179,11 +168,7 @@ class ReaderPreferences(
         NONE(MR.strings.tapping_inverted_none),
         HORIZONTAL(MR.strings.tapping_inverted_horizontal, shouldInvertHorizontal = true),
         VERTICAL(MR.strings.tapping_inverted_vertical, shouldInvertVertical = true),
-        BOTH(
-            MR.strings.tapping_inverted_both,
-            shouldInvertHorizontal = true,
-            shouldInvertVertical = true,
-        ),
+        BOTH(MR.strings.tapping_inverted_both, shouldInvertHorizontal = true, shouldInvertVertical = true),
     }
 
     enum class ReaderHideThreshold(val threshold: Int) {
@@ -196,6 +181,9 @@ class ReaderPreferences(
     companion object {
         const val WEBTOON_PADDING_MIN = 0
         const val WEBTOON_PADDING_MAX = 25
+
+        const val PRELOAD_SIZE_MIN = 4
+        const val PRELOAD_SIZE_MAX = 20
 
         val TapZones = listOf(
             MR.strings.label_default,
@@ -240,5 +228,20 @@ class ReaderPreferences(
                 )
             }
         }
+
+        // SY -->
+        val PageLayouts = listOf(
+            MR.strings.single_page,
+            MR.strings.double_pages,
+            MR.strings.automatic_orientation,
+        )
+
+        val CenterMarginTypes = listOf(
+            MR.strings.center_margin_none,
+            MR.strings.center_margin_double_page,
+            MR.strings.center_margin_wide_page,
+            MR.strings.center_margin_double_and_wide_page,
+        )
+        // SY <--
     }
 }
