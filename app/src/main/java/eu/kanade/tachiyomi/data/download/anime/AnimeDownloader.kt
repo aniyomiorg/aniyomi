@@ -20,6 +20,9 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadPart
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.util.size
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -483,7 +486,9 @@ class AnimeDownloader(
 
             if (downloadScope.isActive) {
                 file = try {
-                    if (isHls(download.video!!) || isMpd(download.video!!)) {
+                    if (isTorrent(download.video!!)) {
+                        torrentDownload(download, tmpDir, filename)
+                    } else if (isHls(download.video!!) || isMpd(download.video!!)) {
                         ffmpegDownload(download, tmpDir, filename)
                     } else {
                         httpDownload(download, tmpDir, filename, newThreads, safe)
@@ -503,7 +508,9 @@ class AnimeDownloader(
         // otherwise we attempt a final try forcing safe mode
         return if (downloadScope.isActive) {
             file ?: try {
-                if (isHls(download.video!!) || isMpd(download.video!!)) {
+                if (isTorrent(download.video!!)) {
+                    torrentDownload(download, tmpDir, filename)
+                } else if (isHls(download.video!!) || isMpd(download.video!!)) {
                     ffmpegDownload(download, tmpDir, filename)
                 } else {
                     httpDownload(download, tmpDir, filename, 1, true)
@@ -517,12 +524,46 @@ class AnimeDownloader(
         }
     }
 
+    private fun isTorrent(video: Video): Boolean {
+        val url = video.videoUrl ?: return false
+        return url.startsWith("magnet") || url.endsWith(".torrent") || url.startsWith(TorrentServerUtils.hostUrl)
+    }
+
     private fun isMpd(video: Video): Boolean {
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".mpd") ?: false
     }
 
     private fun isHls(video: Video): Boolean {
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
+    }
+
+    // this start the torrent server and get the url to download the video
+    private suspend fun torrentDownload(
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
+        val video = download.video!!
+        TorrentServerService.start()
+        if (video.videoUrl!!.startsWith(TorrentServerUtils.hostUrl)) {
+            val hash = video.videoUrl!!.substringAfter("link=").substringBefore("&")
+            val index = video.videoUrl!!.substringAfter("index=").substringBefore("&").toInt()
+            val magnet = "magnet:?xt=urn:btih:$hash&index=$index"
+            video.videoUrl = magnet
+        }
+        val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+        var index = 0
+        if (video.videoUrl!!.contains("index=")) {
+            index = try {
+                video.videoUrl?.substringAfter("index=")
+                    ?.substringBefore("&")?.toInt() ?: 0
+            } catch (_: Exception) {
+                0
+            }
+        }
+        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        video.videoUrl = torrentUrl
+        return ffmpegDownload(download, tmpDir, filename)
     }
 
     // ffmpeg is always on safe mode

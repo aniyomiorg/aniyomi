@@ -106,6 +106,8 @@ seeker = "io.github.2307vivek:seeker:1.1.1"
 
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
+torrentserver = "com.github.Diegopyl1209:torrentserver-aniyomi:c18f58e51b"
+
 [bundles]
 archive = ["common-compress", "junrar"]
 acra = ["acra-http", "acra-scheduler"]

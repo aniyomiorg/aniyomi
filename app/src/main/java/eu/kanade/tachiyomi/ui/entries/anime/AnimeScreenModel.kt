@@ -25,10 +25,12 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniChartApi
@@ -191,11 +193,17 @@ class AnimeScreenModel(
             val needRefreshInfo = !anime.initialized
             val needRefreshEpisode = episodes.isEmpty()
 
+            val animeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+
+            if (animeSource.isSourceForTorrents()) {
+                TorrentServerService.start()
+            }
+
             // Show what we have earlier
             mutableState.update {
                 State.Success(
                     anime = anime,
-                    source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
+                    source = animeSource,
                     isFromSource = isFromSource,
                     episodes = episodes,
                     isRefreshingData = needRefreshInfo || needRefreshEpisode,

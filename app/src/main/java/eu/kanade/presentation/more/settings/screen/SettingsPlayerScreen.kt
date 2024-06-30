@@ -20,8 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
 import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
@@ -55,6 +58,7 @@ object SettingsPlayerScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+        val torrentServerPreferences = remember { Injekt.get<TorrentServerPreferences>() }
         val deviceSupportsPip = basePreferences.deviceHasPip()
 
         return listOfNotNull(
@@ -84,6 +88,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 playerPreferences = playerPreferences,
                 basePreferences = basePreferences,
             ),
+            getTorrentServerGroup(torrentServerPreferences),
         )
     }
 
@@ -389,6 +394,55 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = externalPlayerPreference,
                     title = stringResource(MR.strings.pref_external_player_preference),
                     entries = (mapOf("" to "None") + packageNamesMap).toPersistentMap(),
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getTorrentServerGroup(
+        torrentServerPreferences: TorrentServerPreferences,
+    ): Preference.PreferenceGroup {
+        val scope = rememberCoroutineScope()
+        val trackersPref = torrentServerPreferences.trackers()
+        val trackers by trackersPref.collectAsState()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_torrentserver),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.EditTextPreference(
+                    pref = torrentServerPreferences.port(),
+                    title = stringResource(MR.strings.pref_torrentserver_port),
+                    onValueChanged = {
+                        try {
+                            Integer.parseInt(it)
+                            TorrentServerService.stop()
+                            true
+                        } catch (e: Exception) {
+                            false
+                        }
+                    },
+                ),
+                Preference.PreferenceItem.MultiLineEditTextPreference(
+                    pref = torrentServerPreferences.trackers(),
+                    title = stringResource(MR.strings.pref_torrent_trackers),
+                    subtitle = trackersPref.asState(scope).value
+                        .lines().take(2)
+                        .joinToString(
+                            separator = "\n",
+                            postfix = if (trackersPref.asState(scope).value.lines().size > 2) "\n..." else "",
+                        ),
+                    onValueChanged = {
+                        TorrentServerService.stop()
+                        true
+                    },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(MR.strings.pref_reset_torrent_trackers_string),
+                    enabled = remember(trackers) { trackers != trackersPref.defaultValue() },
+                    onClick = {
+                        trackersPref.delete()
+                    },
                 ),
             ),
         )
