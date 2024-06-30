@@ -40,7 +40,7 @@ fun HorizontalPager(
         modifier = modifier,
         contentPadding = contentPadding,
         pageSize = pageSize,
-        outOfBoundsPageCount = beyondBoundsPageCount,
+        beyondViewportPageCount = beyondBoundsPageCount,
         pageSpacing = pageSpacing,
         verticalAlignment = verticalAlignment,
         flingBehavior = PagerDefaults.flingBehavior(
