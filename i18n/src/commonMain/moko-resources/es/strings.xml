@@ -1137,4 +1137,6 @@
     <string name="pref_player_audio_channels_auto_safe">Seguridad automática</string>
     <string name="pref_mpv_scripts">Activar scripts MPV</string>
     <string name="pref_mpv_scripts_summary">Necesita permisos de almacenamiento externo.</string>
+    <string name="pref_webtoon_disable_zoom_out">Desactivar alejar</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
 </resources>
