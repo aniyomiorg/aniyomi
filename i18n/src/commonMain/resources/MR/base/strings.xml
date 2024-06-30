@@ -423,6 +423,7 @@
     <string name="pref_high">High</string>
     <string name="pref_low">Low</string>
     <string name="pref_lowest">Lowest</string>
+    <string name="pref_webtoon_disable_zoom_out">Disable zoom out</string>
     <string name="pref_remove_exclude_categories">Excluded categories</string>
     <string name="no_location_set">No storage location set</string>
     <string name="invalid_location">Invalid location: %s</string>
@@ -1014,6 +1015,7 @@
     <string name="pref_debanding_disabled">Disabled</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
@@ -1035,12 +1037,12 @@
     <string name="label_updates">Manga</string>
     <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Back</string>
-    <string name="enable_auto_play">"Auto-play is on"</string>
-    <string name="disable_auto_play">"Auto-play is off"</string>
-    <string name="video_fit_screen">"Fit to screen"</string>
-    <string name="video_crop_screen">"Cropped to screen"</string>
-    <string name="video_stretch_screen">"Stretched to screen"</string>
-    <string name="video_custom_screen">"Custom aspect ratio"</string>
+    <string name="enable_auto_play">Auto-play is on</string>
+    <string name="disable_auto_play">Auto-play is off</string>
+    <string name="video_fit_screen">Fit to screen</string>
+    <string name="video_crop_screen">Cropped to screen</string>
+    <string name="video_stretch_screen">Stretched to screen</string>
+    <string name="video_custom_screen">Custom aspect ratio</string>
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
     <string name="settings_dialog_header">Player settings</string>

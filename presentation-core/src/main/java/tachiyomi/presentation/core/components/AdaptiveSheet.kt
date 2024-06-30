@@ -4,6 +4,7 @@ import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -12,17 +13,14 @@ import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -121,12 +119,14 @@ fun AdaptiveSheet(
             }
         }
     } else {
+        val decayAnimationSpec = rememberSplineBasedDecay<Float>()
         val anchoredDraggableState = remember {
             AnchoredDraggableState(
                 initialValue = 1,
-                animationSpec = sheetAnimationSpec,
                 positionalThreshold = { with(density) { 56.dp.toPx() } },
                 velocityThreshold = { with(density) { 125.dp.toPx() } },
+                snapAnimationSpec = sheetAnimationSpec,
+                decayAnimationSpec = decayAnimationSpec,
             )
         }
         val internalOnDismissRequest = {
@@ -185,10 +185,8 @@ fun AdaptiveSheet(
                         orientation = Orientation.Vertical,
                         enabled = enableSwipeDismiss,
                     )
-                    .windowInsetsPadding(
-                        WindowInsets.systemBars
-                            .only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
-                    ),
+                    .navigationBarsPadding()
+                    .statusBarsPadding(),
                 shape = MaterialTheme.shapes.extraLarge,
                 tonalElevation = tonalElevation,
                 content = {

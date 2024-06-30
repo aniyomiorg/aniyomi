@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.util.system
 
 import android.content.Context
 import androidx.core.os.LocaleListCompat
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import java.util.Locale
 

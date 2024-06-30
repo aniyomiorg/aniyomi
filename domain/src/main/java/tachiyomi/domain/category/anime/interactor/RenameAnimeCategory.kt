@@ -1,8 +1,8 @@
 package tachiyomi.domain.category.anime.interactor
 
 import logcat.LogPriority
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.category.model.CategoryUpdate

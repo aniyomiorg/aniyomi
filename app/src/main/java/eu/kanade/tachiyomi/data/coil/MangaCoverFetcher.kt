@@ -21,18 +21,18 @@ import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.internal.http.HTTP_NOT_MODIFIED
 import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
 import okio.sink
 import okio.source
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 
 /**
  * A [Fetcher] that fetches cover image for [Manga] object.
