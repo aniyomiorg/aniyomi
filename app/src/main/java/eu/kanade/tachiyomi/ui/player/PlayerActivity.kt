@@ -18,6 +18,8 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
+import android.os.PowerManager
+import android.provider.Settings
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -85,7 +87,6 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -748,12 +749,44 @@ class PlayerActivity : BaseActivity() {
                 !playerPreferences.rememberPlayerBrightness().get()
 
         brightness = if (useDeviceBrightness) {
-            Utils.getScreenBrightness(this) ?: 0.5F
+            getCurrentBrightness()
         } else {
             playerPreferences.playerBrightnessValue().get()
         }
         verticalScrollLeft(0F)
     }
+
+    private fun getMaxBrightness(): Float {
+        val powerManager = getSystemService(POWER_SERVICE) as? PowerManager
+        if (powerManager != null) {
+            val fields = powerManager.javaClass.declaredFields
+            for (field in fields) {
+                // https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/PowerManager.java
+                if (field.getName().equals("BRIGHTNESS_ON")) {
+                    field.isAccessible = true
+                    return try {
+                        (field.get(powerManager) as Int).toFloat()
+                    } catch (e: IllegalAccessException) {
+                        255F
+                    }
+                }
+            }
+        }
+        return 255F
+    }
+
+    private fun getCurrentBrightness(): Float {
+        // check if window has brightness set
+        val lp = window.attributes
+        if (lp.screenBrightness >= 0f) return lp.screenBrightness
+        val resolver = contentResolver
+        return try {
+            Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS) / getMaxBrightness()
+        } catch (e: Settings.SettingNotFoundException) {
+            0.5F
+        }
+    }
+
 
     @Suppress("DEPRECATION")
     private fun setupMediaSession() {
