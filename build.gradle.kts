@@ -1,6 +1,7 @@
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.BasePlugin
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
 
@@ -16,13 +17,12 @@ buildscript {
 
 plugins {
     alias(kotlinx.plugins.serialization) apply false
+    alias(kotlinx.plugins.compose.compiler) apply false
 }
 
 subprojects {
     tasks.withType<KotlinJvmCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
-        }
+        compilerOptions.jvmTarget = JvmTarget.JVM_17
     }
 
     tasks.withType<Test> {
