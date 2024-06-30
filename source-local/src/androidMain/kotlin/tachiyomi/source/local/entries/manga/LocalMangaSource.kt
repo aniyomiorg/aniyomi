@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
+import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
@@ -17,7 +18,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import logcat.LogPriority
-import nl.adaptivity.xmlutil.AndroidXmlReader
+import nl.adaptivity.xmlutil.core.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
 import org.apache.commons.compress.archivers.zip.ZipFile
 import tachiyomi.core.common.i18n.stringResource
@@ -347,7 +348,7 @@ actual class LocalMangaSource(
     override fun getFilterList() = FilterList(MangaOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getPageList(chapter: SChapter) = throw UnsupportedOperationException(
+    override suspend fun getPageList(chapter: SChapter): List<Page> = throw UnsupportedOperationException(
         "Unused",
     )
 
