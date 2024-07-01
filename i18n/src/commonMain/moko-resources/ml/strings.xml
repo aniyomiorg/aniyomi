@@ -99,4 +99,5 @@
     <string name="action_migrate">മൈഗ്രേറ്റ് ചെയ്യുക</string>
     <string name="action_display_mode">ഡിസ്പ്ലേ മോഡ്</string>
     <string name="action_select_inverse">വിപരീതം തിരഞ്ഞെടുക്കുക</string>
+    <string name="action_display">പ്രദർശിപ്പിക്കുക</string>
 </resources>
