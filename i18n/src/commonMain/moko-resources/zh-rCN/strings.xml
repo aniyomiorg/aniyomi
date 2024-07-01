@@ -1133,4 +1133,6 @@
     <string name="pref_player_audio_channels_reverse_stereo">反转立体声</string>
     <string name="pref_mpv_scripts_summary">需要内部存储权限。</string>
     <string name="pref_mpv_scripts">开启 MPV 脚本</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="pref_webtoon_disable_zoom_out">关闭缩小</string>
 </resources>
