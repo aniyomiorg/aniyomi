@@ -3,7 +3,6 @@ import com.android.build.gradle.BasePlugin
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask
 
 buildscript {
     dependencies {
