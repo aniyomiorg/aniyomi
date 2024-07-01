@@ -592,7 +592,7 @@ object ImageUtil {
         imageStream: InputStream,
         resetAfterExtraction: Boolean = true,
     ): BitmapFactory.Options {
-        imageStream.mark(imageStream.available() + 1)
+        imageStream.mark(Int.MAX_VALUE)
 
         val imageBytes = imageStream.readBytes()
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
