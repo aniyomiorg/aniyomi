@@ -1118,4 +1118,9 @@
     <string name="player_subtitle_empty_warning">Não tem efeito porque não há nenhuma faixa de legenda neste vídeo</string>
     <string name="player_reset_subtitles">Redefinir as legendas para o padrão</string>
     <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
+    <string name="pref_player_audio_channels">Canais de Áudio</string>
+    <string name="pref_player_audio_channels_stereo">Estéreo</string>
+    <string name="pref_mpv_scripts_summary">Necessita de permissão de armazenamento externo.</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Estéreo Invertido</string>
+    <string name="pref_mpv_scripts">Habilitar Scripts MPV</string>
 </resources>

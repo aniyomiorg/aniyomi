@@ -85,6 +85,8 @@
     <ID>ConstructorParameterNaming:SimklModels.kt$OAuth$val token_type: String</ID>
     <ID>ConstructorParameterNaming:WebViewScreenModel.kt$WebViewScreenModel$private val AnimeSourceManager: AnimeSourceManager = Injekt.get()</ID>
     <ID>ConstructorParameterNaming:WebViewScreenModel.kt$WebViewScreenModel$private val MangaSourceManager: MangaSourceManager = Injekt.get()</ID>
+    <ID>ContentTrailingLambda:TabbedDialog.kt$content</ID>
+    <ID>ContentTrailingLambda:TrackInfoDialogSelector.kt$content</ID>
     <ID>CyclomaticComplexMethod:AniChartApi.kt$AniChartApi$internal suspend fun loadAiringTime( anime: Anime, trackItems: List&lt;AnimeTrackItem&gt;, manualFetch: Boolean, ): Pair&lt;Int, Long&gt;</ID>
     <ID>CyclomaticComplexMethod:AnilistModels.kt$fun DomainAnimeTrack.toAnilistScore(): String</ID>
     <ID>CyclomaticComplexMethod:AnilistModels.kt$fun DomainMangaTrack.toAnilistScore(): String</ID>
@@ -248,6 +250,10 @@
     <ID>InstanceOfCheckForException:MangaScreenModel.kt$MangaScreenModel$e is HttpException</ID>
     <ID>InstanceOfCheckForException:MangaScreenModel.kt$MangaScreenModel$e is NoChaptersException</ID>
     <ID>InstanceOfCheckForException:ReaderViewModel.kt$ReaderViewModel$e is CancellationException</ID>
+    <ID>LambdaParameterInRestartableEffect:AnimeLibraryContent.kt$onChangeCurrentPage</ID>
+    <ID>LambdaParameterInRestartableEffect:MangaLibraryContent.kt$onChangeCurrentPage</ID>
+    <ID>LambdaParameterInRestartableEffect:ReaderSettingsDialog.kt$onHideMenus</ID>
+    <ID>LambdaParameterInRestartableEffect:ReaderSettingsDialog.kt$onShowMenus</ID>
     <ID>LargeClass:AnimeDownloader.kt$AnimeDownloader</ID>
     <ID>LargeClass:AnimeScreenModel.kt$AnimeScreenModel : StateScreenModel</ID>
     <ID>LargeClass:MangaScreenModel.kt$MangaScreenModel : StateScreenModel</ID>
@@ -1109,8 +1115,9 @@
     <ID>MaxLineLength:SourcePreferences.kt$SourcePreferences$// fun sourcesTabSourcesInCategories() = preferenceStore.getStringSet("sources_tab_source_categories", mutableSetOf())</ID>
     <ID>MemberNameEqualsClassName:ExternalIntents.kt$ExternalIntents.Companion$val externalIntents: ExternalIntents by injectLazy()</ID>
     <ID>ModifierClickableOrder:ScanlatorFilterDialog.kt$clickable { if (isExcluded) { mutableExcludedScanlators.remove(scanlator) } else { mutableExcludedScanlators.add(scanlator) } }</ID>
+    <ID>ModifierComposed:BasePreferenceWidget.kt$highlightBackground</ID>
+    <ID>ModifierComposed:ItemDownloadIndicator.kt$commonClickable</ID>
     <ID>ModifierMissing:AnimeCategoryScreen.kt$AnimeCategoryScreen</ID>
-    <ID>ModifierMissing:AnimeCoverDialog.kt$AnimeCoverDialog</ID>
     <ID>ModifierMissing:AnimeDownloadQueueScreen.kt$AnimeDownloadQueueScreen</ID>
     <ID>ModifierMissing:AnimeExtensionDetailsScreen.kt$AnimeExtensionDetailsScreen</ID>
     <ID>ModifierMissing:AnimeExtensionFilterScreen.kt$AnimeExtensionFilterScreen</ID>
@@ -1164,7 +1171,6 @@
     <ID>ModifierMissing:HomeScreen.kt$HomeScreen$NavigationRailItem</ID>
     <ID>ModifierMissing:LogoHeader.kt$LogoHeader</ID>
     <ID>ModifierMissing:MangaCategoryScreen.kt$MangaCategoryScreen</ID>
-    <ID>ModifierMissing:MangaCoverDialog.kt$MangaCoverDialog</ID>
     <ID>ModifierMissing:MangaDownloadQueueScreen.kt$DownloadQueueScreen</ID>
     <ID>ModifierMissing:MangaExtensionDetailsScreen.kt$MangaExtensionDetailsScreen</ID>
     <ID>ModifierMissing:MangaExtensionFilterScreen.kt$MangaExtensionFilterScreen</ID>
@@ -1225,9 +1231,10 @@
     <ID>ModifierNotUsedAtRoot:MangaChapterListItem.kt$modifier = modifier .selectedBackground(selected) .combinedClickable( onClick = onClick, onLongClick = onLongClick, ) .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp)</ID>
     <ID>ModifierNotUsedAtRoot:TabbedScreen.kt$modifier = modifier</ID>
     <ID>ModifierNotUsedAtRoot:TrackingPreferenceWidget.kt$modifier = modifier .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }) .fillMaxWidth() .padding(horizontal = PrefsHorizontalPadding, vertical = 8.dp)</ID>
-    <ID>ModifierReused:StorageScreenContent.kt$Column( modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, content = { SelectStorageCategory( selectedCategory = state.selectedCategory, categories = state.categories, onCategorySelected = onCategorySelected, ) CumulativeStorage( modifier = Modifier .padding( horizontal = MaterialTheme.padding.small, vertical = MaterialTheme.padding.medium, ) .run { if (isTabletUi()) { this } else { padding(bottom = MaterialTheme.padding.medium) } }, items = state.items, ) }, )</ID>
-    <ID>ModifierReused:StorageScreenContent.kt$Row( modifier = modifier .padding(horizontal = MaterialTheme.padding.small) .padding(contentPadding), content = { if (isTabletUi()) { Info( modifier = Modifier .weight(2f) .padding(end = MaterialTheme.padding.extraLarge) .fillMaxHeight(), ) } LazyColumn( modifier = Modifier.weight(3f), content = { item { Spacer(Modifier.height(MaterialTheme.padding.small)) } item { if (!isTabletUi()) { Info() } } items( state.items.size, itemContent = { index -&gt; StorageItem( item = state.items[index], isManga = isManga, onDelete = onDelete, ) Spacer(Modifier.height(MaterialTheme.padding.medium)) }, ) }, ) }, )</ID>
     <ID>MultipleEmitters:SubtitleColorPage.kt$SubtitleColors</ID>
+    <ID>MutableStateAutoboxing:EpisodeListDialog.kt$mutableStateOf(0)</ID>
+    <ID>MutableStateAutoboxing:SettingsPlayerScreen.kt$SettingsPlayerScreen$mutableStateOf(initialSkipIntroLength)</ID>
+    <ID>MutableStateAutoboxing:VideoChaptersSheet.kt$mutableStateOf(timePosition)</ID>
     <ID>NestedBlockDepth:Anilist.kt$Anilist$override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack</ID>
     <ID>NestedBlockDepth:Anilist.kt$Anilist$override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack</ID>
     <ID>NestedBlockDepth:AnimeDownloadQueueScreenModel.kt$AnimeDownloadQueueScreenModel.&lt;no name provided&gt;$override fun onMenuItemClick(position: Int, menuItem: MenuItem)</ID>
@@ -1262,6 +1269,136 @@
     <ID>NestedBlockDepth:SyncChaptersWithSource.kt$SyncChaptersWithSource$suspend fun await( rawSourceChapters: List&lt;SChapter&gt;, manga: Manga, source: MangaSource, manualFetch: Boolean = false, fetchWindow: Pair&lt;Long, Long&gt; = Pair(0, 0), ): List&lt;Chapter&gt;</ID>
     <ID>NestedBlockDepth:SyncEpisodesWithSource.kt$SyncEpisodesWithSource$suspend fun await( rawSourceEpisodes: List&lt;SEpisode&gt;, anime: Anime, source: AnimeSource, manualFetch: Boolean = false, fetchWindow: Pair&lt;Long, Long&gt; = Pair(0, 0), ): List&lt;Episode&gt;</ID>
     <ID>NestedBlockDepth:WebtoonRecyclerView.kt$WebtoonRecyclerView.Detector$override fun onTouchEvent(ev: MotionEvent): Boolean</ID>
+    <ID>ParameterNaming:AnimeInfoHeader.kt$onAddToLibraryClicked</ID>
+    <ID>ParameterNaming:AnimeInfoHeader.kt$onEditIntervalClicked</ID>
+    <ID>ParameterNaming:AnimeInfoHeader.kt$onTrackingClicked</ID>
+    <ID>ParameterNaming:AnimeInfoHeader.kt$onWebViewClicked</ID>
+    <ID>ParameterNaming:AnimeInfoHeader.kt$onWebViewLongClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryComfortableGrid.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryCompactGrid.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryContent.kt$onAnimeClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryContent.kt$onContinueWatchingClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryContent.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryList.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:AnimeLibraryPager.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onAddToLibraryClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onAllEpisodeSelected</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onBackClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onCoverClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onDownloadActionClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onEditCategoryClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onEditFetchIntervalClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onEditIntervalClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onEpisodeClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onEpisodeSelected</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onFilterButtonClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onFilterClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onMarkPreviousAsSeenClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onMigrateClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onMultiBookmarkClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onMultiDeleteClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onMultiMarkAsSeenClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onSettingsClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onShareClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onTrackingClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onWebViewClicked</ID>
+    <ID>ParameterNaming:AnimeScreen.kt$onWebViewLongClicked</ID>
+    <ID>ParameterNaming:AnimeTrackInfoDialogHome.kt$onRemoved</ID>
+    <ID>ParameterNaming:AnimeUpdatesScreen.kt$onMultiBookmarkClicked</ID>
+    <ID>ParameterNaming:AnimeUpdatesScreen.kt$onMultiDeleteClicked</ID>
+    <ID>ParameterNaming:AnimeUpdatesScreen.kt$onMultiMarkAsSeenClicked</ID>
+    <ID>ParameterNaming:AnimeUpdatesScreen.kt$onUpdateSelected</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onBookmarkedFilterChanged</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onConfirmed</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onDisplayModeChanged</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onDownloadFilterChanged</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onItemSelected</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onScanlatorFilterClicked</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onSortModeChanged</ID>
+    <ID>ParameterNaming:ChapterSettingsDialog.kt$onUnreadFilterChanged</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onBookmarkClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onChangeCategoryClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onDeleteClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onDownloadClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onExternalClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onInternalClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onMarkAsUnviewedClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onMarkAsViewedClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onMarkPreviousAsViewedClicked</ID>
+    <ID>ParameterNaming:EntryBottomActionMenu.kt$onRemoveBookmarkClicked</ID>
+    <ID>ParameterNaming:EntryDownloadDropdownMenu.kt$onDownloadClicked</ID>
+    <ID>ParameterNaming:EntryToolbar.kt$onBackClicked</ID>
+    <ID>ParameterNaming:EpisodeListDialog.kt$onBookmarkClicked</ID>
+    <ID>ParameterNaming:EpisodeListDialog.kt$onEpisodeClicked</ID>
+    <ID>ParameterNaming:EpisodeOptionsDialogScreen.kt$onCopyClicked</ID>
+    <ID>ParameterNaming:EpisodeOptionsDialogScreen.kt$onDownloadClicked</ID>
+    <ID>ParameterNaming:EpisodeOptionsDialogScreen.kt$onExtDownloadClicked</ID>
+    <ID>ParameterNaming:EpisodeOptionsDialogScreen.kt$onExtPlayerClicked</ID>
+    <ID>ParameterNaming:EpisodeOptionsDialogScreen.kt$onIntPlayerClicked</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onBookmarkedFilterChanged</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onConfirmed</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onDisplayModeChanged</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onDownloadFilterChanged</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onItemSelected</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onSortModeChanged</ID>
+    <ID>ParameterNaming:EpisodeSettingsDialog.kt$onUnseenFilterChanged</ID>
+    <ID>ParameterNaming:ItemsDialogs.kt$onValueChanged</ID>
+    <ID>ParameterNaming:ListPreferenceWidget.kt$onSelected</ID>
+    <ID>ParameterNaming:MangaInfoHeader.kt$onAddToLibraryClicked</ID>
+    <ID>ParameterNaming:MangaInfoHeader.kt$onEditIntervalClicked</ID>
+    <ID>ParameterNaming:MangaInfoHeader.kt$onTrackingClicked</ID>
+    <ID>ParameterNaming:MangaInfoHeader.kt$onWebViewClicked</ID>
+    <ID>ParameterNaming:MangaInfoHeader.kt$onWebViewLongClicked</ID>
+    <ID>ParameterNaming:MangaLibraryComfortableGrid.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:MangaLibraryCompactGrid.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:MangaLibraryContent.kt$onContinueReadingClicked</ID>
+    <ID>ParameterNaming:MangaLibraryContent.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:MangaLibraryContent.kt$onMangaClicked</ID>
+    <ID>ParameterNaming:MangaLibraryList.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:MangaLibraryPager.kt$onGlobalSearchClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onAddToLibraryClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onAllChapterSelected</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onBackClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onChapterClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onChapterSelected</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onCoverClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onDownloadActionClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onEditCategoryClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onEditFetchIntervalClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onEditIntervalClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onFilterButtonClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onFilterClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onMarkPreviousAsReadClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onMigrateClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onMultiBookmarkClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onMultiDeleteClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onMultiMarkAsReadClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onSettingsClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onShareClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onTrackingClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onWebViewClicked</ID>
+    <ID>ParameterNaming:MangaScreen.kt$onWebViewLongClicked</ID>
+    <ID>ParameterNaming:MangaTrackInfoDialogHome.kt$onRemoved</ID>
+    <ID>ParameterNaming:MangaUpdatesScreen.kt$onMultiBookmarkClicked</ID>
+    <ID>ParameterNaming:MangaUpdatesScreen.kt$onMultiDeleteClicked</ID>
+    <ID>ParameterNaming:MangaUpdatesScreen.kt$onMultiMarkAsReadClicked</ID>
+    <ID>ParameterNaming:MangaUpdatesScreen.kt$onUpdateSelected</ID>
+    <ID>ParameterNaming:PreferenceScaffold.kt$onBackPressed</ID>
+    <ID>ParameterNaming:ReaderAppBars.kt$onToggleBookmarked</ID>
+    <ID>ParameterNaming:SelectStorageCategory.kt$onCategorySelected</ID>
+    <ID>ParameterNaming:SettingsDownloadScreen.kt$SettingsDownloadScreen$onValueChanged</ID>
+    <ID>ParameterNaming:SettingsPlayerScreen.kt$SettingsPlayerScreen$onValueChanged</ID>
+    <ID>ParameterNaming:SpeedPickerDialog.kt$onSpeedChanged</ID>
+    <ID>ParameterNaming:StorageScreenContent.kt$onCategorySelected</ID>
+    <ID>ParameterNaming:StreamsCatalogSheet.kt$onAudioSelected</ID>
+    <ID>ParameterNaming:StreamsCatalogSheet.kt$onQualitySelected</ID>
+    <ID>ParameterNaming:StreamsCatalogSheet.kt$onSettingsClicked</ID>
+    <ID>ParameterNaming:StreamsCatalogSheet.kt$onSubtitleSelected</ID>
+    <ID>ParameterNaming:StreamsCatalogSheet.kt$onTrackSelected</ID>
+    <ID>ParameterNaming:SwitchPreferenceWidget.kt$onCheckedChanged</ID>
+    <ID>ParameterNaming:TabbedDialog.kt$onOverflowMenuClicked</ID>
+    <ID>ParameterNaming:TriStateListDialog.kt$onValueChanged</ID>
+    <ID>ParameterNaming:VideoChaptersSheet.kt$onVideoChapterSelected</ID>
     <ID>ReturnCount:AndroidAnimeSourceManager.kt$AndroidAnimeSourceManager$private suspend fun createStubSource(id: Long): StubAnimeSource</ID>
     <ID>ReturnCount:AndroidMangaSourceManager.kt$AndroidMangaSourceManager$private suspend fun createStubSource(id: Long): StubMangaSource</ID>
     <ID>ReturnCount:AnimeCoverFetcher.kt$AnimeCoverFetcher$private suspend fun httpLoader(): FetchResult</ID>
@@ -1770,59 +1907,6 @@
     <ID>TopLevelPropertyNaming:WebtoonRecyclerView.kt$private const val DEFAULT_RATE = 1f</ID>
     <ID>TopLevelPropertyNaming:WebtoonRecyclerView.kt$private const val MAX_SCALE_RATE = 3f</ID>
     <ID>TopLevelPropertyNaming:WebtoonRecyclerView.kt$private const val MIN_RATE = 0.5f</ID>
-    <ID>UnstableCollections:AnimeCategoryScreen.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:AnimeDownloadQueueScreen.kt$List&lt;AnimeDownloadHeaderItem&gt;</ID>
-    <ID>UnstableCollections:AnimeHistoryScreen.kt$List&lt;AnimeHistoryUiModel&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryComfortableGrid.kt$List&lt;AnimeLibraryItem&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryComfortableGrid.kt$List&lt;LibraryAnime&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryCompactGrid.kt$List&lt;AnimeLibraryItem&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryCompactGrid.kt$List&lt;LibraryAnime&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryContent.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryContent.kt$List&lt;LibraryAnime&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryList.kt$List&lt;AnimeLibraryItem&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryList.kt$List&lt;LibraryAnime&gt;</ID>
-    <ID>UnstableCollections:AnimeLibraryPager.kt$List&lt;LibraryAnime&gt;</ID>
-    <ID>UnstableCollections:AnimeScreen.kt$List&lt;EpisodeList.Item&gt;</ID>
-    <ID>UnstableCollections:AnimeTrackInfoDialogHome.kt$List&lt;AnimeTrackItem&gt;</ID>
-    <ID>UnstableCollections:AnimeUpdatesScreen.kt$List&lt;AnimeUpdatesItem&gt;</ID>
-    <ID>UnstableCollections:Commons.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:Commons.kt$Set&lt;String&gt;</ID>
-    <ID>UnstableCollections:CumulativeStorage.kt$List&lt;StorageItem&gt;</ID>
-    <ID>UnstableCollections:DownloadsTab.kt$DownloadsTab$List&lt;AnimeDownloadHeaderItem&gt;</ID>
-    <ID>UnstableCollections:DownloadsTab.kt$DownloadsTab$List&lt;MangaDownloadHeaderItem&gt;</ID>
-    <ID>UnstableCollections:EpisodeListDialog.kt$List&lt;Episode&gt;</ID>
-    <ID>UnstableCollections:EpisodeOptionsDialogScreen.kt$List&lt;Video&gt;</ID>
-    <ID>UnstableCollections:GlobalAnimeSearchCardRow.kt$List&lt;Anime&gt;</ID>
-    <ID>UnstableCollections:GlobalAnimeSearchScreen.kt$Map&lt;AnimeCatalogueSource, AnimeSearchItemResult&gt;</ID>
-    <ID>UnstableCollections:GlobalMangaSearchCardRow.kt$List&lt;Manga&gt;</ID>
-    <ID>UnstableCollections:GlobalMangaSearchScreen.kt$Map&lt;CatalogueSource, MangaSearchItemResult&gt;</ID>
-    <ID>UnstableCollections:LibraryTabs.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:ListPreferenceWidget.kt$Map&lt;out T, String&gt;</ID>
-    <ID>UnstableCollections:MangaCategoryScreen.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:MangaDownloadQueueScreen.kt$List&lt;MangaDownloadHeaderItem&gt;</ID>
-    <ID>UnstableCollections:MangaHistoryScreen.kt$List&lt;MangaHistoryUiModel&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryComfortableGrid.kt$List&lt;LibraryManga&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryComfortableGrid.kt$List&lt;MangaLibraryItem&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryCompactGrid.kt$List&lt;LibraryManga&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryCompactGrid.kt$List&lt;MangaLibraryItem&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryContent.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryContent.kt$List&lt;LibraryManga&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryList.kt$List&lt;LibraryManga&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryList.kt$List&lt;MangaLibraryItem&gt;</ID>
-    <ID>UnstableCollections:MangaLibraryPager.kt$List&lt;LibraryManga&gt;</ID>
-    <ID>UnstableCollections:MangaScreen.kt$List&lt;ChapterList.Item&gt;</ID>
-    <ID>UnstableCollections:MangaTrackInfoDialogHome.kt$List&lt;MangaTrackItem&gt;</ID>
-    <ID>UnstableCollections:MangaUpdatesScreen.kt$List&lt;MangaUpdatesItem&gt;</ID>
-    <ID>UnstableCollections:MultiSelectListPreferenceWidget.kt$Set&lt;String&gt;</ID>
-    <ID>UnstableCollections:PreferenceScreen.kt$List&lt;Preference&gt;</ID>
-    <ID>UnstableCollections:ScanlatorFilterDialog.kt$Set&lt;String&gt;</ID>
-    <ID>UnstableCollections:Seekbar.kt$Seekbar$List&lt;Segment&gt;</ID>
-    <ID>UnstableCollections:SelectStorageCategory.kt$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:SettingsLibraryScreen.kt$SettingsLibraryScreen$List&lt;Category&gt;</ID>
-    <ID>UnstableCollections:TrackInfoDialogSelector.kt$Map&lt;Long, StringResource?&gt;</ID>
-    <ID>UnstableCollections:TriStateListDialog.kt$List&lt;T&gt;</ID>
-    <ID>UnstableCollections:VideoChaptersSheet.kt$List&lt;VideoChapter&gt;</ID>
-    <ID>UnstableCollections:WebViewScreenContent.kt$Map&lt;String, String&gt;</ID>
     <ID>UnusedParameter:AnimeUpdatesScreen.kt$onInvertSelection: () -&gt; Unit</ID>
     <ID>UnusedParameter:MangaUpdatesScreen.kt$onInvertSelection: () -&gt; Unit</ID>
     <ID>UnusedParameter:MoreScreen.kt$onClickStorage: () -&gt; Unit</ID>
@@ -1916,21 +2000,11 @@
     <ID>VariableNaming:MangaTrackSearch.kt$MangaTrackSearch$var publishing_status: String = ""</ID>
     <ID>VariableNaming:MangaTrackSearch.kt$MangaTrackSearch$var publishing_type: String = ""</ID>
     <ID>VariableNaming:MangaTrackSearch.kt$MangaTrackSearch$var start_date: String = ""</ID>
-    <ID>ForbiddenComment:BaselineProfileGenerator.kt$BaselineProfileGenerator$// TODO: automate storage permissions and possibly open manga details screen too?</ID>
     <ID>ConstructorParameterNaming:ChapterDetails.kt$ChapterDetails$val chapter_number: Float</ID>
     <ID>ConstructorParameterNaming:ChapterDetails.kt$ChapterDetails$val date_upload: String? = null</ID>
     <ID>ConstructorParameterNaming:EpisodeDetails.kt$EpisodeDetails$val date_upload: String? = null</ID>
     <ID>ConstructorParameterNaming:EpisodeDetails.kt$EpisodeDetails$val episode_number: Float</ID>
     <ID>TopLevelPropertyNaming:ComicInfo.kt$const val COMIC_INFO_FILE = "ComicInfo.xml"</ID>
-    <ID>ForEachOnRange:UpdatesAnimeWidget.kt$0..&lt;rowCount</ID>
-    <ID>ForEachOnRange:UpdatesMangaWidget.kt$0..&lt;rowCount</ID>
-    <ID>LongMethod:UpdatesAnimeWidget.kt$@Composable fun UpdatesAnimeWidget( data: ImmutableList&lt;Pair&lt;Long, Bitmap?&gt;&gt;?, contentColor: ColorProvider, topPadding: Dp, bottomPadding: Dp, modifier: GlanceModifier = GlanceModifier, )</ID>
-    <ID>LongMethod:UpdatesMangaWidget.kt$@Composable fun UpdatesMangaWidget( data: ImmutableList&lt;Pair&lt;Long, Bitmap?&gt;&gt;?, contentColor: ColorProvider, topPadding: Dp, bottomPadding: Dp, modifier: GlanceModifier = GlanceModifier, )</ID>
-    <ID>MagicNumber:GlanceUtils.kt$10</ID>
-    <ID>MagicNumber:GlanceUtils.kt$64</ID>
-    <ID>MagicNumber:GlanceUtils.kt$95</ID>
-    <ID>TooGenericExceptionCaught:AnimeWidgetManager.kt$AnimeWidgetManager$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:MangaWidgetManager.kt$MangaWidgetManager$e: Exception</ID>
     <ID>LongParameterList:AnimeHistoryMapper.kt$AnimeHistoryMapper$( historyId: Long, animeId: Long, episodeId: Long, title: String, thumbnailUrl: String?, sourceId: Long, isFavorite: Boolean, coverLastModified: Long, episodeNumber: Double, seenAt: Date?, )</ID>
     <ID>LongParameterList:AnimeMapper.kt$AnimeMapper$( id: Long, source: Long, url: String, artist: String?, author: String?, description: String?, genre: List&lt;String&gt;?, title: String, status: Long, thumbnailUrl: String?, favorite: Boolean, lastUpdate: Long?, nextUpdate: Long?, initialized: Boolean, viewerFlags: Long, chapterFlags: Long, coverLastModified: Long, dateAdded: Long, updateStrategy: AnimeUpdateStrategy, calculateInterval: Long, lastModifiedAt: Long, favoriteModifiedAt: Long?, )</ID>
     <ID>LongParameterList:AnimeMapper.kt$AnimeMapper$( id: Long, source: Long, url: String, artist: String?, author: String?, description: String?, genre: List&lt;String&gt;?, title: String, status: Long, thumbnailUrl: String?, favorite: Boolean, lastUpdate: Long?, nextUpdate: Long?, initialized: Boolean, viewerFlags: Long, chapterFlags: Long, coverLastModified: Long, dateAdded: Long, updateStrategy: AnimeUpdateStrategy, calculateInterval: Long, lastModifiedAt: Long, favoriteModifiedAt: Long?, totalCount: Long, seenCount: Double, latestUpload: Long, episodeFetchedAt: Long, lastSeen: Long, bookmarkCount: Double, category: Long, )</ID>
@@ -1976,73 +2050,6 @@
     <ID>UnusedParameter:MangaUpdatesRepositoryImpl.kt$MangaUpdatesRepositoryImpl$dateUpload: Long</ID>
     <ID>UseCheckOrError:AnimeTransactionContext.kt$AnimeTransactionElement$throw IllegalStateException("Transaction was never started or was already released")</ID>
     <ID>UseCheckOrError:MangaTransactionContext.kt$TransactionElement$throw IllegalStateException("Transaction was never started or was already released")</ID>
-    <ID>ComposableParamOrder:SettingsItems.kt$RepeatingIconButton</ID>
-    <ID>ComposableParamOrder:SettingsItems.kt$SelectItem</ID>
-    <ID>CyclomaticComplexMethod:Button.kt$ButtonElevation$@OptIn(InternalCoroutinesApi::class) @Composable private fun animateElevation( enabled: Boolean, interactionSource: InteractionSource, ): State&lt;Dp&gt;</ID>
-    <ID>CyclomaticComplexMethod:Scaffold.kt$@Composable private fun ScaffoldLayout( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalFastScroller( listState: LazyListState, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalGridFastScroller( state: LazyGridState, columns: GridCells, arrangement: Arrangement.Horizontal, contentPadding: PaddingValues, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
-    <ID>ForbiddenComment:VerticalFastScroller.kt$// TODO: Sometimes item height is not available when scrolling up</ID>
-    <ID>FunctionNaming:PullRefresh.kt$PullToRefreshStateImpl.Companion$fun Saver( extraVerticalOffset: Float, positionalThreshold: Float, enabled: () -&gt; Boolean, onRefresh: () -&gt; Unit, )</ID>
-    <ID>LongMethod:AdaptiveSheet.kt$@Composable fun AdaptiveSheet( isTabletUi: Boolean, tonalElevation: Dp, enableSwipeDismiss: Boolean, onDismissRequest: () -&gt; Unit, modifier: Modifier = Modifier, content: @Composable () -&gt; Unit, )</ID>
-    <ID>LongMethod:Button.kt$ButtonElevation$@OptIn(InternalCoroutinesApi::class) @Composable private fun animateElevation( enabled: Boolean, interactionSource: InteractionSource, ): State&lt;Dp&gt;</ID>
-    <ID>LongMethod:InfoScreen.kt$@Composable fun InfoScreen( icon: ImageVector, headingText: String, subtitleText: String, acceptText: String, onAcceptClick: () -&gt; Unit, canAccept: Boolean = true, rejectText: String? = null, onRejectClick: (() -&gt; Unit)? = null, content: @Composable ColumnScope.() -&gt; Unit, )</ID>
-    <ID>LongMethod:Scaffold.kt$@Composable private fun ScaffoldLayout( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
-    <ID>LongMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalFastScroller( listState: LazyListState, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
-    <ID>LongMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalGridFastScroller( state: LazyGridState, columns: GridCells, arrangement: Arrangement.Horizontal, contentPadding: PaddingValues, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
-    <ID>LongMethod:WheelPicker.kt$@Composable private fun &lt;T&gt; WheelPicker( items: ImmutableList&lt;T&gt;, modifier: Modifier = Modifier, startIndex: Int = 0, size: DpSize = DpSize(128.dp, 128.dp), onSelectionChanged: (index: Int) -&gt; Unit = {}, manualInputType: KeyboardType? = null, backgroundContent: (@Composable (size: DpSize) -&gt; Unit)? = { WheelPickerDefaults.Background(size = it) }, itemContent: @Composable LazyItemScope.(item: T) -&gt; Unit, )</ID>
-    <ID>LongParameterList:InfoScreen.kt$( icon: ImageVector, headingText: String, subtitleText: String, acceptText: String, onAcceptClick: () -&gt; Unit, canAccept: Boolean = true, rejectText: String? = null, onRejectClick: (() -&gt; Unit)? = null, content: @Composable ColumnScope.() -&gt; Unit, )</ID>
-    <ID>LongParameterList:Scaffold.kt$( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
-    <ID>LongParameterList:Scrollbar.kt$( orientation: Orientation, reverseDirection: Boolean, atEnd: Boolean, showScrollbar: Boolean, thickness: Float, color: Color, alpha: () -&gt; Float, thumbSize: Float, scrollOffset: Float, positionOffset: Float, )</ID>
-    <ID>LongParameterList:SettingsItems.kt$( label: String, placeholder: String, suffix: String, value: Int, step: Int, min: Int? = null, onValueChanged: (Int) -&gt; Unit, )</ID>
-    <ID>MagicNumber:CircularProgressIndicator.kt$2000</ID>
-    <ID>MagicNumber:Modifier.kt$0.16f</ID>
-    <ID>MagicNumber:Modifier.kt$0.22f</ID>
-    <ID>MagicNumber:PullRefresh.kt$PullToRefreshStateImpl$4</ID>
-    <ID>MagicNumber:Scaffold.kt$3</ID>
-    <ID>MagicNumber:Scaffold.kt$4</ID>
-    <ID>MagicNumber:Scaffold.kt$5</ID>
-    <ID>MagicNumber:Scaffold.kt$6</ID>
-    <ID>MagicNumber:Scaffold.kt$7</ID>
-    <ID>MagicNumber:Scaffold.kt$8</ID>
-    <ID>MagicNumber:Scaffold.kt$9</ID>
-    <ID>MagicNumber:Scrollbar.kt$100</ID>
-    <ID>MagicNumber:Scrollbar.kt$50</ID>
-    <ID>MagicNumber:SettingsItems.kt$0.5f</ID>
-    <ID>MagicNumber:SettingsItems.kt$1.5f</ID>
-    <ID>MagicNumber:Surface.kt$100f</ID>
-    <ID>MagicNumber:Surface.kt$4.5f</ID>
-    <ID>MagicNumber:Tabs.kt$0.08f</ID>
-    <ID>MagicNumber:Tabs.kt$0.12f</ID>
-    <ID>MagicNumber:VerticalFastScroller.kt$100</ID>
-    <ID>MagicNumber:WheelPicker.kt$0.2f</ID>
-    <ID>MagicNumber:WheelPicker.kt$1.2f</ID>
-    <ID>MatchingDeclarationName:EmptyScreen.kt$EmptyScreenAction</ID>
-    <ID>MatchingDeclarationName:SettingsItems.kt$SettingsItemsPaddings</ID>
-    <ID>MaxLineLength:Scaffold.kt$*</ID>
-    <ID>ModifierMissing:CollapsibleBox.kt$CollapsibleBox</ID>
-    <ID>ModifierMissing:InfoScreen.kt$InfoScreen</ID>
-    <ID>ModifierMissing:SectionCard.kt$SectionCard</ID>
-    <ID>ModifierMissing:SettingsItems.kt$CheckboxItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$HeadingItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$IconItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$OutlinedNumericChooser</ID>
-    <ID>ModifierMissing:SettingsItems.kt$RadioItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$SelectItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$SettingsChipRow</ID>
-    <ID>ModifierMissing:SettingsItems.kt$SettingsIconGrid</ID>
-    <ID>ModifierMissing:SettingsItems.kt$SliderItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$SortItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$TextItem</ID>
-    <ID>ModifierMissing:SettingsItems.kt$TriStateItem</ID>
-    <ID>ModifierMissing:Tabs.kt$TabText</ID>
-    <ID>ModifierMissing:WheelPicker.kt$WheelPickerDefaults$Background</ID>
-    <ID>ModifierMissing:WheelPicker.kt$WheelPickerDefaults$Item</ID>
-    <ID>PreviewAnnotationNaming:ThemePreviews.kt$ThemePreviews$ThemePreviews</ID>
-    <ID>PreviewPublic:Scrollbar.kt$LazyListHorizontalScrollbarPreview</ID>
-    <ID>PreviewPublic:Scrollbar.kt$LazyListScrollbarPreview</ID>
-    <ID>TooManyFunctions:SettingsItems.kt$tachiyomi.presentation.core.components.SettingsItems.kt</ID>
-    <ID>UnusedPrivateMember:InfoScreen.kt$@PreviewLightDark @Composable private fun InfoScaffoldPreview()</ID>
     <ID>CyclomaticComplexMethod:AnimeLibrarySortMode.kt$AnimeLibrarySort.Companion$fun deserialize(serialized: String): AnimeLibrarySort</ID>
     <ID>FunctionNaming:Pin.kt$fun Pins(vararg pins: Pin)</ID>
     <ID>LongParameterList:SetAnimeEpisodeFlags.kt$SetAnimeEpisodeFlags$( animeId: Long, unseenFilter: Long, downloadedFilter: Long, bookmarkedFilter: Long, sortingMode: Long, sortingDirection: Long, displayMode: Long, )</ID>
@@ -2158,6 +2165,91 @@
     <ID>TopLevelPropertyNaming:StorageManager.kt$private const val MPV_CONFIG_PATH = "mpv-config"</ID>
     <ID>TopLevelPropertyNaming:StorageManager.kt$private const val SCRIPTS_PATH = "scripts"</ID>
     <ID>TopLevelPropertyNaming:StorageManager.kt$private const val SCRIPT_OPTS_PATH = "script-opts"</ID>
+    <ID>ForbiddenComment:BaselineProfileGenerator.kt$BaselineProfileGenerator$// TODO: automate storage permissions and possibly open manga details screen too?</ID>
+    <ID>ComposableParamOrder:SettingsItems.kt$RepeatingIconButton</ID>
+    <ID>ComposableParamOrder:SettingsItems.kt$SelectItem</ID>
+    <ID>ContentTrailingLambda:Scaffold.kt$content</ID>
+    <ID>CyclomaticComplexMethod:Button.kt$ButtonElevation$@OptIn(InternalCoroutinesApi::class) @Composable private fun animateElevation( enabled: Boolean, interactionSource: InteractionSource, ): State&lt;Dp&gt;</ID>
+    <ID>CyclomaticComplexMethod:Scaffold.kt$@Composable private fun ScaffoldLayout( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalFastScroller( listState: LazyListState, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalGridFastScroller( state: LazyGridState, columns: GridCells, arrangement: Arrangement.Horizontal, contentPadding: PaddingValues, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
+    <ID>ForbiddenComment:VerticalFastScroller.kt$// TODO: Sometimes item height is not available when scrolling up</ID>
+    <ID>FunctionNaming:PullRefresh.kt$PullToRefreshStateImpl.Companion$fun Saver( extraVerticalOffset: Float, positionalThreshold: Float, enabled: () -&gt; Boolean, onRefresh: () -&gt; Unit, )</ID>
+    <ID>LambdaParameterInRestartableEffect:AdaptiveSheet.kt$onDismissRequest</ID>
+    <ID>LambdaParameterInRestartableEffect:VerticalFastScroller.kt$thumbAllowed</ID>
+    <ID>LongMethod:AdaptiveSheet.kt$@Composable fun AdaptiveSheet( isTabletUi: Boolean, tonalElevation: Dp, enableSwipeDismiss: Boolean, onDismissRequest: () -&gt; Unit, modifier: Modifier = Modifier, content: @Composable () -&gt; Unit, )</ID>
+    <ID>LongMethod:Button.kt$ButtonElevation$@OptIn(InternalCoroutinesApi::class) @Composable private fun animateElevation( enabled: Boolean, interactionSource: InteractionSource, ): State&lt;Dp&gt;</ID>
+    <ID>LongMethod:InfoScreen.kt$@Composable fun InfoScreen( icon: ImageVector, headingText: String, subtitleText: String, acceptText: String, onAcceptClick: () -&gt; Unit, canAccept: Boolean = true, rejectText: String? = null, onRejectClick: (() -&gt; Unit)? = null, content: @Composable ColumnScope.() -&gt; Unit, )</ID>
+    <ID>LongMethod:Scaffold.kt$@Composable private fun ScaffoldLayout( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
+    <ID>LongMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalFastScroller( listState: LazyListState, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
+    <ID>LongMethod:VerticalFastScroller.kt$@OptIn(FlowPreview::class) @Composable fun VerticalGridFastScroller( state: LazyGridState, columns: GridCells, arrangement: Arrangement.Horizontal, contentPadding: PaddingValues, modifier: Modifier = Modifier, thumbAllowed: () -&gt; Boolean = { true }, thumbColor: Color = MaterialTheme.colorScheme.primary, topContentPadding: Dp = Dp.Hairline, bottomContentPadding: Dp = Dp.Hairline, endContentPadding: Dp = Dp.Hairline, content: @Composable () -&gt; Unit, )</ID>
+    <ID>LongMethod:WheelPicker.kt$@Composable private fun &lt;T&gt; WheelPicker( items: ImmutableList&lt;T&gt;, modifier: Modifier = Modifier, startIndex: Int = 0, size: DpSize = DpSize(128.dp, 128.dp), onSelectionChanged: (index: Int) -&gt; Unit = {}, manualInputType: KeyboardType? = null, backgroundContent: (@Composable (size: DpSize) -&gt; Unit)? = { WheelPickerDefaults.Background(size = it) }, itemContent: @Composable LazyItemScope.(item: T) -&gt; Unit, )</ID>
+    <ID>LongParameterList:InfoScreen.kt$( icon: ImageVector, headingText: String, subtitleText: String, acceptText: String, onAcceptClick: () -&gt; Unit, canAccept: Boolean = true, rejectText: String? = null, onRejectClick: (() -&gt; Unit)? = null, content: @Composable ColumnScope.() -&gt; Unit, )</ID>
+    <ID>LongParameterList:Scaffold.kt$( fabPosition: FabPosition, topBar: @Composable () -&gt; Unit, startBar: @Composable () -&gt; Unit, content: @Composable (PaddingValues) -&gt; Unit, snackbar: @Composable () -&gt; Unit, fab: @Composable () -&gt; Unit, contentWindowInsets: WindowInsets, bottomBar: @Composable () -&gt; Unit, )</ID>
+    <ID>LongParameterList:Scrollbar.kt$( orientation: Orientation, reverseDirection: Boolean, atEnd: Boolean, showScrollbar: Boolean, thickness: Float, color: Color, alpha: () -&gt; Float, thumbSize: Float, scrollOffset: Float, positionOffset: Float, )</ID>
+    <ID>LongParameterList:SettingsItems.kt$( label: String, placeholder: String, suffix: String, value: Int, step: Int, min: Int? = null, onValueChanged: (Int) -&gt; Unit, )</ID>
+    <ID>MagicNumber:CircularProgressIndicator.kt$2000</ID>
+    <ID>MagicNumber:Modifier.kt$0.16f</ID>
+    <ID>MagicNumber:Modifier.kt$0.22f</ID>
+    <ID>MagicNumber:PullRefresh.kt$PullToRefreshStateImpl$4</ID>
+    <ID>MagicNumber:Scaffold.kt$3</ID>
+    <ID>MagicNumber:Scaffold.kt$4</ID>
+    <ID>MagicNumber:Scaffold.kt$5</ID>
+    <ID>MagicNumber:Scaffold.kt$6</ID>
+    <ID>MagicNumber:Scaffold.kt$7</ID>
+    <ID>MagicNumber:Scaffold.kt$8</ID>
+    <ID>MagicNumber:Scaffold.kt$9</ID>
+    <ID>MagicNumber:Scrollbar.kt$100</ID>
+    <ID>MagicNumber:Scrollbar.kt$50</ID>
+    <ID>MagicNumber:SettingsItems.kt$0.5f</ID>
+    <ID>MagicNumber:SettingsItems.kt$1.5f</ID>
+    <ID>MagicNumber:Surface.kt$100f</ID>
+    <ID>MagicNumber:Surface.kt$4.5f</ID>
+    <ID>MagicNumber:Tabs.kt$0.08f</ID>
+    <ID>MagicNumber:Tabs.kt$0.12f</ID>
+    <ID>MagicNumber:VerticalFastScroller.kt$100</ID>
+    <ID>MagicNumber:WheelPicker.kt$0.2f</ID>
+    <ID>MagicNumber:WheelPicker.kt$1.2f</ID>
+    <ID>MatchingDeclarationName:EmptyScreen.kt$EmptyScreenAction</ID>
+    <ID>MatchingDeclarationName:SettingsItems.kt$SettingsItemsPaddings</ID>
+    <ID>MaxLineLength:Scaffold.kt$*</ID>
+    <ID>ModifierComposed:Modifier.kt$clearFocusOnSoftKeyboardHide</ID>
+    <ID>ModifierComposed:Modifier.kt$clickableNoIndication</ID>
+    <ID>ModifierComposed:Scrollbar.kt$drawScrollbar</ID>
+    <ID>ModifierMissing:CollapsibleBox.kt$CollapsibleBox</ID>
+    <ID>ModifierMissing:InfoScreen.kt$InfoScreen</ID>
+    <ID>ModifierMissing:SectionCard.kt$SectionCard</ID>
+    <ID>ModifierMissing:SettingsItems.kt$CheckboxItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$HeadingItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$IconItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$OutlinedNumericChooser</ID>
+    <ID>ModifierMissing:SettingsItems.kt$RadioItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$SelectItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$SettingsChipRow</ID>
+    <ID>ModifierMissing:SettingsItems.kt$SettingsIconGrid</ID>
+    <ID>ModifierMissing:SettingsItems.kt$SliderItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$SortItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$TextItem</ID>
+    <ID>ModifierMissing:SettingsItems.kt$TriStateItem</ID>
+    <ID>ModifierMissing:Tabs.kt$TabText</ID>
+    <ID>ModifierMissing:WheelPicker.kt$WheelPickerDefaults$Background</ID>
+    <ID>ModifierMissing:WheelPicker.kt$WheelPickerDefaults$Item</ID>
+    <ID>ParameterNaming:SettingsItems.kt$onValueChanged</ID>
+    <ID>ParameterNaming:WheelPicker.kt$onSelectionChanged</ID>
+    <ID>PreviewAnnotationNaming:ThemePreviews.kt$ThemePreviews$ThemePreviews</ID>
+    <ID>PreviewPublic:Scrollbar.kt$LazyListHorizontalScrollbarPreview</ID>
+    <ID>PreviewPublic:Scrollbar.kt$LazyListScrollbarPreview</ID>
+    <ID>TooManyFunctions:SettingsItems.kt$tachiyomi.presentation.core.components.SettingsItems.kt</ID>
+    <ID>UnusedPrivateMember:InfoScreen.kt$@PreviewLightDark @Composable private fun InfoScaffoldPreview()</ID>
+    <ID>ForEachOnRange:UpdatesAnimeWidget.kt$0..&lt;rowCount</ID>
+    <ID>ForEachOnRange:UpdatesMangaWidget.kt$0..&lt;rowCount</ID>
+    <ID>LongMethod:UpdatesAnimeWidget.kt$@Composable fun UpdatesAnimeWidget( data: ImmutableList&lt;Pair&lt;Long, Bitmap?&gt;&gt;?, contentColor: ColorProvider, topPadding: Dp, bottomPadding: Dp, modifier: GlanceModifier = GlanceModifier, )</ID>
+    <ID>LongMethod:UpdatesMangaWidget.kt$@Composable fun UpdatesMangaWidget( data: ImmutableList&lt;Pair&lt;Long, Bitmap?&gt;&gt;?, contentColor: ColorProvider, topPadding: Dp, bottomPadding: Dp, modifier: GlanceModifier = GlanceModifier, )</ID>
+    <ID>MagicNumber:GlanceUtils.kt$10</ID>
+    <ID>MagicNumber:GlanceUtils.kt$64</ID>
+    <ID>MagicNumber:GlanceUtils.kt$95</ID>
+    <ID>TooGenericExceptionCaught:AnimeWidgetManager.kt$AnimeWidgetManager$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:MangaWidgetManager.kt$MangaWidgetManager$e: Exception</ID>
     <ID>CyclomaticComplexMethod:ImageUtil.kt$ImageUtil$fun chooseBackground(context: Context, imageStream: InputStream): Drawable</ID>
     <ID>CyclomaticComplexMethod:RateLimitInterceptor.kt$RateLimitInterceptor$override fun intercept(chain: Interceptor.Chain): Response</ID>
     <ID>ForbiddenComment:Localize.kt$// TODO: janky workaround for https://github.com/icerockdev/moko-resources/issues/337</ID>
