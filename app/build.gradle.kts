@@ -333,6 +333,12 @@ tasks {
                 ),
             )
         }
+
+        // https://developer.android.com/jetpack/androidx/releases/compose-compiler#1.5.9
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:nonSkippingGroupOptimization=true",
+        )
     }
 }
 
