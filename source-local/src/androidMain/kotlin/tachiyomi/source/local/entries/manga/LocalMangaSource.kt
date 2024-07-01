@@ -17,9 +17,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import mihon.core.common.extensions.toZipFile
-import nl.adaptivity.xmlutil.core.AndroidXmlReader
+import nl.adaptivity.xmlutil.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
-import org.apache.commons.compress.archivers.zip.ZipFile
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.storage.extension
 import tachiyomi.core.common.storage.nameWithoutExtension
