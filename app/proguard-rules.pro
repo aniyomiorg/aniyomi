@@ -1,4 +1,5 @@
 -dontobfuscate
+-dontoptimize
 
 -keep,allowoptimization class eu.kanade.**
 -keep,allowoptimization class tachiyomi.**
@@ -8,7 +9,7 @@
 -keep,allowoptimization class android.content.** { *; }
 -keep,allowoptimization class uy.kohesive.injekt.** { public protected *; }
 -keep,allowoptimization class android.test.base.** { *; }
--keep class kotlin.** { public protected *; }
+-keep,allowoptimization class kotlin.** { public protected *; }
 -keep,allowoptimization class kotlinx.coroutines.** { public protected *; }
 -keep,allowoptimization class kotlinx.serialization.** { public protected *; }
 -keep,allowoptimization class okhttp3.** { public protected *; }
