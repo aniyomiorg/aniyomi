@@ -1,19 +1,18 @@
 package eu.kanade.tachiyomi.data.coil
 
 import android.net.Uri
-import coil.ImageLoader
-import coil.decode.DataSource
-import coil.decode.ImageSource
-import coil.disk.DiskCache
-import coil.fetch.FetchResult
-import coil.fetch.Fetcher
-import coil.fetch.SourceResult
-import coil.network.HttpException
-import coil.request.Options
-import coil.request.Parameters
+import coil3.Extras
+import coil3.ImageLoader
+import coil3.decode.DataSource
+import coil3.decode.ImageSource
+import coil3.disk.DiskCache
+import coil3.fetch.FetchResult
+import coil3.fetch.Fetcher
+import coil3.fetch.SourceFetchResult
+import coil3.getOrDefault
+import coil3.request.Options
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
-import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.source.online.HttpSource
 import logcat.LogPriority
@@ -21,6 +20,7 @@ import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Request
 import okhttp3.Response
+import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
@@ -42,7 +42,7 @@ import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
  * handled by Coil's [DiskCache].
  *
  * Available request parameter:
- * - [USE_CUSTOM_COVER]: Use custom cover if set by user, default is true
+ * - [USE_CUSTOM_COVER_KEY]: Use custom cover if set by user, default is true
  */
 class MangaCoverFetcher(
     private val url: String?,
@@ -61,7 +61,7 @@ class MangaCoverFetcher(
 
     override suspend fun fetch(): FetchResult {
         // Use custom cover if exists
-        val useCustomCover = options.parameters.value(USE_CUSTOM_COVER) ?: true
+        val useCustomCover = options.extras.getOrDefault(USE_CUSTOM_COVER_KEY)
         if (useCustomCover) {
             val customCoverFile = customCoverFileLazy.value
             if (customCoverFile.exists()) {
@@ -82,16 +82,20 @@ class MangaCoverFetcher(
     private fun uniFileLoader(urlString: String): FetchResult {
         val uniFile = UniFile.fromUri(options.context, Uri.parse(urlString))!!
         val tempFile = uniFile.openInputStream().source().buffer()
-        return SourceResult(
-            source = ImageSource(source = tempFile, context = options.context),
+        return SourceFetchResult(
+            source = ImageSource(source = tempFile, fileSystem = FileSystem.SYSTEM),
             mimeType = "image/*",
             dataSource = DataSource.DISK,
         )
     }
 
     private fun fileLoader(file: File): FetchResult {
-        return SourceResult(
-            source = ImageSource(file = file.toOkioPath(), diskCacheKey = diskCacheKey),
+        return SourceFetchResult(
+            source = ImageSource(
+                file = file.toOkioPath(),
+                fileSystem = FileSystem.SYSTEM,
+                diskCacheKey = diskCacheKey,
+            ),
             mimeType = "image/*",
             dataSource = DataSource.DISK,
         )
@@ -119,7 +123,7 @@ class MangaCoverFetcher(
                 }
 
                 // Read from snapshot
-                return SourceResult(
+                return SourceFetchResult(
                     source = snapshot.toImageSource(),
                     mimeType = "image/*",
                     dataSource = DataSource.DISK,
@@ -139,7 +143,7 @@ class MangaCoverFetcher(
                 // Read from disk cache
                 snapshot = writeToDiskCache(response)
                 if (snapshot != null) {
-                    return SourceResult(
+                    return SourceFetchResult(
                         source = snapshot.toImageSource(),
                         mimeType = "image/*",
                         dataSource = DataSource.NETWORK,
@@ -147,8 +151,8 @@ class MangaCoverFetcher(
                 }
 
                 // Read from response if cache is unused or unusable
-                return SourceResult(
-                    source = ImageSource(source = responseBody.source(), context = options.context),
+                return SourceFetchResult(
+                    source = ImageSource(source = responseBody.source(), fileSystem = FileSystem.SYSTEM),
                     mimeType = "image/*",
                     dataSource = if (response.cacheResponse != null) DataSource.DISK else DataSource.NETWORK,
                 )
@@ -167,17 +171,20 @@ class MangaCoverFetcher(
         val response = client.newCall(newRequest()).await()
         if (!response.isSuccessful && response.code != HTTP_NOT_MODIFIED) {
             response.close()
-            throw HttpException(response)
+            throw Exception(response.message)
         }
         return response
     }
 
     private fun newRequest(): Request {
-        val request = Request.Builder()
-            .url(url!!)
-            .headers(sourceLazy.value?.headers ?: options.headers)
-            // Support attaching custom data to the network request.
-            .tag(Parameters::class.java, options.parameters)
+        val request = Request.Builder().apply {
+            url(url!!)
+
+            val sourceHeaders = sourceLazy.value?.headers
+            if (sourceHeaders != null) {
+                headers(sourceHeaders)
+            }
+        }
 
         when {
             options.networkCachePolicy.readEnabled -> {
@@ -262,7 +269,12 @@ class MangaCoverFetcher(
     }
 
     private fun DiskCache.Snapshot.toImageSource(): ImageSource {
-        return ImageSource(file = data, diskCacheKey = diskCacheKey, closeable = this)
+        return ImageSource(
+            file = data,
+            fileSystem = FileSystem.SYSTEM,
+            diskCacheKey = diskCacheKey,
+            closeable = this,
+        )
     }
 
     private fun getResourceType(cover: String?): Type? {
@@ -326,7 +338,7 @@ class MangaCoverFetcher(
     }
 
     companion object {
-        const val USE_CUSTOM_COVER = "use_custom_cover"
+        val USE_CUSTOM_COVER_KEY = Extras.Key(true)
 
         private val CACHE_CONTROL_NO_STORE = CacheControl.Builder().noStore().build()
         private val CACHE_CONTROL_NO_NETWORK_NO_CACHE = CacheControl.Builder().noCache().onlyIfCached().build()
