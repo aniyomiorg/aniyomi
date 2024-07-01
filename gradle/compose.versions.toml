@@ -7,7 +7,7 @@ accompanist = "0.35.0-alpha"
 activity = "androidx.activity:activity-compose:1.9.0"
 bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
 foundation = { module = "androidx.compose.foundation:foundation" }
-animation = { module = "androidx.compose.animation:animation", version = "1.7.0-beta04" }
+animation = { module = "androidx.compose.animation:animation" }
 animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -17,9 +17,9 @@ material3-core = { module = "androidx.compose.material3:material3" }
 material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
 # Some components aren't available in Material3
-material-core = { module = "androidx.compose.material:material", version = "1.7.0-beta04" }
+material-core = { module = "androidx.compose.material:material" }
 
-glance = "androidx.glance:glance-appwidget:1.1.0"
+glance = "androidx.glance:glance-appwidget:1.0.0"
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
