@@ -1,5 +1,4 @@
 -dontobfuscate
--dontoptimize
 
 -keep,allowoptimization class eu.kanade.**
 -keep,allowoptimization class tachiyomi.**
