@@ -21,6 +21,7 @@ import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.http.HTTP_NOT_MODIFIED
 import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
@@ -32,7 +33,6 @@ import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.
