@@ -33,7 +33,7 @@ subprojects {
     }
 
     plugins.withType<BasePlugin> {
-        plugins.apply("tachiyomi.lint")
+        plugins.apply("detekt")
         configure<BaseExtension> {
             compileSdkVersion(AndroidConfig.compileSdk)
             defaultConfig {
