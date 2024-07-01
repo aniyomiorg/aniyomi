@@ -220,7 +220,7 @@
     <string name="other_source">Andere</string>
     <string name="action_global_search_hint">Globale Suche…</string>
     <string name="latest">Neueste</string>
-    <string name="browse">Durchsuchen</string>
+    <string name="browse">Stöbern</string>
     <string name="channel_common">Allgemein</string>
     <string name="action_display_download_badge">Heruntergelade Kapitel</string>
     <string name="information_empty_category">Keine Kategorien vorhanden. Tippe auf die Plus-Schaltfläche, um eine Kategorie zum Sortieren deiner Bibliothek zu erstellen.</string>
@@ -829,7 +829,7 @@
     <string name="pref_bottom_nav_style">Stil der unteren Navigation</string>
     <string name="pref_update_only_completely_read">Überspringe Einträge mit ungelesenen Kapiteln oder angesehenen Folgen</string>
     <string name="pref_library_update_show_tab_badge">Anzahl von Ungelesenem auf dem „Neues“-Symbol anzeigen</string>
-    <string name="default_manga_category">Standard Mangakategorie</string>
+    <string name="default_manga_category">Standard-Mangakategorie</string>
     <string name="default_anime_category">Standard-Animekategorie</string>
     <string name="pref_manga_library_update_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
     <string name="pref_anime_library_update_categories_details">Anime in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
@@ -1121,7 +1121,7 @@
     <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
     <string name="ext_revoke_trust">Vertrauenswürdige unbekannte Erweiterungen entfernen</string>
-    <string name="action_open_repo">Open Source Repo</string>
+    <string name="action_open_repo">Open-Source-Repository</string>
     <string name="pref_preserve_reading_position">Lesefortschritt bei gelesenen Kapiteln speichern</string>
     <string name="pref_download_slots">Maximale Downloads</string>
     <string name="pref_gpu_next_title">GPU-Next aktivieren</string>
