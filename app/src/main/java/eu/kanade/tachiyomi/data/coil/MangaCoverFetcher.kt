@@ -13,6 +13,7 @@ import coil3.getOrDefault
 import coil3.request.Options
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher.Companion.USE_CUSTOM_COVER_KEY
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.source.online.HttpSource
 import logcat.LogPriority
@@ -32,6 +33,7 @@ import tachiyomi.domain.entries.manga.model.MangaCover
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.io.IOException
 import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 
 /**
@@ -171,7 +173,7 @@ class MangaCoverFetcher(
         val response = client.newCall(newRequest()).await()
         if (!response.isSuccessful && response.code != HTTP_NOT_MODIFIED) {
             response.close()
-            throw Exception(response.message)
+            throw IOException(response.message)
         }
         return response
     }

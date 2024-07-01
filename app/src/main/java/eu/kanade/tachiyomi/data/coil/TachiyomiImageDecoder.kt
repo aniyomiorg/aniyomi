@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.coil
 
-import androidx.core.graphics.drawable.toDrawable
 import coil3.ImageLoader
 import coil3.asCoilImage
 import coil3.decode.DecodeResult
@@ -8,7 +7,6 @@ import coil3.decode.Decoder
 import coil3.decode.ImageSource
 import coil3.fetch.SourceFetchResult
 import coil3.request.Options
-import coil3.request.allowRgb565
 import okio.BufferedSource
 import tachiyomi.core.common.util.system.ImageUtil
 import tachiyomi.decoder.ImageDecoder

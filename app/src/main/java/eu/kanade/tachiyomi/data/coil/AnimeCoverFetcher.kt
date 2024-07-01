@@ -14,6 +14,7 @@ import coil3.request.Options
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER_KEY
 import eu.kanade.tachiyomi.network.await
 import logcat.LogPriority
 import okhttp3.CacheControl
@@ -32,6 +33,7 @@ import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.io.IOException
 import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 
 /**
@@ -171,7 +173,7 @@ class AnimeCoverFetcher(
         val response = client.newCall(newRequest()).await()
         if (!response.isSuccessful && response.code != HTTP_NOT_MODIFIED) {
             response.close()
-            throw Exception(response.message)
+            throw IOException(response.message)
         }
         return response
     }
