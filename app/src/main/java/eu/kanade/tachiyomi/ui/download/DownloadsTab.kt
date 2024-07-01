@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
@@ -68,7 +69,6 @@ import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.HorizontalPager
 import tachiyomi.presentation.core.components.Pill
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
@@ -272,22 +272,23 @@ data class DownloadsTab(
                     state = state,
                     verticalAlignment = Alignment.Top,
                     pageNestedScrollConnection = nestedScrollConnection,
-                ) { page ->
-                    when (page) {
-                        0 -> animeDownloadTab(
-                            nestedScrollConnection,
-                        ).content(
-                            PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                            snackbarHostState,
-                        )
-                        1 -> mangaDownloadTab(
-                            nestedScrollConnection,
-                        ).content(
-                            PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                            snackbarHostState,
-                        )
-                    }
-                }
+                    pageContent = { page ->
+                        when (page) {
+                            0 -> animeDownloadTab(
+                                nestedScrollConnection,
+                            ).content(
+                                PaddingValues(bottom = contentPadding.calculateBottomPadding()),
+                                snackbarHostState,
+                            )
+                            1 -> mangaDownloadTab(
+                                nestedScrollConnection,
+                            ).content(
+                                PaddingValues(bottom = contentPadding.calculateBottomPadding()),
+                                snackbarHostState,
+                            )
+                        }
+                    },
+                )
             }
         }
     }
