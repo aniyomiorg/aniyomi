@@ -139,6 +139,8 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        private const val MAX_BRIGHTNESS = 255F
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -756,23 +758,20 @@ class PlayerActivity : BaseActivity() {
         verticalScrollLeft(0F)
     }
 
+    @Suppress("ReturnCount")
     private fun getMaxBrightness(): Float {
-        val powerManager = getSystemService(POWER_SERVICE) as? PowerManager
-        if (powerManager != null) {
-            val fields = powerManager.javaClass.declaredFields
-            for (field in fields) {
-                // https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/PowerManager.java
-                if (field.getName().equals("BRIGHTNESS_ON")) {
-                    field.isAccessible = true
-                    return try {
-                        (field.get(powerManager) as Int).toFloat()
-                    } catch (e: IllegalAccessException) {
-                        255F
-                    }
-                }
-            }
+        val powerManager = getSystemService(POWER_SERVICE) as? PowerManager ?: return MAX_BRIGHTNESS
+        val brightnessField = powerManager.javaClass.declaredFields.find {
+            it.name == "BRIGHTNESS_ON"
+        } ?: return MAX_BRIGHTNESS
+
+        brightnessField.isAccessible = true
+        return try {
+            (brightnessField.get(powerManager) as Int).toFloat()
+        } catch (e: IllegalAccessException) {
+            logcat(LogPriority.ERROR, e) { "Unable to access BRIGHTNESS_ON field" }
+            MAX_BRIGHTNESS
         }
-        return 255F
     }
 
     private fun getCurrentBrightness(): Float {
@@ -783,10 +782,10 @@ class PlayerActivity : BaseActivity() {
         return try {
             Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS) / getMaxBrightness()
         } catch (e: Settings.SettingNotFoundException) {
+            logcat(LogPriority.ERROR, e) { "Unable to get screen brightness" }
             0.5F
         }
     }
-
 
     @Suppress("DEPRECATION")
     private fun setupMediaSession() {
