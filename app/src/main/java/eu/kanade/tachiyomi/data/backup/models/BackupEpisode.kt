@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.items.episode.model.Episode
 
+@Suppress("MagicNumber")
 @Serializable
 data class BackupEpisode(
     // in 1.x some of these values have different names
@@ -22,6 +23,7 @@ data class BackupEpisode(
     @ProtoNumber(9) var episodeNumber: Float = 0F,
     @ProtoNumber(10) var sourceOrder: Long = 0,
     @ProtoNumber(11) var lastModifiedAt: Long = 0,
+    @ProtoNumber(12) var version: Long = 0,
 ) {
     fun toEpisodeImpl(): Episode {
         return Episode.create().copy(
@@ -37,6 +39,7 @@ data class BackupEpisode(
             dateUpload = this@BackupEpisode.dateUpload,
             sourceOrder = this@BackupEpisode.sourceOrder,
             lastModifiedAt = this@BackupEpisode.lastModifiedAt,
+            version = this@BackupEpisode.version,
         )
     }
 }
@@ -56,6 +59,8 @@ val backupEpisodeMapper = {
         dateFetch: Long,
         dateUpload: Long,
         lastModifiedAt: Long,
+        version: Long,
+        _: Long,
     ->
     BackupEpisode(
         url = url,
@@ -70,5 +75,6 @@ val backupEpisodeMapper = {
         dateUpload = dateUpload,
         sourceOrder = source_order,
         lastModifiedAt = lastModifiedAt,
+        version = version,
     )
 }
