@@ -83,13 +83,12 @@ private fun NotDownloadedIndicator(
     modifier: Modifier = Modifier,
     onClick: (ChapterDownloadAction) -> Unit,
 ) {
-    val hapticFeedback = LocalHapticFeedback.current
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
             .commonClickable(
                 enabled = enabled,
-                hapticFeedback = hapticFeedback,
+                hapticFeedback = LocalHapticFeedback.current,
                 onLongClick = { onClick(ChapterDownloadAction.START_NOW) },
                 onClick = { onClick(ChapterDownloadAction.START) },
             )
@@ -113,14 +112,13 @@ private fun DownloadingIndicator(
     onClick: (ChapterDownloadAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val hapticFeedback = LocalHapticFeedback.current
     var isMenuExpanded by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
             .commonClickable(
                 enabled = enabled,
-                hapticFeedback = hapticFeedback,
+                hapticFeedback = LocalHapticFeedback.current,
                 onLongClick = { onClick(ChapterDownloadAction.CANCEL) },
                 onClick = { isMenuExpanded = true },
             ),
@@ -187,14 +185,13 @@ private fun DownloadedIndicator(
     modifier: Modifier = Modifier,
     onClick: (ChapterDownloadAction) -> Unit,
 ) {
-    val hapticFeedback = LocalHapticFeedback.current
     var isMenuExpanded by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
             .commonClickable(
                 enabled = enabled,
-                hapticFeedback = hapticFeedback,
+                hapticFeedback = LocalHapticFeedback.current,
                 onLongClick = { isMenuExpanded = true },
                 onClick = { isMenuExpanded = true },
             ),
@@ -224,13 +221,12 @@ private fun ErrorIndicator(
     modifier: Modifier = Modifier,
     onClick: (ChapterDownloadAction) -> Unit,
 ) {
-    val hapticFeedback = LocalHapticFeedback.current
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
             .commonClickable(
                 enabled = enabled,
-                hapticFeedback = hapticFeedback,
+                hapticFeedback = LocalHapticFeedback.current,
                 onLongClick = { onClick(ChapterDownloadAction.START) },
                 onClick = { onClick(ChapterDownloadAction.START) },
             ),

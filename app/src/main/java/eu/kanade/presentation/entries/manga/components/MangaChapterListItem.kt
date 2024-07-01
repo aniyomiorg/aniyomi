@@ -30,13 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import me.saket.swipe.SwipeableActionsBox
@@ -142,13 +142,8 @@ fun MangaChapterListItem(
                     )
                 }
 
-                Row {
-                    ProvideTextStyle(
-                        value = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 12.sp,
-                            color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
-                        ),
-                    ) {
+                Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
+                    ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                         if (date != null) {
                             Text(
                                 text = date,

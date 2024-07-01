@@ -143,13 +143,8 @@ fun AnimeEpisodeListItem(
                     )
                 }
 
-                Row {
-                    ProvideTextStyle(
-                        value = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = 12.sp,
-                            color = LocalContentColor.current.copy(alpha = textSubtitleAlpha),
-                        ),
-                    ) {
+                Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
+                    ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                         if (date != null) {
                             Text(
                                 text = date,
