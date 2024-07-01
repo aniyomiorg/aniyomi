@@ -9,7 +9,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import kotlinx.coroutines.async
@@ -244,7 +243,9 @@ actual class LocalAnimeSource(
     override fun getFilterList() = AnimeFilterList(AnimeOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getVideoList(episode: SEpisode): List<Video> = throw UnsupportedOperationException("Unused")
+    override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException(
+        "Unused",
+    )
 
     private fun updateCoverFromVideo(episode: SEpisode, anime: SAnime) {
         val tempFile = File.createTempFile(

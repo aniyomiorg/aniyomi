@@ -38,11 +38,9 @@ android {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        compilerOptions.freeCompilerArgs.addAll(
-            listOf(
-                "-Xexpect-actual-classes",
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            ),
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-Xexpect-actual-classes",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
         )
     }
 }

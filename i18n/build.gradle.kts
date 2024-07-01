@@ -15,6 +15,10 @@ kotlin {
                 api(libs.moko.core)
             }
         }
+
+        androidMain {
+            dependsOn(commonMain) // https://github.com/icerockdev/moko-resources/issues/562
+        }
     }
 }
 
@@ -33,7 +37,7 @@ android {
 }
 
 multiplatformResources {
-    resourcesPackage.set("tachiyomi.i18n")
+    multiplatformResourcesPackage = "tachiyomi.i18n"
 }
 
 tasks {
@@ -43,10 +47,8 @@ tasks {
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        compilerOptions.freeCompilerArgs.addAll(
-            listOf(
-                "-Xexpect-actual-classes",
-            ),
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-Xexpect-actual-classes",
         )
     }
 }

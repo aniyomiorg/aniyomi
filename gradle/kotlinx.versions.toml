@@ -1,7 +1,7 @@
 [versions]
-kotlin_version = "2.0.20-Beta1"
-serialization_version = "1.7.0"
-xml_serialization_version = "0.90.1"
+kotlin_version = "1.9.22"
+serialization_version = "1.6.2"
+xml_serialization_version = "0.86.3"
 
 [libraries]
 reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
@@ -9,7 +9,7 @@ gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "
 
 immutables = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.7" }
 
-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.8.0" }
+coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.7.3" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava" }
@@ -28,4 +28,3 @@ serialization = ["serialization-json", "serialization-json-okio", "serialization
 [plugins]
 android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_version" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin_version" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin_version" }

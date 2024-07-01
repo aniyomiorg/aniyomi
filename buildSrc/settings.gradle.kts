@@ -11,5 +11,3 @@ dependencyResolutionManagement {
         }
     }
 }
-
-rootProject.name = "Aniyomi"
