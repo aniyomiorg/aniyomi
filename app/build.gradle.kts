@@ -25,7 +25,7 @@ android {
         applicationId = "com.dark.animetailv2"
 
         versionCode = 124
-        versionName = "0.15.3.2"
+        versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -165,7 +165,6 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.systemuicontroller)
-    lintChecks(compose.lintchecks)
 
     implementation(compose.colorpicker)
 

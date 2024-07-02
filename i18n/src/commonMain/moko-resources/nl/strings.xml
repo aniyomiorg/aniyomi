@@ -714,7 +714,7 @@
     <string name="app_settings">App-instellingen</string>
     <string name="pref_relative_format">Relatieve tijdstempels</string>
     <string name="pref_relative_format_summary">\"%1$s\" in plaats van \"%2$s\"</string>
-    <string name="manga_categories">Categorieën</string>
+    <string name="manga_categories">Manga Categorieën</string>
     <string name="action_sort_last_manga_update">Laatst gecontroleerd op updates</string>
     <string name="action_show_manga">Laat manga zien</string>
     <string name="action_display_local_badge_manga">Lokale manga</string>
@@ -749,4 +749,71 @@
     <string name="not_selected">Niet geselecteerd</string>
     <string name="action_menu_overflow_description">Meer opties</string>
     <string name="action_bar_up_description">Naar boven</string>
+    <string name="chapters_episodes">Hoofdstukken en afleveringen</string>
+    <string name="action_filter_unseen">Onbekeken</string>
+    <string name="data_saver_ignore_gif">Negeer GIF-animaties</string>
+    <string name="data_saver_downloader">Gebruik databespaarder voor downloads</string>
+    <string name="data_saver_ignore_jpeg">Negeer JPEG-afbeeldingen</string>
+    <string name="data_saver_exclude">Uitsluiten van databesparing</string>
+    <string name="data_saver_color_bw">Omzetten naar zwart-wit</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
+    <string name="data_saver_image_quality">Afbeeldingskwaliteit</string>
+    <string name="download_slots_info">Downloadt alleen gelijktijdig van zelf gehoste of onbeperkte bronnen</string>
+    <string name="anime_categories">Anime Categorieën</string>
+    <string name="episodes">Afleveringen</string>
+    <string name="label_manga">Manga</string>
+    <string name="pref_bottom_nav_no_history">Verplaats Geschiedenis naar Meer</string>
+    <string name="pref_bottom_nav_no_updates">Verplaats Updates naar Meer</string>
+    <string name="pref_bottom_nav_no_manga">Verplaats Manga naar Meer</string>
+    <string name="data_saver_image_format">Comprimeren naar JPEG</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_image_quality_summary">Hogere waarden resulteren in een hogere beeldkwaliteit, maar ook in een grotere bestandsgrootte. 80% is een goed compromis tussen bestandsgrootte en beeldkwaliteit</string>
+    <string name="general_categories">Categorieën</string>
+    <string name="backup_settings_warning">Let op! Een back-up van je instellingen bevat ook de tracker wachtwoorden. Deel dit back-upbestand niet!</string>
+    <string name="confirm_delete_episodes">Weet je zeker dat je de geselecteerde afleveringen wilt verwijderen?</string>
+    <string name="data_saver_summary">Afbeeldingen comprimeren voordat je ze downloadt of in de reader laadt</string>
+    <string name="data_saver_image_format_summary_on">JPEG-bestanden zijn aanzienlijk kleiner dan WebP (waardoor je data bespaart), maar ten koste van de beeldkwaliteit.
+\nMomenteel wordt er gecomprimeerd naar JPEG</string>
+    <string name="data_saver_image_format_summary_off">JPEG-bestanden zijn aanzienlijk kleiner dan WebP (waardoor je data bespaart), maar ten koste van de beeldkwaliteit.
+\nMomenteel wordt er gecomprimeerd naar WebP</string>
+    <string name="bandwidth_hero">Bandwidth Hero (vereist een Bandwidth Hero Proxy server)</string>
+    <string name="data_saver_server_summary">Voer hier de URL van de Bandwidth Hero Proxy server in</string>
+    <string name="unseen">Onbekeken</string>
+    <string name="label_anime_extension_repos">Bronnen voor Anime extensies</string>
+    <string name="onboarding_storage_action_create_folder">Maak standaard Aniyomi-map</string>
+    <string name="safe_download">Veilige downloadmodus voor anime</string>
+    <string name="safe_download_summary">Activeer single thread en no range downloadmodus</string>
+    <string name="download_threads_number">Aantal threads</string>
+    <string name="download_threads_number_summary">Aantal threads dat wordt gebruikt voor het downloaden. Een te hoog aantal kan leiden tot een blokkade van je IP-adres. 4 is meestal een goed aantal om zware belasting van de bronservers te voorkomen.</string>
+    <string name="download_speed_limit">Beperk downloadsnelheid</string>
+    <string name="onboarding_action_skip">Overslaan</string>
+    <string name="onboarding_storage_info">Selecteer een map waar %1$s downloads van hoofdstukken, back-ups meer kan opslaan.
+\n
+\nEen speciale map wordt aanbevolen.
+\n
+\nGeselecteerde map: %2$s</string>
+    <string name="onboarding_permission_notifications_description">Ontvang meldingen over updates van de bibliotheek en meer.</string>
+    <string name="download_unseen">Onbekeken</string>
+    <string name="data_saver">Databesparing</string>
+    <string name="data_saver_stop_exclude">Stop met uitsluiten van databesparing</string>
+    <string name="download_speed_limit_hint">Zet op 0 voor onbeperkte downloadsnelheid.</string>
+    <string name="scanlator">Scanvertaler</string>
+    <string name="confirm_exit">Druk opnieuw op terug om te sluiten</string>
+    <string name="action_filter_started">Begonnen</string>
+    <string name="action_sort_tracker_score">Tracker score</string>
+    <string name="action_sort_airing_time">Uitzendtijd</string>
+    <string name="action_apply">Toepassen</string>
+    <string name="onboarding_storage_action_select">Selecteer een map</string>
+    <string name="onboarding_storage_selection_required">Er moet een map worden geselecteerd</string>
+    <string name="onboarding_storage_help_info">Bijwerken van een oudere versie en weet je niet zeker wat je moet selecteren? Raadpleeg de opslaggids voor meer informatie.</string>
+    <string name="onboarding_storage_help_action">Opslaggids</string>
+    <string name="onboarding_permission_install_apps_description">Om bron extensies te installeren.</string>
+    <string name="onboarding_permission_notifications">Meldingen weergeven</string>
+    <string name="onboarding_permission_install_apps">Toestemming om apps te installeren</string>
+    <string name="onboarding_permission_ignore_battery_opts">Batterij op de achtergrond gebruiken</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Voorkom onderbrekingen van lang durende bibliotheek updates, downloads en herstel van back-ups.</string>
+    <string name="onboarding_permission_action_grant">Toestaan</string>
+    <string name="label_manga_extension_repos">Bronnen voor Manga extensies</string>
+    <string name="pref_bottom_nav_no_browse">Verplaats Bladeren naar Meer</string>
 </resources>

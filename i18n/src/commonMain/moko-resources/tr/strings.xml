@@ -1114,7 +1114,7 @@
     <string name="action_sort_airing_time">Yayınlama tarihi</string>
     <string name="theme_cloudflare">Cloudflare</string>
     <string name="theme_sapphire">Sapphire</string>
-    <string name="theme_doom">Doom</string>
+    <string name="theme_doom">Komünizm</string>
     <string name="pref_preserve_reading_position">Okunmuş bölümlerde okuma pozisyonunu sakla</string>
     <string name="pref_start_screen">Ekranı başlat(?)</string>
     <string name="pref_gpu_next_title">gpu-next\'i aktifleştir</string>
@@ -1124,4 +1124,11 @@
     <string name="download_threads_number">Mantıksal işlemci (Thread) sayısı</string>
     <string name="download_threads_number_summary">İndirme için kullanılacak mantıksal işlemci (thread) sayısı, çok yüksekse IP\'nizin engellenmesine neden olabilir, kaynak sunucularda ağır yükü önlemek için genellikle 4 iyi bir sayıdır.</string>
     <string name="safe_download_summary">Tek mantık çekirdeği (thread) ve aralıksız indirme modunu etkinleştirin</string>
+    <string name="pref_player_audio_channels">Ses kanalları</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Ters stereo</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_auto">Otomatik</string>
+    <string name="pref_mpv_scripts">MPV scriptlerini aktifleştir</string>
+    <string name="pref_mpv_scripts_summary">Harici depolama iznine ihtiyacımız var.</string>
 </resources>
