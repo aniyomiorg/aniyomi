@@ -20,6 +20,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.util.ifAnimeSourcesLoaded
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
@@ -76,6 +77,11 @@ class AnimeScreen(
 
     @Composable
     override fun Content() {
+        if (!ifAnimeSourcesLoaded()) {
+            LoadingScreen()
+            return
+        }
+
         val navigator = LocalNavigator.currentOrThrow
         val context = LocalContext.current
         val haptic = LocalHapticFeedback.current

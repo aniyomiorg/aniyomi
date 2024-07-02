@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import logcat.LogPriority
@@ -44,8 +45,8 @@ class AnimeExtensionManager(
     private val trustExtension: TrustAnimeExtension = Injekt.get(),
 ) {
 
-    var isInitialized = false
-        private set
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
 
     /**
      * API where all the available anime extensions can be found.
@@ -119,7 +120,7 @@ class AnimeExtensionManager(
             .filterIsInstance<AnimeLoadResult.Untrusted>()
             .map { it.extension }
 
-        isInitialized = true
+        _isInitialized.value = true
     }
 
     /**

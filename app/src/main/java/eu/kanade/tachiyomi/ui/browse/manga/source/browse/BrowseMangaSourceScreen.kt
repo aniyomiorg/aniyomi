@@ -35,6 +35,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.util.ifMangaSourcesLoaded
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.browse.manga.MissingSourceScreen
@@ -60,6 +61,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class BrowseMangaSourceScreen(
@@ -73,6 +75,11 @@ data class BrowseMangaSourceScreen(
 
     @Composable
     override fun Content() {
+        if (!ifMangaSourcesLoaded()) {
+            LoadingScreen()
+            return
+        }
+
         val screenModel = rememberScreenModel { BrowseMangaSourceScreenModel(sourceId, listingQuery) }
         val state by screenModel.state.collectAsState()
 

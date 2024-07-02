@@ -22,6 +22,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.util.ifMangaSourcesLoaded
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
@@ -74,6 +75,11 @@ class MangaScreen(
 
     @Composable
     override fun Content() {
+        if (!ifMangaSourcesLoaded()) {
+            LoadingScreen()
+            return
+        }
+
         val navigator = LocalNavigator.currentOrThrow
         val context = LocalContext.current
         val haptic = LocalHapticFeedback.current
