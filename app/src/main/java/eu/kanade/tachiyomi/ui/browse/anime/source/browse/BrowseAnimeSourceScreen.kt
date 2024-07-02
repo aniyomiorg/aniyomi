@@ -48,6 +48,8 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeSourcePreferencesScreen
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -256,6 +258,22 @@ data class BrowseAnimeSourceScreen(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { screenModel.addFavorite(dialog.anime) },
                     onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
+                    onMigrate = {
+                        screenModel.setDialog(BrowseAnimeSourceScreenModel.Dialog.Migrate(dialog.anime, dialog.duplicate))
+                    },
+                )
+            }
+
+            is BrowseAnimeSourceScreenModel.Dialog.Migrate -> {
+                MigrateAnimeDialog(
+                    oldAnime = dialog.oldAnime,
+                    newAnime = dialog.newAnime,
+                    screenModel = MigrateAnimeDialogScreenModel(),
+                    onDismissRequest = onDismissRequest,
+                    onClickTitle = { navigator.push(AnimeScreen(dialog.oldAnime.id)) },
+                    onPopScreen = {
+                        onDismissRequest()
+                    },
                 )
             }
             is BrowseAnimeSourceScreenModel.Dialog.RemoveAnime -> {
@@ -278,7 +296,6 @@ data class BrowseAnimeSourceScreen(
                     },
                 )
             }
-            is BrowseAnimeSourceScreenModel.Dialog.Migrate -> {}
             else -> {}
         }
 

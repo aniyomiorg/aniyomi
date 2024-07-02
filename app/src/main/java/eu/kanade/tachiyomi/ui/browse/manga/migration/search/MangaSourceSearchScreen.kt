@@ -83,7 +83,7 @@ data class MangaSourceSearchScreen(
         ) { paddingValues ->
             val pagingFlow by screenModel.mangaPagerFlowFlow.collectAsState()
             val openMigrateDialog: (Manga) -> Unit = {
-                screenModel.setDialog(BrowseMangaSourceScreenModel.Dialog.Migrate(it))
+                screenModel.setDialog(BrowseMangaSourceScreenModel.Dialog.Migrate(newManga = it, oldManga = oldManga))
             }
             BrowseSourceContent(
                 source = screenModel.source,

@@ -48,6 +48,8 @@ import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialog
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialogScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -256,6 +258,22 @@ data class BrowseMangaSourceScreen(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { screenModel.addFavorite(dialog.manga) },
                     onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
+                    onMigrate = {
+                        screenModel.setDialog(BrowseMangaSourceScreenModel.Dialog.Migrate(dialog.manga, dialog.duplicate))
+                    },
+                )
+            }
+
+            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {
+                MigrateMangaDialog(
+                    oldManga = dialog.oldManga,
+                    newManga = dialog.newManga,
+                    screenModel = MigrateMangaDialogScreenModel(),
+                    onDismissRequest = onDismissRequest,
+                    onClickTitle = { navigator.push(MangaScreen(dialog.oldManga.id)) },
+                    onPopScreen = {
+                        onDismissRequest()
+                    },
                 )
             }
             is BrowseMangaSourceScreenModel.Dialog.RemoveManga -> {
@@ -278,7 +296,6 @@ data class BrowseMangaSourceScreen(
                     },
                 )
             }
-            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {}
             else -> {}
         }
 

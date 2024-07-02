@@ -41,6 +41,8 @@ import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.isLocalOrStub
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialog
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialogScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
@@ -199,11 +201,28 @@ class MangaScreen(
                     isManga = true,
                 )
             }
-            is MangaScreenModel.Dialog.DuplicateManga -> DuplicateMangaDialog(
-                onDismissRequest = onDismissRequest,
-                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
-                onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
-            )
+
+            is MangaScreenModel.Dialog.DuplicateManga -> {
+                DuplicateMangaDialog(
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
+                    onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
+                    onMigrate = {
+                        screenModel.showMigrateDialog(dialog.duplicate)
+                    },
+                )
+            }
+
+            is MangaScreenModel.Dialog.Migrate -> {
+                MigrateMangaDialog(
+                    oldManga = dialog.oldManga,
+                    newManga = dialog.newManga,
+                    screenModel = MigrateMangaDialogScreenModel(),
+                    onDismissRequest = onDismissRequest,
+                    onClickTitle = { navigator.push(MangaScreen(dialog.oldManga.id)) },
+                    onPopScreen = { navigator.replace(MangaScreen(dialog.newManga.id)) },
+                )
+            }
             MangaScreenModel.Dialog.SettingsSheet -> ChapterSettingsDialog(
                 onDismissRequest = onDismissRequest,
                 manga = successState.manga,

@@ -40,6 +40,8 @@ import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
@@ -218,11 +220,28 @@ class AnimeScreen(
                     isManga = false,
                 )
             }
-            is AnimeScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(
-                onDismissRequest = onDismissRequest,
-                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
-                onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
-            )
+
+            is AnimeScreenModel.Dialog.DuplicateAnime -> {
+                DuplicateAnimeDialog(
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
+                    onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
+                    onMigrate = {
+                        screenModel.showMigrateDialog(dialog.duplicate)
+                    },
+                )
+            }
+
+            is AnimeScreenModel.Dialog.Migrate -> {
+                MigrateAnimeDialog(
+                    oldAnime = dialog.oldAnime,
+                    newAnime = dialog.newAnime,
+                    screenModel = MigrateAnimeDialogScreenModel(),
+                    onDismissRequest = onDismissRequest,
+                    onClickTitle = { navigator.push(AnimeScreen(dialog.oldAnime.id)) },
+                    onPopScreen = { navigator.replace(AnimeScreen(dialog.newAnime.id)) },
+                )
+            }
             AnimeScreenModel.Dialog.SettingsSheet -> EpisodeSettingsDialog(
                 onDismissRequest = onDismissRequest,
                 anime = successState.anime,
