@@ -1099,7 +1099,6 @@
     <ID>MagicNumber:WorkManagerExtensions.kt$500</ID>
     <ID>MatchingDeclarationName:ChapterDownloadIndicator.kt$ChapterDownloadAction</ID>
     <ID>MatchingDeclarationName:CommonEntryItem.kt$CommonEntryItemDefaults</ID>
-    <ID>MatchingDeclarationName:CreateAniyomiExtensionRepo.kt$CreateAnimeExtensionRepo</ID>
     <ID>MatchingDeclarationName:EpisodeDownloadIndicator.kt$EpisodeDownloadAction</ID>
     <ID>MatchingDeclarationName:MyAnimeListModels.kt$OAuth</ID>
     <ID>MatchingDeclarationName:NetworkStateTracker.kt$NetworkState</ID>
@@ -1420,7 +1419,7 @@
     <ID>ReturnCount:AnimeScreenModel.kt$AnimeScreenModel$fun runEpisodeDownloadActions( items: List&lt;EpisodeList.Item&gt;, action: EpisodeDownloadAction, )</ID>
     <ID>ReturnCount:BackupCreateJob.kt$BackupCreateJob$override suspend fun doWork(): Result</ID>
     <ID>ReturnCount:BaseColorScheme.kt$BaseColorScheme$fun getColorScheme(isDark: Boolean, isAmoled: Boolean): ColorScheme</ID>
-    <ID>ReturnCount:CreateAniyomiExtensionRepo.kt$CreateAnimeExtensionRepo$fun await(name: String): Result</ID>
+    <ID>ReturnCount:CreateAnimeExtensionRepo.kt$CreateAnimeExtensionRepo$fun await(name: String): Result</ID>
     <ID>ReturnCount:CreateMangaExtensionRepo.kt$CreateMangaExtensionRepo$fun await(name: String): Result</ID>
     <ID>ReturnCount:ExtensionInstallerPreference.kt$ExtensionInstallerPreference$private fun check(value: ExtensionInstaller): ExtensionInstaller</ID>
     <ID>ReturnCount:ExternalIntents.kt$ExternalIntents$suspend fun getExternalIntent( context: Context, animeId: Long?, episodeId: Long?, chosenVideo: Video?, ): Intent?</ID>
@@ -1844,7 +1843,6 @@
     <ID>TopLevelPropertyNaming:ColorFilterPage.kt$private const val BLUE_MASK: Long = 0x000000FF</ID>
     <ID>TopLevelPropertyNaming:ColorFilterPage.kt$private const val GREEN_MASK: Long = 0x0000FF00</ID>
     <ID>TopLevelPropertyNaming:ColorFilterPage.kt$private const val RED_MASK: Long = 0x00FF0000</ID>
-    <ID>TopLevelPropertyNaming:CreateAniyomiExtensionRepo.kt$const val OFFICIAL_ANIYOMI_REPO_BASE_URL = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo"</ID>
     <ID>TopLevelPropertyNaming:DisplayExtensions.kt$// make sure icons on the nav rail fit private const val TABLET_UI_MIN_SCREEN_WIDTH_LANDSCAPE_DP = 600</ID>
     <ID>TopLevelPropertyNaming:DisplayExtensions.kt$// some tablets have screen width like 711dp = 1600px / 2.25 private const val TABLET_UI_MIN_SCREEN_WIDTH_PORTRAIT_DP = 700</ID>
     <ID>TopLevelPropertyNaming:DisplayExtensions.kt$private const val TABLET_UI_REQUIRED_SCREEN_WIDTH_DP = 720</ID>
