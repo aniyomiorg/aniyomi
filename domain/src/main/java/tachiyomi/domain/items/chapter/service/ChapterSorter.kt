@@ -1,6 +1,6 @@
 package tachiyomi.domain.items.chapter.service
 
-import tachiyomi.core.util.lang.compareToWithCollator
+import tachiyomi.core.common.util.lang.compareToWithCollator
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 

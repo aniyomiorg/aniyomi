@@ -12,12 +12,12 @@ kotlin {
                 api(projects.i18n)
 
                 implementation(libs.unifile)
-                implementation(libs.junrar)
+                implementation(libs.bundles.archive)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation(projects.core)
+                implementation(projects.core.common)
                 implementation(projects.coreMetadata)
 
                 // Move ChapterRecognition to separate module?
@@ -45,8 +45,10 @@ android {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        compilerOptions.freeCompilerArgs.addAll(
+            listOf(
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+            ),
         )
     }
 }

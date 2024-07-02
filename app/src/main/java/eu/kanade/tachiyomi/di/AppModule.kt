@@ -34,11 +34,10 @@ import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
-import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.XmlDeclMode.Charset
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
-import tachiyomi.core.storage.AndroidStorageFolderProvider
-import tachiyomi.core.storage.UniFileTempFileManager
+import tachiyomi.core.common.storage.AndroidStorageFolderProvider
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
 import tachiyomi.data.Database
 import tachiyomi.data.DateColumnAdapter
@@ -169,7 +168,7 @@ class AppModule(val app: Application) : InjektModule {
                     ignoreUnknownChildren()
                 }
                 autoPolymorphic = true
-                xmlDeclMode = XmlDeclMode.Charset
+                xmlDeclMode = Charset
                 indent = 2
                 xmlVersion = XmlVersion.XML10
             }
@@ -177,8 +176,6 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory<ProtoBuf> {
             ProtoBuf
         }
-
-        addSingletonFactory { UniFileTempFileManager(app) }
 
         addSingletonFactory { ChapterCache(app, get()) }
 

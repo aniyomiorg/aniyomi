@@ -40,17 +40,18 @@ import eu.kanade.presentation.track.manga.TrackDetailsItem
 import eu.kanade.presentation.track.manga.TrackInfoItemMenu
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import eu.kanade.tachiyomi.util.lang.toLocalDate
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
-import java.text.DateFormat
+import java.time.format.DateTimeFormatter
 
 private const val UnsetStatusTextAlpha = 0.5F
 
 @Composable
 fun AnimeTrackInfoDialogHome(
     trackItems: List<AnimeTrackItem>,
-    dateFormat: DateFormat,
+    dateFormat: DateTimeFormatter,
     onStatusClick: (AnimeTrackItem) -> Unit,
     onEpisodeClick: (AnimeTrackItem) -> Unit,
     onScoreClick: (AnimeTrackItem) -> Unit,
@@ -94,13 +95,13 @@ fun AnimeTrackInfoDialogHome(
                         .takeIf { supportsScoring },
                     startDate = remember(item.track.startDate) {
                         dateFormat.format(
-                            item.track.startDate,
+                            item.track.startDate.toLocalDate(),
                         )
                     }
                         .takeIf { supportsReadingDates && item.track.startDate != 0L },
                     onStartDateClick = { onStartDateEdit(item) } // TODO
                         .takeIf { supportsReadingDates },
-                    endDate = dateFormat.format(item.track.finishDate)
+                    endDate = dateFormat.format(item.track.finishDate.toLocalDate())
                         .takeIf { supportsReadingDates && item.track.finishDate != 0L },
                     onEndDateClick = { onEndDateEdit(item) }
                         .takeIf { supportsReadingDates },

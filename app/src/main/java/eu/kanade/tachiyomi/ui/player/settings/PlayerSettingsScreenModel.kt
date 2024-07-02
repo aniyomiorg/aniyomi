@@ -27,8 +27,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.core.preference.Preference
-import tachiyomi.core.preference.toggle
+import tachiyomi.core.common.preference.Preference
+import tachiyomi.core.common.preference.toggle
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
@@ -88,7 +88,7 @@ class PlayerSettingsScreenModel(
 
         val updateOverrideASS = {
             val newOverrideValue = togglePreference(PlayerPreferences::overrideSubsASS)
-            val overrideType = if (newOverrideValue) "force" else "no"
+            val overrideType = if (newOverrideValue) "force" else "scale"
             MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
 

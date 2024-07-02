@@ -10,7 +10,7 @@ import android.os.Build
 import android.util.Rational
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 
 class PictureInPictureHandler {
@@ -118,7 +118,7 @@ class PictureInPictureHandler {
             PendingIntent.getBroadcast(
                 context,
                 requestCode,
-                Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
+                Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType).setPackage(context.packageName),
                 PendingIntent.FLAG_IMMUTABLE,
             ),
         )

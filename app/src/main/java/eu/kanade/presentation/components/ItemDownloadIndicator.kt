@@ -4,7 +4,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -32,7 +32,7 @@ internal fun Modifier.commonClickable(
         onClick = onClick,
         role = Role.Button,
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(
+        indication = ripple(
             bounded = false,
             radius = IconButtonTokens.StateLayerSize / 2,
         ),

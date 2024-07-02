@@ -2,7 +2,7 @@ package eu.kanade.domain.extension.anime.interactor
 
 import eu.kanade.domain.source.service.SourcePreferences
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import tachiyomi.core.preference.plusAssign
+import tachiyomi.core.common.preference.plusAssign
 
 class CreateAnimeExtensionRepo(private val preferences: SourcePreferences) {
 

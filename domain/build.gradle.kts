@@ -15,7 +15,7 @@ android {
 
 dependencies {
     implementation(projects.sourceApi)
-    implementation(projects.core)
+    implementation(projects.core.common)
 
     implementation(platform(kotlinx.coroutines.bom))
     implementation(kotlinx.bundles.coroutines)
@@ -31,8 +31,10 @@ dependencies {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        compilerOptions.freeCompilerArgs.addAll(
+            listOf(
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            ),
         )
     }
 }
