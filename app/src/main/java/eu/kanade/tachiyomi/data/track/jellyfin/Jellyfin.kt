@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import okhttp3.Dns
-import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainTrack
@@ -25,11 +24,12 @@ class Jellyfin(id: Long) : BaseTracker(id, "Jellyfin"), EnhancedAnimeTracker, An
         const val COMPLETED = 3L
     }
 
-    override val client: OkHttpClient =
+    override val client by lazy {
         networkService.client.newBuilder()
             .addInterceptor(JellyfinInterceptor())
             .dns(Dns.SYSTEM) // don't use DNS over HTTPS as it breaks IP addressing
             .build()
+    }
 
     val api by lazy { JellyfinApi(id, client) }
 
