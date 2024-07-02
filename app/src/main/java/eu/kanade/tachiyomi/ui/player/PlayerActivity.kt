@@ -18,6 +18,8 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
+import android.os.PowerManager
+import android.provider.Settings
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -85,7 +87,6 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -138,6 +139,8 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        private const val MAX_BRIGHTNESS = 255F
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -596,6 +599,9 @@ class PlayerActivity : BaseActivity() {
 
         copyAssets(configDir)
 
+        MPVLib.setOptionString("sub-ass-force-margins", "yes")
+        MPVLib.setOptionString("sub-use-margins", "yes")
+
         player.initialize(
             configDir = configDir,
             cacheDir = applicationContext.cacheDir.path,
@@ -745,11 +751,40 @@ class PlayerActivity : BaseActivity() {
                 !playerPreferences.rememberPlayerBrightness().get()
 
         brightness = if (useDeviceBrightness) {
-            Utils.getScreenBrightness(this) ?: 0.5F
+            getCurrentBrightness()
         } else {
             playerPreferences.playerBrightnessValue().get()
         }
         verticalScrollLeft(0F)
+    }
+
+    @Suppress("ReturnCount")
+    private fun getMaxBrightness(): Float {
+        val powerManager = getSystemService(POWER_SERVICE) as? PowerManager ?: return MAX_BRIGHTNESS
+        val brightnessField = powerManager.javaClass.declaredFields.find {
+            it.name == "BRIGHTNESS_ON"
+        } ?: return MAX_BRIGHTNESS
+
+        brightnessField.isAccessible = true
+        return try {
+            (brightnessField.get(powerManager) as Int).toFloat()
+        } catch (e: IllegalAccessException) {
+            logcat(LogPriority.ERROR, e) { "Unable to access BRIGHTNESS_ON field" }
+            MAX_BRIGHTNESS
+        }
+    }
+
+    private fun getCurrentBrightness(): Float {
+        // check if window has brightness set
+        val lp = window.attributes
+        if (lp.screenBrightness >= 0f) return lp.screenBrightness
+        val resolver = contentResolver
+        return try {
+            Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS) / getMaxBrightness()
+        } catch (e: Settings.SettingNotFoundException) {
+            logcat(LogPriority.ERROR, e) { "Unable to get screen brightness" }
+            0.5F
+        }
     }
 
     @Suppress("DEPRECATION")

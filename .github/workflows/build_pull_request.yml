@@ -39,4 +39,4 @@ jobs:
       - name: Build app and run unit tests
         uses: gradle/gradle-command-action@v3
         with:
-          arguments: ktlintCheck assembleStandardRelease testReleaseUnitTest
+          arguments: detekt assembleStandardRelease testReleaseUnitTest

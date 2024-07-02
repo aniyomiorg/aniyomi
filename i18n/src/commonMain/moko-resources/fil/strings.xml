@@ -482,7 +482,7 @@
     <string name="error_saving_cover">Di ma-save ang cover</string>
     <string name="cover_saved">Na-save na ang cover</string>
     <string name="manga_cover">Takip ng manga</string>
-    <string name="off">Naka-off</string>
+    <string name="off">Naka-on</string>
     <string name="on">Naka-on</string>
     <string name="action_display_local_badge">Lokal na source</string>
     <string name="categorized_display_settings">Mga setting ng bawat kategorya para sa pag-aayos</string>
@@ -1110,7 +1110,7 @@
     <string name="player_add_external_audio_intent">Pumili ng audio file.</string>
     <string name="player_add_external_subtitles_intent">Pumili ng subtitle file.</string>
     <string name="theme_doom">Doom</string>
-    <string name="theme_matrix">Matrix</string>
+    <string name="theme_matrix">Matris</string>
     <string name="action_sort_airing_time">Oras ng pagpapalabas</string>
     <string name="action_reorganize_by">Muling ayusin</string>
     <string name="action_open_repo">Open source na repo</string>
@@ -1127,4 +1127,12 @@
     <string name="download_threads_number">Bilang ng thread</string>
     <string name="download_threads_number_summary">Bilang ng mga thread na gagamitin para sa pag-download, maaaring ma-block ang iyong IP kung masyadong mataas, kadalasan ang 4 ay isang magandang numero upang maiwasan ang mabigat na load sa mga source server.</string>
     <string name="pref_bottom_nav_no_browse">Ilipat ang Maghanap sa Iba pa na tab</string>
+    <string name="pref_player_audio_channels">Mga audio channel</string>
+    <string name="pref_player_audio_channels_auto">Awto</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Baliktad na stereo</string>
+    <string name="pref_player_audio_channels_auto_safe">Awto-safe</string>
+    <string name="pref_mpv_scripts">Paganahin ang mga script ng MPV</string>
+    <string name="pref_mpv_scripts_summary">Kinakailangan ng permiso sa external storage.</string>
 </resources>

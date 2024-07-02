@@ -990,4 +990,32 @@
     <string name="action_hide">Ukryj</string>
     <string name="label_recent_anime_updates">Aktualizacje Anime</string>
     <string name="pref_bottom_nav_style">Styl dolnej nawigacji</string>
+    <string name="action_bar_up_description">Idź do góry</string>
+    <string name="not_selected">Niewybrane</string>
+    <string name="action_sort_airing_time">Data wydania/transmisji</string>
+    <string name="onboarding_description">Skonfiguruj najpierw aplikację. Pamiętaj, że zawsze możesz zmienić ustawienia później.</string>
+    <string name="pref_onboarding_guide">Poradnik dla nowych użytkowników</string>
+    <string name="onboarding_storage_help_info">Aktualizujesz ze starszej wersji i nie wiesz co wybrać? Odnieś się do poradnika przechowywania danych po więcej informacji.</string>
+    <string name="onboarding_permission_install_apps_description">Aby zainstalować rozszerzenia</string>
+    <string name="onboarding_permission_notifications_description">Powiadom mnie o aktualizacjach biblioteki i innych.</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Unikaj przerw w długotrwałych aktualizacjach, pobieraniu i odzyskiwaniu kopii zapasowych.</string>
+    <string name="selected">Wybrane</string>
+    <string name="label_data_storage">Pamięć i dane</string>
+    <string name="confirm_exit">Naciśnij do tyłu jeszcze raz aby wyjść</string>
+    <string name="action_filter_started">Zaczęte</string>
+    <string name="action_sort_tracker_score">Ocena trakera</string>
+    <string name="action_reorganize_by">Reorganizuj</string>
+    <string name="onboarding_action_finish">Zaczynamy</string>
+    <string name="onboarding_storage_info">Wybierz folder, w którym %1$s będzie przechowywać pobrane rozdziały, backupy, a także inne rzeczy.
+\n
+\nZaleca się dedykowany folder.
+\n
+\nWybrany folder: %2$s</string>
+    <string name="onboarding_storage_help_action">Poradnik przechowywania danych</string>
+    <string name="onboarding_permission_install_apps">Uprawnienie do instalowania aplikacji</string>
+    <string name="onboarding_permission_action_grant">Udziel</string>
+    <string name="onboarding_guides_new_user">Nowy w %s? Polecamy sprawdzić poradnik dla nowych użytkowników.</string>
+    <string name="onboarding_guides_returning_user">Reinstalujesz %s?</string>
+    <string name="pref_general_summary">Język aplikacji, powiadomienia</string>
+    <string name="theme_nord">Nord</string>
 </resources>
