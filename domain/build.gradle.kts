@@ -34,6 +34,7 @@ tasks {
         compilerOptions.freeCompilerArgs.addAll(
             listOf(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xcontext-receivers",
             ),
         )
     }

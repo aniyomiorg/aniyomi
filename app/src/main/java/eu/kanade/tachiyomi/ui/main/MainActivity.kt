@@ -163,6 +163,8 @@ class MainActivity : BaseActivity() {
                 playerPreferences = Injekt.get(),
                 backupPreferences = Injekt.get(),
                 trackerManager = Injekt.get(),
+                animeExtensionRepoRepository = Injekt.get(),
+                mangaExtensionRepoRepository = Injekt.get(),
             )
         } else {
             false

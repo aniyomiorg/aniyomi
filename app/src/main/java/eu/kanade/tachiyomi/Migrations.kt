@@ -24,6 +24,12 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.workManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import logcat.LogPriority
+import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
+import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
+import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.TriState
@@ -31,6 +37,8 @@ import tachiyomi.core.common.preference.getAndSet
 import tachiyomi.core.common.preference.getEnum
 import tachiyomi.core.common.preference.minusAssign
 import tachiyomi.core.common.preference.plusAssign
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
@@ -43,6 +51,7 @@ object Migrations {
      *
      * @return true if a migration is performed, false otherwise.
      */
+    @Suppress("SameReturnValue", "MagicNumber")
     fun upgrade(
         context: Context,
         preferenceStore: PreferenceStore,
@@ -56,6 +65,8 @@ object Migrations {
         playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
         trackerManager: TrackerManager,
+        animeExtensionRepoRepository: AnimeExtensionRepoRepository,
+        mangaExtensionRepoRepository: MangaExtensionRepoRepository,
     ): Boolean {
         val lastVersionCode = preferenceStore.getInt(Preference.appStateKey("last_version_code"), 0)
         val oldVersion = lastVersionCode.get()
@@ -590,6 +601,42 @@ object Migrations {
                     preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
                     preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
                     preferenceStore.getBoolean("pref_gpu_next", false).set(gpuNext.get())
+                }
+            }
+
+            val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+            if (oldVersion < 125) {
+                coroutineScope.launchIO {
+                    for ((index, source) in sourcePreferences.animeExtensionRepos().get().withIndex()) {
+                        try {
+                            animeExtensionRepoRepository.upsertRepository(
+                                source,
+                                "Repo #${index + 1}",
+                                null,
+                                source,
+                                "NOFINGERPRINT-${index + 1}",
+                            )
+                        } catch (e: SaveExtensionRepoException) {
+                            logcat(LogPriority.ERROR, e) { "Error Migrating Anime Extension Repo with baseUrl: $source" }
+                        }
+                    }
+                    sourcePreferences.animeExtensionRepos().delete()
+
+                    for ((index, source) in sourcePreferences.mangaExtensionRepos().get().withIndex()) {
+                        try {
+                            mangaExtensionRepoRepository.upsertRepository(
+                                source,
+                                "Repo #${index + 1}",
+                                null,
+                                source,
+                                "NOFINGERPRINT-${index + 1}",
+                            )
+                        } catch (e: SaveExtensionRepoException) {
+                            logcat(LogPriority.ERROR, e) { "Error Migrating Manga Extension Repo with baseUrl: $source" }
+                        }
+                    }
+                    sourcePreferences.mangaExtensionRepos().delete()
                 }
             }
             return true
