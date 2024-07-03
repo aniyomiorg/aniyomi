@@ -3,9 +3,9 @@ package mihon.domain.extensionrepo.manga.interactor
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
 
 class DeleteMangaExtensionRepo(
-    private val extensionRepoRepository: MangaExtensionRepoRepository,
+    private val repository: MangaExtensionRepoRepository,
 ) {
     suspend fun await(baseUrl: String) {
-        extensionRepoRepository.deleteRepository(baseUrl)
+        repository.deleteRepo(baseUrl)
     }
 }

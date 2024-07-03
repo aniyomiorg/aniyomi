@@ -618,7 +618,7 @@ object Migrations {
                 coroutineScope.launchIO {
                     for ((index, source) in sourcePreferences.animeExtensionRepos().get().withIndex()) {
                         try {
-                            animeExtensionRepoRepository.upsertRepository(
+                            animeExtensionRepoRepository.upsertRepo(
                                 source,
                                 "Repo #${index + 1}",
                                 null,
@@ -635,7 +635,7 @@ object Migrations {
 
                     for ((index, source) in sourcePreferences.mangaExtensionRepos().get().withIndex()) {
                         try {
-                            mangaExtensionRepoRepository.upsertRepository(
+                            mangaExtensionRepoRepository.upsertRepo(
                                 source,
                                 "Repo #${index + 1}",
                                 null,

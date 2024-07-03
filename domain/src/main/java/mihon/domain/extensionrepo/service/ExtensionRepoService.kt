@@ -14,9 +14,8 @@ import uy.kohesive.injekt.injectLazy
 
 class ExtensionRepoService(
     private val client: OkHttpClient,
+    private val json: Json,
 ) {
-
-    private val json: Json by injectLazy()
 
     @Suppress("TooGenericExceptionCaught")
     suspend fun fetchRepoDetails(

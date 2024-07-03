@@ -5,9 +5,9 @@ import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
 import mihon.domain.extensionrepo.model.ExtensionRepo
 
 class GetAnimeExtensionRepo(
-    private val extensionRepoRepository: AnimeExtensionRepoRepository,
+    private val repository: AnimeExtensionRepoRepository,
 ) {
-    fun subscribeAll(): Flow<List<ExtensionRepo>> = extensionRepoRepository.subscribeAll()
+    fun subscribeAll(): Flow<List<ExtensionRepo>> = repository.subscribeAll()
 
-    suspend fun getAll(): List<ExtensionRepo> = extensionRepoRepository.getAll()
+    suspend fun getAll(): List<ExtensionRepo> = repository.getAll()
 }

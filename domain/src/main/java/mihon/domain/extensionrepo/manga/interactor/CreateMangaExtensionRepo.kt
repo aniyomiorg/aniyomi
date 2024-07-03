@@ -10,15 +10,10 @@ import okhttp3.OkHttpClient
 import tachiyomi.core.common.util.system.logcat
 
 class CreateMangaExtensionRepo(
-    private val extensionRepoRepository: MangaExtensionRepoRepository,
-    private val networkHelper: NetworkHelper,
+    private val repository: MangaExtensionRepoRepository,
+    private val service: ExtensionRepoService,
 ) {
     private val repoRegex = """^https://.*/index\.min\.json$""".toRegex()
-
-    private val client: OkHttpClient
-        get() = networkHelper.client
-
-    private val extensionRepoService = ExtensionRepoService(client)
 
     suspend fun await(repoUrl: String): Result {
         if (!repoUrl.matches(repoRegex)) {
@@ -26,12 +21,12 @@ class CreateMangaExtensionRepo(
         }
 
         val baseUrl = repoUrl.removeSuffix("/index.min.json")
-        return extensionRepoService.fetchRepoDetails(baseUrl)?.let { insert(it) } ?: Result.InvalidUrl
+        return service.fetchRepoDetails(baseUrl)?.let { insert(it) } ?: Result.InvalidUrl
     }
 
     private suspend fun insert(repo: ExtensionRepo): Result {
         return try {
-            extensionRepoRepository.insertRepository(
+            repository.insertRepo(
                 repo.baseUrl,
                 repo.name,
                 repo.shortName,
@@ -57,12 +52,11 @@ class CreateMangaExtensionRepo(
      */
     @Suppress("ReturnCount")
     private suspend fun handleInsertionError(repo: ExtensionRepo): Result {
-        val repoExists = extensionRepoRepository.getRepository(repo.baseUrl)
+        val repoExists = repository.getRepo(repo.baseUrl)
         if (repoExists != null) {
             return Result.RepoAlreadyExists
         }
-        val matchingFingerprintRepo =
-            extensionRepoRepository.getRepositoryBySigningKeyFingerprint(repo.signingKeyFingerprint)
+        val matchingFingerprintRepo = repository.getRepoBySigningKeyFingerprint(repo.signingKeyFingerprint)
         if (matchingFingerprintRepo != null) {
             return Result.DuplicateFingerprint(matchingFingerprintRepo, repo)
         }

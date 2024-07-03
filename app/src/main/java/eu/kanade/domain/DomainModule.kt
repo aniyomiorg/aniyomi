@@ -57,6 +57,7 @@ import mihon.domain.extensionrepo.manga.interactor.GetMangaExtensionRepoCount
 import mihon.domain.extensionrepo.manga.interactor.ReplaceMangaExtensionRepo
 import mihon.domain.extensionrepo.manga.interactor.UpdateMangaExtensionRepo
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
+import mihon.domain.extensionrepo.service.ExtensionRepoService
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
 import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
 import tachiyomi.data.entries.anime.AnimeRepositoryImpl
@@ -342,6 +343,8 @@ class DomainModule : InjektModule {
         addFactory { ToggleMangaSourcePin(get()) }
         addFactory { TrustAnimeExtension(get()) }
         addFactory { TrustMangaExtension(get()) }
+
+        addFactory { ExtensionRepoService(get(), get()) }
 
         addSingletonFactory<AnimeExtensionRepoRepository> { AnimeExtensionRepoRepositoryImpl(get()) }
         addFactory { GetAnimeExtensionRepo(get()) }

@@ -3,7 +3,7 @@ package mihon.domain.extensionrepo.manga.interactor
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
 
 class GetMangaExtensionRepoCount(
-    private val extensionRepoRepository: MangaExtensionRepoRepository,
+    private val repository: MangaExtensionRepoRepository,
 ) {
-    fun subscribe() = extensionRepoRepository.getCount()
+    fun subscribe() = repository.getCount()
 }
