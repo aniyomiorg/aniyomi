@@ -268,6 +268,8 @@ dependencies {
 
     implementation(libs.leakcanary.plumber)
 
+    testImplementation(kotlinx.coroutines.test)
+
     // mpv-android
     implementation(libs.aniyomi.mpv)
     // FFmpeg-kit

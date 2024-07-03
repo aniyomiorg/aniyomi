@@ -3,7 +3,6 @@ package mihon.core.migration.migrations
 import eu.kanade.tachiyomi.App
 import mihon.core.migration.Migration
 import mihon.core.migration.MigrationContext
-import mihon.core.migration.replacePreferences
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 

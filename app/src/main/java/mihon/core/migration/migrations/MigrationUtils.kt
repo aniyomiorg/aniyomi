@@ -1,4 +1,4 @@
-package mihon.core.migration
+package mihon.core.migration.migrations
 
 import tachiyomi.core.common.preference.PreferenceStore
 
