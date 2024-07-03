@@ -346,7 +346,7 @@ class DomainModule : InjektModule {
         addSingletonFactory<AnimeExtensionRepoRepository> { AnimeExtensionRepoRepositoryImpl(get()) }
         addFactory { GetAnimeExtensionRepo(get()) }
         addFactory { GetAnimeExtensionRepoCount(get()) }
-        addFactory { CreateAnimeExtensionRepo(get()) }
+        addFactory { CreateAnimeExtensionRepo(get(), get()) }
         addFactory { DeleteAnimeExtensionRepo(get()) }
         addFactory { ReplaceAnimeExtensionRepo(get()) }
         addFactory { UpdateAnimeExtensionRepo(get(), get()) }
@@ -354,7 +354,7 @@ class DomainModule : InjektModule {
         addSingletonFactory<MangaExtensionRepoRepository> { MangaExtensionRepoRepositoryImpl(get()) }
         addFactory { GetMangaExtensionRepo(get()) }
         addFactory { GetMangaExtensionRepoCount(get()) }
-        addFactory { CreateMangaExtensionRepo(get()) }
+        addFactory { CreateMangaExtensionRepo(get(), get()) }
         addFactory { DeleteMangaExtensionRepo(get()) }
         addFactory { ReplaceMangaExtensionRepo(get()) }
         addFactory { UpdateMangaExtensionRepo(get(), get()) }
