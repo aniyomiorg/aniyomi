@@ -9,6 +9,7 @@ class RelativeTimestampMigration : Migration {
     override val version = 106f
 
     // Bring back simplified relative timestamp setting
+    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val preferenceStore = migrationContext.get<PreferenceStore>() ?: return false
         val uiPreferences = migrationContext.get<UiPreferences>() ?: return false

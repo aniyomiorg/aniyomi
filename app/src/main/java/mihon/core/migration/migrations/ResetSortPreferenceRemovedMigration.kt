@@ -7,10 +7,11 @@ import mihon.core.migration.Migration
 import mihon.core.migration.MigrationContext
 import tachiyomi.domain.library.service.LibraryPreferences
 
-class ResetSortPreferenceRemovedMigration : Migration  {
+class ResetSortPreferenceRemovedMigration : Migration {
     override val version = 44f
 
     // Reset sorting preference if using removed sort by source
+    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val libraryPreferences = migrationContext.get<LibraryPreferences>() ?: return false

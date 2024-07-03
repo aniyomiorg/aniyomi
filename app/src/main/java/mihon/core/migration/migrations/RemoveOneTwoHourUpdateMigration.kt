@@ -11,6 +11,7 @@ class RemoveOneTwoHourUpdateMigration : Migration {
     override val version = 61f
 
     // Handle removed every 1 or 2 hour library updates
+    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val libraryPreferences = migrationContext.get<LibraryPreferences>() ?: return false

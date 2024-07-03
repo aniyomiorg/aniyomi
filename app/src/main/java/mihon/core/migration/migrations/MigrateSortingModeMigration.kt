@@ -11,6 +11,7 @@ class MigrateSortingModeMigration : Migration {
     override val version = 64f
 
     // Switch to sort per category
+    @Suppress("CyclomaticComplexMethod", "MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val libraryPreferences = migrationContext.get<LibraryPreferences>() ?: return false

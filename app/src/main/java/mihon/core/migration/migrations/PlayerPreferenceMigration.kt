@@ -11,6 +11,7 @@ class PlayerPreferenceMigration : Migration {
     override val version = 92f
 
     // add migration for player preference
+    @Suppress("SwallowedException")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val playerPreferences = migrationContext.get<PlayerPreferences>() ?: return false

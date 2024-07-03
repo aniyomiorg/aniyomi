@@ -10,6 +10,7 @@ class EnableAutoBackupMigration : Migration {
     override val version = 84f
 
     // Always attempt automatic backup creation
+    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val backupPreferences = migrationContext.get<BackupPreferences>() ?: return false

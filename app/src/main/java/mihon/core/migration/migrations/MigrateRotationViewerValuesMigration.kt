@@ -11,6 +11,7 @@ class MigrateRotationViewerValuesMigration : Migration {
     override val version = 60f
 
     // Migrate Rotation and Viewer values to default values for viewer_flags
+    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
