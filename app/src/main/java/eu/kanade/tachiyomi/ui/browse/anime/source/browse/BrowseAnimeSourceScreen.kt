@@ -259,7 +259,9 @@ data class BrowseAnimeSourceScreen(
                     onConfirm = { screenModel.addFavorite(dialog.anime) },
                     onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
                     onMigrate = {
-                        screenModel.setDialog(BrowseAnimeSourceScreenModel.Dialog.Migrate(dialog.anime, dialog.duplicate))
+                        screenModel.setDialog(
+                            BrowseAnimeSourceScreenModel.Dialog.Migrate(dialog.anime, dialog.duplicate),
+                        )
                     },
                 )
             }

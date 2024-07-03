@@ -1,8 +1,8 @@
 package mihon.domain.extensionrepo.anime.interactor
 
 import kotlinx.coroutines.flow.Flow
-import mihon.domain.extensionrepo.model.ExtensionRepo
 import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
+import mihon.domain.extensionrepo.model.ExtensionRepo
 
 class GetAnimeExtensionRepo(
     private val extensionRepoRepository: AnimeExtensionRepoRepository,

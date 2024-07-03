@@ -27,8 +27,8 @@ import eu.kanade.tachiyomi.util.system.workManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import logcat.LogPriority
-import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
 import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
+import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
@@ -51,7 +51,15 @@ object Migrations {
      *
      * @return true if a migration is performed, false otherwise.
      */
-    @Suppress("SameReturnValue", "MagicNumber")
+    @Suppress(
+        "SameReturnValue",
+        "MagicNumber",
+        "CyclomaticComplexMethod",
+        "LongMethod",
+        "LongParameterList",
+        "NestedBlockDepth",
+        "ReturnCount",
+    )
     fun upgrade(
         context: Context,
         preferenceStore: PreferenceStore,
@@ -618,7 +626,9 @@ object Migrations {
                                 "NOFINGERPRINT-${index + 1}",
                             )
                         } catch (e: SaveExtensionRepoException) {
-                            logcat(LogPriority.ERROR, e) { "Error Migrating Anime Extension Repo with baseUrl: $source" }
+                            logcat(LogPriority.ERROR, e) {
+                                "Error Migrating Anime Extension Repo with baseUrl: $source"
+                            }
                         }
                     }
                     sourcePreferences.animeExtensionRepos().delete()
@@ -633,7 +643,9 @@ object Migrations {
                                 "NOFINGERPRINT-${index + 1}",
                             )
                         } catch (e: SaveExtensionRepoException) {
-                            logcat(LogPriority.ERROR, e) { "Error Migrating Manga Extension Repo with baseUrl: $source" }
+                            logcat(LogPriority.ERROR, e) {
+                                "Error Migrating Manga Extension Repo with baseUrl: $source"
+                            }
                         }
                     }
                     sourcePreferences.mangaExtensionRepos().delete()

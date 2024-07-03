@@ -1,7 +1,7 @@
 package mihon.domain.extensionrepo.anime.interactor
 
-import mihon.domain.extensionrepo.model.ExtensionRepo
 import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
+import mihon.domain.extensionrepo.model.ExtensionRepo
 
 class ReplaceAnimeExtensionRepo(
     private val extensionRepoRepository: AnimeExtensionRepoRepository,

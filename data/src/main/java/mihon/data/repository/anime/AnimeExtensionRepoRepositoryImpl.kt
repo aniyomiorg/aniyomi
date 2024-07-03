@@ -3,9 +3,9 @@ package mihon.data.repository.anime
 import android.database.sqlite.SQLiteException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
 import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
 import mihon.domain.extensionrepo.model.ExtensionRepo
-import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 
 class AnimeExtensionRepoRepositoryImpl(

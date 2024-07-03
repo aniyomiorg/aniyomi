@@ -2,9 +2,9 @@ package mihon.domain.extensionrepo.anime.interactor
 
 import eu.kanade.tachiyomi.network.NetworkHelper
 import logcat.LogPriority
+import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
 import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
 import mihon.domain.extensionrepo.model.ExtensionRepo
-import mihon.domain.extensionrepo.anime.repository.AnimeExtensionRepoRepository
 import mihon.domain.extensionrepo.service.ExtensionRepoService
 import okhttp3.OkHttpClient
 import tachiyomi.core.common.util.system.logcat

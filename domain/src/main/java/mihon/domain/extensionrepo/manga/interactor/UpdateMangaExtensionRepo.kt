@@ -4,8 +4,8 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import mihon.domain.extensionrepo.model.ExtensionRepo
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import mihon.domain.extensionrepo.service.ExtensionRepoService
 
 class UpdateMangaExtensionRepo(

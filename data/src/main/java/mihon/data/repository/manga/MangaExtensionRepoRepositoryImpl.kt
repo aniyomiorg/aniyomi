@@ -4,8 +4,8 @@ import android.database.sqlite.SQLiteException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import mihon.domain.extensionrepo.exception.SaveExtensionRepoException
-import mihon.domain.extensionrepo.model.ExtensionRepo
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 
 class MangaExtensionRepoRepositoryImpl(
