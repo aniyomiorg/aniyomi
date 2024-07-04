@@ -46,6 +46,7 @@ import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
  * Available request parameter:
  * - [USE_CUSTOM_COVER_KEY]: Use custom cover if set by user, default is true
  */
+@Suppress("LongParameterList")
 class AnimeCoverFetcher(
     private val url: String?,
     private val isLibraryAnime: Boolean,
@@ -55,7 +56,7 @@ class AnimeCoverFetcher(
     private val diskCacheKeyLazy: Lazy<String>,
     private val sourceLazy: Lazy<AnimeHttpSource?>,
     private val callFactoryLazy: Lazy<Call.Factory>,
-    private val diskCacheLazy: Lazy<DiskCache>,
+    private val imageLoader: ImageLoader,
 ) : Fetcher {
 
     private val diskCacheKey: String
@@ -205,7 +206,7 @@ class AnimeCoverFetcher(
     private fun moveSnapshotToCoverCache(snapshot: DiskCache.Snapshot, cacheFile: File?): File? {
         if (cacheFile == null) return null
         return try {
-            diskCacheLazy.value.run {
+            imageLoader.diskCache?.run {
                 fileSystem.source(snapshot.data).use { input ->
                     writeSourceToCoverCache(input, cacheFile)
                 }
@@ -246,7 +247,7 @@ class AnimeCoverFetcher(
 
     private fun readFromDiskCache(): DiskCache.Snapshot? {
         return if (options.diskCachePolicy.readEnabled) {
-            diskCacheLazy.value.openSnapshot(diskCacheKey)
+            imageLoader.diskCache?.openSnapshot(diskCacheKey)
         } else {
             null
         }
@@ -255,9 +256,10 @@ class AnimeCoverFetcher(
     private fun writeToDiskCache(
         response: Response,
     ): DiskCache.Snapshot? {
-        val editor = diskCacheLazy.value.openEditor(diskCacheKey) ?: return null
+        val diskCache = imageLoader.diskCache
+        val editor = diskCache?.openEditor(diskCacheKey) ?: return null
         try {
-            diskCacheLazy.value.fileSystem.write(editor.data) {
+            diskCache.fileSystem.write(editor.data) {
                 response.body.source().readAll(this)
             }
             return editor.commitAndOpenSnapshot()
@@ -295,7 +297,6 @@ class AnimeCoverFetcher(
 
     class AnimeFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
-        private val diskCacheLazy: Lazy<DiskCache>,
     ) : Fetcher.Factory<Anime> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
@@ -308,17 +309,16 @@ class AnimeCoverFetcher(
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
-                diskCacheKeyLazy = lazy { AnimeKeyer().key(data, options) },
+                diskCacheKeyLazy = lazy { imageLoader.components.key(data, options)!! },
                 sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
-                diskCacheLazy = diskCacheLazy,
+                imageLoader = imageLoader,
             )
         }
     }
 
     class AnimeCoverFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
-        private val diskCacheLazy: Lazy<DiskCache>,
     ) : Fetcher.Factory<AnimeCover> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
@@ -331,10 +331,10 @@ class AnimeCoverFetcher(
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.url) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.animeId) },
-                diskCacheKeyLazy = lazy { AnimeCoverKeyer().key(data, options) },
+                diskCacheKeyLazy = lazy { imageLoader.components.key(data, options)!! },
                 sourceLazy = lazy { sourceManager.get(data.sourceId) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
-                diskCacheLazy = diskCacheLazy,
+                imageLoader = imageLoader,
             )
         }
     }
