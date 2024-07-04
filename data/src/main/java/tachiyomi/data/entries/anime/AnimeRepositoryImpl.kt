@@ -10,6 +10,8 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.library.anime.LibraryAnime
+import java.time.LocalDate
+import java.time.ZoneId
 
 class AnimeRepositoryImpl(
     private val handler: AnimeDatabaseHandler,
@@ -65,9 +67,11 @@ class AnimeRepositoryImpl(
         }
     }
 
+    @Suppress("MagicNumber")
     override suspend fun getUpcomingAnime(statuses: Set<Long>): Flow<List<Anime>> {
+        val epochMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
         return handler.subscribeToList {
-            animesQueries.getUpcomingAnime(statuses, AnimeMapper::mapAnime)
+            animesQueries.getUpcomingAnime(epochMillis, statuses, AnimeMapper::mapAnime)
         }
     }
 
