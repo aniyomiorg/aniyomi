@@ -1,14 +1,17 @@
+import mihon.buildlogic.getBuildTime
+import mihon.buildlogic.getCommitCount
+import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
+    id("mihon.android.application")
+    id("mihon.android.application.compose")
     id("com.mikepenz.aboutlibraries.plugin")
-    kotlin("android")
-    kotlin("plugin.serialization")
-    kotlin("plugin.compose")
+    kotlin("plugin.compose") // TODO(kotlin2): Remove
     id("com.github.zellius.shortcut-helper")
+    kotlin("plugin.serialization")
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -130,7 +133,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
         buildConfig = true
 
         // Disable some unused things
@@ -142,10 +144,6 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
 }
 
@@ -161,7 +159,6 @@ dependencies {
     implementation(projects.presentationWidget)
 
     // Compose
-    implementation(platform(compose.bom))
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
@@ -320,23 +317,6 @@ tasks {
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             ),
         )
-
-        if (project.findProperty("tachiyomi.enableComposeCompilerMetrics") == "true") {
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-        }
     }
 }
 
