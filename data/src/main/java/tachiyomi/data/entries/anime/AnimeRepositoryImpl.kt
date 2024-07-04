@@ -65,6 +65,12 @@ class AnimeRepositoryImpl(
         }
     }
 
+    override suspend fun getUpcomingAnime(statuses: Set<Long>): Flow<List<Anime>> {
+        return handler.subscribeToList {
+            animesQueries.getUpcomingAnime(statuses, AnimeMapper::mapAnime)
+        }
+    }
+
     override suspend fun resetAnimeViewerFlags(): Boolean {
         return try {
             handler.await { animesQueries.resetViewerFlags() }

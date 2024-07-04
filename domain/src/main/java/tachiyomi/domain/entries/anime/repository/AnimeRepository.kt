@@ -25,6 +25,8 @@ interface AnimeRepository {
 
     suspend fun getDuplicateLibraryAnime(id: Long, title: String): List<Anime>
 
+    suspend fun getUpcomingAnime(statuses: Set<Long>): Flow<List<Anime>>
+
     suspend fun resetAnimeViewerFlags(): Boolean
 
     suspend fun setAnimeCategories(animeId: Long, categoryIds: List<Long>)
