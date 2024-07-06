@@ -19,12 +19,12 @@ const val RICH_PRESENCE_TAG = "discord_rpc"
 private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
-private val RICH_PRESENCE_BUTTONS = listOf("Discord")
+private val RICH_PRESENCE_BUTTONS = listOf("Discord Server")
 
 // Constant for metadata list
 private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://discord.gg/vN8nbPHzeC",
+        "https://discord.gg/vN8nbPHzeC"
     ),
 )
 
@@ -38,9 +38,7 @@ data class Activity(
     val type: Int? = null,
     val timestamps: Timestamps? = null,
     val assets: Assets? = null,
-
     val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
-
     val metadata: Metadata? = RICH_PRESENCE_METADATA,
 
 ) {
