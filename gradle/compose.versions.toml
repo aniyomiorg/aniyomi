@@ -12,6 +12,7 @@ animation-graphics = { module = "androidx.compose.animation:animation-graphics" 
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 ui-util = { module = "androidx.compose.ui:ui-util" }
+constraint-layout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
 material3-core = { module = "androidx.compose.material3:material3" }
 material-icons = { module = "androidx.compose.material:material-icons-extended" }

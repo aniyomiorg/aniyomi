@@ -174,6 +174,7 @@ dependencies {
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.systemuicontroller)
     lintChecks(compose.lintchecks)
+    implementation(compose.constraint.layout)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
