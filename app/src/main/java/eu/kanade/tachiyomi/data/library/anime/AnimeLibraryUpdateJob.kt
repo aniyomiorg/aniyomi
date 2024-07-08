@@ -275,21 +275,21 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     try {
-                                        val newChapters = updateAnime(anime, fetchWindow)
+                                        val newEpisodes = updateAnime(anime, fetchWindow)
                                             .sortedByDescending { it.sourceOrder }
 
-                                        if (newChapters.isNotEmpty()) {
+                                        if (newEpisodes.isNotEmpty()) {
                                             val categoryIds = getCategories.await(anime.id).map { it.id }
                                             if (anime.shouldDownloadNewEpisodes(categoryIds, downloadPreferences)) {
-                                                downloadEpisodes(anime, newChapters)
+                                                downloadEpisodes(anime, newEpisodes)
                                                 hasDownloads.set(true)
                                             }
 
                                             libraryPreferences.newAnimeUpdatesCount()
-                                                .getAndSet { it + newChapters.size }
+                                                .getAndSet { it + newEpisodes.size }
 
                                             // Convert to the manga that contains new chapters
-                                            newUpdates.add(anime to newChapters.toTypedArray())
+                                            newUpdates.add(anime to newEpisodes.toTypedArray())
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {

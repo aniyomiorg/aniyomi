@@ -1,5 +1,6 @@
 package eu.kanade.domain.entries.anime.interactor
 
+import eu.kanade.tachiyomi.util.AiringDetails
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
@@ -19,9 +20,9 @@ class SetAnimeViewerFlags(
         )
     }
 
-    suspend fun awaitSetNextEpisodeAiring(id: Long, flags: Pair<Int, Long>) {
-        awaitSetNextEpisodeToAir(id, flags.first.toLong().addHexZeros(zeros = 2))
-        awaitSetNextEpisodeAiringAt(id, flags.second.addHexZeros(zeros = 6))
+    suspend fun awaitSetNextEpisodeAiring(id: Long, flags: AiringDetails) {
+        awaitSetNextEpisodeToAir(id, flags.episode.toLong().addHexZeros(zeros = 2))
+        awaitSetNextEpisodeAiringAt(id, flags.time.addHexZeros(zeros = 6))
     }
 
     private suspend fun awaitSetNextEpisodeToAir(id: Long, flag: Long) {

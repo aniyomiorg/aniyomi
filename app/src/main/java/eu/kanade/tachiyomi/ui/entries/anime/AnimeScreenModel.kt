@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
@@ -31,7 +30,9 @@ import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.AiringDetails
 import eu.kanade.tachiyomi.util.AniChartApi
+import eu.kanade.tachiyomi.util.AniChartItem
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
@@ -225,10 +226,10 @@ class AnimeScreenModel(
             val fetchFromSourceTasks = listOf(
                 async { fetchAnimeFromSource(manualFetch) },
                 async { fetchEpisodesFromSource(manualFetch) },
+                async { successState?.let { updateAiringTime(it.anime, it.trackItems, manualFetch) } }
             )
             fetchFromSourceTasks.awaitAll()
             updateSuccessState { it.copy(isRefreshingData = false) }
-            successState?.let { updateAiringTime(it.anime, it.trackItems, manualFetch) }
         }
     }
 
@@ -1004,7 +1005,8 @@ class AnimeScreenModel(
         trackItems: List<AnimeTrackItem>,
         manualFetch: Boolean,
     ) {
-        val airingEpisodeData = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
+        val aniChartItem = listOf(AniChartItem(anime, trackItems))
+        val airingEpisodeData = AniChartApi().loadAiringTime(aniChartItem, manualFetch)[anime.id] ?: AiringDetails()
         setAnimeViewerFlags.awaitSetNextEpisodeAiring(anime.id, airingEpisodeData)
         updateSuccessState { it.copy(nextAiringEpisode = airingEpisodeData) }
     }
@@ -1074,7 +1076,7 @@ class AnimeScreenModel(
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
             val hasPromptedToAddBefore: Boolean = false,
-            val nextAiringEpisode: Pair<Int, Long> = Pair(
+            val nextAiringEpisode: AiringDetails = AiringDetails(
                 anime.nextEpisodeToAir,
                 anime.nextEpisodeAiringAt,
             ),
@@ -1118,10 +1120,10 @@ class AnimeScreenModel(
                 get() = trackItems.count { it.track != null }
 
             val airingEpisodeNumber: Double
-                get() = nextAiringEpisode.first.toDouble()
+                get() = nextAiringEpisode.episode.toDouble()
 
             val airingTime: Long
-                get() = nextAiringEpisode.second.times(1000L).minus(
+                get() = nextAiringEpisode.time.times(1000L).minus(
                     Calendar.getInstance().timeInMillis,
                 )
 
