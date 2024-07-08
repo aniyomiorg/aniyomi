@@ -16,6 +16,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import eu.kanade.core.util.fastFilter
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
@@ -24,6 +25,11 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.track.AnimeTracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
+import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import eu.kanade.tachiyomi.util.AniChartApi
+import eu.kanade.tachiyomi.util.AniChartItem
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -62,6 +68,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_V
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -87,10 +94,14 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getCategories: GetAnimeCategories = Injekt.get()
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
+    private val getTracks: GetAnimeTracks = Injekt.get()
+    private val trackerManager: TrackerManager = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
     private var animeToUpdate: List<LibraryAnime> = mutableListOf()
+
+    private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is AnimeTracker } }
 
     override suspend fun doWork(): Result {
         if (tags.contains(WORK_NAME_AUTO)) {
@@ -306,6 +317,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     }
                                 }
                             }
+                            AniChartApi().loadAiringTime(getAniChartItems(animeInSource), manualFetch = false)
                         }
                     }
                 }
@@ -327,6 +339,17 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 failedUpdates.size,
                 errorFile.getUriCompat(context),
             )
+        }
+    }
+
+    private suspend fun getAniChartItems(libraryAnime: List<LibraryAnime>): List<AniChartItem> {
+        val loggedInTrackerIds = loggedInTrackers.map { it.id }.toHashSet()
+        return libraryAnime.map { anime ->
+            val tracks = getTracks.await(anime.id)
+                .fastFilter { it.trackerId in loggedInTrackerIds }
+            val trackItems = loggedInTrackers
+                .map { service -> AnimeTrackItem(tracks.find { it.trackerId == service.id }, service) }
+            AniChartItem(anime.anime, trackItems)
         }
     }
 
