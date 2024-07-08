@@ -7,13 +7,11 @@ import eu.kanade.tachiyomi.data.track.simkl.Simkl
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
-import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -84,47 +82,40 @@ class AniChartApi {
                     return@withIOContext Pair(simklIdMap.map { (id, _) -> id to AiringDetails() }.toMap(), malIdMap)
                 }
                 val body = response.body.string()
+                val simklData = removeAiredSimkl(json.decodeFromString<List<SimklResponse>>(body))
 
                 simklIdMap.forEach { (animeId, simklId) ->
-                    val data = removeAiredSimkl(body)
+                    val data = simklData.find { it.ids.simkl == simklId }
 
-                    val malId = data.substringAfter("\"simkl_id\":$simklId,", "").substringAfter(
-                        "\"mal\":\"",
-                    ).substringBefore("\"").toLongOrNull() ?: 0L
+                    val malId = data?.ids?.mal?.toLongOrNull() ?: 0L
                     if (malId != 0L) {
                         malIdMap[animeId] = malId
                         simklIdMap.remove(animeId)
                         return@forEach
                     }
 
-                    val epNum = data.substringAfter("\"simkl_id\":$simklId,", "")
-                        .substringBefore("\"}}").substringAfterLast("\"episode\":")
-                    episodeNumber = epNum.substringBefore(",").toIntOrNull() ?: episodeNumber
+                    episodeNumber = data?.episode?.episode ?: episodeNumber
 
-                    val date = data.substringBefore("\"simkl_id\":$simklId,", "")
-                        .substringAfterLast("\"date\":\"").substringBefore("\"")
-                    airingAt = if (date.isNotBlank()) toUnixTimestamp(date) else airingAt
+                    airingAt = if (data?.date?.isNotBlank() == true) toUnixTimestamp(data.date) else airingAt
 
                     simklAiringMap[animeId] = if (airingAt != 0L) {
                         AiringDetails(episodeNumber, airingAt)
                     } else {
                         AiringDetails()
                     }
-                    simklIdMap.remove(animeId)
                 }
             }
             return@withIOContext Pair(simklAiringMap.toMap(), malIdMap)
         }
     }
 
-    private fun removeAiredSimkl(body: String): String {
+    private fun removeAiredSimkl(simklData: List<SimklResponse>): List<SimklResponse> {
         val currentTimeInMillis = Calendar.getInstance().timeInMillis
-        val index = body.split("\"date\":\"").drop(1).indexOfFirst {
-            val date = it.substringBefore("\"")
+        return simklData.filter {
+            val date = it.date ?: ""
             val time = if (date.isNotBlank()) toUnixTimestamp(date) else 0L
             time.times(1000) > currentTimeInMillis
         }
-        return if (index >= 0) body.substring(index) else ""
     }
 
     private fun toUnixTimestamp(dateFormat: String): Long {
@@ -141,7 +132,7 @@ class AniChartApi {
             val query = """
                 query {
                   Page(page: $page, perPage: 50) {
-                    media($idIn: ${aniIdMap.values}, type: ANIME) {
+                    media($idIn: ${aniIdMap.values.joinToString(",")}) {
                       $remoteId
                       nextAiringEpisode {
                         episode
@@ -152,30 +143,29 @@ class AniChartApi {
                 }
             """.trimMargin()
 
-            with(json) {
-                try {
-                    client.newCall(
-                        POST(
-                            "https://graphql.anilist.co",
-                            body = buildJsonObject { put("query", query) }.toString()
-                                .toRequestBody(jsonMime),
-                        ),
-                    ).execute().parseAs<JsonObject>().let { response ->
-                        val mediaList = response["data"]!!.jsonObject["Page"]!!.jsonObject["media"]!!.jsonArray
-                        if (mediaList.size > 0) {
-                            malAiringMap = mediaList.associate { media ->
-                                val id = media.jsonObject[remoteId]!!.toString().toLong()
-                                val nextAiring = media.jsonObject["nextAiringEpisode"]
-                                val epNum = nextAiring?.jsonObject?.get("episode").toString().toIntOrNull() ?: 1
-                                val airingAt = nextAiring?.jsonObject?.get("airingAt").toString().toLongOrNull() ?: 0L
+            try {
+                val response = client.newCall(
+                    POST(
+                        "https://graphql.anilist.co",
+                        body = buildJsonObject { put("query", query) }.toString()
+                            .toRequestBody(jsonMime),
+                    )
+                ).execute()
 
-                                aniIdMap.filterValues { it == id }.keys.first() to AiringDetails(epNum, airingAt)
-                            } + getAnilistAiringEpisodeData(isMal, aniIdMap, page + 1)
-                        }
-                    }
-                } catch (e: Exception) {
-                    return@withIOContext aniIdMap.map { (id, _) -> id to AiringDetails() }.toMap()
+                val anilistResponse = response.body.let { json.decodeFromString<AnilistResponse>(it.string()) }
+                val mediaList = anilistResponse.data.page.media
+                if (mediaList.isNotEmpty()) {
+                    malAiringMap = mediaList.associate { media ->
+                        val id = if (isMal) media.idMal else media.id
+                        val nextAiring = media.nextAiringEpisode
+                        val epNum = nextAiring?.episode ?: 1
+                        val airingAt = nextAiring?.airingAt ?: 0L
+
+                        aniIdMap.filterValues { it == id }.keys.first() to AiringDetails(epNum, airingAt)
+                    } + getAnilistAiringEpisodeData(isMal, aniIdMap, page + 1)
                 }
+            } catch (e: Exception) {
+                return@withIOContext aniIdMap.map { (id, _) -> id to AiringDetails() }.toMap()
             }
             return@withIOContext malAiringMap
         }
@@ -186,3 +176,49 @@ private typealias TrackIdMap = MutableMap<Long, Long>
 private typealias AnimeAiringMap = Map<Long, AiringDetails>
 data class AniChartItem(val anime: Anime, val trackItems: List<AnimeTrackItem>)
 data class AiringDetails(val episode: Int = 1, val time: Long = 0L)
+
+@Serializable
+private class AnilistResponse(
+    val data: AnilistData
+)
+
+@Serializable
+private class AnilistData(
+    @SerialName("Page") val page: AnilistPage
+)
+
+@Serializable
+private class AnilistPage(
+    val media: List<AnilistMedia>
+)
+
+@Serializable
+private class AnilistMedia(
+    val id: Long?,
+    val idMal: Long?,
+    val nextAiringEpisode: AnilistNextAiringEpisode?
+)
+
+@Serializable
+private class AnilistNextAiringEpisode(
+    val episode: Int?,
+    val airingAt: Long?
+)
+
+@Serializable
+private class SimklResponse(
+    val ids: SimklIds,
+    val episode: SimklEpisode? = null,
+    val date: String?
+)
+
+@Serializable
+private class SimklIds(
+    @SerialName("simkl_id") val simkl: Long,
+    val mal: String?,
+)
+
+@Serializable
+private class SimklEpisode(
+    val episode: Int,
+)
