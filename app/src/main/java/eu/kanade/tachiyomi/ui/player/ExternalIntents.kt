@@ -565,9 +565,11 @@ const val MX_PLAYER = "com.mxtech.videoplayer"
 const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"
 const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"
 const val VLC_PLAYER = "org.videolan.vlc"
-const val MPV_KT = "live.mehiz.mpvkt"
 const val MPV_REMOTE = "com.husudosu.mpvremote"
 const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
 const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"
+
+@Suppress("TopLevelPropertyNaming")
+const val MPV_KT = "live.mehiz.mpvkt"
