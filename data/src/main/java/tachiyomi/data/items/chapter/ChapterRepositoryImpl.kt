@@ -2,8 +2,8 @@ package tachiyomi.data.items.chapter
 
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
-import tachiyomi.core.util.lang.toLong
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.lang.toLong
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.data.items.chapter.ChapterMapper.mapChapter
 import tachiyomi.domain.items.chapter.model.Chapter

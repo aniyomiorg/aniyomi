@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("plugin.compose")
 }
 
 android {
@@ -21,13 +22,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
+    implementation(projects.core.common)
     implementation(projects.domain)
     implementation(projects.presentationCore)
     api(projects.i18n)
 
     implementation(compose.glance)
-    lintChecks(compose.lintchecks)
 
     implementation(kotlinx.immutables)
 

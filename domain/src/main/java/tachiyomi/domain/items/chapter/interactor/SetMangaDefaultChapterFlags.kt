@@ -1,6 +1,6 @@
 package tachiyomi.domain.items.chapter.interactor
 
-import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
 import tachiyomi.domain.entries.manga.model.Manga

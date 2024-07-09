@@ -18,6 +18,8 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
+import android.os.PowerManager
+import android.provider.Settings
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -82,6 +84,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -91,7 +94,6 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -100,13 +102,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.launchNonCancellable
-import tachiyomi.core.util.lang.launchUI
-import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.launchUI
+import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withUIContext
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -144,6 +146,8 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        private const val MAX_BRIGHTNESS = 255F
     }
 
     // AM (CONNECTIONS) -->
@@ -606,6 +610,9 @@ class PlayerActivity : BaseActivity() {
 
         copyAssets(configDir)
 
+        MPVLib.setOptionString("sub-ass-force-margins", "yes")
+        MPVLib.setOptionString("sub-use-margins", "yes")
+
         player.initialize(
             configDir = configDir,
             cacheDir = applicationContext.cacheDir.path,
@@ -621,11 +628,12 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        MPVLib.setOptionString("hwdec", playerPreferences.hwDec().get())
-        when (playerPreferences.deband().get()) {
-            1 -> MPVLib.setOptionString("vf", "gradfun=radius=12")
-            2 -> MPVLib.setOptionString("deband", "yes")
-            3 -> MPVLib.setOptionString("vf", "format=yuv420p")
+        MPVLib.setOptionString("hwdec", playerPreferences.hardwareDecoding().get().mpvValue)
+        when (playerPreferences.videoDebanding().get()) {
+            VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
+            VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
+            VideoDebanding.YUV420P -> MPVLib.setOptionString("vf", "format=yuv420p")
+            VideoDebanding.DISABLED -> {}
         }
 
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
@@ -754,11 +762,40 @@ class PlayerActivity : BaseActivity() {
                 !playerPreferences.rememberPlayerBrightness().get()
 
         brightness = if (useDeviceBrightness) {
-            Utils.getScreenBrightness(this) ?: 0.5F
+            getCurrentBrightness()
         } else {
             playerPreferences.playerBrightnessValue().get()
         }
         verticalScrollLeft(0F)
+    }
+
+    @Suppress("ReturnCount")
+    private fun getMaxBrightness(): Float {
+        val powerManager = getSystemService(POWER_SERVICE) as? PowerManager ?: return MAX_BRIGHTNESS
+        val brightnessField = powerManager.javaClass.declaredFields.find {
+            it.name == "BRIGHTNESS_ON"
+        } ?: return MAX_BRIGHTNESS
+
+        brightnessField.isAccessible = true
+        return try {
+            (brightnessField.get(powerManager) as Int).toFloat()
+        } catch (e: IllegalAccessException) {
+            logcat(LogPriority.ERROR, e) { "Unable to access BRIGHTNESS_ON field" }
+            MAX_BRIGHTNESS
+        }
+    }
+
+    private fun getCurrentBrightness(): Float {
+        // check if window has brightness set
+        val lp = window.attributes
+        if (lp.screenBrightness >= 0f) return lp.screenBrightness
+        val resolver = contentResolver
+        return try {
+            Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS) / getMaxBrightness()
+        } catch (e: Settings.SettingNotFoundException) {
+            logcat(LogPriority.ERROR, e) { "Unable to get screen brightness" }
+            0.5F
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -893,7 +930,7 @@ class PlayerActivity : BaseActivity() {
         AspectState.mode = if (aspectProperty != -1.0 && aspectProperty != (deviceWidth / deviceHeight).toDouble()) {
             AspectState.CUSTOM
         } else {
-            AspectState.get(playerPreferences.playerViewMode().get())
+            playerPreferences.aspectState().get()
         }
 
         playerControls.setViewMode(showText = false)

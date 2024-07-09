@@ -6,6 +6,8 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
+import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.preference.getEnum
 import tachiyomi.i18n.MR
 
 class ReaderPreferences(
@@ -76,6 +78,8 @@ class ReaderPreferences(
     fun skipFiltered() = preferenceStore.getBoolean("skip_filtered", true)
 
     fun skipDupe() = preferenceStore.getBoolean("skip_dupe", false)
+
+    fun webtoonDisableZoomOut() = preferenceStore.getBoolean("webtoon_disable_zoom_out", false)
 
     // endregion
 

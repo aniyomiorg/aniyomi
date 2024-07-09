@@ -2,7 +2,7 @@ package tachiyomi.source.local.filter.anime
 
 import android.content.Context
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
-import tachiyomi.core.i18n.stringResource
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 
 sealed class AnimeOrderBy(context: Context, selection: Selection) : AnimeFilter.Sort(

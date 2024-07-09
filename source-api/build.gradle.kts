@@ -17,7 +17,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation(projects.core)
+                implementation(projects.core.common)
                 api(libs.preferencektx)
 
                 // Workaround for https://youtrack.jetbrains.com/issue/KT-57605
@@ -38,9 +38,11 @@ android {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-Xexpect-actual-classes",
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        compilerOptions.freeCompilerArgs.addAll(
+            listOf(
+                "-Xexpect-actual-classes",
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+            ),
         )
     }
 }

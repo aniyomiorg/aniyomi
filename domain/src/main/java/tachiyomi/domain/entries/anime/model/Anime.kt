@@ -5,6 +5,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.anime.interactor.GetCustomAnimeInfo
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
 import java.time.Instant
 import kotlin.math.pow

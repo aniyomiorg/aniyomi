@@ -4,6 +4,8 @@ import android.content.Context
 import eu.kanade.tachiyomi.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
+import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
 

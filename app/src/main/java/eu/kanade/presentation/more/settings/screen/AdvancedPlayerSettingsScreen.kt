@@ -3,6 +3,7 @@ package eu.kanade.presentation.more.settings.screen
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.Settings
 import androidx.compose.runtime.Composable
@@ -12,8 +13,9 @@ import androidx.compose.ui.platform.LocalContext
 import eu.kanade.core.preference.asState
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlinx.collections.immutable.persistentMapOf
-import tachiyomi.core.i18n.stringResource
+import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
+import kotlinx.collections.immutable.toImmutableMap
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -44,9 +46,9 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
                     ),
                 onValueChanged = {
-                    val inputFile = storageManager.getMPVConfigDirectory()
-                        ?.createFile("mpv.conf")
-                    if (Environment.isExternalStorageManager()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+                        val inputFile = storageManager.getMPVConfigDirectory()
+                            ?.createFile("mpv.conf")
                         inputFile?.openOutputStream()?.bufferedWriter().use { writer ->
                             writer?.write(it)
                         }
@@ -66,9 +68,9 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                         postfix = if (mpvInput.asState(scope).value.lines().size > 2) "\n..." else "",
                     ),
                 onValueChanged = {
-                    val inputFile = storageManager.getMPVConfigDirectory()
-                        ?.createFile("input.conf")
-                    if (Environment.isExternalStorageManager()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
+                        val inputFile = storageManager.getMPVConfigDirectory()
+                            ?.createFile("input.conf")
                         inputFile?.openOutputStream()?.bufferedWriter().use { writer ->
                             writer?.write(it)
                         }
@@ -85,13 +87,12 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
             ),
             Preference.PreferenceItem.ListPreference(
                 title = context.stringResource(MR.strings.pref_debanding_title),
-                pref = playerPreferences.deband(),
-                entries = persistentMapOf(
-                    0 to context.stringResource(MR.strings.pref_debanding_disabled),
-                    1 to context.stringResource(MR.strings.pref_debanding_cpu),
-                    2 to context.stringResource(MR.strings.pref_debanding_gpu),
-                    3 to "YUV420P",
-                ),
+                pref = playerPreferences.videoDebanding(),
+                entries = VideoDebanding.entries.associateWith {
+                    context.stringResource(
+                        it.stringRes,
+                    )
+                }.toImmutableMap(),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 title = context.stringResource(MR.strings.pref_mpv_scripts),
@@ -100,7 +101,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                 onValueChanged = {
                     // Ask for external storage permission
                     if (it) {
-                        if (!Environment.isExternalStorageManager()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
                             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                             intent.data = Uri.fromParts("package", context.packageName, null)
                             context.startActivity(intent)

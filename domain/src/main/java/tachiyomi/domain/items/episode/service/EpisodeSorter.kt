@@ -1,6 +1,6 @@
 package tachiyomi.domain.items.episode.service
 
-import tachiyomi.core.util.lang.compareToWithCollator
+import tachiyomi.core.common.util.lang.compareToWithCollator
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 

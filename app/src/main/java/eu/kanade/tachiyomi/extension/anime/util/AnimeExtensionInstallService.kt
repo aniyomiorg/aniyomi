@@ -15,8 +15,8 @@ import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companio
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
 
 class AnimeExtensionInstallService : Service() {
