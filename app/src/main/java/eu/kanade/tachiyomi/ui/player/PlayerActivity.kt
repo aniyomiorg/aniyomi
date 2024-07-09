@@ -1838,9 +1838,9 @@ class PlayerActivity : BaseActivity() {
                 } else {
                     ep.episode_number
                 }.toString().padStart(2, '0')
-                " - E$epNumber - ${ep.name}"
+                stringResource(MR.strings.media_title_episode, epNumber, ep.name)
             }.orEmpty()
-            anime.title + episode
+            stringResource(MR.strings.media_title_anime, anime.title, episode)
         }
         title?.also {
             MPVLib.setPropertyString("force-media-title", it)
