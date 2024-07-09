@@ -4,10 +4,10 @@ import android.os.Build
 import androidx.compose.ui.graphics.BlendMode
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
-import tachiyomi.core.preference.PreferenceStore
-import tachiyomi.core.preference.getEnum
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.getEnum
 import tachiyomi.i18n.MR
 
 class ReaderPreferences(

@@ -2,10 +2,10 @@ package tachiyomi.domain.entries.manga.model
 
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import tachiyomi.core.common.preference.TriState
 import tachiyomi.core.preference.TriState
 import tachiyomi.domain.entries.manga.interactor.GetCustomMangaInfo
 import uy.kohesive.injekt.injectLazy
-import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
 import java.time.Instant
 
