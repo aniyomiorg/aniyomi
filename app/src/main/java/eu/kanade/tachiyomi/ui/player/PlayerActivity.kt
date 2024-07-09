@@ -1831,20 +1831,21 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setMpvMediaTitle() {
-        val title = viewModel.currentAnime?.let { anime ->
-            val episode = viewModel.currentEpisode?.let { ep ->
-                val epNumber = if (ceil(ep.episode_number) == floor(ep.episode_number)) {
-                    ep.episode_number.toInt()
-                } else {
-                    ep.episode_number
-                }.toString().padStart(2, '0')
-                stringResource(MR.strings.media_title_episode, epNumber, ep.name)
-            }.orEmpty()
-            stringResource(MR.strings.media_title_anime, anime.title, episode)
-        }
-        title?.also {
-            MPVLib.setPropertyString("force-media-title", it)
-        }
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+
+        val epNumber = episode.episode_number.let { number ->
+            if (ceil(number) == floor(number)) number.toInt() else number
+        }.toString().padStart(2, '0')
+
+        val title = stringResource(
+            MR.strings.mpv_media_title,
+            anime.title,
+            epNumber,
+            episode.name,
+        )
+
+        MPVLib.setPropertyString("force-media-title", title)
     }
 
     private var aniskipStamps: List<Stamp> = emptyList()
