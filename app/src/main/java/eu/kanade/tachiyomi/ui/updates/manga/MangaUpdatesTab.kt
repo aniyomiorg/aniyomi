@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.updates.manga
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.FlipToBack
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.SelectAll
@@ -28,6 +29,7 @@ import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import mihon.feature.upcoming.manga.UpcomingMangaScreen
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -146,6 +148,11 @@ fun Screen.mangaUpdatesTab(
             )
         } else {
             persistentListOf(
+                AppBar.Action(
+                    title = stringResource(MR.strings.action_view_upcoming),
+                    icon = Icons.Outlined.CalendarMonth,
+                    onClick = { navigator.push(UpcomingMangaScreen()) },
+                ),
                 AppBar.Action(
                     title = stringResource(MR.strings.action_update_library),
                     icon = Icons.Outlined.Refresh,

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.coil
 
-import coil.key.Keyer
-import coil.request.Options
+import coil3.key.Keyer
+import coil3.request.Options
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import tachiyomi.domain.entries.manga.model.MangaCover

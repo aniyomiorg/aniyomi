@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -29,6 +31,10 @@ class AndroidMangaSourceManager(
     private val extensionManager: MangaExtensionManager,
     private val sourceRepository: MangaStubSourceRepository,
 ) : MangaSourceManager {
+
+    private val _isInitialized = MutableStateFlow(false)
+    override val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
+
     private val downloadManager: MangaDownloadManager by injectLazy()
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
@@ -61,6 +67,7 @@ class AndroidMangaSourceManager(
                         }
                     }
                     sourcesMapFlow.value = mutableMap
+                    _isInitialized.value = true
                 }
         }
 

@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.library")
+    id("mihon.library")
     kotlin("android")
     kotlin("plugin.serialization")
 }
@@ -34,6 +34,7 @@ tasks {
         compilerOptions.freeCompilerArgs.addAll(
             listOf(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xcontext-receivers",
             ),
         )
     }

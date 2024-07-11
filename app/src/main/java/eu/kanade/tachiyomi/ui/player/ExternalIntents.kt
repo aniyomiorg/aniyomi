@@ -192,7 +192,7 @@ class ExternalIntents {
      */
     private fun getIntentForPackage(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
         return when (pkgName) {
-            WEB_VIDEO_CASTER -> webVideoCasterIntent(pkgName, context, uri, video)
+            WebVideoCaster -> webVideoCasterIntent(pkgName, context, uri, video)
             else -> standardIntentForPackage(pkgName, context, uri, video)
         }
     }
@@ -200,7 +200,7 @@ class ExternalIntents {
     private fun webVideoCasterIntent(pkgName: String, context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(uri, "video/*")
-            if (isPackageInstalled(pkgName, context.packageManager)) setPackage(WEB_VIDEO_CASTER)
+            if (isPackageInstalled(pkgName, context.packageManager)) setPackage(WebVideoCaster)
             addExtrasAndFlags(true, this)
 
             val headers = Bundle()
@@ -346,16 +346,17 @@ class ExternalIntents {
      */
     private fun getComponent(packageName: String): ComponentName? {
         return when (packageName) {
-            MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
-            MX_PLAYER, MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(
+            MpvPlayer -> ComponentName(packageName, "$packageName.MPVActivity")
+            MxPlayer, MxPlayerFree, MxPlayerPro -> ComponentName(
                 packageName,
                 "$packageName.ActivityScreen",
             )
-            VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
-            MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
-            JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
-            NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
-            X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
+            VlcPlayer -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
+            MpvKt, MpvKtPreview -> ComponentName(packageName, "live.mehiz.mpvkt.ui.player.PlayerActivity")
+            MpvRemote -> ComponentName(packageName, "$packageName.MainActivity")
+            JustPlayer -> ComponentName(packageName, "$packageName.PlayerActivity")
+            NextPlayer -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
+            XPlayer -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
             AMNIS -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
             else -> null
         }
@@ -609,14 +610,16 @@ class ExternalIntents {
 }
 
 // List of supported external players and their packages
-const val MPV_PLAYER = "is.xyz.mpv"
-const val MX_PLAYER = "com.mxtech.videoplayer"
-const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"
-const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"
-const val VLC_PLAYER = "org.videolan.vlc"
-const val MPV_REMOTE = "com.husudosu.mpvremote"
-const val JUST_PLAYER = "com.brouken.player"
-const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
-const val X_PLAYER = "video.player.videoplayer"
-const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"
+const val MpvPlayer = "is.xyz.mpv"
+const val MxPlayer = "com.mxtech.videoplayer"
+const val MxPlayerFree = "com.mxtech.videoplayer.ad"
+const val MxPlayerPro = "com.mxtech.videoplayer.pro"
+const val VlcPlayer = "org.videolan.vlc"
+const val MpvKt = "live.mehiz.mpvkt"
+const val MpvKtPreview = "live.mehiz.mpvkt.preview"
+const val MpvRemote = "com.husudosu.mpvremote"
+const val JustPlayer = "com.brouken.player"
+const val NextPlayer = "dev.anilbeesetti.nextplayer"
+const val XPlayer = "video.player.videoplayer"
+const val WebVideoCaster = "com.instantbits.cast.webvideo"
 const val AMNIS = "com.amnis"
