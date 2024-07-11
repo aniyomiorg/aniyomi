@@ -2,22 +2,27 @@ package eu.kanade.presentation.more.settings.screen.browse
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.domain.extension.anime.interactor.CreateAnimeExtensionRepo
-import eu.kanade.domain.extension.anime.interactor.DeleteAnimeExtensionRepo
-import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionRepos
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo
+import mihon.domain.extensionrepo.anime.interactor.DeleteAnimeExtensionRepo
+import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepo
+import mihon.domain.extensionrepo.anime.interactor.ReplaceAnimeExtensionRepo
+import mihon.domain.extensionrepo.anime.interactor.UpdateAnimeExtensionRepo
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimeExtensionReposScreenModel(
-    private val getExtensionRepos: GetAnimeExtensionRepos = Injekt.get(),
+    private val getExtensionRepo: GetAnimeExtensionRepo = Injekt.get(),
     private val createExtensionRepo: CreateAnimeExtensionRepo = Injekt.get(),
     private val deleteExtensionRepo: DeleteAnimeExtensionRepo = Injekt.get(),
+    private val replaceExtensionRepo: ReplaceAnimeExtensionRepo = Injekt.get(),
+    private val updateExtensionRepo: UpdateAnimeExtensionRepo = Injekt.get(),
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -25,7 +30,7 @@ class AnimeExtensionReposScreenModel(
 
     init {
         screenModelScope.launchIO {
-            getExtensionRepos.subscribe()
+            getExtensionRepo.subscribeAll()
                 .collectLatest { repos ->
                     mutableState.update {
                         RepoScreenState.Success(
@@ -39,25 +44,51 @@ class AnimeExtensionReposScreenModel(
     /**
      * Creates and adds a new repo to the database.
      *
-     * @param name The name of the repo to create.
+     * @param baseUrl The baseUrl of the repo to create.
      */
-    fun createRepo(name: String) {
+    fun createRepo(baseUrl: String) {
         screenModelScope.launchIO {
-            when (createExtensionRepo.await(name)) {
-                is CreateAnimeExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+            when (val result = createExtensionRepo.await(baseUrl)) {
+                CreateAnimeExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+                CreateAnimeExtensionRepo.Result.RepoAlreadyExists -> _events.send(RepoEvent.RepoAlreadyExists)
+                is CreateAnimeExtensionRepo.Result.DuplicateFingerprint -> {
+                    showDialog(RepoDialog.Conflict(result.oldRepo, result.newRepo))
+                }
                 else -> {}
             }
         }
     }
 
     /**
-     * Deletes the given repo from the database.
+     * Inserts a repo to the database, replace a matching repo with the same signing key fingerprint if found.
      *
-     * @param repo The repo to delete.
+     * @param newRepo The repo to insert
      */
-    fun deleteRepo(repo: String) {
+    fun replaceRepo(newRepo: ExtensionRepo) {
         screenModelScope.launchIO {
-            deleteExtensionRepo.await(repo)
+            replaceExtensionRepo.await(newRepo)
+        }
+    }
+
+    /**
+     * Refreshes information for each repository.
+     */
+    fun refreshRepos() {
+        val status = state.value
+
+        if (status is RepoScreenState.Success) {
+            screenModelScope.launchIO {
+                updateExtensionRepo.awaitAll()
+            }
+        }
+    }
+
+    /**
+     * Deletes the given repo from the database
+     */
+    fun deleteRepo(baseUrl: String) {
+        screenModelScope.launchIO {
+            deleteExtensionRepo.await(baseUrl)
         }
     }
 

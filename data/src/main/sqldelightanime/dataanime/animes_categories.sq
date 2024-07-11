@@ -2,25 +2,22 @@ CREATE TABLE animes_categories(
     _id INTEGER NOT NULL PRIMARY KEY,
     anime_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
-    last_modified_at INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY(category_id) REFERENCES categories (_id)
     ON DELETE CASCADE,
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
 
-CREATE TRIGGER update_last_modified_at_animes_categories
-AFTER UPDATE ON animes_categories
-FOR EACH ROW
+CREATE TRIGGER insert_anime_category_update_version AFTER INSERT ON animes_categories
 BEGIN
-  UPDATE animes_categories
-  SET last_modified_at = strftime('%s', 'now')
-  WHERE _id = new._id;
+    UPDATE animes
+    SET version = version + 1
+    WHERE _id = new.anime_id AND (SELECT is_syncing FROM animes WHERE _id = new.anime_id) = 0;
 END;
 
 insert:
-INSERT INTO animes_categories(anime_id, category_id, last_modified_at)
-VALUES (:animeId, :categoryId, 0);
+INSERT INTO animes_categories(anime_id, category_id)
+VALUES (:animeId, :categoryId);
 
 deleteAnimeCategoryByAnimeId:
 DELETE FROM animes_categories

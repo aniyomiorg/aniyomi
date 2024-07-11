@@ -5,7 +5,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.anime.model.Anime
 
-@Suppress("DEPRECATION")
+@Suppress(
+    "DEPRECATION",
+    "MagicNumber",
+)
 @Serializable
 data class BackupAnime(
     // in 1.x some of these values have different names
@@ -37,6 +40,7 @@ data class BackupAnime(
     @ProtoNumber(105) var updateStrategy: AnimeUpdateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,
     @ProtoNumber(106) var lastModifiedAt: Long = 0,
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
+    @ProtoNumber(109) var version: Long = 0,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(
@@ -56,6 +60,7 @@ data class BackupAnime(
             updateStrategy = this@BackupAnime.updateStrategy,
             lastModifiedAt = this@BackupAnime.lastModifiedAt,
             favoriteModifiedAt = this@BackupAnime.favoriteModifiedAt,
+            version = this@BackupAnime.version,
         )
     }
 }

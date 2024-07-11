@@ -16,10 +16,10 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import logcat.LogPriority
-import tachiyomi.core.common.preference.plusAssign
 import tachiyomi.core.common.util.lang.launchNow
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
@@ -42,8 +42,8 @@ class MangaExtensionManager(
     private val trustExtension: TrustMangaExtension = Injekt.get(),
 ) {
 
-    var isInitialized = false
-        private set
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> = _isInitialized.asStateFlow()
 
     /**
      * API where all the available extensions can be found.
@@ -109,7 +109,7 @@ class MangaExtensionManager(
             .filterIsInstance<MangaLoadResult.Untrusted>()
             .map { it.extension }
 
-        isInitialized = true
+        _isInitialized.value = true
     }
 
     /**

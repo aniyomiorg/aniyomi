@@ -55,8 +55,6 @@ import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
@@ -67,7 +65,6 @@ import eu.kanade.presentation.more.settings.screen.data.RestoreBackupScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -107,6 +104,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import mihon.core.migration.Migrator
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.withUIContext
@@ -123,9 +121,7 @@ import androidx.compose.ui.graphics.Color.Companion as ComposeColor
 
 class MainActivity : BaseActivity() {
 
-    private val sourcePreferences: SourcePreferences by injectLazy()
     private val libraryPreferences: LibraryPreferences by injectLazy()
-    private val uiPreferences: UiPreferences by injectLazy()
     private val preferences: BasePreferences by injectLazy()
 
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
@@ -149,24 +145,7 @@ class MainActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val didMigration = if (isLaunch) {
-            Migrations.upgrade(
-                context = applicationContext,
-                basePreferences = preferences,
-                uiPreferences = uiPreferences,
-                preferenceStore = Injekt.get(),
-                networkPreferences = Injekt.get(),
-                sourcePreferences = sourcePreferences,
-                securityPreferences = Injekt.get(),
-                libraryPreferences = libraryPreferences,
-                readerPreferences = Injekt.get(),
-                playerPreferences = Injekt.get(),
-                backupPreferences = Injekt.get(),
-                trackerManager = Injekt.get(),
-            )
-        } else {
-            false
-        }
+        val didMigration = Migrator.awaitAndRelease()
 
         // Do not let the launcher create a new activity http://stackoverflow.com/questions/16283079
         if (!isTaskRoot) {

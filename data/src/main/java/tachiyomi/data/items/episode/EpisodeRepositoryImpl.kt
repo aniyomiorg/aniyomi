@@ -29,6 +29,7 @@ class EpisodeRepositoryImpl(
                         episode.sourceOrder,
                         episode.dateFetch,
                         episode.dateUpload,
+                        episode.version,
                     )
                     val lastInsertId = episodesQueries.selectLastInsertedRowId().executeAsOne()
                     episode.copy(id = lastInsertId)
@@ -65,6 +66,8 @@ class EpisodeRepositoryImpl(
                     dateFetch = episodeUpdate.dateFetch,
                     dateUpload = episodeUpdate.dateUpload,
                     episodeId = episodeUpdate.id,
+                    version = episodeUpdate.version,
+                    isSyncing = 0,
                 )
             }
         }
@@ -114,6 +117,7 @@ class EpisodeRepositoryImpl(
         }
     }
 
+    @Suppress("LongParameterList")
     private fun mapEpisode(
         id: Long,
         animeId: Long,
@@ -129,6 +133,9 @@ class EpisodeRepositoryImpl(
         dateFetch: Long,
         dateUpload: Long,
         lastModifiedAt: Long,
+        version: Long,
+        @Suppress("UNUSED_PARAMETER")
+        isSyncing: Long,
     ): Episode = Episode(
         id = id,
         animeId = animeId,
@@ -144,5 +151,6 @@ class EpisodeRepositoryImpl(
         episodeNumber = episodeNumber,
         scanlator = scanlator,
         lastModifiedAt = lastModifiedAt,
+        version = version,
     )
 }

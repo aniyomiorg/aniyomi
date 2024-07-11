@@ -23,6 +23,7 @@ data class AnimeUpdate(
     val thumbnailUrl: String? = null,
     val updateStrategy: AnimeUpdateStrategy? = null,
     val initialized: Boolean? = null,
+    val version: Long? = null,
 )
 
 fun Anime.toAnimeUpdate(): AnimeUpdate {
@@ -47,5 +48,6 @@ fun Anime.toAnimeUpdate(): AnimeUpdate {
         thumbnailUrl = thumbnailUrl,
         updateStrategy = updateStrategy,
         initialized = initialized,
+        version = version,
     )
 }

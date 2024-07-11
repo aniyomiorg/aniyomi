@@ -1,14 +1,17 @@
+import mihon.buildlogic.getBuildTime
+import mihon.buildlogic.getCommitCount
+import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
+    id("mihon.android.application")
+    id("mihon.android.application.compose")
     id("com.mikepenz.aboutlibraries.plugin")
-    kotlin("android")
-    kotlin("plugin.serialization")
-    kotlin("plugin.compose")
+    kotlin("plugin.compose") // TODO(kotlin2): Remove
     id("com.github.zellius.shortcut-helper")
+    kotlin("plugin.serialization")
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -21,7 +24,7 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 124
+        versionCode = 125
         versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -130,7 +133,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
         buildConfig = true
 
         // Disable some unused things
@@ -142,10 +144,6 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
 }
 
@@ -161,7 +159,6 @@ dependencies {
     implementation(projects.presentationWidget)
 
     // Compose
-    implementation(platform(compose.bom))
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
@@ -172,7 +169,6 @@ dependencies {
     debugImplementation(compose.ui.tooling)
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
-    implementation(compose.accompanist.webview)
     implementation(compose.accompanist.systemuicontroller)
 
     implementation(androidx.paging.runtime)
@@ -249,6 +245,9 @@ dependencies {
     implementation(libs.bundles.voyager)
     implementation(libs.compose.materialmotion)
     implementation(libs.swipe)
+    implementation(libs.compose.webview)
+    implementation(libs.compose.grid)
+
 
     // Logging
     implementation(libs.logcat)
@@ -266,6 +265,8 @@ dependencies {
     // debugImplementation(libs.leakcanary.android)
 
     implementation(libs.leakcanary.plumber)
+
+    testImplementation(kotlinx.coroutines.test)
 
     // mpv-android
     implementation(libs.aniyomi.mpv)
@@ -308,7 +309,7 @@ tasks {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                 "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-                "-opt-in=coil.annotation.ExperimentalCoilApi",
+                "-opt-in=coil3.annotation.ExperimentalCoilApi",
                 "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
@@ -316,23 +317,6 @@ tasks {
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             ),
         )
-
-        if (project.findProperty("tachiyomi.enableComposeCompilerMetrics") == "true") {
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-        }
     }
 }
 
