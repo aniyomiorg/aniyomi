@@ -22,13 +22,14 @@ class CrashLogUtil(
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get(),
 ) {
 
-    suspend fun dumpLogs() = withNonCancellableContext {
+    suspend fun dumpLogs(exception: Throwable? = null) = withNonCancellableContext {
         try {
             val file = context.createFileInCacheDir("aniyomi_crash_logs.txt")
 
             file.appendText(getDebugInfo() + "\n\n")
             getMangaExtensionsInfo()?.let { file.appendText("$it\n\n") }
             getAnimeExtensionsInfo()?.let { file.appendText("$it\n\n") }
+            exception?.let { file.appendText("$it\n\n") }
 
             Runtime.getRuntime().exec("logcat *:E -d -f ${file.absolutePath}").waitFor()
 
