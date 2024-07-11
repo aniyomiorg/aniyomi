@@ -694,7 +694,7 @@ class MangaDownloader(
         )
 
         // Remove the old file
-        dir.findFile(COMIC_INFO_FILE, true)?.delete()
+        dir.findFile(COMIC_INFO_FILE)?.delete()
         dir.createFile(COMIC_INFO_FILE)!!.openOutputStream().use {
             val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
             it.write(comicInfoString.toByteArray())
