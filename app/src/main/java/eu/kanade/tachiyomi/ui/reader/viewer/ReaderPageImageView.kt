@@ -33,8 +33,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonSubsamplingImageView
 import eu.kanade.tachiyomi.util.system.GLUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.view.isVisibleOnScreen
-import java.io.InputStream
-import java.nio.ByteBuffer
+import okio.BufferedSource
 
 /**
  * A wrapper view for showing page image.
@@ -159,14 +158,14 @@ open class ReaderPageImageView @JvmOverloads constructor(
         }
     }
 
-    fun setImage(inputStream: InputStream, isAnimated: Boolean, config: Config) {
+    fun setImage(source: BufferedSource, isAnimated: Boolean, config: Config) {
         this.config = config
         if (isAnimated) {
             prepareAnimatedImageView()
-            setAnimatedImage(inputStream, config)
+            setAnimatedImage(source, config)
         } else {
             prepareNonAnimatedImageView()
-            setNonAnimatedImage(inputStream, config)
+            setNonAnimatedImage(source, config)
         }
     }
 
@@ -275,7 +274,7 @@ open class ReaderPageImageView @JvmOverloads constructor(
     }
 
     private fun setNonAnimatedImage(
-        image: Any,
+        data: Any,
         config: Config,
     ) = (pageView as? SubsamplingScaleImageView)?.apply {
         setDoubleTapZoomDuration(config.zoomDuration.getSystemScaledDuration())
@@ -296,11 +295,11 @@ open class ReaderPageImageView @JvmOverloads constructor(
             },
         )
 
-        when (image) {
-            is BitmapDrawable -> setImage(ImageSource.bitmap(image.bitmap))
-            is InputStream -> setImage(ImageSource.inputStream(image))
+        when (data) {
+            is BitmapDrawable -> setImage(ImageSource.bitmap(data.bitmap))
+            is BufferedSource -> setImage(ImageSource.inputStream(data.inputStream()))
             else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}",
+                "Not implemented for class ${data::class.simpleName}",
             )
         }
         isVisible = true
@@ -346,20 +345,13 @@ open class ReaderPageImageView @JvmOverloads constructor(
     }
 
     private fun setAnimatedImage(
-        image: Any,
+        data: Any,
         config: Config,
     ) = (pageView as? AppCompatImageView)?.apply {
         if (this is PhotoView) {
             setZoomTransitionDuration(config.zoomDuration.getSystemScaledDuration())
         }
 
-        val data = when (image) {
-            is Drawable -> image
-            is InputStream -> ByteBuffer.wrap(image.readBytes())
-            else -> throw IllegalArgumentException(
-                "Not implemented for class ${image::class.simpleName}",
-            )
-        }
         val request = ImageRequest.Builder(context)
             .data(data)
             .memoryCachePolicy(CachePolicy.DISABLED)
