@@ -267,7 +267,7 @@ class MangaExtensionManager(
      *
      * @param extension the extension to trust
      */
-    fun trust(extension: MangaExtension.Untrusted) {
+    suspend fun trust(extension: MangaExtension.Untrusted) {
         _untrustedExtensionsMapFlow.value[extension.pkgName] ?: return
 
         trustExtension.trust(extension.pkgName, extension.versionCode, extension.signatureHash)

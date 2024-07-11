@@ -272,7 +272,7 @@ class AnimeExtensionManager(
      *
      * @param extension the extension to trust
      */
-    fun trust(extension: AnimeExtension.Untrusted) {
+    suspend fun trust(extension: AnimeExtension.Untrusted) {
         _untrustedExtensionsMapFlow.value[extension.pkgName] ?: return
 
         trustExtension.trust(extension.pkgName, extension.versionCode, extension.signatureHash)
