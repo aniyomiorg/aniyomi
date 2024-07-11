@@ -24,8 +24,9 @@ import androidx.core.view.children
 import aniyomi.ui.metadata.adapters.MetadataUIUtil.getResourceColor
 import aniyomi.util.dropBlank
 import aniyomi.util.trimOrNull
-import coil.load
-import coil.transform.RoundedCornersTransformation
+import coil3.load
+import coil3.request.transformations
+import coil3.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

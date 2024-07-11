@@ -57,4 +57,7 @@
     <plurals name="seconds">
         <item quantity="other">%d秒</item>
     </plurals>
+    <plurals name="upcoming_relative_time">
+        <item quantity="other">%1$d 天后</item>
+    </plurals>
 </resources>

@@ -10,6 +10,8 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.library.manga.LibraryManga
+import java.time.LocalDate
+import java.time.ZoneId
 
 class MangaRepositoryImpl(
     private val handler: MangaDatabaseHandler,
@@ -62,6 +64,14 @@ class MangaRepositoryImpl(
     override suspend fun getDuplicateLibraryManga(id: Long, title: String): List<Manga> {
         return handler.awaitList {
             mangasQueries.getDuplicateLibraryManga(title, id, MangaMapper::mapManga)
+        }
+    }
+
+    @Suppress("MagicNumber")
+    override suspend fun getUpcomingManga(statuses: Set<Long>): Flow<List<Manga>> {
+        val epochMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
+        return handler.subscribeToList {
+            mangasQueries.getUpcomingManga(epochMillis, statuses, MangaMapper::mapManga)
         }
     }
 

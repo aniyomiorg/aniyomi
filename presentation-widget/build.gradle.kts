@@ -1,7 +1,8 @@
 plugins {
-    id("com.android.library")
+    id("mihon.library")
+    id("mihon.library.compose")
     kotlin("android")
-    kotlin("plugin.compose")
+    kotlin("plugin.compose") // TODO(kotlin2): remove
 }
 
 android {
@@ -10,14 +11,6 @@ android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
 }
 

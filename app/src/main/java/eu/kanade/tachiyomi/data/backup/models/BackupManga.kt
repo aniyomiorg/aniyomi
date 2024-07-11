@@ -7,6 +7,7 @@ import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
 
 @Suppress(
+    
     "DEPRECATION",
     "MagicNumber",
 )

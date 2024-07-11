@@ -4,9 +4,12 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 
 interface AnimeSourceManager {
+
+    val isInitialized: StateFlow<Boolean>
 
     val catalogueSources: Flow<List<AnimeCatalogueSource>>
 
