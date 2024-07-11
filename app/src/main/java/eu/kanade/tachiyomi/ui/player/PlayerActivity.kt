@@ -112,6 +112,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
@@ -1735,6 +1737,7 @@ class PlayerActivity : BaseActivity() {
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
     internal suspend fun fileLoaded() {
+        setMpvMediaTitle()
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
         clearTracks()
         player.loadTracks()
@@ -1825,6 +1828,24 @@ class PlayerActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun setMpvMediaTitle() {
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+
+        val epNumber = episode.episode_number.let { number ->
+            if (ceil(number) == floor(number)) number.toInt() else number
+        }.toString().padStart(2, '0')
+
+        val title = stringResource(
+            MR.strings.mpv_media_title,
+            anime.title,
+            epNumber,
+            episode.name,
+        )
+
+        MPVLib.setPropertyString("force-media-title", title)
     }
 
     private var aniskipStamps: List<Stamp> = emptyList()

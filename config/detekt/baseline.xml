@@ -1849,15 +1849,6 @@
     <ID>TopLevelPropertyNaming:DisplayExtensions.kt$// some tablets have screen width like 711dp = 1600px / 2.25 private const val TABLET_UI_MIN_SCREEN_WIDTH_PORTRAIT_DP = 700</ID>
     <ID>TopLevelPropertyNaming:DisplayExtensions.kt$private const val TABLET_UI_REQUIRED_SCREEN_WIDTH_DP = 720</ID>
     <ID>TopLevelPropertyNaming:ExternalIntents.kt$// List of supported external players and their packages const val MPV_PLAYER = "is.xyz.mpv"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val JUST_PLAYER = "com.brouken.player"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val MPV_REMOTE = "com.husudosu.mpvremote"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val MX_PLAYER = "com.mxtech.videoplayer"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val VLC_PLAYER = "org.videolan.vlc"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"</ID>
-    <ID>TopLevelPropertyNaming:ExternalIntents.kt$const val X_PLAYER = "video.player.videoplayer"</ID>
     <ID>TopLevelPropertyNaming:GLUtil.kt$// Safe minimum default size private const val IMAGE_MAX_BITMAP_DIMENSION = 2048</ID>
     <ID>TopLevelPropertyNaming:GestureHandler.kt$private const val STATE_HORIZONTAL = 1</ID>
     <ID>TopLevelPropertyNaming:GestureHandler.kt$private const val STATE_UP = 0</ID>
