@@ -84,7 +84,7 @@ private fun CategoryContent(
             key = { _, category -> "category-${category.id}" },
         ) { index, category ->
             CategoryListItem(
-                modifier = Modifier.animateItemPlacement(),
+                modifier = Modifier.animateItem(),
                 category = category,
                 canMoveUp = index != 0,
                 canMoveDown = index != categories.lastIndex,

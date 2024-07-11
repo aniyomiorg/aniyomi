@@ -88,8 +88,7 @@ import tachiyomi.presentation.core.components.material.ExtendedFloatingActionBut
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.isScrolledToEnd
-import tachiyomi.presentation.core.util.isScrollingUp
+import tachiyomi.presentation.core.util.shouldExpandFAB
 import tachiyomi.source.local.entries.anime.isLocal
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -393,7 +392,7 @@ private fun AnimeScreenSmallImpl(
                         )
                     },
                     onClick = onContinueWatching,
-                    expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
+                    expanded = episodeListState.shouldExpandFAB(),
                 )
             }
         },
@@ -680,7 +679,7 @@ fun AnimeScreenLargeImpl(
                     },
                     icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
                     onClick = onContinueWatching,
-                    expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
+                    expanded = episodeListState.shouldExpandFAB(),
                 )
             }
         },

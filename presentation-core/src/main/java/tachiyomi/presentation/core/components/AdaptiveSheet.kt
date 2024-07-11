@@ -161,7 +161,9 @@ fun AdaptiveSheet(
                         if (enableSwipeDismiss) {
                             Modifier.nestedScroll(
                                 remember(anchoredDraggableState) {
-                                    anchoredDraggableState.preUpPostDownNestedScrollConnection()
+                                    anchoredDraggableState.preUpPostDownNestedScrollConnection(
+                                        onFling = { scope.launch { anchoredDraggableState.settle(it) } }
+                                    )
                                 },
                             )
                         } else {
@@ -209,10 +211,12 @@ fun AdaptiveSheet(
     }
 }
 
-private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() = object : NestedScrollConnection {
+private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection(
+    onFling: (velocity: Float) -> Unit
+) = object : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         val delta = available.toFloat()
-        return if (delta < 0 && source == NestedScrollSource.Drag) {
+        return if (delta < 0 && source == NestedScrollSource.UserInput) {
             dispatchRawDelta(delta).toOffset()
         } else {
             Offset.Zero
@@ -224,7 +228,7 @@ private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() 
         available: Offset,
         source: NestedScrollSource,
     ): Offset {
-        return if (source == NestedScrollSource.Drag) {
+        return if (source == NestedScrollSource.UserInput) {
             dispatchRawDelta(available.toFloat()).toOffset()
         } else {
             Offset.Zero
@@ -234,7 +238,7 @@ private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() 
     override suspend fun onPreFling(available: Velocity): Velocity {
         val toFling = available.toFloat()
         return if (toFling < 0 && offset > anchors.minAnchor()) {
-            settle(toFling)
+            onFling(toFling)
             // since we go to the anchor with tween settling, consume all for the best UX
             available
         } else {
@@ -243,13 +247,8 @@ private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() 
     }
 
     override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        val toFling = available.toFloat()
-        return if (toFling > 0) {
-            settle(toFling)
-            available
-        } else {
-            Velocity.Zero
-        }
+        onFling(available.toFloat())
+        return available
     }
 
     private fun Float.toOffset(): Offset = Offset(0f, this)
@@ -257,5 +256,6 @@ private fun <T> AnchoredDraggableState<T>.preUpPostDownNestedScrollConnection() 
     @JvmName("velocityToFloat")
     private fun Velocity.toFloat() = this.y
 
+    @JvmName("offsetToFloat")
     private fun Offset.toFloat(): Float = this.y
 }

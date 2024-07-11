@@ -55,7 +55,7 @@ internal fun LazyListScope.animeUpdatesLastUpdatedItem(
     item(key = "animeUpdates-lastUpdated") {
         Box(
             modifier = Modifier
-                .animateItemPlacement()
+                .animateItem()
                 .padding(
                     horizontal = MaterialTheme.padding.medium,
                     vertical = MaterialTheme.padding.small,
@@ -95,14 +95,14 @@ internal fun LazyListScope.animeUpdatesUiItems(
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
                 ListGroupHeader(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                     text = relativeDateText(item.date),
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 AnimeUpdatesUiItem(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     watchProgress = updatesItem.update.lastSecondSeen
