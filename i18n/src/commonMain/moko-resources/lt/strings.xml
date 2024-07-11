@@ -683,8 +683,8 @@
     <string name="also_set_chapter_settings_for_library">Taip pat taikyti visiems mano bibliotekoje esantiems įrašams</string>
     <string name="dialog_with_checkbox_reset">Iš naujo nustatyti visus šio įrašo skyrius</string>
     <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
-    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Aniyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
-    <string name="information_webview_required">\"WebView\" reikalingas \"Aniyomi\"</string>
+    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Animetail\". Bakstelėkite , jei norite sužinoti daugiau.</string>
+    <string name="information_webview_required">\"WebView\" reikalingas \"Animetail\"</string>
     <string name="action_sort_unseen_count">Neperžiūrėtų skaičius</string>
     <string name="action_mark_as_seen">Pažymėti kaip peržiūrėtą</string>
     <string name="action_sort_last_seen">Paskiausiai žiurėtas</string>

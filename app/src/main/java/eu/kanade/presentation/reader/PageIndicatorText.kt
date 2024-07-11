@@ -16,10 +16,12 @@ import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 
 @Composable
 fun PageIndicatorText(
-    currentPage: Int,
+    // SY -->
+    currentPage: String,
+    // SY <--
     totalPages: Int,
 ) {
-    if (currentPage <= 0 || totalPages <= 0) return
+    if (currentPage.isEmpty() || totalPages <= 0) return
 
     val text = "$currentPage / $totalPages"
 
@@ -54,7 +56,7 @@ fun PageIndicatorText(
 private fun PageIndicatorTextPreview() {
     TachiyomiPreviewTheme {
         Surface {
-            PageIndicatorText(currentPage = 10, totalPages = 69)
+            PageIndicatorText(currentPage = "10", totalPages = 69)
         }
     }
 }

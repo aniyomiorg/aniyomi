@@ -766,7 +766,7 @@
     <string name="pref_library_update_smart_update">อัปเดตอัจฉริยะ</string>
     <string name="label_extension_repos">รีโพส่วนขยาย</string>
     <string name="error_repo_exists">มีรีโพนี้อยู่แล้ว!</string>
-    <string name="action_add_repo_message">เพิ่มรีโพเพิ่มเติมให้กับ Aniyomi - ควรเป็น URL ที่ลงท้ายด้วย \"index.min.json\"</string>
+    <string name="action_add_repo_message">เพิ่มรีโพเพิ่มเติมให้กับ Animetail - ควรเป็น URL ที่ลงท้ายด้วย \"index.min.json\"</string>
     <string name="manga_interval_custom_amount">ความถี่ในการอัปเดตกำหนดเอง:</string>
     <string name="information_empty_repos">คุณไม่มีรีโพที่ตั้งค่าไว้</string>
     <string name="onboarding_storage_help_action">คู่มือการจัดเก็บข้อมูล</string>
@@ -806,8 +806,8 @@
     <string name="also_set_chapter_settings_for_library">นําไปใช้กับมังงะทั้งหมดในคลังด้วย</string>
     <string name="dialog_with_checkbox_reset">รีเซ็ตตอนทั้งหมดสำหรับมังงะนี้</string>
     <string name="download_insufficient_space">ไม่สามารถดาวน์โหลดตอนได้เนื่องจากพื้นที่จัดเก็บเหลือน้อย</string>
-    <string name="download_queue_size_warning">คำเตือน: การดาวน์โหลดจำนวนมากอาจทำให้แหล่งข้อมูลทำงานช้าลงและ/หรือปิดกั้น Aniyomi แตะเพื่อเรียนรู้เพิ่มเติม</string>
-    <string name="information_webview_required">Aniyomi จำเป็นต้องใช้ WebView</string>
+    <string name="download_queue_size_warning">คำเตือน: การดาวน์โหลดจำนวนมากอาจทำให้แหล่งข้อมูลทำงานช้าลงและ/หรือปิดกั้น Animetail แตะเพื่อเรียนรู้เพิ่มเติม</string>
+    <string name="information_webview_required">Animetail จำเป็นต้องใช้ WebView</string>
     <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
     <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
 </resources>

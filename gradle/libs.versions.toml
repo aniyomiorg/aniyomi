@@ -15,6 +15,7 @@ detektCompose = "0.4.5"
 [libraries]
 desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
+google-services-gradle = "com.google.gms:google-services:4.4.0"
 
 rxjava = "io.reactivex:rxjava:1.3.8"
 
@@ -34,6 +35,7 @@ disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:7c257e1c64"
 common-compress = "org.apache.commons:commons-compress:1.26.2"
 junrar = "com.github.junrar:junrar:7.5.5"
+zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
@@ -51,6 +53,8 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp" }
 
 subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:aeaa170036"
 image-decoder = "com.github.tachiyomiorg:image-decoder:e08e9be535"
+exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
+
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
@@ -72,6 +76,8 @@ moko-core = { module = "dev.icerock.moko:resources", version.ref = "moko" }
 moko-gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "moko" }
 
 logcat = "com.squareup.logcat:logcat:0.1"
+
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.5.0"
 
 acra-http = { module = "ch.acra:acra-http", version.ref = "acra" }
 acra-scheduler = { module = "ch.acra:acra-advanced-scheduler", version.ref = "acra" }
@@ -113,6 +119,14 @@ seeker = "io.github.2307vivek:seeker:1.2.2"
 
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
+libsucore = "com.github.topjohnwu.libsu:core:5.2.2"
+
+google-api-services-drive = "com.google.apis:google-api-services-drive:v3-rev197-1.25.0"
+google-api-client-oauth = "com.google.oauth-client:google-oauth-client:1.34.1"
+
+media-router = "androidx.mediarouter:mediarouter:1.3.1"
+cast-play-services = "com.google.android.gms:play-services-cast-framework:21.2.0"
+
 [bundles]
 archive = ["common-compress", "junrar"]
 acra = ["acra-http", "acra-scheduler"]
@@ -125,3 +139,4 @@ sqldelight = ["sqldelight-android-driver", "sqldelight-coroutines", "sqldelight-
 voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-tab-navigator", "voyager-transitions"]
 richtext = ["richtext-commonmark", "richtext-m3"]
 test = ["junit", "kotest-assertions", "mockk"]
+cast = ["media-router", "cast-play-services"]

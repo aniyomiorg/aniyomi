@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.PendingIntent
-import android.app.job.JobInfo
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -25,6 +24,7 @@ import coil3.util.DebugLogger
 import eu.kanade.domain.DomainModule
 import eu.kanade.domain.SYDomainModule
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
 import eu.kanade.tachiyomi.crash.CrashActivity
@@ -36,7 +36,9 @@ import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.di.AppModule
 import eu.kanade.tachiyomi.di.PreferenceModule
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -46,8 +48,6 @@ import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.cancelNotification
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.notify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -86,7 +86,6 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
     override fun onCreate() {
         super<Application>.onCreate()
 
-        setupAcra()
         GlobalExceptionHandler.initialize(applicationContext, CrashActivity::class.java)
 
         // TLS 1.3 support for Android < 10
@@ -155,6 +154,13 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
+        val syncPreferences: SyncPreferences = Injekt.get()
+        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
+        if (syncPreferences.isSyncEnabled() && syncTriggerOpt.syncOnAppStart
+        ) {
+            SyncDataJob.startNow(this@App)
+        }
+
         initializeMigrator()
     }
 
@@ -200,10 +206,31 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
 
     override fun onStart(owner: LifecycleOwner) {
         SecureActivityDelegate.onApplicationStart()
+
+        val syncPreferences: SyncPreferences = Injekt.get()
+        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
+        if (syncPreferences.isSyncEnabled() && syncTriggerOpt.syncOnAppResume
+        ) {
+            SyncDataJob.startNow(this@App)
+        }
+
+        // AM (DISCORD) -->
+        DiscordRPCService.start(applicationContext)
+        // <-- AM (DISCORD)
     }
 
     override fun onStop(owner: LifecycleOwner) {
         SecureActivityDelegate.onApplicationStopped()
+
+        val syncPreferences: SyncPreferences = Injekt.get()
+        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
+        if (syncPreferences.isSyncEnabled() && syncTriggerOpt.syncOnAppStart) {
+            SyncDataJob.startNow(this@App)
+        }
+
+        // AM (DISCORD) -->
+        DiscordRPCService.stop(applicationContext)
+        // <-- AM (DISCORD)
     }
 
     override fun getPackageName(): String {
@@ -223,31 +250,6 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
         } catch (_: Exception) {
         }
         return super.getPackageName()
-    }
-
-    private fun setupAcra() {
-        if (BuildConfig.ACRA_URI.isNotEmpty() && isPreviewBuildType || isReleaseBuildType) {
-            initAcra {
-                buildConfigClass = BuildConfig::class.java
-                excludeMatchingSharedPreferencesKeys = listOf(
-                    Preference.privateKey(".*"), ".*username.*", ".*password.*", ".*token.*",
-                )
-
-                reportFormat = StringFormat.JSON
-                httpSender {
-                    uri = BuildConfig.ACRA_URI
-                    basicAuthLogin = BuildConfig.ACRA_LOGIN
-                    basicAuthPassword = BuildConfig.ACRA_PASSWORD
-                    httpMethod = HttpSender.Method.POST
-                }
-
-                scheduler {
-                    requiresBatteryNotLow = true
-                    requiresDeviceIdle = true
-                    requiresNetworkType = JobInfo.NETWORK_TYPE_UNMETERED
-                }
-            }
-        }
     }
 
     private fun setupNotificationChannels() {

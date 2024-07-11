@@ -22,6 +22,8 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.updates.anime.AnimeUpdateScreen
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -32,8 +34,11 @@ import kotlinx.coroutines.launch
 import mihon.feature.upcoming.anime.UpcomingAnimeScreen
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 @Composable
@@ -58,11 +63,20 @@ fun Screen.animeUpdatesTab(
         null
     }
 
+    val getEpisodeByAnimeId: GetEpisodesByAnimeId = Injekt.get()
+
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
         val update = updateItem.update
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
-        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, extPlayer)
+        val episode = getEpisodeByAnimeId.await(update.animeId).find { it.id == update.episodeId }
+        MainActivity.startPlayerActivity(
+            context,
+            update.animeId,
+            update.episodeId,
+            episode?.url,
+            extPlayer,
+        )
     }
 
     return TabContent(
@@ -116,6 +130,9 @@ fun Screen.animeUpdatesTab(
             }
 
             LaunchedEffect(Unit) {
+                // AM (DISCORD) -->
+                DiscordRPCService.setAnimeScreen(context, DiscordScreen.UPDATES)
+                // <-- AM (DISCORD)
                 screenModel.events.collectLatest { event ->
                     when (event) {
                         AnimeUpdatesScreenModel.Event.InternalError -> screenModel.snackbarHostState.showSnackbar(

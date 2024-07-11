@@ -1,14 +1,22 @@
-| Build | Preview Release | Codefactor | Stable | Translate Aniyomi                                                                                                                                 | Discord Server |
-|-------|-----------|-------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [![CI](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| Build                                                                                                                                                                 | Preview Release                                                                                                                                                                          | Codefactor | Stable                                                                                                                                                             | Translate Aniyomi                                                                                                                                 | Discord Server |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| [![CI](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml/badge.svg)](https://github.com/Dark25/Animetail2/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/Dark25/Animetail2-preview.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/v/release/Dark25/Animetail2.svg?maxAge=3600&label=download)](https://github.com/Dark25/Animetail2/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1196139193664028762?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph) |
 
-# ![app icon](.github/readme-images/app-icon.png)Aniyomi
-Aniyomi is a video player and image viewer for Android 8.0 and above.
+# ![app icon](.github/readme-images/icon.png) Animetail
+Animetail is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is a video player and image viewer for Android 8.0 and above.
+This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY, Kuukiyomi but also other forks
 
 ## Features
 
 Features include:
-* Watching videos
+* Kuukiyomi:
+  * Torrent support(Needs right extensions) (@Diegopyl1209)
+  * Custom Theme support
+  * resmush.it(Data Saver Provider)
+  * Group by tags in library
+  * Discord Rich Presence for Manga
+* Aniyomi:
+  * Watching videos
 * View images
 * Local reading/watching of downloaded content
 * A configurable reader with multiple viewers, reading directions and other settings.
@@ -17,11 +25,16 @@ Features include:
 * Categories to organize your library
 * Light and dark themes
 * Create backups locally to read/watch offline or to your desired cloud service
+* Other fork features:
+  * TachiyomiSY:
+    * Data Saver
+    * Edit Info
+    * Library Grouping
+  * Animiru:
+    * Discord Rich Presence
 
 ## Download
-Get the app from the [releases page](https://github.com/aniyomiorg/aniyomi/releases).
-
-If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/aniyomiorg/aniyomi-preview/releases).
+Get the app from the [releases page](https://github.com/dark25/animetail2/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -29,8 +42,9 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/aniyomiorg/aniyomi/issues), and [recent release version changes](https://aniyomi.org/changelogs/).**
-2. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
+1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/dark25/animetail2/issues).**
+2. Also take a look at issues opened and closed on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
+3. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/nq3442cDph)
 
 </details>
 
@@ -43,6 +57,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 * Include screenshot (if needed)
 * If it could be device-dependent, try reproducing on another device (if possible)
 * Don't group unrelated requests into one issue
+
 
 </details>
 

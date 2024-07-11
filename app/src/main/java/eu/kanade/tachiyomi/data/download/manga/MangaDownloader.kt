@@ -598,7 +598,15 @@ class MangaDownloader(
             // If the original page was previously split, then skip
             if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return
 
-            ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix)
+            ImageUtil.splitTallImage(
+                tmpDir,
+                imageFile,
+                filenamePrefix,
+                // SY -->
+                zip4jFile = null,
+                zip4jEntry = null,
+                // SY <--
+            )
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Failed to split downloaded image" }
         }

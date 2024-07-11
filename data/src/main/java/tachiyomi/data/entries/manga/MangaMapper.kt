@@ -3,7 +3,6 @@ package tachiyomi.data.entries.manga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
-
 object MangaMapper {
     @Suppress("LongParameterList")
     fun mapManga(
@@ -44,12 +43,14 @@ object MangaMapper {
         chapterFlags = chapterFlags,
         coverLastModified = coverLastModified,
         url = url,
-        title = title,
-        artist = artist,
-        author = author,
-        description = description,
-        genre = genre,
-        status = status,
+        // SY -->
+        ogTitle = title,
+        ogArtist = artist,
+        ogAuthor = author,
+        ogDescription = description,
+        ogGenre = genre,
+        ogStatus = status,
+        // SY <--
         thumbnailUrl = thumbnailUrl,
         updateStrategy = updateStrategy,
         initialized = initialized,

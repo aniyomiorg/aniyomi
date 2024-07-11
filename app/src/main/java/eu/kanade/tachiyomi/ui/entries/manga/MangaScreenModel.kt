@@ -6,6 +6,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.util.fastAny
+import aniyomi.util.nullIfEmpty
+import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.asState
@@ -68,8 +70,11 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
+import tachiyomi.domain.entries.manga.interactor.SetCustomMangaInfo
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
+import tachiyomi.domain.entries.manga.model.CustomMangaInfo
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
@@ -82,6 +87,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -99,6 +105,10 @@ class MangaScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val getMangaAndChapters: GetMangaWithChapters = Injekt.get(),
+    // SY -->
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val setCustomMangaInfo: SetCustomMangaInfo = Injekt.get(),
+    // SY <--
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val getAvailableScanlators: GetAvailableScanlators = Injekt.get(),
     private val getExcludedScanlators: GetExcludedScanlators = Injekt.get(),
@@ -281,6 +291,73 @@ class MangaScreenModel(
             }
         }
     }
+
+    // SY -->
+    fun updateMangaInfo(
+        title: String?,
+        author: String?,
+        artist: String?,
+        description: String?,
+        tags: List<String>?,
+        status: Long?,
+    ) {
+        val state = successState ?: return
+        var manga = state.manga
+        if (state.manga.isLocal()) {
+            val newTitle = if (title.isNullOrBlank()) manga.url else title.trim()
+            val newAuthor = author?.trimOrNull()
+            val newArtist = artist?.trimOrNull()
+            val newDesc = description?.trimOrNull()
+            manga = manga.copy(
+                ogTitle = newTitle,
+                ogAuthor = author?.trimOrNull(),
+                ogArtist = artist?.trimOrNull(),
+                ogDescription = description?.trimOrNull(),
+                ogGenre = tags?.nullIfEmpty(),
+                ogStatus = status ?: 0,
+                lastUpdate = manga.lastUpdate + 1,
+            )
+            (sourceManager.get(LocalMangaSource.ID) as LocalMangaSource).updateMangaInfo(
+                manga.toSManga(),
+            )
+            screenModelScope.launchNonCancellable {
+                updateManga.await(
+                    MangaUpdate(
+                        manga.id,
+                        title = newTitle,
+                        author = newAuthor,
+                        artist = newArtist,
+                        description = newDesc,
+                        genre = tags,
+                        status = status,
+                    ),
+                )
+            }
+        } else {
+            val genre = if (!tags.isNullOrEmpty() && tags != state.manga.ogGenre) {
+                tags
+            } else {
+                null
+            }
+            setCustomMangaInfo.set(
+                CustomMangaInfo(
+                    state.manga.id,
+                    title?.trimOrNull(),
+                    author?.trimOrNull(),
+                    artist?.trimOrNull(),
+                    description?.trimOrNull(),
+                    genre,
+                    status.takeUnless { it == state.manga.ogStatus },
+                ),
+            )
+            manga = manga.copy(lastUpdate = manga.lastUpdate + 1)
+        }
+
+        updateSuccessState { successState ->
+            successState.copy(manga = manga)
+        }
+    }
+    // SY <--
 
     fun toggleFavorite() {
         toggleFavorite(
@@ -610,17 +687,21 @@ class MangaScreenModel(
             LibraryPreferences.ChapterSwipeAction.ToggleRead -> {
                 markChaptersRead(listOf(chapter), !chapter.read)
             }
+
             LibraryPreferences.ChapterSwipeAction.ToggleBookmark -> {
                 bookmarkChapters(listOf(chapter), !chapter.bookmark)
             }
+
             LibraryPreferences.ChapterSwipeAction.Download -> {
                 val downloadAction: ChapterDownloadAction = when (chapterItem.downloadState) {
                     MangaDownload.State.ERROR,
                     MangaDownload.State.NOT_DOWNLOADED,
                     -> ChapterDownloadAction.START_NOW
+
                     MangaDownload.State.QUEUE,
                     MangaDownload.State.DOWNLOADING,
                     -> ChapterDownloadAction.CANCEL
+
                     MangaDownload.State.DOWNLOADED -> ChapterDownloadAction.DELETE
                 }
                 runChapterDownloadActions(
@@ -628,6 +709,7 @@ class MangaScreenModel(
                     action = downloadAction,
                 )
             }
+
             LibraryPreferences.ChapterSwipeAction.Disabled -> throw IllegalStateException()
         }
     }
@@ -694,14 +776,17 @@ class MangaScreenModel(
                     downloadManager.startDownloads()
                 }
             }
+
             ChapterDownloadAction.START_NOW -> {
                 val chapter = items.singleOrNull()?.chapter ?: return
                 startDownload(listOf(chapter), true)
             }
+
             ChapterDownloadAction.CANCEL -> {
                 val chapterId = items.singleOrNull()?.id ?: return
                 cancelDownload(chapterId)
             }
+
             ChapterDownloadAction.DELETE -> {
                 deleteChapters(items.map { it.chapter })
             }
@@ -1030,6 +1115,11 @@ class MangaScreenModel(
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog
         data class Migrate(val newManga: Manga, val oldManga: Manga) : Dialog
+
+        // SY -->
+        data class EditMangaInfo(val manga: Manga) : Dialog
+
+        // SY <--
         data class SetMangaFetchInterval(val manga: Manga) : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
@@ -1066,6 +1156,19 @@ class MangaScreenModel(
             setExcludedScanlators.await(mangaId, excludedScanlators)
         }
     }
+
+    // SY -->
+    fun showEditMangaInfoDialog() {
+        mutableState.update { state ->
+            when (state) {
+                State.Loading -> state
+                is State.Success -> {
+                    state.copy(dialog = Dialog.EditMangaInfo(state.manga))
+                }
+            }
+        }
+    }
+    // SY <--
 
     sealed interface State {
         @Immutable

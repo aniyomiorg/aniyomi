@@ -39,9 +39,12 @@ import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
@@ -124,6 +127,11 @@ class AnimeScreen(
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
+                    if (successState.source.isSourceForTorrents()) {
+                        TorrentServerService.start()
+                        TorrentServerService.wait(10)
+                        TorrentServerUtils.setTrackersList()
+                    }
                     val extPlayer = screenModel.alwaysUseExternalPlayer != alt
                     openEpisode(context, episode, extPlayer)
                 }
@@ -174,6 +182,9 @@ class AnimeScreen(
             }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
+            // SY <--
             onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
                 successState.anime.favorite
             },
@@ -291,6 +302,15 @@ class AnimeScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is AnimeScreenModel.Dialog.EditAnimeInfo -> {
+                EditAnimeDialog(
+                    anime = dialog.anime,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateAnimeInfo,
+                )
+            }
+            // SY <--
             is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
                     interval = dialog.anime.fetchInterval,
@@ -353,6 +373,7 @@ class AnimeScreen(
                 context,
                 episode.animeId,
                 episode.id,
+                episode.url,
                 useExternalPlayer,
             )
         }
