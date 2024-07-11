@@ -10,8 +10,6 @@ import tachiyomi.domain.entries.manga.model.Manga
     
     "DEPRECATION",
     "MagicNumber",
-,
-    "MagicNumber",
 )
 @Serializable
 data class BackupManga(

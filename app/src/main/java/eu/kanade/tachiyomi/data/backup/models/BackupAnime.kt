@@ -10,8 +10,6 @@ import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
     
     "DEPRECATION",
     "MagicNumber",
-,
-    "MagicNumber",
 )
 @Serializable
 data class BackupAnime(
