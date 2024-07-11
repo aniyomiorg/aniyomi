@@ -1106,6 +1106,7 @@ class AnimeScreenModel(
         ) : Dialog
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog
+        data class Migrate(val newAnime: Anime, val oldAnime: Anime) : Dialog
         data class SetAnimeFetchInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
 
@@ -1137,6 +1138,11 @@ class AnimeScreenModel(
 
     fun showCoverDialog() {
         updateSuccessState { it.copy(dialog = Dialog.FullCover) }
+    }
+
+    fun showMigrateDialog(duplicate: Anime) {
+        val anime = successState?.anime ?: return
+        updateSuccessState { it.copy(dialog = Dialog.Migrate(newAnime = anime, oldAnime = duplicate)) }
     }
 
     // SY -->

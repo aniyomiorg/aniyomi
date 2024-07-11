@@ -66,9 +66,6 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 * Write a detailed issue, explaining what it should do or how. Avoid writing just "like X app does"
 * Include screenshot (if needed)
 
-Source requests should be created at https://github.com/aniyomiorg/aniyomi-extensions, they do not belong in this repository.
-</details>
-
 <details><summary>Contributing</summary>
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).

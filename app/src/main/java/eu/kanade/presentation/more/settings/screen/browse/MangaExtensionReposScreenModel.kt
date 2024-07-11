@@ -4,24 +4,29 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.domain.extension.manga.interactor.CreateMangaExtensionRepo
-import eu.kanade.domain.extension.manga.interactor.DeleteMangaExtensionRepo
-import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionRepos
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import mihon.domain.extensionrepo.manga.interactor.CreateMangaExtensionRepo
+import mihon.domain.extensionrepo.manga.interactor.DeleteMangaExtensionRepo
+import mihon.domain.extensionrepo.manga.interactor.GetMangaExtensionRepo
+import mihon.domain.extensionrepo.manga.interactor.ReplaceMangaExtensionRepo
+import mihon.domain.extensionrepo.manga.interactor.UpdateMangaExtensionRepo
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MangaExtensionReposScreenModel(
-    private val getExtensionRepos: GetMangaExtensionRepos = Injekt.get(),
+    private val getExtensionRepo: GetMangaExtensionRepo = Injekt.get(),
     private val createExtensionRepo: CreateMangaExtensionRepo = Injekt.get(),
     private val deleteExtensionRepo: DeleteMangaExtensionRepo = Injekt.get(),
+    private val replaceExtensionRepo: ReplaceMangaExtensionRepo = Injekt.get(),
+    private val updateExtensionRepo: UpdateMangaExtensionRepo = Injekt.get(),
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -29,7 +34,7 @@ class MangaExtensionReposScreenModel(
 
     init {
         screenModelScope.launchIO {
-            getExtensionRepos.subscribe()
+            getExtensionRepo.subscribeAll()
                 .collectLatest { repos ->
                     mutableState.update {
                         RepoScreenState.Success(
@@ -43,25 +48,51 @@ class MangaExtensionReposScreenModel(
     /**
      * Creates and adds a new repo to the database.
      *
-     * @param name The name of the repo to create.
+     * @param baseUrl The baseUrl of the repo to create.
      */
-    fun createRepo(name: String) {
+    fun createRepo(baseUrl: String) {
         screenModelScope.launchIO {
-            when (createExtensionRepo.await(name)) {
-                is CreateMangaExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+            when (val result = createExtensionRepo.await(baseUrl)) {
+                CreateMangaExtensionRepo.Result.InvalidUrl -> _events.send(RepoEvent.InvalidUrl)
+                CreateMangaExtensionRepo.Result.RepoAlreadyExists -> _events.send(RepoEvent.RepoAlreadyExists)
+                is CreateMangaExtensionRepo.Result.DuplicateFingerprint -> {
+                    showDialog(RepoDialog.Conflict(result.oldRepo, result.newRepo))
+                }
                 else -> {}
             }
         }
     }
 
     /**
-     * Deletes the given repo from the database.
+     * Inserts a repo to the database, replace a matching repo with the same signing key fingerprint if found.
      *
-     * @param repo The repo to delete.
+     * @param newRepo The repo to insert
      */
-    fun deleteRepo(repo: String) {
+    fun replaceRepo(newRepo: ExtensionRepo) {
         screenModelScope.launchIO {
-            deleteExtensionRepo.await(repo)
+            replaceExtensionRepo.await(newRepo)
+        }
+    }
+
+    /**
+     * Refreshes information for each repository.
+     */
+    fun refreshRepos() {
+        val status = state.value
+
+        if (status is RepoScreenState.Success) {
+            screenModelScope.launchIO {
+                updateExtensionRepo.awaitAll()
+            }
+        }
+    }
+
+    /**
+     * Deletes the given repo from the database
+     */
+    fun deleteRepo(baseUrl: String) {
+        screenModelScope.launchIO {
+            deleteExtensionRepo.await(baseUrl)
         }
     }
 
@@ -87,11 +118,13 @@ class MangaExtensionReposScreenModel(
 sealed class RepoEvent {
     sealed class LocalizedMessage(val stringRes: StringResource) : RepoEvent()
     data object InvalidUrl : LocalizedMessage(MR.strings.invalid_repo_name)
+    data object RepoAlreadyExists : LocalizedMessage(MR.strings.error_repo_exists)
 }
 
 sealed class RepoDialog {
     data object Create : RepoDialog()
     data class Delete(val repo: String) : RepoDialog()
+    data class Conflict(val oldRepo: ExtensionRepo, val newRepo: ExtensionRepo) : RepoDialog()
 }
 
 sealed class RepoScreenState {
@@ -101,7 +134,8 @@ sealed class RepoScreenState {
 
     @Immutable
     data class Success(
-        val repos: ImmutableSet<String>,
+        val repos: ImmutableSet<ExtensionRepo>,
+        val oldRepos: ImmutableSet<String>? = null,
         val dialog: RepoDialog? = null,
     ) : RepoScreenState() {
 
