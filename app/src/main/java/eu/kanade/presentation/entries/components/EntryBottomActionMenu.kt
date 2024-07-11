@@ -93,7 +93,7 @@ fun EntryBottomActionMenu(
                 bottomEnd = ZeroCornerSize,
                 bottomStart = ZeroCornerSize,
             ),
-            tonalElevation = 3.dp,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             val haptic = LocalHapticFeedback.current
             val confirm = remember { mutableStateListOf(false, false, false, false, false, false, false, false, false) }
@@ -284,7 +284,7 @@ fun LibraryBottomActionMenu(
                 bottomEnd = ZeroCornerSize,
                 bottomStart = ZeroCornerSize,
             ),
-            tonalElevation = 3.dp,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             val haptic = LocalHapticFeedback.current
             val confirm = remember { mutableStateListOf(false, false, false, false, false) }
