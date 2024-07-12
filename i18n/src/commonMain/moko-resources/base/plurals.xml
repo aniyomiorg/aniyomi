@@ -32,6 +32,10 @@
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
     </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">1 page</item>
+        <item quantity="other">%1$s pages</item>
+    </plurals>
     <plurals name="missing_items">
         <item quantity="one">Missing %1$s item</item>
         <item quantity="other">Missing %1$s items</item>
