@@ -69,9 +69,6 @@ fun AnimeEpisodeListItem(
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val textAlpha = if (seen) ReadItemAlpha else 1f
-    val textSubtitleAlpha = if (seen) ReadItemAlpha else SecondaryItemAlpha
-
     val start = getSwipeAction(
         action = episodeSwipeStartAction,
         seen = seen,
@@ -136,15 +133,20 @@ fun AnimeEpisodeListItem(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = LocalContentColor.current.copy(alpha = textAlpha),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         onTextLayout = { textHeight = it.size.height },
+                        color = LocalContentColor.current.copy(alpha = if (seen) ReadItemAlpha else 1f),
                     )
                 }
 
-                Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
-                    ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
+                Row {
+                    val subtitleStyle = MaterialTheme.typography.bodySmall
+                        .merge(
+                            color = LocalContentColor.current
+                                .copy(alpha = if (seen) ReadItemAlpha else SecondaryItemAlpha)
+                        )
+                    ProvideTextStyle(value = subtitleStyle) {
                         if (date != null) {
                             Text(
                                 text = date,
