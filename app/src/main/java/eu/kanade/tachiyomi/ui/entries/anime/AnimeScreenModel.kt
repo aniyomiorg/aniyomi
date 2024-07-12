@@ -27,6 +27,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
+import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
@@ -44,7 +45,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -116,8 +116,6 @@ class AnimeScreenModel(
     private val successState: State.Success?
         get() = state.value as? State.Success
 
-    val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is AnimeTracker } }
-
     val anime: Anime?
         get() = successState?.anime
 
@@ -173,6 +171,16 @@ class AnimeScreenModel(
                             anime = anime,
                             episodes = episodes.toEpisodeListItems(anime),
                         )
+                    }
+                }
+        }
+
+        screenModelScope.launchIO {
+            trackerManager.loggedInTrackersFlow()
+                .distinctUntilChanged()
+                .collectLatest { trackers ->
+                    updateSuccessState {
+                        it.copy(loggedInTracker = trackers)
                     }
                 }
         }
@@ -976,21 +984,18 @@ class AnimeScreenModel(
 
     private fun observeTrackers() {
         val anime = successState?.anime ?: return
+
         screenModelScope.launchIO {
-            getTracks.subscribe(anime.id)
-                .catch { logcat(LogPriority.ERROR, it) }
-                .map { tracks ->
-                    loggedInTrackers
-                        // Map to TrackItem
-                        .map { service ->
-                            AnimeTrackItem(
-                                tracks.find { it.trackerId == service.id },
-                                service,
-                            )
-                        }
-                        // Show only if the service supports this anime's source
-                        .filter { (it.tracker as? EnhancedAnimeTracker)?.accept(source!!) ?: true }
-                }
+            combine(
+                getTracks.subscribe(anime.id).catch { logcat(LogPriority.ERROR, it) },
+                trackerManager.loggedInTrackersFlow(),
+            ) { animeTracks, loggedInTrackers ->
+                loggedInTrackers
+                    // Map to TrackItem
+                    .map { service -> AnimeTrackItem(animeTracks.find { it.trackerId == service.id }, service) }
+                    // Show only if the service supports this anime's source
+                    .filter { (it.tracker as? EnhancedAnimeTracker)?.accept(source!!) ?: true }
+            }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
@@ -1074,6 +1079,7 @@ class AnimeScreenModel(
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
             val hasPromptedToAddBefore: Boolean = false,
+            val loggedInTracker: List<Tracker> = emptyList(),
             val nextAiringEpisode: Pair<Int, Long> = Pair(
                 anime.nextEpisodeToAir,
                 anime.nextEpisodeAiringAt,

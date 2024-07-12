@@ -250,8 +250,8 @@ data class AnimeTrackInfoDialogHomeScreen(
         }
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
-            val loggedInTrackers = Injekt.get<TrackerManager>().trackers.filter {
-                it.isLoggedIn && it is AnimeTracker
+            val loggedInTrackers = Injekt.get<TrackerManager>().loggedInTrackers().filter {
+                it is AnimeTracker
             }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedInTrackers
