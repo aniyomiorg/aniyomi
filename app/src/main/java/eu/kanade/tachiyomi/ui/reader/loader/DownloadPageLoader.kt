@@ -10,7 +10,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import tachiyomi.core.common.storage.openReadOnlyChannel
+import mihon.core.common.archive.archiveReader
 import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.injectLazy
 
@@ -27,7 +27,7 @@ internal class DownloadPageLoader(
 
     private val context: Application by injectLazy()
 
-    private var zipPageLoader: ZipPageLoader? = null
+    private var archivePageLoader: ArchivePageLoader? = null
 
     override var isLocal: Boolean = true
 
@@ -48,11 +48,11 @@ internal class DownloadPageLoader(
 
     override fun recycle() {
         super.recycle()
-        zipPageLoader?.recycle()
+        archivePageLoader?.recycle()
     }
 
     private suspend fun getPagesFromArchive(file: UniFile): List<ReaderPage> {
-        val loader = ZipPageLoader(file.openReadOnlyChannel(context)).also { zipPageLoader = it }
+        val loader = ArchivePageLoader(file.archiveReader(context)).also { archivePageLoader = it }
         return loader.getPages()
     }
 
@@ -72,6 +72,6 @@ internal class DownloadPageLoader(
     }
 
     override suspend fun loadPage(page: ReaderPage) {
-        zipPageLoader?.loadPage(page)
+        archivePageLoader?.loadPage(page)
     }
 }
