@@ -88,7 +88,7 @@ fun AnimeExtensionScreen(
     PullRefresh(
         refreshing = state.isRefreshing,
         onRefresh = onRefresh,
-        enabled = { !state.isLoading },
+        enabled = !state.isLoading,
     ) {
         when {
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
