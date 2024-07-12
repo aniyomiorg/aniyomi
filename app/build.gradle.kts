@@ -169,6 +169,8 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.systemuicontroller)
 
+    implementation(androidx.interpolator)
+
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
 
