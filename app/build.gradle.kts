@@ -9,7 +9,6 @@ plugins {
     id("mihon.android.application")
     id("mihon.android.application.compose")
     id("com.mikepenz.aboutlibraries.plugin")
-    kotlin("plugin.compose") // TODO(kotlin2): Remove
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
 }
