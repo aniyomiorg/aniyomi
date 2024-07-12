@@ -19,7 +19,7 @@ material3-core = { module = "androidx.compose.material3:material3" }
 material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
 # Some components aren't available in Material3
-material-core = { module = "androidx.compose.material:material", version = "1.7.0-beta04" }
+material-core = { module = "androidx.compose.material:material", version = "1.7.0-beta05" }
 
 glance = "androidx.glance:glance-appwidget:1.1.0"
 
