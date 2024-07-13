@@ -1137,4 +1137,17 @@
     <string name="pref_mpv_scripts_summary">Necesita permisos de almacenamiento externo.</string>
     <string name="pref_webtoon_disable_zoom_out">Desactivar alejar</string>
     <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="action_migrate_duplicate">Migrar entrada existente</string>
+    <string name="upcoming_guide">Próxima publicación</string>
+    <string name="upcoming_calendar_next">Próximo mes</string>
+    <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
+    <string name="label_upcoming">Próximamente</string>
+    <string name="action_add_anyway">Añadir de todos modos</string>
+    <string name="action_replace_repo">Remplazar</string>
+    <string name="action_replace_repo_title">La huella digital de la clave firma ya existe</string>
+    <string name="action_replace_repo_message">El repositorio %1$s tiene la misma huella digital de clave de firma que %2$s.
+\nSi esto es lo esperado, %2$s será reemplazado, de lo contrario contacte con el mantenedor de su repositorio.</string>
+    <string name="pref_display_profile">Perfil de visualización personalizado</string>
+    <string name="action_view_upcoming">Próximas actualizaciones</string>
+    <string name="upcoming_calendar_prev">Mes anterior</string>
 </resources>
