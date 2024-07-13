@@ -175,16 +175,6 @@ class AnimeScreenModel(
                 }
         }
 
-        screenModelScope.launchIO {
-            trackerManager.loggedInTrackersFlow()
-                .distinctUntilChanged()
-                .collectLatest { trackers ->
-                    updateSuccessState {
-                        it.copy(loggedInTracker = trackers)
-                    }
-                }
-        }
-
         observeDownloads()
 
         screenModelScope.launchIO {
@@ -990,15 +980,31 @@ class AnimeScreenModel(
                 getTracks.subscribe(anime.id).catch { logcat(LogPriority.ERROR, it) },
                 trackerManager.loggedInTrackersFlow(),
             ) { animeTracks, loggedInTrackers ->
+                // Show only if the service supports this manga's source
+                val supportedTrackers = loggedInTrackers.filter { (it as? EnhancedAnimeTracker)?.accept(source!!) ?: true }
+                val supportedTrackerIds = supportedTrackers.map { it.id }.toHashSet()
+                val supportedTrackerTracks = animeTracks.filter { it.trackerId in supportedTrackerIds }
+                supportedTrackerTracks.size to supportedTrackers.isNotEmpty()
+            }
+                .distinctUntilChanged()
+                .collectLatest { (trackingCount, hasLoggedInTrackers) ->
+                    updateSuccessState {
+                        it.copy(
+                            trackingCount = trackingCount,
+                            hasLoggedInTrackers = hasLoggedInTrackers,
+                        )
+                    }
+                }
+
+            combine(
+                getTracks.subscribe(anime.id).catch { logcat(LogPriority.ERROR, it) },
+                trackerManager.loggedInTrackersFlow(),
+            ) { animeTracks, loggedInTrackers ->
                 loggedInTrackers
-                    // Map to TrackItem
                     .map { service -> AnimeTrackItem(animeTracks.find { it.trackerId == service.id }, service) }
-                    // Show only if the service supports this anime's source
-                    .filter { (it.tracker as? EnhancedAnimeTracker)?.accept(source!!) ?: true }
             }
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
-                    updateSuccessState { it.copy(trackItems = trackItems) }
                     updateAiringTime(anime, trackItems, manualFetch = false)
                 }
         }
@@ -1075,11 +1081,12 @@ class AnimeScreenModel(
             val source: AnimeSource,
             val isFromSource: Boolean,
             val episodes: List<EpisodeList.Item>,
-            val trackItems: List<AnimeTrackItem> = emptyList(),
+            val trackingCount: Int = 0,
+            val hasLoggedInTrackers: Boolean = false,
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
             val hasPromptedToAddBefore: Boolean = false,
-            val loggedInTracker: List<Tracker> = emptyList(),
+            val trackItems: List<AnimeTrackItem> = emptyList(),
             val nextAiringEpisode: Pair<Int, Long> = Pair(
                 anime.nextEpisodeToAir,
                 anime.nextEpisodeAiringAt,
@@ -1119,9 +1126,6 @@ class AnimeScreenModel(
 
             val trackingAvailable: Boolean
                 get() = trackItems.isNotEmpty()
-
-            val trackingCount: Int
-                get() = trackItems.count { it.track != null }
 
             val airingEpisodeNumber: Double
                 get() = nextAiringEpisode.first.toDouble()
