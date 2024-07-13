@@ -39,12 +39,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.entries.components.ItemCover
-import tachiyomi.domain.entries.EntryCover as EntryCoverModel
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.BadgeGroup
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
-
+import tachiyomi.domain.entries.EntryCover as EntryCoverModel
 
 object CommonEntryItemDefaults {
     val GridHorizontalSpacer = 4.dp
