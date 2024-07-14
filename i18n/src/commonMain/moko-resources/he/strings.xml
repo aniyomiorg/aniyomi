@@ -982,4 +982,5 @@
     <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
     <string name="onboarding_permission_ignore_battery_opts_description">המנע מהפרעות לתהליכים ממושכים כמו: עדכוני ספרייה, הורדות, ושחזור מגיבויים</string>
+    <string name="label_upcoming">יוצא בקרוב</string>
 </resources>
