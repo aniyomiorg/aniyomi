@@ -53,7 +53,7 @@ import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
-import eu.kanade.presentation.components.relativeDateText
+import eu.kanade.presentation.components.relativeDateTimeText
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryScreenItem
 import eu.kanade.presentation.entries.anime.components.AnimeActionRow
@@ -902,7 +902,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     } else {
                         episodeItem.episode.name
                     },
-                    date = relativeDateText(episodeItem.episode.dateUpload),
+                    date = relativeDateTimeText(episodeItem.episode.dateUpload),
                     watchProgress = episodeItem.episode.lastSecondSeen
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {

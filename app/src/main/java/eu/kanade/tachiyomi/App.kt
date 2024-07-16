@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.PendingIntent
-import android.app.job.JobInfo
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -47,8 +46,6 @@ import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.cancelNotification
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.notify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
