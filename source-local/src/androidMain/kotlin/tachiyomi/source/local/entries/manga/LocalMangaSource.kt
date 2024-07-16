@@ -16,14 +16,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import mihon.core.common.extensions.toZipFile
+import mihon.core.common.archive.archiveReader
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.core.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.storage.extension
 import tachiyomi.core.common.storage.nameWithoutExtension
-import tachiyomi.core.common.storage.openReadOnlyChannel
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.ImageUtil
 import tachiyomi.core.common.util.system.logcat
@@ -49,7 +48,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import com.github.junrar.Archive as JunrarArchive
 
 actual class LocalMangaSource(
     private val context: Context,
@@ -190,9 +188,7 @@ actual class LocalMangaSource(
 
                 // Copy ComicInfo.xml from chapter archive to top level if found
                 noXmlFile == null -> {
-                    val chapterArchives = mangaDirFiles
-                        .filter(ArchiveManga::isSupported)
-                        .toList()
+                    val chapterArchives = mangaDirFiles.filter(ArchiveManga::isSupported)
 
                     val copiedFile = copyComicInfoFileFromArchive(chapterArchives, mangaDir)
                     if (copiedFile != null) {
@@ -215,26 +211,10 @@ actual class LocalMangaSource(
 
     private fun copyComicInfoFileFromArchive(chapterArchives: List<UniFile>, folder: UniFile): UniFile? {
         for (chapter in chapterArchives) {
-            when (Format.valueOf(chapter)) {
-                is Format.Zip -> {
-                    chapter.openReadOnlyChannel(context).toZipFile().use { zip ->
-                        zip.getEntry(COMIC_INFO_FILE)?.let { comicInfoFile ->
-                            zip.getInputStream(comicInfoFile).buffered().use { stream ->
-                                return copyComicInfoFile(stream, folder)
-                            }
-                        }
-                    }
+            chapter.archiveReader(context).use { reader ->
+                reader.getInputStream(COMIC_INFO_FILE)?.use { stream ->
+                    return copyComicInfoFile(stream, folder)
                 }
-                is Format.Rar -> {
-                    JunrarArchive(chapter.openInputStream()).use { rar ->
-                        rar.fileHeaders.firstOrNull { it.fileName == COMIC_INFO_FILE }?.let { comicInfoFile ->
-                            rar.getInputStream(comicInfoFile).buffered().use { stream ->
-                                return copyComicInfoFile(stream, folder)
-                            }
-                        }
-                    }
-                }
-                else -> {}
             }
         }
         return null
@@ -269,7 +249,7 @@ actual class LocalMangaSource(
 
         val chapters = fileSystem.getFilesInMangaDirectory(manga.url)
             // Only keep supported formats
-            .filter { it.isDirectory || ArchiveManga.isSupported(it) }
+            .filter { it.isDirectory || ArchiveManga.isSupported(it) || it.extension.equals("epub", true) }
             .map { chapterFile ->
                 SChapter.create().apply {
                     url = "${manga.url}/${chapterFile.name}"
@@ -287,7 +267,7 @@ actual class LocalMangaSource(
 
                     val format = Format.valueOf(chapterFile)
                     if (format is Format.Epub) {
-                        EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
+                        EpubFile(format.file.archiveReader(context)).use { epub ->
                             epub.fillMetadata(manga, this)
                         }
                     }
@@ -337,8 +317,8 @@ actual class LocalMangaSource(
         try {
             val (mangaDirName, chapterName) = chapter.url.split('/', limit = 2)
             return fileSystem.getBaseDirectory()
-                ?.findFile(mangaDirName, true)
-                ?.findFile(chapterName, true)
+                ?.findFile(mangaDirName)
+                ?.findFile(chapterName)
                 ?.let(Format.Companion::valueOf)
                 ?: throw Exception(context.stringResource(MR.strings.chapter_not_found))
         } catch (e: Format.UnknownFormatException) {
@@ -364,51 +344,22 @@ actual class LocalMangaSource(
 
                     entry?.let { coverManager.update(manga, it.openInputStream()) }
                 }
-                is Format.Zip -> {
-                    format.file.openReadOnlyChannel(context).toZipFile().use { zip ->
-                        val entry = zip.entries.toList()
-                            .sortedWith { f1, f2 ->
-                                f1.name.compareToCaseInsensitiveNaturalOrder(
-                                    f2.name,
-                                )
-                            }
-                            .find {
-                                !it.isDirectory && ImageUtil.isImage(it.name) {
-                                    zip.getInputStream(
-                                        it,
-                                    )
-                                }
-                            }
+                is Format.Archive -> {
+                    format.file.archiveReader(context).use { reader ->
+                        val entry = reader.useEntries { entries ->
+                            entries
+                                .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                                .find { it.isFile && ImageUtil.isImage(it.name) { reader.getInputStream(it.name)!! } }
+                        }
 
-                        entry?.let { coverManager.update(manga, zip.getInputStream(it)) }
-                    }
-                }
-                is Format.Rar -> {
-                    JunrarArchive(format.file.openInputStream()).use { archive ->
-                        val entry = archive.fileHeaders
-                            .sortedWith { f1, f2 ->
-                                f1.fileName.compareToCaseInsensitiveNaturalOrder(
-                                    f2.fileName,
-                                )
-                            }
-                            .find {
-                                !it.isDirectory && ImageUtil.isImage(it.fileName) {
-                                    archive.getInputStream(
-                                        it,
-                                    )
-                                }
-                            }
-
-                        entry?.let { coverManager.update(manga, archive.getInputStream(it)) }
+                        entry?.let { coverManager.update(manga, reader.getInputStream(it.name)!!) }
                     }
                 }
                 is Format.Epub -> {
-                    EpubFile(format.file.openReadOnlyChannel(context)).use { epub ->
-                        val entry = epub.getImagesFromPages()
-                            .firstOrNull()
-                            ?.let { epub.getEntry(it) }
+                    EpubFile(format.file.archiveReader(context)).use { epub ->
+                        val entry = epub.getImagesFromPages().firstOrNull()
 
-                        entry?.let { coverManager.update(manga, epub.getInputStream(it)) }
+                        entry?.let { coverManager.update(manga, epub.getInputStream(it)!!) }
                     }
                 }
             }

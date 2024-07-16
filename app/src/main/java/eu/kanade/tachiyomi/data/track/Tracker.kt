@@ -5,6 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import dev.icerock.moko.resources.StringResource
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
 
 interface Tracker {
@@ -36,6 +37,8 @@ interface Tracker {
     fun logout()
 
     val isLoggedIn: Boolean
+
+    val isLoggedInFlow: Flow<Boolean>
 
     fun getUsername(): String
 

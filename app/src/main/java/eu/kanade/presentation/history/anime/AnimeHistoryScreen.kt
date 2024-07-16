@@ -84,14 +84,14 @@ private fun AnimeHistoryScreenContent(
             when (item) {
                 is AnimeHistoryUiModel.Header -> {
                     ListGroupHeader(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier.animateItem(),
                         text = relativeDateText(item.date),
                     )
                 }
                 is AnimeHistoryUiModel.Item -> {
                     val value = item.item
                     AnimeHistoryItem(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier.animateItem(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

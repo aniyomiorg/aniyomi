@@ -68,7 +68,7 @@ private fun AnimeSourcesFilterContent(
                 contentType = "source-filter-header",
             ) {
                 AnimeSourcesFilterHeader(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                     language = language,
                     enabled = enabled,
                     onClickItem = onClickLanguage,
@@ -81,7 +81,7 @@ private fun AnimeSourcesFilterContent(
                     contentType = { "source-filter-item" },
                 ) { source ->
                     AnimeSourcesFilterItem(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier.animateItem(),
                         source = source,
                         isEnabled = "${source.id}" !in state.disabledSources,
                         onClickItem = onClickSource,

@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Clone repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3.4.2
@@ -46,7 +46,19 @@ jobs:
       - name: Build app and run unit tests
         uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3.4.2
         with:
-          arguments: detekt assembleStandardRelease testReleaseUnitTest
+          arguments: detekt assembleStandardRelease testReleaseUnitTest testStandardReleaseUnitTest
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-v8a-${{ github.sha }}
+          path: app/build/outputs/apk/standard/release/app-standard-arm64-v8a-release-unsigned.apk
+
+      - name: Upload mapping
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapping-${{ github.sha }}
+          path: app/build/outputs/mapping/standardRelease
 
       # Sign APK and create release for tags
 
@@ -96,7 +108,7 @@ jobs:
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'aniyomiorg/aniyomi'
-        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v2.0.4
+        uses: softprops/action-gh-release@a74c6b72af54cfa997e81df42d94703d6313a2d0 # v2.0.6
         with:
           tag_name: ${{ env.VERSION_TAG }}
           name: Aniyomi ${{ env.VERSION_TAG }}

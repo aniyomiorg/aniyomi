@@ -48,6 +48,10 @@
 -dontnote rx.internal.util.PlatformDependent
 ##---------------End: proguard configuration for RxJava 1.x  ----------
 
+##---------------Begin: proguard configuration for okhttp  ----------
+-keepclasseswithmembers class okhttp3.MultipartBody$Builder { *; }
+##---------------End: proguard configuration for okhttp  ----------
+
 ##---------------Begin: proguard configuration for kotlinx.serialization  ----------
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.** # core serialization annotations
@@ -76,6 +80,3 @@
 
 # XmlUtil
 -keep public enum nl.adaptivity.xmlutil.EventType { *; }
-
-# Apache Commons Compress
--keep class * extends org.apache.commons.compress.archivers.zip.ZipExtraField { <init>(); }

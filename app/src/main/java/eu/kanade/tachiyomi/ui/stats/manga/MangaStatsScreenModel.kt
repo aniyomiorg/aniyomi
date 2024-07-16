@@ -37,7 +37,7 @@ class MangaStatsScreenModel(
     private val trackerManager: TrackerManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
 
-    private val loggedInTrackers by lazy { trackerManager.trackers.fastFilter { it.isLoggedIn && it is MangaTracker } }
+    private val loggedInTrackers by lazy { trackerManager.loggedInTrackers().filter { it is MangaTracker } }
 
     init {
         screenModelScope.launchIO {

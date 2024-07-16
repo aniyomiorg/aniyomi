@@ -1,83 +1,87 @@
-| Build | Preview Release | Codefactor | Stable | Translate Aniyomi                                                                                                                                 | Discord Server |
-|-------|-----------|-------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [![CI](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi/badge)](https://www.codefactor.io/repository/github/aniyomiorg/aniyomi) | [![stable release](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=download)](https://github.com/aniyomiorg/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+<div align="center">
 
-# ![app icon](.github/readme-images/app-icon.png)Aniyomi
-Aniyomi is a video player and image viewer for Android 8.0 and above.
+<a href="https://aniyomi.org">
+    <img src="./.github/assets/logo.png" alt="Aniyomi logo" title="Aniyomi logo" width="80"/>
+</a>
+
+# Aniyomi [App](#)
+
+### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon.
+Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
+
+[![Discord server](https://img.shields.io/discord/841701076242530374.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/F32UjdJZrR)
+[![GitHub downloads](https://img.shields.io/github/downloads/aniyomiorg/aniyomi/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/aniyomiorg/aniyomi/releases)
+
+[![CI](https://img.shields.io/github/actions/workflow/status/aniyomiorg/aniyomi/build_push.yml?labelColor=27303D)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml)
+[![License: Apache-2.0](https://img.shields.io/github/license/aniyomiorg/aniyomi?labelColor=27303D&color=818cf8)](/LICENSE)
+[![Translation status](https://img.shields.io/weblate/progress/aniyomi?labelColor=27303D&color=946300)](https://hosted.weblate.org/engage/aniyomi/)
+
+## Download
+
+[![Aniyomi Stable](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/aniyomiorg/aniyomi/releases)
+[![Aniyomi Preview](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/aniyomiorg/aniyomi-preview/releases)
+
+*Requires Android 8.0 or higher.*
 
 ## Features
 
-Features include:
-* Watching videos
-* View images
-* Local reading/watching of downloaded content
+<div align="left">
+
+* Local reading and watching of content.
 * A configurable reader with multiple viewers, reading directions and other settings.
-* A configurable player built on mpv-android with multiple options and settings
-* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
-* Categories to organize your library
-* Light and dark themes
-* Create backups locally to read/watch offline or to your desired cloud service
+* A configurable player built on mpv-android with multiple options and settings.
+* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
+* Categories to organize your library.
+* Light and dark themes.
+* Schedule updating your library for new chapters/episodes.
+* Create backups locally to read/watch offline or to your desired cloud service.
+* Plus much more...
 
-## Download
-Get the app from the [releases page](https://github.com/aniyomiorg/aniyomi/releases).
+</div>
 
-If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/aniyomiorg/aniyomi-preview/releases).
+## Contributing
 
-## Issues, Feature Requests and Contributing
+[Code of conduct](./CODE_OF_CONDUCT.md) · [Contributing guide](./CONTRIBUTING.md)
 
-Please make sure to read the full guidelines. Your issue may be closed without warning if you do not.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-<details><summary>Issues</summary>
+Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/faq/general), the [changelog](https://aniyomi.org/changelogs/) and the already opened [issues](https://github.com/aniyomiorg/aniyomi/issues); if you got any questions, join our [Discord server](https://discord.gg/F32UjdJZrR).
 
-1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/aniyomiorg/aniyomi/issues), and [recent release version changes](https://aniyomi.org/changelogs/).**
-2. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
+### Repositories
 
-</details>
+[![aniyomiorg/aniyomi-website - GitHub](https://github-readme-stats.vercel.app/api/pin/?username=aniyomiorg&repo=aniyomi-website&bg_color=161B22&text_color=c9d1d9&title_color=818cf8&icon_color=818cf8&border_radius=8&hide_border=true&description_lines_count=2)](https://github.com/aniyomiorg/aniyomi-website/)
+[![aniyomiorg/aniyomi-mpv-lib - GitHub](https://github-readme-stats.vercel.app/api/pin/?username=aniyomiorg&repo=aniyomi-mpv-lib&bg_color=161B22&text_color=c9d1d9&title_color=818cf8&icon_color=818cf8&border_radius=8&hide_border=true&description_lines_count=2)](https://github.com/aniyomiorg/aniyomi-mpv-lib/)
 
-<details><summary>Bugs</summary>
+### Credits
 
-* Include version (More → About → Version)
-  * If not latest, try updating, it may have already been solved
-  * Preview version is equal to the number of commits as seen on the main page
-* Include steps to reproduce (if not obvious from description)
-* Include screenshot (if needed)
-* If it could be device-dependent, try reproducing on another device (if possible)
-* Don't group unrelated requests into one issue
+Thank you to all the people who have contributed!
 
-</details>
+<a href="https://github.com/aniyomiorg/aniyomi/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=aniyomiorg/aniyomi" alt="Aniyomi app contributors" title="Aniyomi app contributors" width="800"/>
+</a>
 
-<details><summary>Feature Requests</summary>
+### Disclaimer
 
-* Write a detailed issue, explaining what it should do or how. Avoid writing just "like X app does"
-* Include screenshot (if needed)
+The developer(s) of this application does not have any affiliation with the content providers available, and this application hosts zero content.
 
-<details><summary>Contributing</summary>
+### License
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
-</details>
+<pre>
+Copyright © 2015 Javier Tomás
+Copyright © 2024 The Mihon Open Source Project
+Copyright © 2024 The Aniyomi Open Source Project
 
-<details><summary>Code of Conduct</summary>
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
-</details>
+http://www.apache.org/licenses/LICENSE-2.0
 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</pre>
 
-## License
-
-    Copyright 2015 Javier Tomás
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-## Disclaimer
-
-The developer of this application does not have any affiliation with the content providers available.
+</div>

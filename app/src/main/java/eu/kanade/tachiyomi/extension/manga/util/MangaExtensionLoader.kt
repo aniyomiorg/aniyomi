@@ -186,7 +186,7 @@ internal object MangaExtensionLoader {
      * Attempts to load an extension from the given package name. It checks if the extension
      * contains the required feature flag before trying to load it.
      */
-    fun loadMangaExtensionFromPkgName(context: Context, pkgName: String): MangaLoadResult {
+    suspend fun loadMangaExtensionFromPkgName(context: Context, pkgName: String): MangaLoadResult {
         val extensionPackage = getMangaExtensionInfoFromPkgName(context, pkgName)
         if (extensionPackage == null) {
             logcat(LogPriority.ERROR) { "Extension package is not found ($pkgName)" }
@@ -243,7 +243,8 @@ internal object MangaExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    private fun loadMangaExtension(context: Context, extensionInfo: MangaExtensionInfo): MangaLoadResult {
+    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
+    private suspend fun loadMangaExtension(context: Context, extensionInfo: MangaExtensionInfo): MangaLoadResult {
         val pkgManager = context.packageManager
         val pkgInfo = extensionInfo.packageInfo
         val appInfo = pkgInfo.applicationInfo
@@ -274,7 +275,7 @@ internal object MangaExtensionLoader {
         if (signatures.isNullOrEmpty()) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return MangaLoadResult.Error
-        } else if (!trustExtension.isTrusted(pkgInfo, signatures.last())) {
+        } else if (!trustExtension.isTrusted(pkgInfo, signatures)) {
             val extension = MangaExtension.Untrusted(
                 extName,
                 pkgName,

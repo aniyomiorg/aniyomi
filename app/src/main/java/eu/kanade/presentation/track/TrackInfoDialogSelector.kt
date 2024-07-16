@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +23,7 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,8 +43,6 @@ import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.components.material.AlertDialogContent
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.isScrolledToEnd
-import tachiyomi.presentation.core.util.isScrolledToStart
 
 @Composable
 fun TrackStatusSelector(
@@ -86,16 +84,8 @@ fun TrackStatusSelector(
                     }
                 }
             }
-            if (!state.isScrolledToStart()) {
-                HorizontalDivider(
-                    modifier = Modifier.align(Alignment.TopCenter),
-                )
-            }
-            if (!state.isScrolledToEnd()) {
-                HorizontalDivider(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                )
-            }
+            if (state.canScrollBackward) HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
+            if (state.canScrollForward) HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
         },
         onConfirm = onConfirm,
         onDismissRequest = onDismissRequest,

@@ -34,7 +34,6 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
 
 /**
  * A [Fetcher] that fetches cover image for [Manga] object.
@@ -344,5 +343,7 @@ class MangaCoverFetcher(
 
         private val CACHE_CONTROL_NO_STORE = CacheControl.Builder().noStore().build()
         private val CACHE_CONTROL_NO_NETWORK_NO_CACHE = CacheControl.Builder().noCache().onlyIfCached().build()
+
+        private const val HTTP_NOT_MODIFIED = 304
     }
 }

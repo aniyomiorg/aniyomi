@@ -110,4 +110,9 @@
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Mâine</item>
+        <item quantity="few">În %1$d zile</item>
+        <item quantity="other">În %1$d de zile</item>
+    </plurals>
 </resources>

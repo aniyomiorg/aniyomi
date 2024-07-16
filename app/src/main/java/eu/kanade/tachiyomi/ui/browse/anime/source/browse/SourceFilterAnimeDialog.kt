@@ -40,9 +40,7 @@ fun SourceFilterAnimeDialog(
 ) {
     val updateFilters = { onUpdate(filters) }
 
-    AdaptiveSheet(
-        onDismissRequest = onDismissRequest,
-    ) {
+    AdaptiveSheet(onDismissRequest = onDismissRequest) {
         LazyColumn {
             stickyHeader {
                 Row(
