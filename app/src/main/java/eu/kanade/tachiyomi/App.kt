@@ -58,11 +58,6 @@ import logcat.LogPriority
 import logcat.LogcatLogger
 import mihon.core.migration.Migrator
 import mihon.core.migration.migrations.migrations
-import org.acra.config.httpSender
-import org.acra.config.scheduler
-import org.acra.data.StringFormat
-import org.acra.ktx.initAcra
-import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.Preference
@@ -87,7 +82,6 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
     override fun onCreate() {
         super<Application>.onCreate()
 
-        setupAcra()
         GlobalExceptionHandler.initialize(applicationContext, CrashActivity::class.java)
 
         // TLS 1.3 support for Android < 10
@@ -232,31 +226,6 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
         } catch (_: Exception) {
         }
         return super.getPackageName()
-    }
-
-    private fun setupAcra() {
-        if (BuildConfig.ACRA_URI.isNotEmpty() && isPreviewBuildType || isReleaseBuildType) {
-            initAcra {
-                buildConfigClass = BuildConfig::class.java
-                excludeMatchingSharedPreferencesKeys = listOf(
-                    Preference.privateKey(".*"), ".*username.*", ".*password.*", ".*token.*",
-                )
-
-                reportFormat = StringFormat.JSON
-                httpSender {
-                    uri = BuildConfig.ACRA_URI
-                    basicAuthLogin = BuildConfig.ACRA_LOGIN
-                    basicAuthPassword = BuildConfig.ACRA_PASSWORD
-                    httpMethod = HttpSender.Method.POST
-                }
-
-                scheduler {
-                    requiresBatteryNotLow = true
-                    requiresDeviceIdle = true
-                    requiresNetworkType = JobInfo.NETWORK_TYPE_UNMETERED
-                }
-            }
-        }
     }
 
     private fun setupNotificationChannels() {
