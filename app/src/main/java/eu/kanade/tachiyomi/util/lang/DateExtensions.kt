@@ -88,52 +88,49 @@ fun LocalDateTime.toRelativeString(
         return dateFormat.format(this)
     }
     val now = LocalDateTime.now()
-    val difference = ChronoUnit.DAYS.between(this, now)
+    val timeDifference = ChronoUnit.DAYS.between(this, now)
+    val dateDifference = ChronoUnit.DAYS.between(this.toLocalDate(), now.toLocalDate())
     return when {
-        difference < -7 -> dateFormat.format(this)
-        difference < -1 -> context.pluralStringResource(
+        timeDifference < -7 -> dateFormat.format(this)
+        timeDifference < 0 -> context.pluralStringResource(
             MR.plurals.upcoming_relative_time,
-            difference.toInt().absoluteValue,
-            difference.toInt().absoluteValue,
+            dateDifference.toInt().absoluteValue,
+            dateDifference.toInt().absoluteValue,
         )
-        difference < 0 -> {
-            val hourDifference = ChronoUnit.HOURS.between(now, this)
-            if (hourDifference < 1) {
-                val minuteDifference = ChronoUnit.MINUTES.between(now, this)
-                context.pluralStringResource(
-                    MR.plurals.upcoming_relative_time_minutes,
-                    minuteDifference.toInt(),
-                    minuteDifference.toInt(),
-                )
-            } else {
-                context.pluralStringResource(
-                    MR.plurals.upcoming_relative_time_hours,
-                    hourDifference.toInt(),
-                    hourDifference.toInt(),
-                )
-            }
-        }
-        difference < 1 -> {
+        timeDifference < 1 -> {
             val hourDifference = ChronoUnit.HOURS.between(this, now)
-            if (hourDifference < 1) {
-                val minuteDifference = ChronoUnit.MINUTES.between(this, now)
-                context.pluralStringResource(
-                    MR.plurals.relative_time_minutes,
-                    minuteDifference.toInt(),
-                    minuteDifference.toInt(),
+            when {
+                hourDifference < 0 -> context.pluralStringResource(
+                    MR.plurals.upcoming_relative_time_hours,
+                    hourDifference.toInt().absoluteValue,
+                    hourDifference.toInt().absoluteValue,
                 )
-            } else {
-                context.pluralStringResource(
+                hourDifference < 1 -> {
+                    val minuteDifference = ChronoUnit.MINUTES.between(this, now)
+                    when {
+                        minuteDifference < 0 -> context.pluralStringResource(
+                            MR.plurals.upcoming_relative_time_minutes,
+                            minuteDifference.toInt().absoluteValue,
+                            minuteDifference.toInt().absoluteValue,
+                        )
+                        else -> context.pluralStringResource(
+                            MR.plurals.relative_time_minutes,
+                            minuteDifference.toInt(),
+                            minuteDifference.toInt(),
+                        )
+                    }
+                }
+                else -> context.pluralStringResource(
                     MR.plurals.relative_time_hours,
                     hourDifference.toInt(),
                     hourDifference.toInt(),
                 )
             }
         }
-        difference < 7 -> context.resources.getQuantityString(
+        timeDifference < 7 -> context.resources.getQuantityString(
             R.plurals.relative_time,
-            difference.toInt(),
-            difference.toInt(),
+            dateDifference.toInt(),
+            dateDifference.toInt(),
         )
         else -> dateFormat.format(this)
     }
