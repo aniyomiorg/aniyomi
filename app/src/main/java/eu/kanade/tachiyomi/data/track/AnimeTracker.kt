@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
@@ -112,4 +113,6 @@ interface AnimeTracker {
             withUIContext { Injekt.get<Application>().toast(e.message) }
         }
     }
+
+    fun getStatusForAnime(status: Long): StringResource?
 }

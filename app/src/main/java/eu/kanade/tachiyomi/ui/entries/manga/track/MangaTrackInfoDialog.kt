@@ -301,7 +301,9 @@ private data class TrackStatusSelectorScreen(
     ) : StateScreenModel<Model.State>(State(track.status)) {
 
         fun getSelections(): Map<Long, StringResource?> {
-            return tracker.mangaService.getStatusListManga().associateWith { tracker.getStatus(it) }
+            return tracker.mangaService.getStatusListManga().associateWith {
+                (tracker as? MangaTracker)?.getStatusForManga(it)
+            }
         }
 
         fun setSelection(selection: Long) {
