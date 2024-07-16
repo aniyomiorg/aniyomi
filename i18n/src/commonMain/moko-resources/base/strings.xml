@@ -1108,9 +1108,16 @@
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_settings_filters">Filters</string>
     <string name="player_subtitle_settings_delay_tab">Delay</string>
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
+    <string name="player_filters_brightness">Brightness</string>
+    <string name="player_filters_saturation">Saturation</string>
+    <string name="player_filters_contrast">Contrast</string>
+    <string name="player_filters_gamma">Gamma</string>
+    <string name="player_filters_hue">Hue</string>
+    <string name="player_filters_warning">Some filters may not work your current video driver</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_add_external_audio">Add external audio</string>
     <string name="player_add_external_audio_intent">Select an audio file.</string>

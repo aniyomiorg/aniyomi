@@ -63,6 +63,7 @@ import eu.kanade.tachiyomi.ui.player.settings.sheets.ScreenshotOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.StreamsCatalogSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.VideoChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.VideoFilters
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
@@ -635,10 +636,18 @@ class PlayerActivity : BaseActivity() {
             )
         }
 
+        setVideoFilters()
+
         MPVLib.setOptionString("input-default-bindings", "yes")
 
         MPVLib.addLogObserver(playerObserver)
         player.addObserver(playerObserver)
+    }
+
+    private fun setVideoFilters() {
+        VideoFilters.entries.forEach {
+            MPVLib.setPropertyInt(it.mpvProperty, it.preference(playerPreferences).get())
+        }
     }
 
     private fun setupPlayerAudio() {
