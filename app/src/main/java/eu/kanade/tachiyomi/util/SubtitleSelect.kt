@@ -32,7 +32,7 @@ class SubtitleSelect(private val playerPreferences: PlayerPreferences) {
             locale.getDisplayName(locale),
             locale.getDisplayName(Locale.ENGLISH).substringBefore(" ("),
         )
-        val langRegex = Regex("""\b${locale.getISO3Language()}\b""")
+        val langRegex = Regex("""\b${locale.getISO3Language()}\b""", RegexOption.IGNORE_CASE)
 
         val filtered = tracks.withIndex()
             .filterNot { (_, track) ->
