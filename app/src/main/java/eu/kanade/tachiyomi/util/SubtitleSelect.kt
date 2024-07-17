@@ -23,24 +23,19 @@ class SubtitleSelect(private val playerPreferences: PlayerPreferences) {
             SubConfig()
         }
 
-        val locale = if (config.lang == null) {
-            LocaleListCompat.getDefault()[0]!!
-        } else {
-            Locale(config.lang)
+        val locales = config.lang.map(::Locale).ifEmpty {
+            listOf(LocaleListCompat.getDefault()[0]!!)
         }
-        val langNames = listOf(
-            locale.getDisplayName(locale),
-            locale.getDisplayName(Locale.ENGLISH).substringBefore(" ("),
-        )
-        val langRegex = Regex("""\b${locale.getISO3Language()}\b""", RegexOption.IGNORE_CASE)
+        val chosenLocale = locales.firstOrNull { locale ->
+            tracks.any { t -> containsLang(t.lang, locale) }
+        } ?: return null
 
         val filtered = tracks.withIndex()
             .filterNot { (_, track) ->
                 config.blacklist.any { track.lang.contains(it, true) }
             }
             .filter { (_, track) ->
-                langNames.any { track.lang.contains(it, true) } ||
-                    langRegex.find(track.lang) != null
+                containsLang(track.lang, chosenLocale)
             }
 
         return filtered.firstOrNull { (_, track) ->
@@ -48,9 +43,17 @@ class SubtitleSelect(private val playerPreferences: PlayerPreferences) {
         }?.index ?: filtered.getOrNull(0)?.index
     }
 
+    private fun containsLang(title: String, locale: Locale): Boolean {
+        val localName = locale.getDisplayName(locale)
+        val englishName = locale.getDisplayName(Locale.ENGLISH).substringBefore(" (")
+        val langRegex = Regex("""\b${locale.getISO3Language()}\b""", RegexOption.IGNORE_CASE)
+
+        return title.contains(localName) || title.contains(englishName) || langRegex.find(title) != null
+    }
+
     @Serializable
     data class SubConfig(
-        val lang: String? = null,
+        val lang: List<String> = emptyList(),
         val blacklist: List<String> = emptyList(),
         val whitelist: List<String> = emptyList(),
     )
