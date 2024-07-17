@@ -4,45 +4,19 @@ naming:
     ignoreAnnotated: [ 'Composable' ]
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][A-Za-z0-9]*'
-  ConstructorParameterNaming:
-    active: false
-
-exceptions:
-  TooGenericExceptionCaught:
-    active: false
-  TooGenericExceptionThrown:
-    active: false
-  SwallowedException:
-    active: false
-  PrintStackTrace:
-    active: false
-
 complexity:
-  LongParameterList:
-    functionThreshold: 50
-    constructorThreshold: 51
-    ignoreDefaultParameters: true
-  ComplexCondition:
-    threshold: 7
-  CyclomaticComplexMethod:
-    active: false
   LongMethod:
-    active: false
-  LargeClass:
-    active: false
-  TooManyFunctions:
-    active: false
-
+    ignoreAnnotated: [ 'Composable' ]
+  LongParameterList:
+    ignoreDefaultParameters: true
+    ignoreAnnotated: [ 'Composable' ]
 style:
   MagicNumber:
-    active: false
     ignorePropertyDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
+  ReturnCount:
+    excludeGuardClauses: true
+  SerialVersionUIDInSerializableClass:
+    active: false
   UnusedPrivateMember:
     ignoreAnnotated: [ 'Preview' ]
-  UnusedParameter:
-    active: false
-  UnusedPrivateClass:
-    active: false
-  ReturnCount:
-    active: false

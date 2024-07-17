@@ -23,7 +23,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import androidx.exifinterface.media.ExifInterface
 import com.hippo.unifile.UniFile
 import logcat.LogPriority
 import net.lingala.zip4j.ZipFile
@@ -33,11 +32,9 @@ import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.net.URLConnection
-import java.security.SecureRandom
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
@@ -236,6 +233,7 @@ object ImageUtil {
      * to compensate for scaling.
      */
 
+    @Suppress("MagicNumber")
     fun addHorizontalCenterMargin(imageStream: InputStream, viewHeight: Int, backgroundContext: Context): InputStream {
         val imageBitmap = ImageDecoder.newInstance(imageStream)?.decode()!!
         val height = imageBitmap.height
@@ -291,6 +289,7 @@ object ImageUtil {
     /**
      * Splits tall images to improve performance of reader
      */
+    @Suppress("ReturnCount")
     fun splitTallImage(
         tmpDir: UniFile,
         imageFile: UniFile,
@@ -670,7 +669,7 @@ object ImageUtil {
     /**
      * Used to check an image's dimensions without loading it in the memory.
      */
-    @Suppress("SwallowedException")
+    @Suppress("SwallowedException", "MagicNumber")
     private fun extractImageOptions(
         imageStream: InputStream,
         // SY -->
@@ -721,22 +720,6 @@ object ImageUtil {
             return options
         }
     }
-
-    /**
-     * Creates random exif metadata used as padding to make
-     * the size of files inside  CBZ archives unique
-     */
-    fun addPaddingToImageExif(imageFile: File) {
-        try {
-            val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-            val padding = List(SecureRandom().nextInt(16384) + 16384) { charPool.random() }.joinToString("")
-            val exif = ExifInterface(imageFile.absolutePath)
-            exif.setAttribute("UserComment", padding)
-            exif.saveAttributes()
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-        }
-    }
     // SY <--
 
     private fun getBitmapRegionDecoder(imageStream: InputStream): BitmapRegionDecoder? {
@@ -756,6 +739,7 @@ object ImageUtil {
         "image/jxl" to "jxl",
     )
 
+    @Suppress("MagicNumber")
     fun mergeBitmaps(
         imageBitmap: Bitmap,
         imageBitmap2: Bitmap,

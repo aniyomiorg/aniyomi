@@ -293,6 +293,7 @@ class MangaScreenModel(
     }
 
     // SY -->
+    @Suppress("LongParameterList")
     fun updateMangaInfo(
         title: String?,
         author: String?,

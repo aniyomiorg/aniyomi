@@ -96,6 +96,7 @@ import java.util.Date
 /**
  * Presenter used by the activity to perform background operations.
  */
+@Suppress("LargeClass")
 class ReaderViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
     private val sourceManager: MangaSourceManager = Injekt.get(),
@@ -887,6 +888,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     // SY -->
+    @Suppress("ReturnCount")
     fun saveImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
@@ -921,6 +923,7 @@ class ReaderViewModel @JvmOverloads constructor(
         }
     }
 
+    @Suppress("LongParameterList")
     private fun saveImages(
         page1: ReaderPage,
         page2: ReaderPage,
@@ -930,9 +933,9 @@ class ReaderViewModel @JvmOverloads constructor(
         manga: Manga,
     ): Uri {
         val stream1 = page1.stream!!
-        ImageUtil.findImageType(stream1) ?: throw Exception("Not an image")
+        ImageUtil.findImageType(stream1)
         val stream2 = page2.stream!!
-        ImageUtil.findImageType(stream2) ?: throw Exception("Not an image")
+        ImageUtil.findImageType(stream2)
         val imageBitmap = ImageDecoder.newInstance(stream1())?.decode()!!
         val imageBitmap2 = ImageDecoder.newInstance(stream2())?.decode()!!
 
@@ -995,6 +998,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     // SY -->
+    @Suppress("ReturnCount")
     fun shareImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
@@ -1030,6 +1034,7 @@ class ReaderViewModel @JvmOverloads constructor(
     /**
      * Sets the image of the selected page as cover and notifies the UI of the result.
      */
+    @Suppress("ReturnCount")
     fun setAsCover(useExtraPage: Boolean) {
         // SY -->
         val page = if (useExtraPage) {

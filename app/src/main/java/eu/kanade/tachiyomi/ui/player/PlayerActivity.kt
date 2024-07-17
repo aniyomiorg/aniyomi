@@ -1641,6 +1641,7 @@ class PlayerActivity : BaseActivity() {
         finish()
     }
 
+    @Suppress("MagicNumber", "NestedBlockDepth")
     private fun setVideoList(
         qualityIndex: Int,
         videos: List<Video>?,

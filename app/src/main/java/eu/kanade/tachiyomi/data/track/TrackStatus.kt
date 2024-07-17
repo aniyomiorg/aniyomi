@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.data.track.shikimori.Shikimori
 import eu.kanade.tachiyomi.data.track.simkl.Simkl
 
+@Suppress("MagicNumber")
 enum class TrackStatus(val int: Long, @StringRes val res: Int) {
     READING(1, R.string.reading),
     WATCHING(11, R.string.watching),
@@ -25,6 +26,7 @@ enum class TrackStatus(val int: Long, @StringRes val res: Int) {
     ;
 
     companion object {
+        @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
         fun parseTrackerStatus(tracker: Long, statusLong: Long): TrackStatus? {
             return when (tracker) {
                 (1L) -> {

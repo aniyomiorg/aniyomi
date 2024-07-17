@@ -30,6 +30,7 @@ class TorrentServerService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    @Suppress("ReturnCount")
     override fun onStartCommand(
         intent: Intent?,
         flags: Int,
@@ -53,6 +54,7 @@ class TorrentServerService : Service() {
         return START_NOT_STICKY
     }
 
+    @Suppress("MagicNumber")
     private fun startServer() {
         serviceScope.launch {
             if (TorrentServerApi.echo() == "") {
@@ -123,6 +125,7 @@ class TorrentServerService : Service() {
         const val ACTION_STOP = "stop_torrent_server"
         val applicationContext = Injekt.get<Application>()
 
+        @Suppress("TooGenericExceptionCaught")
         fun start() {
             try {
                 val intent =
@@ -132,10 +135,11 @@ class TorrentServerService : Service() {
                 applicationContext.startService(intent)
             } catch (e: Exception) {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "start() error: ${e.message}")
-                e.printStackTrace()
+                println(e.stackTrace)
             }
         }
 
+        @Suppress("TooGenericExceptionCaught")
         fun stop() {
             try {
                 val intent =
@@ -145,10 +149,11 @@ class TorrentServerService : Service() {
                 applicationContext.startService(intent)
             } catch (e: Exception) {
                 if (BuildConfig.DEBUG) Log.d("TorrentService", "stop() error: ${e.message}")
-                e.printStackTrace()
+                println(e.stackTrace)
             }
         }
 
+        @Suppress("MagicNumber")
         fun wait(timeout: Int = -1): Boolean {
             var count = 0
             if (timeout < 0) {

@@ -90,6 +90,7 @@ import java.util.Collections
  */
 typealias AnimeLibraryMap = Map<Category, List<AnimeLibraryItem>>
 
+@Suppress("LargeClass")
 class AnimeLibraryScreenModel(
     private val getLibraryAnime: GetLibraryAnime = Injekt.get(),
     private val getCategories: GetVisibleAnimeCategories = Injekt.get(),
@@ -294,6 +295,7 @@ class AnimeLibraryScreenModel(
     /**
      * Applies library sorting to the given map of anime.
      */
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun AnimeLibraryMap.applySort(
         // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<AnimeTrack>>,
@@ -809,6 +811,7 @@ class AnimeLibraryScreenModel(
         return getNextEpisodes.await(anime.id).firstOrNull()
     }
 
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
     private fun getGroupedAnimeItems(
         groupType: Int,
         libraryAnime: List<AnimeLibraryItem>,

@@ -26,7 +26,7 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
-@Suppress("ParameterNaming")
+@Suppress("ParameterNaming", "LongMethod")
 fun ReaderPageActionsDialog(
     onDismissRequest: () -> Unit,
     // SY -->

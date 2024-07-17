@@ -66,6 +66,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
 
     private val protoBuf: ProtoBuf = Injekt.get()
 
+    @Suppress("ReturnCount", "TooGenericExceptionCaught")
     override suspend fun doSync(syncData: SyncData): Backup? {
         beforeSync()
 
@@ -107,6 +108,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         googleDriveService.refreshToken()
     }
 
+    @Suppress("TooGenericExceptionThrown", "TooGenericExceptionCaught")
     private fun pullSyncData(): SyncData? {
         val drive = googleDriveService.driveService
             ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
@@ -135,6 +137,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionThrown")
     private suspend fun pushSyncData(syncData: SyncData) {
         val drive = googleDriveService.driveService
             ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
@@ -188,6 +191,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun getAppDataFileList(drive: Drive): MutableList<File> {
         try {
             // Search for the existing file by name in the appData folder
@@ -208,6 +212,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     suspend fun deleteSyncDataFromGoogleDrive(): DeleteSyncDataStatus {
         val drive = googleDriveService.driveService
 
@@ -293,6 +298,7 @@ class GoogleDriveService(private val context: Context) {
      * even if they have previously granted access.
      * @return The authorization URL.
      */
+    @Suppress("TooGenericExceptionThrown")
     private fun generateAuthorizationUrl(): String {
         val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
         val secrets = GoogleClientSecrets.load(
@@ -312,6 +318,8 @@ class GoogleDriveService(private val context: Context) {
             .setApprovalPrompt("force")
             .build()
     }
+
+    @Suppress("TooGenericExceptionThrown")
     internal suspend fun refreshToken() = withIOContext {
         val refreshToken = syncPreferences.googleDriveRefreshToken().get()
 
@@ -400,6 +408,7 @@ class GoogleDriveService(private val context: Context) {
      * @param onSuccess A callback function to be called on successful authorization.
      * @param onFailure A callback function to be called on authorization failure.
      */
+    @Suppress("TooGenericExceptionCaught")
     fun handleAuthorizationCode(
         authorizationCode: String,
         activity: Activity,

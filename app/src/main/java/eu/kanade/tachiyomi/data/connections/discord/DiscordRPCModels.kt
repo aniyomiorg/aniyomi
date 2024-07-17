@@ -120,6 +120,7 @@ data class Res(
     val d: JsonElement,
 )
 
+@Suppress("MagicNumber")
 enum class OpCode(val value: Int) {
     /** An event was dispatched. */
     DISPATCH(0),

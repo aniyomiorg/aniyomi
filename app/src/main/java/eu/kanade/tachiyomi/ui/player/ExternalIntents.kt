@@ -269,6 +269,7 @@ class ExternalIntents {
      * @param uri the path data of the video.
      * @param video the video being sent to the external player.
      */
+    @Suppress("MagicNumber")
     private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             if (isPackageInstalled(AMNIS, context.packageManager)) {

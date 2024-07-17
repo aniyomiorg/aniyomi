@@ -45,7 +45,7 @@ object Migrations {
      *
      * @return true if a migration is performed, false otherwise.
      */
-    @Suppress("NestedBlockDepth")
+    @Suppress("NestedBlockDepth", "ReturnCount", "LongMethod", "CyclomaticComplexMethod", "LongParameterList")
     fun upgrade(
         context: Context,
         preferenceStore: PreferenceStore,

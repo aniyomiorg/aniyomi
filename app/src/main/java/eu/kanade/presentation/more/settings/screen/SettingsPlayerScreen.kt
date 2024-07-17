@@ -402,7 +402,7 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
-    @Suppress("SwallowedException")
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
     @Composable
     private fun getTorrentServerGroup(
         torrentServerPreferences: TorrentServerPreferences,

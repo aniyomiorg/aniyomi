@@ -29,6 +29,7 @@ class SyncDataJob(private val context: Context, workerParams: WorkerParameters) 
 
     private val notifier = SyncNotifier(context)
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun doWork(): Result {
         if (tags.contains(TAG_AUTO)) {
             // Find a running manual worker. If exists, try again later
@@ -72,6 +73,7 @@ class SyncDataJob(private val context: Context, workerParams: WorkerParameters) 
             return context.workManager.isRunning(TAG_JOB)
         }
 
+        @Suppress("MagicNumber")
         fun setupTask(context: Context, prefInterval: Int? = null) {
             val syncPreferences = Injekt.get<SyncPreferences>()
             val interval = prefInterval ?: syncPreferences.syncInterval().get()

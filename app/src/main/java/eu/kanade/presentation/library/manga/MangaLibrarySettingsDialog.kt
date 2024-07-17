@@ -42,6 +42,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
+@Suppress("MagicNumber")
 fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,

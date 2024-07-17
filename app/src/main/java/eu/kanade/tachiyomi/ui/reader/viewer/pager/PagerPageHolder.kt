@@ -153,6 +153,7 @@ class PagerPageHolder(
     /**
      * Called when the page is ready.
      */
+    @Suppress("MagicNumber", "LongMethod")
     private suspend fun setImage() {
         if (extraPage == null) {
             progressIndicator.setProgress(0)
@@ -267,6 +268,14 @@ class PagerPageHolder(
         }
     }
 
+    @Suppress(
+        "ReturnCount",
+        "TooGenericExceptionCaught",
+        "MagicNumber",
+        "LongMethod",
+        "CyclomaticComplexMethod",
+        "ComplexCondition"
+    )
     private fun mergePages(imageStream: InputStream, imageStream2: InputStream?): InputStream {
         // Handle adding a center margin to wide images if requested
         if (imageStream2 == null) {
@@ -378,6 +387,7 @@ class PagerPageHolder(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun splitDoublePages() {
         scope.launch {
             delay(100)
@@ -388,6 +398,7 @@ class PagerPageHolder(
         }
     }
 
+    @Suppress("MagicNumber", "CyclomaticComplexMethod")
     private fun splitInHalf(imageStream: InputStream): InputStream {
         var side = when {
             viewer is L2RPagerViewer && page is InsertPage -> ImageUtil.Side.RIGHT

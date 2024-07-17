@@ -80,6 +80,7 @@ data class BackupManga(
     }
 
     // SY -->
+    @Suppress("ComplexCondition")
     fun getCustomMangaInfo(): CustomMangaInfo? {
         if (customTitle != null ||
             customArtist != null ||

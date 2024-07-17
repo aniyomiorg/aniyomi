@@ -77,6 +77,7 @@ import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
+@Suppress("TooManyFunctions")
 object SettingsDataScreen : SearchableSettings {
 
     val restorePreferenceKeyString = MR.strings.label_backup
@@ -516,6 +517,7 @@ object SettingsDataScreen : SearchableSettings {
     }
 
     @Composable
+    @Suppress("MagicNumber")
     private fun getAutomaticSyncGroup(syncPreferences: SyncPreferences): Preference.PreferenceGroup {
         val context = LocalContext.current
         val syncIntervalPref = syncPreferences.syncInterval()

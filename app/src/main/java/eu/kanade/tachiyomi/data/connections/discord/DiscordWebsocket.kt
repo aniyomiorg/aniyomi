@@ -76,6 +76,7 @@ open class DiscordWebSocketImpl(
         webSocket?.send(json.encodeToString(response))
     }
 
+    @Suppress("MagicNumber")
     override fun close() {
         webSocket?.send(
             json.encodeToString(
@@ -118,6 +119,7 @@ open class DiscordWebSocketImpl(
             if (sendIdentify) sendIdentify()
         }
 
+        @Suppress("MagicNumber")
         override fun onMessage(webSocket: WebSocket, text: String) {
             log("Message : $text")
 
@@ -142,6 +144,7 @@ open class DiscordWebSocketImpl(
             }
         }
 
+        @Suppress("MagicNumber")
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             log("Server Closed : $code $reason")
             if (code == 4000) {

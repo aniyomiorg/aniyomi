@@ -167,6 +167,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
     private suspend fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryAnime = getLibraryAnime.await()
         // SY -->
@@ -317,6 +318,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @return an observable delivering the progress of each update.
      */
+    @Suppress("MagicNumber", "LongMethod")
     private suspend fun updateEpisodeList() {
         val semaphore = Semaphore(5)
         val progressCount = AtomicInteger(0)
@@ -554,6 +556,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }
         }
+
+        @Suppress("ReturnCount")
         fun startNow(
             context: Context,
             category: Category? = null,

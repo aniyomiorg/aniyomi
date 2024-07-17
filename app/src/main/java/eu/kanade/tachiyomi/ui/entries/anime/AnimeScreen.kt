@@ -78,6 +78,7 @@ class AnimeScreen(
     override fun onProvideAssistUrl() = assistUrl
 
     @Composable
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val context = LocalContext.current

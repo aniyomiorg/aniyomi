@@ -87,7 +87,7 @@ import tachiyomi.source.local.entries.manga.isLocal
 import java.time.Instant
 
 @Composable
-@Suppress("ParameterNaming")
+@Suppress("ParameterNaming", "LongMethod")
 fun MangaScreen(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -232,7 +232,7 @@ fun MangaScreen(
 }
 
 @Composable
-@Suppress("ParameterNaming")
+@Suppress("ParameterNaming", "LongMethod")
 private fun MangaScreenSmallImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -493,7 +493,7 @@ private fun MangaScreenSmallImpl(
 }
 
 @Composable
-@Suppress("ParameterNaming")
+@Suppress("ParameterNaming", "LongMethod")
 fun MangaScreenLargeImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,

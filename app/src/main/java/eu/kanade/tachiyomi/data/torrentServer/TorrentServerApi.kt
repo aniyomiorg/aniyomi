@@ -17,6 +17,7 @@ object TorrentServerApi {
     private val network: NetworkHelper by injectLazy()
     private val hostUrl = TorrentServerUtils.hostUrl
 
+    @Suppress("TooGenericExceptionCaught")
     fun echo(): String {
         return try {
             network.client.newCall(GET("$hostUrl/echo")).execute().body.string()
@@ -26,6 +27,7 @@ object TorrentServerApi {
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun shutdown(): String {
         return try {
             network.client.newCall(GET("$hostUrl/shutdown")).execute().body.string()

@@ -78,6 +78,7 @@ data class BackupAnime(
     }
 
     // SY -->
+    @Suppress("ComplexCondition")
     fun getCustomAnimeInfo(): CustomAnimeInfo? {
         if (customTitle != null ||
             customArtist != null ||

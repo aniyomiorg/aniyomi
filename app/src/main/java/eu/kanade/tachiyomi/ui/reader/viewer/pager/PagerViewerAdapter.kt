@@ -229,7 +229,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
     }
 
     // SY -->
-    @Suppress("ForEachOnRange", "NestedBlockDepth")
+    @Suppress("ForEachOnRange", "NestedBlockDepth", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
     private fun setJoinedItems(useSecondPage: Boolean = false) {
         val oldCurrent = joinedItems.getOrNull(viewer.pager.currentItem)
         if (!viewer.config.doublePages) {
@@ -375,6 +375,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         viewer.pager.setCurrentItem(index, false)
     }
 
+    @Suppress("MagicNumber")
     fun splitDoublePages(current: ReaderPage) {
         val oldCurrent = joinedItems.getOrNull(viewer.pager.currentItem)
         setJoinedItems(

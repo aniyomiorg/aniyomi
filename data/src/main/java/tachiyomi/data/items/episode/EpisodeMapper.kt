@@ -3,6 +3,7 @@ package tachiyomi.data.items.episode
 import tachiyomi.domain.items.episode.model.Episode
 
 object EpisodeMapper {
+    @Suppress("LongParameterList")
     fun mapEpisode(
         id: Long,
         animeId: Long,

@@ -35,6 +35,7 @@ class SyncYomiSyncService(
 
     private class SyncYomiException(message: String?) : Exception(message)
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun doSync(syncData: SyncData): Backup? {
         try {
             val (remoteData, etag) = pullSyncData()
@@ -61,6 +62,7 @@ class SyncYomiSyncService(
         }
     }
 
+    @Suppress("ReturnCount")
     private suspend fun pullSyncData(): Pair<SyncData?, String> {
         val host = syncPreferences.clientHost().get()
         val apiKey = syncPreferences.clientAPIKey().get()
@@ -123,6 +125,7 @@ class SyncYomiSyncService(
     /**
      * Return true if update success
      */
+    @Suppress("MagicNumber")
     private suspend fun pushSyncData(syncData: SyncData, eTag: String) {
         val backup = syncData.backup ?: return
 

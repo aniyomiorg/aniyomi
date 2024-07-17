@@ -40,6 +40,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.source.local.entries.anime.isLocal
 
 @Composable
+@Suppress("MagicNumber", "LongMethod")
 fun EditAnimeDialog(
     anime: Anime,
     onDismissRequest: () -> Unit,
@@ -113,6 +114,7 @@ fun EditAnimeDialog(
     )
 }
 
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun onViewCreated(
     anime: Anime,
     context: Context,
@@ -204,7 +206,7 @@ private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: Coro
     }
 }
 
-private fun loadCover(anime: Anime, context: Context, binding: EditAnimeDialogBinding) {
+private fun loadCover(anime: Anime, binding: EditAnimeDialogBinding) {
     binding.animeCover.load(anime) {
         transformations(RoundedCornersTransformation(4.dpToPx.toFloat()))
     }

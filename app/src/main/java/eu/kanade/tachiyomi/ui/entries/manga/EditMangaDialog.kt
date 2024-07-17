@@ -40,6 +40,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.source.local.entries.manga.isLocal
 
 @Composable
+@Suppress("MagicNumber", "LongMethod")
 fun EditMangaDialog(
     manga: Manga,
     onDismissRequest: () -> Unit,
@@ -113,6 +114,7 @@ fun EditMangaDialog(
     )
 }
 
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun onViewCreated(
     manga: Manga,
     context: Context,
@@ -204,7 +206,7 @@ private fun resetTags(manga: Manga, binding: EditMangaDialogBinding, scope: Coro
     }
 }
 
-private fun loadCover(manga: Manga, context: Context, binding: EditMangaDialogBinding) {
+private fun loadCover(manga: Manga, binding: EditMangaDialogBinding) {
     binding.mangaCover.load(manga) {
         transformations(RoundedCornersTransformation(4.dpToPx.toFloat()))
     }

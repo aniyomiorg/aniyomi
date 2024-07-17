@@ -277,6 +277,7 @@ class AnimeScreenModel(
     }
 
     // SY -->
+    @Suppress("LongParameterList")
     fun updateAnimeInfo(
         title: String?,
         author: String?,

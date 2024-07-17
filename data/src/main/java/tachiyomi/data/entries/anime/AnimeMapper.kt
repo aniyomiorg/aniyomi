@@ -59,6 +59,7 @@ object AnimeMapper {
         version = version,
     )
 
+    @Suppress("LongParameterList")
     fun mapLibraryAnime(
         id: Long,
         source: Long,

@@ -24,7 +24,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsService
 
 @Composable
-@Suppress("ModifierNotUsedAtRoot")
+@Suppress("ModifierNotUsedAtRoot", "MagicNumber")
 fun ConnectionsPreferenceWidget(
     service: ConnectionsService,
     checked: Boolean,
