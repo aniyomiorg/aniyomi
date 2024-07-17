@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
+import okio.Buffer
+import okio.BufferedSource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
@@ -31,7 +33,6 @@ import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.math.max
 
@@ -165,7 +166,7 @@ class PagerPageHolder(
         val streamFn2 = extraPage?.stream
 
         try {
-            val (bais, isAnimated, background) = withIOContext {
+            val (source, isAnimated, background) = withIOContext {
                 streamFn().buffered(16).use { stream ->
                     // SY -->
                     (
@@ -182,36 +183,31 @@ class PagerPageHolder(
                             mergePages(stream, stream2)
                         }.use { itemStream ->
                             // SY <--
-                            val bais = ByteArrayInputStream(itemStream.readBytes())
-                            val isAnimated = ImageUtil.isAnimatedAndSupported(bais)
-                            bais.reset()
+                            val source = streamFn().use { process(item, Buffer().readFrom(it)) }
+                            val isAnimated = ImageUtil.isAnimatedAndSupported(source)
                             val background = if (!isAnimated && viewer.config.automaticBackground) {
-                                ImageUtil.chooseBackground(context, bais)
+                                ImageUtil.chooseBackground(context, source.peek().inputStream())
                             } else {
                                 null
                             }
-                            bais.reset()
-                            Triple(bais, isAnimated, background)
+                            Triple(source, isAnimated, background)
                         }
                     }
-                }
             }
             withUIContext {
-                bais.use {
-                    setImage(
-                        it,
-                        isAnimated,
-                        Config(
-                            zoomDuration = viewer.config.doubleTapAnimDuration,
-                            minimumScaleType = viewer.config.imageScaleType,
-                            cropBorders = viewer.config.imageCropBorders,
-                            zoomStartPosition = viewer.config.imageZoomType,
-                            landscapeZoom = viewer.config.landscapeZoom,
-                        ),
-                    )
-                    if (!isAnimated) {
-                        pageBackground = background
-                    }
+                setImage(
+                    source,
+                    isAnimated,
+                    Config(
+                        zoomDuration = viewer.config.doubleTapAnimDuration,
+                        minimumScaleType = viewer.config.imageScaleType,
+                        cropBorders = viewer.config.imageCropBorders,
+                        zoomStartPosition = viewer.config.imageZoomType,
+                        landscapeZoom = viewer.config.landscapeZoom,
+                    ),
+                )
+                if (!isAnimated) {
+                    pageBackground = background
                 }
                 removeErrorLayout()
             }
@@ -223,38 +219,37 @@ class PagerPageHolder(
         }
     }
 
-    private fun process(page: ReaderPage, imageStream: BufferedInputStream): InputStream {
+    private fun process(page: ReaderPage, imageSource: BufferedSource): BufferedSource {
         if (viewer.config.dualPageRotateToFit) {
-            return rotateDualPage(imageStream)
+            return rotateDualPage(imageSource)
         }
 
         if (!viewer.config.dualPageSplit) {
-            return imageStream
+            return imageSource
         }
 
         if (page is InsertPage) {
-            return splitInHalf(imageStream)
+            return splitInHalf(imageSource)
         }
-
         val isDoublePage = ImageUtil.isWideImage(
-            imageStream,
+            imageSource,
             // SY -->
             page.zip4jFile,
             page.zip4jEntry,
             // SY <--
         )
         if (!isDoublePage) {
-            return imageStream
+            return imageSource
         }
 
         onPageSplit(page)
 
-        return splitInHalf(imageStream)
+        return splitInHalf(imageSource)
     }
 
-    private fun rotateDualPage(imageStream: BufferedInputStream): InputStream {
+    private fun rotateDualPage(imageSource: BufferedSource): BufferedSource {
         val isDoublePage = ImageUtil.isWideImage(
-            imageStream,
+            imageSource,
             // SY -->
             page.zip4jFile,
             page.zip4jEntry,
@@ -262,9 +257,9 @@ class PagerPageHolder(
         )
         return if (isDoublePage) {
             val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
-            ImageUtil.rotateImage(imageStream, rotation)
+            ImageUtil.rotateImage(imageSource, rotation)
         } else {
-            imageStream
+            imageSource
         }
     }
 
@@ -276,13 +271,13 @@ class PagerPageHolder(
         "CyclomaticComplexMethod",
         "ComplexCondition"
     )
-    private fun mergePages(imageStream: InputStream, imageStream2: InputStream?): InputStream {
+    private fun mergePages(imageSource: BufferedSource, imageStream2: InputStream?): BufferedSource {
         // Handle adding a center margin to wide images if requested
         if (imageStream2 == null) {
-            return if (imageStream is BufferedInputStream &&
-                !ImageUtil.isAnimatedAndSupported(imageStream) &&
+            return if (imageSource is BufferedInputStream &&
+                !ImageUtil.isAnimatedAndSupported(imageSource) &&
                 ImageUtil.isWideImage(
-                    imageStream,
+                    imageSource,
                     // SY -->
                     page.zip4jFile,
                     page.zip4jEntry,
@@ -293,22 +288,22 @@ class PagerPageHolder(
             ) {
                 ImageUtil.addHorizontalCenterMargin(imageStream, height, context)
             } else {
-                imageStream
+                imageSource
             }
         }
 
-        if (page.fullPage) return imageStream
-        if (ImageUtil.isAnimatedAndSupported(imageStream)) {
+        if (page.fullPage) return imageSource
+        if (ImageUtil.isAnimatedAndSupported(imageSource)) {
             page.fullPage = true
             splitDoublePages()
-            return imageStream
+            return imageSource
         } else if (ImageUtil.isAnimatedAndSupported(imageStream2)) {
             page.isolatedPage = true
             extraPage?.fullPage = true
             splitDoublePages()
-            return imageStream
+            return imageSource
         }
-        val imageBytes = imageStream.readBytes()
+        val imageBytes = imageSource.readBytes()
         val imageBitmap = try {
             ImageDecoder.newInstance(imageBytes.inputStream())?.decode()
         } catch (e: Exception) {
@@ -317,7 +312,7 @@ class PagerPageHolder(
         }
         if (imageBitmap == null) {
             imageStream2.close()
-            imageStream.close()
+            imageSource.close()
             page.fullPage = true
             splitDoublePages()
             logcat(LogPriority.ERROR) { "Cannot combine pages" }
@@ -329,7 +324,7 @@ class PagerPageHolder(
 
         if (height < width) {
             imageStream2.close()
-            imageStream.close()
+            imageSource.close()
             page.fullPage = true
             splitDoublePages()
             return imageBytes.inputStream()
@@ -344,7 +339,7 @@ class PagerPageHolder(
         }
         if (imageBitmap2 == null) {
             imageStream2.close()
-            imageStream.close()
+            imageSource.close()
             extraPage?.fullPage = true
             page.isolatedPage = true
             splitDoublePages()
@@ -357,7 +352,7 @@ class PagerPageHolder(
 
         if (height2 < width2) {
             imageStream2.close()
-            imageStream.close()
+            imageSource.close()
             extraPage?.fullPage = true
             page.isolatedPage = true
             splitDoublePages()
@@ -365,7 +360,7 @@ class PagerPageHolder(
         }
         val isLTR = (viewer !is R2LPagerViewer) xor viewer.config.invertDoublePages
 
-        imageStream.close()
+        imageSource.close()
         imageStream2.close()
 
         val centerMargin = if (viewer.config.centerMarginType and PagerConfig.CenterMarginType
@@ -399,7 +394,7 @@ class PagerPageHolder(
     }
 
     @Suppress("MagicNumber", "CyclomaticComplexMethod")
-    private fun splitInHalf(imageStream: InputStream): InputStream {
+    private fun splitInHalf(imageSource: BufferedSource): BufferedSource {
         var side = when {
             viewer is L2RPagerViewer && page is InsertPage -> ImageUtil.Side.RIGHT
             viewer !is L2RPagerViewer && page is InsertPage -> ImageUtil.Side.LEFT
@@ -426,7 +421,7 @@ class PagerPageHolder(
             0
         }
 
-        return ImageUtil.splitInHalf(imageStream, side, sideMargin)
+        return ImageUtil.splitInHalf(imageSource, side, sideMargin)
     }
 
     private fun onPageSplit(page: ReaderPage) {

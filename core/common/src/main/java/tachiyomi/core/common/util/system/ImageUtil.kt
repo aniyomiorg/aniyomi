@@ -14,7 +14,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import android.webkit.MimeTypeMap
 import androidx.annotation.ColorInt
 import androidx.core.graphics.alpha
 import androidx.core.graphics.applyCanvas
@@ -33,8 +32,9 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import okio.Buffer
+import okio.BufferedSource
 import java.io.InputStream
-import java.net.URLConnection
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
@@ -45,12 +45,8 @@ object ImageUtil {
     fun isImage(name: String?, openStream: (() -> InputStream)? = null): Boolean {
         if (name == null) return false
 
-        val contentType = try {
-            URLConnection.guessContentTypeFromName(name)
-        } catch (e: Exception) {
-            null
-        } ?: openStream?.let { findImageType(it)?.mime }
-        return contentType?.startsWith("image/") ?: false
+        val extension = name.substringAfterLast('.')
+        return ImageType.entries.any { it.extension == extension } || openStream?.let { findImageType(it) } != null
     }
 
     fun findImageType(openStream: () -> InputStream): ImageType? {
@@ -74,26 +70,26 @@ object ImageUtil {
         }
     }
 
-    fun getExtensionFromMimeType(mime: String?): String {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(mime)
-            ?: SUPPLEMENTARY_MIMETYPE_MAPPING[mime]
-            ?: "jpg"
+    fun getExtensionFromMimeType(mime: String?, openStream: () -> InputStream): String {
+        val type = mime?.let { ImageType.entries.find { it.mime == mime } } ?: findImageType(openStream)
+        return type?.extension ?: "jpg"
     }
 
-    fun isAnimatedAndSupported(stream: InputStream): Boolean {
-        try {
-            val type = getImageType(stream) ?: return false
-            return when (type.format) {
+    fun isAnimatedAndSupported(source: BufferedSource): Boolean {
+        return try {
+            val type = getImageType(source.peek().inputStream()) ?: return false
+            // https://coil-kt.github.io/coil/getting_started/#supported-image-formats
+            when (type.format) {
                 Format.Gif -> true
-                // Coil supports animated WebP on Android 9.0+
-                // https://coil-kt.github.io/coil/getting_started/#supported-image-formats
+                // Animated WebP on Android 9+
                 Format.Webp -> type.isAnimated && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                // Animated Heif on Android 11+
+                Format.Heif -> type.isAnimated && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
                 else -> false
             }
         } catch (e: Exception) {
-            /* Do Nothing */
+            false
         }
-        return false
     }
 
     private fun getImageType(stream: InputStream): tachiyomi.decoder.ImageType? {
@@ -129,14 +125,14 @@ object ImageUtil {
      * @return true if the width is greater than the height
      */
     fun isWideImage(
-        imageStream: BufferedInputStream,
+        imageSource: BufferedSource,
         // SY -->
         zip4jFile: ZipFile?,
         zip4jEntry: FileHeader?,
         // SY <--
     ): Boolean {
         val options = extractImageOptions(
-            imageStream,
+            imageSource,
             // SY -->
             zip4jFile,
             zip4jEntry,
@@ -146,10 +142,10 @@ object ImageUtil {
     }
 
     /**
-     * Extract the 'side' part from imageStream and return it as InputStream.
+     * Extract the 'side' part from [BufferedSource] and return it as [BufferedSource].
      */
-    fun splitInHalf(imageStream: InputStream, side: Side, sidePadding: Int): InputStream {
-        val imageBytes = imageStream.readBytes()
+    fun splitInHalf(imageSource: BufferedSource, side: Side, sidePadding: Int): BufferedSource {
+        val imageBytes = imageSource.peek().readByteArray()
 
         val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         val height = imageBitmap.height
@@ -165,22 +161,20 @@ object ImageUtil {
         half.applyCanvas {
             drawBitmap(imageBitmap, part, singlePage, null)
         }
-        val output = ByteArrayOutputStream()
-        half.compress(Bitmap.CompressFormat.JPEG, 100, output)
+        val output = Buffer()
+        half.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
 
-        return ByteArrayInputStream(output.toByteArray())
+        return output
     }
 
-    fun rotateImage(imageStream: InputStream, degrees: Float): InputStream {
-        val imageBytes = imageStream.readBytes()
-
-        val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    fun rotateImage(imageSource: BufferedSource, degrees: Float): BufferedSource {
+        val imageBitmap = BitmapFactory.decodeStream(imageSource.inputStream())
         val rotated = rotateBitMap(imageBitmap, degrees)
 
-        val output = ByteArrayOutputStream()
-        rotated.compress(Bitmap.CompressFormat.JPEG, 100, output)
+        val output = Buffer()
+        rotated.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
 
-        return ByteArrayInputStream(output.toByteArray())
+        return output
     }
 
     private fun rotateBitMap(bitmap: Bitmap, degrees: Float): Bitmap {
@@ -191,10 +185,8 @@ object ImageUtil {
     /**
      * Split the image into left and right parts, then merge them into a new image.
      */
-    fun splitAndMerge(imageStream: InputStream, upperSide: Side): InputStream {
-        val imageBytes = imageStream.readBytes()
-
-        val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    fun splitAndMerge(imageSource: BufferedSource, upperSide: Side): BufferedSource {
+        val imageBitmap = BitmapFactory.decodeStream(imageSource.inputStream())
         val height = imageBitmap.height
         val width = imageBitmap.width
 
@@ -216,9 +208,9 @@ object ImageUtil {
             drawBitmap(imageBitmap, leftPart, bottomPart, null)
         }
 
-        val output = ByteArrayOutputStream()
-        result.compress(Bitmap.CompressFormat.JPEG, 100, output)
-        return ByteArrayInputStream(output.toByteArray())
+        val output = Buffer()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
+        return output
     }
 
     enum class Side {
@@ -268,14 +260,14 @@ object ImageUtil {
      * @return true if the height:width ratio is greater than 3.
      */
     private fun isTallImage(
-        imageStream: InputStream,
+        imageSource: BufferedSource,
         // SY -->
         zip4jFile: ZipFile?,
         zip4jEntry: FileHeader?,
         // SY <--
     ): Boolean {
         val options = extractImageOptions(
-            imageStream,
+            imageSource,
             // SY -->
             zip4jFile,
             zip4jEntry,
@@ -299,8 +291,9 @@ object ImageUtil {
         zip4jEntry: FileHeader?,
         // SY <--
     ): Boolean {
-        if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(
-                imageFile.openInputStream(),
+        val imageSource = imageFile.openInputStream().use { Buffer().readFrom(it) }
+        if (isAnimatedAndSupported(imageSource) || !isTallImage(
+                imageSource,
                 // SY -->
                 zip4jFile,
                 zip4jEntry,
@@ -310,14 +303,14 @@ object ImageUtil {
             return true
         }
 
-        val bitmapRegionDecoder = getBitmapRegionDecoder(imageFile.openInputStream())
+        val bitmapRegionDecoder = getBitmapRegionDecoder(imageSource.peek().inputStream())
         if (bitmapRegionDecoder == null) {
             logcat { "Failed to create new instance of BitmapRegionDecoder" }
             return false
         }
 
         val options = extractImageOptions(
-            imageFile.openInputStream(),
+            imageSource,
             // SY -->
             zip4jFile,
             zip4jEntry,
@@ -671,7 +664,7 @@ object ImageUtil {
      */
     @Suppress("SwallowedException", "MagicNumber")
     private fun extractImageOptions(
-        imageStream: InputStream,
+        imageSource: BufferedSource,
         // SY -->
         zip4jFile: ZipFile?,
         zip4jEntry: FileHeader?,
@@ -679,10 +672,10 @@ object ImageUtil {
         resetAfterExtraction: Boolean = true,
     ): BitmapFactory.Options {
         // Ensure the stream supports marking and resetting
-        val bufferedStream = if (imageStream is BufferedInputStream) {
-            imageStream
+        val bufferedStream = if (imageSource is BufferedInputStream) {
+            imageSource
         } else {
-            BufferedInputStream(imageStream)
+            BufferedInputStream(imageSource.peek().inputStream())
         }
 
         // SY -->

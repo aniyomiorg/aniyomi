@@ -1,14 +1,14 @@
 [versions]
-compiler = "1.5.8"
-compose-bom = "2024.01.00-alpha03"
-accompanist = "0.34.0"
+compose-bom = "2024.07.00-alpha01"
+accompanist = "0.35.1-alpha"
 
 [libraries]
 activity = "androidx.activity:activity-compose:1.9.0"
 bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
 foundation = { module = "androidx.compose.foundation:foundation" }
-animation = { module = "androidx.compose.animation:animation", version = "1.7.0-beta04" }
+animation = { module = "androidx.compose.animation:animation" }
 animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
+runtime = { module = "androidx.compose.runtime:runtime" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 ui-util = { module = "androidx.compose.ui:ui-util" }
@@ -16,12 +16,10 @@ ui-util = { module = "androidx.compose.ui:ui-util" }
 material3-core = { module = "androidx.compose.material3:material3" }
 material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
-# Some components aren't available in Material3
-material-core = { module = "androidx.compose.material:material", version = "1.7.0-beta04" }
-
 glance = "androidx.glance:glance-appwidget:1.1.0"
 
 colorpicker = {module = "com.github.skydoves:colorpicker-compose", version = "1.0.7"}
 
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
+
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

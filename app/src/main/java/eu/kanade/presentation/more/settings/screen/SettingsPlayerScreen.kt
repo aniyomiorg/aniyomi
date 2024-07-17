@@ -26,17 +26,19 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
-import eu.kanade.tachiyomi.ui.player.AMNIS
-import eu.kanade.tachiyomi.ui.player.JUST_PLAYER
-import eu.kanade.tachiyomi.ui.player.MPV_PLAYER
-import eu.kanade.tachiyomi.ui.player.MPV_REMOTE
-import eu.kanade.tachiyomi.ui.player.MX_PLAYER
-import eu.kanade.tachiyomi.ui.player.MX_PLAYER_FREE
-import eu.kanade.tachiyomi.ui.player.MX_PLAYER_PRO
-import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
-import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
-import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
-import eu.kanade.tachiyomi.ui.player.X_PLAYER
+import eu.kanade.tachiyomi.ui.player.Amnis
+import eu.kanade.tachiyomi.ui.player.JustPlayer
+import eu.kanade.tachiyomi.ui.player.MpvKt
+import eu.kanade.tachiyomi.ui.player.MpvKtPreview
+import eu.kanade.tachiyomi.ui.player.MpvPlayer
+import eu.kanade.tachiyomi.ui.player.MpvRemote
+import eu.kanade.tachiyomi.ui.player.MxPlayer
+import eu.kanade.tachiyomi.ui.player.MxPlayerFree
+import eu.kanade.tachiyomi.ui.player.MxPlayerPro
+import eu.kanade.tachiyomi.ui.player.NextPlayer
+import eu.kanade.tachiyomi.ui.player.VlcPlayer
+import eu.kanade.tachiyomi.ui.player.WebVideoCaster
+import eu.kanade.tachiyomi.ui.player.XPlayer
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
 import kotlinx.collections.immutable.persistentListOf
@@ -500,15 +502,17 @@ object SettingsPlayerScreen : SearchableSettings {
 }
 
 val externalPlayers = listOf(
-    MPV_PLAYER,
-    MX_PLAYER,
-    MX_PLAYER_FREE,
-    MX_PLAYER_PRO,
-    VLC_PLAYER,
-    MPV_REMOTE,
-    JUST_PLAYER,
-    NEXT_PLAYER,
-    X_PLAYER,
-    WEB_VIDEO_CASTER,
-    AMNIS,
+    MpvPlayer,
+    MxPlayer,
+    MxPlayerFree,
+    MxPlayerPro,
+    VlcPlayer,
+    MpvKt,
+    MpvKtPreview,
+    MpvRemote,
+    JustPlayer,
+    NextPlayer,
+    XPlayer,
+    WebVideoCaster,
+    Amnis,
 )

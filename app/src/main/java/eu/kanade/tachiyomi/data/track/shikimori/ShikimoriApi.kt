@@ -92,7 +92,7 @@ class ShikimoriApi(
                         put("user_id", userId)
                         put("target_id", track.remote_id)
                         put("target_type", "Anime")
-                        put("chapters", track.last_episode_seen.toInt())
+                        put("episodes", track.last_episode_seen.toInt())
                         put("score", track.score.toInt())
                         put("status", track.toShikimoriStatus())
                     }
@@ -257,7 +257,7 @@ class ShikimoriApi(
 
     suspend fun findLibAnime(track: AnimeTrack, user_id: String): AnimeTrack? {
         return withIOContext {
-            val urlAnimes = "$apiUrl/mangas".toUri().buildUpon()
+            val urlAnimes = "$apiUrl/animes".toUri().buildUpon()
                 .appendPath(track.remote_id.toString())
                 .build()
             val animes = with(json) {

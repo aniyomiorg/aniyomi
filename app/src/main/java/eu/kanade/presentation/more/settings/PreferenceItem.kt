@@ -7,13 +7,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.more.settings.widget.ConnectionsPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.EditTextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.InfoWidget
@@ -26,8 +26,6 @@ import kotlinx.coroutines.launch
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.util.collectAsState
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 val LocalPreferenceHighlighted = compositionLocalOf(structuralEqualityPolicy()) { false }
 val LocalPreferenceMinHeight = compositionLocalOf(structuralEqualityPolicy()) { 56.dp }
@@ -175,16 +173,14 @@ internal fun PreferenceItem(
                 )
             }
             is Preference.PreferenceItem.TrackerPreference -> {
-                val uName by Injekt.get<TrackPreferences>()
-                    .trackUsername(item.tracker)
-                    .collectAsState()
-                item.tracker.run {
-                    TrackingPreferenceWidget(
-                        tracker = this,
-                        checked = uName.isNotEmpty(),
-                        onClick = { if (isLoggedIn) item.logout() else item.login() },
-                    )
+                val isLoggedIn by item.tracker.let { tracker ->
+                    tracker.isLoggedInFlow.collectAsState(tracker.isLoggedIn)
                 }
+                TrackingPreferenceWidget(
+                    tracker = item.tracker,
+                    checked = isLoggedIn,
+                    onClick = { if (isLoggedIn) item.logout() else item.login() },
+                )
             }
             // AM (CONNECTIONS) -->
             is Preference.PreferenceItem.ConnectionsPreference -> {

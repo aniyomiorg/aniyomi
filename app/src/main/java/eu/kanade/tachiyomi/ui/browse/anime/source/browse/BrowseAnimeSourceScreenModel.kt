@@ -349,7 +349,7 @@ class BrowseAnimeSourceScreenModel(
             val anime: Anime,
             val initialSelection: ImmutableList<CheckboxState.State<Category>>,
         ) : Dialog
-        data class Migrate(val newAnime: Anime) : Dialog
+        data class Migrate(val newAnime: Anime, val oldAnime: Anime) : Dialog
     }
 
     @Immutable

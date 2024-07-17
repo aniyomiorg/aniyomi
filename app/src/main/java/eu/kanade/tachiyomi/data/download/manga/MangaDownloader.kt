@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
+import mihon.core.common.archive.ZipWriter
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
 import okio.Throttler
@@ -59,15 +60,12 @@ import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.BufferedOutputStream
 import java.io.File
 import java.util.Locale
-import java.util.zip.CRC32
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -87,6 +85,7 @@ class MangaDownloader(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val xml: XML = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
+    private val getMangaTracks: GetMangaTracks = Injekt.get(),
     // SY -->
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     // SY <--
@@ -575,14 +574,8 @@ class MangaDownloader(
      * @param file the file where the image is already downloaded.
      */
     private fun getImageExtension(response: Response, file: UniFile): String {
-        // Read content type if available.
         val mime = response.body.contentType()?.run { if (type == "image") "image/$subtype" else null }
-            // Else guess from the uri.
-            ?: context.contentResolver.getType(file.uri)
-            // Else read magic numbers.
-            ?: ImageUtil.findImageType { file.openInputStream() }?.mime
-
-        return ImageUtil.getExtensionFromMimeType(mime)
+        return ImageUtil.getExtensionFromMimeType(mime) { file.openInputStream() }
     }
 
     private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile) {
@@ -649,25 +642,9 @@ class MangaDownloader(
         tmpDir: UniFile,
     ) {
         val zip = mangaDir.createFile("$dirname.cbz$TMP_DIR_SUFFIX")!!
-        ZipOutputStream(BufferedOutputStream(zip.openOutputStream())).use { zipOut ->
-            zipOut.setMethod(ZipEntry.STORED)
-
-            tmpDir.listFiles()?.forEach { img ->
-                img.openInputStream().use { input ->
-                    val data = input.readBytes()
-                    val size = img.length()
-                    val entry = ZipEntry(img.name).apply {
-                        val crc = CRC32().apply {
-                            update(data)
-                        }
-                        setCrc(crc.value)
-
-                        compressedSize = size
-                        setSize(size)
-                    }
-                    zipOut.putNextEntry(entry)
-                    zipOut.write(data)
-                }
+        ZipWriter(context, zip).use { writer ->
+            tmpDir.listFiles()?.forEach { file ->
+                writer.write(file)
             }
         }
         zip.renameTo("$dirname.cbz")
@@ -683,11 +660,24 @@ class MangaDownloader(
         chapter: Chapter,
         source: HttpSource,
     ) {
-        val chapterUrl = source.getChapterUrl(chapter.toSChapter())
         val categories = getCategories.await(manga.id).map { it.name.trim() }.takeUnless { it.isEmpty() }
-        val comicInfo = getComicInfo(manga, chapter, chapterUrl, categories)
+        val urls = getMangaTracks.await(manga.id)
+            .mapNotNull { track ->
+                track.remoteUrl.takeUnless { url -> url.isBlank() }?.trim()
+            }
+            .plus(source.getChapterUrl(chapter.toSChapter()).trim())
+            .distinct()
+
+        val comicInfo = getComicInfo(
+            manga,
+            chapter,
+            urls,
+            categories,
+            source.name
+        )
+
         // Remove the old file
-        dir.findFile(COMIC_INFO_FILE, true)?.delete()
+        dir.findFile(COMIC_INFO_FILE)?.delete()
         dir.createFile(COMIC_INFO_FILE)!!.openOutputStream().use {
             val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
             it.write(comicInfoString.toByteArray())

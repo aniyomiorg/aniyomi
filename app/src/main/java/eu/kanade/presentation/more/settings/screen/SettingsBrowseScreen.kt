@@ -2,6 +2,7 @@ package eu.kanade.presentation.more.settings.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -14,11 +15,12 @@ import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionReposScr
 import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.authenticate
 import kotlinx.collections.immutable.persistentListOf
+import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepoCount
+import mihon.domain.extensionrepo.manga.interactor.GetMangaExtensionRepoCount
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -34,8 +36,11 @@ object SettingsBrowseScreen : SearchableSettings {
         val navigator = LocalNavigator.currentOrThrow
 
         val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
-        val mangaReposCount by sourcePreferences.mangaExtensionRepos().collectAsState()
-        val animeReposCount by sourcePreferences.animeExtensionRepos().collectAsState()
+        val getMangaExtensionRepoCount = remember { Injekt.get<GetMangaExtensionRepoCount>() }
+        val getAnimeExtensionRepoCount = remember { Injekt.get<GetAnimeExtensionRepoCount>() }
+
+        val mangaReposCount by getMangaExtensionRepoCount.subscribe().collectAsState(0)
+        val animeReposCount by getAnimeExtensionRepoCount.subscribe().collectAsState(0)
 
         return listOf(
             Preference.PreferenceGroup(
@@ -53,8 +58,8 @@ object SettingsBrowseScreen : SearchableSettings {
                         title = stringResource(MR.strings.label_anime_extension_repos),
                         subtitle = pluralStringResource(
                             MR.plurals.num_repos,
-                            animeReposCount.size,
-                            animeReposCount.size,
+                            animeReposCount,
+                            animeReposCount,
                         ),
                         onClick = {
                             navigator.push(AnimeExtensionReposScreen())
@@ -64,8 +69,8 @@ object SettingsBrowseScreen : SearchableSettings {
                         title = stringResource(MR.strings.label_manga_extension_repos),
                         subtitle = pluralStringResource(
                             MR.plurals.num_repos,
-                            mangaReposCount.size,
-                            mangaReposCount.size,
+                            mangaReposCount,
+                            mangaReposCount,
                         ),
                         onClick = {
                             navigator.push(MangaExtensionReposScreen())

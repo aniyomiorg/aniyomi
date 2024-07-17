@@ -27,7 +27,7 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -82,7 +82,7 @@ fun MangaUpdateScreen(
                             isRefreshing = false
                         }
                     },
-                    enabled = { !state.selectionMode },
+                    enabled = !state.selectionMode,
                     indicatorPadding = contentPadding,
                 ) {
                     FastScrollLazyColumn(
@@ -141,6 +141,6 @@ private fun MangaUpdatesBottomBar(
 }
 
 sealed interface MangaUpdatesUiModel {
-    data class Header(val date: LocalDate) : MangaUpdatesUiModel
+    data class Header(val date: LocalDateTime) : MangaUpdatesUiModel
     data class Item(val item: MangaUpdatesItem) : MangaUpdatesUiModel
 }

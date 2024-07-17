@@ -94,7 +94,7 @@ fun MangaLibraryContent(
                     isRefreshing = false
                 }
             },
-            enabled = { notSelectionMode },
+            enabled = notSelectionMode,
         ) {
             MangaLibraryPager(
                 state = pagerState,

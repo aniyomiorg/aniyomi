@@ -41,7 +41,7 @@ data class BackupAnime(
     @ProtoNumber(105) var updateStrategy: AnimeUpdateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,
     @ProtoNumber(106) var lastModifiedAt: Long = 0,
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
-    @ProtoNumber(108) var version: Long = 0,
+    @ProtoNumber(109) var version: Long = 0,
 
     @ProtoNumber(602) var customStatus: Int = 0,
 

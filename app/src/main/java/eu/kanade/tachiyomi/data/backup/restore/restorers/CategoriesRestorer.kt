@@ -27,12 +27,14 @@ class CategoriesRestorer(
                 .sortedBy { it.order }
                 .distinctBy { it.name }
                 .map {
-                    val newOrder = nextOrder++
-                    dbCategoriesByName[it.name]
-                        ?: animeHandler.awaitOneExecutable {
-                            categoriesQueries.insert(it.name, newOrder, it.flags)
-                            categoriesQueries.selectLastInsertedRowId()
-                        }.let { id -> it.toCategory(id).copy(order = newOrder) }
+                    val dbCategory = dbCategoriesByName[it.name]
+                    if (dbCategory != null) return@map dbCategory
+                    val order = nextOrder++
+                    animeHandler.awaitOneExecutable {
+                        categoriesQueries.insert(it.name, order, it.flags)
+                        categoriesQueries.selectLastInsertedRowId()
+                    }
+                        .let { id -> it.toCategory(id).copy(order = order) }
                 }
 
             libraryPreferences.categorizedDisplaySettings().set(
@@ -53,12 +55,14 @@ class CategoriesRestorer(
                 .sortedBy { it.order }
                 .distinctBy { it.name }
                 .map {
-                    val newOrder = nextOrder++
-                    dbCategoriesByName[it.name]
-                        ?: mangaHandler.awaitOneExecutable {
-                            categoriesQueries.insert(it.name, newOrder, it.flags)
-                            categoriesQueries.selectLastInsertedRowId()
-                        }.let { id -> it.toCategory(id).copy(order = newOrder) }
+                    val dbCategory = dbCategoriesByName[it.name]
+                    if (dbCategory != null) return@map dbCategory
+                    val order = nextOrder++
+                    mangaHandler.awaitOneExecutable {
+                        categoriesQueries.insert(it.name, order, it.flags)
+                        categoriesQueries.selectLastInsertedRowId()
+                    }
+                        .let { id -> it.toCategory(id).copy(order = order) }
                 }
 
             libraryPreferences.categorizedDisplaySettings().set(

@@ -30,7 +30,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -86,7 +86,7 @@ fun AnimeUpdateScreen(
                             isRefreshing = false
                         }
                     },
-                    enabled = { !state.selectionMode },
+                    enabled = !state.selectionMode,
                     indicatorPadding = contentPadding,
                 ) {
                     FastScrollLazyColumn(
@@ -153,6 +153,6 @@ private fun AnimeUpdatesBottomBar(
 }
 
 sealed interface AnimeUpdatesUiModel {
-    data class Header(val date: LocalDate) : AnimeUpdatesUiModel
+    data class Header(val date: LocalDateTime) : AnimeUpdatesUiModel
     data class Item(val item: AnimeUpdatesItem) : AnimeUpdatesUiModel
 }

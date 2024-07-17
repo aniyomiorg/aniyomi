@@ -1,21 +1,22 @@
 package eu.kanade.test
 
 import android.graphics.Color
-import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import okhttp3.OkHttpClient
-import tachiyomi.i18n.MR
 
 data class DummyTracker(
     override val id: Long,
     override val name: String,
     override val supportsReadingDates: Boolean = false,
     override val isLoggedIn: Boolean = false,
+    override val isLoggedInFlow: Flow<Boolean> = flowOf(false),
     val valLogoColor: Int = Color.rgb(18, 25, 35),
     val valLogo: Int = R.drawable.ic_tracker_anilist,
     val valStatuses: List<Long> = (1L..6L).toList(),
@@ -32,18 +33,6 @@ data class DummyTracker(
     override fun getLogoColor(): Int = valLogoColor
 
     override fun getLogo(): Int = valLogo
-
-    override fun getStatus(status: Long): StringResource? = when (status) {
-        1L -> MR.strings.reading
-        2L -> MR.strings.plan_to_read
-        3L -> MR.strings.completed
-        4L -> MR.strings.on_hold
-        5L -> MR.strings.dropped
-        6L -> MR.strings.repeating
-        7L -> MR.strings.watching
-        8L -> MR.strings.plan_to_watch
-        else -> null
-    }
 
     override fun getCompletionStatus(): Long = valCompletionStatus
 

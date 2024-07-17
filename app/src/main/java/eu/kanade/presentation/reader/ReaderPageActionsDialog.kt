@@ -43,11 +43,9 @@ fun ReaderPageActionsDialog(
     var useExtraPage by remember { mutableStateOf(false) }
     // SY <--
 
-    AdaptiveSheet(
-        onDismissRequest = onDismissRequest,
-    ) {
-        Column(modifier = Modifier.padding(vertical = 16.dp)) {
+    AdaptiveSheet(onDismissRequest = onDismissRequest) {
             Row(
+                modifier = Modifier.padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 ActionButton(
@@ -158,7 +156,6 @@ fun ReaderPageActionsDialog(
                     )
                 }
             }
-        }
     }
 
     if (showSetCoverDialog) {

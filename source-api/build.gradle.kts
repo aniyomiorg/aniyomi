@@ -1,7 +1,7 @@
 plugins {
+    id("mihon.library")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("com.android.library")
 }
 
 kotlin {
@@ -13,6 +13,9 @@ kotlin {
                 api(libs.injekt.core)
                 api(libs.rxjava)
                 api(libs.jsoup)
+
+                implementation(project.dependencies.platform(compose.bom))
+                implementation(compose.runtime)
             }
         }
         val androidMain by getting {

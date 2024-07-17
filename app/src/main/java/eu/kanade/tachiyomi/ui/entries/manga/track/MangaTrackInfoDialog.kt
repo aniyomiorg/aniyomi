@@ -250,8 +250,8 @@ data class MangaTrackInfoDialogHomeScreen(
         }
 
         private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {
-            val loggedInTrackers = Injekt.get<TrackerManager>().trackers.filter {
-                it.isLoggedIn && it is MangaTracker
+            val loggedInTrackers = Injekt.get<TrackerManager>().loggedInTrackers().filter {
+                it is MangaTracker
             }
             val source = Injekt.get<MangaSourceManager>().getOrStub(sourceId)
             return loggedInTrackers
@@ -301,7 +301,9 @@ private data class TrackStatusSelectorScreen(
     ) : StateScreenModel<Model.State>(State(track.status)) {
 
         fun getSelections(): Map<Long, StringResource?> {
-            return tracker.mangaService.getStatusListManga().associateWith { tracker.getStatus(it) }
+            return tracker.mangaService.getStatusListManga().associateWith {
+                (tracker as? MangaTracker)?.getStatusForManga(it)
+            }
         }
 
         fun setSelection(selection: Long) {
@@ -444,6 +446,7 @@ private data class TrackDateSelectorScreen(
     private val start: Boolean,
 ) : Screen() {
 
+    @Transient
     private val selectableDates = object : SelectableDates {
         override fun isSelectableDate(utcTimeMillis: Long): Boolean {
             val dateToCheck = Instant.ofEpochMilli(utcTimeMillis)

@@ -1,14 +1,14 @@
+import mihon.buildlogic.getBuildTime
+import mihon.buildlogic.getCommitCount
+import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
-    id("com.android.application")
+    id("mihon.android.application")
+    id("mihon.android.application.compose")
     id("com.mikepenz.aboutlibraries.plugin")
-    kotlin("android")
-    kotlin("plugin.serialization")
-    kotlin("plugin.compose")
     id("com.github.zellius.shortcut-helper")
+    kotlin("plugin.serialization")
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -32,16 +32,16 @@ android {
         buildConfigField("boolean", "PREVIEW", "false")
 
         // Put these fields in acra.properties
-        val acraProperties = Properties()
-        rootProject.file("acra.properties")
-            .takeIf { it.exists() }
-            ?.let { acraProperties.load(FileInputStream(it)) }
-        val acraUri = acraProperties.getProperty("ACRA_URI", "")
-        val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
-        val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
-        buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
-        buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
-        buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
+        // val acraProperties = Properties()
+        // rootProject.file("acra.properties")
+        //     .takeIf { it.exists() }
+        //     ?.let { acraProperties.load(FileInputStream(it)) }
+        // val acraUri = acraProperties.getProperty("ACRA_URI", "")
+        // val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
+        // val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
+        // buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
+        // buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
+        // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS
@@ -131,7 +131,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
         buildConfig = true
 
         // Disable some unused things
@@ -143,10 +142,6 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
 }
 
@@ -162,21 +157,19 @@ dependencies {
     implementation(projects.presentationWidget)
 
     // Compose
-    implementation(platform(compose.bom))
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
-    implementation(compose.material.core)
     implementation(compose.material.icons)
     implementation(compose.animation)
     implementation(compose.animation.graphics)
     debugImplementation(compose.ui.tooling)
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
-    implementation(compose.accompanist.webview)
     implementation(compose.accompanist.systemuicontroller)
 
     implementation(compose.colorpicker)
+    implementation(androidx.interpolator)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
@@ -256,6 +249,9 @@ dependencies {
     implementation(libs.bundles.voyager)
     implementation(libs.compose.materialmotion)
     implementation(libs.swipe)
+    implementation(libs.compose.webview)
+    implementation(libs.compose.grid)
+
 
     implementation(libs.google.api.services.drive)
     implementation(libs.google.api.client.oauth)
@@ -273,6 +269,8 @@ dependencies {
     // debugImplementation(libs.leakcanary.android)
 
     implementation(libs.leakcanary.plumber)
+
+    testImplementation(kotlinx.coroutines.test)
 
     // mpv-android
     implementation(libs.aniyomi.mpv)
@@ -317,31 +315,13 @@ tasks {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                 "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-                "-opt-in=coil.annotation.ExperimentalCoilApi",
-                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
+                "-opt-in=coil3.annotation.ExperimentalCoilApi",
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             ),
         )
-
-        if (project.findProperty("tachiyomi.enableComposeCompilerMetrics") == "true") {
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-            compilerOptions.freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        project.layout.buildDirectory.dir("compose_metrics").get().asFile.absolutePath,
-                ),
-            )
-        }
     }
 }
 

@@ -70,6 +70,7 @@ import eu.kanade.tachiyomi.ui.player.settings.sheets.ScreenshotOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.StreamsCatalogSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.VideoChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.SubtitleSettingsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.VideoFilters
 import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.toHexString
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
@@ -119,6 +120,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import `is`.xyz.mpv.MPVView.Chapter as VideoChapter
 
@@ -644,10 +647,18 @@ class PlayerActivity : BaseActivity() {
             )
         }
 
+        setVideoFilters()
+
         MPVLib.setOptionString("input-default-bindings", "yes")
 
         MPVLib.addLogObserver(playerObserver)
         player.addObserver(playerObserver)
+    }
+
+    private fun setVideoFilters() {
+        VideoFilters.entries.forEach {
+            MPVLib.setPropertyInt(it.mpvProperty, it.preference(playerPreferences).get())
+        }
     }
 
     private fun setupPlayerAudio() {
@@ -1793,6 +1804,7 @@ class PlayerActivity : BaseActivity() {
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
     internal suspend fun fileLoaded() {
+        setMpvMediaTitle()
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
         clearTracks()
         player.loadTracks()
@@ -1883,6 +1895,24 @@ class PlayerActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun setMpvMediaTitle() {
+        val anime = viewModel.currentAnime ?: return
+        val episode = viewModel.currentEpisode ?: return
+
+        val epNumber = episode.episode_number.let { number ->
+            if (ceil(number) == floor(number)) number.toInt() else number
+        }.toString().padStart(2, '0')
+
+        val title = stringResource(
+            MR.strings.mpv_media_title,
+            anime.title,
+            epNumber,
+            episode.name,
+        )
+
+        MPVLib.setPropertyString("force-media-title", title)
     }
 
     private var aniskipStamps: List<Stamp> = emptyList()

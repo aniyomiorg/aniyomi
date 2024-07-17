@@ -1,26 +1,27 @@
 package eu.kanade.tachiyomi.data.coil
 
 import android.net.Uri
-import coil.ImageLoader
-import coil.decode.DataSource
-import coil.decode.ImageSource
-import coil.disk.DiskCache
-import coil.fetch.FetchResult
-import coil.fetch.Fetcher
-import coil.fetch.SourceResult
-import coil.network.HttpException
-import coil.request.Options
-import coil.request.Parameters
+import coil3.Extras
+import coil3.ImageLoader
+import coil3.decode.DataSource
+import coil3.decode.ImageSource
+import coil3.disk.DiskCache
+import coil3.fetch.FetchResult
+import coil3.fetch.Fetcher
+import coil3.fetch.SourceFetchResult
+import coil3.getOrDefault
+import coil3.request.Options
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
+import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER_KEY
 import eu.kanade.tachiyomi.network.await
 import logcat.LogPriority
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Request
 import okhttp3.Response
+import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
@@ -32,7 +33,7 @@ import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
+import java.io.IOException
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.
@@ -42,8 +43,9 @@ import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
  * handled by Coil's [DiskCache].
  *
  * Available request parameter:
- * - [USE_CUSTOM_COVER]: Use custom cover if set by user, default is true
+ * - [USE_CUSTOM_COVER_KEY]: Use custom cover if set by user, default is true
  */
+@Suppress("LongParameterList")
 class AnimeCoverFetcher(
     private val url: String?,
     private val isLibraryAnime: Boolean,
@@ -53,7 +55,7 @@ class AnimeCoverFetcher(
     private val diskCacheKeyLazy: Lazy<String>,
     private val sourceLazy: Lazy<AnimeHttpSource?>,
     private val callFactoryLazy: Lazy<Call.Factory>,
-    private val diskCacheLazy: Lazy<DiskCache>,
+    private val imageLoader: ImageLoader,
 ) : Fetcher {
 
     private val diskCacheKey: String
@@ -61,7 +63,7 @@ class AnimeCoverFetcher(
 
     override suspend fun fetch(): FetchResult {
         // Use custom cover if exists
-        val useCustomCover = options.parameters.value(USE_CUSTOM_COVER) ?: true
+        val useCustomCover = options.extras.getOrDefault(USE_CUSTOM_COVER_KEY)
         if (useCustomCover) {
             val customCoverFile = customCoverFileLazy.value
             if (customCoverFile.exists()) {
@@ -82,16 +84,20 @@ class AnimeCoverFetcher(
     private fun uniFileLoader(urlString: String): FetchResult {
         val uniFile = UniFile.fromUri(options.context, Uri.parse(urlString))!!
         val tempFile = uniFile.openInputStream().source().buffer()
-        return SourceResult(
-            source = ImageSource(source = tempFile, context = options.context),
+        return SourceFetchResult(
+            source = ImageSource(source = tempFile, fileSystem = FileSystem.SYSTEM),
             mimeType = "image/*",
             dataSource = DataSource.DISK,
         )
     }
 
     private fun fileLoader(file: File): FetchResult {
-        return SourceResult(
-            source = ImageSource(file = file.toOkioPath(), diskCacheKey = diskCacheKey),
+        return SourceFetchResult(
+            source = ImageSource(
+                file = file.toOkioPath(),
+                fileSystem = FileSystem.SYSTEM,
+                diskCacheKey = diskCacheKey,
+            ),
             mimeType = "image/*",
             dataSource = DataSource.DISK,
         )
@@ -119,7 +125,7 @@ class AnimeCoverFetcher(
                 }
 
                 // Read from snapshot
-                return SourceResult(
+                return SourceFetchResult(
                     source = snapshot.toImageSource(),
                     mimeType = "image/*",
                     dataSource = DataSource.DISK,
@@ -139,7 +145,7 @@ class AnimeCoverFetcher(
                 // Read from disk cache
                 snapshot = writeToDiskCache(response)
                 if (snapshot != null) {
-                    return SourceResult(
+                    return SourceFetchResult(
                         source = snapshot.toImageSource(),
                         mimeType = "image/*",
                         dataSource = DataSource.NETWORK,
@@ -147,8 +153,8 @@ class AnimeCoverFetcher(
                 }
 
                 // Read from response if cache is unused or unusable
-                return SourceResult(
-                    source = ImageSource(source = responseBody.source(), context = options.context),
+                return SourceFetchResult(
+                    source = ImageSource(source = responseBody.source(), fileSystem = FileSystem.SYSTEM),
                     mimeType = "image/*",
                     dataSource = if (response.cacheResponse != null) DataSource.DISK else DataSource.NETWORK,
                 )
@@ -167,17 +173,20 @@ class AnimeCoverFetcher(
         val response = client.newCall(newRequest()).await()
         if (!response.isSuccessful && response.code != HTTP_NOT_MODIFIED) {
             response.close()
-            throw HttpException(response)
+            throw IOException(response.message)
         }
         return response
     }
 
     private fun newRequest(): Request {
-        val request = Request.Builder()
-            .url(url!!)
-            .headers(sourceLazy.value?.headers ?: options.headers)
-            // Support attaching custom data to the network request.
-            .tag(Parameters::class.java, options.parameters)
+        val request = Request.Builder().apply {
+            url(url!!)
+
+            val sourceHeaders = sourceLazy.value?.headers
+            if (sourceHeaders != null) {
+                headers(sourceHeaders)
+            }
+        }
 
         when {
             options.networkCachePolicy.readEnabled -> {
@@ -196,7 +205,7 @@ class AnimeCoverFetcher(
     private fun moveSnapshotToCoverCache(snapshot: DiskCache.Snapshot, cacheFile: File?): File? {
         if (cacheFile == null) return null
         return try {
-            diskCacheLazy.value.run {
+            imageLoader.diskCache?.run {
                 fileSystem.source(snapshot.data).use { input ->
                     writeSourceToCoverCache(input, cacheFile)
                 }
@@ -236,18 +245,23 @@ class AnimeCoverFetcher(
     }
 
     private fun readFromDiskCache(): DiskCache.Snapshot? {
-        return if (options.diskCachePolicy.readEnabled) diskCacheLazy.value[diskCacheKey] else null
+        return if (options.diskCachePolicy.readEnabled) {
+            imageLoader.diskCache?.openSnapshot(diskCacheKey)
+        } else {
+            null
+        }
     }
 
     private fun writeToDiskCache(
         response: Response,
     ): DiskCache.Snapshot? {
-        val editor = diskCacheLazy.value.edit(diskCacheKey) ?: return null
+        val diskCache = imageLoader.diskCache
+        val editor = diskCache?.openEditor(diskCacheKey) ?: return null
         try {
-            diskCacheLazy.value.fileSystem.write(editor.data) {
+            diskCache.fileSystem.write(editor.data) {
                 response.body.source().readAll(this)
             }
-            return editor.commitAndGet()
+            return editor.commitAndOpenSnapshot()
         } catch (e: Exception) {
             try {
                 editor.abort()
@@ -258,7 +272,12 @@ class AnimeCoverFetcher(
     }
 
     private fun DiskCache.Snapshot.toImageSource(): ImageSource {
-        return ImageSource(file = data, diskCacheKey = diskCacheKey, closeable = this)
+        return ImageSource(
+            file = data,
+            fileSystem = FileSystem.SYSTEM,
+            diskCacheKey = diskCacheKey,
+            closeable = this,
+        )
     }
 
     private fun getResourceType(cover: String?): Type? {
@@ -277,7 +296,6 @@ class AnimeCoverFetcher(
 
     class AnimeFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
-        private val diskCacheLazy: Lazy<DiskCache>,
     ) : Fetcher.Factory<Anime> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
@@ -290,17 +308,16 @@ class AnimeCoverFetcher(
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
-                diskCacheKeyLazy = lazy { AnimeKeyer().key(data, options) },
+                diskCacheKeyLazy = lazy { imageLoader.components.key(data, options)!! },
                 sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
-                diskCacheLazy = diskCacheLazy,
+                imageLoader = imageLoader,
             )
         }
     }
 
     class AnimeCoverFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
-        private val diskCacheLazy: Lazy<DiskCache>,
     ) : Fetcher.Factory<AnimeCover> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
@@ -313,18 +330,20 @@ class AnimeCoverFetcher(
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.url) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.animeId) },
-                diskCacheKeyLazy = lazy { AnimeCoverKeyer().key(data, options) },
+                diskCacheKeyLazy = lazy { imageLoader.components.key(data, options)!! },
                 sourceLazy = lazy { sourceManager.get(data.sourceId) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
-                diskCacheLazy = diskCacheLazy,
+                imageLoader = imageLoader,
             )
         }
     }
 
     companion object {
-        const val USE_CUSTOM_COVER = "use_custom_cover"
+        val USE_CUSTOM_COVER_KEY = Extras.Key(true)
 
         private val CACHE_CONTROL_NO_STORE = CacheControl.Builder().noStore().build()
         private val CACHE_CONTROL_NO_NETWORK_NO_CACHE = CacheControl.Builder().noCache().onlyIfCached().build()
+
+        private const val HTTP_NOT_MODIFIED = 304
     }
 }

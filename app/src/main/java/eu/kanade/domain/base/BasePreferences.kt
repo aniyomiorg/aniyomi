@@ -3,8 +3,6 @@ package eu.kanade.domain.base
 import android.content.Context
 import android.content.pm.PackageManager
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.i18n.MR
@@ -23,11 +21,6 @@ class BasePreferences(
 
     fun extensionInstaller() = ExtensionInstallerPreference(context, preferenceStore)
 
-    fun acraEnabled() = preferenceStore.getBoolean(
-        "acra.enable",
-        isPreviewBuildType || isReleaseBuildType,
-    )
-
     fun deviceHasPip() = context.packageManager.hasSystemFeature(
         PackageManager.FEATURE_PICTURE_IN_PICTURE,
     )
@@ -40,4 +33,6 @@ class BasePreferences(
         SHIZUKU(MR.strings.ext_installer_shizuku, false),
         PRIVATE(MR.strings.ext_installer_private, false),
     }
+
+    fun displayProfile() = preferenceStore.getString("pref_display_profile_key", "")
 }

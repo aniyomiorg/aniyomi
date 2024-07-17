@@ -1,104 +1,105 @@
-| Build                                                                                                                                                                 | Preview Release                                                                                                                                                                          | Codefactor | Stable                                                                                                                                                             | Translate Aniyomi                                                                                                                                 | Discord Server |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [![CI](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml/badge.svg)](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml) | [![latest preview build](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi-preview.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi/badge)](https://www.codefactor.io/repository/github/LuftVerbot/kuukiyomi) | [![stable release](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi.svg?maxAge=3600&label=download)](https://github.com/LuftVerbot/kuukiyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/aniyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/aniyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya) |
+<div align="center">
 
-# ![app icon](.github/readme-images/app-icon.png)Kuukiyomi
-Kuukiyomi is an fork of [Aniyomi](https://github.com/aniyomiorg/aniyomi) which is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 8.0 and above.
-This version of Aniyomi aims to implement as many features of other forks as possible. This Includes TachiyomiSY but also other forks
+<a href="https://aniyomi.org">
+    <img src="./.github/assets/logo.png" alt="Kuukiyomi logo" title="Kuukiyomi logo" width="80"/>
+</a>
+
+# Kuukiyomi [App](#)
+
+### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon and Aniyomi.
+Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
+
+[![Discord server](https://img.shields.io/discord/1133390318323126402.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/s82Vu589Ya)
+[![GitHub downloads](https://img.shields.io/github/downloads/LuftVerbot/kuukiyomi/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/LuftVerbot/kuukiyomi/releases)
+
+[![CI](https://img.shields.io/github/actions/workflow/status/LuftVerbot/kuukiyomi/build_push.yml?labelColor=27303D)](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml)
+[![License: Apache-2.0](https://img.shields.io/github/license/aniyomiorg/aniyomi?labelColor=27303D&color=818cf8)](/LICENSE)
+[![Translation status](https://img.shields.io/weblate/progress/aniyomi?labelColor=27303D&color=946300)](https://hosted.weblate.org/engage/aniyomi/)
+
+## Download
+
+[![Kuukiyomi Stable](https://img.shields.io/github/release/LuftVerbot/kuukiyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/LuftVerbot/kuukiyomi/releases)
+[![Kuukiyomi Preview](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/LuftVerbot/kuukiyomi-preview/releases)
+
+*Requires Android 8.0 or higher.*
 
 ## Features
 
+<div align="left">
+
 Features include:
 * Kuukiyomi:
-  * Torrent support(Needs right extensions) (@Diegopyl1209)
-  * Custom Theme support
-  * resmush.it(Data Saver Provider)
-  * Group by tags in library
-  * Discord Rich Presence for Manga
+    * Torrent support(Needs right extensions) (@Diegopyl1209)
+    * Custom Theme support
+    * resmush.it(Data Saver Provider)
+    * Group by tags in library
+    * Discord Rich Presence for Manga
 * Aniyomi:
-  * Watching videos
-  * View images
-  * Local reading/watching of downloaded content
-  * A configurable reader with multiple viewers, reading directions and other settings.
-  * A configurable player built on mpv-android with multiple options and settings
-  * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
-  * Categories to organize your library
-  * Light and dark themes
-  * Create backups locally to read/watch offline or to your desired cloud service
+    * Watching videos
+    * View images
+    * Local reading/watching of downloaded content
+    * A configurable reader with multiple viewers, reading directions and other settings.
+    * A configurable player built on mpv-android with multiple options and settings
+    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
+    * Categories to organize your library
+    * Light and dark themes
+    * Create backups locally to read/watch offline or to your desired cloud service
 * Other fork features:
-  * TachiyomiSY:
-    * Data Saver
-    * Edit Info
-    * Library Grouping
-    * Double Pages
-  * Animiru:
-    * Discord Rich Presence
-  * TachiyomiJ2K:
-    * Page Preload
+    * TachiyomiSY:
+        * Data Saver
+        * Edit Info
+        * Library Grouping
+        * Double Pages
+    * Animiru:
+        * Discord Rich Presence
+    * TachiyomiJ2K:
+        * Page Preload
 
-## Download
-Get the app from the [releases page](https://github.com/LuftVerbot/kuukiyomi/releases).
+</div>
 
-## Issues, Feature Requests and Contributing
+## Contributing
 
-Please make sure to read the full guidelines. Your issue may be closed without warning if you do not.
+[Code of conduct](./CODE_OF_CONDUCT.md) · [Contributing guide](./CONTRIBUTING.md)
 
-<details><summary>Issues</summary>
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-1. **Before reporting a new issue, take a look at the already opened and closed [issues](https://github.com/LuftVerbot/kuukiyomi/issues).**
-2. Also take a look at issues opened and closed on Aniyomis GitHub [issues](https://aniyomi.org/changelogs/).
-3. If you are unsure, ask on Discord: [![Discord](https://img.shields.io/discord/1133390318323126402?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/s82Vu589Ya)
+Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/faq/general), the [changelog](https://aniyomi.org/changelogs/) and the already opened [issues](https://github.com/aniyomiorg/aniyomi/issues); if you got any questions, join our [Discord server](https://discord.gg/F32UjdJZrR).
 
-</details>
+### Repositories
 
-<details><summary>Bugs</summary>
+[![aniyomiorg/aniyomi-website - GitHub](https://github-readme-stats.vercel.app/api/pin/?username=aniyomiorg&repo=aniyomi-website&bg_color=161B22&text_color=c9d1d9&title_color=818cf8&icon_color=818cf8&border_radius=8&hide_border=true&description_lines_count=2)](https://github.com/aniyomiorg/aniyomi-website/)
+[![aniyomiorg/aniyomi-mpv-lib - GitHub](https://github-readme-stats.vercel.app/api/pin/?username=aniyomiorg&repo=aniyomi-mpv-lib&bg_color=161B22&text_color=c9d1d9&title_color=818cf8&icon_color=818cf8&border_radius=8&hide_border=true&description_lines_count=2)](https://github.com/aniyomiorg/aniyomi-mpv-lib/)
 
-* Include version (More → About → Version)
-  * If not latest, try updating, it may have already been solved
-  * Preview version is equal to the number of commits as seen on the main page
-* Include steps to reproduce (if not obvious from description)
-* Include screenshot (if needed)
-* If it could be device-dependent, try reproducing on another device (if possible)
-* Don't group unrelated requests into one issue
+### Credits
 
+Thank you to all the people who have contributed!
 
-</details>
+<a href="https://github.com/aniyomiorg/aniyomi/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=aniyomiorg/aniyomi" alt="Aniyomi app contributors" title="Aniyomi app contributors" width="800"/>
+</a>
 
-<details><summary>Feature Requests</summary>
+### Disclaimer
 
-* Write a detailed issue, explaining what it should do or how. Avoid writing just "like X app does"
-* Include screenshot (if needed)
+The developer(s) of this application does not have any affiliation with the content providers available, and this application hosts zero content.
 
-Source requests should be created at https://github.com/aniyomiorg/aniyomi-extensions, they do not belong in this repository.
-</details>
+### License
 
-<details><summary>Contributing</summary>
+<pre>
+Copyright © 2015 Javier Tomás
+Copyright © 2024 The Mihon Open Source Project
+Copyright © 2024 The Aniyomi Open Source Project
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
-</details>
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-<details><summary>Code of Conduct</summary>
+http://www.apache.org/licenses/LICENSE-2.0
 
-See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
-</details>
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</pre>
 
-
-## License
-
-    Copyright 2015 Javier Tomás
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-## Disclaimer
-
-The developer of this application does not have any affiliation with the content providers available.
+</div>

@@ -1,8 +1,6 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
-import eu.kanade.domain.extension.anime.interactor.OFFICIAL_ANIYOMI_REPO_BASE_URL
-import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -12,9 +10,14 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import logcat.LogPriority
+import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepo
+import mihon.domain.extensionrepo.anime.interactor.UpdateAnimeExtensionRepo
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.util.lang.withIOContext
@@ -27,7 +30,8 @@ internal class AnimeExtensionApi {
 
     private val networkService: NetworkHelper by injectLazy()
     private val preferenceStore: PreferenceStore by injectLazy()
-    private val sourcePreferences: SourcePreferences by injectLazy()
+    private val getExtensionRepo: GetAnimeExtensionRepo by injectLazy()
+    private val updateExtensionRepo: UpdateAnimeExtensionRepo by injectLazy()
     private val animeExtensionManager: AnimeExtensionManager by injectLazy()
     private val json: Json by injectLazy()
 
@@ -37,14 +41,15 @@ internal class AnimeExtensionApi {
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            buildList {
-                addAll(getExtensions(OFFICIAL_ANIYOMI_REPO_BASE_URL))
-                sourcePreferences.animeExtensionRepos().get().map { addAll(getExtensions(it)) }
-            }
+            getExtensionRepo.getAll()
+                .map { async { getExtensions(it) } }
+                .awaitAll()
+                .flatten()
         }
     }
 
-    private suspend fun getExtensions(repoBaseUrl: String): List<AnimeExtension.Available> {
+    private suspend fun getExtensions(extRepo: ExtensionRepo): List<AnimeExtension.Available> {
+        val repoBaseUrl = extRepo.baseUrl
         return try {
             val response = networkService.client
                 .newCall(GET("$repoBaseUrl/index.min.json"))
@@ -71,6 +76,9 @@ internal class AnimeExtensionApi {
         ) {
             return null
         }
+
+        // Update extension repo details
+        updateExtensionRepo.awaitAll()
 
         val extensions = if (fromAvailableExtensionList) {
             animeExtensionManager.availableExtensionsFlow.value
