@@ -82,7 +82,8 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
                     "Local device ID: $localDeviceId, Last sync device ID: $lastSyncDeviceId"
                 }
 
-                // check if the last sync was done by the same device if so overwrite the remote data with the local data
+                // check if the last sync was done by the same device if so
+                // overwrite the remote data with the local data
                 return if (lastSyncDeviceId == localDeviceId) {
                     pushSyncData(syncData)
                     syncData.backup
@@ -389,8 +390,10 @@ class GoogleDriveService(private val context: Context) {
     }
 
     /**
-     * Handles the authorization code returned after the user has granted the application permission to access their Google Drive account.
-     * It obtains the access token and refresh token using the authorization code, saves the tokens to the SyncPreferences,
+     * Handles the authorization code returned after the user has granted the
+     * application permission to access their Google Drive account.
+     * It obtains the access token and refresh token using the authorization code,
+     * saves the tokens to the SyncPreferences,
      * sets up the Google Drive service using the obtained tokens, and initializes the service.
      * @param authorizationCode The authorization code obtained from the OAuthCallbackServer.
      * @param activity The current activity.

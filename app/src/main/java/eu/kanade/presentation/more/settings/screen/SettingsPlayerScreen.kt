@@ -402,6 +402,7 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
+    @Suppress("SwallowedException")
     @Composable
     private fun getTorrentServerGroup(
         torrentServerPreferences: TorrentServerPreferences,

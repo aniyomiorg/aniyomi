@@ -13,15 +13,19 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 // Constant for logging tag
+@Suppress("TopLevelPropertyNaming")
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
+@Suppress("TopLevelPropertyNaming")
 private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
 
 // Constant for buttons list
+@Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
 
 // Constant for metadata list
+@Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
         "https://github.com/LuftVerbot/Kuukiyomi",
@@ -177,26 +181,26 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, kuukiyomiImageUrl),
-    LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),
-    UPDATES(R.string.label_recent_updates, R.string.scrolling, updatesImageUrl),
-    HISTORY(R.string.label_recent_manga, R.string.scrolling, historyImageUrl),
-    BROWSE(R.string.label_sources, R.string.browsing, browseImageUrl),
-    MORE(R.string.label_settings, R.string.messing, moreImageUrl),
-    WEBVIEW(R.string.action_web_view, R.string.browsing, webviewImageUrl),
-    VIDEO(R.string.video, R.string.watching, videoImageUrl),
-    MANGA(R.string.manga, R.string.reading, mangaImageUrl),
+    APP(R.string.app_name, R.string.browsing, KuukiyomiImageUrl),
+    LIBRARY(R.string.label_library, R.string.browsing, LibraryImageUrl),
+    UPDATES(R.string.label_recent_updates, R.string.scrolling, UpdatesImageUrl),
+    HISTORY(R.string.label_recent_manga, R.string.scrolling, HistoryImageUrl),
+    BROWSE(R.string.label_sources, R.string.browsing, BrowseImageUrl),
+    MORE(R.string.label_settings, R.string.messing, MoreImageUrl),
+    WEBVIEW(R.string.action_web_view, R.string.browsing, WebviewImageUrl),
+    VIDEO(R.string.video, R.string.watching, VideoImageUrl),
+    MANGA(R.string.manga, R.string.reading, MangaImageUrl),
 }
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val kuukiyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
-private const val libraryImageUrl = "emojis/1216125466033918052.webp?quality=lossless"
-private const val updatesImageUrl = "emojis/1216122475688231003.webp?quality=lossless"
-private const val historyImageUrl = "emojis/1216122387515310170.webp?quality=lossless"
-private const val browseImageUrl = "emojis/1216122371501723718.webp?quality=lossless"
-private const val moreImageUrl = "emojis/1216122403219050536.webp?quality=lossless"
-private const val webviewImageUrl = "emojis/1216122455618490509.webp?quality=lossless"
-private const val videoImageUrl = "emojis/1216122435200483459.webp?quality=lossless"
-private const val mangaImageUrl = "emojis/1216122415751626782.webp?quality=lossless"
+private const val KuukiyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
+private const val LibraryImageUrl = "emojis/1216125466033918052.webp?quality=lossless"
+private const val UpdatesImageUrl = "emojis/1216122475688231003.webp?quality=lossless"
+private const val HistoryImageUrl = "emojis/1216122387515310170.webp?quality=lossless"
+private const val BrowseImageUrl = "emojis/1216122371501723718.webp?quality=lossless"
+private const val MoreImageUrl = "emojis/1216122403219050536.webp?quality=lossless"
+private const val WebviewImageUrl = "emojis/1216122455618490509.webp?quality=lossless"
+private const val VideoImageUrl = "emojis/1216122435200483459.webp?quality=lossless"
+private const val MangaImageUrl = "emojis/1216122415751626782.webp?quality=lossless"
 // <-- AM (DISCORD)

@@ -270,6 +270,7 @@ class DiscordRPCService : Service() {
             }
         }
 
+        @Suppress("SwallowedException")
         internal suspend fun setReaderActivity(
             context: Context,
             readerData: ReaderData = ReaderData(),

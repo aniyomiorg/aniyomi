@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.calculateChapterGap
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import kotlinx.coroutines.delay
+import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.system.logcat
@@ -228,6 +229,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
     }
 
     // SY -->
+    @Suppress("ForEachOnRange", "NestedBlockDepth")
     private fun setJoinedItems(useSecondPage: Boolean = false) {
         val oldCurrent = joinedItems.getOrNull(viewer.pager.currentItem)
         if (!viewer.config.doublePages) {
@@ -379,10 +381,12 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
             oldCurrent?.second == current ||
                 (current.index + 1) < (
                     (
-                        oldCurrent?.second
-                            ?: oldCurrent?.first
-                        ) as? ReaderPage
-                    )?.index ?: 0,
+                        (
+                            oldCurrent?.second
+                                ?: oldCurrent?.first
+                            ) as? ReaderPage
+                        )?.index ?: 0
+                    ),
         )
 
         // The listener may be removed when we split a page, so the ui may not have updated properly

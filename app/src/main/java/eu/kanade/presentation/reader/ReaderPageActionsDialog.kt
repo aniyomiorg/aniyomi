@@ -26,6 +26,7 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
+@Suppress("ParameterNaming")
 fun ReaderPageActionsDialog(
     onDismissRequest: () -> Unit,
     // SY -->

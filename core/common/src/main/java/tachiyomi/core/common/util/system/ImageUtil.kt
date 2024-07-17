@@ -670,6 +670,7 @@ object ImageUtil {
     /**
      * Used to check an image's dimensions without loading it in the memory.
      */
+    @Suppress("SwallowedException")
     private fun extractImageOptions(
         imageStream: InputStream,
         // SY -->

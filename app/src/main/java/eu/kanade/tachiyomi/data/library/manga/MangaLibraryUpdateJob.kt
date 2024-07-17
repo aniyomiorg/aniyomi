@@ -18,7 +18,6 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.sync.SyncPreferences
@@ -30,7 +29,6 @@ import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -56,7 +54,6 @@ import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
 import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
@@ -430,55 +427,6 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val dbManga = getManga.await(manga.id)?.takeIf { it.favorite } ?: return emptyList()
 
         return syncChaptersWithSource.await(chapters, dbManga, source, false, fetchWindow)
-    }
-
-    private suspend fun updateCovers() {
-        val semaphore = Semaphore(5)
-        val progressCount = AtomicInteger(0)
-        val currentlyUpdatingManga = CopyOnWriteArrayList<Manga>()
-
-        coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }
-                .values
-                .map { mangaInSource ->
-                    async {
-                        semaphore.withPermit {
-                            mangaInSource.forEach { libraryManga ->
-                                val manga = libraryManga.manga
-                                ensureActive()
-
-                                withUpdateNotification(
-                                    currentlyUpdatingManga,
-                                    progressCount,
-                                    manga,
-                                ) {
-                                    val source = sourceManager.get(manga.source) ?: return@withUpdateNotification
-                                    try {
-                                        val networkManga = source.getMangaDetails(manga.toSManga())
-                                        val updatedManga = manga.prepUpdateCover(
-                                            coverCache,
-                                            networkManga,
-                                            true,
-                                        )
-                                            .copyFrom(networkManga)
-                                        try {
-                                            updateManga.await(updatedManga.toMangaUpdate())
-                                        } catch (e: Exception) {
-                                            logcat(LogPriority.ERROR) { "Manga doesn't exist anymore" }
-                                        }
-                                    } catch (e: Throwable) {
-                                        // Ignore errors and continue
-                                        logcat(LogPriority.ERROR, e)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .awaitAll()
-        }
-
-        notifier.cancelProgressNotification()
     }
 
     private suspend fun withUpdateNotification(

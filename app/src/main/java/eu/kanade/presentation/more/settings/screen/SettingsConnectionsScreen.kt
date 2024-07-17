@@ -210,6 +210,7 @@ object SettingsConnectionsScreen : SearchableSettings {
         )
     }
 
+    @Suppress("SwallowedException")
     private suspend fun checkLogin(
         context: Context,
         service: ConnectionsService,
