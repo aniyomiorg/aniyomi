@@ -1118,7 +1118,7 @@
     <string name="player_filters_contrast">Contrast</string>
     <string name="player_filters_gamma">Gamma</string>
     <string name="player_filters_hue">Hue</string>
-    <string name="player_filters_warning">Some filters may not work your current video driver</string>
+    <string name="player_filters_warning">Some filters may not work with your current video driver</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_add_external_audio">Add external audio</string>
     <string name="player_add_external_audio_intent">Select an audio file.</string>
