@@ -33,6 +33,7 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
         val context = LocalContext.current
         val mpvConf = playerPreferences.mpvConf()
         val mpvInput = playerPreferences.mpvInput()
+        val subSelectConf = playerPreferences.subSelectConf()
         val storageManager: StorageManager = Injekt.get()
 
         return listOf(
@@ -78,6 +79,17 @@ object AdvancedPlayerSettingsScreen : SearchableSettings {
                     }
                     true
                 },
+                canBeBlank = true,
+            ),
+            Preference.PreferenceItem.MultiLineEditTextPreference(
+                pref = subSelectConf,
+                title = context.stringResource(MR.strings.pref_sub_select_conf),
+                subtitle = subSelectConf.asState(scope).value
+                    .lines().take(2)
+                    .joinToString(
+                        separator = "\n",
+                        postfix = if (subSelectConf.asState(scope).value.lines().size > 2) "\n..." else "",
+                    ),
                 canBeBlank = true,
             ),
             Preference.PreferenceItem.SwitchPreference(

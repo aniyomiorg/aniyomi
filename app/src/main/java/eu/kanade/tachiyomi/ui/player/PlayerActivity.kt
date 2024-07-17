@@ -82,6 +82,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
+import eu.kanade.tachiyomi.util.SubtitleSelect
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -1738,13 +1739,34 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    private val subtitleSelect = SubtitleSelect(playerPreferences)
+
+    private fun selectSubtitle(subtitleTracks: List<Track>, index: Int, embedded: Boolean = false) {
+        val offset = if (embedded) 0 else 1
+        streams.subtitle.index = index + offset
+        val tracks = player.tracks.getValue("sub")
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == subtitleTracks[index].url ||
+                it.mpvId.toString() == subtitleTracks[index].url
+        }
+        selectedLoadedTrack?.let { player.sid = it.mpvId }
+            ?: MPVLib.command(
+                arrayOf(
+                    "sub-add",
+                    subtitleTracks[index].url,
+                    "select",
+                    subtitleTracks[index].url,
+                ),
+            )
+    }
+
     // TODO: exception java.util.ConcurrentModificationException:
     //  UPDATE: MAY HAVE BEEN FIXED
     // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
-    @SuppressLint("SourceLockedOrientationActivity")
+    @Suppress("NestedBlockDepth", "LongMethod", "CyclomaticComplexMethod")
     internal suspend fun fileLoaded() {
         setMpvMediaTitle()
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
@@ -1763,23 +1785,23 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
             }
         } else {
-            currentVideoList?.getOrNull(streams.quality.index)
-                ?.subtitleTracks?.let { tracks ->
-                    val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName, true)
+            val subtitleTracks = currentVideoList?.getOrNull(streams.quality.index)
+                ?.subtitleTracks?.takeIf { it.isNotEmpty() }
+
+            subtitleTracks?.let { tracks ->
+                val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks) ?: 0
+                hadPreviousSubs = true
+                selectSubtitle(tracks, preferredIndex)
+            } ?: let {
+                val tracks = streams.subtitle.tracks.toList()
+                val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks)
+                    ?: let {
+                        val mpvSub = player.tracks["sub"]?.firstOrNull { player.sid == it.mpvId }
+                        mpvSub?.let {
+                            streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
+                        }?.coerceAtLeast(0) ?: 0
                     }
-                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
-                    tracks.getOrNull(requestedLanguage)?.let { sub ->
-                        hadPreviousSubs = true
-                        streams.subtitle.index = requestedLanguage + 1
-                        MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
-                    }
-                } ?: run {
-                val mpvSub = player.tracks.getOrElse("sub") { emptyList() }
-                    .firstOrNull { player.sid == it.mpvId }
-                streams.subtitle.index = mpvSub?.let {
-                    streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
-                }?.coerceAtLeast(0) ?: 0
+                selectSubtitle(tracks, preferredIndex, embedded = true)
             }
         }
         if (hadPreviousAudio) {
