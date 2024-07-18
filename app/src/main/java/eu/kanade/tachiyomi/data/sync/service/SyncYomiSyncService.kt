@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.sync.service
 import android.content.Context
 import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.tachiyomi.data.backup.models.Backup
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.sync.SyncNotifier
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.PUT
@@ -35,6 +34,7 @@ class SyncYomiSyncService(
 
     private class SyncYomiException(message: String?) : Exception(message)
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun doSync(syncData: SyncData): Backup? {
         try {
             val (remoteData, etag) = pullSyncData()
@@ -61,6 +61,7 @@ class SyncYomiSyncService(
         }
     }
 
+    @Suppress("ReturnCount")
     private suspend fun pullSyncData(): Pair<SyncData?, String> {
         val host = syncPreferences.clientHost().get()
         val apiKey = syncPreferences.clientAPIKey().get()
@@ -102,7 +103,7 @@ class SyncYomiSyncService(
             }
 
             return try {
-                val backup = protoBuf.decodeFromByteArray(BackupSerializer, byteArray)
+                val backup = protoBuf.decodeFromByteArray(Backup.serializer(), byteArray)
                 return Pair(SyncData(backup = backup), newETag)
             } catch (_: SerializationException) {
                 logcat(LogPriority.INFO) {
@@ -123,6 +124,7 @@ class SyncYomiSyncService(
     /**
      * Return true if update success
      */
+    @Suppress("MagicNumber")
     private suspend fun pushSyncData(syncData: SyncData, eTag: String) {
         val backup = syncData.backup ?: return
 
@@ -144,7 +146,7 @@ class SyncYomiSyncService(
             .writeTimeout(timeout, TimeUnit.SECONDS)
             .build()
 
-        val byteArray = protoBuf.encodeToByteArray(BackupSerializer, backup)
+        val byteArray = protoBuf.encodeToByteArray(Backup.serializer(), backup)
         if (byteArray.isEmpty()) {
             throw IllegalStateException(context.stringResource(MR.strings.empty_backup_error))
         }

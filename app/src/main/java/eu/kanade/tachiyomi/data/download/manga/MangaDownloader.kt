@@ -593,10 +593,6 @@ class MangaDownloader(
                 tmpDir,
                 imageFile,
                 filenamePrefix,
-                // SY -->
-                zip4jFile = null,
-                zip4jEntry = null,
-                // SY <--
             )
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Failed to split downloaded image" }

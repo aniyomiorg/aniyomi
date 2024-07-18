@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://aniyomi.org">
-    <img src="./.github/assets/logo.png" alt="animetail logo" title="animetail logo" width="80"/>
+    <img src="./.github/assets/icon.png" alt="animetail logo" title="animetail logo" width="80"/>
 </a>
 
 # Animetail [App](#)
@@ -21,29 +21,29 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 [![Aniyomi Stable](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/aniyomiorg/aniyomi/releases)
 [![Aniyomi Preview](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/aniyomiorg/aniyomi-preview/releases)
 
-*Requires Android 8.0 or higher.*
+Requires Android 8.0 or higher.
 
 ## Features
 
 Features include:
-* Kuukiyomi:
-  * Torrent support(Needs right extensions) (@Diegopyl1209)
-  * Custom Theme support
-  * resmush.it(Data Saver Provider)
-  * Group by tags in library
-  * Discord Rich Presence for Manga
-* Aniyomi:
-  * Watching videos
-* View images
-* Local reading/watching of downloaded content
-* A configurable reader with multiple viewers, reading directions and other settings.
-* A configurable player built on mpv-android with multiple options and settings.
-* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
-* Categories to organize your library.
-* Light and dark themes.
-* Schedule updating your library for new chapters/episodes.
-* Create backups locally to read/watch offline or to your desired cloud service.
-* Plus much more...
+ Kuukiyomi:
+   Torrent support(Needs right extensions) (@Diegopyl1209)
+   Custom Theme support
+   resmush.it(Data Saver Provider)
+   Group by tags in library
+   Discord Rich Presence for Manga
+ Aniyomi:
+   Watching videos
+ View images
+ Local reading/watching of downloaded content
+ A configurable reader with multiple viewers, reading directions and other settings.
+ A configurable player built on mpv-android with multiple options and settings.
+ Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
+ Categories to organize your library.
+ Light and dark themes.
+ Schedule updating your library for new chapters/episodes.
+ Create backups locally to read/watch offline or to your desired cloud service.
+ Plus much more...
 
 </div>
 

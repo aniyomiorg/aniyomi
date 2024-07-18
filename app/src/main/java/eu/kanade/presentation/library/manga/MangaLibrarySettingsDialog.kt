@@ -43,6 +43,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
+@Suppress("MagicNumber")
 fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,
@@ -190,9 +191,9 @@ private fun ColumnScope.SortPage(
         globalSortMode.type
     }
     val sortDescending = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
-        category.sort.isAscending
+        !category.sort.isAscending
     } else {
-        globalSortMode.isAscending
+        !globalSortMode.isAscending
     }.not()
     // SY <--
 
@@ -332,13 +333,15 @@ private fun ColumnScope.GroupPage(
     screenModel: MangaLibrarySettingsScreenModel,
     hasCategories: Boolean,
 ) {
-    val groups = remember(hasCategories, screenModel.trackers) {
+    val trackers by screenModel.trackersFlow.collectAsState()
+
+    val groups = remember(hasCategories, trackers) {
         buildList {
             add(MangaLibraryGroup.BY_DEFAULT)
             add(MangaLibraryGroup.BY_SOURCE)
             add(MangaLibraryGroup.BY_TAG)
             add(MangaLibraryGroup.BY_STATUS)
-            if (screenModel.trackers.isNotEmpty()) {
+            if (trackers.isNotEmpty()) {
                 add(MangaLibraryGroup.BY_TRACK_STATUS)
             }
             if (hasCategories) {
