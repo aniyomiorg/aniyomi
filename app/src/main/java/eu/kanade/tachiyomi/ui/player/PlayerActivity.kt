@@ -82,6 +82,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
+import eu.kanade.tachiyomi.util.SubtitleSelect
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -1738,74 +1739,39 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    private val subtitleSelect = SubtitleSelect(playerPreferences)
+
+    private fun selectSubtitle(subtitleTracks: List<Track>, index: Int, embedded: Boolean = false) {
+        val offset = if (embedded) 0 else 1
+        streams.subtitle.index = index + offset
+        val tracks = player.tracks.getValue("sub")
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == subtitleTracks[index].url ||
+                it.mpvId.toString() == subtitleTracks[index].url
+        }
+        selectedLoadedTrack?.let { player.sid = it.mpvId }
+            ?: MPVLib.command(
+                arrayOf(
+                    "sub-add",
+                    subtitleTracks[index].url,
+                    "select",
+                    subtitleTracks[index].url,
+                ),
+            )
+    }
+
     // TODO: exception java.util.ConcurrentModificationException:
     //  UPDATE: MAY HAVE BEEN FIXED
     // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
-    @SuppressLint("SourceLockedOrientationActivity")
     internal suspend fun fileLoaded() {
         setMpvMediaTitle()
-        val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
         clearTracks()
         player.loadTracks()
-        streams.subtitle.tracks += player.tracks.getOrElse("sub") { emptyList() }
-            .drop(1).map { track ->
-                Track(track.mpvId.toString(), track.name)
-            }.toTypedArray()
-        streams.audio.tracks += player.tracks.getOrElse("audio") { emptyList() }
-            .drop(1).map { track ->
-                Track(track.mpvId.toString(), track.name)
-            }.toTypedArray()
-        if (hadPreviousSubs) {
-            streams.subtitle.tracks.getOrNull(streams.subtitle.index)?.let { sub ->
-                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
-            }
-        } else {
-            currentVideoList?.getOrNull(streams.quality.index)
-                ?.subtitleTracks?.let { tracks ->
-                    val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName, true)
-                    }
-                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
-                    tracks.getOrNull(requestedLanguage)?.let { sub ->
-                        hadPreviousSubs = true
-                        streams.subtitle.index = requestedLanguage + 1
-                        MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
-                    }
-                } ?: run {
-                val mpvSub = player.tracks.getOrElse("sub") { emptyList() }
-                    .firstOrNull { player.sid == it.mpvId }
-                streams.subtitle.index = mpvSub?.let {
-                    streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
-                }?.coerceAtLeast(0) ?: 0
-            }
-        }
-        if (hadPreviousAudio) {
-            streams.audio.tracks.getOrNull(streams.audio.index)?.let { audio ->
-                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
-            }
-        } else {
-            currentVideoList?.getOrNull(streams.quality.index)
-                ?.audioTracks?.let { tracks ->
-                    val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName)
-                    }
-                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
-                    tracks.getOrNull(requestedLanguage)?.let { audio ->
-                        hadPreviousAudio = true
-                        streams.audio.index = requestedLanguage + 1
-                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
-                    }
-                } ?: run {
-                val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
-                    .firstOrNull { player.aid == it.mpvId }
-                streams.audio.index = mpvAudio?.let {
-                    streams.audio.tracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
-                }?.coerceAtLeast(0) ?: 0
-            }
-        }
+        setupSubtitleTracks()
+        setupAudioTracks()
 
         viewModel.viewModelScope.launchUI {
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
@@ -1835,6 +1801,71 @@ class PlayerActivity : BaseActivity() {
                     aniskipStamps = it
                     updateChapters(it, player.duration)
                 }
+            }
+        }
+    }
+
+    private fun setupSubtitleTracks() {
+        streams.subtitle.tracks += player.tracks.getOrElse("sub") { emptyList() }
+            .drop(1).map { track ->
+                Track(track.mpvId.toString(), track.name)
+            }.toTypedArray()
+        if (hadPreviousSubs) {
+            streams.subtitle.tracks.getOrNull(streams.subtitle.index)?.let { sub ->
+                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
+            }
+            return
+        }
+        val subtitleTracks = currentVideoList?.getOrNull(streams.quality.index)
+            ?.subtitleTracks?.takeIf { it.isNotEmpty() }
+
+        subtitleTracks?.let { tracks ->
+            val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks) ?: 0
+            hadPreviousSubs = true
+            selectSubtitle(tracks, preferredIndex)
+        } ?: let {
+            val tracks = streams.subtitle.tracks.toList()
+            val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks)
+                ?: let {
+                    val mpvSub = player.tracks["sub"]?.firstOrNull { player.sid == it.mpvId }
+                    mpvSub?.let {
+                        streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
+                    }?.coerceAtLeast(0) ?: 0
+                }
+            selectSubtitle(tracks, preferredIndex, embedded = true)
+        }
+    }
+
+    private fun setupAudioTracks() {
+        val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+
+        streams.audio.tracks += player.tracks.getOrElse("audio") { emptyList() }
+            .drop(1).map { track ->
+                Track(track.mpvId.toString(), track.name)
+            }.toTypedArray()
+
+        if (hadPreviousAudio) {
+            streams.audio.tracks.getOrNull(streams.audio.index)?.let { audio ->
+                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
+            }
+        } else {
+            currentVideoList?.getOrNull(streams.quality.index)
+                ?.audioTracks?.let { tracks ->
+                    val langIndex = tracks.indexOfFirst {
+                        it.lang.contains(localLangName)
+                    }
+                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
+                    tracks.getOrNull(requestedLanguage)?.let { audio ->
+                        hadPreviousAudio = true
+                        streams.audio.index = requestedLanguage + 1
+                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
+                    }
+                } ?: run {
+                val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
+                    .firstOrNull { player.aid == it.mpvId }
+                streams.audio.index = mpvAudio?.let {
+                    streams.audio.tracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
+                }?.coerceAtLeast(0) ?: 0
             }
         }
     }

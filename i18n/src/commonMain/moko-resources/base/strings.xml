@@ -943,6 +943,7 @@
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
+    <string name="pref_sub_select_conf">Edit advanced subtitle track select configuration</string>
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
@@ -1117,7 +1118,7 @@
     <string name="player_filters_contrast">Contrast</string>
     <string name="player_filters_gamma">Gamma</string>
     <string name="player_filters_hue">Hue</string>
-    <string name="player_filters_warning">Some filters may not work your current video driver</string>
+    <string name="player_filters_warning">Some filters may not work with your current video driver</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_add_external_audio">Add external audio</string>
     <string name="player_add_external_audio_intent">Select an audio file.</string>

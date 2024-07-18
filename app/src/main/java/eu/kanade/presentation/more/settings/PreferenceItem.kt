@@ -169,6 +169,22 @@ internal fun PreferenceItem(
                     canBeBlank = item.canBeBlank,
                 )
             }
+            is Preference.PreferenceItem.MPVConfPreference -> {
+                val values by item.pref.collectAsState()
+                EditTextPreferenceWidget(
+                    title = item.title,
+                    subtitle = item.subtitle,
+                    icon = item.icon,
+                    value = values,
+                    onConfirm = {
+                        val accepted = item.onValueChanged(it)
+                        if (accepted) item.pref.set(it)
+                        accepted
+                    },
+                    singleLine = false,
+                    canBeBlank = item.canBeBlank,
+                )
+            }
             is Preference.PreferenceItem.TrackerPreference -> {
                 val isLoggedIn by item.tracker.let { tracker ->
                     tracker.isLoggedInFlow.collectAsState(tracker.isLoggedIn)
