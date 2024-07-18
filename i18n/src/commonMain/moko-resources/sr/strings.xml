@@ -725,8 +725,8 @@
     <string name="also_set_chapter_settings_for_library">Такође примени на све манге у колекцији</string>
     <string name="dialog_with_checkbox_reset">Ресетујте сва поглавља ове манге</string>
     <string name="download_insufficient_space">Неуспешно преузимање поглавља због недовољне меморије</string>
-    <string name="download_queue_size_warning">Упозорење: велики број преузимања може довести до успоравања извора и/или блокирања Aniyomi-ја</string>
-    <string name="information_webview_required">За Aniyomi је потребан WebView</string>
+    <string name="download_queue_size_warning">Упозорење: велики број преузимања може довести до успоравања извора и/или блокирања Kuukiyomi-ја</string>
+    <string name="information_webview_required">За Kuukiyomi је потребан WebView</string>
     <string name="download_notifier_download_paused_chapters">Преузимање заустављено</string>
     <string name="channel_new_chapters_episodes">Ажурирања поглавља</string>
     <string name="pref_relative_format">Релативне временске ознаке</string>

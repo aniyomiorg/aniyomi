@@ -182,12 +182,12 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "Discord",
                             icon = CustomIcons.Discord,
-                            url = "https://discord.gg/F32UjdJZrR",
+                            url = "https://discord.gg/s82Vu589Ya",
                         )
                         LinkIcon(
                             label = "GitHub",
                             icon = CustomIcons.Github,
-                            url = "https://github.com/aniyomiorg/aniyomi",
+                            url = "https://github.com/LuftVerbot/kuukiyomi",
                         )
                     }
                 }
@@ -203,13 +203,12 @@ object AboutScreen : Screen() {
         onAvailableUpdate: (GetApplicationRelease.Result.NewUpdate) -> Unit,
         onFinish: () -> Unit,
     ) {
-        val updateChecker = AppUpdateChecker()
+        val updateChecker = AppUpdateChecker(context)
         withUIContext {
             try {
                 when (
                     val result = withIOContext {
-                        updateChecker.checkForUpdate(
-                            context,
+                        updateChecker.checkForUpdates(
                             forceCheck = true,
                         )
                     }

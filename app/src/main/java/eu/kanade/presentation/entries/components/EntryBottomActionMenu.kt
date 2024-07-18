@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Input
 import androidx.compose.material.icons.automirrored.outlined.Label
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.Delete
@@ -195,7 +197,7 @@ fun EntryBottomActionMenu(
                 if (!isManga && onExternalClicked != null && !playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(MR.strings.action_play_externally),
-                        icon = Icons.Outlined.OpenInNew,
+                        icon = Icons.AutoMirrored.Outlined.OpenInNew,
                         toConfirm = confirm[7],
                         onLongClick = { onLongClickItem(7) },
                         onClick = onExternalClicked,
@@ -204,7 +206,7 @@ fun EntryBottomActionMenu(
                 if (!isManga && onInternalClicked != null && playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(MR.strings.action_play_internally),
-                        icon = Icons.Outlined.Input,
+                        icon = Icons.AutoMirrored.Outlined.Input,
                         toConfirm = confirm[8],
                         onLongClick = { onLongClickItem(8) },
                         onClick = onInternalClicked,

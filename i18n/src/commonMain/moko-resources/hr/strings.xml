@@ -779,7 +779,7 @@
     <string name="dialog_with_checkbox_reset">Obnovi sva poglavlja za ovaj manga</string>
     <string name="download_insufficient_space">Neuspjelo preuzimanje zbog nedovoljne memorije</string>
     <string name="download_queue_size_warning">Upozorenje: velika skupna preuzimanja mogu dovesti do usporavanja izvora i/ili blokiranja Aniyomija. Za daljnje informacije dodirni.</string>
-    <string name="information_webview_required">Za Aniyomi je potreban WebView</string>
+    <string name="information_webview_required">Za Kuukiyomi je potreban WebView</string>
     <string name="download_notifier_download_paused_chapters">Preuzimanje poglavlja je zaustavljeno</string>
     <string name="channel_new_chapters_episodes">Ažuriranja poglavlja</string>
     <string name="action_mark_as_unseen">Označi kao nepogledano</string>
@@ -1048,7 +1048,7 @@
     <string name="player_font_size_text_field">Veličina fonta</string>
     <string name="player_subtitle_font_text_field">Ime fonta</string>
     <string name="player_subtitle_settings">Postavke titlova</string>
-    <string name="unlock_app_title">Otključaj Aniyomi</string>
+    <string name="unlock_app_title">Otključaj Kuukiyomi</string>
     <string name="label_all">Sve</string>
     <string name="label_category">Kategorija</string>
     <string name="pref_pip_replace_with_previous">Zamjenjuje opciju Preskoči 10 sekundi s prethodnom epizodom</string>
@@ -1073,7 +1073,7 @@
     <string name="player_subtitle_settings_color_tab">Boja</string>
     <string name="player_subtitle_delay">Kašnjenje titlova</string>
     <string name="pref_mpv_input">Uredi MPV ulaznu datoteku za konfiguraciju mapiranja tipkovnice</string>
-    <string name="onboarding_storage_action_create_folder">Stvori standardnu mapu za Aniyomi</string>
+    <string name="onboarding_storage_action_create_folder">Stvori standardnu mapu za Kuukiyomi</string>
     <string name="download_speed_limit_hint">Postavi na 0 za deaktiviranje ograničenja brzine.</string>
     <string name="download_speed_limit">Ograničenje brzine preuzimanja</string>
     <string name="pref_start_screen">Početni ekran</string>

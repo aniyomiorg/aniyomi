@@ -769,7 +769,7 @@
     <string name="error_repo_exists">El repositorio ya existe!</string>
     <string name="pref_library_update_smart_update">Actualizaciones inteligentes</string>
     <string name="invalid_repo_name">La dirección URL del repositorio no parece ser correcta</string>
-    <string name="action_add_repo_message">Añade más repositorios a Aniyomi; la dirección URL tiene que terminar en «index.min.json».</string>
+    <string name="action_add_repo_message">Añade más repositorios a Kuukiyomi; la dirección URL tiene que terminar en «index.min.json».</string>
     <string name="delete_repo_confirmation">¿Seguro que quieres borrar el repositorio «%s»?</string>
     <string name="action_delete_repo">Borrar repositorio</string>
     <string name="action_add_repo">Añadir un repositorio</string>
@@ -937,7 +937,7 @@
     <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Episodio %1$s - %2$s</string>
     <string name="download_insufficient_space">No se pudo descargar ningún capítulo, queda muy poco espacio</string>
-    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Aniyomi. Toca aquí para más información.</string>
+    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Kuukiyomi. Toca aquí para más información.</string>
     <string name="video_list_empty_error">No se encontró ningún vídeo</string>
     <string name="notification_new_episodes">Nuevos episodios encontrados</string>
     <string name="information_no_recent_anime">No he visto nada recientemente</string>
@@ -1079,7 +1079,7 @@
     <string name="player_add_external_subtitles_intent">Seleccionar un archivo de subtítulos.</string>
     <string name="label_storage">Almacenamiento</string>
     <string name="player_font_size_text_field">Tamaño de la fuente</string>
-    <string name="unlock_app_title">Desbloquear Aniyomi</string>
+    <string name="unlock_app_title">Desbloquear Kuukiyomi</string>
     <string name="pref_pip_replace_with_previous">Sustituir la opción saltar 10 segundos por episodio anterior</string>
     <string name="pref_reset_mpv_conf">Restablecer el archivo de configuración MPV</string>
     <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
@@ -1104,7 +1104,7 @@
     <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
     <string name="player_subtitle_border_color">Borde</string>
     <string name="pref_library_update_show_tab_badge">Mostrar el recuento de no vistos/no leídos en el icono actualizaciones</string>
-    <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
+    <string name="onboarding_storage_action_create_folder">Crear carpeta de Kuukiyomi por defecto</string>
     <string name="theme_matrix">Matrix</string>
     <string name="theme_doom">Doom</string>
     <string name="confirm_exit">Presione Atrás nuevamente para salir</string>

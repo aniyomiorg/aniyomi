@@ -20,9 +20,11 @@ import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.components.LibraryToolbarTitle
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -45,6 +47,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.core.common.util.lang.compareToWithCollator
@@ -62,13 +65,16 @@ import tachiyomi.domain.history.manga.interactor.GetNextChapters
 import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
 import tachiyomi.domain.track.manga.model.MangaTrack
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -79,6 +85,7 @@ import java.util.Collections
  */
 typealias MangaLibraryMap = Map<Category, List<MangaLibraryItem>>
 
+@Suppress("LargeClass")
 class MangaLibraryScreenModel(
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
     private val getCategories: GetVisibleMangaCategories = Injekt.get(),
@@ -95,6 +102,9 @@ class MangaLibraryScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
+    // SY -->
+    private val getTracks: GetMangaTracks = Injekt.get(),
+    // SY <--
 ) : StateScreenModel<MangaLibraryScreenModel.State>(State()) {
 
     var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
@@ -107,12 +117,25 @@ class MangaLibraryScreenModel(
                 state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
                 getTracksPerManga.subscribe(),
-                getTrackingFilterFlow(),
-                downloadCache.changes,
-            ) { searchQuery, library, tracks, trackingFilter, _ ->
+                combine(
+                    getTrackingFilterFlow(),
+                    downloadCache.changes,
+                    ::Pair,
+                ),
+                // SY -->
+                combine(
+                    state.map { it.groupType }.distinctUntilChanged(),
+                    libraryPreferences.mangaSortingMode().changes(),
+                    ::Pair,
+                ),
+                // SY <--
+            ) { searchQuery, library, tracks, (trackingFilter, _), (groupType, sort) ->
                 library
+                    // SY -->
+                    .applyGrouping(groupType)
+                    // SY <--
                     .applyFilters(tracks, trackingFilter)
-                    .applySort(tracks, trackingFilter.keys)
+                    .applySort(tracks, sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT }, trackingFilter.keys)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
                             // Filter query
@@ -171,6 +194,16 @@ class MangaLibraryScreenModel(
                 }
             }
             .launchIn(screenModelScope)
+
+        // SY -->
+        libraryPreferences.groupMangaLibraryBy().changes()
+            .onEach {
+                mutableState.update { state ->
+                    state.copy(groupType = it)
+                }
+            }
+            .launchIn(screenModelScope)
+        // SY <--
     }
 
     /**
@@ -262,6 +295,7 @@ class MangaLibraryScreenModel(
     private fun MangaLibraryMap.applySort(
         // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<MangaTrack>>,
+        groupSort: MangaLibrarySort? = null,
         loggedInTrackerIds: Set<Long>,
     ): MangaLibraryMap {
         val sortAlphabetically: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
@@ -283,7 +317,9 @@ class MangaLibraryScreenModel(
         }
 
         val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
-            val sort = keys.find { it.id == i1.libraryManga.category }!!.sort
+            // SY -->
+            val sort = groupSort ?: keys.find { it.id == i1.libraryManga.category }!!.sort
+            // SY <--
             when (sort.type) {
                 MangaLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
@@ -322,7 +358,10 @@ class MangaLibraryScreenModel(
         }
 
         return this.mapValues { entry ->
-            val comparator = if (keys.find { it.id == entry.key.id }!!.sort.isAscending) {
+            // SY -->
+            val isAscending = groupSort?.isAscending ?: keys.find { it.id == entry.key.id }!!.sort.isAscending
+            // SY <--
+            val comparator = if (isAscending) {
                 Comparator(sortFn)
             } else {
                 Collections.reverseOrder(sortFn)
@@ -404,6 +443,34 @@ class MangaLibraryScreenModel(
             displayCategories.associateWith { libraryManga[it.id].orEmpty() }
         }
     }
+
+    // SY -->
+    private fun MangaLibraryMap.applyGrouping(groupType: Int): MangaLibraryMap {
+        val items = when (groupType) {
+            MangaLibraryGroup.BY_DEFAULT -> this
+            MangaLibraryGroup.UNGROUPED -> {
+                mapOf(
+                    Category(
+                        0,
+                        preferences.context.getString(R.string.ungrouped),
+                        0,
+                        0,
+                        false,
+                    ) to
+                        values.flatten().distinctBy { it.libraryManga.manga.id },
+                )
+            }
+            else -> {
+                getGroupedMangaItems(
+                    groupType = groupType,
+                    libraryManga = this.values.flatten().distinctBy { it.libraryManga.manga.id },
+                )
+            }
+        }
+
+        return items
+    }
+    // SY <--
 
     /**
      * Flow of tracking filter preferences
@@ -724,6 +791,124 @@ class MangaLibraryScreenModel(
         data class DeleteManga(val manga: List<Manga>) : Dialog
     }
 
+    // SY -->
+    /** Returns first unread chapter of a manga */
+    suspend fun getFirstUnread(manga: Manga): Chapter? {
+        return getNextChapters.await(manga.id).firstOrNull()
+    }
+
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
+    private fun getGroupedMangaItems(
+        groupType: Int,
+        libraryManga: List<MangaLibraryItem>,
+    ): MangaLibraryMap {
+        val context = preferences.context
+        return when (groupType) {
+            MangaLibraryGroup.BY_TRACK_STATUS -> {
+                val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
+                libraryManga.groupBy { item ->
+                    val status = tracks[item.libraryManga.manga.id]?.firstNotNullOfOrNull { track ->
+                        TrackStatus.parseTrackerStatus(track.trackerId, track.status)
+                    } ?: TrackStatus.OTHER
+
+                    status.int
+                }.mapKeys { (id) ->
+                    Category(
+                        id = id.toLong(),
+                        name = TrackStatus.entries
+                            .find { it.int == id }
+                            .let { it ?: TrackStatus.OTHER }
+                            .let { context.getString(it.res) },
+                        order = TrackStatus.entries.toTypedArray().indexOfFirst {
+                            it.int == id
+                        }.takeUnless { it == -1 }?.toLong() ?: TrackStatus.OTHER.ordinal.toLong(),
+                        flags = 0,
+                        hidden = false,
+                    )
+                }
+            }
+            MangaLibraryGroup.BY_SOURCE -> {
+                val sources: List<Long>
+                libraryManga.groupBy { item ->
+                    item.libraryManga.manga.source
+                }.also {
+                    sources = it.keys
+                        .map {
+                            sourceManager.getOrStub(it)
+                        }
+                        .sortedWith(
+                            compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.ifBlank { it.id.toString() } },
+                        )
+                        .map { it.id }
+                }.mapKeys {
+                    Category(
+                        id = it.key,
+                        name = if (it.key == LocalMangaSource.ID) {
+                            context.getString(R.string.local_source)
+                        } else {
+                            val source = sourceManager.getOrStub(it.key)
+                            source.name.ifBlank { source.id.toString() }
+                        },
+                        order = sources.indexOf(it.key).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
+                        flags = 0,
+                        hidden = false,
+                    )
+                }
+            }
+            MangaLibraryGroup.BY_TAG -> {
+                val tags: List<String> = libraryManga.flatMap { item ->
+                    item.libraryManga.manga.genre?.distinct() ?: emptyList()
+                }
+                libraryManga.flatMap { item ->
+                    item.libraryManga.manga.genre?.distinct()?.map {
+                            genre ->
+                        Pair(genre, item)
+                    } ?: emptyList()
+                }.groupBy({ it.first }, { it.second }).filterValues { it.size > 3 }
+                    .mapKeys { (genre, _) ->
+                        Category(
+                            id = genre.hashCode().toLong(),
+                            name = genre,
+                            order = tags.indexOf(genre).takeUnless { it == -1 }?.toLong() ?: Long.MAX_VALUE,
+                            flags = 0,
+                            hidden = false,
+                        )
+                    }
+            }
+            else -> {
+                libraryManga.groupBy { item ->
+                    item.libraryManga.manga.status
+                }.mapKeys {
+                    Category(
+                        id = it.key + 1,
+                        name = when (it.key) {
+                            SManga.ONGOING.toLong() -> context.getString(R.string.ongoing)
+                            SManga.LICENSED.toLong() -> context.getString(R.string.licensed)
+                            SManga.CANCELLED.toLong() -> context.getString(R.string.cancelled)
+                            SManga.ON_HIATUS.toLong() -> context.getString(R.string.on_hiatus)
+                            SManga.PUBLISHING_FINISHED.toLong() -> context.getString(
+                                R.string.publishing_finished,
+                            )
+                            SManga.COMPLETED.toLong() -> context.getString(R.string.completed)
+                            else -> context.getString(R.string.unknown)
+                        },
+                        order = when (it.key) {
+                            SManga.ONGOING.toLong() -> 1
+                            SManga.LICENSED.toLong() -> 2
+                            SManga.CANCELLED.toLong() -> 3
+                            SManga.ON_HIATUS.toLong() -> 4
+                            SManga.PUBLISHING_FINISHED.toLong() -> 5
+                            SManga.COMPLETED.toLong() -> 6
+                            else -> 7
+                        },
+                        flags = 0,
+                        hidden = false,
+                    )
+                }
+            }
+        }.toSortedMap(compareBy { it.order })
+    }
+
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
@@ -751,6 +936,9 @@ class MangaLibraryScreenModel(
         val showMangaCount: Boolean = false,
         val showMangaContinueButton: Boolean = false,
         val dialog: Dialog? = null,
+        // SY -->
+        val groupType: Int = MangaLibraryGroup.BY_DEFAULT,
+        // SY <--
     ) {
         private val libraryCount by lazy {
             library.values

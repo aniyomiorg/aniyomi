@@ -70,7 +70,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
     /**
      * Currently active item. It can be a chapter page or a chapter transition.
      */
-    private var currentPage: Any? = null
+    var currentPage: Any? = null
 
     private val threshold: Int =
         Injekt.get<ReaderPreferences>()

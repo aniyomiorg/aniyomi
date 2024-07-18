@@ -22,3 +22,5 @@
 *.woff binary
 *.pyc binary
 *.swp binary
+
+*.aar binary

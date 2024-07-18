@@ -254,6 +254,7 @@ private fun VideoList(
                                 episode.id,
                                 true,
                                 selectedVideo,
+                                videoList,
                             )
                         }
                     },

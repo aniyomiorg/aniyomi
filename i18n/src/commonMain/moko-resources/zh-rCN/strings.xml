@@ -534,7 +534,7 @@
     <string name="notification_size_warning">大量更新会损害资源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
-    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Aniyomi。点击了解详情。</string>
+    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Kuukiyomi。点击了解详情。</string>
     <string name="ext_update_all">全部更新</string>
     <string name="channel_app_updates">应用更新</string>
     <string name="database_clean">无需清理</string>
@@ -710,7 +710,7 @@
     <string name="exception_unknown_host">无法连接到 %s</string>
     <string name="source_settings">资源设置</string>
     <string name="app_settings">应用设置</string>
-    <string name="unlock_app_title">解锁 Aniyomi</string>
+    <string name="unlock_app_title">解锁 Kuukiyomi</string>
     <string name="action_sort_category">分类排序</string>
     <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
     <string name="notification_updating_progress">正在更新仓库…(%s)</string>
@@ -766,7 +766,7 @@
     <string name="label_extension_repos">插件仓库</string>
     <string name="information_empty_repos">尚未添加任何仓库。</string>
     <string name="label_add_repo_input">仓库网址</string>
-    <string name="action_add_repo_message">在 Aniyomi 中添加仓库，输入的网址结尾应为“index.min.json”。</string>
+    <string name="action_add_repo_message">在 Kuukiyomi 中添加仓库，输入的网址结尾应为“index.min.json”。</string>
     <string name="onboarding_storage_help_info">如果你是从旧版本更新而来但不知道该如何选择，可以查看存储指南了解更多。</string>
     <string name="onboarding_storage_help_action">存储指南</string>
     <string name="pref_storage_location">存储位置</string>
@@ -935,11 +935,11 @@
     <string name="player_statistics_page_2">第二页</string>
     <string name="player_statistics_page_3">第三页</string>
     <string name="download_insufficient_space">存储空间不足，无法下载</string>
-    <string name="download_queue_size_warning">警告：批量下载可能导致资源变慢，甚至会使得它们屏蔽 Aniyomi。点击了解详情。</string>
+    <string name="download_queue_size_warning">警告：批量下载可能导致资源变慢，甚至会使得它们屏蔽 Kuukiyomi。点击了解详情。</string>
     <string name="video_list_empty_error">没有视频</string>
     <string name="notification_new_episodes">发现新的剧集</string>
     <string name="information_no_recent_anime">暂无观看记录</string>
-    <string name="information_webview_required">Aniyomi 依赖于 WebView</string>
+    <string name="information_webview_required">Kuukiyomi 依赖于 WebView</string>
     <string name="episode_settings_updated">已更新默认剧集设置</string>
     <string name="download_notifier_download_paused_chapters">章节下载已暂停</string>
     <string name="download_notifier_download_paused_episodes">剧集下载已暂停</string>

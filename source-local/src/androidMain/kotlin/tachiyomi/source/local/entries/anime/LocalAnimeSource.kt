@@ -17,6 +17,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.common.i18n.stringResource
@@ -151,6 +152,23 @@ actual class LocalAnimeSource(
             Observable.just(getSearchAnime(page, query, filters))
         }
     }
+
+    // SY -->
+    fun updateAnimeInfo(anime: SAnime) {
+        val directory = fileSystem.getFilesInBaseDirectory().map { File(it.filePath, anime.url) }.find {
+            it.exists()
+        } ?: return
+        val existingFileName = directory.listFiles()?.find { it.extension == "json" }?.name
+        val file = File(directory, existingFileName ?: "info.json")
+        file.outputStream().use {
+            json.encodeToStream(anime.toJson(), it)
+        }
+    }
+
+    private fun SAnime.toJson(): AnimeDetails {
+        return AnimeDetails(title, author, artist, description, genre?.split(", "), status)
+    }
+    // SY <--
 
     // Anime details related
     override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {

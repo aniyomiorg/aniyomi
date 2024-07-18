@@ -237,15 +237,56 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="aniyomi"/>
+                <data android:scheme="kuukiyomi" />
 
-                <data android:host="myanimelist-auth" />
                 <data android:host="anilist-auth" />
                 <data android:host="bangumi-auth" />
+                <data android:host="myanimelist-auth" />
                 <data android:host="shikimori-auth" />
                 <data android:host="simkl-auth"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.setting.track.GoogleDriveLoginActivity"
+            android:label="GoogleDrive"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="eu.kanade.google.oauth" />
+            </intent-filter>
+        </activity>
+
+        <activity android:label="Discord Login"
+            android:name=".ui.setting.connections.DiscordLoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https" android:host="account.samsung.com" android:path="/accounts/oauth/callback"/>
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".data.connections.discord.DiscordRPCService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
+            <intent-filter>
+                <action android:name ="android.intent.action.VIEW"/>
+                <category android:name ="android.intent.category.DEFAULT"/>
+                <category android:name ="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                    android:host="account.samsung.com"
+                    android:path="/accounts/oauth/callback"/>
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".data.notification.NotificationReceiver"
@@ -273,6 +314,11 @@
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
             tools:node="merge" />
+
+        <service
+            android:name=".data.torrentServer.service.TorrentServerService"
+            android:foregroundServiceType="dataSync"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"
