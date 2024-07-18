@@ -10,9 +10,6 @@ open class ReaderPage(
     url: String = "",
     imageUrl: String? = null,
     // SY -->
-    /** zip4j inputStreams do not support mark() and release(), so they must be passed to ImageUtil */
-    var zip4jFile: ZipFile? = null,
-    var zip4jEntry: FileHeader? = null,
     /** Value to check if this page is used to as if it was too wide */
     var shiftedPage: Boolean = false,
     /** Value to check if a page is can be doubled up, but can't because the next page is too wide */
