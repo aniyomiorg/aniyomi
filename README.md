@@ -24,7 +24,7 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 *Requires Android 8.0 or higher.*
 
 ## Features
-<div align="left">
+
 Features include:
 * Kuukiyomi:
   * Torrent support(Needs right extensions) (@Diegopyl1209)
