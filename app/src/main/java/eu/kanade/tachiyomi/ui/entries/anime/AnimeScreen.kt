@@ -156,7 +156,7 @@ class AnimeScreen(
                 )
             }.takeIf { isAnimeHttpSource },
             onTrackingClicked = {
-                if (screenModel.loggedInTrackers.isEmpty()) {
+                if (!successState.hasLoggedInTrackers) {
                     navigator.push(SettingsScreen(SettingsScreen.Destination.Tracking))
                 } else {
                     screenModel.showTrackDialog()

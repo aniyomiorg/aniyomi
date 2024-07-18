@@ -2,7 +2,6 @@ plugins {
     id("mihon.library")
     id("mihon.library.compose")
     kotlin("android")
-    kotlin("plugin.compose") // TODO(kotlin2): remove
 }
 
 android {
@@ -12,16 +11,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
-    // TODO(kotlin2): Remove -->
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
-    }
-    // <-- TODO(kotlin2)
 }
 
 dependencies {
@@ -29,11 +18,9 @@ dependencies {
     api(projects.i18n)
 
     // Compose
-    implementation(platform(compose.bom)) // TODO(kotlin2): remove
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
-    implementation(compose.material.core)
     implementation(compose.material.icons)
     implementation(compose.animation)
     implementation(compose.animation.graphics)

@@ -10,7 +10,6 @@ buildscript {
 
 plugins {
     alias(kotlinx.plugins.serialization) apply false
-    alias(kotlinx.plugins.compose.compiler) apply false
 }
 
 tasks.register<Delete>("clean") {

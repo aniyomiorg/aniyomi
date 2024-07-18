@@ -41,7 +41,7 @@ class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaT
 
     override fun getStatusListManga(): List<Long> = listOf(UNREAD, READING, COMPLETED)
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
+    override fun getStatusForManga(status: Long): StringResource? = when (status) {
         UNREAD -> MR.strings.unread
         READING -> MR.strings.reading
         COMPLETED -> MR.strings.completed

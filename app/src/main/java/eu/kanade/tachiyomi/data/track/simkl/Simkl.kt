@@ -100,7 +100,7 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
         return listOf(WATCHING, COMPLETED, ON_HOLD, NOT_INTERESTING, PLAN_TO_WATCH)
     }
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
+    override fun getStatusForAnime(status: Long): StringResource? = when (status) {
         WATCHING -> MR.strings.watching
         PLAN_TO_WATCH -> MR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed

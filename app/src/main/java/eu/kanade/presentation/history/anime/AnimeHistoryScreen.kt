@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import eu.kanade.presentation.components.relativeDateText
+import eu.kanade.presentation.components.relativeDateTimeText
 import eu.kanade.presentation.history.anime.components.AnimeHistoryItem
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
@@ -20,7 +20,7 @@ import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Composable
 fun AnimeHistoryScreen(
@@ -84,14 +84,14 @@ private fun AnimeHistoryScreenContent(
             when (item) {
                 is AnimeHistoryUiModel.Header -> {
                     ListGroupHeader(
-                        modifier = Modifier.animateItemPlacement(),
-                        text = relativeDateText(item.date),
+                        modifier = Modifier.animateItem(),
+                        text = relativeDateTimeText(item.date),
                     )
                 }
                 is AnimeHistoryUiModel.Item -> {
                     val value = item.item
                     AnimeHistoryItem(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier.animateItem(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },
@@ -104,7 +104,7 @@ private fun AnimeHistoryScreenContent(
 }
 
 sealed interface AnimeHistoryUiModel {
-    data class Header(val date: LocalDate) : AnimeHistoryUiModel
+    data class Header(val date: LocalDateTime) : AnimeHistoryUiModel
     data class Item(val item: AnimeHistoryWithRelations) : AnimeHistoryUiModel
 }
 

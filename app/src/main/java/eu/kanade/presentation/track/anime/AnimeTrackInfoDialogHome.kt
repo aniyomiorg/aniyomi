@@ -38,6 +38,7 @@ import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.presentation.track.manga.TrackDetailsItem
 import eu.kanade.presentation.track.manga.TrackInfoItemMenu
+import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.util.lang.toLocalDate
@@ -77,7 +78,7 @@ fun AnimeTrackInfoDialogHome(
                 TrackInfoItem(
                     title = item.track.title,
                     tracker = item.tracker,
-                    status = item.tracker.getStatus(item.track.status),
+                    status = (item.tracker as? AnimeTracker)?.getStatusForAnime(item.track.status),
                     onStatusClick = { onStatusClick(item) },
                     episodes = "${item.track.lastEpisodeSeen.toInt()}".let {
                         val totalEpisodes = item.track.totalEpisodes
@@ -178,7 +179,7 @@ private fun TrackInfoItem(
             modifier = Modifier
                 .padding(top = 12.dp)
                 .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.surfaceContainerHighest)
                 .padding(8.dp)
                 .clip(RoundedCornerShape(6.dp)),
         ) {

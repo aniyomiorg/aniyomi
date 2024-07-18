@@ -36,28 +36,35 @@ object EpisodeRecognition {
             return episodeNumber
         }
 
-        // Get chapter title with lower case
-        var name = episodeName.lowercase()
+        // Get episode title with lower case
+        val cleanEpisodeName = episodeName.lowercase()
+            // Remove anime title from episode title.
+            .replace(animeTitle.lowercase(), "").trim()
+            // Remove comma's or hyphens.
+            .replace(',', '.')
+            .replace('-', '.')
+            // Remove unwanted white spaces.
+            .replace(unwantedWhiteSpace, "")
 
-        // Remove anime title from episode title.
-        name = name.replace(animeTitle.lowercase(), "").trim()
+        val numberMatch = number.findAll(cleanEpisodeName)
 
-        // Remove comma's or hyphens.
-        name = name.replace(',', '.').replace('-', '.')
+        when {
+            numberMatch.none() -> {
+                return episodeNumber ?: -1.0
+            }
+            numberMatch.count() > 1 -> {
+                // Remove unwanted tags.
+                unwanted.replace(cleanEpisodeName, "").let { name ->
+                    // Check base case ep.xx
+                    basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }
 
-        // Remove unwanted white spaces.
-        name = unwantedWhiteSpace.replace(name, "")
+                    // need to find again first number might already removed
+                    number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
+                }
+            }
+        }
 
-        // Remove unwanted tags.
-        name = unwanted.replace(name, "")
-
-        // Check base case ch.xx
-        basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }
-
-        // Take the first number encountered.
-        number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
-
-        return episodeNumber ?: -1.0
+        return getEpisodeNumberFromMatch(numberMatch.first())
     }
 
     /**

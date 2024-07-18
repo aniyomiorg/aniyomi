@@ -178,7 +178,7 @@ internal object AnimeExtensionLoader {
      * Attempts to load an extension from the given package name. It checks if the extension
      * contains the required feature flag before trying to load it.
      */
-    fun loadExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
+    suspend fun loadExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
         val extensionPackage = getAnimeExtensionInfoFromPkgName(context, pkgName)
         if (extensionPackage == null) {
             logcat(LogPriority.ERROR) { "Extension package is not found ($pkgName)" }
@@ -235,7 +235,8 @@ internal object AnimeExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    private fun loadExtension(context: Context, extensionInfo: AnimeExtensionInfo): AnimeLoadResult {
+    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
+    private suspend fun loadExtension(context: Context, extensionInfo: AnimeExtensionInfo): AnimeLoadResult {
         val pkgManager = context.packageManager
 
         val pkgInfo = extensionInfo.packageInfo
@@ -265,7 +266,7 @@ internal object AnimeExtensionLoader {
         if (signatures.isNullOrEmpty()) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return AnimeLoadResult.Error
-        } else if (!trustExtension.isTrusted(pkgInfo, signatures.last())) {
+        } else if (!trustExtension.isTrusted(pkgInfo, signatures)) {
             val extension = AnimeExtension.Untrusted(
                 extName,
                 pkgName,

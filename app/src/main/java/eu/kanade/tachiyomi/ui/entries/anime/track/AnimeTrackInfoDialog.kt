@@ -250,8 +250,8 @@ data class AnimeTrackInfoDialogHomeScreen(
         }
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
-            val loggedInTrackers = Injekt.get<TrackerManager>().trackers.filter {
-                it.isLoggedIn && it is AnimeTracker
+            val loggedInTrackers = Injekt.get<TrackerManager>().loggedInTrackers().filter {
+                it is AnimeTracker
             }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedInTrackers
@@ -301,7 +301,9 @@ private data class TrackStatusSelectorScreen(
     ) : StateScreenModel<Model.State>(State(track.status)) {
 
         fun getSelections(): Map<Long, StringResource?> {
-            return tracker.animeService.getStatusListAnime().associateWith { tracker.getStatus(it) }
+            return tracker.animeService.getStatusListAnime().associateWith {
+                (tracker as? AnimeTracker)?.getStatusForAnime(it)
+            }
         }
 
         fun setSelection(selection: Long) {

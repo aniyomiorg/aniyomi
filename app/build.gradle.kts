@@ -7,7 +7,6 @@ plugins {
     id("mihon.android.application")
     id("mihon.android.application.compose")
     id("com.mikepenz.aboutlibraries.plugin")
-    kotlin("plugin.compose") // TODO(kotlin2): Remove
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
 }
@@ -153,7 +152,6 @@ dependencies {
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
-    implementation(compose.material.core)
     implementation(compose.material.icons)
     implementation(compose.animation)
     implementation(compose.animation.graphics)
@@ -161,6 +159,8 @@ dependencies {
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
     implementation(compose.accompanist.systemuicontroller)
+
+    implementation(androidx.interpolator)
 
     implementation(compose.colorpicker)
 
@@ -209,7 +209,6 @@ dependencies {
     // Disk
     implementation(libs.disklrucache)
     implementation(libs.unifile)
-    implementation(libs.bundles.archive)
 
     // Preferences
     implementation(libs.preferencektx)
@@ -313,7 +312,6 @@ tasks {
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                 "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
                 "-opt-in=coil3.annotation.ExperimentalCoilApi",
-                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",

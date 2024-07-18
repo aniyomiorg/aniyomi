@@ -54,7 +54,7 @@ internal fun LazyListScope.mangaUpdatesLastUpdatedItem(
     item(key = "mangaUpdates-lastUpdated") {
         Box(
             modifier = Modifier
-                .animateItemPlacement()
+                .animateItem()
                 .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         ) {
             Text(
@@ -91,14 +91,14 @@ internal fun LazyListScope.mangaUpdatesUiItems(
         when (item) {
             is MangaUpdatesUiModel.Header -> {
                 ListGroupHeader(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                     text = relativeDateText(item.date),
                 )
             }
             is MangaUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 MangaUpdatesUiItem(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     readProgress = updatesItem.update.lastPageRead

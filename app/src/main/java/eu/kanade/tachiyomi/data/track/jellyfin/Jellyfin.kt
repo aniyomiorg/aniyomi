@@ -39,7 +39,7 @@ class Jellyfin(id: Long) : BaseTracker(id, "Jellyfin"), EnhancedAnimeTracker, An
 
     override fun getStatusListAnime(): List<Long> = listOf(UNSEEN, WATCHING, COMPLETED)
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
+    override fun getStatusForAnime(status: Long): StringResource? = when (status) {
         UNSEEN -> MR.strings.unseen
         WATCHING -> MR.strings.watching
         COMPLETED -> MR.strings.completed

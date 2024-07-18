@@ -46,6 +46,7 @@ import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.DiskUtil.MAX_FILE_NAME_BYTES
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -91,6 +92,7 @@ import java.util.Date
 /**
  * Presenter used by the activity to perform background operations.
  */
+@Suppress("LargeClass")
 class ReaderViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
     private val sourceManager: MangaSourceManager = Injekt.get(),
@@ -179,20 +181,20 @@ class ReaderViewModel @JvmOverloads constructor(
                                 (
                                     manga.downloadedFilterRaw ==
                                         Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
-                                            it.name,
-                                            it.scanlator,
-                                            manga.title,
-                                            manga.source,
-                                        )
+                                        it.name,
+                                        it.scanlator,
+                                        manga.title,
+                                        manga.source,
+                                    )
                                     ) ||
                                 (
                                     manga.downloadedFilterRaw ==
                                         Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
-                                            it.name,
-                                            it.scanlator,
-                                            manga.title,
-                                            manga.source,
-                                        )
+                                        it.name,
+                                        it.scanlator,
+                                        manga.title,
+                                        manga.source,
+                                    )
                                     ) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_BOOKMARKED && !it.bookmark) ||
                                 (manga.bookmarkedFilterRaw == Manga.CHAPTER_SHOW_NOT_BOOKMARKED && it.bookmark)
@@ -883,6 +885,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     // SY -->
+    @Suppress("ReturnCount")
     fun saveImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
@@ -917,6 +920,7 @@ class ReaderViewModel @JvmOverloads constructor(
         }
     }
 
+    @Suppress("LongParameterList", "TooGenericExceptionThrown")
     private fun saveImages(
         page1: ReaderPage,
         page2: ReaderPage,
@@ -937,12 +941,12 @@ class ReaderViewModel @JvmOverloads constructor(
         // Build destination file.
         val filenameSuffix = " - ${page1.number}-${page2.number}.jpg"
         val filename = DiskUtil.buildValidFilename(
-            "${manga.title} - ${chapter.name}".takeBytes(DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
+            "${manga.title} - ${chapter.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
         ) + filenameSuffix
 
         return imageSaver.save(
             image = Image.Page(
-                inputStream = { ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, 0, bg) },
+                inputStream = { ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, 0, bg).inputStream() },
                 name = filename,
                 location = location,
             ),
@@ -991,6 +995,7 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     // SY -->
+    @Suppress("ReturnCount")
     fun shareImages() {
         val (firstPage, secondPage) = (state.value.dialog as? Dialog.PageActions ?: return)
         val viewer = state.value.viewer as? PagerViewer ?: return
@@ -1026,6 +1031,7 @@ class ReaderViewModel @JvmOverloads constructor(
     /**
      * Sets the image of the selected page as cover and notifies the UI of the result.
      */
+    @Suppress("ReturnCount")
     fun setAsCover(useExtraPage: Boolean) {
         // SY -->
         val page = if (useExtraPage) {

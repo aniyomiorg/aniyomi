@@ -332,6 +332,13 @@
     <string name="pref_page_transitions">Animate page transitions</string>
     <string name="pref_flash_page">Flash on page change</string>
     <string name="pref_flash_page_summ">Reduces ghosting on e-ink displays</string>
+    <string name="pref_flash_duration">Flash duration</string>
+    <string name="pref_flash_duration_summary">%1$s ms</string>
+    <string name="pref_flash_page_interval">Flash every</string>
+    <string name="pref_flash_with">Flash with</string>
+    <string name="pref_flash_style_black">Black</string>
+    <string name="pref_flash_style_white">White</string>
+    <string name="pref_flash_style_white_black">White and Black</string>
     <string name="pref_double_tap_anim_speed">Double tap animation speed</string>
     <string name="pref_show_page_number">Show page number</string>
     <string name="pref_show_reading_mode">Show reading mode</string>
@@ -539,8 +546,6 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="updated_version">Updated to v%1$s</string>
-    <string name="pref_enable_acra">Send crash reports</string>
-    <string name="pref_acra_summary">Helps fix any bugs. No sensitive data will be sent</string>
     <string name="fdroid_warning">F-Droid builds are not officially supported.\nTap to learn more.</string>
     <string name="label_downloaded_only">Downloaded only</string>
     <string name="pref_incognito_mode">Incognito mode</string>
@@ -609,6 +614,8 @@
     <!-- "… around 2 days" -->
     <string name="manga_interval_expected_update">New chapters predicted to be released in around %1$s, checking around every %2$s.</string>
     <string name="anime_interval_expected_update">New episodes predicted to be released in around %1$s, checking around every %2$s.</string>
+    <string name="manga_interval_expected_update_null">This manga is either completed, or there is no predicted release date.</string>
+    <string name="anime_interval_expected_update_null">This anime is either completed, or there is no predicted release date.</string>
     <string name="manga_interval_expected_update_soon">Soon</string>
     <string name="manga_interval_custom_amount">Custom update frequency:</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
@@ -689,7 +696,6 @@
     <string name="transition_pages_error">Failed to load pages: %1$s</string>
     <string name="page_list_empty_error">No pages found</string>
     <string name="loader_not_implemented_error">Source not found</string>
-    <string name="loader_rar5_error">RARv5 format is not supported</string>
     <string name="updating_library">Updating library</string>
     <string name="update_already_running">An update is already running</string>
     <string name="cant_open_last_read_chapter">Unable to open last read chapter</string>
@@ -755,6 +761,7 @@
     <string name="file_select_cover">Select cover image</string>
     <string name="file_select_backup">Select backup file</string>
     <string name="file_picker_error">No file picker app found</string>
+    <string name="file_picker_uri_permission_unsupported">Failed to acquire persistent folder access. The app may behave unexpectedly.</string>
     <string name="file_null_uri_error">No file selected</string>
     <string name="update_check_confirm">Download</string>
     <string name="update_check_open">Open on GitHub</string>
@@ -940,6 +947,7 @@
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
+    <string name="pref_sub_select_conf">Edit advanced subtitle track select configuration</string>
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
@@ -1105,9 +1113,16 @@
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
+    <string name="player_subtitle_settings_filters">Filters</string>
     <string name="player_subtitle_settings_delay_tab">Delay</string>
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings_color_tab">Color</string>
+    <string name="player_filters_brightness">Brightness</string>
+    <string name="player_filters_saturation">Saturation</string>
+    <string name="player_filters_contrast">Contrast</string>
+    <string name="player_filters_gamma">Gamma</string>
+    <string name="player_filters_hue">Hue</string>
+    <string name="player_filters_warning">Some filters may not work with your current video driver</string>
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_add_external_audio">Add external audio</string>
     <string name="player_add_external_audio_intent">Select an audio file.</string>

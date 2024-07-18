@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupChapter
 import eu.kanade.tachiyomi.data.backup.models.BackupEpisode
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.backup.restore.RestoreOptions
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
@@ -46,6 +45,7 @@ import kotlin.system.measureTimeMillis
  *
  * @property context The application context.
  */
+@Suppress("TooManyFunctions")
 class SyncManager(
     private val context: Context,
     private val mangaHandler: MangaDatabaseHandler = Injekt.get(),
@@ -80,6 +80,7 @@ class SyncManager(
      * This function retrieves local data (favorites, manga, extensions, and categories)
      * from the database using the BackupManager, then synchronizes the data with a sync service.
      */
+    @Suppress("ReturnCount", "LongMethod")
     suspend fun syncData() {
         // Reset isSyncing in case it was left over or failed syncing during restore.
         mangaHandler.await(inTransaction = true) {
@@ -169,10 +170,8 @@ class SyncManager(
         }
 
         // Check if it's first sync based on lastSyncTimestamp
-        if (syncPreferences.lastSyncTimestamp().get() == 0L && (
-                databaseManga.isNotEmpty() &&
-                    databaseAnime.isNotEmpty()
-                )
+        if (syncPreferences.lastSyncTimestamp().get() == 0L &&
+            (databaseManga.isNotEmpty() && databaseAnime.isNotEmpty())
         ) {
             // It's first sync no need to restore data. (just update remote data)
             syncPreferences.lastSyncTimestamp().set(Date().time)
@@ -230,7 +229,7 @@ class SyncManager(
         val cacheFile = File(context.cacheDir, "Animetail_sync_data.proto.gz")
         return try {
             cacheFile.outputStream().use { output ->
-                output.write(ProtoBuf.encodeToByteArray(BackupSerializer, backup))
+                output.write(ProtoBuf.encodeToByteArray(Backup.serializer(), backup))
                 Uri.fromFile(cacheFile)
             }
         } catch (e: IOException) {
@@ -260,6 +259,7 @@ class SyncManager(
         return animeHandler.awaitList { animesQueries.getAnimesWithFavoriteTimestamp(::mapAnime) }
     }
 
+    @Suppress("ReturnCount")
     private suspend fun isMangaDifferent(localManga: Manga, remoteManga: BackupManga): Boolean {
         val localChapters = mangaHandler.await {
             chaptersQueries.getChaptersByMangaId(
@@ -284,6 +284,7 @@ class SyncManager(
         return false
     }
 
+    @Suppress("ReturnCount")
     private suspend fun isAnimeDifferent(localAnime: Anime, remoteAnime: BackupAnime): Boolean {
         val localEpisodes = animeHandler.await { episodesQueries.getEpisodesByAnimeId(localAnime.id).executeAsList() }
         val localCategories = getAnimeCategories.await(localAnime.id).map { it.order }
@@ -303,6 +304,7 @@ class SyncManager(
         return false
     }
 
+    @Suppress("ReturnCount")
     private fun areChaptersDifferent(localChapters: List<Chapters>, remoteChapters: List<BackupChapter>): Boolean {
         val localChapterMap = localChapters.associateBy { it.url }
         val remoteChapterMap = remoteChapters.associateBy { it.url }
@@ -323,6 +325,7 @@ class SyncManager(
         return false
     }
 
+    @Suppress("ReturnCount")
     private fun areEpisodesDifferent(localEpisodes: List<Episodes>, remoteEpisodes: List<BackupEpisode>): Boolean {
         val localEpisodeMap = localEpisodes.associateBy { it.url }
         val remoteEpisodeMap = remoteEpisodes.associateBy { it.url }
@@ -350,6 +353,7 @@ class SyncManager(
      * @return a Pair of lists, where the first list contains different favorite manga
      * and the second list contains non-favorite manga.
      */
+    @Suppress("MagicNumber")
     private suspend fun mangaFilterFavoritesAndNonFavorites(
         backup: Backup,
     ): Pair<List<BackupManga>, List<BackupManga>> {
@@ -397,6 +401,7 @@ class SyncManager(
         return Pair(favorites, nonFavorites)
     }
 
+    @Suppress("MagicNumber")
     private suspend fun aniFilterFavoritesAndNonFavorites(backup: Backup): Pair<List<BackupAnime>, List<BackupAnime>> {
         val favorites = mutableListOf<BackupAnime>()
         val nonFavorites = mutableListOf<BackupAnime>()

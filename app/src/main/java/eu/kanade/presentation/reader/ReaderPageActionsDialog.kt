@@ -42,9 +42,7 @@ fun ReaderPageActionsDialog(
     var useExtraPage by remember { mutableStateOf(false) }
     // SY <--
 
-    AdaptiveSheet(
-        onDismissRequest = onDismissRequest,
-    ) {
+    AdaptiveSheet(onDismissRequest = onDismissRequest) {
         Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),

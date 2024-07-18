@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
+@Suppress("MagicNumber")
 fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,
@@ -143,7 +145,7 @@ private fun ColumnScope.FilterPage(
         )
     }
 
-    val trackers = remember { screenModel.trackers }
+    val trackers by screenModel.trackersFlow.collectAsState()
     when (trackers.size) {
         0 -> {
             // No trackers
@@ -180,6 +182,7 @@ private fun ColumnScope.SortPage(
     category: Category?,
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
+    val trackers by screenModel.trackersFlow.collectAsState()
     // SY -->
     val globalSortMode by screenModel.libraryPreferences.mangaSortingMode().collectAsState()
     val sortingMode = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
@@ -188,18 +191,17 @@ private fun ColumnScope.SortPage(
         globalSortMode.type
     }
     val sortDescending = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
-        category.sort.isAscending
+        !category.sort.isAscending
     } else {
-        globalSortMode.isAscending
+        !globalSortMode.isAscending
     }.not()
     // SY <--
 
-    val trackerSortOption =
-        if (screenModel.trackers.isEmpty()) {
-            emptyList()
-        } else {
-            listOf(MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean)
-        }
+    val trackerSortOption = if (trackers.isEmpty()) {
+        emptyList()
+    } else {
+        listOf(MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean)
+    }
 
     listOf(
         MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
@@ -331,13 +333,15 @@ private fun ColumnScope.GroupPage(
     screenModel: MangaLibrarySettingsScreenModel,
     hasCategories: Boolean,
 ) {
-    val groups = remember(hasCategories, screenModel.trackers) {
+    val trackers by screenModel.trackersFlow.collectAsState()
+
+    val groups = remember(hasCategories, trackers) {
         buildList {
             add(MangaLibraryGroup.BY_DEFAULT)
             add(MangaLibraryGroup.BY_SOURCE)
             add(MangaLibraryGroup.BY_TAG)
             add(MangaLibraryGroup.BY_STATUS)
-            if (screenModel.trackers.isNotEmpty()) {
+            if (trackers.isNotEmpty()) {
                 add(MangaLibraryGroup.BY_TRACK_STATUS)
             }
             if (hasCategories) {

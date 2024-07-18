@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.manga.MangaHistoryUiModel
-import eu.kanade.tachiyomi.util.lang.toLocalDate
+import eu.kanade.tachiyomi.util.lang.toLocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -69,8 +69,8 @@ class MangaHistoryScreenModel(
     private fun List<MangaHistoryWithRelations>.toHistoryUiModels(): List<MangaHistoryUiModel> {
         return map { MangaHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
-                val beforeDate = before?.item?.readAt?.time?.toLocalDate()
-                val afterDate = after?.item?.readAt?.time?.toLocalDate()
+                val beforeDate = before?.item?.readAt?.time?.toLocalDateTime()
+                val afterDate = after?.item?.readAt?.time?.toLocalDateTime()
                 when {
                     beforeDate != afterDate && afterDate != null -> MangaHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.

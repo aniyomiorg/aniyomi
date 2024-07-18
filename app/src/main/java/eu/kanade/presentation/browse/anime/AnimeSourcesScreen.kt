@@ -74,12 +74,12 @@ fun AnimeSourcesScreen(
                     when (model) {
                         is AnimeSourceUiModel.Header -> {
                             AnimeSourceHeader(
-                                modifier = Modifier.animateItemPlacement(),
+                                modifier = Modifier.animateItem(),
                                 language = model.language,
                             )
                         }
                         is AnimeSourceUiModel.Item -> AnimeSourceItem(
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem(),
                             source = model.source,
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,

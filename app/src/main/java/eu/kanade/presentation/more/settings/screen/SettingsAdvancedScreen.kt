@@ -58,7 +58,6 @@ import eu.kanade.tachiyomi.ui.more.OnboardingScreen
 import eu.kanade.tachiyomi.util.CrashLogUtil
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
@@ -98,12 +97,6 @@ object SettingsAdvancedScreen : SearchableSettings {
         val networkPreferences = remember { Injekt.get<NetworkPreferences>() }
 
         return listOf(
-            Preference.PreferenceItem.SwitchPreference(
-                pref = basePreferences.acraEnabled(),
-                title = stringResource(MR.strings.pref_enable_acra),
-                subtitle = stringResource(MR.strings.pref_acra_summary),
-                enabled = isPreviewBuildType || isReleaseBuildType,
-            ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(MR.strings.pref_dump_crash_logs),
                 subtitle = stringResource(MR.strings.pref_dump_crash_logs_summary),

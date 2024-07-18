@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.util.ioCoroutineScope
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tachiyomi.core.common.preference.toggle
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
@@ -38,6 +40,7 @@ abstract class MangaSearchScreenModel(
     private val extensionManager: MangaExtensionManager = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
+    private val preferences: SourcePreferences = Injekt.get(),
 ) : StateScreenModel<MangaSearchScreenModel.State>(initialState) {
 
     private val coroutineDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
@@ -58,6 +61,14 @@ abstract class MangaSearchScreenModel(
             { "${it.id}" !in pinnedSources },
             { "${it.name.lowercase()} (${it.lang})" },
         )
+    }
+
+    init {
+        screenModelScope.launch {
+            preferences.globalSearchFilterState().changes().collectLatest { state ->
+                mutableState.update { it.copy(onlyShowHasResults = state) }
+            }
+        }
     }
 
     @Composable
@@ -107,7 +118,7 @@ abstract class MangaSearchScreenModel(
     }
 
     fun toggleFilterResults() {
-        mutableState.update { it.copy(onlyShowHasResults = !it.onlyShowHasResults) }
+        preferences.globalSearchFilterState().toggle()
     }
 
     fun search() {

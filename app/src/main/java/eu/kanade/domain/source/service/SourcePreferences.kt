@@ -46,6 +46,11 @@ class SourcePreferences(
         emptySet(),
     )
 
+    fun globalSearchFilterState() = preferenceStore.getBoolean(
+        Preference.appStateKey("has_filters_toggle_state"),
+        false,
+    )
+
     // Mixture Sources
 
     fun disabledAnimeSources() = preferenceStore.getStringSet("hidden_anime_catalogues", emptySet())

@@ -90,7 +90,7 @@ fun MangaExtensionScreen(
     PullRefresh(
         refreshing = state.isRefreshing,
         onRefresh = onRefresh,
-        enabled = { !state.isLoading },
+        enabled = !state.isLoading,
     ) {
         when {
             state.isLoading -> LoadingScreen(Modifier.padding(contentPadding))
@@ -187,14 +187,14 @@ private fun ExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem(),
                             action = action,
                         )
                     }
                     is MangaExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem(),
                         )
                     }
                 }
@@ -212,8 +212,8 @@ private fun ExtensionContent(
                 },
             ) { item ->
                 ExtensionItem(
+                    modifier = Modifier.animateItem(),
                     item = item,
-                    modifier = Modifier.animateItemPlacement(),
                     onClickItem = {
                         when (it) {
                             is MangaExtension.Available -> onInstallExtension(it)
