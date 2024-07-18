@@ -19,7 +19,6 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.tachiyomi.data.backup.models.Backup
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -66,6 +65,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
 
     private val protoBuf: ProtoBuf = Injekt.get()
 
+    @Suppress("ReturnCount", "TooGenericExceptionCaught")
     override suspend fun doSync(syncData: SyncData): Backup? {
         beforeSync()
 
@@ -82,7 +82,8 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
                     "Local device ID: $localDeviceId, Last sync device ID: $lastSyncDeviceId"
                 }
 
-                // check if the last sync was done by the same device if so overwrite the remote data with the local data
+                // check if the last sync was done by the same device if so
+                // overwrite the remote data with the local data
                 return if (lastSyncDeviceId == localDeviceId) {
                     pushSyncData(syncData)
                     syncData.backup
@@ -106,6 +107,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         googleDriveService.refreshToken()
     }
 
+    @Suppress("TooGenericExceptionThrown", "TooGenericExceptionCaught")
     private fun pullSyncData(): SyncData? {
         val drive = googleDriveService.driveService
             ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
@@ -123,7 +125,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
             drive.files().get(gdriveFileId).executeMediaAsInputStream().use { inputStream ->
                 GZIPInputStream(inputStream).use { gzipInputStream ->
                     val byteArray = gzipInputStream.readBytes()
-                    val backup = protoBuf.decodeFromByteArray(BackupSerializer, byteArray)
+                    val backup = protoBuf.decodeFromByteArray(Backup.serializer(), byteArray)
                     val deviceId = fileList[0].appProperties["deviceId"] ?: ""
                     return SyncData(deviceId = deviceId, backup = backup)
                 }
@@ -134,6 +136,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionThrown")
     private suspend fun pushSyncData(syncData: SyncData) {
         val drive = googleDriveService.driveService
             ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
@@ -141,7 +144,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         val fileList = getAppDataFileList(drive)
         val backup = syncData.backup ?: return
 
-        val byteArray = protoBuf.encodeToByteArray(BackupSerializer, backup)
+        val byteArray = protoBuf.encodeToByteArray(Backup.serializer(), backup)
         if (byteArray.isEmpty()) {
             throw IllegalStateException(context.stringResource(MR.strings.empty_backup_error))
         }
@@ -187,6 +190,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun getAppDataFileList(drive: Drive): MutableList<File> {
         try {
             // Search for the existing file by name in the appData folder
@@ -207,6 +211,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     suspend fun deleteSyncDataFromGoogleDrive(): DeleteSyncDataStatus {
         val drive = googleDriveService.driveService
 
@@ -292,6 +297,7 @@ class GoogleDriveService(private val context: Context) {
      * even if they have previously granted access.
      * @return The authorization URL.
      */
+    @Suppress("TooGenericExceptionThrown")
     private fun generateAuthorizationUrl(): String {
         val jsonFactory: JsonFactory = JacksonFactory.getDefaultInstance()
         val secrets = GoogleClientSecrets.load(
@@ -311,6 +317,8 @@ class GoogleDriveService(private val context: Context) {
             .setApprovalPrompt("force")
             .build()
     }
+
+    @Suppress("TooGenericExceptionThrown")
     internal suspend fun refreshToken() = withIOContext {
         val refreshToken = syncPreferences.googleDriveRefreshToken().get()
 
@@ -389,14 +397,17 @@ class GoogleDriveService(private val context: Context) {
     }
 
     /**
-     * Handles the authorization code returned after the user has granted the application permission to access their Google Drive account.
-     * It obtains the access token and refresh token using the authorization code, saves the tokens to the SyncPreferences,
+     * Handles the authorization code returned after the user has granted the
+     * application permission to access their Google Drive account.
+     * It obtains the access token and refresh token using the authorization code,
+     * saves the tokens to the SyncPreferences,
      * sets up the Google Drive service using the obtained tokens, and initializes the service.
      * @param authorizationCode The authorization code obtained from the OAuthCallbackServer.
      * @param activity The current activity.
      * @param onSuccess A callback function to be called on successful authorization.
      * @param onFailure A callback function to be called on authorization failure.
      */
+    @Suppress("TooGenericExceptionCaught")
     fun handleAuthorizationCode(
         authorizationCode: String,
         activity: Activity,

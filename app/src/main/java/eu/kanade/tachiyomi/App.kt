@@ -32,6 +32,7 @@ import eu.kanade.tachiyomi.crash.GlobalExceptionHandler
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
 import eu.kanade.tachiyomi.data.coil.AnimeKeyer
+import eu.kanade.tachiyomi.data.coil.BufferedSourceFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
@@ -174,29 +175,37 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
         )
     }
 
+    @Suppress("MagicNumber")
     override fun newImageLoader(context: Context): ImageLoader {
         return ImageLoader.Builder(this).apply {
             val callFactoryLazy = lazy { Injekt.get<NetworkHelper>().client }
             components {
+                // NetworkFetcher.Factory
                 add(OkHttpNetworkFetcherFactory(callFactoryLazy::value))
+                // Decoder.Factory
                 add(TachiyomiImageDecoder.Factory())
+                // Fetcher.Factory
+                add(BufferedSourceFetcher.Factory())
                 add(MangaCoverFetcher.MangaFactory(callFactoryLazy))
+                add(MangaCoverFetcher.MangaCoverFactory(callFactoryLazy))
                 add(AnimeCoverFetcher.AnimeFactory(callFactoryLazy))
                 add(AnimeCoverFetcher.AnimeCoverFactory(callFactoryLazy))
+                // Keyer
                 add(AnimeKeyer())
-                add(MangaCoverFetcher.MangaCoverFactory(callFactoryLazy))
                 add(MangaKeyer())
                 add(AnimeCoverKeyer())
                 add(MangaCoverKeyer())
             }
+
             crossfade((300 * this@App.animatorDurationScale).toInt())
             allowRgb565(DeviceUtil.isLowRamDevice(this@App))
             if (networkPreferences.verboseLogging().get()) logger(DebugLogger())
 
             // Coil spawns a new thread for every image load by default
-            fetcherDispatcher(Dispatchers.IO.limitedParallelism(8))
-            decoderDispatcher(Dispatchers.IO.limitedParallelism(2))
-        }.build()
+            fetcherCoroutineContext(Dispatchers.IO.limitedParallelism(8))
+            decoderCoroutineContext(Dispatchers.IO.limitedParallelism(3))
+        }
+            .build()
     }
 
     override fun onStart(owner: LifecycleOwner) {

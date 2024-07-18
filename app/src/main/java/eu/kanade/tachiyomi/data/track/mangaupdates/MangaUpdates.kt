@@ -51,7 +51,7 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
         return listOf(READING_LIST, COMPLETE_LIST, ON_HOLD_LIST, UNFINISHED_LIST, WISH_LIST)
     }
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
+    override fun getStatusForManga(status: Long): StringResource? = when (status) {
         READING_LIST -> MR.strings.reading_list
         WISH_LIST -> MR.strings.wish_list
         COMPLETE_LIST -> MR.strings.complete_list

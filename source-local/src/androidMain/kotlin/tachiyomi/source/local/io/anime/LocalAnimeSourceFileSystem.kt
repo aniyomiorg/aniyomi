@@ -17,13 +17,13 @@ actual class LocalAnimeSourceFileSystem(
 
     actual fun getAnimeDirectory(name: String): UniFile? {
         return getBaseDirectory()
-            ?.findFile(name, true)
+            ?.findFile(name)
             ?.takeIf { it.isDirectory }
     }
 
     actual fun getFilesInAnimeDirectory(name: String): List<UniFile> {
         return getBaseDirectory()
-            ?.findFile(name, true)
+            ?.findFile(name)
             ?.takeIf { it.isDirectory }
             ?.listFiles().orEmpty().toList()
     }

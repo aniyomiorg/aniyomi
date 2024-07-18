@@ -31,11 +31,9 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
-import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
@@ -49,7 +47,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -129,8 +126,6 @@ class MangaScreenModel(
 
     private val successState: State.Success?
         get() = state.value as? State.Success
-
-    val loggedInTrackers by lazy { trackerManager.trackers.filter { it.isLoggedIn && it is MangaTracker } }
 
     val manga: Manga?
         get() = successState?.manga
@@ -1089,18 +1084,26 @@ class MangaScreenModel(
         val manga = successState?.manga ?: return
 
         screenModelScope.launchIO {
-            getTracks.subscribe(manga.id)
-                .catch { logcat(LogPriority.ERROR, it) }
-                .map { tracks ->
-                    loggedInTrackers
-                        // Map to TrackItem
-                        .map { service -> MangaTrackItem(tracks.find { it.trackerId == service.id }, service) }
-                        // Show only if the service supports this manga's source
-                        .filter { (it.tracker as? EnhancedMangaTracker)?.accept(source!!) ?: true }
+            combine(
+                getTracks.subscribe(manga.id).catch { logcat(LogPriority.ERROR, it) },
+                trackerManager.loggedInTrackersFlow(),
+            ) { mangaTracks, loggedInTrackers ->
+                // Show only if the service supports this manga's source
+                val supportedTrackers = loggedInTrackers.filter {
+                    (it as? EnhancedMangaTracker)?.accept(source!!) ?: true
                 }
+                val supportedTrackerIds = supportedTrackers.map { it.id }.toHashSet()
+                val supportedTrackerTracks = mangaTracks.filter { it.trackerId in supportedTrackerIds }
+                supportedTrackerTracks.size to supportedTrackers.isNotEmpty()
+            }
                 .distinctUntilChanged()
-                .collectLatest { trackItems ->
-                    updateSuccessState { it.copy(trackItems = trackItems) }
+                .collectLatest { (trackingCount, hasLoggedInTrackers) ->
+                    updateSuccessState {
+                        it.copy(
+                            trackingCount = trackingCount,
+                            hasLoggedInTrackers = hasLoggedInTrackers,
+                        )
+                    }
                 }
         }
     }
@@ -1182,7 +1185,8 @@ class MangaScreenModel(
             val chapters: List<ChapterList.Item>,
             val availableScanlators: Set<String>,
             val excludedScanlators: Set<String>,
-            val trackItems: List<MangaTrackItem> = emptyList(),
+            val trackingCount: Int = 0,
+            val hasLoggedInTrackers: Boolean = false,
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
             val hasPromptedToAddBefore: Boolean = false,
@@ -1229,10 +1233,7 @@ class MangaScreenModel(
                 get() = scanlatorFilterActive || manga.chaptersFiltered()
 
             val trackingAvailable: Boolean
-                get() = trackItems.isNotEmpty()
-
-            val trackingCount: Int
-                get() = trackItems.count { it.track != null }
+                get() = trackingCount > 0
 
             /**
              * Applies the view filters to the list of chapters obtained from the database.

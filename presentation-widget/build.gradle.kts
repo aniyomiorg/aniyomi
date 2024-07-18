@@ -2,7 +2,6 @@ plugins {
     id("mihon.library")
     id("mihon.library.compose")
     kotlin("android")
-    kotlin("plugin.compose") // TODO(kotlin2): remove
 }
 
 android {

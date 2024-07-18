@@ -94,7 +94,7 @@ fun AnimeLibraryContent(
                     isRefreshing = false
                 }
             },
-            enabled = { notSelectionMode },
+            enabled = notSelectionMode,
         ) {
             AnimeLibraryPager(
                 state = pagerState,

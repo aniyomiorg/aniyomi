@@ -84,13 +84,20 @@ class Anilist(id: Long) :
         return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
     }
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
-        WATCHING -> MR.strings.watching
+    override fun getStatusForManga(status: Long): StringResource? = when (status) {
         READING -> MR.strings.reading
         PLANNING -> MR.strings.plan_to_read
-        PLANNING_ANIME -> MR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed
         REPEATING -> MR.strings.repeating
+        PAUSED -> MR.strings.paused
+        DROPPED -> MR.strings.dropped
+        else -> null
+    }
+
+    override fun getStatusForAnime(status: Long): StringResource? = when (status) {
+        WATCHING -> MR.strings.watching
+        PLANNING_ANIME -> MR.strings.plan_to_watch
+        COMPLETED -> MR.strings.completed
         REPEATING_ANIME -> MR.strings.repeating_anime
         PAUSED -> MR.strings.paused
         DROPPED -> MR.strings.dropped

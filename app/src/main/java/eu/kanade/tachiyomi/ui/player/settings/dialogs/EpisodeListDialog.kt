@@ -43,7 +43,7 @@ import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import java.time.Instant
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -94,7 +94,7 @@ fun EpisodeListDialog(
                     val date = episode.date_upload
                         .takeIf { it > 0L }
                         ?.let {
-                            LocalDate.ofInstant(
+                            LocalDateTime.ofInstant(
                                 Instant.ofEpochMilli(it),
                                 ZoneId.systemDefault(),
                             ).toRelativeString(

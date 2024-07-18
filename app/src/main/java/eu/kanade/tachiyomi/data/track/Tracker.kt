@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.data.track
 import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import dev.icerock.moko.resources.StringResource
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
 
 interface Tracker {
@@ -24,8 +24,6 @@ interface Tracker {
     @ColorInt
     fun getLogoColor(): Int
 
-    fun getStatus(status: Long): StringResource?
-
     fun getCompletionStatus(): Long
 
     fun getScoreList(): ImmutableList<String>
@@ -36,6 +34,8 @@ interface Tracker {
     fun logout()
 
     val isLoggedIn: Boolean
+
+    val isLoggedInFlow: Flow<Boolean>
 
     fun getUsername(): String
 

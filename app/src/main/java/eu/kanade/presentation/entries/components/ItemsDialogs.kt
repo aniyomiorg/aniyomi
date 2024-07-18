@@ -110,9 +110,18 @@ fun SetIntervalDialog(
                             ),
                         ),
                     )
-
-                    Spacer(Modifier.height(MaterialTheme.padding.small))
+                } else {
+                    Text(
+                        stringResource(
+                            if (isManga) {
+                                MR.strings.manga_interval_expected_update_null
+                            } else {
+                                MR.strings.anime_interval_expected_update_null
+                            },
+                        ),
+                    )
                 }
+                Spacer(Modifier.height(MaterialTheme.padding.small))
 
                 if (onValueChanged != null && (isDevFlavor || isPreviewBuildType)) {
                     Text(stringResource(MR.strings.manga_interval_custom_amount))

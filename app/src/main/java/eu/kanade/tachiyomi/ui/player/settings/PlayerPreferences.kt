@@ -37,6 +37,8 @@ class PlayerPreferences(
 
     fun mpvInput() = preferenceStore.getString("pref_mpv_input", "")
 
+    fun subSelectConf() = preferenceStore.getString("pref_sub_select_conf", "")
+
     fun defaultPlayerOrientationType() = preferenceStore.getInt(
         "pref_default_player_orientation_type_key",
         10,
@@ -121,4 +123,10 @@ class PlayerPreferences(
     fun backgroundColorSubtitles() = preferenceStore.getInt("pref_background_color_subtitles", 0)
 
     fun mpvScripts() = preferenceStore.getBoolean("mpv_scripts", false)
+
+    fun brightnessFilter() = preferenceStore.getInt("pref_player_filter_brightness")
+    fun saturationFilter() = preferenceStore.getInt("pref_player_filter_saturation")
+    fun contrastFilter() = preferenceStore.getInt("pref_player_filter_contrast")
+    fun gammaFilter() = preferenceStore.getInt("pref_player_filter_gamma")
+    fun hueFilter() = preferenceStore.getInt("pref_player_filter_hue")
 }

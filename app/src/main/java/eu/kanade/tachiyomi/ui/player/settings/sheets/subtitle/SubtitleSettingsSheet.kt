@@ -54,6 +54,7 @@ fun SubtitleSettingsSheet(
     TabbedDialog(
         onDismissRequest = onDismissRequest,
         tabTitles = persistentListOf(
+            stringResource(MR.strings.player_subtitle_settings_filters),
             stringResource(MR.strings.player_subtitle_settings_delay_tab),
             stringResource(MR.strings.player_subtitle_settings_font_tab),
             stringResource(MR.strings.player_subtitle_settings_color_tab),
@@ -66,9 +67,10 @@ fun SubtitleSettingsSheet(
                 .verticalScroll(rememberScrollState()),
         ) {
             when (page) {
-                0 -> StreamsDelayPage(screenModel)
-                1 -> SubtitleFontPage(screenModel)
-                2 -> SubtitleColorPage(screenModel)
+                0 -> FiltersPage(screenModel)
+                1 -> StreamsDelayPage(screenModel)
+                2 -> SubtitleFontPage(screenModel)
+                3 -> SubtitleColorPage(screenModel)
             }
         }
     }

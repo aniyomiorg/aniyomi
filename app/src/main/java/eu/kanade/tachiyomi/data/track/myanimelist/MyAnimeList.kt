@@ -69,15 +69,22 @@ class MyAnimeList(id: Long) :
         return listOf(WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH, REWATCHING)
     }
 
-    override fun getStatus(status: Long): StringResource? = when (status) {
+    override fun getStatusForManga(status: Long): StringResource? = when (status) {
         READING -> MR.strings.reading
-        WATCHING -> MR.strings.watching
         COMPLETED -> MR.strings.completed
         ON_HOLD -> MR.strings.on_hold
         DROPPED -> MR.strings.dropped
         PLAN_TO_READ -> MR.strings.plan_to_read
-        PLAN_TO_WATCH -> MR.strings.plan_to_watch
         REREADING -> MR.strings.repeating
+        else -> null
+    }
+
+    override fun getStatusForAnime(status: Long): StringResource? = when (status) {
+        WATCHING -> MR.strings.watching
+        COMPLETED -> MR.strings.completed
+        ON_HOLD -> MR.strings.on_hold
+        DROPPED -> MR.strings.dropped
+        PLAN_TO_WATCH -> MR.strings.plan_to_watch
         REWATCHING -> MR.strings.repeating_anime
         else -> null
     }
