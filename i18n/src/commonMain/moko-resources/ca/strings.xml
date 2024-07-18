@@ -698,7 +698,7 @@
     <string name="track_activity_name">Inici de sessió al servei de seguiment</string>
     <string name="download_cache_invalidated">S’ha invalidat l\'índex de baixades</string>
     <string name="information_cloudflare_help">Premeu aquí per a obtenir ajuda amb el Cloudflare</string>
-    <string name="unlock_app_title">Desbloqueja Kuukiyomi</string>
+    <string name="unlock_app_title">Desbloqueja Aniyomi</string>
     <string name="exception_offline">No hi ha connexió a Internet</string>
     <string name="exception_http">HTTP %d, comproveu el lloc web en una WebView</string>
     <string name="exception_unknown_host">No s’ha pogut accedir a %s</string>
@@ -761,7 +761,7 @@
     <string name="label_extension_repos">Repositoris d’extensions</string>
     <string name="information_empty_repos">No heu definit cap repositori.</string>
     <string name="action_delete_repo">Suprimeix el repositori</string>
-    <string name="action_add_repo_message">Afegiu repositoris addicionals al Kuukiyomi. Ha de ser un URL que acabi amb «index.min.json».</string>
+    <string name="action_add_repo_message">Afegiu repositoris addicionals al Aniyomi. Ha de ser un URL que acabi amb «index.min.json».</string>
     <string name="error_repo_exists">Aquest repositori ja existeix!</string>
     <string name="invalid_repo_name">URL del repositori invàlid</string>
     <string name="delete_repo_confirmation">Voleu suprimir el repositori «%s»?</string>
@@ -801,8 +801,8 @@
     <string name="also_set_chapter_settings_for_library">Aplica-ho també a tots els elements de la biblioteca</string>
     <string name="dialog_with_checkbox_reset">Reinicia tots els capítols d\'aquest element</string>
     <string name="download_insufficient_space">No s\'han pogut baixar els capítols perquè hi ha poc espai d\'emmagatzematge</string>
-    <string name="download_queue_size_warning">Advertència: Les baixades massa grosses poden fer que les fonts es tornin més lentes i/o bloquin el Kuukiyomi. Premeu per a obtenir-ne més informació.</string>
-    <string name="information_webview_required">El Kuukiyomi requereix el WebView</string>
+    <string name="download_queue_size_warning">Advertència: Les baixades massa grosses poden fer que les fonts es tornin més lentes i/o bloquin el Aniyomi. Premeu per a obtenir-ne més informació.</string>
+    <string name="information_webview_required">El Aniyomi requereix el WebView</string>
     <string name="download_notifier_download_paused_chapters">Baixada pausada</string>
     <string name="channel_new_chapters_episodes">Novetats de capítols</string>
     <string name="pref_remove_exclude_categories_anime">Categories d\'anime excloses</string>
@@ -985,9 +985,9 @@
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar l\'anime</string>
     <string name="settings">Ajustaments</string>
-    <string name="unofficial_extension_message_aniyomi">Aquesta extensió no és de la llista oficial d\'extensions d\'Kuukiyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Aquesta extensió no és de la llista oficial d\'extensions d\'Aniyomi.</string>
     <string name="pref_category_progress">Progrès</string>
-    <string name="unofficial_anime_extension_message">Aquesta extensió no és del llistat d\'extensions oficials d\'Kuukiyomi.</string>
+    <string name="unofficial_anime_extension_message">Aquesta extensió no és del llistat d\'extensions oficials d\'Aniyomi.</string>
     <string name="pref_default_player_orientation">Orientació per defecte</string>
     <string name="pref_adjust_orientation_video_dimensions">Ajustar la orientació segons les dimensions del vídeo</string>
     <string name="pref_category_volume_brightness">Volum i lluentor</string>

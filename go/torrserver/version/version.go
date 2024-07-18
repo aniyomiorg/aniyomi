@@ -6,7 +6,7 @@ import (
 	// "github.com/anacrolix/torrent"
 )
 
-const Version = "Kuukiyomi torrserver"
+const Version = "Aniyomi torrserver"
 
 func GetTorrentVersion() string {
 	bi, ok := debug.ReadBuildInfo()

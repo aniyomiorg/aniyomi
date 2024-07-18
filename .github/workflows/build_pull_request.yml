@@ -3,7 +3,6 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
-      - 'i18n/src/main/res/**/strings-kuukiyomi.xml'
       - 'i18n/src/commonMain/moko-resources/**/strings-aniyomi.xml'
       - 'i18n/src/commonMain/moko-resources/**/strings.xml'
       - 'i18n/src/commonMain/moko-resources/**/plurals-aniyomi.xml'

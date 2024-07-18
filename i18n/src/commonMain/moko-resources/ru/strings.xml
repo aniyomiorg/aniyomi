@@ -760,7 +760,7 @@
     <string name="error_repo_exists">Этот репозиторий уже существует!</string>
     <string name="pref_library_update_smart_update">Умное обновление</string>
     <string name="invalid_repo_name">Недопустимый URL-адрес репозитория</string>
-    <string name="action_add_repo_message">Добавить дополнительные репозиторий в Kuukiyomi. Это должны быть URL-адреса которые заканчиваться на \"index.min.json\".</string>
+    <string name="action_add_repo_message">Добавить дополнительные репозиторий в Aniyomi. Это должны быть URL-адреса которые заканчиваться на \"index.min.json\".</string>
     <string name="delete_repo_confirmation">Хотите ли вы удалить репозиторий \"%s\"?</string>
     <string name="action_delete_repo">Удалить репозиторий</string>
     <string name="action_add_repo">Добавить репозиторий</string>
@@ -800,7 +800,7 @@
     <string name="also_set_chapter_settings_for_library">Также применить для всей манги в моей библиотеке</string>
     <string name="dialog_with_checkbox_reset">Сбросить все главы для этой манги</string>
     <string name="download_insufficient_space">Не удалось загрузить из-за нехватки места для хранения</string>
-    <string name="download_queue_size_warning">Предупреждение: большие объемы загрузки могут привести к замедлению работы источников и/или блокировке Kuukiyomi. Нажмите, чтобы узнать больше.</string>
+    <string name="download_queue_size_warning">Предупреждение: большие объемы загрузки могут привести к замедлению работы источников и/или блокировке Aniyomi. Нажмите, чтобы узнать больше.</string>
     <string name="information_webview_required">Для работы приложения требуется WebView</string>
     <string name="download_notifier_download_paused_chapters">Загрузка главы приостановлена</string>
     <string name="channel_new_chapters_episodes">Обновления глав/эпизодов</string>
@@ -933,7 +933,7 @@
     <string name="confirm_delete_episodes">Вы уверены, что хотите удалить выбранные эпизоды?</string>
     <string name="action_hide">Скрыть</string>
     <string name="label_recent_anime_updates">Обновления Аниме</string>
-    <string name="unlock_app_title">Разблокировать Kuukiyomi</string>
+    <string name="unlock_app_title">Разблокировать Aniyomi</string>
     <string name="action_global_manga_search">Глобальный поиск Манги</string>
     <string name="action_global_anime_search">Глобальный поиск Аниме</string>
     <string name="action_sort_latest_episode">Последний эпизод</string>
@@ -1095,7 +1095,7 @@
     <string name="action_play_externally">Смотреть в другом плеере</string>
     <string name="action_download_unseen">Скачать не просмотренные эпизоды</string>
     <string name="pref_category_internal_player">Внутренний плеер</string>
-    <string name="onboarding_storage_action_create_folder">Создать папку Kuukiyomi по умолчанию</string>
+    <string name="onboarding_storage_action_create_folder">Создать папку Aniyomi по умолчанию</string>
     <string name="action_filter_started">Начато</string>
     <string name="action_sort_airing_time">Время выхода в эфир</string>
     <string name="theme_cloudflare">Cloudflare</string>

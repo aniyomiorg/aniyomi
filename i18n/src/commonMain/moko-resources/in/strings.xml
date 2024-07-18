@@ -762,7 +762,7 @@
     <string name="pref_library_update_smart_update">Pembauan pintar</string>
     <string name="onboarding_storage_help_info">Memperbarui dari versi lama dan tak yakin harus pilih mana? lihat panduan penyimpanan untuk informasi lebih lanjut.</string>
     <string name="action_add_repo">Tambahkan repo</string>
-    <string name="action_add_repo_message">Tambahkan repo lain ke Kuukiyomi. Seharusnya URL yang memiliki akhiran \"index.min.json\".</string>
+    <string name="action_add_repo_message">Tambahkan repo lain ke Aniyomi. Seharusnya URL yang memiliki akhiran \"index.min.json\".</string>
     <string name="label_extension_repos">Repositori ekstensi</string>
     <string name="information_empty_repos">Anda tidak memiliki repositori yang ditetapkan.</string>
     <string name="invalid_backup_file_error">Kesalahan penuh:</string>
@@ -934,11 +934,11 @@
     <string name="player_statistics_page_3">Halaman 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Tidak dapat mengunduh karena ruang penyimpanan rendah</string>
-    <string name="download_queue_size_warning">Peringatan: mengunduh dalam jumlah besar bisa menyebabkan sumber menjadi lambat dan/atau memblokir Kuukiyomi. Ketuk untuk mempelajari lebih lanjut.</string>
+    <string name="download_queue_size_warning">Peringatan: mengunduh dalam jumlah besar bisa menyebabkan sumber menjadi lambat dan/atau memblokir Aniyomi. Ketuk untuk mempelajari lebih lanjut.</string>
     <string name="video_list_empty_error">Video tidak ditemukan</string>
     <string name="notification_new_episodes">Ada episode baru nihh</string>
     <string name="information_no_recent_anime">Tidak ada yang ditonton baru-baru ini</string>
-    <string name="information_webview_required">WebView dibutuhkan untuk Kuukiyomi</string>
+    <string name="information_webview_required">WebView dibutuhkan untuk Aniyomi</string>
     <string name="episode_settings_updated">Ubah pengaturan standar episode</string>
     <string name="download_notifier_download_paused_chapters">Pengunduhan dijeda</string>
     <string name="download_notifier_download_paused_episodes">Unduhan episode dijeda</string>
@@ -1048,7 +1048,7 @@
     <string name="label_category">Kategori</string>
     <string name="go_to_after_opening">Lewati pembukaan</string>
     <string name="label_recent_anime_updates">Pembaruan Anime</string>
-    <string name="unlock_app_title">Buka Kunci Kuukiyomi</string>
+    <string name="unlock_app_title">Buka Kunci Aniyomi</string>
     <string name="pref_pip_replace_with_previous">Mengganti opsi Lewati 10 detik dengan Episode sebelumnya</string>
     <string name="pref_anime_storage_usage">Penggunaan penyimpanan Anime</string>
     <string name="pref_manga_storage_usage">Penggunaan Penyimpanan Manga</string>

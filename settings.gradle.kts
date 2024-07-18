@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Kuukiyomi"
+rootProject.name = "Aniyomi"
 include(":app")
 include(":core-metadata")
 include(":core:common")

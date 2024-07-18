@@ -781,8 +781,8 @@
     <string name="also_set_chapter_settings_for_library">Gäller även alla inlägg i biblioteket</string>
     <string name="dialog_with_checkbox_reset">Återställ alla kapitel för denna post</string>
     <string name="download_insufficient_space">Det gick inte att ladda ner kapitelt på grund av lågt lagringsutrymme</string>
-    <string name="download_queue_size_warning">Varning: stora massnerladdningar kan leda till att källor blir långsamma och/eller blockerar Kuukiyomi. Tryck för att få veta mer.</string>
-    <string name="information_webview_required">WebView krävs för Kuukiyomi</string>
+    <string name="download_queue_size_warning">Varning: stora massnerladdningar kan leda till att källor blir långsamma och/eller blockerar Aniyomi. Tryck för att få veta mer.</string>
+    <string name="information_webview_required">WebView krävs för Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
     <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
 </resources>

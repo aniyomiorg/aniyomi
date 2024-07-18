@@ -2,6 +2,8 @@ import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("mihon.android.application")
@@ -19,11 +21,10 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
+        applicationId = "xyz.jmir.tachiyomi.mi"
 
-        applicationId = "xyz.luft.tachiyomi.mi"
-
-        versionCode = 123
-        versionName = "0.3.2"
+        versionCode = 125
+        versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")

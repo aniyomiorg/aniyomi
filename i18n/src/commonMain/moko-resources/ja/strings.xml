@@ -787,8 +787,8 @@
     <string name="also_set_chapter_settings_for_library">ライブラリにあるすべての項目にも適用</string>
     <string name="dialog_with_checkbox_reset">この項目の章をすべてリセット</string>
     <string name="download_insufficient_space">空き領域不足のため、章をダウンロードできませんでした</string>
-    <string name="download_queue_size_warning">警告：大量の一括ダウンロードにより、ソースは遅くなったり、Kuukiyomiを接続禁止したりする恐れがあります。詳しくはタップでご覧ください。</string>
-    <string name="information_webview_required">KuukiyomiはWebViewを必要としています</string>
+    <string name="download_queue_size_warning">警告：大量の一括ダウンロードにより、ソースは遅くなったり、Aniyomiを接続禁止したりする恐れがあります。詳しくはタップでご覧ください。</string>
+    <string name="information_webview_required">AniyomiはWebViewを必要としています</string>
     <string name="download_notifier_download_paused_chapters">ダウンロード一時停止済み</string>
     <string name="channel_new_chapters_episodes">章の更新</string>
     <string name="pref_library_manga_columns">行あたりの漫画</string>

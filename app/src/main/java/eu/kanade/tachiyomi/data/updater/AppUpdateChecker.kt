@@ -32,9 +32,9 @@ class AppUpdateChecker(private val context: Context) {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "LuftVerbot/kuukiyomi-preview"
+        "aniyomiorg/aniyomi-preview"
     } else {
-        "LuftVerbot/kuukiyomi"
+        "aniyomiorg/aniyomi"
     }
 }
 

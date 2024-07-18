@@ -793,8 +793,8 @@
     <string name="also_set_chapter_settings_for_library">Applica anche a tutti i manga nella mia libreria</string>
     <string name="dialog_with_checkbox_reset">Reimposta tutti i capitoli di questo manga</string>
     <string name="download_insufficient_space">Impossibile scaricare i capitoli a causa dello spazio di archiviazione insufficiente</string>
-    <string name="download_queue_size_warning">Attenzione: grossi download possono rallentare le fonti e/o bloccare Kuukiyomi. Tocca per saperne di più.</string>
-    <string name="information_webview_required">È necessaria l\'app WebView per Kuukiyomi</string>
+    <string name="download_queue_size_warning">Attenzione: grossi download possono rallentare le fonti e/o bloccare Aniyomi. Tocca per saperne di più.</string>
+    <string name="information_webview_required">È necessaria l\'app WebView per Aniyomi</string>
     <string name="channel_new_chapters_episodes">Aggiornamenti capitoli/episodi</string>
     <string name="pref_library_manga_columns">Manga per riga</string>
     <string name="pref_library_anime_columns">Anime per riga</string>
@@ -1047,7 +1047,7 @@
     <string name="player_track_delay_text_field">Ritardi</string>
     <string name="player_subtitle_background_color">Sfondo</string>
     <string name="label_storage">Memoria</string>
-    <string name="unlock_app_title">Sblocca Kuukiyomi</string>
+    <string name="unlock_app_title">Sblocca Aniyomi</string>
     <string name="pref_pip_replace_with_previous">Sostituisce l\'opzione Salta 10 secondi con Episodio precedente</string>
     <string name="pref_mpv_input">Modifica mappa dei tasti del file di input MPV</string>
     <string name="pref_anime_storage_usage">Utilizzo memoria Anime</string>
@@ -1077,7 +1077,7 @@
     <string name="player_add_external_subtitles_intent">Selezione un file sottotitoli.</string>
     <string name="label_anime_extension_repos">Repo delle estensioni anime</string>
     <string name="pref_reset_mpv_conf">Reimposta configurazione MPV</string>
-    <string name="onboarding_storage_action_create_folder">Crea una cartella default per Kuukiyomi</string>
+    <string name="onboarding_storage_action_create_folder">Crea una cartella default per Aniyomi</string>
     <string name="pref_download_slots">Numero di download massimo</string>
     <string name="local_source_badge">Locale</string>
     <string name="information_empty_repos">Non hai impostato alcuna repo.</string>

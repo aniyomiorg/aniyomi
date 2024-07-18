@@ -28,8 +28,8 @@ private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
 @Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/LuftVerbot/Kuukiyomi",
-        "https://discord.gg/s82Vu589Ya",
+        "https://github.com/aniyomiorg/aniyomi",
+        "https://discord.gg/F32UjdJZrR",
     ),
 )
 
@@ -182,7 +182,7 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, KuukiyomiImageUrl),
+    APP(R.string.app_name, R.string.browsing, AniyomiImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, LibraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, UpdatesImageUrl),
     HISTORY(R.string.label_recent_manga, R.string.scrolling, HistoryImageUrl),
@@ -195,7 +195,7 @@ enum class DiscordScreen(
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val KuukiyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
+private const val AniyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
 private const val LibraryImageUrl = "emojis/1216125466033918052.webp?quality=lossless"
 private const val UpdatesImageUrl = "emojis/1216122475688231003.webp?quality=lossless"
 private const val HistoryImageUrl = "emojis/1216122387515310170.webp?quality=lossless"

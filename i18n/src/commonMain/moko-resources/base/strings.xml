@@ -8,7 +8,7 @@
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
 
-    <string name="app_name" translatable="false">Kuukiyomi</string>
+    <string name="app_name" translatable="false">Aniyomi</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
     <string name="manga">Manga</string>
@@ -306,7 +306,7 @@
     <string name="information_empty_repos">You have no repos set.</string>
     <string name="action_add_repo">Add repo</string>
     <string name="label_add_repo_input">Repo URL</string>
-    <string name="action_add_repo_message">Add additional repos to Kuukiyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="action_add_repo_message">Add additional repos to Aniyomi. This should be a URL that ends with \"index.min.json\".</string>
     <string name="error_repo_exists">This repo already exists!</string>
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
@@ -834,7 +834,7 @@
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
     <string name="pref_bottom_nav_no_browse">Move Browse to the More tab</string>
-    <string name="unlock_app_title">Unlock Kuukiyomi</string>
+    <string name="unlock_app_title">Unlock Aniyomi</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_global_manga_search">Global Manga Search</string>
     <string name="action_global_anime_search">Global Anime Search</string>
@@ -1032,7 +1032,7 @@
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Kuukiyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
@@ -1159,7 +1159,7 @@
     <string name="unseen">Unseen</string>
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
-    <string name="onboarding_storage_action_create_folder">Create default Kuukiyomi folder</string>
+    <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
     <string name="safe_download">Safe downloading mode for anime</string>
     <string name="safe_download_summary">Enable single thread and no range downloading mode</string>
     <string name="download_threads_number">Thread count</string>
@@ -1168,4 +1168,174 @@
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
     <string name="pref_mpv_scripts">Enable MPV scripts</string>
     <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
+
+    <!-- Library Grouping -->
+    <string name="tracking_status">Tracking status</string>
+    <string name="tag">Tags</string>
+    <string name="ungrouped">Ungrouped</string>
+    <string name="not_tracked">Not tracked</string>
+
+    <!-- More Info Menu -->
+    <string name="group">Group</string>
+
+    <!-- Library settings -->
+    <string name="anime_library_group_updates">Anime Library dynamic category updates</string>
+    <string name="manga_library_group_updates">Manga Library dynamic category updates</string>
+    <string name="library_group_updates_global">Always launch global updates</string>
+    <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
+    <string name="library_group_updates_all">Launch category updates all the time</string>
+
+    <!-- Entry Info Edit -->
+    <string name="reset_tags">Reset Tags</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="title_hint">Title: %1$s</string>
+    <string name="description_hint">Description: %1$s</string>
+    <string name="author_hint">Author: %1$s</string>
+    <string name="artist_hint">Artist: %1$s</string>
+    <string name="custom_entry_info">Custom entry info</string>
+
+    <!-- Preferences -->
+    <!-- Subsections -->
+    <string name="pref_category_fork">Fork Settings</string>
+
+
+    <!-- Actions -->
+    <string name="action_edit_info">Edit info</string>
+
+    <!-- Connections section -->
+    <string name="special_services">Special Services</string>
+    <string name="pref_category_connections">Connections</string>
+    <string name="pref_connections_summary">Discord, more to come..</string>
+    <string name="connections_info">Special Services that are unique to Aniyomi and enhance the way you use the app</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Aniyomi does not share it anywhere else</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
+    <string name="show_chapters_titles_title">Show Episodes/Chapters Titles</string>
+    <string name="show_chapters_titles_subtitle">Show the title of the episode/chapter you are reading</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
+    <string name="pref_discord_idle">🌙 Idle</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord Incognito mode</string>
+    <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
+    <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Browsing</string>
+    <string name="scrolling">Scrolling through</string>
+    <string name="messing">Messing around with</string>
+    <string name="video">Video</string>
+    <string name="comic">Comic</string>
+
+    <!-- Torrent -->
+    <string name="install_amnis">Amnis Player needs to be installed</string>
+    <string name="pref_category_torrentserver">TorrentServer Preferences</string>
+    <string name="pref_torrentserver_port">TorrentServer Port</string>
+    <string name="torrentserver_isrunning">TorrentServer is running</string>
+    <string name="pref_torrent_trackers">Torrent Trackers</string>
+    <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
+
+    <!-- Prefs -->
+    <string name="pref_page_preload_amount">Page preload amount</string>
+
+    <!-- Reader -->
+    <!-- Reader Settings -->
+    <string name="preserve_reading_position">Preserve reading position on read entries</string>
+    <string name="reader_bottom_buttons">Reader Bottom Buttons</string>
+    <string name="reader_bottom_buttons_summary">Customize what buttons appear at the bottom of the reader</string>
+
+    <!-- Reader Actions -->
+    <string name="action_set_first_page_cover">Set first page as cover</string>
+    <string name="action_set_second_page_cover">Set second page as cover</string>
+    <string name="action_save_first_page">Save first page</string>
+    <string name="action_save_second_page">Save second page</string>
+    <string name="action_share_first_page">Share first page</string>
+    <string name="action_share_second_page">Share second page</string>
+    <string name="action_save_combined_page">Save combined page</string>
+    <string name="action_share_combined_page">Share combined page</string>
+
+    <!-- Reader Sharing -->
+    <string name="share_pages_info">%1$s: %2$s, pages %3$s</string>
+
+    <!-- Double page spread -->
+    <string name="page_layout">Page layout</string>
+    <string name="shift_double_pages">Shift one page over</string>
+    <string name="double_pages">Double pages</string>
+    <string name="single_page">Single page</string>
+    <string name="automatic_orientation">Automatic (based on orientation)</string>
+    <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
+    <string name="invert_double_pages">Invert double pages</string>
+
+    <!-- Center margin -->
+    <string name="center_margin">Center Margin</string>
+    <string name="center_margin_none">None</string>
+    <string name="center_margin_double_page">Add to double Page</string>
+    <string name="center_margin_wide_page">Add to wide Page</string>
+    <string name="center_margin_double_and_wide_page">Add to both</string>
+    <string name="pref_center_margin">Center margin type</string>
+    <string name="pref_center_margin_summary">Insert spacer to accommodate deadspace on foldable devices.</string>
+
+    <!-- Custom Color Picker -->
+    <string name="pref_custom_color">Custom Color Picker</string>
+    <string name="custom_color_description">Pick a color for the custom Theme</string>
+    <string name="theme_custom">Custom Theme</string>
+
+    <!-- Cross Device Sync -->
+    <string name="label_backup">Backup</string>
+    <string name="label_sync">Sync</string>
+    <string name="label_triggers">Triggers</string>
+    <string name="pref_backup_and_sync_summary">Manual &amp; automatic backups and sync</string>
+    <string name="update_30min">Every 30 minutes</string>
+    <string name="update_1hour">Every hour</string>
+    <string name="update_3hour">Every 3 hours</string>
+    <string name="sync_error">Syncing library failed</string>
+    <string name="sync_complete">Syncing library complete</string>
+    <string name="sync_in_progress">Sync is already in progress</string>
+    <string name="pref_sync_host">Host</string>
+    <string name="pref_sync_host_summ">Enter the host address for synchronizing your library</string>
+    <string name="pref_sync_api_key">API key</string>
+    <string name="pref_sync_api_key_summ">Enter the API key to synchronize your library</string>
+    <string name="pref_sync_now_group_title">Sync Actions</string>
+    <string name="pref_sync_now">Sync now</string>
+    <string name="pref_sync_confirmation_title">Sync confirmation</string>
+    <string name="pref_sync_now_subtitle">Initiate immediate synchronization of your data</string>
+    <string name="pref_sync_confirmation_message">Syncing will overwrite your local library with the remote library. Are you sure you want to continue?</string>
+    <string name="pref_sync_service">Service</string>
+    <string name="pref_sync_service_summ">Select the service to sync your library with</string>
+    <string name="pref_sync_service_category">Sync</string>
+    <string name="pref_sync_automatic_category">Automatic Synchronization</string>
+    <string name="pref_sync_interval">Synchronization frequency</string>
+    <string name="pref_choose_what_to_sync">Choose what to sync</string>
+    <string name="success_reset_sync_timestamp">Last sync timestamp reset</string>
+    <string name="syncyomi">SyncYomi</string>
+    <string name="sync_completed_message">Done in %1$s</string>
+    <string name="last_synchronization">Last Synchronization: %1$s</string>
+    <string name="google_drive">Google Drive</string>
+    <string name="pref_google_drive_sign_in">Sign in</string>
+    <string name="google_drive_sign_in_success">Signed in successfully</string>
+    <string name="google_drive_sign_in_failed">Sign in failed</string>
+    <string name="authentication">Authentication</string>
+    <string name="pref_google_drive_purge_sync_data">Clear Sync Data from Google Drive</string>
+    <string name="google_drive_sync_data_purged">Sync data purged from Google Drive</string>
+    <string name="google_drive_sync_data_not_found">No sync data found in Google Drive</string>
+    <string name="google_drive_sync_data_purge_error">Error purging sync data from Google Drive, Try to sign in again.</string>
+    <string name="google_drive_login_success">Logged in to Google Drive</string>
+    <string name="google_drive_login_failed">Failed to log in to Google Drive: %s</string>
+    <string name="google_drive_not_signed_in">Not signed in to Google Drive</string>
+    <string name="error_uploading_sync_data">Error uploading sync data to Google Drive</string>
+    <string name="error_deleting_google_drive_lock_file">Error Deleting Google Drive Lock File</string>
+    <string name="error_before_sync_gdrive">Error before sync: %s</string>
+    <string name="pref_purge_confirmation_title">Purge confirmation</string>
+    <string name="pref_purge_confirmation_message">Purging sync data will delete all your sync data from Google Drive. Are you sure you want to continue?</string>
+    <string name="pref_sync_options">Create sync triggers</string>
+    <string name="pref_sync_options_summ">Can be used to set sync triggers</string>
+    <string name="sync_on_chapter_read">Sync on Chapter Read</string>
+    <string name="sync_on_chapter_open">Sync on Chapter Open</string>
+    <string name="sync_on_episode_seen">Sync on Episode Seen</string>
+    <string name="sync_on_episode_open">Sync on Episode Open</string>
+    <string name="sync_on_app_start">Sync on App Start</string>
+    <string name="sync_on_app_resume">Sync on App Resume</string>
+    <string name="sync_library">Sync library</string>
 </resources>

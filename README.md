@@ -1,25 +1,25 @@
 <div align="center">
 
 <a href="https://aniyomi.org">
-    <img src="./.github/assets/logo.png" alt="Kuukiyomi logo" title="Kuukiyomi logo" width="80"/>
+    <img src="./.github/assets/logo.png" alt="Aniyomi logo" title="Aniyomi logo" width="80"/>
 </a>
 
-# Kuukiyomi [App](#)
+# Aniyomi [App](#)
 
-### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon and Aniyomi.
+### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon.
 Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
 
-[![Discord server](https://img.shields.io/discord/1133390318323126402.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/s82Vu589Ya)
-[![GitHub downloads](https://img.shields.io/github/downloads/LuftVerbot/kuukiyomi/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/LuftVerbot/kuukiyomi/releases)
+[![Discord server](https://img.shields.io/discord/841701076242530374.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/s82Vu589Ya)
+[![GitHub downloads](https://img.shields.io/github/downloads/aniyomiorg/aniymomi/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/aniyomiorg/aniyomi/releases)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/LuftVerbot/kuukiyomi/build_push.yml?labelColor=27303D)](https://github.com/LuftVerbot/kuukiyomi/actions/workflows/build_push.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/aniyomiorg/aniyomi/build_push.yml?labelColor=27303D)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml)
 [![License: Apache-2.0](https://img.shields.io/github/license/aniyomiorg/aniyomi?labelColor=27303D&color=818cf8)](/LICENSE)
 [![Translation status](https://img.shields.io/weblate/progress/aniyomi?labelColor=27303D&color=946300)](https://hosted.weblate.org/engage/aniyomi/)
 
 ## Download
 
-[![Kuukiyomi Stable](https://img.shields.io/github/release/LuftVerbot/kuukiyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/LuftVerbot/kuukiyomi/releases)
-[![Kuukiyomi Preview](https://img.shields.io/github/v/release/LuftVerbot/kuukiyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/LuftVerbot/kuukiyomi-preview/releases)
+[![Aniyomi Stable](https://img.shields.io/github/release/aniyomiorg/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/aniyomiorg/aniyomi/releases)
+[![Aniyomi Preview](https://img.shields.io/github/v/release/aniyomiorg/aniyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/aniyomiorg/aniyomi-preview/releases)
 
 *Requires Android 8.0 or higher.*
 
@@ -27,33 +27,15 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 <div align="left">
 
-Features include:
-* Kuukiyomi:
-    * Torrent support(Needs right extensions) (@Diegopyl1209)
-    * Custom Theme support
-    * resmush.it(Data Saver Provider)
-    * Group by tags in library
-    * Discord Rich Presence for Manga
-* Aniyomi:
-    * Watching videos
-    * View images
-    * Local reading/watching of downloaded content
-    * A configurable reader with multiple viewers, reading directions and other settings.
-    * A configurable player built on mpv-android with multiple options and settings
-    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
-    * Categories to organize your library
-    * Light and dark themes
-    * Create backups locally to read/watch offline or to your desired cloud service
-* Other fork features:
-    * TachiyomiSY:
-        * Data Saver
-        * Edit Info
-        * Library Grouping
-        * Double Pages
-    * Animiru:
-        * Discord Rich Presence
-    * TachiyomiJ2K:
-        * Page Preload
+* Local reading and watching of content.
+* A configurable reader with multiple viewers, reading directions and other settings.
+* A configurable player built on mpv-android with multiple options and settings.
+* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
+* Categories to organize your library.
+* Light and dark themes.
+* Schedule updating your library for new chapters/episodes.
+* Create backups locally to read/watch offline or to your desired cloud service.
+* Plus much more...
 
 </div>
 
