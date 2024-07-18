@@ -742,7 +742,7 @@
     <string name="dialog_with_checkbox_reset">Resetuj wszystkie rozdziały tej mangi</string>
     <string name="download_insufficient_space">Nie udało się pobrać rozdziałów z powodu braku miejsca na urządzeniu</string>
     <string name="download_queue_size_warning">Ostrzeżenie: Duże aktualizacje biblioteki mogą prowadzić do zwiększonego zużycia baterii oraz spowolnienia działania źródeł.</string>
-    <string name="information_webview_required">Widok w przeglądarce jest wymagany dla Aniyomi</string>
+    <string name="information_webview_required">Widok w przeglądarce jest wymagany dla Animetail</string>
     <string name="download_notifier_download_paused_chapters">Pobieranie wstrzymane</string>
     <string name="channel_new_chapters_episodes">Aktualizacje rozdziałów</string>
     <string name="backup_settings_warning">Ostrzeżenie: Tworzenie kopii zapasowej ustawień spowoduje zapisanie również haseł do ścieżek, nie udostępniaj tego pliku nikomu!</string>
@@ -818,7 +818,7 @@
     <string name="pref_player_summary">Kontrola postępu, wewnętrzny odtwarzacz, zewnętrzny odtwarzacz</string>
     <string name="action_display_local_badge_anime">Anime lokalne</string>
     <string name="pref_pip_episode_toasts">Wyświetl komunikaty odcinków podczas przełączania się między odcinkami w trybie obrazu w obrazie</string>
-    <string name="unofficial_anime_extension_message">To rozszerzenie nie pochodzi z oficjalnej listy rozszerzeń Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">To rozszerzenie nie pochodzi z oficjalnej listy rozszerzeń Animetail.</string>
     <string name="pref_pip_on_exit">Automatycznie przełączaj się w tryb obrazu w obrazie po wyjściu z odtwarzacza</string>
     <string name="pref_media_control_chapter_seeking_summary">Po włączeniu, użycie opcji \'następny\' spowoduje wywołanie przycisku \'pomiń intro\', jeśli nie zostaną znalezione żadne rozdziały</string>
     <string name="pref_waiting_time_aniskip_7">7 sekund</string>

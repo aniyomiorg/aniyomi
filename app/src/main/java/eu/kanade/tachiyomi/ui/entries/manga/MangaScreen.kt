@@ -154,6 +154,9 @@ class MangaScreen(
             onShareClicked = { shareManga(context, screenModel.manga, screenModel.source) }.takeIf { isHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.manga.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditMangaInfoDialog,
+            // SY <--
             onEditFetchIntervalClicked = screenModel::showSetMangaFetchIntervalDialog.takeIf {
                 successState.manga.favorite
             },
@@ -275,6 +278,15 @@ class MangaScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is MangaScreenModel.Dialog.EditMangaInfo -> {
+                EditMangaDialog(
+                    manga = dialog.manga,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateMangaInfo,
+                )
+            }
+            // SY <--
             is MangaScreenModel.Dialog.SetMangaFetchInterval -> {
                 SetIntervalDialog(
                     interval = dialog.manga.fetchInterval,

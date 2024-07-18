@@ -1,10 +1,10 @@
 <div align="center">
 
 <a href="https://aniyomi.org">
-    <img src="./.github/assets/logo.png" alt="Aniyomi logo" title="Aniyomi logo" width="80"/>
+    <img src="./.github/assets/logo.png" alt="animetail logo" title="animetail logo" width="80"/>
 </a>
 
-# Aniyomi [App](#)
+# Animetail [App](#)
 
 ### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon.
 Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
@@ -25,9 +25,17 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 ## Features
 
-<div align="left">
-
-* Local reading and watching of content.
+Features include:
+* Kuukiyomi:
+  * Torrent support(Needs right extensions) (@Diegopyl1209)
+  * Custom Theme support
+  * resmush.it(Data Saver Provider)
+  * Group by tags in library
+  * Discord Rich Presence for Manga
+* Aniyomi:
+  * Watching videos
+* View images
+* Local reading/watching of downloaded content
 * A configurable reader with multiple viewers, reading directions and other settings.
 * A configurable player built on mpv-android with multiple options and settings.
 * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.

@@ -55,7 +55,7 @@ val backupEpisodeMapper = {
         lastSecondSeen: Long,
         totalSeconds: Long,
         episodeNumber: Double,
-        source_order: Long,
+        sourceOrder: Long,
         dateFetch: Long,
         dateUpload: Long,
         lastModifiedAt: Long,
@@ -73,7 +73,7 @@ val backupEpisodeMapper = {
         totalSeconds = totalSeconds,
         dateFetch = dateFetch,
         dateUpload = dateUpload,
-        sourceOrder = source_order,
+        sourceOrder = sourceOrder,
         lastModifiedAt = lastModifiedAt,
         version = version,
     )

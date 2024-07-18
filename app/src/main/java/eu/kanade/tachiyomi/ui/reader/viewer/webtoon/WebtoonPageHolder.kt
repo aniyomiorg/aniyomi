@@ -218,7 +218,13 @@ class WebtoonPageHolder(
         }
 
         if (viewer.config.dualPageSplit) {
-            val isDoublePage = ImageUtil.isWideImage(imageSource)
+            val isDoublePage = ImageUtil.isWideImage(
+                imageSource,
+                // SY -->
+                page?.zip4jFile,
+                page?.zip4jEntry,
+                // SY <--
+            )
             if (isDoublePage) {
                 val upperSide = if (viewer.config.dualPageInvert) ImageUtil.Side.LEFT else ImageUtil.Side.RIGHT
                 return ImageUtil.splitAndMerge(imageSource, upperSide)
@@ -229,7 +235,13 @@ class WebtoonPageHolder(
     }
 
     private fun rotateDualPage(imageSource: BufferedSource): BufferedSource {
-        val isDoublePage = ImageUtil.isWideImage(imageSource)
+        val isDoublePage = ImageUtil.isWideImage(
+            imageSource,
+            // SY -->
+            page?.zip4jFile,
+            page?.zip4jEntry,
+            // SY <--
+        )
         return if (isDoublePage) {
             val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
             ImageUtil.rotateImage(imageSource, rotation)

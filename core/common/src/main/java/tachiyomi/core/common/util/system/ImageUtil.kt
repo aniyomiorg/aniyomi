@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.BitmapRegionDecoder
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Rect
@@ -21,13 +22,20 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.exifinterface.media.ExifInterface
 import com.hippo.unifile.UniFile
 import logcat.LogPriority
 import okio.Buffer
 import okio.BufferedSource
+import net.lingala.zip4j.ZipFile
+import net.lingala.zip4j.model.FileHeader
 import tachiyomi.decoder.Format
 import tachiyomi.decoder.ImageDecoder
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.security.SecureRandom
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
@@ -117,22 +125,34 @@ object ImageUtil {
      *
      * @return true if the width is greater than the height
      */
-    fun isWideImage(imageSource: BufferedSource): Boolean {
-        val options = extractImageOptions(imageSource)
+    fun isWideImage(
+        imageSource: BufferedSource,
+        // SY -->
+        zip4jFile: ZipFile?,
+        zip4jEntry: FileHeader?,
+        // SY <--
+    ): Boolean {
+        val options = extractImageOptions(
+            imageSource,
+            // SY -->
+            zip4jFile,
+            zip4jEntry,
+            // SY <--
+        )
         return options.outWidth > options.outHeight
     }
 
     /**
      * Extract the 'side' part from [BufferedSource] and return it as [BufferedSource].
      */
-    fun splitInHalf(imageSource: BufferedSource, side: Side): BufferedSource {
+    fun splitInHalf(imageSource: BufferedSource, side: Side, sidePadding: Int): BufferedSource {
         val imageBitmap = BitmapFactory.decodeStream(imageSource.inputStream())
         val height = imageBitmap.height
         val width = imageBitmap.width
 
-        val singlePage = Rect(0, 0, width / 2, height)
+        val singlePage = Rect(0, 0, width / 2 + sidePadding, height)
 
-        val half = createBitmap(width / 2, height)
+        val half = createBitmap(width / 2 + sidePadding, height)
         val part = when (side) {
             Side.RIGHT -> Rect(width - width / 2, 0, width, height)
             Side.LEFT -> Rect(0, 0, width / 2, height)
@@ -197,22 +217,86 @@ object ImageUtil {
         LEFT,
     }
 
+    // SY -->
+    /**
+     * Split the image into left and right parts, then merge them into a
+     * new image with added center padding scaled relative to the height of the display view
+     * to compensate for scaling.
+     */
+
+    fun addHorizontalCenterMargin(imageStream: InputStream, viewHeight: Int, backgroundContext: Context): InputStream {
+        val imageBitmap = ImageDecoder.newInstance(imageStream)?.decode()!!
+        val height = imageBitmap.height
+        val width = imageBitmap.width
+
+        val centerPadding = 96 / (max(1, viewHeight) / height).coerceAtLeast(1)
+
+        val leftSourcePart = Rect(0, 0, width / 2, height)
+        val rightSourcePart = Rect(width / 2, 0, width, height)
+        val leftTargetPart = Rect(0, 0, width / 2, height)
+        val rightTargetPart = Rect(width / 2 + centerPadding, 0, width + centerPadding, height)
+
+        val bgColor = chooseBackground(backgroundContext, imageStream)
+        bgColor.setBounds(width / 2, 0, width / 2 + centerPadding, height)
+        val result = createBitmap(width + centerPadding, height)
+
+        result.applyCanvas {
+            drawBitmap(imageBitmap, leftSourcePart, leftTargetPart, null)
+            drawBitmap(imageBitmap, rightSourcePart, rightTargetPart, null)
+            bgColor.draw(this)
+        }
+
+        val output = ByteArrayOutputStream()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output)
+        return ByteArrayInputStream(output.toByteArray())
+    }
+    // SY <--
+
     /**
      * Check whether the image is considered a tall image.
      *
      * @return true if the height:width ratio is greater than 3.
      */
-    private fun isTallImage(imageSource: BufferedSource): Boolean {
-        val options = extractImageOptions(imageSource)
+    private fun isTallImage(
+        imageSource: BufferedSource,
+        // SY -->
+        zip4jFile: ZipFile?,
+        zip4jEntry: FileHeader?,
+        // SY <--
+    ): Boolean {
+        val options = extractImageOptions(
+            imageStream,
+            // SY -->
+            zip4jFile,
+            zip4jEntry,
+            // SY <--
+            resetAfterExtraction = false,
+        )
+
         return (options.outHeight / options.outWidth) > 3
     }
 
     /**
      * Splits tall images to improve performance of reader
      */
-    fun splitTallImage(tmpDir: UniFile, imageFile: UniFile, filenamePrefix: String): Boolean {
-        val imageSource = imageFile.openInputStream().use { Buffer().readFrom(it) }
-        if (isAnimatedAndSupported(imageSource) || !isTallImage(imageSource)) {
+    fun splitTallImage(
+        tmpDir: UniFile,
+        imageFile: UniFile,
+        filenamePrefix: String,
+        // SY -->
+        zip4jFile: ZipFile?,
+        zip4jEntry: FileHeader?,
+        // SY <--
+    ): Boolean {
+        val imageSource = imageSource.use { Buffer().readFrom(it) }
+        if (isAnimatedAndSupported(imageSource) || !isTallImage(
+                imageSource,
+                // SY -->
+                zip4jFile,
+                zip4jEntry,
+                // SY <--
+            )
+        ) {
             return true
         }
 
@@ -222,7 +306,14 @@ object ImageUtil {
             return false
         }
 
-        val options = extractImageOptions(imageSource).apply {
+        val options = extractImageOptions(
+            imageSource,
+            // SY -->
+            zip4jFile,
+            zip4jEntry,
+            // SY <--
+            resetAfterExtraction = false,
+        ).apply {
             inJustDecodeBounds = false
         }
 
@@ -236,12 +327,7 @@ object ImageUtil {
 
                 val splitFile = tmpDir.createFile(splitImageName)!!
 
-                val region = Rect(
-                    0,
-                    splitData.topOffset,
-                    splitData.splitWidth,
-                    splitData.bottomOffset,
-                )
+                val region = Rect(0, splitData.topOffset, splitData.splitWidth, splitData.bottomOffset)
 
                 splitFile.openOutputStream().use { outputStream ->
                     val splitBitmap = bitmapRegionDecoder.decodeRegion(region, options)
@@ -573,11 +659,73 @@ object ImageUtil {
     /**
      * Used to check an image's dimensions without loading it in the memory.
      */
-    private fun extractImageOptions(imageSource: BufferedSource): BitmapFactory.Options {
+    private fun extractImageOptions(
+        imageStream: InputStream,
+        // SY -->
+        zip4jFile: ZipFile?,
+        zip4jEntry: FileHeader?,
+        // SY <--
+        resetAfterExtraction: Boolean = true,
+    ): BitmapFactory.Options {
+        // Ensure the stream supports marking and resetting
+        val bufferedStream = if (imageStream is BufferedInputStream) {
+            imageStream
+        } else {
+            BufferedInputStream(imageStream)
+        }
+
+        // SY -->
+        // zip4j does currently not support mark() and reset()
+        if (zip4jFile != null && zip4jEntry != null) return extractImageOptionsZip4j(zip4jFile, zip4jEntry)
+        // SY <--
+
+        // Mark the stream with a large enough read-ahead limit
+        val markLimit = 1024 * 1024 // 1 MB mark limit
+        bufferedStream.mark(markLimit)
+
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeStream(imageSource.peek().inputStream(), null, options)
+        try {
+            BitmapFactory.decodeStream(bufferedStream, null, options)
+        } catch (e: Exception) {
+            // Handle decoding exception
+        } finally {
+            if (resetAfterExtraction) {
+                try {
+                    bufferedStream.reset()
+                } catch (e: IOException) {
+                    // Handle reset exception
+                }
+            }
+        }
         return options
     }
+
+    // SY -->
+    private fun extractImageOptionsZip4j(zip4jFile: ZipFile?, zip4jEntry: FileHeader?): BitmapFactory.Options {
+        zip4jFile?.getInputStream(zip4jEntry).use { imageStream ->
+            val imageBytes = imageStream?.readBytes()
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            imageBytes?.size?.let { BitmapFactory.decodeByteArray(imageBytes, 0, it, options) }
+            return options
+        }
+    }
+
+    /**
+     * Creates random exif metadata used as padding to make
+     * the size of files inside  CBZ archives unique
+     */
+    fun addPaddingToImageExif(imageFile: File) {
+        try {
+            val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            val padding = List(SecureRandom().nextInt(16384) + 16384) { charPool.random() }.joinToString("")
+            val exif = ExifInterface(imageFile.absolutePath)
+            exif.setAttribute("UserComment", padding)
+            exif.saveAttributes()
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+        }
+    }
+    // SY <--
 
     private fun getBitmapRegionDecoder(imageStream: InputStream): BitmapRegionDecoder? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -589,6 +737,52 @@ object ImageUtil {
     }
 
     private val optimalImageHeight = getDisplayMaxHeightInPx * 2
+
+    fun mergeBitmaps(
+        imageBitmap: Bitmap,
+        imageBitmap2: Bitmap,
+        isLTR: Boolean,
+        centerMargin: Int,
+        @ColorInt background: Int = Color.WHITE,
+        progressCallback: ((Int) -> Unit)? = null,
+    ): ByteArrayInputStream {
+        val height = imageBitmap.height
+        val width = imageBitmap.width
+        val height2 = imageBitmap2.height
+        val width2 = imageBitmap2.width
+
+        val maxHeight = max(height, height2)
+
+        val result = Bitmap.createBitmap(width + width2 + centerMargin, max(height, height2), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        canvas.drawColor(background)
+        val upperPart = Rect(
+            if (isLTR) 0 else width2 + centerMargin,
+            (maxHeight - height) / 2,
+            (if (isLTR) 0 else width2 + centerMargin) + width,
+            height + (maxHeight - height) / 2,
+        )
+
+        canvas.drawBitmap(imageBitmap, imageBitmap.rect, upperPart, null)
+        progressCallback?.invoke(98)
+        val bottomPart = Rect(
+            if (!isLTR) 0 else width + centerMargin,
+            (maxHeight - height2) / 2,
+            (if (!isLTR) 0 else width + centerMargin) + width2,
+            height2 + (maxHeight - height2) / 2,
+        )
+
+        canvas.drawBitmap(imageBitmap2, imageBitmap2.rect, bottomPart, null)
+        progressCallback?.invoke(99)
+
+        val output = ByteArrayOutputStream()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output)
+        progressCallback?.invoke(100)
+        return ByteArrayInputStream(output.toByteArray())
+    }
+
+    private val Bitmap.rect: Rect
+        get() = Rect(0, 0, width, height)
 }
 
 val getDisplayMaxHeightInPx: Int
