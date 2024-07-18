@@ -52,7 +52,7 @@ object TorrentServerApi {
                 title = title,
                 poster = poster,
                 data = data,
-                save_to_db = save,
+                saveToDb = save,
             ).toString()
         val resp =
             network.client.newCall(

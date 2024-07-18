@@ -220,7 +220,6 @@ dependencies {
     // SY -->
     implementation(libs.zip4j)
     // SY <--
-    implementation(libs.bundles.archive)
 
     // Preferences
     implementation(libs.preferencektx)

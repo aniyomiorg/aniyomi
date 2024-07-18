@@ -53,8 +53,6 @@ class WebtoonConfig(
     var continuousCropBorders = false
         private set
 
-    var zoomPropertyChangedListener: ((Boolean) -> Unit)? = null
-
     // SY <--
 
     init {

@@ -61,11 +61,6 @@ object SettingsReaderScreen : SearchableSettings {
                 title = stringResource(MR.strings.pref_show_navigation_mode),
                 subtitle = stringResource(MR.strings.pref_show_navigation_mode_summary),
             ),
-            Preference.PreferenceItem.SwitchPreference(
-                pref = readerPref.trueColor(),
-                title = stringResource(MR.strings.pref_true_color),
-                subtitle = stringResource(MR.strings.pref_true_color_summary),
-            ),
             /* SY -->
             Preference.PreferenceItem.SwitchPreference(
                 pref = readerPref.pageTransitions(),

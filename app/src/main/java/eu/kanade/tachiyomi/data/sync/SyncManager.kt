@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupChapter
 import eu.kanade.tachiyomi.data.backup.models.BackupEpisode
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.backup.restore.RestoreOptions
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
@@ -24,7 +23,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import logcat.logcat
-import tachiyomi.core.util.system.logcat
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.entries.anime.AnimeMapper.mapAnime
 import tachiyomi.data.entries.manga.MangaMapper.mapManga
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
@@ -230,7 +229,7 @@ class SyncManager(
         val cacheFile = File(context.cacheDir, "kuukiyomi_sync_data.proto.gz")
         return try {
             cacheFile.outputStream().use { output ->
-                output.write(ProtoBuf.encodeToByteArray(BackupSerializer, backup))
+                output.write(ProtoBuf.encodeToByteArray(Backup.serializer(), backup))
                 Uri.fromFile(cacheFile)
             }
         } catch (e: IOException) {

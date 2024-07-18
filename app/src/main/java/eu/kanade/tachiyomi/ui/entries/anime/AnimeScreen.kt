@@ -374,7 +374,6 @@ class AnimeScreen(
                 context,
                 episode.animeId,
                 episode.id,
-                episode.url,
                 useExternalPlayer,
             )
         }

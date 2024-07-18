@@ -43,6 +43,7 @@ import tachiyomi.source.local.io.Format
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import tachiyomi.source.local.metadata.fillMetadata
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat

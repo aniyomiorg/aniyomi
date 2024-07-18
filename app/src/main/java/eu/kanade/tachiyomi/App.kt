@@ -56,10 +56,10 @@ import kotlinx.coroutines.flow.onEach
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
-import org.conscrypt.Conscrypt
-import tachiyomi.core.common.i18n.stringResource
 import mihon.core.migration.Migrator
 import mihon.core.migration.migrations.migrations
+import org.conscrypt.Conscrypt
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.util.system.logcat
@@ -79,6 +79,7 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
     private val disableIncognitoReceiver = DisableIncognitoReceiver()
 
     @SuppressLint("LaunchActivityFromNotification")
+    @Suppress("LongMethod")
     override fun onCreate() {
         super<Application>.onCreate()
 

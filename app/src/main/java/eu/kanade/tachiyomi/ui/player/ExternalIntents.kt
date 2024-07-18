@@ -272,9 +272,9 @@ class ExternalIntents {
     @Suppress("MagicNumber")
     private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
-            if (isPackageInstalled(AMNIS, context.packageManager)) {
+            if (isPackageInstalled(Amnis, context.packageManager)) {
                 if (uri.toString().startsWith("magnet:")) {
-                    component = getComponent(AMNIS)
+                    component = getComponent(Amnis)
                 }
             } else {
                 withUIContext {

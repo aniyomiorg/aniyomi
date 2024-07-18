@@ -34,13 +34,8 @@ import kotlinx.coroutines.launch
 import mihon.feature.upcoming.anime.UpcomingAnimeScreen
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
-import tachiyomi.core.i18n.stringResource
-import tachiyomi.core.util.lang.launchIO
-import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 @Composable
@@ -65,18 +60,14 @@ fun Screen.animeUpdatesTab(
         null
     }
 
-    val getEpisodeByAnimeId: GetEpisodesByAnimeId = Injekt.get()
-
     suspend fun openEpisode(updateItem: AnimeUpdatesItem, altPlayer: Boolean = false) {
         val playerPreferences: PlayerPreferences by injectLazy()
         val update = updateItem.update
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
-        val episode = getEpisodeByAnimeId.await(update.animeId).find { it.id == update.episodeId }
         MainActivity.startPlayerActivity(
             context,
             update.animeId,
             update.episodeId,
-            episode?.url,
             extPlayer,
         )
     }
