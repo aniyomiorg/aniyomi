@@ -1,6 +1,5 @@
 package eu.kanade.domain.ui
 
-import android.os.Build
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.domain.ui.model.StartScreen
