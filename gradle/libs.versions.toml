@@ -108,6 +108,8 @@ aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.15.n"
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.15"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.2.1"
 
+torrentserver = "com.github.Diegopyl1209:torrentserver-aniyomi:c18f58e51b"
+
 seeker = "io.github.2307vivek:seeker:1.2.2"
 
 truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"

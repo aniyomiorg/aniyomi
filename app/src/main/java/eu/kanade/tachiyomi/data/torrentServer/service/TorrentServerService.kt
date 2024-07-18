@@ -9,7 +9,6 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
@@ -58,7 +57,6 @@ class TorrentServerService : Service() {
     private fun startServer() {
         serviceScope.launch {
             if (TorrentServerApi.echo() == "") {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
                 torrServer.TorrServer.startTorrentServer(filesDir.absolutePath)
                 wait(10)
                 TorrentServerUtils.setTrackersList()
@@ -68,7 +66,6 @@ class TorrentServerService : Service() {
 
     private fun stopServer() {
         serviceScope.launch {
-            if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
             torrServer.TorrServer.stopTorrentServer()
             TorrentServerApi.shutdown()
             applicationContext.cancelNotification(Notifications.ID_TORRENT_SERVER)
@@ -96,7 +93,7 @@ class TorrentServerService : Service() {
             )
         val builder = context.notificationBuilder(Notifications.CHANNEL_TORRENT_SERVER) {
             setSmallIcon(R.drawable.ic_sua)
-            setContentText(stringResource(MR.strings.torrentserver_isrunning))
+            setContentText(stringResource(MR.strings.torrentserver_is_running))
             setContentTitle(stringResource(MR.strings.app_name))
             setAutoCancel(false)
             setOngoing(true)
@@ -134,7 +131,6 @@ class TorrentServerService : Service() {
                     }
                 applicationContext.startService(intent)
             } catch (e: Exception) {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "start() error: ${e.message}")
                 println(e.stackTrace)
             }
         }
@@ -148,7 +144,6 @@ class TorrentServerService : Service() {
                     }
                 applicationContext.startService(intent)
             } catch (e: Exception) {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "stop() error: ${e.message}")
                 println(e.stackTrace)
             }
         }
