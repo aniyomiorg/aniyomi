@@ -66,7 +66,7 @@
     <string name="install_amnis">Amnis Player needs to be installed</string>
     <string name="pref_category_torrentserver">TorrentServer Preferences</string>
     <string name="pref_torrentserver_port">TorrentServer Port</string>
-    <string name="torrentserver_isrunning">TorrentServer is running</string>
+    <string name="torrentserver_is_running">Torrent Server is running</string>
     <string name="pref_torrent_trackers">Torrent Trackers</string>
     <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
 
