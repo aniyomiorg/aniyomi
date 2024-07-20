@@ -41,6 +41,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.source.local.entries.manga.isLocal
 
 @Composable
+@Suppress("MagicNumber", "LongMethod")
 fun EditMangaDialog(
     manga: Manga,
     onDismissRequest: () -> Unit,
@@ -114,13 +115,14 @@ fun EditMangaDialog(
     )
 }
 
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun onViewCreated(
     manga: Manga,
     context: Context,
     binding: EditMangaDialogBinding,
     scope: CoroutineScope,
 ) {
-    loadCover(manga, context, binding)
+    loadCover(manga, binding)
 
     val statusAdapter: ArrayAdapter<String> = ArrayAdapter(
         context,
@@ -209,7 +211,7 @@ private fun resetInfo(manga: Manga, binding: EditMangaDialogBinding, scope: Coro
     resetTags(manga, binding, scope)
 }
 
-private fun loadCover(manga: Manga, context: Context, binding: EditMangaDialogBinding) {
+private fun loadCover(manga: Manga, binding: EditMangaDialogBinding) {
     binding.mangaCover.load(manga) {
         transformations(RoundedCornersTransformation(4.dpToPx.toFloat()))
     }

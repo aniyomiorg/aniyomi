@@ -288,6 +288,7 @@ class MangaScreenModel(
     }
 
     // SY -->
+    @Suppress("LongParameterList")
     fun updateMangaInfo(
         title: String?,
         author: String?,
@@ -1117,12 +1118,12 @@ class MangaScreenModel(
         ) : Dialog
         data class DeleteChapters(val chapters: List<Chapter>) : Dialog
         data class DuplicateManga(val manga: Manga, val duplicate: Manga) : Dialog
-        data class Migrate(val newManga: Manga, val oldManga: Manga) : Dialog
 
         // SY -->
         data class EditMangaInfo(val manga: Manga) : Dialog
-
         // SY <--
+
+        data class Migrate(val newManga: Manga, val oldManga: Manga) : Dialog
         data class SetMangaFetchInterval(val manga: Manga) : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog

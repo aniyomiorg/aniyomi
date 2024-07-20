@@ -273,6 +273,7 @@ class AnimeScreenModel(
     }
 
     // SY -->
+    @Suppress("LongParameterList")
     fun updateAnimeInfo(
         title: String?,
         author: String?,
@@ -1151,11 +1152,6 @@ class AnimeScreenModel(
         updateSuccessState { it.copy(dialog = Dialog.FullCover) }
     }
 
-    fun showMigrateDialog(duplicate: Anime) {
-        val anime = successState?.anime ?: return
-        updateSuccessState { it.copy(dialog = Dialog.Migrate(newAnime = anime, oldAnime = duplicate)) }
-    }
-
     // SY -->
     fun showEditAnimeInfoDialog() {
         mutableState.update { state ->
@@ -1168,6 +1164,11 @@ class AnimeScreenModel(
         }
     }
     // SY <--
+
+    fun showMigrateDialog(duplicate: Anime) {
+        val anime = successState?.anime ?: return
+        updateSuccessState { it.copy(dialog = Dialog.Migrate(newAnime = anime, oldAnime = duplicate)) }
+    }
 
     fun showAnimeSkipIntroDialog() {
         updateSuccessState { it.copy(dialog = Dialog.ChangeAnimeSkipIntro) }

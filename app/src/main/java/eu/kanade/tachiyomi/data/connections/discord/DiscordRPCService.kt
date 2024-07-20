@@ -196,6 +196,7 @@ class DiscordRPCService : Service() {
             )
         }
 
+        @Suppress("SwallowedException", "TooGenericExceptionCaught", "CyclomaticComplexMethod")
         internal suspend fun setPlayerActivity(
             context: Context,
             playerData: PlayerData = PlayerData(),
@@ -260,6 +261,7 @@ class DiscordRPCService : Service() {
             }
         }
 
+        @Suppress("SwallowedException", "TooGenericExceptionCaught", "CyclomaticComplexMethod")
         internal suspend fun setReaderActivity(
             context: Context,
             readerData: ReaderData = ReaderData(),

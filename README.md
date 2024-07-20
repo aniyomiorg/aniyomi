@@ -29,23 +29,31 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 Features include:
 * Kuukiyomi:
-  * Torrent support(Needs right extensions) (@Diegopyl1209)
-  * Custom Theme support
-  * resmush.it(Data Saver Provider)
-  * Group by tags in library
-  * Discord Rich Presence for Manga
+    * Torrent support(Needs right extensions) (@Diegopyl1209)
+    * Custom Theme support
+    * resmush.it(Data Saver Provider)
+    * Group by tags in library
+    * Discord Rich Presence for Manga
 * Aniyomi:
-  * Watching videos
-* View images
-* Local reading/watching of downloaded content
-* A configurable reader with multiple viewers, reading directions and other settings.
-* A configurable player built on mpv-android with multiple options and settings.
-* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
-* Categories to organize your library.
-* Light and dark themes.
-* Schedule updating your library for new chapters/episodes.
-* Create backups locally to read/watch offline or to your desired cloud service.
-* Plus much more...
+    * Watching videos
+    * View images
+    * Local reading/watching of downloaded content
+    * A configurable reader with multiple viewers, reading directions and other settings.
+    * A configurable player built on mpv-android with multiple options and settings
+    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
+    * Categories to organize your library
+    * Light and dark themes
+    * Create backups locally to read/watch offline or to your desired cloud service
+* Other fork features:
+    * TachiyomiSY:
+        * Data Saver
+        * Edit Info
+        * Library Grouping
+        * Double Pages
+    * Animiru:
+        * Discord Rich Presence
+    * TachiyomiJ2K:
+        * Page Preload
 
 </div>
 

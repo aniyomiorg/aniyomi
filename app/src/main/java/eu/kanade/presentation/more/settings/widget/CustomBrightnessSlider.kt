@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageBitmapConfig
 import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
@@ -38,13 +37,6 @@ fun CustomBrightnessSlider(
     val wheelPaint = Paint().apply {
         color = Color.White
         alpha = 1.0f
-    }
-
-    // Set up the paint for the border if necessary
-    val borderPaint = Paint().apply {
-        style = PaintingStyle.Stroke
-        strokeWidth = with(LocalDensity.current) { borderSize.toPx() }
-        color = borderColor
     }
 
     // This function creates the ImageBitmap for the gradient background of the slider

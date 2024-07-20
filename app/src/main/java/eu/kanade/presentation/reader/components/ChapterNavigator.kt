@@ -38,6 +38,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.math.roundToInt
 
 @Composable
+@Suppress("LongMethod")
 fun ChapterNavigator(
     isRtl: Boolean,
     onNextChapter: () -> Unit,

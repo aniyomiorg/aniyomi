@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.torrentServer.model
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("ConstructorParameterNaming")
 data class Torrent(
     var title: String,
     var poster: String? = null,

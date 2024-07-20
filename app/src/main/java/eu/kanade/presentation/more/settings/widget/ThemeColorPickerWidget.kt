@@ -31,6 +31,7 @@ import eu.kanade.domain.ui.model.AppTheme
 import kotlin.math.roundToInt
 
 @Composable
+@Suppress("LongMethod")
 internal fun ThemeColorPickerWidget(
     initialColor: Color,
     controller: ColorPickerController,

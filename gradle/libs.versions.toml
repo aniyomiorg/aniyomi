@@ -33,6 +33,8 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:e0def6b3dc"
 libarchive = "me.zhanghai.android.libarchive:library:1.1.0"
+common-compress = "org.apache.commons:commons-compress:1.26.2"
+junrar = "com.github.junrar:junrar:7.5.5"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
@@ -52,7 +54,6 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp" }
 subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:b8e1b0ed2b"
 image-decoder = "com.github.tachiyomiorg:image-decoder:41c059e540"
 exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
-
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
@@ -109,6 +110,8 @@ detekt-rules-compose = { module = "io.nlopez.compose.rules:detekt", version.ref 
 aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.15.n"
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.15"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.2.1"
+
+torrentserver = "com.github.Diegopyl1209:torrentserver-aniyomi:c18f58e51b"
 
 seeker = "io.github.2307vivek:seeker:1.2.2"
 

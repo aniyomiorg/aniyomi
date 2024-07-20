@@ -35,6 +35,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 private val animationSpec = tween<IntOffset>(200)
 
 @Composable
+@Suppress("LongMethod")
 fun ReaderAppBars(
     visible: Boolean,
     fullscreen: Boolean,
