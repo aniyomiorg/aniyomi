@@ -13,15 +13,19 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 // Constant for logging tag
+@Suppress("TopLevelPropertyNaming")
 const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
+@Suppress("TopLevelPropertyNaming")
 private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
+@Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_BUTTONS = listOf("Discord Server")
 
 // Constant for metadata list
+@Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
         "https://discord.gg/vN8nbPHzeC"
@@ -116,6 +120,7 @@ data class Res(
     val d: JsonElement,
 )
 
+@Suppress("MagicNumber")
 enum class OpCode(val value: Int) {
     /** An event was dispatched. */
     DISPATCH(0),
@@ -177,26 +182,26 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, animetailImageUrl),
-    LIBRARY(R.string.label_library, R.string.browsing, libraryImageUrl),
-    UPDATES(R.string.label_recent_updates, R.string.scrolling, updatesImageUrl),
-    HISTORY(R.string.label_recent_manga, R.string.scrolling, historyImageUrl),
-    BROWSE(R.string.label_sources, R.string.browsing, browseImageUrl),
-    MORE(R.string.label_settings, R.string.messing, moreImageUrl),
-    WEBVIEW(R.string.action_web_view, R.string.browsing, webviewImageUrl),
-    VIDEO(R.string.video, R.string.watching, videoImageUrl),
-    MANGA(R.string.manga, R.string.reading, mangaImageUrl),
+    APP(R.string.app_name, R.string.browsing, AnimetailImageUrl),
+    LIBRARY(R.string.label_library, R.string.browsing, LibraryImageUrl),
+    UPDATES(R.string.label_recent_updates, R.string.scrolling, UpdatesImageUrl),
+    HISTORY(R.string.label_recent_manga, R.string.scrolling, HistoryImageUrl),
+    BROWSE(R.string.label_sources, R.string.browsing, BrowseImageUrl),
+    MORE(R.string.label_settings, R.string.messing, MoreImageUrl),
+    WEBVIEW(R.string.action_web_view, R.string.browsing, WebviewImageUrl),
+    VIDEO(R.string.video, R.string.watching, VideoImageUrl),
+    MANGA(R.string.manga, R.string.reading, MangaImageUrl),
 }
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match animetail brown/ green theme, Luft
-private const val animetailImageUrl = "emojis/1259596496353886230.webp?quality=lossless"
-private const val libraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
-private const val updatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
-private const val historyImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
-private const val browseImageUrl = "emojis/1235354864419344455.webp?quality=lossless"
-private const val moreImageUrl = "emojis/1235355169752088706.webp?quality=lossless"
-private const val webviewImageUrl = "emojis/1235355362169851996.webp?quality=lossless"
-private const val videoImageUrl = "emojis/1235355607201218660.webp?quality=lossless"
-private const val mangaImageUrl = "emojis/1235355804274659390.webp?quality=lossless"
+private const val AnimetailImageUrl = "emojis/1259596496353886230.webp?quality=lossless"
+private const val LibraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
+private const val UpdatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
+private const val HistoryImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
+private const val BrowseImageUrl = "emojis/1235354864419344455.webp?quality=lossless"
+private const val MoreImageUrl = "emojis/1235355169752088706.webp?quality=lossless"
+private const val WebviewImageUrl = "emojis/1235355362169851996.webp?quality=lossless"
+private const val VideoImageUrl = "emojis/1235355607201218660.webp?quality=lossless"
+private const val MangaImageUrl = "emojis/1235355804274659390.webp?quality=lossless"
 // <-- AM (DISCORD)

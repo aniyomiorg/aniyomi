@@ -33,6 +33,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.active
 
 @Composable
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun EntryToolbar(
     title: String,
     titleAlphaProvider: () -> Float,

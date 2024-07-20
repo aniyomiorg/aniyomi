@@ -8,8 +8,6 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
-import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
@@ -30,6 +28,7 @@ class TorrentServerService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    @Suppress("ReturnCount")
     override fun onStartCommand(
         intent: Intent?,
         flags: Int,
@@ -53,10 +52,10 @@ class TorrentServerService : Service() {
         return START_NOT_STICKY
     }
 
+    @Suppress("MagicNumber")
     private fun startServer() {
         serviceScope.launch {
             if (TorrentServerApi.echo() == "") {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "startServer()")
                 torrServer.TorrServer.startTorrentServer(filesDir.absolutePath)
                 wait(10)
                 TorrentServerUtils.setTrackersList()
@@ -66,7 +65,6 @@ class TorrentServerService : Service() {
 
     private fun stopServer() {
         serviceScope.launch {
-            if (BuildConfig.DEBUG) Log.d("TorrentService", "stopServer()")
             torrServer.TorrServer.stopTorrentServer()
             TorrentServerApi.shutdown()
             applicationContext.cancelNotification(Notifications.ID_TORRENT_SERVER)
@@ -94,7 +92,7 @@ class TorrentServerService : Service() {
             )
         val builder = context.notificationBuilder(Notifications.CHANNEL_TORRENT_SERVER) {
             setSmallIcon(R.drawable.ic_ani)
-            setContentText(stringResource(MR.strings.torrentserver_isrunning))
+            setContentText(stringResource(MR.strings.torrentserver_is_running))
             setContentTitle(stringResource(MR.strings.app_name))
             setAutoCancel(false)
             setOngoing(true)
@@ -123,6 +121,7 @@ class TorrentServerService : Service() {
         const val ACTION_STOP = "stop_torrent_server"
         val applicationContext = Injekt.get<Application>()
 
+        @Suppress("TooGenericExceptionCaught")
         fun start() {
             try {
                 val intent =
@@ -131,11 +130,11 @@ class TorrentServerService : Service() {
                     }
                 applicationContext.startService(intent)
             } catch (e: Exception) {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "start() error: ${e.message}")
-                e.printStackTrace()
+                println(e.stackTrace)
             }
         }
 
+        @Suppress("TooGenericExceptionCaught")
         fun stop() {
             try {
                 val intent =
@@ -144,11 +143,11 @@ class TorrentServerService : Service() {
                     }
                 applicationContext.startService(intent)
             } catch (e: Exception) {
-                if (BuildConfig.DEBUG) Log.d("TorrentService", "stop() error: ${e.message}")
-                e.printStackTrace()
+                println(e.stackTrace)
             }
         }
 
+        @Suppress("MagicNumber")
         fun wait(timeout: Int = -1): Boolean {
             var count = 0
             if (timeout < 0) {

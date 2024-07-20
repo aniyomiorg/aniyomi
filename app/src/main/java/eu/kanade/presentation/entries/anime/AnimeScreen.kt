@@ -94,6 +94,7 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 fun AnimeScreen(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -248,6 +249,7 @@ fun AnimeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -547,6 +549,7 @@ private fun AnimeScreenSmallImpl(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 fun AnimeScreenLargeImpl(
     state: AnimeScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,

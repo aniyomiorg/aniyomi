@@ -16,6 +16,7 @@ class Discord(id: Long) : ConnectionsService(id) {
 
     override fun getLogo() = R.drawable.ic_discord_24dp
 
+    @Suppress("MagicNumber")
     override fun getLogoColor() = Color.rgb(88, 101, 242)
 
     override fun logout() {

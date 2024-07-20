@@ -38,6 +38,7 @@ private enum class State {
 
 @SuppressLint("ComposeParameterOrder")
 @Composable
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun <T> TriStateListDialog(
     title: String,
     message: String? = null,

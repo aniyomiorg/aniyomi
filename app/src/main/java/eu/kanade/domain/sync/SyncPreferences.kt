@@ -8,6 +8,7 @@ import java.util.UUID
 
 /** Made by @kaiserbh. Huge thx for making this feature. **/
 
+@Suppress("TooManyFunctions")
 class SyncPreferences(
     private val preferenceStore: PreferenceStore,
 ) {

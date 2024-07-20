@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.torrentServer.model
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("ConstructorParameterNaming")
 data class BTSets(
     // Cache
     var CacheSize: Long,

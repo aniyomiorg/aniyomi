@@ -35,6 +35,7 @@ class AppUpdateDownloadJob(
     private val notifier = AppUpdateNotifier(context)
     private val network: NetworkHelper by injectLazy()
 
+    @Suppress("SwallowedException")
     override suspend fun doWork(): Result {
         val url = inputData.getString(EXTRA_DOWNLOAD_URL) ?: return Result.failure()
         val title = inputData.getString(EXTRA_DOWNLOAD_TITLE) ?: context.stringResource(MR.strings.app_name)
@@ -65,6 +66,7 @@ class AppUpdateDownloadJob(
      *
      * @param url url location of file
      */
+    @Suppress("MagicNumber")
     private fun downloadApk(title: String, url: String) {
         val request = Request.Builder().url(url).build()
         network.client.newCall(request).enqueue(object : Callback {

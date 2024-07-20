@@ -13,6 +13,7 @@ private val DEFAULT_CACHE_CONTROL = CacheControl.Builder().maxAge(10, MINUTES).b
 private val DEFAULT_HEADERS = Headers.Builder().build()
 private val DEFAULT_BODY: RequestBody = FormBody.Builder().build()
 
+@Suppress("FunctionNaming")
 fun GET(
     url: String,
     headers: Headers = DEFAULT_HEADERS,
@@ -24,6 +25,7 @@ fun GET(
 /**
  * @since extensions-lib 1.4
  */
+@Suppress("FunctionNaming")
 fun GET(
     url: HttpUrl,
     headers: Headers = DEFAULT_HEADERS,
@@ -36,6 +38,7 @@ fun GET(
         .build()
 }
 
+@Suppress("FunctionNaming")
 fun POST(
     url: String,
     headers: Headers = DEFAULT_HEADERS,
@@ -50,6 +53,7 @@ fun POST(
         .build()
 }
 
+@Suppress("FunctionNaming")
 fun PUT(
     url: String,
     headers: Headers = DEFAULT_HEADERS,
@@ -63,6 +67,8 @@ fun PUT(
         .cacheControl(cache)
         .build()
 }
+
+@Suppress("FunctionNaming")
 fun PATCH(
     url: String,
     headers: Headers = DEFAULT_HEADERS,
@@ -77,6 +83,7 @@ fun PATCH(
         .build()
 }
 
+@Suppress("FunctionNaming")
 fun DELETE(
     url: String,
     headers: Headers = DEFAULT_HEADERS,

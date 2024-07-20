@@ -93,6 +93,7 @@ class ChapterCache(
             .launchIn(scope)
     }
 
+    @Suppress("MagicNumber")
     private fun setupDiskCache(cacheSize: Int): DiskLruCache {
         return DiskLruCache.open(
             File(context.cacheDir, PARAMETER_CACHE_DIRECTORY),

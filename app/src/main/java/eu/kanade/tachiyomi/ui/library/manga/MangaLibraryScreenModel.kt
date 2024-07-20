@@ -86,6 +86,7 @@ import java.util.Collections
  */
 typealias MangaLibraryMap = Map<Category, List<MangaLibraryItem>>
 
+@Suppress("LargeClass")
 class MangaLibraryScreenModel(
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
     private val getCategories: GetVisibleMangaCategories = Injekt.get(),
@@ -135,7 +136,7 @@ class MangaLibraryScreenModel(
                     .applyGrouping(groupType)
                     // SY <--
                     .applyFilters(tracks, trackingFilter)
-                    .applySort(tracks, trackingFilter.keys, sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT })
+                    .applySort(tracks, sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT }, trackingFilter.keys)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
                             // Filter query
@@ -295,8 +296,8 @@ class MangaLibraryScreenModel(
     private fun MangaLibraryMap.applySort(
         // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<MangaTrack>>,
-        loggedInTrackerIds: Set<Long>,
         groupSort: MangaLibrarySort? = null,
+        loggedInTrackerIds: Set<Long>,
     ): MangaLibraryMap {
         val sortAlphabetically: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
             i1.libraryManga.manga.title.lowercase().compareToWithCollator(i2.libraryManga.manga.title.lowercase())
@@ -819,6 +820,7 @@ class MangaLibraryScreenModel(
         return getNextChapters.await(manga.id).firstOrNull()
     }
 
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
     private fun getGroupedMangaItems(
         groupType: Int,
         libraryManga: List<MangaLibraryItem>,

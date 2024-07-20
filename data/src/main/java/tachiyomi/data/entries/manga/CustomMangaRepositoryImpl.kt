@@ -16,6 +16,7 @@ class CustomMangaRepositoryImpl(context: Context) : CustomMangaRepository {
 
     override fun get(mangaId: Long) = customMangaMap[mangaId]
 
+    @Suppress("SwallowedException", "ReturnCount", "TooGenericExceptionCaught")
     private fun fetchCustomData(): MutableMap<Long, CustomMangaInfo> {
         if (!editJson.exists() || !editJson.isFile) return mutableMapOf()
 
@@ -37,6 +38,7 @@ class CustomMangaRepositoryImpl(context: Context) : CustomMangaRepository {
             .toMutableMap()
     }
 
+    @Suppress("ComplexCondition")
     override fun set(mangaInfo: CustomMangaInfo) {
         if (
             mangaInfo.title == null &&

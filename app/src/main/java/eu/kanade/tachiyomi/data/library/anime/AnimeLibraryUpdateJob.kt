@@ -18,7 +18,6 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.sync.SyncPreferences
@@ -30,7 +29,6 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.track.TrackStatus
-import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -57,7 +55,6 @@ import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
@@ -171,6 +168,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
     private suspend fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryAnime = getLibraryAnime.await()
 
@@ -322,6 +320,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @return an observable delivering the progress of each update.
      */
+    @Suppress("MagicNumber", "LongMethod")
     private suspend fun updateEpisodeList() {
         val semaphore = Semaphore(5)
         val progressCount = AtomicInteger(0)
@@ -436,55 +435,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         return syncEpisodesWithSource.await(episodes, dbAnime, source, false, fetchWindow)
     }
 
-    private suspend fun updateCovers() {
-        val semaphore = Semaphore(5)
-        val progressCount = AtomicInteger(0)
-        val currentlyUpdatingAnime = CopyOnWriteArrayList<Anime>()
-
-        coroutineScope {
-            animeToUpdate.groupBy { it.anime.source + (0..4).random() }
-                .values
-                .map { animeInSource ->
-                    async {
-                        semaphore.withPermit {
-                            animeInSource.forEach { libraryAnime ->
-                                val anime = libraryAnime.anime
-                                ensureActive()
-
-                                withUpdateNotification(
-                                    currentlyUpdatingAnime,
-                                    progressCount,
-                                    anime,
-                                ) {
-                                    val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
-                                    try {
-                                        val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime.prepUpdateCover(
-                                            coverCache,
-                                            networkAnime,
-                                            true,
-                                        )
-                                            .copyFrom(networkAnime)
-                                        try {
-                                            updateAnime.await(updatedAnime.toAnimeUpdate())
-                                        } catch (e: Exception) {
-                                            logcat(LogPriority.ERROR) { "Anime doesn't exist anymore" }
-                                        }
-                                    } catch (e: Throwable) {
-                                        // Ignore errors and continue
-                                        logcat(LogPriority.ERROR, e)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .awaitAll()
-        }
-
-        notifier.cancelProgressNotification()
-    }
-
     private suspend fun withUpdateNotification(
         updatingAnime: CopyOnWriteArrayList<Anime>,
         completed: AtomicInteger,
@@ -559,11 +509,6 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          */
         private const val KEY_CATEGORY = "animeCategory"
 
-        /**
-         * Key that defines what should be updated.
-         */
-        private const val KEY_TARGET = "animeTarget"
-
         // SY -->
         /**
          * Key for group to update.
@@ -613,6 +558,8 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 context.workManager.cancelUniqueWork(WORK_NAME_AUTO)
             }
         }
+
+        @Suppress("ReturnCount")
         fun startNow(
             context: Context,
             category: Category? = null,

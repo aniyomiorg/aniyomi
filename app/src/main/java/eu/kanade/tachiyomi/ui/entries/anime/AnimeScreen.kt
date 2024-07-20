@@ -42,9 +42,9 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
-import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
@@ -81,6 +81,7 @@ class AnimeScreen(
     override fun onProvideAssistUrl() = assistUrl
 
     @Composable
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
     override fun Content() {
         if (!ifAnimeSourcesLoaded()) {
             LoadingScreen()
@@ -373,7 +374,6 @@ class AnimeScreen(
                 context,
                 episode.animeId,
                 episode.id,
-                episode.url,
                 useExternalPlayer,
             )
         }

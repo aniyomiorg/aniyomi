@@ -3,6 +3,7 @@ package tachiyomi.data.items.chapter
 import tachiyomi.domain.items.chapter.model.Chapter
 
 object ChapterMapper {
+    @Suppress("LongParameterList")
     fun mapChapter(
         id: Long,
         mangaId: Long,

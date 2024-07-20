@@ -50,6 +50,7 @@ object SettingsAppearanceScreen : SearchableSettings {
     }
 
     @Composable
+    @Suppress("SpreadOperator")
     private fun getThemeGroup(
         uiPreferences: UiPreferences,
     ): Preference.PreferenceGroup {
