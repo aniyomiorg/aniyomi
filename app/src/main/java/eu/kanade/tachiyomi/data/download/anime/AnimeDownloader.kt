@@ -1077,7 +1077,6 @@ class AnimeDownloader(
 
         return sinkFile
     }
-
     private fun getComplementaryRanges(
         range: Pair<Long, Long>,
         toRemove: List<Pair<Long, Long>>,
@@ -1097,7 +1096,6 @@ class AnimeDownloader(
 
         return result.toList()
     }
-
     private fun getDownloadParts(
         download: AnimeDownload,
         video: Video,

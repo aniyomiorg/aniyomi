@@ -7,6 +7,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
 
 @Suppress(
+    
     "DEPRECATION",
     "MagicNumber",
 )

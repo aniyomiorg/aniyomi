@@ -40,6 +40,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -169,6 +170,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
     private suspend fun addMangaToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryManga = getLibraryManga.await()
+
         // SY -->
         val groupMangaLibraryUpdateType = libraryPreferences.groupMangaLibraryUpdateType().get()
         // SY <--
@@ -183,7 +185,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     group == MangaLibraryGroup.UNGROUPED
                 )
         ) {
-            val categoriesToUpdate = libraryPreferences.mangaUpdateCategories().get().map(String::toLong)
+            val categoriesToUpdate = libraryPreferences.mangaUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToUpdate }
             } else {
@@ -203,7 +205,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             when (group) {
                 MangaLibraryGroup.BY_TRACK_STATUS -> {
                     val trackingExtra = groupExtra?.toIntOrNull() ?: -1
-                    val tracks = getTracks.await().groupBy { it.mangaId }
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
 
                     libraryManga.filter { (manga) ->
                         val status = tracks[manga.id]?.firstNotNullOfOrNull { track ->

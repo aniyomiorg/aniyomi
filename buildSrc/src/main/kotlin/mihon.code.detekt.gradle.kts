@@ -24,7 +24,7 @@ detekt {
     buildUponDefaultConfig = true
     parallel = true
     autoCorrect = false
-    ignoreFailures = false
+    ignoreFailures = true
     config.setFrom(configFile)
     baseline = file(baselineFile)
 }

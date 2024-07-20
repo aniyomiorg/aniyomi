@@ -40,6 +40,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -170,6 +171,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
     private suspend fun addAnimeToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryAnime = getLibraryAnime.await()
+
         // SY -->
         val groupAnimeLibraryUpdateType = libraryPreferences.groupAnimeLibraryUpdateType().get()
         // SY <--
@@ -184,7 +186,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                     group == AnimeLibraryGroup.UNGROUPED
                 )
         ) {
-            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map(String::toLong)
+            val categoriesToUpdate = libraryPreferences.animeUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 libraryAnime.filter { it.category in categoriesToUpdate }
             } else {
@@ -204,7 +206,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             when (group) {
                 AnimeLibraryGroup.BY_TRACK_STATUS -> {
                     val trackingExtra = groupExtra?.toIntOrNull() ?: -1
-                    val tracks = getTracks.await().groupBy { it.animeId }
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.animeId }
 
                     libraryAnime.filter { (anime) ->
                         val status = tracks[anime.id]?.firstNotNullOfOrNull { track ->
@@ -467,7 +469,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private fun writeErrorFile(errors: List<Pair<Anime, String?>>): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("kuukiyomi_update_errors.txt")
+                val file = context.createFileInCacheDir("animetail_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(
                         context.stringResource(MR.strings.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n",

@@ -180,23 +180,20 @@ private fun onViewCreated(
         binding.animeGenresTags.setChips(anime.genre.orEmpty().dropBlank(), scope)
 
         binding.title.hint = context.getString(R.string.title_hint, anime.ogTitle)
-        if (anime.ogAuthor != null) {
-            binding.animeAuthor.hint = context.getString(R.string.author_hint, anime.ogAuthor)
-        }
-        if (anime.ogArtist != null) {
-            binding.animeArtist.hint = context.getString(R.string.artist_hint, anime.ogArtist)
-        }
-        if (!anime.ogDescription.isNullOrBlank()) {
-            binding.animeDescription.hint =
-                context.getString(
-                    R.string.description_hint,
-                    anime.ogDescription!!.replace("\n", " ").chop(20),
-                )
-        }
+        binding.animeAuthor.hint = context.getString(R.string.author_hint, anime.ogAuthor ?: "")
+        binding.animeArtist.hint = context.getString(R.string.artist_hint, anime.ogArtist ?: "")
+        binding.animeDescription.hint =
+            context.getString(
+                R.string.description_hint,
+                anime.ogDescription?.takeIf { it.isNotBlank() }?.let { it.replace("\n", " ").chop(20) } ?: "",
+            )
     }
     binding.animeGenresTags.clearFocus()
 
     binding.resetTags.setOnClickListener { resetTags(anime, binding, scope) }
+    // SY -->
+    binding.resetInfo.setOnClickListener { resetInfo(anime, binding, scope) }
+    // SY <--
 }
 
 private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {
@@ -205,6 +202,14 @@ private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: Coro
     } else {
         binding.animeGenresTags.setChips(anime.ogGenre.orEmpty(), scope)
     }
+}
+
+private fun resetInfo(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {
+    binding.title.setText("")
+    binding.animeAuthor.setText("")
+    binding.animeArtist.setText("")
+    binding.animeDescription.setText("")
+    resetTags(anime, binding, scope)
 }
 
 private fun loadCover(anime: Anime, binding: EditAnimeDialogBinding) {

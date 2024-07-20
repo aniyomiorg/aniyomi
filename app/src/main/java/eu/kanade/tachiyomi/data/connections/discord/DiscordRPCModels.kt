@@ -18,18 +18,17 @@ const val RICH_PRESENCE_TAG = "discord_rpc"
 
 // Constant for application id
 @Suppress("TopLevelPropertyNaming")
-private const val RICH_PRESENCE_APPLICATION_ID = "952899285983326208"
+private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
 // Constant for buttons list
 @Suppress("TopLevelPropertyNaming")
-private val RICH_PRESENCE_BUTTONS = listOf("Get the app!", "Join the Discord!")
+private val RICH_PRESENCE_BUTTONS = listOf("Discord Server")
 
 // Constant for metadata list
 @Suppress("TopLevelPropertyNaming")
 private val RICH_PRESENCE_METADATA = Activity.Metadata(
     listOf(
-        "https://github.com/LuftVerbot/Kuukiyomi",
-        "https://discord.gg/s82Vu589Ya",
+        "https://discord.gg/vN8nbPHzeC"
     ),
 )
 
@@ -45,6 +44,7 @@ data class Activity(
     val assets: Assets? = null,
     val buttons: List<String>? = RICH_PRESENCE_BUTTONS,
     val metadata: Metadata? = RICH_PRESENCE_METADATA,
+
 ) {
     @Serializable
     data class Assets(
@@ -182,7 +182,7 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, KuukiyomiImageUrl),
+    APP(R.string.app_name, R.string.browsing, AnimetailImageUrl),
     LIBRARY(R.string.label_library, R.string.browsing, LibraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, UpdatesImageUrl),
     HISTORY(R.string.label_recent_manga, R.string.scrolling, HistoryImageUrl),
@@ -194,14 +194,14 @@ enum class DiscordScreen(
 }
 
 // Constants for standard Rich Presence image urls
-// change the image Urls used here to match kuukiyomi brown/ green theme, Luft
-private const val KuukiyomiImageUrl = "emojis/1216123453468577913.webp?quality=lossless"
-private const val LibraryImageUrl = "emojis/1216125466033918052.webp?quality=lossless"
-private const val UpdatesImageUrl = "emojis/1216122475688231003.webp?quality=lossless"
-private const val HistoryImageUrl = "emojis/1216122387515310170.webp?quality=lossless"
-private const val BrowseImageUrl = "emojis/1216122371501723718.webp?quality=lossless"
-private const val MoreImageUrl = "emojis/1216122403219050536.webp?quality=lossless"
-private const val WebviewImageUrl = "emojis/1216122455618490509.webp?quality=lossless"
-private const val VideoImageUrl = "emojis/1216122435200483459.webp?quality=lossless"
-private const val MangaImageUrl = "emojis/1216122415751626782.webp?quality=lossless"
+// change the image Urls used here to match animetail brown/ green theme, Luft
+private const val AnimetailImageUrl = "emojis/1259596496353886230.webp?quality=lossless"
+private const val LibraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
+private const val UpdatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
+private const val HistoryImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
+private const val BrowseImageUrl = "emojis/1235354864419344455.webp?quality=lossless"
+private const val MoreImageUrl = "emojis/1235355169752088706.webp?quality=lossless"
+private const val WebviewImageUrl = "emojis/1235355362169851996.webp?quality=lossless"
+private const val VideoImageUrl = "emojis/1235355607201218660.webp?quality=lossless"
+private const val MangaImageUrl = "emojis/1235355804274659390.webp?quality=lossless"
 // <-- AM (DISCORD)

@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Kuukiyomi"
+rootProject.name = "Animetail"
 include(":app")
 include(":core-metadata")
 include(":core:common")

@@ -202,6 +202,7 @@ object AnimeLibraryTab : Tab() {
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.anime.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteAnimeDialog,
+                    onClickResetInfo = screenModel::resetInfo.takeIf { state.showResetInfo },
                     isManga = false,
                 )
             },

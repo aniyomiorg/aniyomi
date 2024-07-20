@@ -257,5 +257,6 @@ sealed class Preference {
         override val enabled: Boolean = true,
 
         val preferenceItems: ImmutableList<PreferenceItem<out Any>>,
+
     ) : Preference()
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -569,6 +570,25 @@ class AnimeLibraryScreenModel(
         }
     }
 
+    fun resetInfo() {
+        state.value.selection.fastForEach { (anime) ->
+            val animeInfo = AnimeUpdate(
+                id = anime.id,
+                title = null,
+                author = null,
+                artist = null,
+                thumbnailUrl = null,
+                description = null,
+                genre = null,
+                status = null,
+            )
+            screenModelScope.launchNonCancellable {
+                updateAnime.await(animeInfo)
+            }
+        }
+        clearSelection()
+    }
+
     /**
      * Marks animes' episodes seen status.
      */
@@ -963,6 +983,16 @@ class AnimeLibraryScreenModel(
 
         val categories = library.keys.toList()
 
+        val showResetInfo: Boolean by lazy {
+            selection.fastAny { (anime) ->
+                anime.title != anime.ogTitle ||
+                    anime.author != anime.ogAuthor ||
+                    anime.artist != anime.ogArtist ||
+                    anime.description != anime.ogDescription ||
+                    anime.genre != anime.ogGenre ||
+                    anime.status != anime.ogStatus
+            }
+        }
         fun getAnimelibItemsByCategoryId(categoryId: Long): List<AnimeLibraryItem>? {
             return library.firstNotNullOfOrNull { (k, v) -> v.takeIf { k.id == categoryId } }
         }

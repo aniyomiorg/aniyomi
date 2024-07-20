@@ -3,11 +3,11 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
-      - 'i18n/src/main/res/**/strings-kuukiyomi.xml'
       - 'i18n/src/commonMain/moko-resources/**/strings-aniyomi.xml'
       - 'i18n/src/commonMain/moko-resources/**/strings.xml'
       - 'i18n/src/commonMain/moko-resources/**/plurals-aniyomi.xml'
       - 'i18n/src/commonMain/moko-resources/**/plurals.xml'
+      - 'i18n/src/main/res/**/strings-animetail.xml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
