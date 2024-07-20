@@ -109,6 +109,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.ByteArrayOutputStream
 
+@Suppress("LargeClass")
 class ReaderActivity : BaseActivity() {
 
     companion object {

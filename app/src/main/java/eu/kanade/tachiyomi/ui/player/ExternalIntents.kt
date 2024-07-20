@@ -269,11 +269,12 @@ class ExternalIntents {
      * @param uri the path data of the video.
      * @param video the video being sent to the external player.
      */
+    @Suppress("MagicNumber")
     private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
-            if (isPackageInstalled(AMNIS, context.packageManager)) {
+            if (isPackageInstalled(Amnis, context.packageManager)) {
                 if (uri.toString().startsWith("magnet:")) {
-                    component = getComponent(AMNIS)
+                    component = getComponent(Amnis)
                 }
             } else {
                 withUIContext {
@@ -357,7 +358,7 @@ class ExternalIntents {
             JustPlayer -> ComponentName(packageName, "$packageName.PlayerActivity")
             NextPlayer -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
             XPlayer -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
-            AMNIS -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
+            Amnis -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
             else -> null
         }
     }
@@ -622,4 +623,4 @@ const val JustPlayer = "com.brouken.player"
 const val NextPlayer = "dev.anilbeesetti.nextplayer"
 const val XPlayer = "video.player.videoplayer"
 const val WebVideoCaster = "com.instantbits.cast.webvideo"
-const val AMNIS = "com.amnis"
+const val Amnis = "com.amnis"

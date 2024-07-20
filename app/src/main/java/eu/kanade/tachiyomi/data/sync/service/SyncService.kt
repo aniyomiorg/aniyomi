@@ -23,6 +23,7 @@ data class SyncData(
     val backup: Backup? = null,
 )
 
+@Suppress("TooManyFunctions")
 abstract class SyncService(
     val context: Context,
     val json: Json,
@@ -428,6 +429,7 @@ abstract class SyncService(
      * @param remoteCategoriesList The list of remote SyncCategory objects.
      * @return The merged list of SyncCategory objects.
      */
+    @Suppress("ReturnCount")
     private fun mergeCategoriesLists(
         localCategoriesList: List<BackupCategory>?,
         remoteCategoriesList: List<BackupCategory>?,

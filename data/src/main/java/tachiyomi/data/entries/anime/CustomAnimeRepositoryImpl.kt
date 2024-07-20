@@ -16,6 +16,7 @@ class CustomAnimeRepositoryImpl(context: Context) : CustomAnimeRepository {
 
     override fun get(animeId: Long) = customAnimeMap[animeId]
 
+    @Suppress("SwallowedException", "ReturnCount", "TooGenericExceptionCaught")
     private fun fetchCustomData(): MutableMap<Long, CustomAnimeInfo> {
         if (!editJson.exists() || !editJson.isFile) return mutableMapOf()
 
@@ -37,6 +38,7 @@ class CustomAnimeRepositoryImpl(context: Context) : CustomAnimeRepository {
             .toMutableMap()
     }
 
+    @Suppress("ComplexCondition")
     override fun set(animeInfo: CustomAnimeInfo) {
         if (
             animeInfo.title == null &&

@@ -104,6 +104,7 @@ object SettingsConnectionsScreen : SearchableSettings {
     }
 
     @Composable
+    @Suppress("LongMethod")
     private fun ConnectionsLoginDialog(
         service: ConnectionsService,
         @StringRes uNameStringRes: Int,
@@ -210,6 +211,7 @@ object SettingsConnectionsScreen : SearchableSettings {
         )
     }
 
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
     private suspend fun checkLogin(
         context: Context,
         service: ConnectionsService,
@@ -272,6 +274,7 @@ internal fun ConnectionsLogoutDialog(
     )
 }
 
+@Suppress("UnusedPrivateClass")
 private data class LoginConnectionsDialog(
     val service: ConnectionsService,
     @StringRes val uNameStringRes: Int,

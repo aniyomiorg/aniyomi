@@ -57,7 +57,6 @@ fun Screen.animeHistoryTab(
                 context,
                 episode.animeId,
                 episode.id,
-                episode.url,
                 extPlayer,
             )
         } else {

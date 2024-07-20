@@ -12,7 +12,7 @@ data class TorrentRequest(
     val title: String = "",
     val poster: String = "",
     val data: String = "",
-    val save_to_db: Boolean = false,
+    val saveToDb: Boolean = false,
 ) {
     override fun toString(): String {
         return Json.encodeToString(serializer(), this)
@@ -28,16 +28,16 @@ open class Request(val action: String) {
 
 class SettingsReq(
     action: String,
-    val Sets: BTSets,
+    val sets: BTSets,
 ) : Request(action)
 
 class ViewedReq(
     action: String,
     val hash: String = "",
-    val file_index: Int = -1,
+    val fileIndex: Int = -1,
 ) : Request(action)
 
 data class Viewed(
     val hash: String,
-    val file_index: Int,
+    val fileIndex: Int,
 )

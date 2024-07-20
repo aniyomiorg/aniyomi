@@ -191,10 +191,9 @@ class ReaderPreferences(
         const val WEBTOON_PADDING_MIN = 0
         const val WEBTOON_PADDING_MAX = 25
 
-        const val MILLI_CONVERSION = 100
-
         const val PRELOAD_SIZE_MIN = 4
         const val PRELOAD_SIZE_MAX = 20
+        const val MILLI_CONVERSION = 100
 
         val TapZones = listOf(
             MR.strings.label_default,

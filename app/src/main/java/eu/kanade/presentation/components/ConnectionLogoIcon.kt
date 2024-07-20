@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.data.connections.ConnectionsService
 import tachiyomi.presentation.core.util.clickableNoIndication
 
 @Composable
+@Suppress("ModifierMissing")
 fun ConnectionsLogoIcon(
     service: ConnectionsService,
     onClick: (() -> Unit)? = null,

@@ -104,11 +104,11 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     // SY -->
     val pageLayout by screenModel.preferences.pageLayout().collectAsState()
     SettingsChipRow(MR.strings.page_layout) {
-        ReaderPreferences.PageLayouts.mapIndexed { index, it ->
+        ReaderPreferences.PageLayouts.mapIndexed { index, text ->
             FilterChip(
                 selected = pageLayout == index,
                 onClick = { screenModel.preferences.pageLayout().set(index) },
-                label = { Text(stringResource(it)) },
+                label = { Text(stringResource(text)) },
             )
         }
     }
@@ -168,11 +168,11 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
 
     val centerMarginType by screenModel.preferences.centerMarginType().collectAsState()
     SettingsChipRow(MR.strings.pref_center_margin) {
-        ReaderPreferences.CenterMarginTypes.mapIndexed { index, it ->
+        ReaderPreferences.CenterMarginTypes.mapIndexed { index, text ->
             FilterChip(
                 selected = centerMarginType == index,
                 onClick = { screenModel.preferences.centerMarginType().set(index) },
-                label = { Text(stringResource(it)) },
+                label = { Text(stringResource(text)) },
             )
         }
     }

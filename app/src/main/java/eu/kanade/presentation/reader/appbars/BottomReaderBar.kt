@@ -25,6 +25,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
+@Suppress("LongMethod")
 fun BottomReaderBar(
     // SY -->
     enabledButtons: Set<String>,

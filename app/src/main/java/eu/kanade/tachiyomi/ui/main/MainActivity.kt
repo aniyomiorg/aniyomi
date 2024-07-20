@@ -577,7 +577,6 @@ class MainActivity : BaseActivity() {
             context: Context,
             animeId: Long,
             episodeId: Long,
-            episodeUrl: String?,
             extPlayer: Boolean,
             video: Video? = null,
             videoList: List<Video>? = null,

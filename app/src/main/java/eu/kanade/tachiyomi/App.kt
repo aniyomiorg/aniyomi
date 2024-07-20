@@ -79,6 +79,7 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
     private val disableIncognitoReceiver = DisableIncognitoReceiver()
 
     @SuppressLint("LaunchActivityFromNotification")
+    @Suppress("LongMethod")
     override fun onCreate() {
         super<Application>.onCreate()
 
@@ -150,14 +151,14 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
+        initializeMigrator()
+
         val syncPreferences: SyncPreferences = Injekt.get()
         val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
         if (syncPreferences.isSyncEnabled() && syncTriggerOpt.syncOnAppStart
         ) {
             SyncDataJob.startNow(this@App)
         }
-
-        initializeMigrator()
     }
 
     private fun initializeMigrator() {

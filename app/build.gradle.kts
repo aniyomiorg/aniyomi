@@ -160,9 +160,8 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.systemuicontroller)
 
-    implementation(androidx.interpolator)
-
     implementation(compose.colorpicker)
+    implementation(androidx.interpolator)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
@@ -209,6 +208,10 @@ dependencies {
     // Disk
     implementation(libs.disklrucache)
     implementation(libs.unifile)
+    implementation(libs.junrar)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Preferences
     implementation(libs.preferencektx)
@@ -276,7 +279,7 @@ dependencies {
     // true type parser
     implementation(libs.truetypeparser)
     // torrserver
-    implementation(files("libs/server.aar"))
+	implementation(libs.torrentserver)
     // Cast
     implementation(libs.bundles.cast)
 }

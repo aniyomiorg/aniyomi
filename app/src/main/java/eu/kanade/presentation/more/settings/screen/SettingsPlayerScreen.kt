@@ -26,7 +26,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
-import eu.kanade.tachiyomi.ui.player.AMNIS
+import eu.kanade.tachiyomi.ui.player.Amnis
 import eu.kanade.tachiyomi.ui.player.JustPlayer
 import eu.kanade.tachiyomi.ui.player.MpvKt
 import eu.kanade.tachiyomi.ui.player.MpvKtPreview
@@ -404,6 +404,7 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
     @Composable
     private fun getTorrentServerGroup(
         torrentServerPreferences: TorrentServerPreferences,
@@ -513,5 +514,5 @@ val externalPlayers = listOf(
     NextPlayer,
     XPlayer,
     WebVideoCaster,
-    AMNIS,
+    Amnis,
 )

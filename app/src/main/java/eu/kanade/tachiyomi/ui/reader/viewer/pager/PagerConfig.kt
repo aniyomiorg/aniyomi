@@ -229,6 +229,7 @@ class PagerConfig(
         const val AUTOMATIC = 2
     }
 
+    @Suppress("MagicNumber")
     fun themeToColor(theme: Int) {
         pageCanvasColor = when (theme) {
             1 -> Color.BLACK
