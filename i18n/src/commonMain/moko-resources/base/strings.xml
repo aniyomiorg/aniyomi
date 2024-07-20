@@ -153,6 +153,7 @@
     <string name="loading">Loading…</string>
     <string name="internal_error">InternalError: Check crash logs for further information</string>
     <string name="app_not_available">App not available</string>
+    <string name="relative_time_now">Now</string>
     <!-- Onboarding -->
     <string name="pref_onboarding_guide">Onboarding guide</string>
     <string name="onboarding_heading">Welcome!</string>

@@ -113,6 +113,7 @@ fun LocalDateTime.toRelativeString(
                             minuteDifference.toInt().absoluteValue,
                             minuteDifference.toInt().absoluteValue,
                         )
+                        minuteDifference == 0L -> context.stringResource(MR.strings.relative_time_now)
                         else -> context.pluralStringResource(
                             MR.plurals.relative_time_minutes,
                             minuteDifference.toInt(),
