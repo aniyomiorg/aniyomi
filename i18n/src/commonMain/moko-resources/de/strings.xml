@@ -1129,4 +1129,16 @@
     <string name="pref_player_audio_channels">Audiokanäle</string>
     <string name="pref_player_audio_channels_reverse_stereo">Stereo (Umgekehrt)</string>
     <string name="pref_player_audio_channels_auto">Automatisch</string>
+    <string name="label_upcoming">Bevorstehend</string>
+    <string name="action_add_anyway">Trotzdem hinzufügen</string>
+    <string name="pref_display_profile">Benutzerdefiniertes Anzeigeprofil</string>
+    <string name="upcoming_calendar_prev">Vorheriger Monat</string>
+    <string name="action_migrate_duplicate">Vorhandenen Eintrag migrieren</string>
+    <string name="action_replace_repo">Ersetzen</string>
+    <string name="action_view_upcoming">Kommende Updates anzeigen</string>
+    <string name="upcoming_calendar_next">Nächsten Monat</string>
+    <string name="pref_mpv_scripts_summary">Benötigt externe Speicherberechtigung.</string>
+    <string name="pref_webtoon_disable_zoom_out">Verkleinern deaktivieren</string>
+    <string name="action_replace_repo_title">Der Signaturschlüssel-Fingerabdruck ist bereits vorhanden</string>
+    <string name="pref_mpv_scripts">MPV-Skripte aktivieren</string>
 </resources>
