@@ -1142,4 +1142,9 @@
     <string name="action_replace_repo_title">签名密钥指纹已存在</string>
     <string name="action_replace_repo_message">%1$s 仓库已经存在和 %2$s 仓库相同的签名密钥指纹。
 \n若继续，%2$s 将被替换，否则请联系你的仓库维护员。</string>
+    <string name="pref_flash_duration_summary">%1$s 毫秒</string>
+    <string name="relative_time_now">现在</string>
+    <string name="pref_flash_style_white_black">黑白</string>
+    <string name="pref_flash_style_black">黑色</string>
+    <string name="pref_flash_style_white">白色</string>
 </resources>
