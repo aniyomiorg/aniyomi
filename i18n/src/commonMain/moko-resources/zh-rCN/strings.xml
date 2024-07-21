@@ -173,8 +173,6 @@
     <string name="clear_database_confirmation">您确定吗？不在书架中的作品的已读章节和进度将会丢失</string>
     <string name="clear_database_completed">数据已删除</string>
     <string name="version">版本</string>
-    <string name="pref_enable_acra">发送错误报告</string>
-    <string name="pref_acra_summary">协助我们修复错误，不会发送敏感数据</string>
     <string name="login_title">登录 %1$s</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
@@ -597,7 +595,6 @@
     <string name="pref_user_agent_string">默认 User Agent 字符串</string>
     <string name="pref_reset_user_agent_string">恢复默认 User Agent 字符串</string>
     <string name="action_remove_everything">全部删除</string>
-    <string name="loader_rar5_error">不支持 RARv5 格式</string>
     <string name="appwidget_unavailable_locked">应用锁开启时，小部件不能使用</string>
     <string name="appwidget_updates_description">查看最近更新的作品</string>
     <string name="update_already_running">有其他更新尚未完成</string>

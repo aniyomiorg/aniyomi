@@ -129,7 +129,6 @@
     <string name="website">Webgunea</string>
     <string name="licenses">Open Source lizentziak</string>
     <string name="privacy_policy">Pribatutasun politika</string>
-    <string name="pref_acra_summary">Edozein akats konpontzen laguntzen du. Ez da datu sentikorrik bidaliko</string>
     <string name="label_downloaded_only">Deskargatuak bakarrik</string>
     <string name="pref_incognito_mode">Ezkutuko modua</string>
     <string name="downloaded_chapters">Deskargatutako kapituluak</string>
@@ -282,7 +281,6 @@
     <string name="pref_create_backup_summ">Liburutegia berreskuratzeko erabil daiteke</string>
     <string name="downloaded_only_summary">Zure liburutegiko manga guztiak iragazten ditu</string>
     <string name="pref_dns_over_https">DNS HTTPS bidez (DoH)</string>
-    <string name="pref_enable_acra">Bidali hutsegite-txostenak</string>
     <string name="notification_incognito_text">Desgaitu ezkutuko modua</string>
     <string name="used_cache">Erabilia: %1$s</string>
     <string name="clipboard_copy_error">Ezin izan da arbelean kopiatu</string>

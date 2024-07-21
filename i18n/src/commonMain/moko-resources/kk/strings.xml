@@ -375,7 +375,6 @@
     <string name="logout">Шығу</string>
     <string name="unknown_error">Белгісіз қателік</string>
     <string name="pref_clear_database">Дерекқорды тазалау</string>
-    <string name="pref_enable_acra">Қателіктер туралы есептерді жіберу</string>
     <string name="no_pinned_sources">Сізде бекітілген дереккөздер жоқ</string>
     <string name="empty_backup_error">Кітапханада сақтайтын түк жоқ</string>
     <string name="downloaded_only_summary">Кітапханаңыздағы барлық жазбаларды сүзеді</string>
@@ -431,7 +430,6 @@
     <string name="pref_disable_battery_optimization">Батареяның оңтайландыруын өшіру</string>
     <string name="battery_optimization_setting_activity_not_found">Құрылғы баптауы ашылмады</string>
     <string name="privacy_policy">Құпиялық саясаты</string>
-    <string name="pref_acra_summary">Барлық мүмкін қателерді түзетуге көмектеседі. Пайдаланушы деректері жіберілмейді</string>
     <string name="label_downloaded_only">Жүктелгенді ғана</string>
     <string name="login_title">%1$s-ге кіру</string>
     <string name="password">Құпиясөз</string>
@@ -489,7 +487,6 @@
     <string name="cant_open_last_read_chapter">Ақырғы оқылған тарау ашылмай тұр</string>
     <string name="updates_last_update_info">Кітапхананың ақырғы жаңаруы: %s</string>
     <string name="loader_not_implemented_error">Дереккөз табылмады</string>
-    <string name="loader_rar5_error">RARv5 пішімі қолжетімсіз</string>
     <string name="myanimelist_relogin">MyAnimeList-ке қайтадан кіріңіз</string>
     <string name="error_no_match">Ұқсастық табылмады</string>
     <string name="source_unsupported">Дереккөз қолжетімсіз</string>

@@ -316,8 +316,6 @@
     <string name="login_title">Prijavi se na %1$s</string>
     <string name="downloaded_only_summary">Filtrira sve unose u biblioteci</string>
     <string name="label_downloaded_only">Samo preuzeto</string>
-    <string name="pref_acra_summary">Pomaže pri ispravljanju grešaka. Ne šalju se nikoji privatni podaci</string>
-    <string name="pref_enable_acra">Šalji izvještaje o iznenadnim prekidima rada aplikacije</string>
     <string name="check_for_updates">Traži nove verzije</string>
     <string name="licenses">Licence otvorenog koda</string>
     <string name="version">Verzija</string>
@@ -559,7 +557,6 @@
     <string name="on_hold_list">Na popisu čekanja</string>
     <string name="unfinished_list">Popis nedovršenih</string>
     <string name="download_notifier_split_page_not_found">Stranica %d nije pronađena tijekom rastavljanja</string>
-    <string name="loader_rar5_error">RARv5 format nije podržan</string>
     <string name="download_ahead_info">Radi samo ako je trenutačno i sljedeće poglavlje već preuzeto.</string>
     <string name="network_not_metered">Samo na mrežom bez ograničenja</string>
     <string name="action_sort_unread_count">Broj nepročitanih</string>

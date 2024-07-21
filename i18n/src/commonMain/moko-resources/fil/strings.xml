@@ -359,8 +359,6 @@
     <string name="login_title">Mag-login sa %1$s</string>
     <string name="downloaded_only_summary">Pini-filter ang lahat ng mga entry sa iyong akalatan</string>
     <string name="label_downloaded_only">Mga na-download lang</string>
-    <string name="pref_acra_summary">Nakatutulong sa pag-ayos sa mga bug. Walang sensitibong data ang ipapadala</string>
-    <string name="pref_enable_acra">Ipadala ang mga ulat ng pag-crash</string>
     <string name="updated_version">Nai-update patungong bersyon %1$s</string>
     <string name="check_for_updates">Maghanap ng update</string>
     <string name="licenses">Mga lisensiyang open-source</string>
@@ -597,7 +595,6 @@
     <string name="pref_reset_user_agent_string">I-reset ang default na string ng user agent</string>
     <string name="pref_user_agent_string">Default na string ng user agent</string>
     <string name="action_remove_everything">Burahin lahat</string>
-    <string name="loader_rar5_error">Di suportado ang format na RARv5</string>
     <string name="appwidget_updates_description">Tingnan ang mga kamakailang nai-update na entry sa iyong aklatan</string>
     <string name="appwidget_unavailable_locked">Di available ang widget kapag nakabukas ang lock</string>
     <string name="update_already_running">May ina-update sa ngayon</string>

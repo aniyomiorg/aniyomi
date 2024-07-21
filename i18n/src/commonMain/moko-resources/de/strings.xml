@@ -147,8 +147,6 @@
     <string name="pref_clear_database_summary">Verlauf für Einträge löschen, die nicht in deiner Bibliothek gespeichert sind</string>
     <string name="clear_database_completed">Einträge gelöscht</string>
     <string name="version">Version</string>
-    <string name="pref_enable_acra">Fehlerberichte senden</string>
-    <string name="pref_acra_summary">Hilft bei der Behebung von Fehlern. Keine sensiblen Daten werden gesendet</string>
     <string name="login_title">Bei %1$s anmelden</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
@@ -595,7 +593,6 @@
     <string name="pref_user_agent_string">Standard-User-Agent-Text</string>
     <string name="pref_reset_user_agent_string">Standard-User-Agent-Text zurücksetzen</string>
     <string name="action_remove_everything">Alles entfernen</string>
-    <string name="loader_rar5_error">Das RARv5-Format wird nicht unterstützt</string>
     <string name="appwidget_updates_description">Deine kürzlich aktualisierten Bibliothekseinträge ansehen</string>
     <string name="appwidget_unavailable_locked">Widget ist nicht verfügbar, wenn die App-Sperre aktiviert ist</string>
     <string name="update_already_running">Eine Aktualisierung ist bereits im Gange</string>

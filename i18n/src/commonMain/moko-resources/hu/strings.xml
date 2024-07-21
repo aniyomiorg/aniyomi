@@ -51,7 +51,6 @@
     <string name="pref_read_with_volume_keys_inverted">Gombok felcserélése</string>
     <string name="pref_reader_theme">Háttérszín</string>
     <string name="version">Verzió</string>
-    <string name="pref_enable_acra">Összeomlás-jelentések küldése</string>
     <string name="completed">Befejezett</string>
     <string name="dropped">Dobott</string>
     <string name="plan_to_read">Tervezett</string>
@@ -572,7 +571,6 @@
     <string name="whats_new">Újdonságok</string>
     <string name="help_translate">Segíts fordítani</string>
     <string name="privacy_policy">Adatvédelmi irányelvek</string>
-    <string name="pref_acra_summary">Segít a hibák javításában. Semmilyen bizalmas információ nem lesz elküldve</string>
     <string name="cancelled">Félbeszakított</string>
     <string name="on_hiatus">Szünetelő</string>
     <string name="show_title">Forrás címe</string>
@@ -587,7 +585,6 @@
     <string name="pref_user_agent_string">Alap hálózati kliens szöveg</string>
     <string name="pref_reset_user_agent_string">Alap hálózati kliens szöveg visszaállítása</string>
     <string name="action_remove_everything">Minden Eltávolitása</string>
-    <string name="loader_rar5_error">RARv5 formátum nem támogatót</string>
     <string name="appwidget_updates_description">Lásd nemrég frissített mangádat</string>
     <string name="appwidget_unavailable_locked">Widget nem elérhető amikor az alkalmazás zárolva van</string>
     <string name="pref_appearance_summary">Téma, dátum és idő formátuma</string>

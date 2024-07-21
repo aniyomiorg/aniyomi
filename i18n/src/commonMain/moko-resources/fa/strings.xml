@@ -303,8 +303,6 @@
     <string name="login_title">ورود به %1$s</string>
     <string name="downloaded_only_summary">همه مانگاهای موجود در کتابخانه را فیلتر می کند</string>
     <string name="label_downloaded_only">فقط دانلود شده ها</string>
-    <string name="pref_acra_summary">به رفع اشکالات برنامه کمک می کند. هیچ گونه داده حساسی ارسال نخواهد شد</string>
-    <string name="pref_enable_acra">ارسال گزارش های خرابی</string>
     <string name="check_for_updates">بررسی برای به آپدیت‌ها</string>
     <string name="licenses">مجوزهای منبع باز</string>
     <string name="version">نسخهٔ</string>
@@ -562,7 +560,6 @@
     <string name="backup_info">شما باید از پشتیبانی ها در جا های دیگر هم کپی داشته باشید.</string>
     <string name="action_update_category">بروزرسانی دسته بندی</string>
     <string name="action_copy_to_clipboard">کپی کردن به کلیپ‌برد</string>
-    <string name="loader_rar5_error">فرمت RARv5 پشتیبانی نشده</string>
     <string name="on_hiatus">متوقف شده</string>
     <string name="unlock_app_title">باز گشایی %s</string>
     <string name="delete_downloaded">پاک کردن قسمت های دانلود شده</string>

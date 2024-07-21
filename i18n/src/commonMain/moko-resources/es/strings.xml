@@ -100,8 +100,6 @@
     <string name="clear_database_confirmation">¿Seguro? Perderás los capítulos leídos y el progreso de los títulos que no pertenezcan a la biblioteca</string>
     <string name="clear_database_completed">Elementos borrados</string>
     <string name="version">Versión</string>
-    <string name="pref_enable_acra">Enviar informes de fallos</string>
-    <string name="pref_acra_summary">Ayuda a corregir cualquier error. No se enviará ninguna información personal</string>
     <string name="login_title">Iniciar sesión en %1$s</string>
     <string name="username">Nombre de usuario</string>
     <string name="password">Contraseña</string>
@@ -596,7 +594,6 @@
     <string name="pref_user_agent_string">Identificarse como otro navegador web («user agent»)</string>
     <string name="pref_reset_user_agent_string">Volver a la identificación de navegador («user agent») original</string>
     <string name="action_remove_everything">Quitar todo</string>
-    <string name="loader_rar5_error">La aplicación no es capaz de leer el formato RARv5</string>
     <string name="appwidget_updates_description">Aquí aparecerá el contenido más reciente de tu biblioteca</string>
     <string name="appwidget_unavailable_locked">El widget no está disponible cuando el bloqueo de aplicación está activo</string>
     <string name="update_already_running">Ya se está actualizando</string>

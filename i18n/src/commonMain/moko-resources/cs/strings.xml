@@ -210,8 +210,6 @@
     <string name="pref_clear_database_summary">Smazat historii položek, které nejsou uloženy ve vaší knihovně</string>
     <string name="clear_database_completed">Položky byly smazány</string>
     <string name="version">Verze</string>
-    <string name="pref_enable_acra">Odesílat hlášení o pádu</string>
-    <string name="pref_acra_summary">Pomáhá opravit chyby. Nebudou odeslány žádné citlivé údaje</string>
     <string name="updating_category">Aktualizuji kategorie</string>
     <string name="local_source">Lokální zdroj</string>
     <string name="other_source">Ostatní</string>
@@ -587,7 +585,6 @@
     <string name="pref_reset_user_agent_string">Obnovit výchozí řetězec pro user agent</string>
     <string name="pref_user_agent_string">Výchozí řetězec pro user agent</string>
     <string name="action_remove_everything">Odstranit vše</string>
-    <string name="loader_rar5_error">Formát RARv5 není podporován</string>
     <string name="appwidget_unavailable_locked">Widget není k dispozici, když je povolen zámek aplikace</string>
     <string name="appwidget_updates_description">Podívejte se na své nedávno aktualizované záznamy v knihovně</string>
     <string name="update_already_running">Aktualizace již probíhá</string>

@@ -108,7 +108,6 @@
     <string name="picture_saved">Картинка сохранена</string>
     <string name="plan_to_read">Запланировано</string>
     <string name="portrait">Портретная</string>
-    <string name="pref_acra_summary">Помогает исправлять все возможные ошибки. Данные пользователя не передаются</string>
     <string name="pref_category_about">Информация</string>
     <string name="pref_category_advanced">Дополнительно</string>
     <string name="pref_category_downloads">Загрузки</string>
@@ -121,7 +120,6 @@
     <string name="pref_custom_brightness">Пользовательская яркость</string>
     <string name="pref_custom_color_filter">Пользовательский светофильтр</string>
     <string name="pref_download_new">Загружать новые главы</string>
-    <string name="pref_enable_acra">Отправлять отчёты об ошибках</string>
     <string name="pref_page_transitions">Анимированные переходы страниц</string>
     <string name="pref_fullscreen">Полноэкранный режим</string>
     <string name="pref_image_scale_type">Масштабирование</string>
@@ -588,7 +586,6 @@
     <string name="pref_user_agent_string">User agent по умолчанию</string>
     <string name="pref_reset_user_agent_string">Сбросить user agent по умолчанию</string>
     <string name="action_remove_everything">Удалить всё</string>
-    <string name="loader_rar5_error">Формат RARv5 не поддерживается</string>
     <string name="appwidget_unavailable_locked">Виджет недоступен при включённой блокировке биометрией</string>
     <string name="appwidget_updates_description">Посмотреть недавно обновлённые серии в библиотеке</string>
     <string name="update_already_running">Обновление уже запущено</string>

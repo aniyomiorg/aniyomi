@@ -169,8 +169,6 @@
     <string name="pref_clear_database_summary">Iscantzella sa cronologia pro sos elementos chi non sunt sarvados in sa biblioteca tua</string>
     <string name="clear_database_completed">Boghes iscantzelladas</string>
     <string name="version">Versione</string>
-    <string name="pref_enable_acra">Imbia raportos a pitzu de sos arrestos anòmalos</string>
-    <string name="pref_acra_summary">Agiudat a acontzare cale si siat faddina. Perunu datu sensìbile at a èssere imbiadu</string>
     <string name="login_title">Intra in %1$s</string>
     <string name="username">Nùmene impreadore</string>
     <string name="password">Crae de intrada</string>
@@ -588,7 +586,6 @@
     <string name="pref_user_agent_string">Istringa de agente de utente predefinida</string>
     <string name="pref_reset_user_agent_string">Reseta s\'istringa de agente de utente predefinida</string>
     <string name="action_remove_everything">Boga totu</string>
-    <string name="loader_rar5_error">Su formadu RARv5 no est suportadu</string>
     <string name="appwidget_unavailable_locked">Su widget no est a disponimentu cando su blocu de s\'aplicatzione est abilitadu</string>
     <string name="appwidget_updates_description">Pòmpia sos elementos de biblioteca tuos agiornados dae pagu</string>
     <string name="update_already_running">B\'est giai un\'agiornamentu in cursu</string>

@@ -149,8 +149,6 @@
     <string name="pref_clear_database_summary">Exclui o histórico de itens que não estão salvos em sua biblioteca</string>
     <string name="clear_database_completed">Entradas excluídas</string>
     <string name="version">Versão</string>
-    <string name="pref_enable_acra">Enviar relatórios de erro</string>
-    <string name="pref_acra_summary">Ajuda a corrigir eventuais erros. Nenhum dado sensível será enviado</string>
     <string name="login_title">Fazer login em %1$s</string>
     <string name="username">Nome de usuário</string>
     <string name="password">Senha</string>
@@ -591,7 +589,6 @@
     <string name="pref_user_agent_string">User Agent padrão</string>
     <string name="pref_reset_user_agent_string">Redefinir o User Agent padrão</string>
     <string name="action_remove_everything">Remover tudo</string>
-    <string name="loader_rar5_error">O formato RARv5 não é suportado</string>
     <string name="appwidget_updates_description">Veja seus itens da biblioteca atualizados recentemente</string>
     <string name="appwidget_unavailable_locked">Widget não disponível quando o bloqueio do aplicativo está habilitado</string>
     <string name="update_already_running">Uma atualização já está em andamento</string>
