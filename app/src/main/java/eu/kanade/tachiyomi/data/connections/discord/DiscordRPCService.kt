@@ -17,7 +17,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.util.system.notificationBuilder
@@ -31,6 +30,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlinx.serialization.json.Json
 
 class DiscordRPCService : Service() {
 
@@ -229,24 +229,27 @@ class DiscordRPCService : Service() {
             }
 
             withIOContext {
+                val connectionsManager: ConnectionsManager by injectLazy()
                 val networkService: NetworkHelper by injectLazy()
                 val client = networkService.client
-                val response = if (!discordIncognito) {
+                val json = Json {
+                    encodeDefaults = true
+                    allowStructuredMapKeys = true
+                    ignoreUnknownKeys = true
+                }
+                val rpcExternalAsset = RPCExternalAsset(applicationId = RICH_PRESENCE_APPLICATION_ID, token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(), client = client, json = json)
+
+                val discordUri = if (!discordIncognito) {
                     try {
-                        client.newCall(
-                            GET("https://kizzy-api.vercel.app/image?url=${playerData.thumbnailUrl}"),
-                        ).execute()
+                      rpcExternalAsset.getDiscordUri(playerData.thumbnailUrl)
                     } catch (e: Throwable) {
                         null
                     }
                 } else {
                     null
                 }
-
-                val animeThumbnail = response?.body?.string()
-                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore(
-                        "\"}",
-                    )
+                val animeThumbnail = discordUri?.takeIf { !it.contains("external/Not Found") }
+                    ?.substringAfter("\"id\": \"")?.substringBefore("\"}")
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setAnimeScreen(
@@ -260,6 +263,7 @@ class DiscordRPCService : Service() {
                 )
             }
         }
+
 
         @Suppress("SwallowedException", "TooGenericExceptionCaught", "CyclomaticComplexMethod")
         internal suspend fun setReaderActivity(
@@ -296,24 +300,23 @@ class DiscordRPCService : Service() {
             }
 
             withIOContext {
+                val connectionsManager: ConnectionsManager by injectLazy()
                 val networkService: NetworkHelper by injectLazy()
                 val client = networkService.client
-                val response = if (!discordIncognito) {
+                val json = Json { ignoreUnknownKeys = true }  // Configura el JSON parser si es necesario
+                val rpcExternalAsset = RPCExternalAsset(applicationId = RICH_PRESENCE_APPLICATION_ID , token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(), client = client, json = json)
+
+                val discordUri = if (!discordIncognito) {
                     try {
-                        client.newCall(
-                            GET("https://kizzy-api.vercel.app/image?url=${readerData.thumbnailUrl}"),
-                        ).execute()
+                        rpcExternalAsset.getDiscordUri(readerData.thumbnailUrl)
                     } catch (e: Throwable) {
                         null
                     }
                 } else {
                     null
                 }
-
-                val mangaThumbnail = response?.body?.string()
-                    ?.takeIf { !it.contains("external/Not Found") }?.substringAfter("\"id\": \"")?.substringBefore(
-                        "\"}",
-                    )
+                val mangaThumbnail = discordUri?.takeIf { !it.contains("external/Not Found") }
+                    ?.substringAfter("\"id\": \"")?.substringBefore("\"}")
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
 
                 setMangaScreen(
@@ -327,6 +330,8 @@ class DiscordRPCService : Service() {
                 )
             }
         }
+
+        private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
     }
 }
 // <-- AM (DISCORD)
