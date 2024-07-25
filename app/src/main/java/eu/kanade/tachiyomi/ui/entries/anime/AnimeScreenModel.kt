@@ -994,7 +994,9 @@ class AnimeScreenModel(
                         )
                     }
                 }
+        }
 
+        screenModelScope.launchIO {
             combine(
                 getTracks.subscribe(anime.id).catch { logcat(LogPriority.ERROR, it) },
                 trackerManager.loggedInTrackersFlow(),
