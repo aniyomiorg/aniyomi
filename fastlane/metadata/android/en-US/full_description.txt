@@ -1,0 +1,13 @@
+Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
+<h3>Features</h3>
+<ul>
+<li>Local reading and watching of content.</li>
+<li>A configurable reader with multiple viewers, reading directions and other settings.</li>
+<li>A configurable player built on mpv-android with multiple options and settings.</li>
+<li>Tracker support: MyAnimeList, AniList, Kitsu, MangaUpdates, Shikimori, Simkl, and Bangumi support.</li>
+<li>Categories to organize your library.</li>
+<li>Light and dark themes.</li>
+<li>Schedule updating your library for new chapters/episodes.</li>
+<li>Create backups locally to read/watch offline or to your desired cloud service.</li>
+<li>Plus much more...</li>
+</ul>
