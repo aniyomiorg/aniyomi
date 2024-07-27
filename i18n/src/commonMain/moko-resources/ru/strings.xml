@@ -1123,4 +1123,6 @@
     <string name="action_replace_repo">Заменить</string>
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="action_add_anyway">Все равно добавить</string>
+    <string name="relative_time_now">Сейчас</string>
+    <string name="pref_flash_duration_summary">%1$s мс</string>
 </resources>
