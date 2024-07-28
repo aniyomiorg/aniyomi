@@ -1127,4 +1127,5 @@
     <string name="pref_mpv_scripts">MPV scriptlerini aktifleştir</string>
     <string name="pref_mpv_scripts_summary">Harici depolama iznine ihtiyacımız var.</string>
     <string name="pref_webtoon_disable_zoom_out">Yakınlaştırmayı devre dışı bırak</string>
+    <string name="action_add_anyway">Yinede ekle</string>
 </resources>
