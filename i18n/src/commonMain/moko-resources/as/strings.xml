@@ -358,8 +358,6 @@
     <string name="pref_grayscale">গ্ৰেছ্কেল</string>
     <string name="pref_inverted_colors">উল্ট</string>
     <string name="pref_custom_color_filter">কাষ্টম ৰং ফিল্টাৰ</string>
-    <string name="pref_true_color">32-বিট ৰং</string>
-    <string name="pref_true_color_summary">ব্যান্ডিং কমাৰ, তবে কার্যকলাপত প্ৰভাৱ কৰিব পাৰে</string>
     <string name="pref_crop_borders">বৰ্ডাৰ কাট কৰক</string>
     <string name="pref_custom_brightness">কাষ্টম উজ্জ্বলতা</string>
     <string name="pref_color_filter_mode">ৰং ফিল্টাৰ ব্লেণ্ড মোড</string>
@@ -558,8 +556,6 @@
     <string name="privacy_policy">গোপনীয়তা নীতি</string>
     <string name="check_for_updates">আপডেট চেক কৰক</string>
     <string name="updated_version">সংস্কৰণ %1$sলৈ আপডেট হ’ল</string>
-    <string name="pref_enable_acra">ক্রেশ ৰিপ\'ৰ্ট পঠিওঁক</string>
-    <string name="pref_acra_summary">যে কোনো ত্ৰুটিসমূহ ঠিক কৰিবলৈ সহায় কৰে। কোনো গোপনীয় তথ্য পঠিওঁব নাই</string>
     <string name="fdroid_warning">F-Droid বিল্ডসমূহ আধিকাৰিকভাৱে সমৰ্থিত নহয়।
 \nঅধিক জানক বাবে ট্যাপ কৰক।</string>
     <string name="label_downloaded_only">কেৱল ডাউনল\'ড কৰা</string>
@@ -711,7 +707,6 @@
     <string name="transition_pages_error">পৃষ্ঠাসমূহ ল\'ড কৰা ব্যৰ্থ: %1$s</string>
     <string name="page_list_empty_error">কোনো পৃষ্ঠা পোৱা নাই</string>
     <string name="loader_not_implemented_error">উৎস পোৱা নহয়</string>
-    <string name="loader_rar5_error">RARv5 ফ\'ৰ্মেটটো সমৰ্থিত নহয়</string>
     <string name="updating_library">গ্ৰন্থাগাৰ আপডেট কৰি আছে</string>
     <string name="update_already_running">এটা আপডেট ইতিমধ্যে চলি আছে</string>
     <string name="cant_open_last_read_chapter">শেহতীয়া পঢ়া অধ্যায় খোলা যাব নাই</string>
