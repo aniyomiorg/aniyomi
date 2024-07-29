@@ -1128,4 +1128,17 @@
     <string name="pref_mpv_scripts_summary">Harici depolama iznine ihtiyacımız var.</string>
     <string name="pref_webtoon_disable_zoom_out">Yakınlaştırmayı devre dışı bırak</string>
     <string name="action_add_anyway">Yinede ekle</string>
+    <string name="relative_time_now">Şimdi</string>
+    <string name="pref_flash_duration">Flaş süresi</string>
+    <string name="pref_flash_with">Flaşlayacağın şey :</string>
+    <string name="pref_flash_style_white">Beyaz</string>
+    <string name="pref_flash_duration_summary">%1$s ms</string>
+    <string name="pref_flash_page_interval">Flaş aralığı :</string>
+    <string name="pref_flash_style_black">Siyah</string>
+    <string name="pref_flash_style_white_black">Beyaz ve siyah</string>
+    <string name="label_upcoming">Gelecek bölüm</string>
+    <string name="action_replace_repo_message">%1$s Reposu, %2$s ile aynı İmza Anahtarı Parmak İzine sahip.
+\nEğer bu bekleniyorsa, %2$s , %1$s ile değiştirilecektir, aksi takdirde repo yöneticinizle iletişime geçin.</string>
+    <string name="action_replace_repo">Değiştir</string>
+    <string name="action_replace_repo_title">İmzalama anahtarı parmak izi zaten var</string>
 </resources>
