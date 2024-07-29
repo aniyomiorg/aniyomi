@@ -101,7 +101,7 @@ detekt-rules-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatt
 detekt-rules-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
 
 aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.15.n"
-ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.15"
+ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:5.1.LTS"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.2.1"
 
 seeker = "io.github.2307vivek:seeker:1.2.2"
