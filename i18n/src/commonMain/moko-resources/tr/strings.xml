@@ -8,7 +8,7 @@
     <string name="history">Geçmiş</string>
     <string name="label_settings">Ayarlar</string>
     <string name="label_download_queue">İndirme kuyruğu</string>
-    <string name="label_library">Kitaplık</string>
+    <string name="label_library">Kütüphane</string>
     <string name="label_recent_manga">Geçmiş</string>
     <string name="label_recent_updates">Güncellemeler</string>
     <string name="label_backup">Yedekle ve geri yükle</string>
@@ -188,9 +188,9 @@
     <string name="ongoing">Devam ediyor</string>
     <string name="unknown">Bilinmiyor</string>
     <string name="licensed">Lisanslı</string>
-    <string name="remove_from_library">Kitaplıktan kaldır</string>
+    <string name="remove_from_library">Kütüphaneden kaldır</string>
     <string name="manga_added_library">Kitaplığa eklendi</string>
-    <string name="manga_removed_library">Kitaplıktan kaldırıldı</string>
+    <string name="manga_removed_library">Kütüphaneden kaldırıldı</string>
     <string name="delete_downloads_for_manga">İndirilen bölümler silinsin mi?</string>
     <string name="copied_to_clipboard">Panoya kopyalandı:
 \n%1$s</string>
@@ -277,7 +277,7 @@
     <string name="action_webview_back">Geri</string>
     <string name="action_webview_forward">İleri</string>
     <string name="action_webview_refresh">Yenile</string>
-    <string name="pref_category_library">Kitaplık</string>
+    <string name="pref_category_library">Kütüphane</string>
     <string name="ext_obsolete">Geçersiz</string>
     <string name="obsolete_extension_message">Bu uzantı artık kullanılamıyor. Düzgün çalışmayabilir ve uygulamada sorunlara neden olabilir. Kaldırılması önerilir.</string>
     <string name="pref_date_format">Tarih biçimi</string>
@@ -333,7 +333,7 @@
     <string name="action_unpin">Sabitlemeyi kaldır</string>
     <string name="action_pin">Sabitle</string>
     <string name="add_tracking">İzleme ekle</string>
-    <string name="in_library">Kitaplıkta</string>
+    <string name="in_library">Kütüphanede</string>
     <string name="add_to_library">Kitaplığa ekle</string>
     <string name="manga_info_collapse">Daha az</string>
     <string name="manga_info_expand">Daha fazla</string>
@@ -360,7 +360,7 @@
     <string name="sort_by_upload_date">Yüklenme tarihine göre</string>
     <string name="label_data">Veri</string>
     <string name="backup_restore_missing_sources">Eksik kaynaklar:</string>
-    <string name="invalid_backup_file_missing_manga">Yedek bir kitaplık girdisi içermiyor.</string>
+    <string name="invalid_backup_file_missing_manga">Yedek, bir kütüphane girdisi içermiyor.</string>
     <string name="invalid_backup_file">Geçersiz yedekleme dosyası:</string>
     <string name="pref_library_update_refresh_metadata_summary">Kitaplığı güncellerken yeni kapak ve ayrıntılar için kontrol et</string>
     <string name="pref_library_update_refresh_metadata">Üst veriyi otomatik olarak yenile</string>
@@ -553,7 +553,7 @@
     <string name="disabled_nav">Devre dışı</string>
     <string name="update_check_fdroid_migration_info">Resmi yayınlardan yeni bir sürüm var. Resmi olmayan F-Droid sürümlerinden nasıl geçiş yapacağınızı öğrenmek için dokunun.</string>
     <string name="error_saving_picture">Resim kaydedilirken hata oluştu</string>
-    <string name="empty_backup_error">Yedeklenecek kitaplık girdisi yok</string>
+    <string name="empty_backup_error">Yedeklenecek kütüphane girdisi yok</string>
     <string name="update_check_open">GitHub\'da aç</string>
     <string name="webview_data_deleted">WebView verileri temizlendi</string>
     <string name="pref_clear_webview_data">WebView verilerini temizle</string>
@@ -661,7 +661,7 @@
 \nYine de devam etmek istiyor musunuz\?</string>
     <string name="track_error">%1$s hatası: %2$s</string>
     <string name="information_required_plain">*gerekli</string>
-    <string name="pref_hide_in_library_items">Zaten kitaplıkta bulunan girdileri gizle</string>
+    <string name="pref_hide_in_library_items">Kütüphanede zaten bulunan girdileri gizle</string>
     <string name="action_copy_to_clipboard">Panoya kopyala</string>
     <string name="action_update_category">Kategoriyi güncelle</string>
     <string name="split_tall_images">Uzun görselleri böl</string>
@@ -694,10 +694,10 @@
     <string name="information_cloudflare_help">Cloudflare ile ilgili yardım için buraya dokunun</string>
     <string name="exception_unknown_host">%s verisine erişilemedi</string>
     <string name="track_activity_name">İzleyici girişi</string>
-    <string name="library_sync_complete">Kitaplık eşitlemesi tamamlandı</string>
+    <string name="library_sync_complete">Kütüphane eşitlemesi tamamlandı</string>
     <string name="exception_http">HTTP %d, siteyi WebView\'de denetle</string>
     <string name="exception_offline">İnternet bağlantısı yok</string>
-    <string name="syncing_library">Kitaplık eşitleniyor</string>
+    <string name="syncing_library">Kütüphane eşitleniyor</string>
     <string name="unlock_app_title">Aç: %s</string>
     <string name="action_move_to_bottom_all_for_series">Seriyi en alta taşı</string>
     <string name="action_sort_category">Kategorileri sırala</string>
@@ -745,10 +745,10 @@
 \nSeçilen klasör: %2$s</string>
     <string name="onboarding_permission_notifications">Bildirim izni</string>
     <string name="onboarding_permission_install_apps">Uygulama yükleme izni</string>
-    <string name="onboarding_permission_ignore_battery_opts_description">Uzun süreli kitaplık güncellemelerinin, indirmelerin ve yedekleme ile geri yüklemelerinin kesintiye uğramasını önleyin.</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Uzun süreli kütüphane güncellemelerinin, indirmelerin ve yedekleme ile geri yüklemelerinin kesintiye uğramasını önleyin.</string>
     <string name="onboarding_permission_ignore_battery_opts">Arka planda pil kullanımı</string>
     <string name="onboarding_permission_install_apps_description">Kaynak uzantılarını kurmak için.</string>
-    <string name="onboarding_permission_notifications_description">Kitaplık güncellemeleri ve daha fazlası için bildirim alın.</string>
+    <string name="onboarding_permission_notifications_description">Kütüphane güncellemeleri ve daha fazlası için bildirim alın.</string>
     <string name="onboarding_permission_action_grant">İzin Ver</string>
     <string name="available_disk_space_info">Kullanılabilir: %1$s / Toplam: %2$s</string>
     <string name="ext_permission_install_apps_warning">Uzantıları kurmak için izin gerekli. İzin vermek için buraya dokunun.</string>
@@ -861,7 +861,7 @@
     <string name="pref_external_downloader_selection">Harici indirme yöneticisi tercihi</string>
     <string name="pref_download_new_episodes">Yeni bölümleri indir</string>
     <string name="auto_download_while_watching">İzlerken otomatik olarak indir</string>
-    <string name="download_ahead_info_anime">Yalnızca kitaplıktaki girdilerde ve mevcut bölüm ile bir sonraki bölüm zaten indirilmişse çalışır</string>
+    <string name="download_ahead_info_anime">Yalnızca kütüphanedeki girdilerde ve mevcut bölüm ile bir sonraki bölüm zaten indirilmişse çalışır</string>
     <string name="pref_auto_update_manga_sync">Okuduktan/İzledikten sonra ilerlemeyi güncelle</string>
     <string name="pref_clear_chapter_cache">Bölüm önbelleğini temizle</string>
     <string name="pref_auto_clear_chapter_cache">Uygulama açıldığında bölüm önbelleğini temizle</string>
