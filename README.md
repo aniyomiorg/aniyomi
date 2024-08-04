@@ -18,7 +18,7 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 ## Download
 
-[![Aniyomi Stable](https://img.shields.io/github/release/Dark25/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/aniyomiorg/aniyomi/releases)
+[![Aniyomi Stable](https://img.shields.io/github/release/Dark25/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/Dark25/Animetail2/releases)
 [![Aniyomi Preview](https://img.shields.io/github/v/release/Dark25/aniyomi-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/aniyomiorg/aniyomi-preview/releases)
 
 *Requires Android 8.0 or higher.*
