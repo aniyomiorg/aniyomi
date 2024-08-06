@@ -48,6 +48,8 @@ import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.base.BasePreferences
@@ -223,6 +225,7 @@ class PlayerActivity : BaseActivity() {
     private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
     internal var mCastSession: CastSession? = null
     private var isInCastMode: Boolean = false
+    private var isCastApiAvailable = false
 
     internal val player get() = binding.player
 
@@ -556,9 +559,18 @@ class PlayerActivity : BaseActivity() {
             IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
         )
 
+        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            if (isCastApiAvailable) {
+
         mCastContext = CastContext.getSharedInstance(this)
         mCastSession = mCastContext!!.sessionManager.currentCastSession
-        setupCastListener()
+            setupCastListener()
+                }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
+        }
+
     }
     private fun copyAssets(configDir: String) {
         val assetManager = this.assets
@@ -991,11 +1003,17 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            if (isCastApiAvailable) {
         mCastContext!!.sessionManager.addSessionManagerListener(
             mSessionManagerListener!!,
             CastSession::class.java,
         )
         isInCastMode = mCastSession != null && mCastSession!!.isConnected
+            }
+        } catch (_: Exception) {
+        }
 
         super.onResume()
         refreshUi()
@@ -1003,10 +1021,16 @@ class PlayerActivity : BaseActivity() {
 
     override fun onPause() {
         viewModel.saveCurrentEpisodeWatchingProgress()
+        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            if (isCastApiAvailable) {
         mCastContext!!.sessionManager.removeSessionManagerListener(
             mSessionManagerListener!!,
             CastSession::class.java,
         )
+            }
+        } catch (_: Exception) {
+        }
         super.onPause()
     }
 
@@ -2246,7 +2270,8 @@ class PlayerActivity : BaseActivity() {
         return currentVideoList?.getOrNull(0)?.videoUrl!!.let {
             MediaInfo.Builder(it)
                 .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                .setContentType("videos/mp4")
+                //agrega varios tipos de videos
+                .setContentType("video/mp4")
                 .setContentUrl(it)
                 .setMetadata(movieMetadata)
                 .setStreamDuration((player.duration!!).toLong())
