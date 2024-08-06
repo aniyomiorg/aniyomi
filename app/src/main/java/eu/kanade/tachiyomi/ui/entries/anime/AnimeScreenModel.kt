@@ -82,6 +82,7 @@ import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
@@ -121,6 +122,9 @@ class AnimeScreenModel(
     private val animeRepository: AnimeRepository = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    // AM (FILE_SIZE) -->
+    private val storagePreferences: StoragePreferences = Injekt.get(),
+    // <-- AM (FILE_SIZE)
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
 
     private val successState: State.Success?
@@ -155,6 +159,10 @@ class AnimeScreenModel(
 
     internal val autoOpenTrack: Boolean
         get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
+
+    // AM (FILE_SIZE) -->
+    val showFileSize = storagePreferences.showEpisodeFileSize().get()
+    // <-- AM (FILE_SIZE)
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -1281,6 +1289,9 @@ sealed class EpisodeList {
         val episode: Episode,
         val downloadState: AnimeDownload.State,
         val downloadProgress: Int,
+        // AM (FILE_SIZE) -->
+        var fileSize: Long? = null,
+        // <-- AM (FILE_SIZE)
         val selected: Boolean = false,
     ) : EpisodeList() {
         val id = episode.id

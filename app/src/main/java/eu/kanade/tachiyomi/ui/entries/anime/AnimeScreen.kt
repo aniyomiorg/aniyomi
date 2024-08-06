@@ -125,6 +125,9 @@ class AnimeScreen(
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
             alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
+            // AM (FILE_SIZE) -->
+            showFileSize = screenModel.showFileSize,
+            // <-- AM (FILE_SIZE)
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {

@@ -25,6 +25,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -52,6 +53,7 @@ import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.backup.create.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.sync.SyncManager
 import eu.kanade.tachiyomi.data.sync.service.GoogleDriveService
@@ -61,6 +63,8 @@ import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
@@ -76,6 +80,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+
 
 @Suppress("TooManyFunctions")
 object SettingsDataScreen : SearchableSettings {
@@ -109,9 +114,10 @@ object SettingsDataScreen : SearchableSettings {
         return persistentListOf(
             getStorageLocationPref(storagePreferences = storagePreferences),
             Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.pref_storage_location_info)),
-
             getBackupAndRestoreGroup(backupPreferences = backupPreferences),
-            getDataGroup(),
+            // AM (FILE_SIZE) -->
+            getDataGroup(storagePreferences = storagePreferences),
+            // <-- AM (FILE_SIZE)
         ) + getSyncPreferences(syncPreferences = syncPreferences, syncService = syncService)
     }
 
@@ -188,7 +194,6 @@ object SettingsDataScreen : SearchableSettings {
     private fun getBackupAndRestoreGroup(backupPreferences: BackupPreferences): Preference.PreferenceGroup {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
-
         val lastAutoBackup by backupPreferences.lastAutoBackupTimestamp().collectAsState()
 
         val chooseBackup = rememberLauncherForActivityResult(
@@ -280,7 +285,7 @@ object SettingsDataScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getDataGroup(): Preference.PreferenceGroup {
+    private fun getDataGroup(storagePreferences: StoragePreferences): Preference.PreferenceGroup {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -289,6 +294,18 @@ object SettingsDataScreen : SearchableSettings {
         val chapterCache = remember { Injekt.get<ChapterCache>() }
         var cacheReadableSizeSema by remember { mutableIntStateOf(0) }
         val cacheReadableSize = remember(cacheReadableSizeSema) { chapterCache.readableSize }
+
+        // AM (FILE_SIZE) -->
+        LaunchedEffect(Unit) {
+            storagePreferences.showEpisodeFileSize().changes()
+                .drop(1)
+                .collectLatest { value ->
+                    if (value) {
+                        Injekt.get<AnimeDownloadCache>().invalidateCache()
+                    }
+                }
+        }
+        // <-- AM (FILE_SIZE)
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_storage_usage),
@@ -305,6 +322,13 @@ object SettingsDataScreen : SearchableSettings {
                         },
                     )
                 },
+
+                // AM (FILE_SIZE) -->
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = storagePreferences.showEpisodeFileSize(),
+                    title = stringResource(MR.strings.pref_show_downloaded_episode_file_size),
+                ),
+                // <-- AM (FILE_SIZE)
 
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.label_storage),

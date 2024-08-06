@@ -2,6 +2,7 @@ package eu.kanade.presentation.entries.anime.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.ArrowModifier
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.IndicatorModifier
@@ -52,6 +54,9 @@ fun EpisodeDownloadIndicator(
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onClick: (EpisodeDownloadAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
     modifier: Modifier = Modifier,
 ) {
     when (val downloadState = downloadStateProvider()) {
@@ -66,10 +71,16 @@ fun EpisodeDownloadIndicator(
             downloadState = downloadState,
             downloadProgressProvider = downloadProgressProvider,
             onClick = onClick,
+            // AM (FILE_SIZE) -->
+            fileSize = fileSize,
+            // <-- AM (FILE_SIZE)
         )
         AnimeDownload.State.DOWNLOADED -> DownloadedIndicator(
             enabled = enabled,
             modifier = modifier,
+            // AM (FILE_SIZE) -->
+            fileSize = fileSize,
+            // <-- AM (FILE_SIZE)
             onClick = onClick,
         )
         AnimeDownload.State.ERROR -> ErrorIndicator(
@@ -113,6 +124,9 @@ private fun DownloadingIndicator(
     downloadState: AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onClick: (EpisodeDownloadAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
     modifier: Modifier = Modifier,
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
@@ -192,8 +206,24 @@ private fun DownloadedIndicator(
     enabled: Boolean,
     modifier: Modifier = Modifier,
     onClick: (EpisodeDownloadAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
+
+    // AM (FILE_SIZE) -->
+    if (fileSize != null) {
+        Text(
+            text = "${fileSize / 1024 / 1024}MB",
+            maxLines = 1,
+            style = MaterialTheme.typography.bodyMedium
+                .copy(color = MaterialTheme.colorScheme.primary, fontSize = 12.sp),
+            modifier = Modifier.padding(all = 10.dp),
+        )
+    }
+    // <-- AM (FILE_SIZE)
+
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
