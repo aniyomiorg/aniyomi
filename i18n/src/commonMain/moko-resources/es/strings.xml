@@ -726,7 +726,7 @@
     <string name="no_scanlators_found">No se ha encontrado ningún equipo de traducción</string>
     <string name="scanlator">Equipo de traducción</string>
     <string name="exclude_scanlators">Excluir equipo de traducción</string>
-    <string name="selected">Seleccionado</string>
+    <string name="selected">Selecionado</string>
     <string name="not_selected">Sin seleccionar</string>
     <string name="action_menu_overflow_description">Más opciones</string>
     <string name="action_bar_up_description">Navegar hacia arriba</string>
