@@ -27,7 +27,7 @@ android {
         applicationId = "com.dark.animetailv2"
 
         versionCode = 126
-        versionName = "0.16.5.4"
+        versionName = "0.16.5.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
