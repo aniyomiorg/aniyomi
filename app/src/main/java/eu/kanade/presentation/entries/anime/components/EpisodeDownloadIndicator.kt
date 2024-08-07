@@ -1,6 +1,5 @@
 package eu.kanade.presentation.entries.anime.components
 
-import android.text.format.Formatter.formatFileSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -41,7 +39,8 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
-
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 enum class EpisodeDownloadAction {
     START,
@@ -212,7 +211,7 @@ private fun DownloadedIndicator(
     // AM (FILE_SIZE) -->
     if (fileSize != null) {
         Text(
-            text = formatFileSize(LocalContext.current, fileSize),
+            text = formatFileSize(fileSize),
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.primary, fontSize = 12.sp),
@@ -249,6 +248,17 @@ private fun DownloadedIndicator(
     }
 }
 
+// AM (FILE_SIZE) -->
+private fun formatFileSize(fileSize: Long): String {
+    val megaByteSize = fileSize / 1000.0 / 1000.0
+    return if (megaByteSize > 900){
+        val gigaByteSize = megaByteSize / 1000.0
+        "${BigDecimal(gigaByteSize).setScale(2, RoundingMode.HALF_EVEN)} GB"
+    } else {
+        "${BigDecimal(megaByteSize).setScale(0, RoundingMode.HALF_EVEN)} MB"
+    }
+}
+// <-- AM (FILE_SIZE)
 
 
 @Composable
