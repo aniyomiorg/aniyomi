@@ -211,7 +211,7 @@ private fun DownloadedIndicator(
     // AM (FILE_SIZE) -->
     if (fileSize != null) {
         Text(
-            text = "${fileSize / 1024 / 1024}MB",
+            text = formatFileSize(fileSize),
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.primary, fontSize = 12.sp),
