@@ -122,7 +122,7 @@ private fun DownloadingIndicator(
     enabled: Boolean,
     downloadState: AnimeDownload.State,
     downloadProgressProvider: () -> Int,
-    onClick: (EpisodeDownloadAction) -> Unit
+    onClick: (EpisodeDownloadAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
@@ -211,7 +211,7 @@ private fun DownloadedIndicator(
     // AM (FILE_SIZE) -->
     if (fileSize != null) {
         Text(
-            text = formatFileSize(fileSize),
+            text = "${fileSize / 1024 / 1024}MB",
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.primary, fontSize = 12.sp),
