@@ -73,9 +73,6 @@ fun EpisodeDownloadIndicator(
             downloadState = downloadState,
             downloadProgressProvider = downloadProgressProvider,
             onClick = onClick,
-            // AM (FILE_SIZE) -->
-            fileSize = fileSize,
-            // <-- AM (FILE_SIZE)
         )
         AnimeDownload.State.DOWNLOADED -> DownloadedIndicator(
             enabled = enabled,
@@ -125,10 +122,7 @@ private fun DownloadingIndicator(
     enabled: Boolean,
     downloadState: AnimeDownload.State,
     downloadProgressProvider: () -> Int,
-    onClick: (EpisodeDownloadAction) -> Unit,
-    // AM (FILE_SIZE) -->
-    fileSize: Long?,
-    // <-- AM (FILE_SIZE)
+    onClick: (EpisodeDownloadAction) -> Unit
     modifier: Modifier = Modifier,
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
