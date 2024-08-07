@@ -23,16 +23,16 @@ jobs:
 
     steps:
       - name: Clone repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@v4 # v4.1.7
 
       - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3.5.0
+        uses: gradle/actions/wrapper-validation@v4 # v3.5.0
 
       - name: Dependency Review
         uses: actions/dependency-review-action@5a2ce3f5b92ee19cbb1541a4984c76d921601d7c # v4.3.4
 
       - name: Set up JDK
-        uses: actions/setup-java@6a0805fcefea3d4657a47ac4c165951e33482018 # v4.2.2
+        uses: actions/setup-java@v4 # v4.2.2
         with:
           java-version: 17
           distribution: adopt
