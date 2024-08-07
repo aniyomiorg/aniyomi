@@ -14,7 +14,7 @@ detektCompose = "0.4.5"
 [libraries]
 desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
-google-services-gradle = "com.google.gms:google-services:4.4.0"
+google-services-gradle = "com.google.gms:google-services:4.4.2"
 
 rxjava = "io.reactivex:rxjava:1.3.8"
 
@@ -76,7 +76,7 @@ moko-gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "
 
 logcat = "com.squareup.logcat:logcat:0.1"
 
-firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.5.0"
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:22.0.2"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
 aboutLibraries-gradle = { module = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin", version.ref = "aboutlib_version" }
@@ -122,8 +122,8 @@ libsucore = "com.github.topjohnwu.libsu:core:5.2.2"
 google-api-services-drive = "com.google.apis:google-api-services-drive:v3-rev197-1.25.0"
 google-api-client-oauth = "com.google.oauth-client:google-oauth-client:1.34.1"
 
-media-router = "androidx.mediarouter:mediarouter:1.3.1"
-cast-play-services = "com.google.android.gms:play-services-cast-framework:21.2.0"
+media-router = "androidx.mediarouter:mediarouter:1.7.0"
+cast-play-services = "com.google.android.gms:play-services-cast-framework:21.5.0"
 
 [bundles]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]
