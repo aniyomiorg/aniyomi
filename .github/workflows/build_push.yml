@@ -68,7 +68,7 @@ jobs:
 
 
       - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/wrapper-validation@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3.5.0
 
       - name: Set up JDK
         uses: actions/setup-java@6a0805fcefea3d4657a47ac4c165951e33482018 # v4.2.2
