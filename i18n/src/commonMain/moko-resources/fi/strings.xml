@@ -212,8 +212,6 @@
     <string name="pref_clear_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
     <string name="clear_database_completed">Tiedot poistettu</string>
     <string name="version">Versio</string>
-    <string name="pref_enable_acra">Lähetä kaatumisilmoituksia</string>
-    <string name="pref_acra_summary">Auttaa korjaamaan bugeja. Arkaluonteista tietoa ei lähetetä</string>
     <string name="login_title">%1$s kirjautuminen</string>
     <string name="username">Käyttäjätunnus</string>
     <string name="password">Salasana</string>
@@ -578,7 +576,6 @@
     <string name="pref_verbose_logging">Yksityiskohtainen kirjaaminen</string>
     <string name="cover_saved">Kansikuva tallennettu</string>
     <string name="error_saving_cover">Virhe tallentaessa kansikuvaa</string>
-    <string name="loader_rar5_error">RARv5-muoto ei ole tuettu</string>
     <string name="skipped_reason_not_caught_up">Ohitettu, koska sarjassa on luettomia lukuja</string>
     <string name="skipped_reason_not_always_update">Ohitettu, koska sarja ei vaadi päivityksiä</string>
     <string name="remove_manga">Olet poistamassa \"%s\" kirjastostasi</string>

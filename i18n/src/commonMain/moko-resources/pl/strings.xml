@@ -184,8 +184,6 @@
     <string name="cookies_cleared">Ciasteczka usunięte</string>
     <string name="pref_clear_database_summary">Usuń historię wpisów, których nie ma w twojej bibliotece</string>
     <string name="pref_clear_database">Wyczyść bazę danych</string>
-    <string name="pref_enable_acra">Wysyłaj raporty o awariach</string>
-    <string name="pref_acra_summary">Pomaga naprawiać błędy. Żadne wrażliwe dane nie będą wysyłane</string>
     <string name="backup_created">Utworzono kopię zapasową</string>
     <string name="restore_completed">Przywracanie ukończone</string>
     <string name="clear_database_completed">Pozycje usunięte</string>
@@ -588,7 +586,6 @@
     <string name="delete_category">Usuń kategorię</string>
     <string name="internal_error">InternalError: sprawdź log błędów po więcej informacji</string>
     <string name="action_remove_everything">Usuń wszystko</string>
-    <string name="loader_rar5_error">Format RARv5 jest nieobsługiwany</string>
     <string name="error_user_agent_string_blank">Pole user agent nie może być puste</string>
     <string name="update_already_running">Aktualizacja już trwa</string>
     <string name="theme_tidalwave">Tsunami</string>

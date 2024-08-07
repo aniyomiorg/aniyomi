@@ -168,8 +168,6 @@
     <string name="pref_clear_database_summary">Slett historikk for oppføringer som ikke er lagret i biblioteket ditt</string>
     <string name="clear_database_completed">Oppføringer slettet</string>
     <string name="version">Versjon</string>
-    <string name="pref_enable_acra">Send krasjrapporter</string>
-    <string name="pref_acra_summary">Hjelper til med fiksing av feil. Ingen sensitiv data vil bli sendt</string>
     <string name="login_title">Logg på %1$s</string>
     <string name="username">Brukernavn</string>
     <string name="password">Passord</string>
@@ -573,7 +571,6 @@
     <string name="download_notifier_split_page_path_not_found">Kunne ikke finne filbanen til side %d</string>
     <string name="pref_security_summary">Applås, sikker skjerm</string>
     <string name="pref_advanced_summary">Dump krasjlogger, batterioptimaliseringer</string>
-    <string name="loader_rar5_error">RARv5-formatet støttes ikke</string>
     <string name="missing_storage_permission">Lagringstilgang er ikke gitt</string>
     <string name="error_user_agent_string_invalid">Ugyldig streng for brukeragent</string>
     <string name="wish_list">Ønskeliste</string>

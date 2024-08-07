@@ -285,8 +285,6 @@
     <string name="login_title">%1$s\'га киири</string>
     <string name="downloaded_only_summary">Бэбэлэтиэкэҕэ баар маанганы барытын биилтирдээһин</string>
     <string name="label_downloaded_only">Хачайдаммыт эрэ</string>
-    <string name="pref_acra_summary">Ханнык баҕар сыаһалары көннөрөргө көмөлөһөр. Бэйэ дааннайдар ылыллыбаттар</string>
-    <string name="pref_enable_acra">Охтуу туһунан отчуоту ыытыы</string>
     <string name="delete_downloads_for_manga">Хачайдаммыт түһүмэхтэри сотторобут\?</string>
     <string name="manga_info_collapse">Кырата</string>
     <string name="manga_info_expand">Эбии</string>

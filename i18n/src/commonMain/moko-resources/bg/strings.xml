@@ -124,8 +124,6 @@
     <string name="pref_clear_database_summary">Изтрий историята на манги, които не са запазени в библиотеката</string>
     <string name="clear_database_completed">Базата данни изчистена</string>
     <string name="version">Версия</string>
-    <string name="pref_enable_acra">Изпращай данни за сривове</string>
-    <string name="pref_acra_summary">Помага за оправянето на бъгове. Няма да се изпращат лични данни</string>
     <string name="login_title">Влизане в %1$s</string>
     <string name="username">Потребителско име</string>
     <string name="password">Парола</string>
@@ -601,7 +599,6 @@
     <string name="remove_manga">Искате да премахнете \"%s\" от библиотеката си</string>
     <string name="action_close">Затвори</string>
     <string name="pref_reset_viewer_flags_success">Всички настройки на четеца нулирани</string>
-    <string name="loader_rar5_error">Форматът RARv5 не се поддържа</string>
     <string name="pref_appearance_summary">Тема, формат на датата и времето</string>
     <string name="pref_library_summary">Категории, глобални обновления</string>
     <string name="pref_reader_summary">Режим на четене, показване, навигация</string>

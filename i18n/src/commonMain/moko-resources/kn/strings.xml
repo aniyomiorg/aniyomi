@@ -328,8 +328,6 @@
     <string name="login_title">%1$s ಗೆ ಲಾಗ್ ಇನ್ ಮಾಡಿ</string>
     <string name="downloaded_only_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದ ಎಲ್ಲಾ ಮಾಂಗಾವನ್ನು ಫಿಲ್ಟರ್ ಮಾಡುತ್ತದೆ</string>
     <string name="label_downloaded_only">ಡೌನ್ಲೋಡ್ ಮಾಡಿದ</string>
-    <string name="pref_acra_summary">ಯಾವುದೇ ದೋಷಗಳನ್ನು ಸರಿಪಡಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಯಾವುದೇ ಸೂಕ್ಷ್ಮ ಡೇಟಾವನ್ನು ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ</string>
-    <string name="pref_enable_acra">ಕ್ರ್ಯಾಶ್ ವರದಿಗಳನ್ನು ಕಳುಹಿಸಿ</string>
     <string name="check_for_updates">ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
     <string name="licenses">ಓಪನ್ ಸೋರ್ಸ್ ಪರವಾನಗಿಗಳು</string>
     <string name="version">ಆವೃತ್ತಿ</string>

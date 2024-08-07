@@ -51,7 +51,6 @@
     <string name="pref_read_with_volume_keys_inverted">Gombok felcserélése</string>
     <string name="pref_reader_theme">Háttérszín</string>
     <string name="version">Verzió</string>
-    <string name="pref_enable_acra">Összeomlás-jelentések küldése</string>
     <string name="completed">Befejezett</string>
     <string name="dropped">Dobott</string>
     <string name="plan_to_read">Tervezett</string>
@@ -189,7 +188,6 @@
     <string name="pref_category_display">Megjelenés</string>
     <string name="parental_controls_info">Ez nem akadályozza meg a nem hivatalos vagy az esetlegesen helytelenül megjelölt bővítményeket a 18+-os tartalmak megjelenítésétől az alkalmazáson belül.</string>
     <string name="pref_show_nsfw_source">Megjelenítés a forrás- és kiterjesztéseklistában</string>
-    <string name="pref_true_color">32 bites színmélység</string>
     <string name="pref_show_reading_mode_summary">Rövid ideig mutassa a jelenlegi módot az olvasó megnyitásakor</string>
     <string name="pref_show_reading_mode">Olvasó mód mutatása</string>
     <string name="ext_nsfw_warning">Tartalmazhat felnőtt (18+) tartalmat</string>
@@ -377,7 +375,6 @@
     <string name="pref_grayscale">Szürkeárnyalatos</string>
     <string name="off">Ki</string>
     <string name="on">Be</string>
-    <string name="pref_true_color_summary">Csökkenti a sávosodást, de befolyásolhatja a teljesítményt</string>
     <string name="pref_double_tap_anim_speed">Dupla koppintás animációjának sebessége</string>
     <string name="ext_installer_pref">Telepítő</string>
     <string name="ext_install_service_notif">Bővítmény telepítése…</string>
@@ -574,7 +571,6 @@
     <string name="whats_new">Újdonságok</string>
     <string name="help_translate">Segíts fordítani</string>
     <string name="privacy_policy">Adatvédelmi irányelvek</string>
-    <string name="pref_acra_summary">Segít a hibák javításában. Semmilyen bizalmas információ nem lesz elküldve</string>
     <string name="cancelled">Félbeszakított</string>
     <string name="on_hiatus">Szünetelő</string>
     <string name="show_title">Forrás címe</string>
@@ -589,7 +585,6 @@
     <string name="pref_user_agent_string">Alap hálózati kliens szöveg</string>
     <string name="pref_reset_user_agent_string">Alap hálózati kliens szöveg visszaállítása</string>
     <string name="action_remove_everything">Minden Eltávolitása</string>
-    <string name="loader_rar5_error">RARv5 formátum nem támogatót</string>
     <string name="appwidget_updates_description">Lásd nemrég frissített mangádat</string>
     <string name="appwidget_unavailable_locked">Widget nem elérhető amikor az alkalmazás zárolva van</string>
     <string name="pref_appearance_summary">Téma, dátum és idő formátuma</string>

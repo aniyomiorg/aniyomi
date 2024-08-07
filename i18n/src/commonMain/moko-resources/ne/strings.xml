@@ -166,8 +166,6 @@
     <string name="battery_optimization_setting_activity_not_found">यन्त्रको सेटिङहरू खोल्न सकिएन</string>
     <string name="pref_incognito_mode">गुप्त मोड</string>
     <string name="label_downloaded_only">डाउनलोड गरिएको मात्र</string>
-    <string name="pref_acra_summary">कुनै पनि बगहरू ठीक गर्न मद्दत गर्दछ। कुनै संवेदनशील डेटा पठाइने छैन</string>
-    <string name="pref_enable_acra">क्र्यास रिपोर्टहरू पठाउनुहोस्</string>
     <string name="updated_version">v%1$s मा अपडेट गरियो</string>
     <string name="check_for_updates">अपडेटका लागि जाँच गर्नुहोस्</string>
     <string name="decode_image_error">छवि लोड गर्न सकिएन</string>
@@ -199,7 +197,6 @@
     <string name="pref_page_transitions">पृष्ठ ट्रान्जिसन एनिमेट गर्नुहोस्</string>
     <string name="pref_double_tap_anim_speed">एनिमेसनको गति डबल ट्याप गर्नुहोस्</string>
     <string name="pref_show_reading_mode_summary">रिडर खोल्दा छोटकरीमा हालको मोड देखाउनुहोस्</string>
-    <string name="pref_true_color_summary">ब्यान्डिङ घटाउँछ, तर कार्यसम्पादनलाई असर गर्न सक्छ</string>
     <string name="on">अन</string>
     <string name="pref_custom_brightness">कस्टम चमक</string>
     <string name="pref_skip_read_chapters">पढिएको चिन्ह लगाइएका अध्यायहरू छोड्नुहोस्</string>
@@ -247,7 +244,6 @@
     <string name="pref_dual_page_invert_summary">यदि विभाजित चौडा पृष्ठहरूको प्लेसमेन्ट पढ्ने दिशासँग मेल खाँदैन</string>
     <string name="pref_show_reading_mode">पढ्ने मोड देखाउनुहोस्</string>
     <string name="pref_show_page_number">पृष्ठ नम्बर देखाउनुहोस्</string>
-    <string name="pref_true_color">३२-बिट रङ</string>
     <string name="pref_crop_borders">सीमाना क्रप गर्नुहोस्</string>
     <string name="off">अफ</string>
     <string name="pref_grayscale">ग्रे-स्केल</string>
@@ -637,7 +633,6 @@
     <string name="download_notifier_split_page_not_found">पृष्ठ विभाजन गर्दा %d फेला परेन</string>
     <string name="information_no_manga_category">वर्ग खाली छ</string>
     <string name="internal_error">आन्तरिक त्रुटि: थप जानकारीको लागि क्र्यास लगहरू जाँच गर्नुहोस्</string>
-    <string name="loader_rar5_error">RARv5 समर्थित छैन</string>
     <string name="label_completed_titles">पढिसकेका इन्ट्रीहरू</string>
     <string name="label_total_chapters">कुल</string>
     <string name="label_read_chapters">पढेको</string>

@@ -5,18 +5,18 @@
     <string name="label_library">Кітапхана</string>
     <string name="label_recent_updates">Жаңартулар</string>
     <string name="label_sources">Дереккөздер</string>
-    <string name="label_backup">Сақтық көшірмесі</string>
+    <string name="label_backup">Сақтық көшірме</string>
     <string name="label_extensions">Кеңейтулер</string>
     <string name="label_extension_info">Кеңейту ақпары</string>
     <string name="label_help">Көмек</string>
     <string name="categories">Санаттар</string>
-    <string name="manga">Кітапхана жазбалары</string>
+    <string name="manga">Манга</string>
     <string name="chapters">Тараулар</string>
     <string name="track">Бақылау</string>
     <string name="label_migration">Көшу</string>
     <string name="label_default">Әдепкі</string>
     <string name="label_warning">Ескерту</string>
-    <string name="confirm_lock_change">Өзгертуді растау үшін аутентификация өтіңіз</string>
+    <string name="confirm_lock_change">Өзгерісті растау үшін аутентификациядан өтіңіз</string>
     <string name="action_menu">Мәзір</string>
     <string name="action_filter">Сүзгі</string>
     <string name="action_filter_bookmarked">Бетбелгіленген</string>
@@ -57,8 +57,8 @@
     <string name="pref_category_advanced">Толығырақ</string>
     <string name="pref_category_theme">Кейіп</string>
     <string name="theme_system">Жүйе бойынша</string>
-    <string name="theme_light">Өшірулі</string>
-    <string name="theme_dark">Қосулы</string>
+    <string name="theme_light">Ақ</string>
+    <string name="theme_dark">Қара</string>
     <string name="theme_strawberrydaiquiri">Құлпынай Дайкири</string>
     <string name="theme_tako">Тако</string>
     <string name="theme_yotsuba">Йотсуба</string>
@@ -88,14 +88,14 @@
     <string name="action_filter_unread">Оқылмаған</string>
     <string name="action_filter_empty">Сүзгіні алып тастау</string>
     <string name="action_sort_alpha">Әліпби бойынша</string>
-    <string name="action_sort_count">Түгел жазбалар</string>
-    <string name="action_sort_total">Тараулар саны</string>
+    <string name="action_sort_count">Түгел жазба</string>
+    <string name="action_sort_total">Тарау саны</string>
     <string name="action_sort_last_read">Соңғы оқылған</string>
     <string name="action_sort_latest_chapter">Соңғы тарау</string>
     <string name="action_sort_chapter_fetch_date">Тараудың келген күні бойынша</string>
     <string name="action_sort_date_added">Қосылған күні</string>
     <string name="action_search">Іздеу</string>
-    <string name="action_search_settings">Баптау іздеу</string>
+    <string name="action_search_settings">Іздеуді баптау</string>
     <string name="action_global_search">Ауқымды іздеу</string>
     <string name="action_select_all">Түгелін таңдау</string>
     <string name="action_download">Жүктеп алу</string>
@@ -125,7 +125,7 @@
     <string name="action_open_in_web_view">WebView-де ашу</string>
     <string name="action_migrate">Көшу</string>
     <string name="action_display_mode">Бейнебет режимі</string>
-    <string name="action_display_local_badge">Локалды дереккөз</string>
+    <string name="action_display_local_badge">Жергілікті дереккөз</string>
     <string name="action_display_language_badge">Тіл</string>
     <string name="action_display_show_tabs">Санат қойындыларын көрсету</string>
     <string name="action_display_show_number_of_items">Элементтер санын көрсету</string>
@@ -138,19 +138,19 @@
     <string name="action_sort">Сұрыптау</string>
     <string name="action_order_by_upload_date">Жүктелген күні бойынша</string>
     <string name="action_order_by_chapter_number">Тарау нөмірі бойынша</string>
-    <string name="action_newest">Жаңарақ</string>
-    <string name="action_oldest">Ескірек</string>
+    <string name="action_newest">Ең жаңасы</string>
+    <string name="action_oldest">Ең ескісі</string>
     <string name="action_asc">Артуы бойынша</string>
     <string name="action_desc">Кемуі бойынша</string>
     <string name="action_move_to_top">Басына оралу</string>
     <string name="action_move_to_top_all_for_series">Туындыны басына апару</string>
-    <string name="action_move_to_bottom">Соңына бару</string>
+    <string name="action_move_to_bottom">Соңына апару</string>
     <string name="action_install">Орнату</string>
     <string name="action_share">Бөлісу</string>
     <string name="action_save">Сақтау</string>
     <string name="action_reset">Қалпына келтіру</string>
     <string name="action_undo">Болдырмау</string>
-    <string name="action_open_log">Тіркеуді ашу</string>
+    <string name="action_open_log">Журналды ашу</string>
     <string name="action_show_errors">Толық ақпарат алу үшін басыңыз</string>
     <string name="action_restore">Қалпына келтіру</string>
     <string name="action_webview_back">Артқа</string>
@@ -176,7 +176,7 @@
     <string name="pref_library_update_interval">Автоматты жаңартулар</string>
     <string name="action_resume">Жалғастыру</string>
     <string name="pref_app_language">Қолданба тілі</string>
-    <string name="default_category_summary">Әрқашан сұраңыз</string>
+    <string name="default_category_summary">Әрқашан сұрау</string>
     <string name="default_category">Әдепкі санат</string>
     <string name="categorized_display_settings">Сұрыптау және көрсету үшін әр санат баптауы</string>
     <string name="ext_uninstall">Жою</string>
@@ -208,7 +208,7 @@
     <string name="include">Қосу: %s</string>
     <string name="ext_installing">Орнатылуда</string>
     <string name="ext_installed">Орнатылды</string>
-    <string name="ext_trust">Сенім</string>
+    <string name="ext_trust">Сену</string>
     <string name="ext_untrusted">Сенімсіз</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Shizuku-ны кеңейту орнатушысы ретінде пайдалану үшін Shizuku-ны орнатып іске қосыңыз.</string>
     <string name="pref_show_navigation_mode">Түрту аймақтарының қабаттасуын көрсету</string>
@@ -231,11 +231,9 @@
     <string name="ext_install">Орнату</string>
     <string name="ext_app_info">Қолданба туралы</string>
     <string name="untrusted_extension">Сенімсіз кеңейту</string>
-    <string name="untrusted_extension_message">Бұл кеңейту сенімсіз сертификатпен қол қойылған және іске қосылмаған.
+    <string name="untrusted_extension_message">Зиянды кеңейтімдер сақталған кез келген кіру мәліметтерін оқи алады немесе кездейсоқ кодты орындай алады.
 \n
-\nЗиянды кеңейту Aniyomi-де сақталған кез келген кіру тіркелгі деректерін оқуы немесе еркін кодты орындауы мүмкін.
-\n
-\nОсы сертификатқа сену арқылы сіз осы қауіп-қатерді қабылдайсыз.</string>
+\nОсы кеңейтімге сенім білдіре отырып, сіз осы тәуекелдерді қабылдайсыз.</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="ext_nsfw_warning">Бұл кеңейту дереккөзінде NSFW (18+) мазмұны болуы мүмкін</string>
     <string name="ext_install_service_notif">Кеңейту орнатылуда…</string>
@@ -250,9 +248,9 @@
     <string name="pref_category_reading">Оқылуда</string>
     <string name="recent_manga_time">Тарау %1$s - %2$s</string>
     <string name="pref_skip_read_chapters">Оқылды деп белгіленген тарауларды өткізіп жіберу</string>
-    <string name="delete_category_confirmation">«%s» деген санатты жойғыңыз келеді ме\?</string>
+    <string name="delete_category_confirmation">«%s» деген санатты жойғыңыз келе ме?</string>
     <string name="delete_category">Санатты жою</string>
-    <string name="internal_error">Ішкі қателік: Қосымша ақпарат алу үшін қателіктер тіркеуін тексеріңіз</string>
+    <string name="internal_error">Ішкі қателік: Қосымша ақпарат алу үшін қателіктер журналын тексеріңіз</string>
     <string name="theme_lavender">Лаванда</string>
     <string name="pref_skip_filtered_chapters">Сүзілген тарауларлы өткізіп жіберу</string>
     <string name="action_remove_everything">Барлығын жою</string>
@@ -375,7 +373,6 @@
     <string name="logout">Шығу</string>
     <string name="unknown_error">Белгісіз қателік</string>
     <string name="pref_clear_database">Дерекқорды тазалау</string>
-    <string name="pref_enable_acra">Қателіктер туралы есептерді жіберу</string>
     <string name="no_pinned_sources">Сізде бекітілген дереккөздер жоқ</string>
     <string name="empty_backup_error">Кітапханада сақтайтын түк жоқ</string>
     <string name="downloaded_only_summary">Кітапханаңыздағы барлық жазбаларды сүзеді</string>
@@ -431,7 +428,6 @@
     <string name="pref_disable_battery_optimization">Батареяның оңтайландыруын өшіру</string>
     <string name="battery_optimization_setting_activity_not_found">Құрылғы баптауы ашылмады</string>
     <string name="privacy_policy">Құпиялық саясаты</string>
-    <string name="pref_acra_summary">Барлық мүмкін қателерді түзетуге көмектеседі. Пайдаланушы деректері жіберілмейді</string>
     <string name="label_downloaded_only">Жүктелгенді ғана</string>
     <string name="login_title">%1$s-ге кіру</string>
     <string name="password">Құпиясөз</string>
@@ -489,7 +485,6 @@
     <string name="cant_open_last_read_chapter">Ақырғы оқылған тарау ашылмай тұр</string>
     <string name="updates_last_update_info">Кітапхананың ақырғы жаңаруы: %s</string>
     <string name="loader_not_implemented_error">Дереккөз табылмады</string>
-    <string name="loader_rar5_error">RARv5 пішімі қолжетімсіз</string>
     <string name="myanimelist_relogin">MyAnimeList-ке қайтадан кіріңіз</string>
     <string name="error_no_match">Ұқсастық табылмады</string>
     <string name="source_unsupported">Дереккөз қолжетімсіз</string>
@@ -528,10 +523,10 @@
     <string name="notification_chapters_multiple">%1$s Тарау</string>
     <string name="library_errors_help">Кітапхананы жаңарту қателіктерін жөндеу үшін %1$s</string>
     <string name="pref_appearance_summary">Кейіп, күні мен уақыт пішімі</string>
-    <string name="pref_library_summary">Санаттар, ауқымды жаңарту</string>
+    <string name="pref_library_summary">Санаттар, ауқымды жаңарту, бөлімдерді парақтау</string>
     <string name="pref_tracking_summary">Прогрессті біржақты синхрондау, кеңейтілген синхрондау</string>
     <string name="pref_backup_summary">Қолмен және автоматты сақтық көшірмелері</string>
-    <string name="pref_advanced_summary">Қателер тіркеуін түсіру, батареяны оңтайландыру</string>
+    <string name="pref_advanced_summary">Қателер журналын түсіру, батареяны оңтайландыру</string>
     <string name="manga_removed_library">Кітапханадан жойылды</string>
     <string name="chapter_downloading_progress">(%1$d/%2$d) жүктелуде</string>
     <string name="show_chapter_number">Тарау нөмірі</string>
@@ -701,4 +696,58 @@
     <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>
     <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Aniyomi бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
     <string name="information_webview_required">Aniyomi-ны қолдану үшін WebView керек</string>
+    <string name="relative_time_now">Қазір</string>
+    <string name="onboarding_storage_selection_required">Бір қалта таңдауыңыз міндетті</string>
+    <string name="pref_relative_format">Салыстырмалы уақыт белгілері</string>
+    <string name="pref_relative_format_summary">\"%2$s\" орнына \"%1$s\"</string>
+    <string name="pref_library_update_smart_update">Ақылды жаңарту</string>
+    <string name="not_selected">Таңдалмаған</string>
+    <string name="action_bar_up_description">Жоғары</string>
+    <string name="sort_category_confirmation">Санаттарды әліпби бойынша сұрыптағыңыз келе ме?</string>
+    <string name="action_apply">Қолдану</string>
+    <string name="onboarding_description">Алдымен біраз нәрсені реттеп шығайық. Оларды кейінірек баптауда әрқашан өзгерте аласыз.</string>
+    <string name="onboarding_action_next">Келесі</string>
+    <string name="onboarding_action_skip">Өткізіп жіберу</string>
+    <string name="action_revert_to_default">Әдепкіге қайтару</string>
+    <string name="pref_onboarding_guide">Жаңа бастаушы нұсқаулығы</string>
+    <string name="onboarding_heading">Қош келдіңіз!</string>
+    <string name="onboarding_action_finish">Бастау</string>
+    <string name="onboarding_storage_info">%1$s бөлім жүктеулері, сақтық көшірмелерін және т.б. мәліметті сақтайтын қалтаны таңдаңыз.
+\n
+\nБөлек қалта арнаған ұсынылыды.
+\n
+\nТаңдалған қалта: %2$s</string>
+    <string name="onboarding_storage_action_select">Қалта таңдау</string>
+    <string name="onboarding_storage_help_action">Сақтау нұсқаулығы</string>
+    <string name="onboarding_permission_install_apps">Қолданба орнатуға рұқсат</string>
+    <string name="onboarding_permission_install_apps_description">Дереккөз кеңейтімдерін орнату үшін.</string>
+    <string name="onboarding_permission_notifications">Хабарландыру жіберуге рұқсат</string>
+    <string name="onboarding_permission_notifications_description">Кітапхана жаңартулары және т.б. жаңалық туралы хабардар болу үшін.</string>
+    <string name="onboarding_permission_ignore_battery_opts">Фонда батарея пайдалануға рұқсат</string>
+    <string name="onboarding_permission_action_grant">Беру</string>
+    <string name="onboarding_permission_ignore_battery_opts_description">Ұзақ уақытқа созылатын кітапхана жаңартулары, жүктеулер және сақтық көшірмелерді қалпына келтіру үшін үзілістер болмауы үшін.</string>
+    <string name="onboarding_guides_new_user">%s қолданбасына жаңадан келдіңіз бе? Жаңа бастаушылар нұсқаулығын оқуды ұсынамыз.</string>
+    <string name="onboarding_guides_returning_user">%s қолданбасын қайта орнатып жатсыз ба?</string>
+    <string name="theme_nord">Солтүстік</string>
+    <string name="theme_sapphire">Жақұт</string>
+    <string name="pref_library_columns_per_row">Әр қатарға %d</string>
+    <string name="ext_permission_install_apps_warning">Қолданба орнатуға рұқсат керек. Рұқсатты беру үшін мұнда басыңыз.</string>
+    <string name="label_upcoming">Жақында шығады</string>
+    <string name="confirm_exit">Шығу үшін тағы да артқа басыңыз</string>
+    <string name="action_filter_started">Басталды</string>
+    <string name="action_move_to_bottom_all_for_series">Туындыны соңына апару</string>
+    <string name="action_add_anyway">Бәрібір қосу</string>
+    <string name="pref_general_summary">Қолданба тілі, хабарландырулар</string>
+    <string name="onboarding_storage_help_info">Ескі нұсқадан жаңартылып, не таңдарыңызды білмей жүрсіз бе? Қосымша ақпарат алу үшін сақтау нұсқаулығына жүгініңіз.</string>
+    <string name="pref_chapter_swipe_end">Оңға қарай өткізгендегі әрекет</string>
+    <string name="pref_chapter_swipe_start">Солға қарай өткізгендегі әрекет</string>
+    <string name="pref_update_only_in_release_period">Келесі жаңарту уақытын болжау</string>
+    <string name="selected">Таңдалған</string>
+    <string name="action_sort_airing_time">Шыққан уақыты</string>
+    <string name="action_sort_category">Санаттарды сұрыптау</string>
+    <string name="action_reorganize_by">Қайта реттеу</string>
+    <string name="action_menu_overflow_description">Тағы параметр</string>
+    <string name="label_data_storage">Дерек пен жад</string>
+    <string name="delete_downloaded">Жүктелгендерді жою</string>
+    <string name="action_set_interval">Аралық орнату</string>
 </resources>

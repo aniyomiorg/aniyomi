@@ -139,7 +139,6 @@
     <string name="pref_clear_database">データベースをクリア</string>
     <string name="pref_clear_database_summary">ライブラリにない項目の履歴を削除</string>
     <string name="version">バージョン</string>
-    <string name="pref_enable_acra">クラッシュレポートを送信する</string>
     <string name="login_title">%1$sにログイン</string>
     <string name="username">ユーザー名</string>
     <string name="password">パスワード</string>
@@ -180,7 +179,6 @@
     <string name="pref_clear_cookies">Cookiesを削除</string>
     <string name="cookies_cleared">Cookiesを削除しました</string>
     <string name="clear_database_completed">エントリーを削除しました</string>
-    <string name="pref_acra_summary">バグの修正などに役立ちます。個人情報を送信しません</string>
     <string name="unknown_error">不明なエラー</string>
     <string name="updating_category">カテゴリーを更新中</string>
     <string name="no_more_results">これ以上の結果はありません</string>
@@ -265,7 +263,6 @@
     <string name="transition_pages_loading">ページをロード中…</string>
     <string name="transition_pages_error">ページのロードに失敗: %1$s</string>
     <string name="pref_read_with_long_tap">長押しでアクションを表示</string>
-    <string name="pref_true_color">32ビットカラー</string>
     <string name="pref_skip_read_chapters">読み終わった章をスキップ</string>
     <string name="pref_color_filter_mode">ｶﾗｰﾌｨﾙﾀｰﾌﾞﾚﾝﾄﾞﾓｰﾄﾞ</string>
     <string name="filter_mode_overlay">オーバーレイ</string>
@@ -335,7 +332,6 @@
     <string name="filter_mode_darken">焼き込み/比較（暗）</string>
     <string name="filter_mode_lighten">覆い焼き/比較（明）</string>
     <string name="filter_mode_multiply">乗算</string>
-    <string name="pref_true_color_summary">バンディングを軽減しますが、パフォーマンスを影響するかもしれません</string>
     <string name="pref_cutout_short">画面の切り抜きエリアにも内容を表示</string>
     <string name="ext_updates_pending">更新あり</string>
     <string name="pref_library_update_refresh_metadata_summary">ライブラリを更新時、新しい表紙と情報を確認します</string>
@@ -595,7 +591,6 @@
     <string name="pref_user_agent_string">デフォルトのユーザーエージェント文字列</string>
     <string name="pref_reset_user_agent_string">デフォルトのユーザーエージェント文字列をリセットする</string>
     <string name="action_remove_everything">全て削除</string>
-    <string name="loader_rar5_error">フォーマットRARv5は未対応です</string>
     <string name="appwidget_updates_description">最近更新されたライブラリの項目を見る</string>
     <string name="appwidget_unavailable_locked">アプリロックがONの時、ウィジェットは利用できません</string>
     <string name="update_already_running">アップデートはすでに進行中です</string>

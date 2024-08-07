@@ -191,8 +191,6 @@
     <string name="cache_delete_error">Fout opgetreden tijdens het wissen</string>
     <string name="pref_clear_database">Database leegmaken</string>
     <string name="pref_clear_database_summary">Verwijder geschiedenis voor items die niet in je bibliotheek zijn opgeslagen</string>
-    <string name="pref_enable_acra">Rapporteer bugs</string>
-    <string name="pref_acra_summary">Helpt bij het oplossen van bugs. Er wordt geen gevoelige data verzonden</string>
     <string name="information_no_recent_manga">Niks recent gelezen</string>
     <string name="download_notifier_unknown_error">Kon dit hoofdstuk niet downloaden door een onverwachte fout</string>
     <string name="pref_library_update_restriction">Toestel beperkingen voor automatisch bijwerken</string>
@@ -553,7 +551,6 @@
     <string name="download_ahead">Download vooruit</string>
     <string name="webview_data_deleted">WebView-gegevens gewist</string>
     <string name="pref_clear_webview_data">WebView-gegevens wissen</string>
-    <string name="loader_rar5_error">RARv5-indeling wordt niet ondersteund</string>
     <string name="download_notifier_split_page_not_found">Pagina %d niet gevonden tijdens het splitsen</string>
     <string name="internal_error">InternalError: Bekijk de crash logs voor meer informatie</string>
     <string name="theme_lavender">Lavendel</string>

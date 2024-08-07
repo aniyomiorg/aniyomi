@@ -94,8 +94,6 @@
     <string name="email">כתובת דוא\"ל</string>
     <string name="username">שם משתמש</string>
     <string name="login_title">התחבר אל %1$s</string>
-    <string name="pref_acra_summary">עוזר בתיקון באגים. לא יישלחו נתונים רגישים</string>
-    <string name="pref_enable_acra">שלח דוחות קריסה</string>
     <string name="ext_uninstall">הסר התקנה</string>
     <string name="ext_untrusted">לא מאומת</string>
     <string name="ext_installed">הותקן</string>
@@ -537,7 +535,6 @@
     <string name="pref_dual_page_invert_summary">אם המקום של העמוד המפוצל לא תואם לכיוון הקריאה</string>
     <string name="tapping_inverted_none">כלום</string>
     <string name="pref_viewer_nav">איזורי נגיעה</string>
-    <string name="loader_rar5_error">הפורמט RARv5 לא נתמך</string>
     <string name="action_search_hint">חיפוש…</string>
     <string name="action_open_random_manga">פתיחת פריט אקראי</string>
     <string name="getting_started_guide">מדריך למתחיל</string>
@@ -982,4 +979,5 @@
     <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
     <string name="onboarding_permission_ignore_battery_opts_description">המנע מהפרעות לתהליכים ממושכים כמו: עדכוני ספרייה, הורדות, ושחזור מגיבויים</string>
+    <string name="label_upcoming">יוצא בקרוב</string>
 </resources>

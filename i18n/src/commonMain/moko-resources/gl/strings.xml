@@ -68,8 +68,6 @@
     <string name="pref_custom_color_filter">Filtro de cor personalizado</string>
     <string name="pref_custom_brightness">Brillo presonalizado</string>
     <string name="pref_crop_borders">Recortar bordes</string>
-    <string name="pref_true_color_summary">Reduce o anelado (\"banding\"), pero pode afectar ao rendemento</string>
-    <string name="pref_true_color">Cor de 32 bits</string>
     <string name="pref_show_reading_mode_summary">Amosar brevemente o modo actual cando se abre o lector</string>
     <string name="pref_show_reading_mode">Amosar modo de lectura</string>
     <string name="pref_show_page_number">Amosar número de páxina</string>
@@ -268,7 +266,6 @@
     <string name="licenses">Licenzas de código aberto</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="updated_version">Actualizado a v%1$s</string>
-    <string name="pref_acra_summary">Axuda a corrixir os erros. Non se enviará ningunha información sensíbel</string>
     <string name="notification_incognito_text">Desactivar o modo incógnito</string>
     <string name="login">Iniciar sesión</string>
     <string name="downloaded_chapters">Capítulos baixados</string>
@@ -290,7 +287,6 @@
     <string name="error_user_agent_string_blank">O axente de usuario non pode estar vacío</string>
     <string name="used_cache">Usado: %1$s</string>
     <string name="battery_optimization_setting_activity_not_found">Non se puideron abrir os axustes do dispositivo</string>
-    <string name="pref_enable_acra">Enviar informes de erros</string>
     <string name="tabs_header">Lapelas</string>
     <string name="no_more_results">Non hai máis resultados</string>
     <string name="last_used_source">Usado recentemente</string>
@@ -643,7 +639,6 @@
     <string name="confirm_set_image_as_cover">Queres usar esta imaxe como portada\?</string>
     <string name="error_category_exists">Xa hai unha categoría con este nome!</string>
     <string name="viewer">Modo de lectura</string>
-    <string name="loader_rar5_error">O formato RARv5 non está soportado</string>
     <string name="updating_library">Actualizando a biblioteca</string>
     <string name="updates_last_update_info">Última actualización da biblioteca: %s</string>
     <string name="recent_manga_time">Cap. %1$s - %2$s</string>

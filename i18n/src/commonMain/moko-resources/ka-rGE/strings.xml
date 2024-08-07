@@ -214,8 +214,6 @@
     <string name="website">ვებსაიტი</string>
     <string name="version">ვერსია</string>
     <string name="check_for_updates">განახლებების მოძებნა</string>
-    <string name="pref_enable_acra">ქრეშის რეპორტის გაგზავნა</string>
-    <string name="pref_acra_summary">ეხმარება შეცდომების გამოსწორებაში. სენსიტიური მონაცემები არ იქნება გაგზავნილი</string>
     <string name="label_downloaded_only">მხოლოდ გადმოწერილები</string>
     <string name="downloaded_only_summary">თქვენს ბიბლიოთეკაში ყველა ჩანაწერის გაფილტვრა</string>
     <string name="login_title">შესვლა %1$s-ში</string>
