@@ -19,5 +19,4 @@ repositories {
     gradlePluginPortal()
     mavenCentral()
     google()
-    maven(url = "https://www.jitpack.io")
 }
