@@ -282,9 +282,6 @@ dependencies {
 	implementation(libs.torrentserver)
     // Cast
     implementation(libs.bundles.cast)
-
-    //shortcut helper
-    implementation (libs.android.shortcut.gradle)
 }
 
 androidComponents {
