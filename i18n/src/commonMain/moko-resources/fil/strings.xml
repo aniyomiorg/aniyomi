@@ -1159,4 +1159,5 @@
     <string name="player_subtitle_settings_filters">Mga Filter</string>
     <string name="player_filters_brightness">Liwanag</string>
     <string name="player_filters_warning">Ang ilang filer ay maaring di-gumana gamit ang kasalukuyang video driver</string>
+    <string name="pref_sub_select_conf">I-edit ang advanced na configuration sa pagpili ng subtitle track</string>
 </resources>
