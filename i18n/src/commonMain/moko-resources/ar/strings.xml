@@ -1048,4 +1048,7 @@
     <string name="ext_revoke_trust">ابطال الاضافات الموثوقة الغير معرفة</string>
     <string name="untrusted_extension_message">يمكن للملحقات الضارة قراءة بيانات تسجيل الدخول المخزنة أو تنفيذ تعليمات برمجية عشوائية. 
 \nمن خلال الثقة بهذه الاضافة ، فإنك تتحمل مسؤولية هذه المخاطر.</string>
+    <string name="relative_time_now">الآن</string>
+    <string name="label_upcoming">قادم</string>
+    <string name="action_add_anyway">أضف على أية حال</string>
 </resources>
