@@ -674,7 +674,7 @@
     <string name="pref_chapter_swipe_start">Sola kaydırma eylemi</string>
     <string name="pref_double_tap_zoom">Yakınlaştırmak için iki kez dokun</string>
     <string name="pref_library_columns_per_row">Satır başına %d</string>
-    <string name="action_set_interval">Aralığı ayarlama</string>
+    <string name="action_set_interval">Aralığı ayarla</string>
     <string name="action_filter_interval_custom">Özel güncelleme aralığı</string>
     <string name="intervals_header">Zaman aralıkları</string>
     <string name="action_sort_next_updated">Sonraki beklenen güncelleme</string>
