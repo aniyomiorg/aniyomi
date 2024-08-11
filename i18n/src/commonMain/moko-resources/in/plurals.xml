@@ -69,4 +69,7 @@
     <plurals name="download_amount_anime">
         <item quantity="other">%d Episode selanjutnya</item>
     </plurals>
+    <plurals name="pref_pages">
+        <item quantity="other">%1$s halaman</item>
+    </plurals>
 </resources>
