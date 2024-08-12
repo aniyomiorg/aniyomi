@@ -30,7 +30,7 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 * Local reading and watching of content.
 * A configurable reader with multiple viewers, reading directions and other settings.
 * A configurable player built on mpv-android with multiple options and settings.
-* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
+* Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.app/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), [Simkl](https://simkl.com/), and [Bangumi](https://bgm.tv/) support.
 * Categories to organize your library.
 * Light and dark themes.
 * Schedule updating your library for new chapters/episodes.
