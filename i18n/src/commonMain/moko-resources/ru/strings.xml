@@ -1125,4 +1125,11 @@
     <string name="action_add_anyway">Все равно добавить</string>
     <string name="relative_time_now">Сейчас</string>
     <string name="pref_flash_duration_summary">%1$s мс</string>
+    <string name="player_subtitle_settings_filters">Фильтры</string>
+    <string name="player_filters_brightness">Яркость</string>
+    <string name="player_filters_saturation">Насыщенность</string>
+    <string name="player_filters_contrast">Контраст</string>
+    <string name="player_filters_gamma">Гамма</string>
+    <string name="player_filters_hue">Цветовой тон</string>
+    <string name="player_filters_warning">Некоторые фильтры могут не работать с текущим видео драйвером</string>
 </resources>
