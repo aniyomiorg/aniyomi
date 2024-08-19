@@ -165,7 +165,6 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
         )
     }
 
-    @Suppress("MagicNumber")
     override fun newImageLoader(context: Context): ImageLoader {
         return ImageLoader.Builder(this).apply {
             val callFactoryLazy = lazy { Injekt.get<NetworkHelper>().client }

@@ -36,10 +36,11 @@ jobs:
           java-version: 17
           distribution: adopt
 
-      - name: Build app and run unit tests
+      - name: Set up gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-        with:
-          arguments: detekt assembleStandardRelease testReleaseUnitTest testStandardReleaseUnitTest
+
+      - name: Build app and run unit tests
+        run: ./gradlew assembleStandardRelease testReleaseUnitTest testStandardReleaseUnitTest
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

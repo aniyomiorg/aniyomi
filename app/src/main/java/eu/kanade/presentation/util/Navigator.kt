@@ -33,7 +33,6 @@ import uy.kohesive.injekt.api.get
 /**
  * For invoking back press to the parent activity
  */
-@SuppressLint("ComposeCompositionLocalUsage")
 val LocalBackPress: ProvidableCompositionLocal<(() -> Unit)?> = staticCompositionLocalOf { null }
 
 private val uiPreferences: UiPreferences = Injekt.get()
