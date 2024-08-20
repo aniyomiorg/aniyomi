@@ -1,6 +1,8 @@
 package eu.kanade.tachiyomi.data.download.anime
 
+import android.app.Application
 import android.content.Context
+import android.net.Uri
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -12,6 +14,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
@@ -26,7 +30,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromByteArray
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encodeToByteArray
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import tachiyomi.core.common.storage.extension
@@ -212,27 +224,28 @@ class AnimeDownloadCache(
      * @param animeUniFile the directory of the anime.
      * @param anime the anime of the episode.
      */
-    @Synchronized
-    fun addEpisode(episodeDirName: String, animeUniFile: UniFile, anime: Anime) {
-        // Retrieve the cached source directory or cache a new one
-        var sourceDir = rootDownloadsDir.sourceDirs[anime.source]
-        if (sourceDir == null) {
-            val source = sourceManager.get(anime.source) ?: return
-            val sourceUniFile = provider.findSourceDir(source) ?: return
-            sourceDir = SourceDirectory(sourceUniFile)
-            rootDownloadsDir.sourceDirs += anime.source to sourceDir
-        }
+    suspend fun addEpisode(episodeDirName: String, animeUniFile: UniFile, anime: Anime) {
+        rootDownloadsDirLock.withLock {
+            // Retrieve the cached source directory or cache a new one
+            var sourceDir = rootDownloadsDir.sourceDirs[anime.source]
+            if (sourceDir == null) {
+                val source = sourceManager.get(anime.source) ?: return
+                val sourceUniFile = provider.findSourceDir(source) ?: return
+                sourceDir = SourceDirectory(sourceUniFile)
+                rootDownloadsDir.sourceDirs += anime.source to sourceDir
+            }
 
-        // Retrieve the cached anime directory or cache a new one
-        val animeDirName = provider.getAnimeDirName(anime.title)
-        var animeDir = sourceDir.animeDirs[animeDirName]
-        if (animeDir == null) {
-            animeDir = AnimeDirectory(animeUniFile)
-            sourceDir.animeDirs += animeDirName to animeDir
-        }
+            // Retrieve the cached anime directory or cache a new one
+            val animeDirName = provider.getAnimeDirName(anime.title)
+            var animeDir = sourceDir.animeDirs[animeDirName]
+            if (animeDir == null) {
+                animeDir = AnimeDirectory(animeUniFile)
+                sourceDir.animeDirs += animeDirName to animeDir
+            }
 
-        // Save the episode directory
-        animeDir.episodeDirs += episodeDirName
+            // Save the chapter directory
+            animeDir.episodeDirs += episodeDirName
+        }
 
         notifyChanges()
     }
@@ -243,15 +256,18 @@ class AnimeDownloadCache(
      * @param episode the episode to remove.
      * @param anime the anime of the episode.
      */
-    @Synchronized
-    fun removeEpisode(episode: Episode, anime: Anime) {
-        val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
-        val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
-        provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
-            if (it in animeDir.episodeDirs) {
-                animeDir.episodeDirs -= it
+    suspend fun removeEpisode(episode: Episode, anime: Anime) {
+        rootDownloadsDirLock.withLock {
+            val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
+            val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
+            provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
+                if (it in animeDir.episodeDirs) {
+                    animeDir.episodeDirs -= it
+                }
             }
         }
+
+        notifyChanges()
     }
 
     /**
@@ -260,17 +276,19 @@ class AnimeDownloadCache(
      * @param episodes the list of episode to remove.
      * @param anime the anime of the episode.
      */
-    @Synchronized
-    fun removeEpisodes(episodes: List<Episode>, anime: Anime) {
-        val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
-        val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
-        episodes.forEach { episode ->
-            provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
-                if (it in animeDir.episodeDirs) {
-                    animeDir.episodeDirs -= it
+    suspend fun removeEpisodes(episodes: List<Episode>, anime: Anime) {
+        rootDownloadsDirLock.withLock {
+            val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
+            val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
+            episodes.forEach { episode ->
+                provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
+                    if (it in animeDir.episodeDirs) {
+                        animeDir.episodeDirs -= it
+                    }
                 }
             }
         }
+
         notifyChanges()
     }
 
@@ -279,19 +297,22 @@ class AnimeDownloadCache(
      *
      * @param anime the anime to remove.
      */
-    @Synchronized
-    fun removeAnime(anime: Anime) {
-        val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
-        val animeDirName = provider.getAnimeDirName(anime.title)
-        if (sourceDir.animeDirs.containsKey(animeDirName)) {
-            sourceDir.animeDirs -= animeDirName
+    suspend fun removeAnime(anime: Anime) {
+        rootDownloadsDirLock.withLock {
+            val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
+            val animeDirName = provider.getAnimeDirName(anime.title)
+            if (sourceDir.animeDirs.containsKey(animeDirName)) {
+                sourceDir.animeDirs -= animeDirName
+            }
         }
 
         notifyChanges()
     }
 
-    fun removeSource(source: AnimeSource) {
-        rootDownloadsDir.sourceDirs -= source.id
+    suspend fun removeSource(source: AnimeSource) {
+        rootDownloadsDirLock.withLock {
+            rootDownloadsDir.sourceDirs -= source.id
+        }
 
         notifyChanges()
     }
@@ -340,7 +361,6 @@ class AnimeDownloadCache(
                         sourceId?.let { it to SourceDirectory(dir) }
                     }
                     .toMap()
-                    .let { ConcurrentHashMap(it) }
 
                 rootDownloadsDir.sourceDirs = sourceDirs
 
@@ -353,7 +373,7 @@ class AnimeDownloadCache(
 
                             sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
 
-                            animeDirs.values.forEach { animeDir ->
+                            sourceDir.animeDirs.values.forEach { animeDir ->
                                 val episodeDirs = animeDir.dir?.listFiles().orEmpty()
                                     .mapNotNull {
                                         when {
@@ -384,7 +404,6 @@ class AnimeDownloadCache(
                 if (exception != null && exception !is CancellationException) {
                     logcat(LogPriority.ERROR, exception) { "Failed to create download cache" }
                 }
-
                 lastRenew = System.currentTimeMillis()
                 notifyChanges()
             }
@@ -402,29 +421,78 @@ class AnimeDownloadCache(
         scope.launchNonCancellable {
             _changes.send(Unit)
         }
+        updateDiskCache()
+    }
+
+    private var updateDiskCacheJob: Job? = null
+
+    @Suppress("MagicNumber")
+    private fun updateDiskCache() {
+        updateDiskCacheJob?.cancel()
+        updateDiskCacheJob = scope.launchIO {
+            delay(1000)
+            ensureActive()
+            val bytes = ProtoBuf.encodeToByteArray(rootDownloadsDir)
+            ensureActive()
+            try {
+                diskCacheFile.writeBytes(bytes)
+            } catch (e: Throwable) {
+                logcat(
+                    priority = LogPriority.ERROR,
+                    throwable = e,
+                    message = { "Failed to write disk cache file" },
+                )
+            }
+        }
     }
 }
 
 /**
  * Class to store the files under the root downloads directory.
  */
+@Serializable
 private class RootDirectory(
+    @Serializable(with = UniFileAsStringSerializer::class)
     val dir: UniFile?,
-    var sourceDirs: ConcurrentHashMap<Long, SourceDirectory> = ConcurrentHashMap(),
+    var sourceDirs: Map<Long, SourceDirectory> = mapOf(),
 )
 
 /**
  * Class to store the files under a source directory.
  */
+@Serializable
 private class SourceDirectory(
+    @Serializable(with = UniFileAsStringSerializer::class)
     val dir: UniFile?,
-    var animeDirs: ConcurrentHashMap<String, AnimeDirectory> = ConcurrentHashMap(),
+    var animeDirs: Map<String, AnimeDirectory> = mapOf(),
 )
 
 /**
  * Class to store the files under a manga directory.
  */
+@Serializable
 private class AnimeDirectory(
+    @Serializable(with = UniFileAsStringSerializer::class)
     val dir: UniFile?,
     var episodeDirs: MutableSet<String> = mutableSetOf(),
 )
+
+private object UniFileAsStringSerializer : KSerializer<UniFile?> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("UniFile", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: UniFile?) {
+        return if (value == null) {
+            encoder.encodeNull()
+        } else {
+            encoder.encodeString(value.uri.toString())
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): UniFile? {
+        return if (decoder.decodeNotNullMark()) {
+            UniFile.fromUri(Injekt.get<Application>(), Uri.parse(decoder.decodeString()))
+        } else {
+            decoder.decodeNull()
+        }
+    }
+}
