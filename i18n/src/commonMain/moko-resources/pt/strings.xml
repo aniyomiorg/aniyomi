@@ -1118,4 +1118,5 @@
     <string name="pref_mpv_scripts_summary">Necessita de permissão de armazenamento externo.</string>
     <string name="pref_player_audio_channels_reverse_stereo">Estéreo Invertido</string>
     <string name="pref_mpv_scripts">Habilitar Scripts MPV</string>
+    <string name="action_add_anyway">Adicionar de qualquer maneira</string>
 </resources>
