@@ -1157,4 +1157,6 @@
     <string name="upcoming_calendar_next">Sljedeći mjesec</string>
     <string name="pref_sub_select_conf">Uredi naprednu konfiguraciju odabira titlova</string>
     <string name="player_filters_contrast">Kontrast</string>
+    <string name="download_threads_number">Broj niti</string>
+    <string name="download_threads_number_summary">Broj niti koje se koriste pri preuzimanju, može doći do blokade IP adrese ako je broj prevelik, 4 je dobar broj za izbjegavanje visoke opterećenosti servera.</string>
 </resources>
