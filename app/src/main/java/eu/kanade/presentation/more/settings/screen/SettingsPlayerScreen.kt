@@ -84,6 +84,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 pref = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(MR.strings.pref_preserve_watching_position),
             ),
+            getCastGroup(playerPreferences = playerPreferences),
             getInternalPlayerGroup(playerPreferences = playerPreferences),
             getVolumeAndBrightnessGroup(playerPreferences = playerPreferences),
             getOrientationGroup(playerPreferences = playerPreferences),
@@ -363,6 +364,21 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = pipReplaceWithPrevious,
                     title = stringResource(MR.strings.pref_pip_replace_with_previous),
                     enabled = isPipEnabled,
+                ),
+            ),
+        )
+    }
+
+    // habilita o desabilita el uso de cast que habilitarlo o deshabilitarlo sea con switch
+    @Composable
+    private fun getCastGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enableCast = playerPreferences.enableCast()
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_cast),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableCast,
+                    title = stringResource(MR.strings.pref_enable_cast),
                 ),
             ),
         )

@@ -169,7 +169,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
 
+        if (playerPreferences.enableCast().get()) {
         CastButtonFactory.setUpMediaRouteButton(activity.applicationContext, binding.castBtn)
+        } else {
+            binding.castBtn.visibility = View.GONE
+        }
     }
 
     private fun switchEpisode(previous: Boolean) {

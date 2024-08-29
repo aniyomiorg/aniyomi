@@ -191,9 +191,9 @@ private fun ColumnScope.SortPage(
         globalSortMode.type
     }
     val sortDescending = if (screenModel.grouping == AnimeLibraryGroup.BY_DEFAULT) {
-        !category.sort.isAscending
+        category.sort.isAscending
     } else {
-        !globalSortMode.isAscending
+        globalSortMode.isAscending
     }.not()
     // SY <--
 

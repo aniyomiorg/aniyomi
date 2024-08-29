@@ -130,7 +130,7 @@ actual class LocalMangaSource(
 
                         // Try to find the cover
                         coverManager.find(mangaDir.name.orEmpty())?.let {
-                            thumbnail_url = it.filePath
+                            thumbnail_url = it.uri.toString()
                         }
                     }
                 }
@@ -160,7 +160,7 @@ actual class LocalMangaSource(
     // Manga details related
     override suspend fun getMangaDetails(manga: SManga): SManga = withIOContext {
         coverManager.find(manga.url)?.let {
-            manga.thumbnail_url = it.filePath
+            manga.thumbnail_url = it.uri.toString()
         }
 
         // Augment manga details based on metadata files
