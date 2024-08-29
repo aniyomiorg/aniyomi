@@ -24,6 +24,7 @@ import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.util.size
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -1158,7 +1159,8 @@ class AnimeDownloader(
         filename: String,
     ): UniFile {
         try {
-            val file = tmpDir.createFile("$filename.mp4")!!
+            val file = tmpDir.createFile("${filename}_tmp.mp4")!!
+            context.copyToClipboard("Episode download location", tmpDir.filePath!!.substringBeforeLast("_tmp"))
 
             // TODO: support other file formats!!
             // start download with intent
@@ -1231,7 +1233,7 @@ class AnimeDownloader(
             context.startActivity(intent)
             return file
         } catch (e: Exception) {
-            tmpDir.findFile("$filename.mp4")?.delete()
+            tmpDir.findFile("${filename}_tmp.mp4")?.delete()
             throw e
         }
     }
@@ -1255,6 +1257,8 @@ class AnimeDownloader(
 
         download.status = if (downloadedVideo.size == 1) {
             // Only rename the directory if it's downloaded
+            val filename = DiskUtil.buildValidFilename("${download.anime.title} - ${download.episode.name}")
+            tmpDir.findFile("${filename}_tmp.mp4")?.delete()
             tmpDir.renameTo(dirname)
 
             cache.addEpisode(dirname, animeDir, download.anime)
