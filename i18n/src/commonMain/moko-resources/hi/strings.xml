@@ -150,8 +150,6 @@
     <string name="pref_clear_database_summary">उन आइटम का इतिहास हटाएं जो आपकी पुस्तकालय में सहेजी नहीं गई हैं</string>
     <string name="clear_database_completed">प्रविष्टियां हटाई गईं</string>
     <string name="version">संस्करण</string>
-    <string name="pref_enable_acra">क्रैश रिपोर्ट भेजें</string>
-    <string name="pref_acra_summary">किसी भी बग को ठीक करने में मदद करता है कोई संवेदनशील डेटा नहीं भेजा जाएगा</string>
     <string name="login_title">%1$s के लिए लॉगिन</string>
     <string name="username">उपयोगकर्ता नाम</string>
     <string name="password">पासवर्ड</string>
@@ -582,7 +580,6 @@
     <string name="empty_screen">खैर, यह अजीब है</string>
     <string name="internal_error">आंतरिक त्रुटि : अधिक जानकारी के लिए क्रैश लॉग की जाँच करें</string>
     <string name="network_not_metered">केवल अनमीटर्ड कनेक्शन पर</string>
-    <string name="loader_rar5_error">RARv5 प्रारूप समर्थित नहीं है</string>
     <string name="updates_last_update_info">पुस्तकालय पिछली बार अपडेट किया गया: %s</string>
     <string name="appwidget_updates_description">अपनी हाल ही में अपडेट की गई पुस्तकालय एन्ट्री देखें</string>
     <string name="download_ahead_info">केवल तभी काम करता है जब वर्तमान अध्याय + अगला पहले से ही डाउनलोड किया गया हो।</string>
@@ -638,7 +635,7 @@
     <string name="pref_invalidate_download_cache">डाउनलोड अनुक्रमणिका अमान्य करें</string>
     <string name="copied_to_clipboard_plain">क्लिपबोर्ड पर कॉपी हो गया है</string>
     <string name="track_delete_remote_text">%s से भी हटा दें</string>
-    <string name="manga_categories">मंगा श्रेणियाँ</string>
+    <string name="manga_categories">मंगा श्रेणियां</string>
     <string name="action_sort_last_manga_update">अंतिम मंगा अपडेट</string>
     <string name="action_show_manga">आइटम दिखाएँ</string>
     <string name="action_display_local_badge_manga">स्थानीय स्रोत</string>
@@ -679,7 +676,7 @@
     <string name="action_global_manga_search">वैश्विक मंगा खोज</string>
     <string name="episodes">एपिसोड</string>
     <string name="chapters_episodes">अध्याय और एपिसोड</string>
-    <string name="entries">पुस्तकालय प्रविष्टियाँ</string>
+    <string name="entries">लाइब्रेरी प्रविष्टियों</string>
     <string name="label_manga_library">मंगा</string>
     <string name="label_anime_library">एनिमे</string>
     <string name="label_manga_sources">मंगा स्रोत</string>
@@ -695,4 +692,14 @@
     <string name="action_sort_last_anime_update">अंतिम एनीमे अपडेट</string>
     <string name="action_sort_unseen_count">अनदेखे की संख्या</string>
     <string name="action_sort_episode_fetch_date">एपिसोड लाने की तारीख</string>
+    <string name="action_hide">छुपाएँ</string>
+    <string name="label_all">सभी</string>
+    <string name="label_category">श्रेणी</string>
+    <string name="action_bar_up_description">ऊपर जायें</string>
+    <string name="selected">चयनित</string>
+    <string name="action_menu_overflow_description">अधिक विकल्प</string>
+    <string name="delete_downloaded">डाउनलोड हटाएं</string>
+    <string name="scanlator">स्कैनलेटर</string>
+    <string name="label_data_storage">डेटा और संग्रहण</string>
+    <string name="confirm_exit">बाहर निकलने के लिए फिर से दबाएं</string>
 </resources>

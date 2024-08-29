@@ -494,7 +494,6 @@
     <string name="chapter_not_found">Skyrius nerastas</string>
     <string name="publishing_finished">Skaitinis nepublikuojamas</string>
     <string name="tabs_header">Skirtukai</string>
-    <string name="pref_enable_acra">Siųsti strigčių ataskaitas</string>
     <string name="plan_to_read">Planuojama skaityti</string>
     <string name="no_more_results">Daugiau rezultatų nėra</string>
     <string name="confirm_delete_chapters">Ar tikrai norite ištrinti pasirinktus skyrius\?</string>
@@ -504,7 +503,6 @@
     <string name="in_library">Bibliotekoje</string>
     <string name="reading">Skaitoma</string>
     <string name="error_saving_cover">Išsaugant viršelį įvyko klaida</string>
-    <string name="pref_acra_summary">Padeda ištaisyti bet kokias klaidas. Skelbtini duomenys nebus siunčiami</string>
     <string name="password">Slaptažodis</string>
     <string name="login">Prisijungti</string>
     <string name="sort_by_source">Pagal šaltinį</string>
@@ -587,7 +585,6 @@
     <string name="cant_open_last_read_chapter">Nepavyko atidaryti paskutinio skaityto skyriaus</string>
     <string name="chapter_progress">Puslapis: %1$d</string>
     <string name="transition_next">Kitas:</string>
-    <string name="loader_rar5_error">RARv5 formatas nepalaikomas</string>
     <string name="source_filter_empty_screen">Įdiegtų šaltinių nerasta</string>
     <string name="theme_tidalwave">Potvynio banga</string>
     <string name="action_search_hint">Ieškoti…</string>

@@ -108,7 +108,6 @@
     <string name="picture_saved">Картинка сохранена</string>
     <string name="plan_to_read">Запланировано</string>
     <string name="portrait">Портретная</string>
-    <string name="pref_acra_summary">Помогает исправлять все возможные ошибки. Данные пользователя не передаются</string>
     <string name="pref_category_about">Информация</string>
     <string name="pref_category_advanced">Дополнительно</string>
     <string name="pref_category_downloads">Загрузки</string>
@@ -121,7 +120,6 @@
     <string name="pref_custom_brightness">Пользовательская яркость</string>
     <string name="pref_custom_color_filter">Пользовательский светофильтр</string>
     <string name="pref_download_new">Загружать новые главы</string>
-    <string name="pref_enable_acra">Отправлять отчёты об ошибках</string>
     <string name="pref_page_transitions">Анимированные переходы страниц</string>
     <string name="pref_fullscreen">Полноэкранный режим</string>
     <string name="pref_image_scale_type">Масштабирование</string>
@@ -264,7 +262,6 @@
     <string name="pref_read_with_long_tap">Показать действия при долгом нажатии</string>
     <string name="action_open_in_web_view">Открыть в WebView</string>
     <string name="pref_skip_read_chapters">Пропускать прочитанные главы</string>
-    <string name="pref_true_color">32-битный цвет</string>
     <string name="pref_color_filter_mode">Режим светофильтра</string>
     <string name="filter_mode_overlay">Наложение</string>
     <string name="filter_mode_multiply">Умножение</string>
@@ -354,7 +351,6 @@
     <string name="viewer">Режим чтения</string>
     <string name="pref_category_for_this_series">Для этой серии</string>
     <string name="gray_background">Серый</string>
-    <string name="pref_true_color_summary">Уменьшает полосатость, но может влиять на производительность</string>
     <string name="battery_optimization_setting_activity_not_found">Не удалось открыть настройки устройства</string>
     <string name="pref_refresh_library_covers">Обновить обложки серий</string>
     <string name="tracking_info">Односторонняя синхронизация для обновления прогресса в сторонних сервисах отслеживания. Настройте отслеживание при помощи кнопки «Отслеживание».</string>
@@ -590,7 +586,6 @@
     <string name="pref_user_agent_string">User agent по умолчанию</string>
     <string name="pref_reset_user_agent_string">Сбросить user agent по умолчанию</string>
     <string name="action_remove_everything">Удалить всё</string>
-    <string name="loader_rar5_error">Формат RARv5 не поддерживается</string>
     <string name="appwidget_unavailable_locked">Виджет недоступен при включённой блокировке биометрией</string>
     <string name="appwidget_updates_description">Посмотреть недавно обновлённые серии в библиотеке</string>
     <string name="update_already_running">Обновление уже запущено</string>
@@ -1122,4 +1117,19 @@
     <string name="safe_download">Режим безопасного скачивания аниме</string>
     <string name="safe_download_summary">Включить режим скачивания одним потоком без диапазона</string>
     <string name="download_threads_number_summary">Количество потоков для скачивания: при слишком большом значении возможна блокировка Вашего IP. Во избежание чрезмерных нагрузок на сервера, рекомендуется 4.</string>
+    <string name="pref_player_audio_channels">Аудио каналы</string>
+    <string name="pref_player_audio_channels_mono">Моно</string>
+    <string name="pref_player_audio_channels_stereo">Стерео</string>
+    <string name="action_replace_repo">Заменить</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="action_add_anyway">Все равно добавить</string>
+    <string name="relative_time_now">Сейчас</string>
+    <string name="pref_flash_duration_summary">%1$s мс</string>
+    <string name="player_subtitle_settings_filters">Фильтры</string>
+    <string name="player_filters_brightness">Яркость</string>
+    <string name="player_filters_saturation">Насыщенность</string>
+    <string name="player_filters_contrast">Контраст</string>
+    <string name="player_filters_gamma">Гамма</string>
+    <string name="player_filters_hue">Цветовой тон</string>
+    <string name="player_filters_warning">Некоторые фильтры могут не работать с текущим видео драйвером</string>
 </resources>

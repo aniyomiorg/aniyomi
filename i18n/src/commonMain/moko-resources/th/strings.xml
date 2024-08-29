@@ -175,8 +175,6 @@
     <string name="pref_clear_database_summary">ลบประวัติรายการที่ไม่ได้บันทึกไว้ในคลัง</string>
     <string name="clear_database_completed">ลบรายการแล้ว</string>
     <string name="version">เวอร์ชัน</string>
-    <string name="pref_enable_acra">ส่งรายงานความผิดพลาด</string>
-    <string name="pref_acra_summary">ช่วยแก้ไขจุดบกพร่องต่างๆ จะไม่มีการส่งข้อมูลที่สำคัญ</string>
     <string name="login_title">ลงชื่อเข้าใช้ %1$s</string>
     <string name="username">ชื่อผู้ใช้</string>
     <string name="password">รหัสผ่าน</string>
@@ -597,7 +595,6 @@
     <string name="pref_user_agent_string">ตัวแทนผู้ใช้เริ่มต้น</string>
     <string name="pref_reset_user_agent_string">รีเซ็ตตัวแทนผู้ใช้</string>
     <string name="action_remove_everything">นำทุกอย่างออก</string>
-    <string name="loader_rar5_error">ไม่รับรองรูปแบบ RARv5</string>
     <string name="appwidget_updates_description">แสดงรายการในคลังที่อัปเดตล่าสุดของคุณ</string>
     <string name="appwidget_unavailable_locked">วิดเจ็ตไม่พร้อมใช้งานขณะการล็อกแอปเปิดไว้</string>
     <string name="error_user_agent_string_blank">สตริงตัวแทนผู้ใช้ไม่สามารถทิ้งว่างเปล่าไว้ได้</string>

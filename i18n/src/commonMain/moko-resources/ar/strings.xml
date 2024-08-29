@@ -149,8 +149,6 @@
     <string name="pref_clear_database_summary">مسح سجلّ الإدخالات التي ليست محفوظة في مكتبتك</string>
     <string name="clear_database_completed">تم حذف المدخلات</string>
     <string name="version">اﻹصدار</string>
-    <string name="pref_enable_acra">إرسال تقارير الأعطال</string>
-    <string name="pref_acra_summary">هذا يساعد فى حل أي مشاكل. لن يتم إرسال أيّة بيانات حساسة</string>
     <string name="login_title">تسجيل الدخول إلى %1$s</string>
     <string name="username">اسم المستخدم</string>
     <string name="password">كلمة المرور</string>
@@ -592,7 +590,6 @@
     <string name="appwidget_unavailable_locked">لا تتاح الأداة حال تمكين قفل التطبيق</string>
     <string name="appwidget_updates_description">اطَّلع على ما حُدِّث مؤخَّرًا في مكتبتك</string>
     <string name="action_remove_everything">حذف كل شيء</string>
-    <string name="loader_rar5_error">تنسيق RARv5 ليس مدعومًا</string>
     <string name="theme_tidalwave">موجة مد و جزر</string>
     <string name="multi_lang">متعدد</string>
     <string name="update_already_running">هنالك تحديث جارٍ بالفعل</string>
@@ -1050,4 +1047,7 @@
     <string name="ext_revoke_trust">ابطال الاضافات الموثوقة الغير معرفة</string>
     <string name="untrusted_extension_message">يمكن للملحقات الضارة قراءة بيانات تسجيل الدخول المخزنة أو تنفيذ تعليمات برمجية عشوائية. 
 \nمن خلال الثقة بهذه الاضافة ، فإنك تتحمل مسؤولية هذه المخاطر.</string>
+    <string name="relative_time_now">الآن</string>
+    <string name="label_upcoming">قادم</string>
+    <string name="action_add_anyway">أضف على أية حال</string>
 </resources>
