@@ -1244,7 +1244,7 @@ class AnimeDownloader(
      * @param tmpDir the directory where the download is currently stored.
      * @param dirname the real (non temporary) directory name of the download.
      */
-    private fun ensureSuccessfulAnimeDownload(
+    private suspend fun ensureSuccessfulAnimeDownload(
         download: AnimeDownload,
         animeDir: UniFile,
         tmpDir: UniFile,

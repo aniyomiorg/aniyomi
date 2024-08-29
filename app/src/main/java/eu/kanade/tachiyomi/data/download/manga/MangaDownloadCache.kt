@@ -250,6 +250,7 @@ class MangaDownloadCache(
             // Save the chapter directory
             mangaDir.chapterDirs += chapterDirName
         }
+
         notifyChanges()
     }
 
@@ -279,7 +280,6 @@ class MangaDownloadCache(
      * @param chapters the list of chapter to remove.
      * @param manga the manga of the chapter.
      */
-
     suspend fun removeChapters(chapters: List<Chapter>, manga: Manga) {
         rootDownloadsDirLock.withLock {
             val sourceDir = rootDownloadsDir.sourceDirs[manga.source] ?: return
@@ -375,7 +375,7 @@ class MangaDownloadCache(
 
                             sourceDir.mangaDirs = ConcurrentHashMap(mangaDirs)
 
-                            mangaDirs.values.forEach { mangaDir ->
+                            sourceDir.mangaDirs.values.forEach { mangaDir ->
                                 val chapterDirs = mangaDir.dir?.listFiles().orEmpty()
                                     .mapNotNull {
                                         when {
