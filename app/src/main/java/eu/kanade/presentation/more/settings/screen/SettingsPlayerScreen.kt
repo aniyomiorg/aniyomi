@@ -18,10 +18,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
+import eu.kanade.tachiyomi.ui.player.Amnis
 import eu.kanade.tachiyomi.ui.player.JustPlayer
 import eu.kanade.tachiyomi.ui.player.MpvKt
 import eu.kanade.tachiyomi.ui.player.MpvKtPreview
@@ -40,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.i18n.stringResource
@@ -57,6 +63,7 @@ object SettingsPlayerScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+        val torrentServerPreferences = remember { Injekt.get<TorrentServerPreferences>() }
         val deviceSupportsPip = basePreferences.deviceHasPip()
 
         return listOfNotNull(
@@ -77,6 +84,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 pref = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(MR.strings.pref_preserve_watching_position),
             ),
+            getCastGroup(playerPreferences = playerPreferences),
             getInternalPlayerGroup(playerPreferences = playerPreferences),
             getVolumeAndBrightnessGroup(playerPreferences = playerPreferences),
             getOrientationGroup(playerPreferences = playerPreferences),
@@ -86,6 +94,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 playerPreferences = playerPreferences,
                 basePreferences = basePreferences,
             ),
+            getTorrentServerGroup(torrentServerPreferences),
         )
     }
 
@@ -360,6 +369,21 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
+    // habilita o desabilita el uso de cast que habilitarlo o deshabilitarlo sea con switch
+    @Composable
+    private fun getCastGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enableCast = playerPreferences.enableCast()
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_cast),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableCast,
+                    title = stringResource(MR.strings.pref_enable_cast),
+                ),
+            ),
+        )
+    }
+
     @Composable
     private fun getExternalPlayerGroup(
         playerPreferences: PlayerPreferences,
@@ -391,6 +415,58 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = externalPlayerPreference,
                     title = stringResource(MR.strings.pref_external_player_preference),
                     entries = (mapOf("" to "None") + packageNamesMap).toPersistentMap(),
+                ),
+            ),
+        )
+    }
+
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
+    @Composable
+    private fun getTorrentServerGroup(
+        torrentServerPreferences: TorrentServerPreferences,
+    ): Preference.PreferenceGroup {
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val trackersPref = torrentServerPreferences.trackers()
+        val trackers by trackersPref.collectAsState()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_torrentserver),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.EditTextPreference(
+                    pref = torrentServerPreferences.port(),
+                    title = stringResource(MR.strings.pref_torrentserver_port),
+                    onValueChanged = {
+                        try {
+                            Integer.parseInt(it)
+                            TorrentServerService.stop()
+                            true
+                        } catch (e: Exception) {
+                            false
+                        }
+                    },
+                ),
+                Preference.PreferenceItem.MultiLineEditTextPreference(
+                    pref = torrentServerPreferences.trackers(),
+                    title = context.stringResource(MR.strings.pref_torrent_trackers),
+                    subtitle = trackersPref.asState(scope).value
+                        .lines().take(2)
+                        .joinToString(
+                            separator = "\n",
+                            postfix = if (trackersPref.asState(scope).value.lines().size > 2) "\n..." else "",
+                        ),
+                    onValueChanged = {
+                        TorrentServerService.stop()
+                        true
+                    },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(MR.strings.pref_reset_torrent_trackers_string),
+                    enabled = remember(trackers) { trackers != trackersPref.defaultValue() },
+                    onClick = {
+                        trackersPref.delete()
+                        context.stringResource(MR.strings.requires_app_restart)
+                    },
                 ),
             ),
         )
@@ -454,4 +530,5 @@ val externalPlayers = listOf(
     NextPlayer,
     XPlayer,
     WebVideoCaster,
+    Amnis,
 )

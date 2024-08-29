@@ -2,8 +2,6 @@ import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
     id("mihon.android.application")
@@ -11,6 +9,10 @@ plugins {
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
+}
+
+if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
+    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -21,28 +23,17 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 125
-        versionName = "0.16.4.3"
+        applicationId = "com.dark.animetailv2"
+
+        versionCode = 126
+        versionName = "0.16.5.7"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
         buildConfigField("boolean", "PREVIEW", "false")
-
-        // Put these fields in acra.properties
-        // val acraProperties = Properties()
-        // rootProject.file("acra.properties")
-        //     .takeIf { it.exists() }
-        //     ?.let { acraProperties.load(FileInputStream(it)) }
-        // val acraUri = acraProperties.getProperty("ACRA_URI", "")
-        // val acraLogin = acraProperties.getProperty("ACRA_LOGIN", "")
-        // val acraPassword = acraProperties.getProperty("ACRA_PASSWORD", "")
-        // buildConfigField("String", "ACRA_URI", "\"$acraUri\"")
-        // buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
-        // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS
@@ -169,6 +160,7 @@ dependencies {
     implementation(compose.ui.util)
     implementation(compose.accompanist.systemuicontroller)
 
+    implementation(compose.colorpicker)
     implementation(androidx.interpolator)
 
     implementation(androidx.paging.runtime)
@@ -216,12 +208,19 @@ dependencies {
     // Disk
     implementation(libs.disklrucache)
     implementation(libs.unifile)
+    implementation(libs.junrar)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Preferences
     implementation(libs.preferencektx)
 
     // Dependency injection
     implementation(libs.injekt.core)
+    // SY -->
+    implementation(libs.zip4j)
+    // SY <--
 
     // Image loading
     implementation(platform(libs.coil.bom))
@@ -248,8 +247,14 @@ dependencies {
     implementation(libs.compose.grid)
 
 
+    implementation(libs.google.api.services.drive)
+    implementation(libs.google.api.client.oauth)
+
     // Logging
     implementation(libs.logcat)
+
+    // Crash reports/analytics
+    "standardImplementation"(libs.firebase.analytics)
 
     // Shizuku
     implementation(libs.bundles.shizuku)
@@ -273,6 +278,10 @@ dependencies {
     implementation(libs.seeker)
     // true type parser
     implementation(libs.truetypeparser)
+    // torrserver
+	implementation(libs.torrentserver)
+    // Cast
+    implementation(libs.bundles.cast)
 }
 
 androidComponents {

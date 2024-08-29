@@ -285,7 +285,7 @@
     <string name="pref_skip_filtered_chapters">Bỏ qua các chương đã lọc</string>
     <string name="filter_mode_screen">Màn hình</string>
     <string name="pref_cutout_short">Hiển thị nội dung ở phần rìa</string>
-    <string name="obsolete_extension_message">Phần mở rộng này không khả dụng. Nó có thể không chạy và có thể gây ra lỗi với Aniyomi. Kiến nghị nên Gỡ cài đặt.</string>
+    <string name="obsolete_extension_message">Phần mở rộng này không khả dụng. Nó có thể không chạy và có thể gây ra lỗi với Animetail. Kiến nghị nên Gỡ cài đặt.</string>
     <string name="ext_obsolete">Lỗi thời</string>
     <string name="ext_updates_pending">Cập nhật đang chờ</string>
     <string name="pref_category_library_update">Cập nhật toàn bộ</string>
