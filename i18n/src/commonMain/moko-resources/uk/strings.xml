@@ -168,8 +168,6 @@
     <string name="pref_clear_database_summary">Очистити історію для записів, які не знаходяться у вашій бібліотеці</string>
     <string name="clear_database_completed">Дані видалено</string>
     <string name="version">Версія</string>
-    <string name="pref_enable_acra">Надсилати звіти про падіння</string>
-    <string name="pref_acra_summary">Допомагає виправляти будь-які баги. Особисті дані не передаються</string>
     <string name="login_title">Авторизація до %1$s</string>
     <string name="username">Ім\'я користувача</string>
     <string name="password">Пароль</string>
@@ -262,7 +260,6 @@
     <string name="channel_common">Звичайний</string>
     <string name="pref_read_with_long_tap">Показувати дії при довгому натисканні</string>
     <string name="action_open_in_web_view">Відкрити у WebView</string>
-    <string name="pref_true_color">32-бітний колір</string>
     <string name="pref_skip_read_chapters">Пропускати розділи, відмічені як прочитані</string>
     <string name="pref_color_filter_mode">Режим накладання кольорового фільтру</string>
     <string name="filter_mode_overlay">Накладання</string>
@@ -340,7 +337,6 @@
     <string name="website">Сторінка</string>
     <string name="label_downloaded_only">Тільки завантажені</string>
     <string name="gray_background">Сірий</string>
-    <string name="pref_true_color_summary">Зменшує ефект смугування, але може вплинути на продуктивність</string>
     <string name="pref_library_update_refresh_metadata_summary">Перевірити наявність нової обкладинки та подробиць при оновленні бібліотеки</string>
     <string name="pref_library_update_refresh_metadata">Автоматично оновлювати метадані</string>
     <string name="action_migrate">Мігрувати</string>
@@ -592,7 +588,6 @@
     <string name="pref_user_agent_string">Типовий user agent</string>
     <string name="action_remove_everything">Видалити все</string>
     <string name="pref_reset_user_agent_string">Скинути типовий user agent</string>
-    <string name="loader_rar5_error">Формат RARv5 не підтримується</string>
     <string name="multi_lang">Багатомовне</string>
     <string name="updates_last_update_info">Останнє оновлення бібліотеки: %s</string>
     <string name="missing_storage_permission">Дозволи на зберігання не надано</string>

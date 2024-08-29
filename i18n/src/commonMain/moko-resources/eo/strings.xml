@@ -426,7 +426,6 @@
     <string name="error_saving_cover">Eraro dum kovrila konservado</string>
     <string name="notification_incognito_text">Malŝalti privatan reĝimon</string>
     <string name="pref_incognito_mode">Privata reĝimo</string>
-    <string name="pref_enable_acra">Sendadi raportojn de rompoj</string>
     <string name="pref_tablet_ui_mode">Perforti tabulkomputil-interfaco</string>
     <string name="pref_disable_battery_optimization">Malŝalti bateria optimumigo</string>
     <string name="channel_common">Ofta</string>

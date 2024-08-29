@@ -169,8 +169,6 @@
     <string name="pref_custom_color_filter">Pinili kong filter ng kulay</string>
     <string name="pref_custom_brightness">Pinili kong liwanag</string>
     <string name="pref_crop_borders">Gupitin ang gilid</string>
-    <string name="pref_true_color_summary">Binabawasan ang banding, ngunit maaaring makaapekto ito sa performance</string>
-    <string name="pref_true_color">Totoong kulay (32-bit)</string>
     <string name="pref_show_reading_mode_summary">Mabilis na ipakita ang kasalukuyang ginagamit kapag nakabukas ang reader</string>
     <string name="pref_show_reading_mode">Ipakita ang paraan ng pagbasa</string>
     <string name="pref_show_page_number">Ipakita ang bilang ng pahina</string>
@@ -361,8 +359,6 @@
     <string name="login_title">Mag-login sa %1$s</string>
     <string name="downloaded_only_summary">Pini-filter ang lahat ng mga entry sa iyong akalatan</string>
     <string name="label_downloaded_only">Mga na-download lang</string>
-    <string name="pref_acra_summary">Nakatutulong sa pag-ayos sa mga bug. Walang sensitibong data ang ipapadala</string>
-    <string name="pref_enable_acra">Ipadala ang mga ulat ng pag-crash</string>
     <string name="updated_version">Nai-update patungong bersyon %1$s</string>
     <string name="check_for_updates">Maghanap ng update</string>
     <string name="licenses">Mga lisensiyang open-source</string>
@@ -509,7 +505,7 @@
     <string name="pref_highest">Pinakamataas</string>
     <string name="pref_hide_threshold">Sensitivity para sa pagtatago ng menu sa scroll</string>
     <string name="pref_inverted_colors">Baligtad</string>
-    <string name="relative_time_today">Ngayon</string>
+    <string name="relative_time_today">Ngayong Araw</string>
     <string name="theme_tealturquoise">Teal at Turquoise</string>
     <string name="pref_category_appearance">Hitsura</string>
     <string name="confirm_lock_change">Patotohanan para makumpirma ang pagbabago</string>
@@ -599,7 +595,6 @@
     <string name="pref_reset_user_agent_string">I-reset ang default na string ng user agent</string>
     <string name="pref_user_agent_string">Default na string ng user agent</string>
     <string name="action_remove_everything">Burahin lahat</string>
-    <string name="loader_rar5_error">Di suportado ang format na RARv5</string>
     <string name="appwidget_updates_description">Tingnan ang mga kamakailang nai-update na entry sa iyong aklatan</string>
     <string name="appwidget_unavailable_locked">Di available ang widget kapag nakabukas ang lock</string>
     <string name="update_already_running">May ina-update sa ngayon</string>
@@ -1135,4 +1130,34 @@
     <string name="pref_player_audio_channels_auto_safe">Awto-safe</string>
     <string name="pref_mpv_scripts">Paganahin ang mga script ng MPV</string>
     <string name="pref_mpv_scripts_summary">Kinakailangan ng permiso sa external storage.</string>
+    <string name="pref_webtoon_disable_zoom_out">Patayin ang pag-zoom out</string>
+    <string name="action_replace_repo_title">Umiiral na ang Signing Key Fingerprint</string>
+    <string name="pref_display_profile">Ipasadya ang profile sa display</string>
+    <string name="action_view_upcoming">Tingnan ang mga Paparating na Update</string>
+    <string name="upcoming_guide">Gabay sa Paparating</string>
+    <string name="upcoming_calendar_next">Susunod na Buwan</string>
+    <string name="upcoming_calendar_prev">Nakaraang Buwan</string>
+    <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="action_migrate_duplicate">Ilipat ang kasalukuyang entry</string>
+    <string name="label_upcoming">Paparating</string>
+    <string name="action_add_anyway">Idagdag pa rin</string>
+    <string name="action_replace_repo_message">Ang repository na %1$s ay may magkaparehong Signing Key Fingerprint sa %2$s.
+\nKung ito ay inaasahan, %2$s ang papalitan, kung hindi naman ay makipag-ugnayan sa tagapamahala ng iyong repo.</string>
+    <string name="action_replace_repo">Palitan</string>
+    <string name="relative_time_now">Ngayon</string>
+    <string name="pref_flash_page_interval">Mag-flash kada</string>
+    <string name="pref_flash_with">Mag-flash gamit ang</string>
+    <string name="pref_flash_style_white_black">Puti at Itim</string>
+    <string name="pref_flash_duration">Tagal ng pag-flash</string>
+    <string name="manga_interval_expected_update_null">Ang manga na ito ay nakumpleto na, o walang nahulaang petsa ng paglabas.</string>
+    <string name="file_picker_uri_permission_unsupported">Bigong makakuha ng patuloy na pag-access sa folder. Ang app ay magkilos ng di-inaasahan.</string>
+    <string name="pref_flash_duration_summary">%1$s ms</string>
+    <string name="anime_interval_expected_update_null">Ang anime na ito ay nakumpleto na, o walang nahulaang petsa ng paglabas.</string>
+    <string name="pref_flash_style_black">Itim</string>
+    <string name="pref_flash_style_white">Puti</string>
+    <string name="player_subtitle_settings_filters">Mga Filter</string>
+    <string name="player_filters_brightness">Liwanag</string>
+    <string name="player_filters_warning">Ang ilang filer ay maaring di-gumana gamit ang kasalukuyang video driver</string>
+    <string name="pref_sub_select_conf">I-edit ang advanced na configuration sa pagpili ng subtitle track</string>
 </resources>

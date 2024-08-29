@@ -147,8 +147,6 @@
     <string name="pref_clear_database_summary">Verlauf für Einträge löschen, die nicht in deiner Bibliothek gespeichert sind</string>
     <string name="clear_database_completed">Einträge gelöscht</string>
     <string name="version">Version</string>
-    <string name="pref_enable_acra">Fehlerberichte senden</string>
-    <string name="pref_acra_summary">Hilft bei der Behebung von Fehlern. Keine sensiblen Daten werden gesendet</string>
     <string name="login_title">Bei %1$s anmelden</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
@@ -267,7 +265,6 @@
     <string name="transition_pages_loading">Lade Seiten…</string>
     <string name="transition_pages_error">Seiten konnten nicht geladen werden: %1$s</string>
     <string name="action_open_in_web_view">In WebView öffnen</string>
-    <string name="pref_true_color">32-Bit-Farben</string>
     <string name="pref_skip_read_chapters">Gelesene Kapitel überspringen</string>
     <string name="pref_read_with_long_tap">Aktionen bei langem Antippen anzeigen</string>
     <string name="filter_mode_overlay">Overlay</string>
@@ -359,7 +356,6 @@
     <string name="gray_background">Grau</string>
     <string name="viewer">Lesemodus</string>
     <string name="pref_category_for_this_series">Für diese Serie</string>
-    <string name="pref_true_color_summary">Reduziert Streifenbildung, könnte aber die Leistung beeinflussen</string>
     <string name="battery_optimization_setting_activity_not_found">Geräteeinstellungen konnten nicht geöffnet werden</string>
     <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den externen Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Trackingbutton ein.</string>
     <string name="pref_refresh_library_covers">Bibliothekscover aktualisieren</string>
@@ -597,7 +593,6 @@
     <string name="pref_user_agent_string">Standard-User-Agent-Text</string>
     <string name="pref_reset_user_agent_string">Standard-User-Agent-Text zurücksetzen</string>
     <string name="action_remove_everything">Alles entfernen</string>
-    <string name="loader_rar5_error">Das RARv5-Format wird nicht unterstützt</string>
     <string name="appwidget_updates_description">Deine kürzlich aktualisierten Bibliothekseinträge ansehen</string>
     <string name="appwidget_unavailable_locked">Widget ist nicht verfügbar, wenn die App-Sperre aktiviert ist</string>
     <string name="update_already_running">Eine Aktualisierung ist bereits im Gange</string>
@@ -1131,4 +1126,16 @@
     <string name="pref_player_audio_channels">Audiokanäle</string>
     <string name="pref_player_audio_channels_reverse_stereo">Stereo (Umgekehrt)</string>
     <string name="pref_player_audio_channels_auto">Automatisch</string>
+    <string name="label_upcoming">Bevorstehend</string>
+    <string name="action_add_anyway">Trotzdem hinzufügen</string>
+    <string name="pref_display_profile">Benutzerdefiniertes Anzeigeprofil</string>
+    <string name="upcoming_calendar_prev">Vorheriger Monat</string>
+    <string name="action_migrate_duplicate">Vorhandenen Eintrag migrieren</string>
+    <string name="action_replace_repo">Ersetzen</string>
+    <string name="action_view_upcoming">Kommende Updates anzeigen</string>
+    <string name="upcoming_calendar_next">Nächsten Monat</string>
+    <string name="pref_mpv_scripts_summary">Benötigt externe Speicherberechtigung.</string>
+    <string name="pref_webtoon_disable_zoom_out">Verkleinern deaktivieren</string>
+    <string name="action_replace_repo_title">Der Signaturschlüssel-Fingerabdruck ist bereits vorhanden</string>
+    <string name="pref_mpv_scripts">MPV-Skripte aktivieren</string>
 </resources>

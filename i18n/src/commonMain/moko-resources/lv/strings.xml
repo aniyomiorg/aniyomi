@@ -399,12 +399,10 @@
     <string name="action_track">Sekot</string>
     <string name="enhanced_services">Uzlabotie pakalpojumi</string>
     <string name="help_translate">Palīdzi tulkot</string>
-    <string name="pref_enable_acra">Sūtīt avārijas ziņojumus</string>
     <string name="cache_deleted">Kešatmiņa nodzēsta. %1$d faili ir izdzēsti</string>
     <string name="action_display_cover_only_grid">Tikai vāka režģis</string>
     <string name="username">Lietotājvārds</string>
     <string name="password">Parole</string>
-    <string name="pref_acra_summary">Palīdz novērst jebkādas problēmas. Sensitīvi dati netiks nosūtīti</string>
     <string name="email">E-pasta adrese</string>
     <string name="login">Pieteikumvārds</string>
     <string name="pref_incognito_mode">Inkognito režīms</string>
@@ -633,7 +631,6 @@
     <string name="pref_appearance_summary">Tēma, datuma un laika formāti</string>
     <string name="pref_library_summary">Kategorijas, globāli atjauninājumi, nodaļu vilkšana</string>
     <string name="appwidget_unavailable_locked">Logrīks nav pieejams, ja ir iespējota lietotņu bloķēšana</string>
-    <string name="loader_rar5_error">RARv5 formāts netiek atbalstīts</string>
     <string name="hour_short">%dh</string>
     <string name="internal_error">InternalError: Par plašāku informāciju skatiet avārijas žurnālu</string>
     <string name="delete_category_confirmation">Vai vēlaties dzēst kategoriju \"%s\"\?</string>
