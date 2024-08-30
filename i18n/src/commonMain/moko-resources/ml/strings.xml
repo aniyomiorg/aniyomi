@@ -131,4 +131,9 @@
     <string name="action_move_to_bottom">താഴേക്ക് നീക്കുക</string>
     <string name="action_share">പങ്കിടുക</string>
     <string name="action_display">പ്രദർശിപ്പിക്കുക</string>
+    <string name="action_sort_airing_time">സംപ്രേഷണ സമയം</string>
+    <string name="action_filter_started">ആരംഭിച്ചു</string>
+    <string name="action_reorganize_by">പുനഃക്രമീകരിക്കുക</string>
+    <string name="action_revert_to_default">സ്ഥിരസ്ഥിതിയിലേക്ക് മടങ്ങുക</string>
+    <string name="action_undo">പഴയപടിയാക്കുക</string>
 </resources>

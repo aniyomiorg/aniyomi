@@ -462,7 +462,6 @@
     <string name="action_display_cover_only_grid">केवलं मुखचित्रेण इष्टिकाविन्यासः</string>
     <string name="privacy_policy">गुप्ततानीतिः</string>
     <string name="licenses">अपावृतप्रभावकानि अनुज्ञापत्राणि</string>
-    <string name="pref_enable_acra">ध्वंसावेदनानि प्रेषयतु</string>
     <string name="delete_downloads_for_manga">अवारोपिताध्यायान् नाशयानि किम्</string>
     <string name="set_chapter_settings_as_default">प्राथमिकमिव स्थापयतु</string>
     <string name="no_chapters_error">काः अपि अध्यायाः न लभ्याः</string>
@@ -522,7 +521,6 @@
     <string name="confirm_delete_chapters">त्वं निश्चितरूपेण सङ्गृहीतान् अध्यायान् नाशयितुम् इच्छसि किम् \?</string>
     <string name="pref_dump_crash_logs_summary">व्युत्पादकेभ्यः प्रसारयितुं दोषदत्तम् एकस्यां सञ्चिकायां रक्षति</string>
     <string name="confirm_set_chapter_settings">इमानि समायोजनानि प्राथमिकानि इव रक्षितुं त्वं निश्चितं किम्</string>
-    <string name="pref_acra_summary">स्खलितानां परिहरणे साहाय्यं करिष्यति। संवेदनशीलदत्तांशाः न प्रेषिष्यते॥</string>
     <string name="pref_disable_battery_optimization_summary">पृष्ठभूमौ ग्रन्थालयस्य नवीकरणेषु प्रतिलेखनेषु च साहाय्यं करोति</string>
     <string name="dialog_with_checkbox_remove_description">अस्य अध्यायस्य पठिततिथिम् एतत् निष्करोति। त्वं निश्चितं किम्</string>
     <string name="cache_delete_error">काष्वस्तु मार्जयति सति एकः दोषः भूतः</string>

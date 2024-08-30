@@ -147,8 +147,6 @@
     <string name="pref_clear_database_summary">Hapus riwayat untuk entri yang tidak disimpan di perpustakaan Anda</string>
     <string name="clear_database_completed">Entri dihapus</string>
     <string name="version">Versi</string>
-    <string name="pref_enable_acra">Kirim laporan kerusakan</string>
-    <string name="pref_acra_summary">Bantu memperbaiki bug. Tidak ada data sensitif yang akan dikirim</string>
     <string name="login_title">Masuk ke %1$s</string>
     <string name="username">Nama pengguna</string>
     <string name="password">Kata sandi</string>
@@ -597,7 +595,6 @@
     <string name="pref_user_agent_string">String agen pengguna default</string>
     <string name="pref_reset_user_agent_string">Setel ulang string agen pengguna default</string>
     <string name="action_remove_everything">Hapus semuanya</string>
-    <string name="loader_rar5_error">Format RARv5 tidak didukung</string>
     <string name="appwidget_updates_description">Lihat entri pustaka Anda yang baru saja diperbarui</string>
     <string name="appwidget_unavailable_locked">Widget tidak tersedia saat kunci aplikasi diaktifkan</string>
     <string name="update_already_running">Pembaruan sudah berjalan</string>

@@ -120,8 +120,6 @@
     <string name="pref_clear_database_summary">Elimina la cronologia delle voci che non sono presenti nella libreria</string>
     <string name="clear_database_completed">Elementi eliminati</string>
     <string name="version">Versione</string>
-    <string name="pref_enable_acra">Invia segnalazioni crash</string>
-    <string name="pref_acra_summary">Aiuta a correggere eventuali bug. Non verranno inviati dati sensibili</string>
     <string name="login_title">Accedi a %1$s</string>
     <string name="username">Nome utente</string>
     <string name="password">Password</string>
@@ -261,7 +259,6 @@
     <string name="transition_pages_loading">Caricamento pagine…</string>
     <string name="transition_pages_error">Caricamento pagine fallito: %1$s</string>
     <string name="action_open_in_web_view">Apri in WebView</string>
-    <string name="pref_true_color">Colori a 32 bit</string>
     <string name="pref_skip_read_chapters">Salta i capitoli segnati come letti</string>
     <string name="filter_mode_screen">Schermo</string>
     <string name="pref_read_with_long_tap">Mostra azioni con un tocco prolungato</string>
@@ -355,7 +352,6 @@
     <string name="pref_refresh_library_covers">Aggiorna le copertine della libreria</string>
     <string name="restore_duration">%02d min, %02d sec</string>
     <string name="tracking_info">Sincronizzazione a senso unico per aggiornare l\'avanzamento dei capitoli sui servizi di tracking. Imposta il tracking per le singole voci dai loro pulsanti di tracking.</string>
-    <string name="pref_true_color_summary">Riduce il banding, ma potrebbe influire sulle prestazioni</string>
     <string name="gray_background">Grigio</string>
     <string name="page_list_empty_error">Nessuna pagina trovata</string>
     <string name="sort_by_upload_date">Per data di aggiunta</string>
@@ -591,7 +587,6 @@
     <string name="pref_reset_user_agent_string">Ripristina la stringa «user agent» del browser</string>
     <string name="pref_user_agent_string">Stringa «user agent» del browser</string>
     <string name="action_remove_everything">Rimuovi tutto</string>
-    <string name="loader_rar5_error">Il formato RARv5 non è supportato</string>
     <string name="appwidget_unavailable_locked">Widget non disponibile quando il blocco app è attivo</string>
     <string name="appwidget_updates_description">Vedi le voci aggiornate di recente</string>
     <string name="update_already_running">È già in corso un aggiornamento</string>

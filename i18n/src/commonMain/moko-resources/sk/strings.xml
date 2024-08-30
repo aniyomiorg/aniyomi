@@ -184,8 +184,6 @@
     <string name="obsolete_extension_message">Toto rozšírenie už nie je k dispozícii.</string>
     <string name="clear_database_completed">Záznamy boli odstránené</string>
     <string name="version">Verzia</string>
-    <string name="pref_enable_acra">Odosielať správy o zlyhaní</string>
-    <string name="pref_acra_summary">Pomáha opraviť akékoľvek chyby. Nebudú odoslané žiadne citlivé údaje</string>
     <string name="login_title">Prihláste sa do %1$s</string>
     <string name="username">Užívateľské meno</string>
     <string name="password">Heslo</string>
@@ -600,7 +598,6 @@
     <string name="skipped_reason_completed">Preskočené, pretože séria je dokončená</string>
     <string name="skipped_reason_not_caught_up">Preskočené, pretože obsahuje neprečítané kapitoly</string>
     <string name="skipped_reason_not_started">Preskočené, pretože neboli prečítané žiadne kapitoly</string>
-    <string name="loader_rar5_error">Formát RARv5 nie je podporovaný</string>
     <string name="label_local">Lokálna</string>
     <string name="label_downloaded">Stiahnuté</string>
     <string name="label_stats">Štatistiky</string>

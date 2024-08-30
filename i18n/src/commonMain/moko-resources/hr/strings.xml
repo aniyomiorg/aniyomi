@@ -203,8 +203,6 @@
     <string name="pref_custom_color_filter">Prilagođeni filtar boja</string>
     <string name="pref_custom_brightness">Prilagođena svjetlina</string>
     <string name="pref_crop_borders">Odreži rubove</string>
-    <string name="pref_true_color_summary">Smanjuje oštre prijelaze između nijansi, ali može utjecati na performansu</string>
-    <string name="pref_true_color">32-bitna boja</string>
     <string name="pref_show_page_number">Prikaži broj stranice</string>
     <string name="pref_double_tap_anim_speed">Brzina animacije dvostrukog dodira</string>
     <string name="pref_page_transitions">Animiraj prijelaze stranica</string>
@@ -318,8 +316,6 @@
     <string name="login_title">Prijavi se na %1$s</string>
     <string name="downloaded_only_summary">Filtrira sve unose u biblioteci</string>
     <string name="label_downloaded_only">Samo preuzeto</string>
-    <string name="pref_acra_summary">Pomaže pri ispravljanju grešaka. Ne šalju se nikoji privatni podaci</string>
-    <string name="pref_enable_acra">Šalji izvještaje o iznenadnim prekidima rada aplikacije</string>
     <string name="check_for_updates">Traži nove verzije</string>
     <string name="licenses">Licence otvorenog koda</string>
     <string name="version">Verzija</string>
@@ -451,7 +447,7 @@
     <string name="include">Uključi: %s</string>
     <string name="action_sort_chapter_fetch_date">Datum preuzimanja poglavlja</string>
     <string name="action_show_errors">Dodirni za prikaz detalja</string>
-    <string name="update_check_eol">Ove verzija androida više nije podržana</string>
+    <string name="update_check_eol">Ova Android verzija više nije podržana</string>
     <string name="clipboard_copy_error">Kopiranje nije uspješno</string>
     <string name="rotation_landscape">Ležeće</string>
     <string name="rotation_portrait">Uspravno</string>
@@ -561,7 +557,6 @@
     <string name="on_hold_list">Na popisu čekanja</string>
     <string name="unfinished_list">Popis nedovršenih</string>
     <string name="download_notifier_split_page_not_found">Stranica %d nije pronađena tijekom rastavljanja</string>
-    <string name="loader_rar5_error">RARv5 format nije podržan</string>
     <string name="download_ahead_info">Radi samo ako je trenutačno i sljedeće poglavlje već preuzeto.</string>
     <string name="network_not_metered">Samo na mrežom bez ograničenja</string>
     <string name="action_sort_unread_count">Broj nepročitanih</string>
@@ -1128,4 +1123,40 @@
     <string name="pref_player_audio_channels_auto_safe">Automatsko spremanje</string>
     <string name="pref_mpv_scripts">Omogući MPV skripta</string>
     <string name="pref_mpv_scripts_summary">Potrebna je dozvola za eksterno spremanje.</string>
+    <string name="relative_time_now">Sada</string>
+    <string name="pref_flash_duration">Trajanje bljeskalice</string>
+    <string name="pref_flash_duration_summary">%1$s ms</string>
+    <string name="pref_flash_page_interval">Bljesak svakih</string>
+    <string name="pref_flash_with">Bljesak sa</string>
+    <string name="pref_flash_style_black">Crna</string>
+    <string name="pref_flash_style_white">Bijela</string>
+    <string name="pref_flash_style_white_black">Bijela i crna</string>
+    <string name="manga_interval_expected_update_null">Ovaj je manga gotov ili nema predviđeni datum izdavanja.</string>
+    <string name="anime_interval_expected_update_null">Ovaj je anime gotov ili nema predviđeni datum izdavanja.</string>
+    <string name="action_view_upcoming">Pogledaj aktualiziranja nadolazećih</string>
+    <string name="upcoming_guide">Vodič za nadolazeće</string>
+    <string name="upcoming_calendar_prev">Prethodni mjesec</string>
+    <string name="file_picker_uri_permission_unsupported">Neuspjelo dobivanje pristupa trajnoj mapi. Aplikacija će se može ponašati neočekivano.</string>
+    <string name="mpv_media_title">%1$s – E%2$s – %3$s</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="player_subtitle_settings_filters">Filtri</string>
+    <string name="player_filters_brightness">Svjetlina</string>
+    <string name="player_filters_saturation">Zasićenost</string>
+    <string name="player_filters_gamma">Gamut</string>
+    <string name="player_filters_hue">Nijansa</string>
+    <string name="player_filters_warning">Neki filtri možda neće raditi s tvojim trenutačnim pokretačem videa</string>
+    <string name="pref_webtoon_disable_zoom_out">Deaktiviraj smanjivanje prikaza</string>
+    <string name="label_upcoming">Nadolazeće</string>
+    <string name="action_add_anyway">Svejdno dodaj</string>
+    <string name="action_migrate_duplicate">Migriraj postojeći unos</string>
+    <string name="action_replace_repo">Zamijeni</string>
+    <string name="action_replace_repo_message">Repozitorij %1$s ima isti ključ otiska prsta za potpisivanje kao %2$s.
+\nAko se to očekuje %2$s će se zamijeniti, u suprotnom se obrati svom održavatelju repozitorija.</string>
+    <string name="pref_display_profile">Prilagođeni profil prikaza</string>
+    <string name="action_replace_repo_title">Ključ otiska prsta za potpisivanje već postoji</string>
+    <string name="upcoming_calendar_next">Sljedeći mjesec</string>
+    <string name="pref_sub_select_conf">Uredi naprednu konfiguraciju odabira titlova</string>
+    <string name="player_filters_contrast">Kontrast</string>
+    <string name="download_threads_number">Broj niti</string>
+    <string name="download_threads_number_summary">Broj niti koje se koriste pri preuzimanju, može doći do blokade IP adrese ako je broj prevelik, 4 je dobar broj za izbjegavanje visoke opterećenosti servera.</string>
 </resources>
