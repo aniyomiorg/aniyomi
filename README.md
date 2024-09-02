@@ -28,6 +28,12 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 <div align="left">
 
 Features include:
+* Animetail:
+    * Support for Cast functionality
+    * Support themes monet
+    * Android tv compatibility (only banner)
+    * Optimized Discord Rich Presence for Manga and Anime, no external API.
+
 * Kuukiyomi:
     * Torrent support(Needs right extensions) (@Diegopyl1209)
     * Custom Theme support
