@@ -1120,4 +1120,20 @@
     <string name="safe_download">Modalità sicura per scaricare gli anime</string>
     <string name="safe_download_summary">Attiva la modalità di download a singolo thread e no range</string>
     <string name="download_threads_number">Numero di thread</string>
+    <string name="label_upcoming">In arrivo</string>
+    <string name="relative_time_now">Ora</string>
+    <string name="action_replace_repo">Rimpiazza</string>
+    <string name="pref_flash_duration">Durata flash</string>
+    <string name="pref_flash_duration_summary">%1$s ms</string>
+    <string name="pref_flash_page_interval">Flash ogni</string>
+    <string name="pref_flash_with">Flash con</string>
+    <string name="pref_flash_style_black">Nero</string>
+    <string name="pref_flash_style_white">Bianco</string>
+    <string name="pref_flash_style_white_black">Bianco e Nero</string>
+    <string name="player_filters_hue">Tono</string>
+    <string name="player_filters_warning">Alcuni filtri potrebbero non funzionare con i tuoi driver video attuali</string>
+    <string name="pref_player_audio_channels_auto">Auto</string>
+    <string name="pref_mpv_scripts_summary">Necessita permesso a spazio di archiviazione esterno.</string>
+    <string name="action_add_anyway">Aggiungi comunque</string>
+    <string name="action_migrate_duplicate">Migra elemento esistente</string>
 </resources>
