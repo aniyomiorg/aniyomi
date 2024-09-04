@@ -263,7 +263,7 @@
     <string name="pref_skip_read_chapters">Bỏ qua chương đã đọc</string>
     <string name="pref_color_filter_mode">Chế độ hòa trộn bộ lọc màu</string>
     <string name="filter_mode_overlay">Lớp phủ (Overlay)</string>
-    <string name="filter_mode_multiply">Trộn màu nhân</string>
+    <string name="filter_mode_multiply">Trộn màu nhân (Multiply)</string>
     <string name="label_help">Trợ giúp</string>
     <string name="no_results_found">Không tìm thấy kết quả nào</string>
     <string name="migration_selection_prompt">Chọn 1 nguồn để di chuyển từ</string>
@@ -283,7 +283,7 @@
     <string name="pref_category_reading">Đang đọc</string>
     <string name="pref_always_show_chapter_transition">Luôn hiển thị chuyển tiếp chương</string>
     <string name="pref_skip_filtered_chapters">Bỏ qua các chương đã lọc</string>
-    <string name="filter_mode_screen">Trộn màu phủ</string>
+    <string name="filter_mode_screen">Trộn màu phủ (Screen)</string>
     <string name="pref_cutout_short">Hiển thị nội dung ở phần rìa</string>
     <string name="obsolete_extension_message">Phần mở rộng này không khả dụng. Nó có thể không chạy và có thể gây ra lỗi với Aniyomi. Kiến nghị nên Gỡ cài đặt.</string>
     <string name="ext_obsolete">Lỗi thời</string>
@@ -348,8 +348,8 @@
     <string name="backup_in_progress">Sao lưu đang trong quá trình thực hiện</string>
     <string name="clear_history_confirmation">Bạn có chắc không\? Tất cả lịch sử sẽ bị xoá.</string>
     <string name="track_finished_reading_date">Ngày kết thúc</string>
-    <string name="filter_mode_lighten">Trộn màu tránh / làm sáng</string>
-    <string name="filter_mode_darken">Trộn màu cháy sáng / làm tối</string>
+    <string name="filter_mode_lighten">Trộn màu tránh / làm sáng (Dodge / Lighten)</string>
+    <string name="filter_mode_darken">Trộn màu cháy sáng / làm tối (Burn / Darken)</string>
     <string name="downloaded_chapters">Các chương đã tải</string>
     <string name="requires_app_restart">Yêu cầu khởi động lại ứng dụng để có hiệu lực</string>
     <string name="edge_nav">Dạng góc cạnh</string>
@@ -774,7 +774,7 @@
     <string name="download_error">Lỗi</string>
     <string name="download_paused">Đã tạm dừng</string>
     <string name="also_set_chapter_settings_for_library">Ngoài ra có hiệu lực với tất cả truyện trong thư viện</string>
-    <string name="dialog_with_checkbox_reset">Làm mới mọi chương của truyện này</string>
+    <string name="dialog_with_checkbox_reset">Đặt lại mọi chương của manga này</string>
     <string name="download_insufficient_space">Không thể tãi chương vì dung lượng bộ nhớ xuống thấp</string>
     <string name="download_queue_size_warning">Cảnh báo: các tải xuống hàng loạt lớn có thể dẫn đến các nguồn trở nên chậm hơn và / hoặc chặn Aniyomi. Nhấn vào để tìm hiểu thêm.</string>
     <string name="information_webview_required">Aniyomi yêu cầu phải có WebView</string>
@@ -973,9 +973,9 @@
     <string name="action_change_intro_length">Thay đổi độ dài intro</string>
     <string name="relative_time_now">Bây giờ</string>
     <string name="action_replace_repo">Thay thế</string>
-    <string name="action_replace_repo_message">Repository %1$s có cùng Signing Key Fingerprint như %2$s.
+    <string name="action_replace_repo_message">Repository %1$s có cùng Chữ ký Khoá Vân Tay như %2$s.
 \nNếu bạn đang muốn điều này, %2$s sẽ được thay thế. Nếu không hãy liên hệ với người bảo trì repo của bạn.</string>
-    <string name="action_replace_repo_title">Signing Key Fingerprint đã tồn tại</string>
+    <string name="action_replace_repo_title">Chữ ký Khoá Vân Tay đã tồn tại</string>
     <string name="pref_flash_duration_summary">%1$s ms</string>
     <string name="pref_flash_duration">Thời gian làm mới</string>
     <string name="pref_flash_page_interval">Làm mới sau</string>
@@ -1091,7 +1091,7 @@
     <string name="player_subtitle_font_text_field">Tên phông chữ</string>
     <string name="player_subtitle_delay">Độ trễ phụ đề</string>
     <string name="snack_add_to_anime_library">Thêm anime vào thư viện?</string>
-    <string name="dialog_with_checkbox_reset_anime">Đặt lại tất cả các tập cho anime này</string>
+    <string name="dialog_with_checkbox_reset_anime">Đặt lại mọi tập cho anime này</string>
     <string name="player_aniskip_ed">Bỏ qua Ending</string>
     <string name="data_saver_image_format_summary_off">Kích thước tệp Jpeg nhỏ hơn đáng kể so với Webp (có nghĩa là lưu được nhiều dữ liệu hơn), nhưng nó cũng khiến hình ảnh mất chất lượng nhiều hơn.
 \nHiện đang nén thành Webp</string>
@@ -1154,7 +1154,7 @@
     <string name="pref_gpu_next_title">Bật gpu-next</string>
     <string name="label_upcoming">Sắp tới</string>
     <string name="action_add_anyway">Vẫn thêm</string>
-    <string name="action_migrate_duplicate">Di chuyển mục nhập hiện có</string>
+    <string name="action_migrate_duplicate">Gộp các mục đã có</string>
     <string name="label_history">Manga</string>
     <string name="download_slots_info">Sẽ chỉ tải xuống đồng thời từ các nguồn tự lưu trữ hoặc không được kiểm soát</string>
     <string name="unseen">Bỏ đã xem</string>
