@@ -147,6 +147,7 @@ android {
 
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
     implementation(projects.sourceApi)
