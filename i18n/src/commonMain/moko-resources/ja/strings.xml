@@ -844,7 +844,6 @@
     <string name="action_sort_airing_time">放送時間</string>
     <string name="action_reorganize_by">再注文</string>
     <string name="action_migrate_duplicate">既存のエントリを移行する</string>
-    <string name="theme_nord"></string>
     <string name="action_add_repo">リポジトリを追加</string>
     <string name="label_add_repo_input">リポジトリのURL</string>
     <string name="action_add_repo_message">Aniyomi にリポジトリを追加します。これは、\"index.min.json\"で終わる URL である必要があります。</string>
