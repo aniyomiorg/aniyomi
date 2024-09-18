@@ -85,12 +85,6 @@ object SettingsLibraryScreen : SearchableSettings {
         val userCategoriesCount = allCategories.filterNot(Category::isSystemCategory).size
         val userAnimeCategoriesCount = allAnimeCategories.filterNot(Category::isSystemCategory).size
 
-        val defaultCategory by libraryPreferences.defaultMangaCategory().collectAsState()
-        val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
-        val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
-        val selectedAnimeCategory =
-            allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
-
         // For default category
         val mangaIds = listOf(libraryPreferences.defaultMangaCategory().defaultValue()) +
             allCategories.fastMap { it.id.toInt() }
@@ -117,8 +111,6 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultAnimeCategory(),
                     title = stringResource(MR.strings.default_anime_category),
-                    subtitle = selectedAnimeCategory?.visualName
-                        ?: stringResource(MR.strings.default_category_summary),
                     entries = animeIds.zip(animeLabels).toMap().toImmutableMap(),
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -133,7 +125,6 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultMangaCategory(),
                     title = stringResource(MR.strings.default_manga_category),
-                    subtitle = selectedCategory?.visualName ?: stringResource(MR.strings.default_category_summary),
                     entries = mangaIds.zip(mangaLabels).toMap().toImmutableMap(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
