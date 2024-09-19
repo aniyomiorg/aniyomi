@@ -76,8 +76,11 @@ class BackupRestorer(
         val backupMangaMaps = backup.backupSources + backup.backupBrokenSources.map { it.toBackupSource() }
         mangaSourceMapping = backupMangaMaps.associate { it.sourceId to it.name }
 
-        if (options.library) {
-            restoreAmount += backup.backupManga.size + backup.backupAnime.size + 2 // +2 for anime and manga categories
+        if (options.libraryEntries) {
+            restoreAmount += backup.backupManga.size + backup.backupAnime.size
+        }
+        if (options.categories) {
+            restoreAmount += 2 // +2 for anime and manga categories
         }
         if (options.appSettings) {
             restoreAmount += 1
@@ -90,7 +93,7 @@ class BackupRestorer(
         }
 
         coroutineScope {
-            if (options.library) {
+            if (options.categories) {
                 restoreCategories(
                     backupAnimeCategories = backup.backupAnimeCategories,
                     backupMangaCategories = backup.backupCategories,
@@ -102,9 +105,9 @@ class BackupRestorer(
             if (options.sourceSettings) {
                 restoreSourcePreferences(backup.backupSourcePreferences)
             }
-            if (options.library) {
-                restoreAnime(backup.backupAnime, backup.backupAnimeCategories)
-                restoreManga(backup.backupManga, backup.backupCategories)
+            if (options.libraryEntries) {
+                restoreAnime(backup.backupAnime, if (options.categories) backup.backupAnimeCategories else emptyList())
+                restoreManga(backup.backupManga, if (options.categories) backup.backupCategories else emptyList())
             }
             if (options.extensions) {
                 restoreExtensions(backup.backupExtensions)

@@ -84,15 +84,15 @@ class BackupCreator(
                 throw IllegalStateException(context.stringResource(MR.strings.create_backup_file_error))
             }
 
-            val databaseAnime = getAnimeFavorites.await()
-            val databaseManga = getMangaFavorites.await()
+            val backupAnime = backupAnimes(getAnimeFavorites.await(), options)
+            val backupManga = backupMangas(getMangaFavorites.await(), options)
             val backup = Backup(
-                backupManga = backupMangas(databaseManga, options),
+                backupManga = backupManga,
                 backupCategories = backupMangaCategories(options),
-                backupAnime = backupAnimes(databaseAnime, options),
+                backupAnime = backupAnime,
                 backupAnimeCategories = backupAnimeCategories(options),
-                backupSources = backupMangaSources(databaseManga),
-                backupAnimeSources = backupAnimeSources(databaseAnime),
+                backupSources = backupMangaSources(backupManga),
+                backupAnimeSources = backupAnimeSources(backupAnime),
                 backupPreferences = backupAppPreferences(options),
                 backupSourcePreferences = backupSourcePreferences(options),
                 backupExtensions = backupExtensions(options),
@@ -141,17 +141,21 @@ class BackupCreator(
     }
 
     private suspend fun backupMangas(mangas: List<Manga>, options: BackupOptions): List<BackupManga> {
+        if (!options.libraryEntries) return emptyList()
+
         return mangaBackupCreator.backupMangas(mangas, options)
     }
 
     private suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
+        if (!options.libraryEntries) return emptyList()
+
         return animeBackupCreator.backupAnimes(animes, options)
     }
 
-    private fun backupAnimeSources(animes: List<Anime>): List<BackupAnimeSource> {
+    private fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
         return sourcesBackupCreator.backupAnimeSources(animes)
     }
-    private fun backupMangaSources(mangas: List<Manga>): List<BackupSource> {
+    private fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
         return sourcesBackupCreator.backupMangaSources(mangas)
     }
 

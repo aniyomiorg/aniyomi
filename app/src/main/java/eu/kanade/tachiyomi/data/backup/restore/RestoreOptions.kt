@@ -5,27 +5,34 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 
 data class RestoreOptions(
-    val library: Boolean = true,
+    val libraryEntries: Boolean = true,
+    val categories: Boolean = true,
     val appSettings: Boolean = true,
     val sourceSettings: Boolean = true,
     val extensions: Boolean = false,
 ) {
 
     fun asBooleanArray() = booleanArrayOf(
-        library,
+        libraryEntries,
+        categories,
         appSettings,
         sourceSettings,
         extensions,
     )
 
-    fun anyEnabled() = library || appSettings || sourceSettings || extensions
+    fun canRestore() = libraryEntries || categories || appSettings || sourceSettings || extensions
 
     companion object {
         val options = persistentListOf(
             Entry(
                 label = MR.strings.label_library,
-                getter = RestoreOptions::library,
-                setter = { options, enabled -> options.copy(library = enabled) },
+                getter = RestoreOptions::libraryEntries,
+                setter = { options, enabled -> options.copy(libraryEntries = enabled) },
+            ),
+            Entry(
+                label = MR.strings.categories,
+                getter = RestoreOptions::categories,
+                setter = { options, enabled -> options.copy(categories = enabled) },
             ),
             Entry(
                 label = MR.strings.app_settings,
@@ -45,10 +52,11 @@ data class RestoreOptions(
         )
 
         fun fromBooleanArray(array: BooleanArray) = RestoreOptions(
-            library = array[0],
-            appSettings = array[1],
-            sourceSettings = array[2],
-            extensions = array[3],
+            libraryEntries = array[0],
+            categories = array[1],
+            appSettings = array[2],
+            sourceSettings = array[3],
+            extensions = array[4],
         )
     }
 
