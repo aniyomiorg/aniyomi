@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">名称</string>
-    <string name="categories">分类</string>
+    <string name="categories">类别</string>
     <string name="manga">漫画</string>
     <string name="chapters">章节</string>
     <string name="history">历史记录</string>
@@ -1147,4 +1147,20 @@
     <string name="pref_flash_style_white_black">黑白</string>
     <string name="pref_flash_style_black">黑色</string>
     <string name="pref_flash_style_white">白色</string>
+    <string name="player_subtitle_settings_filters">滤镜</string>
+    <string name="player_filters_saturation">饱和度</string>
+    <string name="player_filters_contrast">对比度</string>
+    <string name="pref_flash_duration">闪光时间</string>
+    <string name="pref_flash_page_interval">每次都闪烁</string>
+    <string name="pref_flash_with">同时闪光</string>
+    <string name="manga_interval_expected_update_null">这个漫画没有完结，或没有确定的连载日。</string>
+    <string name="anime_interval_expected_update_null">这个漫画没有完结，或没有确定的连载日。</string>
+    <string name="file_picker_uri_permission_unsupported">获取持续存储权限失败，本应用可能存在意外错误。</string>
+    <string name="pref_sub_select_conf">记住编辑外部字幕的设置</string>
+    <string name="player_filters_brightness">明亮度</string>
+    <string name="player_filters_gamma">Gamma</string>
+    <string name="player_filters_hue">色调</string>
+    <string name="player_filters_warning">一些滤镜无法在你现有的视频驱动下生效</string>
+    <string name="pref_display_profile">自定义显示特性文件</string>
+    <string name="pref_media_control_chapter_seeking_summary">开启后，若找不到其他章节，点击下一页将会唤醒跳过开头按钮</string>
 </resources>
