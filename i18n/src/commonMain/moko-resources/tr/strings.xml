@@ -759,7 +759,7 @@
     <string name="onboarding_storage_help_action">Depolama kılavuzu</string>
     <string name="action_add_repo">Depo ekle</string>
     <string name="label_add_repo_input">Depo bağlantısı</string>
-    <string name="action_add_repo_message">Aniyomi\'ye ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
+    <string name="action_add_repo_message">Animetail\'ye ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
     <string name="error_repo_exists">Bu depo zaten var!</string>
     <string name="action_delete_repo">Depoyu sil</string>
     <string name="invalid_repo_name">Geçersiz depo bağlantısı</string>

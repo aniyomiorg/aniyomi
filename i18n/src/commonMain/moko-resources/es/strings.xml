@@ -764,7 +764,7 @@
     <string name="error_repo_exists">El repositorio ya existe!</string>
     <string name="pref_library_update_smart_update">Actualizaciones inteligentes</string>
     <string name="invalid_repo_name">La dirección URL del repositorio no parece ser correcta</string>
-    <string name="action_add_repo_message">Añade más repositorios a Aniyomi; la dirección URL tiene que terminar en «index.min.json».</string>
+    <string name="action_add_repo_message">Añade más repositorios a Animetail; la dirección URL tiene que terminar en «index.min.json».</string>
     <string name="delete_repo_confirmation">¿Seguro que quieres borrar el repositorio «%s»?</string>
     <string name="action_delete_repo">Borrar repositorio</string>
     <string name="action_add_repo">Añadir un repositorio</string>
@@ -834,7 +834,7 @@
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
-    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Animetail.</string>
     <string name="rotation_reverse_landscape">Paisaje invertido</string>
     <string name="rotation_sensor_portrait">Retrato del sensor</string>
     <string name="rotation_sensor_landscape">Paisaje de sensores</string>
@@ -932,7 +932,7 @@
     <string name="player_statistics_page_3">Página 3</string>
     <string name="recent_anime_time">Episodio %1$s - %2$s</string>
     <string name="download_insufficient_space">No se pudo descargar ningún capítulo, queda muy poco espacio</string>
-    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Aniyomi. Toca aquí para más información.</string>
+    <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Animetail. Toca aquí para más información.</string>
     <string name="video_list_empty_error">No se encontró ningún vídeo</string>
     <string name="notification_new_episodes">Nuevos episodios encontrados</string>
     <string name="information_no_recent_anime">No he visto nada recientemente</string>
@@ -1005,7 +1005,7 @@
     <string name="pref_search_pinned_manga_sources_only">Buscar sólo fuentes de manga incrustadas en la búsqueda global</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
     <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes del anime incrustadas en la búsqueda global</string>
-    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Animetail.</string>
     <string name="pref_category_volume_brightness">Volumen y Brillo</string>
     <string name="pref_category_pip">Imagen en imagen (PiP)</string>
     <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
@@ -1074,7 +1074,7 @@
     <string name="player_add_external_subtitles_intent">Seleccionar un archivo de subtítulos.</string>
     <string name="label_storage">Almacenamiento</string>
     <string name="player_font_size_text_field">Tamaño de la fuente</string>
-    <string name="unlock_app_title">Desbloquear Aniyomi</string>
+    <string name="unlock_app_title">Desbloquear Animetail</string>
     <string name="pref_pip_replace_with_previous">Sustituir la opción saltar 10 segundos por episodio anterior</string>
     <string name="pref_reset_mpv_conf">Restablecer el archivo de configuración MPV</string>
     <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
@@ -1094,12 +1094,42 @@
     <string name="player_reset_subtitles">Restablecer subtítulos a valores predeterminados</string>
     <string name="player_subtitle_background_color">Fondo</string>
     <string name="unseen">Sin ver</string>
+    <!-- Connections section -->
+    <string name="special_services">Servicios Especiales</string>
+    <string name="pref_category_connections">Conexiones</string>
+    <string name="pref_connections_summary">Discord, más por venir...</string>
+    <string name="connections_info">Servicios especiales que son exclusivos de Animetail y mejoran la forma en que utilizas la aplicación.</string>
+    <string name="connections_discord">Discord</string>
+    <string name="connections_discord_info">Este servicio de Discord funciona a través del registro de tokens. Úsalo bajo tu propio riesgo. Tu token se almacena localmente y Animetail no lo comparte en ningún otro lugar.</string>
+    <string name="pref_discord_rpc">Discord Rich Presence</string>
+    <string name="show_chapters_titles_title">Muestra los Títulos de los Episodios/Capítulos.</string>
+    <string name="show_chapters_titles_subtitle">Muestra el título del episodio/capítulo que estás leyendo.</string>
+    <string name="pref_enable_discord_rpc">Habilitar Discord Rich Presence</string>
+    <string name="pref_discord_status">Discord Status</string>
+    <string name="pref_discord_dnd">⛔ No Molestar</string>
+    <string name="pref_discord_idle">🌙 Ausente</string>
+    <string name="pref_discord_online">🟢 Online</string>
+    <string name="pref_category_discord_incognito">RPC Incognito</string>
+    <string name="pref_discord_incognito">Discord en Modo Incógnito</string>
+    <string name="pref_discord_incognito_summary">Anulado cuando el modo incógnito está habilitado</string>
+    <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+
+    <!-- Discord section -->
+    <string name="browsing">Navegando</string>
+    <string name="scrolling">Desplazandose por</string>
+    <string name="messing">Jugando con</string>
+    <string name="video">Video</string>
+    <string name="comic">Manga</string>
     <string name="label_anime_extension_repos">Repositorios de extensiones de anime</string>
     <string name="label_manga_extension_repos">Repositorios de extensiones de manga</string>
     <string name="pref_update_anime_release_grace_period">Período de gracia previsto para el lanzamiento del anime</string>
     <string name="player_subtitle_border_color">Borde</string>
     <string name="pref_library_update_show_tab_badge">Mostrar el recuento de no vistos/no leídos en el icono actualizaciones</string>
-    <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
+    <string name="multi_thread_download_threads_number_summary">La cantidad de subprocesos a usar para la descarga puede bloquear su IP si es demasiado alta; generalmente 4 es un buen número para evitar una carga pesada en los servidores de origen.</string>
+    <string name="multi_thread_download">Descarga multiproceso para anime</string>
+    <string name="multi_thread_download_summary">Habilite la descarga de anime usando subprocesos múltiples</string>
+    <string name="multi_thread_download_threads_number">Número de hilos</string>
+    <string name="onboarding_storage_action_create_folder">Crear carpeta de Animetail por defecto</string>
     <string name="theme_matrix">Matrix</string>
     <string name="theme_doom">Doom</string>
     <string name="confirm_exit">Presione Atrás nuevamente para salir</string>

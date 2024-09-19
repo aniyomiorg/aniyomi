@@ -78,6 +78,8 @@ class PlayerPreferences(
     fun gestureHorizontalSeek() = preferenceStore.getBoolean("pref_gesture_horizontal_seek", true)
     fun playerStatisticsPage() = preferenceStore.getInt("pref_player_statistics_page", 0)
 
+    fun enableCast() = preferenceStore.getBoolean("pref_enable_cast", false)
+
     fun alwaysUseExternalPlayer() = preferenceStore.getBoolean(
         "pref_always_use_external_player",
         false,

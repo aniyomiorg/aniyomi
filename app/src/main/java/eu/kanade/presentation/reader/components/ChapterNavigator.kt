@@ -38,6 +38,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.math.roundToInt
 
 @Composable
+@Suppress("LongMethod")
 fun ChapterNavigator(
     isRtl: Boolean,
     onNextChapter: () -> Unit,
@@ -45,6 +46,9 @@ fun ChapterNavigator(
     onPreviousChapter: () -> Unit,
     enabledPrevious: Boolean,
     currentPage: Int,
+    // SY -->
+    currentPageText: String,
+    // SY <--
     totalPages: Int,
     onSliderValueChange: (Int) -> Unit,
 ) {
@@ -93,7 +97,9 @@ fun ChapterNavigator(
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = currentPage.toString())
+                        // SY -->
+                        Text(text = currentPageText)
+                        // SY <--
 
                         val interactionSource = remember { MutableInteractionSource() }
                         val sliderDragged by interactionSource.collectIsDraggedAsState()
