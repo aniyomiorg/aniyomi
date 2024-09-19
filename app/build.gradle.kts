@@ -217,7 +217,7 @@ dependencies {
     implementation(libs.preferencektx)
 
     // Dependency injection
-    implementation(libs.injekt.core)
+    implementation(libs.injekt)
     // SY -->
     implementation(libs.zip4j)
     // SY <--

@@ -117,7 +117,6 @@ import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.launchUI
-import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
@@ -1582,7 +1581,6 @@ class PlayerActivity : BaseActivity() {
             // AM (DISCORD) -->
             updateDiscordRPC(exitingPlayer = false)
             // <-- AM (DISCORD)
-            withIOContext { player.loadTracks() }
         }
     }
 
@@ -1935,7 +1933,7 @@ class PlayerActivity : BaseActivity() {
             val tracks = streams.subtitle.tracks.toList()
             val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks)
                 ?: let {
-                    val mpvSub = player.tracks["sub"]?.firstOrNull { player.sid == it.mpvId }
+                    val mpvSub = player.tracks["sub"]?.toTypedArray()?.firstOrNull { player.sid == it.mpvId }
                     mpvSub?.let {
                         streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
                     }?.coerceAtLeast(0) ?: 0
@@ -1969,8 +1967,7 @@ class PlayerActivity : BaseActivity() {
                         MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
                     }
                 } ?: run {
-                val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
-                    .firstOrNull { player.aid == it.mpvId }
+                val mpvAudio = player.tracks["audio"]?.toTypedArray()?.firstOrNull { player.aid == it.mpvId }
                 streams.audio.index = mpvAudio?.let {
                     streams.audio.tracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
                 }?.coerceAtLeast(0) ?: 0

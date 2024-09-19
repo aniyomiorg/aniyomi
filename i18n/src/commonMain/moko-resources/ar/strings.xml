@@ -2,7 +2,7 @@
 <resources>
     <string name="name">الاسم</string>
     <string name="categories">الفئات</string>
-    <string name="manga">إدخالات المكتبة</string>
+    <string name="manga">المانغا</string>
     <string name="chapters">الفصول</string>
     <string name="track">التعقب</string>
     <string name="history">التاريخ</string>
@@ -679,7 +679,7 @@
     <string name="skipped_reason_not_in_release_period">تُخُطِّيت بسبب عدم توقع صدور اليوم</string>
     <string name="manga_display_modified_interval_title">عيِّن التحديث كلَّ</string>
     <string name="intervals_header">المدة</string>
-    <string name="action_sort_next_updated">التحديث المتوقع القادم</string>
+    <string name="action_sort_next_updated">التحديث المتوقع قدومه</string>
     <string name="track_delete_title">أأزيل تتبع %s؟</string>
     <string name="track_delete_text">هذا يزيل التتبع محليًّا.</string>
     <string name="action_ok">حسنًا</string>
@@ -696,7 +696,7 @@
     <string name="exception_offline">لا اتصال بالإنترنت</string>
     <string name="exception_http">خطأ HTTP %d، انظر في WebView</string>
     <string name="exception_unknown_host">لا يمكن الوصول إلى %s</string>
-    <string name="unlock_app_title">افتح %s</string>
+    <string name="unlock_app_title">افتح انيومي</string>
     <string name="action_move_to_bottom_all_for_series">انقل السلسلة للقعر</string>
     <string name="pref_relative_format">التوقيت النسبي</string>
     <string name="pref_relative_format_summary">«%1$s» بدلًا عن «%2$s»</string>
@@ -1050,4 +1050,11 @@
     <string name="relative_time_now">الآن</string>
     <string name="label_upcoming">قادم</string>
     <string name="action_add_anyway">أضف على أية حال</string>
+    <string name="pref_pip_replace_with_previous">تعويض</string>
+    <string name="label_manga_extension_repos">إضافة المانغا</string>
+    <string name="label_anime_extension_repos">اضافة الانمي</string>
+    <string name="pref_anime_storage_usage">تخزين الانمي المستخدم</string>
+    <string name="pref_manga_storage_usage">تخزين المانغا المستخدم</string>
+    <string name="unseen">إزالة المشاهدة</string>
+    <string name="pref_update_anime_release_grace_period">فترة السماح المتوقعة لإصدار الأنمي</string>
 </resources>
