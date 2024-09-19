@@ -1827,7 +1827,7 @@ class PlayerActivity : BaseActivity() {
             val tracks = streams.subtitle.tracks.toList()
             val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks)
                 ?: let {
-                    val mpvSub = player.tracks["sub"]?.firstOrNull { player.sid == it.mpvId }
+                    val mpvSub = player.tracks["sub"]?.toTypedArray()?.firstOrNull { player.sid == it.mpvId }
                     mpvSub?.let {
                         streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
                     }?.coerceAtLeast(0) ?: 0
@@ -1861,8 +1861,7 @@ class PlayerActivity : BaseActivity() {
                         MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
                     }
                 } ?: run {
-                val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
-                    .firstOrNull { player.aid == it.mpvId }
+                val mpvAudio = player.tracks["audio"]?.toTypedArray()?.firstOrNull { player.aid == it.mpvId }
                 streams.audio.index = mpvAudio?.let {
                     streams.audio.tracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
                 }?.coerceAtLeast(0) ?: 0
