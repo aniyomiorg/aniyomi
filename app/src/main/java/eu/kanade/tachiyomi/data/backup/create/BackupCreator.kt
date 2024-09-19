@@ -6,11 +6,13 @@ import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeBackupCreator
-import eu.kanade.tachiyomi.data.backup.create.creators.CategoriesBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.AnimeCategoriesBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.AnimeSourcesBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.MangaCategoriesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.ExtensionsBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.MangaBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.MangaSourcesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.PreferenceBackupCreator
-import eu.kanade.tachiyomi.data.backup.create.creators.SourcesBackupCreator
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
@@ -50,35 +52,33 @@ class BackupCreator(
     private val getMangaFavorites: GetMangaFavorites = Injekt.get(),
     private val backupPreferences: BackupPreferences = Injekt.get(),
 
-    private val categoriesBackupCreator: CategoriesBackupCreator = CategoriesBackupCreator(),
+    private val animeCategoriesBackupCreator: AnimeCategoriesBackupCreator = AnimeCategoriesBackupCreator(),
+    private val mangaCategoriesBackupCreator: MangaCategoriesBackupCreator = MangaCategoriesBackupCreator(),
     private val animeBackupCreator: AnimeBackupCreator = AnimeBackupCreator(),
     private val mangaBackupCreator: MangaBackupCreator = MangaBackupCreator(),
     private val preferenceBackupCreator: PreferenceBackupCreator = PreferenceBackupCreator(),
-    private val sourcesBackupCreator: SourcesBackupCreator = SourcesBackupCreator(),
+    private val animeSourcesBackupCreator: AnimeSourcesBackupCreator = AnimeSourcesBackupCreator(),
+    private val mangaSourcesBackupCreator: MangaSourcesBackupCreator = MangaSourcesBackupCreator(),
     private val extensionsBackupCreator: ExtensionsBackupCreator = ExtensionsBackupCreator(context),
 ) {
 
     suspend fun backup(uri: Uri, options: BackupOptions): String {
         var file: UniFile? = null
         try {
-            file = (
-                if (isAutoBackup) {
-                    // Get dir of file and create
-                    val dir = UniFile.fromUri(context, uri)
-
-                    // Delete older backups
-                    dir?.listFiles { _, filename -> FILENAME_REGEX.matches(filename) }
-                        .orEmpty()
-                        .sortedByDescending { it.name }
-                        .drop(MAX_AUTO_BACKUPS - 1)
-                        .forEach { it.delete() }
-
-                    // Create new file to place backup
-                    dir?.createFile(getFilename())
-                } else {
-                    UniFile.fromUri(context, uri)
-                }
-                )
+            file = if (isAutoBackup) {
+                // Get dir of file and create
+                val dir = UniFile.fromUri(context, uri)
+                // Delete older backups
+                dir?.listFiles { _, filename -> FILENAME_REGEX.matches(filename) }
+                    .orEmpty()
+                    .sortedByDescending { it.name }
+                    .drop(MAX_AUTO_BACKUPS - 1)
+                    .forEach { it.delete() }
+                // Create new file to place backup
+                dir?.createFile(getFilename())
+            } else {
+                UniFile.fromUri(context, uri)
+            }
 
             if (file == null || !file.isFile) {
                 throw IllegalStateException(context.stringResource(MR.strings.create_backup_file_error))
@@ -131,50 +131,50 @@ class BackupCreator(
     private suspend fun backupAnimeCategories(options: BackupOptions): List<BackupCategory> {
         if (!options.categories) return emptyList()
 
-        return categoriesBackupCreator.backupAnimeCategories()
+        return animeCategoriesBackupCreator()
     }
 
     private suspend fun backupMangaCategories(options: BackupOptions): List<BackupCategory> {
         if (!options.categories) return emptyList()
 
-        return categoriesBackupCreator.backupMangaCategories()
+        return mangaCategoriesBackupCreator()
     }
 
     private suspend fun backupMangas(mangas: List<Manga>, options: BackupOptions): List<BackupManga> {
         if (!options.libraryEntries) return emptyList()
 
-        return mangaBackupCreator.backupMangas(mangas, options)
+        return mangaBackupCreator(mangas, options)
     }
 
     private suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
         if (!options.libraryEntries) return emptyList()
 
-        return animeBackupCreator.backupAnimes(animes, options)
+        return animeBackupCreator(animes, options)
     }
 
     private fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
-        return sourcesBackupCreator.backupAnimeSources(animes)
+        return animeSourcesBackupCreator(animes)
     }
     private fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
-        return sourcesBackupCreator.backupMangaSources(mangas)
+        return mangaSourcesBackupCreator(mangas)
     }
 
     private fun backupAppPreferences(options: BackupOptions): List<BackupPreference> {
         if (!options.appSettings) return emptyList()
 
-        return preferenceBackupCreator.backupAppPreferences(includePrivatePreferences = options.privateSettings)
+        return preferenceBackupCreator.createApp(includePrivatePreferences = options.privateSettings)
     }
 
     private fun backupSourcePreferences(options: BackupOptions): List<BackupSourcePreferences> {
         if (!options.sourceSettings) return emptyList()
 
-        return preferenceBackupCreator.backupSourcePreferences(includePrivatePreferences = options.privateSettings)
+        return preferenceBackupCreator.createSource(includePrivatePreferences = options.privateSettings)
     }
 
     private fun backupExtensions(options: BackupOptions): List<BackupExtension> {
         if (!options.extensions) return emptyList()
 
-        return extensionsBackupCreator.backupExtensions()
+        return extensionsBackupCreator()
     }
 
     companion object {

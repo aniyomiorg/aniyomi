@@ -10,9 +10,10 @@ import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSourcePreferences
+import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeCategoriesRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
-import eu.kanade.tachiyomi.data.backup.restore.restorers.CategoriesRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.ExtensionsRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaCategoriesRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.PreferenceRestorer
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -32,7 +33,8 @@ class BackupRestorer(
     private val notifier: BackupNotifier,
     private val isSync: Boolean,
 
-    private val categoriesRestorer: CategoriesRestorer = CategoriesRestorer(),
+    private val animeCategoriesRestorer: AnimeCategoriesRestorer = AnimeCategoriesRestorer(),
+    private val mangaCategoriesRestorer: MangaCategoriesRestorer = MangaCategoriesRestorer(),
     private val preferenceRestorer: PreferenceRestorer = PreferenceRestorer(context),
     private val animeRestorer: AnimeRestorer = AnimeRestorer(),
     private val mangaRestorer: MangaRestorer = MangaRestorer(),
@@ -122,8 +124,8 @@ class BackupRestorer(
         backupMangaCategories: List<BackupCategory>,
     ) = launch {
         ensureActive()
-        categoriesRestorer.restoreAnimeCategories(backupAnimeCategories)
-        categoriesRestorer.restoreMangaCategories(backupMangaCategories)
+        animeCategoriesRestorer(backupAnimeCategories)
+        mangaCategoriesRestorer(backupMangaCategories)
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -143,7 +145,7 @@ class BackupRestorer(
                 ensureActive()
 
                 try {
-                    animeRestorer.restoreAnime(it, backupAnimeCategories)
+                    animeRestorer.restore(it, backupAnimeCategories)
                 } catch (e: Exception) {
                     val sourceName = animeSourceMapping[it.source] ?: it.source.toString()
                     errors.add(Date() to "${it.title} [$sourceName]: ${e.message}")
@@ -163,7 +165,7 @@ class BackupRestorer(
                 ensureActive()
 
                 try {
-                    mangaRestorer.restoreManga(it, backupMangaCategories)
+                    mangaRestorer.restore(it, backupMangaCategories)
                 } catch (e: Exception) {
                     val sourceName = mangaSourceMapping[it.source] ?: it.source.toString()
                     errors.add(Date() to "${it.title} [$sourceName]: ${e.message}")
@@ -176,7 +178,7 @@ class BackupRestorer(
 
     private fun CoroutineScope.restoreAppPreferences(preferences: List<BackupPreference>) = launch {
         ensureActive()
-        preferenceRestorer.restoreAppPreferences(preferences)
+        preferenceRestorer.restoreApp(preferences)
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -189,7 +191,7 @@ class BackupRestorer(
 
     private fun CoroutineScope.restoreSourcePreferences(preferences: List<BackupSourcePreferences>) = launch {
         ensureActive()
-        preferenceRestorer.restoreSourcePreferences(preferences)
+        preferenceRestorer.restoreSource(preferences)
 
         restoreProgress += 1
         notifier.showRestoreProgress(

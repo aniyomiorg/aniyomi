@@ -53,7 +53,7 @@ class AnimeRestorer(
             )
     }
 
-    suspend fun restoreAnime(
+    suspend fun restore(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
     ) {
