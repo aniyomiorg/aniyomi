@@ -195,7 +195,7 @@ enum class DiscordScreen(
 
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match animetail brown/ green theme, Luft
-private const val AnimetailImageUrl = "emojis/1259596496353886230.webp?quality=lossless"
+private const val AnimetailImageUrl = "emojis/1286834441981005824.webp?quality=lossless"
 private const val LibraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
 private const val UpdatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
 private const val HistoryImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
