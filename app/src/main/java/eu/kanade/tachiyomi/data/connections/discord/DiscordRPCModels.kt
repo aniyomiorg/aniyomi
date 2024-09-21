@@ -8,6 +8,7 @@ package eu.kanade.tachiyomi.data.connections.discord
 
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.BuildConfig
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -182,7 +183,7 @@ enum class DiscordScreen(
     @StringRes val details: Int,
     val imageUrl: String,
 ) {
-    APP(R.string.app_name, R.string.browsing, AnimetailImageUrl),
+    APP(R.string.app_name, R.string.browsing, AnimetailImage),
     LIBRARY(R.string.label_library, R.string.browsing, LibraryImageUrl),
     UPDATES(R.string.label_recent_updates, R.string.scrolling, UpdatesImageUrl),
     HISTORY(R.string.label_recent_manga, R.string.scrolling, HistoryImageUrl),
@@ -196,6 +197,8 @@ enum class DiscordScreen(
 // Constants for standard Rich Presence image urls
 // change the image Urls used here to match animetail brown/ green theme, Luft
 private const val AnimetailImageUrl = "emojis/1286834441981005824.webp?quality=lossless"
+private const val AnimetailPreviewImageUrl = "emojis/1286834519533420544.webp?quality=lossless"
+private val AnimetailImage = if (BuildConfig.PREVIEW == true) AnimetailPreviewImageUrl else AnimetailImageUrl
 private const val LibraryImageUrl = "emojis/1235353629867638924.webp?quality=lossless"
 private const val UpdatesImageUrl = "emojis/1235354596570955917.webp?quality=lossless"
 private const val HistoryImageUrl = "emojis/1235354299089817671.webp?quality=lossless"
@@ -204,4 +207,5 @@ private const val MoreImageUrl = "emojis/1235355169752088706.webp?quality=lossle
 private const val WebviewImageUrl = "emojis/1235355362169851996.webp?quality=lossless"
 private const val VideoImageUrl = "emojis/1235355607201218660.webp?quality=lossless"
 private const val MangaImageUrl = "emojis/1235355804274659390.webp?quality=lossless"
+
 // <-- AM (DISCORD)
