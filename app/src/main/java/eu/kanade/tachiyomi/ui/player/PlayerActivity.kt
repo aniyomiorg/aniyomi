@@ -24,6 +24,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -2118,6 +2119,10 @@ class PlayerActivity : BaseActivity() {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> {
                 playerControls.updatePlaybackPos(value.toInt())
+                //value is in milliseconds
+                Log.d("PlayerActivity", "time-pos valuetoInt: ${value.toInt()}")
+                Log.d("PlayerActivity", "time-pos value: ${value}")
+                Log.d("PlayerActivity", "time-pos value1000 ${value* 1000}")
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
                 updatePlaybackState()
             }
@@ -2200,7 +2205,7 @@ class PlayerActivity : BaseActivity() {
 
     // -- CAST --
 
-    private fun setupCastListener() {
+     private fun setupCastListener() {
         mSessionManagerListener = object : SessionManagerListener<CastSession> {
             override fun onSessionEnded(session: CastSession, error: Int) {
                 onApplicationDisconnected()
