@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.LifecycleCoroutineScope
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
@@ -25,10 +26,12 @@ class MangaWidgetManager(
                 after = BaseMangaUpdatesGridGlanceWidget.DateLimit.toEpochMilli(),
             ),
             securityPreferences.useAuthenticator().changes(),
-            transform = { a, _ -> a },
+            transform = { a, b -> a to b },
         )
-            .drop(1)
-            .distinctUntilChanged()
+            .distinctUntilChanged { old, new ->
+                old.second == new.second &&
+                    old.first.map { it.chapterId }.toSet() == new.first.map { it.chapterId }.toSet()
+            }
             .onEach {
                 try {
                     MangaUpdatesGridGlanceWidget().updateAll(this)
@@ -37,6 +40,7 @@ class MangaWidgetManager(
                     logcat(LogPriority.ERROR, e) { "Failed to update widget" }
                 }
             }
+            .flowOn(Dispatchers.Default)
             .launchIn(scope)
     }
 }
