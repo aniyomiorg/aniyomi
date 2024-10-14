@@ -136,4 +136,9 @@
     <string name="action_reorganize_by">പുനഃക്രമീകരിക്കുക</string>
     <string name="action_revert_to_default">സ്ഥിരസ്ഥിതിയിലേക്ക് മടങ്ങുക</string>
     <string name="action_undo">പഴയപടിയാക്കുക</string>
+    <string name="action_display_show_number_of_items">ഇനങ്ങളുടെ എണ്ണം കാണിക്കുക</string>
+    <string name="action_open_log">ലോഗ് തുറക്കുക</string>
+    <string name="action_show_errors">വിശദാംശങ്ങൾ കാണാൻ ടാപ്പുചെയ്യുക</string>
+    <string name="action_start_downloading_now">ഇപ്പോൾ ഡൗൺലോഡ് ചെയ്യാൻ ആരംഭിക്കുക</string>
+    <string name="action_not_now">ഇപ്പോൾ വേണ്ട</string>
 </resources>
