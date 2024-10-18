@@ -985,7 +985,7 @@
     <string name="pref_webtoon_disable_zoom_out">Tắt thu nhỏ</string>
     <string name="manga_interval_expected_update_null">Manga này đã hoàn thành hoặc chưa có ngày phát hành dự kiến.</string>
     <string name="action_view_upcoming">Xem Cập Nhật Mới</string>
-    <string name="upcoming_guide">Hướng Dẫn Sắp Tới</string>
+    <string name="upcoming_guide">Lịch Chiếu Sắp Tới</string>
     <string name="upcoming_calendar_next">Tháng Tiếp Theo</string>
     <string name="upcoming_calendar_prev">Tháng Trước</string>
     <string name="file_picker_uri_permission_unsupported">Không thể duy trì truy cập thư mục. Ứng dụng có thể hoạt động bất thường.</string>
