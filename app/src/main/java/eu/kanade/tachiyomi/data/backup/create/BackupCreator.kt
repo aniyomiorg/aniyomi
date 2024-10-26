@@ -7,10 +7,12 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeCategoriesBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.AnimeExtensionRepoBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeSourcesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.MangaCategoriesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.ExtensionsBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.MangaBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.MangaExtensionRepoBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.MangaSourcesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.PreferenceBackupCreator
 import eu.kanade.tachiyomi.data.backup.models.Backup
@@ -18,6 +20,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionRepos
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSource
@@ -57,6 +60,8 @@ class BackupCreator(
     private val animeBackupCreator: AnimeBackupCreator = AnimeBackupCreator(),
     private val mangaBackupCreator: MangaBackupCreator = MangaBackupCreator(),
     private val preferenceBackupCreator: PreferenceBackupCreator = PreferenceBackupCreator(),
+    private val animeExtensionRepoBackupCreator: AnimeExtensionRepoBackupCreator = AnimeExtensionRepoBackupCreator(),
+    private val mangaExtensionRepoBackupCreator: MangaExtensionRepoBackupCreator = MangaExtensionRepoBackupCreator(),
     private val animeSourcesBackupCreator: AnimeSourcesBackupCreator = AnimeSourcesBackupCreator(),
     private val mangaSourcesBackupCreator: MangaSourcesBackupCreator = MangaSourcesBackupCreator(),
     private val extensionsBackupCreator: ExtensionsBackupCreator = ExtensionsBackupCreator(context),
@@ -94,6 +99,8 @@ class BackupCreator(
                 backupSources = backupMangaSources(backupManga),
                 backupAnimeSources = backupAnimeSources(backupAnime),
                 backupPreferences = backupAppPreferences(options),
+                backupAnimeExtensionRepo = backupAnimeExtensionRepos(options),
+                backupMangaExtensionRepo = backupMangaExtensionRepos(options),
                 backupSourcePreferences = backupSourcePreferences(options),
                 backupExtensions = backupExtensions(options),
             )
@@ -163,6 +170,18 @@ class BackupCreator(
         if (!options.appSettings) return emptyList()
 
         return preferenceBackupCreator.createApp(includePrivatePreferences = options.privateSettings)
+    }
+
+    private suspend fun backupAnimeExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
+        if (!options.extensionRepoSettings) return emptyList()
+
+        return animeExtensionRepoBackupCreator()
+    }
+
+    private suspend fun backupMangaExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
+        if (!options.extensionRepoSettings) return emptyList()
+
+        return mangaExtensionRepoBackupCreator()
     }
 
     private fun backupSourcePreferences(options: BackupOptions): List<BackupSourcePreferences> {

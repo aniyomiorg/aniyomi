@@ -11,6 +11,7 @@ data class BackupOptions(
     val tracking: Boolean = true,
     val history: Boolean = true,
     val appSettings: Boolean = true,
+    val extensionRepoSettings: Boolean = true,
     val sourceSettings: Boolean = true,
     val privateSettings: Boolean = false,
     val extensions: Boolean = false,
@@ -23,12 +24,13 @@ data class BackupOptions(
         tracking,
         history,
         appSettings,
+        extensionRepoSettings,
         sourceSettings,
         privateSettings,
         extensions,
     )
 
-    fun canCreate() = libraryEntries || categories || appSettings || sourceSettings
+    fun canCreate() = libraryEntries || categories || appSettings || extensionRepoSettings || sourceSettings
 
     companion object {
         val libraryOptions = persistentListOf(
@@ -69,6 +71,11 @@ data class BackupOptions(
                 setter = { options, enabled -> options.copy(appSettings = enabled) },
             ),
             Entry(
+                label = MR.strings.extensionRepo_settings,
+                getter = BackupOptions::extensionRepoSettings,
+                setter = { options, enabled -> options.copy(extensionRepoSettings = enabled) },
+            ),
+            Entry(
                 label = MR.strings.source_settings,
                 getter = BackupOptions::sourceSettings,
                 setter = { options, enabled -> options.copy(sourceSettings = enabled) },
@@ -96,9 +103,10 @@ data class BackupOptions(
             tracking = array[3],
             history = array[4],
             appSettings = array[5],
-            sourceSettings = array[6],
-            privateSettings = array[7],
-            extensions = array[8],
+            extensionRepoSettings = array[6],
+            sourceSettings = array[7],
+            privateSettings = array[8],
+            extensions = array[9],
         )
     }
 

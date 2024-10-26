@@ -7,13 +7,16 @@ import eu.kanade.tachiyomi.data.backup.BackupNotifier
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionRepos
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSourcePreferences
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeCategoriesRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeExtensionRepoRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.ExtensionsRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaCategoriesRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaExtensionRepoRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.PreferenceRestorer
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -36,6 +39,8 @@ class BackupRestorer(
     private val animeCategoriesRestorer: AnimeCategoriesRestorer = AnimeCategoriesRestorer(),
     private val mangaCategoriesRestorer: MangaCategoriesRestorer = MangaCategoriesRestorer(),
     private val preferenceRestorer: PreferenceRestorer = PreferenceRestorer(context),
+    private val animeExtensionRepoRestorer: AnimeExtensionRepoRestorer = AnimeExtensionRepoRestorer(),
+    private val mangaExtensionRepoRestorer: MangaExtensionRepoRestorer = MangaExtensionRepoRestorer(),
     private val animeRestorer: AnimeRestorer = AnimeRestorer(),
     private val mangaRestorer: MangaRestorer = MangaRestorer(),
     private val extensionsRestorer: ExtensionsRestorer = ExtensionsRestorer(context),
@@ -87,6 +92,9 @@ class BackupRestorer(
         if (options.appSettings) {
             restoreAmount += 1
         }
+        if (options.extensionRepoSettings) {
+            restoreAmount += backup.backupAnimeExtensionRepo.size + backup.backupMangaExtensionRepo.size
+        }
         if (options.sourceSettings) {
             restoreAmount += 1
         }
@@ -110,6 +118,9 @@ class BackupRestorer(
             if (options.libraryEntries) {
                 restoreAnime(backup.backupAnime, if (options.categories) backup.backupAnimeCategories else emptyList())
                 restoreManga(backup.backupManga, if (options.categories) backup.backupCategories else emptyList())
+            }
+            if (options.extensionRepoSettings) {
+                restoreExtensionRepos(backup.backupAnimeExtensionRepo, backup.backupMangaExtensionRepo)
             }
             if (options.extensions) {
                 restoreExtensions(backup.backupExtensions)
@@ -200,6 +211,49 @@ class BackupRestorer(
             restoreAmount,
             isSync,
         )
+    }
+
+    private fun CoroutineScope.restoreExtensionRepos(
+        backupAnimeExtensionRepo: List<BackupExtensionRepos>,
+        backupMangaExtensionRepo: List<BackupExtensionRepos>,
+    ) = launch {
+        backupAnimeExtensionRepo
+            .forEach {
+                ensureActive()
+
+                try {
+                    animeExtensionRepoRestorer(it)
+                } catch (e: Exception) {
+                    errors.add(Date() to "Error Adding Anime Repo: ${it.name} : ${e.message}")
+                }
+
+                restoreProgress += 1
+                notifier.showRestoreProgress(
+                    context.stringResource(MR.strings.extensionRepo_settings),
+                    restoreProgress,
+                    restoreAmount,
+                    isSync,
+                )
+            }
+
+        backupMangaExtensionRepo
+            .forEach {
+                ensureActive()
+
+                try {
+                    mangaExtensionRepoRestorer(it)
+                } catch (e: Exception) {
+                    errors.add(Date() to "Error Adding Manga Repo: ${it.name} : ${e.message}")
+                }
+
+                restoreProgress += 1
+                notifier.showRestoreProgress(
+                    context.stringResource(MR.strings.extensionRepo_settings),
+                    restoreProgress,
+                    restoreAmount,
+                    isSync,
+                )
+            }
     }
 
     private fun CoroutineScope.restoreExtensions(extensions: List<BackupExtension>) = launch {
