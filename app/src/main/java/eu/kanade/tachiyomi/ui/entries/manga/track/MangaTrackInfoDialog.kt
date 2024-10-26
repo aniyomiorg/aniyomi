@@ -55,6 +55,7 @@ import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
@@ -175,6 +176,7 @@ data class MangaTrackInfoDialogHomeScreen(
                     ),
                 )
             },
+            onCopyLink = { context.copyTrackerLink(it) },
         )
     }
 
@@ -185,6 +187,13 @@ data class MangaTrackInfoDialogHomeScreen(
         val url = trackItem.track?.remoteUrl ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
+        }
+    }
+
+    private fun Context.copyTrackerLink(trackItem: MangaTrackItem) {
+        val url = trackItem.track?.remoteUrl ?: return
+        if (url.isNotBlank()) {
+            copyToClipboard(url, url)
         }
     }
 

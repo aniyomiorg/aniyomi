@@ -61,6 +61,7 @@ fun AnimeTrackInfoDialogHome(
     onNewSearch: (AnimeTrackItem) -> Unit,
     onOpenInBrowser: (AnimeTrackItem) -> Unit,
     onRemoved: (AnimeTrackItem) -> Unit,
+    onCopyLink: (AnimeTrackItem) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -109,6 +110,7 @@ fun AnimeTrackInfoDialogHome(
                     onNewSearch = { onNewSearch(item) },
                     onOpenInBrowser = { onOpenInBrowser(item) },
                     onRemoved = { onRemoved(item) },
+                    onCopyLink = { onCopyLink(item) },
                 )
             } else {
                 TrackInfoItemEmpty(
@@ -137,6 +139,7 @@ private fun TrackInfoItem(
     onNewSearch: () -> Unit,
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
+    onCopyLink: () -> Unit,
 ) {
     val context = LocalContext.current
     Column {
@@ -146,6 +149,7 @@ private fun TrackInfoItem(
             TrackLogoIcon(
                 tracker = tracker,
                 onClick = onOpenInBrowser,
+                onLongClick = onCopyLink,
             )
             Box(
                 modifier = Modifier
@@ -172,6 +176,7 @@ private fun TrackInfoItem(
             TrackInfoItemMenu(
                 onOpenInBrowser = onOpenInBrowser,
                 onRemoved = onRemoved,
+                onCopyLink = onCopyLink,
             )
         }
 
