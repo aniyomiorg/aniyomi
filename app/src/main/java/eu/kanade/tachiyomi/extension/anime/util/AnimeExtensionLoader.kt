@@ -234,7 +234,6 @@ internal object AnimeExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
     private suspend fun loadExtension(context: Context, extensionInfo: AnimeExtensionInfo): AnimeLoadResult {
         val pkgManager = context.packageManager
 

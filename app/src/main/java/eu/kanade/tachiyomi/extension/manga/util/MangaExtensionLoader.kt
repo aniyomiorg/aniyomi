@@ -243,7 +243,6 @@ internal object MangaExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
     private suspend fun loadMangaExtension(context: Context, extensionInfo: MangaExtensionInfo): MangaLoadResult {
         val pkgManager = context.packageManager
         val pkgInfo = extensionInfo.packageInfo

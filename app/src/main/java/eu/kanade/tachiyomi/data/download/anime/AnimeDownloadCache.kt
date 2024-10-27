@@ -426,7 +426,6 @@ class AnimeDownloadCache(
 
     private var updateDiskCacheJob: Job? = null
 
-    @Suppress("MagicNumber")
     private fun updateDiskCache() {
         updateDiskCacheJob?.cancel()
         updateDiskCacheJob = scope.launchIO {

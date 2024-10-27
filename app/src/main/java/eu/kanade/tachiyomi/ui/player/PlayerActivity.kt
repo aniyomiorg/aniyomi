@@ -770,7 +770,6 @@ class PlayerActivity : BaseActivity() {
         verticalScrollLeft(0F)
     }
 
-    @Suppress("ReturnCount")
     private fun getMaxBrightness(): Float {
         val powerManager = getSystemService(POWER_SERVICE) as? PowerManager ?: return MAX_BRIGHTNESS
         val brightnessField = powerManager.javaClass.declaredFields.find {

@@ -5,10 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.anime.model.Anime
 
-@Suppress(
-    "DEPRECATION",
-    "MagicNumber",
-)
+@Suppress("DEPRECATION")
 @Serializable
 data class BackupAnime(
     // in 1.x some of these values have different names

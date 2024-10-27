@@ -67,7 +67,6 @@ class AnimeRepositoryImpl(
         }
     }
 
-    @Suppress("MagicNumber")
     override suspend fun getUpcomingAnime(statuses: Set<Long>): Flow<List<Anime>> {
         val epochMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
         return handler.subscribeToList {
